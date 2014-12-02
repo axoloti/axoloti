@@ -1,0 +1,26 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="60">
+      <params>
+         <frac32.u.map name="value" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="outlet1" x="200" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="outlet1 outlet"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>normal</subpatchmode>
+      <NPresets>8</NPresets>
+      <NPresetEntries>1</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

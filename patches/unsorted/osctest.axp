@@ -1,0 +1,44 @@
+<patch-1.0>
+   <obj type="c" name="c_1" x="40" y="20">
+      <params>
+         <frac32.u.map name="value" value="8.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU_1" x="160" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" name="vcf3_1" x="183" y="179">
+      <params>
+         <frac32.s.map name="pitch" value="-1.0"/>
+         <frac32.u.map name="reso" value="57.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" name="saw_1" x="40" y="180">
+      <params>
+         <frac32.s.map name="pitch" value="-29.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" name="dac1_1" x="320" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c_1 out"/>
+         <dest name="scopeU_1 in"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="vcf3_1 in"/>
+      </net>
+      <net>
+         <source name="vcf3_1 out"/>
+         <dest name="dac1_1 wave"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

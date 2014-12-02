@@ -1,0 +1,25 @@
+<objdefs>
+   <obj.normal id="oneliner_k" sha="215ebed562f5105b7cff0ec13065e31a257ab1ee">
+      <sDescription>k-rate c one-liner</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map name="c" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map>
+      </params>
+      <attribs>
+         <table name="line"/>
+      </attribs>
+      <code.krate><![CDATA[%line%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

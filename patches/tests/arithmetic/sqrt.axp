@@ -1,0 +1,46 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="40">
+      <params>
+         <frac32.u.map name="value" value="15.149999618530273"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="sqrt" sha="49e71e8498a85d74d8ac30d3563c4f1e29c34a3c" name="sqrt1" x="120" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="200" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="square root" x="280" y="40"/>
+   <obj type="*" sha="b031e26920f6cf5c1a53377ee6021573c4e3ac02" name="*1" x="120" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1_" x="200" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="square of square root" x="280" y="140"/>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="sqrt1 in"/>
+      </net>
+      <net>
+         <source name="sqrt1 out"/>
+         <dest name="displayU1 in"/>
+         <dest name="*1 a"/>
+         <dest name="*1 b"/>
+      </net>
+      <net>
+         <source name="*1 result"/>
+         <dest name="displayU1_ in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

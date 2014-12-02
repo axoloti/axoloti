@@ -1,0 +1,32 @@
+<objdefs>
+   <obj.normal id="satp" sha="107e97e0797ac54d70617cbd5af301ac85ec58a8">
+      <sDescription>saturate to normal positive range</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%out%= __USAT(%in%,27);]]></code.krate>
+   </obj.normal>
+   <obj.normal id="satp" sha="c3a9f3c72a58d5781087813c2c396865b86a41d4">
+      <sDescription>saturate to normal positive range</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[%out%= __USAT(%in%,27);]]></code.srate>
+   </obj.normal>
+</objdefs>

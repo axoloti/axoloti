@@ -1,0 +1,60 @@
+<objdefs>
+   <obj.normal id="alloc 16b" sha="30e6566ebd5bd19afe2c6975adaa19d5b16584d9">
+      <sDescription>allocate 16bit table in RAM memory, -128.00 .. 127.99</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="size">
+            <MenuEntries>
+               <string>2</string>
+               <string>4</string>
+               <string>8</string>
+               <string>16</string>
+               <string>32</string>
+               <string>64</string>
+               <string>128</string>
+               <string>256</string>
+               <string>512</string>
+               <string>1024</string>
+               <string>2048</string>
+               <string>4096</string>
+               <string>8192</string>
+               <string>16384</string>
+               <string>32768</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+            </CEntries>
+         </combo>
+         <text name="init"/>
+      </attribs>
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (%size%);
+static const uint32_t LENGTH = (1<<%size%);
+static const uint32_t LENGTHMASK = ((1<<%size%)-1);
+static const uint32_t BITS = 16;
+static const uint32_t GAIN = 12;
+int16_t array[LENGTH];
+]]></code.declaration>
+      <code.init><![CDATA[{ 
+  int i;
+  for(i=0;i<LENGTH;i++) array[i]=0;}%init%]]></code.init>
+   </obj.normal>
+</objdefs>

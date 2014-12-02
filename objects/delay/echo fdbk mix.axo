@@ -1,0 +1,47 @@
+<objdefs>
+   <obj.normal id="echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee">
+      <sDescription>Audio delay with feedback and mix, fixed delay time</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input"/>
+         <frac32 name="mixm" description="mix"/>
+         <frac32 name="feedbackm" description="feedback"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="mix">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="feedback">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs>
+         <spinner name="delaylength" MinValue="32" MaxValue="20000" DefaultValue="5000"/>
+      </attribs>
+      <code.declaration><![CDATA[uint32_t delaywindex;
+uint32_t delayrindex;
+int16_t delayline[%delaylength%];
+]]></code.declaration>
+      <code.init><![CDATA[   int i;
+   for(i=0;i<%delaylength%;i++) delayline[i] = 0;
+   delaywindex = 0;
+   delayrindex = 1;
+]]></code.init>
+      <code.krate><![CDATA[  int32_t _mix = %mix% + %mixm%;
+   int32_t _fdbk = %feedback% + %feedbackm%;
+]]></code.krate>
+      <code.srate><![CDATA[ int32_t rd = delayline[delayrindex++];
+delayline[delaywindex++] = __SSAT((%in%>>15) + ___SMMUL(rd<<5,_fdbk),16);
+if (delayrindex == %delaylength%) delayrindex = 0;
+if (delaywindex == %delaylength%) delaywindex = 0;
+%out% = (%in%>>1) + (___SMMUL(rd<<16,_mix<<2));
+]]></code.srate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,15 @@
+<objdefs>
+   <obj.normal id="uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645">
+      <sDescription>uniform distributed (white) noise. Range -64..64</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32buffer.bipolar name="wave" description="white noise" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[%wave%= (int32_t)(GenerateRandomNumber())>>4;]]></code.srate>
+   </obj.normal>
+</objdefs>

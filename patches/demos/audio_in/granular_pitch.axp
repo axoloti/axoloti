@@ -1,0 +1,43 @@
+<patch-1.0>
+   <obj type="adc~" sha="2215b2e513239e306346ea02ae2ee6746d6d62a5" name="adc~_1" x="40" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delwrite~" sha="c573b27a5ebc2efb2d1e8ec173ff4793a2acbae2" name="d" x="300" y="40">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="16384 (341ms)"/>
+      </attribs>
+   </obj>
+   <obj type="grainpitchvoice" sha="9079efe0b7b0ed817129660f015f18b466ce895d" name="grainpitchvoice_1" x="420" y="40">
+      <params>
+         <frac32.s.map name="detune" value="2.7755575615628914E-17"/>
+         <frac32.s.map name="detunerange" value="2.0"/>
+         <frac32.u.map name="lspread" value="2.5"/>
+         <frac32.s.map name="length" value="-9.0"/>
+         <frac32.u.map name="ospread" value="26.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="16"/>
+      </attribs>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="560" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="grainpitchvoice_1 outlet~_1"/>
+         <dest name="dac~_1 left"/>
+         <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="adc~_1 left"/>
+         <dest name="d in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

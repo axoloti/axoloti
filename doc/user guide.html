@@ -1,0 +1,211 @@
+<html>
+    <body>
+        <h1>Axoloti</h1>
+
+        <h2>Main window</h2>
+        The main window manages the connection with the Axoloti board, and also contains
+        a log of info and error messages.
+
+        <h2>Patch window</h2>
+        Double click in an empty document ("patch") to create a new object (or press "n"). 
+        This brings up the object selector. In the object selector you can type a name, objects containing the name will 
+
+        <h2>Objects</h2>
+        Objects contain:
+        <ul>
+            <li><b>titlebar</b> containing the kind of object
+            <li><b>instance name</b> the name you give it.
+                Duplicate names in a patch are illegal.
+            <li><b>inlets</b>: colored circles on the left side
+            <li><b>outlets</b> colored squares on the right side
+            <li><b>attributes</b> values that can only be set before running the patch.
+            <li><b>parameters</b> values that can be set before loading the patch and also be modified during a "live" session.
+            <li><b>indicators</b> visualizations of live data from the patch.
+        </ul>
+        Operations on objects (not in Live Mode):
+        <ul>
+            <li>Objects can be moved by dragging the titlebar.
+            <li>Objects can be selected by clicking the titlebar, or dragging a rectange around a group.
+            <li>Selected objects can be deleted by pressing delete or backspace.
+            <li>Objects can mutate to a different type by double-clicking on the title. Connections and parameters will be preserved. Attributes are not preserved (yet)!
+            <li>Instance name can be changed (a double click on the instancename brings up the instance name editor)
+            <li>Attributes can be changed
+            <li>Parameters can be changed by <ul>
+                    <li>mouse for units
+                    <li>shift-mouse for sub-units
+                    <li>arrow-up, arrow-down
+                    <li>shift-arrow-up, shift-arrow-down
+                    <li>page-up, page-down
+                    <li>home, end
+                    <li>or typing the number followed by enter
+                </ul>
+            <li>Some parameters have real-world units, displayed left of the dial. For some, multiple conversions are meaningful. Clicking on the real-world unit to alternate between different units. Eg. frequency in Hertz or period time in milliseconds.
+            <li>Parameter mapping to MIDI Continuous Controllers: right click on the parameter to assign a MIDI controller. Mapped parameters have a "C" mark right of the dial.
+        </ul>
+        Operations on objects (in Live Mode):
+        <ul>
+            <li>Parameters can be changed
+            <li>No objects can be added/moved/replaced!
+        </ul>
+
+        <h2>Connections</h2>
+
+        Connections between objects can be made by dragging from an inlet to an outlet or from outlet to inlet.
+        Connections can be deleted via the pop-up menu (right-click) on inlets or outlets.
+
+        Different data types are marked by different colors on the outlets, inlets and wires.
+        <ul>
+            <li><b>Red</b> connections are for s-rate (audio-rate, 48000 Hz). The normal range is -64 to 64 units.
+            <li><b>Blue</b> connection points are for k-rate (control-rate, 3000 Hz) fractional numbers. The normal range is -64 to 64 units. Control voltages in modular synthesizer lingo.
+            <li><b>Yellow</b> connections are for k-rate booleans. Gate signals in modular synthesizer lingo.
+            <li><b>Green</b> connections are for k-rate integers (whole numbers). The range is -2147483648 to 2147483647.
+            <li><b>Pink</b> connections are for strings. Mostly useful for dynamic filenames.
+        </ul>
+
+        <h3>connections between different types</h3>
+        <ul>
+            <li>A red output can be connected to a blue input, this will take one out of 16 audio samples.
+            <li>A yellow output can be connected to a blue input, this yields +64 units for true, 0 for false.
+            <li>A green output can be connected to a blue input.
+            <li>A blue output can be connected to a green input, the value is rounded down.
+            <li>A pink output must always be connected to a pink input. 
+        </ul>
+
+        A connection that is illegal is drawn as a thick black dashed wire, and ignored.
+
+        <h2>Execution order</h2>
+
+        Every object in the patch is executed once in the signal processing loop, at 3000Hz.
+        Objects are executed in reading order: left to right, top to bottom.
+        A connection from an outlet to an inlet earlier in the execution order, are buffered. 
+        So feedback topologies are legal, and never result in stack overflows.
+
+        <h2>Live connection</h2>
+
+        Engaging live mode generates compilable code from the patch, compiles the code, uploads the binary and starts the binary on the board.
+        In live mode, only parameters can be changed.
+        Connections, execution order, location, attributes,... are all frozen.
+
+        <br>
+        <b>
+            Currently presets, midi mapping, and modulation can be adjusted in live 
+            mode, but those changes are only reflected until after engaging live mode again.
+        </b>
+
+        <h2>Keyboard shortcuts</h2>
+        <ul><li>Arrow keys to move selected objects
+            <li>To adjust a focused parameter : <ul>
+                <li>Up/down arrow keys to increment/decrement by a single units
+                <li>Shift-up/down arrow keys to increment/decrement by a tenth of a single unit
+                <li>Control-shift-up/down arrow keys to increment/decrement by one hundredth of a single unit
+                <li>Control-up/down arrow keys to increment/decrement by 5 units
+                <li>Mouse-wheel (also in combination with shift and control) does the same as arrow-up and arrow-down
+                <li>Page-up/page down to make coarse adjustments 
+                <li>Home/end to go to minimum/maximum
+                <li>or just start typing a value, followed by enter!
+                </ul>
+            <li>'c' to add a comment to the patch
+            <li>'n' to add an object to the patch
+        </ul>
+
+        <h2>Subpatching</h2>
+        To maintain clean patches, it is useful to define an object from a patch. 
+        To do this:<ul>
+            <li>Create a "child" patch, use inlet, inlet~, outlet, and outlet~ objects to create connections in the resulting object.
+            <li>Save this patch.
+            <li>Create a new "mother" patch
+            <li>Save this patch to the same directory as the "child" patch
+            <li>you can use the "child" patch as an object, by entering the patch filename in the object selector (without .axp extension), prefixed by "./". 
+        </ul>
+        If you want to modify this object, and propagate the changes:
+        <ul><li>select "edit object definition" in the object popup menu
+            <li>the "child" patch window opens
+            <li>to propagate changes, save the child patch.
+            <li>"live" changes are not working in a child patch. Changes are only effective after re-enabling live mode.
+        </ul>
+        Parameters can be propagated to the encapsulating object, right-click on the parameter and select "show on parent".
+        "Show on parent" parameters are drawn in blue.
+
+        <h2>Polyphonic Subpatching</h2>
+        A polyphonic subpatch creates an array of the subpatch. Every element in this array is called a "voice".
+        For playing music, this automatically allocates notes played simultaneously to different voices.
+        You can obtain the index of the voice with the "voiceindex" object.
+        
+        <h2>Presets</h2>
+        A preset is a set of selected parameters and their new value. To include a parameter to a preset, select the preset index to edit in the toolbar. Then right-click on a parameter and select "include in current preset" in the popup-menu. The parameter will turn yellow. A yellow parameter is not updated live, but indicates that you are adjusting its value in the preset.
+        <b>Changes to presets are only updated after dis- and re-engaging the live checkbox!</b>
+        Presets in a sub-patch can be applied only with the "preset" object.
+        A preset in a "normal" sub-patch only affects the sub-patch.
+        A preset in a polyphonic sub-patch only affects one voice.        
+        
+        <h2>Advanced tricks</h2>
+        <h3>Working without hardware</h3>
+        Currently patches do not run without hardware attached. 
+        But you can test compilation. Choose "generate code" in the patch menu, and then "compile code".
+        <h3>Editing code after code generation and before upload</h3>
+        Do not use the "live" checkbox. Choose "generate code" in the patch menu, edit the code in the file "patch/xpatch.cpp", then choose "compile code" in the patch menu, and finally select "upload code".
+        The edits in the code are of course destroyed when the code generator runs again.
+        <h3>XML copy paste</h3>
+        Copy/paste uses XML in text format in the clipboard. You can copy an object from a patch, and paste it in a text editor, inspect/edit its internals, copy it from the text-editor and paste it into the patch again.
+
+        <h2>Axoloti core</h2>
+
+        <h3>Normal operation</h3>
+        By plugging in the usb-connection, the board powers up. The power LED should light up immediately. The other LED should flash three times if everything is OK.
+        
+        Patch binaries are specific to the version of the firmware. If the patch binary is made with a different version of the firmware, Axoloti will crash. 
+        In that case, unplug the sdcard before applying power to Axoloti, or hold button S2 during power-up.
+
+        <h3>Connections</h3>
+        <ul>
+            <li>The 3.5mm (1/8") mini-jack is a headphone output. Use only for headphones. To connect other equipment, use the 6.25mm connector! This is because the headphone jack is electrically biased at 1.65V. 
+            <li>The 6.35mm (1/4") jacks are audio in- and output (labeled on the backside of the circuit board).
+            <li>The 5 pole DIN connectors are MIDI in- and output (labeled on the backside of the circuit board).
+            <li>micro-sd-card (should be FAT formatted)
+            <li>mini-usb also serves as the power source. For standalone use, you can use a USB adaptor, or an external USB battery, commercially available for smartphones and tablets. But you need a mini-usb plug, not the micro-USB (more common on tablets and smartphones).
+        </ul>
+
+        <h2>Common problems, errors and solutions</h2>
+        <h3>Fatal error: can't create build/obj/chcore_v7m.o: No such file or directory</h3>
+        (or: Fatal error: can't create build/obj/crt0.o: No such file or directory)<br>
+        Create an empty directory called "obj" in firmware/build. While you're there, also create the directory "lst" in the same place.
+        <h3>fatal error: diskio.h: No such file or directory</h3>
+        unzip chibios/ext/fatfs-0.9-patched.zip to chibios/ext/fatfs
+        <h3>After firmware update the led flashes three times but can't connect</h3>
+        You probably have a "start.bin" file on sdcard that does not match the firmware version.
+        The solution: unplug Axoloti Core and replug it while holding pushbutton S2 until after the LED flashes three times. This prevents "start.bin" from loading (and crashing). Now it should be able to connect again and overwrite "start.bin" with a new one using the "upload to sdcard as startup" menu.
+        Alternatively, you can remove the sdcard and erase the "start.bin" file with an sdcard reader. 
+        Or remove the sdcard before powering up the Axoloti Core, then insert the card it again, and use the "Upload to sdcard as startup" command.
+        <h3>Error: "region `SRAM' overflowed by 14760 bytes"</h3>
+        The executable binary code is too big to fit the allocated memory. 
+        <h3>Error: "region `CCMSRAM' overflowed by 66780 bytes"</h3>
+        The patch uses too much memory for variables to fit. Delay-lines, echos, RAM tables or sample streaming buffers are the biggest consumers of memory.
+        <h3>The Axoloti program froze up, can I still save my document?</h3>
+        Often yes, after disconnecting the USB cable, the program unfreezes.
+        <h3>The delay/read objects have no units</h3>
+        The knob-setting on the delay/delread objects is the fraction of the actual full delay length of the corresponding delay/write.
+        So if the delay/read is reading from a delayline of 1024 samples,
+        the zero position of the delay/read corresponds with zero samples, and the max position with 1024 samples.
+        
+        <h2>Limitations</h2>
+        <ul>
+            <li>8 presets buttons in the GUI. The actual number of presets in a patch is configurable in patch settings dialog.
+            <li>The number of modulation sources and the number of modulation targets per source is configurable in patch settings dialog.
+            <li>The patch can use 64kB of on-chip RAM.
+            <li>The patch executable code can use 56kB of on-chip RAM.
+        </ul>
+
+        <h2>Known issues</h2>
+        <ul>
+            <li>No undo function                
+            <li>Modifications of presets are not applied while in live modus, only when entering live modus.
+            <li>Midi Controller mapping changes are not applied in live modus.                
+            <li>Modulation changes are not applied in live modus.
+            <li>the size of objects changes depending on ???
+            <li>OSX retina screens: radio buttons not drawn correctly?
+            <li>Object selector popup does not follow scrolling and misses some shortcuts. Also outside the screen if activated close to the bottom right
+            <li>Some limitations are not checked/enforced... (memory usage, number of presets, number of modulation sources/targets)
+            <li>if you computer goes in sleep, the connection is stuck. Unplug the board, save your work, quit Axoloti and launch it again.
+        </ul>
+    </body>
+</html>

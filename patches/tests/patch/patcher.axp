@@ -1,0 +1,50 @@
+<patch-1.0>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_1" x="42" y="98">
+      <params>
+         <frac32.u.map name="value" value="49.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <patcher type="patch/patcher" sha="da39a3ee5e6b4b0d3255bfef95601890afd80709" name="patcher_1" x="126" y="98">
+      <params/>
+      <attribs/>
+      <subpatch>
+         <obj type="patch/inlet f" sha="ec45071db47e99aa672b4e8456c862acb1d95499" name="inlet_1" x="70" y="84">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="patch/outlet f" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="outlet_1" x="168" y="84">
+            <params/>
+            <attribs/>
+         </obj>
+         <nets>
+            <net>
+               <source name="inlet_1 inlet"/>
+               <dest name="outlet_1 outlet"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>no</subpatchmode>
+         </settings>
+         <notes><![CDATA[]]></notes>
+      </subpatch>
+   </patcher>
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="dial_2" x="224" y="98">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="dial_1 out"/>
+         <dest name="patcher_1 inlet_1"/>
+      </net>
+      <net>
+         <source name="patcher_1 outlet_1"/>
+         <dest name="dial_2 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

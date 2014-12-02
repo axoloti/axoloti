@@ -1,0 +1,26 @@
+<objdefs>
+   <obj.normal id="in stereo" sha="2215b2e513239e306346ea02ae2ee6746d6d62a5">
+      <sDescription>Audio input, stereo</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32buffer name="left" description="Left channel" SumBuffer="false"/>
+         <frac32buffer name="right" description="Right channel" SumBuffer="false"/>
+      </outlets>
+      <displays>
+         <frac32.vu name="vuLeft"/>
+         <frac32.vu name="vuRight"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int j;
+for(j=0;j<BUFSIZE;j++){
+   %left%[j] = AudioInputLeft[j];
+   %right%[j] = AudioInputRight[j];
+}
+%vuLeft%=%left%[0];
+%vuRight%=%right%[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>

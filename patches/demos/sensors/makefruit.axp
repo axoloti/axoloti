@@ -1,0 +1,132 @@
+<patch-1.0>
+   <obj type="digitalRead" sha="ba19c07c1187a5920be1049cfb56e9518a722c82" name="digitalRead_1" x="20" y="140">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PB1"/>
+         <combo attributeName="mode" selection="hi-z"/>
+      </attribs>
+   </obj>
+   <obj type="cb1m" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_1" x="160" y="140">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="or2" sha="d7f898c6d323d5b2bb8a39859aae4e049141b870" name="or2_1" x="200" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delayedpulsedurationx" sha="55f69bc6153344c6d5bed526ec91502b83708ce3" name="delayedpulsedurationx_1" x="280" y="140">
+      <params>
+         <frac32.s.map name="delay" value="-64.0"/>
+         <frac32.s.map name="pulselength" value="63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10" name="+c1" x="400" y="140">
+      <params>
+         <frac32.u.map name="c" value="12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="stringi" sha="4c1c90721e5f530e9fbdcfa373edaffe908e605b" name="stringi1" x="460" y="140">
+      <params/>
+      <attribs>
+         <table attributeName="prefix" table="lpl"/>
+         <table attributeName="suffix" table=".wav"/>
+      </attribs>
+   </obj>
+   <obj type="envahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="300" y="260">
+      <params>
+         <frac32.u.map name="a" value="8.0"/>
+         <frac32.u.map name="d" onParent="true" value="44.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="offset" x="400" y="260">
+      <params>
+         <frac32.u.map name="value" onParent="true" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="div128" sha="a04562d4c5dad7454500fb8bc6383a802aef8f25" name="div1281" x="460" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="playwave2stereo" sha="70fe22e694bf2df624372f88abd54856f3d8784b" name="playwave21" x="520" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="640" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1_" x="640" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="700" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="stringi1 out"/>
+         <dest name="playwave21 filename"/>
+      </net>
+      <net>
+         <source name="playwave21 outl"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="playwave21 outr"/>
+         <dest name="vca_1_ a"/>
+      </net>
+      <net>
+         <source name="envahd1 env"/>
+         <dest name="vca_1 v"/>
+         <dest name="vca_1_ v"/>
+      </net>
+      <net>
+         <source name="+c1 out"/>
+         <dest name="stringi1 index"/>
+      </net>
+      <net>
+         <source name="offset out"/>
+         <dest name="div1281 in"/>
+      </net>
+      <net>
+         <source name="div1281 out"/>
+         <dest name="playwave21 pos"/>
+      </net>
+      <net>
+         <source name="delayedpulsedurationx_1 pulse"/>
+         <dest name="playwave21 trig"/>
+      </net>
+      <net>
+         <source name="or2_1 o"/>
+         <dest name="delayedpulsedurationx_1 trig"/>
+         <dest name="envahd1 gate"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="dac~_1 left"/>
+      </net>
+      <net>
+         <source name="vca_1_ o"/>
+         <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="cb1m_1 o"/>
+         <dest name="or2_1 i1"/>
+      </net>
+      <net>
+         <source name="digitalRead_1 out"/>
+         <dest name="or2_1 i2"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

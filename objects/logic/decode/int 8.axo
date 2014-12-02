@@ -1,0 +1,34 @@
+<objdefs>
+   <obj.normal id="int 8" sha="69af9c80b214387a1a7210934e1cbb8536964d4d">
+      <sDescription>integer decoder</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="i1" description="input 1"/>
+      </inlets>
+      <outlets>
+         <bool32 name="o0" description="output 0" SumBuffer="false"/>
+         <bool32 name="o1" description="output 1" SumBuffer="false"/>
+         <bool32 name="o2" description="output 2" SumBuffer="false"/>
+         <bool32 name="o3" description="output 3" SumBuffer="false"/>
+         <bool32 name="o4" description="output 4" SumBuffer="false"/>
+         <bool32 name="o5" description="output 5" SumBuffer="false"/>
+         <bool32 name="o6" description="output 6" SumBuffer="false"/>
+         <bool32 name="o7" description="output 7" SumBuffer="false"/>
+         <int32 name="chain" description="chain output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%o0% = (%i1% == 0)?1:0;
+%o1% = (%i1% == 1)?1:0;
+%o2% = (%i1% == 2)?1:0;
+%o3% = (%i1% == 3)?1:0;
+%o4% = (%i1% == 4)?1:0;
+%o5% = (%i1% == 5)?1:0;
+%o6% = (%i1% == 6)?1:0;
+%o7% = (%i1% == 7)?1:0;
+%chain% = (%i1% - 8);
+]]></code.krate>
+   </obj.normal>
+</objdefs>

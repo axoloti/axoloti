@@ -1,28 +1,115 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+#################
+## AxoStudio
+#################
 
-# Precompiled Headers
-*.gch
-*.pch
+firmware/build/*
+firmware/.dep/*
+firmware/STM32_USB_Host_Library/*
+firmware/STM32F4xx_HAL_Driver/*
+control_firmware/build/*
+control_firmware/.dep/*
+portaudio-r1891-build/*
+portaudio/*
+win32tools/
+chibios/
+chibios_2.6.5/
+patch/xpatch.c
+patch/xpatch.cpp
+patch/xpatch.elf
+patch/xpatch.o
+patch/xpatch.d
+patch/xpatch.bin
+patch/xpatch.lst
+patch/xpatch.map
+.preferences.xml
+/chibios
+/target/
+/osx_tools/
+/build/
+/nbproject/private/
+/dist/
+hs_err_*.log
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
 
-# Fortran module files
-*.mod
+#################
+## Eagle
+#################
+*.b##
+*.b#1
+*.b#2
+*.b#3
+*.b#4
+*.b#5
+*.b#6
+*.b#7
+*.b#8
+*.b#9
+*.s##
+*.s#1
+*.s#2
+*.s#3
+*.s#4
+*.s#5
+*.s#6
+*.s#7
+*.s#8
+*.s#9
+*.l##
+*.l#1
+*.l#2
+*.l#3
+*.l#4
+*.l#5
+*.l#6
+*.l#7
+*.l#8
+*.l#9
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
 
-# Executables
-*.exe
-*.out
-*.app
+#################
+## Eclipse
+#################
+
+*.pydevproject
+.project
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
+
+# PDT-specific
+.buildpath
+
+#############
+## Windows detritus
+#############
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Mac crap
+.DS_Store
+

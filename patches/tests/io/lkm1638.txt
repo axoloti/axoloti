@@ -1,0 +1,54 @@
+
+uint8_t *xbuf;
+
+
+void tm1638_send_command(uint8_t x){
+spiSelect(&SPID1);
+chThdSleepMicroseconds(10);
+xbuf[0] = x;
+spiSend(&SPID1,1,&xbuf[0]);
+chThdSleepMicroseconds(10);
+spiUnselect(&SPID1);
+chThdSleepMicroseconds(10);
+}
+
+void tm1638_send_data(uint8_t addr, uint8_t data){
+tm1638_send_command(0x44);
+xbuf[0] = addr|0xc0;
+xbuf[1] = data;
+spiSelect(&SPID1);
+chThdSleepMicroseconds(10);
+spiSend(&SPID1,2,xbuf);
+chThdSleepMicroseconds(10);
+spiUnselect(&SPID1);
+chThdSleepMicroseconds(10);
+}
+
+void tm1638_set_led(uint8_t led, uint8_t cols){
+tm1638_send_data((led << 1) + 1, cols);
+}
+
+
+static uint8_t _xbuf[16] __attribute__ ((section (".sram2")));
+xbuf = _xbuf;
+
+
+
+tm1638_send_command(0x8F);
+
+////// init code
+
+static uint8_t _xbuf[16] __attribute__ ((section (".sram2")));
+xbuf = _xbuf;
+
+
+
+/////////////
+char i;
+while(!chThdShouldTerminate()){
+	i++;
+	chThdSleepMilliseconds(2);
+	tm1638_set_led((i&0x7), in1>>21);
+}
+
+chThdExit((msg_t)0);

@@ -1,0 +1,42 @@
+<objdefs>
+   <obj.normal id="reciprocal" sha="fee3b32001d8cc8788bdd6d14bd4ad5f04187030">
+      <sDescription>reciprocal, y = 64/x</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[if (%in%) {
+      float inf = %in%;
+      %out% = (int)(281474976710656.f/inf);
+    } else
+        %out% = 1<<27;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="reciprocal" sha="d4d6b03818ac9b3fa60fa7449f3414ebc196e238">
+      <sDescription>reciprocal, y = 64/x</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[if (%in%) {
+      float inf = %in%;
+      %out% = (int)(281474976710656.f/inf);
+    } else
+        %out% = 1<<27;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,121 @@
+<objdefs>
+   <obj.normal id="*" sha="b031e26920f6cf5c1a53377ee6021573c4e3ac02">
+      <sDescription>multiply</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="a" description="input"/>
+         <frac32 name="b" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%result%= ___SMMUL(%a%<<3,%b%<<2);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="*" sha="2dd344688c5663bfd27e605392f893ca49e4bcb7">
+      <sDescription>multiply</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="a" description="input"/>
+         <frac32buffer name="b" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[%result%= ___SMMUL(%a%<<3,%b%<<2);
+]]></code.srate>
+   </obj.normal>
+   <obj.normal id="*" sha="c47ceb7366785e0103cf880ce3450321491949f1">
+      <sDescription>multiply</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="a" description="input"/>
+         <frac32 name="b" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[%result%= ___SMMUL(%a%<<3,%b%<<2);
+]]></code.srate>
+   </obj.normal>
+   <obj.normal id="*" sha="c491f4fcc25792418020a0d98176129e3beac388">
+      <sDescription>multiply</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="a" description="input"/>
+         <int32 name="b" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%result%= %a%*%b%;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="*" sha="c31e1791ae8105d1f16792b09c827b16c8ac6b35">
+      <sDescription>multiply</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="a" description="input"/>
+         <frac32 name="b" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%result%= %a%*%b%;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="*" sha="2cde1e360d5ac386ff90b7726b9bc329b9fe46d2">
+      <sDescription>multiply</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="a" description="input"/>
+         <int32 name="b" description="input"/>
+      </inlets>
+      <outlets>
+         <int32 name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%result%= %a%*%b%;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="*" sha="d67b6c172dd96232df67e96baf19e3062e880e68">
+      <sDescription>multiply</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="a" description="input"/>
+         <frac32buffer name="b" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[%result%= ___SMMUL(%a%<<3,%b%<<2);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

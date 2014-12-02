@@ -1,0 +1,34 @@
+<objdefs>
+   <obj.normal id="record2" sha="a81485c5ad3662cfb26feb163c52775cbd64fe38">
+      <sDescription>record audio into table, starting from position</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="wave" description="wave"/>
+         <frac32 name="pos" description="start position in table"/>
+         <bool32.risingfalling name="en" description="enable"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <objref name="table"/>
+      </attribs>
+      <code.declaration><![CDATA[   int ntrig;
+   int pos;
+]]></code.declaration>
+      <code.init><![CDATA[pos = -1;
+]]></code.init>
+      <code.krate><![CDATA[   if ((%en%>0) && !ntrig) {
+      ntrig=1;
+      uint32_t asat = __USAT(%pos%,27);
+      pos = asat>>(27-%table%.LENGTHPOW);
+   }
+   else if (!(%en%>0)) ntrig=0;
+]]></code.krate>
+      <code.srate><![CDATA[   if (%en%>0) {
+       if (pos< %table%.LENGTH)
+              %table%.array[pos++] = __SSAT(%wave%,28)>>%table%.GAIN;
+   }]]></code.srate>
+   </obj.normal>
+</objdefs>

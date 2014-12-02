@@ -1,0 +1,47 @@
+<objdefs>
+   <obj.normal id="div 256" sha="d38dcba9fc7e97e1a69ac902a2cc595e87eca024">
+      <sDescription>divide by 256</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%out%= %in%>>8;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="div 256" sha="d5da30d88b10f5028af87030cfd738e963a4ffd2">
+      <sDescription>divide by 256</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[%out%= %in%>>8;]]></code.srate>
+   </obj.normal>
+   <obj.normal id="div 256" sha="27cb176484e00732cd0ba0e62055460b79a54362">
+      <sDescription>divide by 256</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <int32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%out%= %in%>>8;]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,33 @@
+<objdefs>
+   <obj.normal id="saw lin" sha="f07af1d07daf7d5c2b5d64cbc0061679e61cc18f">
+      <sDescription>saw wave LFO, rising slope, frequency input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="freq" description="frequency"/>
+         <bool32.rising name="reset" description="reset phase"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="wave" description="saw wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[uint32_t Phase;
+uint32_t r;
+]]></code.declaration>
+      <code.init><![CDATA[   Phase = 0;
+   r = 1;
+]]></code.init>
+      <code.krate><![CDATA[   {
+      if (%reset% && r) {
+         Phase = 0;
+         r = 0;
+      } else {
+         if (!%reset%) r = 1;
+         Phase += %freq%>>2;
+      }
+      %wave%= (Phase>>5);
+   }]]></code.krate>
+   </obj.normal>
+</objdefs>

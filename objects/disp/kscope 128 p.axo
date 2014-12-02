@@ -1,0 +1,35 @@
+<objdefs>
+   <obj.normal id="kscope 128 p" sha="d1bb962568d7aeafd27e33108ad78d000a042cf6">
+      <sDescription>positive control rate signal oscilloscope (time domain), showing 128 consecutive samples</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <rotatedParams>true</rotatedParams>
+      <inlets>
+         <frac32.positive name="in" description="input"/>
+         <bool32 name="hold" description="hold"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <uint8array128.vbar name="scope" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int8_t t[128];
+int index;
+]]></code.declaration>
+      <code.init><![CDATA[int i;
+for(i=0;i<128;i++) t[i]=0;
+index = 0;
+]]></code.init>
+      <code.krate><![CDATA[int i;
+t[index++] = (uint8_t)(%in%>>20);
+if (index == 128){
+  index = 0;
+  if (!%hold%){
+    for(i=0;i<128;i++)
+      %scope%[i]=t[i];
+  }
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>

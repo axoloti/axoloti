@@ -1,0 +1,28 @@
+<objdefs>
+   <obj.normal id="cc thin" sha="970061517641cff6d9187b1ee39abd939aaf8f1d">
+      <sDescription>Midi controller output, automatic thinning. Sends to midi/in/* objects only.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.positive name="v" description="value"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="0"/>
+         <spinner name="cc" MinValue="0" MaxValue="127" DefaultValue="0"/>
+      </attribs>
+      <code.declaration><![CDATA[int32_t lsend;
+int timer;
+]]></code.declaration>
+      <code.init><![CDATA[timer = 0;
+]]></code.init>
+      <code.krate><![CDATA[if (((lsend>%v%+(1<<19))||(%v%>lsend+(1<<19))) && (timer>30)) {
+   lsend = %v%;
+   PatchMidiInHandler(MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));
+   timer = 0;
+} else timer++;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,33 @@
+<objdefs>
+   <obj.normal id="d" sha="e047de4d97e15e991286b65f7265528616d6b4e8">
+      <sDescription>decay envelope, audio rate</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.positive name="env" description="envelope output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="d" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+int ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[val = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) { val =1<<27; ntrig=1;}
+   else { if (!(%trig%>0)) ntrig=0; }
+]]></code.krate>
+      <code.srate><![CDATA[   %env% = val;
+val -= ___SMMUL(val, %d%>>1);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

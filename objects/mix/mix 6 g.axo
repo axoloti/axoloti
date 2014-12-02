@@ -1,0 +1,108 @@
+<objdefs>
+   <obj.normal id="mix 6 g" sha="fb597c661fa5120fe1ed92ce5621ec1eeef3bb94">
+      <sDescription>6 input k-rate mixer, shows gain units</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="bus_in" description="input with unity gain"/>
+         <frac32 name="in1" description="input 1"/>
+         <frac32 name="in2" description="input 2"/>
+         <frac32 name="in3" description="input 3"/>
+         <frac32 name="in4" description="input 4"/>
+         <frac32 name="in5" description="input 5"/>
+         <frac32 name="in6" description="input 6"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="mix out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.gain name="gain1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain3">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain4">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain5">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain6">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
+   accum = ___SMMLA(%in2%,%gain2%,accum);
+;   accum = ___SMMLA(%in3%,%gain3%,accum);
+;   accum = ___SMMLA(%in4%,%gain4%,accum);
+;   accum = ___SMMLA(%in5%,%gain5%,accum);
+;   accum = ___SMMLA(%in6%,%gain6%,accum);
+;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="mix 6 g" sha="f48cf8a789f60bd24166f6e544b61ccf3a21230f">
+      <sDescription>6 input s-rate mixer, shows gain units</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="bus_in" description="input with unity gain"/>
+         <frac32buffer name="in1" description="input 1"/>
+         <frac32buffer name="in2" description="input 2"/>
+         <frac32buffer name="in3" description="input 3"/>
+         <frac32buffer name="in4" description="input 4"/>
+         <frac32buffer name="in5" description="input 5"/>
+         <frac32buffer name="in6" description="input 6"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="mix out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.gain name="gain1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain3">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain4">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain5">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain6">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+      </params>
+      <attribs/>
+      <code.srate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
+   accum = ___SMMLA(%in2%,%gain2%,accum);
+;   accum = ___SMMLA(%in3%,%gain3%,accum);
+;   accum = ___SMMLA(%in4%,%gain4%,accum);
+;   accum = ___SMMLA(%in5%,%gain5%,accum);
+;   accum = ___SMMLA(%in6%,%gain6%,accum);
+;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

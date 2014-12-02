@@ -1,0 +1,30 @@
+<objdefs>
+   <obj.normal id="sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6">
+      <sDescription>sine wave LFO, linear interpolated table, pitch input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.bipolar name="pitchm" description="pitch modulation"/>
+      </inlets>
+      <outlets>
+         <frac32.bipolar name="wave" description="sine wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.lfopitch name="pitch" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.lfopitch>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[uint32_t Phase;]]></code.declaration>
+      <code.init><![CDATA[Phase = 0;]]></code.init>
+      <code.krate><![CDATA[   {      int32_t freq;
+      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+      Phase += freq>>2;
+      int32_t r;
+      SINE2TINTERP(Phase,r)
+      %wave%= (r>>4);
+   }]]></code.krate>
+   </obj.normal>
+</objdefs>

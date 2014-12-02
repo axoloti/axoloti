@@ -1,0 +1,222 @@
+<patch-1.0>
+   <obj type="keybzone_lru" sha="ff92e04d9d1c21701cad00e37ce228d185467c57" name="keybzone_lru1" x="20" y="20">
+      <params/>
+      <attribs>
+         <spinner attributeName="startNote" value="0"/>
+         <spinner attributeName="endNote" value="127"/>
+      </attribs>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="140" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="lfo" x="240" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="div32" sha="41545586fbaebf68c4240a279a5619af09b5c1a1" name="div321" x="320" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="envahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="660" y="20">
+      <params>
+         <frac32.u.map name="a" value="31.0"/>
+         <frac32.u.map name="d" value="30.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth1" x="160" y="120">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix2" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe" name="mix11" x="220" y="120">
+      <params>
+         <frac32.u.map name="gain1" value="0.0"/>
+         <frac32.u.map name="gain2" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1" x="480" y="120">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="envd" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envahd2" x="660" y="140">
+      <params>
+         <frac32.u.map name="d" value="53.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix2" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe" name="mix21" x="740" y="140">
+      <params>
+         <frac32.u.map name="gain1" value="63.0"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pnoise" sha="8adc4b3e5aae39c856d02171f3d0b04aeec9625e" name="pnoise1" x="320" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix12" x="380" y="200">
+      <params>
+         <frac32.u.map name="gain1" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1_" x="480" y="200">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1_" x="140" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="inv" sha="dd3d98b9ec6f2b9231cb1d00d0f9667152537120" name="inv1" x="560" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix31" x="580" y="280">
+      <params>
+         <frac32.u.map name="gain1" value="25.0"/>
+         <frac32.u.map name="gain2" value="0.0"/>
+         <frac32.u.map name="gain3" value="23.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="hpfm~" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hpfm_1" x="700" y="280">
+      <params>
+         <frac32.s.map name="pitch" value="10.0"/>
+         <frac32.u.map name="reso" value="50.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pnoise" sha="8adc4b3e5aae39c856d02171f3d0b04aeec9625e" name="pnoise1_" x="320" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix12_" x="380" y="300">
+      <params>
+         <frac32.u.map name="gain1" value="0.19999980926513672"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1__" x="480" y="300">
+      <params>
+         <frac32.s.map name="pitch" value="-0.1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="880" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="1020" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="keybzone_lru1 note"/>
+         <dest name="smooth1 in"/>
+         <dest name="mix12_ bus_in"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="saw_1 pitchm"/>
+         <dest name="mix21 bus_in"/>
+         <dest name="mix12 bus_in"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="mix31 in1"/>
+      </net>
+      <net>
+         <source name="saw_1__ wave"/>
+         <dest name="mix31 in3"/>
+      </net>
+      <net>
+         <source name="mix31 out"/>
+         <dest name="hpfm_1 in"/>
+      </net>
+      <net>
+         <source name="hpfm_1 out"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="envahd1 env"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="lfo wave"/>
+         <dest name="div321 in"/>
+      </net>
+      <net>
+         <source name="smooth1 out"/>
+         <dest name="mix11 bus_in"/>
+      </net>
+      <net>
+         <source name="div321 out"/>
+         <dest name="mix11 in1"/>
+         <dest name="mix21 in1"/>
+      </net>
+      <net>
+         <source name="envahd2 env"/>
+         <dest name="mix21 in2"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="hpfm_1 pitchm"/>
+      </net>
+      <net>
+         <source name="saw_1_ wave"/>
+         <dest name="inv1 in"/>
+      </net>
+      <net>
+         <source name="inv1 out"/>
+         <dest name="mix31 in2"/>
+      </net>
+      <net>
+         <source name="pnoise1 out"/>
+         <dest name="mix12 in1"/>
+      </net>
+      <net>
+         <source name="mix12 out"/>
+         <dest name="saw_1_ pitchm"/>
+      </net>
+      <net>
+         <source name="pnoise1_ out"/>
+         <dest name="mix12_ in1"/>
+      </net>
+      <net>
+         <source name="mix12_ out"/>
+         <dest name="saw_1__ pitchm"/>
+      </net>
+      <net>
+         <source name="keybzone_lru1 gate2"/>
+         <dest name="displayS1 in"/>
+         <dest name="envahd2 trig"/>
+      </net>
+      <net>
+         <source name="keybzone_lru1 gate"/>
+         <dest name="envahd1 gate"/>
+         <dest name="displayS1_ in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

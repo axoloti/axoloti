@@ -1,0 +1,70 @@
+<objdefs>
+   <obj.normal id="pwm" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c">
+      <sDescription>Bandwith limited pulse width modulation oscillator</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
+         <frac32.positive name="pwm" description="pwm ratio"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="wave" description="pwm wave, anti-aliased" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.pitch name="pitch" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.pitch>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[  int32_t osc_p;
+  static const int blepvoices = 8;
+  int16_t *oscp[blepvoices];
+  uint32_t nextvoice;
+  int32_t pwmp;
+]]></code.declaration>
+      <code.init><![CDATA[    int j;
+    for(j=0;j<blepvoices;j++)
+      oscp[j] = &blept[BLEPSIZE-1];   nextvoice = 0;]]></code.init>
+      <code.krate><![CDATA[      int32_t freq;
+      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+  int j;
+  int16_t *lastblep = &blept[BLEPSIZE-1];
+  for(j=0;j<BUFSIZE;j++){
+    int i;
+    int p;
+    p = osc_p;
+    osc_p = p+freq;
+    int32_t sum=0;
+    if ((osc_p>0)&&!(p>0)){   // dispatch
+      nextvoice = (nextvoice+1)&(blepvoices-1);
+      int32_t x = 0;
+      if (freq>>24)
+         x = osc_p/(freq>>6);
+      else if (freq)
+         x = (osc_p<<6)/freq;
+      oscp[nextvoice] = &blept[x];
+      pwmp = %pwm%;
+    }
+    if ((osc_p-(pwmp<<4)>0)&&!(p-(pwmp<<4)>0)){   // dispatch
+      nextvoice = (nextvoice+1)&(blepvoices-1);
+      int32_t x = 0;
+      if (freq>>24)
+        x = (osc_p-(%pwm%<<4))/(freq>>6);
+      else if (freq)
+        x = ((osc_p-(%pwm%<<4))<<6)/(freq);
+      oscp[nextvoice] = &blept[x];
+    }
+    for(i=0;i<blepvoices;i++){ // sample
+      int16_t *t = oscp[i];
+      if (i&1) sum+=*t; else sum-=*t; 
+      t+=64;
+      if (t>=lastblep) t=lastblep;
+      oscp[i]=t;
+    }
+    sum -= ((((nextvoice+1)&1)<<1)-1)<<13;
+    %wave%[j]=sum<<13;
+  }]]></code.krate>
+   </obj.normal>
+</objdefs>

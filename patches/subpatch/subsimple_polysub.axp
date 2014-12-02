@@ -1,0 +1,38 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="160" y="40">
+      <params>
+         <frac32.u.map name="value" value="9.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="outC" x="280" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c1" sha="ea3f53ea316f208a3ff2da087adce60e5e319c91" name="c11" x="120" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="outOne" x="280" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="outC outlet"/>
+      </net>
+      <net>
+         <source name="c11 o"/>
+         <dest name="outOne outlet"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>polyphonic</subpatchmode>
+      <NPresets>8</NPresets>
+      <NPresetEntries>1</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

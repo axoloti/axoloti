@@ -1,0 +1,48 @@
+<objdefs>
+   <obj.normal id="samplehold" sha="332c0a95e3f565a482d970d66b76153dae8d7d92">
+      <sDescription>Pass through when s_h input is less or equal than zero or hold when positive.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="input"/>
+         <frac32 name="s_h" description="pass through when less or equal than zero or hold when positive"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[   int32_t hold;
+]]></code.declaration>
+      <code.init><![CDATA[hold = 0;
+]]></code.init>
+      <code.krate><![CDATA[if (%s_h%<=0)
+   hold = %in%;
+%out% = hold;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="samplehold" sha="37856879cf6c0ba2d84d25bca330b3c3615d474">
+      <sDescription>Pass through when s_h input is less or equal than zero or hold when positive.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input"/>
+         <frac32buffer name="s_h" description="pass through when less or equal than zero or hold when positive"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[   int32_t hold;
+]]></code.declaration>
+      <code.init><![CDATA[hold = 0;
+]]></code.init>
+      <code.srate><![CDATA[if (%s_h%<=0)
+   hold = %in%;
+%out% = hold;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

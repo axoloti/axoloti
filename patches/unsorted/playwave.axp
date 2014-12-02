@@ -1,0 +1,46 @@
+<patch-1.0>
+   <obj type="c" name="c1" x="40" y="20">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="playwave" name="playwave1" x="200" y="20">
+      <params/>
+      <attribs>
+         <table attributeName="wavefile" table="pia_l030.wav"/>
+      </attribs>
+   </obj>
+   <obj type="dac~1" name="dac_11" x="400" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" name="dac_21" x="400" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1" x="40" y="100">
+      <params>
+         <frac32.s.map name="pitch" value="-7.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="comment" name="file test.wav in root of sdcard" x="200" y="140"/>
+   <comment type="comment" name="sdcard must be inserted already before powering on the axoloti core!" x="200" y="160"/>
+   <nets>
+      <net>
+         <source name="playwave1 o"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="playwave1 pos"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="playwave1 trig"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

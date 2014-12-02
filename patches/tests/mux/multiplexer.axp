@@ -1,0 +1,67 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="20">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="sel" x="160" y="40">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="0" y="100">
+      <params>
+         <frac32.u.map name="value" value="10.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="inmux4" sha="e7166ff98d97ba23b1ddc266f3af122f01bf7412" name="inmux41" x="160" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="280" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="0" y="180">
+      <params>
+         <frac32.u.map name="value" value="20.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="0" y="260">
+      <params>
+         <frac32.u.map name="value" value="30.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="inmux41 i0"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="inmux41 i1"/>
+      </net>
+      <net>
+         <source name="c3 out"/>
+         <dest name="inmux41 i2"/>
+      </net>
+      <net>
+         <source name="c4 out"/>
+         <dest name="inmux41 i3"/>
+      </net>
+      <net>
+         <source name="sel out"/>
+         <dest name="inmux41 s"/>
+      </net>
+      <net>
+         <source name="inmux41 o"/>
+         <dest name="displayU1 in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,144 @@
+<patch-1.0>
+   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="56" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="-6.899999618530273"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="rand/uniform f trig" sha="7c693e3fcb8abe7dc3908628ef0eb911a4a19ce1" name="uniform_2" x="182" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c_1" x="294" y="0">
+      <params>
+         <frac32.u.map name="amp" value="55.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="uniform_1" x="126" y="112">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="env/d lin x" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="adsr_1" x="112" y="154">
+      <params>
+         <frac32.s.map name="d" value="-23.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="210" y="154">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="266" y="154">
+      <params>
+         <frac32.s.map name="pitch" value="1.0"/>
+         <frac32.u.map name="reso" value="49.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix_1" x="84" y="378">
+      <params>
+         <frac32.u.map name="gain1" value="24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="reverb/fdn4" sha="13d669964bda5b57297a930109b40a6bc2f548e4" name="fdn4_1" x="210" y="378">
+      <params>
+         <frac32.u.map name="g" value="37.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="d1" value="647"/>
+         <spinner attributeName="d2" value="953"/>
+         <spinner attributeName="d3" value="1163"/>
+         <spinner attributeName="d4" value="1531"/>
+      </attribs>
+   </obj>
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix_2" x="392" y="378">
+      <params>
+         <frac32.u.map name="gain1" value="32.0"/>
+         <frac32.u.map name="gain2" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix_3" x="476" y="406">
+      <params>
+         <frac32.u.map name="gain1" value="32.0"/>
+         <frac32.u.map name="gain2" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="560" y="406">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="fdn4_1 out1"/>
+         <dest name="mix_2 in1"/>
+      </net>
+      <net>
+         <source name="fdn4_1 out2"/>
+         <dest name="mix_2 in2"/>
+      </net>
+      <net>
+         <source name="mix_1 out"/>
+         <dest name="fdn4_1 in1"/>
+         <dest name="mix_2 bus_in"/>
+         <dest name="mix_3 bus_in"/>
+      </net>
+      <net>
+         <source name="mix_2 out"/>
+         <dest name="out_1 left"/>
+      </net>
+      <net>
+         <source name="adsr_1 env"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="uniform_1 wave"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="square_1 wave"/>
+         <dest name="adsr_1 trig"/>
+         <dest name="uniform_2 trig"/>
+      </net>
+      <net>
+         <source name="fdn4_1 out3"/>
+         <dest name="mix_3 in1"/>
+      </net>
+      <net>
+         <source name="fdn4_1 out4"/>
+         <dest name="mix_3 in2"/>
+      </net>
+      <net>
+         <source name="mix_3 out"/>
+         <dest name="out_1 right"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="vcf3~_1 in"/>
+      </net>
+      <net>
+         <source name="vcf3~_1 out"/>
+         <dest name="mix_1 in1"/>
+      </net>
+      <net>
+         <source name="uniform_2 rand"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="vcf3~_1 pitchm"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

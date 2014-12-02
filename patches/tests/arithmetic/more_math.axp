@@ -1,0 +1,54 @@
+<patch-1.0>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp2" x="80" y="100">
+      <params>
+         <frac32.s.map name="value" value="17.745342254638672"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/round" sha="3944e69389a11054c6d2a9beca3dd2d704aa5355" name="round1" x="160" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="240" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp2_" x="80" y="240">
+      <params>
+         <frac32.s.map name="value" value="-60.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/quantize" sha="4c4a90a911707903fc9fc7215d7c31567a87181e" name="round1_" x="160" y="240">
+      <params/>
+      <attribs>
+         <spinner attributeName="bits" value="3"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1_" x="252" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="cbp2 out"/>
+         <dest name="round1 in"/>
+      </net>
+      <net>
+         <source name="round1 out"/>
+         <dest name="displayS1 in"/>
+      </net>
+      <net>
+         <source name="cbp2_ out"/>
+         <dest name="round1_ a"/>
+      </net>
+      <net>
+         <source name="round1_ b"/>
+         <dest name="displayS1_ in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

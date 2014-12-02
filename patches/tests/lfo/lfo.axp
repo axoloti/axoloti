@@ -1,0 +1,150 @@
+<patch-1.0>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="freq" x="14" y="14">
+      <params>
+         <frac32.s.map name="value" value="11.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="210" y="14">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="reset" x="14" y="98">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw21" x="210" y="98">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/i radio 8 v" sha="1e72dd4de547d6bc356161613f0080b899628801" name="i_1" x="434" y="168">
+      <params>
+         <int32.vradio name="value" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/saw down" sha="374413e8279bb79209e158715ff652782fda082a" name="sawdown21" x="210" y="196">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="210" y="294">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mux/mux 8" sha="86863079e7321e24cc459b915df254f38201e6e" name="inmux81" x="448" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart b" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1" x="532" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" sha="5a9175b8d44d830756d1599a86b4a6a49813a19b" name="interp_1" x="532" y="434">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="630" y="448">
+      <params>
+         <frac32.u.map name="amp" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_11" x="700" y="448">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="lfo/saw lin" sha="f07af1d07daf7d5c2b5d64cbc0061679e61cc18f" name="saw1" x="210" y="518">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="490" y="560">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/kscope 128 b" sha="187931f6934dab0686ca4d2b338cd8688db4f3e6" name="scope_128s1" x="560" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="lfo/saw down lin" sha="5a576a35a4a518f008b9aba330400e23ea949336" name="sawdown1" x="210" y="574">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="freq out"/>
+         <dest name="saw1 freq"/>
+         <dest name="sawdown1 freq"/>
+      </net>
+      <net>
+         <source name="reset o"/>
+         <dest name="sawdown1 reset"/>
+         <dest name="saw1 reset"/>
+         <dest name="saw21 reset"/>
+         <dest name="sawdown21 reset"/>
+         <dest name="square1 reset"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="inmux81 i0"/>
+      </net>
+      <net>
+         <source name="inmux81 o"/>
+         <dest name="scopeS1 in"/>
+         <dest name="interp_1 i"/>
+         <dest name="scope_128s1 in"/>
+      </net>
+      <net>
+         <source name="saw21 wave"/>
+         <dest name="inmux81 i1"/>
+      </net>
+      <net>
+         <source name="sawdown21 wave"/>
+         <dest name="inmux81 i2"/>
+      </net>
+      <net>
+         <source name="square1 wave"/>
+         <dest name="inmux81 i3"/>
+      </net>
+      <net>
+         <source name="saw1 wave"/>
+         <dest name="inmux81 i4"/>
+      </net>
+      <net>
+         <source name="sawdown1 wave"/>
+         <dest name="inmux81 i5"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="scope_128s1 hold"/>
+      </net>
+      <net>
+         <source name="interp_1 o"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="i_1 out"/>
+         <dest name="inmux81 s"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="dac_11 left"/>
+         <dest name="dac_11 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

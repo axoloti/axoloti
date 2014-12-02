@@ -1,0 +1,400 @@
+<objdefs>
+   <objdef class="axoloti.object.AxoObject" id="subtest">
+      <sDescription>C:\Users\jtaelman\Documents\GitHub\AxoStudio\patches\subtest.axp</sDescription>
+      <inlets/>
+      <outlets>
+         <outlet class="axoloti.outlets.OutletFrac32" name="outlet1" description="outlet1" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attributes/>
+      <sDeclaration><![CDATA[typedef struct {
+    ParameterExchange_t PExch[1];
+/* parameters2 */
+KeyValuePair KVP_osc1_pitch;
+uint32_t osc1Phase;
+int32_t outlet1outlet;
+
+/* modsource defines */
+/* net latches */
+} subtestData;
+/* init */
+void subtestInit(subtestData *data) {
+  int i;
+    SetKVP_IPVP(&data->KVP_osc1_pitch,ObjectKvpRoot, "KVP_osc1_pitch" ,&data->PExch[0],0,133169152);
+  KVP_RegisterObject(&data->KVP_osc1_pitch);
+data->osc1Phase = 0;
+  numPEx = 1;
+
+int *pp;
+// preset 0
+pp = (int*)(&Presets[0]);
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+// preset 1
+pp = (int*)(&Presets[1]);
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+// preset 2
+pp = (int*)(&Presets[2]);
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+// preset 3
+pp = (int*)(&Presets[3]);
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+// preset 4
+pp = (int*)(&Presets[4]);
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+// preset 5
+pp = (int*)(&Presets[5]);
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+// preset 6
+pp = (int*)(&Presets[6]);
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+// preset 7
+pp = (int*)(&Presets[7]);
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+   *pp++ = -1; *pp++ = 0;
+}
+
+/* krate */
+void subtestProcess(subtestData *data) {
+  int i;
+  int UNCONNECTED_OUTPUT;
+  int UNCONNECTED_INPUT=0;
+    int32_t  net0;
+// --------osc1---------
+   {      int32_t local_osc1freq;
+      MTOF(data->PExch[0].modvalue + 0 ,local_osc1freq);
+      data->osc1Phase += local_osc1freq>>2;
+      int32_t local_osc1r;
+      SINE2TINTERP(data->osc1Phase,local_osc1r)
+      net0= (local_osc1r>>4);
+   }
+// --------outlet1---------
+  data->outlet1outlet = net0;
+
+/* net latch copy */
+}
+
+void subtestMidiInControlChange(subtestData *data, uint8_t channel, uint8_t cc, uint8_t val){
+   if (channel == MIDICHANNEL){
+   }
+}
+
+void subtestMidiInNoteOn(subtestData *data, uint8_t channel, uint8_t note, uint8_t velocity){
+   if (channel == MIDICHANNEL){
+   }
+}
+
+void subtestMidiInNoteOff(subtestData *data, uint8_t channel, uint8_t note, uint8_t velocity){
+   if (channel == MIDICHANNEL){
+   }
+}
+
+void subtestMidiInPitchBend(subtestData *data, uint8_t channel, uint8_t data1, uint8_t data2){
+   if (channel == MIDICHANNEL){
+   }
+}
+
+void subtestMidiInAllNotesOff(subtestData *data, uint8_t channel){
+   if (channel == MIDICHANNEL){
+   }
+}
+
+void subtestMidiInResetControllers(subtestData *data, uint8_t channel){
+   if (channel == MIDICHANNEL){
+   }
+}
+
+]]></sDeclaration>
+      <sInitCode><![CDATA[   osc1_i.Init(*this);
+   outlet1_i.Init(*this);
+   int i;
+   int j;
+   const int32_t *p;
+   p = GetInitParams();
+   for(j=0;j<1;j++){
+      PExch[j].value = p[j];
+      PExch[j].modvalue = p[j];
+      PExch[j].signals = 0;
+   }
+     displayVector[0] = 0x446F7841;
+     displayVector[1] = 0;
+     displayVector[2] = 0;
+]]></sInitCode>
+      <sKRateCode><![CDATA[  int i;
+  for(i=0;i<BUFSIZE;i++) outputLeft[i]=0;
+  for(i=0;i<BUFSIZE;i++) outputRight[i]=0;
+//--------- <nets> -----------//
+    int32_t  net0;
+//--------- </nets> ----------//
+//--------- <zero> ----------//
+  int32_t UNCONNECTED_OUTPUT;
+  int32_t UNCONNECTED_INPUT=0;
+  int32buffer zerobuffer;
+  for(i=0;i<BUFSIZE;i++) zerobuffer[i]=0;
+  int32buffer UNCONNECTED_OUTPUT_BUFFER;
+//--------- </zero> ----------//
+//--------- <object calls> ----------//
+  osc1_i.dsp(*this, 0 , net0);
+  outlet1_i.dsp(*this, net0);
+//--------- </object calls> ----------//
+//--------- <net latch copy> ----------//
+//--------- </net latch copy> ----------//
+]]></sKRateCode>
+      <sMidiCCCode><![CDATA[   if (channel == MIDICHANNEL){
+   }
+]]></sMidiCCCode>
+      <sMidiNoteOnCode><![CDATA[   if (channel == MIDICHANNEL){
+   }
+]]></sMidiNoteOnCode>
+      <sMidiNoteOffCode><![CDATA[   if (channel == MIDICHANNEL){
+   }
+]]></sMidiNoteOffCode>
+   </objdef>
+</objdefs>

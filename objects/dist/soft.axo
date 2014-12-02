@@ -1,0 +1,40 @@
+<objdefs>
+   <obj.normal id="soft" sha="d1abc8d0ff871eec9b76ec2b6de9bfd51f38243a">
+      <sDescription>symetrical soft saturation distortion: y=1.5*x-0.5*x^3 for -1&amp;lt;x&amp;lt;1, y=-1 for x&amp;lt;-1, y=1 for x&amp;gt;1, no oversampling or anti-aliasing</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32.bipolar name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int32_t ts = __SSAT(%in%,28);
+int32_t tsq31 = ts<<3;
+int32_t tsq31p3 = ___SMMUL(tsq31,___SMMUL(tsq31,tsq31));
+%out% = ts + (ts>>1) - (tsq31p3);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="soft" sha="4de9b281f2a362671b6dc8606f5d039535893f45">
+      <sDescription>symetrical soft saturation distortion: y=1.5*x-0.5*x^3 for -1&amp;lt;x&amp;lt;1, y=-1 for x&amp;lt;-1, y=1 for x&amp;gt;1, no oversampling or anti-aliasing</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="audio input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="out" description="audio output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[int32_t ts = __SSAT(%in%,28);
+int32_t tsq31 = ts<<3;
+int32_t tsq31p3 = ___SMMUL(tsq31,___SMMUL(tsq31,tsq31));
+%out% = ts + (ts>>1) - (tsq31p3);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

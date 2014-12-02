@@ -1,0 +1,60 @@
+<objdefs>
+   <obj.normal id="change" sha="2473451a71c0ec362331c67ef644bc59197a247d">
+      <sDescription>Generates a trigger pulse when current input value is different from previous value.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <bool32 name="trig" description="trigger pulse" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[   int ptrig;
+   int32_t pval;
+]]></code.declaration>
+      <code.init><![CDATA[ptrig = 0;
+pval = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((pval != %in%)&(!ptrig)) { 
+  %trig% = 1;
+  pval = %in%;
+  ptrig = 1;
+} else {
+  ptrig = 0;
+  %trig% = 0;
+}
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="change" sha="f80233f48404b59940f740ca338756232392f909">
+      <sDescription>Generates a trigger pulse when current input value is different from previous value.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <bool32 name="trig" description="trigger pulse" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[   int ptrig;
+   int32_t pval;
+]]></code.declaration>
+      <code.init><![CDATA[ptrig = 0;
+pval = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((pval != %in%)&(!ptrig)) { 
+  %trig% = 1;
+  pval = %in%;
+  ptrig = 1;
+} else {
+  ptrig = 0;
+  %trig% = 0;
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>

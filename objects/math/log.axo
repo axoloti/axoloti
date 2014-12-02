@@ -1,0 +1,42 @@
+<objdefs>
+   <obj.normal id="log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd">
+      <sDescription>logarithm, y=16+8*log2(x)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.positive name="a" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[Float_t f;
+f.f = %a%;
+int32_t r1 = ((f.parts.exponent&0x7F)-18) << 24;
+int32_t r3 = logt[f.parts.mantissa>>15]<<10;
+%result% = r1 + r3;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="log" sha="ff1f4aeb54fc1d404d0bb1720dc013b79eaf36e8">
+      <sDescription>logarithm, y=16+8*log2(x)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer.positive name="a" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[Float_t f;
+f.f = %a%;
+int32_t r1 = ((f.parts.exponent&0x7F)-18) << 24;
+int32_t r3 = logt[f.parts.mantissa>>15]<<10;
+%result% = r1 + r3;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

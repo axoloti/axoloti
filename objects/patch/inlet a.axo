@@ -1,0 +1,17 @@
+<objdefs>
+   <obj.normal id="inlet a" sha="2944bdbaeb2a8a42d5a97163275d052f75668a86">
+      <sDescription>Fractional buffer (audio) inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32buffer name="inlet" description="inlet" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32buffer _inlet;
+]]></code.declaration>
+      <code.srate><![CDATA[   %inlet% = _inlet[buffer_index];]]></code.srate>
+   </obj.normal>
+</objdefs>

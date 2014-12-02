@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="send i" sha="1e4343a5dec42cd8476c6e0434396f139684ac0f">
+      <sDescription>send (to recv object), integer type</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="v" description="v"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t _vi;
+]]></code.declaration>
+      <code.krate><![CDATA[  _vi = %v%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,65 @@
+<objdefs>
+   <obj.normal id="delta" sha="c1baa08776e10d0bfde6633563f02611494ab6cd">
+      <sDescription>pseudo derivative, difference between previous and current value</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32 name="d" description="a(t) - a(t-1)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t _ap;
+]]></code.declaration>
+      <code.init><![CDATA[   _ap = 0;
+]]></code.init>
+      <code.krate><![CDATA[   %d%= %a% - _ap;
+   _ap = %a%;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="delta" sha="a0571010403326d85c9c2c55e100910e30e1bbe4">
+      <sDescription>pseudo derivative, difference between previous and current value</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="d" description="a(t) - a(t-1)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t _ap;
+]]></code.declaration>
+      <code.init><![CDATA[   _ap = 0;
+]]></code.init>
+      <code.srate><![CDATA[   %d%= %a% - _ap;
+   _ap = %a%;
+]]></code.srate>
+   </obj.normal>
+   <obj.normal id="delta" sha="4eff7b00344b2ded521b17825739badbe9863de9">
+      <sDescription>pseudo derivative, difference between previous and current value</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <int32 name="d" description="a(t) - a(t-1)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t _ap;
+]]></code.declaration>
+      <code.init><![CDATA[   _ap = 0;
+]]></code.init>
+      <code.krate><![CDATA[   %d%= %a% - _ap;
+   _ap = %a%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

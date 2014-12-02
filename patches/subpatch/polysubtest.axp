@@ -1,0 +1,37 @@
+<patch-1.0>
+   <obj type="c" name="c1" x="80" y="60">
+      <params>
+         <frac32.u.map name="value" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c2" x="80" y="180">
+      <params>
+         <frac32.u.map name="value" onParent="true" value="8.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="outlet" name="outlet1" x="160" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="outlet" name="outlet2" x="160" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c2 out"/>
+         <dest name="outlet2 outlet"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="outlet1 outlet"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>polyphonic</subpatchmode>
+      <MidiChannel>0</MidiChannel>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

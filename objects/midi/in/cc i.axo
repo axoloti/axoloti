@@ -1,0 +1,29 @@
+<objdefs>
+   <obj.normal id="cc i" sha="7f43740c4d7e4145d07d22ce3cf4516a7cbd4c73">
+      <sDescription>Receives Midi Continuous Controller messages, integer output (0-127)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <int32.positive name="midiCC" description="midi CC 0-127" SumBuffer="false"/>
+         <bool32.pulse name="trig" description="trigger output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="cc" MinValue="0" MaxValue="127" DefaultValue="0"/>
+         <spinner name="default" MinValue="0" MaxValue="127" DefaultValue="0"/>
+      </attribs>
+      <code.declaration><![CDATA[int32_t ccv;
+int32_t ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[ccv = %default%;
+]]></code.init>
+      <code.krate><![CDATA[%midiCC%= ccv;
+%trig% = ntrig;
+ntrig = 0;
+]]></code.krate>
+      <code.midihandler><![CDATA[if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == %cc%)) { ccv = data2; ntrig = 1;}
+]]></code.midihandler>
+   </obj.normal>
+</objdefs>

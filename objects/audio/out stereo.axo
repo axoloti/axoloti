@@ -1,0 +1,26 @@
+<objdefs>
+   <obj.normal id="out stereo" sha="b933bb91801a126126313c11f773158b5ca2face">
+      <sDescription>Audio output, stereo</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="left" description="Left channel"/>
+         <frac32buffer name="right" description="Right channel"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <frac32.vu name="vuLeft"/>
+         <frac32.vu name="vuRight"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int j;
+for(j=0;j<BUFSIZE;j++){
+   AudioOutputLeft[j] += __SSAT(%left%[j],28);
+   AudioOutputRight[j] += __SSAT(%right%[j],28);
+}
+%vuLeft%=%left%[0];
+%vuRight%=%right%[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>

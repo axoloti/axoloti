@@ -1,0 +1,40 @@
+<patch-1.0>
+   <obj type="inlet" name="inlet1" x="40" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix2" name="mix21" x="120" y="120">
+      <params>
+         <frac32.u.map name="gain1" onParent="true" value="53.5"/>
+         <frac32.u.map name="gain2" value="19.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="rand" name="rand1" x="40" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="outlet" name="outlet1" x="280" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="inlet1 inlet"/>
+         <dest name="mix21 in1"/>
+      </net>
+      <net>
+         <source name="rand1 wave"/>
+         <dest name="mix21 in2"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="outlet1 outlet"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>normal</subpatchmode>
+      <MidiChannel>0</MidiChannel>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,115 @@
+<patch-1.0>
+   <obj type="midi/in/keyb zone lru" sha="b9b28cf52b3421368e367f3718404222910c57a5" name="keybzone_lru_1" x="14" y="14">
+      <params/>
+      <attribs>
+         <spinner attributeName="startNote" value="0"/>
+         <spinner attributeName="endNote" value="127"/>
+      </attribs>
+   </obj>
+   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd_1" x="196" y="14">
+      <params>
+         <frac32.u.map name="d" value="2.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*" sha="b031e26920f6cf5c1a53377ee6021573c4e3ac02" name="*_1" x="308" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd_1" x="560" y="112">
+      <params>
+         <frac32.u.map name="a" value="0.0"/>
+         <frac32.u.map name="d" value="54.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix1_1" x="420" y="154">
+      <params>
+         <frac32.u.map name="gain1" value="16.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="210" y="252">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/square sync" sha="9d196dfa9e8b9f0e0b3ebc4162c12d61a696c13d" name="squaresync~_1" x="420" y="252">
+      <params>
+         <frac32.s.map name="pitch" value="7.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_1" x="560" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="658" y="266">
+      <params>
+         <frac32.u.map name="amp" value="14.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="854" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="keybzone_lru_1 gate2"/>
+         <dest name="envd_1 trig"/>
+         <dest name="envahd_1 gate"/>
+      </net>
+      <net>
+         <source name="envd_1 env"/>
+         <dest name="*_1 a"/>
+      </net>
+      <net>
+         <source name="keybzone_lru_1 velocity"/>
+         <dest name="*_1 b"/>
+      </net>
+      <net>
+         <source name="keybzone_lru_1 note"/>
+         <dest name="mix1_1 bus_in"/>
+         <dest name="osc~_1 pitchm"/>
+      </net>
+      <net>
+         <source name="*_1 result"/>
+         <dest name="mix1_1 in1"/>
+      </net>
+      <net>
+         <source name="mix1_1 out"/>
+         <dest name="squaresync~_1 pitchm"/>
+      </net>
+      <net>
+         <source name="osc~_1 wave"/>
+         <dest name="squaresync~_1 sync"/>
+      </net>
+      <net>
+         <source name="squaresync~_1 wave"/>
+         <dest name="vca~_1 a"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="dac~_1 left"/>
+         <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="envahd_1 env"/>
+         <dest name="vca~_1 v"/>
+      </net>
+      <net>
+         <source name="vca~_1 o"/>
+         <dest name="*c_1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>polyphonic</subpatchmode>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

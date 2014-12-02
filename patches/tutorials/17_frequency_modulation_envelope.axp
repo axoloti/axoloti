@@ -1,0 +1,104 @@
+<patch-1.0>
+   <comment type="patch/comment" sha="sha" name="frequency modulation, sine wave carrier, sine wave modulator" x="14" y="14"/>
+   <comment type="patch/comment" sha="sha" name="evelope to control modulation depth" x="182" y="42"/>
+   <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd1" x="182" y="56">
+      <params>
+         <frac32.u.map name="d" value="29.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="336" y="56">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="modulator oscillator" x="14" y="182"/>
+   <comment type="patch/comment" sha="sha" name="modulation intensity" x="182" y="182"/>
+   <comment type="patch/comment" sha="sha" name="carrier oscillator" x="336" y="182"/>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="196">
+      <params>
+         <frac32.s.map name="pitch" value="12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_2" x="182" y="196">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_2" x="336" y="196">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="462" y="196">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="532" y="196">
+      <params>
+         <frac32.u.map name="amp" value="4.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="616" y="196">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_1" x="546" y="308">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="osc_1 pitchm"/>
+         <dest name="osc_2 pitchm"/>
+      </net>
+      <net>
+         <source name="keyb1 gate"/>
+         <dest name="vca_1 v"/>
+         <dest name="envd1 trig"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="osc_2 wave"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="envd1 env"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="vca_2 a"/>
+      </net>
+      <net>
+         <source name="vca_2 o"/>
+         <dest name="osc_2 fm"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="vca_2 v"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="*c1 in"/>
+         <dest name="scope_1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

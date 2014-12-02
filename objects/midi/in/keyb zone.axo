@@ -1,0 +1,48 @@
+<objdefs>
+   <obj.normal id="keyb zone" sha="44dada96531ef6abd5c77f60bb92dbb2ec0d6d35">
+      <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32.bipolar name="note" description="midi note number" SumBuffer="false"/>
+         <bool32 name="gate" description="key pressed?" SumBuffer="false"/>
+         <frac32.positive name="velocity" description="note-on velocity" SumBuffer="false"/>
+         <frac32.positive name="releaseVelocity" description="note-off velocity" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="startNote" MinValue="0" MaxValue="127" DefaultValue="0"/>
+         <spinner name="endNote" MinValue="0" MaxValue="127" DefaultValue="127"/>
+      </attribs>
+      <code.declaration><![CDATA[int8_t _note;
+uint8_t _gate;
+uint8_t _velo;
+uint8_t _rvelo;
+]]></code.declaration>
+      <code.init><![CDATA[_gate = 0;
+_note = 0;
+]]></code.init>
+      <code.krate><![CDATA[%note%= _note<<21;
+%gate%= _gate<<27;
+%velocity%= _velo<<20;
+%releaseVelocity%= _rvelo<<20;
+]]></code.krate>
+      <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
+  if ((data1 >= %startNote%)&&(data1 <= %endNote%)) {
+    _velo = data2;
+    _note = data1-64;
+    _gate = 1;
+  }
+} else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||          (status == MIDI_NOTE_OFF + %midichannel%)) {
+  if (_note == data1-64) {
+    _rvelo = data2;
+    _gate = 0;
+  }
+} else if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {
+   _gate = 0;
+}
+]]></code.midihandler>
+   </obj.normal>
+</objdefs>

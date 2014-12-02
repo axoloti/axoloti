@@ -1,0 +1,52 @@
+<objdefs>
+   <obj.normal id="comp" sha="32cf18b5f858588a4bec8b21d3f519e2a9689471">
+      <sDescription>Dynamic range compressor. Gain calculation only. Envelope follower, attatck, decay and VCA are not included.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="tresh">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="ratio">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t frac_log(int32_t a) {
+	Float_t f;
+	f.f = a;
+	int32_t r1 = ((f.parts.exponent&0x7F)-18) << 24;
+	int32_t r3 = logt[f.parts.mantissa>>15]<<10;
+	return r1 + r3;
+}
+
+int32_t frac_exp(int32_t a) {
+	int8_t s = (a>>24)+4;
+	uint8_t ei = a>>16;
+	if (s>=0)
+	     return expt[ei]<<s;
+	else return expt[ei]>>(-s);
+}
+]]></code.declaration>
+      <code.krate><![CDATA[int32_t inlog = frac_log(%in%);
+int32_t treshlog = frac_log(%tresh%);
+int32_t over = inlog-treshlog;
+int32_t gain;
+if (over<0){
+	gain = 0x80000;
+} else {
+	gain = frac_exp(-___SMMUL(over,%ratio%)<<5);
+}
+%out% = gain<<8;//___SMMUL(%in%,gain);
+]]></code.krate>
+   </obj.normal>
+</objdefs>

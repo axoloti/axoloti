@@ -1,0 +1,60 @@
+<objdefs>
+   <obj.normal id="mix 2 g" sha="6305d27c723353f0d434c0ab30735c5dd11b7670">
+      <sDescription>2 input k-rate mixer, shows gain units</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="bus_in" description="input with unity gain"/>
+         <frac32 name="in1" description="input 1"/>
+         <frac32 name="in2" description="input 2"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="mix out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.gain name="gain1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
+   accum = ___SMMLA(%in2%,%gain2%,accum);
+;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="mix 2 g" sha="f14eeeeb6df032a7e072e970956c20613eb267f1">
+      <sDescription>2 input s-rate mixer, shows gain units</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="bus_in" description="input with unity gain"/>
+         <frac32buffer name="in1" description="input 1"/>
+         <frac32buffer name="in2" description="input 2"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="mix out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.gain name="gain1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+      </params>
+      <attribs/>
+      <code.srate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
+   accum = ___SMMLA(%in2%,%gain2%,accum);
+;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,30 @@
+<objdefs>
+   <obj.normal id="sine lin" sha="aa2d91984c32ce318dfd20c91518d6b34c94e12f">
+      <sDescription>FM sine wave oscillator, linear interpolated sine table, s-rate frequency input, linear frequency input (goes all the way to 0)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.bipolar name="freqm" description="frequency modulation"/>
+         <frac32buffer.bipolar name="pm" description="phase modulation"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="wave" description="sine wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.freq name="freq" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.freq>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[uint32_t Phase; ]]></code.declaration>
+      <code.init><![CDATA[Phase = 0;]]></code.init>
+      <code.srate><![CDATA[Phase += (%freq% + %freqm%)<<4;
+int32_t r;
+int32_t p2 = Phase + (%pm%<<4);
+SINE2TINTERP(p2,r)
+%wave%= (r>>4);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

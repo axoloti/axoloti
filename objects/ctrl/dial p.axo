@@ -1,0 +1,21 @@
+<objdefs>
+   <obj.normal id="dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90">
+      <sDescription>positive constant value dial</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32.positive name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="value" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[%out%= %value%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,22 @@
+<objdefs>
+   <obj.normal id="out right" sha="a23b68aa6010f51e12035361950edcd7afae239">
+      <sDescription>Audio output, right channel</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="wave" description="Right channel"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <frac32.vu name="vu" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int j;
+for(j=0;j<BUFSIZE;j++){
+   AudioOutputRight[j] += __SSAT(%wave%[j],28);
+}
+%vu%=%wave%[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>

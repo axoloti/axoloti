@@ -1,0 +1,32 @@
+<objdefs>
+   <obj.normal id="hp1 m" sha="a1ea0059fc23dd74010a5d1a03eaa9e4368207fc">
+      <sDescription>1st order hipass filter, modulation input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input"/>
+         <frac32 name="freqm" description="freq modulation"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="freq" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+]]></code.declaration>
+      <code.init><![CDATA[val = 0;
+]]></code.init>
+      <code.krate><![CDATA[int32_t f;
+   MTOF(%freq%+%freqm%,f);
+]]></code.krate>
+      <code.srate><![CDATA[   val = ___SMMLA((%in%-val)<<1,f,val);
+   %out%= %in%-val;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,7 @@
+<objdefs>
+   <obj.comment id="comment" sha="sha">
+      <sDescription>free text comment</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+   </obj.comment>
+</objdefs>

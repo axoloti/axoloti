@@ -1,0 +1,21 @@
+<objdefs>
+   <obj.normal id="modsource" sha="fdb6777505be0746768fb7e222fb1389c1e96554">
+      <sDescription>generic modulation source</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <providesModulationSource>true</providesModulationSource>
+      <inlets>
+         <frac32 name="v" description="value"/>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int ntrig;
+]]></code.declaration>
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {PExModulationSourceChange(&parent2->PExModulationSources[MODULATOR_%name%][0],NMODULATIONTARGETS,%v%);  ntrig=1;}
+if (!(%trig%>0)) ntrig=0;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

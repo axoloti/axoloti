@@ -1,0 +1,62 @@
+<patch-1.0>
+   <obj type="c" name="c_1" x="40" y="20">
+      <params>
+         <frac32.u.map name="value" value="27.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU_1" x="160" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" name="vcf3_1" x="183" y="179">
+      <params>
+         <frac32.s.map name="pitch" value="21.0">
+            <presets>
+               <preset index="1">
+                  <f v="21.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="-10.0"/>
+               </preset>
+            </presets>
+         </frac32.s.map>
+         <frac32.u.map name="reso" value="57.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" name="saw_1" x="40" y="180">
+      <params>
+         <frac32.s.map name="pitch" value="-29.0">
+            <presets>
+               <preset index="3">
+                  <f v="-29.0"/>
+               </preset>
+               <preset index="4">
+                  <f v="22.0"/>
+               </preset>
+            </presets>
+         </frac32.s.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" name="dac1_1" x="320" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c_1 out"/>
+         <dest name="scopeU_1 in"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="vcf3_1 in"/>
+      </net>
+      <net>
+         <source name="vcf3_1 out"/>
+         <dest name="dac1_1 wave"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

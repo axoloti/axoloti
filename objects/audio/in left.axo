@@ -1,0 +1,22 @@
+<objdefs>
+   <obj.normal id="in left" sha="f36683ba4df4704fc1d45058134f1721a25d22f9">
+      <sDescription>Audio input, left channel (or mono)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32buffer name="wave" description="Left channel" SumBuffer="false"/>
+      </outlets>
+      <displays>
+         <frac32.vu name="vu" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int j;
+for(j=0;j<BUFSIZE;j++){
+   %wave%[j] = AudioInputLeft[j];
+}
+%vu%=%wave%[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>

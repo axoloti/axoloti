@@ -1,0 +1,29 @@
+<objdefs>
+   <obj.normal id="sel b 16 x2" sha="ba7dc9a0cd74f2dfa097e8259c7dacfbfc67213a">
+      <sDescription>select one out of 16 booleans, chainable, 2 tracks</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in" description="in"/>
+         <bool32 name="def1" description="default value channel 1"/>
+         <bool32 name="def2" description="default value channel 2"/>
+      </inlets>
+      <outlets>
+         <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
+         <bool32 name="o1" description="output channel 1" SumBuffer="false"/>
+         <bool32 name="o2" description="output channel 2" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <bin16 name="p1" noLabel="true"/>
+         <bin16 name="p2" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {   %o1%=%p1%&(1<<%in%);
+   %o2%=%p2%&(1<<%in%);
+} else {
+   %o1% = %def1%;   %o2% = %def2%;}
+%chain% = %in%-16;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

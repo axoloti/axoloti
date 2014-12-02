@@ -1,0 +1,64 @@
+<patch-1.0>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="40" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="80" y="120">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="80" y="180">
+      <params>
+         <frac32.u.map name="value" value="63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb12" x="80" y="260">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfsrseq" sha="51f0d210664ba04c15f1c6188877b3dadbfcd16d" name="lfsrsea1" x="240" y="260">
+      <params/>
+      <attribs>
+         <combo attributeName="polynomial" selection="0x9"/>
+      </attribs>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1" x="360" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1" x="400" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="square1 wave"/>
+         <dest name="lfsrsea1 trig"/>
+      </net>
+      <net>
+         <source name="lfsrsea1 out"/>
+         <dest name="dispb1 in"/>
+         <dest name="scopeS1 in"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="lfsrsea1 r"/>
+      </net>
+      <net>
+         <source name="cb12 o"/>
+         <dest name="lfsrsea1 load"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="lfsrsea1 lval"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

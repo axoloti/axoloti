@@ -1,0 +1,107 @@
+<patch-1.0>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb1_1" x="80" y="40">
+      <params>
+         <bool32.tgl name="b" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="clockgen" sha="e37d0c1776329ecd4434ba0797205d0374beb273" name="clockgen_1" x="220" y="40">
+      <params>
+         <frac32.u.map name="bpm" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb_1" x="380" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cb1m" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_1" x="80" y="100">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="divremc" sha="a9507fb906b40fc4885ac66c9e4b34b840e8164d" name="divremc_2" x="380" y="100">
+      <params/>
+      <attribs>
+         <spinner attributeName="denominator" value="6"/>
+      </attribs>
+   </obj>
+   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar16_5" x="580" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="6 counts per 16th" x="800" y="100"/>
+   <obj type="divremc" sha="a9507fb906b40fc4885ac66c9e4b34b840e8164d" name="divremc_3" x="380" y="180">
+      <params/>
+      <attribs>
+         <spinner attributeName="denominator" value="16"/>
+      </attribs>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="16th" x="540" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar16_6" x="580" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="16 per bar" x="800" y="200"/>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="measure" x="540" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar16_3" x="580" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar16_4" x="780" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="bar number" x="1000" y="280"/>
+   <nets>
+      <net>
+         <source name="ibar16_3 chain_out"/>
+         <dest name="ibar16_4 in"/>
+      </net>
+      <net>
+         <source name="divremc_2 rem"/>
+         <dest name="ibar16_5 in"/>
+      </net>
+      <net>
+         <source name="divremc_2 div"/>
+         <dest name="divremc_3 a"/>
+      </net>
+      <net>
+         <source name="divremc_3 rem"/>
+         <dest name="ibar16_6 in"/>
+         <dest name="16th in"/>
+      </net>
+      <net>
+         <source name="divremc_3 div"/>
+         <dest name="ibar16_3 in"/>
+         <dest name="measure in"/>
+      </net>
+      <net>
+         <source name="clockgen_1 pos24ppq"/>
+         <dest name="divremc_2 a"/>
+      </net>
+      <net>
+         <source name="clockgen_1 active"/>
+         <dest name="dispb_1 in"/>
+      </net>
+      <net>
+         <source name="cb1_1 o"/>
+         <dest name="clockgen_1 run"/>
+      </net>
+      <net>
+         <source name="cb1m_1 o"/>
+         <dest name="clockgen_1 rst"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

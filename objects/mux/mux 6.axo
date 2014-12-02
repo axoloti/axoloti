@@ -1,0 +1,122 @@
+<objdefs>
+   <obj.normal id="mux 6" sha="88fc4871dff7243f4739fa81f1177d6eda2f3101">
+      <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="i0" description="input 0"/>
+         <frac32 name="i1" description="input 1"/>
+         <frac32 name="i2" description="input 2"/>
+         <frac32 name="i3" description="input 3"/>
+         <frac32 name="i4" description="input 4"/>
+         <frac32 name="i5" description="input 5"/>
+         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+      </inlets>
+      <outlets>
+         <frac32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
+      case 0: %o%= %i0%;break;
+      case 1: %o%= %i1%;break;
+      case 2: %o%= %i2%;break;
+      case 3: %o%= %i3%;break;
+      case 4: %o%= %i4%;break;
+      case 5: %o%= %i5%;break;
+      default: %o%= %i5%;break;
+}
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="mux 6" sha="2f48db275e7e6b82946ed41c1aadcb21f6e6a930">
+      <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="i0" description="input 0"/>
+         <int32 name="i1" description="input 1"/>
+         <int32 name="i2" description="input 2"/>
+         <int32 name="i3" description="input 3"/>
+         <int32 name="i4" description="input 4"/>
+         <int32 name="i5" description="input 5"/>
+         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+      </inlets>
+      <outlets>
+         <int32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
+      case 0: %o%= %i0%;break;
+      case 1: %o%= %i1%;break;
+      case 2: %o%= %i2%;break;
+      case 3: %o%= %i3%;break;
+      case 4: %o%= %i4%;break;
+      case 5: %o%= %i5%;break;
+      default: %o%= %i5%;break;
+}
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="mux 6" sha="b2b6f0d11acf8802992a0a4323f5d0aafa89ed93">
+      <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="i0" description="input 0"/>
+         <frac32buffer name="i1" description="input 1"/>
+         <frac32buffer name="i2" description="input 2"/>
+         <frac32buffer name="i3" description="input 3"/>
+         <frac32buffer name="i4" description="input 4"/>
+         <frac32buffer name="i5" description="input 5"/>
+         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[   switch(%s%>0?%s%:0){
+      case 0: %o%= %i0%;break;
+      case 1: %o%= %i1%;break;
+      case 2: %o%= %i2%;break;
+      case 3: %o%= %i3%;break;
+      case 4: %o%= %i4%;break;
+      case 5: %o%= %i5%;break;
+      default: %o%= %i5%;break;
+}
+]]></code.srate>
+   </obj.normal>
+   <obj.normal id="mux 6" sha="b11f3c83f69df15547d0db26a8eb17d6f90a48f4">
+      <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="i0" description="input 0"/>
+         <bool32 name="i1" description="input 1"/>
+         <bool32 name="i2" description="input 2"/>
+         <bool32 name="i3" description="input 3"/>
+         <bool32 name="i4" description="input 4"/>
+         <bool32 name="i5" description="input 5"/>
+         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+      </inlets>
+      <outlets>
+         <bool32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
+      case 0: %o%= %i0%;break;
+      case 1: %o%= %i1%;break;
+      case 2: %o%= %i2%;break;
+      case 3: %o%= %i3%;break;
+      case 4: %o%= %i4%;break;
+      case 5: %o%= %i5%;break;
+      default: %o%= %i5%;break;
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>

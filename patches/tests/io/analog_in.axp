@@ -1,0 +1,233 @@
+<patch-1.0>
+   <comment type="comment" sha="sha" name="test for all analog inputs" x="0" y="0"/>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="40" y="40">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA0 (ADC1_IN0)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="200" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_" x="280" y="40">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA4 (ADC1_IN4)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU5" x="440" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4__" x="520" y="40">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PB0 (ADC1_IN8)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU9" x="680" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4______" x="760" y="40">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PC2 (ADC1_IN12)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU13" x="920" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2" x="40" y="160">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA1 (ADC1_IN1)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU2" x="200" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1_" x="280" y="160">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA5 (ADC1_IN5)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU6" x="440" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4___" x="520" y="160">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PB1 (ADC1_IN9)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU10" x="680" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_______" x="760" y="160">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PC3 (ADC1_IN13)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU14" x="920" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead3" x="40" y="280">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA2 (ADC1_IN2)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU3" x="200" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2_" x="280" y="280">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA6 (ADC1_IN6)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU7" x="440" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4____" x="520" y="280">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PC0 (ADC1_IN10)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU11" x="680" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4________" x="760" y="280">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PC4 (ADC1_IN14)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU15" x="920" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4" x="40" y="400">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA3 (ADC1_IN3)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU4" x="200" y="400">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead3_" x="280" y="400">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA7 (ADC1_IN7)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU8" x="440" y="400">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_____" x="520" y="400">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PC1 (ADC1_IN11)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU12" x="680" y="400">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_________" x="760" y="400">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PC5 (ADC1_IN15)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU16" x="920" y="400">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="analogRead1 out"/>
+         <dest name="scopeU1 in"/>
+      </net>
+      <net>
+         <source name="analogRead2 out"/>
+         <dest name="scopeU2 in"/>
+      </net>
+      <net>
+         <source name="analogRead3 out"/>
+         <dest name="scopeU3 in"/>
+      </net>
+      <net>
+         <source name="analogRead4 out"/>
+         <dest name="scopeU4 in"/>
+      </net>
+      <net>
+         <source name="analogRead4_ out"/>
+         <dest name="scopeU5 in"/>
+      </net>
+      <net>
+         <source name="analogRead1_ out"/>
+         <dest name="scopeU6 in"/>
+      </net>
+      <net>
+         <source name="analogRead2_ out"/>
+         <dest name="scopeU7 in"/>
+      </net>
+      <net>
+         <source name="analogRead3_ out"/>
+         <dest name="scopeU8 in"/>
+      </net>
+      <net>
+         <source name="analogRead4__ out"/>
+         <dest name="scopeU9 in"/>
+      </net>
+      <net>
+         <source name="analogRead4___ out"/>
+         <dest name="scopeU10 in"/>
+      </net>
+      <net>
+         <source name="analogRead4____ out"/>
+         <dest name="scopeU11 in"/>
+      </net>
+      <net>
+         <source name="analogRead4_____ out"/>
+         <dest name="scopeU12 in"/>
+      </net>
+      <net>
+         <source name="analogRead4______ out"/>
+         <dest name="scopeU13 in"/>
+      </net>
+      <net>
+         <source name="analogRead4_______ out"/>
+         <dest name="scopeU14 in"/>
+      </net>
+      <net>
+         <source name="analogRead4________ out"/>
+         <dest name="scopeU15 in"/>
+      </net>
+      <net>
+         <source name="analogRead4_________ out"/>
+         <dest name="scopeU16 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

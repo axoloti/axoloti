@@ -1,0 +1,59 @@
+<patch-1.0>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="240" y="20">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="377a3586859b26132804d77a27e8734c2cf0fc69" name="osc_1" x="0" y="80">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="rfft128" sha="211b57fdecbd931110ca02afb21453c309d8323a" name="rfft1281" x="400" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix21" x="240" y="80">
+      <params>
+         <frac32.u.map name="gain1" value="0.0"/>
+         <frac32.u.map name="gain2" value="0.0"/>
+         <frac32.u.map name="gain3" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="0" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="8c87c37d5169a8ac979b310b57ee0ec517ec94b9" name="saw_1" x="0" y="280">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="rfft1281 hold"/>
+      </net>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="mix21 in1"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="rfft1281 in"/>
+      </net>
+      <net>
+         <source name="rand_1 wave"/>
+         <dest name="mix21 in2"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="mix21 in3"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,70 @@
+<patch-1.0>
+   <obj type="mix1" name="mix11" x="364" y="94">
+      <params>
+         <frac32.u.map name="gain1" value="1.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1" x="40" y="100">
+      <params>
+         <frac32.s.map name="pitch" value="-48.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="voice" name="voice1" x="160" y="100">
+      <params/>
+      <attribs>
+         <combo attributeName="poly" selection="8"/>
+      </attribs>
+   </obj>
+   <obj type="dac~1" name="dac_11" x="520" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" name="dac_21" x="520" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c1" x="40" y="180">
+      <params>
+         <frac32.u.map name="value" value="14.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayU" name="displayU1" x="400" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayU" name="displayU1_" x="400" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="voice1 inlet1"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="voice1 inlet_pass"/>
+      </net>
+      <net>
+         <source name="voice1 outlet_pass"/>
+         <dest name="displayU1 in"/>
+      </net>
+      <net>
+         <source name="voice1 outlet1"/>
+         <dest name="displayU1_ in"/>
+      </net>
+      <net>
+         <source name="voice1 outlet_1"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

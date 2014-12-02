@@ -1,0 +1,28 @@
+<objdefs>
+   <obj.normal id="touch" sha="cb01f331517bc8be44bcf77add271dab64bb90df">
+      <sDescription>Midi channel pressure input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32.positive name="o" description="channel pressure, 0..64" SumBuffer="false"/>
+         <bool32.pulse name="trig" description="trigger output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t _press;
+int32_t ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[_press = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[%o% = _press;
+%trig% = ntrig;
+ntrig = 0;
+]]></code.krate>
+      <code.midihandler><![CDATA[if (status == MIDI_CHANNEL_PRESSURE + %midichannel%) {  _press = (data1)<<20;
+  ntrig = 1;
+}]]></code.midihandler>
+   </obj.normal>
+</objdefs>

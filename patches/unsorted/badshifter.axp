@@ -1,0 +1,81 @@
+<patch-1.0>
+   <obj type="adc~1" name="adc_11" x="40" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delwrite~" name="tape" x="80" y="20">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="2048 (42.66ms)"/>
+      </attribs>
+   </obj>
+   <obj type="phasor3~" name="phasor3_1" x="80" y="160">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="5" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix1" name="mix11" x="240" y="160">
+      <params>
+         <frac32.u.map name="gain1" MidiCC="6" value="28.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="delread2~~" name="delread2__1" x="360" y="160">
+      <params>
+         <frac32.u.map name="time" MidiCC="7" value="0.0"/>
+      </params>
+      <attribs>
+         <table attributeName="delayname" table="tape"/>
+      </attribs>
+   </obj>
+   <obj type="mix3" name="mix21" x="600" y="160">
+      <params>
+         <frac32.u.map name="gain1" MidiCC="1" value="63.5"/>
+         <frac32.u.map name="gain2" MidiCC="2" value="0.0"/>
+         <frac32.u.map name="gain3" MidiCC="17" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" name="dac_11" x="760" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="echo2~" name="echo2_1" x="280" y="280">
+      <params>
+         <frac32.u.map name="mix" MidiCC="3" value="37.0"/>
+         <frac32.u.map name="feedback" MidiCC="4" value="63.5"/>
+      </params>
+      <attribs>
+         <int attributeName="delaylength" value="20000"/>
+      </attribs>
+   </obj>
+   <nets>
+      <net>
+         <source name="phasor3_1 phasor"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="delread2__1 timem"/>
+      </net>
+      <net>
+         <source name="adc_11 wave"/>
+         <dest name="tape in"/>
+         <dest name="echo2_1 in"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="dac_11 wave"/>
+      </net>
+      <net>
+         <source name="echo2_1 out"/>
+         <dest name="mix21 in2"/>
+      </net>
+      <net>
+         <source name="delread2__1 out"/>
+         <dest name="mix21 in1"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="inlet b" sha="e98d5f4c7b741588feaffc8629026f8d8e59e3ef">
+      <sDescription>Boolean inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <bool32 name="inlet" description="inlet" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t _inlet;
+]]></code.declaration>
+      <code.krate><![CDATA[  %inlet% = _inlet;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

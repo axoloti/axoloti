@@ -1,0 +1,58 @@
+<objdefs>
+   <obj.normal id="load" sha="cda31f7c4e985b172c8ab1789b5490716070d75e">
+      <sDescription>load table from sdcard</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <charptr32 name="filename" description="file name"/>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets>
+         <int32 name="bw" description="bw" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <objref name="table"/>
+      </attribs>
+      <includes>
+         <include>chibios/ext/fatfs/src/ff.h</include>
+      </includes>
+      <depends>
+         <depend>fatfs</depend>
+      </depends>
+      <code.declaration><![CDATA[  int ntrig;
+   int _bw;
+]]></code.declaration>
+      <code.init><![CDATA[  ntrig = 0;
+_bw = 0;
+]]></code.init>
+      <code.krate><![CDATA[  if ((%trig%>0) && !ntrig) {
+    ntrig=1;
+    FIL FileObject;
+    FRESULT err;
+    UINT bytes_read;
+    err = f_open(&FileObject, %filename%, FA_READ | FA_OPEN_EXISTING);
+    if (err != FR_OK) {TransmitTextMessage("Open failed\n"); _bw = err; return;}
+    int rem_sz = sizeof(%table%.array);
+    int offset = 0;
+    while (rem_sz>0) {
+      if (rem_sz>sizeof(fbuff)) {
+        err = f_read(&FileObject, fbuff, sizeof(fbuff),&bytes_read);
+        memcpy((char *)(&%table%.array[0]) + offset,(char *)fbuff,sizeof(fbuff));
+        rem_sz -= sizeof(fbuff);
+        offset += sizeof(fbuff);
+      } else {
+        err = f_read(&FileObject, fbuff, rem_sz,&bytes_read);
+        memcpy((char *)(&%table%.array[0]) + offset,(char *)fbuff,rem_sz);
+        rem_sz = 0;
+      }
+    }    if (err != FR_OK) {TransmitTextMessage("Read failed\n"); _bw = err; return;};
+    err = f_close(&FileObject);
+    if (err != FR_OK) {TransmitTextMessage("Close failed\n");_bw = err; return;};
+  }
+  else if (!(%trig%>0)) ntrig=0;
+%bw% = _bw;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

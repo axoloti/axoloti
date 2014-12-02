@@ -1,0 +1,142 @@
+<patch-1.0>
+   <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="0" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="noise burst as excitation" x="224" y="42"/>
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="266" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="lowpass for softer sound" x="364" y="84"/>
+   <comment type="patch/comment" sha="sha" name="(prevent clipping)" x="490" y="98"/>
+   <comment type="patch/comment" sha="sha" name="resonating &quot;body&quot; composed out of 3 simple resonances" x="602" y="98"/>
+   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd1" x="168" y="140">
+      <params>
+         <frac32.u.map name="d" value="22.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="294" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp" sha="219ae48267404fac1e204a0ae6f3f1363e789297" name="lpf_1" x="364" y="140">
+      <params>
+         <frac32.s.map name="pitch" value="37.0"/>
+         <frac32.u.map name="reso" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1_" x="490" y="140">
+      <params>
+         <frac32.u.map name="amp" value="24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2" x="602" y="140">
+      <params>
+         <frac32.s.map name="pitch" value="34.0"/>
+         <frac32.u.map name="reso" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="high = short burst" x="168" y="238"/>
+   <comment type="patch/comment" sha="sha" name="low = long burst" x="168" y="252"/>
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2_" x="602" y="280">
+      <params>
+         <frac32.s.map name="pitch" value="-10.0"/>
+         <frac32.u.map name="reso" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="volume" x="882" y="406"/>
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2__" x="602" y="434">
+      <params>
+         <frac32.s.map name="pitch" value="6.0"/>
+         <frac32.u.map name="reso" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix31" x="756" y="434">
+      <params>
+         <frac32.u.map name="gain1" value="38.5"/>
+         <frac32.u.map name="gain2" value="42.5"/>
+         <frac32.u.map name="gain3" value="41.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="882" y="434">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="966" y="434">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="audio/out right" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_21" x="966" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="envd1 env"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="rand_1 wave"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="keyb1 gate"/>
+         <dest name="envd1 trig"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="lpf_1 in"/>
+      </net>
+      <net>
+         <source name="*c1_ out"/>
+         <dest name="lpf_2 in"/>
+         <dest name="lpf_2_ in"/>
+         <dest name="lpf_2__ in"/>
+      </net>
+      <net>
+         <source name="lpf_2 out"/>
+         <dest name="mix31 in1"/>
+      </net>
+      <net>
+         <source name="lpf_2_ out"/>
+         <dest name="mix31 in2"/>
+      </net>
+      <net>
+         <source name="lpf_2__ out"/>
+         <dest name="mix31 in3"/>
+      </net>
+      <net>
+         <source name="mix31 out"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="lpf_2 pitchm"/>
+         <dest name="lpf_2_ pitchm"/>
+         <dest name="lpf_2__ pitchm"/>
+      </net>
+      <net>
+         <source name="lpf_1 out"/>
+         <dest name="*c1_ in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

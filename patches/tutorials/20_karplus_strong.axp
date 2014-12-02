@@ -1,0 +1,125 @@
+<patch-1.0>
+   <comment type="patch/comment" sha="sha" name="play with the piano!" x="14" y="14"/>
+   <obj type="keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="294" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="generates a short burst of noise" x="392" y="56"/>
+   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd1" x="294" y="84">
+      <params>
+         <frac32.u.map name="d" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="406" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="compute the right delay time from pitch" x="14" y="210"/>
+   <comment type="patch/comment" sha="sha" name="interpolating delayline read" x="322" y="210"/>
+   <comment type="patch/comment" sha="sha" name="99% feedback" x="518" y="210"/>
+   <comment type="patch/comment" sha="sha" name="delayline write" x="630" y="210"/>
+   <obj type="delay/mtod" sha="800732c561d801c8b0c245ce1c6cd2413cd0ff6" name="mtod_1" x="56" y="252">
+      <params>
+         <frac32.s.map name="pitch" value="8.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/-c" sha="7e5ae2d57dd806e6c238ad9acbb5efbd70dc7d10" name="-c1" x="168" y="252">
+      <params>
+         <frac32.u.map name="c" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" sha="5a9175b8d44d830756d1599a86b4a6a49813a19b" name="interp_1" x="238" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delread2~~" sha="22a07dcbe5007bc4095bed25946486e7c98caf23" name="delread2__1" x="322" y="252">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="d1"/>
+      </attribs>
+   </obj>
+   <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix11" x="518" y="252">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="delay/write" sha="c573b27a5ebc2efb2d1e8ec173ff4793a2acbae2" name="d1" x="630" y="252">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="2048 (42.66ms)"/>
+      </attribs>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="644" y="336">
+      <params>
+         <frac32.u.map name="amp" value="15.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="714" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="bug: tuning reference is incorrect" x="56" y="350"/>
+   <nets>
+      <net>
+         <source name="keyb1 gate"/>
+         <dest name="envd1 trig"/>
+      </net>
+      <net>
+         <source name="envd1 env"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="rand_1 wave"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="mix11 bus_in"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="d1 in"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="interp_1 o"/>
+         <dest name="delread2__1 timem"/>
+      </net>
+      <net>
+         <source name="-c1 out"/>
+         <dest name="interp_1 i"/>
+      </net>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="mtod_1 pitchm"/>
+      </net>
+      <net>
+         <source name="mtod_1 delay"/>
+         <dest name="-c1 in"/>
+      </net>
+      <net>
+         <source name="delread2__1 out"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="out_1 left"/>
+         <dest name="out_1 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

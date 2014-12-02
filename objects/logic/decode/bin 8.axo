@@ -1,0 +1,34 @@
+<objdefs>
+   <obj.normal id="bin 8" sha="82fef7cec2f1a4397c10a079e2e9d1bc9b8aea29">
+      <sDescription>binary decoder</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="i1" description="input 1"/>
+      </inlets>
+      <outlets>
+         <bool32 name="o0" description="output 0" SumBuffer="false"/>
+         <bool32 name="o1" description="output 1" SumBuffer="false"/>
+         <bool32 name="o2" description="output 2" SumBuffer="false"/>
+         <bool32 name="o3" description="output 3" SumBuffer="false"/>
+         <bool32 name="o4" description="output 4" SumBuffer="false"/>
+         <bool32 name="o5" description="output 5" SumBuffer="false"/>
+         <bool32 name="o6" description="output 6" SumBuffer="false"/>
+         <bool32 name="o7" description="output 7" SumBuffer="false"/>
+         <int32 name="chain" description="chain output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%o0% = (%i1% & 0x01)?1:0;
+%o1% = (%i1% & 0x02)?1:0;
+%o2% = (%i1% & 0x04)?1:0;
+%o3% = (%i1% & 0x08)?1:0;
+%o4% = (%i1% & 0x10)?1:0;
+%o5% = (%i1% & 0x20)?1:0;
+%o6% = (%i1% & 0x40)?1:0;
+%o7% = (%i1% & 0x80)?1:0;
+%chain% = (%i1% >> 8);
+]]></code.krate>
+   </obj.normal>
+</objdefs>

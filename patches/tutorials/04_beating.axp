@@ -1,0 +1,53 @@
+<patch-1.0>
+   <comment type="patch/comment" sha="sha" name="mixing (adding) two sine oscillations of nearby frequencies results in periodic cancelling of their output" x="14" y="14"/>
+   <comment type="patch/comment" sha="sha" name="called &quot;beating&quot;" x="336" y="28"/>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="42">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="musicians listen to beatings and adjust the tuning to slow them down to zero to tune their instruments" x="336" y="42"/>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_2" x="14" y="154">
+      <params>
+         <frac32.s.map name="pitch" value="-0.057451343536376764"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix21" x="378" y="154">
+      <params>
+         <frac32.u.map name="gain1" value="11.0"/>
+         <frac32.u.map name="gain2" value="11.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="574" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="shift-drag to make sub-unit adjustments to the frequency dial!" x="14" y="280"/>
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig1" x="504" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="mix21 in1"/>
+      </net>
+      <net>
+         <source name="osc_2 wave"/>
+         <dest name="mix21 in2"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+         <dest name="scope_128s_trig1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

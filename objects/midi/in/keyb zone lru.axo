@@ -1,0 +1,72 @@
+<objdefs>
+   <obj.normal id="keyb zone lru" sha="b9b28cf52b3421368e367f3718404222910c57a5">
+      <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity, least recently used</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32.bipolar name="note" description="midi note number" SumBuffer="false"/>
+         <bool32 name="gate" description="key pressed - holds on legato notes" SumBuffer="false"/>
+         <bool32 name="gate2" description="key pressed - retriggers on legato notes" SumBuffer="false"/>
+         <frac32.positive name="velocity" description="note-on velocity" SumBuffer="false"/>
+         <frac32.positive name="releaseVelocity" description="note-off velocity" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="startNote" MinValue="0" MaxValue="127" DefaultValue="0"/>
+         <spinner name="endNote" MinValue="0" MaxValue="127" DefaultValue="127"/>
+      </attribs>
+      <code.declaration><![CDATA[int8_t _note;
+int32_t _gate;
+int32_t _gate2;
+uint8_t _velo;
+uint8_t _rvelo;
+uint32_t np[%endNote%-%startNote%+1];
+uint32_t p;
+]]></code.declaration>
+      <code.init><![CDATA[_gate = 0;
+_gate2 = 0;
+_note = 0;
+p = 1;
+int j;
+for(j=0;j<%endNote%-%startNote%+1;j++) np[j]=0;
+]]></code.init>
+      <code.krate><![CDATA[%note%= _note<<21;
+%gate%= _gate;
+%gate2%= _gate2;
+_gate2 = _gate;
+%velocity%= _velo<<20;
+%releaseVelocity%= _rvelo<<20;
+]]></code.krate>
+      <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
+  if ((data1 >= %startNote%)&&(data1 <= %endNote%)) {
+    _velo = data2;
+    _note = data1-64;
+    _gate = 1<<27;
+    _gate2 = 0;
+    np[data1-%startNote%]=p++;
+  }
+} else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||
+          (status == MIDI_NOTE_OFF + %midichannel%)) {
+if ((data1 >= %startNote%)&&(data1 <= %endNote%)) {
+   _rvelo = data2;
+np[data1-%startNote%]=0;
+int j;
+int np2 = 0;
+int n2 = 0;
+for(j=0;j<%endNote%-%startNote%+1;j++){
+   if (np[j]>np2) {
+      np2=np[j];
+      n2 = j;
+   }
+}
+if (n2>0) _note = n2+%startNote%-64;
+else _gate = 0;
+}
+} else if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {
+  _gate = 0;
+}
+]]></code.midihandler>
+   </obj.normal>
+</objdefs>

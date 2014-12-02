@@ -1,0 +1,27 @@
+<objdefs>
+   <obj.normal id="vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf">
+      <sDescription>&quot;voltage controlled amplifier&quot;, multiplies v and a inputs, with linear interpolation from k- to s-rate</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="v" description="gain input"/>
+         <frac32buffer name="a" description="audio input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[   int32_t prev;
+    int32_t step;
+]]></code.declaration>
+      <code.krate><![CDATA[   step = (%v% - prev)>>4;
+   int32_t i = prev;
+   prev = %v%;
+]]></code.krate>
+      <code.srate><![CDATA[   %o% =  ___SMMUL(%a%,i)<<5;
+   i += step;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

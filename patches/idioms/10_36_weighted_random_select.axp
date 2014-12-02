@@ -1,0 +1,77 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="360" y="20">
+      <params>
+         <frac32.u.map name="value" value="10.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="40" y="40">
+      <params>
+         <frac32.s.map name="pitch" value="-29.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrigi" sha="23641b880e3d60cb2e41e6ce78ffd8b2afd3ed8b" name="randtrigi1" x="240" y="40">
+      <params>
+         <int32 name="max" value="50"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="&gt;" sha="2ca219d058543958cc56c30fee1066860b90e0ed" name="&lt;1" x="480" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix2" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe" name="mix11" x="640" y="40">
+      <params>
+         <frac32.u.map name="gain1" value="1.0"/>
+         <frac32.u.map name="gain2" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161" x="840" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1_" x="360" y="100">
+      <params>
+         <frac32.u.map name="value" value="25.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="&gt;" sha="2ca219d058543958cc56c30fee1066860b90e0ed" name="&lt;1_" x="480" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="square1 wave"/>
+         <dest name="randtrigi1 trig"/>
+      </net>
+      <net>
+         <source name="randtrigi1 v"/>
+         <dest name="&lt;1 in1"/>
+         <dest name="&lt;1_ in1"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="&lt;1 in2"/>
+      </net>
+      <net>
+         <source name="c1_ out"/>
+         <dest name="&lt;1_ in2"/>
+      </net>
+      <net>
+         <source name="&lt;1 out"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="&lt;1_ out"/>
+         <dest name="mix11 in2"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="ibar161 in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

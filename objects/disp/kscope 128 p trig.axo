@@ -1,0 +1,50 @@
+<objdefs>
+   <obj.normal id="kscope 128 p trig" sha="c693fd16d4c5da24d8fba4f073fac24bbc968a8">
+      <sDescription>positive control rate signal oscilloscope (time domain), showing 128 consecutive samples after the signal becomes positive.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <rotatedParams>true</rotatedParams>
+      <inlets>
+         <frac32.positive name="in" description="input"/>
+         <bool32 name="hold" description="hold"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <uint8array128.vbar name="scope" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int8_t t[128];
+int index;
+int32_t pval;
+]]></code.declaration>
+      <code.init><![CDATA[int i;
+for(i=0;i<128;i++) t[i]=0;
+index = 0;
+pval = 0;
+]]></code.init>
+      <code.krate><![CDATA[int i;
+if (index<0) {
+      int32_t val = (%in%)>(1<<19);
+      if (val&&(!pval)){
+         index=0;
+      }
+      pval = val;
+   if (index == 0){
+         t[index++]=(uint8_t)(%in%>>20);
+   }
+} else { 
+   if(index==128) {
+      index=-1;
+   } else 
+      t[index++]=(uint8_t)(%in%>>20);
+   if ((index==-1)&&(!%hold%)){
+     int i;
+     for(i=0;i<128;i++)
+       %scope%[i]=t[i];
+     pval = %in%>(1<<19);
+   }
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,81 @@
+<patch-1.0>
+   <obj type="dacconfig" sha="e47910fb3176fe2a8167aa211513bd0f0f20e741" name="dacconfig1" x="240" y="20">
+      <params/>
+      <attribs>
+         <combo attributeName="headphones" selection="0dB"/>
+      </attribs>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="360" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="adcconfig" sha="d92ed17e442cc5e55023cecf2afe63c9655d4100" name="adcconfig1" x="40" y="20">
+      <params/>
+      <attribs>
+         <combo attributeName="gain" selection="-12dB"/>
+         <combo attributeName="boost" selection="Mute"/>
+      </attribs>
+   </obj>
+   <obj type="adc~1" sha="76cc7b8fc059b573ece27b3319e73b4136159cff" name="adc_11" x="40" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="adc~2" sha="eb076735a76e9cbf9b15de488e15bcec40f8c16a" name="adc_21" x="40" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="360" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="377a3586859b26132804d77a27e8734c2cf0fc69" name="osc_1" x="0" y="180">
+      <params>
+         <frac32.s.map name="pitch" value="-21.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="160" y="180">
+      <params>
+         <frac32.u.map name="amp" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="+" sha="f21fcf9a2511404a296065f4ba87ab840e153161" name="+1" x="280" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="+" sha="f21fcf9a2511404a296065f4ba87ab840e153161" name="+1_" x="280" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="test tone" x="40" y="140"/>
+   <comment type="comment" sha="sha" name="volume" x="160" y="140"/>
+   <nets>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="adc_11 wave"/>
+         <dest name="+1 in2"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="+1 in1"/>
+         <dest name="+1_ in1"/>
+      </net>
+      <net>
+         <source name="adc_21 wave"/>
+         <dest name="+1_ in2"/>
+      </net>
+      <net>
+         <source name="+1_ out"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="+1 out"/>
+         <dest name="dac_11 wave"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

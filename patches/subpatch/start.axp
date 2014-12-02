@@ -1,0 +1,564 @@
+<patch-1.0>
+   <obj type="decode_int" name="decode_int1" x="0" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b1" x="240" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan1" x="280" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU1" x="400" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="adc~1" name="adc_11_" x="640" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix2" name="mix21" x="720" y="80">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="2.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="hipass~" name="hipass_1" x="840" y="80">
+      <params>
+         <frac32.u.map name="freq" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="double" name="double1" x="920" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b2" x="240" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan2" x="280" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU2_" x="480" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="double" name="double1_" x="920" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="adc~2" name="adc_21" x="640" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="double" name="double1__" x="920" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU3__" x="400" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b3" x="240" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan3" x="280" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="double" name="double1___" x="920" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" name="dac_11_" x="1040" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="hipass~" name="hipass_2" x="640" y="240">
+      <params>
+         <frac32.u.map name="freq" value="9.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="half" name="half1" x="720" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="&gt;c" name="gtc" x="800" y="240">
+      <params>
+         <frac32.u.map name="c" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="delta" name="delta1" x="880" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" name="dac_21" x="1040" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b4" x="240" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan4" x="280" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU4_" x="480" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" name="scopeS1" x="720" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU5_" x="400" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b5" x="240" y="360">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan5" x="280" y="360">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t5" name="pwmout_t51" x="600" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU6_" x="480" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b6" x="240" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan6" x="280" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU7__" x="400" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" name="vcf3_1" x="720" y="480">
+      <params>
+         <frac32.s.map name="pitch" value="5.0"/>
+         <frac32.u.map name="reso" value="29.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="env~" name="env_1" x="840" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix2" name="mix22" x="960" y="480">
+      <params>
+         <frac32.u.map name="gain1" value="0.5"/>
+         <frac32.u.map name="gain2" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc0" name="osc01" x="1080" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" name="scopeS1__" x="1200" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="+" name="plus" x="1320" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="counter" name="counter1" x="1400" y="480">
+      <params>
+         <int32 name="maximum" value="15"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" name="ibar161" x="1480" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="decode_int" name="decode_int2" x="0" y="520">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b7" x="240" y="520">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan7" x="280" y="520">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c1" x="840" y="520">
+      <params>
+         <frac32.u.map name="value" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayU" name="displayU1" x="1480" y="540">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU8_" x="480" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b8" x="240" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan8" x="280" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delta" name="delta1_" x="1200" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="&gt;c" name="gtc_" x="1120" y="620">
+      <params>
+         <frac32.u.map name="c" value="2.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU9_" x="400" y="640">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="randtrigi" name="randtrigi1" x="1400" y="640">
+      <params>
+         <int32 name="max" value="13"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" name="ibar161_" x="1480" y="640">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t3" name="pwmout_t31" x="600" y="660">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b9" x="240" y="680">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan9" x="280" y="680">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU10__" x="480" y="700">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="button1" name="button11" x="880" y="740">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="toggle" name="toggle1" x="960" y="740">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="selectc2" name="selectc21" x="1040" y="740">
+      <params>
+         <frac32.u.map name="v0" value="63.5"/>
+         <frac32.u.map name="v1" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="send" name="ena" x="1120" y="740">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b10" x="240" y="760">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan10" x="280" y="760">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t8" name="pwmout_t81" x="760" y="780">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayU" name="displayU2" x="1120" y="780">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU11___" x="400" y="800">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b11" x="240" y="840">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan11" x="280" y="840">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU12___" x="480" y="880">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t4" name="pwmout_t41" x="640" y="880">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" name="b12" x="240" y="920">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chan" name="chan12" x="280" y="920">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="chan1 outlet1"/>
+         <dest name="scopeU1 in"/>
+         <dest name="pwmout_t51 pa0"/>
+      </net>
+      <net>
+         <source name="adc_11_ wave"/>
+         <dest name="vcf3_1 in"/>
+         <dest name="mix21 in1"/>
+      </net>
+      <net>
+         <source name="adc_21 wave"/>
+         <dest name="hipass_2 in"/>
+         <dest name="mix21 in2"/>
+      </net>
+      <net>
+         <source name="double1___ out"/>
+         <dest name="dac_11_ wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="chan2 outlet1"/>
+         <dest name="scopeU2_ in"/>
+         <dest name="pwmout_t51 pa1"/>
+      </net>
+      <net>
+         <source name="chan3 outlet1"/>
+         <dest name="scopeU3__ in"/>
+         <dest name="pwmout_t51 pa2"/>
+      </net>
+      <net>
+         <source name="chan4 outlet1"/>
+         <dest name="scopeU4_ in"/>
+         <dest name="pwmout_t51 pa3"/>
+      </net>
+      <net>
+         <source name="chan5 outlet1"/>
+         <dest name="scopeU5_ in"/>
+         <dest name="pwmout_t81 pa5"/>
+      </net>
+      <net>
+         <source name="chan6 outlet1"/>
+         <dest name="scopeU6_ in"/>
+         <dest name="pwmout_t31 pa6"/>
+      </net>
+      <net>
+         <source name="chan7 outlet1"/>
+         <dest name="scopeU7__ in"/>
+         <dest name="pwmout_t31 pa7"/>
+      </net>
+      <net>
+         <source name="chan8 outlet1"/>
+         <dest name="scopeU8_ in"/>
+         <dest name="pwmout_t31 pb0"/>
+      </net>
+      <net>
+         <source name="chan9 outlet1"/>
+         <dest name="scopeU9_ in"/>
+         <dest name="pwmout_t31 pb1"/>
+      </net>
+      <net>
+         <source name="chan10 outlet1"/>
+         <dest name="scopeU10__ in"/>
+         <dest name="pwmout_t41 pb8"/>
+      </net>
+      <net>
+         <source name="chan11 outlet1"/>
+         <dest name="scopeU11___ in"/>
+         <dest name="pwmout_t41 pb9"/>
+      </net>
+      <net>
+         <source name="chan12 outlet1"/>
+         <dest name="scopeU12___ in"/>
+         <dest name="pwmout_t81 pc7"/>
+      </net>
+      <net>
+         <source name="double1 out"/>
+         <dest name="double1_ in"/>
+      </net>
+      <net>
+         <source name="double1_ out"/>
+         <dest name="double1__ in"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="hipass_1 in"/>
+      </net>
+      <net>
+         <source name="hipass_1 out"/>
+         <dest name="double1 in"/>
+      </net>
+      <net>
+         <source name="double1__ out"/>
+         <dest name="double1___ in"/>
+      </net>
+      <net>
+         <source name="counter1 o"/>
+         <dest name="ibar161 in"/>
+         <dest name="displayU1 in"/>
+         <dest name="decode_int1 i1"/>
+      </net>
+      <net>
+         <source name="hipass_2 out"/>
+         <dest name="half1 in"/>
+      </net>
+      <net>
+         <source name="half1 out"/>
+         <dest name="gtc in"/>
+         <dest name="scopeS1 in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o0"/>
+         <dest name="chan1 inlet1"/>
+         <dest name="b1 in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o6"/>
+         <dest name="chan7 inlet1"/>
+         <dest name="b7 in"/>
+      </net>
+      <net>
+         <source name="vcf3_1 out"/>
+         <dest name="env_1 wave"/>
+      </net>
+      <net>
+         <source name="gtc out"/>
+         <dest name="delta1 a"/>
+      </net>
+      <net>
+         <source name="plus out"/>
+         <dest name="counter1 trig"/>
+         <dest name="randtrigi1 trig"/>
+      </net>
+      <net>
+         <source name="gtc_ out"/>
+         <dest name="delta1_ a"/>
+      </net>
+      <net>
+         <source name="delta1_ d"/>
+         <dest name="plus in2"/>
+      </net>
+      <net>
+         <source name="osc01 out"/>
+         <dest name="gtc_ in"/>
+         <dest name="scopeS1__ in"/>
+      </net>
+      <net>
+         <source name="env_1 amp"/>
+         <dest name="mix22 in1"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="mix22 in2"/>
+      </net>
+      <net>
+         <source name="mix22 out"/>
+         <dest name="osc01 frequency"/>
+      </net>
+      <net>
+         <source name="button11 out"/>
+         <dest name="toggle1 trig"/>
+      </net>
+      <net>
+         <source name="toggle1 o"/>
+         <dest name="selectc21 s"/>
+      </net>
+      <net>
+         <source name="selectc21 o"/>
+         <dest name="ena v"/>
+         <dest name="displayU2 in"/>
+      </net>
+      <net>
+         <source name="randtrigi1 v"/>
+         <dest name="ibar161_ in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o1"/>
+         <dest name="chan2 inlet1"/>
+         <dest name="b2 in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o2"/>
+         <dest name="chan3 inlet1"/>
+         <dest name="b3 in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o3"/>
+         <dest name="chan4 inlet1"/>
+         <dest name="b4 in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o4"/>
+         <dest name="chan5 inlet1"/>
+         <dest name="b5 in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o5"/>
+         <dest name="chan6 inlet1"/>
+         <dest name="b6 in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o7"/>
+         <dest name="chan8 inlet1"/>
+         <dest name="b8 in"/>
+      </net>
+      <net>
+         <source name="decode_int1 chain"/>
+         <dest name="decode_int2 i1"/>
+      </net>
+      <net>
+         <source name="decode_int2 o0"/>
+         <dest name="chan9 inlet1"/>
+         <dest name="b9 in"/>
+      </net>
+      <net>
+         <source name="decode_int2 o1"/>
+         <dest name="chan10 inlet1"/>
+         <dest name="b10 in"/>
+      </net>
+      <net>
+         <source name="decode_int2 o2"/>
+         <dest name="chan11 inlet1"/>
+         <dest name="b11 in"/>
+      </net>
+      <net>
+         <source name="decode_int2 o3"/>
+         <dest name="chan12 inlet1"/>
+         <dest name="b12 in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

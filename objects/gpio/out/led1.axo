@@ -1,0 +1,16 @@
+<objdefs>
+   <obj.normal id="led1" sha="228b11846ff6a3209ecf90ced1ec59fe0a35bbe9">
+      <sDescription>controls the LED on the board</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="in" description="positive = on"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.init><![CDATA[   palSetPadMode(GPIOA,8,PAL_MODE_OUTPUT_PUSHPULL);]]></code.init>
+      <code.krate><![CDATA[   palWritePad(GPIOA,8,(%in%>0));]]></code.krate>
+   </obj.normal>
+</objdefs>

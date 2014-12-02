@@ -1,0 +1,42 @@
+<objdefs>
+   <obj.normal id="-c" sha="7e5ae2d57dd806e6c238ad9acbb5efbd70dc7d10">
+      <sDescription>subtract constant</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="c" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[%out%= %in%- %c%;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="-c" sha="3ce2337e3d146554f568711a6b81d3578b0c92e0">
+      <sDescription>subtract constant</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="c" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.srate><![CDATA[%out%= %in%- %c%;]]></code.srate>
+   </obj.normal>
+</objdefs>

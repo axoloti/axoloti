@@ -1,0 +1,122 @@
+<patch-1.0>
+   <comment type="comment" sha="sha" name="modulation source definition" x="200" y="20"/>
+   <obj type="keyb" sha="47bd98210bbdd2f31afd6baa726279bc5a8fc32a" name="keyb1" x="40" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="modsource" sha="45ebafea67ca2fe0720654bb75664ba8a032a332" name="modpitch" x="200" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="modulation source applied -&gt; right click on dial -&gt; modulators" x="40" y="180"/>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="220">
+      <params>
+         <frac32.u.map name="value" value="15.0">
+            <modulators>
+               <modulation sourceName="modpitch" value="4.0"/>
+            </modulators>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="360" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="modulations are not shown on the dial, only affect the internal value!" x="40" y="320"/>
+   <comment type="comment" sha="sha" name="another two modulation sources" x="40" y="380"/>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="40" y="420">
+      <params>
+         <frac32.u.map name="value" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="changespeedlim" sha="8139aa36b2337921d024c8963005fa8129f270ce" name="changespeedlim1" x="120" y="420">
+      <params>
+         <frac32.u.map name="d" value="46.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="modsource" sha="45ebafea67ca2fe0720654bb75664ba8a032a332" name="mod_c2" x="280" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="40" y="500">
+      <params>
+         <frac32.u.map name="value" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="changespeedlim" sha="8139aa36b2337921d024c8963005fa8129f270ce" name="changespeedlim1_" x="120" y="500">
+      <params>
+         <frac32.u.map name="d" value="46.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="modsource" sha="45ebafea67ca2fe0720654bb75664ba8a032a332" name="mod_c3" x="280" y="500">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="c4 is modulated by both mod_c2 and c3" x="40" y="620"/>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="40" y="660">
+      <params>
+         <frac32.u.map name="value" value="0.0">
+            <modulators>
+               <modulation sourceName="modpitch" value="0.0"/>
+               <modulation sourceName="mod_c2" value="10.0"/>
+               <modulation sourceName="mod_c3" value="20.0"/>
+            </modulators>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="120" y="660">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="modpitch v"/>
+      </net>
+      <net>
+         <source name="keyb1 gate"/>
+         <dest name="modpitch trig"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="displayU1 in"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="changespeedlim1 in"/>
+         <dest name="mod_c2 v"/>
+      </net>
+      <net>
+         <source name="changespeedlim1 trig"/>
+         <dest name="mod_c2 trig"/>
+      </net>
+      <net>
+         <source name="c3 out"/>
+         <dest name="changespeedlim1_ in"/>
+         <dest name="mod_c3 v"/>
+      </net>
+      <net>
+         <source name="c4 out"/>
+         <dest name="displayS1 in"/>
+      </net>
+      <net>
+         <source name="changespeedlim1_ trig"/>
+         <dest name="mod_c3 trig"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>0</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

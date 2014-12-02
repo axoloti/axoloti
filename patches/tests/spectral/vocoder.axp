@@ -1,0 +1,142 @@
+<patch-1.0>
+   <obj type="keybzone_lru" sha="d22473f78d43bec724fdf2c7b1ed4565b4f11e0a" name="keybzone_lru1" x="0" y="0">
+      <params/>
+      <attribs>
+         <spinner attributeName="startNote" value="0"/>
+         <spinner attributeName="endNote" value="120"/>
+      </attribs>
+   </obj>
+   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_1" x="120" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="adc~1" sha="76cc7b8fc059b573ece27b3319e73b4136159cff" name="adc_11" x="400" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix41" x="480" y="0">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="0.0"/>
+         <frac32.u.map name="gain3" value="0.0"/>
+         <frac32.u.map name="gain4" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="48a545f7a28cac69c91560e873ac2754d450f408" name="osc_1" x="760" y="40">
+      <params>
+         <frac32.s.map name="pitch" value="-13.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_1_" x="120" y="80">
+      <params>
+         <frac32.s.map name="pitch" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="48a545f7a28cac69c91560e873ac2754d450f408" name="osc_2" x="280" y="100">
+      <params>
+         <frac32.s.map name="pitch" value="10.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_1__" x="120" y="160">
+      <params>
+         <frac32.s.map name="pitch" value="-24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="800" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="160" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix31" x="280" y="240">
+      <params>
+         <frac32.u.map name="gain1" value="12.5"/>
+         <frac32.u.map name="gain2" value="12.5"/>
+         <frac32.u.map name="gain3" value="12.5"/>
+         <frac32.u.map name="gain4" value="4.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vocoder24v1" sha="6d9336d0af616451a51bbcc4675a9fce48d495e1" name="vocoder24v11" x="480" y="240">
+      <params>
+         <frac32.u.map name="reso" value="59.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix41_" x="600" y="240">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+         <frac32.u.map name="gain3" value="2.0"/>
+         <frac32.u.map name="gain4" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="800" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="keybzone_lru1 note"/>
+         <dest name="saw_1 pitchm"/>
+         <dest name="saw_1_ pitchm"/>
+         <dest name="saw_1__ pitchm"/>
+      </net>
+      <net>
+         <source name="mix41_ out"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="adc_11 wave"/>
+         <dest name="mix41 in1"/>
+         <dest name="mix41 in2"/>
+         <dest name="mix41 in3"/>
+         <dest name="mix41 in4"/>
+         <dest name="mix41 bus_in"/>
+      </net>
+      <net>
+         <source name="mix31 out"/>
+         <dest name="vocoder24v11 car"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="mix31 in1"/>
+      </net>
+      <net>
+         <source name="saw_1_ wave"/>
+         <dest name="mix31 in2"/>
+      </net>
+      <net>
+         <source name="saw_1__ wave"/>
+         <dest name="mix31 in3"/>
+      </net>
+      <net>
+         <source name="vocoder24v11 out"/>
+         <dest name="mix41_ bus_in"/>
+         <dest name="mix41_ in1"/>
+         <dest name="mix41_ in2"/>
+         <dest name="mix41_ in3"/>
+         <dest name="mix41_ in4"/>
+      </net>
+      <net>
+         <source name="rand_1 wave"/>
+         <dest name="mix31 in4"/>
+      </net>
+      <net>
+         <source name="mix41 out"/>
+         <dest name="vocoder24v11 mod"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

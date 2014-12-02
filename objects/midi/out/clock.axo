@@ -1,0 +1,58 @@
+<objdefs>
+   <obj.normal id="clock" sha="1f1daad8acc3168308da7e85a8ecdc01992c2822">
+      <sDescription>Midi clock master, als outputs Midi clock, start, stop, and continue messages</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="run" description="Run"/>
+         <bool32.rising name="rst" description="Reset"/>
+      </inlets>
+      <outlets>
+         <bool32 name="active" description="Song is playing" SumBuffer="false"/>
+         <int32 name="pos4ppq" description="Position in 4 counts per quarter" SumBuffer="false"/>
+         <int32 name="pos24ppq" description="Position in 24 counts per quarter" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="bpm" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[bool _active;
+int32_t _posfrac;
+int32_t _pos24ppq;
+bool rstp;
+]]></code.declaration>
+      <code.init><![CDATA[_active = 0;
+_posfrac = 0;
+_pos24ppq = 0;
+rstp = 0;]]></code.init>
+      <code.krate><![CDATA[if (%rst% & !rstp){
+   rstp = 1;
+   _posfrac = 0;
+   _pos24ppq = 0;
+} else if (!%rst%){
+   rstp = 0;
+}
+if (%run% && !_active) {
+  _active = 1;
+  if (_pos24ppq)     SendMidi1(MIDI_START);
+  else     SendMidi1(MIDI_CONTINUE);
+} else if (!%run% && _active){
+  _active = 0;
+  SendMidi1(MIDI_STOP);
+}if (_active) {
+  _posfrac += %bpm%;
+  if (_posfrac & 1<<31) {
+    _posfrac &= (1<<31)-1;
+    _pos24ppq++;
+    SendMidi1(MIDI_TIMING_CLOCK);
+  }
+}
+%pos4ppq% = _pos24ppq/6;
+%pos24ppq% = _pos24ppq;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

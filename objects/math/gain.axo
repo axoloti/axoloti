@@ -1,0 +1,44 @@
+<objdefs>
+   <obj.normal id="gain" sha="254b9ca7c9013f74e80217152a9c491e28d51b0a">
+      <sDescription>amplify up to 16 times (saturated)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.gain16 name="amp" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain16>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[%out%= __SSAT(___SMMUL(%amp%,__SSAT(%in%,28)<<4)<<1,28);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="gain" sha="60c5fcc3503670dd02f8989bba108d80be59b518">
+      <sDescription>amplify up to 16 times (saturated)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.gain16 name="amp" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain16>
+      </params>
+      <attribs/>
+      <code.srate><![CDATA[%out%= __SSAT(___SMMUL(%amp%,__SSAT(%in%,28)<<4)<<1,28);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

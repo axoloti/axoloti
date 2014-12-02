@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="outlet a" sha="72226293648dde4dd4739bc1b8bc46a6bf660595">
+      <sDescription>Fractional buffer (audio) outlet. The outlet object becomes an outlet connector when this patch is used as an object (subpatch)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="outlet" description="outlet"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32buffer _outlet;
+]]></code.declaration>
+      <code.srate><![CDATA[   _outlet[buffer_index] = %outlet%;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

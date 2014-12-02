@@ -1,0 +1,72 @@
+<patch-1.0>
+   <patcher type="patch/patcher" sha="da39a3ee5e6b4b0d3255bfef95601890afd80709" name="patcher_1" x="42" y="154">
+      <params>
+         <frac32.s.map name="saw_1" value="0.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="4"/>
+      </attribs>
+      <subpatch>
+         <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb_1" x="98" y="56">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="238" y="154">
+            <params>
+               <frac32.s.map name="pitch" onParent="true" value="0.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="364" y="168">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="patch/outlet a" sha="72226293648dde4dd4739bc1b8bc46a6bf660595" name="outlet_1" x="448" y="182">
+            <params/>
+            <attribs/>
+         </obj>
+         <nets>
+            <net>
+               <source name="keyb_1 note"/>
+               <dest name="saw_1 pitchm"/>
+            </net>
+            <net>
+               <source name="saw_1 wave"/>
+               <dest name="vca_1 a"/>
+            </net>
+            <net>
+               <source name="keyb_1 gate"/>
+               <dest name="vca_1 v"/>
+            </net>
+            <net>
+               <source name="vca_1 o"/>
+               <dest name="outlet_1 outlet"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>polyphonic</subpatchmode>
+            <MidiChannel>1</MidiChannel>
+            <NPresets>8</NPresets>
+            <NPresetEntries>32</NPresetEntries>
+            <NModulationSources>8</NModulationSources>
+            <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+         </settings>
+         <notes><![CDATA[]]></notes>
+      </subpatch>
+   </patcher>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="154" y="154">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="patcher_1 outlet_1"/>
+         <dest name="out_1 left"/>
+         <dest name="out_1 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

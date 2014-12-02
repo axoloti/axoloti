@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>Getting started on Windows</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>Getting started on Windows</h1>
+        Assumes you have installed from source or downloaded a precompiled binary.
+        <h2>Install DFU driver</h2>
+        To flash firmware with the DFU method, you need to install the libusbK driver for the "STM32 Bootloader" device (you get this device by holding button S1 while connecting the USB cable).
+        Use <A href="http://zadig.akeo.ie/">zadig</A> to install the "libusbK" driver for the "STM32 Bootloader" (vendor = 0x0483, product = 0xdf11). Enable options->list all devices to be able to select the "STM32 Bootloader".
+        <h2>Install Virtual com port driver</h2>
+        To connect, you need the virtual com port driver. On windows 7, you can get this automatically.
+        Windows 8 cries very hard about unsigned drivers, and you can't get it automatically so you need to get it from STMicro here: 
+        <a href="http://www.st.com/st-web-ui/static/active/en/st_prod_software_internet/resource/technical/software/driver/stsw-stm32102.zip">direct link</a>
+        or <a href="http://www.st.com/web/en/catalog/tools/PF257938#">download page</a>
+        <h2>Launching Axoloti</h2>
+        Open (doubleclick) Axoloti.bat
+        <h2>Compiling the firmware</h2>
+        Select menu "Board", submenu "Firmware", item "Compile firmware".
+        <h2>Uploading the firmware</h2>
+        Get the board in DFU-mode (hold S1 while plugging the USB cable).
+        Select menu "Board", submenu "Firmware", item "Upload firmware with DFU".
+        Flashing take a few minutes.
+        <h2>Connect</h2>
+        Select the right com-port.
+        If you can't connect, remove the sdcard before plugging in...
+        <h2>Next</h2>
+        You're ready to use Axoloti. Next time, you can just start Axoloti and click connect, no need to compile or flash firmware again.        
+    </body>
+</html>

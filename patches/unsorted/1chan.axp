@@ -1,0 +1,69 @@
+<patch-1.0>
+   <obj type="osc" name="osc1" x="0" y="60">
+      <params>
+         <frac32.s.map name="pitch" value="-64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1" x="120" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="satp" name="satp1" x="200" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1" x="280" y="60">
+      <params>
+         <frac32.u.map name="time" value="63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="+c" name="comp" x="360" y="60">
+      <params>
+         <frac32.u.map name="c" value="10.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*" name="mul" x="440" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t5" name="pwmout_t51" x="600" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU1" x="440" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="comp out"/>
+         <dest name="mul b"/>
+      </net>
+      <net>
+         <source name="smooth1 out"/>
+         <dest name="comp in"/>
+         <dest name="mul a"/>
+      </net>
+      <net>
+         <source name="mul result"/>
+         <dest name="scopeU1 in"/>
+         <dest name="pwmout_t51 pa0"/>
+      </net>
+      <net>
+         <source name="randtrig1 rand"/>
+         <dest name="satp1 in"/>
+      </net>
+      <net>
+         <source name="satp1 out"/>
+         <dest name="smooth1 in"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="randtrig1 trig"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

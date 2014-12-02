@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="bitxor" sha="9dd3edf53961f5a288c5b8d0399d49aeff4bddfa">
+      <sDescription>bitwise binary and operator</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in1" description="in2"/>
+         <int32 name="in2" description="in2"/>
+      </inlets>
+      <outlets>
+         <int32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%out% = %in1%^%in2%;]]></code.krate>
+   </obj.normal>
+</objdefs>

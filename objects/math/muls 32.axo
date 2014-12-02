@@ -1,0 +1,32 @@
+<objdefs>
+   <obj.normal id="muls 32" sha="b4fd2fdd11900fcc7b7695c7c9984890d6aefa4a">
+      <sDescription>saturated multiply by 32</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%out%= __SSAT(%in%,23)<<5;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="muls 32" sha="58417168ec3e1e224e671747f09f1c1992c7a9e7">
+      <sDescription>saturated multiply by 32</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[%out%= __SSAT(%in%,23)<<5;]]></code.srate>
+   </obj.normal>
+</objdefs>

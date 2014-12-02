@@ -1,0 +1,32 @@
+<patch-1.0>
+   <obj type="osc~" sha="377a3586859b26132804d77a27e8734c2cf0fc69" name="osc_1" x="80" y="80">
+      <params>
+         <frac32.s.map name="pitch" value="11.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="through_sub" sha="b7e01ca50474a379ce06098d779aa6ca437f5e6f" name="through_sub1" x="200" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="360" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="360" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="through_sub1 inlet_1"/>
+      </net>
+      <net>
+         <source name="through_sub1 outlet_1"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

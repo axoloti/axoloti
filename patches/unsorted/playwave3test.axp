@@ -1,0 +1,158 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="240" y="0">
+      <params>
+         <frac32.u.map name="value" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="320" y="0">
+      <params>
+         <frac32.u.map name="gain1" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="40" y="100">
+      <params>
+         <frac32.s.map name="pitch" value="9.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter1" x="320" y="100">
+      <params>
+         <int32 name="maximum" value="16"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10" name="+c1" x="400" y="100">
+      <params>
+         <frac32.u.map name="c" value="59.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1" x="480" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="stringi" sha="729bdb1d434ebbff3539034a3805ca20fa2794ee" name="stringi1" x="520" y="100">
+      <params/>
+      <attribs>
+         <table attributeName="prefix" table="pia_l"/>
+         <table attributeName="suffix" table=".wav"/>
+      </attribs>
+   </obj>
+   <obj type="playwave2" sha="ee43cd2d153ce3a5a4b09ef0dc0f13177fc8a87f" name="playwave21" x="680" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="1040" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1_" x="40" y="200">
+      <params>
+         <frac32.s.map name="pitch" value="13.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter1_" x="320" y="200">
+      <params>
+         <int32 name="maximum" value="16"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10" name="+c1_" x="400" y="200">
+      <params>
+         <frac32.u.map name="c" value="56.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1_" x="480" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="stringi" sha="729bdb1d434ebbff3539034a3805ca20fa2794ee" name="stringi1_" x="520" y="200">
+      <params/>
+      <attribs>
+         <table attributeName="prefix" table="pia_l"/>
+         <table attributeName="suffix" table=".wav"/>
+      </attribs>
+   </obj>
+   <obj type="playwave2" sha="ee43cd2d153ce3a5a4b09ef0dc0f13177fc8a87f" name="playwave21_" x="680" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="1040" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix41" x="880" y="140">
+      <params>
+         <frac32.u.map name="gain1" value="34.0"/>
+         <frac32.u.map name="gain2" value="35.5"/>
+         <frac32.u.map name="gain3" value="0.0"/>
+         <frac32.u.map name="gain4" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="+c1 out"/>
+         <dest name="dispI1 in"/>
+         <dest name="stringi1 index"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="counter1 trig"/>
+         <dest name="playwave21 trig"/>
+      </net>
+      <net>
+         <source name="counter1 o"/>
+         <dest name="+c1 in"/>
+      </net>
+      <net>
+         <source name="stringi1 out"/>
+         <dest name="playwave21 filename"/>
+      </net>
+      <net>
+         <source name="mix41 out"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="osc1_ wave"/>
+         <dest name="counter1_ trig"/>
+         <dest name="playwave21_ trig"/>
+      </net>
+      <net>
+         <source name="stringi1_ out"/>
+         <dest name="playwave21_ filename"/>
+      </net>
+      <net>
+         <source name="counter1_ o"/>
+         <dest name="+c1_ in"/>
+      </net>
+      <net>
+         <source name="+c1_ out"/>
+         <dest name="dispI1_ in"/>
+         <dest name="stringi1_ index"/>
+      </net>
+      <net>
+         <source name="playwave21 o"/>
+         <dest name="mix41 in1"/>
+      </net>
+      <net>
+         <source name="playwave21_ o"/>
+         <dest name="mix41 in2"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="playwave21 pos"/>
+         <dest name="playwave21_ pos"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

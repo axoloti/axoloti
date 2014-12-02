@@ -1,0 +1,50 @@
+<objdefs>
+   <obj.normal id="min" sha="24694c0012f422c71e350782ee94a72ef599a9fa">
+      <sDescription>minimum</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in1" description="in1"/>
+         <frac32 name="in2" description="in2"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%out%= (%in1%<%in2%)?%in1%:%in2%;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="min" sha="75b4e88c0bf1aed550d559a1ea7974644e1a2274">
+      <sDescription>minimum</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in1" description="in2"/>
+         <frac32buffer name="in2" description="in2"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[%out%= (%in1%<%in2%)?%in1%:%in2%;]]></code.srate>
+   </obj.normal>
+   <obj.normal id="min" sha="cfb037f0ea418a3cace92ef28a72962a2b6db14">
+      <sDescription>minimum</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in1" description="in2"/>
+         <int32 name="in2" description="in2"/>
+      </inlets>
+      <outlets>
+         <int32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%out%= (%in1%<%in2%)?%in1%:%in2%;]]></code.krate>
+   </obj.normal>
+</objdefs>

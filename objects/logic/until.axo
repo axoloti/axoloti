@@ -1,0 +1,43 @@
+<objdefs>
+   <obj.normal id="until" sha="45760196b6dc3199d5df420a8c1632ca405063c1">
+      <sDescription>rapid trigger pulses until rising edge on stop</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="start" description="start"/>
+         <bool32.rising name="stop" description="stop"/>
+         <bool32.rising name="pause" description="pause triggering when true"/>
+      </inlets>
+      <outlets>
+         <bool32.pulse name="o" description="repetitive pulse" SumBuffer="false"/>
+         <int32.positive name="count" description="repetitive pulse" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[   int pstart;
+   int pstop;
+   int po;
+   int state;
+]]></code.declaration>
+      <code.init><![CDATA[pstart = 0;
+pstop=0;
+po=0;
+state=0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%start%>0)&&!pstart) {
+  state = 1;
+  pstart = 1;
+}
+if (pstart && !(%start%>0)) pstart = 0;
+if ((%stop%>0)&&!pstop) {
+  state = 0;
+  pstop = 1;
+}
+if (pstop && !(%stop%>0)) pstop = 0;
+%o% = (state&1)<<27;
+if (!(%pause%>0)) if (state>0) state++;
+%count% = (state>>1);
+]]></code.krate>
+   </obj.normal>
+</objdefs>

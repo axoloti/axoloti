@@ -1,0 +1,38 @@
+<objdefs>
+   <obj.normal id="cos" sha="bba0c20ab32678ed34365aeb6943b53d60b2c7">
+      <sDescription>cosine function, -64..64 phase corresponds to -180 to 180 degrees</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="phase" description="phase"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="cos(phase)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[       int32_t r;
+       SINE2TINTERP((%phase%<<4)+(1<<30),r)
+       %out%= (r>>4);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="cos" sha="8e1816a884241ec4b44374c205dbcd18fe0d101e">
+      <sDescription>cosine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="phase" description="phase"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="cos(phase)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[       int32_t r;
+       SINE2TINTERP((%phase%<<4)+(1<<30),r)
+       %out%= (r>>4);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

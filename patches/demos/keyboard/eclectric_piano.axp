@@ -1,0 +1,85 @@
+<patch-1.0>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="-6.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/interp" sha="5a9175b8d44d830756d1599a86b4a6a49813a19b" name="interp_1" x="126" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="./eclectric_piano_voice" sha="9732af343e64f405a47ff12e5a24e8a5591c70f2" name="eclectric_piano_voice2" x="14" y="98">
+      <params>
+         <frac32.u.map name="q:gain1" value="0.9849996566772461"/>
+         <frac32.u.map name="q:gain2" value="0.0"/>
+         <frac32.s.map name="f1:pitch" value="0.0"/>
+         <frac32.s.map name="f2:pitch" value="12.0"/>
+         <frac32.u.map name="mix21:gain1" value="5.5"/>
+         <frac32.u.map name="mix21:gain2" value="4.5"/>
+         <frac32.u.map name="mix21:gain3" value="3.5"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="12"/>
+      </attribs>
+   </obj>
+   <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix11" x="154" y="98">
+      <params>
+         <frac32.u.map name="gain1" value="16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/muls 2" sha="17100b9369a00a2265f0f754ff1c0ec87f9c6690" name="muls41" x="252" y="98">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dist/soft" sha="4de9b281f2a362671b6dc8606f5d039535893f45" name="sat1" x="336" y="98">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/hp1" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass_1" x="406" y="98">
+      <params>
+         <frac32.u.map name="freq" value="4.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="476" y="98">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="hipass_1 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="interp_1 i"/>
+      </net>
+      <net>
+         <source name="interp_1 o"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="sat1 out"/>
+         <dest name="hipass_1 in"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="muls41 in"/>
+      </net>
+      <net>
+         <source name="muls41 out"/>
+         <dest name="sat1 in"/>
+      </net>
+      <net>
+         <source name="eclectric_piano_voice2 dac_1"/>
+         <dest name="mix11 bus_in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

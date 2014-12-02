@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="inlet f" sha="ec45071db47e99aa672b4e8456c862acb1d95499">
+      <sDescription>Fractional inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32 name="inlet" description="inlet" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t _inlet;
+]]></code.declaration>
+      <code.krate><![CDATA[  %inlet% = _inlet;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

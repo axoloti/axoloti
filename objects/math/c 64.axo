@@ -1,0 +1,16 @@
+<objdefs>
+   <obj.normal id="c 64" sha="69b493f3d94607d38df5ab951d27622bec162349">
+      <sDescription>constant value: 64</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <int32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%o%= 64;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

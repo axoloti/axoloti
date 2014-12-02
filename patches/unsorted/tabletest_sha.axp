@@ -1,0 +1,104 @@
+<patch-1.0>
+   <obj type="ramtable8" sha="16dc5f80ca3889cc98392d3e77ce5ed128140c96" name="t1" x="40" y="20">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="16"/>
+         <text attributeName="init">
+            <sText><![CDATA[int i;
+for(i=0;i<LENGTH;i++)
+	array[i]=i;
+]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="160" y="20">
+      <params>
+         <frac32.u.map name="value" value="29.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="tabread" sha="a079e7ef365f6ab0f19a8c7246d0dc4e6ffa63c6" name="tabread1" x="200" y="20">
+      <params/>
+      <attribs>
+         <table attributeName="table" table="t1"/>
+      </attribs>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="360" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" sha="7224f0f8080ebb101b837d5823024ae068903724" name="osc1" x="40" y="140">
+      <params>
+         <frac32.s.map name="pitch" value="-16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter1" x="160" y="140">
+      <params>
+         <int32 name="maximum" value="23"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="tabread" sha="4a797be637258e9f46e75481b6b3d85ee80f1787" name="tabread2" x="240" y="140">
+      <params/>
+      <attribs>
+         <table attributeName="table" table="t1"/>
+      </attribs>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1_" x="440" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161" x="240" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="phasor3~" sha="d4a9c4bcd79473f4f0f5ec182aba555c0149e337" name="phasor3_1" x="40" y="300">
+      <params>
+         <frac32.s.map name="pitch" value="-64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="tabread" sha="fad870a0015dd3e9aca793f16707d197c98c944b" name="tabread3" x="200" y="300">
+      <params/>
+      <attribs>
+         <table attributeName="table" table="t1"/>
+      </attribs>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="389" y="312">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="tabread1 a"/>
+      </net>
+      <net>
+         <source name="tabread1 o"/>
+         <dest name="displayS1 in"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="counter1 trig"/>
+      </net>
+      <net>
+         <source name="counter1 o"/>
+         <dest name="tabread2 a"/>
+         <dest name="ibar161 in"/>
+      </net>
+      <net>
+         <source name="tabread2 o"/>
+         <dest name="displayS1_ in"/>
+      </net>
+      <net>
+         <source name="phasor3_1 phasor"/>
+         <dest name="tabread3 a"/>
+      </net>
+      <net>
+         <source name="tabread3 o"/>
+         <dest name="dac_11 wave"/>
+      </net>
+   </nets>
+   <notes><![CDATA[note fdf ]]></notes>
+</patch-1.0>

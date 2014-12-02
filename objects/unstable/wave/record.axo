@@ -1,0 +1,47 @@
+<objdefs>
+   <obj.normal id="record" sha="bdd8bbc33127ba950db6ace64f72f194e749d41">
+      <sDescription>streaming recording of a mono RAW audio file from sdcard (BROKEN: clicks)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.risingfalling name="trig" description="trigger"/>
+         <charptr32 name="filename" description="file name"/>
+         <frac32buffer name="in" description="input"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./streamer.h</include>
+         <include>chibios/ext/fatfs/src/ff.h</include>
+      </includes>
+      <code.declaration><![CDATA[    WORKING_AREA(waThreadSD, 2048);
+   sdReadFilePingpong *stream;
+   int ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[static sdReadFilePingpong s __attribute__ ((section (".sram2")));
+stream = &s;
+stream->pingpong = CLOSED;
+stream->doSeek = 0;
+ntrig = 0;
+stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),
+                    HIGHPRIO, ThreadSD, (void *)stream);]]></code.init>
+      <code.dispose><![CDATA[sdStopStreamer(stream);
+]]></code.dispose>
+      <code.krate><![CDATA[     int32_t i;
+     if ((%trig%>0) && !ntrig) {
+        sdOpenStreamRec(stream,%filename%);
+        ntrig=1;
+     } else if ((!(%trig%>0)) && ntrig) {        ntrig=0;
+        if (stream) 
+           sdCloseStreamRec(stream);
+        stream = 0;
+     }
+        int16_t *p = 0;
+     if (stream!=0)        p=sdWriteStream(stream);
+     if (p && ntrig)
+        for(i=0;i<BUFSIZE;i++) (*(p++)) = %in%[i]>>10;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

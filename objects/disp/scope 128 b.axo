@@ -1,0 +1,36 @@
+<objdefs>
+   <obj.normal id="scope 128 b" sha="375509bcb23b2f6a69f9cd82349f406464c8295e">
+      <sDescription>bipolar audio rate signal oscilloscope (time domain), showing 128 consecutive samples</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <rotatedParams>true</rotatedParams>
+      <inlets>
+         <frac32buffer.bipolar name="in" description="input"/>
+         <bool32 name="hold" description="hold"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <int8array128.vbar name="scope" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int8_t t[128];
+int index;
+]]></code.declaration>
+      <code.init><![CDATA[int i;
+for(i=0;i<128;i++) t[i]=0;
+index = 0;
+]]></code.init>
+      <code.krate><![CDATA[int i;
+for(i=0;i<16;i++)
+   t[index++] = (uint8_t)(%in%[i]>>21);
+if (index == 128){
+  index = 0;
+  if (!%hold%){
+    for(i=0;i<128;i++)
+      %scope%[i]=t[i];
+  }
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>

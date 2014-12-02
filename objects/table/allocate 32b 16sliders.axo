@@ -1,0 +1,105 @@
+<objdefs>
+   <obj.normal id="allocate 32b 16sliders" sha="2227408087d0108a79d19893c9bcca8343f9f004">
+      <sDescription>table in RAM memory, direct from sliders</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <rotatedParams>true</rotatedParams>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params>
+         <frac32.s.mapvsl name="b0" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b1" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b2" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b3" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b4" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b5" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b6" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b7" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b8" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b9" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b10" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b11" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b12" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b13" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b14" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b15" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = 4;
+static const uint32_t LENGTH = 1<<4;
+static const uint32_t LENGTHMASK = (1<<4)-1;
+static const uint32_t BITS = 32;
+static const uint32_t GAIN = 0;
+int32_t array[LENGTH];
+]]></code.declaration>
+      <code.init><![CDATA[{ 
+  int i;
+  for(i=0;i<LENGTH;i++) array[i]=0;}]]></code.init>
+      <code.krate><![CDATA[array[0] = %b0%;
+array[1] = %b1%;
+array[2] = %b2%;
+array[3] = %b3%;
+array[4] = %b4%;
+array[5] = %b5%;
+array[6] = %b6%;
+array[7] = %b7%;
+array[8] = %b8%;
+array[9] = %b9%;
+array[10] = %b10%;
+array[11] = %b11%;
+array[12] = %b12%;
+array[13] = %b13%;
+array[14] = %b14%;
+array[15] = %b15%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

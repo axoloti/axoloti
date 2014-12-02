@@ -1,0 +1,112 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="20">
+      <params>
+         <frac32.u.map name="value" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd" name="log1" x="160" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="320" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="c1_" x="40" y="120">
+      <params>
+         <frac32.s.map name="value" value="56.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1" name="exp1" x="160" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS2" x="320" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1__" x="40" y="260">
+      <params>
+         <frac32.u.map name="value" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd" name="log1_" x="120" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1" name="exp1_" x="240" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="360" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="c1___" x="40" y="340">
+      <params>
+         <frac32.s.map name="value" value="-64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1" name="exp1__" x="120" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd" name="log1__" x="240" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS3" x="360" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="log1 a"/>
+      </net>
+      <net>
+         <source name="log1 result"/>
+         <dest name="displayS1 in"/>
+      </net>
+      <net>
+         <source name="c1_ out"/>
+         <dest name="exp1 a"/>
+      </net>
+      <net>
+         <source name="exp1 result"/>
+         <dest name="displayS2 in"/>
+      </net>
+      <net>
+         <source name="c1__ out"/>
+         <dest name="log1_ a"/>
+      </net>
+      <net>
+         <source name="log1_ result"/>
+         <dest name="exp1_ a"/>
+      </net>
+      <net>
+         <source name="exp1_ result"/>
+         <dest name="displayU1 in"/>
+      </net>
+      <net>
+         <source name="c1___ out"/>
+         <dest name="exp1__ a"/>
+      </net>
+      <net>
+         <source name="exp1__ result"/>
+         <dest name="log1__ a"/>
+      </net>
+      <net>
+         <source name="log1__ result"/>
+         <dest name="displayS3 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,38 @@
+<patch-1.0>
+   <obj type="sampler_voice_simple" sha="ec4c66987f8bffe8369c63817128403abd3b35ea" name="sampler_voice1" x="40" y="20">
+      <params>
+         <frac32.u.map name="offset" value="0.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="12"/>
+         <combo attributeName="midichannel" selection="0"/>
+      </attribs>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="240" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="240" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="sampler_voice1 outlet_1"/>
+         <dest name="dac_11 wave"/>
+      </net>
+      <net>
+         <source name="sampler_voice1 outlet_2"/>
+         <dest name="dac_21 wave"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>0</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

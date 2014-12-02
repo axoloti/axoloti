@@ -1,0 +1,25 @@
+<objdefs>
+   <obj.normal id="script" sha="82709d8f2cd722b129cb94767cdc4a23b41a5230">
+      <sDescription>script with 2 outputs, triggered by MIDI input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32 name="out1_" description="out1" SumBuffer="false"/>
+         <frac32 name="out2_" description="out2" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <text name="script"/>
+      </attribs>
+      <code.declaration><![CDATA[int32_t out1,out2;
+]]></code.declaration>
+      <code.init><![CDATA[out1=0;out2=0;
+]]></code.init>
+      <code.krate><![CDATA[%out1_% = this->out1;
+%out2_% = this->out2;
+]]></code.krate>
+      <code.midihandler><![CDATA[%script%]]></code.midihandler>
+   </obj.normal>
+</objdefs>

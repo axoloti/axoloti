@@ -1,0 +1,38 @@
+<objdefs>
+   <obj.normal id="quantize" sha="4c4a90a911707903fc9fc7215d7c31567a87181e">
+      <sDescription>quantize to n bits</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32 name="b" description="quant(a)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="bits" MinValue="1" MaxValue="28" DefaultValue="7"/>
+      </attribs>
+      <code.krate><![CDATA[   %b%= %a% & (~((1<<(28-%bits%))-1));
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="quantize" sha="3cf3075bda10b7de86084f67a210bdfe4e310125">
+      <sDescription>quantize to n bits</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="b" description="quant(a)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="bits" MinValue="1" MaxValue="28" DefaultValue="7"/>
+      </attribs>
+      <code.srate><![CDATA[   %b%= %a% & (~((1<<(28-%bits%))-1));
+]]></code.srate>
+   </obj.normal>
+</objdefs>

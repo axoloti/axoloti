@@ -1,0 +1,96 @@
+<objdefs>
+   <obj.normal id="mix 5 sq" sha="2c70dd09cb9eadcac2b5edfab7cc9dfd8463bee">
+      <sDescription>5 input k-rate mixer, square gain scale</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="bus_in" description="input with unity gain"/>
+         <frac32 name="in1" description="input 1"/>
+         <frac32 name="in2" description="input 2"/>
+         <frac32 name="in3" description="input 3"/>
+         <frac32 name="in4" description="input 4"/>
+         <frac32 name="in5" description="input 5"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="mix out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.squaregain name="gain1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.squaregain>
+         <frac32.u.map.squaregain name="gain2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.squaregain>
+         <frac32.u.map.squaregain name="gain3">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.squaregain>
+         <frac32.u.map.squaregain name="gain4">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.squaregain>
+         <frac32.u.map.squaregain name="gain5">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.squaregain>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
+   accum = ___SMMLA(%in2%,%gain2%,accum);
+;   accum = ___SMMLA(%in3%,%gain3%,accum);
+;   accum = ___SMMLA(%in4%,%gain4%,accum);
+;   accum = ___SMMLA(%in5%,%gain5%,accum);
+;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="mix 5 sq" sha="21fe44985ad7c35f8d1c6de0a14762636e5c313e">
+      <sDescription>5 input s-rate mixer, square gain scale</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="bus_in" description="input with unity gain"/>
+         <frac32buffer name="in1" description="input 1"/>
+         <frac32buffer name="in2" description="input 2"/>
+         <frac32buffer name="in3" description="input 3"/>
+         <frac32buffer name="in4" description="input 4"/>
+         <frac32buffer name="in5" description="input 5"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="mix out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.squaregain name="gain1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.squaregain>
+         <frac32.u.map.squaregain name="gain2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.squaregain>
+         <frac32.u.map.squaregain name="gain3">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.squaregain>
+         <frac32.u.map.squaregain name="gain4">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.squaregain>
+         <frac32.u.map.squaregain name="gain5">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.squaregain>
+      </params>
+      <attribs/>
+      <code.srate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
+   accum = ___SMMLA(%in2%,%gain2%,accum);
+;   accum = ___SMMLA(%in3%,%gain3%,accum);
+;   accum = ___SMMLA(%in4%,%gain4%,accum);
+;   accum = ___SMMLA(%in5%,%gain5%,accum);
+;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

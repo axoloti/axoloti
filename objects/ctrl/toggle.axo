@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c">
+      <sDescription>constant boolean, toggle control</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <bool32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <bool32.tgl name="b" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[%o%=%b%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

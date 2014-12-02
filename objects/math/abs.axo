@@ -1,0 +1,47 @@
+<objdefs>
+   <obj.normal id="abs" sha="56b0e9ebf07d4a6d8f04db3682899c48c85cc389">
+      <sDescription>absolute value</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%out%= %in%>0?%in%:-%in%;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="abs" sha="d9aef12fddc085a0a8a7a9868f1c845c538a9209">
+      <sDescription>absolute value</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[%out%= %in%>0?%in%:-%in%;]]></code.srate>
+   </obj.normal>
+   <obj.normal id="abs" sha="c35ca1940c32617a5fff7d876c1dbec0a1bbf4b0">
+      <sDescription>absolute value</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <int32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%out%= %in%>0?%in%:-%in%;]]></code.krate>
+   </obj.normal>
+</objdefs>

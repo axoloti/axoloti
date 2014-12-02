@@ -1,0 +1,460 @@
+<patch-1.0>
+   <obj type="osc" name="osc1" x="0" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="-63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1" x="120" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1" x="200" y="0">
+      <params>
+         <frac32.u.map name="time" value="56.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU1" x="520" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1_" x="0" y="80">
+      <params>
+         <frac32.s.map name="pitch" value="-63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1_" x="120" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1_" x="200" y="80">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="adc~1" name="adc_11_" x="440" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1__" x="0" y="160">
+      <params>
+         <frac32.s.map name="pitch" value="-64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1__" x="120" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1__" x="200" y="160">
+      <params>
+         <frac32.u.map name="time" value="59.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix2" name="mix21" x="520" y="160">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix4" name="mix41" x="640" y="160">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+         <frac32.u.map name="gain3" value="63.5"/>
+         <frac32.u.map name="gain4" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth2" x="880" y="160">
+      <params>
+         <frac32.u.map name="time" value="7.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="double" name="double1" x="960" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" name="scopeS1_" x="1040" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="adc~2" name="adc_21" x="440" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1___" x="0" y="240">
+      <params>
+         <frac32.s.map name="pitch" value="-61.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1___" x="120" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1___" x="200" y="240">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" name="dac_11_" x="800" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth2_" x="880" y="280">
+      <params>
+         <frac32.u.map name="time" value="5.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="double" name="double2" x="960" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" name="scopeS1" x="1040" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" name="dac_21" x="800" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1____" x="0" y="320">
+      <params>
+         <frac32.s.map name="pitch" value="-63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1____" x="120" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1____" x="200" y="320">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t5" name="pwmout_t51" x="440" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1_____" x="0" y="400">
+      <params>
+         <frac32.s.map name="pitch" value="-62.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1_____" x="120" y="400">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1_____" x="200" y="400">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1______" x="0" y="480">
+      <params>
+         <frac32.s.map name="pitch" value="-62.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1______" x="120" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1______" x="200" y="480">
+      <params>
+         <frac32.u.map name="time" value="58.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1_______" x="0" y="560">
+      <params>
+         <frac32.s.map name="pitch" value="-62.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1_______" x="120" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1_______" x="200" y="560">
+      <params>
+         <frac32.u.map name="time" value="59.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t3" name="pwmout_t31" x="400" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1________" x="0" y="640">
+      <params>
+         <frac32.s.map name="pitch" value="-63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1________" x="120" y="640">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1________" x="240" y="640">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1_________" x="0" y="720">
+      <params>
+         <frac32.s.map name="pitch" value="-61.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1_________" x="120" y="720">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1_________" x="240" y="720">
+      <params>
+         <frac32.u.map name="time" value="62.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1__________" x="0" y="800">
+      <params>
+         <frac32.s.map name="pitch" value="-59.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1__________" x="120" y="800">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1__________" x="240" y="800">
+      <params>
+         <frac32.u.map name="time" value="58.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t4" name="pwmout_t41" x="520" y="800">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" name="osc1___________" x="0" y="880">
+      <params>
+         <frac32.s.map name="pitch" value="-61.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrig" name="randtrig1___________" x="120" y="880">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1___________" x="240" y="880">
+      <params>
+         <frac32.u.map name="time" value="60.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t8" name="pwmout_t81" x="480" y="880">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="smooth1____ out"/>
+         <dest name="pwmout_t81 pa5"/>
+      </net>
+      <net>
+         <source name="smooth1_________ out"/>
+         <dest name="pwmout_t41 pb8"/>
+      </net>
+      <net>
+         <source name="smooth1__________ out"/>
+         <dest name="pwmout_t41 pb9"/>
+      </net>
+      <net>
+         <source name="smooth1___________ out"/>
+         <dest name="pwmout_t81 pc7"/>
+      </net>
+      <net>
+         <source name="smooth1 out"/>
+         <dest name="pwmout_t51 pa0"/>
+         <dest name="scopeU1 in"/>
+      </net>
+      <net>
+         <source name="adc_11_ wave"/>
+         <dest name="mix21 in1"/>
+         <dest name="smooth2 in"/>
+      </net>
+      <net>
+         <source name="adc_21 wave"/>
+         <dest name="mix21 in2"/>
+         <dest name="smooth2_ in"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="mix41 in1"/>
+         <dest name="mix41 in2"/>
+         <dest name="mix41 in3"/>
+         <dest name="mix41 in4"/>
+      </net>
+      <net>
+         <source name="mix41 out"/>
+         <dest name="dac_11_ wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="randtrig1 rand"/>
+         <dest name="smooth1 in"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="randtrig1 trig"/>
+      </net>
+      <net>
+         <source name="osc1_ wave"/>
+         <dest name="randtrig1_ trig"/>
+      </net>
+      <net>
+         <source name="osc1__ wave"/>
+         <dest name="randtrig1__ trig"/>
+      </net>
+      <net>
+         <source name="randtrig1_ rand"/>
+         <dest name="smooth1_ in"/>
+      </net>
+      <net>
+         <source name="randtrig1__ rand"/>
+         <dest name="smooth1__ in"/>
+      </net>
+      <net>
+         <source name="smooth1_ out"/>
+         <dest name="pwmout_t51 pa1"/>
+      </net>
+      <net>
+         <source name="smooth1__ out"/>
+         <dest name="pwmout_t51 pa2"/>
+      </net>
+      <net>
+         <source name="smooth1___ out"/>
+         <dest name="pwmout_t51 pa3"/>
+      </net>
+      <net>
+         <source name="smooth1_____ out"/>
+         <dest name="pwmout_t31 pa6"/>
+      </net>
+      <net>
+         <source name="smooth1______ out"/>
+         <dest name="pwmout_t31 pa7"/>
+      </net>
+      <net>
+         <source name="smooth1_______ out"/>
+         <dest name="pwmout_t31 pb0"/>
+      </net>
+      <net>
+         <source name="smooth1________ out"/>
+         <dest name="pwmout_t31 pb1"/>
+      </net>
+      <net>
+         <source name="osc1___ wave"/>
+         <dest name="randtrig1___ trig"/>
+      </net>
+      <net>
+         <source name="osc1____ wave"/>
+         <dest name="randtrig1____ trig"/>
+      </net>
+      <net>
+         <source name="osc1_____ wave"/>
+         <dest name="randtrig1_____ trig"/>
+      </net>
+      <net>
+         <source name="osc1______ wave"/>
+         <dest name="randtrig1______ trig"/>
+      </net>
+      <net>
+         <source name="osc1_______ wave"/>
+         <dest name="randtrig1_______ trig"/>
+      </net>
+      <net>
+         <source name="osc1________ wave"/>
+         <dest name="randtrig1________ trig"/>
+      </net>
+      <net>
+         <source name="randtrig1________ rand"/>
+         <dest name="smooth1________ in"/>
+      </net>
+      <net>
+         <source name="randtrig1_______ rand"/>
+         <dest name="smooth1_______ in"/>
+      </net>
+      <net>
+         <source name="randtrig1______ rand"/>
+         <dest name="smooth1______ in"/>
+      </net>
+      <net>
+         <source name="randtrig1_____ rand"/>
+         <dest name="smooth1_____ in"/>
+      </net>
+      <net>
+         <source name="randtrig1____ rand"/>
+         <dest name="smooth1____ in"/>
+      </net>
+      <net>
+         <source name="randtrig1___ rand"/>
+         <dest name="smooth1___ in"/>
+      </net>
+      <net>
+         <source name="randtrig1_________ rand"/>
+         <dest name="smooth1_________ in"/>
+      </net>
+      <net>
+         <source name="randtrig1__________ rand"/>
+         <dest name="smooth1__________ in"/>
+      </net>
+      <net>
+         <source name="randtrig1___________ rand"/>
+         <dest name="smooth1___________ in"/>
+      </net>
+      <net>
+         <source name="osc1___________ wave"/>
+         <dest name="randtrig1___________ trig"/>
+      </net>
+      <net>
+         <source name="osc1__________ wave"/>
+         <dest name="randtrig1__________ trig"/>
+      </net>
+      <net>
+         <source name="osc1_________ wave"/>
+         <dest name="randtrig1_________ trig"/>
+      </net>
+      <net>
+         <source name="smooth2 out"/>
+         <dest name="double1 in"/>
+      </net>
+      <net>
+         <source name="double1 out"/>
+         <dest name="scopeS1_ in"/>
+      </net>
+      <net>
+         <source name="smooth2_ out"/>
+         <dest name="double2 in"/>
+      </net>
+      <net>
+         <source name="double2 out"/>
+         <dest name="scopeS1 in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,26 @@
+<objdefs>
+   <obj.normal id="toggle" sha="6bbdbe388e7a2ccf11a7d72cf71769a3b20cc14f">
+      <sDescription>toggle</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets>
+         <bool32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[   int ntrig;
+   int op;
+]]></code.declaration>
+      <code.init><![CDATA[ntrig = 0;
+op = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {op = !op; ntrig=1;}
+if (!(%trig%>0)) ntrig=0;
+%o%= op;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

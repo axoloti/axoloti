@@ -1,0 +1,86 @@
+<patch-1.0>
+   <obj type="c32" sha="5797bce9fc4e770d9c14890b0fa899f126c5bc38" name="c641" x="80" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="0" y="120">
+      <params>
+         <frac32.s.map name="pitch" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="160" y="120">
+      <params>
+         <frac32.u.map name="gain1" value="11.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="440" y="120">
+      <params>
+         <frac32.u.map name="value" value="13.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="520" y="120">
+      <params>
+         <frac32.u.map name="value" value="4.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="adc~1" sha="76cc7b8fc059b573ece27b3319e73b4136159cff" name="adc_11" x="0" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="280" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chorus" sha="c71cd02f08a884b34185cb9392c7c87adff1aebb" name="chorus1" x="440" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="600" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="tremolo + stereo chorus effect" x="18" y="21"/>
+   <nets>
+      <net>
+         <source name="chorus1 L"/>
+         <dest name="dac_1 left"/>
+      </net>
+      <net>
+         <source name="chorus1 R"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="chorus1 speed"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="chorus1 depth"/>
+      </net>
+      <net>
+         <source name="adc_11 wave"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="chorus1 in"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="c641 o"/>
+         <dest name="mix11 bus_in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

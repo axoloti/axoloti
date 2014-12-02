@@ -1,0 +1,50 @@
+<objdefs>
+   <obj.normal id="hex" sha="3ce96bdfc9c7668d6dbdd8a7430d740e07a3f48e">
+      <sDescription>hexadecimal display (for developers)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="input"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <int32.hexlabel name="v" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%v%=%in%;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="hex" sha="d872fe33dc9fb1838bb5864ed0f7a57d80e63937">
+      <sDescription>hexadecimal display (for developers)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in" description="input"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <int32.hexlabel name="v" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%v%=%in%;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="hex" sha="de6b83af9149f73fe665ab94616327c2c8162d88">
+      <sDescription>hexadecimal display (for developers): char pointer</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <charptr32 name="in" description="input"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <int32.hexlabel name="v" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%v%=(int32_t)%in%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

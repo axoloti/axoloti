@@ -1,0 +1,96 @@
+<patch-1.0>
+   <obj type="select_bool_16_v2x4" sha="2550bb1cdd0761d8347dc1fdecd5d8ebd604de50" name="select_bool_16_v2x4_1" x="20" y="0">
+      <params>
+         <bin16 name="p1" onParent="true" value="1008"/>
+         <bin16 name="p2" value="0"/>
+         <bin16 name="p3" onParent="true" value="1984"/>
+         <bin16 name="p4" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cb16" sha="10460eadb48a887eafeedcf4c65933030e4eabdd" name="cb16_2" x="580" y="20">
+      <params>
+         <bin16 name="b16" value="0">
+            <presets>
+               <preset index="4">
+                  <f v="49708.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="65385.0"/>
+               </preset>
+               <preset index="5">
+                  <f v="12.0"/>
+               </preset>
+            </presets>
+         </bin16>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cb16" sha="10460eadb48a887eafeedcf4c65933030e4eabdd" name="cb16_1" x="580" y="80">
+      <params>
+         <bin16 name="b16" onParent="true" value="-2147483648">
+            <presets>
+               <preset index="1">
+                  <f v="6309.0"/>
+               </preset>
+            </presets>
+         </bin16>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="inlet" sha="ec45071db47e99aa672b4e8456c862acb1d95499" name="inlet_1" x="80" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="~" x="180" y="220">
+      <params>
+         <frac32.u.map name="value" onParent="true" value="51.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="x" x="340" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb1_1" x="500" y="220">
+      <params>
+         <bool32.tgl name="b" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb_1" x="540" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="y" x="340" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="inlet_b" sha="e98d5f4c7b741588feaffc8629026f8d8e59e3ef" name="inlet_b_1" x="20" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="y_" x="340" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="~ out"/>
+         <dest name="x outlet"/>
+      </net>
+      <net>
+         <source name="cb1_1 o"/>
+         <dest name="dispb_1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>normal</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

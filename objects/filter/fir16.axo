@@ -1,0 +1,34 @@
+<objdefs>
+   <obj.normal id="fir16" sha="79dcf6979a6691736ed1c072bf5b09164af32b86">
+      <sDescription>finite impulse response filter, with 16 coefficients</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input"/>
+         <frac32buffer name="coefs" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[arm_fir_instance_q31 f;
+q31_t state[BUFSIZE + BUFSIZE -1];
+]]></code.declaration>
+      <code.init><![CDATA[arm_fir_init_q31(&f,
+	BUFSIZE,
+	0,
+	&state[0],
+	BUFSIZE);
+]]></code.init>
+      <code.krate><![CDATA[f.pCoeffs = (q31_t*)%coefs%;
+
+arm_fir_fast_q31(
+  &f,
+  (q31_t*)%in%,
+  %out%,
+  BUFSIZE);
+]]></code.krate>
+   </obj.normal>
+</objdefs>

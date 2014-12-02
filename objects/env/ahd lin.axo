@@ -1,0 +1,38 @@
+<objdefs>
+   <obj.normal id="ahd lin" sha="d5f54db4739e057a5699c6d2275e4c95d1fcbe08">
+      <sDescription>attack/hold/decay envelope, linear ramps</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.risingfalling name="trig" description="trigger"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="env" description="envelope output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.klineartime.reverse name="a">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.klineartime.reverse>
+         <frac32.u.map.klineartime.reverse name="d">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.klineartime.reverse>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+]]></code.declaration>
+      <code.init><![CDATA[val = 0;
+]]></code.init>
+      <code.krate><![CDATA[if (%trig% > 0) {
+  val += %a% >> 7;
+}
+else {
+  val -= %d% >> 7;
+}
+val = __USAT(val,27);
+%env% = val;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,58 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="20">
+      <params>
+         <frac32.u.map name="value" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="40" y="100">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="preset" sha="56452d6d8bcb5f68e402b3ee6cded3649d214aaf" name="preset1" x="160" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="40" y="220">
+      <params>
+         <frac32.u.map name="value" value="3.0">
+            <presets>
+               <preset index="1">
+                  <f v="1.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="2.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="3.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="160" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="preset1 trig"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="preset1 preset"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="displayU1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,60 @@
+<objdefs>
+   <obj.normal id="sel dial 8" sha="e556f1c05421e16f04d6ebd0c77097ed6a7c8618">
+      <sDescription>selectable constant</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="s" description="select"/>
+      </inlets>
+      <outlets>
+         <frac32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="v0">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v3">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v4">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v5">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v6">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v7">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[   switch(%s%>0?%s%:0) {
+      case 0: %o%= %v0%; break;
+      case 1: %o%= %v1%; break;
+      case 2: %o%= %v2%; break;
+      case 3: %o%= %v3%; break;
+      case 4: %o%= %v4%; break;
+      case 5: %o%= %v5%; break;
+      case 6: %o%= %v6%; break;
+      case 7: default: %o%= %v7%; break;
+   }
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,192 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="0">
+      <params>
+         <frac32.u.map name="value" MidiCC="12" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth1" x="80" y="20">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="240" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="0" y="80">
+      <params>
+         <frac32.u.map name="value" MidiCC="13" value="0.0">
+            <presets>
+               <preset index="1">
+                  <f v="63.5"/>
+               </preset>
+               <preset index="3">
+                  <f v="31.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="0" y="160">
+      <params>
+         <frac32.u.map name="value" MidiCC="14" value="7.5">
+            <presets>
+               <preset index="1">
+                  <f v="63.5"/>
+               </preset>
+               <preset index="2">
+                  <f v="0.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="0" y="240">
+      <params>
+         <frac32.u.map name="value" MidiCC="15" value="16.0">
+            <presets>
+               <preset index="1">
+                  <f v="63.5"/>
+               </preset>
+               <preset index="2">
+                  <f v="0.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="29.5"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c5" x="0" y="320">
+      <params>
+         <frac32.u.map name="value" MidiCC="16" value="29.5">
+            <presets>
+               <preset index="2">
+                  <f v="0.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t5" sha="b039fad23a8dfd2fa54f2d4f6108b397273d87bd" name="pwmout_t51" x="440" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c6" x="0" y="400">
+      <params>
+         <frac32.u.map name="value" MidiCC="17" value="1.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c7" x="0" y="480">
+      <params>
+         <frac32.u.map name="value" MidiCC="18" value="4.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c8" x="0" y="560">
+      <params>
+         <frac32.u.map name="value" MidiCC="19" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c9" x="0" y="640">
+      <params>
+         <frac32.u.map name="value" MidiCC="20" value="9.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t3" sha="c6c36bce1738f803a40a11c3e030e5240431b3e9" name="pwmout_t31" x="120" y="640">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c10" x="0" y="720">
+      <params>
+         <frac32.u.map name="value" MidiCC="21" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c11" x="0" y="800">
+      <params>
+         <frac32.u.map name="value" MidiCC="22" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t4" sha="c2151e6cb19ea1aa1adeab6b638009fa38d7c2dc" name="pwmout_t41" x="120" y="820">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c12" x="0" y="880">
+      <params>
+         <frac32.u.map name="value" MidiCC="23" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t8" sha="bc5389b0e96a90dcc21d117cbf363659bfe2070e" name="pwmout_t81" x="280" y="920">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c5 out"/>
+         <dest name="pwmout_t81 pa5"/>
+      </net>
+      <net>
+         <source name="c6 out"/>
+         <dest name="pwmout_t31 pa6"/>
+      </net>
+      <net>
+         <source name="c7 out"/>
+         <dest name="pwmout_t31 pa7"/>
+      </net>
+      <net>
+         <source name="c8 out"/>
+         <dest name="pwmout_t31 pb0"/>
+      </net>
+      <net>
+         <source name="c9 out"/>
+         <dest name="pwmout_t31 pb1"/>
+      </net>
+      <net>
+         <source name="c10 out"/>
+         <dest name="pwmout_t41 pb8"/>
+      </net>
+      <net>
+         <source name="c11 out"/>
+         <dest name="pwmout_t41 pb9"/>
+      </net>
+      <net>
+         <source name="c12 out"/>
+         <dest name="pwmout_t81 pc7"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="smooth1 in"/>
+      </net>
+      <net>
+         <source name="smooth1 out"/>
+         <dest name="pwmout_t51 pa0"/>
+         <dest name="scopeU1 in"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="pwmout_t51 pa1"/>
+      </net>
+      <net>
+         <source name="c3 out"/>
+         <dest name="pwmout_t51 pa2"/>
+      </net>
+      <net>
+         <source name="c4 out"/>
+         <dest name="pwmout_t51 pa3"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

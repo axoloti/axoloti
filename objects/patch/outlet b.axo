@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="outlet b" sha="4f808e69c735aa76a990b5027b834057a146350">
+      <sDescription>Boolean outlet. The outlet object becomes an outlet connector when this patch is used as an object (subpatch)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="outlet" description="outlet"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t _outlet;
+]]></code.declaration>
+      <code.krate><![CDATA[  _outlet = %outlet%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,36 @@
+<objdefs>
+   <obj.normal id="play2" sha="98247b4a866cd88ae46eeb0743bbb1a9fff17514">
+      <sDescription>play audio from table (non-transposed), starting from position</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="pos" description="start position in table"/>
+         <bool32.risingfalling name="en" description="enable"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="wave" description="wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <objref name="table"/>
+      </attribs>
+      <code.declaration><![CDATA[   int ntrig;
+   int pos;
+]]></code.declaration>
+      <code.init><![CDATA[pos = -1;
+]]></code.init>
+      <code.krate><![CDATA[   if ((%en%>0) && !ntrig) {
+      ntrig=1;
+      uint32_t asat = __USAT(%pos%,27);
+      pos = asat>>(27-%table%.LENGTHPOW);
+   }
+   else if (!(%en%>0)) ntrig=0;
+     int32_t i;
+]]></code.krate>
+      <code.srate><![CDATA[   if (%en%>0) {
+       if (pos< %table%.LENGTH)
+              %wave% = %table%.array[pos++]<<%table%.GAIN;
+   } else %wave% = 0;]]></code.srate>
+   </obj.normal>
+</objdefs>

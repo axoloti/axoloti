@@ -1,0 +1,59 @@
+<patch-1.0>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="40" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="-64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c2" x="200" y="20">
+      <params>
+         <frac32.u.map name="amp" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="40" y="140">
+      <params>
+         <frac32.s.map name="pitch" value="16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1" x="40" y="280">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="240" y="280">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="analyzer24db2" sha="ebec0496c981fe053637f2258879d50dc0661e73" name="analyzer24db21" x="160" y="400">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="analyzer24db21 in"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="*c2 in"/>
+      </net>
+      <net>
+         <source name="*c2 out"/>
+         <dest name="osc_1 pitchm"/>
+         <dest name="saw_1 pitchm"/>
+      </net>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="*c1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

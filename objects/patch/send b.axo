@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="send b" sha="13852054681571c031b50e78d44e9f6ce21ee01b">
+      <sDescription>send (to recv object), boolean type</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="v" description="v"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t _vb;
+]]></code.declaration>
+      <code.krate><![CDATA[  _vb = %v%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

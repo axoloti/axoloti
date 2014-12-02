@@ -1,0 +1,55 @@
+<patch-1.0>
+   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand~_1" x="0" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="60" y="100">
+      <params>
+         <frac32.u.map name="amp" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="eq5" sha="2279030430f4a0afc28e5a60a997f0c75cf2d642" name="eq5_1" x="140" y="100">
+      <params>
+         <int32 name="low" value="0"/>
+         <int32 name="lowmid" value="0"/>
+         <int32 name="mid" value="0"/>
+         <int32 name="highmid" value="0"/>
+         <int32 name="high" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_2" x="240" y="100">
+      <params>
+         <frac32.u.map name="amp" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="320" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="rand~_1 wave"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="eq5_1 in"/>
+      </net>
+      <net>
+         <source name="eq5_1 out"/>
+         <dest name="*c_2 in"/>
+      </net>
+      <net>
+         <source name="*c_2 out"/>
+         <dest name="dac~_1 left"/>
+         <dest name="dac~_1 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

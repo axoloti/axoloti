@@ -1,0 +1,11 @@
+<patch-1.0>
+   <obj type="./subsub" sha="355ebc8311e29733ca54b9ce7e46e05a39bdda0f" name="subsub_1" x="112" y="126">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets/>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

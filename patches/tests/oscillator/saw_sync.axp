@@ -1,0 +1,127 @@
+<patch-1.0>
+   <obj type="keybzone_lru" sha="ced209fd4887eb83c50466040edc4a7030c5bc6a" name="keybzone_lru_1" x="20" y="0">
+      <params/>
+      <attribs>
+         <spinner attributeName="startNote" value="0"/>
+         <spinner attributeName="endNote" value="64"/>
+      </attribs>
+   </obj>
+   <obj type="keybzone_lru" sha="ced209fd4887eb83c50466040edc4a7030c5bc6a" name="keybzone_lru_2" x="120" y="0">
+      <params/>
+      <attribs>
+         <spinner attributeName="startNote" value="64"/>
+         <spinner attributeName="endNote" value="127"/>
+      </attribs>
+   </obj>
+   <obj type="mix1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix1_1" x="200" y="140">
+      <params>
+         <frac32.u.map name="gain1" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="envahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd_1" x="340" y="140">
+      <params>
+         <frac32.u.map name="a" value="0.0"/>
+         <frac32.u.map name="d" value="54.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pnoise" sha="8adc4b3e5aae39c856d02171f3d0b04aeec9625e" name="pnoise_1" x="100" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c_1" x="520" y="200">
+      <params>
+         <frac32.u.map name="amp" value="16.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_2" x="0" y="260">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_1" x="100" y="260">
+      <params>
+         <frac32.u.map name="gain1" value="31.5"/>
+         <frac32.u.map name="gain2" value="31.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="sawsync~" sha="d57bc2c5f8ddbdc058329dc5229b6765b0609a55" name="sawsync~_1" x="220" y="260">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_1" x="320" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="hipass~" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass~_1" x="380" y="260">
+      <params>
+         <frac32.u.map name="freq" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="660" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="hipass~_1 out"/>
+         <dest name="dac~_1 left"/>
+         <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="sawsync~_1 wave"/>
+         <dest name="vca~_1 a"/>
+      </net>
+      <net>
+         <source name="vca~_1 o"/>
+         <dest name="hipass~_1 in"/>
+      </net>
+      <net>
+         <source name="keybzone_lru_1 note"/>
+         <dest name="osc~_2 pitchm"/>
+      </net>
+      <net>
+         <source name="envahd_1 env"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="vca~_1 v"/>
+      </net>
+      <net>
+         <source name="osc~_2 wave"/>
+         <dest name="mix2_1 in2"/>
+      </net>
+      <net>
+         <source name="mix2_1 out"/>
+         <dest name="sawsync~_1 sync"/>
+      </net>
+      <net>
+         <source name="keybzone_lru_2 gate"/>
+         <dest name="envahd_1 gate"/>
+      </net>
+      <net>
+         <source name="keybzone_lru_2 note"/>
+         <dest name="mix1_1 bus_in"/>
+      </net>
+      <net>
+         <source name="mix1_1 out"/>
+         <dest name="sawsync~_1 pitchm"/>
+      </net>
+      <net>
+         <source name="pnoise_1 out"/>
+         <dest name="mix1_1 in1"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

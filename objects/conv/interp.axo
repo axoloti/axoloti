@@ -1,0 +1,26 @@
+<objdefs>
+   <obj.normal id="interp" sha="5a9175b8d44d830756d1599a86b4a6a49813a19b">
+      <sDescription>linear interpolation from k- to s-rate</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="i" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[   int32_t _prev;
+    int32_t _step;
+]]></code.declaration>
+      <code.krate><![CDATA[   _step = (%i% - _prev)>>4;
+   int32_t _i = _prev;
+   _prev = %i%;
+]]></code.krate>
+      <code.srate><![CDATA[   %o% = _i;
+   _i += _step;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

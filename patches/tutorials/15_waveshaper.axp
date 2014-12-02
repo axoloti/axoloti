@@ -1,0 +1,188 @@
+<patch-1.0>
+   <comment type="patch/comment" sha="sha" name="waveshaper: time domain tranfert function" x="42" y="14"/>
+   <comment type="patch/comment" sha="sha" name="adds harmonics to the spectrum" x="84" y="28"/>
+   <comment type="patch/comment" sha="sha" name="(but also aliases!)" x="126" y="42"/>
+   <comment type="patch/comment" sha="sha" name="arctan-like function = &quot;soft saturation&quot;" x="42" y="84"/>
+   <comment type="patch/comment" sha="sha" name="hard clipping: gritty distortion" x="294" y="84"/>
+   <comment type="patch/comment" sha="sha" name="asymetric: generates even harmonics" x="532" y="84"/>
+   <obj type="table/allocate 32b 16sliders" sha="2227408087d0108a79d19893c9bcca8343f9f004" name="softsat" x="42" y="112">
+      <params>
+         <frac32.s.mapvsl name="b0" value="-64.0"/>
+         <frac32.s.mapvsl name="b1" value="-63.0"/>
+         <frac32.s.mapvsl name="b2" value="-60.0"/>
+         <frac32.s.mapvsl name="b3" value="-49.0"/>
+         <frac32.s.mapvsl name="b4" value="-41.0"/>
+         <frac32.s.mapvsl name="b5" value="-34.0"/>
+         <frac32.s.mapvsl name="b6" value="-20.0"/>
+         <frac32.s.mapvsl name="b7" value="0.0"/>
+         <frac32.s.mapvsl name="b8" value="21.0"/>
+         <frac32.s.mapvsl name="b9" value="38.0"/>
+         <frac32.s.mapvsl name="b10" value="46.0"/>
+         <frac32.s.mapvsl name="b11" value="50.0"/>
+         <frac32.s.mapvsl name="b12" value="53.0"/>
+         <frac32.s.mapvsl name="b13" value="56.0"/>
+         <frac32.s.mapvsl name="b14" value="59.0"/>
+         <frac32.s.mapvsl name="b15" value="63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/allocate 32b 16sliders" sha="2227408087d0108a79d19893c9bcca8343f9f004" name="hardsat" x="294" y="112">
+      <params>
+         <frac32.s.mapvsl name="b0" value="-64.0"/>
+         <frac32.s.mapvsl name="b1" value="-64.0"/>
+         <frac32.s.mapvsl name="b2" value="-64.0"/>
+         <frac32.s.mapvsl name="b3" value="-64.0"/>
+         <frac32.s.mapvsl name="b4" value="-64.0"/>
+         <frac32.s.mapvsl name="b5" value="-64.0"/>
+         <frac32.s.mapvsl name="b6" value="-64.0"/>
+         <frac32.s.mapvsl name="b7" value="-64.0"/>
+         <frac32.s.mapvsl name="b8" value="63.0"/>
+         <frac32.s.mapvsl name="b9" value="63.0"/>
+         <frac32.s.mapvsl name="b10" value="63.0"/>
+         <frac32.s.mapvsl name="b11" value="63.0"/>
+         <frac32.s.mapvsl name="b12" value="63.0"/>
+         <frac32.s.mapvsl name="b13" value="63.0"/>
+         <frac32.s.mapvsl name="b14" value="63.0"/>
+         <frac32.s.mapvsl name="b15" value="63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/allocate 32b 16sliders" sha="2227408087d0108a79d19893c9bcca8343f9f004" name="asym" x="532" y="112">
+      <params>
+         <frac32.s.mapvsl name="b0" value="-64.0"/>
+         <frac32.s.mapvsl name="b1" value="-64.0"/>
+         <frac32.s.mapvsl name="b2" value="-63.0"/>
+         <frac32.s.mapvsl name="b3" value="-59.0"/>
+         <frac32.s.mapvsl name="b4" value="-54.0"/>
+         <frac32.s.mapvsl name="b5" value="-46.0"/>
+         <frac32.s.mapvsl name="b6" value="-39.0"/>
+         <frac32.s.mapvsl name="b7" value="-27.0"/>
+         <frac32.s.mapvsl name="b8" value="-10.0"/>
+         <frac32.s.mapvsl name="b9" value="33.0"/>
+         <frac32.s.mapvsl name="b10" value="53.0"/>
+         <frac32.s.mapvsl name="b11" value="63.0"/>
+         <frac32.s.mapvsl name="b12" value="63.0"/>
+         <frac32.s.mapvsl name="b13" value="63.0"/>
+         <frac32.s.mapvsl name="b14" value="63.0"/>
+         <frac32.s.mapvsl name="b15" value="63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="test signal selection" x="42" y="308"/>
+   <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_1" x="0" y="322">
+      <params>
+         <int32.vradio name="value" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="0 - audio sample" x="98" y="322"/>
+   <comment type="patch/comment" sha="sha" name="1 - sine wave" x="98" y="336"/>
+   <comment type="patch/comment" sha="sha" name="2 - sawtooth wave" x="98" y="350"/>
+   <comment type="patch/comment" sha="sha" name="3 - noise" x="98" y="364"/>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="14" y="434">
+      <params>
+         <frac32.s.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="test_signal_generator" sha="2af293afd36a93c8daba4e925f9e0e2fc3bb2d76" name="test_signal_generator1" x="126" y="434">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/bipolar2unipolar" sha="38609fdcec231d6b21f80d961254b8abd0ecad61" name="bipolar2unipolar1" x="294" y="434">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="table/read interp" sha="b0519acd115f068f0851ae0be434a57888454c06" name="tabread21" x="420" y="434">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="softsat"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_2" x="616" y="448">
+      <params>
+         <int32.vradio name="value" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="0:original" x="714" y="490"/>
+   <obj type="table/read interp" sha="b0519acd115f068f0851ae0be434a57888454c06" name="tabread21_" x="420" y="504">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="hardsat"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="1:softsat" x="714" y="504"/>
+   <comment type="patch/comment" sha="sha" name="2:hardsat" x="714" y="518"/>
+   <comment type="patch/comment" sha="sha" name="3: asymmetric" x="714" y="532"/>
+   <obj type="table/read interp" sha="b0519acd115f068f0851ae0be434a57888454c06" name="tabread21__" x="420" y="574">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="asym"/>
+      </attribs>
+   </obj>
+   <obj type="mux/mux 4" sha="4145bfd8751449238db95f24fb1cd2a69972d026" name="inmux31" x="616" y="574">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="700" y="574">
+      <params>
+         <frac32.u.map name="amp" value="9.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_11" x="770" y="574">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="cbp1 out"/>
+         <dest name="test_signal_generator1 pitch"/>
+      </net>
+      <net>
+         <source name="test_signal_generator1 outlet_1"/>
+         <dest name="bipolar2unipolar1 i"/>
+         <dest name="inmux31 i0"/>
+      </net>
+      <net>
+         <source name="bipolar2unipolar1 o"/>
+         <dest name="tabread21 a"/>
+         <dest name="tabread21_ a"/>
+         <dest name="tabread21__ a"/>
+      </net>
+      <net>
+         <source name="tabread21_ o"/>
+         <dest name="inmux31 i2"/>
+      </net>
+      <net>
+         <source name="tabread21__ o"/>
+         <dest name="inmux31 i3"/>
+      </net>
+      <net>
+         <source name="tabread21 o"/>
+         <dest name="inmux31 i1"/>
+      </net>
+      <net>
+         <source name="inmux31 o"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_11 left"/>
+         <dest name="dac_11 right"/>
+      </net>
+      <net>
+         <source name="i_1 out"/>
+         <dest name="test_signal_generator1 selection"/>
+      </net>
+      <net>
+         <source name="i_2 out"/>
+         <dest name="inmux31 s"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

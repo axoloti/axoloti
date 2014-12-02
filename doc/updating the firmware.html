@@ -1,0 +1,20 @@
+<html>
+<body>
+        <h2>Firmware update</h2>
+
+        After downloading a new update, you need to recompile the firmware and flash the Axoloti Core.
+
+        <h3>1. Compile the firmware</h3>
+        Go to the Axoloti main window, and in the "board" menu, select firmware->compile.
+        If all goes well, the message "compile successful!" appears in the log.
+        <h3>2. Connect the board in DFU mode</h3>
+        Unplug the Axoloti board from the USB port. Push and hold switch S1 while plugging in the USB connection.
+        You can release the switch after plugging.
+        <h3>3. Flash the firmware</h3>
+        Go to the Axoloti main window, and in the "board" menu, select firmware->flash with DFU. 
+        If this fails on Windows, use <A href="http://zadig.akeo.ie/">zadig</A> to install the "libusbK" driver for the "STM32 Bootloader" (vendor = 0x0483, product = 0xdf11).
+        If this fails on Linux, this is likely caused by having insufficient permissions to the USB device. The solution is to run "sudo ./platform_linux/upload_fw_dfu.sh" from the main directory.
+        <h3>4. Leave DFU mode</h3>
+        Unplug the Axoloti Core from the USB port, and plug it back in (without pushing switch S1).
+</body>
+</html>

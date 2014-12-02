@@ -1,0 +1,105 @@
+<patch-1.0>
+   <obj type="phasor3~" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52" name="osc_1" x="40" y="80">
+      <params>
+         <frac32.s.map name="pitch" value="-3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="unipolar2bipolar" sha="8525be5d55df51043f07b379c6d326988e993946" name="unipolar2bipolar1" x="200" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="double" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2" name="double1" x="320" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c2" x="400" y="80">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s_trig_v2" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig_v21" x="400" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="softsat" sha="4de9b281f2a362671b6dc8606f5d039535893f45" name="softsat1" x="200" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="280" y="280">
+      <params>
+         <frac32.u.map name="amp" value="62.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s_trig_v2" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig_v21_" x="400" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="saw" sha="f07af1d07daf7d5c2b5d64cbc0061679e61cc18f" name="saw1" x="40" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="unipolar2bipolar" sha="1036bdea372166d396fc75329ed1d057bd4af3fb" name="unipolar2bipolar1_" x="160" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="double" sha="c633387a1d72b98c2decbdfee1f60ab6893c82b" name="double1_" x="280" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c2_" x="360" y="440">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="softsat" sha="4de9b281f2a362671b6dc8606f5d039535893f45" name="softsat2" x="200" y="580">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="*c2 out"/>
+         <dest name="scope_128s_trig_v21 in"/>
+         <dest name="softsat1 in"/>
+      </net>
+      <net>
+         <source name="softsat1 out"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="scope_128s_trig_v21_ in"/>
+      </net>
+      <net>
+         <source name="osc_1 phasor"/>
+         <dest name="unipolar2bipolar1 i"/>
+      </net>
+      <net>
+         <source name="unipolar2bipolar1 o"/>
+         <dest name="double1 in"/>
+      </net>
+      <net>
+         <source name="double1 out"/>
+         <dest name="*c2 in"/>
+      </net>
+      <net>
+         <source name="saw1 wave"/>
+         <dest name="unipolar2bipolar1_ i"/>
+      </net>
+      <net>
+         <source name="unipolar2bipolar1_ o"/>
+         <dest name="double1_ in"/>
+      </net>
+      <net>
+         <source name="double1_ out"/>
+         <dest name="*c2_ in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

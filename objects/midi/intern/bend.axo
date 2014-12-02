@@ -1,0 +1,22 @@
+<objdefs>
+   <obj.normal id="bend" sha="dd9c5285086369846d3afbff18b34630ce90755d">
+      <sDescription>Midi pitch bend output. Sends to midi/in/* objects only.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.bipolar name="bend" description="pitch bend"/>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="0"/>
+      </attribs>
+      <code.declaration><![CDATA[int ntrig;
+]]></code.declaration>
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}
+if (!(%trig%>0)) ntrig=0;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

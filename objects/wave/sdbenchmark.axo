@@ -1,0 +1,17 @@
+<objdefs>
+   <obj.normal id="sdbenchmark" sha="83bede234c4cec7b1d0311275f064bdf36213c22">
+      <sDescription>sdcard benchmark</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./sdbenchmark.h</include>
+      </includes>
+      <code.init><![CDATA[sdbenchmark();
+]]></code.init>
+   </obj.normal>
+</objdefs>

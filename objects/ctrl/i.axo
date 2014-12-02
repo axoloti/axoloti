@@ -1,0 +1,21 @@
+<objdefs>
+   <obj.normal id="i" sha="f379e2b7efb6169f8e7327be5b09362609656408">
+      <sDescription>positive integer control</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <int32.positive name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <int32 name="value" noLabel="true">
+            <MinValue i="0"/>
+            <MaxValue i="65536"/>
+         </int32>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[%out%= %value%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

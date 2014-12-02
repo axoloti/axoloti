@@ -1,0 +1,50 @@
+<objdefs>
+   <obj.normal id="play2" sha="7370e75d2cd86cc1588277da82a2ddbe1643c3fb">
+      <sDescription>streaming playback of a mono .wav file from sdcard (testing)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="pos" description="position"/>
+         <bool32.risingfalling name="trig" description="trigger"/>
+         <charptr32 name="filename" description="file name"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./streamer.h</include>
+         <include>chibios/ext/fatfs/src/ff.h</include>
+      </includes>
+      <code.declaration><![CDATA[    WORKING_AREA(waThreadSD, 512);
+   sdReadFilePingpong *stream;
+   int ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[static sdReadFilePingpong s __attribute__ ((section (".rodata")));
+stream = &s;
+stream->pingpong = CLOSED;
+stream->doSeek = 0;
+ntrig = 0;
+stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),
+                    HIGHPRIO, ThreadSD, (void *)stream);]]></code.init>
+      <code.dispose><![CDATA[sdStopStreamer(stream);
+]]></code.dispose>
+      <code.krate><![CDATA[     int32_t i;
+     if ((%trig%>0) && !ntrig) {
+        sdOpenStream(stream,%filename%);
+        sdSeekStream(stream,((%pos%)>>4)<<2);
+        ntrig=1;
+     } else if ((!(%trig%>0)) && ntrig) {        ntrig=0;
+           sdCloseStream(stream);
+     }
+     int16_t *p = 0;
+        p=sdReadStream(stream);
+     if (p && ntrig)
+        for(i=0;i<BUFSIZE;i++) %o%[i] = (*(p++))<<10;
+     else 
+        for(i=0;i<BUFSIZE;i++) %o%[i] = 0;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

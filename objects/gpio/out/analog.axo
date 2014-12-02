@@ -1,0 +1,26 @@
+<objdefs>
+   <obj.normal id="analog" sha="a8c40145b5423b0c4df3a4a6e89974969a86009a">
+      <sDescription>low-speed 12 bit digital to analog conversion, not suitable for audio signals, but for control voltages...</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="PA4" description="voltage ratio (64u = 3.3V)"/>
+         <frac32 name="PA5" description="voltage ratio (64u = 3.3V)"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.init><![CDATA[palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
+palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
+RCC->APB1ENR |= 0x20000000;
+DAC->CR |= 0x00030003;
+]]></code.init>
+      <code.dispose><![CDATA[DAC->CR = 0x0;
+RCC->APB1ENR &= ~0x20000000;
+]]></code.dispose>
+      <code.krate><![CDATA[DAC->DHR12R1 = %PA4%>>15;
+DAC->DHR12R2 = %PA5%>>15;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

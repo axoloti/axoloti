@@ -1,0 +1,56 @@
+<patch-1.0>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="80" y="0">
+      <params>
+         <bool32.tgl name="b" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="phasor3q~" sha="f9d6105d36172af17f0c58d4ef163277f375a209" name="phasor3_1" x="40" y="60">
+      <params>
+         <frac32.s.map name="pitch" value="31.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s" sha="f5f9c73202e6df9170a172e578ff7e58ad266d76" name="scope_128s_trig1" x="240" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="window~" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d" name="window_1" x="400" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s" sha="f5f9c73202e6df9170a172e578ff7e58ad266d76" name="scope_128s_trig1__" x="520" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s" sha="f5f9c73202e6df9170a172e578ff7e58ad266d76" name="scope_128s_trig1_" x="240" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="window~" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d" name="window_2" x="600" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="phasor3_1 phasor0"/>
+         <dest name="scope_128s_trig1 in"/>
+         <dest name="window_1 phase"/>
+      </net>
+      <net>
+         <source name="phasor3_1 phasor180"/>
+         <dest name="scope_128s_trig1_ in"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="scope_128s_trig1 hold"/>
+         <dest name="scope_128s_trig1_ hold"/>
+         <dest name="scope_128s_trig1__ hold"/>
+      </net>
+      <net>
+         <source name="window_1 win"/>
+         <dest name="scope_128s_trig1__ in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

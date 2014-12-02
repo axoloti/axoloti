@@ -1,0 +1,175 @@
+<patch-1.0>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="40" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="-32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay_1" x="320" y="20">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="rockwehrmann"/>
+      </attribs>
+   </obj>
+   <obj type="+" sha="f21fcf9a2511404a296065f4ba87ab840e153161" name="+1" x="40" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="fdbkcomb" sha="545bfc2c024322a105e8ab12a2b44003713c4916" name="fdbkcomb1" x="160" y="100">
+      <params>
+         <frac32.s.map name="a" value="-52.0"/>
+         <frac32.s.map name="b" value="32.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="delay" value="901"/>
+      </attribs>
+   </obj>
+   <obj type="fdbkcomb" sha="545bfc2c024322a105e8ab12a2b44003713c4916" name="fdbkcomb1_" x="160" y="220">
+      <params>
+         <frac32.s.map name="a" value="-53.0"/>
+         <frac32.s.map name="b" value="32.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="delay" value="778"/>
+      </attribs>
+   </obj>
+   <obj type="fdbkcomb" sha="545bfc2c024322a105e8ab12a2b44003713c4916" name="fdbkcomb1__" x="160" y="340">
+      <params>
+         <frac32.s.map name="a" value="-50.0"/>
+         <frac32.s.map name="b" value="32.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="delay" value="1011"/>
+      </attribs>
+   </obj>
+   <obj type="fdbkcomb" sha="545bfc2c024322a105e8ab12a2b44003713c4916" name="fdbkcomb1___" x="160" y="460">
+      <params>
+         <frac32.s.map name="a" value="-49.0"/>
+         <frac32.s.map name="b" value="32.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="delay" value="1123"/>
+      </attribs>
+   </obj>
+   <obj type="mix4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix41" x="360" y="460">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+         <frac32.u.map name="gain3" value="63.5"/>
+         <frac32.u.map name="gain4" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="allpass" sha="8140941b68c1e90cdb668d6ed237ed2b2ba1a8f6" name="allpass4" x="520" y="460">
+      <params>
+         <frac32.s.map name="g" value="-48.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="delay" value="125"/>
+      </attribs>
+   </obj>
+   <obj type="allpass" sha="8140941b68c1e90cdb668d6ed237ed2b2ba1a8f6" name="allpass5" x="680" y="460">
+      <params>
+         <frac32.s.map name="g" value="-48.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="delay" value="42"/>
+      </attribs>
+   </obj>
+   <obj type="allpass" sha="8140941b68c1e90cdb668d6ed237ed2b2ba1a8f6" name="allpass6" x="840" y="460">
+      <params>
+         <frac32.s.map name="g" value="-48.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="delay" value="12"/>
+      </attribs>
+   </obj>
+   <obj type="mix1" sha="f543e080bd2111cba525885443039f346703a594" name="mix11" x="1000" y="520">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="inv" sha="dd3d98b9ec6f2b9231cb1d00d0f9667152537120" name="inv1" x="920" y="620">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix1" sha="f543e080bd2111cba525885443039f346703a594" name="mix11_" x="1000" y="620">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="1120" y="620">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="allpass4 out"/>
+         <dest name="allpass5 in"/>
+      </net>
+      <net>
+         <source name="allpass5 out"/>
+         <dest name="allpass6 in"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="dac_1 left"/>
+      </net>
+      <net>
+         <source name="mix11_ out"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="allpass6 out"/>
+         <dest name="mix11 in1"/>
+         <dest name="inv1 in"/>
+      </net>
+      <net>
+         <source name="inv1 out"/>
+         <dest name="mix11_ in1"/>
+      </net>
+      <net>
+         <source name="mix41 out"/>
+         <dest name="allpass4 in"/>
+      </net>
+      <net>
+         <source name="+1 out"/>
+         <dest name="fdbkcomb1 in"/>
+         <dest name="fdbkcomb1_ in"/>
+         <dest name="fdbkcomb1__ in"/>
+         <dest name="fdbkcomb1___ in"/>
+      </net>
+      <net>
+         <source name="fdbkcomb1 out"/>
+         <dest name="mix41 in1"/>
+      </net>
+      <net>
+         <source name="fdbkcomb1_ out"/>
+         <dest name="mix41 in2"/>
+      </net>
+      <net>
+         <source name="fdbkcomb1__ out"/>
+         <dest name="mix41 in3"/>
+      </net>
+      <net>
+         <source name="fdbkcomb1___ out"/>
+         <dest name="mix41 in4"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1 out"/>
+         <dest name="+1 in1"/>
+         <dest name="mix11 bus_in"/>
+         <dest name="mix11_ bus_in"/>
+      </net>
+      <net>
+         <source name="square1 wave"/>
+         <dest name="flashwaveplay_1 trig"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

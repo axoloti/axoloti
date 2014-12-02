@@ -1,0 +1,173 @@
+<patch-1.0>
+   <obj type="osc" name="osc1" x="0" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="7.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="counter" name="counter1" x="120" y="20">
+      <params>
+         <int32 name="maximum" value="16"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" name="wavtrig" x="200" y="20">
+      <params>
+         <bin16 name="b16" value="24877"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="led1" name="led11" x="400" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" name="wavpos" x="200" y="80">
+      <params>
+         <bin16 name="b16" value="8196"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix2" name="mix22" x="400" y="80">
+      <params>
+         <frac32.u.map name="gain1" value="1.0"/>
+         <frac32.u.map name="gain2" value="4.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="button1" name="button11" x="0" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="playwave" name="playwave1" x="560" y="120">
+      <params/>
+      <attribs>
+         <table attributeName="wavefile" table="test.wav"/>
+      </attribs>
+   </obj>
+   <obj type="vu" name="vu3" x="760" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c1" x="320" y="140">
+      <params>
+         <frac32.u.map name="value" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" name="seq_snare" x="200" y="260">
+      <params>
+         <bin16 name="b16" value="4625"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" name="flashwaveplay_1" x="400" y="260">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808snare"/>
+      </attribs>
+   </obj>
+   <obj type="vu" name="vu1" x="520" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix3" name="mix21" x="760" y="260">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="12.5"/>
+         <frac32.u.map name="gain3" value="23.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" name="dac_11" x="880" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" name="seq_bd" x="200" y="320">
+      <params>
+         <bin16 name="b16" value="17476"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" name="flashwaveplay_1_" x="400" y="320">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808bd"/>
+      </attribs>
+   </obj>
+   <obj type="vu" name="vu2" x="520" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" name="dac_21" x="880" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" name="ibar161" x="200" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="counter1 trig"/>
+      </net>
+      <net>
+         <source name="counter1 o"/>
+         <dest name="wavtrig in"/>
+         <dest name="seq_snare in"/>
+         <dest name="seq_bd in"/>
+         <dest name="wavpos in"/>
+         <dest name="ibar161 in"/>
+      </net>
+      <net>
+         <source name="wavtrig o"/>
+         <dest name="playwave1 trig"/>
+         <dest name="led11 in"/>
+      </net>
+      <net>
+         <source name="playwave1 o"/>
+         <dest name="mix21 in1"/>
+         <dest name="vu3 in"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="seq_snare o"/>
+         <dest name="flashwaveplay_1 trig"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1 out"/>
+         <dest name="mix21 in2"/>
+         <dest name="vu1 in"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1_ out"/>
+         <dest name="mix21 in3"/>
+         <dest name="vu2 in"/>
+      </net>
+      <net>
+         <source name="seq_bd o"/>
+         <dest name="flashwaveplay_1_ trig"/>
+      </net>
+      <net>
+         <source name="wavpos o"/>
+         <dest name="mix22 in1"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="mix22 in2"/>
+      </net>
+      <net>
+         <source name="mix22 out"/>
+         <dest name="playwave1 pos"/>
+      </net>
+      <net>
+         <source name="button11 out"/>
+         <dest name="counter1 r"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

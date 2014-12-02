@@ -1,0 +1,24 @@
+<patch-1.0>
+   <obj type="polysynth_voice" sha="22e88ae8efbf79077324394658dea0d6ec02415e" name="polysynth_voice1" x="0" y="60">
+      <params/>
+      <attribs>
+         <combo attributeName="poly" selection="6"/>
+      </attribs>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="160" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="160" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="polysynth_voice1 out"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

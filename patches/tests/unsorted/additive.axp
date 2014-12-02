@@ -1,0 +1,72 @@
+<patch-1.0>
+   <obj type="keybzone_lru" sha="d22473f78d43bec724fdf2c7b1ed4565b4f11e0a" name="keybzone_lru1" x="0" y="160">
+      <params/>
+      <attribs>
+         <spinner attributeName="startNote" value="0"/>
+         <spinner attributeName="endNote" value="0"/>
+      </attribs>
+   </obj>
+   <obj type="mtof" sha="a620f86cc7234a9fa26043819d068b779dd852f" name="mtof1" x="160" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="additive_sub" sha="e0386ba51e8969fb4e8f15bec0d2afece1246be4" name="additive_sub1" x="320" y="260">
+      <params/>
+      <attribs>
+         <combo attributeName="poly" selection="8"/>
+      </attribs>
+   </obj>
+   <obj type="*" sha="c47ceb7366785e0103cf880ce3450321491949f1" name="*1" x="440" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="600" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="120" y="280">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="div8" sha="c1d4128b46f598ed9a0e7f9959073815c3ccd4d3" name="div81" x="200" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="*1 result"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="keybzone_lru1 note"/>
+         <dest name="mtof1 pitch"/>
+      </net>
+      <net>
+         <source name="mtof1 frequency"/>
+         <dest name="additive_sub1 freq"/>
+      </net>
+      <net>
+         <source name="keybzone_lru1 gate"/>
+         <dest name="*1 b"/>
+      </net>
+      <net>
+         <source name="additive_sub1 out"/>
+         <dest name="*1 a"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="div81 in"/>
+      </net>
+      <net>
+         <source name="div81 out"/>
+         <dest name="additive_sub1 ratio"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

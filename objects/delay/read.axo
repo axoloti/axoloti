@@ -1,0 +1,51 @@
+<objdefs>
+   <obj.normal id="read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b">
+      <sDescription>delay read, non-interpolated</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="timem" description="delay time (fraction of total delayline size)"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="time" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs>
+         <objref name="delayname"/>
+      </attribs>
+      <code.krate><![CDATA[   uint32_t delay = %delayname%.writepos - (__USAT(%time% + %timem%,27)>>(27-%delayname%.LENGTHPOW)) - BUFSIZE;
+]]></code.krate>
+      <code.srate><![CDATA[  %out%= %delayname%.array[(delay++) & %delayname%.LENGTHMASK]<<14;
+]]></code.srate>
+   </obj.normal>
+   <obj.normal id="read" sha="9428f1942521d9e80e7ca58ea38e1d417220e94f">
+      <sDescription>delay read, non-interpolated</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="timem" description="delay time (fraction of total delayline size)"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="time" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs>
+         <objref name="delayname"/>
+      </attribs>
+      <code.srate><![CDATA[      uint32_t delay1 = %delayname%.writepos - (__USAT(%time% + %timem%,27)>>(27-%delayname%.LENGTHPOW)) - BUFSIZE + buffer_index;
+      %out%= %delayname%.array[delay1 & %delayname%.LENGTHMASK]<<14;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

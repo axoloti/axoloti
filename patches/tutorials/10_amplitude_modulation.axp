@@ -1,0 +1,90 @@
+<patch-1.0>
+   <comment type="patch/comment" sha="sha" name="amplitude modulation, sine wave carrier, sine wave modulator, 100% modulation depth" x="14" y="14"/>
+   <obj type="keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="modulator oscillator" x="56" y="168"/>
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="56" y="182">
+      <params>
+         <frac32.s.map name="pitch" value="-27.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="carrier oscillator" x="56" y="322"/>
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_2" x="56" y="336">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/bipolar2unipolar" sha="38609fdcec231d6b21f80d961254b8abd0ecad61" name="bipolar2unipolar1" x="182" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*" sha="d67b6c172dd96232df67e96baf19e3062e880e68" name="*1" x="336" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="434" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="504" y="336">
+      <params>
+         <frac32.u.map name="amp" value="33.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="588" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="out=0.5+0.5*in" x="182" y="392"/>
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_1" x="574" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc_2 wave"/>
+         <dest name="bipolar2unipolar1 i"/>
+      </net>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="*1 a"/>
+      </net>
+      <net>
+         <source name="bipolar2unipolar1 o"/>
+         <dest name="*1 b"/>
+      </net>
+      <net>
+         <source name="*1 result"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="osc_1 pitchm"/>
+         <dest name="osc_2 pitchm"/>
+      </net>
+      <net>
+         <source name="keyb1 gate"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="*c1 in"/>
+         <dest name="scope_1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

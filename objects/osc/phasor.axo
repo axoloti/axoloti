@@ -1,0 +1,30 @@
+<objdefs>
+   <obj.normal id="phasor" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52">
+      <sDescription>phasor with logarithmic pitch plus linear frequency, k-rate pitch input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="pitchm" description="pitch modulation"/>
+         <frac32buffer name="fm" description="phase increment"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.positive name="phasor" description="phasor wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.pitch name="pitch" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.pitch>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[uint32_t Phase;]]></code.declaration>
+      <code.init><![CDATA[Phase = 0;]]></code.init>
+      <code.krate><![CDATA[   uint32_t freq;
+   MTOFEXTENDED(%pitch% + %pitchm%,freq);
+]]></code.krate>
+      <code.srate><![CDATA[Phase += (freq>>0) + %fm%;
+   %phasor% = Phase>>5;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

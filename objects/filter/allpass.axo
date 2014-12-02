@@ -1,0 +1,40 @@
+<objdefs>
+   <obj.normal id="allpass" sha="8140941b68c1e90cdb668d6ed237ed2b2ba1a8f6">
+      <sDescription>allpass reverb section</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.ratio name="g" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.ratio>
+      </params>
+      <attribs>
+         <spinner name="delay" MinValue="1" MaxValue="10000" DefaultValue="1000"/>
+      </attribs>
+      <code.declaration><![CDATA[int16_t d[%delay%];
+int dpos;
+]]></code.declaration>
+      <code.init><![CDATA[int i;
+for (i=0;i<%delay%;i++)
+   d[i] = 0;
+dpos = 0;
+]]></code.init>
+      <code.krate><![CDATA[int32_t g2 = %g%<<4;
+int32_t g2c = ((1<<31)-1)-g2;
+]]></code.krate>
+      <code.srate><![CDATA[int32_t dout =  d[dpos]<<16;
+int32_t din = ___SMMLA(g2,dout,%in%>>1);
+d[dpos++]=din>>15;
+%out% = ___SMMLS(g2,din<<1,dout>>1)<<1;
+if (dpos == %delay%) dpos = 0;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

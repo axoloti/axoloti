@@ -1,0 +1,56 @@
+<patch-1.0>
+   <obj type="keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb_1" x="20" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="shepard_voice" sha="4d2357263c4c72108af906608433460338503704" name="shepard_voice_1" x="160" y="140">
+      <params>
+         <frac32.u.map name="interval" value="12.0"/>
+         <frac32.s.map name="transpose" value="-36.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="8"/>
+      </attribs>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_1" x="300" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="420" y="140">
+      <params>
+         <frac32.u.map name="amp" value="2.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="500" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="keyb_1 gate"/>
+         <dest name="vca~_1 v"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="dac~_1 left"/>
+         <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="vca~_1 o"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="keyb_1 note"/>
+         <dest name="shepard_voice_1 pitch"/>
+      </net>
+      <net>
+         <source name="shepard_voice_1 outlet~_1"/>
+         <dest name="vca~_1 a"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,36 @@
+<objdefs>
+   <obj.normal id="pan m" sha="5d73816389e41249dbf47bd07b63e80247198585">
+      <sDescription>stereo balance (panorama) with modulation input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="i1" description="input"/>
+         <frac32 name="c" description="pan control"/>
+      </inlets>
+      <outlets>
+         <frac32 name="left" description="output" SumBuffer="false"/>
+         <frac32 name="right" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%left% = ___SMMUL((1<<29)-(c<<2),%i1%)<<2;%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="pan m" sha="f2d9a02beeb3b451541dc262fc3d1e3b1d3af031">
+      <sDescription>stereo balance (panorama) with modulation input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="i1" description="input"/>
+         <frac32 name="c" description="pan control"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="left" description="output" SumBuffer="false"/>
+         <frac32buffer name="right" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[%left% = ___SMMUL((1<<29)-(c<<2),%i1%)<<2;%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;]]></code.srate>
+   </obj.normal>
+</objdefs>

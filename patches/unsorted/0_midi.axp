@@ -1,0 +1,414 @@
+<patch-1.0>
+   <obj type="c" name="c1" x="0" y="0">
+      <params>
+         <frac32.u.map name="value" MidiCC="12" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1" x="80" y="0">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU1" x="240" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c2" x="0" y="80">
+      <params>
+         <frac32.u.map name="value" MidiCC="13" value="0.0">
+            <presets>
+               <preset index="1">
+                  <f v="63.5"/>
+               </preset>
+               <preset index="3">
+                  <f v="31.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth2_" x="80" y="80">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU2_" x="320" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU3__" x="240" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="adc~1" name="adc_11_" x="440" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c3" x="0" y="160">
+      <params>
+         <frac32.u.map name="value" MidiCC="14" value="0.0">
+            <presets>
+               <preset index="1">
+                  <f v="63.5"/>
+               </preset>
+               <preset index="2">
+                  <f v="0.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth3__" x="80" y="160">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix2" name="mix21" x="520" y="160">
+      <params>
+         <frac32.u.map name="gain1" value="62.5"/>
+         <frac32.u.map name="gain2" value="5.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix4" name="mix41" x="640" y="160">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+         <frac32.u.map name="gain3" value="63.5"/>
+         <frac32.u.map name="gain4" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="adc~2" name="adc_21" x="440" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c4" x="0" y="240">
+      <params>
+         <frac32.u.map name="value" MidiCC="15" value="0.0">
+            <presets>
+               <preset index="1">
+                  <f v="63.5"/>
+               </preset>
+               <preset index="2">
+                  <f v="0.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="29.5"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth4_" x="80" y="240">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU4_" x="320" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" name="dac_11_" x="800" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU5_" x="240" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" name="dac_21" x="800" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c5" x="0" y="320">
+      <params>
+         <frac32.u.map name="value" MidiCC="16" value="0.0">
+            <presets>
+               <preset index="2">
+                  <f v="0.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth5_" x="80" y="320">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t5" name="pwmout_t51" x="440" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU6_" x="320" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c6" x="0" y="400">
+      <params>
+         <frac32.u.map name="value" MidiCC="17" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth6_" x="80" y="400">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU7__" x="240" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU0_" x="760" y="460">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c7" x="0" y="480">
+      <params>
+         <frac32.u.map name="value" MidiCC="18" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth7_" x="80" y="480">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU8_" x="320" y="520">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c8" x="0" y="560">
+      <params>
+         <frac32.u.map name="value" MidiCC="19" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth8_" x="80" y="560">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU9_" x="240" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t3" name="pwmout_t31" x="480" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c9" x="0" y="640">
+      <params>
+         <frac32.u.map name="value" MidiCC="20" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth9_" x="80" y="640">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU10__" x="320" y="660">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t8" name="pwmout_t81" x="760" y="680">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c10" x="0" y="720">
+      <params>
+         <frac32.u.map name="value" MidiCC="21" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth10_" x="80" y="720">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU11___" x="240" y="760">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c11" x="0" y="800">
+      <params>
+         <frac32.u.map name="value" MidiCC="22" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth11__" x="80" y="800">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" name="scopeU12___" x="320" y="840">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="pwmout_t4" name="pwmout_t41" x="480" y="840">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" name="c12" x="0" y="880">
+      <params>
+         <frac32.u.map name="value" MidiCC="23" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth12__" x="80" y="880">
+      <params>
+         <frac32.u.map name="time" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c8 out"/>
+         <dest name="smooth8_ in"/>
+      </net>
+      <net>
+         <source name="c9 out"/>
+         <dest name="smooth9_ in"/>
+      </net>
+      <net>
+         <source name="c10 out"/>
+         <dest name="smooth10_ in"/>
+      </net>
+      <net>
+         <source name="c11 out"/>
+         <dest name="smooth11__ in"/>
+      </net>
+      <net>
+         <source name="c12 out"/>
+         <dest name="smooth12__ in"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="smooth1 in"/>
+      </net>
+      <net>
+         <source name="smooth1 out"/>
+         <dest name="pwmout_t51 pa0"/>
+         <dest name="scopeU1 in"/>
+      </net>
+      <net>
+         <source name="adc_11_ wave"/>
+         <dest name="mix21 in1"/>
+      </net>
+      <net>
+         <source name="adc_21 wave"/>
+         <dest name="mix21 in2"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="mix41 in1"/>
+         <dest name="mix41 in2"/>
+         <dest name="mix41 in3"/>
+         <dest name="mix41 in4"/>
+      </net>
+      <net>
+         <source name="mix41 out"/>
+         <dest name="dac_11_ wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="smooth2_ in"/>
+      </net>
+      <net>
+         <source name="smooth2_ out"/>
+         <dest name="scopeU2_ in"/>
+         <dest name="pwmout_t51 pa1"/>
+      </net>
+      <net>
+         <source name="c3 out"/>
+         <dest name="smooth3__ in"/>
+      </net>
+      <net>
+         <source name="smooth3__ out"/>
+         <dest name="scopeU3__ in"/>
+         <dest name="pwmout_t51 pa2"/>
+      </net>
+      <net>
+         <source name="c4 out"/>
+         <dest name="smooth4_ in"/>
+         <dest name="smooth4_ in"/>
+      </net>
+      <net>
+         <source name="smooth4_ out"/>
+         <dest name="scopeU4_ in"/>
+         <dest name="pwmout_t51 pa3"/>
+      </net>
+      <net>
+         <source name="c5 out"/>
+         <dest name="smooth5_ in"/>
+      </net>
+      <net>
+         <source name="smooth5_ out"/>
+         <dest name="scopeU5_ in"/>
+         <dest name="pwmout_t81 pa5"/>
+      </net>
+      <net>
+         <source name="c6 out"/>
+         <dest name="smooth6_ in"/>
+      </net>
+      <net>
+         <source name="smooth6_ out"/>
+         <dest name="scopeU6_ in"/>
+         <dest name="pwmout_t31 pa6"/>
+      </net>
+      <net>
+         <source name="c7 out"/>
+         <dest name="smooth7_ in"/>
+      </net>
+      <net>
+         <source name="smooth7_ out"/>
+         <dest name="scopeU7__ in"/>
+         <dest name="pwmout_t31 pa7"/>
+      </net>
+      <net>
+         <source name="smooth8_ out"/>
+         <dest name="scopeU8_ in"/>
+         <dest name="pwmout_t31 pb0"/>
+      </net>
+      <net>
+         <source name="smooth9_ out"/>
+         <dest name="scopeU9_ in"/>
+         <dest name="pwmout_t31 pb1"/>
+      </net>
+      <net>
+         <source name="smooth10_ out"/>
+         <dest name="scopeU10__ in"/>
+         <dest name="pwmout_t41 pb8"/>
+      </net>
+      <net>
+         <source name="smooth11__ out"/>
+         <dest name="scopeU11___ in"/>
+         <dest name="pwmout_t41 pb9"/>
+      </net>
+      <net>
+         <source name="smooth12__ out"/>
+         <dest name="scopeU12___ in"/>
+         <dest name="pwmout_t81 pc7"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

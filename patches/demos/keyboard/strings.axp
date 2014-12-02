@@ -1,0 +1,49 @@
+<patch-1.0>
+   <obj type="./stringvoice" sha="65c0834729cf9c917998c5bf5a197dca925eda0e" name="stringvoice1" x="60" y="100">
+      <params>
+         <frac32.s.map name="envf:a" value="-17.0"/>
+         <frac32.s.map name="envf:d" value="19.0"/>
+         <frac32.u.map name="envf:s" value="21.5"/>
+         <frac32.s.map name="envf:r" value="0.0"/>
+         <frac32.u.map name="envahd21:a" value="30.0"/>
+         <frac32.u.map name="envahd21:d" value="56.0"/>
+         <frac32.s.map name="osc2" value="-10.0"/>
+         <frac32.u.map name="pwm" value="3.0"/>
+         <frac32.s.map name="vcf3_1:pitch" MidiCC="1" value="63.0"/>
+         <frac32.u.map name="vcf3_1:reso" value="26.5"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="7"/>
+         <combo attributeName="midichannel" selection="0"/>
+      </attribs>
+   </obj>
+   <obj type="chorus2" sha="251ade07aed51656f172e99173f8500c451e0067" name="chorus21" x="220" y="100">
+      <params>
+         <frac32.u.map name="depth" value="3.0"/>
+         <frac32.s.map name="speed" value="-33.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="340" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="stringvoice1 outlet_1"/>
+         <dest name="chorus21 in"/>
+      </net>
+      <net>
+         <source name="chorus21 L"/>
+         <dest name="dac_1 left"/>
+      </net>
+      <net>
+         <source name="chorus21 R"/>
+         <dest name="dac_1 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

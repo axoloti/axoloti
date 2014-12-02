@@ -1,0 +1,30 @@
+<objdefs>
+   <obj.normal id="glide" sha="f8cb232fe6c6730b20faafffc0212f3717edbeb">
+      <sDescription>exponential smooth with enable</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="input"/>
+         <bool32 name="en" description="enable"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="time" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+]]></code.declaration>
+      <code.init><![CDATA[   val = 0;
+]]></code.init>
+      <code.krate><![CDATA[      if (%en%>0) val = ___SMMLA(val-%in%,(-1<<26)+(%time%>>1),val);
+   else val = %in%;
+   %out%= val;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

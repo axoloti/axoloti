@@ -1,0 +1,27 @@
+<patch-1.0>
+   <obj type="ramtable8" sha="16dc5f80ca3889cc98392d3e77ce5ed128140c96" name="tab2" x="840" y="40">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="4"/>
+         <text attributeName="init">
+            <sText><![CDATA[]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="keyb" sha="c4bae6e941c9c85103725bc12ed6eec656d9852c" name="keyb1" x="920" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter2" x="1040" y="40">
+      <params>
+         <int32 name="maximum" value="4"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="tabwrite" sha="f483c359a26b18c209716f47a289a1401446b8ee" name="tabwrite1" x="1120" y="40">
+      <params/>
+      <attribs>
+         <table attributeName="table" table="tab2"/>
+      </attribs>
+   </obj>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="0" y="80">

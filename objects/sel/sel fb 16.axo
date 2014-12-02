@@ -1,0 +1,105 @@
+<objdefs>
+   <obj.normal id="sel fb 16" sha="327cbafa4c76b1b7accb1d3bcf9b6f21803efd9a">
+      <sDescription>select one out of 16 bipolar fractionals, with chain i/o</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <rotatedParams>true</rotatedParams>
+      <inlets>
+         <int32 name="in" description="in"/>
+         <frac32 name="def" description="default value"/>
+      </inlets>
+      <outlets>
+         <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
+         <frac32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.mapvsl name="b0" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b1" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b2" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b3" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b4" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b5" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b6" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b7" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b8" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b9" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b10" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b11" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b12" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b13" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b14" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+         <frac32.s.mapvsl name="b15" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.mapvsl>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[switch(%in%){
+case 0: %o% = %b0%; break;
+case 1: %o% = %b1%; break;
+case 2: %o% = %b2%; break;
+case 3: %o% = %b3%; break;
+case 4: %o% = %b4%; break;
+case 5: %o% = %b5%; break;
+case 6: %o% = %b6%; break;
+case 7: %o% = %b7%; break;
+case 8: %o% = %b8%; break;
+case 9: %o% = %b9%; break;
+case 10: %o% = %b10%; break;
+case 11: %o% = %b11%; break;
+case 12: %o% = %b12%; break;
+case 13: %o% = %b13%; break;
+case 14: %o% = %b14%; break;
+case 15: %o% = %b15%; break;
+default: %o% = %def%;
+}
+%chain% = %in% - 16;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,104 @@
+<patch-1.0>
+   <comment type="patch/comment" sha="sha" name="one envelope for amplitude, another for pitch" x="14" y="14"/>
+   <comment type="patch/comment" sha="sha" name="again: use the keyboard window to play!" x="14" y="28"/>
+   <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="70">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="182" y="70">
+      <params>
+         <frac32.u.map name="a" value="15.5"/>
+         <frac32.u.map name="d" value="34.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1_" x="336" y="70">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd1" x="182" y="210">
+      <params>
+         <frac32.u.map name="d" value="7.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="336" y="210">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="final pitch = keyboard pitch plus enevelope scaled to x (dial position) semitones" x="182" y="350"/>
+   <obj type="mix/mix 1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="182" y="392">
+      <params>
+         <frac32.u.map name="gain1" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="336" y="392">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="504" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="616" y="392">
+      <params>
+         <frac32.u.map name="amp" value="20.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="742" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig1" x="504" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="mix output = bus_in + in1 * dial/64" x="182" y="518"/>
+   <nets>
+      <net>
+         <source name="keyb1 gate"/>
+         <dest name="envahd1 gate"/>
+         <dest name="envd1 trig"/>
+      </net>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="mix11 bus_in"/>
+      </net>
+      <net>
+         <source name="envahd1 env"/>
+         <dest name="scopeU1_ in"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="*c1 in"/>
+         <dest name="scope_128s_trig1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="envd1 env"/>
+         <dest name="mix11 in1"/>
+         <dest name="scopeU1 in"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="saw_1 pitchm"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

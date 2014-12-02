@@ -1,0 +1,33 @@
+<objdefs>
+   <obj.normal id="test_annotations" sha="f2cb995ddcec5d4ba6868ecba0fd7398d564bd0">
+      <sDescription>shows various annotations on inputs and outputs</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.positive name="pos" description="positive fractional"/>
+         <frac32.bipolar name="bip" description="bipolar fractional"/>
+         <frac32buffer.positive name="pos_b" description="positive fractional buffer"/>
+         <frac32buffer.bipolar name="bip_b" description="bipolar fractional input buffer"/>
+         <bool32 name="bool" description="bool"/>
+         <bool32.rising name="bool_r" description="bool rising"/>
+         <bool32.risingfalling name="bool_rf" description="bool rising/falling"/>
+         <int32 name="int" description="integer"/>
+         <int32 class="axoloti.inlets.InletInt32Pos" name="int_pos" description="positive integer"/>
+         <int32 class="axoloti.inlets.InletInt32Bipolar" name="int_bip" description="bipolar integer"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="o_pos" description="positive fractional" SumBuffer="false"/>
+         <frac32.bipolar name="o_bip" description="bipolar fractional" SumBuffer="false"/>
+         <frac32buffer.positive name="o_pos_b" description="positive fractional buffer" SumBuffer="false"/>
+         <frac32buffer.bipolar name="o_bip_b" description="bipolar fractional input buffer" SumBuffer="false"/>
+         <bool32 name="o_bool" description="bool" SumBuffer="false"/>
+         <bool32.pulse name="o_bool_p" description="boolean pulse" SumBuffer="false"/>
+         <int32 name="o_int" description="integer" SumBuffer="false"/>
+         <int32.positive name="o_int_pos" description="positive integer" SumBuffer="false"/>
+         <int32.bipolar name="o_int_bip" description="bipolar integer" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+   </obj.normal>
+</objdefs>

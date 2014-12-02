@@ -1,0 +1,57 @@
+<patch-1.0>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="40" y="60">
+      <params>
+         <frac32.s.map name="pitch" value="-16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pulselength" sha="8db9c5cacae9ca28ff382ee6bc6acde364845835" name="pulselength1" x="320" y="60">
+      <params>
+         <frac32.s.map name="delay" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="520" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="200" y="180">
+      <params>
+         <frac32.s.map name="value" value="17.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pulselengthmx" sha="d897d6699b6693a94c567b293a827883b12e3439" name="pulselengthmx1" x="320" y="180">
+      <params>
+         <frac32.s.map name="delay" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU2" x="520" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="square1 wave"/>
+         <dest name="pulselength1 trig"/>
+         <dest name="pulselengthmx1 trig"/>
+      </net>
+      <net>
+         <source name="pulselength1 pulse"/>
+         <dest name="scopeU1 in"/>
+      </net>
+      <net>
+         <source name="cbp1 out"/>
+         <dest name="pulselengthmx1 delaym"/>
+      </net>
+      <net>
+         <source name="pulselengthmx1 pulse"/>
+         <dest name="scopeU2 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

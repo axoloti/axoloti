@@ -1,0 +1,51 @@
+<objdefs>
+   <obj.normal id="write" sha="d57515c0f3344ccf04436a1483b381a2b73aeba1">
+      <sDescription>write to table</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.positive name="a" description="index in fraction of table size"/>
+         <frac32 name="v" description="value"/>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <objref name="table"/>
+      </attribs>
+      <code.declaration><![CDATA[   int ntrig;
+]]></code.declaration>
+      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) {
+      ntrig=1;
+      %table%.array[__USAT(%a%,27)>>(27-%table%.LENGTHPOW)]=__SSAT(%v%,28)>>%table%.GAIN;
+   }
+   if (!(%trig%>0)) ntrig=0;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="write" sha="27fd4ced2949a883990a38df165fea0d15e1bc2b">
+      <sDescription>write to table</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 class="axoloti.inlets.InletInt32Pos" name="a" description="index (integer, not fraction)"/>
+         <frac32 name="v" description="value"/>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <objref name="table"/>
+      </attribs>
+      <code.declaration><![CDATA[   int ntrig;
+]]></code.declaration>
+      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) {
+      ntrig=1;
+      if (%a%<%table%.LENGTH)
+         %table%.array[%a%]=__SSAT(%v%,28)>>%table%.GAIN;
+   }
+   if (!(%trig%>0)) ntrig=0;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

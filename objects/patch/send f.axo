@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="send f" sha="317772b85deca12c39f748c73412e0bf94a9b2e3">
+      <sDescription>send (to recv object), fractional type</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="v" description="v"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t _v;
+]]></code.declaration>
+      <code.krate><![CDATA[  _v = %v%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

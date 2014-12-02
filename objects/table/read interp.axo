@@ -1,0 +1,54 @@
+<objdefs>
+   <obj.normal id="read interp" sha="2dfc3a1a00aeb03244b8ef0259d6c004c06cdbc">
+      <sDescription>read from table, linear interpolated</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.positive name="a" description="index in fraction of table size"/>
+      </inlets>
+      <outlets>
+         <frac32 name="o" description="table[a]" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <objref name="table"/>
+      </attribs>
+      <code.krate><![CDATA[   uint32_t asat = __USAT(%a%,27);
+    int index = asat>>(27-%table%.LENGTHPOW);
+   int32_t y1 = %table%.array[index]<<%table%.GAIN;
+   int32_t y2 = %table%.array[(index+1)&%table%.LENGTHMASK]<<%table%.GAIN;
+   int frac = (asat - (index<<(27-%table%.LENGTHPOW)))<<(%table%.LENGTHPOW+3);
+  int32_t rr;
+  rr = ___SMMUL(y1,(1<<30)-frac);
+  rr = ___SMMLA(y2,frac,rr);
+%o%= rr<<2;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="read interp" sha="b0519acd115f068f0851ae0be434a57888454c06">
+      <sDescription>read from table, linear interpolated</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer.positive name="a" description="index in fraction of table size"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="table[a]" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <objref name="table"/>
+      </attribs>
+      <code.srate><![CDATA[   uint32_t asat = __USAT(%a%,27);
+    int index = asat>>(27-%table%.LENGTHPOW);
+   int32_t y1 = %table%.array[index]<<%table%.GAIN;
+   int32_t y2 = %table%.array[(index+1)&%table%.LENGTHMASK]<<%table%.GAIN;
+   int frac = (asat - (index<<(27-%table%.LENGTHPOW)))<<(%table%.LENGTHPOW+3);
+  int32_t rr;
+  rr = ___SMMUL(y1,(1<<30)-frac);
+  rr = ___SMMLA(y2,frac,rr);
+%o%= rr<<2;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,127 @@
+<patch-1.0>
+   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand~_1" x="120" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="hpf~" sha="2c3219893ab8ef42b46eb323284a077f0ba55d54" name="hpf~_2" x="160" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="63.0"/>
+         <frac32.u.map name="reso" value="49.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="hpf~" sha="2c3219893ab8ef42b46eb323284a077f0ba55d54" name="hpf~_3" x="240" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="-53.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c_1" x="340" y="20">
+      <params>
+         <frac32.u.map name="value" value="2.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="nointerp~" sha="77d868d4547e0e29a1aa7711f764a6d3957177f9" name="nointerp~_1" x="400" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="adc~" sha="2215b2e513239e306346ea02ae2ee6746d6d62a5" name="adc~_1" x="20" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="hpf~" sha="2c3219893ab8ef42b46eb323284a077f0ba55d54" name="hpf~_1" x="80" y="120">
+      <params>
+         <frac32.s.map name="pitch" value="7.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_1" x="220" y="120">
+      <params>
+         <frac32.u.map name="gain1" value="0.015000000000000003"/>
+         <frac32.u.map name="gain2" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="schmitttrigger~" sha="9aac34cb87f8ee70600c69ac5c74881bb0811fe6" name="schmitttrigger~_1" x="320" y="120">
+      <params>
+         <frac32.u.map name="hysteresis" value="0.009999752044677734"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="520" y="120">
+      <params>
+         <frac32.u.map name="amp" value="22.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="600" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="20" y="320">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s_v2" sha="375509bcb23b2f6a69f9cd82349f406464c8295e" name="scope_128s_v2_1" x="280" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s_trig_v2" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig_v2_1" x="420" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="adc~_1 left"/>
+         <dest name="hpf~_1 in"/>
+      </net>
+      <net>
+         <source name="schmitttrigger~_1 out"/>
+         <dest name="*c_1 in"/>
+         <dest name="scope_128s_trig_v2_1 in"/>
+         <dest name="scope_128s_v2_1 in"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="dac~_1 left"/>
+         <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="mix2_1 out"/>
+         <dest name="schmitttrigger~_1 in"/>
+      </net>
+      <net>
+         <source name="hpf~_1 out"/>
+         <dest name="mix2_1 bus_in"/>
+      </net>
+      <net>
+         <source name="rand~_1 wave"/>
+         <dest name="hpf~_2 in"/>
+      </net>
+      <net>
+         <source name="hpf~_2 out"/>
+         <dest name="hpf~_3 in"/>
+      </net>
+      <net>
+         <source name="hpf~_3 out"/>
+         <dest name="mix2_1 in1"/>
+      </net>
+      <net>
+         <source name="nointerp~_1 o"/>
+         <dest name="mix2_1 in2"/>
+      </net>
+      <net>
+         <source name="c_1 out"/>
+         <dest name="nointerp~_1 i"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

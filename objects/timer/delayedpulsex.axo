@@ -1,0 +1,44 @@
+<objdefs>
+   <obj.normal id="delayedpulsex" sha="61d5bc13107350e8a295ed78868e86be011b312a">
+      <sDescription>Generates a single pulse after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger. The generated pulse is so small you won&apos;t notice it on a display! Extended range version.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets>
+         <bool32.pulse name="pulse" description="pulse output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.klineartime.exp name="delay" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.klineartime.exp>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+int ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[val = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%trig% > 0) && !ntrig) {
+  val = 1 << 30;
+  ntrig = 1;
+  %pulse% = 0;
+}
+else {
+  if (!(%trig% > 0))
+    ntrig = 0;
+  if (val>0) {
+    int32_t t;
+    MTOF(-%delay%,t);
+     val -= t>>3;
+     if (val<=0) %pulse% = 1;
+     else %pulse% = 0;
+  } else %pulse% = 0;
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>

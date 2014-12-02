@@ -1,0 +1,61 @@
+<objdefs>
+   <obj.normal id="play2 stereo" sha="70fe22e694bf2df624372f88abd54856f3d8784b">
+      <sDescription>streaming playback of a stereo .wav file from sdcard (testing)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="pos" description="position"/>
+         <bool32.risingfalling name="trig" description="trigger"/>
+         <charptr32 name="filename" description="file name"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="outl" description="output left" SumBuffer="false"/>
+         <frac32buffer name="outr" description="output right" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <includes>
+         <include>./streamer.h</include>
+         <include>chibios/ext/fatfs/src/ff.h</include>
+      </includes>
+      <code.declaration><![CDATA[    WORKING_AREA(waThreadSD, 2048);
+   sdReadFilePingpong *stream;
+   int ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[static sdReadFilePingpong s __attribute__ ((section (".rodata")));
+stream = &s;
+stream->pingpong = CLOSED;
+stream->doSeek = 0;
+ntrig = 0;
+stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),
+                    HIGHPRIO, ThreadSD, (void *)stream);]]></code.init>
+      <code.dispose><![CDATA[sdStopStreamer(stream);
+]]></code.dispose>
+      <code.krate><![CDATA[     int32_t i;
+     if ((%trig%>0) && !ntrig) {
+        sdOpenStream(stream,%filename%);
+        sdSeekStream(stream,((%pos%)>>4)<<2);
+        ntrig=1;
+     } else if ((!(%trig%>0)) && ntrig) {        ntrig=0;
+        sdCloseStream(stream);
+     }
+     int16_t *p = 0;
+     int16_t *q = 0;
+     if (%trig%>0) {        p=sdReadStream(stream);
+        q=sdReadStream(stream);
+     }     if (p && q && ntrig) {
+        for(i=0;i<BUFSIZE/2;i++){
+           %outl%[i] = (*(p++))<<10;
+           %outr%[i] = (*(p++))<<10;
+        }
+        for(;i<BUFSIZE;i++){
+           %outl%[i] = (*(q++))<<10;
+           %outr%[i] = (*(q++))<<10;
+        }
+     }
+     else 
+        for(i=0;i<BUFSIZE;i++) %outl%[i] = %outr%[i]= 0;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

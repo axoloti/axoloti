@@ -1,0 +1,15 @@
+<objdefs>
+   <obj.normal id="uniform f" sha="a5949c689afce5a3097108fd569d13ffda3895f6">
+      <sDescription>uniform distributed (white) noise, k-rate generation. Range -64..64</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32 name="wave" description="white noise" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%wave%= (int32_t)(GenerateRandomNumber())>>4;]]></code.krate>
+   </obj.normal>
+</objdefs>

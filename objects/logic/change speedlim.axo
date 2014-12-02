@@ -1,0 +1,74 @@
+<objdefs>
+   <obj.normal id="change speedlim" sha="66643745eb6dc4d0abbde79a0360d8b6011c3e99">
+      <sDescription>Generates a trigger pulse when current input value is different from previous value, with a minimum time interval between pulses.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <bool32 name="trig" description="trigger pulse" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.klineartime.reverse name="d" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.klineartime.reverse>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[   int ptrig;
+   int32_t pval;
+]]></code.declaration>
+      <code.init><![CDATA[ptrig = 0;
+pval = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((pval != %in%)&(!ptrig)) { 
+  %trig% = 1;
+  pval = %in%;
+  ptrig = 1 << 27;
+} else {
+  if (ptrig>0) {
+    ptrig -= %d% >> 7;
+  } else ptrig = 0;
+  %trig% = 0;
+}
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="change speedlim" sha="8139aa36b2337921d024c8963005fa8129f270ce">
+      <sDescription>Generates a trigger pulse when current input value is different from previous value, with a minimum time interval between pulses.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <bool32 name="trig" description="trigger pulse" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.klineartime.reverse name="d" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.klineartime.reverse>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[   int ptrig;
+   int32_t pval;
+]]></code.declaration>
+      <code.init><![CDATA[ptrig = 0;
+pval = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((pval != %in%)&(!ptrig)) { 
+  %trig% = 1;
+  pval = %in%;
+  ptrig = 1 << 27;
+} else {
+  if (ptrig>0) {
+    ptrig -= %d% >> 7;
+  } else ptrig = 0;
+  %trig% = 0;
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>

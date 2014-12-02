@@ -1,0 +1,38 @@
+<objdefs>
+   <obj.normal id="wrap" sha="e59f5a52c5966bbd4a924a17b6720480cdd99486">
+      <sDescription>wrap to 0..64 range after multiplying with 2^bits</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="b" description="quant(a)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="bits" MinValue="0" MaxValue="27" DefaultValue="7"/>
+      </attribs>
+      <code.krate><![CDATA[   %b%= (%a%<<%bits%) & ((1<<27)-1);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="wrap" sha="ab95c4e2b122c98a94e2f369315e05c4809b07a8">
+      <sDescription>wrap to 0..64 range after multiplying with 2^bits</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.positive name="b" description="quant(a)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="bits" MinValue="0" MaxValue="27" DefaultValue="7"/>
+      </attribs>
+      <code.srate><![CDATA[   %b%= (%a%<<%bits%) & ((1<<27)-1);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

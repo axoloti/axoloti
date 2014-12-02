@@ -1,0 +1,20 @@
+<objdefs>
+   <obj.normal id="i radio 8 h" sha="ea2c1e474ffa7f12f0631acd25dc25c667c62408">
+      <sDescription>positive integer control, horizontal radio buttons</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <int32.positive name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <int32.hradio name="value" noLabel="true">
+            <MaxValue i="8"/>
+         </int32.hradio>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[%out%= %value%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

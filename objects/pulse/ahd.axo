@@ -1,0 +1,33 @@
+<objdefs>
+   <obj.normal id="ahd" sha="61680899fc217534b8e3a7e3070d23dd72c30cef">
+      <sDescription>attack hold decay envelope, audio rate</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.risingfalling name="gate" description="gate"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.positive name="env" description="envelope output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="a">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="d">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+]]></code.declaration>
+      <code.init><![CDATA[   val = 0;
+]]></code.init>
+      <code.srate><![CDATA[   if (%gate%>0) val = ___SMMLA((1<<27)-val,(1<<26)-(%a%>>1),val);
+   else val = ___SMMLA(val, (-1<<26)+(%d%>>1),val);
+   %env%= val;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,31 @@
+<objdefs>
+   <obj.normal id="flipflop" sha="628e0943cc67719faff47fcfe4c3caf52958287e">
+      <sDescription>flipflop</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="set" description="set"/>
+         <bool32.rising name="reset" description="reset"/>
+      </inlets>
+      <outlets>
+         <bool32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[   int p_set;
+   int p_reset;
+   int op;
+]]></code.declaration>
+      <code.init><![CDATA[p_set = 0;
+p_reset = 0;
+op = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%set%>0) && !p_set) {op = 1; p_set=1;}
+if ((%reset%>0) && !p_reset) {op = 0; p_reset=1;}
+if (!(%set%>0)) p_set=0;
+if (!(%reset%>0)) p_reset=0;
+%o%= (op<<27);
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,149 @@
+<patch-1.0>
+   <obj type="&lt;c" sha="355de7092a37338e16e09397154948f860a9160c" name="&gt;c1" x="200" y="20">
+      <params>
+         <frac32.u.map name="c" value="44.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="40" y="120">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA0 (ADC1_IN0)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="200" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth1" x="280" y="120">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c1" x="440" y="120">
+      <params>
+         <frac32.u.map name="amp" value="48.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="inv" sha="7b02dcb8eae6c8e1f4f1f9f532ad6cd7f0d9a69" name="inv1" x="560" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="toInt" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt1" x="640" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1" x="800" y="120">
+      <params>
+         <frac32.s.map name="pitch" value="18.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="1000" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2" x="40" y="240">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA1 (ADC1_IN1)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU2" x="200" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c1_" x="280" y="240">
+      <params>
+         <frac32.u.map name="amp" value="55.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="360" y="240">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+         <frac32.u.map name="reso" value="60.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="echo2~" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="520" y="240">
+      <params>
+         <frac32.u.map name="mix" value="34.5"/>
+         <frac32.u.map name="feedback" value="51.0"/>
+      </params>
+      <attribs>
+         <int attributeName="delaylength" value="17723"/>
+      </attribs>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c3" x="800" y="240">
+      <params>
+         <frac32.u.map name="amp" value="5.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="920" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="analogRead1 out"/>
+         <dest name="scopeU1 in"/>
+         <dest name="&gt;c1 in"/>
+         <dest name="smooth1 in"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="analogRead2 out"/>
+         <dest name="scopeU2 in"/>
+         <dest name="*c1_ in"/>
+      </net>
+      <net>
+         <source name="*c1_ out"/>
+         <dest name="vcf3_1 pitchm"/>
+      </net>
+      <net>
+         <source name="vcf3_1 out"/>
+         <dest name="echo2_1 in"/>
+      </net>
+      <net>
+         <source name="echo2_1 out"/>
+         <dest name="*c3 in"/>
+      </net>
+      <net>
+         <source name="*c3 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="vcf3_1 in"/>
+      </net>
+      <net>
+         <source name="&gt;c1 out"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="inv1 in"/>
+      </net>
+      <net>
+         <source name="inv1 out"/>
+         <dest name="toInt1 i"/>
+      </net>
+      <net>
+         <source name="toInt1 o"/>
+         <dest name="saw_1 pitchm"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

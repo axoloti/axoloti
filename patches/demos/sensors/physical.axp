@@ -1,0 +1,22 @@
+<patch-1.0>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead_1" x="60" y="60">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PC0 (ADC1_IN10)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="220" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="analogRead_1 out"/>
+         <dest name="scopeU_1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

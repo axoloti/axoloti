@@ -1,0 +1,16 @@
+<objdefs>
+   <obj.normal id="button1" sha="d7e5e78016948ecaade268473afb9502b7c75239">
+      <sDescription>button S2 on axoloti core board</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <bool32 name="out" description="button state" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.init><![CDATA[   palSetPadMode(GPIOB,2,PAL_MODE_INPUT_PULLDOWN);]]></code.init>
+      <code.krate><![CDATA[%out%= palReadPad(GPIOB,2);]]></code.krate>
+   </obj.normal>
+</objdefs>

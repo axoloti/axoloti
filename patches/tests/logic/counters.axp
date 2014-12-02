@@ -1,0 +1,100 @@
+<patch-1.0>
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="increment" x="14" y="14">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="decrement" x="14" y="70">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="reset" x="14" y="140">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="logic/counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter1" x="196" y="140">
+      <params>
+         <int32 name="maximum" value="16"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/i" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1__" x="308" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161" x="392" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="logic/counter2" sha="15f2cb0c8e4088e3a7bd37444354cfabe7d005cf" name="counter21" x="196" y="238">
+      <params>
+         <int32 name="maximum" value="16"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/i" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1" x="308" y="238">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161_" x="392" y="238">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="logic/countersat2" sha="e386dfb4004d42015b0b5cec0ee2c2bfeb39e35e" name="counter21_" x="196" y="336">
+      <params>
+         <int32 name="maximum" value="16"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/i" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1_" x="308" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161__" x="392" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="increment o"/>
+         <dest name="counter21 inc"/>
+         <dest name="counter1 trig"/>
+         <dest name="counter21_ inc"/>
+      </net>
+      <net>
+         <source name="decrement o"/>
+         <dest name="counter21 dec"/>
+         <dest name="counter21_ dec"/>
+      </net>
+      <net>
+         <source name="counter21 o"/>
+         <dest name="dispI1 in"/>
+         <dest name="ibar161_ in"/>
+      </net>
+      <net>
+         <source name="reset o"/>
+         <dest name="counter21 r"/>
+         <dest name="counter21_ r"/>
+         <dest name="counter1 r"/>
+      </net>
+      <net>
+         <source name="counter21_ o"/>
+         <dest name="dispI1_ in"/>
+         <dest name="ibar161__ in"/>
+      </net>
+      <net>
+         <source name="counter1 o"/>
+         <dest name="dispI1__ in"/>
+         <dest name="ibar161 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

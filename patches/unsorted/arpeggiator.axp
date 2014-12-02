@@ -1,0 +1,335 @@
+<patch-1.0>
+   <obj type="ramtable8" sha="16dc5f80ca3889cc98392d3e77ce5ed128140c96" name="t1" x="40" y="40">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="4"/>
+         <text attributeName="init">
+            <sText><![CDATA[]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="keyb" sha="c4bae6e941c9c85103725bc12ed6eec656d9852c" name="keyb1" x="40" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter1" x="200" y="160">
+      <params>
+         <int32 name="maximum" value="4"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="tabwrite" sha="f483c359a26b18c209716f47a289a1401446b8ee" name="tabwrite1" x="320" y="160">
+      <params/>
+      <attribs>
+         <table attributeName="table" table="t1"/>
+      </attribs>
+   </obj>
+   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter1__" x="680" y="160">
+      <params>
+         <int32 name="maximum" value="6"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="selectc8" sha="e556f1c05421e16f04d6ebd0c77097ed6a7c8618" name="max1_" x="760" y="160">
+      <params>
+         <frac32.u.map name="v0" value="25.5"/>
+         <frac32.u.map name="v1" value="53.0"/>
+         <frac32.u.map name="v2" value="2.5"/>
+         <frac32.u.map name="v3" value="27.5"/>
+         <frac32.u.map name="v4" value="57.5"/>
+         <frac32.u.map name="v5" value="9.0"/>
+         <frac32.u.map name="v6" value="17.0"/>
+         <frac32.u.map name="v7" value="31.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth21" x="840" y="260">
+      <params>
+         <frac32.u.map name="risetime" value="22.5"/>
+         <frac32.u.map name="falltime" value="29.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="0" y="340">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="envd" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd1" x="640" y="380">
+      <params>
+         <frac32.u.map name="d" MidiCC="19" value="30.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter1_" x="40" y="460">
+      <params>
+         <int32 name="maximum" value="8"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="selectc8" sha="e556f1c05421e16f04d6ebd0c77097ed6a7c8618" name="max1" x="240" y="460">
+      <params>
+         <frac32.u.map name="v0" value="0.0"/>
+         <frac32.u.map name="v1" value="1.0"/>
+         <frac32.u.map name="v2" value="0.0"/>
+         <frac32.u.map name="v3" value="2.0"/>
+         <frac32.u.map name="v4" value="1.0"/>
+         <frac32.u.map name="v5" value="3.0"/>
+         <frac32.u.map name="v6" value="2.0"/>
+         <frac32.u.map name="v7" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="toInt" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt1" x="320" y="460">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="tabread" sha="4a797be637258e9f46e75481b6b3d85ee80f1787" name="tabread1" x="440" y="460">
+      <params/>
+      <attribs>
+         <table attributeName="table" table="t1"/>
+      </attribs>
+   </obj>
+   <obj type="saw~" sha="3445b02fa5289504183cffbb950cfe0e78671af" name="saw_1" x="600" y="460">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="720" y="460">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="800" y="460">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="880" y="460">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="18" value="-64.0"/>
+         <frac32.u.map name="reso" value="59.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="+1" sha="4fe729a7a54d99c1d63a2bdb85652b2031c32726" name="+11" x="160" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="selectc8" sha="e556f1c05421e16f04d6ebd0c77097ed6a7c8618" name="max1__" x="320" y="600">
+      <params>
+         <frac32.u.map name="v0" value="0.0"/>
+         <frac32.u.map name="v1" value="1.0"/>
+         <frac32.u.map name="v2" value="0.0"/>
+         <frac32.u.map name="v3" value="2.0"/>
+         <frac32.u.map name="v4" value="1.0"/>
+         <frac32.u.map name="v5" value="3.0"/>
+         <frac32.u.map name="v6" value="2.0"/>
+         <frac32.u.map name="v7" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="toInt" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt1_" x="400" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="tabread" sha="4a797be637258e9f46e75481b6b3d85ee80f1787" name="tabread1_" x="520" y="600">
+      <params/>
+      <attribs>
+         <table attributeName="table" table="t1"/>
+      </attribs>
+   </obj>
+   <obj type="saw~" sha="3445b02fa5289504183cffbb950cfe0e78671af" name="saw_1_" x="680" y="600">
+      <params>
+         <frac32.s.map name="pitch" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1_" x="800" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1_" x="880" y="600">
+      <params>
+         <frac32.u.map name="amp" value="5.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1_" x="960" y="600">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="17" value="-64.0"/>
+         <frac32.u.map name="reso" value="61.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_161" x="240" y="1140">
+      <params>
+         <bin16 name="b16" value="16705"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay_1" x="440" y="1140">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808bd"/>
+      </attribs>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_161_" x="240" y="1200">
+      <params>
+         <bin16 name="b16" value="528"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay_1_" x="440" y="1200">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808snare"/>
+      </attribs>
+   </obj>
+   <obj type="mix4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix21" x="880" y="1200">
+      <params>
+         <frac32.u.map name="gain1" value="5.5"/>
+         <frac32.u.map name="gain2" value="15.0"/>
+         <frac32.u.map name="gain3" value="11.0"/>
+         <frac32.u.map name="gain4" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="1040" y="1200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="1040" y="1260">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="keyb1 gate"/>
+         <dest name="counter1 trig"/>
+         <dest name="tabwrite1 trig"/>
+      </net>
+      <net>
+         <source name="counter1 o"/>
+         <dest name="tabwrite1 a"/>
+      </net>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="tabwrite1 v"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="counter1_ trig"/>
+         <dest name="envd1 trig"/>
+         <dest name="counter1__ trig"/>
+      </net>
+      <net>
+         <source name="tabread1 o"/>
+         <dest name="saw_1 pitchm"/>
+      </net>
+      <net>
+         <source name="counter1_ o"/>
+         <dest name="select_bool_161 in"/>
+         <dest name="max1 s"/>
+         <dest name="select_bool_161_ in"/>
+         <dest name="+11 a"/>
+      </net>
+      <net>
+         <source name="envd1 env"/>
+         <dest name="vca_1 v"/>
+         <dest name="vca_1_ v"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="select_bool_161 o"/>
+         <dest name="flashwaveplay_1 trig"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1 out"/>
+         <dest name="mix21 in2"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1_ out"/>
+         <dest name="mix21 in3"/>
+      </net>
+      <net>
+         <source name="max1 o"/>
+         <dest name="toInt1 i"/>
+      </net>
+      <net>
+         <source name="toInt1 o"/>
+         <dest name="tabread1 a"/>
+      </net>
+      <net>
+         <source name="select_bool_161_ o"/>
+         <dest name="flashwaveplay_1_ trig"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="vcf3_1 in"/>
+      </net>
+      <net>
+         <source name="vcf3_1 out"/>
+         <dest name="mix21 in1"/>
+      </net>
+      <net>
+         <source name="max1_ o"/>
+         <dest name="smooth21 in"/>
+      </net>
+      <net>
+         <source name="smooth21 out"/>
+         <dest name="vcf3_1 pitchm"/>
+      </net>
+      <net>
+         <source name="counter1__ o"/>
+         <dest name="max1_ s"/>
+      </net>
+      <net>
+         <source name="+11 result"/>
+         <dest name="max1__ s"/>
+      </net>
+      <net>
+         <source name="max1__ o"/>
+         <dest name="toInt1_ i"/>
+      </net>
+      <net>
+         <source name="toInt1_ o"/>
+         <dest name="tabread1_ a"/>
+      </net>
+      <net>
+         <source name="tabread1_ o"/>
+         <dest name="saw_1_ pitchm"/>
+      </net>
+      <net>
+         <source name="saw_1_ wave"/>
+         <dest name="vca_1_ a"/>
+      </net>
+      <net>
+         <source name="vca_1_ o"/>
+         <dest name="*c1_ in"/>
+      </net>
+      <net>
+         <source name="*c1_ out"/>
+         <dest name="vcf3_1_ in"/>
+      </net>
+      <net>
+         <source name="vcf3_1_ out"/>
+         <dest name="mix21 in4"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

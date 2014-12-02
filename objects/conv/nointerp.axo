@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="nointerp" sha="77d868d4547e0e29a1aa7711f764a6d3957177f9">
+      <sDescription>k- to s-rate without interpolation</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="i" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[   %o% = %i%;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

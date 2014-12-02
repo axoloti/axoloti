@@ -1,0 +1,61 @@
+<patch-1.0>
+   <obj type="osc~" sha="a0a38b92aa9a37159453c4563e317f4b8c81f328" name="osc0_1_" x="40" y="120">
+      <params>
+         <frac32.s.map name="pitch" value="-16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c2" x="160" y="120">
+      <params>
+         <frac32.u.map name="amp" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c2_" x="160" y="200">
+      <params>
+         <frac32.u.map name="amp" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="a0a38b92aa9a37159453c4563e317f4b8c81f328" name="osc0_1" x="360" y="200">
+      <params>
+         <frac32.s.map name="pitch" value="-16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="560" y="200">
+      <params>
+         <frac32.u.map name="amp" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="720" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc0_1 wave"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="osc0_1_ wave"/>
+         <dest name="*c2 in"/>
+         <dest name="*c2_ in"/>
+      </net>
+      <net>
+         <source name="*c2 out"/>
+         <dest name="osc0_1 fm"/>
+      </net>
+      <net>
+         <source name="*c2_ out"/>
+         <dest name="osc0_1 pm"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,45 @@
+<patch-1.0>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="259" y="139">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1" x="240" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1_" x="360" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="polysynth_voice2" sha="8f751ac10d03e78994e7cd06d69798a3298b4137" name="polysynth_voice21" x="80" y="100">
+      <params>
+         <frac32.s.map name="pitch" value="27.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="1"/>
+      </attribs>
+   </obj>
+   <nets>
+      <net>
+         <source name="polysynth_voice21 out"/>
+         <dest name="dac_11 wave"/>
+      </net>
+      <net>
+         <source name="polysynth_voice21 outlet1"/>
+         <dest name="scopeS1 in"/>
+      </net>
+      <net>
+         <source name="polysynth_voice21 outlet2"/>
+         <dest name="scopeS1_ in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>0</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

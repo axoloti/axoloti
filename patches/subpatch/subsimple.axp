@@ -1,0 +1,34 @@
+<patch-1.0>
+   <obj type="subsimple_polysub" sha="2d3b07bf4d653743b558e51d37a7bc0c000f6290" name="subsimple_polysub1" x="40" y="80">
+      <params/>
+      <attribs>
+         <combo attributeName="poly" selection="1"/>
+      </attribs>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="200" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU2" x="200" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="subsimple_polysub1 outC"/>
+         <dest name="displayU1 in"/>
+      </net>
+      <net>
+         <source name="subsimple_polysub1 outOne"/>
+         <dest name="displayU2 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <NPresets>1</NPresets>
+      <NPresetEntries>1</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

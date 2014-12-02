@@ -1,0 +1,57 @@
+<patch-1.0>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="80" y="160">
+      <params>
+         <frac32.s.map name="pitch" value="52.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="slew" sha="521ab25a6a0aa5d12cbe59b5c1f9630a2f01e167" name="slew1" x="280" y="160">
+      <params>
+         <frac32.u.map name="slew" value="2.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="kscope_128s_trig" sha="b2b49b9d34257a10eac015d8d4ac99d207cec7bf" name="kscope_128s_trig1" x="440" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="80" y="300">
+      <params>
+         <frac32.s.map name="pitch" value="-14.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="slew" sha="b21f230004310005f3550792d307774153a89670" name="slew2" x="280" y="320">
+      <params>
+         <frac32.u.map name="slew" value="1.6500000000000006"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="400" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="slew1 in"/>
+      </net>
+      <net>
+         <source name="slew1 out"/>
+         <dest name="kscope_128s_trig1 in"/>
+      </net>
+      <net>
+         <source name="slew2 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="slew2 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

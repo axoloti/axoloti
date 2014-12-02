@@ -1,0 +1,99 @@
+<patch-1.0>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="14">
+      <params>
+         <frac32.s.map name="pitch" value="-39.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="126" y="14">
+      <params>
+         <frac32.u.map name="gain1" value="7.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="252" y="14">
+      <params>
+         <frac32.s.map name="pitch" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="delay/echo" sha="c99f6c1ce7d79693879e0923e21fc0c6ffd1169" name="echo0_1" x="420" y="14">
+      <params/>
+      <attribs>
+         <int attributeName="delaylength" value="8615"/>
+      </attribs>
+   </obj>
+   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="420" y="84">
+      <params>
+         <frac32.u.map name="mix" value="46.0"/>
+         <frac32.u.map name="feedback" value="29.0"/>
+      </params>
+      <attribs>
+         <int attributeName="delaylength" value="8440"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="336" y="252">
+      <params>
+         <frac32.u.map name="value" value="34.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="delay/echo fdbk" sha="7611c8729f6b16550b0764bc62bc93ccc71235fc" name="echo1_1" x="420" y="252">
+      <params/>
+      <attribs>
+         <int attributeName="delaylength" value="8440"/>
+      </attribs>
+   </obj>
+   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix31" x="686" y="252">
+      <params>
+         <frac32.u.map name="gain1" value="10.5"/>
+         <frac32.u.map name="gain2" value="11.0"/>
+         <frac32.u.map name="gain3" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="784" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="osc_1 pitchm"/>
+      </net>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="echo2_1 in"/>
+         <dest name="echo0_1 in"/>
+         <dest name="echo1_1 in"/>
+      </net>
+      <net>
+         <source name="echo0_1 out"/>
+         <dest name="mix31 in1"/>
+      </net>
+      <net>
+         <source name="echo2_1 out"/>
+         <dest name="mix31 in2"/>
+      </net>
+      <net>
+         <source name="echo1_1 out"/>
+         <dest name="mix31 in3"/>
+      </net>
+      <net>
+         <source name="mix31 out"/>
+         <dest name="dac_11 wave"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="echo1_1 feedback"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

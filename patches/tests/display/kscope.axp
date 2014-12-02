@@ -1,0 +1,68 @@
+<patch-1.0>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="40" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="bipolar range: s suffic" x="200" y="40"/>
+   <comment type="comment" sha="sha" name="positive range: u suffix" x="440" y="40"/>
+   <obj type="scopeS" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1" x="200" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="440" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="&quot;chart plotter&quot; polls for individual samples, time scale dependent on communication link!" x="640" y="80"/>
+   <obj type="cb1m" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb11" x="40" y="100">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="the exact timing depends on the PC, and may contain irregularities" x="640" y="120"/>
+   <comment type="comment" sha="sha" name="hold!" x="40" y="180"/>
+   <obj type="kscope_128s" sha="187931f6934dab0686ca4d2b338cd8688db4f3e6" name="kscope_128s1" x="200" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="kscope_128u" sha="d1bb962568d7aeafd27e33108ad78d000a042cf6" name="kscope_128u1" x="440" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="&quot;scope&quot;: 128 consecutive samples, horizontal time range is 128samples/3000Hz = 42.6ms" x="640" y="280"/>
+   <obj type="kscope_128s_trig" sha="b2b49b9d34257a10eac015d8d4ac99d207cec7bf" name="kscope_128s_trig_v21" x="200" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="kscope_128u_trig" sha="c693fd16d4c5da24d8fba4f073fac24bbc968a8" name="kscope_128u_trig1" x="440" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="the &quot;trig&quot; variants start capturing only when te signal becomes positive to synchronise the image" x="640" y="480"/>
+   <comment type="comment" sha="sha" name="timescale is the same as non-&quot;trig&quot; variants" x="640" y="520"/>
+   <nets>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="kscope_128s_trig_v21 in"/>
+         <dest name="scopeS1 in"/>
+         <dest name="scopeU1 in"/>
+         <dest name="kscope_128u1 in"/>
+         <dest name="kscope_128u_trig1 in"/>
+         <dest name="kscope_128s1 in"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="kscope_128s_trig_v21 hold"/>
+         <dest name="kscope_128u1 hold"/>
+         <dest name="kscope_128u_trig1 hold"/>
+         <dest name="kscope_128s1 hold"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

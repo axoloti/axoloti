@@ -1,0 +1,75 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="60">
+      <params>
+         <frac32.u.map name="value" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix1" sha="8041da25532c27ffaeaed170f3e9ca3b871804af" name="mix11" x="80" y="60">
+      <params>
+         <frac32.u.map name="gain1" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="sampler_voice" sha="c761de126ac7858fe841f44ba32dd7dda7485b98" name="sampler_voice1" x="200" y="60">
+      <params/>
+      <attribs>
+         <combo attributeName="poly" selection="4"/>
+      </attribs>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="320" y="60">
+      <params>
+         <frac32.u.map name="value" value="2.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2_" x="400" y="60">
+      <params>
+         <frac32.u.map name="value" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="chorus" sha="21c967102624e969f5d9afd3f0c653f38783d68a" name="chorus1" x="480" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="600" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="600" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="sampler_voice1 inlet1"/>
+      </net>
+      <net>
+         <source name="chorus1 L"/>
+         <dest name="dac_11 wave"/>
+      </net>
+      <net>
+         <source name="chorus1 R"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="sampler_voice1 outlet_1"/>
+         <dest name="chorus1 in"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="chorus1 speed"/>
+      </net>
+      <net>
+         <source name="c2_ out"/>
+         <dest name="chorus1 depth"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

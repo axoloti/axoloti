@@ -1,0 +1,51 @@
+<objdefs>
+   <obj.normal id="follower" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4">
+      <sDescription>envelope follower, linear output</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input wave"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="amp" description="amplitude" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="time">
+            <MenuEntries>
+               <string>1.3ms</string>
+               <string>2.7ms</string>
+               <string>5.3ms</string>
+               <string>10.6ms</string>
+               <string>21.2ms</string>
+               <string>42.6ms</string>
+               <string>85.3ms</string>
+               <string>170.6ms</string>
+            </MenuEntries>
+            <CEntries>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[int32_t accu;
+]]></code.declaration>
+      <code.init><![CDATA[accu = 0;
+]]></code.init>
+      <code.krate><![CDATA[ int sabs = 0;
+int i;  for(i=0;i<BUFSIZE;i++){    int32_t v = %in%[i];
+    sabs += v>0?v:-v;
+  }
+  accu -= accu>>%time%;
+  accu += sabs>>(%time%+4);
+  %amp% = accu;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,43 @@
+<patch-1.0>
+   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="20" y="60">
+      <params>
+         <frac32.s.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="reciprocal" sha="fee3b32001d8cc8788bdd6d14bd4ad5f04187030" name="reciprocal1" x="80" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="160" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="reciprocal" sha="fee3b32001d8cc8788bdd6d14bd4ad5f04187030" name="reciprocal1_" x="240" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1_" x="320" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="cbp1 out"/>
+         <dest name="reciprocal1 in"/>
+      </net>
+      <net>
+         <source name="reciprocal1 out"/>
+         <dest name="displayS1 in"/>
+         <dest name="reciprocal1_ in"/>
+      </net>
+      <net>
+         <source name="reciprocal1_ out"/>
+         <dest name="displayS1_ in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

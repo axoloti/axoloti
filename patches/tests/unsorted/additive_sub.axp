@@ -1,0 +1,93 @@
+<patch-1.0>
+   <obj type="polyindex" sha="d4abd919262b0b2a913b0aeb4ddf2dd44a6e39af" name="polyindex1" x="160" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="+1" sha="4fe729a7a54d99c1d63a2bdb85652b2031c32726" name="+1" x="240" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="inlet" sha="ec45071db47e99aa672b4e8456c862acb1d95499" name="freq" x="40" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*" sha="c31e1791ae8105d1f16792b09c827b16c8ac6b35" name="*1" x="360" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="inlet" sha="ec45071db47e99aa672b4e8456c862acb1d95499" name="ratio" x="40" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*" sha="c31e1791ae8105d1f16792b09c827b16c8ac6b35" name="*2" x="200" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="-" sha="27008b61438fd41bbc9a021b13c5eaad1cc101b5" name="-1" x="480" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc0~" sha="aa2d91984c32ce318dfd20c91518d6b34c94e12f" name="osc0_1" x="600" y="180">
+      <params>
+         <frac32.u.map name="freq" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="760" y="180">
+      <params>
+         <frac32.u.map name="amp" onParent="true" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="outlet~" sha="72226293648dde4dd4739bc1b8bc46a6bf660595" name="out" x="880" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="polyindex1 index"/>
+         <dest name="+1 a"/>
+         <dest name="*2 a"/>
+      </net>
+      <net>
+         <source name="freq inlet"/>
+         <dest name="*1 b"/>
+      </net>
+      <net>
+         <source name="+1 result"/>
+         <dest name="*1 a"/>
+      </net>
+      <net>
+         <source name="ratio inlet"/>
+         <dest name="*2 b"/>
+      </net>
+      <net>
+         <source name="*1 result"/>
+         <dest name="-1 in1"/>
+      </net>
+      <net>
+         <source name="*2 result"/>
+         <dest name="-1 in2"/>
+      </net>
+      <net>
+         <source name="-1 out"/>
+         <dest name="osc0_1 freqm"/>
+      </net>
+      <net>
+         <source name="osc0_1 wave"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="out outlet"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>polyphonic</subpatchmode>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

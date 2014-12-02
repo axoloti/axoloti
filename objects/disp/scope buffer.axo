@@ -1,0 +1,32 @@
+<objdefs>
+   <obj.normal id="scope buffer" sha="a8100388e1218ba50352d7e1743cd1b7f37bacd4">
+      <sDescription>bipolar audio rate signal oscilloscope (time domain), showing 1 sample buffer of 16 samples</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <rotatedParams>true</rotatedParams>
+      <inlets>
+         <frac32buffer.bipolar name="in" description="input"/>
+         <bool32 name="hold" description="hold"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <frac4byte.vbar name="v0" noLabel="true"/>
+         <frac4byte.vbar name="v1" noLabel="true"/>
+         <frac4byte.vbar name="v2" noLabel="true"/>
+         <frac4byte.vbar name="v3" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[if (!%hold%){
+int8_t t[16];
+int i;
+for(i=0;i<16;i++)
+   t[i] = (uint8_t)(%in%[i]>>21);
+%v0%=*((int32_t*)(&t[0]));
+%v1%=*((int32_t*)(&t[4]));
+%v2%=*((int32_t*)(&t[8]));
+%v3%=*((int32_t*)(&t[12]));
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="cb16" sha="10460eadb48a887eafeedcf4c65933030e4eabdd">
+      <sDescription>constant from 16 flags</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <bin16 name="b16" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[%o%=%b16%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

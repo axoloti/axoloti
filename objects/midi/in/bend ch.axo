@@ -1,0 +1,30 @@
+<objdefs>
+   <obj.normal id="bend ch" sha="f227cf9bda295d5787303fc0e81a123e0097da3a">
+      <sDescription>Midi pitch bend input on specified channel</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32.bipolar name="bend" description="pitch bend, -64..64" SumBuffer="false"/>
+         <bool32.pulse name="trig" description="trigger output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="0"/>
+      </attribs>
+      <code.declaration><![CDATA[int32_t _bend;
+int32_t ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[_bend = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[%bend% = _bend;
+%trig% = ntrig;
+ntrig = 0;
+]]></code.krate>
+      <code.midihandler><![CDATA[if (status == MIDI_PITCH_BEND + %channel% - 1) {  _bend = ((int)((data2<<7)+data1)-0x2000)<<14;
+  ntrig = 1;
+}]]></code.midihandler>
+   </obj.normal>
+</objdefs>

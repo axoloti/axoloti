@@ -1,0 +1,35 @@
+<objdefs>
+   <obj.normal id="record" sha="a11cd48fc41465d055106b87f9d341f6750abf93">
+      <sDescription>record audio into table, records from the beginning till the end of the table</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="wave" description="wave"/>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <objref name="table"/>
+      </attribs>
+      <code.declaration><![CDATA[   int ntrig;
+   int pos;
+]]></code.declaration>
+      <code.init><![CDATA[pos = -1;
+]]></code.init>
+      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) {
+      ntrig=1;
+      pos = 0;
+   }
+   else if (!(%trig%>0)) ntrig=0;
+     int32_t i;
+   if (pos>=0) {
+       if ((pos+BUFSIZE)< %table%.LENGTH)
+          for(i=0;i<BUFSIZE;i++){
+              %table%.array[pos++] = __SSAT(%wave%[i],28)>>%table%.GAIN;
+          }
+       else pos = -1;
+   }]]></code.krate>
+   </obj.normal>
+</objdefs>

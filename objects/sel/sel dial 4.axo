@@ -1,0 +1,40 @@
+<objdefs>
+   <obj.normal id="sel dial 4" sha="849fa0f07de4d3c6ffcc3e384a10568aaf8ad7c2">
+      <sDescription>selectable constant. Output is v0 if s&lt;1. v1 if s&lt;2. v2 if s&lt;3. v3 if more.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="s" description="select"/>
+      </inlets>
+      <outlets>
+         <frac32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="v0">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v3">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[   switch(%s%>0?%s%:0) {
+      case 0: %o%= %v0%; break;
+      case 1: %o%= %v1%; break;
+      case 2: %o%= %v2%; break;
+      case 3: default: %o%= %v3%; break;
+   }
+]]></code.krate>
+   </obj.normal>
+</objdefs>

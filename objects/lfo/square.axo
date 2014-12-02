@@ -1,0 +1,40 @@
+<objdefs>
+   <obj.normal id="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18">
+      <sDescription>square wave LFO, boolean output, frequency input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.bipolar name="pitchm" description="pitch modulation"/>
+         <bool32.rising name="reset" description="reset phase"/>
+      </inlets>
+      <outlets>
+         <bool32 name="wave" description="square wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.lfopitch name="pitch" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.lfopitch>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t Phase;
+uint32_t r;
+]]></code.declaration>
+      <code.init><![CDATA[   Phase = 0;
+   r = 1;
+]]></code.init>
+      <code.krate><![CDATA[   {
+      if (%reset% && r) {
+         Phase = 0;
+         r = 0;
+      } else {
+         if (!%reset%) r = 1;
+         int32_t freq;
+         MTOFEXTENDED(%pitch% + %pitchm%,freq);
+         Phase += freq>>2;
+      }
+      %wave%= (Phase>0)?1:0;
+   }]]></code.krate>
+   </obj.normal>
+</objdefs>

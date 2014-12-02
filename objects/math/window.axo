@@ -1,0 +1,40 @@
+<objdefs>
+   <obj.normal id="window" sha="ff29ab0721db1b1238076400832e919d860fc38f">
+      <sDescription>hanning window function, input 0..64</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.positive name="phase" description="phase"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="win" description="w(phase)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[   {
+       int32_t r;
+       HANNING2TINTERP(%phase%<<5,r)
+       %win%= (r>>4);
+   }]]></code.krate>
+   </obj.normal>
+   <obj.normal id="window" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d">
+      <sDescription>hanning window function, input 0..64</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="phase" description="phase"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="win" description="w(phase)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[   {
+       int32_t r;
+       HANNING2TINTERP(%phase%<<5,r)
+       %win%= (r>>4);
+   }]]></code.srate>
+   </obj.normal>
+</objdefs>

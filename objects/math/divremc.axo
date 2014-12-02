@@ -1,0 +1,26 @@
+<objdefs>
+   <obj.normal id="divremc" sha="a9507fb906b40fc4885ac66c9e4b34b840e8164d">
+      <sDescription>divide integer with constant, also outputs remainder (modulo)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="a" description="nominator"/>
+      </inlets>
+      <outlets>
+         <int32 name="div" description="a divided by denominator" SumBuffer="false"/>
+         <int32 name="rem" description="remainder of division by denominator" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="denominator" MinValue="1" MaxValue="128" DefaultValue="1"/>
+      </attribs>
+      <code.krate><![CDATA[int r;
+if (%a% >=0)
+  r = ((unsigned int)%a%)/%denominator%;
+else  r = -(((unsigned int)(%denominator%-%a%))/%denominator%);
+%div%= r;
+%rem% = %a%-(r*%denominator%);
+]]></code.krate>
+   </obj.normal>
+</objdefs>

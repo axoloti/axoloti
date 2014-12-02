@@ -1,0 +1,70 @@
+<objdefs>
+   <obj.normal id="xfade" sha="26e6531ae932c0933646b409d957264faeee6fca">
+      <sDescription>crossfade between two inputs</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="i1" description="input"/>
+         <frac32 name="i2" description="input"/>
+         <frac32.positive name="c" description="control"/>
+      </inlets>
+      <outlets>
+         <frac32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[   {
+      int64_t a = (int64_t)%i2% * %c%;
+      a += (int64_t)%i1% * ((128<<20)-%c%);
+      %o%= a>>27;
+   }
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="xfade" sha="e301a25211e0b6899b8b54c25e7ac5d9f404eda0">
+      <sDescription>crossfade between two inputs</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="i1" description="input"/>
+         <frac32buffer name="i2" description="input"/>
+         <frac32buffer.positive name="c" description="control"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[   {
+      int64_t a = (int64_t)%i2% * %c%;
+      a += (int64_t)%i1% * ((128<<20)-%c%);
+      %o%= a>>27;
+   }
+]]></code.srate>
+   </obj.normal>
+   <obj.normal id="xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890">
+      <sDescription>crossfade between two inputs</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="i1" description="input"/>
+         <frac32buffer name="i2" description="input"/>
+         <frac32.positive name="c" description="control"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[   int32_t ccompl = ((128<<20)-%c%);
+]]></code.krate>
+      <code.srate><![CDATA[   {
+      int64_t a = (int64_t)%i2% * %c%;
+      a += (int64_t)%i1% * ccompl;
+      %o%= a>>27;
+   }
+]]></code.srate>
+   </obj.normal>
+</objdefs>

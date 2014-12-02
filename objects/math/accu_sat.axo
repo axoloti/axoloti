@@ -1,0 +1,30 @@
+<objdefs>
+   <obj.normal id="accu_sat" sha="f699babed031a7eae8fe89958c523bc05636eb0a">
+      <sDescription>Saturating accumulator. Adds input to accumulator on trigger. Reset clears the accumulator to zero.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="i" description="input"/>
+         <bool32.rising name="trig" description="trigger"/>
+         <bool32.rising name="rst" description="reset"/>
+      </inlets>
+      <outlets>
+         <frac32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[   int ntrig;   int rtrig;   int accu;
+]]></code.declaration>
+      <code.init><![CDATA[ntrig = 0;
+rtrig = 0;
+accu = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {accu += %i%; ntrig=1; accu = __SSAT(accu,28);}
+if (!(%trig%>0)) ntrig=0;
+if ((%rst%>0) && !rtrig) {accu = 0; rtrig=1;}
+if (!(%rst%>0)) rtrig=0;
+%o%= accu;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,34 @@
+<objdefs>
+   <obj.normal id="bipolar2unipolar" sha="b80b299df9cb5523b1c4c0c7fe09941a1c682112">
+      <sDescription>bipolar to unipolar</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="i" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[   %o%= (%i%>>1)+(1<<26);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="bipolar2unipolar" sha="38609fdcec231d6b21f80d961254b8abd0ecad61">
+      <sDescription>bipolar to unipolar</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="i" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[   %o%= (%i%>>1)+(1<<26);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

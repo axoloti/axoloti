@@ -1,0 +1,86 @@
+<objdefs>
+   <obj.normal id="mix 4" sha="ca5b79d6e8c624919eb82e572c057a4b00809359">
+      <sDescription>4 input k-rate mixer</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="bus_in" description="input with unity gain"/>
+         <frac32 name="in1" description="input 1"/>
+         <frac32 name="in2" description="input 2"/>
+         <frac32 name="in3" description="input 3"/>
+         <frac32 name="in4" description="input 4"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="mix out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="gain1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="gain2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="gain3">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="gain4">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[{   int32_t accum = ___SMMUL(%in1%,%gain1%);
+   accum = ___SMMLA(%in2%,%gain2%,accum);
+;   accum = ___SMMLA(%in3%,%gain3%,accum);
+;   accum = ___SMMLA(%in4%,%gain4%,accum);
+;   %out%=  __SSAT(%bus_in% + (accum<<5),28);
+}
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="mix 4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c">
+      <sDescription>4 input s-rate mixer</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="bus_in" description="input with unity gain"/>
+         <frac32buffer name="in1" description="input 1"/>
+         <frac32buffer name="in2" description="input 2"/>
+         <frac32buffer name="in3" description="input 3"/>
+         <frac32buffer name="in4" description="input 4"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="mix out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="gain1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="gain2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="gain3">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="gain4">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.srate><![CDATA[{   int32_t accum = ___SMMUL(%in1%,%gain1%);
+   accum = ___SMMLA(%in2%,%gain2%,accum);
+;   accum = ___SMMLA(%in3%,%gain3%,accum);
+;   accum = ___SMMLA(%in4%,%gain4%,accum);
+;   %out%=  __SSAT(%bus_in% + (accum<<5),28);
+}
+]]></code.srate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,50 @@
+<objdefs>
+   <obj.normal id="ad" sha="80b6e4194c0eed6d34df6c297255b4f1c051a292">
+      <sDescription>Attack/decay envelope</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="env" description="envelope output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.klineartime.exp2 name="a">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.klineartime.exp2>
+         <frac32.s.map class="axoloti.parameters.ParameterFrac32SMapKDTimeExp" name="d">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int8_t stage;
+int ntrig;
+int32_t val;
+]]></code.declaration>
+      <code.init><![CDATA[stage = 0;
+ntrig = 0;
+val = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {
+   stage = 1;
+   ntrig = 1;
+}
+if (!(%trig%>0) && ntrig) {
+   stage = 0;
+   ntrig=0;
+}
+if (stage == 0){
+   val = ___SMMUL(val,%d%)<<1;
+} else {
+   val = val + %a%;
+   if (val<0) {
+      val =0x7FFFFFFF;
+      stage = 0;
+   }
+}%env% = val>>4;]]></code.krate>
+   </obj.normal>
+</objdefs>

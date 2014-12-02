@@ -1,0 +1,11 @@
+<patch-1.0>
+   <obj type="test_annotations" sha="f2cb995ddcec5d4ba6868ecba0fd7398d564bd0" name="test_annotations1" x="80" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets/>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

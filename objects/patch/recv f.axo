@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="recv f" sha="28ed8f2ff47b8badd4560ffb81e81bf0a8762d4d">
+      <sDescription>receive (from send), fractional type</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32 name="v" description="v" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <objref name="sender"/>
+      </attribs>
+      <code.krate><![CDATA[%v% = %sender%._v;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

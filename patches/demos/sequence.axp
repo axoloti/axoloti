@@ -1,0 +1,501 @@
+<patch-1.0>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="metronome" x="0" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="7.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_1" x="280" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="-24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter_1" x="0" y="80">
+      <params>
+         <int32 name="maximum" value="16"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="beat" x="80" y="80">
+      <params>
+         <bin16 name="b16" value="268456209"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="selectc2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents" x="280" y="80">
+      <params>
+         <frac32.u.map name="v0" value="40.0"/>
+         <frac32.u.map name="v1" value="2.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="envd2" sha="50cab575d33b76fbf6279e2c0fa381124d3f1032" name="envd2_1" x="360" y="80">
+      <params>
+         <frac32.u.map name="d" value="24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="440" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="520" y="80">
+      <params>
+         <frac32.s.map name="pitch" value="-11.0"/>
+         <frac32.u.map name="reso" value="57.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_1" x="640" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="accent" x="80" y="140">
+      <params>
+         <bin16 name="b16" value="84787"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI_1" x="40" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_1" x="80" y="200">
+      <params>
+         <bin16 name="b16" value="52331"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="selectc2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents1" x="280" y="220">
+      <params>
+         <frac32.u.map name="v0" value="0.0"/>
+         <frac32.u.map name="v1" value="24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth2_1" x="360" y="220">
+      <params>
+         <frac32.u.map name="risetime" value="42.5"/>
+         <frac32.u.map name="falltime" value="23.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="480" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_2" x="560" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar16_1" x="80" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_1" x="800" y="300">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="60.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="echo2~" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="920" y="300">
+      <params>
+         <frac32.u.map name="mix" value="63.5"/>
+         <frac32.u.map name="feedback" value="19.5"/>
+      </params>
+      <attribs>
+         <int attributeName="delaylength" value="18772"/>
+      </attribs>
+   </obj>
+   <obj type="mix1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix1_1" x="400" y="340">
+      <params>
+         <frac32.u.map name="gain1" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c_1" x="320" y="360">
+      <params>
+         <frac32.u.map name="value" value="4.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_2" x="520" y="360">
+      <params>
+         <frac32.s.map name="pitch" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_3" x="640" y="360">
+      <params>
+         <frac32.u.map name="gain1" value="50.0"/>
+         <frac32.u.map name="gain2" value="50.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_2" x="80" y="440">
+      <params>
+         <bin16 name="b16" value="43879"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="selectc2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="selectc2_1" x="280" y="440">
+      <params>
+         <frac32.u.map name="v0" value="0.0"/>
+         <frac32.u.map name="v1" value="12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth2_2" x="400" y="440">
+      <params>
+         <frac32.u.map name="risetime" value="27.0"/>
+         <frac32.u.map name="falltime" value="6.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_1_" x="520" y="440">
+      <params>
+         <frac32.s.map name="pitch" value="-24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix3_2" x="920" y="540">
+      <params>
+         <frac32.u.map name="gain1" value="48.0"/>
+         <frac32.u.map name="gain2" value="22.5"/>
+         <frac32.u.map name="gain3" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac1_1" x="1040" y="540">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="beat_" x="80" y="560">
+      <params>
+         <bin16 name="b16" value="268465737"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="selectc2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents_" x="280" y="560">
+      <params>
+         <frac32.u.map name="v0" value="0.0"/>
+         <frac32.u.map name="v1" value="62.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="envd2" sha="50cab575d33b76fbf6279e2c0fa381124d3f1032" name="envd2_1_" x="360" y="560">
+      <params>
+         <frac32.u.map name="d" value="7.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1_" x="440" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1_" x="520" y="560">
+      <params>
+         <frac32.s.map name="pitch" value="16.0"/>
+         <frac32.u.map name="reso" value="62.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2" x="640" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac2_1" x="1040" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="accent_" x="80" y="620">
+      <params>
+         <bin16 name="b16" value="101424"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_1_" x="80" y="680">
+      <params>
+         <bin16 name="b16" value="34141"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="selectc2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents1_" x="280" y="700">
+      <params>
+         <frac32.u.map name="v0" value="0.0"/>
+         <frac32.u.map name="v1" value="15.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth2_1_" x="360" y="700">
+      <params>
+         <frac32.u.map name="risetime" value="0.0"/>
+         <frac32.u.map name="falltime" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1_" x="480" y="700">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_3" x="560" y="700">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_1__" x="80" y="820">
+      <params>
+         <bin16 name="b16" value="16961"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay1" x="280" y="820">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808bd"/>
+      </attribs>
+   </obj>
+   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_1_" x="400" y="820">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix3_1" x="440" y="820">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+         <frac32.u.map name="gain3" value="20.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="double" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2" name="double_1" x="569" y="843">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="sin" sha="1071012784f2bd65a87a083ab2b7c3d46db76c52" name="sin_1" x="672" y="854">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_2_" x="80" y="880">
+      <params>
+         <bin16 name="b16" value="4112"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay2" x="280" y="880">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808hatclose"/>
+      </attribs>
+   </obj>
+   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2_" x="400" y="880">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_3" x="80" y="940">
+      <params>
+         <bin16 name="b16" value="18696"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay3" x="280" y="940">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808snare"/>
+      </attribs>
+   </obj>
+   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_3" x="400" y="940">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="metronome wave"/>
+         <dest name="counter_1 trig"/>
+      </net>
+      <net>
+         <source name="counter_1 o"/>
+         <dest name="beat in"/>
+         <dest name="accent in"/>
+         <dest name="select_bool_16_1 in"/>
+         <dest name="beat_ in"/>
+         <dest name="accent_ in"/>
+         <dest name="select_bool_16_1_ in"/>
+         <dest name="select_bool_16_2 in"/>
+         <dest name="ibar16_1 in"/>
+         <dest name="dispI_1 in"/>
+         <dest name="select_bool_16_1__ in"/>
+         <dest name="select_bool_16_2_ in"/>
+         <dest name="select_bool_16_3 in"/>
+      </net>
+      <net>
+         <source name="beat o"/>
+         <dest name="envd2_1 trig"/>
+      </net>
+      <net>
+         <source name="accents o"/>
+         <dest name="envd2_1 dm"/>
+      </net>
+      <net>
+         <source name="accent o"/>
+         <dest name="accents s"/>
+      </net>
+      <net>
+         <source name="envd2_1 env"/>
+         <dest name="vca_1 v"/>
+         <dest name="scopeU_2 in"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="vcf3_1 in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_1 o"/>
+         <dest name="accents1 s"/>
+      </net>
+      <net>
+         <source name="accents1 o"/>
+         <dest name="smooth2_1 in"/>
+      </net>
+      <net>
+         <source name="smooth2_1 out"/>
+         <dest name="vcf3_1 pitchm"/>
+         <dest name="scopeU_1 in"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="beat_ o"/>
+         <dest name="envd2_1_ trig"/>
+      </net>
+      <net>
+         <source name="accent_ o"/>
+         <dest name="accents_ s"/>
+      </net>
+      <net>
+         <source name="accents_ o"/>
+         <dest name="envd2_1_ dm"/>
+      </net>
+      <net>
+         <source name="envd2_1_ env"/>
+         <dest name="vca_1_ v"/>
+      </net>
+      <net>
+         <source name="vca_1_ o"/>
+         <dest name="vcf3_1_ in"/>
+      </net>
+      <net>
+         <source name="smooth2_1_ out"/>
+         <dest name="vcf3_1_ pitchm"/>
+         <dest name="scopeU_1_ in"/>
+      </net>
+      <net>
+         <source name="accents1_ o"/>
+         <dest name="smooth2_1_ in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_1_ o"/>
+         <dest name="accents1_ s"/>
+      </net>
+      <net>
+         <source name="select_bool_16_2 o"/>
+         <dest name="selectc2_1 s"/>
+      </net>
+      <net>
+         <source name="selectc2_1 o"/>
+         <dest name="smooth2_2 in"/>
+      </net>
+      <net>
+         <source name="smooth2_2 out"/>
+         <dest name="saw_1_ pitchm"/>
+         <dest name="scopeU_3 in"/>
+         <dest name="mix1_1 bus_in"/>
+      </net>
+      <net>
+         <source name="vcf3_1_ out"/>
+         <dest name="vu_2 in"/>
+         <dest name="mix2_1 in2"/>
+      </net>
+      <net>
+         <source name="vcf3_1 out"/>
+         <dest name="vu_1 in"/>
+         <dest name="mix2_1 in1"/>
+      </net>
+      <net>
+         <source name="mix2_1 out"/>
+         <dest name="echo2_1 in"/>
+         <dest name="mix3_2 in1"/>
+      </net>
+      <net>
+         <source name="mix3_2 out"/>
+         <dest name="dac1_1 wave"/>
+         <dest name="dac2_1 wave"/>
+      </net>
+      <net>
+         <source name="saw_2 wave"/>
+         <dest name="mix2_3 in1"/>
+      </net>
+      <net>
+         <source name="saw_1_ wave"/>
+         <dest name="mix2_3 in2"/>
+      </net>
+      <net>
+         <source name="mix2_3 out"/>
+         <dest name="vca_1_ a"/>
+      </net>
+      <net>
+         <source name="mix1_1 out"/>
+         <dest name="saw_2 pitchm"/>
+      </net>
+      <net>
+         <source name="c_1 out"/>
+         <dest name="mix1_1 in1"/>
+      </net>
+      <net>
+         <source name="select_bool_16_1__ o"/>
+         <dest name="flashwaveplay1 trig"/>
+      </net>
+      <net>
+         <source name="select_bool_16_2_ o"/>
+         <dest name="flashwaveplay2 trig"/>
+      </net>
+      <net>
+         <source name="select_bool_16_3 o"/>
+         <dest name="flashwaveplay3 trig"/>
+      </net>
+      <net>
+         <source name="flashwaveplay1 out"/>
+         <dest name="vu_1_ in"/>
+         <dest name="mix3_1 in1"/>
+      </net>
+      <net>
+         <source name="flashwaveplay2 out"/>
+         <dest name="vu_2_ in"/>
+         <dest name="mix3_1 in2"/>
+      </net>
+      <net>
+         <source name="flashwaveplay3 out"/>
+         <dest name="vu_3 in"/>
+         <dest name="mix3_1 in3"/>
+      </net>
+      <net>
+         <source name="echo2_1 out"/>
+         <dest name="mix3_2 in2"/>
+      </net>
+      <net>
+         <source name="mix3_1 out"/>
+         <dest name="double_1 in"/>
+      </net>
+      <net>
+         <source name="double_1 out"/>
+         <dest name="sin_1 phase"/>
+      </net>
+      <net>
+         <source name="sin_1 out"/>
+         <dest name="mix3_2 in3"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

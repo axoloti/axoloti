@@ -1,0 +1,72 @@
+<objdefs>
+   <obj.normal id="eq4" sha="518b736fd39d7b359aad0043072946b6141c773b">
+      <sDescription>Four-band equalizer. The transition frequencies are 100, 500, 2000, and 6000 Hz. Lower quality version. The low band is ommitted.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <int32 name="lowmid">
+            <MinValue i="-9"/>
+            <MaxValue i="9"/>
+         </int32>
+         <int32 name="mid">
+            <MinValue i="-9"/>
+            <MaxValue i="9"/>
+         </int32>
+         <int32 name="highmid">
+            <MinValue i="-9"/>
+            <MaxValue i="9"/>
+         </int32>
+         <int32 name="high">
+            <MinValue i="-9"/>
+            <MaxValue i="9"/>
+         </int32>
+      </params>
+      <attribs/>
+      <includes>
+         <include>./eq5coefs.h</include>
+      </includes>
+      <code.declaration><![CDATA[q31_t biquadStateBand2Q31[4 * 2];
+q31_t biquadStateBand3Q31[4 * 2];
+q31_t biquadStateBand4Q31[4 * 2];
+q31_t biquadStateBand5Q31[4 * 2];
+  arm_biquad_casd_df1_inst_q31 S2;
+  arm_biquad_casd_df1_inst_q31 S3;
+  arm_biquad_casd_df1_inst_q31 S4;
+  arm_biquad_casd_df1_inst_q31 S5;
+static const int NUMSTAGES=2;
+]]></code.declaration>
+      <code.init><![CDATA[  arm_biquad_cascade_df1_init_q31(&S2, NUMSTAGES,
+            (q31_t *) &eq5coefs[190*1 + 10*(%lowmid% + 9)],
+            &biquadStateBand2Q31[0], 2);
+
+  arm_biquad_cascade_df1_init_q31(&S3, NUMSTAGES,
+          (q31_t *) &eq5coefs[190*2 + 10*(%mid% + 9)],
+          &biquadStateBand3Q31[0], 2);
+
+  arm_biquad_cascade_df1_init_q31(&S4, NUMSTAGES,
+          (q31_t *) &eq5coefs[190*3 + 10*(%highmid% + 9)],
+          &biquadStateBand4Q31[0], 2);
+
+  arm_biquad_cascade_df1_init_q31(&S5, NUMSTAGES,
+          (q31_t *) &eq5coefs[190*4 + 10*(%high% + 9)],
+          &biquadStateBand5Q31[0], 2);
+]]></code.init>
+      <code.krate><![CDATA[S2.pCoeffs = (q31_t*)&eq5coefs[190*1 + 10*(%lowmid% + 9)];
+S3.pCoeffs = (q31_t*)&eq5coefs[190*2 + 10*(%mid% + 9)];
+S4.pCoeffs = (q31_t*)&eq5coefs[190*3 + 10*(%highmid% + 9)];
+S5.pCoeffs = (q31_t*)&eq5coefs[190*4 + 10*(%high% + 9)];
+
+arm_biquad_cascade_df1_q31(&S2, (q31_t *)%in%, (q31_t *)%out%, BUFSIZE);
+arm_biquad_cascade_df1_q31(&S3, (q31_t *)%out%, (q31_t *)%out%, BUFSIZE);
+arm_biquad_cascade_df1_q31(&S4, (q31_t *)%out%, (q31_t *)%out%, BUFSIZE);
+arm_biquad_cascade_df1_q31(&S5, (q31_t *)%out%, (q31_t *)%out%, BUFSIZE);
+]]></code.krate>
+   </obj.normal>
+</objdefs>

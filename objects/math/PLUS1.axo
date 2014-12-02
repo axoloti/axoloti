@@ -1,0 +1,47 @@
+<objdefs>
+   <obj.normal id="+1" sha="61413e41a22dba4d3f6a4be145c06146934f7120">
+      <sDescription>adds one unit</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32 name="result" description="a+1" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%result%= %a%+(1<<21);]]></code.krate>
+   </obj.normal>
+   <obj.normal id="+1" sha="4fe729a7a54d99c1d63a2bdb85652b2031c32726">
+      <sDescription>adds one unit</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <int32 name="result" description="a+1" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%result%= %a%+1;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="+1" sha="123c22afb731c850f5fca5eece7dd54edffe2a9f">
+      <sDescription>adds one unit</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="result" description="a+1" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%result%= %a%+(1<<21);]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,29 @@
+<objdefs>
+   <obj.normal id="pwm t5" sha="b039fad23a8dfd2fa54f2d4f6108b397273d87bd">
+      <sDescription>pwm output timer 5</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="pa0" description="pwm ratio"/>
+         <frac32 name="pa1" description="pwm ratio"/>
+         <frac32 name="pa2" description="pwm ratio"/>
+         <frac32 name="pa3" description="pwm ratio"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <depends>
+         <depend>PWMD5</depend>
+      </depends>
+      <code.init><![CDATA[  palSetPadMode(GPIOA, 0, PAL_MODE_ALTERNATE(2));
+  palSetPadMode(GPIOA, 1, PAL_MODE_ALTERNATE(2));
+  palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(2));
+  palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(2));]]></code.init>
+      <code.krate><![CDATA[   pwmEnableChannel(&PWMD5, 0, (pwmcnt_t)((%pa0%>=0)?(4096-(%pa0%>>15)):4096));
+   pwmEnableChannel(&PWMD5, 1, (pwmcnt_t)((%pa1%>=0)?(4096-(%pa1%>>15)):4096));
+   pwmEnableChannel(&PWMD5, 2, (pwmcnt_t)((%pa2%>=0)?(4096-(%pa2%>>15)):4096));
+   pwmEnableChannel(&PWMD5, 3, (pwmcnt_t)((%pa3%>=0)?(4096-(%pa3%>>15)):4096));
+]]></code.krate>
+   </obj.normal>
+</objdefs>

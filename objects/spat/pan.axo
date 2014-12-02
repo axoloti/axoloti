@@ -1,0 +1,44 @@
+<objdefs>
+   <obj.normal id="pan" sha="61607561a89b218b9fd29b12920af8063776899a">
+      <sDescription>stereo balance (panorama)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="i1" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="left" description="output" SumBuffer="false"/>
+         <frac32 name="right" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.ratio name="c" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.ratio>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[%left% = ___SMMUL((1<<29)-(%c%<<2),%i1%)<<2;%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="pan" sha="ae1048aeefcb0da9fc2ba40a0e6396e222807375">
+      <sDescription>stereo balance (panorama)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="i1" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="left" description="output" SumBuffer="false"/>
+         <frac32buffer name="right" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.ratio name="c" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.ratio>
+      </params>
+      <attribs/>
+      <code.srate><![CDATA[%left% = ___SMMUL((1<<29)-(%c%<<2),%i1%)<<2;%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;]]></code.srate>
+   </obj.normal>
+</objdefs>

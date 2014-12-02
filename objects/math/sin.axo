@@ -1,0 +1,38 @@
+<objdefs>
+   <obj.normal id="sin" sha="6c2c51772640a985c60b8e74dd46cdab84f70868">
+      <sDescription>sine function, -64..64 phase corresponds to -180 to 180 degrees</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="phase" description="phase"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="sin(phase)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[       int32_t r;
+       SINE2TINTERP(%phase%<<4,r)
+       %out%= (r>>4);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="sin" sha="1071012784f2bd65a87a083ab2b7c3d46db76c52">
+      <sDescription>sine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="phase" description="phase"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="sin(phase)" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[       int32_t r;
+       SINE2TINTERP(%phase%<<4,r)
+       %out%= (r>>4);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

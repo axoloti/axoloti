@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="to f" sha="ca9cced965e22be50ffea2273ab776493b9e6ae2">
+      <sDescription>convert to fractional output</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="i" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[   %o%= %i%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

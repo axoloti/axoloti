@@ -1,0 +1,82 @@
+<patch-1.0>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4" x="0" y="40">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA3 (ADC1_IN3)"/>
+      </attribs>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="knob1" x="200" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_" x="0" y="100">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA1 (ADC1_IN1)"/>
+      </attribs>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="knob2" x="200" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4__" x="0" y="160">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA2 (ADC1_IN2)"/>
+      </attribs>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="knob3" x="200" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4___" x="0" y="220">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA0 (ADC1_IN0)"/>
+      </attribs>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="knob4" x="200" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="0" y="280">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA5 (ADC1_IN5)"/>
+      </attribs>
+   </obj>
+   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="pedal" x="200" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="analogRead4 out"/>
+         <dest name="knob1 outlet"/>
+      </net>
+      <net>
+         <source name="analogRead4_ out"/>
+         <dest name="knob2 outlet"/>
+      </net>
+      <net>
+         <source name="analogRead4___ out"/>
+         <dest name="knob4 outlet"/>
+      </net>
+      <net>
+         <source name="analogRead4__ out"/>
+         <dest name="knob3 outlet"/>
+      </net>
+      <net>
+         <source name="analogRead1 out"/>
+         <dest name="pedal outlet"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>normal</subpatchmode>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

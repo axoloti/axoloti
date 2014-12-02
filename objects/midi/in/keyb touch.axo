@@ -1,0 +1,55 @@
+<objdefs>
+   <obj.normal id="keyb touch" sha="583b14fe738d269a156ff5842bde32605dcf64bf">
+      <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity. Polyphonic touch output.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32.bipolar name="note" description="midi note number (-64..63)" SumBuffer="false"/>
+         <bool32 name="gate" description="key pressed, no retrigger legato" SumBuffer="false"/>
+         <bool32 name="gate2" description="key pressed, retrigger on legato" SumBuffer="false"/>
+         <frac32.positive name="velocity" description="note-on velocity" SumBuffer="false"/>
+         <frac32.positive name="releaseVelocity" description="note-off velocity" SumBuffer="false"/>
+         <frac32.positive name="touch" description="polyphonic aftertouch" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int8_t _note;
+int32_t _gate;
+int32_t _gate2;
+uint8_t _velo;
+uint8_t _rvelo;
+uint8_t _touch;
+]]></code.declaration>
+      <code.init><![CDATA[_gate = 0;
+_note = 0;
+_touch = 0;
+]]></code.init>
+      <code.krate><![CDATA[%note%= _note<<21;
+%gate%= _gate;
+%gate2%= _gate2;
+_gate2 = _gate;
+%velocity%= _velo<<20;
+%touch% = _touch<<20;
+%releaseVelocity%= _rvelo<<20;
+]]></code.krate>
+      <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
+  _velo = data2;
+  _note = data1-64;
+  _gate = 1<<27;
+  _gate2 = 0;
+} else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||
+          (status == MIDI_NOTE_OFF + %midichannel%)) {
+  if (_note == data1-64) {
+    _rvelo = data2;
+    _gate = 0;
+  }
+} else if ((status == %midichannel% + MIDI_POLY_PRESSURE)&&(data1-64 == _note)) {
+  _touch = data2;
+} else if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {
+  _gate = 0;
+}
+]]></code.midihandler>
+   </obj.normal>
+</objdefs>

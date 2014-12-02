@@ -1,0 +1,31 @@
+<patch-1.0>
+   <obj type="keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb_1" x="40" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="envd~" sha="e047de4d97e15e991286b65f7265528616d6b4e8" name="envd~_1" x="140" y="60">
+      <params>
+         <frac32.u.map name="d" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="200" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="envd~_1 env"/>
+         <dest name="dac~_1 left"/>
+         <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="keyb_1 gate"/>
+         <dest name="envd~_1 trig"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,557 @@
+<objdefs>
+   <obj.normal id="control_on_parent_sub">
+      <sDescription>no description</sDescription>
+      <inlets/>
+      <outlets>
+         <frac32 name="one" description="one" SumBuffer="false"/>
+         <frac32 name="two" description="two" SumBuffer="false"/>
+         <frac32 name="three" description="three" SumBuffer="false"/>
+         <frac32 name="four" description="four" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="c2">
+            <DefaultValue v="2.0"/>
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="c4">
+            <DefaultValue v="4.0"/>
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <includes/>
+      <depends/>
+      <code.declaration><![CDATA[    static const int NPEXCH = 4;
+    ParameterExchange_t PExch[NPEXCH];
+    int displayVector[3];
+    static const int NPRESETS = 8;
+    static const int NPRESET_ENTRIES = 32;
+    static const int NMODULATIONSOURCES = 8;
+    static const int NMODULATIONTARGETS = 8;
+    PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS];
+    void PExParameterChange(int index, int32_t value, int32_t mask) {
+  PExch[index].modvalue -= (patchMeta.pPExch)[index].value;
+  PExch[index].value = value;
+  PExch[index].modvalue += (patchMeta.pPExch)[index].value;
+  PExch[index].signals = mask;
+  if (PExch[index].pfunction) {
+    PExch[index].finalvalue =  (PExch[index].pfunction)(PExch[index].modvalue,index);
+  } else {
+    PExch[index].finalvalue = PExch[index].modvalue;
+  }
+}     int32buffer inputLeft;
+     int32buffer inputRight;
+     int32buffer outputLeft;
+     int32buffer outputRight;
+/* modsource defines */
+/* parameter instance indices */
+static const int PARAM_INDEX_c1_value = 0;
+static const int PARAM_INDEX_c2_value = 1;
+static const int PARAM_INDEX_c3_value = 2;
+static const int PARAM_INDEX_c4_value = 3;
+/* object classes */
+class instancec1{
+  public: // v1
+  %parent% *parent2;
+KeyValuePair KVP_instancec1_value;
+  public: void Init(%parent% * parent) {
+parent2 = parent;
+}
+  public: void Dispose() {
+}
+  public: void dsp (int32_t  & out  ){
+out= parent2->PExch[0].finalvalue;
+
+}
+}
+;class instanceone{
+  public: // v1
+  %parent% *parent2;
+int32_t _outlet;
+
+  public: void Init(%parent% * parent) {
+parent2 = parent;
+}
+  public: void Dispose() {
+}
+  public: void dsp (const int32_t  outlet  ){
+  _outlet = outlet;
+
+}
+}
+;class instancec2{
+  public: // v1
+  %parent% *parent2;
+KeyValuePair KVP_instancec2_value;
+  public: void Init(%parent% * parent) {
+parent2 = parent;
+}
+  public: void Dispose() {
+}
+  public: void dsp (int32_t  & out  ){
+out= parent2->%c2%;
+
+}
+}
+;class instancetwo{
+  public: // v1
+  %parent% *parent2;
+int32_t _outlet;
+
+  public: void Init(%parent% * parent) {
+parent2 = parent;
+}
+  public: void Dispose() {
+}
+  public: void dsp (const int32_t  outlet  ){
+  _outlet = outlet;
+
+}
+}
+;class instancec3{
+  public: // v1
+  %parent% *parent2;
+KeyValuePair KVP_instancec3_value;
+  public: void Init(%parent% * parent) {
+parent2 = parent;
+}
+  public: void Dispose() {
+}
+  public: void dsp (int32_t  & out  ){
+out= parent2->PExch[2].finalvalue;
+
+}
+}
+;class instancethree{
+  public: // v1
+  %parent% *parent2;
+int32_t _outlet;
+
+  public: void Init(%parent% * parent) {
+parent2 = parent;
+}
+  public: void Dispose() {
+}
+  public: void dsp (const int32_t  outlet  ){
+  _outlet = outlet;
+
+}
+}
+;class instancec4{
+  public: // v1
+  %parent% *parent2;
+KeyValuePair KVP_instancec4_value;
+  public: void Init(%parent% * parent) {
+parent2 = parent;
+}
+  public: void Dispose() {
+}
+  public: void dsp (int32_t  & out  ){
+out= parent2->%c4%;
+
+}
+}
+;class instancefour{
+  public: // v1
+  %parent% *parent2;
+int32_t _outlet;
+
+  public: void Init(%parent% * parent) {
+parent2 = parent;
+}
+  public: void Dispose() {
+}
+  public: void dsp (const int32_t  outlet  ){
+  _outlet = outlet;
+
+}
+}
+;/* object instances */
+     instancec1 instancec1_i;
+     instanceone instanceone_i;
+     instancec2 instancec2_i;
+     instancetwo instancetwo_i;
+     instancec3 instancec3_i;
+     instancethree instancethree_i;
+     instancec4 instancec4_i;
+     instancefour instancefour_i;
+/* net latches */
+   static const int32_t * GetInitParams(void){
+      static const int32_t p[4]= {
+      2097152,
+      4194304,
+      6291456,
+      8388608
+      };
+      return &p[0];
+   }   static const int32_t * GetPresets(void){
+      static const int32_t p[NPRESETS][NPRESET_ENTRIES][2] = {
+         {
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0}
+         },
+         {
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0}
+         },
+         {
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0}
+         },
+         {
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0}
+         },
+         {
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0}
+         },
+         {
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0}
+         },
+         {
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0}
+         },
+         {
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0},
+           {-1,0}
+         }
+      };
+   return &p[0][0][0];
+   };
+void ApplyPreset(int index){
+   index--;
+   if (index < NPRESETS) {
+     PresetParamChange_t *pa = (PresetParamChange_t *)(GetPresets());
+     PresetParamChange_t *p = &pa[index*NPRESET_ENTRIES];
+       int i;
+       for(i=0;i<NPRESET_ENTRIES;i++){
+         PresetParamChange_t *pp = &p[i];
+           if ((pp->pexIndex>=0)&&(pp->pexIndex<NPEXCH)) {
+               int v = pp->value - PExch[pp->pexIndex].value;
+               PExch[pp->pexIndex].value = pp->value;
+               PExch[pp->pexIndex].modvalue +=v;
+               PExch[pp->pexIndex].signals = 0xFFEF;
+               if (PExch[pp->pexIndex].pfunction) {
+                  PExch[pp->pexIndex].finalvalue = (PExch[pp->pexIndex].pfunction)(PExch[pp->pexIndex].modvalue,pp->pexIndex);
+               } else {
+                  PExch[pp->pexIndex].finalvalue = PExch[pp->pexIndex].modvalue;
+               }
+           }
+           else break;
+       }
+   }
+}
+]]></code.declaration>
+      <code.init><![CDATA[   instancec1_i.Init(this);
+   instanceone_i.Init(this);
+   instancec2_i.Init(this);
+   instancetwo_i.Init(this);
+   instancec3_i.Init(this);
+   instancethree_i.Init(this);
+   instancec4_i.Init(this);
+   instancefour_i.Init(this);
+   int i;
+   int j;
+   const int32_t *p;
+   p = GetInitParams();
+   for(j=0;j<4;j++){
+      PExch[j].value = p[j];
+      PExch[j].modvalue = p[j];
+      PExch[j].signals = 0;
+      PExch[j].pfunction = 0;
+      PExch[j].finalvalue = p[j];
+   }
+     displayVector[0] = 0x446F7841;
+     displayVector[1] = 0;
+     displayVector[2] = 0;
+]]></code.init>
+      <code.dispose><![CDATA[   instancec1_i.Dispose();
+   instanceone_i.Dispose();
+   instancec2_i.Dispose();
+   instancetwo_i.Dispose();
+   instancec3_i.Dispose();
+   instancethree_i.Dispose();
+   instancec4_i.Dispose();
+   instancefour_i.Dispose();
+]]></code.dispose>
+      <code.krate><![CDATA[int i; /*...*/
+//--------- <nets> -----------//
+    int32_t  net0;
+    int32_t  net1;
+    int32_t  net2;
+    int32_t  net3;
+//--------- </nets> ----------//
+//--------- <zero> ----------//
+  int32_t UNCONNECTED_OUTPUT;
+  static const int32_t UNCONNECTED_INPUT=0;
+  static const int32buffer zerobuffer = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  int32buffer UNCONNECTED_OUTPUT_BUFFER;
+//--------- </zero> ----------//
+//--------- <object calls> ----------//
+  instancec1_i.dsp(net0);
+  instanceone_i.dsp(net0);
+  instancec2_i.dsp(net1);
+  instancetwo_i.dsp(net1);
+  instancec3_i.dsp(net2);
+  instancethree_i.dsp(net2);
+  instancec4_i.dsp(net3);
+  instancefour_i.dsp(net3);
+//--------- </object calls> ----------//
+//--------- <net latch copy> ----------//
+//--------- </net latch copy> ----------//
+   %one% = instanceone_i._outlet;
+   %two% = instancetwo_i._outlet;
+   %three% = instancethree_i._outlet;
+   %four% = instancefour_i._outlet;
+]]></code.krate>
+      <code.midicc><![CDATA[]]></code.midicc>
+      <code.midinoteon><![CDATA[]]></code.midinoteon>
+      <code.midinoteoff><![CDATA[]]></code.midinoteoff>
+   </obj.normal>
+</objdefs>

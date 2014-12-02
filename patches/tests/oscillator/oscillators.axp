@@ -1,0 +1,198 @@
+<patch-1.0>
+   <obj type="keyb" sha="47bd98210bbdd2f31afd6baa726279bc5a8fc32a" name="keyb1" x="40" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc2_1" x="200" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1" x="200" y="120">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="square~" sha="f0b93226767e21295522abd5f9b79ae4eee84326" name="square_1" x="200" y="200">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="120" y="280">
+      <params>
+         <frac32.u.map name="value" value="25.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="pwm~" sha="253d63a70217e07437c5d28ce6b93d59bf3e1" name="pwm_1" x="200" y="280">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="c1" x="440" y="340">
+      <params>
+         <frac32.s.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb12" x="720" y="340">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="phasor3~" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52" name="phasor3_1" x="160" y="380">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="inmux8" sha="69835ed83d9a8603e491811298c8a155a05c4064" name="inmux41" x="400" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c2" x="480" y="420">
+      <params>
+         <frac32.u.map name="amp" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lpf~" sha="219ae48267404fac1e204a0ae6f3f1363e789297" name="vcf3_1" x="600" y="420">
+      <params>
+         <frac32.s.map name="pitch" value="36.0"/>
+         <frac32.u.map name="reso" value="35.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="inmux2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f" name="inmux21" x="720" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="800" y="420">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="920" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="phasor3q~" sha="bb3797f6808c1fa0ccf714c27361878a3fd8be29" name="phasor3q_1" x="120" y="480">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="920" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="560" y="500">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s_trig" sha="274f52631825aadd974c6d5d8e899fb9655d754b" name="scope_128s_trig1" x="560" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="240" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="lfsr~" sha="94017314f1e9bdac75f41689a6df3c5a5b90c345" name="lfsr_1" x="200" y="640">
+      <params/>
+      <attribs>
+         <combo attributeName="polynomial" selection="0x2CB"/>
+      </attribs>
+   </obj>
+   <nets>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="inmux41 o"/>
+         <dest name="scope_128s_trig1 in"/>
+         <dest name="*c2 in"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="scope_128s_trig1 hold"/>
+      </net>
+      <net>
+         <source name="osc2_1 wave"/>
+         <dest name="inmux41 i0"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="inmux41 i1"/>
+      </net>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="saw_1 pitchm"/>
+         <dest name="pwm_1 pitchm"/>
+         <dest name="square_1 pitchm"/>
+         <dest name="osc2_1 pitchm"/>
+         <dest name="phasor3_1 pitchm"/>
+         <dest name="phasor3q_1 pitchm"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="pwm_1 pwm"/>
+      </net>
+      <net>
+         <source name="pwm_1 wave"/>
+         <dest name="inmux41 i3"/>
+      </net>
+      <net>
+         <source name="*c2 out"/>
+         <dest name="vcf3_1 in"/>
+         <dest name="inmux21 i1"/>
+      </net>
+      <net>
+         <source name="square_1 wave"/>
+         <dest name="inmux41 i2"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="inmux41 s"/>
+      </net>
+      <net>
+         <source name="rand_1 wave"/>
+         <dest name="inmux41 i6"/>
+      </net>
+      <net>
+         <source name="lfsr_1 out"/>
+         <dest name="inmux41 i7"/>
+      </net>
+      <net>
+         <source name="phasor3q_1 phasor0"/>
+         <dest name="inmux41 i5"/>
+      </net>
+      <net>
+         <source name="phasor3_1 phasor"/>
+         <dest name="inmux41 i4"/>
+      </net>
+      <net>
+         <source name="vcf3_1 out"/>
+         <dest name="inmux21 i2"/>
+      </net>
+      <net>
+         <source name="inmux21 o"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="cb12 o"/>
+         <dest name="inmux21 s"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

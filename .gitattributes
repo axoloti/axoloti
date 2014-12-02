@@ -1,0 +1,18 @@
+*Makefile binary
+
+* text=auto
+*.c text 
+*.cpp text
+*.h text
+*.xml text
+*.java text diff=java
+
+*.png binary
+*.jpg binary
+*.pdf binary
+*.exe binary
+*.tar binary
+
+*.axp   text diff=html
+*.axo   text diff=html
+ 

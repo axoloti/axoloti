@@ -1,0 +1,36 @@
+<objdefs>
+   <obj.normal id="indexed" sha="4c1c90721e5f530e9fbdcfa373edaffe908e605b">
+      <sDescription>generates string: prefix000suffix</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="index" description="index"/>
+      </inlets>
+      <outlets>
+         <charptr32 name="out" description="string" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <table name="prefix"/>
+         <table name="suffix"/>
+      </attribs>
+      <code.declaration><![CDATA[char c[64];
+int offset;
+int pval;]]></code.declaration>
+      <code.init><![CDATA[strcpy(&c[0],"%prefix%000%suffix%");
+offset = strlen("%prefix%");
+pval = 0;
+]]></code.init>
+      <code.krate><![CDATA[if (%index% != pval){   pval = %index%;
+   int i = %index%;   int i0 = i/10;
+   c[offset+2] = '0'+i-10*i0;
+   i = i0; i0 = i/10;
+   c[offset+1] = '0'+i-10*i0;
+   i = i0; i0 = i/10;
+   c[offset+0] = '0'+i-10*i0;
+}
+%out% = &c[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>

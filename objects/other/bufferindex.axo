@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="bufferindex" sha="63d69b410a3dd33249815b5b2a3138b579149f8c">
+      <sDescription>outputs a constant buffer containing [0,4,8,12,...].</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <frac32buffer.positive name="out" description="lfs pattern" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int i;
+for(i=0;i<BUFSIZE;i++)
+  %out%[i] = i<<23;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

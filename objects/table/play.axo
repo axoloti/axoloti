@@ -1,0 +1,37 @@
+<objdefs>
+   <obj.normal id="play" sha="661e6425aa2ae595d063d1ece9c7d51be246b601">
+      <sDescription>play audio from table</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="wave" description="wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <objref name="table"/>
+      </attribs>
+      <code.declaration><![CDATA[   int ntrig;
+   int pos;
+]]></code.declaration>
+      <code.init><![CDATA[pos = -1;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) {
+      ntrig=1;
+      pos = 0;
+   }
+   else if (!(%trig%>0)) ntrig=0;
+   int32_t i;
+   if ((pos>=0)&&((pos+BUFSIZE)< %table%.LENGTH))
+       for(i=0;i<BUFSIZE;i++){
+           %wave%[i]= %table%.array[pos++]<<%table%.GAIN;
+       }
+   else {       pos = -1;
+       for(i=0;i<BUFSIZE;i++) %wave%[i]= 0;
+   }]]></code.krate>
+   </obj.normal>
+</objdefs>

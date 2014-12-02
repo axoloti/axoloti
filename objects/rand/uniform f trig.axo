@@ -1,0 +1,26 @@
+<objdefs>
+   <obj.normal id="uniform f trig" sha="7c693e3fcb8abe7dc3908628ef0eb911a4a19ce1">
+      <sDescription>uniform distributed (white) noise, triggered generation. Range -64..64</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets>
+         <frac32.bipolar name="rand" description="random number" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+int ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[val = (int32_t)(GenerateRandomNumber())>>4;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) { val = (int32_t)(GenerateRandomNumber())>>4; ntrig=1;}
+   else if (!(%trig%>0)) ntrig=0;
+   %rand%= val;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,50 @@
+<patch-1.0>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="40" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="-14.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cb1m" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m1" x="240" y="60">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="80" y="120">
+      <params>
+         <frac32.s.map name="value" value="-22.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="accu_sat" sha="f699babed031a7eae8fe89958c523bc05636eb0a" name="accu_sat1" x="280" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1" x="400" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="square1 wave"/>
+         <dest name="accu_sat1 trig"/>
+      </net>
+      <net>
+         <source name="accu_sat1 o"/>
+         <dest name="scopeS1 in"/>
+      </net>
+      <net>
+         <source name="cbp1 out"/>
+         <dest name="accu_sat1 i"/>
+      </net>
+      <net>
+         <source name="cb1m1 o"/>
+         <dest name="accu_sat1 rst"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

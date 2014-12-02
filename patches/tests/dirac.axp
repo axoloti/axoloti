@@ -1,0 +1,72 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="40">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="osc0_1" x="80" y="40">
+      <params>
+         <frac32.s.map name="pitch" value="47.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="kscope_128s" sha="187931f6934dab0686ca4d2b338cd8688db4f3e6" name="kscope_128s1" x="240" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dirac~" sha="8c4dd3566568ebf45704f21b94c45174a4206ea" name="dirac_1" x="40" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="160" y="180">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s_trig_v2" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig_v21" x="280" y="180">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="allpass" sha="784311d0f4b7b4295794205281da94bd05ed52ed" name="allpass1" x="280" y="340">
+      <params>
+         <frac32.s.map name="g" value="63.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="delay" value="8"/>
+      </attribs>
+   </obj>
+   <obj type="scope_128s_trig_v2" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig_v21_" x="440" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc0_1 wave"/>
+         <dest name="dirac_1 trig"/>
+         <dest name="kscope_128s1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="scope_128s_trig_v21 in"/>
+         <dest name="allpass1 in"/>
+      </net>
+      <net>
+         <source name="dirac_1 out"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="osc0_1 pitchm"/>
+      </net>
+      <net>
+         <source name="allpass1 out"/>
+         <dest name="scope_128s_trig_v21_ in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

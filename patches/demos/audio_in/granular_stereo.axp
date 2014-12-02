@@ -1,0 +1,44 @@
+<patch-1.0>
+   <obj type="adc~1" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="60" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delwrite~" sha="c573b27a5ebc2efb2d1e8ec173ff4793a2acbae2" name="d" x="300" y="40">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="8192 (170ms)"/>
+      </attribs>
+   </obj>
+   <obj type="grainstereovoice" sha="e2a06799af3290084928b7b96ce4b1bdc9ed703f" name="grainstereovoice_1" x="420" y="40">
+      <params>
+         <frac32.u.map name="lspread" value="13.5"/>
+         <frac32.u.map name="length" value="39.0"/>
+         <frac32.u.map name="ospread" value="26.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="14"/>
+      </attribs>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="560" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="grainstereovoice_1 L"/>
+         <dest name="dac~_1 left"/>
+      </net>
+      <net>
+         <source name="grainstereovoice_1 R"/>
+         <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="adc~1_1 wave"/>
+         <dest name="d in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

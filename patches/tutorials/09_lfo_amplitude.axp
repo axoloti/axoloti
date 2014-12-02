@@ -1,0 +1,115 @@
+<patch-1.0>
+   <comment type="patch/comment" sha="sha" name="One low frequency oscillator to modulate the amplitude of an oscillator" x="28" y="14"/>
+   <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="28" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="again, use the piano keyboard to play!" x="182" y="56"/>
+   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd_1" x="560" y="84">
+      <params>
+         <frac32.u.map name="a" value="26.0"/>
+         <frac32.u.map name="d" value="58.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="c32 = half range of a fractional" x="392" y="140"/>
+   <obj type="math/c 32" sha="5797bce9fc4e770d9c14890b0fa899f126c5bc38" name="c321" x="392" y="154">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="this is the LFO" x="182" y="168"/>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="182" y="196">
+      <params>
+         <frac32.s.map name="pitch" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="392" y="196">
+      <params>
+         <frac32.u.map name="gain1" value="13.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*" sha="b031e26920f6cf5c1a53377ee6021573c4e3ac02" name="*1" x="546" y="238">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart b" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS_1" x="630" y="238">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="lfo intensity" x="406" y="294"/>
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="140" y="364">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="308" y="364">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="420" y="364">
+      <params>
+         <frac32.u.map name="amp" value="15.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="504" y="364">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig_v2_1" x="392" y="476">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="*c1 in"/>
+         <dest name="scope_128s_trig_v2_1 in"/>
+      </net>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="saw_1 pitchm"/>
+      </net>
+      <net>
+         <source name="c321 o"/>
+         <dest name="mix11 bus_in"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="*1 b"/>
+      </net>
+      <net>
+         <source name="*1 result"/>
+         <dest name="vca_1 v"/>
+         <dest name="scopeS_1 in"/>
+      </net>
+      <net>
+         <source name="keyb1 gate"/>
+         <dest name="envahd_1 gate"/>
+      </net>
+      <net>
+         <source name="envahd_1 env"/>
+         <dest name="*1 a"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

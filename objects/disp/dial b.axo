@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e">
+      <sDescription>displays bipolar k-rate signals</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.bipolar name="in" description="input"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <frac32.s.dial name="v" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%v%=%in%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

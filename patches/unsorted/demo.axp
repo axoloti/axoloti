@@ -1,0 +1,330 @@
+<patch-1.0>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="40" y="80">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA0 (ADC1_IN0)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="200" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc~" sha="377a3586859b26132804d77a27e8734c2cf0fc69" name="osc_1" x="360" y="80">
+      <params>
+         <frac32.s.map name="pitch" value="-44.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="6d47e0f0db3465196a58855781dfb7f2b9a9ba65" name="*c1" x="520" y="100">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2" x="40" y="200">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA1 (ADC1_IN1)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU2" x="200" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="8c87c37d5169a8ac979b310b57ee0ec517ec94b9" name="saw_1" x="360" y="200">
+      <params>
+         <frac32.s.map name="pitch" value="-47.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix2" sha="b919d90cd02aa387b63a8726ba51ff4d43396435" name="mix21" x="480" y="200">
+      <params>
+         <frac32.u.map name="gain1" value="23.0"/>
+         <frac32.u.map name="gain2" value="24.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="600" y="220">
+      <params>
+         <frac32.s.map name="pitch" value="-36.0"/>
+         <frac32.u.map name="reso" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix4" sha="ed2cf048906c80424ec8dc8454c3adeef61a5ade" name="mix31" x="800" y="260">
+      <params>
+         <frac32.u.map name="gain1" value="21.5"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+         <frac32.u.map name="gain3" value="63.5"/>
+         <frac32.u.map name="gain4" value="62.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="analyzer24" sha="d60defbb9e1222e96365648ad0696896457829b1" name="analyzer241" x="920" y="260">
+      <params>
+         <frac32.u.map name="reso" value="47.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead3" x="40" y="320">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA2 (ADC1_IN2)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU3" x="200" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="400">
+      <params>
+         <frac32.u.map name="value" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="88fae74b0c9af1fa64e598ff6c253347e5edc01" name="*c2" x="80" y="400">
+      <params>
+         <frac32.u.map name="amp" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="sampler_voice" sha="ef273ddf51f6e9c0174163201f544fd93708d29b" name="sampler_voice1" x="280" y="400">
+      <params/>
+      <attribs>
+         <combo attributeName="poly" selection="4"/>
+      </attribs>
+   </obj>
+   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_2" x="400" y="400">
+      <params>
+         <frac32.s.map name="pitch" value="-26.0"/>
+         <frac32.u.map name="reso" value="22.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="920" y="460">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="echo2~" sha="9216ef74fddac6c7bbb497cdf46529508234070e" name="echo2_1" x="600" y="500">
+      <params>
+         <frac32.u.map name="mix" value="31.0"/>
+         <frac32.u.map name="feedback" value="21.0"/>
+      </params>
+      <attribs>
+         <int attributeName="delaylength" value="20000"/>
+      </attribs>
+   </obj>
+   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4" x="40" y="520">
+      <params/>
+      <attribs>
+         <combo attributeName="channel" selection="PA3 (ADC1_IN3)"/>
+      </attribs>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU3_" x="200" y="520">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_2_" x="400" y="540">
+      <params>
+         <frac32.s.map name="pitch" value="-26.0"/>
+         <frac32.u.map name="reso" value="22.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc" sha="7224f0f8080ebb101b837d5823024ae068903724" name="metronome" x="0" y="640">
+      <params>
+         <frac32.s.map name="pitch" value="7.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar16_1" x="120" y="680">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter_1" x="0" y="720">
+      <params>
+         <int32 name="maximum" value="16"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_1__" x="120" y="740">
+      <params>
+         <bin16 name="b16" value="16961"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay1" x="320" y="740">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808bd"/>
+      </attribs>
+   </obj>
+   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_1_" x="440" y="740">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix3" sha="7119a6190eb67ecf8111da1506972dd15c8e0e0f" name="mix3_1" x="480" y="740">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+         <frac32.u.map name="gain3" value="20.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_2_" x="120" y="800">
+      <params>
+         <bin16 name="b16" value="4112"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay2" x="320" y="800">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808hatclose"/>
+      </attribs>
+   </obj>
+   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2_" x="440" y="800">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI_1" x="40" y="820">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_3" x="120" y="860">
+      <params>
+         <bin16 name="b16" value="18696"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay3" x="320" y="860">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808snare"/>
+      </attribs>
+   </obj>
+   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_3" x="440" y="860">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="analogRead2 out"/>
+         <dest name="saw_1 pitchm"/>
+         <dest name="scopeU2 in"/>
+      </net>
+      <net>
+         <source name="analogRead1 out"/>
+         <dest name="osc_1 pitchm"/>
+         <dest name="scopeU1 in"/>
+      </net>
+      <net>
+         <source name="analogRead3 out"/>
+         <dest name="vcf3_1 pitchm"/>
+         <dest name="scopeU3 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="osc_1 fm"/>
+      </net>
+      <net>
+         <source name="echo2_1 out"/>
+         <dest name="dac_11 wave"/>
+         <dest name="analyzer241 in"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="*c2 in"/>
+      </net>
+      <net>
+         <source name="*c2 out"/>
+         <dest name="sampler_voice1 inlet1"/>
+      </net>
+      <net>
+         <source name="sampler_voice1 outlet_1"/>
+         <dest name="vcf3_2 in"/>
+      </net>
+      <net>
+         <source name="analogRead4 out"/>
+         <dest name="vcf3_2 pitchm"/>
+         <dest name="scopeU3_ in"/>
+      </net>
+      <net>
+         <source name="sampler_voice1 outlet_2"/>
+         <dest name="vcf3_2_ in"/>
+      </net>
+      <net>
+         <source name="vcf3_2 out"/>
+         <dest name="mix31 in3"/>
+      </net>
+      <net>
+         <source name="vcf3_2_ out"/>
+         <dest name="mix31 in4"/>
+      </net>
+      <net>
+         <source name="mix21 out"/>
+         <dest name="vcf3_1 in"/>
+      </net>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="*c1 in"/>
+         <dest name="mix21 in1"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="mix21 in2"/>
+      </net>
+      <net>
+         <source name="vcf3_1 out"/>
+         <dest name="mix31 in1"/>
+      </net>
+      <net>
+         <source name="metronome wave"/>
+         <dest name="counter_1 trig"/>
+      </net>
+      <net>
+         <source name="counter_1 o"/>
+         <dest name="dispI_1 in"/>
+         <dest name="select_bool_16_1__ in"/>
+         <dest name="select_bool_16_2_ in"/>
+         <dest name="select_bool_16_3 in"/>
+         <dest name="ibar16_1 in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_1__ o"/>
+         <dest name="flashwaveplay1 trig"/>
+      </net>
+      <net>
+         <source name="select_bool_16_2_ o"/>
+         <dest name="flashwaveplay2 trig"/>
+      </net>
+      <net>
+         <source name="select_bool_16_3 o"/>
+         <dest name="flashwaveplay3 trig"/>
+      </net>
+      <net>
+         <source name="flashwaveplay1 out"/>
+         <dest name="vu_1_ in"/>
+         <dest name="mix3_1 in1"/>
+      </net>
+      <net>
+         <source name="flashwaveplay2 out"/>
+         <dest name="vu_2_ in"/>
+         <dest name="mix3_1 in2"/>
+      </net>
+      <net>
+         <source name="flashwaveplay3 out"/>
+         <dest name="vu_3 in"/>
+         <dest name="mix3_1 in3"/>
+      </net>
+      <net>
+         <source name="mix3_1 out"/>
+         <dest name="mix31 in2"/>
+      </net>
+      <net>
+         <source name="mix31 out"/>
+         <dest name="echo2_1 in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="inv" sha="77e1f7e6c23d3e299a726997943d432a8cde98bd">
+      <sDescription>invert</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="i" description="input"/>
+      </inlets>
+      <outlets>
+         <bool32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%o% = (%i%>0)?0:1;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

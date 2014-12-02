@@ -1,0 +1,85 @@
+<patch-1.0>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="40" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dirac~" sha="8c4dd3566568ebf45704f21b94c45174a4206ea" name="dirac_1" x="200" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="inmux3" sha="5c223e8c6775133275daea84781e04371c638b69" name="inmux31" x="320" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="400" y="20">
+      <params>
+         <frac32.u.map name="value" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="240" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="fdbkcomb" sha="545bfc2c024322a105e8ab12a2b44003713c4916" name="fdbkcomb1" x="120" y="200">
+      <params>
+         <frac32.s.map name="a" value="60.0"/>
+         <frac32.s.map name="b" value="23.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="delay" value="11"/>
+      </attribs>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="320" y="200">
+      <params>
+         <frac32.u.map name="amp" value="43.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="520" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s_trig_v2" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig_v21" x="320" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="square1 wave"/>
+         <dest name="dirac_1 trig"/>
+      </net>
+      <net>
+         <source name="dirac_1 out"/>
+         <dest name="inmux31 i0"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="scope_128s_trig_v21 in"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="fdbkcomb1 out"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="rand_1 wave"/>
+         <dest name="inmux31 i1"/>
+      </net>
+      <net>
+         <source name="inmux31 o"/>
+         <dest name="fdbkcomb1 in"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="inmux31 s"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

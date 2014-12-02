@@ -1,0 +1,36 @@
+<objdefs>
+   <obj.normal id="hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813">
+      <sDescription>2-pole resonant high-pass filter (biquad)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="filter input"/>
+         <frac32 name="pitchm" description="pitch modulation"/>
+         <frac32 name="resom" description="filter resonance"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="filter output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.pitch name="pitch">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.pitch>
+         <frac32.u.map.filterq name="reso">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.filterq>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[biquad_state bs;biquad_coefficients bc;
+]]></code.declaration>
+      <code.init><![CDATA[biquad_clearstate(&bs);
+]]></code.init>
+      <code.krate><![CDATA[      int32_t freq;
+      MTOF(%pitch% + %pitchm%,freq);
+      biquad_hp_coefs(&bc,freq,INT_MAX - (__USAT(%resom% + %reso%,27)<<4));
+      biquad_dsp(&bs,&bc,%in%,%out%);
+]]></code.krate>
+   </obj.normal>
+</objdefs>

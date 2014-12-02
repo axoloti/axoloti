@@ -1,0 +1,22 @@
+<objdefs>
+   <obj.normal id="cc any" sha="86d48b2affb47053582469232764da4f1d11fb38">
+      <sDescription>Midi controller output to any CC number and channel</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.positive name="v" description="value"/>
+         <int32 class="axoloti.inlets.InletInt32Pos" name="cc" description="midi Continous Controller number 0-127"/>
+         <int32 class="axoloti.inlets.InletInt32Pos" name="chan" description="channel 1..16"/>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int ntrig;
+]]></code.declaration>
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {MidiSend3(MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}
+if (!(%trig%>0)) ntrig=0;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,36 @@
+<objdefs>
+   <obj.normal id="&lt;&lt;" sha="1d2ab772fa460c260d0414b756782e30821e5444">
+      <sDescription>Left shift. Doubles the value &quot;shift&quot; times, with overflow. If overflow is not desireable, use &quot;muls&quot;.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32 name="result" description="a amplified in 6dB steps" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="shift" MinValue="0" MaxValue="31" DefaultValue="1"/>
+      </attribs>
+      <code.krate><![CDATA[%result%= %a% << %shift%;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="&lt;&lt;" sha="96e73302a673e4ad502914a3d6baa8aeb6bbdc15">
+      <sDescription>Left shift. Doubles the value &quot;shift&quot; times, with overflow. If overflow is not desireable, use &quot;muls&quot;.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="result" description="a amplified with i 6dB steps" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="shift" MinValue="0" MaxValue="31" DefaultValue="1"/>
+      </attribs>
+      <code.srate><![CDATA[%result%= %a% << %shift%;]]></code.srate>
+   </obj.normal>
+</objdefs>

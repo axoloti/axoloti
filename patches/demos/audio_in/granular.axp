@@ -1,0 +1,41 @@
+<patch-1.0>
+   <obj type="adc~1" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="60" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delwrite~" sha="c573b27a5ebc2efb2d1e8ec173ff4793a2acbae2" name="d" x="140" y="40">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="16384 (341ms)"/>
+      </attribs>
+   </obj>
+   <obj type="grainvoice" sha="871b86c48125f74fb8b544d3148af6e71d3eaf90" name="grainvoice_1" x="260" y="40">
+      <params>
+         <frac32.u.map name="lspread" value="14.5"/>
+         <frac32.s.map name="length" value="-24.0"/>
+         <frac32.u.map name="ospread" value="38.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="16"/>
+      </attribs>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="440" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="grainvoice_1 outlet~_1"/>
+         <dest name="dac~_1 left"/>
+         <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="adc~1_1 wave"/>
+         <dest name="d in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

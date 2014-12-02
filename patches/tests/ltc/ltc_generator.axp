@@ -1,0 +1,55 @@
+<patch-1.0>
+   <obj type="ltc.gen" sha="2faa7905faf62aedd04c2908a0fda56fcff9f4c8" name="ltc.gen_1" x="60" y="20">
+      <params/>
+      <attribs>
+         <combo attributeName="fps" selection="25"/>
+      </attribs>
+   </obj>
+   <obj type="disp.dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="h" x="180" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp.dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="m" x="240" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp.dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="s" x="300" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp.dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="f" x="360" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="audio.out.audio" sha="b933bb91801a126126313c11f773158b5ca2face" name="audio.out.audio_1" x="180" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="ltc.gen_1 h"/>
+         <dest name="h in"/>
+      </net>
+      <net>
+         <source name="ltc.gen_1 m"/>
+         <dest name="m in"/>
+      </net>
+      <net>
+         <source name="ltc.gen_1 s"/>
+         <dest name="s in"/>
+      </net>
+      <net>
+         <source name="ltc.gen_1 f"/>
+         <dest name="f in"/>
+      </net>
+      <net>
+         <source name="ltc.gen_1 out"/>
+         <dest name="audio.out.audio_1 left"/>
+         <dest name="audio.out.audio_1 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

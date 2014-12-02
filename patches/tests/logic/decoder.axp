@@ -1,0 +1,236 @@
+<patch-1.0>
+   <obj type="ctrl/i" sha="f379e2b7efb6169f8e7327be5b09362609656408" name="i_1" x="28" y="14">
+      <params>
+         <int32 name="value" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="logic/decode/bin 8" sha="82fef7cec2f1a4397c10a079e2e9d1bc9b8aea29" name="decode_bin1" x="98" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb0" x="224" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1" x="294" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb2" x="364" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb3" x="434" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb4" x="504" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb5" x="574" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb6" x="644" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb7" x="714" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/i" sha="f379e2b7efb6169f8e7327be5b09362609656408" name="i_2" x="28" y="168">
+      <params>
+         <int32 name="value" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="logic/decode/int 8" sha="69af9c80b214387a1a7210934e1cbb8536964d4d" name="decode_bin1_" x="98" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b0" x="224" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b1" x="294" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b2" x="364" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b3" x="434" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b4" x="504" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b5" x="574" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b6" x="644" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b7" x="714" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="logic/decode/int 8" sha="69af9c80b214387a1a7210934e1cbb8536964d4d" name="decode_bin1__" x="98" y="308">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b00" x="224" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b01" x="294" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b02" x="364" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b03" x="434" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b04" x="504" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b05" x="574" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b06" x="644" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="b07" x="714" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="decode_bin1 o0"/>
+         <dest name="dispb0 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1 o1"/>
+         <dest name="dispb1 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1 o2"/>
+         <dest name="dispb2 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1 o3"/>
+         <dest name="dispb3 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1 o4"/>
+         <dest name="dispb4 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1 o5"/>
+         <dest name="dispb5 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1 o6"/>
+         <dest name="dispb6 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1 o7"/>
+         <dest name="dispb7 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1_ o0"/>
+         <dest name="b0 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1_ o1"/>
+         <dest name="b1 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1_ o2"/>
+         <dest name="b2 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1_ o3"/>
+         <dest name="b3 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1_ o4"/>
+         <dest name="b4 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1_ o5"/>
+         <dest name="b5 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1_ o6"/>
+         <dest name="b6 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1_ o7"/>
+         <dest name="b7 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1_ chain"/>
+         <dest name="decode_bin1__ i1"/>
+      </net>
+      <net>
+         <source name="decode_bin1__ o0"/>
+         <dest name="b00 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1__ o1"/>
+         <dest name="b01 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1__ o2"/>
+         <dest name="b02 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1__ o3"/>
+         <dest name="b03 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1__ o4"/>
+         <dest name="b04 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1__ o5"/>
+         <dest name="b05 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1__ o6"/>
+         <dest name="b06 in"/>
+      </net>
+      <net>
+         <source name="decode_bin1__ o7"/>
+         <dest name="b07 in"/>
+      </net>
+      <net>
+         <source name="i_1 out"/>
+         <dest name="decode_bin1 i1"/>
+      </net>
+      <net>
+         <source name="i_2 out"/>
+         <dest name="decode_bin1_ i1"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

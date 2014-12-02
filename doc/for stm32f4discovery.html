@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Using the STM32f4Discovery board</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <H1>Using the STM32f4Discovery board</H1>
+        Axoloti is designed to run with the Axoloti Core board. But the STM32f4Discovery can be made to work too. 
+        <H2>Modify the firmware</H2>
+        <ul>
+            <li>in firmware/Makefile, change codec_ADAU1961.c into codec_CS43L22.c
+            <li>in firmware/axoloti_defines.h, uncomment the line "#define BOARD_STM32F4DISCOVERY 1", and comment the line "#define BOARD_AXOLOTI_V03 1"
+            <li>recompile the firmware                
+            <li>flash the firmware (using STLink)
+        </ul>
+        <H2>Limitations</H2>
+        <ul>
+            <li>SDcard cannot be used (pin conflict with the audio DAC)
+            <li>no audio input available
+            <li>the on-board microphone is not supported
+            <li>the on-board accelerometer is not supported
+            <li>the on-board LEDs are not supported
+            <li>48kHz sample rate is a bit off : 47991.07031kHz (0.32 cent lower tuning)
+            <li>no method yet to write/load a patch to/from internal flash - so no standalone operation yet
+        </ul>
+    </body>
+</html>

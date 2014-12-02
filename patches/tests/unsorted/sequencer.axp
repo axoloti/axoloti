@@ -1,0 +1,289 @@
+<patch-1.0>
+   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161" x="320" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161_" x="520" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="0" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="-3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter1" x="120" y="20">
+      <params>
+         <int32 name="maximum" value="64"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ibar32" sha="52ec29cec338905c2c7d9a7f7bf2e4a3871bc3ed" name="ibar321" x="320" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ibar32" sha="52ec29cec338905c2c7d9a7f7bf2e4a3871bc3ed" name="ibar321_" x="520" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1" x="0" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb2" x="80" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1" x="120" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ibar64" sha="9670d4ffe8212b7b9873dff03a5bfc9b1548922b" name="ibar641" x="320" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_161" x="320" y="280">
+      <params>
+         <bin16 name="b16" value="13071"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1" x="520" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="led1" sha="228b11846ff6a3209ecf90ced1ec59fe0a35bbe9" name="led11" x="560" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="240" y="340">
+      <params>
+         <bool32.tgl name="b" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16_v2x2" sha="ba7dc9a0cd74f2dfa097e8259c7dacfbfc67213a" name="select_bool_16_v2x21" x="320" y="340">
+      <params>
+         <bin16 name="p1" value="1"/>
+         <bin16 name="p2" value="2"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1__" x="560" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1___" x="640" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16_v2x4" sha="2550bb1cdd0761d8347dc1fdecd5d8ebd604de50" name="select_bool_16_v2x41" x="320" y="440">
+      <params>
+         <bin16 name="p1" value="34049"/>
+         <bin16 name="p2" value="34946"/>
+         <bin16 name="p3" value="36932"/>
+         <bin16 name="p4" value="41000"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1____" x="560" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1_____" x="640" y="480">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1______" x="720" y="500">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1_______" x="800" y="540">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_f_16" sha="e5a21283c9b00b2591a7475a20267deb24f2362b" name="select_f_161" x="320" y="600">
+      <params>
+         <frac32.u.mapvsl name="b0" value="5.0"/>
+         <frac32.u.mapvsl name="b1" value="10.0"/>
+         <frac32.u.mapvsl name="b2" value="16.5"/>
+         <frac32.u.mapvsl name="b3" value="10.0"/>
+         <frac32.u.mapvsl name="b4" value="1.0"/>
+         <frac32.u.mapvsl name="b5" value="11.5"/>
+         <frac32.u.mapvsl name="b6" value="10.0"/>
+         <frac32.u.mapvsl name="b7" value="0.0"/>
+         <frac32.u.mapvsl name="b8" value="0.0"/>
+         <frac32.u.mapvsl name="b9" value="0.0"/>
+         <frac32.u.mapvsl name="b10" value="5.5"/>
+         <frac32.u.mapvsl name="b11" value="0.0"/>
+         <frac32.u.mapvsl name="b12" value="0.0"/>
+         <frac32.u.mapvsl name="b13" value="2.5"/>
+         <frac32.u.mapvsl name="b14" value="0.0"/>
+         <frac32.u.mapvsl name="b15" value="2.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="520" y="600">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16_v2" sha="edded2c45c473d9ae251dbd56053120a8b3c57be" name="select_bool_16_v21" x="320" y="780">
+      <params>
+         <bin16 name="b16" value="8257"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_bool_16_v2" sha="edded2c45c473d9ae251dbd56053120a8b3c57be" name="select_bool_16_v21_" x="560" y="780">
+      <params>
+         <bin16 name="b16" value="7"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1_" x="760" y="780">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="select_fs_16b" sha="1bb1c9be66a4c6303cbae04af5f50b45bb25ebdf" name="select_fs_16b1" x="320" y="900">
+      <params>
+         <frac32.s.mapvsl name="b0" value="0.0"/>
+         <frac32.s.mapvsl name="b1" value="0.0"/>
+         <frac32.s.mapvsl name="b2" value="0.0"/>
+         <frac32.s.mapvsl name="b3" value="0.0"/>
+         <frac32.s.mapvsl name="b4" value="0.0"/>
+         <frac32.s.mapvsl name="b5" value="0.0"/>
+         <frac32.s.mapvsl name="b6" value="0.0"/>
+         <frac32.s.mapvsl name="b7" value="0.0"/>
+         <frac32.s.mapvsl name="b8" value="0.0"/>
+         <frac32.s.mapvsl name="b9" value="5.0"/>
+         <frac32.s.mapvsl name="b10" value="-6.0"/>
+         <frac32.s.mapvsl name="b11" value="10.0"/>
+         <frac32.s.mapvsl name="b12" value="0.0"/>
+         <frac32.s.mapvsl name="b13" value="0.0"/>
+         <frac32.s.mapvsl name="b14" value="0.0"/>
+         <frac32.s.mapvsl name="b15" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="select_fs_16b" sha="1bb1c9be66a4c6303cbae04af5f50b45bb25ebdf" name="select_fs_16b1_" x="520" y="900">
+      <params>
+         <frac32.s.mapvsl name="b0" value="4.5"/>
+         <frac32.s.mapvsl name="b1" value="8.5"/>
+         <frac32.s.mapvsl name="b2" value="31.0"/>
+         <frac32.s.mapvsl name="b3" value="19.5"/>
+         <frac32.s.mapvsl name="b4" value="6.5"/>
+         <frac32.s.mapvsl name="b5" value="0.0"/>
+         <frac32.s.mapvsl name="b6" value="6.0"/>
+         <frac32.s.mapvsl name="b7" value="2.0"/>
+         <frac32.s.mapvsl name="b8" value="0.0"/>
+         <frac32.s.mapvsl name="b9" value="0.0"/>
+         <frac32.s.mapvsl name="b10" value="5.0"/>
+         <frac32.s.mapvsl name="b11" value="4.5"/>
+         <frac32.s.mapvsl name="b12" value="0.0"/>
+         <frac32.s.mapvsl name="b13" value="4.5"/>
+         <frac32.s.mapvsl name="b14" value="3.5"/>
+         <frac32.s.mapvsl name="b15" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="760" y="900">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="counter1 o"/>
+         <dest name="select_bool_161 in"/>
+         <dest name="ibar161 in"/>
+         <dest name="select_f_161 in"/>
+         <dest name="select_bool_16_v21 in"/>
+         <dest name="select_fs_16b1 in"/>
+         <dest name="select_bool_16_v2x21 in"/>
+         <dest name="select_bool_16_v2x41 in"/>
+         <dest name="dispI1 in"/>
+         <dest name="ibar321 in"/>
+         <dest name="ibar641 in"/>
+      </net>
+      <net>
+         <source name="select_bool_161 o"/>
+         <dest name="dispb1 in"/>
+         <dest name="led11 in"/>
+      </net>
+      <net>
+         <source name="select_f_161 o"/>
+         <dest name="displayU1 in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_v21 chain"/>
+         <dest name="select_bool_16_v21_ in"/>
+      </net>
+      <net>
+         <source name="ibar161 chain_out"/>
+         <dest name="ibar161_ in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_v21_ o"/>
+         <dest name="dispb1_ in"/>
+      </net>
+      <net>
+         <source name="square1 wave"/>
+         <dest name="counter1 trig"/>
+         <dest name="scopeS1 in"/>
+         <dest name="dispb2 in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_v21 o"/>
+         <dest name="select_bool_16_v21_ def"/>
+      </net>
+      <net>
+         <source name="select_fs_16b1 chain"/>
+         <dest name="select_fs_16b1_ in"/>
+      </net>
+      <net>
+         <source name="select_fs_16b1 o"/>
+         <dest name="select_fs_16b1_ def"/>
+      </net>
+      <net>
+         <source name="select_fs_16b1_ o"/>
+         <dest name="displayS1 in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_v2x21 o1"/>
+         <dest name="dispb1__ in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_v2x21 o2"/>
+         <dest name="dispb1___ in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_v2x41 o1"/>
+         <dest name="dispb1____ in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_v2x41 o2"/>
+         <dest name="dispb1_____ in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_v2x41 o3"/>
+         <dest name="dispb1______ in"/>
+      </net>
+      <net>
+         <source name="select_bool_16_v2x41 o4"/>
+         <dest name="dispb1_______ in"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="select_bool_16_v2x21 def1"/>
+         <dest name="select_bool_16_v2x21 def2"/>
+         <dest name="select_bool_16_v2x41 def1"/>
+         <dest name="select_bool_16_v2x41 def2"/>
+         <dest name="select_bool_16_v2x41 def3"/>
+         <dest name="select_bool_16_v2x41 def4"/>
+      </net>
+      <net>
+         <source name="ibar321 chain_out"/>
+         <dest name="ibar321_ in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

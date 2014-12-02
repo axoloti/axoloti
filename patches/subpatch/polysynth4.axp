@@ -1,0 +1,68 @@
+<patch-1.0>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="0" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="-2.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c1" x="120" y="20">
+      <params>
+         <frac32.u.map name="amp" value="2.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="div32" sha="41545586fbaebf68c4240a279a5619af09b5c1a1" name="div321" x="240" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="polysynth_voice4" sha="a0d3939071e40461b8581f74f6cedba005cb9948" name="polysynth_voice41" x="320" y="20">
+      <params>
+         <frac32.u.map name="envd1" value="16.0"/>
+         <frac32.s.map name="saw" value="0.0"/>
+         <frac32.u.map name="vcfSaw_reso" value="60.5"/>
+         <frac32.u.map name="env_a" value="13.5"/>
+         <frac32.u.map name="env_d" value="60.0"/>
+         <frac32.u.map name="volume" value="2.0"/>
+         <frac32.s.map name="square" value="12.0"/>
+         <frac32.u.map name="vcfSquare_reso" value="56.5"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="7"/>
+      </attribs>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_11" x="520" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="div321 in"/>
+      </net>
+      <net>
+         <source name="div321 out"/>
+         <dest name="polysynth_voice41 vibrato"/>
+      </net>
+      <net>
+         <source name="polysynth_voice41 outL"/>
+         <dest name="dac_11 left"/>
+      </net>
+      <net>
+         <source name="polysynth_voice41 outR"/>
+         <dest name="dac_11 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>0</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

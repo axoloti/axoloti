@@ -1,0 +1,259 @@
+<patch-1.0>
+   <comment type="comment" sha="sha" name="check settings for MIDI channel!" x="40" y="20"/>
+   <obj type="keybnote" sha="5d623ad73ade2280421069a67ee3f30595794c72" name="keybnote1" x="40" y="60">
+      <params/>
+      <attribs>
+         <spinner attributeName="note" value="60"/>
+      </attribs>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay_1" x="180" y="60">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808bd"/>
+      </attribs>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="340" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="keybnote" sha="5d623ad73ade2280421069a67ee3f30595794c72" name="keybnote1_" x="40" y="160">
+      <params/>
+      <attribs>
+         <spinner attributeName="note" value="62"/>
+      </attribs>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay_1_" x="180" y="160">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808snare"/>
+      </attribs>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1_" x="340" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="keybnote" sha="5d623ad73ade2280421069a67ee3f30595794c72" name="keybnote1__" x="40" y="260">
+      <params/>
+      <attribs>
+         <spinner attributeName="note" value="64"/>
+      </attribs>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay_1__" x="180" y="260">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808hatclose"/>
+      </attribs>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1__" x="340" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="keybnote" sha="5d623ad73ade2280421069a67ee3f30595794c72" name="keybnote1___" x="40" y="360">
+      <params/>
+      <attribs>
+         <spinner attributeName="note" value="65"/>
+      </attribs>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay_1___" x="180" y="360">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808hatopen"/>
+      </attribs>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1___" x="340" y="360">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="keybnote" sha="5d623ad73ade2280421069a67ee3f30595794c72" name="keybnote1____" x="40" y="460">
+      <params/>
+      <attribs>
+         <spinner attributeName="note" value="67"/>
+      </attribs>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay_1____" x="180" y="460">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808hitom"/>
+      </attribs>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1____" x="340" y="460">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="keybnote" sha="5d623ad73ade2280421069a67ee3f30595794c72" name="keybnote1_____" x="40" y="560">
+      <params/>
+      <attribs>
+         <spinner attributeName="note" value="69"/>
+      </attribs>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay_1_____" x="180" y="560">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808midtom"/>
+      </attribs>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1_____" x="340" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="keybnote" sha="5d623ad73ade2280421069a67ee3f30595794c72" name="keybnote1______" x="40" y="660">
+      <params/>
+      <attribs>
+         <spinner attributeName="note" value="71"/>
+      </attribs>
+   </obj>
+   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay_1______" x="180" y="660">
+      <params/>
+      <attribs>
+         <combo attributeName="sample" selection="808lotom"/>
+      </attribs>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1______" x="340" y="660">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix7" sha="e2e19d94516239bac4be0805adb91501669a4843" name="mix71" x="420" y="680">
+      <params>
+         <frac32.u.map name="gain1" value="7.0"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+         <frac32.u.map name="gain3" value="29.5"/>
+         <frac32.u.map name="gain4" value="32.5"/>
+         <frac32.u.map name="gain5" value="29.5"/>
+         <frac32.u.map name="gain6" value="31.0"/>
+         <frac32.u.map name="gain7" value="31.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1______" x="560" y="680">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="keybnote1 gate"/>
+         <dest name="flashwaveplay_1 trig"/>
+      </net>
+      <net>
+         <source name="keybnote1 velocity"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1 out"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="keybnote1_ gate"/>
+         <dest name="flashwaveplay_1_ trig"/>
+      </net>
+      <net>
+         <source name="keybnote1_ velocity"/>
+         <dest name="vca_1_ v"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1_ out"/>
+         <dest name="vca_1_ a"/>
+      </net>
+      <net>
+         <source name="keybnote1__ gate"/>
+         <dest name="flashwaveplay_1__ trig"/>
+      </net>
+      <net>
+         <source name="keybnote1__ velocity"/>
+         <dest name="vca_1__ v"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1__ out"/>
+         <dest name="vca_1__ a"/>
+      </net>
+      <net>
+         <source name="keybnote1___ gate"/>
+         <dest name="flashwaveplay_1___ trig"/>
+      </net>
+      <net>
+         <source name="keybnote1___ velocity"/>
+         <dest name="vca_1___ v"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1___ out"/>
+         <dest name="vca_1___ a"/>
+      </net>
+      <net>
+         <source name="keybnote1____ gate"/>
+         <dest name="flashwaveplay_1____ trig"/>
+      </net>
+      <net>
+         <source name="keybnote1____ velocity"/>
+         <dest name="vca_1____ v"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1____ out"/>
+         <dest name="vca_1____ a"/>
+      </net>
+      <net>
+         <source name="keybnote1_____ gate"/>
+         <dest name="flashwaveplay_1_____ trig"/>
+      </net>
+      <net>
+         <source name="keybnote1_____ velocity"/>
+         <dest name="vca_1_____ v"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1_____ out"/>
+         <dest name="vca_1_____ a"/>
+      </net>
+      <net>
+         <source name="keybnote1______ gate"/>
+         <dest name="flashwaveplay_1______ trig"/>
+      </net>
+      <net>
+         <source name="keybnote1______ velocity"/>
+         <dest name="vca_1______ v"/>
+      </net>
+      <net>
+         <source name="flashwaveplay_1______ out"/>
+         <dest name="vca_1______ a"/>
+      </net>
+      <net>
+         <source name="mix71 out"/>
+         <dest name="dac_1______ left"/>
+         <dest name="dac_1______ right"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="mix71 in1"/>
+      </net>
+      <net>
+         <source name="vca_1_ o"/>
+         <dest name="mix71 in2"/>
+      </net>
+      <net>
+         <source name="vca_1__ o"/>
+         <dest name="mix71 in3"/>
+      </net>
+      <net>
+         <source name="vca_1___ o"/>
+         <dest name="mix71 in4"/>
+      </net>
+      <net>
+         <source name="vca_1____ o"/>
+         <dest name="mix71 in5"/>
+      </net>
+      <net>
+         <source name="vca_1_____ o"/>
+         <dest name="mix71 in6"/>
+      </net>
+      <net>
+         <source name="vca_1______ o"/>
+         <dest name="mix71 in7"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>10</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

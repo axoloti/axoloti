@@ -1,0 +1,118 @@
+<patch-1.0>
+   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="0" y="40">
+      <params>
+         <frac32.s.map name="value" value="59.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="toInt" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt1" x="200" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1" x="280" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="toBool" sha="205e5c5ed2de35ec586e37ce247ac3b4a9d22cd5" name="toBool1" x="200" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="280" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="0" y="220">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="toFrac" sha="ca9cced965e22be50ffea2273ab776493b9e6ae2" name="toFrac1" x="200" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS2" x="280" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="toInt" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt1_" x="200" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1_" x="280" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp2" x="0" y="380">
+      <params>
+         <frac32.s.map name="value" value="-1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="toInt" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt1__" x="80" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="toFrac" sha="ca9cced965e22be50ffea2273ab776493b9e6ae2" name="toFrac1_" x="200" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS2_" x="280" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="toBool" sha="205e5c5ed2de35ec586e37ce247ac3b4a9d22cd5" name="toBool1_" x="200" y="460">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1_" x="280" y="460">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="cbp1 out"/>
+         <dest name="toInt1 i"/>
+         <dest name="toBool1 i"/>
+      </net>
+      <net>
+         <source name="toInt1 o"/>
+         <dest name="dispI1 in"/>
+      </net>
+      <net>
+         <source name="toBool1 o"/>
+         <dest name="displayS1 in"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="toFrac1 i"/>
+         <dest name="toInt1_ i"/>
+      </net>
+      <net>
+         <source name="toFrac1 o"/>
+         <dest name="displayS2 in"/>
+      </net>
+      <net>
+         <source name="cbp2 out"/>
+         <dest name="toInt1__ i"/>
+      </net>
+      <net>
+         <source name="toInt1__ o"/>
+         <dest name="toFrac1_ i"/>
+         <dest name="toBool1_ i"/>
+      </net>
+      <net>
+         <source name="toFrac1_ o"/>
+         <dest name="displayS2_ in"/>
+      </net>
+      <net>
+         <source name="toInt1_ o"/>
+         <dest name="dispI1_ in"/>
+      </net>
+      <net>
+         <source name="toBool1_ o"/>
+         <dest name="displayS1_ in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

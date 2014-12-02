@@ -1,0 +1,67 @@
+<patch-1.0>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="40" y="20">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cb16" sha="10460eadb48a887eafeedcf4c65933030e4eabdd" name="cb161" x="480" y="20">
+      <params>
+         <bin16 name="b16" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="120">
+      <params>
+         <frac32.u.map name="value" value="31.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="40" y="260">
+      <params>
+         <frac32.s.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayUvbar" sha="4a88516a5b0a868df66114691847c587506fa013" name="displayUvbar1" x="480" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1" x="120" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1" x="160" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="280" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="160" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="280" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="dispb1 in"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="scopeU1 in"/>
+         <dest name="displayU1 in"/>
+      </net>
+      <net>
+         <source name="cbp1 out"/>
+         <dest name="scopeS1 in"/>
+         <dest name="displayS1 in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

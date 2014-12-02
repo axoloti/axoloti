@@ -1,0 +1,23 @@
+<objdefs>
+   <obj.normal id="cc" sha="b75c29c4a673c3cf1b0c417741358ea446de1b85">
+      <sDescription>Midi controller output</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.positive name="v" description="value"/>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="0"/>
+         <spinner name="cc" MinValue="0" MaxValue="127" DefaultValue="0"/>
+      </attribs>
+      <code.declaration><![CDATA[int ntrig;
+]]></code.declaration>
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {MidiSend3(MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));  ntrig=1;}
+if (!(%trig%>0)) ntrig=0;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

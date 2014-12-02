@@ -1,0 +1,24 @@
+<objdefs>
+   <obj.normal id="sel b 32" sha="5a9589400726d6b8229f0da752e327252ba3afea">
+      <sDescription>select one out of 32 booleans, chainable</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in" description="in"/>
+         <bool32 name="def" description="default value"/>
+      </inlets>
+      <outlets>
+         <int32 name="chain" description="chain out (in-32)" SumBuffer="false"/>
+         <bool32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <bin32 name="b32" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<32))   %o%=%b32%&(1<<%in%);
+else %o% = %def%;
+%chain% = %in%-32;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,125 @@
+<patch-1.0>
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="0" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="adc~1" sha="76cc7b8fc059b573ece27b3319e73b4136159cff" name="adc_11" x="0" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="hipass~" sha="f2c3331ff1e86a59b28451886de7b0221346e227" name="hipass_1" x="80" y="100">
+      <params>
+         <frac32.u.map name="freq" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lowpass~" sha="d9e91f7c039fc3e02a23b765dbf6f9c7af2661d1" name="lowpass_1" x="200" y="100">
+      <params>
+         <frac32.u.map name="freq" value="58.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="infclip~" sha="b593e026bd98022e0fb3a259cfa53b4cb3721ade" name="infclip_1" x="320" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delwrite~" sha="c573b27a5ebc2efb2d1e8ec173ff4793a2acbae2" name="d1" x="400" y="100">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="256 (5.33ms)"/>
+      </attribs>
+   </obj>
+   <obj type="delread~" sha="df294c6b5b7fb10ec3552408f812031a3b636680" name="delread_1_" x="520" y="100">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <table attributeName="delayname" table="d1"/>
+      </attribs>
+   </obj>
+   <obj type="delwrite~" sha="c573b27a5ebc2efb2d1e8ec173ff4793a2acbae2" name="d2" x="200" y="200">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="256 (5.33ms)"/>
+      </attribs>
+   </obj>
+   <obj type="delread~" sha="df294c6b5b7fb10ec3552408f812031a3b636680" name="delread_1" x="320" y="200">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <table attributeName="delayname" table="d2"/>
+      </attribs>
+   </obj>
+   <obj type="*" sha="d67b6c172dd96232df67e96baf19e3062e880e68" name="*1" x="520" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="640" y="200">
+      <params>
+         <frac32.u.map name="amp" value="29.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="760" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="280">
+      <params>
+         <frac32.u.map name="value" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="div32" sha="41545586fbaebf68c4240a279a5619af09b5c1a1" name="div161" x="80" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="hipass_1 out"/>
+         <dest name="lowpass_1 in"/>
+      </net>
+      <net>
+         <source name="*1 result"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="delread_1 out"/>
+         <dest name="*1 b"/>
+      </net>
+      <net>
+         <source name="delread_1_ out"/>
+         <dest name="*1 a"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="div161 in"/>
+      </net>
+      <net>
+         <source name="div161 out"/>
+         <dest name="delread_1 timem"/>
+      </net>
+      <net>
+         <source name="lowpass_1 out"/>
+         <dest name="infclip_1 in"/>
+         <dest name="d2 in"/>
+      </net>
+      <net>
+         <source name="infclip_1 out"/>
+         <dest name="d1 in"/>
+      </net>
+      <net>
+         <source name="adc_11 wave"/>
+         <dest name="hipass_1 in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,36 @@
+<objdefs>
+   <obj.normal id="&gt;&gt;" sha="cb8ad22bdd2b29d57d63c4540cf5fe2c9b4ce21d">
+      <sDescription>attenuates a k-rate signal with &quot;shift&quot; times 6dB</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32 name="result" description="a attenuated in 6dB steps" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="shift" MinValue="0" MaxValue="31" DefaultValue="1"/>
+      </attribs>
+      <code.krate><![CDATA[%result%= %a% >> %shift%;]]></code.krate>
+   </obj.normal>
+   <obj.normal id="&gt;&gt;" sha="d41e14ea0466939c31478842f4b0d0401cbd7bf5">
+      <sDescription>attenuates a s-rate signal with &quot;shift&quot; times 6dB</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="a" description="a"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="result" description="a attenuated with i 6dB steps" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="shift" MinValue="0" MaxValue="31" DefaultValue="1"/>
+      </attribs>
+      <code.srate><![CDATA[%result%= %a% >> %shift%;]]></code.srate>
+   </obj.normal>
+</objdefs>

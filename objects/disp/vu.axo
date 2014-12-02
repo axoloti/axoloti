@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343">
+      <sDescription>cheap vu meter display</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <frac32.vu name="v" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%v%=%in%[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>

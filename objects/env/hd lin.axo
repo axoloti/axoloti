@@ -1,0 +1,35 @@
+<objdefs>
+   <obj.normal id="hd lin" sha="c2939a8e03f80347fcceea10afaf9b82abd2a38">
+      <sDescription>hold/decay envelope, linear ramp</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.risingfalling name="trig" description="trigger"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="env" description="envelope output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.klineartime.reverse name="d" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.klineartime.reverse>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+]]></code.declaration>
+      <code.init><![CDATA[val = 0;
+]]></code.init>
+      <code.krate><![CDATA[if (%trig% > 0) {
+  val = 1 << 27;
+}
+else {
+  val -= %d% >> 7;
+  if (val < 0)
+    val = 0;
+}
+%env% = val;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

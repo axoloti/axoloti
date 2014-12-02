@@ -1,0 +1,114 @@
+<patch-1.0>
+   <obj type="saw~" name="saw_1" x="40" y="20">
+      <params>
+         <frac32.s.map name="pitch" value="17.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="delwrite~" name="d1" x="160" y="20">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="1024 (21.33ms)"/>
+      </attribs>
+   </obj>
+   <obj type="osc" name="osc_1" x="40" y="120">
+      <params>
+         <frac32.s.map name="pitch" value="8.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix1" name="mix1_1" x="160" y="120">
+      <params>
+         <frac32.u.map name="gain1" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="delread~" name="delread_1" x="280" y="120">
+      <params>
+         <frac32.u.map name="time" value="32.0"/>
+      </params>
+      <attribs>
+         <table attributeName="delayname" table="d1"/>
+      </attribs>
+   </obj>
+   <obj type="osc~" name="osc2" x="40" y="220">
+      <params>
+         <frac32.s.map name="pitch" value="-64.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix1" name="mix1_2" x="160" y="220">
+      <params>
+         <frac32.u.map name="gain1" value="3.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="delread~~" name="delread__1" x="280" y="220">
+      <params>
+         <frac32.u.map name="time" value="32.0"/>
+      </params>
+      <attribs>
+         <table attributeName="delayname" table="d1"/>
+      </attribs>
+   </obj>
+   <obj type="delread2~~" name="delread2" x="280" y="320">
+      <params>
+         <frac32.u.map name="time" value="32.5"/>
+      </params>
+      <attribs>
+         <table attributeName="delayname" table="d1"/>
+      </attribs>
+   </obj>
+   <obj type="mix3" name="mix2_1" x="480" y="320">
+      <params>
+         <frac32.u.map name="gain1" value="0.0"/>
+         <frac32.u.map name="gain2" value="0.0"/>
+         <frac32.u.map name="gain3" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" name="dac_1" x="600" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="delread_1 out"/>
+         <dest name="mix2_1 in1"/>
+      </net>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="mix1_1 in1"/>
+      </net>
+      <net>
+         <source name="mix1_1 out"/>
+         <dest name="delread_1 timem"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="d1 in"/>
+      </net>
+      <net>
+         <source name="osc2 wave"/>
+         <dest name="mix1_2 in1"/>
+      </net>
+      <net>
+         <source name="mix1_2 out"/>
+         <dest name="delread2 timem"/>
+         <dest name="delread__1 timem"/>
+      </net>
+      <net>
+         <source name="mix2_1 out"/>
+         <dest name="dac_1 wave"/>
+      </net>
+      <net>
+         <source name="delread2 out"/>
+         <dest name="mix2_1 in3"/>
+      </net>
+      <net>
+         <source name="delread__1 out"/>
+         <dest name="mix2_1 in2"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

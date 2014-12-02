@@ -1,0 +1,52 @@
+<patch-1.0>
+   <obj type="subpatch_polyindex_sub" sha="5d42c7e096a0299a138612ca959ffbed36c9e40e" name="subpatch_polyindex_sub1" x="40" y="40">
+      <params>
+         <frac32.u.map name="on__parent" value="3.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="4"/>
+      </attribs>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="240" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="sum of polyIndex" x="320" y="40"/>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1_" x="240" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="sum of one" x="320" y="120"/>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayU1__" x="240" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="sum of key velocities (via modulation)" x="320" y="200"/>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayU1___" x="240" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="parameter on parent propagation to polyphonic voices" x="320" y="280"/>
+   <nets>
+      <net>
+         <source name="subpatch_polyindex_sub1 polyIndexSum"/>
+         <dest name="displayU1 in"/>
+      </net>
+      <net>
+         <source name="subpatch_polyindex_sub1 oneSum"/>
+         <dest name="displayU1_ in"/>
+      </net>
+      <net>
+         <source name="subpatch_polyindex_sub1 c_on_parent"/>
+         <dest name="displayU1___ in"/>
+      </net>
+      <net>
+         <source name="subpatch_polyindex_sub1 mod_by_velo"/>
+         <dest name="displayU1__ in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,0 +1,20 @@
+<objdefs>
+   <obj.normal id="c" sha="9d9590b9873dcd8223849722cb29734440c1cce8">
+      <sDescription>constant string</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <charptr32 name="out" description="string" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <table name="str"/>
+      </attribs>
+      <code.declaration><![CDATA[char *c = "%str%";
+]]></code.declaration>
+      <code.krate><![CDATA[%out% = c;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

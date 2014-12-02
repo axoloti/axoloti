@@ -1,0 +1,44 @@
+<objdefs>
+   <obj.normal id="*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e">
+      <sDescription>Multiply (attenuate) with a constant value</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.gain name="amp" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[%out%= ___SMMUL(%amp%,%in%)<<1;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="*c" sha="3ade427ae7291fdf62058c4243fe718758187105">
+      <sDescription>Multiply (attenuate) with a constant value</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map.gain name="amp" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.gain>
+      </params>
+      <attribs/>
+      <code.srate><![CDATA[%out%= ___SMMUL(%amp%,%in%)<<1;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

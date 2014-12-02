@@ -1,0 +1,135 @@
+<patch-1.0>
+   <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd1" x="112" y="84">
+      <params>
+         <frac32.u.map name="d" value="33.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="pitch envelope" x="224" y="84"/>
+   <comment type="patch/comment" sha="sha" name="combine note, envelope and lfo for oscillator pitch" x="336" y="140"/>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="112" y="168">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="pitch LFO" x="224" y="168"/>
+   <obj type="mix/mix 2" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe" name="mix11" x="336" y="168">
+      <params>
+         <frac32.u.map name="gain1" value="8.5"/>
+         <frac32.u.map name="gain2" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="oscillator" x="476" y="168"/>
+   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="476" y="182">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="filter with envelope" x="252" y="336"/>
+   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1_" x="14" y="364">
+      <params>
+         <frac32.u.map name="a" value="29.5"/>
+         <frac32.u.map name="d" value="49.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c2" x="140" y="364">
+      <params>
+         <frac32.u.map name="amp" value="17.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_1" x="252" y="364">
+      <params>
+         <frac32.s.map name="pitch" value="-6.0"/>
+         <frac32.u.map name="reso" value="59.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="14" y="532">
+      <params>
+         <frac32.u.map name="a" value="30.5"/>
+         <frac32.u.map name="d" value="56.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="amplitude envelope" x="126" y="532"/>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_2" x="378" y="602">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="448" y="602">
+      <params>
+         <frac32.u.map name="amp" value="34.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="518" y="602">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="keyb1 gate"/>
+         <dest name="envd1 trig"/>
+         <dest name="envahd1 gate"/>
+         <dest name="envahd1_ gate"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="saw_1 pitchm"/>
+      </net>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="mix11 bus_in"/>
+      </net>
+      <net>
+         <source name="envd1 env"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="mix11 in2"/>
+      </net>
+      <net>
+         <source name="lpf_1 out"/>
+         <dest name="vca_2 a"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="lpf_1 in"/>
+      </net>
+      <net>
+         <source name="envahd1_ env"/>
+         <dest name="*c2 in"/>
+      </net>
+      <net>
+         <source name="*c2 out"/>
+         <dest name="lpf_1 pitchm"/>
+      </net>
+      <net>
+         <source name="envahd1 env"/>
+         <dest name="vca_2 v"/>
+      </net>
+      <net>
+         <source name="vca_2 o"/>
+         <dest name="*c1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

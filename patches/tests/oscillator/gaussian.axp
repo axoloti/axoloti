@@ -1,0 +1,126 @@
+<patch-1.0>
+   <obj type="double" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2" name="double1" x="320" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c4" x="400" y="0">
+      <params>
+         <frac32.u.map name="amp" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gnoise~" sha="2e4a916b2cc13c0dfa77471e18fb43de2f382e62" name="gaussian_1" x="40" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="120" y="80">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s_v2" sha="375509bcb23b2f6a69f9cd82349f406464c8295e" name="scope_128s_v21" x="240" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="max" sha="6e94a93047c9310dc305d1794ea81db4225e0e1c" name="max1" x="400" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scope_1buffer" sha="a8100388e1218ba50352d7e1743cd1b7f37bacd4" name="scope_1buffer1" x="520" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="720" y="140">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="comment" sha="sha" name="off: gaussian white noise" x="760" y="140"/>
+   <comment type="comment" sha="sha" name="on: uniform white noise" x="760" y="160"/>
+   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="40" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c2" x="120" y="200">
+      <params>
+         <frac32.u.map name="amp" value="22.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="scope_128s_v2" sha="375509bcb23b2f6a69f9cd82349f406464c8295e" name="scope_128s_v21_" x="240" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="inmux2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f" name="inmux21" x="720" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c3" x="800" y="200">
+      <params>
+         <frac32.u.map name="amp" value="6.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="920" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="analyzer24db2" sha="ebec0496c981fe053637f2258879d50dc0661e73" name="analyzer24db21" x="600" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="gaussian_1 wave"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="scope_128s_v21 in"/>
+         <dest name="inmux21 i1"/>
+         <dest name="max1 in1"/>
+      </net>
+      <net>
+         <source name="rand_1 wave"/>
+         <dest name="*c2 in"/>
+      </net>
+      <net>
+         <source name="*c2 out"/>
+         <dest name="inmux21 i2"/>
+         <dest name="scope_128s_v21_ in"/>
+      </net>
+      <net>
+         <source name="inmux21 o"/>
+         <dest name="analyzer24db21 in"/>
+         <dest name="*c3 in"/>
+      </net>
+      <net>
+         <source name="*c3 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="inmux21 s"/>
+      </net>
+      <net>
+         <source name="max1 out"/>
+         <dest name="scope_1buffer1 in"/>
+         <dest name="double1 in"/>
+      </net>
+      <net>
+         <source name="*c4 out"/>
+         <dest name="max1 in2"/>
+      </net>
+      <net>
+         <source name="double1 out"/>
+         <dest name="*c4 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

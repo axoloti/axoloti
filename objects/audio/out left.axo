@@ -1,0 +1,22 @@
+<objdefs>
+   <obj.normal id="out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7">
+      <sDescription>Audio output, left channel (or mono)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="wave" description="Left channel"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <frac32.vu name="vu" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int j;
+for(j=0;j<BUFSIZE;j++){
+   AudioOutputLeft[j] += __SSAT(%wave%[j],28);
+}
+%vu%=%wave%[0];
+]]></code.krate>
+   </obj.normal>
+</objdefs>

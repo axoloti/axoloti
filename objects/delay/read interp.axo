@@ -1,0 +1,33 @@
+<objdefs>
+   <obj.normal id="read interp" sha="22a07dcbe5007bc4095bed25946486e7c98caf23">
+      <sDescription>delay read, linear interpolated</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="timem" description="delay time (fraction of total delayline size)"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="time" noLabel="true">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs>
+         <objref name="delayname"/>
+      </attribs>
+      <code.srate><![CDATA[      uint32_t tmp_d =  __USAT(%time% + %timem%,27);
+      uint32_t tmp_di = %delayname%.writepos - (tmp_d>>(27-%delayname%.LENGTHPOW)) - BUFSIZE + buffer_index -1;
+      uint32_t tmp_w1 = (tmp_d<<(%delayname%.LENGTHPOW+3)) & 0x3FFFFFFF;
+      uint32_t tmp_w2 = (1<<30) - tmp_w1;
+      int32_t tmp_a1 = %delayname%.array[tmp_di&%delayname%.LENGTHMASK]<<16;
+      int32_t tmp_a2 = %delayname%.array[(tmp_di+1)&%delayname%.LENGTHMASK]<<16;
+      int32_t tmp_r = ___SMMUL(tmp_a1,tmp_w1);
+      tmp_r = ___SMMLA(tmp_a2,tmp_w2,tmp_r);
+      %out%= tmp_r;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

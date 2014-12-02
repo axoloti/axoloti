@@ -1,0 +1,33 @@
+<patch-1.0>
+   <obj type="osc~" sha="48a545f7a28cac69c91560e873ac2754d450f408" name="osc_1" x="0" y="60">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="160" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="button1" sha="d7e5e78016948ecaade268473afb9502b7c75239" name="button11" x="0" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="load" sha="7e9a243e4b7d650ee243932589849d137ebd24" name="load1" x="120" y="200">
+      <params/>
+      <attribs>
+         <table attributeName="filename" table="load2.bin"/>
+      </attribs>
+   </obj>
+   <nets>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="dac_11 wave"/>
+      </net>
+      <net>
+         <source name="button11 out"/>
+         <dest name="load1 trig"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

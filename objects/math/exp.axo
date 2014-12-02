@@ -1,0 +1,42 @@
+<objdefs>
+   <obj.normal id="exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1">
+      <sDescription>exponent function, y=pow(2,(x/8)-2)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.positive name="a" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32 name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int8_t s = (%a%>>24)+4;
+uint8_t ei = %a%>>16;
+if (s>=0)
+     %result% = expt[ei]<<s;
+else %result% = expt[ei]>>(-s);
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="exp" sha="5643db429ae8ad03e3d2e4b1fa362999d16aeb32">
+      <sDescription>exponent function, y=pow(2,(x/8)-2)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer.positive name="a" description="input"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="result" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[int8_t s = (%a%>>24)+4;
+uint8_t ei = %a%>>16;
+if (s>=0)
+     %result% = expt[ei]<<s;
+else %result% = expt[ei]>>(-s);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

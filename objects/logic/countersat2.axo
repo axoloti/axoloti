@@ -1,0 +1,47 @@
+<objdefs>
+   <obj.normal id="countersat2" sha="e386dfb4004d42015b0b5cec0ee2c2bfeb39e35e">
+      <sDescription>saturating up/down counter</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="inc" description="increment trigger"/>
+         <bool32.rising name="dec" description="decrement trigger"/>
+         <bool32.rising name="r" description="reset"/>
+      </inlets>
+      <outlets>
+         <int32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <int32 name="maximum" noLabel="true">
+            <MinValue i="0"/>
+            <MaxValue i="65536"/>
+         </int32>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[   int ntrig;
+   int rtrig;
+   int dtrig;
+   int count;
+]]></code.declaration>
+      <code.init><![CDATA[    count=0;
+   ntrig = 0;
+   dtrig = 0;
+   rtrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%inc%>0) && !ntrig) {
+   count++; if (count>=%maximum%) {count = %maximum%-1; }
+   ntrig=1;
+}
+else if (!(%inc%>0)) ntrig=0;
+if ((%dec%>0) && !dtrig) {
+   count--; if (count<0) {count = 0;}
+   dtrig=1;
+}
+else if (!(%dec%>0)) dtrig=0;
+if ((%r%>0) && !rtrig) {count=0; rtrig = 1;}
+else if (!(%r%>0)) rtrig=0;
+%o%= count;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

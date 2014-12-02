@@ -1,0 +1,37 @@
+<objdefs>
+   <obj.normal id="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea">
+      <sDescription>2-pole resonant low-pass filter (biquad), filter updated at k-rate</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="filter input"/>
+         <frac32 name="pitchm" description="pitch modulation"/>
+         <frac32 name="resom" description="filter resonance"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="filter output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map name="pitch">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map>
+         <frac32.u.map.filterq name="reso">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map.filterq>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[data_filter_biquad_A fd;
+]]></code.declaration>
+      <code.init><![CDATA[  init_filter_biquad_A(&fd);
+]]></code.init>
+      <code.krate><![CDATA[  {
+      int32_t freq;
+      MTOF(%pitch% + %pitchm%,freq);
+      f_filter_biquad_A(&fd,%in%,%out%,freq,INT_MAX - (__USAT(%resom% + %reso%,27)<<4));
+   }
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,0 +1,54 @@
+<html>
+<body>
+        <h1>The directory tree</h1>
+        <ul>
+            <li>chibios : you can download this from internet (version 2.6.3)
+                unpack the fatfs zip in chibios!
+            <li>firmware : the C firmware running on the board
+            <li>objects : all the objects you can use in a patch. This is XML containing the relevant C-code and definition of inlets, outlets, parameters...
+            <li>patch : here the current document is compiled
+            <li>patches : example documents!
+            <li>platform_xxxx : scripts and binaries for every platform. They are executed with the Axoloti root folder as working directory!
+            <li>src : the GUI source code (in JAVA)
+            <li>dist : the Java executable
+        </ul>
+		
+		<h1>For Windows</h1>
+		Contents of the platform_win directory:
+		<ul>
+		<li>compile_firmware.bat
+		<li>compile_gui.bat
+		<li>compile_patch.bat
+		<li>dfu-util.exe : for flashing the firmware via the DFU interface
+		<li>gcc-arm-none-eabi-4_8-2014q2 
+			<ul> 
+				<li>arm-none-eabi
+				<li>bin
+				<li>lib
+				<li>share
+			</ul>
+		<li>libusb-1.0.dll : needed for dfu-util
+		<li>oem112.inf
+		<li>openocd : needed for flashing the firmware via the STLink interface (usually not needed)
+		<li>path.bat : set the path for the compiler
+		<li>upload_fw_dfu.bat
+		<li>upload_fw_stlink.bat
+		<li>yagarto-tools
+			<ul>
+				<li>bin
+					<ul>
+						<li>copying.txt
+						<li>cp.exe
+						<li>echo
+						<li>make.exe
+						<li>mkdir.exe
+						<li>msys-1.0.dll
+						<li>rm.exe
+						<li>sh.exe
+						<li>source.txt
+						<li>touch.exe
+					</ul>
+			</ul>
+		<li>zadig.html : download link for Zadig
+		</body>
+		</html>

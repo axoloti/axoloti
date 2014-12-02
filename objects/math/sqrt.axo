@@ -1,0 +1,42 @@
+<objdefs>
+   <obj.normal id="sqrt" sha="49e71e8498a85d74d8ac30d3563c4f1e29c34a3c">
+      <sDescription>square root (of absolute value), y = 8*sqrt(x)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32 name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[int32_t ai = %in%>0?%in%:-%in%;
+float aif = ai;
+aif *= (1<<27);
+aif = _VSQRTF(aif);
+%out%= (int)aif;
+]]></code.krate>
+   </obj.normal>
+   <obj.normal id="sqrt" sha="4f48bc4fdb1725807a923dfb6e48225df40a992c">
+      <sDescription>square root (of absolute value), y = 8*sqrt(x)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="in"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="out" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.srate><![CDATA[int32_t ai = %in%>0?%in%:-%in%;
+float aif = ai;
+aif *= (1<<27);
+aif = _VSQRTF(aif);
+%out%= (int)aif;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

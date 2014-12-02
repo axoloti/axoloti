@@ -1,0 +1,27 @@
+<objdefs>
+   <obj.normal id="sel dial 2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55">
+      <sDescription>selectable constant. Output is v1 if s&gt;0, otherwise v0.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="s" description="select"/>
+      </inlets>
+      <outlets>
+         <frac32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="v0">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.u.map name="v1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.krate><![CDATA[   %o%= (%s% > 0)?%v1%:%v0%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

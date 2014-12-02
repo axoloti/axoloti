@@ -1,0 +1,38 @@
+<objdefs>
+   <obj.normal id="sine r" sha="7b6e23eed2c3410327bbbfab9ad452431b5a33aa">
+      <sDescription>sine wave LFO, linear interpolated table, pitch input, reset input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.bipolar name="pitchm" description="pitch modulation"/>
+         <bool32.rising name="reset" description="reset phase"/>
+         <frac32.bipolar name="phase" description="phase for reset"/>
+      </inlets>
+      <outlets>
+         <frac32.bipolar name="wave" description="sine wave" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.lfopitch name="pitch" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.lfopitch>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[uint32_t Phase;uint32_t r;
+]]></code.declaration>
+      <code.init><![CDATA[Phase = 0;]]></code.init>
+      <code.krate><![CDATA[      if (%reset% && r) {
+         Phase = %phase% << 4;
+         r = 0;
+      } else {
+         if (!%reset%) r = 1;
+     }   {      int32_t freq;
+      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+      Phase += freq>>2;
+      int32_t r;
+      SINE2TINTERP(Phase,r)
+      %wave%= (r>>4);
+   }]]></code.krate>
+   </obj.normal>
+</objdefs>

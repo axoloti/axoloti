@@ -1,0 +1,45 @@
+<html>
+<body>            
+        <h2>Documentation for developers</h2>
+        <h3>Abbreviations</h3>
+        <ul><li>PEX : parameter exchange. Parameters can be adjusted by the GUI, by MIDI, by recalling presets, and by "scripts". PEX keeps it all in sync.
+            <li>AXO : short for Axoloti...
+        </ul>
+        
+        <h3>Object creation search order</h3>
+        If the object name starts with "./" or "../"
+        <ul>
+            <li>the path relative to the current document path will be searched for a ".axo" file
+            <li>the path relative to the current document path will be searched for a ".axp" file                
+        </ul>
+        If the object name does not start with "./" or "../"
+        <ul>
+            <li>When opening a document, or pasting from the clipboard, the "SHA" 
+                hash stored in the document will be matched against objects 
+                pre-loaded from the path. The "SHA hash" of an object is unique
+                to the functional implementation of the object.
+                The pre-loaded object may have a different name, or changed 
+                documentation, but since the functional implementation is the same, 
+                it is probably an update of naming or documentation of the object. 
+            <li>Objects in the search path
+            <li>Patches in the search path
+        </ul>
+        <h3>Memory map</h3>
+        After startup, SRAM1 is remapped to 0x00000000. This boosts the performance when executing from SRAM1.
+        <ul><li>0x20000000-0x20001FFF : vector table
+            <li>0x20000200-0x2000BFFF : firmware reserved memory
+            <li>0x20010000-0x2001BFFF : patch memory (preferred area for execution)
+            <li>0x20010001 : patch init function entry point
+            <li>0x10000000-0x1000DFFF : patch memory (CCM RAM, can't execute)
+            <li>0x1000F000-0x1000FFFF : firmware reserved memory
+            </ul>
+        Important: CCM SRAM can't be used for DMA. This does not give errors/warnings, just invalid data!
+        <h3>Future work: improving performance</h3>
+        <ul><li>For the BLIT oscillators, rearranging the BLIT table to successive polyphase samples, will enable use of the FLASH memory data cache.
+            <li>Parameter data preparation in PEX callback function.
+            <li>Biquad filter coefficient computation can be improved a lot!
+            <li>The biquad filter itself also has room for improvement
+            <li>eliminating redundant fractional number rightshift+leftshift (needs extra inlet/outlet metadata)
+        </ul>
+		</body>
+		</html>

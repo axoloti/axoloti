@@ -1,0 +1,191 @@
+<patch-1.0>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="252" y="14">
+      <params>
+         <frac32.u.map name="value" value="2.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="42" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="168" y="84">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mux/mux 3" sha="6010724173dab3a9f46f0b50f27efcab0bb2e96c" name="inmux21" x="322" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix11" x="406" y="84">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp" sha="219ae48267404fac1e204a0ae6f3f1363e789297" name="lpf_1" x="602" y="84">
+      <params>
+         <frac32.s.map name="pitch" value="-8.0"/>
+         <frac32.u.map name="reso" value="31.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="168" y="196">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/hp" sha="2c3219893ab8ef42b46eb323284a077f0ba55d54" name="hpf_1" x="602" y="224">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+         <frac32.u.map name="reso" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="168" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/bp" sha="dd559d9587821150be4157ac2ba7e2b4b6de6fae" name="bpf_1" x="574" y="350">
+      <params>
+         <frac32.s.map name="pitch" value="20.0"/>
+         <frac32.u.map name="reso" value="53.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/hp1" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass_1" x="574" y="490">
+      <params>
+         <frac32.u.map name="freq" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/i radio 8 v" sha="1e72dd4de547d6bc356161613f0080b899628801" name="i_1" x="728" y="504">
+      <params>
+         <int32.vradio name="value" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp1" sha="91e2ecaa66340906540043ea41ac3987ce0aef17" name="lowpass_1" x="574" y="574">
+      <params>
+         <frac32.s.map name="freq" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="532" y="672">
+      <params>
+         <frac32.s.map name="pitch" value="1.0"/>
+         <frac32.u.map name="reso" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mux/mux 7" sha="6f39b94067a962620fe870a132b5c564494e39a8" name="inmux61" x="728" y="672">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="812" y="672">
+      <params>
+         <frac32.u.map name="amp" value="25.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_11" x="868" y="672">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="770" y="826">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b" sha="375509bcb23b2f6a69f9cd82349f406464c8295e" name="scope_128s1" x="840" y="826">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="lpf_1 in"/>
+         <dest name="hpf_1 in"/>
+         <dest name="bpf_1 in"/>
+         <dest name="hipass_1 in"/>
+         <dest name="lowpass_1 in"/>
+         <dest name="vcf3_1 in"/>
+         <dest name="inmux61 i5"/>
+      </net>
+      <net>
+         <source name="lpf_1 out"/>
+         <dest name="inmux61 i0"/>
+      </net>
+      <net>
+         <source name="hpf_1 out"/>
+         <dest name="inmux61 i1"/>
+      </net>
+      <net>
+         <source name="keyb1 note"/>
+         <dest name="square_1 pitchm"/>
+         <dest name="osc_1 pitchm"/>
+      </net>
+      <net>
+         <source name="square_1 wave"/>
+         <dest name="inmux21 i1"/>
+      </net>
+      <net>
+         <source name="rand_1 wave"/>
+         <dest name="inmux21 i2"/>
+      </net>
+      <net>
+         <source name="bpf_1 out"/>
+         <dest name="inmux61 i2"/>
+      </net>
+      <net>
+         <source name="hipass_1 out"/>
+         <dest name="inmux61 i3"/>
+      </net>
+      <net>
+         <source name="lowpass_1 out"/>
+         <dest name="inmux61 i4"/>
+      </net>
+      <net>
+         <source name="inmux61 o"/>
+         <dest name="scope_128s1 in"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="inmux21 o"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="vcf3_1 out"/>
+         <dest name="inmux61 i6"/>
+      </net>
+      <net>
+         <source name="osc_1 wave"/>
+         <dest name="inmux21 i0"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="inmux21 s"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="scope_128s1 hold"/>
+      </net>
+      <net>
+         <source name="i_1 out"/>
+         <dest name="inmux61 s"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_11 left"/>
+         <dest name="dac_11 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

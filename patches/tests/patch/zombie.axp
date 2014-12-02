@@ -1,0 +1,31 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="20">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="zombietype" sha="1234567890" name="zombiename" x="140" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS_1" x="260" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="zombiename out"/>
+         <source name="zombiename out2"/>
+         <dest name="displayS_1 in"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="zombiename in1"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>
