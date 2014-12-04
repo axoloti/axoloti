@@ -23,4 +23,10 @@ unzip -o coreutils-5.3.0-bin.zip
 wget -nc http://dfu-util.sourceforge.net/releases/dfu-util-0.8-binaries/win32-mingw32/dfu-util.exe
 wget -nc http://dfu-util.sourceforge.net/releases/dfu-util-0.8-binaries/win32-mingw32/libusb-1.0.dll
 
-echo "if you need a pre-compiled openOCD, get it from here: http://www.freddiechopin.info/en/download/category/4-openocd"
+mv dfu-util.exe bin
+mv libusb-1.0.dll bin
+
+wget -nc http://www.emb4fun.de/archive/stlink/download/stlink-20130324-win.zip
+unzip -o stlink-20130324-win.zip
+mv stlink-20130324-win/bin/st-flash.exe bin
+
