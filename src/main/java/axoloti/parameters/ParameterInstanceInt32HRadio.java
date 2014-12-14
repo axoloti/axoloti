@@ -17,8 +17,6 @@
  */
 package axoloti.parameters;
 
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
 import components.control.HRadioComponent;
 import org.simpleframework.xml.Attribute;
 
@@ -28,8 +26,6 @@ import org.simpleframework.xml.Attribute;
  */
 public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
 
-    protected HRadioComponent dial;
-
     public ParameterInstanceInt32HRadio() {
     }
 
@@ -37,42 +33,9 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
         super(v);
     }
 
-    int min = 0;
-    int max = 64;
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        dial = CreateControl();
-        add(dial);
-        updateV();
-        dial.addMouseListener(popupMouseListener);
-
-        dial.addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                if (value.getInt() != dial.getValue()) {
-                    value.setInt((int) dial.getValue());
-                    needsTransmit = true;
-                }
-            }
-        });
-    }
-
-    @Override
-    public void CopyValueFrom(ParameterInstance p) {
-        super.CopyValueFrom(p);
-        if (p instanceof ParameterInstanceInt32HRadio) {
-            ParameterInstanceInt32HRadio p1 = (ParameterInstanceInt32HRadio) p;
-//            min = p1.min;
-//            max = p1.max;
-        }
-    }
-
     @Override
     public void updateV() {
-        dial.setValue(value.getInt());
+        ctrl.setValue(value.getInt());
     }
 
     @Override
@@ -99,21 +62,12 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void ShowPreset(int i) {
-    }
-
-    @Override
-    public void IncludeInPreset() {
-    }
-
-    @Override
-    public void ExcludeFromPreset() {
-    }
-
-    @Override
     public HRadioComponent CreateControl() {
-//        return new HRadioComponent(0,8);
         return new HRadioComponent(0, ((ParameterInt32HRadio) parameter).MaxValue.getInt());
     }
 
+    @Override
+    public HRadioComponent getControlComponent() {
+        return (HRadioComponent) ctrl;
+    }
 }

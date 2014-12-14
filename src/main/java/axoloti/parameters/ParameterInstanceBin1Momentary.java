@@ -19,8 +19,6 @@ package axoloti.parameters;
 
 import axoloti.datatypes.Int32;
 import axoloti.datatypes.Value;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
 import components.control.PulseButtonComponent;
 import org.simpleframework.xml.Attribute;
 
@@ -30,32 +28,11 @@ import org.simpleframework.xml.Attribute;
  */
 public class ParameterInstanceBin1Momentary extends ParameterInstanceInt32 {
 
-    private PulseButtonComponent button;
-
     public ParameterInstanceBin1Momentary() {
     }
 
     public ParameterInstanceBin1Momentary(@Attribute(name = "value") int v) {
         super(v);
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        button = CreateControl();
-        add(button);
-
-        button.addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                if (value.getInt() != button.getValue()) {
-                    value.setInt((int) button.getValue());
-                    needsTransmit = true;
-                }
-            }
-        });
-        updateV();
     }
 
     @Override
@@ -82,20 +59,8 @@ public class ParameterInstanceBin1Momentary extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void ShowPreset(int i) {
-    }
-
-    @Override
-    public void IncludeInPreset() {
-    }
-
-    @Override
-    public void ExcludeFromPreset() {
-    }
-
-    @Override
     public void updateV() {
-        button.setValue(value.getInt());
+        ctrl.setValue(value.getInt());
     }
 
     @Override
@@ -107,5 +72,10 @@ public class ParameterInstanceBin1Momentary extends ParameterInstanceInt32 {
     @Override
     public PulseButtonComponent CreateControl() {
         return new PulseButtonComponent();
+    }
+
+    @Override
+    public PulseButtonComponent getControlComponent() {
+        return (PulseButtonComponent) ctrl;
     }
 }

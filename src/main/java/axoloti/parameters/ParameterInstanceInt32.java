@@ -17,10 +17,13 @@
  */
 package axoloti.parameters;
 
+import axoloti.Preset;
 import axoloti.datatypes.Int32;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
 import axoloti.object.AxoObjectInstance;
+import java.awt.Color;
+import javax.swing.UIManager;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -67,4 +70,47 @@ public abstract class ParameterInstanceInt32 extends ParameterInstance<Int32> {
             value.setRaw(p1.value.getRaw());
         }
     }
+
+    @Override
+    public void setOnParent(boolean b) {
+        super.setOnParent(b);
+        if (b) {
+            setForeground(Color.blue);
+        } else {
+            setForeground(Color.black);
+        }
+    }
+
+    @Override
+    public void ShowPreset(int i) {
+        this.presetEditActive = i;
+        if (i > 0) {
+            Preset p = GetPreset(presetEditActive);
+            if (p != null) {
+                setBackground(Color.yellow);
+                getControlComponent().setValue(p.value.getDouble());
+            } else {
+                setBackground(UIManager.getColor("Panel.background"));
+                getControlComponent().setValue(value.getDouble());
+            }
+        } else {
+            setBackground(UIManager.getColor("Panel.background"));
+            getControlComponent().setValue(value.getDouble());
+        }
+    }
+
+    @Override
+    public void handleAdjustment() {
+        Preset p = GetPreset(presetEditActive);
+        if (p != null) {
+            p.value = new ValueInt32((int) getControlComponent().getValue());
+        } else {
+            if (value.getInt() != (int) getControlComponent().getValue()) {
+                value.setInt((int) getControlComponent().getValue());
+                needsTransmit = true;
+                UpdateUnit();
+            }
+        }
+    }
+
 }

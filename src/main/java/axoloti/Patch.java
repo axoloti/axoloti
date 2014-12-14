@@ -1177,7 +1177,7 @@ public class Patch {
                 ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
-                if ((p.onParent != null) && (p.onParent)) {
+                if (p.isOnParent()) {
                     ao.params.add(p.getParameterForParent());
                 }
             }
@@ -1297,7 +1297,7 @@ public class Patch {
                 ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
-                if ((p.onParent != null) && (p.onParent)) {
+                if (p.isOnParent()) {
                     ao.params.add(p.getParameterForParent());
                 }
             }

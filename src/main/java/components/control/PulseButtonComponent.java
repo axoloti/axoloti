@@ -52,13 +52,17 @@ public class PulseButtonComponent extends ACtrlComponent {
     @Override
     protected void mousePressed(MouseEvent e) {
         grabFocus();
-        setValue(1.0);
+        if (e.getButton() == 1) {
+            setValue(1.0);
+        }
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
-        if (!e.isShiftDown()) {
-            setValue(0.0);
+        if (e.getButton() == 1) {
+            if (!e.isShiftDown()) {
+                setValue(0.0);
+            }
         }
     }
 

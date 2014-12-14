@@ -42,7 +42,6 @@ public class ParameterInt32HRadio extends Parameter<Int32> {
     @Override
     public ParameterInstance InstanceFactory() {
         ParameterInstanceInt32HRadio b = new ParameterInstanceInt32HRadio();
-        b.max = MaxValue.getInt();
         return b;
     }
 

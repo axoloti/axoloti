@@ -51,11 +51,6 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap {
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-    }
-
-    @Override
     public String GetPFunction() {
         if (pfunction == null) {
             return "pfun_signed_clamp";

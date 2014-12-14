@@ -96,7 +96,7 @@ public class CheckboxComponent extends ACtrlComponent {
                 selIndex = i;
             }
         }
-        System.out.println("cb" + value);
+        //System.out.println("cb" + value);
     }
 
     @Override

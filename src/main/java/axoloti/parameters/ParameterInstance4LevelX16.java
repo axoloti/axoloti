@@ -19,8 +19,6 @@ package axoloti.parameters;
 
 import axoloti.datatypes.Int32;
 import axoloti.datatypes.Value;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
 import components.control.Checkbox4StatesComponent;
 import org.simpleframework.xml.Attribute;
 
@@ -30,8 +28,6 @@ import org.simpleframework.xml.Attribute;
  */
 public class ParameterInstance4LevelX16 extends ParameterInstanceInt32 {
 
-    private Checkbox4StatesComponent checkboxes;
-
     public ParameterInstance4LevelX16() {
     }
 
@@ -40,30 +36,8 @@ public class ParameterInstance4LevelX16 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        checkboxes = CreateControl();
-        add(checkboxes);
-
-        checkboxes.addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                if (value.getInt() != checkboxes.getValue()) {
-                    value.setInt((int) checkboxes.getValue());
-                    needsTransmit = true;
-                }
-            }
-        });
-
-        checkboxes.addMouseListener(popupMouseListener);
-        updateV();
-    }
-
-    @Override
     public Checkbox4StatesComponent CreateControl() {
-        Checkbox4StatesComponent ACtrl = new Checkbox4StatesComponent(0, 16);
-        return ACtrl;
+        return new Checkbox4StatesComponent(0, 16);
     }
 
     @Override
@@ -94,16 +68,8 @@ public class ParameterInstance4LevelX16 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void IncludeInPreset() {
-    }
-
-    @Override
-    public void ExcludeFromPreset() {
-    }
-
-    @Override
     public void updateV() {
-        checkboxes.setValue(value.getInt());
+        ctrl.setValue(value.getInt());
     }
 
     @Override
@@ -112,4 +78,8 @@ public class ParameterInstance4LevelX16 extends ParameterInstanceInt32 {
         updateV();
     }
 
+    @Override
+    public Checkbox4StatesComponent getControlComponent() {
+        return (Checkbox4StatesComponent) ctrl;
+    }
 }

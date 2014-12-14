@@ -109,8 +109,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        if (this instanceof AxoObjectInstancePatcher){
-            ((AxoObjectInstancePatcher)this).updateObj1();
+        if (this instanceof AxoObjectInstancePatcher) {
+            ((AxoObjectInstancePatcher) this).updateObj1();
         }
         if (parameterInstances == null) {
             parameterInstances = new ArrayList<ParameterInstance>();
@@ -480,7 +480,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 //        if (!classname.equals("one"))
         c += "parent2 = parent;\n";
         for (ParameterInstance p : parameterInstances) {
-            if (!((p.onParent != null) && (p.onParent) && (enableOnParent))) {
+            if (!((p.isOnParent() && enableOnParent))) {
                 c += p.GenerateCodeInit("parent2->", "");
             }
         }
@@ -535,7 +535,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 s = s.replace("%" + i.GetLabel() + "%", i.GetCName());
             }
             for (ParameterInstance p : parameterInstances) {
-                if ((p.onParent != null) && (p.onParent) && (enableOnParent)) {
+                if (p.isOnParent() && enableOnParent) {
                     s = s.replace("%" + p.name + "%", OnParentAccess + p.variableName(vprefix, enableOnParent));
                 } else {
                     s = s.replace("%" + p.name + "%", p.variableName(vprefix, enableOnParent));
@@ -574,7 +574,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 }
             }
             for (ParameterInstance p : parameterInstances) {
-                if ((p.onParent != null) && (p.onParent) && (enableOnParent)) {
+                if (p.isOnParent() && enableOnParent) {
                     s = s.replace("%" + p.name + "%", OnParentAccess + p.variableName(vprefix, enableOnParent));
                 } else {
                     s = s.replace("%" + p.name + "%", p.variableName(vprefix, enableOnParent));

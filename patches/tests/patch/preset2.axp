@@ -1,21 +1,22 @@
 <patch-1.0>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="20">
+   <comment type="patch/comment" sha="sha" name="recall a preset from inside a patch" x="14" y="28"/>
+   <obj type="ctrl/i radio 8 h" sha="ea2c1e474ffa7f12f0631acd25dc25c667c62408" name="i_1" x="14" y="56">
       <params>
-         <frac32.u.map name="value" value="3.0"/>
+         <int32.hradio name="value" value="3"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="40" y="100">
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="button_1" x="56" y="112">
       <params>
-         <bool32.tgl name="b" value="0"/>
+         <bool32.mom name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="preset" sha="56452d6d8bcb5f68e402b3ee6cded3649d214aaf" name="preset1" x="160" y="100">
+   <obj type="patch/preset" sha="56452d6d8bcb5f68e402b3ee6cded3649d214aaf" name="preset1" x="140" y="112">
       <params/>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="40" y="220">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="42" y="224">
       <params>
          <frac32.u.map name="value" value="3.0">
             <presets>
@@ -33,22 +34,22 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="160" y="220">
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="126" y="224">
       <params/>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source name="cb11 o"/>
-         <dest name="preset1 trig"/>
+         <source name="c2 out"/>
+         <dest name="displayU1 in"/>
       </net>
       <net>
-         <source name="c1 out"/>
+         <source name="i_1 out"/>
          <dest name="preset1 preset"/>
       </net>
       <net>
-         <source name="c2 out"/>
-         <dest name="displayU1 in"/>
+         <source name="button_1 o"/>
+         <dest name="preset1 trig"/>
       </net>
    </nets>
    <settings>

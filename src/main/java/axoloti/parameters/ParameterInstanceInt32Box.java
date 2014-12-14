@@ -17,8 +17,6 @@
  */
 package axoloti.parameters;
 
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
 import components.control.NumberBoxComponent;
 import org.simpleframework.xml.Attribute;
 
@@ -27,8 +25,6 @@ import org.simpleframework.xml.Attribute;
  * @author Johannes Taelman
  */
 public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
-
-    protected NumberBoxComponent dial;
 
     public ParameterInstanceInt32Box() {
     }
@@ -41,38 +37,8 @@ public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
     int max = 64;
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        dial = CreateControl();
-        add(dial);
-        updateV();
-        dial.addMouseListener(popupMouseListener);
-
-        dial.addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                if (value.getInt() != dial.getValue()) {
-                    value.setInt((int) dial.getValue());
-                    needsTransmit = true;
-                }
-            }
-        });
-    }
-
-    @Override
-    public void CopyValueFrom(ParameterInstance p) {
-        super.CopyValueFrom(p);
-        if (p instanceof ParameterInstanceInt32Box) {
-            ParameterInstanceInt32Box p1 = (ParameterInstanceInt32Box) p;
-//            min = p1.min;
-//            max = p1.max;
-        }
-    }
-
-    @Override
     public void updateV() {
-        dial.setValue(value.getInt());
+        ctrl.setValue(value.getInt());
     }
 
     @Override
@@ -99,20 +65,12 @@ public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void ShowPreset(int i) {
-    }
-
-    @Override
-    public void IncludeInPreset() {
-    }
-
-    @Override
-    public void ExcludeFromPreset() {
-    }
-
-    @Override
     public NumberBoxComponent CreateControl() {
         return new NumberBoxComponent(0.0, min, max, 1.0);
     }
 
+    @Override
+    public NumberBoxComponent getControlComponent() {
+        return (NumberBoxComponent) ctrl;
+    }
 }

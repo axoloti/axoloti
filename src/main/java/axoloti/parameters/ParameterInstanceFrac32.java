@@ -42,7 +42,6 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
     ArrayList<Modulation> modulators;
 
     final ValueFrac32 value = new ValueFrac32();
-    int presetEditActive = 0;
 
     public ParameterInstanceFrac32(@Attribute(name = "value") double v) {
         value.setDouble(v);
@@ -90,36 +89,6 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
         if (((ParameterFrac32) parameter).DefaultValue != null) {
             value.setRaw(((ParameterFrac32) parameter).DefaultValue.getRaw());
         }
-    }
-
-    @Override
-    public void IncludeInPreset() {
-        if (presetEditActive > 0) {
-            Preset p = GetPreset(presetEditActive);
-            if (p != null) {
-                return;
-            }
-            if (presets == null) {
-                presets = new ArrayList<Preset>();
-            }
-            p = new Preset(presetEditActive, value);
-            presets.add(p);
-        }
-        ShowPreset(presetEditActive);
-    }
-
-    @Override
-    public void ExcludeFromPreset() {
-        if (presetEditActive > 0) {
-            Preset p = GetPreset(presetEditActive);
-            if (p != null) {
-                presets.remove(p);
-                if (presets.isEmpty()) {
-                    presets = null;
-                }
-            }
-        }
-        ShowPreset(presetEditActive);
     }
 
     public void updateModulation(int index, double amount) {
@@ -176,4 +145,17 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
         }
     }
 
+    @Override
+    public void handleAdjustment() {
+        Preset p = GetPreset(presetEditActive);
+        if (p != null) {
+            p.value = new ValueFrac32(getControlComponent().getValue());
+        } else {
+            if (value.getDouble() != getControlComponent().getValue()) {
+                value.setDouble(getControlComponent().getValue());
+                needsTransmit = true;
+                UpdateUnit();
+            }
+        }
+    }
 }

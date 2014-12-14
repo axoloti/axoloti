@@ -26,6 +26,8 @@ import axoloti.utils.CharEscape;
 import components.AssignPresetMenuItems;
 import components.LabelComponent;
 import components.control.ACtrlComponent;
+import components.control.ACtrlEvent;
+import components.control.ACtrlListener;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -36,7 +38,6 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
@@ -55,7 +56,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel {
     @Attribute
     public String name;
     @Attribute(required = false)
-    public Boolean onParent;
+    private Boolean onParent;
     protected int index;
     public Parameter<dt> parameter;
     @ElementList(required = false)
@@ -66,6 +67,8 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel {
     LabelComponent valuelbl = new LabelComponent("123456789");
     NativeToReal convs[];
     int selectedConv = 0;
+    int presetEditActive = 0;
+    ACtrlComponent ctrl;
 
     public ParameterInstance() {
     }
@@ -131,6 +134,17 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel {
         }
 //        if (axoObj.patch != null)
 //            ShowPreset(axoObj.patch.presetNo);
+
+        ctrl = CreateControl();
+        add(getControlComponent());
+        getControlComponent().addMouseListener(popupMouseListener);
+        getControlComponent().addACtrlListener(new ACtrlListener() {
+            @Override
+            public void ACtrlAdjusted(ACtrlEvent e) {
+                handleAdjustment();
+            }
+        });
+        updateV();
     }
 
     public void applyDefaultValue() {
@@ -140,9 +154,33 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel {
         return needsTransmit;
     }
 
-    abstract public void IncludeInPreset();
+    public void IncludeInPreset() {
+        if (presetEditActive > 0) {
+            Preset p = GetPreset(presetEditActive);
+            if (p != null) {
+                return;
+            }
+            if (presets == null) {
+                presets = new ArrayList<Preset>();
+            }
+            p = new Preset(presetEditActive, getValue());
+            presets.add(p);
+        }
+        ShowPreset(presetEditActive);
+    }
 
-    abstract public void ExcludeFromPreset();
+    public void ExcludeFromPreset() {
+        if (presetEditActive > 0) {
+            Preset p = GetPreset(presetEditActive);
+            if (p != null) {
+                presets.remove(p);
+                if (presets.isEmpty()) {
+                    presets = null;
+                }
+            }
+        }
+        ShowPreset(presetEditActive);
+    }
 
     public byte[] TXData() {
         needsTransmit = false;
@@ -376,6 +414,10 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel {
         JMenu m_preset = new JMenu("Preset");
         new AssignPresetMenuItems(this, m_preset);
         m.add(m_preset);
-
     }
+
+    abstract public ACtrlComponent getControlComponent();
+
+    abstract public void handleAdjustment();
+
 }

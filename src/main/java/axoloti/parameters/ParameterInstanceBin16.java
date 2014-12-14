@@ -19,8 +19,6 @@ package axoloti.parameters;
 
 import axoloti.datatypes.Int32;
 import axoloti.datatypes.Value;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
 import components.control.CheckboxComponent;
 import org.simpleframework.xml.Attribute;
 
@@ -30,8 +28,6 @@ import org.simpleframework.xml.Attribute;
  */
 public class ParameterInstanceBin16 extends ParameterInstanceInt32 {
 
-    private CheckboxComponent checkboxes;
-
     public ParameterInstanceBin16() {
     }
 
@@ -40,30 +36,8 @@ public class ParameterInstanceBin16 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        checkboxes = CreateControl();
-        add(checkboxes);
-
-        checkboxes.addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                if (value.getInt() != checkboxes.getValue()) {
-                    value.setInt((int) checkboxes.getValue());
-                    needsTransmit = true;
-                }
-            }
-        });
-
-        checkboxes.addMouseListener(popupMouseListener);
-        updateV();
-    }
-
-    @Override
     public CheckboxComponent CreateControl() {
-        CheckboxComponent ACtrl = new CheckboxComponent(0, 16);
-        return ACtrl;
+        return new CheckboxComponent(0, 16);
     }
 
     @Override
@@ -90,20 +64,8 @@ public class ParameterInstanceBin16 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void ShowPreset(int i) {
-    }
-
-    @Override
-    public void IncludeInPreset() {
-    }
-
-    @Override
-    public void ExcludeFromPreset() {
-    }
-
-    @Override
     public void updateV() {
-        checkboxes.setValue(value.getInt());
+        ctrl.setValue(value.getInt());
     }
 
     @Override
@@ -112,4 +74,8 @@ public class ParameterInstanceBin16 extends ParameterInstanceInt32 {
         updateV();
     }
 
+    @Override
+    public CheckboxComponent getControlComponent() {
+        return (CheckboxComponent) ctrl;
+    }
 }

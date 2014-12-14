@@ -21,15 +21,11 @@ import axoloti.Modulation;
 import axoloti.Modulator;
 import axoloti.Preset;
 import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueFrac32;
 import components.AssignMidiCCComponent;
 import components.AssignMidiCCMenuItems;
 import components.AssignModulatorComponent;
 import components.AssignModulatorMenuItems;
 import components.AssignPresetComponent;
-import components.control.ACtrlComponent;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
 import components.control.DialComponent;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -49,7 +45,6 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
 
     @Attribute(required = false)
     Integer MidiCC = null;
-    DialComponent dial;
     AssignMidiCCComponent midiAssign;
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
@@ -63,9 +58,8 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
     }
 
     @Override
-    public ACtrlComponent CreateControl() {
-        ACtrlComponent ACtrl = new DialComponent(0.0, getMin(), getMax(), getTick());
-        return ACtrl;
+    public DialComponent CreateControl() {
+        return new DialComponent(0.0, getMin(), getMax(), getTick());
     }
 
     @Override
@@ -93,8 +87,6 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        dial = new DialComponent(0.0, getMin(), getMax(), getTick());
-        add(dial);
         JPanel btns = new JPanel();
         btns.setLayout(new BoxLayout(btns, BoxLayout.PAGE_AXIS));
 
@@ -111,24 +103,6 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
 
 //        setComponentPopupMenu(new ParameterInstanceUInt7MapPopupMenu3(this));
         addMouseListener(popupMouseListener);
-        dial.addMouseListener(popupMouseListener);
-        dial.addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                Preset p = GetPreset(presetEditActive);
-                if (p != null) {
-                    p.value = new ValueFrac32(dial.getValue());
-                } else {
-                    if (value.getDouble() != dial.getValue()) {
-                        value.setDouble(dial.getValue());
-                        needsTransmit = true;
-                        UpdateUnit();
-                    }
-                }
-            }
-        });
-
-        setOnParent(isOnParent());
         updateV();
     }
 
@@ -145,8 +119,8 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
     @Override
     public void updateV() {
         super.updateV();
-        if (dial != null) {
-            dial.setValue(value.getDouble());
+        if (ctrl != null) {
+            ctrl.setValue(value.getDouble());
         }
     }
 
@@ -246,14 +220,14 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
             Preset p = GetPreset(presetEditActive);
             if (p != null) {
                 setBackground(Color.yellow);
-                dial.setValue(p.value.getDouble());
+                ctrl.setValue(p.value.getDouble());
             } else {
                 setBackground(UIManager.getColor("Panel.background"));
-                dial.setValue(value.getDouble());
+                ctrl.setValue(value.getDouble());
             }
         } else {
             setBackground(UIManager.getColor("Panel.background"));
-            dial.setValue(value.getDouble());
+            ctrl.setValue(value.getDouble());
         }
         presetAssign.repaint();
         /*
@@ -288,4 +262,8 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
         m.add(m2);
     }
 
+    @Override
+    public DialComponent getControlComponent() {
+        return (DialComponent) ctrl;
+    }
 }

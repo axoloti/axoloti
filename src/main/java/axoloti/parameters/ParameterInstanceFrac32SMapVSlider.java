@@ -20,9 +20,6 @@ package axoloti.parameters;
 import axoloti.Modulation;
 import axoloti.Modulator;
 import axoloti.Preset;
-import axoloti.datatypes.ValueFrac32;
-import components.control.ACtrlListener;
-import components.control.ACtrlEvent;
 import components.control.VSliderComponent;
 import java.awt.Color;
 import javax.swing.UIManager;
@@ -36,7 +33,6 @@ public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S
 
     @Attribute(required = false)
     Integer MidiCC = null;
-    protected VSliderComponent dial;
     //private JLabel lblCC;
 
     public ParameterInstanceFrac32SMapVSlider() {
@@ -50,31 +46,13 @@ public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        dial = CreateControl();
-        add(dial);
         SetMidiCC(MidiCC);
-        dial.addMouseListener(popupMouseListener);
-
-        dial.addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                Preset p = GetPreset(presetEditActive);
-                if (p != null) {
-                    p.value = new ValueFrac32(dial.getValue());
-                } else {
-                    if (value.getDouble() != dial.getValue()) {
-                        value.setDouble(dial.getValue());
-                        needsTransmit = true;
-                    }
-                }
-            }
-        });
     }
 
     @Override
     public void updateV() {
-        if (dial != null) {
-            dial.setValue(value.getDouble());
+        if (ctrl != null) {
+            ctrl.setValue(value.getDouble());
         }
     }
 
@@ -133,14 +111,14 @@ public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S
             Preset p = GetPreset(presetEditActive);
             if (p != null) {
                 setBackground(Color.yellow);
-                dial.setValue(p.value.getDouble());
+                ctrl.setValue(p.value.getDouble());
             } else {
                 setBackground(UIManager.getColor("Panel.background"));
-                dial.setValue(value.getDouble());
+                ctrl.setValue(value.getDouble());
             }
         } else {
             setBackground(UIManager.getColor("Panel.background"));
-            dial.setValue(value.getDouble());
+            ctrl.setValue(value.getDouble());
         }
         if ((presets != null) && (!presets.isEmpty())) {
 //            lblPreset.setVisible(true);
@@ -152,5 +130,10 @@ public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S
     @Override
     public VSliderComponent CreateControl() {
         return new VSliderComponent(0.0, getMin(), getMax(), getTick());
+    }
+
+    @Override
+    public VSliderComponent getControlComponent() {
+        return (VSliderComponent) ctrl;
     }
 }
