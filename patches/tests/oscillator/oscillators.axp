@@ -1,112 +1,112 @@
 <patch-1.0>
-   <obj type="keyb" sha="47bd98210bbdd2f31afd6baa726279bc5a8fc32a" name="keyb1" x="40" y="20">
+   <obj type="keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc2_1" x="200" y="20">
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc2_1" x="182" y="14">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1" x="200" y="120">
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="182" y="126">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="square~" sha="f0b93226767e21295522abd5f9b79ae4eee84326" name="square_1" x="200" y="200">
+   <obj type="square~" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="182" y="210">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="120" y="280">
+   <obj type="ctrl/i radio 8 v" sha="1e72dd4de547d6bc356161613f0080b899628801" name="i_1" x="378" y="224">
+      <params>
+         <int32.vradio name="value" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="98" y="294">
       <params>
          <frac32.u.map name="value" value="25.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="pwm~" sha="253d63a70217e07437c5d28ce6b93d59bf3e1" name="pwm_1" x="200" y="280">
+   <obj type="pwm~" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1" x="182" y="294">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="c1" x="440" y="340">
-      <params>
-         <frac32.s.map name="value" value="0.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb12" x="720" y="340">
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb12" x="700" y="336">
       <params>
          <bool32.tgl name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="phasor3~" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52" name="phasor3_1" x="160" y="380">
+   <obj type="osc/phasor" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52" name="phasor3_1" x="182" y="392">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="inmux8" sha="69835ed83d9a8603e491811298c8a155a05c4064" name="inmux41" x="400" y="420">
+   <obj type="mux/mux 8" sha="71acbf38e6eb8cb51ebdae0e107bac8b0eba477c" name="inmux41" x="378" y="420">
       <params/>
       <attribs/>
    </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c2" x="480" y="420">
+   <obj type="math/*c" sha="3ade427ae7291fdf62058c4243fe718758187105" name="*c2" x="462" y="420">
       <params>
          <frac32.u.map name="amp" value="32.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="lpf~" sha="219ae48267404fac1e204a0ae6f3f1363e789297" name="vcf3_1" x="600" y="420">
+   <obj type="filter/lp" sha="219ae48267404fac1e204a0ae6f3f1363e789297" name="vcf3_1" x="574" y="420">
       <params>
          <frac32.s.map name="pitch" value="36.0"/>
          <frac32.u.map name="reso" value="35.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="inmux2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f" name="inmux21" x="720" y="420">
+   <obj type="mux/mux 2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f" name="inmux21" x="700" y="420">
       <params/>
       <attribs/>
    </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="800" y="420">
+   <obj type="math/*c" sha="3ade427ae7291fdf62058c4243fe718758187105" name="*c1" x="784" y="420">
       <params>
          <frac32.u.map name="amp" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="920" y="420">
+   <obj type="dac~1" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="896" y="420">
       <params/>
       <attribs/>
    </obj>
-   <obj type="phasor3q~" sha="bb3797f6808c1fa0ccf714c27361878a3fd8be29" name="phasor3q_1" x="120" y="480">
+   <obj type="dac~2" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_21" x="896" y="476">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc/phasor compl" sha="bb3797f6808c1fa0ccf714c27361878a3fd8be29" name="phasor3q_1" x="182" y="490">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="920" y="480">
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="182" y="588">
       <params/>
       <attribs/>
    </obj>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="560" y="500">
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb11" x="490" y="616">
       <params>
-         <bool32.tgl name="b" value="0"/>
+         <bool32.mom name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="scope_128s_trig" sha="274f52631825aadd974c6d5d8e899fb9655d754b" name="scope_128s_trig1" x="560" y="560">
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_1" x="574" y="616">
       <params/>
       <attribs/>
    </obj>
-   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="240" y="600">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="lfsr~" sha="94017314f1e9bdac75f41689a6df3c5a5b90c345" name="lfsr_1" x="200" y="640">
+   <obj type="other/lfsr~" sha="94017314f1e9bdac75f41689a6df3c5a5b90c345" name="lfsr_1" x="182" y="630">
       <params/>
       <attribs>
          <combo attributeName="polynomial" selection="0x2CB"/>
@@ -120,12 +120,8 @@
       </net>
       <net>
          <source name="inmux41 o"/>
-         <dest name="scope_128s_trig1 in"/>
          <dest name="*c2 in"/>
-      </net>
-      <net>
-         <source name="cb11 o"/>
-         <dest name="scope_128s_trig1 hold"/>
+         <dest name="scope_1 in"/>
       </net>
       <net>
          <source name="osc2_1 wave"/>
@@ -162,10 +158,6 @@
          <dest name="inmux41 i2"/>
       </net>
       <net>
-         <source name="c1 out"/>
-         <dest name="inmux41 s"/>
-      </net>
-      <net>
          <source name="rand_1 wave"/>
          <dest name="inmux41 i6"/>
       </net>
@@ -193,6 +185,17 @@
          <source name="cb12 o"/>
          <dest name="inmux21 s"/>
       </net>
+      <net>
+         <source name="i_1 out"/>
+         <dest name="inmux41 s"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="scope_1 hold"/>
+      </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
 </patch-1.0>

@@ -4,7 +4,6 @@ In order of priority (high to low)
 * undo in editor
 * watchdog in firmware
 * patch/settings/preset store from axoloti core
-* patch storing/loading from microcontroller flash memory
 * cable datatype for MIDI function calls
 * librarian for sound-sample tables in flash?
 * SDCardreader mode
@@ -16,4 +15,4 @@ In order of priority (high to low)
 * Librarian: compile a directory of patches on PC, dump the binaries on target SD
 * DSP: reduce (right shift on output) (left shift on input)
 * DSP: automatic insert clipping if range can exceed
-* GCC/LD/OBJCOPY invoke with pipes
+* GCC/LD/OBJCOPY invoke with pipes or switch to libClang java bindings?

@@ -247,6 +247,7 @@ public class SerialConnection {
     private final byte[] stopPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('S')};
     private final byte[] pingPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('p')};
     private final byte[] getFileListPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('d')};
+    private final byte[] copyToFlashPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('F')};
 
     public void TransmitStart() throws SerialPortException {
         serialPort.writeBytes(startPckt);
@@ -262,6 +263,10 @@ public class SerialConnection {
 
     public void TransmitPing() throws SerialPortException {
         serialPort.writeBytes(pingPckt);
+    }
+
+    public void TransmitCopyToFlash() throws SerialPortException {
+        serialPort.writeBytes(copyToFlashPckt);
     }
 
     public void UploadFragment(byte[] buffer, int offset) throws SerialPortException {

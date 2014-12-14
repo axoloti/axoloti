@@ -29,6 +29,7 @@
 #include "ui.h"
 #include "string.h"
 #include "virtual_control.h"
+#include "flash.h"
 
 /* Virtual serial port over USB.*/
 SerialUSBDriver SDU1;
@@ -307,7 +308,8 @@ void ReadDirectoryListing(void) {
  * "Axos" -> stop patch
  * "AxoT" (char number) -> apply preset
  * "AxoM" (char char char) -> 3 byte midi message
- * "AxoD" go to DFU mode
+ * "AxoD" go to DFU mode (not working!)
+ * "AxoF" copy patch code to flash (assumes patch is stopped)
  * "Axod" read directory listing
  * "AxoC (int length) (char[] filename)" create and open file on sdcard
  * "Axoc" close file on sdcard
@@ -343,6 +345,21 @@ void CloseFile(void) {
   if (err != FR_OK) {
     TransmitTextMessage("File close failed");
   }
+}
+
+void CopyPatchToFlash(void) {
+  flash_unlock();
+  flash_Erase_sector(11);
+  int src_addr = PATCHMAINLOC;
+  int flash_addr = 0x080E0000;
+  int c;
+  for (c = 0; c < 48 * 1024;) {
+    flash_ProgramWord(flash_addr, *(int32_t *)src_addr);
+    src_addr += 4;
+    flash_addr += 4;
+    c += 4;
+  }
+  AckPending = 1;
 }
 
 void PExReceiveByte(unsigned char c) {
@@ -411,6 +428,12 @@ void PExReceiveByte(unsigned char c) {
         header = 0;
         StopPatch();
         BootLoaderInit();
+      }
+      else if (c == 'F') { // copy to flash
+        state = 0;
+        header = 0;
+        StopPatch();
+        CopyPatchToFlash();
       }
       else if (c == 'd') { // read directory listing
         state = 0;

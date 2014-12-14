@@ -15,16 +15,12 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __PCONNECTION_H
-#define __PCONNECTION_H
 
-extern SerialUSBDriver SDU1;
-void PExTransmit(void);
-void PExReceive(void);
-void InitPConnection(void);
-extern void BootLoaderInit(void);
-void TransmitTextMessage(const char *c);
-void TransmitTextMessageHeader(void);
-int GetFirmwareID(void);
+#ifndef __FLASH_H
+#define __FLASH_H
+
+int flash_Erase_sector(int sector);
+int flash_ProgramWord(uint32_t Address, uint32_t Data);
+void flash_unlock(void);
 
 #endif

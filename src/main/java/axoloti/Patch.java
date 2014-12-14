@@ -1087,8 +1087,12 @@ public class Patch {
                 + "  root.MidiInHandler(status,data1,data2);\n"
                 + "}\n\n";
 
-        c += "void xpatch_init2(void)\n"
+        c += "void xpatch_init2(int fwid)\n"
                 + "{\n"
+                + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID + ") {\n"
+                + "    patchMeta.fptr_dsp_process = 0;\n"
+                + "    return;"
+                + "  }\n"
                 + "  patchMeta.npresets = " + settings.GetNPresets() + ";\n"
                 + "  patchMeta.npreset_entries = " + settings.GetNPresetEntries() + ";\n"
                 + "  patchMeta.pPresets = (PresetParamChange_t*) root.GetPresets();\n"
@@ -1119,9 +1123,9 @@ public class Patch {
         } else {
             c += "#define MIDICHANNEL " + (settings.GetMidiChannel() - 1) + " // DEPRECATED!\n";
         }
-        c += "void xpatch_init2(void);\n"
-                + "extern \"C\" __attribute__ ((section(\".boot\"))) void xpatch_init(void){\n"
-                + "  xpatch_init2();\n"
+        c += "void xpatch_init2(int fwid);\n"
+                + "extern \"C\" __attribute__ ((section(\".boot\"))) void xpatch_init(int fwid){\n"
+                + "  xpatch_init2(fwid);\n"
                 + "}\n\n";
 
         c += "void PatchMidiInHandler(uint8_t status, uint8_t data1, uint8_t data2);\n\n";

@@ -105,8 +105,13 @@ void StopPatch(void) {
 void StartPatch(void) {
   KVP_ClearObjects();
   sdAttemptMountIfUnmounted();
+  patchMeta.fptr_dsp_process = 0;
   patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
-  (patchMeta.fptr_patch_init)();
+  (patchMeta.fptr_patch_init)(GetFirmwareID());
+  if (patchMeta.fptr_dsp_process == 0){
+    // failed, incompatible firmwareID?
+    return;
+  }
   patchStatus = 0;
   if (!pThreadDSP)
     pThreadDSP = chThdCreateStatic(waThreadDSP, sizeof(waThreadDSP), HIGHPRIO,

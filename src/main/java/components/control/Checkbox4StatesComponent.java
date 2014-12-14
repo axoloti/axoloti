@@ -86,7 +86,7 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
                 dragAction = true;
             }
         }
-        System.out.println("cb" + value);
+        //System.out.println("cb" + value);
     }
 
     @Override

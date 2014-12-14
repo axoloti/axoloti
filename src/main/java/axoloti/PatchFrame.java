@@ -230,6 +230,7 @@ public class PatchFrame extends javax.swing.JFrame {
         jCheckBoxMenuItemLive = new javax.swing.JCheckBoxMenuItem();
         jMenuItemUploadSD = new javax.swing.JMenuItem();
         jMenuItemUploadSDStart = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuGenerateCode = new javax.swing.JMenuItem();
         jMenuCompileCode = new javax.swing.JMenuItem();
@@ -450,6 +451,14 @@ jCheckBoxMenuItemLive.addActionListener(new java.awt.event.ActionListener() {
         }
     });
     jMenuPatch.add(jMenuItemUploadSDStart);
+
+    jMenuItem2.setText("Upload to internal flash");
+    jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItem2ActionPerformed(evt);
+        }
+    });
+    jMenuPatch.add(jMenuItem2);
     jMenuPatch.add(jSeparator3);
 
     jMenuGenerateCode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
@@ -789,6 +798,13 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         c.setContents(new StringSelection(baos.toString()), null);
     }//GEN-LAST:event_jMenuSaveClipActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patch));
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadPatch());
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdCopyPatchToFlash());
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     /* write to sdcard...
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -809,6 +825,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenu jMenuHelp;
     private javax.swing.JMenuItem jMenuHelpContents;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemAdjScroll;
     private javax.swing.JMenuItem jMenuItemClearPreset;
     private javax.swing.JMenuItem jMenuItemDelete;

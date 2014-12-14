@@ -103,8 +103,19 @@ int main(void) {
 
 #if (BOARD_AXOLOTI_V03)
   if (!palReadPad(GPIOB, 2)) // button S2 not pressed
-  SDLoadPatch("0:start.bin");
+    SDLoadPatch("0:start.bin");
 #endif
+
+  // if no patch booting or running yet
+  // try loading from flash
+  if (patchStatus) {
+    // patch in flash sector 11
+    memcpy((uint8_t *)PATCHMAINLOC, 0x080E0000, 0xE000);
+    if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
+        && (*(uint32_t *)PATCHMAINLOC != 0)) {
+      StartPatch();
+    }
+  }
 
 #ifdef ENABLE_USB_HOST
 // SD2 for serial debug output

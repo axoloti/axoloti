@@ -111,6 +111,7 @@ CSRC = $(PORTSRC) \
        parameters.c \
        main.c \
        patch.c \
+       flash.c \
        virtual_control.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_q31.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_q31.c \

@@ -23,7 +23,7 @@
 #include "ui.h"
 #include "axoloti_board.h"
 
-typedef void (*fptr_patch_init_t)(void);
+typedef void (*fptr_patch_init_t)(int32_t * fwID);
 typedef void (*fptr_patch_dispose_t)(void);
 typedef void (*fptr_patch_dsp_process_t)(int32_t *, int32_t *);
 typedef void (*fptr_patch_midi_in_handler_t)(uint8_t, uint8_t, uint8_t);
