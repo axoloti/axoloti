@@ -30,5 +30,5 @@ public class SelectionRectangle extends JPanel {
         setLayout(null);
         setBorder(BorderFactory.createEtchedBorder());
     }
-    
+
 }

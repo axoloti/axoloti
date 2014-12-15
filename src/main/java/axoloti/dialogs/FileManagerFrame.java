@@ -220,7 +220,6 @@ public class FileManagerFrame extends javax.swing.JFrame {
         }
     }
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1Refresh;
     private javax.swing.JButton jButtonUpload;

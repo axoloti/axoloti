@@ -59,8 +59,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
             setType(ao);
         }
     }
-    
-    
+
     public void updateObj() {
         if (pg != null) {
             AxoObject ao = pg.GenerateAxoObj();

@@ -29,6 +29,7 @@ import org.simpleframework.xml.ElementUnion;
  * @author Johannes Taelman
  */
 public class Preset {
+
     @Attribute
     public int index;
 
