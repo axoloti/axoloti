@@ -123,7 +123,7 @@ public class SerialConnection {
         }
         GoIdleState();
         if (portName == null) {
-            portName = MainFrame.prefs.ComPortName;
+            portName = MainFrame.prefs.getComPortName();
         }
         List<String> pl = Arrays.asList(SerialPortList.getPortNames());
         if ((portName == null) || (portName.isEmpty()) || (!pl.contains(portName))) {
@@ -134,7 +134,7 @@ public class SerialConnection {
             if (portName.isEmpty()) {
                 return false;
             }
-            MainFrame.prefs.ComPortName = portName;
+            MainFrame.prefs.setComPortName(portName);
             MainFrame.prefs.SavePrefs();
         }
         try {

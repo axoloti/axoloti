@@ -83,8 +83,6 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
-        jMenuRegenerateObjects.setVisible(false);
-        jMenuAutoTest.setVisible(false);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
         transparentCursor = getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null);
@@ -169,6 +167,11 @@ public class MainFrame extends javax.swing.JFrame {
         remote = new AxolotiRemoteControl();
         remote.setTitle("Remote");
         remote.setVisible(false);
+
+        if (!prefs.getExpertMode()) {
+            jMenuRegenerateObjects.setVisible(false);
+            jMenuAutoTest.setVisible(false);
+        }
     }
 
     /**

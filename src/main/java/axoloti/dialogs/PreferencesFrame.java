@@ -47,7 +47,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
     void Apply() {
         prefs.setPollInterval(Integer.parseInt(jTextFieldPollInterval.getText()));
         prefs.setObjectSearchPath(jTextPanePath.getText().split("\n"));
-        prefs.MouseDialAngular = jComboBox1.getSelectedItem().equals("Angular");
+        prefs.setMouseDialAngular(jComboBox1.getSelectedItem().equals("Angular"));
     }
 
     /**

@@ -87,6 +87,18 @@ public class PatchFrame extends javax.swing.JFrame {
         UpdateConnectStatus();
         setExtendedState(MAXIMIZED_BOTH);
 
+        if (!MainFrame.prefs.getExpertMode()) {
+            jSeparator3.setVisible(false);
+            jMenuItemLock.setVisible(false);
+            jMenuGenerateCode.setVisible(false);
+            jMenuCompileCode.setVisible(false);
+            jMenuUploadCode.setVisible(false);
+            jMenuItemLock.setVisible(false);
+            jMenuItemUnlock.setVisible(false);
+        }
+        jMenuPreset.setVisible(false);
+        jMenuItemAdjScroll.setVisible(false);
+
         //        jScrollPane1.setAutoscrolls(true);
         /*
          patch.setPreferredSize(new Dimension(5000, 5000));

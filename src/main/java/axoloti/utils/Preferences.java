@@ -37,11 +37,13 @@ public class Preferences {
     @Element
     String ObjectSearchPath;
     @Element(required = false)
-    public String ComPortName;
+    String ComPortName;
     @Element(required = false)
     Integer PollInterval;
     @Element(required = false)
-    public Boolean MouseDialAngular;
+    Boolean MouseDialAngular;
+    @Element(required = false)
+    Boolean ExpertMode;
 
     final int minimumPollInterval = 20;
 
@@ -60,6 +62,9 @@ public class Preferences {
         }
         if (MouseDialAngular == null) {
             MouseDialAngular = false;
+        }
+        if (ExpertMode == null) {
+            ExpertMode = false;
         }
     }
 
@@ -130,4 +135,25 @@ public class Preferences {
             Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public String getComPortName() {
+        return ComPortName;
+    }
+
+    public void setComPortName(String ComPortName) {
+        this.ComPortName = ComPortName;
+    }
+
+    public Boolean getMouseDialAngular() {
+        return MouseDialAngular;
+    }
+
+    public void setMouseDialAngular(Boolean MouseDialAngular) {
+        this.MouseDialAngular = MouseDialAngular;
+    }
+
+    public Boolean getExpertMode() {
+        return ExpertMode;
+    }
+
 }
