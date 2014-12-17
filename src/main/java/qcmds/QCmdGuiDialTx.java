@@ -37,6 +37,21 @@ public class QCmdGuiDialTx implements QCmdGUITask {
                         //processor.println("tx dial " + p.getName());
                     }
                 }
+                if (patch.presetUpdatePending) {
+                    byte pb[] = new byte[patch.getSettings().GetNPresets() * patch.getSettings().GetNPresetEntries() * 8];
+                    int p = 0;
+                    for (int i = 0; i < patch.getSettings().GetNPresets(); i++) {
+                        int pi[] = patch.DistillPreset(i + 1);
+                        for (int j = 0; j < patch.getSettings().GetNPresetEntries() * 2; j++) {
+                            pb[p++] = (byte) (pi[j]);
+                            pb[p++] = (byte) (pi[j] >> 8);
+                            pb[p++] = (byte) (pi[j] >> 16);
+                            pb[p++] = (byte) (pi[j] >> 24);
+                        }
+                    }
+                    processor.AppendToQueue(new QCmdUpdatePreset(pb));
+                    patch.presetUpdatePending = false;
+                }
             }
         }
     }

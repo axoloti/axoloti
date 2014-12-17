@@ -217,6 +217,21 @@ public class SerialConnection {
         serialPort.writeBytes(data);
     }
 
+    public void SendUpdatedPreset(byte[] b) throws SerialPortException {
+        byte[] data = new byte[8];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'R';
+        int len = b.length;
+        data[4] = (byte) len;
+        data[5] = (byte) (len >> 8);
+        data[6] = (byte) (len >> 16);
+        data[7] = (byte) (len >> 24);
+        serialPort.writeBytes(data);
+        serialPort.writeBytes(b);
+    }
+
     class Sync {
 
         int Acked = 0;

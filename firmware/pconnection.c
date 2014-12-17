@@ -302,6 +302,7 @@ void ReadDirectoryListing(void) {
 /* input data decoder state machine
  *
  * "AxoP" (int value, int16 index) -> parameter set
+ * "AxoR" (int length, data) -> preset data set
  * "AxoW" (int length, int offset, char[length] data) -> data write
  * "Axow" (int length, int offset, char[12] filename, char[length] data) -> data write to sdcard
  * "AxoS" -> start patch
@@ -394,6 +395,9 @@ void PExReceiveByte(unsigned char c) {
     case 3:
       header = c;
       if (c == 'P') { // param change
+        state = 4;
+      }
+      else if (c == 'R') { // preset change
         state = 4;
       }
       else if (c == 'W') { // write
@@ -790,6 +794,45 @@ void PExReceiveByte(unsigned char c) {
       Btn_Nav_Or.word = Btn_Nav_Or.word | a;
       Btn_Nav_And.word = Btn_Nav_And.word & b;
       break;
+    }
+  }
+  else if (header == 'R') {
+    switch (state) {
+    case 4:
+      length = c;
+      state++;
+      break;
+    case 5:
+      length += c << 8;
+      state++;
+      break;
+    case 6:
+      length += c << 16;
+      state++;
+      break;
+    case 7:
+      length += c << 24;
+      state++;
+      offset = (int)patchMeta.pPresets;
+      break;
+    default:
+      if (length > 0) {
+        length--;
+        if (offset) {
+          *((unsigned char *)offset) = c;
+          offset++;
+        }
+        if (length == 0) {
+          header = 0;
+          state = 0;
+          AckPending = 1;
+        }
+      }
+      else {
+        header = 0;
+        state = 0;
+        AckPending = 1;
+      }
     }
   }
   else {

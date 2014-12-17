@@ -94,6 +94,8 @@ public class Patch {
     boolean locked = false;
     private boolean dirty = false;
 
+    public boolean presetUpdatePending = false;
+
     MainFrame GetMainFrame() {
         return MainFrame.mainframe;
     }
@@ -112,6 +114,7 @@ public class Patch {
     void GoLive() {
         ShowPreset(0);
         WriteCode();
+        presetUpdatePending = false;
         GetQCmdProcessor().SetPatch(this);
         GetQCmdProcessor().AppendToQueue(new QCmdStop());
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
@@ -1695,7 +1698,7 @@ public class Patch {
     //final int NPRESETS = 8;
     //final int NPRESET_ENTRIES = 32;
 
-    int[] DistillPreset(int i) {
+    public int[] DistillPreset(int i) {
         int[] pdata;
         pdata = new int[settings.GetNPresetEntries() * 2];
         for (int j = 0; j < settings.GetNPresetEntries(); j++) {
@@ -1717,6 +1720,12 @@ public class Patch {
                 }
             }
         }
+        /*
+         System.out.format("preset data : %d\n",i);
+         for(int j=0;j<pdata.length/2;j++){
+         System.out.format("  %d : %d\n",pdata[j*2],pdata[j*2+1] );
+         }
+         */
         return pdata;
     }
 

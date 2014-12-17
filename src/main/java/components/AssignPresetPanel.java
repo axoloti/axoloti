@@ -84,6 +84,7 @@ public class AssignPresetPanel extends JPanel {
                 ctrls.get(i).setEnabled(false);
                 param.RemovePreset(i + 1);
             }
+            param.axoObj.patch.presetUpdatePending = true;
         }
 
     };
@@ -102,6 +103,7 @@ public class AssignPresetPanel extends JPanel {
                     }
                 }
             }
+            param.axoObj.patch.presetUpdatePending = true;
         }
     };
 }

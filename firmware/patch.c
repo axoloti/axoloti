@@ -39,6 +39,7 @@ void InitPatch0(void) {
   patchMeta.initpreset_size = 0;
   patchMeta.npresets = 0;
   patchMeta.npreset_entries = 0;
+  patchMeta.pPresets = 0;
 }
 
 int dspLoadPct; // DSP load in percent
