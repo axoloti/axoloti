@@ -1,11 +1,11 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="56" y="28">
+   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="70" y="28">
       <params>
          <frac32.s.map name="pitch" value="-13.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_1" x="168" y="28">
+   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_1" x="182" y="28">
       <params>
          <frac32.s.map name="a" value="-52.0"/>
          <frac32.s.map name="d" value="9.0"/>
@@ -14,7 +14,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_2" x="280" y="28">
+   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_2" x="294" y="28">
       <params>
          <frac32.s.map name="a" value="-33.0"/>
          <frac32.s.map name="d" value="63.0"/>
@@ -23,41 +23,41 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c_1" x="406" y="28">
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c_1" x="420" y="28">
       <params>
          <frac32.u.map name="amp" value="32.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="keybzone_lru" sha="b9b28cf52b3421368e367f3718404222910c57a5" name="keybzone_lru_1" x="14" y="196">
+   <obj type="midi/in/keyb zone lru" sha="b9b28cf52b3421368e367f3718404222910c57a5" name="keybzone_lru_1" x="28" y="196">
       <params/>
       <attribs>
          <spinner attributeName="startNote" value="0"/>
          <spinner attributeName="endNote" value="127"/>
       </attribs>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw~_1" x="266" y="266">
+   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw~_1" x="280" y="266">
       <params>
          <frac32.s.map name="pitch" value="-17.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="math/div 4" sha="24e4544f0f846eb56ca3b8d30b635a5eb50caa29" name="div4_1" x="378" y="266">
+   <obj type="math/div 4" sha="24e4544f0f846eb56ca3b8d30b635a5eb50caa29" name="div4_1" x="392" y="266">
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="462" y="266">
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="476" y="266">
       <params>
          <frac32.s.map name="pitch" value="17.0"/>
          <frac32.u.map name="reso" value="59.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_1" x="588" y="280">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_1" x="602" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="658" y="280">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="672" y="280">
       <params/>
       <attribs/>
    </obj>

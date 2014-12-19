@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="ramtable32" sha="c9cc4c02436509b149863fb2d27ff1f3cfc3bcee" name="coefs" x="20" y="20">
+   <obj type="table/alloc 32b" sha="c9cc4c02436509b149863fb2d27ff1f3cfc3bcee" name="coefs" x="20" y="42">
       <params/>
       <attribs>
          <combo attributeName="size" selection="256"/>
@@ -8,91 +8,70 @@
          </text>
       </attribs>
    </obj>
-   <obj type="cb1m" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_1" x="200" y="20">
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_1" x="200" y="42">
       <params>
          <bool32.mom name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand~_1" x="240" y="20">
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand~_1" x="280" y="42">
       <params/>
       <attribs/>
    </obj>
-   <obj type="tabrecord~" sha="eedac9a82fcbcd693c27b41abb9177713f5990" name="tabrecord~_1" x="280" y="20">
+   <obj type="tabrecord~" sha="a11cd48fc41465d055106b87f9d341f6750abf93" name="tabrecord~_1" x="378" y="42">
       <params/>
       <attribs>
          <objref attributeName="table" obj="coefs"/>
       </attribs>
    </obj>
-   <obj type="ramtable32slider16" sha="2227408087d0108a79d19893c9bcca8343f9f004" name="coefs2" x="20" y="120">
-      <params>
-         <frac32.s.mapvsl name="b0" value="63.0"/>
-         <frac32.s.mapvsl name="b1" value="-36.0"/>
-         <frac32.s.mapvsl name="b2" value="-37.0"/>
-         <frac32.s.mapvsl name="b3" value="-8.0"/>
-         <frac32.s.mapvsl name="b4" value="48.0"/>
-         <frac32.s.mapvsl name="b5" value="-32.0"/>
-         <frac32.s.mapvsl name="b6" value="34.0"/>
-         <frac32.s.mapvsl name="b7" value="33.0"/>
-         <frac32.s.mapvsl name="b8" value="-29.0"/>
-         <frac32.s.mapvsl name="b9" value="42.0"/>
-         <frac32.s.mapvsl name="b10" value="39.0"/>
-         <frac32.s.mapvsl name="b11" value="-18.0"/>
-         <frac32.s.mapvsl name="b12" value="-36.0"/>
-         <frac32.s.mapvsl name="b13" value="-64.0"/>
-         <frac32.s.mapvsl name="b14" value="25.0"/>
-         <frac32.s.mapvsl name="b15" value="-64.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="saw~" sha="26fd327d0c765a610f27879cae76aed0a2729542" name="saw~_1" x="400" y="220">
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw~_1" x="462" y="168">
       <params>
          <frac32.s.map name="pitch" value="5.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_1" x="20" y="300">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_1" x="14" y="252">
       <params>
          <frac32.s.map name="pitch" value="-61.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="bipolar2unipolar" sha="b80b299df9cb5523b1c4c0c7fe09941a1c682112" name="bipolar2unipolar_1" x="100" y="300">
+   <obj type="conv/bipolar2unipolar" sha="b80b299df9cb5523b1c4c0c7fe09941a1c682112" name="bipolar2unipolar_1" x="112" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="nointerp~" sha="77d868d4547e0e29a1aa7711f764a6d3957177f9" name="nointerp~_1" x="200" y="300">
+   <obj type="conv/nointerp" sha="77d868d4547e0e29a1aa7711f764a6d3957177f9" name="nointerp~_1" x="238" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_1" x="260" y="300">
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_1" x="336" y="252">
       <params>
          <frac32.u.map name="gain1" value="1.0"/>
          <frac32.u.map name="gain2" value="32.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="tabread2" sha="b0519acd115f068f0851ae0be434a57888454c06" name="tabread2_1" x="360" y="300">
+   <obj type="table/read interp" sha="b0519acd115f068f0851ae0be434a57888454c06" name="tabread2_1" x="434" y="252">
       <params/>
       <attribs>
          <objref attributeName="table" obj="coefs"/>
       </attribs>
    </obj>
-   <obj type="fir16" sha="79dcf6979a6691736ed1c072bf5b09164af32b86" name="fir16_1" x="480" y="300">
+   <obj type="filter/fir16" sha="79dcf6979a6691736ed1c072bf5b09164af32b86" name="fir16_1" x="560" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="560" y="300">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="644" y="252">
       <params>
          <frac32.u.map name="amp" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="620" y="300">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="742" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="bufferindex" sha="63d69b410a3dd33249815b5b2a3138b579149f8c" name="bufferindex_2" x="180" y="340">
+   <obj type="other/bufferindex" sha="63d69b410a3dd33249815b5b2a3138b579149f8c" name="bufferindex_2" x="224" y="294">
       <params/>
       <attribs/>
    </obj>

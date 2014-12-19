@@ -1,80 +1,80 @@
 <patch-1.0>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="A" x="40" y="60">
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="A" x="14" y="14">
       <params>
          <bool32.tgl name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="and2" sha="1938611ef1b57af3c7b1965081b17bf8e194d9a6" name="and21" x="120" y="60">
+   <obj type="logic/and 2" sha="1938611ef1b57af3c7b1965081b17bf8e194d9a6" name="and21" x="98" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1" x="200" y="60">
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1" x="182" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="B" x="40" y="120">
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="B" x="14" y="70">
       <params>
          <bool32.tgl name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="or2" sha="d7f898c6d323d5b2bb8a39859aae4e049141b870" name="or21" x="120" y="120">
+   <obj type="logic/or 2" sha="d7f898c6d323d5b2bb8a39859aae4e049141b870" name="or21" x="98" y="70">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb2" x="200" y="120">
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb2" x="182" y="70">
       <params/>
       <attribs/>
    </obj>
-   <obj type="xor2" sha="8a56b7e930ed548aead5faa2625e3f87672f1385" name="xor21" x="120" y="180">
+   <obj type="logic/xor 2" sha="8a56b7e930ed548aead5faa2625e3f87672f1385" name="xor21" x="98" y="126">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb3" x="200" y="180">
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb3" x="182" y="126">
       <params/>
       <attribs/>
    </obj>
-   <obj type="inv" sha="77e1f7e6c23d3e299a726997943d432a8cde98bd" name="inv1" x="120" y="240">
+   <obj type="logic/inv" sha="77e1f7e6c23d3e299a726997943d432a8cde98bd" name="inv1" x="98" y="196">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb6" x="200" y="240">
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb6" x="182" y="196">
       <params/>
       <attribs/>
    </obj>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="40" y="320">
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb11" x="14" y="266">
       <params>
-         <bool32.tgl name="b" value="0"/>
+         <bool32.mom name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="toggle" sha="ee655a99304f768e3ad148a9acd915d6131776d9" name="toggle1" x="80" y="320">
+   <obj type="logic/toggle" sha="6bbdbe388e7a2ccf11a7d72cf71769a3b20cc14f" name="toggle_1" x="112" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb4" x="160" y="320">
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb4" x="182" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb12" x="40" y="420">
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb12" x="14" y="378">
       <params>
-         <bool32.tgl name="b" value="0"/>
+         <bool32.mom name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="flipflop" sha="8eb56be7e515ce9964467320583bba49c955be75" name="flipflop1" x="80" y="420">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb5" x="160" y="420">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb13" x="40" y="480">
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb13" x="14" y="434">
       <params>
-         <bool32.tgl name="b" value="0"/>
+         <bool32.mom name="b" value="0"/>
       </params>
+      <attribs/>
+   </obj>
+   <obj type="logic/flipflop" sha="628e0943cc67719faff47fcfe4c3caf52958287e" name="flipflop_1" x="98" y="434">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb5" x="182" y="434">
+      <params/>
       <attribs/>
    </obj>
    <nets>
@@ -101,23 +101,7 @@
       </net>
       <net>
          <source name="cb11 o"/>
-         <dest name="toggle1 trig"/>
-      </net>
-      <net>
-         <source name="toggle1 o"/>
-         <dest name="dispb4 in"/>
-      </net>
-      <net>
-         <source name="cb12 o"/>
-         <dest name="flipflop1 set"/>
-      </net>
-      <net>
-         <source name="flipflop1 o"/>
-         <dest name="dispb5 in"/>
-      </net>
-      <net>
-         <source name="cb13 o"/>
-         <dest name="flipflop1 reset"/>
+         <dest name="toggle_1 trig"/>
       </net>
       <net>
          <source name="xor21 o"/>
@@ -127,6 +111,25 @@
          <source name="inv1 o"/>
          <dest name="dispb6 in"/>
       </net>
+      <net>
+         <source name="toggle_1 o"/>
+         <dest name="dispb4 in"/>
+      </net>
+      <net>
+         <source name="cb12 o"/>
+         <dest name="flipflop_1 set"/>
+      </net>
+      <net>
+         <source name="cb13 o"/>
+         <dest name="flipflop_1 reset"/>
+      </net>
+      <net>
+         <source name="flipflop_1 o"/>
+         <dest name="dispb5 in"/>
+      </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
 </patch-1.0>

@@ -64,7 +64,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="504" y="238">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="532" y="238">
       <params/>
       <attribs/>
    </obj>
@@ -76,7 +76,7 @@
          <objref attributeName="delayname" obj="delwrite~_1"/>
       </attribs>
    </obj>
-   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_1" x="462" y="350">
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_1" x="490" y="350">
       <params/>
       <attribs/>
    </obj>

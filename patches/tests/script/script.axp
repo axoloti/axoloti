@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="script2" sha="d4319422198752d393898f325781b3081713fc6d" name="script2_1" x="20" y="20">
+   <obj type="script2" sha="1478c410b77725959c034de4a2456dd1198e9080" name="script2_1" x="20" y="20">
       <params/>
       <attribs>
          <text attributeName="script">
@@ -20,11 +20,11 @@ void loop(){
          </text>
       </attribs>
    </obj>
-   <obj type="scopeS" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1" x="200" y="20">
+   <obj type="disp/chart b" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1" x="182" y="20">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="200" y="140">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="182" y="140">
       <params/>
       <attribs/>
    </obj>

@@ -1,15 +1,15 @@
 <patch-1.0>
-   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand~_1" x="0" y="100">
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand~_1" x="14" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="60" y="100">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="112" y="14">
       <params>
-         <frac32.u.map name="amp" value="0.0"/>
+         <frac32.u.map name="amp" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="eq5" sha="2279030430f4a0afc28e5a60a997f0c75cf2d642" name="eq5_1" x="140" y="100">
+   <obj type="filter/eq5hq" sha="77c9cf4558679dd4d1717444cd7da00cc127dc88" name="eq5hq_1" x="224" y="14">
       <params>
          <int32 name="low" value="0"/>
          <int32 name="lowmid" value="0"/>
@@ -19,13 +19,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_2" x="240" y="100">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_2" x="336" y="14">
       <params>
-         <frac32.u.map name="amp" value="0.0"/>
+         <frac32.u.map name="amp" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="320" y="100">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="448" y="14">
       <params/>
       <attribs/>
    </obj>
@@ -35,17 +35,17 @@
          <dest name="*c_1 in"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="eq5_1 in"/>
-      </net>
-      <net>
-         <source name="eq5_1 out"/>
-         <dest name="*c_2 in"/>
-      </net>
-      <net>
          <source name="*c_2 out"/>
          <dest name="dac~_1 left"/>
          <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="eq5hq_1 in"/>
+      </net>
+      <net>
+         <source name="eq5hq_1 out"/>
+         <dest name="*c_2 in"/>
       </net>
    </nets>
    <settings>

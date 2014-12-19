@@ -55,7 +55,7 @@ for(i=0;i<LENGTH;i++)
          <objref attributeName="table" obj="t2"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1___" x="896" y="70">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1___" x="854" y="70">
       <params/>
       <attribs/>
    </obj>
@@ -82,7 +82,7 @@ for(i=0;i<LENGTH;i++)
          <objref attributeName="table" obj="t3"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1_____" x="1386" y="70">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1_____" x="1330" y="70">
       <params/>
       <attribs/>
    </obj>
@@ -95,7 +95,7 @@ for(i=0;i<LENGTH;i++)
          <objref attributeName="table" obj="t2"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1____" x="896" y="154">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1____" x="854" y="154">
       <params/>
       <attribs/>
    </obj>
@@ -105,7 +105,7 @@ for(i=0;i<LENGTH;i++)
          <objref attributeName="table" obj="t3"/>
       </attribs>
    </obj>
-   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1______" x="1386" y="154">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1______" x="1330" y="154">
       <params/>
       <attribs/>
    </obj>

@@ -1,23 +1,23 @@
 <patch-1.0>
-   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="20" y="60">
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="28" y="14">
       <params>
          <frac32.s.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="reciprocal" sha="fee3b32001d8cc8788bdd6d14bd4ad5f04187030" name="reciprocal1" x="80" y="60">
+   <obj type="math/reciprocal" sha="fee3b32001d8cc8788bdd6d14bd4ad5f04187030" name="reciprocal1" x="112" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="160" y="60">
+   <obj type="math/reciprocal" sha="fee3b32001d8cc8788bdd6d14bd4ad5f04187030" name="reciprocal1_" x="308" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="reciprocal" sha="fee3b32001d8cc8788bdd6d14bd4ad5f04187030" name="reciprocal1_" x="240" y="60">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="210" y="56">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1_" x="320" y="60">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1_" x="406" y="56">
       <params/>
       <attribs/>
    </obj>

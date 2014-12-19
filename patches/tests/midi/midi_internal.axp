@@ -13,7 +13,7 @@
    </obj>
    <obj type="ctrl/i" sha="f379e2b7efb6169f8e7327be5b09362609656408" name="in_1" x="182" y="14">
       <params>
-         <int32 name="value" value="16"/>
+         <int32 name="value" value="26"/>
       </params>
       <attribs/>
    </obj>

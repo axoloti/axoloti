@@ -1,31 +1,32 @@
 <patch-1.0>
-   <obj type="pnoise~" sha="5c70e43f5400259659295a36f22e50d041888396" name="pnoise_1" x="40" y="20">
+   <obj type="pnoise~" sha="60f2be0f8974717ae4480e80f70bfae0bb3f01d5" name="pnoise_1" x="28" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analyzer24db2" sha="ebec0496c981fe053637f2258879d50dc0661e73" name="analyzer24db21" x="160" y="20">
+   <obj type="spectral/analyzer 24" sha="ebec0496c981fe053637f2258879d50dc0661e73" name="analyzer24db21" x="154" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="scope_128s_v2" sha="375509bcb23b2f6a69f9cd82349f406464c8295e" name="scope_128s1" x="40" y="200">
+   <obj type="disp/scope 128 b" sha="375509bcb23b2f6a69f9cd82349f406464c8295e" name="scope_128s1" x="28" y="196">
       <params/>
       <attribs/>
    </obj>
-   <obj type="max" sha="6e94a93047c9310dc305d1794ea81db4225e0e1c" name="max1" x="200" y="200">
+   <obj type="math/max" sha="6e94a93047c9310dc305d1794ea81db4225e0e1c" name="max1" x="196" y="196">
       <params/>
       <attribs/>
    </obj>
-   <obj type="double" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2" name="double1" x="200" y="260">
+   <comment type="patch/comment" sha="sha" name="maximum value in a buffer" x="280" y="210"/>
+   <obj type="math/double" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2" name="double1" x="196" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="280" y="260">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="280" y="252">
       <params>
-         <frac32.u.map name="amp" value="32.00000000000001"/>
+         <frac32.u.map name="amp" value="32.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="scope_1buffer" sha="a8100388e1218ba50352d7e1743cd1b7f37bacd4" name="scope_1buffer1" x="360" y="260">
+   <obj type="disp/scope buffer" sha="a8100388e1218ba50352d7e1743cd1b7f37bacd4" name="scope_1buffer1" x="406" y="266">
       <params/>
       <attribs/>
    </obj>

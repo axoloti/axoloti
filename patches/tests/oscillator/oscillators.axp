@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="14">
+   <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="14">
       <params/>
       <attribs/>
    </obj>
@@ -9,13 +9,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="182" y="126">
+   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="182" y="126">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="square~" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="182" y="210">
+   <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="182" y="210">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -33,7 +33,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="pwm~" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1" x="182" y="294">
+   <obj type="osc/pwm" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1" x="182" y="294">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -78,11 +78,11 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~1" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="896" y="420">
+   <obj type="audio/out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="896" y="420">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~2" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_21" x="896" y="476">
+   <obj type="audio/out right" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_21" x="896" y="476">
       <params/>
       <attribs/>
    </obj>

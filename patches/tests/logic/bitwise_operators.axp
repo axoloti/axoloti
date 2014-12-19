@@ -5,11 +5,11 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="math/bitor" sha="f3f3eca017588511a6dbe06fa6e2f62be5303c74" name="bitor" x="182" y="14">
+   <obj type="math/bitor" sha="f3f3eca017588511a6dbe06fa6e2f62be5303c74" name="bitor" x="112" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="336" y="14">
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="196" y="14">
       <params/>
       <attribs/>
    </obj>
@@ -19,19 +19,19 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="math/bitand" sha="15ad98bae240354bd54275afc309304274130a7e" name="bitand" x="182" y="98">
+   <obj type="math/bitand" sha="15ad98bae240354bd54275afc309304274130a7e" name="bitand" x="112" y="98">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1_" x="336" y="98">
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1_" x="196" y="98">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/bitxor" sha="9dd3edf53961f5a288c5b8d0399d49aeff4bddfa" name="bitxor" x="182" y="182">
+   <obj type="math/bitxor" sha="9dd3edf53961f5a288c5b8d0399d49aeff4bddfa" name="bitxor" x="112" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1__" x="336" y="182">
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1__" x="196" y="182">
       <params/>
       <attribs/>
    </obj>

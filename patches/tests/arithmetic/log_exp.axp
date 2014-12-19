@@ -1,65 +1,65 @@
 <patch-1.0>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="20">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="14" y="14">
       <params>
          <frac32.u.map name="value" value="32.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd" name="log1" x="160" y="20">
+   <obj type="math/log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd" name="log1" x="140" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="320" y="20">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="266" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="c1_" x="40" y="120">
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="c1_" x="14" y="112">
       <params>
          <frac32.s.map name="value" value="56.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1" name="exp1" x="160" y="120">
+   <obj type="math/exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1" name="exp1" x="140" y="112">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS2" x="320" y="120">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS2" x="266" y="112">
       <params/>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1__" x="40" y="260">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1__" x="14" y="252">
       <params>
          <frac32.u.map name="value" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd" name="log1_" x="120" y="260">
+   <obj type="math/log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd" name="log1_" x="98" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1" name="exp1_" x="240" y="260">
+   <obj type="math/exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1" name="exp1_" x="196" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="360" y="260">
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="308" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="c1___" x="40" y="340">
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="c1___" x="14" y="336">
       <params>
          <frac32.s.map name="value" value="-64.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1" name="exp1__" x="120" y="340">
+   <obj type="math/exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1" name="exp1__" x="98" y="336">
       <params/>
       <attribs/>
    </obj>
-   <obj type="log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd" name="log1__" x="240" y="340">
+   <obj type="math/log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd" name="log1__" x="196" y="336">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS3" x="360" y="340">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS3" x="308" y="336">
       <params/>
       <attribs/>
    </obj>

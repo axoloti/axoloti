@@ -1,55 +1,55 @@
 <patch-1.0>
-   <obj type="dacconfig" sha="e47910fb3176fe2a8167aa211513bd0f0f20e741" name="dacconfig1" x="240" y="20">
-      <params/>
-      <attribs>
-         <combo attributeName="headphones" selection="0dB"/>
-      </attribs>
-   </obj>
-   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="360" y="300">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="adcconfig" sha="d92ed17e442cc5e55023cecf2afe63c9655d4100" name="adcconfig1" x="40" y="20">
+   <obj type="adcconfig" sha="c5ee5e230152b248edde544704970b051688aa4f" name="adcconfig1" x="28" y="42">
       <params/>
       <attribs>
          <combo attributeName="gain" selection="-12dB"/>
          <combo attributeName="boost" selection="Mute"/>
       </attribs>
    </obj>
-   <obj type="adc~1" sha="76cc7b8fc059b573ece27b3319e73b4136159cff" name="adc_11" x="40" y="300">
+   <obj type="dacconfig" sha="2aa0e0cba0ec5538ada88b36303a2632fc2a8b1a" name="dacconfig1" x="182" y="42">
       <params/>
-      <attribs/>
+      <attribs>
+         <combo attributeName="headphones" selection="0dB"/>
+      </attribs>
    </obj>
-   <obj type="adc~2" sha="eb076735a76e9cbf9b15de488e15bcec40f8c16a" name="adc_21" x="40" y="380">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="360" y="380">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="osc~" sha="377a3586859b26132804d77a27e8734c2cf0fc69" name="osc_1" x="0" y="180">
+   <comment type="patch/comment" sha="sha" name="test tone" x="56" y="126"/>
+   <comment type="patch/comment" sha="sha" name="volume" x="182" y="126"/>
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="28" y="154">
       <params>
          <frac32.s.map name="pitch" value="-21.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="160" y="180">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="182" y="154">
       <params>
          <frac32.u.map name="amp" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="+" sha="f21fcf9a2511404a296065f4ba87ab840e153161" name="+1" x="280" y="300">
+   <obj type="adc~1" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc_11" x="56" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="+" sha="f21fcf9a2511404a296065f4ba87ab840e153161" name="+1_" x="280" y="380">
+   <obj type="math/+" sha="f21fcf9a2511404a296065f4ba87ab840e153161" name="+1" x="308" y="280">
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="test tone" x="40" y="140"/>
-   <comment type="comment" sha="sha" name="volume" x="160" y="140"/>
+   <obj type="dac~1" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="378" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="adc~2" sha="2e62bc7fd13ee755880acfd02907b99c6960f8f0" name="adc_21" x="56" y="364">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/+" sha="f21fcf9a2511404a296065f4ba87ab840e153161" name="+1_" x="308" y="364">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_21" x="378" y="364">
+      <params/>
+      <attribs/>
+   </obj>
    <nets>
       <net>
          <source name="osc_1 wave"/>
@@ -77,5 +77,8 @@
          <dest name="dac_11 wave"/>
       </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
 </patch-1.0>

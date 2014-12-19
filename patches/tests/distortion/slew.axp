@@ -1,33 +1,33 @@
 <patch-1.0>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="80" y="160">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="28">
       <params>
          <frac32.s.map name="pitch" value="52.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="slew" sha="521ab25a6a0aa5d12cbe59b5c1f9630a2f01e167" name="slew1" x="280" y="160">
+   <obj type="dist/slew" sha="521ab25a6a0aa5d12cbe59b5c1f9630a2f01e167" name="slew1" x="224" y="28">
       <params>
          <frac32.u.map name="slew" value="2.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="kscope_128s_trig" sha="b2b49b9d34257a10eac015d8d4ac99d207cec7bf" name="kscope_128s_trig1" x="440" y="160">
+   <obj type="disp/kscope 128 b trig" sha="b2b49b9d34257a10eac015d8d4ac99d207cec7bf" name="kscope_128s_trig1" x="406" y="28">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="80" y="300">
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="168">
       <params>
          <frac32.s.map name="pitch" value="-14.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="slew" sha="b21f230004310005f3550792d307774153a89670" name="slew2" x="280" y="320">
+   <obj type="dist/slew" sha="b21f230004310005f3550792d307774153a89670" name="slew2" x="224" y="182">
       <params>
-         <frac32.u.map name="slew" value="1.6500000000000006"/>
+         <frac32.u.map name="slew" value="1.6499996185302734"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="400" y="320">
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="336" y="182">
       <params/>
       <attribs/>
    </obj>

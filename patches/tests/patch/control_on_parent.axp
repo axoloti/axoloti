@@ -1,42 +1,42 @@
 <patch-1.0>
-   <obj type="control_on_parent_sub" sha="30d78406cbba1af9d1a8d6d8a1ebf011185204e3" name="control_on_parent_sub1" x="40" y="40">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="240" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="./control_on_parent_sub" sha="847a89adf2f395cec9bb1b977d804eb8d6ce9fa7" name="obj_1" x="42" y="42">
       <params>
-         <frac32.u.map name="c2" value="33.5"/>
-         <frac32.u.map name="c4" value="10.5"/>
+         <frac32.u.map name="c2" value="2.0"/>
+         <frac32.u.map name="c4" value="4.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="240" y="40">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS2" x="240" y="120">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS2" x="240" y="120">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS3" x="240" y="200">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS3" x="240" y="200">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS4" x="240" y="280">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS4" x="240" y="280">
       <params/>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source name="control_on_parent_sub1 one"/>
+         <source name="obj_1 one"/>
          <dest name="displayS1 in"/>
       </net>
       <net>
-         <source name="control_on_parent_sub1 two"/>
+         <source name="obj_1 two"/>
          <dest name="displayS2 in"/>
       </net>
       <net>
-         <source name="control_on_parent_sub1 three"/>
+         <source name="obj_1 three"/>
          <dest name="displayS3 in"/>
       </net>
       <net>
-         <source name="control_on_parent_sub1 four"/>
+         <source name="obj_1 four"/>
          <dest name="displayS4 in"/>
       </net>
    </nets>

@@ -1,57 +1,57 @@
 <patch-1.0>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_2" x="0" y="20">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_2" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c_3" x="80" y="20">
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c_3" x="112" y="14">
       <params>
          <frac32.u.map name="amp" value="3.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_1" x="160" y="20">
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="210" y="14">
+      <params>
+         <frac32.s.map name="pitch" value="-10.599999904632568"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_1" x="14" y="140">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c_2" x="240" y="20">
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c_2" x="112" y="140">
       <params>
          <frac32.u.map name="amp" value="3.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="40" y="100">
+   <obj type="squaresync~" sha="9d196dfa9e8b9f0e0b3ebc4162c12d61a696c13d" name="squaresync~_1" x="210" y="140">
       <params>
-         <frac32.s.map name="pitch" value="-10.600000000000007"/>
+         <frac32.s.map name="pitch" value="5.507214069366455"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="squaresync~" sha="6c080cfa37121c79ff627df0cb7cb62fc3cb90c9" name="squaresync~_1" x="200" y="100">
-      <params>
-         <frac32.s.map name="pitch" value="5.507214095342533"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="cb1m" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_1" x="300" y="100">
-      <params>
-         <bool32.mom name="b" value="0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="440" y="140">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="322" y="140">
       <params>
          <frac32.u.map name="amp" value="12.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="500" y="140">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="420" y="140">
       <params/>
       <attribs/>
    </obj>
-   <obj type="scope_128s_v2" sha="375509bcb23b2f6a69f9cd82349f406464c8295e" name="scope_128s_v2_1" x="300" y="220">
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_1" x="322" y="252">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b" sha="375509bcb23b2f6a69f9cd82349f406464c8295e" name="scope_128s_v2_1" x="392" y="252">
       <params/>
       <attribs/>
    </obj>

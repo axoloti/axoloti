@@ -1,41 +1,41 @@
 <patch-1.0>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="0" y="80">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="26.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1_" x="0" y="160">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1_" x="14" y="98">
       <params>
          <frac32.s.map name="pitch" value="27.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="samplehold" sha="332c0a95e3f565a482d970d66b76153dae8d7d92" name="samplehold1" x="160" y="160">
+   <obj type="logic/samplehold" sha="332c0a95e3f565a482d970d66b76153dae8d7d92" name="samplehold1" x="182" y="98">
       <params/>
       <attribs/>
    </obj>
-   <obj type="kscope_128s_trig" sha="b2b49b9d34257a10eac015d8d4ac99d207cec7bf" name="kscope_128s1" x="280" y="160">
+   <obj type="disp/kscope 128 b trig" sha="b2b49b9d34257a10eac015d8d4ac99d207cec7bf" name="kscope_128s1" x="294" y="98">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="0" y="280">
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="210">
       <params>
-         <frac32.s.map name="pitch" value="4.200000000000001"/>
+         <frac32.s.map name="pitch" value="4.199999809265137"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1_" x="40" y="380">
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1_" x="14" y="322">
       <params>
-         <frac32.s.map name="pitch" value="4.2200000000000015"/>
+         <frac32.s.map name="pitch" value="4.21999979019165"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="samplehold" sha="37856879cf6c0ba2d84d25bca330b3c3615d474" name="samplehold1_" x="200" y="380">
+   <obj type="logic/samplehold" sha="37856879cf6c0ba2d84d25bca330b3c3615d474" name="samplehold1_" x="182" y="322">
       <params/>
       <attribs/>
    </obj>
-   <obj type="scope_128s_trig_v2" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128u_trig_v21" x="320" y="380">
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128u_trig_v21" x="294" y="322">
       <params/>
       <attribs/>
    </obj>

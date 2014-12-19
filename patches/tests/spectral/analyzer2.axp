@@ -1,35 +1,35 @@
 <patch-1.0>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="40" y="20">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="28" y="20">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c2" x="200" y="20">
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c2" x="196" y="20">
       <params>
          <frac32.u.map name="amp" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="40" y="140">
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="28" y="140">
       <params>
          <frac32.s.map name="pitch" value="16.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1" x="40" y="280">
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="28" y="280">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="240" y="280">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="238" y="280">
       <params>
          <frac32.u.map name="amp" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="analyzer24db2" sha="ebec0496c981fe053637f2258879d50dc0661e73" name="analyzer24db21" x="160" y="400">
+   <obj type="spectral/analyzer 24" sha="ebec0496c981fe053637f2258879d50dc0661e73" name="analyzer24db21" x="154" y="400">
       <params/>
       <attribs/>
    </obj>

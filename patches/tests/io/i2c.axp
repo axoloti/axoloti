@@ -1,26 +1,9 @@
 <patch-1.0>
-   <obj type="i2c.begin" sha="1ea9db31ce7ec2874d2a8315213c733a6b3c2dcf" name="i2c.begin_1" x="80" y="60">
+   <obj type="gpio/i2c/config" sha="1ea9db31ce7ec2874d2a8315213c733a6b3c2dcf" name="i2c.begin_1" x="14" y="42">
       <params/>
       <attribs/>
    </obj>
-   <obj type="adcconfig" sha="c5ee5e230152b248edde544704970b051688aa4f" name="adcconfig_1" x="240" y="60">
-      <params/>
-      <attribs>
-         <combo attributeName="gain" selection="-12dB"/>
-         <combo attributeName="boost" selection="Mute"/>
-      </attribs>
-   </obj>
-   <obj type="serial.begin" sha="f0df278a5fd5140e32239828049a8e062059f391" name="serial.begin_1" x="80" y="120">
-      <params/>
-      <attribs>
-         <combo attributeName="baudrate" selection="1200"/>
-      </attribs>
-   </obj>
-   <obj type="spi.begin" sha="e9e5af10e158c69f4c3f003a2d3612ffd0246bc4" name="spi.begin_1" x="80" y="180">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="script" sha="ba13a90be49d2157146d885c2cdf29e2c36cf457" name="script_1" x="80" y="240">
+   <obj type="script/script" sha="ba13a90be49d2157146d885c2cdf29e2c36cf457" name="script_1" x="14" y="98">
       <params/>
       <attribs>
          <text attributeName="script">
@@ -43,13 +26,13 @@ while(!chThdShouldTerminate()){
          </text>
       </attribs>
    </obj>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_1" x="240" y="240">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_1" x="140" y="98">
       <params>
          <frac32.s.map name="pitch" value="-32.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="scopeS" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS_1" x="380" y="240">
+   <obj type="disp/chart b" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS_1" x="280" y="98">
       <params/>
       <attribs/>
    </obj>

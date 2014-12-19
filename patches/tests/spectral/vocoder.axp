@@ -1,22 +1,22 @@
 <patch-1.0>
-   <obj type="keybzone_lru" sha="d22473f78d43bec724fdf2c7b1ed4565b4f11e0a" name="keybzone_lru1" x="0" y="0">
+   <obj type="keybzone_lru" sha="b9b28cf52b3421368e367f3718404222910c57a5" name="keybzone_lru1" x="0" y="14">
       <params/>
       <attribs>
          <spinner attributeName="startNote" value="0"/>
          <spinner attributeName="endNote" value="120"/>
       </attribs>
    </obj>
-   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_1" x="120" y="0">
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="126" y="14">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="adc~1" sha="76cc7b8fc059b573ece27b3319e73b4136159cff" name="adc_11" x="400" y="0">
+   <obj type="adc~1" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc_11" x="406" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="mix4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix41" x="480" y="0">
+   <obj type="mix/mix 4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix41" x="476" y="14">
       <params>
          <frac32.u.map name="gain1" value="63.5"/>
          <frac32.u.map name="gain2" value="0.0"/>
@@ -25,39 +25,25 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="48a545f7a28cac69c91560e873ac2754d450f408" name="osc_1" x="760" y="40">
-      <params>
-         <frac32.s.map name="pitch" value="-13.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_1_" x="120" y="80">
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1_" x="126" y="98">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="48a545f7a28cac69c91560e873ac2754d450f408" name="osc_2" x="280" y="100">
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_2" x="280" y="112">
       <params>
          <frac32.s.map name="pitch" value="10.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_1__" x="120" y="160">
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1__" x="126" y="182">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="800" y="220">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="160" y="240">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="mix4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix31" x="280" y="240">
+   <obj type="mix/mix 4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix31" x="280" y="252">
       <params>
          <frac32.u.map name="gain1" value="12.5"/>
          <frac32.u.map name="gain2" value="12.5"/>
@@ -66,13 +52,17 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="vocoder24v1" sha="6d9336d0af616451a51bbcc4675a9fce48d495e1" name="vocoder24v11" x="480" y="240">
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="154" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="unstable/spectral/vocoder 24" sha="6d9336d0af616451a51bbcc4675a9fce48d495e1" name="vocoder24v11" x="476" y="280">
       <params>
          <frac32.u.map name="reso" value="59.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="mix4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix41_" x="600" y="240">
+   <obj type="mix/mix 4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix41_" x="644" y="280">
       <params>
          <frac32.u.map name="gain1" value="63.5"/>
          <frac32.u.map name="gain2" value="63.5"/>
@@ -81,7 +71,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="800" y="300">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="742" y="280">
       <params/>
       <attribs/>
    </obj>
@@ -94,8 +84,8 @@
       </net>
       <net>
          <source name="mix41_ out"/>
-         <dest name="dac_11 wave"/>
-         <dest name="dac_21 wave"/>
+         <dest name="out_1 left"/>
+         <dest name="out_1 right"/>
       </net>
       <net>
          <source name="adc_11 wave"/>
@@ -138,5 +128,8 @@
          <dest name="vocoder24v11 mod"/>
       </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
 </patch-1.0>

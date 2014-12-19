@@ -1,31 +1,24 @@
 <patch-1.0>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c_1" x="300" y="40">
-      <params>
-         <frac32.u.map name="value" MidiCC="64" value="0.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="change" sha="f80233f48404b59940f740ca338756232392f909" name="change_1" x="360" y="40">
+   <obj type="audio/inconfig" sha="c5ee5e230152b248edde544704970b051688aa4f" name="adcconfig_1" x="210" y="42">
       <params/>
-      <attribs/>
+      <attribs>
+         <combo attributeName="gain" selection="0dB"/>
+         <combo attributeName="boost" selection="20dB"/>
+      </attribs>
    </obj>
-   <obj type="modsource" sha="45ebafea67ca2fe0720654bb75664ba8a032a332" name="modsource_1" x="460" y="40">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="560" y="60">
+   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="602" y="56">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter_1" x="680" y="60">
+   <obj type="logic/counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter_1" x="714" y="56">
       <params>
          <int32 name="maximum" value="8"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="select_fs_16b" sha="327cbafa4c76b1b7accb1d3bcf9b6f21803efd9a" name="select_fs_16b_1" x="760" y="60">
+   <obj type="sel/sel fb 16" sha="327cbafa4c76b1b7accb1d3bcf9b6f21803efd9a" name="select_fs_16b_1" x="798" y="56">
       <params>
          <frac32.s.mapvsl name="b0" value="24.0"/>
          <frac32.s.mapvsl name="b1" value="-11.0"/>
@@ -46,14 +39,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="adcconfig" sha="c5ee5e230152b248edde544704970b051688aa4f" name="adcconfig_1" x="60" y="80">
-      <params/>
-      <attribs>
-         <combo attributeName="gain" selection="0dB"/>
-         <combo attributeName="boost" selection="20dB"/>
-      </attribs>
-   </obj>
-   <obj type="ramtable32" sha="c9cc4c02436509b149863fb2d27ff1f3cfc3bcee" name="t" x="180" y="120">
+   <obj type="table/alloc 32b" sha="c9cc4c02436509b149863fb2d27ff1f3cfc3bcee" name="t" x="210" y="112">
       <params/>
       <attribs>
          <combo attributeName="size" selection="8192"/>
@@ -62,27 +48,27 @@
          </text>
       </attribs>
    </obj>
-   <obj type="adc~1" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="0" y="220">
+   <obj type="audio/in left" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="28" y="210">
       <params/>
       <attribs/>
    </obj>
-   <obj type="hipass~" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass~_2" x="60" y="220">
+   <obj type="filter/hp1" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass~_2" x="98" y="210">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="schmitttrigger~" sha="b6a051f4b960da5fe758d0b8bb723fa9a427a1b" name="schmitttrigger~_1" x="120" y="220">
+   <obj type="dist/schmitttrigger" sha="b6a051f4b960da5fe758d0b8bb723fa9a427a1b" name="schmitttrigger~_1" x="154" y="210">
       <params>
          <frac32.u.map name="hysteresis" value="0.019999980926513672"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="div2" sha="5df68ad33aa1633cb7cb1724fcd41eee28932582" name="div2_1" x="220" y="220">
+   <obj type="math/div 2" sha="5df68ad33aa1633cb7cb1724fcd41eee28932582" name="div2_1" x="252" y="210">
       <params/>
       <attribs/>
    </obj>
-   <obj type="eq4" sha="518b736fd39d7b359aad0043072946b6141c773b" name="eq4_1" x="280" y="220">
+   <obj type="filter/eq4" sha="518b736fd39d7b359aad0043072946b6141c773b" name="eq4_1" x="322" y="210">
       <params>
          <int32 name="lowmid" value="5"/>
          <int32 name="mid" value="2"/>
@@ -91,13 +77,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="hipass~" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass~_1" x="400" y="220">
+   <obj type="filter/hp1" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass~_1" x="434" y="210">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="graintablevoice2" sha="1f19375e264d3d3526ec62ac0999379f7897de4b" name="graintablevoice2_1" x="480" y="220">
+   <obj type="graintablevoice2" sha="d2b79fd5112c65f5075494095e8667591baf56dc" name="graintablevoice2_1" x="518" y="210">
       <params>
          <frac32.u.map name="lspread" value="5.5"/>
          <frac32.s.map name="length" value="1.700000286102295"/>
@@ -111,32 +97,32 @@
          <combo attributeName="poly" selection="12"/>
       </attribs>
    </obj>
-   <obj type="muls2" sha="17100b9369a00a2265f0f754ff1c0ec87f9c6690" name="muls2_1" x="600" y="260">
+   <obj type="math/muls 2" sha="17100b9369a00a2265f0f754ff1c0ec87f9c6690" name="muls2_1" x="630" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="740" y="260">
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="742" y="252">
       <params>
          <frac32.s.map name="pitch" value="-8.0"/>
          <frac32.u.map name="reso" value="60.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_1" x="860" y="300">
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_1" x="868" y="294">
       <params>
          <frac32.u.map name="gain1" value="20.0"/>
          <frac32.u.map name="gain2" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_2" x="740" y="400">
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_2" x="742" y="392">
       <params>
          <frac32.s.map name="pitch" value="4.0"/>
          <frac32.u.map name="reso" value="60.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="graintablevoice2" sha="1f19375e264d3d3526ec62ac0999379f7897de4b" name="graintablevoice2_2" x="480" y="420">
+   <obj type="graintablevoice2" sha="d2b79fd5112c65f5075494095e8667591baf56dc" name="graintablevoice2_2" x="518" y="420">
       <params>
          <frac32.u.map name="lspread" value="5.5"/>
          <frac32.s.map name="length" value="0.7000002861022949"/>
@@ -150,18 +136,18 @@
          <combo attributeName="poly" selection="12"/>
       </attribs>
    </obj>
-   <obj type="muls2" sha="17100b9369a00a2265f0f754ff1c0ec87f9c6690" name="muls2_2" x="600" y="420">
+   <obj type="math/muls 2" sha="17100b9369a00a2265f0f754ff1c0ec87f9c6690" name="muls2_2" x="630" y="420">
       <params/>
       <attribs/>
    </obj>
-   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_2" x="860" y="440">
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_2" x="868" y="434">
       <params>
          <frac32.u.map name="gain1" value="17.0"/>
          <frac32.u.map name="gain2" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="1000" y="440">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="1008" y="434">
       <params/>
       <attribs/>
    </obj>
@@ -205,15 +191,6 @@
       <net>
          <source name="eq4_1 out"/>
          <dest name="hipass~_1 in"/>
-      </net>
-      <net>
-         <source name="c_1 out"/>
-         <dest name="change_1 in"/>
-         <dest name="modsource_1 v"/>
-      </net>
-      <net>
-         <source name="change_1 trig"/>
-         <dest name="modsource_1 trig"/>
       </net>
       <net>
          <source name="square_1 wave"/>

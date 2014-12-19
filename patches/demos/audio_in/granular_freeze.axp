@@ -1,47 +1,47 @@
 <patch-1.0>
-   <obj type="env~" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4" name="env~_1" x="40" y="40">
+   <obj type="env/follower" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4" name="env~_1" x="40" y="40">
       <params/>
       <attribs>
          <combo attributeName="time" selection="42.6ms"/>
       </attribs>
    </obj>
-   <obj type="mix1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix1_1" x="120" y="40">
+   <obj type="mix/mix 1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix1_1" x="120" y="40">
       <params>
          <frac32.u.map name="gain1" value="2.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="&gt;c" sha="aa245f90aec358415dbbc12409c90065cda73d3e" name="&gt;c_1" x="220" y="40">
+   <obj type="math/&gt;c" sha="aa245f90aec358415dbbc12409c90065cda73d3e" name="&gt;c_1" x="220" y="40">
       <params>
          <frac32.u.map name="c" value="5.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand~_1" x="300" y="40">
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand~_1" x="300" y="40">
       <params/>
       <attribs/>
    </obj>
-   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_1" x="340" y="60">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_1" x="340" y="60">
       <params/>
       <attribs/>
    </obj>
-   <obj type="cb1m" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_1" x="20" y="160">
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_1" x="20" y="160">
       <params>
          <bool32.mom name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="adc~1" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="80" y="160">
+   <obj type="audio/in left" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="80" y="160">
       <params/>
       <attribs/>
    </obj>
-   <obj type="tabrecord~" sha="a3892e778ba03a4de7657660d1f1611c3e359689" name="tabrecord~_1" x="160" y="160">
+   <obj type="tabrecord~" sha="a11cd48fc41465d055106b87f9d341f6750abf93" name="tabrecord~_1" x="160" y="160">
       <params/>
       <attribs>
          <objref attributeName="table" obj="t"/>
       </attribs>
    </obj>
-   <obj type="ramtable16" sha="30e6566ebd5bd19afe2c6975adaa19d5b16584d9" name="t" x="300" y="160">
+   <obj type="table/alloc 16b" sha="30e6566ebd5bd19afe2c6975adaa19d5b16584d9" name="t" x="300" y="160">
       <params/>
       <attribs>
          <combo attributeName="size" selection="16384"/>
@@ -50,7 +50,7 @@
          </text>
       </attribs>
    </obj>
-   <obj type="graintablevoice" sha="275b0e9301c060424d5899750e4271874d2f1ba5" name="graintablevoice_1____tmp____tmp" x="20" y="240">
+   <obj type="graintablevoice" sha="8822d7059a3a58dac138f33a2bae1c6774c9864" name="graintablevoice_1" x="20" y="266">
       <params>
          <frac32.s.map name="detunerange" value="0.01999950408935547"/>
          <frac32.s.map name="detune" value="8.0"/>
@@ -62,7 +62,7 @@
          <combo attributeName="poly" selection="16"/>
       </attribs>
    </obj>
-   <obj type="graintablevoice" sha="275b0e9301c060424d5899750e4271874d2f1ba5" name="graintablevoice_1____tmp_" x="140" y="240">
+   <obj type="graintablevoice" sha="8822d7059a3a58dac138f33a2bae1c6774c9864" name="graintablevoice_2" x="196" y="266">
       <params>
          <frac32.s.map name="detunerange" value="0.01999950408935547"/>
          <frac32.s.map name="detune" value="8.0"/>
@@ -74,15 +74,15 @@
          <combo attributeName="poly" selection="16"/>
       </attribs>
    </obj>
-   <obj type="softsat" sha="4de9b281f2a362671b6dc8606f5d039535893f45" name="softsat_1" x="280" y="260">
+   <obj type="dist/soft" sha="4de9b281f2a362671b6dc8606f5d039535893f45" name="softsat_1" x="336" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="380" y="260">
+   <obj type="dist/soft" sha="4de9b281f2a362671b6dc8606f5d039535893f45" name="softsat_2" x="336" y="322">
       <params/>
       <attribs/>
    </obj>
-   <obj type="softsat" sha="4de9b281f2a362671b6dc8606f5d039535893f45" name="softsat_2" x="280" y="300">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="406" y="322">
       <params/>
       <attribs/>
    </obj>
@@ -110,7 +110,7 @@
          <dest name="tabrecord~_1 trig"/>
       </net>
       <net>
-         <source name="graintablevoice_1____tmp_ outlet~_1"/>
+         <source name="graintablevoice_2 outlet~_1"/>
          <dest name="softsat_1 in"/>
       </net>
       <net>
@@ -118,7 +118,7 @@
          <dest name="dac~_1 left"/>
       </net>
       <net>
-         <source name="graintablevoice_1____tmp____tmp outlet~_1"/>
+         <source name="graintablevoice_1 outlet~_1"/>
          <dest name="softsat_2 in"/>
       </net>
       <net>

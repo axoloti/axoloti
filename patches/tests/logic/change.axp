@@ -9,31 +9,31 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="logic/change" sha="2473451a71c0ec362331c67ef644bc59197a247d" name="change1" x="182" y="14">
+   <obj type="logic/change" sha="2473451a71c0ec362331c67ef644bc59197a247d" name="change1" x="168" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="logic/counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter1" x="294" y="14">
+   <obj type="logic/counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter1" x="266" y="14">
       <params>
          <int32 name="maximum" value="16"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161" x="378" y="14">
+   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161" x="364" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="logic/change" sha="f80233f48404b59940f740ca338756232392f909" name="change1_" x="182" y="126">
+   <obj type="logic/change" sha="f80233f48404b59940f740ca338756232392f909" name="change1_" x="168" y="126">
       <params/>
       <attribs/>
    </obj>
-   <obj type="logic/counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter1_" x="294" y="126">
+   <obj type="logic/counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter1_" x="266" y="126">
       <params>
          <int32 name="maximum" value="16"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161_" x="378" y="126">
+   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161_" x="364" y="126">
       <params/>
       <attribs/>
    </obj>
@@ -43,23 +43,23 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="conv/to i" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt2" x="182" y="238">
+   <obj type="conv/to i" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt2" x="140" y="238">
       <params/>
       <attribs/>
    </obj>
-   <obj type="logic/change speedlim" sha="66643745eb6dc4d0abbde79a0360d8b6011c3e99" name="changespeedlim1" x="266" y="238">
+   <obj type="logic/change speedlim" sha="66643745eb6dc4d0abbde79a0360d8b6011c3e99" name="changespeedlim1" x="224" y="238">
       <params>
          <frac32.u.map name="d" value="34.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="logic/counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter1__" x="420" y="238">
+   <obj type="logic/counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter1__" x="364" y="238">
       <params>
          <int32 name="maximum" value="16"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161__" x="504" y="238">
+   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161__" x="462" y="238">
       <params/>
       <attribs/>
    </obj>

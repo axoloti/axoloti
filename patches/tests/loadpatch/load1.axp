@@ -1,19 +1,19 @@
 <patch-1.0>
-   <obj type="osc~" sha="48a545f7a28cac69c91560e873ac2754d450f408" name="osc_1" x="0" y="60">
+   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="28">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="160" y="60">
+   <obj type="dac~1" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="126" y="28">
       <params/>
       <attribs/>
    </obj>
-   <obj type="button1" sha="d7e5e78016948ecaade268473afb9502b7c75239" name="button11" x="0" y="200">
+   <obj type="gpio/in/button1" sha="d7e5e78016948ecaade268473afb9502b7c75239" name="button11" x="14" y="168">
       <params/>
       <attribs/>
    </obj>
-   <obj type="load" sha="7e9a243e4b7d650ee243932589849d137ebd24" name="load1" x="120" y="200">
+   <obj type="patch/load" sha="dfb6f545e11f28d876ca35293a6c83e87dc43438" name="load_1" x="126" y="168">
       <params/>
       <attribs>
          <table attributeName="filename" table="load2.bin"/>
@@ -26,8 +26,11 @@
       </net>
       <net>
          <source name="button11 out"/>
-         <dest name="load1 trig"/>
+         <dest name="load_1 trig"/>
       </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
 </patch-1.0>

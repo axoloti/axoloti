@@ -1,89 +1,89 @@
 <patch-1.0>
-   <obj type="&lt;c" sha="355de7092a37338e16e09397154948f860a9160c" name="&gt;c1" x="200" y="20">
+   <obj type="math/&lt;c" sha="355de7092a37338e16e09397154948f860a9160c" name="&gt;c1" x="196" y="42">
       <params>
          <frac32.u.map name="c" value="44.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="40" y="120">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="42" y="140">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA0 (ADC1_IN0)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="200" y="120">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="196" y="140">
       <params/>
       <attribs/>
    </obj>
-   <obj type="smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth1" x="280" y="120">
+   <obj type="math/smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth1" x="280" y="140">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c1" x="440" y="120">
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c1" x="434" y="140">
       <params>
          <frac32.u.map name="amp" value="48.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="inv" sha="7b02dcb8eae6c8e1f4f1f9f532ad6cd7f0d9a69" name="inv1" x="560" y="120">
+   <obj type="math/inv" sha="7b02dcb8eae6c8e1f4f1f9f532ad6cd7f0d9a69" name="inv1" x="560" y="140">
       <params/>
       <attribs/>
    </obj>
-   <obj type="toInt" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt1" x="640" y="120">
+   <obj type="conv/to i" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt1" x="644" y="140">
       <params/>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1" x="800" y="120">
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="798" y="140">
       <params>
          <frac32.s.map name="pitch" value="18.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="1000" y="140">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="994" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2" x="40" y="240">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2" x="42" y="252">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA1 (ADC1_IN1)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU2" x="200" y="240">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU2" x="196" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c1_" x="280" y="240">
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c1_" x="280" y="252">
       <params>
          <frac32.u.map name="amp" value="55.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="360" y="240">
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="392" y="252">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="60.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="echo2~" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="520" y="240">
+   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="518" y="252">
       <params>
          <frac32.u.map name="mix" value="34.5"/>
          <frac32.u.map name="feedback" value="51.0"/>
       </params>
       <attribs>
-         <int attributeName="delaylength" value="17723"/>
+         <spinner attributeName="delaylength" value="17723"/>
       </attribs>
    </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c3" x="800" y="240">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c3" x="798" y="252">
       <params>
          <frac32.u.map name="amp" value="5.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="920" y="240">
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="924" y="252">
       <params/>
       <attribs/>
    </obj>

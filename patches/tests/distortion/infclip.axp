@@ -1,27 +1,27 @@
 <patch-1.0>
-   <obj type="hipass~" sha="f2c3331ff1e86a59b28451886de7b0221346e227" name="hipass_1" x="80" y="0">
+   <obj type="adc~1" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc_11" x="28" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="hipass~" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass_1" x="98" y="14">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="adc~1" sha="76cc7b8fc059b573ece27b3319e73b4136159cff" name="adc_11" x="0" y="0">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="+c" sha="dd36bdfc156063826c3897754f7ef30fd2895c89" name="c2" x="160" y="0">
+   <obj type="math/+c" sha="dd36bdfc156063826c3897754f7ef30fd2895c89" name="c2" x="182" y="14">
       <params>
-         <frac32.u.map name="c" value="0.055758792855660426"/>
+         <frac32.u.map name="c" value="0.05575847625732422"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="40" y="80">
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="56" y="98">
       <params>
          <frac32.s.map name="pitch" value="43.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="mix5" sha="2c736847c4b108230551b01d12e0c1893a51cb26" name="mix21" x="320" y="160">
+   <obj type="mix/mix 5" sha="2c736847c4b108230551b01d12e0c1893a51cb26" name="mix21" x="336" y="182">
       <params>
          <frac32.u.map name="gain1" value="0.0"/>
          <frac32.u.map name="gain2" value="0.0"/>
@@ -31,27 +31,27 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="infclip~" sha="b593e026bd98022e0fb3a259cfa53b4cb3721ade" name="infclip_1" x="480" y="160">
+   <obj type="infclip~" sha="3b7380de881bb6eafc05c60b35ae2351855d6c09" name="infclip_1" x="434" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1_" x="40" y="180">
-      <params>
-         <frac32.s.map name="pitch" value="11.99541296107003"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="600" y="160">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="504" y="182">
       <params>
          <frac32.u.map name="amp" value="4.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="680" y="160">
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="616" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="40" y="280">
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1_" x="56" y="210">
+      <params>
+         <frac32.s.map name="pitch" value="11.995412826538086"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="56" y="322">
       <params/>
       <attribs/>
    </obj>
@@ -94,5 +94,8 @@
          <dest name="mix21 in4"/>
       </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
 </patch-1.0>

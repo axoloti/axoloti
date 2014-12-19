@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="comment" sha="sha" name="midi in script to recall a preset : CC52 for preset 1, CC53 for preset 2...." x="20" y="20"/>
-   <obj type="midiinscript" sha="82709d8f2cd722b129cb94767cdc4a23b41a5230" name="midiinscript1" x="20" y="60">
+   <comment type="patch/comment" sha="sha" name="midi in script to recall a preset : CC52 for preset 1, CC53 for preset 2...." x="14" y="14"/>
+   <obj type="midi/in/script" sha="82709d8f2cd722b129cb94767cdc4a23b41a5230" name="midiinscript1" x="14" y="42">
       <params/>
       <attribs>
          <text attributeName="script">
@@ -12,7 +12,7 @@
          </text>
       </attribs>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="20" y="160">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="14" y="140">
       <params>
          <frac32.u.map name="value" value="1.0">
             <presets>
@@ -45,7 +45,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="100" y="160">
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="84" y="140">
       <params/>
       <attribs/>
    </obj>

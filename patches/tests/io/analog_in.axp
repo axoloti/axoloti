@@ -1,162 +1,162 @@
 <patch-1.0>
-   <comment type="comment" sha="sha" name="test for all analog inputs" x="0" y="0"/>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="40" y="40">
+   <comment type="patch/comment" sha="sha" name="test for all analog inputs" x="14" y="14"/>
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="14" y="42">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA0 (ADC1_IN0)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="200" y="40">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="154" y="42">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_" x="280" y="40">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_" x="238" y="42">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA4 (ADC1_IN4)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU5" x="440" y="40">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU5" x="378" y="42">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4__" x="520" y="40">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4__" x="462" y="42">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PB0 (ADC1_IN8)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU9" x="680" y="40">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU9" x="602" y="42">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4______" x="760" y="40">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4______" x="686" y="42">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC2 (ADC1_IN12)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU13" x="920" y="40">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU13" x="826" y="42">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2" x="40" y="160">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2" x="14" y="154">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA1 (ADC1_IN1)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU2" x="200" y="160">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU2" x="154" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1_" x="280" y="160">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1_" x="238" y="154">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA5 (ADC1_IN5)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU6" x="440" y="160">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU6" x="378" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4___" x="520" y="160">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4___" x="462" y="154">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PB1 (ADC1_IN9)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU10" x="680" y="160">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU10" x="602" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_______" x="760" y="160">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_______" x="686" y="154">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC3 (ADC1_IN13)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU14" x="920" y="160">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU14" x="826" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead3" x="40" y="280">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead3" x="14" y="280">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA2 (ADC1_IN2)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU3" x="200" y="280">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU3" x="154" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2_" x="280" y="280">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2_" x="238" y="280">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA6 (ADC1_IN6)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU7" x="440" y="280">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU7" x="378" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4____" x="520" y="280">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4____" x="462" y="280">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC0 (ADC1_IN10)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU11" x="680" y="280">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU11" x="602" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4________" x="760" y="280">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4________" x="686" y="280">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC4 (ADC1_IN14)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU15" x="920" y="280">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU15" x="826" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4" x="40" y="400">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4" x="14" y="392">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA3 (ADC1_IN3)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU4" x="200" y="400">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU4" x="154" y="392">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead3_" x="280" y="400">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead3_" x="238" y="392">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA7 (ADC1_IN7)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU8" x="440" y="400">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU8" x="378" y="392">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_____" x="520" y="400">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_____" x="462" y="392">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC1 (ADC1_IN11)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU12" x="680" y="400">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU12" x="602" y="392">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_________" x="760" y="400">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_________" x="686" y="392">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC5 (ADC1_IN15)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU16" x="920" y="400">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU16" x="826" y="392">
       <params/>
       <attribs/>
    </obj>

@@ -1,33 +1,33 @@
 <patch-1.0>
-   <obj type="inlet" sha="ec45071db47e99aa672b4e8456c862acb1d95499" name="inlet_frac" x="40" y="40">
+   <obj type="patch/inlet f" sha="ec45071db47e99aa672b4e8456c862acb1d95499" name="inlet_frac" x="14" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="outlet" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="outlet_frac" x="200" y="40">
+   <obj type="patch/outlet f" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="outlet_frac" x="182" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="inlet_b" sha="e98d5f4c7b741588feaffc8629026f8d8e59e3ef" name="inlet_bool" x="40" y="100">
+   <obj type="patch/inlet b" sha="e98d5f4c7b741588feaffc8629026f8d8e59e3ef" name="inlet_bool" x="14" y="70">
       <params/>
       <attribs/>
    </obj>
-   <obj type="outlet_b" sha="4f808e69c735aa76a990b5027b834057a146350" name="outlet_bool" x="200" y="100">
+   <obj type="patch/outlet b" sha="4f808e69c735aa76a990b5027b834057a146350" name="outlet_bool" x="182" y="70">
       <params/>
       <attribs/>
    </obj>
-   <obj type="inlet_i" sha="7a8c64d8041725644599af7ed4007b59beb57b1e" name="inlet_int" x="40" y="160">
+   <obj type="patch/inlet i" sha="7a8c64d8041725644599af7ed4007b59beb57b1e" name="inlet_int" x="14" y="126">
       <params/>
       <attribs/>
    </obj>
-   <obj type="outlet_i" sha="765721e48b5b8f0e998ecf5be549bf6ab0ec7e51" name="outlet_int" x="200" y="160">
+   <obj type="patch/outlet i" sha="765721e48b5b8f0e998ecf5be549bf6ab0ec7e51" name="outlet_int" x="182" y="126">
       <params/>
       <attribs/>
    </obj>
-   <obj type="inlet~" sha="2944bdbaeb2a8a42d5a97163275d052f75668a86" name="inlet_buffer" x="40" y="220">
+   <obj type="patch/inlet a" sha="2944bdbaeb2a8a42d5a97163275d052f75668a86" name="inlet_buffer" x="14" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="outlet~" sha="72226293648dde4dd4739bc1b8bc46a6bf660595" name="outlet_buffer" x="200" y="220">
+   <obj type="patch/outlet a" sha="72226293648dde4dd4739bc1b8bc46a6bf660595" name="outlet_buffer" x="182" y="182">
       <params/>
       <attribs/>
    </obj>

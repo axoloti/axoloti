@@ -1,67 +1,67 @@
 <patch-1.0>
-   <comment type="comment" sha="sha" name="DOES NOT WORK YET" x="43" y="28"/>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="120" y="80">
+   <comment type="patch/comment" sha="sha" name="DOES NOT WORK YET" x="14" y="14"/>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="98" y="70">
       <params>
          <frac32.u.map name="value" value="4.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="stringi" sha="11d59858f67133c4d23999967bbb52643eb8421e" name="stringi1" x="240" y="80">
+   <obj type="stringi" sha="4c1c90721e5f530e9fbdcfa373edaffe908e605b" name="stringi1" x="210" y="70">
       <params/>
       <attribs>
          <table attributeName="prefix" table="txx"/>
          <table attributeName="suffix" table=".raw"/>
       </attribs>
    </obj>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11_" x="560" y="140">
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11_" x="532" y="126">
       <params>
          <bool32.tgl name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="40" y="200">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="182">
       <params>
          <frac32.s.map name="pitch" value="-60.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="mix1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="160" y="200">
+   <obj type="mix/mix 1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="140" y="182">
       <params>
          <frac32.u.map name="gain1" value="8.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="280" y="200">
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="252" y="182">
       <params>
          <frac32.s.map name="pitch" value="-15.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="mix1" sha="f543e080bd2111cba525885443039f346703a594" name="mix11_" x="400" y="200">
+   <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix11_" x="378" y="182">
       <params>
          <frac32.u.map name="gain1" value="15.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="recwave" sha="bc82eee864fa0afb882278cb9db157b128aa8089" name="recwave1" x="560" y="200">
+   <obj type="recwave" sha="bdd8bbc33127ba950db6ace64f72f194e749d41" name="recwave1" x="532" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="play" x="320" y="340">
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="play" x="294" y="322">
       <params>
          <bool32.tgl name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="playwave2" sha="7d4c790799b1c84bf60cbcf10e023d391b3fc683" name="playwave21" x="400" y="340">
+   <obj type="playwave2" sha="7370e75d2cd86cc1588277da82a2ddbe1643c3fb" name="playwave21" x="378" y="322">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="560" y="340">
+   <obj type="dac~1" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="532" y="322">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_11_" x="560" y="400">
+   <obj type="dac~2" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_11_" x="532" y="378">
       <params/>
       <attribs/>
    </obj>

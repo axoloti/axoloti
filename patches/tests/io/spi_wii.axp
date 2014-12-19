@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="comment" sha="sha" name="Interface for the wii-mote camera (SPI version)" x="20" y="20"/>
-   <obj type="spi.begin" sha="8491453740b6fc6b2fcf5de6e9eb65baa370f6e4" name="spi.begin_1" x="20" y="60">
+   <comment type="patch/comment" sha="sha" name="Interface for the wii-mote camera (SPI version)" x="20" y="14"/>
+   <obj type="gpio/spi/config" sha="8491453740b6fc6b2fcf5de6e9eb65baa370f6e4" name="spi.begin_1" x="20" y="42">
       <params/>
       <attribs>
          <combo attributeName="clock_polarity" selection="0 when idle"/>
@@ -9,11 +9,11 @@
          <combo attributeName="format" selection="LSB first"/>
       </attribs>
    </obj>
-   <comment type="comment" sha="sha" name="PA5 = SCK" x="180" y="60"/>
-   <comment type="comment" sha="sha" name="PA6 = MISO" x="180" y="80"/>
-   <comment type="comment" sha="sha" name="PA7 = MOSI" x="180" y="100"/>
-   <comment type="comment" sha="sha" name="PA4 = NSS" x="180" y="120"/>
-   <obj type="script2" sha="1478c410b77725959c034de4a2456dd1198e9080" name="script2_1" x="20" y="200">
+   <comment type="patch/comment" sha="sha" name="PA5 = SCK" x="180" y="42"/>
+   <comment type="patch/comment" sha="sha" name="PA6 = MISO" x="180" y="56"/>
+   <comment type="patch/comment" sha="sha" name="PA7 = MOSI" x="180" y="70"/>
+   <comment type="patch/comment" sha="sha" name="PA4 = NSS" x="180" y="84"/>
+   <obj type="script/script2" sha="1478c410b77725959c034de4a2456dd1198e9080" name="script2_1" x="20" y="154">
       <params/>
       <attribs>
          <text attributeName="script">
@@ -93,19 +93,19 @@ void loop(void){
          </text>
       </attribs>
    </obj>
-   <obj type="disphex" sha="3ce96bdfc9c7668d6dbdd8a7430d740e07a3f48e" name="disphex_1" x="200" y="200">
+   <obj type="disp/hex" sha="3ce96bdfc9c7668d6dbdd8a7430d740e07a3f48e" name="disphex_1" x="168" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="340" y="200">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="308" y="154">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disphex" sha="3ce96bdfc9c7668d6dbdd8a7430d740e07a3f48e" name="disphex_2" x="200" y="260">
+   <obj type="disp/hex" sha="3ce96bdfc9c7668d6dbdd8a7430d740e07a3f48e" name="disphex_2" x="168" y="210">
       <params/>
       <attribs/>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_2" x="340" y="320">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_2" x="308" y="266">
       <params/>
       <attribs/>
    </obj>

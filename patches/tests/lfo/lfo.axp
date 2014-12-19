@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="freq" x="14" y="14">
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="freq_" x="14" y="14">
       <params>
          <frac32.s.map name="value" value="11.5"/>
       </params>
@@ -59,17 +59,23 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_11" x="700" y="448">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_11" x="728" y="448">
       <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="freq" x="28" y="518">
+      <params>
+         <frac32.s.map name="value" value="11.5"/>
+      </params>
       <attribs/>
    </obj>
    <obj type="lfo/saw lin" sha="f07af1d07daf7d5c2b5d64cbc0061679e61cc18f" name="saw1" x="210" y="518">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="490" y="560">
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb11" x="490" y="560">
       <params>
-         <bool32.tgl name="b" value="0"/>
+         <bool32.mom name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
@@ -141,6 +147,13 @@
          <source name="*c_1 out"/>
          <dest name="dac_11 left"/>
          <dest name="dac_11 right"/>
+      </net>
+      <net>
+         <source name="freq_ out"/>
+         <dest name="osc1 pitchm"/>
+         <dest name="saw21 pitchm"/>
+         <dest name="sawdown21 pitchm"/>
+         <dest name="square1 pitchm"/>
       </net>
    </nets>
    <settings>

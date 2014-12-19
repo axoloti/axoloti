@@ -1,166 +1,170 @@
 <patch-1.0>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="metronome" x="0" y="0">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="metronome" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="7.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_1" x="280" y="0">
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="308" y="28">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="counter" sha="b6d84a4508de2ebf80126ae80f49e5588149d417" name="counter_1" x="0" y="80">
+   <obj type="counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter_1" x="14" y="98">
       <params>
          <int32 name="maximum" value="16"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="beat" x="80" y="80">
+   <obj type="sel/sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="beat" x="112" y="112">
       <params>
          <bin16 name="b16" value="268456209"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="selectc2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents" x="280" y="80">
+   <obj type="sel/sel dial 2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents" x="308" y="112">
       <params>
          <frac32.u.map name="v0" value="40.0"/>
          <frac32.u.map name="v1" value="2.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="envd2" sha="50cab575d33b76fbf6279e2c0fa381124d3f1032" name="envd2_1" x="360" y="80">
+   <obj type="env/d m" sha="50cab575d33b76fbf6279e2c0fa381124d3f1032" name="envd2_1" x="392" y="112">
       <params>
          <frac32.u.map name="d" value="24.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="440" y="80">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_2" x="490" y="112">
       <params/>
       <attribs/>
    </obj>
-   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="520" y="80">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="602" y="112">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="686" y="112">
       <params>
          <frac32.s.map name="pitch" value="-11.0"/>
-         <frac32.u.map name="reso" value="57.5"/>
+         <frac32.u.map name="reso" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_1" x="640" y="80">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_1" x="798" y="112">
       <params/>
       <attribs/>
    </obj>
-   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="accent" x="80" y="140">
+   <obj type="sel/sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="accent" x="112" y="182">
       <params>
          <bin16 name="b16" value="84787"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI_1" x="40" y="180">
+   <obj type="disp/i" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI_1" x="56" y="210">
       <params/>
       <attribs/>
    </obj>
-   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_1" x="80" y="200">
+   <obj type="sel/sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_1" x="112" y="238">
       <params>
          <bin16 name="b16" value="52331"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="selectc2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents1" x="280" y="220">
+   <obj type="sel/sel dial 2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents1" x="308" y="252">
       <params>
          <frac32.u.map name="v0" value="0.0"/>
          <frac32.u.map name="v1" value="24.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth2_1" x="360" y="220">
+   <obj type="math/smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth2_1" x="392" y="252">
       <params>
          <frac32.u.map name="risetime" value="42.5"/>
          <frac32.u.map name="falltime" value="23.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="480" y="220">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="476" y="252">
       <params/>
       <attribs/>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_2" x="560" y="220">
+   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar16_1" x="112" y="294">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ibar16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar16_1" x="80" y="260">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_1" x="800" y="300">
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_1" x="826" y="336">
       <params>
          <frac32.u.map name="gain1" value="63.5"/>
          <frac32.u.map name="gain2" value="60.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="echo2~" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="920" y="300">
+   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="938" y="336">
       <params>
          <frac32.u.map name="mix" value="63.5"/>
          <frac32.u.map name="feedback" value="19.5"/>
       </params>
       <attribs>
-         <int attributeName="delaylength" value="18772"/>
+         <spinner attributeName="delaylength" value="18772"/>
       </attribs>
    </obj>
-   <obj type="mix1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix1_1" x="400" y="340">
-      <params>
-         <frac32.u.map name="gain1" value="1.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c_1" x="320" y="360">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c_1" x="420" y="378">
       <params>
          <frac32.u.map name="value" value="4.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_2" x="520" y="360">
+   <obj type="mix/mix 1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix1_1" x="490" y="378">
+      <params>
+         <frac32.u.map name="gain1" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_2" x="574" y="378">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_3" x="640" y="360">
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_3" x="686" y="378">
       <params>
          <frac32.u.map name="gain1" value="50.0"/>
          <frac32.u.map name="gain2" value="50.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_2" x="80" y="440">
+   <obj type="sel/sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_2" x="112" y="476">
       <params>
          <bin16 name="b16" value="43879"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="selectc2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="selectc2_1" x="280" y="440">
+   <obj type="sel/sel dial 2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="selectc2_1" x="308" y="476">
       <params>
          <frac32.u.map name="v0" value="0.0"/>
          <frac32.u.map name="v1" value="12.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth2_2" x="400" y="440">
+   <obj type="math/smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth2_2" x="420" y="476">
       <params>
          <frac32.u.map name="risetime" value="27.0"/>
          <frac32.u.map name="falltime" value="6.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="186cb19a80ec8d0b360bd86a8708233e555fc61b" name="saw_1_" x="520" y="440">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_3" x="504" y="476">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1_" x="574" y="476">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="mix3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix3_2" x="920" y="540">
+   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix3_2" x="938" y="574">
       <params>
          <frac32.u.map name="gain1" value="48.0"/>
          <frac32.u.map name="gain2" value="22.5"/>
@@ -168,99 +172,95 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac1_1" x="1040" y="540">
+   <obj type="dac~1" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac1_1" x="1064" y="574">
       <params/>
       <attribs/>
    </obj>
-   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="beat_" x="80" y="560">
+   <obj type="sel/sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="beat_" x="112" y="602">
       <params>
          <bin16 name="b16" value="268465737"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="selectc2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents_" x="280" y="560">
+   <obj type="sel/sel dial 2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents_" x="308" y="602">
       <params>
          <frac32.u.map name="v0" value="0.0"/>
          <frac32.u.map name="v1" value="62.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="envd2" sha="50cab575d33b76fbf6279e2c0fa381124d3f1032" name="envd2_1_" x="360" y="560">
+   <obj type="env/d m" sha="50cab575d33b76fbf6279e2c0fa381124d3f1032" name="envd2_1_" x="392" y="602">
       <params>
          <frac32.u.map name="d" value="7.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1_" x="440" y="560">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1_" x="490" y="602">
       <params/>
       <attribs/>
    </obj>
-   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1_" x="520" y="560">
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1_" x="560" y="602">
       <params>
-         <frac32.s.map name="pitch" value="16.0"/>
+         <frac32.s.map name="pitch" value="21.0"/>
          <frac32.u.map name="reso" value="62.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2" x="640" y="560">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2" x="672" y="602">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac2_1" x="1040" y="600">
+   <obj type="dac~2" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac2_1" x="1064" y="630">
       <params/>
       <attribs/>
    </obj>
-   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="accent_" x="80" y="620">
+   <obj type="sel/sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="accent_" x="112" y="658">
       <params>
          <bin16 name="b16" value="101424"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_1_" x="80" y="680">
+   <obj type="sel/sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_1_" x="112" y="714">
       <params>
          <bin16 name="b16" value="34141"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="selectc2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents1_" x="280" y="700">
+   <obj type="sel/sel dial 2" sha="5b56c2ce0db38d4d3da54dff0198ef5c1364db55" name="accents1_" x="308" y="714">
       <params>
          <frac32.u.map name="v0" value="0.0"/>
          <frac32.u.map name="v1" value="15.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth2_1_" x="360" y="700">
+   <obj type="math/smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth2_1_" x="392" y="714">
       <params>
          <frac32.u.map name="risetime" value="0.0"/>
          <frac32.u.map name="falltime" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1_" x="480" y="700">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1_" x="504" y="742">
       <params/>
       <attribs/>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_3" x="560" y="700">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_1__" x="80" y="820">
+   <obj type="sel/sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_1__" x="112" y="854">
       <params>
-         <bin16 name="b16" value="16961"/>
+         <bin16 name="b16" value="54993"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay1" x="280" y="820">
+   <obj type="wave/flashplay" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay1" x="308" y="854">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808bd"/>
       </attribs>
    </obj>
-   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_1_" x="400" y="820">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_1_" x="420" y="854">
       <params/>
       <attribs/>
    </obj>
-   <obj type="mix3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix3_1" x="440" y="820">
+   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix3_1" x="490" y="854">
       <params>
          <frac32.u.map name="gain1" value="63.5"/>
          <frac32.u.map name="gain2" value="63.5"/>
@@ -268,43 +268,43 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="double" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2" name="double_1" x="569" y="843">
+   <obj type="math/double" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2" name="double_1" x="588" y="854">
       <params/>
       <attribs/>
    </obj>
-   <obj type="sin" sha="1071012784f2bd65a87a083ab2b7c3d46db76c52" name="sin_1" x="672" y="854">
+   <obj type="math/sin" sha="1071012784f2bd65a87a083ab2b7c3d46db76c52" name="sin_1" x="686" y="854">
       <params/>
       <attribs/>
    </obj>
-   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_2_" x="80" y="880">
+   <obj type="sel/sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_2_" x="112" y="910">
       <params>
          <bin16 name="b16" value="4112"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay2" x="280" y="880">
+   <obj type="wave/flashplay" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay2" x="308" y="910">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808hatclose"/>
       </attribs>
    </obj>
-   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2_" x="400" y="880">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2_" x="420" y="910">
       <params/>
       <attribs/>
    </obj>
-   <obj type="select_bool_16" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_3" x="80" y="940">
+   <obj type="sel/sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb" name="select_bool_16_3" x="98" y="980">
       <params>
          <bin16 name="b16" value="18696"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="flashwaveplay~" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay3" x="280" y="940">
+   <obj type="wave/flashplay" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad" name="flashwaveplay3" x="308" y="980">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808snare"/>
       </attribs>
    </obj>
-   <obj type="vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_3" x="400" y="940">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_3" x="420" y="980">
       <params/>
       <attribs/>
    </obj>
@@ -497,5 +497,8 @@
          <dest name="mix3_2 in3"/>
       </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
 </patch-1.0>

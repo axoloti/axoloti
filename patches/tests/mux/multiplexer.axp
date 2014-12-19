@@ -1,37 +1,37 @@
 <patch-1.0>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="20">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="28" y="28">
       <params>
          <frac32.u.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="sel" x="160" y="40">
+   <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_1" x="168" y="28">
       <params>
-         <frac32.u.map name="value" value="0.0"/>
+         <int32.vradio name="value" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="0" y="100">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="28" y="112">
       <params>
          <frac32.u.map name="value" value="10.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="inmux4" sha="e7166ff98d97ba23b1ddc266f3af122f01bf7412" name="inmux41" x="160" y="120">
+   <obj type="inmux4" sha="868ef20dcb0c47514ee473fd70c3e42cf81d71b8" name="inmux41" x="182" y="126">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="280" y="120">
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="280" y="126">
       <params/>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="0" y="180">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="28" y="196">
       <params>
          <frac32.u.map name="value" value="20.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="0" y="260">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="28" y="280">
       <params>
          <frac32.u.map name="value" value="30.0"/>
       </params>
@@ -55,13 +55,16 @@
          <dest name="inmux41 i3"/>
       </net>
       <net>
-         <source name="sel out"/>
-         <dest name="inmux41 s"/>
-      </net>
-      <net>
          <source name="inmux41 o"/>
          <dest name="displayU1 in"/>
       </net>
+      <net>
+         <source name="i_1 out"/>
+         <dest name="inmux41 s"/>
+      </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
 </patch-1.0>

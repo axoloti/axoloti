@@ -1,135 +1,107 @@
 <patch-1.0>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="0">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="14" y="14">
       <params>
-         <frac32.u.map name="value" MidiCC="12" value="0.0"/>
+         <frac32.u.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth1" x="80" y="20">
+   <obj type="math/smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth1" x="98" y="14">
       <params>
          <frac32.u.map name="time" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="240" y="40">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="266" y="42">
       <params/>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="0" y="80">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="14" y="98">
       <params>
-         <frac32.u.map name="value" MidiCC="13" value="0.0">
-            <presets>
-               <preset index="1">
-                  <f v="63.5"/>
-               </preset>
-               <preset index="3">
-                  <f v="31.0"/>
-               </preset>
-            </presets>
+         <frac32.u.map name="value" value="0.0">
+            <presets/>
          </frac32.u.map>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="0" y="160">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="14" y="182">
       <params>
-         <frac32.u.map name="value" MidiCC="14" value="7.5">
-            <presets>
-               <preset index="1">
-                  <f v="63.5"/>
-               </preset>
-               <preset index="2">
-                  <f v="0.0"/>
-               </preset>
-            </presets>
+         <frac32.u.map name="value" value="7.5">
+            <presets/>
          </frac32.u.map>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="0" y="240">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="14" y="266">
       <params>
-         <frac32.u.map name="value" MidiCC="15" value="16.0">
-            <presets>
-               <preset index="1">
-                  <f v="63.5"/>
-               </preset>
-               <preset index="2">
-                  <f v="0.0"/>
-               </preset>
-               <preset index="3">
-                  <f v="29.5"/>
-               </preset>
-            </presets>
+         <frac32.u.map name="value" value="16.0">
+            <presets/>
          </frac32.u.map>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c5" x="0" y="320">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c5" x="14" y="350">
       <params>
-         <frac32.u.map name="value" MidiCC="16" value="29.5">
-            <presets>
-               <preset index="2">
-                  <f v="0.0"/>
-               </preset>
-            </presets>
+         <frac32.u.map name="value" value="29.5">
+            <presets/>
          </frac32.u.map>
       </params>
       <attribs/>
    </obj>
-   <obj type="pwmout_t5" sha="b039fad23a8dfd2fa54f2d4f6108b397273d87bd" name="pwmout_t51" x="440" y="340">
+   <obj type="gpio/out/pwm t5" sha="b039fad23a8dfd2fa54f2d4f6108b397273d87bd" name="pwmout_t51" x="448" y="378">
       <params/>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c6" x="0" y="400">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c6" x="14" y="434">
       <params>
-         <frac32.u.map name="value" MidiCC="17" value="1.5"/>
+         <frac32.u.map name="value" value="1.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c7" x="0" y="480">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c7" x="14" y="518">
       <params>
-         <frac32.u.map name="value" MidiCC="18" value="4.5"/>
+         <frac32.u.map name="value" value="4.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c8" x="0" y="560">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c8" x="14" y="602">
       <params>
-         <frac32.u.map name="value" MidiCC="19" value="3.0"/>
+         <frac32.u.map name="value" value="3.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c9" x="0" y="640">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c9" x="14" y="686">
       <params>
-         <frac32.u.map name="value" MidiCC="20" value="9.0"/>
+         <frac32.u.map name="value" value="9.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="pwmout_t3" sha="c6c36bce1738f803a40a11c3e030e5240431b3e9" name="pwmout_t31" x="120" y="640">
+   <obj type="gpio/out/pwm t3" sha="c6c36bce1738f803a40a11c3e030e5240431b3e9" name="pwmout_t31" x="126" y="686">
       <params/>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c10" x="0" y="720">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c10" x="14" y="770">
       <params>
-         <frac32.u.map name="value" MidiCC="21" value="0.0"/>
+         <frac32.u.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c11" x="0" y="800">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c11" x="14" y="854">
       <params>
-         <frac32.u.map name="value" MidiCC="22" value="0.0"/>
+         <frac32.u.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="pwmout_t4" sha="c2151e6cb19ea1aa1adeab6b638009fa38d7c2dc" name="pwmout_t41" x="120" y="820">
+   <obj type="gpio/out/pwm t4" sha="c2151e6cb19ea1aa1adeab6b638009fa38d7c2dc" name="pwmout_t41" x="126" y="868">
       <params/>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c12" x="0" y="880">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c12" x="14" y="938">
       <params>
-         <frac32.u.map name="value" MidiCC="23" value="0.0"/>
+         <frac32.u.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="pwmout_t8" sha="bc5389b0e96a90dcc21d117cbf363659bfe2070e" name="pwmout_t81" x="280" y="920">
+   <obj type="gpio/out/pwm t8" sha="bc5389b0e96a90dcc21d117cbf363659bfe2070e" name="pwmout_t81" x="294" y="980">
       <params/>
       <attribs/>
    </obj>
@@ -188,5 +160,8 @@
          <dest name="pwmout_t51 pa3"/>
       </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
 </patch-1.0>
