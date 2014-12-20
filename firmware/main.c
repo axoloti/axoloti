@@ -91,6 +91,7 @@ int main(void) {
   palSetPadMode(GPIOB, 2, PAL_MODE_INPUT_PULLDOWN);
 
   axoloti_board_init();
+  adc_init();
   axoloti_math_init();
   midi_init();
   codec_init();

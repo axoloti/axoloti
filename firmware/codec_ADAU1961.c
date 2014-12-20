@@ -40,11 +40,9 @@ STM32_SPI2_TX_DMA_CHN /* 0000 */)
 STM32_DMA_GETCHANNEL(STM32_DMA_STREAM_ID(1, 3), \
 3)
 
-static const SPIConfig spi1c_cfg = {NULL,
-/* HW dependent part.*/GPIOE,
-                                    8, SPI_CR1_BR_0 | SPI_CR1_BR_1
-                                        | SPI_CR1_BR_2 | SPI_CR1_CPOL
-                                        | SPI_CR1_CPHA };
+static const SPIConfig spi1c_cfg = {NULL, /* HW dependent part.*/GPIOE, 8,
+                                    SPI_CR1_BR_0 | SPI_CR1_BR_1 | SPI_CR1_BR_2
+                                        | SPI_CR1_CPOL | SPI_CR1_CPHA };
 
 void codec_ADAU1961_hw_reset(void) {
 }
@@ -413,9 +411,9 @@ static void dma_i2s_interrupt(void* dat, uint32_t flags) {
 }
 
 static void dma_i2s_rxinterrupt(void* dat, uint32_t flags) {
-  dmaStreamClearInterrupt(i2sdma_ADAU1961rx);
   (void)dat;
   (void)flags;
+  dmaStreamClearInterrupt(i2sdma_ADAU1961rx);
 }
 
 static void codec_ADAU1961_dma_init(void) {

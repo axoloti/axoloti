@@ -35,11 +35,11 @@ STM32_DMA_GETCHANNEL(STM32_SPI_SPI3_TX_DMA_STREAM, \
 STM32_SPI3_TX_DMA_CHN)
 
 static uint8_t txbuf[2] __attribute__ ((section (".sram2")));
-static uint8_t  rxbuf[2] __attribute__ ((section (".sram2")));
+static uint8_t rxbuf[2] __attribute__ ((section (".sram2")));
 
 void codec_CS43L22_hw_init(void) {
-  palSetPadMode(GPIOB, 6, PAL_MODE_ALTERNATE(4)| PAL_STM32_OTYPE_OPENDRAIN);
-  palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(4)| PAL_STM32_OTYPE_OPENDRAIN);
+  palSetPadMode(GPIOB, 6, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN);
+  palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN);
 
 // Start the i2c driver
   i2cStart(&CODEC_I2C, &i2cfg);
@@ -83,16 +83,20 @@ void codec_CS43L22_hw_init(void) {
 }
 
 void codec_CS43L22_hw_reset(void) {
-  palClearPad(GPIOD, 4);//GPIOD_RESET);
+  palClearPad(GPIOD, 4); //GPIOD_RESET);
   halPolledDelay(MS2RTT(10));
-  palSetPad(GPIOD, 4);//GPIOD_RESET);
+  palSetPad(GPIOD, 4); //GPIOD_RESET);
 }
 
 static void dma_i2s_interrupt(void* dat, uint32_t flags) {
-  if ((i2sdma)->stream->CR & STM32_DMA_CR_CT){
-    computebufI(rbuf,buf);
-  } else {
-    computebufI(rbuf2,buf2);
+  (void)dat;
+  (void)flags;
+
+  if ((i2sdma)->stream->CR & STM32_DMA_CR_CT) {
+    computebufI(rbuf, buf);
+  }
+  else {
+    computebufI(rbuf2, buf2);
   }
   dmaStreamClearInterrupt(i2sdma);
 }
@@ -100,18 +104,13 @@ static void dma_i2s_interrupt(void* dat, uint32_t flags) {
 static void codec_CS43L22_dma_init(void) {
   i2sdma = STM32_DMA_STREAM(STM32_SPI_SPI3_TX_DMA_STREAM);
 
-  i2stxdmamode = STM32_DMA_CR_CHSEL(I2S3_TX_DMA_CHANNEL) |
-  STM32_DMA_CR_PL(STM32_SPI_SPI3_DMA_PRIORITY) |
-  STM32_DMA_CR_DIR_M2P |
-  STM32_DMA_CR_TEIE |
-  STM32_DMA_CR_TCIE |
-  STM32_DMA_CR_DBM | // double buffer mode
-  STM32_DMA_CR_PSIZE_HWORD | STM32_DMA_CR_MSIZE_WORD;
+  i2stxdmamode = STM32_DMA_CR_CHSEL(I2S3_TX_DMA_CHANNEL)
+      | STM32_DMA_CR_PL(STM32_SPI_SPI3_DMA_PRIORITY) | STM32_DMA_CR_DIR_M2P
+      | STM32_DMA_CR_TEIE | STM32_DMA_CR_TCIE | STM32_DMA_CR_DBM | // double buffer mode
+      STM32_DMA_CR_PSIZE_HWORD | STM32_DMA_CR_MSIZE_WORD;
 
-  dmaStreamAllocate(i2sdma,
-      STM32_SPI_SPI3_IRQ_PRIORITY,
-      (stm32_dmaisr_t)dma_i2s_interrupt,
-      (void *)&SPID3);
+  dmaStreamAllocate(i2sdma, STM32_SPI_SPI3_IRQ_PRIORITY,
+                    (stm32_dmaisr_t)dma_i2s_interrupt, (void *)&SPID3);
 
   dmaStreamSetPeripheral(i2sdma, &(SPI3->DR));
   dmaStreamSetMemory0(i2sdma, buf);
@@ -129,24 +128,24 @@ void codec_CS43L22_i2s_init_48k(void) {
   palSetPadMode(GPIOC, 12, PAL_MODE_ALTERNATE(6));
 
 // SPI3 in I2S Mode, Master
-  CODEC_I2S_ENABLE
-  ;
-  CODEC_I2S ->I2SCFGR = SPI_I2SCFGR_I2SMOD | SPI_I2SCFGR_I2SCFG_1 | SPI_I2SCFGR_DATLEN_1;
-  CODEC_I2S ->I2SPR = SPI_I2SPR_MCKOE | SPI_I2SPR_ODD | 3;
+  CODEC_I2S_ENABLE;
+  CODEC_I2S->I2SCFGR = SPI_I2SCFGR_I2SMOD | SPI_I2SCFGR_I2SCFG_1
+      | SPI_I2SCFGR_DATLEN_1;
+  CODEC_I2S->I2SPR = SPI_I2SPR_MCKOE | SPI_I2SPR_ODD | 3;
   codec_CS43L22_dma_init();
-  CODEC_I2S ->CR2 = SPI_CR2_TXDMAEN;
-  CODEC_I2S ->I2SCFGR |= SPI_I2SCFGR_I2SE;
+  CODEC_I2S->CR2 = SPI_CR2_TXDMAEN;
+  CODEC_I2S->I2SCFGR |= SPI_I2SCFGR_I2SE;
 }
 
 void codec_CS43L22_writeReg(uint8_t addr, uint8_t data) {
   txbuf[0] = addr;
   txbuf[1] = data;
-  i2cMasterTransmitTimeout(&I2CD1, CS43L22_ADDR, txbuf, 2, NULL, 0, MS2ST(4) );
+  i2cMasterTransmitTimeout(&I2CD1, CS43L22_ADDR, txbuf, 2, NULL, 0, MS2ST(4));
 }
 
 uint8_t codec_CS43L22_readReg(uint8_t addr) {
   txbuf[0] = addr;
-  i2cMasterTransmitTimeout(&I2CD1, CS43L22_ADDR, txbuf, 1, rxbuf, 2, MS2ST(4) );
+  i2cMasterTransmitTimeout(&I2CD1, CS43L22_ADDR, txbuf, 1, rxbuf, 2, MS2ST(4));
   return rxbuf[0];
 }
 

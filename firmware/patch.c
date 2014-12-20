@@ -84,7 +84,7 @@ static msg_t ThreadDSP(void *arg) {
         outbuf[i] = 0;
       }
     }
-    AxoboardADCConvert();
+    adc_convert();
     DspTime = RTT2US(hal_lld_get_counter_value() - tStart);
     dspLoadPct = (100 * DspTime) / CycleTime;
   }
@@ -106,6 +106,8 @@ void StopPatch(void) {
 void StartPatch(void) {
   KVP_ClearObjects();
   sdAttemptMountIfUnmounted();
+  // reinit pin configuration for adc
+  adc_init();
   patchMeta.fptr_dsp_process = 0;
   patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
   (patchMeta.fptr_patch_init)(GetFirmwareID());

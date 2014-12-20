@@ -17,6 +17,7 @@
  */
 #include "ch.h"
 #include "hal.h"
+#include "axoloti_defines.h"
 #include "axoloti_board.h"
 
 void BlinkenLights(void) {
@@ -46,7 +47,7 @@ void BlinkenLights(void) {
   palClearPad(GPIOE, 14);
 }
 
-Mutex Mutex_DMAStream_1_7; // shared: SPI3 (axocontrol) and I2C2 (codec)
+Mutex Mutex_DMAStream_1_7; // shared: SPI3 (axoloti control) and I2C2 (codec)
 
 void axoloti_board_init(void) {
   chMtxInit(&Mutex_DMAStream_1_7);
@@ -76,11 +77,56 @@ void InitPWM(void) {
 //  pwmStart(&PWMD8, &pwmcfg);
 }
 
-// ------------------------- ADC --------------------------------------------
+/* Total number of channels to be sampled by a single ADC operation.*/
+#define ADC_GRP1_NUM_CHANNELS   16
 
-#if 1
+/* Depth of the conversion buffer, channels are sampled four times each.*/
+#define ADC_GRP1_BUF_DEPTH      1
 
-//static void adccb(ADCDriver *adcp, adcsample_t *buffer, size_t n);
+void adc_init(void) {
+#if (BOARD_AXOLOTI_V03)
+  palSetPadMode(GPIOA, 0, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOA, 1, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOA, 2, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOA, 3, PAL_MODE_INPUT_ANALOG);
+
+  palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOA, 6, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOA, 7, PAL_MODE_INPUT_ANALOG);
+
+  palSetPadMode(GPIOB, 0, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOB, 1, PAL_MODE_INPUT_ANALOG);
+
+  palSetPadMode(GPIOC, 0, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOC, 1, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOC, 2, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOC, 3, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOC, 4, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOC, 5, PAL_MODE_INPUT_ANALOG);
+  adcStart(&ADCD1, NULL);
+#elif (BOARD_STM32F4DISCOVERY)
+
+  palSetPadMode(GPIOA, 0, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOA, 1, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOA, 2, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOA, 3, PAL_MODE_INPUT_ANALOG);
+  // skip GPIOA4: LRCLK
+  // skip GPIOA5,GPIOA6,GPIOA7: accelerometer
+  palSetPadMode(GPIOB, 0, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOB, 1, PAL_MODE_INPUT_ANALOG);
+  //skip GPIOPC0: USB PowerOn
+  palSetPadMode(GPIOC, 1, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOC, 2, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOC, 3, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOC, 4, PAL_MODE_INPUT_ANALOG);
+  palSetPadMode(GPIOC, 5, PAL_MODE_INPUT_ANALOG);
+  adcStart(&ADCD1, NULL);
+#else
+#error "ADC: No board defined?"
+#endif
+
+}
 
 /*
  * ADC samples buffer.
@@ -117,9 +163,8 @@ static const ADCConversionGroup adcgrpcfg1 = {FALSE,      //circular buffer mode
         | ADC_SQR3_SQ5_N(ADC_CHANNEL_IN4) | ADC_SQR3_SQ6_N(ADC_CHANNEL_IN5) //SQR3: Conversion group sequence 1...6
 };
 
-void AxoboardADCConvert(void) {
+void adc_convert(void) {
   adcStopConversion(&ADCD1);
   adcStartConversion(&ADCD1, &adcgrpcfg1, adcvalues, ADC_GRP1_BUF_DEPTH);
 }
 
-#endif
