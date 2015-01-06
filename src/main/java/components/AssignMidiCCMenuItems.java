@@ -17,7 +17,7 @@
  */
 package components;
 
-import axoloti.parameters.ParameterInstanceFrac32UMap;
+import axoloti.parameters.ParameterInstance;
 import java.awt.GridLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
@@ -30,7 +30,7 @@ import javax.swing.JRadioButton;
  */
 public class AssignMidiCCMenuItems {
 
-    public AssignMidiCCMenuItems(final ParameterInstanceFrac32UMap param, JComponent parent) {
+    public AssignMidiCCMenuItems(final ParameterInstance param, JComponent parent) {
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(16, 0));
         ButtonGroup group = new ButtonGroup();

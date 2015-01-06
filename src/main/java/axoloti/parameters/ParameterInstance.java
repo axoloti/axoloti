@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -23,6 +23,7 @@ import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
+import components.AssignMidiCCComponent;
 import components.AssignPresetMenuItems;
 import components.LabelComponent;
 import components.control.ACtrlComponent;
@@ -51,7 +52,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "param")
-public abstract class ParameterInstance<dt extends DataType> extends JPanel {
+public abstract class ParameterInstance<dt extends DataType> extends JPanel implements ActionListener {
 
     @Attribute
     public String name;
@@ -69,6 +70,9 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel {
     int selectedConv = 0;
     int presetEditActive = 0;
     ACtrlComponent ctrl;
+    @Attribute(required = false)
+    Integer MidiCC = null;
+    AssignMidiCCComponent midiAssign;
 
     public ParameterInstance() {
     }
@@ -88,6 +92,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel {
 
     public void CopyValueFrom(ParameterInstance p) {
         onParent = p.onParent;
+        SetMidiCC(p.MidiCC);
     }
 
     public void PostConstructor() {
@@ -145,6 +150,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel {
             }
         });
         updateV();
+        SetMidiCC(MidiCC);
     }
 
     public void applyDefaultValue() {
@@ -325,7 +331,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel {
         return index;
     }
 
-    String GenerateMidiCCCodeSub(String vprefix, Integer MidiCC, String value) {
+    String GenerateMidiCCCodeSub(String vprefix, String value) {
         if (MidiCC != null) {
             return "        if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == " + MidiCC + ")) {\n"
                     + "            PExParameterChange(&parent2->" + PExName(vprefix) + "," + value + ", 0xFFFD);\n"
@@ -420,4 +426,36 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel {
 
     abstract public void handleAdjustment();
 
+    void SetMidiCC(Integer cc) {
+        if ((cc != null) && (cc >= 0)) {
+            MidiCC = cc;
+            if (midiAssign != null) {
+                midiAssign.setCC(cc);
+            }
+        } else {
+            MidiCC = null;
+            if (midiAssign != null) {
+                midiAssign.setCC(-1);
+            }
+        }
+    }
+
+    public int getMidiCC() {
+        if (MidiCC == null) {
+            return -1;
+        } else {
+            return MidiCC;
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String s = e.getActionCommand();
+        if (s.startsWith("CC")) {
+            int i = Integer.parseInt(s.substring(2));
+            SetMidiCC(i);
+        } else if (s.equals("none")) {
+            SetMidiCC(-1);
+        }
+    }
 }

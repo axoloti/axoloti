@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -41,11 +41,8 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implements ActionListener {
+public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U {
 
-    @Attribute(required = false)
-    Integer MidiCC = null;
-    AssignMidiCCComponent midiAssign;
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
 
@@ -67,7 +64,6 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
         super.CopyValueFrom(p);
         if (p instanceof ParameterInstanceFrac32UMap) {
             ParameterInstanceFrac32UMap p1 = (ParameterInstanceFrac32UMap) p;
-            SetMidiCC(p1.MidiCC);
         }
     }
 
@@ -98,7 +94,6 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
         btns.add(modulationAssign);
         presetAssign = new AssignPresetComponent(this);
         btns.add(presetAssign);
-        SetMidiCC(MidiCC);
         add(btns);
 
 //        setComponentPopupMenu(new ParameterInstanceUInt7MapPopupMenu3(this));
@@ -121,28 +116,6 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
         super.updateV();
         if (ctrl != null) {
             ctrl.setValue(value.getDouble());
-        }
-    }
-
-    void SetMidiCC(Integer cc) {
-        if ((cc != null) && (cc >= 0)) {
-            MidiCC = cc;
-            if (midiAssign != null) {
-                midiAssign.setCC(cc);
-            }
-        } else {
-            MidiCC = null;
-            if (midiAssign != null) {
-                midiAssign.setCC(-1);
-            }
-        }
-    }
-
-    public int getMidiCC() {
-        if (MidiCC == null) {
-            return -1;
-        } else {
-            return MidiCC;
         }
     }
 
@@ -207,7 +180,7 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
 
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, MidiCC, "data2<<20");
+        return GenerateMidiCCCodeSub(vprefix, "data2<<20");
     }
 
     /*
@@ -237,18 +210,6 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U implem
          lblPreset.setVisible(false);
          }
          */
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String s = e.getActionCommand();
-        //                System.out.println(e.getActionCommand(  ));
-        if (s.startsWith("CC")) {
-            int i = Integer.parseInt(s.substring(2));
-            SetMidiCC(i);
-        } else if (s.equals("none")) {
-            SetMidiCC(-1);
-        }
     }
 
     @Override

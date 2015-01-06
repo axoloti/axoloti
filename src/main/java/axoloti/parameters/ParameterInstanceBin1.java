@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -19,7 +19,10 @@ package axoloti.parameters;
 
 import axoloti.datatypes.Int32;
 import axoloti.datatypes.Value;
+import components.AssignMidiCCMenuItems;
 import components.control.CheckboxComponent;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -60,7 +63,7 @@ public class ParameterInstanceBin1 extends ParameterInstanceInt32 {
 
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
-        return "";
+        return GenerateMidiCCCodeSub(vprefix, "(data2>0)");
     }
 
     @Override
@@ -77,5 +80,13 @@ public class ParameterInstanceBin1 extends ParameterInstanceInt32 {
     @Override
     public CheckboxComponent getControlComponent() {
         return (CheckboxComponent) ctrl;
+    }
+
+    @Override
+    public void populatePopup(JPopupMenu m) {
+        super.populatePopup(m);
+        JMenu m1 = new JMenu("Midi CC");
+        new AssignMidiCCMenuItems(this, m1);
+        m.add(m1);
     }
 }

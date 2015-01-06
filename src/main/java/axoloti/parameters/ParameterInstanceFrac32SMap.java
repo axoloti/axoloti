@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -92,6 +92,6 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap {
 
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, MidiCC, "(data2-64)<<21");
+        return GenerateMidiCCCodeSub(vprefix, "(data2-64)<<21");
     }
 }

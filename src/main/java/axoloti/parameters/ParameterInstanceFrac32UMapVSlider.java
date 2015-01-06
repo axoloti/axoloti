@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -31,10 +31,6 @@ import org.simpleframework.xml.Attribute;
  */
 public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U {
 
-    @Attribute(required = false)
-    Integer MidiCC = null;
-    //private JLabel lblCC;
-
     public ParameterInstanceFrac32UMapVSlider() {
     }
 
@@ -45,25 +41,12 @@ public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        SetMidiCC(MidiCC);
     }
 
     @Override
     public void updateV() {
         if (ctrl != null) {
             ctrl.setValue(value.getDouble());
-        }
-    }
-
-    void SetMidiCC(Integer cc) {
-        if ((cc != null) && (cc >= 0)) {
-            MidiCC = cc;
-        } else {
-            MidiCC = null;
-        }
-        doLayout();
-        if (getParent() != null) {
-            getParent().doLayout();
         }
     }
 
@@ -97,7 +80,7 @@ public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U
 
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, MidiCC, "val<<20");
+        return GenerateMidiCCCodeSub(vprefix, "val<<20");
     }
 
     /*
