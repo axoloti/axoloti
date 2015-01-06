@@ -52,6 +52,7 @@ public class Midi extends gentools {
         WriteAxoObject(catName, Create_keyb_mod());
         WriteAxoObject(catName, Create_keyb_touch());
         WriteAxoObject(catName, Create_keybzone());
+        WriteAxoObject(catName, Create_keybzone_touch());
         WriteAxoObject(catName, Create_keybzoneLRU());
         WriteAxoObject(catName, Create_keybnote());
         WriteAxoObject(catName, Create_bendin());
@@ -355,7 +356,7 @@ public class Midi extends gentools {
     }
 
     static AxoObject Create_keybzone() {
-        AxoObject o = new AxoObject("keyb zone", "Monophonic MIDI keyboard note input, gate, velocity and release velocity");
+        AxoObject o = new AxoObject("keyb zone", "Monophonic MIDI keyboard note input, gate, velocity and release velocity, only responding to a range of notes");
         o.outlets.add(new OutletFrac32Bipolar("note", "midi note number"));
         o.outlets.add(new OutletBool32("gate", "key pressed?"));
         o.outlets.add(new OutletFrac32Pos("velocity", "note-on velocity"));
@@ -386,6 +387,48 @@ public class Midi extends gentools {
         o.sKRateCode = "%note%= _note<<21;\n"
                 + "%gate%= _gate<<27;\n"
                 + "%velocity%= _velo<<20;\n"
+                + "%releaseVelocity%= _rvelo<<20;\n";
+        return o;
+    }
+
+    static AxoObject Create_keybzone_touch() {
+        AxoObject o = new AxoObject("keyb zone touch", "Monophonic MIDI keyboard note input, gate, velocity and release velocity, only responding to a range of notes, with polyphonic aftertouch");
+        o.outlets.add(new OutletFrac32Bipolar("note", "midi note number"));
+        o.outlets.add(new OutletBool32("gate", "key pressed?"));
+        o.outlets.add(new OutletFrac32Pos("velocity", "note-on velocity"));
+        o.outlets.add(new OutletFrac32Pos("releaseVelocity", "note-off velocity"));
+        o.outlets.add(new OutletFrac32Pos("touch", "polyphonic aftertouch"));
+        o.attributes.add(new AxoAttributeSpinner("startNote", 0, 127, 0));
+        o.attributes.add(new AxoAttributeSpinner("endNote", 0, 127, 127));
+        o.sLocalData = "int8_t _note;\n"
+                + "uint8_t _gate;\n"
+                + "uint8_t _velo;\n"
+                + "uint8_t _rvelo;\n"
+                + "uint8_t _touch;\n";
+        o.sInitCode = "_gate = 0;\n"
+                + "_note = 0;\n"
+                + "_touch = 0;\n";
+        o.sMidiCode = "if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {\n"
+                + "  if ((data1 >= %startNote%)&&(data1 <= %endNote%)) {\n"
+                + "    _velo = data2;\n"
+                + "    _note = data1-64;\n"
+                + "    _gate = 1;\n"
+                + "  }\n"
+                + "} else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||"
+                + "          (status == MIDI_NOTE_OFF + %midichannel%)) {\n"
+                + "  if (_note == data1-64) {\n"
+                + "    _rvelo = data2;\n"
+                + "    _gate = 0;\n"
+                + "  }\n"
+                + "} else if ((status == %midichannel% + MIDI_POLY_PRESSURE)&&(data1-64 == _note)) {\n"
+                + "  _touch = data2;\n"
+                + "} else if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {\n"
+                + "   _gate = 0;\n"
+                + "}\n";
+        o.sKRateCode = "%note%= _note<<21;\n"
+                + "%gate%= _gate<<27;\n"
+                + "%velocity%= _velo<<20;\n"
+                + "%touch% = _touch<<20;\n"
                 + "%releaseVelocity%= _rvelo<<20;\n";
         return o;
     }

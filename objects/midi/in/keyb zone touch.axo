@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="keyb zone" sha="44dada96531ef6abd5c77f60bb92dbb2ec0d6d35">
-      <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity, only responding to a range of notes</sDescription>
+   <obj.normal id="keyb zone touch" sha="a338e85868281e045314a2800ffafe4f12117ad4">
+      <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity, only responding to a range of notes, with polyphonic aftertouch</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets/>
@@ -9,6 +9,7 @@
          <bool32 name="gate" description="key pressed?" SumBuffer="false"/>
          <frac32.positive name="velocity" description="note-on velocity" SumBuffer="false"/>
          <frac32.positive name="releaseVelocity" description="note-off velocity" SumBuffer="false"/>
+         <frac32.positive name="touch" description="polyphonic aftertouch" SumBuffer="false"/>
       </outlets>
       <displays/>
       <params/>
@@ -20,13 +21,16 @@
 uint8_t _gate;
 uint8_t _velo;
 uint8_t _rvelo;
+uint8_t _touch;
 ]]></code.declaration>
       <code.init><![CDATA[_gate = 0;
 _note = 0;
+_touch = 0;
 ]]></code.init>
       <code.krate><![CDATA[%note%= _note<<21;
 %gate%= _gate<<27;
 %velocity%= _velo<<20;
+%touch% = _touch<<20;
 %releaseVelocity%= _rvelo<<20;
 ]]></code.krate>
       <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
@@ -40,6 +44,8 @@ _note = 0;
     _rvelo = data2;
     _gate = 0;
   }
+} else if ((status == %midichannel% + MIDI_POLY_PRESSURE)&&(data1-64 == _note)) {
+  _touch = data2;
 } else if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {
    _gate = 0;
 }
