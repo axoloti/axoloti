@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -60,6 +60,7 @@ public class Midi extends gentools {
         WriteAxoObject(catName, Create_touchin());
         WriteAxoObject(catName, Create_midiscript());
         WriteAxoObject(catName, Create_clockin());
+        WriteAxoObject(catName, Create_pgmin());
 
         catName = "midi.out";
         WriteAxoObject(catName, Create_noteout());
@@ -572,6 +573,24 @@ public class Midi extends gentools {
                 + "  ntrig = 1;\n"
                 + "}";
         o.sKRateCode = "%o% = _press;\n"
+                + "%trig% = ntrig;\n"
+                + "ntrig = 0;\n";
+        return o;
+    }
+
+    static AxoObject Create_pgmin() {
+        AxoObject o = new AxoObject("pgm", "Midi program change");
+        o.outlets.add(new OutletInt32("o", "program"));
+        o.outlets.add(new OutletBool32Pulse("trig", "trigger output"));
+        o.sLocalData = "int8_t _pgm;\n"
+                + "int8_t ntrig;\n";
+        o.sInitCode = "_pgm = 0;\n"
+                + "ntrig = 0;\n";
+        o.sMidiCode = "if (status == MIDI_PROGRAM_CHANGE + %midichannel%) {"
+                + "  _pgm = data1;\n"
+                + "  ntrig = 1;\n"
+                + "}";
+        o.sKRateCode = "%o% = _pgm;\n"
                 + "%trig% = ntrig;\n"
                 + "ntrig = 0;\n";
         return o;
