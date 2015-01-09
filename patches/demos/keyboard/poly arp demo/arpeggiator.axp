@@ -29,7 +29,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="bd1" sha="413ca24291b12aef7ba4baec13362a25bb124808" name="bd1_1" x="798" y="0">
+   <obj type="./bd1" sha="413ca24291b12aef7ba4baec13362a25bb124808" name="bd1_1" x="798" y="0">
       <params>
          <frac32.s.map name="d1" value="-38.0"/>
          <frac32.s.map name="lp1" value="-36.0"/>
@@ -39,7 +39,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="hh" sha="28ab3be4f73f294c14caece31fb4fcbaa54d86c3" name="hh_1" x="896" y="0">
+   <obj type="./hh" sha="28ab3be4f73f294c14caece31fb4fcbaa54d86c3" name="hh_1" x="896" y="0">
       <params>
          <frac32.s.map name="env" value="4.0"/>
          <frac32.s.map name="bpf:pitch" value="41.0"/>
@@ -127,7 +127,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="./stringvoice" sha="dac413ce9bc4e2c4510e9a49c96750f5659c9d77" name="stringvoice1" x="728" y="252">
+   <obj type="./stringvoice" sha="42fefbc2c44a87003ae560096ab1229a739c8a45" name="stringvoice1" x="728" y="252">
       <params>
          <frac32.u.map name="pnoise" value="49.0"/>
          <frac32.s.map name="envf:a" MidiCC="114" value="-64.0">
