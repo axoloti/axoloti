@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="pan m" sha="5d73816389e41249dbf47bd07b63e80247198585">
+   <obj.normal id="pan m" sha="6a0b5d25068ca25bf4d7ffbe3fd617fcbb5ecec9">
       <sDescription>stereo balance (panorama) with modulation input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +14,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%left% = ___SMMUL((1<<29)-(c<<2),%i1%)<<2;%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;]]></code.krate>
+      <code.krate><![CDATA[%left% = ___SMMUL((1<<29)-(%c%<<2),%i1%)<<2;%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;]]></code.krate>
    </obj.normal>
    <obj.normal id="pan m" sha="f2d9a02beeb3b451541dc262fc3d1e3b1d3af031">
       <sDescription>stereo balance (panorama) with modulation input</sDescription>
