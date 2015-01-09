@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -25,9 +25,11 @@ import axoloti.inlets.InletCharPtr32;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
+import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletFrac32Buffer;
+import axoloti.outlets.OutletInt32Bipolar;
+import axoloti.outlets.OutletInt32Pos;
 import static generatedobjects.gentools.WriteAxoObject;
-import java.util.HashSet;
 
 /**
  *
@@ -37,54 +39,20 @@ public class Wave extends gentools {
 
     static void GenerateAll() {
         String catName = "wave";
-        WriteAxoObject(catName, Create_playWave());
         WriteAxoObject(catName, Create_playWave2());
         WriteAxoObject(catName, Create_playWave2Stereo());
         WriteAxoObject(catName, Create_playWave2StereoPoly());
+        WriteAxoObject(catName, Create_playWave3Mono());
         WriteAxoObject(catName, Create_playWave3Stereo());
+        WriteAxoObject(catName, Create_playWave3Mono_fn());
+        WriteAxoObject(catName, Create_playWave3Stereo_fn());
         WriteAxoObject(catName, Create_playFlashWave());
         WriteAxoObject(catName, Create_FlashWaveRead2());
         WriteAxoObject(catName, Create_Benchmark());
         //WriteAxoObject(dirname, Create_FlashWaveRead2());
-        WriteAxoObject(unstable + catName, Create_recWave2());
+        WriteAxoObject(catName, Create_recWave2());
     }
 
-    static AxoObject Create_playWave() {
-        AxoObject o = new AxoObject("play", "streaming playback of a mono .wav file from sdcard (IN DEVELOPMENT)");
-        o.inlets.add(new InletFrac32("pos", "position"));
-        o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
-        o.outlets.add(new OutletFrac32Buffer("o", "output"));
-        o.attributes.add(new AxoAttributeTablename("wavefile"));
-        o.includes.add("chibios/ext/fatfs/src/ff.h");
-        o.includes.add("./streamer.h");
-        o.sLocalData = "    WORKING_AREA(waThreadSD, 512);\n"
-                + "   sdReadFilePingpong *stream;\n"
-                + "   int ntrig;\n";
-        o.sInitCode = "static sdReadFilePingpong s __attribute__ ((section (\".rodata\")));\n"
-                + "stream = &s;\n"
-                + "stream->pingpong = CLOSED;\n"
-                + "stream->doSeek = 0;\n"
-                + "ntrig = 0;\n"
-                + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
-                + "                    HIGHPRIO, ThreadSD, (void *)stream);"
-                + "sdOpenStream(stream,\"%wavefile%\");\n";
-        o.sKRateCode = "      int16_t *p = sdReadStream(stream);\n"
-                + "      int32_t i;\n"
-                + "      if (p && ntrig)\n"
-                + "        for (i = 0; i < BUFSIZE; i++)\n"
-                + "          %o%[i] = (*(p++)) << 10;\n"
-                + "      else\n"
-                + "        for (i = 0; i < BUFSIZE; i++)\n"
-                + "          %o%[i] = 0;\n"
-                + "      if ((%trig% > 0) && !ntrig) {\n"
-                + "        sdSeekStream(stream,((%pos%) >> 4) << 2);\n"
-                + "        ntrig = 1;\n"
-                + "      }\n"
-                + "      if (!(%trig% > 0) && ntrig)\n"
-                + "        ntrig = 0;\n";
-        o.sDisposeCode = "sdStopStreamer(stream);\n";
-        return o;
-    }
 
     /*
      static AxoObject Create_playWave() {
@@ -125,7 +93,7 @@ public class Wave extends gentools {
                 + "stream->doSeek = 0;\n"
                 + "ntrig = 0;\n"
                 + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
-                + "                    HIGHPRIO, ThreadSD, (void *)stream);";
+                + "                    HIGHPRIO, ThreadSD, (void *)stream);\n";
         o.sKRateCode = "     int32_t i;\n"
                 + "     if ((%trig%>0) && !ntrig) {\n"
                 + "        sdOpenStream(stream,%filename%);\n"
@@ -163,7 +131,7 @@ public class Wave extends gentools {
                 + "stream->doSeek = 0;\n"
                 + "ntrig = 0;\n"
                 + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
-                + "                    HIGHPRIO, ThreadSD, (void *)stream);";
+                + "                    HIGHPRIO, ThreadSD, (void *)stream);\n";
         o.sKRateCode = "     int32_t i;\n"
                 + "     if ((%trig%>0) && !ntrig) {\n"
                 + "        sdOpenStream(stream,%filename%);\n"
@@ -213,7 +181,7 @@ public class Wave extends gentools {
                 + "stream->doSeek = 0;\n"
                 + "ntrig = 0;\n"
                 + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
-                + "                    HIGHPRIO, ThreadSD, (void *)stream);";
+                + "                    HIGHPRIO, ThreadSD, (void *)stream);\n";
         o.sKRateCode = "     int32_t i;\n"
                 + "     if ((%trig%>0) && !ntrig) {\n"
                 + "        sdOpenStream(stream,%filename%);\n"
@@ -245,6 +213,106 @@ public class Wave extends gentools {
         return o;
     }
 
+    static AxoObject Create_playWave3Mono() {
+        AxoObject o = new AxoObject("play3", "streaming playback of a mono .wav file from sdcard (testing)");
+        o.inlets.add(new InletFrac32("pos", "position"));
+        o.inlets.add(new InletBool32Rising("start", "trigger"));
+        o.inlets.add(new InletBool32Rising("stop", "trigger"));
+        o.inlets.add(new InletCharPtr32("filename", "file name"));
+        o.outlets.add(new OutletFrac32Buffer("out", "output"));
+        o.includes.add("chibios/ext/fatfs/src/ff.h");
+        o.includes.add("./streamer.h");
+        o.sLocalData = "    WORKING_AREA(waThreadSD, 512);\n"
+                + "   sdReadFilePingpong *stream;\n"
+                + "   int starttrig;\n"
+                + "   int stoptrig;\n";
+        o.sInitCode = "static sdReadFilePingpong s __attribute__ ((section (\".rodata\")));\n"
+                + "stream = &s;\n"
+                + "stream->pingpong = CLOSED;\n"
+                + "stream->doSeek = 0;\n"
+                + "starttrig = 0;\n"
+                + "stoptrig = 0;\n"
+                + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
+                + "                    HIGHPRIO, ThreadSD, (void *)stream);\n";
+        o.sKRateCode = "     int32_t i;\n"
+                + "     if ((%start%>0) && !starttrig) {\n"
+                + "        sdOpenStream(stream,%filename%);\n"
+                + "        sdSeekStream(stream,((%pos%)>>4)<<2);\n"
+                + "        starttrig=1;\n"
+                + "     } else if ((!(%start%>0)) && starttrig) {"
+                + "        starttrig=0;\n"
+                + "     }\n"
+                + "     if ((%stop%>0) && !stoptrig) {\n"
+                + "        sdCloseStream(stream);\n"
+                + "        stoptrig=1;\n"
+                + "     } else if ((!(%stop%>0)) && stoptrig) {"
+                + "        stoptrig=0;\n"
+                + "     }\n"
+                + "     int16_t *p = 0;\n"
+                + "     int16_t *q = 0;\n"
+                + "     p=sdReadStream(stream);\n"
+                + "     if (p) {\n"
+                + "        for(i=0;i<BUFSIZE;i++){\n"
+                + "           %out%[i] = (*(p++))<<10;\n"
+                + "        }\n"
+                + "     }\n"
+                + "     else \n"
+                + "        for(i=0;i<BUFSIZE;i++) %out%[i] = 0;\n";
+        o.sDisposeCode = "sdStopStreamer(stream);\n";
+        return o;
+    }
+
+    static AxoObject Create_playWave3Mono_fn() {
+        AxoObject o = new AxoObject("play3 fn", "streaming playback of a mono .wav file from sdcard (testing). Direct filename.");
+        o.inlets.add(new InletFrac32("pos", "position"));
+        o.inlets.add(new InletBool32Rising("start", "trigger"));
+        o.inlets.add(new InletBool32Rising("stop", "trigger"));
+        o.attributes.add(new AxoAttributeTablename("fn"));
+        o.outlets.add(new OutletFrac32Buffer("out", "output"));
+        o.includes.add("chibios/ext/fatfs/src/ff.h");
+        o.includes.add("./streamer.h");
+        o.sLocalData = "    WORKING_AREA(waThreadSD, 512);\n"
+                + "   sdReadFilePingpong *stream;\n"
+                + "   int starttrig;\n"
+                + "   int stoptrig;\n"
+                + "   char c[64];\n";
+        o.sInitCode = "static sdReadFilePingpong s __attribute__ ((section (\".rodata\")));\n"
+                + "stream = &s;\n"
+                + "stream->pingpong = CLOSED;\n"
+                + "stream->doSeek = 0;\n"
+                + "starttrig = 0;\n"
+                + "stoptrig = 0;\n"
+                + "strcpy(&c[0],\"%fn%\");\n"
+                + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
+                + "                    HIGHPRIO, ThreadSD, (void *)stream);\n";
+        o.sKRateCode = "     int32_t i;\n"
+                + "     if ((%start%>0) && !starttrig) {\n"
+                + "        sdOpenStream(stream,&c[0]);\n"
+                + "        sdSeekStream(stream,((%pos%)>>4)<<2);\n"
+                + "        starttrig=1;\n"
+                + "     } else if ((!(%start%>0)) && starttrig) {"
+                + "        starttrig=0;\n"
+                + "     }\n"
+                + "     if ((%stop%>0) && !stoptrig) {\n"
+                + "        sdCloseStream(stream);\n"
+                + "        stoptrig=1;\n"
+                + "     } else if ((!(%stop%>0)) && stoptrig) {"
+                + "        stoptrig=0;\n"
+                + "     }\n"
+                + "     int16_t *p = 0;\n"
+                + "     int16_t *q = 0;\n"
+                + "     p=sdReadStream(stream);\n"
+                + "     if (p) {\n"
+                + "        for(i=0;i<BUFSIZE;i++){\n"
+                + "           %out%[i] = (*(p++))<<10;\n"
+                + "        }\n"
+                + "     }\n"
+                + "     else \n"
+                + "        for(i=0;i<BUFSIZE;i++) %out%[i] = 0;\n";
+        o.sDisposeCode = "sdStopStreamer(stream);\n";
+        return o;
+    }
+
     static AxoObject Create_playWave3Stereo() {
         AxoObject o = new AxoObject("play3 stereo", "streaming playback of a stereo .wav file from sdcard (testing)");
         o.inlets.add(new InletFrac32("pos", "position"));
@@ -266,10 +334,68 @@ public class Wave extends gentools {
                 + "starttrig = 0;\n"
                 + "stoptrig = 0;\n"
                 + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
-                + "                    HIGHPRIO, ThreadSD, (void *)stream);";
+                + "                    HIGHPRIO, ThreadSD, (void *)stream);\n";
         o.sKRateCode = "     int32_t i;\n"
                 + "     if ((%start%>0) && !starttrig) {\n"
                 + "        sdOpenStream(stream,%filename%);\n"
+                + "        sdSeekStream(stream,((%pos%)>>4)<<2);\n"
+                + "        starttrig=1;\n"
+                + "     } else if ((!(%start%>0)) && starttrig) {"
+                + "        starttrig=0;\n"
+                + "     }\n"
+                + "     if ((%stop%>0) && !stoptrig) {\n"
+                + "        sdCloseStream(stream);\n"
+                + "        stoptrig=1;\n"
+                + "     } else if ((!(%stop%>0)) && stoptrig) {"
+                + "        stoptrig=0;\n"
+                + "     }\n"
+                + "     int16_t *p = 0;\n"
+                + "     int16_t *q = 0;\n"
+                + "     p=sdReadStream(stream);\n"
+                + "     q=sdReadStream(stream);\n"
+                + "     if (p && q) {\n"
+                + "        for(i=0;i<BUFSIZE/2;i++){\n"
+                + "           %outl%[i] = (*(p++))<<10;\n"
+                + "           %outr%[i] = (*(p++))<<10;\n"
+                + "        }\n"
+                + "        for(;i<BUFSIZE;i++){\n"
+                + "           %outl%[i] = (*(q++))<<10;\n"
+                + "           %outr%[i] = (*(q++))<<10;\n"
+                + "        }\n"
+                + "     }\n"
+                + "     else \n"
+                + "        for(i=0;i<BUFSIZE;i++) %outl%[i] = %outr%[i]= 0;\n";
+        o.sDisposeCode = "sdStopStreamer(stream);\n";
+        return o;
+    }
+
+    static AxoObject Create_playWave3Stereo_fn() {
+        AxoObject o = new AxoObject("play3 fn stereo", "streaming playback of a stereo .wav file from sdcard (testing)");
+        o.inlets.add(new InletFrac32("pos", "position"));
+        o.inlets.add(new InletBool32Rising("start", "trigger"));
+        o.inlets.add(new InletBool32Rising("stop", "trigger"));
+        o.attributes.add(new AxoAttributeTablename("fn"));
+        o.outlets.add(new OutletFrac32Buffer("outl", "output left"));
+        o.outlets.add(new OutletFrac32Buffer("outr", "output right"));
+        o.includes.add("chibios/ext/fatfs/src/ff.h");
+        o.includes.add("./streamer.h");
+        o.sLocalData = "    WORKING_AREA(waThreadSD, 512);\n"
+                + "   sdReadFilePingpong *stream;\n"
+                + "   int starttrig;\n"
+                + "   int stoptrig;\n"
+                + "   char c[64];\n";
+        o.sInitCode = "static sdReadFilePingpong s __attribute__ ((section (\".rodata\")));\n"
+                + "stream = &s;\n"
+                + "stream->pingpong = CLOSED;\n"
+                + "stream->doSeek = 0;\n"
+                + "starttrig = 0;\n"
+                + "stoptrig = 0;\n"
+                + "strcpy(&c[0],\"%fn%\");\n"
+                + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
+                + "                    HIGHPRIO, ThreadSD, (void *)stream);\n";
+        o.sKRateCode = "     int32_t i;\n"
+                + "     if ((%start%>0) && !starttrig) {\n"
+                + "        sdOpenStream(stream,&c[0]);\n"
                 + "        sdSeekStream(stream,((%pos%)>>4)<<2);\n"
                 + "        starttrig=1;\n"
                 + "     } else if ((!(%start%>0)) && starttrig) {"
@@ -335,36 +461,58 @@ public class Wave extends gentools {
 
     static AxoObject Create_recWave2() {
         AxoObject o = new AxoObject("record", "streaming recording of a mono RAW audio file from sdcard (BROKEN: clicks)");
-        o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
-        o.inlets.add(new InletCharPtr32("filename", "file name"));
+        o.inlets.add(new InletBool32Rising("open", "open file for recording"));
+        o.inlets.add(new InletBool32Rising("start", "start recording"));
+        o.inlets.add(new InletBool32Rising("stop", "stop recording and close file"));
+//        o.inlets.add(new InletCharPtr32("filename", "file name"));
+        o.attributes.add(new AxoAttributeTablename("fn"));
         o.inlets.add(new InletFrac32Buffer("in", "input"));
+        o.outlets.add(new OutletInt32Bipolar("state", "recording state"));
         o.includes.add("chibios/ext/fatfs/src/ff.h");
         o.includes.add("./streamer.h");
-        o.sLocalData = "    WORKING_AREA(waThreadSD, 2048);\n"
+        o.sLocalData = "    WORKING_AREA(waThreadSD, 1024);\n"
                 + "   sdReadFilePingpong *stream;\n"
-                + "   int ntrig;\n";
+                + "   int open_prev;\n"
+                + "   int start_prev;\n"
+                + "   int stop_prev;\n"
+                + "   int recording_active;\n"
+                + "   char c[64];\n";
         o.sInitCode = "static sdReadFilePingpong s __attribute__ ((section (\".sram2\")));\n"
                 + "stream = &s;\n"
                 + "stream->pingpong = CLOSED;\n"
                 + "stream->doSeek = 0;\n"
-                + "ntrig = 0;\n"
+                + "open_prev = 0;\n"
+                + "start_prev = 0;\n"
+                + "stop_prev = 0;\n"
+                + "recording_active = 0;\n"
+                + "strcpy(&c[0],\"%fn%\");\n"                
                 + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
-                + "                    HIGHPRIO, ThreadSD, (void *)stream);";
+                + "                    HIGHPRIO, ThreadSD, (void *)stream);\n";
         o.sKRateCode = "     int32_t i;\n"
-                + "     if ((%trig%>0) && !ntrig) {\n"
-                + "        sdOpenStreamRec(stream,%filename%);\n"
-                + "        ntrig=1;\n"
-                + "     } else if ((!(%trig%>0)) && ntrig) {"
-                + "        ntrig=0;\n"
+                + "     if ((%open%>0) && !open_prev) {\n"
+                + "        recording_active = 0;\n"
+                + "        sdOpenStreamRec(stream,&c[0]);\n"
+                + "     } else if ((%stop%>0) && !stop_prev) {\n"
+                + "        recording_active = 0;\n"
                 + "        if (stream) \n"
                 + "           sdCloseStreamRec(stream);\n"
                 + "        stream = 0;\n"
+                + "     } else if ((%start%>0) && !start_prev) {\n"
+                + "        if (stream)\n"
+                + "           recording_active = 1;\n"
                 + "     }\n"
-                + "        int16_t *p = 0;\n"
-                + "     if (stream!=0)"
+                + "     int16_t *p = 0;\n"
+                + "     if (recording_active && stream) {\n"
                 + "        p=sdWriteStream(stream);\n"
-                + "     if (p && ntrig)\n"
-                + "        for(i=0;i<BUFSIZE;i++) (*(p++)) = %in%[i]>>10;\n";
+                + "        if (p)\n"
+                + "           for(i=0;i<BUFSIZE;i++) (*(p++)) = %in%[i]>>10;\n"
+                + "     }\n"
+                + "open_prev = %open%;\n"
+                + "start_prev = %start%;\n"
+                + "stop_prev = %stop%;\n"
+                + "if (p)"
+                + "   %state% = stream->pingpong;\n"
+                + "else %state% = -1;";
         o.sDisposeCode = "sdStopStreamer(stream);\n";
         return o;
     }

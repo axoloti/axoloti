@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="play3 stereo" sha="29611802c4a5ce0e06b32c44299715c4e105100f">
+   <obj.normal id="play3 fn stereo" sha="984d5774e99c2a2f2e7e8b45d8aac0e1adf2ff86">
       <sDescription>streaming playback of a stereo .wav file from sdcard (testing)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -7,7 +7,6 @@
          <frac32 name="pos" description="position"/>
          <bool32.rising name="start" description="trigger"/>
          <bool32.rising name="stop" description="trigger"/>
-         <charptr32 name="filename" description="file name"/>
       </inlets>
       <outlets>
          <frac32buffer name="outl" description="output left" SumBuffer="false"/>
@@ -15,7 +14,9 @@
       </outlets>
       <displays/>
       <params/>
-      <attribs/>
+      <attribs>
+         <table name="fn"/>
+      </attribs>
       <includes>
          <include>./streamer.h</include>
          <include>chibios/ext/fatfs/src/ff.h</include>
@@ -24,6 +25,7 @@
    sdReadFilePingpong *stream;
    int starttrig;
    int stoptrig;
+   char c[64];
 ]]></code.declaration>
       <code.init><![CDATA[static sdReadFilePingpong s __attribute__ ((section (".rodata")));
 stream = &s;
@@ -31,6 +33,7 @@ stream->pingpong = CLOSED;
 stream->doSeek = 0;
 starttrig = 0;
 stoptrig = 0;
+strcpy(&c[0],"%fn%");
 stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),
                     HIGHPRIO, ThreadSD, (void *)stream);
 ]]></code.init>
@@ -38,7 +41,7 @@ stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),
 ]]></code.dispose>
       <code.krate><![CDATA[     int32_t i;
      if ((%start%>0) && !starttrig) {
-        sdOpenStream(stream,%filename%);
+        sdOpenStream(stream,&c[0]);
         sdSeekStream(stream,((%pos%)>>4)<<2);
         starttrig=1;
      } else if ((!(%start%>0)) && starttrig) {        starttrig=0;

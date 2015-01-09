@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="play3 stereo" sha="29611802c4a5ce0e06b32c44299715c4e105100f">
-      <sDescription>streaming playback of a stereo .wav file from sdcard (testing)</sDescription>
+   <obj.normal id="play3" sha="8bc0539d57441c0ff47c7213f9528fc12b80b03f">
+      <sDescription>streaming playback of a mono .wav file from sdcard (testing)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
@@ -10,8 +10,7 @@
          <charptr32 name="filename" description="file name"/>
       </inlets>
       <outlets>
-         <frac32buffer name="outl" description="output left" SumBuffer="false"/>
-         <frac32buffer name="outr" description="output right" SumBuffer="false"/>
+         <frac32buffer name="out" description="output" SumBuffer="false"/>
       </outlets>
       <displays/>
       <params/>
@@ -51,19 +50,13 @@ stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),
      int16_t *p = 0;
      int16_t *q = 0;
      p=sdReadStream(stream);
-     q=sdReadStream(stream);
-     if (p && q) {
-        for(i=0;i<BUFSIZE/2;i++){
-           %outl%[i] = (*(p++))<<10;
-           %outr%[i] = (*(p++))<<10;
-        }
-        for(;i<BUFSIZE;i++){
-           %outl%[i] = (*(q++))<<10;
-           %outr%[i] = (*(q++))<<10;
+     if (p) {
+        for(i=0;i<BUFSIZE;i++){
+           %out%[i] = (*(p++))<<10;
         }
      }
      else 
-        for(i=0;i<BUFSIZE;i++) %outl%[i] = %outr%[i]= 0;
+        for(i=0;i<BUFSIZE;i++) %out%[i] = 0;
 ]]></code.krate>
    </obj.normal>
 </objdefs>
