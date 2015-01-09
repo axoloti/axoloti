@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -76,7 +76,7 @@ public class Spat extends gentools {
         o.inlets.add(new InletFrac32("c", "pan control"));
         o.outlets.add(new OutletFrac32("left", "output"));
         o.outlets.add(new OutletFrac32("right", "output"));
-        o.sKRateCode = "%left% = ___SMMUL((1<<29)-(c<<2),%i1%)<<2;"
+        o.sKRateCode = "%left% = ___SMMUL((1<<29)-(%c%<<2),%i1%)<<2;"
                 + "%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;";
         return o;
     }
