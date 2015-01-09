@@ -1,0 +1,484 @@
+<patch-1.0>
+   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="14" y="14">
+      <params>
+         <frac32.s.map name="pitch" value="10.049998760223389"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="logic/counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter_1" x="126" y="14">
+      <params>
+         <int32 name="maximum" value="16"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar_1" x="224" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/i radio 8 v" sha="1e72dd4de547d6bc356161613f0080b899628801" name="i_3" x="700" y="42">
+      <params>
+         <int32.vradio name="value" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/+1" sha="4fe729a7a54d99c1d63a2bdb85652b2031c32726" name="+1_1" x="854" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="patch/preset" sha="56452d6d8bcb5f68e402b3ee6cded3649d214aaf" name="preset_1" x="910" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="sel/sel b 16 4t pulse" sha="9ee863d422b7b6abf33279c05f646beda44c356" name="sel_1" x="224" y="70">
+      <params>
+         <bin16 name="p1" value="0">
+            <presets>
+               <preset index="1">
+                  <i i="0"/>
+               </preset>
+               <preset index="2">
+                  <i i="61823"/>
+               </preset>
+               <preset index="3">
+                  <i i="65535"/>
+               </preset>
+               <preset index="4">
+                  <i i="46421"/>
+               </preset>
+               <preset index="5">
+                  <i i="62805"/>
+               </preset>
+               <preset index="8">
+                  <i i="0"/>
+               </preset>
+               <preset index="7">
+                  <i i="21761"/>
+               </preset>
+               <preset index="6">
+                  <i i="65535"/>
+               </preset>
+            </presets>
+         </bin16>
+         <bin16 name="p2" value="65534">
+            <presets>
+               <preset index="2">
+                  <i i="0"/>
+               </preset>
+               <preset index="5">
+                  <i i="2056"/>
+               </preset>
+               <preset index="3">
+                  <i i="0"/>
+               </preset>
+               <preset index="4">
+                  <i i="0"/>
+               </preset>
+               <preset index="1">
+                  <i i="65534"/>
+               </preset>
+               <preset index="8">
+                  <i i="0"/>
+               </preset>
+               <preset index="7">
+                  <i i="0"/>
+               </preset>
+               <preset index="6">
+                  <i i="0"/>
+               </preset>
+            </presets>
+         </bin16>
+         <bin16 name="p3" value="24849">
+            <presets>
+               <preset index="1">
+                  <i i="24849"/>
+               </preset>
+               <preset index="2">
+                  <i i="61713"/>
+               </preset>
+               <preset index="3">
+                  <i i="61713"/>
+               </preset>
+               <preset index="4">
+                  <i i="61713"/>
+               </preset>
+               <preset index="5">
+                  <i i="61713"/>
+               </preset>
+               <preset index="7">
+                  <i i="257"/>
+               </preset>
+               <preset index="6">
+                  <i i="61697"/>
+               </preset>
+               <preset index="8">
+                  <i i="20737"/>
+               </preset>
+            </presets>
+         </bin16>
+         <bin16 name="p4" value="0">
+            <presets>
+               <preset index="1">
+                  <i i="0"/>
+               </preset>
+               <preset index="2">
+                  <i i="0"/>
+               </preset>
+               <preset index="8">
+                  <i i="1"/>
+               </preset>
+               <preset index="7">
+                  <i i="0"/>
+               </preset>
+               <preset index="6">
+                  <i i="0"/>
+               </preset>
+               <preset index="5">
+                  <i i="0"/>
+               </preset>
+               <preset index="4">
+                  <i i="0"/>
+               </preset>
+               <preset index="3">
+                  <i i="0"/>
+               </preset>
+            </presets>
+         </bin16>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="slice" x="518" y="70"/>
+   <obj type="rand/uniform i" sha="c7ef417b1303674030a1d837b38fb010311ca9cf" name="uniform_1" x="434" y="84">
+      <params>
+         <int32 name="max" value="32"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/i" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="i_1" x="518" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="mute" x="784" y="84"/>
+   <comment type="patch/comment" sha="sha" name="var A" x="784" y="98"/>
+   <comment type="patch/comment" sha="sha" name="var B" x="784" y="112"/>
+   <comment type="patch/comment" sha="sha" name="var C" x="784" y="126"/>
+   <obj type="math/*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e" name="*c_1" x="434" y="140">
+      <params>
+         <frac32.u.map name="amp" value="40.94999980926514"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10" name="+c_1" x="532" y="140">
+      <params>
+         <frac32.u.map name="c" value="10.249999523162842"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/div 16" sha="de53fa1ae8551aca115c5ab76dd646a20339668" name="div_1" x="588" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="var D (breaks)" x="784" y="140"/>
+   <comment type="patch/comment" sha="sha" name="var E" x="784" y="154"/>
+   <comment type="patch/comment" sha="sha" name="(re)start" x="168" y="168"/>
+   <comment type="patch/comment" sha="sha" name="var F (bit stutter)" x="784" y="168"/>
+   <comment type="patch/comment" sha="sha" name="stop" x="182" y="182"/>
+   <comment type="patch/comment" sha="sha" name="stutter " x="784" y="182"/>
+   <comment type="patch/comment" sha="sha" name="randomize position" x="112" y="196"/>
+   <comment type="patch/comment" sha="sha" name="stutter speed env" x="126" y="210"/>
+   <obj type="sel/sel b 16" sha="edded2c45c473d9ae251dbd56053120a8b3c57be" name="sel_4" x="224" y="224">
+      <params>
+         <bin16 name="b16" value="0">
+            <presets>
+               <preset index="8">
+                  <i i="65278"/>
+               </preset>
+               <preset index="1">
+                  <i i="0"/>
+               </preset>
+               <preset index="2">
+                  <i i="0"/>
+               </preset>
+               <preset index="3">
+                  <i i="0"/>
+               </preset>
+               <preset index="4">
+                  <i i="0"/>
+               </preset>
+               <preset index="5">
+                  <i i="0"/>
+               </preset>
+               <preset index="6">
+                  <i i="0"/>
+               </preset>
+               <preset index="7">
+                  <i i="192"/>
+               </preset>
+            </presets>
+         </bin16>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="stutter" x="168" y="280"/>
+   <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="d_1" x="28" y="294">
+      <params>
+         <frac32.s.map name="d" value="27.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e" name="*c_4" x="126" y="294">
+      <params>
+         <frac32.u.map name="amp" value="22.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_2" x="224" y="294">
+      <params>
+         <frac32.s.map name="pitch" value="32.04999923706055"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mux/mux 2" sha="b27da86e6781ea0d7128a77aafd60d04e253d3b3" name="mux_2" x="322" y="294">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="wave/play3 fn stereo" sha="2e051c3832769b61a6a44a543bf776c804e79676" name="play3_1" x="434" y="294">
+      <params/>
+      <attribs>
+         <table attributeName="fn" table="amenbr.wav"/>
+      </attribs>
+   </obj>
+   <obj type="math/muls 2" sha="17100b9369a00a2265f0f754ff1c0ec87f9c6690" name="muls_1" x="574" y="294">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/muls 2" sha="17100b9369a00a2265f0f754ff1c0ec87f9c6690" name="muls_2" x="644" y="294">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="714" y="294">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="sine_1" x="840" y="308">
+      <params>
+         <frac32.s.map name="pitch" value="-59.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e" name="*c_3" x="938" y="308">
+      <params>
+         <frac32.u.map name="amp" value="10.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="sel/sel b 16" sha="edded2c45c473d9ae251dbd56053120a8b3c57be" name="sel_3" x="224" y="392">
+      <params>
+         <bin16 name="b16" value="257">
+            <presets>
+               <preset index="1">
+                  <i i="257"/>
+               </preset>
+               <preset index="2">
+                  <i i="256"/>
+               </preset>
+               <preset index="3">
+                  <i i="256"/>
+               </preset>
+               <preset index="4">
+                  <i i="256"/>
+               </preset>
+               <preset index="5">
+                  <i i="1"/>
+               </preset>
+               <preset index="6">
+                  <i i="1"/>
+               </preset>
+               <preset index="7">
+                  <i i="1"/>
+               </preset>
+               <preset index="8">
+                  <i i="255"/>
+               </preset>
+            </presets>
+         </bin16>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="sample credit: VEXST on FreeSound, creative commons" x="434" y="392"/>
+   <obj type="math/*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e" name="*c_2" x="434" y="420">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="546" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="reverb/fdn4" sha="13d669964bda5b57297a930109b40a6bc2f548e4" name="fdn4_1" x="616" y="420">
+      <params>
+         <frac32.u.map name="g" value="46.0"/>
+      </params>
+      <attribs>
+         <spinner attributeName="d1" value="267"/>
+         <spinner attributeName="d2" value="439"/>
+         <spinner attributeName="d3" value="777"/>
+         <spinner attributeName="d4" value="997"/>
+      </attribs>
+   </obj>
+   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_1" x="728" y="420">
+      <params>
+         <frac32.s.map name="pitch" value="16.0"/>
+         <frac32.u.map name="reso" value="48.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_2" x="826" y="420">
+      <params>
+         <frac32.s.map name="pitch" value="16.0"/>
+         <frac32.u.map name="reso" value="48.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_2" x="924" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="reverb gate" x="154" y="448"/>
+   <nets>
+      <net>
+         <source name="square_1 wave"/>
+         <dest name="counter_1 trig"/>
+      </net>
+      <net>
+         <source name="counter_1 o"/>
+         <dest name="sel_1 in"/>
+         <dest name="ibar_1 in"/>
+         <dest name="sel_3 in"/>
+         <dest name="sel_4 in"/>
+      </net>
+      <net>
+         <source name="sel_1 o2"/>
+         <dest name="play3_1 stop"/>
+      </net>
+      <net>
+         <source name="play3_1 outr"/>
+         <dest name="muls_2 in"/>
+      </net>
+      <net>
+         <source name="div_1 out"/>
+         <dest name="play3_1 pos"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="+c_1 in"/>
+      </net>
+      <net>
+         <source name="+c_1 out"/>
+         <dest name="div_1 in"/>
+      </net>
+      <net>
+         <source name="sel_1 o3"/>
+         <dest name="uniform_1 trig"/>
+      </net>
+      <net>
+         <source name="uniform_1 v"/>
+         <dest name="i_1 in"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="*c_2 out"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="fdn4_1 in1"/>
+      </net>
+      <net>
+         <source name="fdn4_1 out1"/>
+         <dest name="hp_1 in"/>
+      </net>
+      <net>
+         <source name="hp_1 out"/>
+         <dest name="out_2 left"/>
+      </net>
+      <net>
+         <source name="fdn4_1 out2"/>
+         <dest name="hp_2 in"/>
+      </net>
+      <net>
+         <source name="hp_2 out"/>
+         <dest name="out_2 right"/>
+      </net>
+      <net>
+         <source name="sine_1 wave"/>
+         <dest name="*c_3 in"/>
+      </net>
+      <net>
+         <source name="*c_3 out"/>
+         <dest name="hp_1 pitchm"/>
+         <dest name="hp_2 pitchm"/>
+      </net>
+      <net>
+         <source name="play3_1 outl"/>
+         <dest name="muls_1 in"/>
+      </net>
+      <net>
+         <source name="muls_1 out"/>
+         <dest name="out_1 left"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="muls_2 out"/>
+         <dest name="out_1 right"/>
+      </net>
+      <net>
+         <source name="sel_3 o"/>
+         <dest name="*c_2 in"/>
+      </net>
+      <net>
+         <source name="counter_1 c"/>
+         <dest name="preset_1 trig"/>
+      </net>
+      <net>
+         <source name="sel_1 o1"/>
+         <dest name="mux_2 i1"/>
+      </net>
+      <net>
+         <source name="mux_2 o"/>
+         <dest name="play3_1 start"/>
+      </net>
+      <net>
+         <source name="square_2 wave"/>
+         <dest name="mux_2 i2"/>
+      </net>
+      <net>
+         <source name="sel_4 o"/>
+         <dest name="mux_2 s"/>
+      </net>
+      <net>
+         <source name="i_3 out"/>
+         <dest name="+1_1 a"/>
+      </net>
+      <net>
+         <source name="+1_1 result"/>
+         <dest name="preset_1 preset"/>
+      </net>
+      <net>
+         <source name="d_1 env"/>
+         <dest name="*c_4 in"/>
+      </net>
+      <net>
+         <source name="*c_4 out"/>
+         <dest name="square_2 pitchm"/>
+      </net>
+      <net>
+         <source name="sel_1 o4"/>
+         <dest name="d_1 trig"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>
