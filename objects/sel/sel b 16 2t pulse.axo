@@ -1,0 +1,37 @@
+<objdefs>
+   <obj.normal id="sel b 16 2t pulse" sha="6e50b6e258dfb862807d138bbe38bb33b717a088">
+      <sDescription>select one out of 16 booleans, chainable, 2 tracks, pulse output</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in" description="in"/>
+         <bool32 name="def1" description="default value channel 1"/>
+         <bool32 name="def2" description="default value channel 2"/>
+      </inlets>
+      <outlets>
+         <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
+         <bool32.pulse name="o1" description="output channel 1" SumBuffer="false"/>
+         <bool32.pulse name="o2" description="output channel 2" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <bin16 name="p1" noLabel="true"/>
+         <bin16 name="p2" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int in_prev;
+]]></code.declaration>
+      <code.init><![CDATA[in_prev = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {
+   %o1%=(%in%!=in_prev)&&(%p1%&(1<<%in%));
+   %o2%=(%in%!=in_prev)&&(%p2%&(1<<%in%));
+} else {
+   %o1% = %def1%;
+   %o2% = %def2%;
+}
+%chain% = %in%-16;
+in_prev = %in%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

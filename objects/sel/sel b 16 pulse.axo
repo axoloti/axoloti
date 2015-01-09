@@ -1,0 +1,29 @@
+<objdefs>
+   <obj.normal id="sel b 16 pulse" sha="1cf670bf70a03bd809b4e6a7cedffcf2298f833b">
+      <sDescription>select one out of 16 booleans, chainable. Pulse output.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32 name="in" description="in"/>
+         <bool32 name="def" description="default value"/>
+      </inlets>
+      <outlets>
+         <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
+         <bool32.pulse name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <bin16 name="b16" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int in_prev;
+]]></code.declaration>
+      <code.init><![CDATA[in_prev = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16))   %o%=(in_prev!=%in%)&&(%b16%&(1<<%in%));
+else %o% = %def%;
+%chain% = %in%-16;
+in_prev = %in%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

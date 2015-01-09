@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -24,6 +24,7 @@ import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.outlets.OutletBool32;
+import axoloti.outlets.OutletBool32Pulse;
 import axoloti.outlets.OutletFrac32;
 import axoloti.outlets.OutletFrac32Pos;
 import axoloti.outlets.OutletInt32;
@@ -48,6 +49,12 @@ public class Sequencer extends gentools {
         WriteAxoObject(catName, Create_SelectBool16v2x2());
         WriteAxoObject(catName, Create_SelectBool16v2x4());
         WriteAxoObject(catName, Create_SelectBool16v2x8());
+
+        WriteAxoObject(catName, Create_SelectBool16v2_pulse());
+        WriteAxoObject(catName, Create_SelectBool16v2x2_pulse());
+        WriteAxoObject(catName, Create_SelectBool16v2x4_pulse());
+        WriteAxoObject(catName, Create_SelectBool16v2x8_pulse());
+
         WriteAxoObject(catName, Create_SelectBool32());
         WriteAxoObject(catName, Create_SelectBool32x2());
         WriteAxoObject(catName, Create_SelectBool32x4());
@@ -99,6 +106,23 @@ public class Sequencer extends gentools {
         return o;
     }
 
+    static AxoObject Create_SelectBool16v2_pulse() {
+        AxoObject o = new AxoObject("sel b 16 pulse", "select one out of 16 booleans, chainable. Pulse output.");
+        o.inlets.add(new InletInt32("in", "in"));
+        o.inlets.add(new InletBool32("def", "default value"));
+        o.outlets.add(new OutletInt32("chain", "chain out (in-16)"));
+        o.outlets.add(new OutletBool32Pulse("o", "output"));
+        o.params.add(new ParameterBin16("b16"));
+        o.sLocalData = "int in_prev;\n";
+        o.sInitCode = "in_prev = 0;\n";
+        o.sKRateCode = "if ((%in%>=0)&&(%in%<16))"
+                + "   %o%=(in_prev!=%in%)&&(%b16%&(1<<%in%));\n"
+                + "else %o% = %def%;\n"
+                + "%chain% = %in%-16;\n"
+                + "in_prev = %in%;\n";
+        return o;
+    }
+
     static AxoObject Create_SelectBool32() {
         AxoObject o = new AxoObject("sel b 32", "select one out of 32 booleans, chainable");
         o.inlets.add(new InletInt32("in", "in"));
@@ -114,7 +138,7 @@ public class Sequencer extends gentools {
     }
 
     static AxoObject Create_SelectBool32_2rows() {
-        AxoObject o = new AxoObject("sel b 32 2t", "select one out of 32 booleans, chainable");
+        AxoObject o = new AxoObject("sel b 32 2t", "select one out of 32 booleans, 2 tracks, chainable");
         o.inlets.add(new InletInt32("in", "in"));
         o.inlets.add(new InletBool32("def", "default value"));
         o.outlets.add(new OutletInt32("chain", "chain out (in-16)"));
@@ -125,7 +149,7 @@ public class Sequencer extends gentools {
         p = new ParameterBin16("b2");
         p.noLabel = true;
         o.params.add(p);
-        o.sKRateCode = "if ((%in%>=0)&&(%in%<16))"
+        o.sKRateCode = "if ((%in%>=0)&&(%in%<16))\n"
                 + "   %o%=%b1%&(1<<%in%);\n"
                 + "else if ((%in%>=16)&&(%in%<32))\n"
                 + "   %o%=%b2%&(1<<(%in%-16));\n"
@@ -135,7 +159,7 @@ public class Sequencer extends gentools {
     }
 
     static AxoObject Create_SelectBool64() {
-        AxoObject o = new AxoObject("sel b 32 4t", "select one out of 64 booleans, chainable");
+        AxoObject o = new AxoObject("sel b 32 4t", "select one out of 64 booleans, 4 tracks, chainable");
         o.inlets.add(new InletInt32("in", "in"));
         o.inlets.add(new InletBool32("def", "default value"));
         o.outlets.add(new OutletInt32("chain", "chain out (in-54)"));
@@ -152,7 +176,7 @@ public class Sequencer extends gentools {
         p = new ParameterBin16("b4");
         p.noLabel = true;
         o.params.add(p);
-        o.sKRateCode = "if ((%in%>=0)&&(%in%<16))"
+        o.sKRateCode = "if ((%in%>=0)&&(%in%<16))\n"
                 + "   %o%=%b1%&(1<<%in%);\n"
                 + "else if ((%in%>=16)&&(%in%<32))\n"
                 + "   %o%=%b2%&(1<<(%in%-16));\n"
@@ -166,7 +190,7 @@ public class Sequencer extends gentools {
     }
 
     static AxoObject Create_SelectBool16v2x2() {
-        AxoObject o = new AxoObject("sel b 16 x2", "select one out of 16 booleans, chainable, 2 tracks");
+        AxoObject o = new AxoObject("sel b 16 2t", "select one out of 16 booleans, chainable, 2 tracks");
         o.inlets.add(new InletInt32("in", "in"));
         o.inlets.add(new InletBool32("def1", "default value channel 1"));
         o.inlets.add(new InletBool32("def2", "default value channel 2"));
@@ -179,14 +203,42 @@ public class Sequencer extends gentools {
         p = new ParameterBin16("p2");
         p.noLabel = true;
         o.params.add(p);
-        o.sKRateCode = "if ((%in%>=0)&&(%in%<16)) {"
+        o.sKRateCode = "if ((%in%>=0)&&(%in%<16)) {\n"
                 + "   %o1%=%p1%&(1<<%in%);\n"
                 + "   %o2%=%p2%&(1<<%in%);\n"
                 + "} else {\n"
-                + "   %o1% = %def1%;"
-                + "   %o2% = %def2%;"
+                + "   %o1% = %def1%;\n"
+                + "   %o2% = %def2%;\n"
                 + "}\n"
                 + "%chain% = %in%-16;\n";
+        return o;
+    }
+
+    static AxoObject Create_SelectBool16v2x2_pulse() {
+        AxoObject o = new AxoObject("sel b 16 2t pulse", "select one out of 16 booleans, chainable, 2 tracks, pulse output");
+        o.inlets.add(new InletInt32("in", "in"));
+        o.inlets.add(new InletBool32("def1", "default value channel 1"));
+        o.inlets.add(new InletBool32("def2", "default value channel 2"));
+        o.outlets.add(new OutletInt32("chain", "chain out (in-16)"));
+        o.outlets.add(new OutletBool32Pulse("o1", "output channel 1"));
+        o.outlets.add(new OutletBool32Pulse("o2", "output channel 2"));
+        ParameterBin16 p = new ParameterBin16("p1");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p2");
+        p.noLabel = true;
+        o.params.add(p);
+        o.sLocalData = "int in_prev;\n";
+        o.sInitCode = "in_prev = 0;\n";
+        o.sKRateCode = "if ((%in%>=0)&&(%in%<16)) {\n"
+                + "   %o1%=(%in%!=in_prev)&&(%p1%&(1<<%in%));\n"
+                + "   %o2%=(%in%!=in_prev)&&(%p2%&(1<<%in%));\n"
+                + "} else {\n"
+                + "   %o1% = %def1%;\n"
+                + "   %o2% = %def2%;\n"
+                + "}\n"
+                + "%chain% = %in%-16;\n"
+                + "in_prev = %in%;\n";
         return o;
     }
 
@@ -208,8 +260,8 @@ public class Sequencer extends gentools {
                 + "   %o1%=%p1%&(1<<%in%);\n"
                 + "   %o2%=%p2%&(1<<%in%);\n"
                 + "} else {\n"
-                + "   %o1% = %def1%;"
-                + "   %o2% = %def2%;"
+                + "   %o1% = %def1%;\n"
+                + "   %o2% = %def2%;\n"
                 + "}\n"
                 + "%chain% = %in%-32;\n";
         return o;
@@ -245,12 +297,54 @@ public class Sequencer extends gentools {
                 + "   %o3%=%p3%&(1<<%in%);\n"
                 + "   %o4%=%p4%&(1<<%in%);\n"
                 + "} else {\n"
-                + "   %o1% = %def1%;"
-                + "   %o2% = %def2%;"
-                + "   %o3% = %def3%;"
-                + "   %o4% = %def4%;"
+                + "   %o1% = %def1%;\n"
+                + "   %o2% = %def2%;\n"
+                + "   %o3% = %def3%;\n"
+                + "   %o4% = %def4%;\n"
                 + "}\n"
                 + "%chain% = %in%-16;\n";
+        return o;
+    }
+
+    static AxoObject Create_SelectBool16v2x4_pulse() {
+        AxoObject o = new AxoObject("sel b 16 4t pulse", "select one out of 16 booleans, chainable, 4 tracks, pulse output");
+        o.inlets.add(new InletInt32("in", "in"));
+        o.inlets.add(new InletBool32("def1", "default value channel 1"));
+        o.inlets.add(new InletBool32("def2", "default value channel 2"));
+        o.inlets.add(new InletBool32("def3", "default value channel 3"));
+        o.inlets.add(new InletBool32("def4", "default value channel 4"));
+        o.outlets.add(new OutletInt32("chain", "chain out (in-16)"));
+        o.outlets.add(new OutletBool32Pulse("o1", "output channel 1"));
+        o.outlets.add(new OutletBool32Pulse("o2", "output channel 2"));
+        o.outlets.add(new OutletBool32Pulse("o3", "output channel 3"));
+        o.outlets.add(new OutletBool32Pulse("o4", "output channel 4"));
+        ParameterBin16 p = new ParameterBin16("p1");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p2");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p3");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p4");
+        p.noLabel = true;
+        o.params.add(p);
+        o.sLocalData = "int in_prev;\n";
+        o.sInitCode = "in_prev = 0;\n";
+        o.sKRateCode = "if ((%in%>=0)&&(%in%<16)) {\n"
+                + "   %o1%=(%in%!=in_prev)&&(%p1%&(1<<%in%));\n"
+                + "   %o2%=(%in%!=in_prev)&&(%p2%&(1<<%in%));\n"
+                + "   %o3%=(%in%!=in_prev)&&(%p3%&(1<<%in%));\n"
+                + "   %o4%=(%in%!=in_prev)&&(%p4%&(1<<%in%));\n"
+                + "} else {\n"
+                + "   %o1% = %def1%;\n"
+                + "   %o2% = %def2%;\n"
+                + "   %o3% = %def3%;\n"
+                + "   %o4% = %def4%;\n"
+                + "}\n"
+                + "%chain% = %in%-16;\n"
+                + "in_prev = %in%;\n";
         return o;
     }
 
@@ -308,16 +402,86 @@ public class Sequencer extends gentools {
                 + "   %o7%=%p7%&(1<<%in%);\n"
                 + "   %o8%=%p8%&(1<<%in%);\n"
                 + "} else {\n"
-                + "   %o1% = %def1%;"
-                + "   %o2% = %def2%;"
-                + "   %o3% = %def3%;"
-                + "   %o4% = %def4%;"
-                + "   %o5% = %def5%;"
-                + "   %o6% = %def6%;"
-                + "   %o7% = %def7%;"
-                + "   %o8% = %def8%;"
+                + "   %o1% = %def1%;\n"
+                + "   %o2% = %def2%;\n"
+                + "   %o3% = %def3%;\n"
+                + "   %o4% = %def4%;\n"
+                + "   %o5% = %def5%;\n"
+                + "   %o6% = %def6%;\n"
+                + "   %o7% = %def7%;\n"
+                + "   %o8% = %def8%;\n"
                 + "}\n"
                 + "%chain% = %in%-16;\n";
+        return o;
+    }
+
+    static AxoObject Create_SelectBool16v2x8_pulse() {
+        AxoObject o = new AxoObject("sel b 16 8t pulse", "select one out of 16 booleans, chainable, 8 tracks, pulse output");
+        o.inlets.add(new InletInt32("in", "in"));
+        o.inlets.add(new InletBool32("def1", "default value channel 1"));
+        o.inlets.add(new InletBool32("def2", "default value channel 2"));
+        o.inlets.add(new InletBool32("def3", "default value channel 3"));
+        o.inlets.add(new InletBool32("def4", "default value channel 4"));
+        o.inlets.add(new InletBool32("def5", "default value channel 5"));
+        o.inlets.add(new InletBool32("def6", "default value channel 6"));
+        o.inlets.add(new InletBool32("def7", "default value channel 7"));
+        o.inlets.add(new InletBool32("def8", "default value channel 8"));
+        o.outlets.add(new OutletInt32("chain", "chain out (in-16)"));
+        o.outlets.add(new OutletBool32("o1", "output channel 1"));
+        o.outlets.add(new OutletBool32("o2", "output channel 2"));
+        o.outlets.add(new OutletBool32("o3", "output channel 3"));
+        o.outlets.add(new OutletBool32("o4", "output channel 4"));
+        o.outlets.add(new OutletBool32("o5", "output channel 5"));
+        o.outlets.add(new OutletBool32("o6", "output channel 6"));
+        o.outlets.add(new OutletBool32("o7", "output channel 7"));
+        o.outlets.add(new OutletBool32("o8", "output channel 8"));
+        ParameterBin16 p = new ParameterBin16("p1");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p2");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p3");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p4");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p5");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p6");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p7");
+        p.noLabel = true;
+        o.params.add(p);
+        p = new ParameterBin16("p8");
+        p.noLabel = true;
+        o.params.add(p);
+        o.sLocalData = "int in_prev;\n";
+        o.sInitCode = "in_prev = 0;\n";
+        o.sKRateCode = "if ((%in%>=0)&&(%in%<16)) {"
+                + "   %o1%=(in_prev!=%in%)&&(%p1%&(1<<%in%));\n"
+                + "   %o2%=(in_prev!=%in%)&&(%p2%&(1<<%in%));\n"
+                + "   %o3%=(in_prev!=%in%)&&(%p3%&(1<<%in%));\n"
+                + "   %o4%=(in_prev!=%in%)&&(%p4%&(1<<%in%));\n"
+                + "   %o5%=(in_prev!=%in%)&&(%p5%&(1<<%in%));\n"
+                + "   %o6%=(in_prev!=%in%)&&(%p6%&(1<<%in%));\n"
+                + "   %o7%=(in_prev!=%in%)&&(%p7%&(1<<%in%));\n"
+                + "   %o8%=(in_prev!=%in%)&&(%p8%&(1<<%in%));\n"
+                + "} else {\n"
+                + "   %o1% = %def1%;\n"
+                + "   %o2% = %def2%;\n"
+                + "   %o3% = %def3%;\n"
+                + "   %o4% = %def4%;\n"
+                + "   %o5% = %def5%;\n"
+                + "   %o6% = %def6%;\n"
+                + "   %o7% = %def7%;\n"
+                + "   %o8% = %def8%;\n"
+                + "}\n"
+                + "%chain% = %in%-16;\n"
+                + "in_prev = %in%;\n";
         return o;
     }
 
@@ -351,10 +515,10 @@ public class Sequencer extends gentools {
                 + "   %o3%=%p3%&(1<<%in%);\n"
                 + "   %o4%=%p4%&(1<<%in%);\n"
                 + "} else {\n"
-                + "   %o1% = %def1%;"
-                + "   %o2% = %def2%;"
-                + "   %o3% = %def3%;"
-                + "   %o4% = %def4%;"
+                + "   %o1% = %def1%;\n"
+                + "   %o2% = %def2%;\n"
+                + "   %o3% = %def3%;\n"
+                + "   %o4% = %def4%;\n"
                 + "}\n"
                 + "%chain% = %in%-32;\n";
         return o;
@@ -414,14 +578,14 @@ public class Sequencer extends gentools {
                 + "   %o7%=%p7%&(1<<%in%);\n"
                 + "   %o8%=%p8%&(1<<%in%);\n"
                 + "} else {\n"
-                + "   %o1% = %def1%;"
-                + "   %o2% = %def2%;"
-                + "   %o3% = %def3%;"
-                + "   %o4% = %def4%;"
-                + "   %o5% = %def5%;"
-                + "   %o6% = %def6%;"
-                + "   %o7% = %def7%;"
-                + "   %o8% = %def8%;"
+                + "   %o1% = %def1%;\n"
+                + "   %o2% = %def2%;\n"
+                + "   %o3% = %def3%;\n"
+                + "   %o4% = %def4%;\n"
+                + "   %o5% = %def5%;\n"
+                + "   %o6% = %def6%;\n"
+                + "   %o7% = %def7%;\n"
+                + "   %o8% = %def8%;\n"
                 + "}\n"
                 + "%chain% = %in%-32;\n";
         return o;

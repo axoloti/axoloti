@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sel b 16 8t" sha="d1861c4678841e9b3b40304bf108557c65d42cb5">
+   <obj.normal id="sel b 16 8t" sha="c024199dcfbdfe0eb161c1e95f3a420285163b1d">
       <sDescription>select one out of 16 booleans, chainable, 8 tracks</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -46,7 +46,15 @@
    %o7%=%p7%&(1<<%in%);
    %o8%=%p8%&(1<<%in%);
 } else {
-   %o1% = %def1%;   %o2% = %def2%;   %o3% = %def3%;   %o4% = %def4%;   %o5% = %def5%;   %o6% = %def6%;   %o7% = %def7%;   %o8% = %def8%;}
+   %o1% = %def1%;
+   %o2% = %def2%;
+   %o3% = %def3%;
+   %o4% = %def4%;
+   %o5% = %def5%;
+   %o6% = %def6%;
+   %o7% = %def7%;
+   %o8% = %def8%;
+}
 %chain% = %in%-16;
 ]]></code.krate>
    </obj.normal>

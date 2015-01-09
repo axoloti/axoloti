@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="sel b 16 4t" sha="91ddf962d1d470b3ccab0d514773dfa9b77dcb98">
-      <sDescription>select one out of 16 booleans, chainable, 4 tracks</sDescription>
+   <obj.normal id="sel b 16 4t pulse" sha="901be8450f8d553f4c6bfa2150f29dd2ebbfb89f">
+      <sDescription>select one out of 16 booleans, chainable, 4 tracks, pulse output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
@@ -12,10 +12,10 @@
       </inlets>
       <outlets>
          <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
-         <bool32 name="o1" description="output channel 1" SumBuffer="false"/>
-         <bool32 name="o2" description="output channel 2" SumBuffer="false"/>
-         <bool32 name="o3" description="output channel 3" SumBuffer="false"/>
-         <bool32 name="o4" description="output channel 4" SumBuffer="false"/>
+         <bool32.pulse name="o1" description="output channel 1" SumBuffer="false"/>
+         <bool32.pulse name="o2" description="output channel 2" SumBuffer="false"/>
+         <bool32.pulse name="o3" description="output channel 3" SumBuffer="false"/>
+         <bool32.pulse name="o4" description="output channel 4" SumBuffer="false"/>
       </outlets>
       <displays/>
       <params>
@@ -25,10 +25,15 @@
          <bin16 name="p4" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {   %o1%=%p1%&(1<<%in%);
-   %o2%=%p2%&(1<<%in%);
-   %o3%=%p3%&(1<<%in%);
-   %o4%=%p4%&(1<<%in%);
+      <code.declaration><![CDATA[int in_prev;
+]]></code.declaration>
+      <code.init><![CDATA[in_prev = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {
+   %o1%=(%in%!=in_prev)&&(%p1%&(1<<%in%));
+   %o2%=(%in%!=in_prev)&&(%p2%&(1<<%in%));
+   %o3%=(%in%!=in_prev)&&(%p3%&(1<<%in%));
+   %o4%=(%in%!=in_prev)&&(%p4%&(1<<%in%));
 } else {
    %o1% = %def1%;
    %o2% = %def2%;
@@ -36,6 +41,7 @@
    %o4% = %def4%;
 }
 %chain% = %in%-16;
+in_prev = %in%;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

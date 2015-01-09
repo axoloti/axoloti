@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="sel b 32 8t" sha="ef63ed7ed4d67d37df326088061c0107cb342c32">
-      <sDescription>select one out of 32 booleans, chainable, 8 tracks</sDescription>
+   <obj.normal id="sel b 16 8t pulse" sha="67e67f12150c9ffcf6bb89d44faf18d1407f10da">
+      <sDescription>select one out of 16 booleans, chainable, 8 tracks, pulse output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
@@ -27,24 +27,28 @@
       </outlets>
       <displays/>
       <params>
-         <bin32 name="p1" noLabel="true"/>
-         <bin32 name="p2" noLabel="true"/>
-         <bin32 name="p3" noLabel="true"/>
-         <bin32 name="p4" noLabel="true"/>
-         <bin32 name="p5" noLabel="true"/>
-         <bin32 name="p6" noLabel="true"/>
-         <bin32 name="p7" noLabel="true"/>
-         <bin32 name="p8" noLabel="true"/>
+         <bin16 name="p1" noLabel="true"/>
+         <bin16 name="p2" noLabel="true"/>
+         <bin16 name="p3" noLabel="true"/>
+         <bin16 name="p4" noLabel="true"/>
+         <bin16 name="p5" noLabel="true"/>
+         <bin16 name="p6" noLabel="true"/>
+         <bin16 name="p7" noLabel="true"/>
+         <bin16 name="p8" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<32)) {   %o1%=%p1%&(1<<%in%);
-   %o2%=%p2%&(1<<%in%);
-   %o3%=%p3%&(1<<%in%);
-   %o4%=%p4%&(1<<%in%);
-   %o5%=%p5%&(1<<%in%);
-   %o6%=%p6%&(1<<%in%);
-   %o7%=%p7%&(1<<%in%);
-   %o8%=%p8%&(1<<%in%);
+      <code.declaration><![CDATA[int in_prev;
+]]></code.declaration>
+      <code.init><![CDATA[in_prev = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {   %o1%=(in_prev!=%in%)&&(%p1%&(1<<%in%));
+   %o2%=(in_prev!=%in%)&&(%p2%&(1<<%in%));
+   %o3%=(in_prev!=%in%)&&(%p3%&(1<<%in%));
+   %o4%=(in_prev!=%in%)&&(%p4%&(1<<%in%));
+   %o5%=(in_prev!=%in%)&&(%p5%&(1<<%in%));
+   %o6%=(in_prev!=%in%)&&(%p6%&(1<<%in%));
+   %o7%=(in_prev!=%in%)&&(%p7%&(1<<%in%));
+   %o8%=(in_prev!=%in%)&&(%p8%&(1<<%in%));
 } else {
    %o1% = %def1%;
    %o2% = %def2%;
@@ -55,7 +59,8 @@
    %o7% = %def7%;
    %o8% = %def8%;
 }
-%chain% = %in%-32;
+%chain% = %in%-16;
+in_prev = %in%;
 ]]></code.krate>
    </obj.normal>
 </objdefs>
