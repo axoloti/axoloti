@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -31,6 +31,7 @@ import axoloti.outlets.OutletFrac32BufferPos;
 import axoloti.parameters.ParameterFrac32SMapPitch;
 import axoloti.parameters.ParameterFrac32UMapFreq;
 import static generatedobjects.gentools.WriteAxoObject;
+import java.util.HashSet;
 
 /**
  *
@@ -50,7 +51,11 @@ public class Osc extends gentools {
 //        WriteAxoObject("osc", CreateSaw2Tilde());
         WriteAxoObject(catName, CreateSaw3Tilde());
         WriteAxoObject(catName, CreateSawSyncTilde());
+        WriteAxoObject(catName, CreateSawTilde_cheap());
+        WriteAxoObject(catName, CreateTriTilde());
+        WriteAxoObject(catName, CreateTriTilde_cheap());
         WriteAxoObject(catName, CreateSquareTilde());
+        WriteAxoObject(catName, CreateSquareTilde_Cheap());
         WriteAxoObject(catName, CreateSquareSyncTilde());
 //        WriteAxoObject(catName, CreateSquare2Tilde());
 //        WriteAxoObject(catName, CreateSquare3Tilde());
@@ -265,6 +270,103 @@ public class Osc extends gentools {
         return o;
     }
 
+    static AxoObject CreateSawTilde_cheap() {
+        AxoObject o = new AxoObject("saw cheap", "Non-bandwith limited saw wave oscillator, cheap sound");
+        o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, non-anti-aliased"));
+        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.includes = new HashSet<String>();
+        o.sLocalData = "  int32_t osc_p;\n";
+        o.sInitCode = "    osc_p=0;\n";
+        o.sKRateCode = "  uint32_t freq;\n"
+                + "  MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "  int j;\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    osc_p+=freq;\n"
+                + "    %wave%[j] = (osc_p)>>5;\n"
+                + "  }\n";
+        return o;
+    }
+
+    static AxoObject CreateTriTilde() {
+        AxoObject o = new AxoObject("tri", "Bandwith limited triangle wave oscillator");
+        o.outlets.add(new OutletFrac32BufferBipolar("wave", "triangle wave, anti-aliased"));
+//        o.outlets.add(new OutletFrac32BufferBipolar("test", "triangle wave, anti-aliased"));
+        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.includes = new HashSet<String>();
+        o.includes.add("./bltable.h");
+        o.sLocalData = "  uint32_t osc_p;\n"
+                + "  static const int blepvoices = 4;\n"
+                + "  const int16_t *oscp[blepvoices];\n"
+                + "  int16_t amp[blepvoices];\n"
+                + "  uint32_t nextvoice;\n";
+        o.sInitCode = "    int j;\n"
+                + "    for(j=0;j<blepvoices;j++){\n"
+                + "      oscp[j] = &blt[BLEPSIZE-1];\n"
+                + "      amp[j]=0;\n"
+                + "    }\n"
+                + "   nextvoice = 0;\n";
+        o.sKRateCode = "  uint32_t freq;\n"
+                + "  MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "  int j;\n"
+                + "  const int16_t *lastblep = &blt[BLEPSIZE-1];\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    int i;\n"
+                + "    uint32_t p;\n"
+                + "    p = osc_p;\n"
+                + "    int32_t p3 = p-2*freq;\n"
+                + "    int32_t tri;\n"
+                + "    if (p3>0){\n"
+                + "       tri = ((1<<30)-(p3))>>4;\n"
+                + "    } else {\n"
+                + "       tri = (p3+(1<<30))>>4;\n"
+                + "    }\n"
+                + "    osc_p = p+freq;\n"
+                + "    if ((((int32_t)osc_p)>0)^(((int32_t)p)>0)){   // dispatch\n"
+                + "      if ((freq>>6)>0) {\n"
+                + "         nextvoice = (nextvoice+1)&(blepvoices-1);\n"
+                + "         int32_t x = (osc_p&0x7FFFFFFF)/(((uint32_t)freq)>>6);\n"
+                + "         oscp[nextvoice] = &blt[x];\n"
+                + "         amp[nextvoice] = (((int32_t)osc_p)<0)?freq>>16:-(freq>>16);\n"
+                + "      }\n"
+                + "    }\n"
+                + "    int32_t sum=0;\n"
+                + "    for(i=0;i<blepvoices;i++){ // sample\n"
+                + "      const int16_t *t = oscp[i];\n"
+                + "      sum += (*t)*amp[i];\n"
+                + "      t+=64;\n"
+                + "      if (t>=lastblep) t=lastblep;\n"
+                + "      oscp[i]=t;\n"
+                + "    }\n"
+                + "    %wave%[j]=tri + (sum>>3);\n"
+                + "  }\n";
+        return o;
+    }
+
+    static AxoObject CreateTriTilde_cheap() {
+        AxoObject o = new AxoObject("tri cheap", "Non-bandwith limited triangle wave oscillator, cheap sound");
+        o.outlets.add(new OutletFrac32BufferBipolar("wave", "triangle wave, non-anti-aliased"));
+//        o.outlets.add(new OutletFrac32BufferBipolar("test", "triangle wave, anti-aliased"));
+        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.includes = new HashSet<String>();
+        o.sLocalData = "  int32_t osc_p;\n";
+        o.sInitCode = "    osc_p=0;\n";
+        o.sKRateCode = "  uint32_t freq;\n"
+                + "  MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "  int j;\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    osc_p+=freq;\n"
+                + "    if (osc_p>0){\n"
+                + "       %wave%[j] = ((1<<30)-(osc_p))>>4;\n"
+                + "    } else {\n"
+                + "       %wave%[j] = (osc_p+(1<<30))>>4;\n"
+                + "    }\n"
+                + "}\n";
+        return o;
+    }
+
     static AxoObject CreateSquareTilde() {
         AxoObject o = new AxoObject("square", "Bandwith limited square wave oscillator");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, anti-aliased"));
@@ -303,6 +405,28 @@ public class Osc extends gentools {
                 + "    sum -= ((((nextvoice+1)&1)<<1)-1)<<13;\n"
                 + "    %wave%[j]=sum<<13;\n"
                 + "  }";
+        return o;
+    }
+
+    static AxoObject CreateSquareTilde_Cheap() {
+        AxoObject o = new AxoObject("square cheap", "Non-bandwith limited square wave oscillator, cheap sound");
+        o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, non-anti-aliased"));
+        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.includes = new HashSet<String>();
+        o.sLocalData = "  int32_t osc_p;\n";
+        o.sInitCode = "    osc_p=0;\n";
+        o.sKRateCode = "  uint32_t freq;\n"
+                + "  MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "  int j;\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    osc_p+=freq;\n"
+                + "    if (osc_p>0){\n"
+                + "       %wave%[j] = (1<<26);\n"
+                + "    } else {\n"
+                + "       %wave%[j] = -(1<<26);\n"
+                + "    }\n"
+                + "}\n";
         return o;
     }
 

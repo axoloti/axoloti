@@ -1,0 +1,37 @@
+<objdefs>
+   <obj.normal id="square cheap" sha="b731d44f3315c325bec1144b15dee815ffb7507e">
+      <sDescription>Non-bandwith limited square wave oscillator, cheap sound</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="wave" description="square wave, non-anti-aliased" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.pitch name="pitch" noLabel="true">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.pitch>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[  int32_t osc_p;
+]]></code.declaration>
+      <code.init><![CDATA[    osc_p=0;
+]]></code.init>
+      <code.krate><![CDATA[  uint32_t freq;
+  MTOFEXTENDED(%pitch% + %pitchm%,freq);
+  int j;
+  for(j=0;j<BUFSIZE;j++){
+    osc_p+=freq;
+    if (osc_p>0){
+       %wave%[j] = (1<<26);
+    } else {
+       %wave%[j] = -(1<<26);
+    }
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>
