@@ -1,4 +1,6 @@
-#define SDREADFILEPINGPONGSIZE 256
+
+
+#define SDREADFILEPINGPONGSIZE 512
 typedef struct {
   union {
     int32_t i32buff[SDREADFILEPINGPONGSIZE];
@@ -41,8 +43,8 @@ typedef struct {
   FIL f;
 } sdReadFilePingpong;
 
-// pre_size : 128 MB
-#define PRE_SIZE (1024*1024*128)
+// pre_size : 32 MB
+#define PRE_SIZE (1024*1024*32)
 
 #define __INL __attribute__ ((noinline))
 
@@ -75,28 +77,32 @@ static __INL msg_t ThreadSD(void *arg) {
         busy = 1;
       }
       else if (s->pingpong == OPENREC) {
+        TransmitTextMessage("rec : opening");
         err = f_open(&s->f, &s->filename[0], FA_WRITE | FA_CREATE_ALWAYS);
+        if (err!=0) TransmitTextMessage("rec : open fail");
         err = f_lseek(&s->f, PRE_SIZE);
+        if (err!=0) TransmitTextMessage("rec : seek1 fail");
         err = f_lseek(&s->f, 0);
+        if (err!=0) TransmitTextMessage("rec : seek2 fail");
         s->offset = 0;
         chSysDisable();
         if (s->pingpong != CLOSING)
           s->pingpong = RECB;
         chSysEnable();
-        //TransmitTextMessage("openrec");
+        TransmitTextMessage("rec : open ok");
         busy = 1;
       }
       if (s->pingpong == CLOSING) {
-        err = f_close(&s->f);
         s->pingpong = CLOSED;
+        err = f_close(&s->f);
         s->offset = -1;
         busy = 1;
       }
       else if (s->pingpong == CLOSINGREC) {
+        s->pingpong = CLOSED;
         err = f_truncate(&s->f);
         err = f_close(&s->f);
-        s->pingpong = CLOSED;
-        //TransmitTextMessage("closerec");
+        TransmitTextMessage("closerec");
         busy = 1;
       }
       else if (s->doSeek && (s->pingpong != CLOSED)) {
@@ -175,13 +181,17 @@ static __INL msg_t ThreadSD(void *arg) {
         busy = 1;
       }
       //}
-    } while (busy != 0);
-    chEvtWaitAnyTimeout((eventmask_t)1, 10);
+    } while ((busy != 0)&&!chThdShouldTerminate());
+    if (!chThdShouldTerminate())
+        chEvtWaitAnyTimeout((eventmask_t)1, 10);
   }
   sdReadFilePingpong *s = (sdReadFilePingpong *)arg;
   if (s->pingpong != CLOSED) {
     err = f_close(&s->f);
   }
+//  TransmitTextMessage("streamer thread : terminated");
+
+
   return (msg_t)0;
 }
 
@@ -294,7 +304,9 @@ void sdCloseStreamRec(sdReadFilePingpong *s) {
 }
 
 void sdStopStreamer(sdReadFilePingpong *s) {
-  if (s->pThreadSD)
+  if (s->pThreadSD) {
     chThdTerminate(s->pThreadSD);
+    chThdWait(s->pThreadSD);
+  }
   s->pThreadSD = 0;
 }
