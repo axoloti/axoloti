@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,6 +17,7 @@
  */
 package generatedobjects;
 
+import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
@@ -26,6 +27,7 @@ import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletFrac32BufferBipolar;
 import axoloti.parameters.ParameterFrac32UMap;
 import static generatedobjects.gentools.WriteAxoObject;
+import java.util.HashSet;
 
 /**
  *
@@ -39,7 +41,12 @@ public class Distortion extends gentools {
         WriteAxoObject(catName, Create_InfGain());
         WriteAxoObject(catName, Create_SchmittTriggerTilde());
         WriteAxoObject(catName, Create_SampleHoldBL());
+        WriteAxoObject(catName, Create_SampleHold_Cheap());
         WriteAxoObject(catName, new AxoObject[]{Create_Slew(), Create_SlewTilde()});
+        WriteAxoObject(catName, Create_Rectify());
+        WriteAxoObject(catName, Create_Rectify_full());
+        WriteAxoObject(catName, Create_Rectify_lab());
+
     }
 
     static AxoObject Create_Softsat() {
@@ -227,7 +234,6 @@ public class Distortion extends gentools {
                 + "  int32_t i0;\n"
                 + "  int32_t in0;\n"
                 + "  int32_t acc;\n";
-//                + "  int32_t xxxv;\n";
         o.sInitCode = "  int j;\n"
                 + "  for(j=0;j<blepvoices;j++)\n"
                 + "    oscp[j] = &blept[BLEPSIZE-1];\n"
@@ -235,7 +241,6 @@ public class Distortion extends gentools {
                 + "  i0 = 0;\n"
                 + "  in0 = 0;\n"
                 + "  acc = 0;\n";
-//                + "  xxxv = 0;\n";
         o.sKRateCode = "  int j;\n"
                 + "  int16_t *lastblep = &blept[BLEPSIZE-1];\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
@@ -243,16 +248,13 @@ public class Distortion extends gentools {
                 + "    int i1 = %trig%[j]>>2;\n" // prevent overflow
                 + "    if ((i1>0)&&!(i0>0)){   // dispatch\n"
                 + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
-                + "      int32_t x = 64-((-i0<<6)/(i1-i0));\n" // f(0)/(f(0)-f(1))
-                //                + "      xxxv = x;\n"
+                + "      int32_t x = (i1<<6)/(i1-i0);\n"
                 + "      oscp[nextvoice] = &blept[x];\n"
                 + "      int32_t val = (((64-x)*(%in%[j]>>2)) + (x*(in0>>2)))>>6;\n"
-                //                + "      int32_t val = ((64-x)*(in0>>2) + (x*(%in%[j]>>2)))>>6;\n"
                 + "      vgain[nextvoice] = (acc-val)<<2;\n"
                 + "      acc = val;\n"
                 + "    }\n"
                 + "    int32_t sum=0;\n"
-                //                + "    out2[j]=acc;\n"
                 + "    i0 = i1;\n"
                 + "    in0 = %in%[j];\n"
                 + "    for(i=0;i<blepvoices;i++){ // sample\n"
@@ -265,9 +267,26 @@ public class Distortion extends gentools {
                 + "      }\n"
                 + "      oscp[i]=t;\n"
                 + "    }\n"
-                + "    %out%[j]=sum+acc;\n"
+                + "    %out%[j]=(sum+acc)<<1;\n"
                 + "  }";
-//                + "xxx = xxxv;\n";
+        return o;
+    }
+
+    static AxoObject Create_SampleHold_Cheap() {
+        AxoObject o = new AxoObject("samplehold~ cheap", "low-quality audio rate sample and hold using blit synthesis (not bandwidth limited)");
+        o.inlets.add(new InletFrac32Buffer("in", "level input"));
+        o.inlets.add(new InletFrac32Buffer("trig", "trigger input, triggers on rising zero-crossing"));
+        o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
+        o.sLocalData
+                = "  int32_t in0;\n"
+                + "  int32_t hold;\n";
+        o.sInitCode = "  in0 = 0;\n"
+                + "  hold = 0;\n";
+        o.sSRateCode = "  if ((%trig%>0)&&!(in0>0)){\n"
+                + "    hold = %in%>>1;\n"
+                + "  }\n"
+                + "  in0 = %trig%;\n"
+                + "  %out% = hold;\n";
         return o;
     }
 
@@ -317,4 +336,324 @@ public class Distortion extends gentools {
         return o;
     }
 
+    static AxoObject Create_Rectify_full() {
+        AxoObject o = new AxoObject("rectifier full", "full-wave rectifier distortion, bandlimited");
+        o.inlets.add(new InletFrac32Buffer("in", "audio input"));
+        o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
+        o.includes = new HashSet<String>();
+        o.includes.add("./bltable.h");
+        o.sLocalData
+                = "  static const int blepvoices = 8;\n"
+                + "  const int16_t *oscp[blepvoices];\n"
+                + "  int16_t amp[blepvoices];\n"
+                + "  uint32_t nextvoice;\n"
+                + "  int32_t in1;\n"
+                + "  int32_t in2;\n"
+                + "  int32_t in3;\n";
+        o.sInitCode = "    int j;\n"
+                + "    for(j=0;j<blepvoices;j++)\n"
+                + "      oscp[j] = &blt[BLEPSIZE-1];\n"
+                + "   nextvoice = 0;\n"
+                + "   in1 = 0;\n"
+                + "   in2 = 0;\n"
+                + "   in3 = 0;\n";
+        o.sKRateCode = "  int j;\n"
+                + "  const int16_t *lastblep = &blt[BLEPSIZE-1];\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    int i;\n"
+                + "    int in0 = %in%[j]>>2;\n"
+                + "    int32_t sum = 0;\n"
+                + "    if ((in0>0)&&(in1<0)){   // dispatch\n"
+                + "	// rising\n"
+                + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
+                + "      int32_t x = ((in0<<6)/(in0-in1));\n"
+                + "      oscp[nextvoice] = &blt[x];\n"
+                + "      amp[nextvoice] = (in0-in1)>>16;\n"
+                + "    } else if ((in0<0)&&(in1>0)){   // dispatch\n"
+                + "	//falling\n"
+                + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
+                + "      int32_t x = ((in0<<6)/(in0-in1));\n"
+                + "      oscp[nextvoice] = &blt[x];\n"
+                + "      amp[nextvoice] = (in1-in0)>>16;\n"
+                + "    }\n"
+                + "    sum = (in3>0)?in3>>1:-in3>>1;\n"
+                + "    in3 = in2;\n"
+                + "    in2 = in1;\n"
+                + "    in1 = in0;\n"
+                + "    for(i=0;i<blepvoices;i++){ // sample\n"
+                + "      const int16_t *t = oscp[i];\n"
+                + "      sum += (*t)*amp[i];\n"
+                + "      t+=64;\n"
+                + "      if (t>=lastblep) t=lastblep;\n"
+                + "      oscp[i]=t;\n"
+                + "    }\n"
+                + "    %out%[j]=sum<<2;\n"
+                + "  }\n";
+        return o;
+    }
+
+    static AxoObject Create_Rectify() {
+        AxoObject o = new AxoObject("rectifier", "half-wave rectifier distortion, bandlimited");
+        o.inlets.add(new InletFrac32Buffer("in", "audio input"));
+        o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
+        o.includes = new HashSet<String>();
+        o.includes.add("./bltable.h");
+        o.sLocalData
+                = "  static const int blepvoices = 8;\n"
+                + "  const int16_t *oscp[blepvoices];\n"
+                + "  int16_t amp[blepvoices];\n"
+                + "  uint32_t nextvoice;\n"
+                + "  int32_t in1;\n"
+                + "  int32_t in2;\n"
+                + "  int32_t in3;\n";
+        o.sInitCode = "    int j;\n"
+                + "    for(j=0;j<blepvoices;j++)\n"
+                + "      oscp[j] = &blt[BLEPSIZE-1];\n"
+                + "   nextvoice = 0;\n"
+                + "   in1 = 0;\n"
+                + "   in2 = 0;\n"
+                + "   in3 = 0;\n";
+        o.sKRateCode = "  int j;\n"
+                + "  const int16_t *lastblep = &blt[BLEPSIZE-1];\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    int i;\n"
+                + "    int in0 = %in%[j]>>2;\n"
+                + "    int32_t sum = 0;\n"
+                + "    if ((in0>0)&&(in1<0)){   // dispatch\n"
+                + "	// rising\n"
+                + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
+                + "      int32_t x = ((in0<<6)/(in0-in1));\n"
+                + "      oscp[nextvoice] = &blt[x];\n"
+                + "      amp[nextvoice] = (in0-in1)>>16;\n"
+                + "    } else if ((in0<0)&&(in1>0)){   // dispatch\n"
+                + "	//falling\n"
+                + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
+                + "      int32_t x = ((in0<<6)/(in0-in1));\n"
+                + "      oscp[nextvoice] = &blt[x];\n"
+                + "      amp[nextvoice] = (in1-in0)>>16;\n"
+                + "    }\n"
+                + "    sum = (in3>0)?in3:0;\n"
+                + "    in3 = in2;\n"
+                + "    in2 = in1;\n"
+                + "    in1 = in0;\n"
+                + "    for(i=0;i<blepvoices;i++){ // sample\n"
+                + "      const int16_t *t = oscp[i];\n"
+                + "      sum += (*t)*amp[i];\n"
+                + "      t+=64;\n"
+                + "      if (t>=lastblep) t=lastblep;\n"
+                + "      oscp[i]=t;\n"
+                + "    }\n"
+                + "    %out%[j]=sum<<2;\n"
+                + "  }\n";
+        return o;
+    }
+
+    static AxoObject Create_Rectify_lab() {
+        /*
+         zero-crossing interpolation
+         f(x) = f(0) + x*(f(1)-f(0))
+         assert f(x) = 0
+         0 = f(0) + x*(f(1)-f(0))
+         eliminate x
+         x = f(0)/(f(0)-f(1))
+
+         test
+         f(0) = -5
+         f(1) = 15
+         x = -5/(-5-15)
+         = 0.25
+        
+         f(0) = 15
+         f(1) = -5
+         x = 15/(15+5)
+         = 0.75
+         */
+
+        AxoObject o = new AxoObject("rectifierlab", "half-wave rectifier distortion, bandlimited");
+        o.inlets.add(new InletFrac32Buffer("in", "audio input"));
+        o.inlets.add(new InletBool32("enable1", ""));
+        o.inlets.add(new InletBool32("enable2", ""));
+        o.inlets.add(new InletBool32("inv1", ""));
+        o.inlets.add(new InletBool32("inv2", ""));
+        o.inlets.add(new InletBool32("p1", ""));
+        o.inlets.add(new InletBool32("p2", ""));
+        o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
+        o.outlets.add(new OutletFrac32BufferBipolar("test1", "audio output"));
+        o.outlets.add(new OutletFrac32BufferBipolar("test2", "audio output"));
+        o.includes = new HashSet<String>();
+        o.includes.add("./bltable.h");
+        o.sLocalData
+                = "  static const int blepvoices = 8;\n"
+                + "  const int16_t *oscp[blepvoices];\n"
+                + "  int16_t amp[blepvoices];\n"
+                + "  uint32_t nextvoice;\n"
+                + "  int32_t i0;\n"
+                + "  int32_t i0d;\n";
+        o.sInitCode = "    int j;\n"
+                + "    for(j=0;j<blepvoices;j++)\n"
+                + "      oscp[j] = &blt[BLEPSIZE-1];\n"
+                + "   nextvoice = 0;\n"
+                + "   i0 = 0;\n"
+                + "   i0d = 0;\n";
+        o.sKRateCode = "  int j;\n"
+                + "  const int16_t *lastblep = &blt[BLEPSIZE-1];\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    int i;\n"
+                + "    int i1 = %in%[j]>>2;\n"
+                + "//    %test1%[j] = ((i1>0)&&(i0>0))?i0:0;\n"
+                + "//    %test1%[j] = (i0>0)?i0:0;\n"
+                + "    %test1%[j] = (i1>0)?i1:0;\n"
+                + "//    %test1%[j] = (i0d>0)?i0d:0;\n"
+                + "    %test2%[j]=0;\n"
+                + "    int32_t sum = 0;\n"
+                + "    if (%enable1%&&(i1>0)&&(i0<0)){   // dispatch\n"
+                + "	// rising\n"
+                + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
+                + "      int32_t x = ((-i0<<6)/(i1-i0));\n"
+                + "      if (%p1%) x = 64-x;\n"
+                + "      oscp[nextvoice] = &blt[x];\n"
+                + "      if (!%inv1%) \n"
+                + "         amp[nextvoice] = (i1-i0)>>16;\n"
+                + "      else \n"
+                + "         amp[nextvoice] = -(i1-i0)>>16;\n"
+                + "\n"
+                + "    } else if (%enable2%&&(i1<0)&&(i0>0)){   // dispatch\n"
+                + "	//falling\n"
+                + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
+                + "      int32_t x = ((i0<<6)/(i0-i1));\n"
+                + "      if (%p2%) x = 64-x;\n"
+                + "      oscp[nextvoice] = &blt[x];\n"
+                + "\n"
+                + "      if (!%inv2%) \n"
+                + "         amp[nextvoice] = (i1-i0)>>16;\n"
+                + "      else \n"
+                + "         amp[nextvoice] = -(i1-i0)>>16;\n"
+                + "\n"
+                + "    }\n"
+                + "    i0d = i0;\n"
+                + "    i0 = i1;\n"
+                + "\n"
+                + "    for(i=0;i<blepvoices;i++){ // sample\n"
+                + "      const int16_t *t = oscp[i];\n"
+                + "      sum += (*t)*amp[i];\n"
+                + "      t+=64;\n"
+                + "      if (t>=lastblep) t=lastblep;\n"
+                + "      oscp[i]=t;\n"
+                + "    }\n"
+                + "    //sum -= ((((nextvoice+1)&1)<<1)-1)<<13;\n"
+                + "    %out%[j]=sum;\n"
+                + "  }\n";
+        return o;
+    }
+
 }
+
+/*
+ loadmatfile('minblep.mat')
+ p=matrix(minblep, 64,32);
+ q=-cumsum(p'-1,1);
+ r=q-repmat(q(32,:),32,1);
+ s=r/-r(1,1);
+ t=s./repmat(s(1,:),32,1);
+ //mprintf("%d, ", matrix(r'/-r(1,1)*16384,64*32,1))
+
+ */
+/*
+ int j;
+ const int16_t *lastblep = &bltri[BLEPSIZE-1];
+ for(j=0;j<BUFSIZE;j++){
+ int i;
+ int i1 = %in%[j]>>2;
+ %test1%[j] = ((i1>0)&&(i0>0))?i0:0;
+ //    %test1%[j] = (i0>0)?i0:0;
+ //    %test1%[j] = (i1>0)?i0:0;
+ %test2%[j]=0;
+ int32_t sum = 0;
+ if (%enable1%&&(i1>0)&&!(i0>0)){   // dispatch
+
+ nextvoice = (nextvoice+1)&(blepvoices-1);
+ int32_t x = ((-i0<<6)/(i1-i0));
+ if (%p1%) x = 64-x;
+ oscp[nextvoice] = &bltri[x];
+ if (!%inv1%) 
+ amp[nextvoice] = i1>>16;
+ else 
+ amp[nextvoice] = -i1>>16;
+
+ } else if (%enable2%&&(i1<0)&&!(i0<0)){   // dispatch
+
+ nextvoice = (nextvoice+1)&(blepvoices-1);
+ int32_t x = ((i0<<6)/(i0-i1));
+ if (%p2%) x = 64-x;
+ oscp[nextvoice] = &bltri[x];
+
+ if (!%inv2%) 
+ amp[nextvoice] = i1>>16;
+ else 
+ amp[nextvoice] = -i1>>16;
+
+ }
+ i0 = i1;
+ for(i=0;i<blepvoices;i++){ // sample
+ const int16_t *t = oscp[i];
+ sum += (*t)*amp[i];
+ t+=64;
+ if (t>=lastblep) t=lastblep;
+ oscp[i]=t;
+ }
+ //sum -= ((((nextvoice+1)&1)<<1)-1)<<13;
+ %out%[j]=sum;
+ }
+
+ */
+/*
+ int j;
+ const int16_t *lastblep = &bltri[BLEPSIZE-1];
+ for(j=0;j<BUFSIZE;j++){
+ int i;
+ int i1 = %in%[j]>>2;
+ %test2%[j]=0;
+
+
+ //    %test1%[j] = ((i1>0)&&(i0>0))?i0:0;
+ //    %test1%[j] = (i0d>0)?i0d:0;
+ %test1%[j] = (i0>0)?i0:0;
+ //    %test1%[j] = (i1>0)?i1:0;
+
+ int32_t sum = 0;
+ if (%enable1%&&(i1>0)&&(i0<0)){   // dispatch
+ nextvoice = (nextvoice+1)&(blepvoices-1);
+ int32_t x = ((-i0<<6)/(i1-i0));
+ if (%p1%) x = 64-x;
+ oscp[nextvoice] = &bltri[x];
+ if (!%inv1%) 
+ amp[nextvoice] = (i0-i1)>>16;
+ else 
+ amp[nextvoice] = -(i0-i1)>>16;
+ } else if (%enable2%&&(i1<0)&&(i0>0)){   // dispatch
+
+ nextvoice = (nextvoice+1)&(blepvoices-1);
+ int32_t x = ((i0<<6)/(i0-i1));
+ if (%p2%) x = 64-x;
+ oscp[nextvoice] = &bltri[x];
+ //	i1 = 0;
+ if (!%inv2%) 
+ amp[nextvoice] = (i0-i1)>>16;
+ else 
+ amp[nextvoice] = -(i0-i1)>>16;
+
+ }
+
+ i0d = i0;
+ i0 = i1;
+ for(i=0;i<blepvoices;i++){ // sample
+ const int16_t *t = oscp[i];
+ sum += (*t)*amp[i];
+ t+=64;
+ if (t>=lastblep) t=lastblep;
+ oscp[i]=t;
+ }
+ //sum -= ((((nextvoice+1)&1)<<1)-1)<<13;
+ %out%[j]=sum<<1;
+ }
+ */
