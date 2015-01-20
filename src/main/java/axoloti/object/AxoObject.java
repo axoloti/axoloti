@@ -490,16 +490,20 @@ public class AxoObject extends AxoObjectAbstract {
             HashSet<String> r = new HashSet<String>();
             for (String s : includes) {
                 if (s.startsWith("./")) {
-                    String dir = sPath.replaceAll("\\\\", "/");
-                    dir = dir.substring(0, dir.lastIndexOf("/"));
-                    String f = dir + "/" + s.substring(2);
-                    String f2 = new File("patch").getAbsolutePath();
-                    String rel = getRelativePath(f2, f);
-                    r.add(rel);
+                    String strippedPath = sPath.substring(0, sPath.lastIndexOf(File.separatorChar));
+                    File f = new File(strippedPath + "/" + s.substring(2));
+                    String s2 = f.getAbsolutePath();
+                    s2 = s2.replace('\\', '/');
+                    r.add(s2);
                 } else if (s.startsWith("../")) {
-                    Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "\"../\" prefix in object include not implemented...");
+                    String strippedPath = sPath.substring(0, sPath.lastIndexOf(File.separatorChar));
+                    File f = new File(strippedPath + "/" + s);
+                    String s2 = f.getAbsolutePath();
+                    s2 = s2.replace('\\', '/');
+                    r.add(s2);
+                    //Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "\"../\" prefix in object include not implemented...");
                 } else if (s.startsWith("chibios/")) {
-                    r.add("../" + s);
+                    r.add((new File("chibios/")).getAbsolutePath() + s.substring(7));
                 } else {
                     r.add(s);
                 }
