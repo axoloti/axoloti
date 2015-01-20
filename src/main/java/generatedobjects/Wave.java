@@ -51,6 +51,7 @@ public class Wave extends gentools {
         WriteAxoObject(catName, Create_Benchmark());
         //WriteAxoObject(dirname, Create_FlashWaveRead2());
         WriteAxoObject(catName, Create_recWave2());
+        WriteAxoObject(catName, Create_Looper());
     }
 
 
@@ -485,7 +486,7 @@ public class Wave extends gentools {
                 + "start_prev = 0;\n"
                 + "stop_prev = 0;\n"
                 + "recording_active = 0;\n"
-                + "strcpy(&c[0],\"%fn%\");\n"                
+                + "strcpy(&c[0],\"%fn%\");\n"
                 + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
                 + "                    HIGHPRIO, ThreadSD, (void *)stream);\n";
         o.sKRateCode = "     int32_t i;\n"
@@ -505,7 +506,7 @@ public class Wave extends gentools {
                 + "     if (recording_active && stream) {\n"
                 + "        p=sdWriteStream(stream);\n"
                 + "        if (p)\n"
-                + "           for(i=0;i<BUFSIZE;i++) (*(p++)) = %in%[i]>>10;\n"
+                + "           for(i=0;i<BUFSIZE;i++) (*(p++)) = %in%[i]>>12;\n"
                 + "     }\n"
                 + "open_prev = %open%;\n"
                 + "start_prev = %start%;\n"
@@ -514,6 +515,56 @@ public class Wave extends gentools {
                 + "   %state% = stream->pingpong;\n"
                 + "else %state% = -1;";
         o.sDisposeCode = "sdStopStreamer(stream);\n";
+        return o;
+    }
+
+    static AxoObject Create_Looper() {
+        AxoObject o = new AxoObject("longdelay", "streaming echo via sdcard");
+        o.attributes.add(new AxoAttributeTablename("fn"));
+        o.inlets.add(new InletFrac32Buffer("in", "input"));
+        o.inlets.add(new InletFrac32("delay", "delay time"));
+        o.outlets.add(new OutletFrac32Buffer("out", "delay out"));
+        o.outlets.add(new OutletInt32Bipolar("state", "recording state"));
+        o.outlets.add(new OutletInt32Bipolar("state2", "playback state"));
+        o.includes.add("chibios/ext/fatfs/src/ff.h");
+        o.includes.add("./looper.h");
+        o.sLocalData = "   WORKING_AREA(waThreadSD, 1024);\n"
+                + "   sdFilePingpongRW *stream;\n"
+                + "   char c[64];\n";
+        o.sInitCode = "static sdFilePingpongRW _stream __attribute__ ((section (\".data\")));\n"
+                + "stream = &_stream;\n"
+                + "stream->playpong = CLOSED;\n"
+                + "stream->recpong = CLOSED;\n"
+                + "\n"
+                + "strcpy(&stream->filename[0],\"%fn%\");\n"
+                + "stream_open(stream);\n"
+                + "//stream->rpos = 0;\n"
+                + "stream->wpos = 1024*48*2;\n"
+                + "stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),\n"
+                + "                    HIGHPRIO, ThreadSD, (void *)stream);\n";
+        o.sKRateCode = "int16_t *p = 0;\n"
+                + "int i;\n"
+                + "\n"
+                + "stream->delay = %delay%>>8;\n"
+                + "\n"
+                + "p=sdWriteStream(stream);\n"
+                + "if (p)\n"
+                + "   for(i=0;i<BUFSIZE;i++)\n"
+                + "      (*(p++)) = %in%[i]>>12;\n"
+                + "\n"
+                + "//%state% = stream->playpong;\n"
+                + "%state% = (int32_t)stream->wpos;\n"
+                + "\n"
+                + "p=sdReadStream(stream);\n"
+                + "if (p) \n"
+                + "   for(i=0;i<BUFSIZE;i++)\n"
+                + "	%out%[i] = (*(p++))<<12;\n"
+                + "\n"
+                + "\n"
+                + "//%state2% = stream->recpong;\n"
+                + "//%state2% = (int32_t)p;\n"
+                + "%state2% = (int32_t)stream->delay;";
+        o.sDisposeCode = "stream_close(stream);\n";
         return o;
     }
 

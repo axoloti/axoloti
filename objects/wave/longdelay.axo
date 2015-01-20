@@ -1,0 +1,65 @@
+<objdefs>
+   <obj.normal id="longdelay" sha="cc97016f13e4d17b2b346ce72e6918290bb07b67">
+      <sDescription>streaming echo via sdcard</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="input"/>
+         <frac32 name="delay" description="delay time"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="delay out" SumBuffer="false"/>
+         <int32.bipolar name="state" description="recording state" SumBuffer="false"/>
+         <int32.bipolar name="state2" description="playback state" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <table name="fn"/>
+      </attribs>
+      <includes>
+         <include>chibios/ext/fatfs/src/ff.h</include>
+         <include>./looper.h</include>
+      </includes>
+      <code.declaration><![CDATA[   WORKING_AREA(waThreadSD, 1024);
+   sdFilePingpongRW *stream;
+   char c[64];
+]]></code.declaration>
+      <code.init><![CDATA[static sdFilePingpongRW _stream __attribute__ ((section (".data")));
+stream = &_stream;
+stream->playpong = CLOSED;
+stream->recpong = CLOSED;
+
+strcpy(&stream->filename[0],"%fn%");
+stream_open(stream);
+//stream->rpos = 0;
+stream->wpos = 1024*48*2;
+stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),
+                    HIGHPRIO, ThreadSD, (void *)stream);
+]]></code.init>
+      <code.dispose><![CDATA[stream_close(stream);
+]]></code.dispose>
+      <code.krate><![CDATA[int16_t *p = 0;
+int i;
+
+stream->delay = %delay%>>8;
+
+p=sdWriteStream(stream);
+if (p)
+   for(i=0;i<BUFSIZE;i++)
+      (*(p++)) = %in%[i]>>12;
+
+//%state% = stream->playpong;
+%state% = (int32_t)stream->wpos;
+
+p=sdReadStream(stream);
+if (p) 
+   for(i=0;i<BUFSIZE;i++)
+	%out%[i] = (*(p++))<<12;
+
+
+//%state2% = stream->recpong;
+//%state2% = (int32_t)p;
+%state2% = (int32_t)stream->delay;]]></code.krate>
+   </obj.normal>
+</objdefs>
