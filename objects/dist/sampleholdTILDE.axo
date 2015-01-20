@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="samplehold~" sha="4e539ef9d8f462cf4ba88a3d6f28cabde20d3744">
+   <obj.normal id="samplehold~" sha="252bae103bd8e122a6fa41a92000c8c6abc39c7b">
       <sDescription>high quality audio rate sample and hold using blit synthesis (bandwidth limited)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -36,7 +36,7 @@
     int i1 = %trig%[j]>>2;
     if ((i1>0)&&!(i0>0)){   // dispatch
       nextvoice = (nextvoice+1)&(blepvoices-1);
-      int32_t x = 64-((-i0<<6)/(i1-i0));
+      int32_t x = (i1<<6)/(i1-i0);
       oscp[nextvoice] = &blept[x];
       int32_t val = (((64-x)*(%in%[j]>>2)) + (x*(in0>>2)))>>6;
       vgain[nextvoice] = (acc-val)<<2;
@@ -54,7 +54,7 @@
       }
       oscp[i]=t;
     }
-    %out%[j]=sum+acc;
+    %out%[j]=(sum+acc)<<1;
   }]]></code.krate>
    </obj.normal>
 </objdefs>
