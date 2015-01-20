@@ -1,0 +1,153 @@
+<patch-1.0>
+   <obj type="audio/in left" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="in_1" x="14" y="14">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="clean channel" x="140" y="14"/>
+   <obj type="filter/eq4" sha="518b736fd39d7b359aad0043072946b6141c773b" name="eq4_1" x="140" y="42">
+      <params>
+         <int32 name="lowmid" value="0"/>
+         <int32 name="mid" value="-8"/>
+         <int32 name="highmid" value="0"/>
+         <int32 name="high" value="6"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="distortion channel" x="140" y="196"/>
+   <obj type="wah1" sha="c13402bd5757318eb1c32e160e124c5e22d8137b" name="wah1_1" x="14" y="224">
+      <params>
+         <bool32.tgl name="on" MidiCC="10" value="0"/>
+         <frac32.u.map name="freq" MidiCC="1" value="54.0"/>
+         <frac32.u.map name="flt:reso" value="58.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="distortion1" sha="fc0b9e4c2f06a7e10135ce2d424feab2b5c34697" name="distortion1_1" x="140" y="224">
+      <params>
+         <frac32.u.map name="gain" value="7.5"/>
+         <frac32.u.map name="level" value="14.0"/>
+         <int32 name="eq:lowmid" value="4"/>
+         <int32 name="eq:mid" value="-6"/>
+         <int32 name="eq:highmid" value="4"/>
+         <int32 name="eq:high" value="7"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="switch2" sha="b1e02746f07ecd680e9a97453c307f131fe6bfdc" name="switch2_1" x="266" y="224">
+      <params>
+         <bool32.tgl name="ab" MidiCC="11" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flanger1" sha="62116ac27928cce8bf2e325fc8f112cc1a772971" name="flanger1_1" x="336" y="224">
+      <params>
+         <bool32.tgl name="on" MidiCC="12" value="0"/>
+         <frac32.u.map name="fdbk" value="26.5"/>
+         <frac32.u.map name="depth" value="20.0"/>
+         <frac32.s.map name="speed" value="-56.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="tapedelay" sha="5f7839551319f9b87ee0f80d47ea42c4fa008f92" name="tapedelay" x="448" y="224">
+      <params>
+         <bool32.tgl name="on" value="1"/>
+         <frac32.u.map name="fdbk" value="16.5"/>
+         <frac32.u.map name="time" value="13.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="chorus3" sha="d93b6c1bdb729f5d0f6f354a5e463b6a9d4303fb" name="chorus3_1" x="532" y="224">
+      <params>
+         <bool32.tgl name="on" MidiCC="13" value="1">
+            <presets>
+               <preset index="1">
+                  <i i="1"/>
+               </preset>
+            </presets>
+         </bool32.tgl>
+         <frac32.u.map name="depth" value="6.0"/>
+         <frac32.s.map name="speed" value="-24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="reverb1" sha="63254eab68b07f18057a6624c3f62984732f736d" name="reverb1_1" x="644" y="224">
+      <params>
+         <bool32.tgl name="on" MidiCC="14" value="1"/>
+         <frac32.u.map name="amt" value="12.0"/>
+         <frac32.u.map name="decay" value="27.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="756" y="224">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="midi/in/cc any" sha="201486c62456f4efcc982c8ed99e2392fc23d9da" name="cc_1" x="56" y="644">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/i" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="i_1" x="154" y="644">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="in_1 wave"/>
+         <dest name="eq4_1 in"/>
+         <dest name="wah1_1 in"/>
+      </net>
+      <net>
+         <source name="reverb1_1 outL"/>
+         <dest name="out_1 left"/>
+      </net>
+      <net>
+         <source name="reverb1_1 outR"/>
+         <dest name="out_1 right"/>
+      </net>
+      <net>
+         <source name="eq4_1 out"/>
+         <dest name="switch2_1 a"/>
+      </net>
+      <net>
+         <source name="chorus3_1 L"/>
+         <dest name="reverb1_1 inL"/>
+      </net>
+      <net>
+         <source name="chorus3_1 R"/>
+         <dest name="reverb1_1 inR"/>
+      </net>
+      <net>
+         <source name="cc_1 cc"/>
+         <dest name="i_1 in"/>
+      </net>
+      <net>
+         <source name="switch2_1 out"/>
+         <dest name="flanger1_1 in"/>
+      </net>
+      <net>
+         <source name="flanger1_1 out"/>
+         <dest name="tapedelay in"/>
+      </net>
+      <net>
+         <source name="tapedelay out"/>
+         <dest name="chorus3_1 in"/>
+      </net>
+      <net>
+         <source name="wah1_1 out"/>
+         <dest name="distortion1_1 in"/>
+      </net>
+      <net>
+         <source name="distortion1_1 out"/>
+         <dest name="switch2_1 b"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>8</NPresetEntries>
+      <NModulationSources>4</NModulationSources>
+      <NModulationTargetsPerSource>4</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>
