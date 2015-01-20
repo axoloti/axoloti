@@ -60,14 +60,6 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U {
     }
 
     @Override
-    public void CopyValueFrom(ParameterInstance p) {
-        super.CopyValueFrom(p);
-        if (p instanceof ParameterInstanceFrac32UMap) {
-            ParameterInstanceFrac32UMap p1 = (ParameterInstanceFrac32UMap) p;
-        }
-    }
-
-    @Override
     public Preset AddPreset(int index, Value value) {
         Preset p = super.AddPreset(index, value);
         presetAssign.repaint();

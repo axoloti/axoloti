@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,7 +17,10 @@
  */
 package axoloti.parameters;
 
+import components.AssignMidiCCMenuItems;
 import components.control.HRadioComponent;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -58,7 +61,9 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
 
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
-        return "";
+        // hmm this is only one possible behavior - could also map to full MIDI range...
+        int max = ((ParameterInt32HRadio) parameter).MaxValue.getInt();
+        return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?:data2:max");
     }
 
     @Override
@@ -69,5 +74,13 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
     @Override
     public HRadioComponent getControlComponent() {
         return (HRadioComponent) ctrl;
+    }
+
+    @Override
+    public void populatePopup(JPopupMenu m) {
+        super.populatePopup(m);
+        JMenu m1 = new JMenu("Midi CC");
+        new AssignMidiCCMenuItems(this, m1);
+        m.add(m1);
     }
 }

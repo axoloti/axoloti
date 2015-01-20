@@ -66,7 +66,6 @@ public class HRadioComponent extends ACtrlComponent {
                 dragAction = true;
             }
         }
-        System.out.println("cb" + value);
     }
 
     @Override
