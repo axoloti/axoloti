@@ -1,52 +1,148 @@
 <patch-1.0>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="28" y="42">
-      <params>
-         <frac32.s.map name="pitch" value="3.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="conv/bipolar2unipolar" sha="b80b299df9cb5523b1c4c0c7fe09941a1c682112" name="bipolar2unipolar1" x="126" y="42">
+   <obj type="math/c 32" sha="5797bce9fc4e770d9c14890b0fa899f126c5bc38" name="c_1" x="98" y="28">
       <params/>
       <attribs/>
    </obj>
-   <obj type="mix/mix 2" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe" name="mix21" x="252" y="42">
+   <obj type="noise/pink" sha="60f2be0f8974717ae4480e80f70bfae0bb3f01d5" name="pnoise2_1" x="182" y="28">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="0" y="70">
       <params>
-         <frac32.u.map name="gain1" value="8.0"/>
-         <frac32.u.map name="gain2" value="28.0"/>
+         <frac32.s.map name="pitch" value="2.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="./organvoice" sha="da8d7aab4034003a0be3e46b9f6163888085a9e4" name="organvoice1" x="336" y="42">
+   <obj type="mix/mix 2" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe" name="mix21" x="98" y="70">
       <params>
-         <frac32.u.map name="envahd1:a" value="0.0"/>
-         <frac32.u.map name="envahd1:d" value="42.5"/>
-         <frac32.u.map name="p" value="57.5"/>
-         <frac32.u.map name="*c3" value="12.5"/>
-         <frac32.u.map name="*c3_" value="10.0"/>
-         <frac32.u.map name="*c2" value="10.5"/>
+         <frac32.u.map name="gain1" value="2.5"/>
+         <frac32.u.map name="gain2" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="./organvoice" sha="c5567ee66bfe18fd9363c8ebe1d864e13b7b014d" name="organvoice1" x="182" y="70">
+      <params>
+         <frac32.u.map name="ahd_1:a" value="0.0"/>
+         <frac32.u.map name="ahd_1:d" value="43.5"/>
+         <frac32.s.map name="p" value="-28.5"/>
+         <frac32.u.map name="pm1" value="0.0">
+            <presets>
+               <preset index="1">
+                  <f v="41.5"/>
+               </preset>
+               <preset index="2">
+                  <f v="41.5"/>
+               </preset>
+               <preset index="3">
+                  <f v="0.0"/>
+               </preset>
+               <preset index="4">
+                  <f v="0.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+         <frac32.u.map name="pm2" value="20.0">
+            <presets>
+               <preset index="1">
+                  <f v="20.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="20.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="20.0"/>
+               </preset>
+               <preset index="4">
+                  <f v="20.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+         <frac32.u.map name="pm3" value="2.0">
+            <presets>
+               <preset index="1">
+                  <f v="26.5"/>
+               </preset>
+               <preset index="2">
+                  <f v="26.5"/>
+               </preset>
+               <preset index="3">
+                  <f v="2.0"/>
+               </preset>
+               <preset index="4">
+                  <f v="2.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+         <frac32.u.map name="mix_1:gain1" value="18.0">
+            <presets>
+               <preset index="1">
+                  <f v="0.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="18.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="18.0"/>
+               </preset>
+               <preset index="4">
+                  <f v="18.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+         <frac32.u.map name="mix_1:gain2" value="25.0">
+            <presets>
+               <preset index="1">
+                  <f v="34.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="0.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="0.0"/>
+               </preset>
+               <preset index="4">
+                  <f v="25.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+         <frac32.u.map name="mix_1:gain3" value="0.0">
+            <presets>
+               <preset index="1">
+                  <f v="0.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="31.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="31.0"/>
+               </preset>
+               <preset index="4">
+                  <f v="0.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+         <frac32.u.map name="mix_1:gain4" value="0.5">
+            <presets/>
+         </frac32.u.map>
       </params>
       <attribs>
-         <combo attributeName="poly" selection="12"/>
+         <combo attributeName="poly" selection="16"/>
       </attribs>
    </obj>
-   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="434" y="42">
+   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="336" y="70">
       <params>
-         <frac32.u.map name="mix" value="12.5"/>
-         <frac32.u.map name="feedback" value="14.0"/>
+         <frac32.u.map name="mix" value="3.0"/>
+         <frac32.u.map name="feedback" value="16.0"/>
       </params>
       <attribs>
-         <int attributeName="delaylength" value="16847"/>
+         <spinner attributeName="delaylength" value="16847"/>
       </attribs>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_21" x="672" y="42">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_21" x="448" y="70">
       <params/>
       <attribs/>
    </obj>
    <nets>
-      <net>
-         <source name="organvoice1 outlet_1"/>
-         <dest name="echo2_1 in"/>
-      </net>
       <net>
          <source name="echo2_1 out"/>
          <dest name="dac_21 left"/>
@@ -61,12 +157,20 @@
          <dest name="organvoice1 pressure_in"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="bipolar2unipolar1 i"/>
+         <source name="c_1 o"/>
+         <dest name="mix21 bus_in"/>
       </net>
       <net>
-         <source name="bipolar2unipolar1 o"/>
+         <source name="osc1 wave"/>
          <dest name="mix21 in1"/>
+      </net>
+      <net>
+         <source name="organvoice1 out"/>
+         <dest name="echo2_1 in"/>
+      </net>
+      <net>
+         <source name="pnoise2_1 out"/>
+         <dest name="organvoice1 noise"/>
       </net>
    </nets>
    <settings>

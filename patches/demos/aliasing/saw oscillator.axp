@@ -1,0 +1,90 @@
+<patch-1.0>
+   <comment type="patch/comment" sha="sha" name="&lt;html&gt;&lt;H2&gt;Comparing a naive non-bandwidth limited saw wave oscillator&lt;br&gt;with a better one&lt;/h2&gt;" x="14" y="14"/>
+   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw_1" x="14" y="98">
+      <params>
+         <frac32.s.map name="pitch" value="-50.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e" name="*c_2" x="126" y="98">
+      <params>
+         <frac32.u.map name="amp" value="60.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/saw cheap" sha="5a224bbe01167b6ed8c613d4262f1825a712c753" name="saw_2" x="238" y="98">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="toggle_1" x="350" y="126">
+      <params>
+         <bool32.tgl name="b" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="off = naive implementation" x="434" y="140"/>
+   <comment type="patch/comment" sha="sha" name="on = better implementation" x="434" y="154"/>
+   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_3" x="238" y="182">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mux/mux 2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f" name="mux_1" x="350" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="3ade427ae7291fdf62058c4243fe718758187105" name="*c_1" x="420" y="182">
+      <params>
+         <frac32.u.map name="amp" value="16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="518" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_1" x="420" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="mux_1 o"/>
+         <dest name="scope_1 in"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="out_1 left"/>
+         <dest name="out_1 right"/>
+      </net>
+      <net>
+         <source name="toggle_1 o"/>
+         <dest name="mux_1 s"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="*c_2 in"/>
+      </net>
+      <net>
+         <source name="*c_2 out"/>
+         <dest name="saw_3 pitchm"/>
+         <dest name="saw_2 pitchm"/>
+      </net>
+      <net>
+         <source name="saw_2 wave"/>
+         <dest name="mux_1 i1"/>
+      </net>
+      <net>
+         <source name="saw_3 wave"/>
+         <dest name="mux_1 i2"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

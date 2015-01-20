@@ -1,0 +1,99 @@
+<patch-1.0>
+   <comment type="patch/comment" sha="sha" name="&lt;html&gt;&lt;H2&gt;Comparing a naive full wave rectifier&lt;br&gt;with a better one&lt;/h2&gt;" x="14" y="14"/>
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="toggle_1" x="504" y="84">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw_1" x="14" y="98">
+      <params>
+         <frac32.s.map name="pitch" value="-40.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e" name="*c_1" x="126" y="98">
+      <params>
+         <frac32.u.map name="amp" value="24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="sine_1" x="238" y="98">
+      <params>
+         <frac32.s.map name="pitch" value="26.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/abs" sha="d9aef12fddc085a0a8a7a9868f1c845c538a9209" name="abs_1" x="350" y="98">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 2" sha="5df68ad33aa1633cb7cb1724fcd41eee28932582" name="div_1" x="406" y="98">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="off = naive implementation" x="588" y="98"/>
+   <comment type="patch/comment" sha="sha" name="on = better implementation" x="588" y="112"/>
+   <obj type="dist/rectifier full" sha="bbd71c0dc9ca3e65420b55751215c30369dfc68" name="rectifier_1" x="350" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mux/mux 2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f" name="mux_1" x="504" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="588" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_2" x="350" y="238">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_1" x="588" y="238">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="mux_1 o"/>
+         <dest name="out_1 left"/>
+         <dest name="out_1 right"/>
+         <dest name="scope_1 in"/>
+      </net>
+      <net>
+         <source name="sine_1 wave"/>
+         <dest name="rectifier_1 in"/>
+         <dest name="scope_2 in"/>
+         <dest name="abs_1 in"/>
+      </net>
+      <net>
+         <source name="toggle_1 o"/>
+         <dest name="mux_1 s"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="sine_1 pitchm"/>
+      </net>
+      <net>
+         <source name="abs_1 out"/>
+         <dest name="div_1 in"/>
+      </net>
+      <net>
+         <source name="div_1 out"/>
+         <dest name="mux_1 i1"/>
+      </net>
+      <net>
+         <source name="rectifier_1 out"/>
+         <dest name="mux_1 i2"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>
