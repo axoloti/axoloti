@@ -25,7 +25,7 @@ include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 
 INCDIR = $(CMSIS)/Include \
 		 $(PORTINC) $(KERNINC) $(TESTINC) \
-         $(HALINC) $(PLATFORMINC) $(BOARDINC) \
+         $(HALINC) $(PLATFORMINC) $(BOARDINC) $(FATFSINC) \
          ../firmware
          
 # Paths
