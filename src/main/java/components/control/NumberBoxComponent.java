@@ -43,6 +43,9 @@ import java.awt.Robot;
  *
  * @author Johannes Taelman
  */
+
+// FIXME: integer versus float model. Currently NumberBoxComponent assumes integers...
+
 public class NumberBoxComponent extends ACtrlComponent {
 
     private double value;
@@ -248,14 +251,14 @@ public class NumberBoxComponent extends ACtrlComponent {
         int h = 3;
         int v = 4;
         if (getWidth() < 20) {
-            s = String.format("%.0f", value);
+            s = String.format("%d", (int)value);
             if (s.length() < 2) {
                 h = 3;
             } else {
                 h = 0;
             }
         } else {
-            s = String.format("%5.0f", value);
+            s = String.format("%5d", (int)value);
         }
         if (getHeight() < 15) {
             v = 2;
