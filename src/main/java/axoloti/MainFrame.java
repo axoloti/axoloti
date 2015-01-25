@@ -31,6 +31,8 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -43,6 +45,8 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
@@ -62,7 +66,7 @@ import qcmds.QCmdUploadPatch;
  *
  * @author Johannes Taelman
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
     static public Preferences prefs = Preferences.LoadPreferences();
     static public AxoObjects axoObjects;
@@ -89,8 +93,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         axoObjects = new AxoObjects();
         axoObjects.LoadAxoObjects();
-        //TransitionManager m = new TransitionManager();
-        //m.CreateTransitions();
 
         mainframe = this;
 
@@ -172,6 +174,45 @@ public class MainFrame extends javax.swing.JFrame {
             jMenuRegenerateObjects.setVisible(false);
             jMenuAutoTest.setVisible(false);
         }
+        PopulateExamplesMenu(jMenuOpenExample);
+    }
+
+    void PopulateExamplesMenu(JMenu parent) {
+        JMenu ptut = new JMenu("tutorials");
+        PopulateExamplesMenu(ptut, "patches/tutorials");
+        parent.add(ptut);
+        JMenu pdemos = new JMenu("demos");
+        PopulateExamplesMenu(pdemos, "patches/demos");
+        parent.add(pdemos);
+        JMenu ptests = new JMenu("tests");
+        PopulateExamplesMenu(ptests, "patches/tests");
+        parent.add(ptests);
+    }
+
+    void PopulateExamplesMenu(JMenu parent, String path) {
+        File dir = new File(path);
+        for (File subdir : dir.listFiles(new java.io.FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory();
+            }
+        })) {
+            JMenu fm = new JMenu(subdir.getName());
+            PopulateExamplesMenu(fm, subdir.getPath());
+            parent.add(fm);
+        }
+        for (String fn : dir.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return (name.endsWith(".axp"));
+            }
+        })) {
+            String fn2 = fn.substring(0, fn.length() - 4);
+            JMenuItem fm = new JMenuItem(fn2);
+            fm.setActionCommand("open:" + path + File.separator + fn);
+            fm.addActionListener(this);
+            parent.add(fm);
+        }
     }
 
     /**
@@ -183,9 +224,6 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
         jButtonClear = new javax.swing.JButton();
         jScrollPaneLog = new javax.swing.JScrollPane();
         jTextPaneLog = new javax.swing.JTextPane();
@@ -202,6 +240,7 @@ public class MainFrame extends javax.swing.JFrame {
         jMenuFile = new javax.swing.JMenu();
         jMenuNew = new javax.swing.JMenuItem();
         jMenuOpen = new javax.swing.JMenuItem();
+        jMenuOpenExample = new javax.swing.JMenu();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuReloadObjects = new javax.swing.JMenuItem();
         jMenuRegenerateObjects = new javax.swing.JMenuItem();
@@ -227,12 +266,6 @@ public class MainFrame extends javax.swing.JFrame {
         jMenuHelp = new javax.swing.JMenu();
         jMenuHelpContents = new javax.swing.JMenuItem();
         jMenuAbout = new javax.swing.JMenuItem();
-
-        jLabel1.setText("jLabel1");
-
-        jMenuItem1.setText("jMenuItem1");
-
-        jMenuItem2.setText("jMenuItem2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Axoloti");
@@ -322,6 +355,9 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
     }
     });
     jMenuFile.add(jMenuOpen);
+
+    jMenuOpenExample.setText("Open example");
+    jMenuFile.add(jMenuOpenExample);
     jMenuFile.add(jSeparator2);
 
     jMenuReloadObjects.setText("Reload Objects");
@@ -711,26 +747,30 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
             prefs.setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
             prefs.SavePrefs();
             File f = fc.getSelectedFile();
-            Serializer serializer = new Persister();
-            try {
-                PatchGUI patch1 = serializer.read(PatchGUI.class, f);
-                PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
-                patch1.setFileNamePath(f.getAbsolutePath());
-                patch1.PostContructor();
-                pf.UpdateConnectStatus();
-                patch1.setFileNamePath(f.getPath());
-                pf.setVisible(true);
-                patches.add(patch1);
-            } catch (Exception ex) {
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            OpenPatch(f);
         }
     }
+
+    public void OpenPatch(File f) {
+        Serializer serializer = new Persister();
+        try {
+            PatchGUI patch1 = serializer.read(PatchGUI.class, f);
+            PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
+            patch1.setFileNamePath(f.getAbsolutePath());
+            patch1.PostContructor();
+            pf.UpdateConnectStatus();
+            patch1.setFileNamePath(f.getPath());
+            pf.setVisible(true);
+            patches.add(patch1);
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButtonClear;
     private javax.swing.JCheckBox jCheckBoxConnect;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelCPUID;
     private javax.swing.JLabel jLabelFirmwareID;
@@ -744,8 +784,6 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenu jMenuFirmware;
     private javax.swing.JMenu jMenuHelp;
     private javax.swing.JMenuItem jMenuHelpContents;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemFCompile;
     private javax.swing.JMenuItem jMenuItemFConnect;
@@ -758,6 +796,7 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemPreferences;
     private javax.swing.JMenuItem jMenuNew;
     private javax.swing.JMenuItem jMenuOpen;
+    private javax.swing.JMenu jMenuOpenExample;
     private javax.swing.JMenuItem jMenuQuit;
     private javax.swing.JMenuItem jMenuRegenerateObjects;
     private javax.swing.JMenuItem jMenuReloadObjects;
@@ -829,6 +868,15 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     public QCmdProcessor getQcmdprocessor() {
         return qcmdprocessor;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String cmd = e.getActionCommand();
+        if (cmd.startsWith("open:")) {
+            String fn = cmd.substring(5);
+            OpenPatch(new File(fn));
+        }
     }
 
 }
