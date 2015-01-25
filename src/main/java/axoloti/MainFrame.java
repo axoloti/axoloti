@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -91,9 +91,6 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
         transparentCursor = getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null);
 
-        axoObjects = new AxoObjects();
-        axoObjects.LoadAxoObjects();
-
         mainframe = this;
 
         updateLinkFirmwareID();
@@ -175,6 +172,9 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             jMenuAutoTest.setVisible(false);
         }
         PopulateExamplesMenu(jMenuOpenExample);
+
+        axoObjects = new AxoObjects();
+        axoObjects.LoadAxoObjects();
     }
 
     void PopulateExamplesMenu(JMenu parent) {

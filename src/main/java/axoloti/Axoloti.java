@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -44,12 +44,10 @@ public class Axoloti {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                AboutFrame.aboutFrame.setVisible(true);
                 try {
-//                    GeneratedObjects.WriteAxoObjects();
                     MainFrame frame = new MainFrame();
                     frame.setVisible(true);
-                    AboutFrame.aboutFrame.toFront();
+                    AboutFrame.aboutFrame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
