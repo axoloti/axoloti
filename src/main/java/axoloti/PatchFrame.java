@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -22,6 +22,7 @@ import axoloti.object.AxoObjects;
 import axoloti.utils.Constants;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -231,7 +232,9 @@ public class PatchFrame extends javax.swing.JFrame {
         jMenuQuit = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
         jMenuItemDelete = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItemSelectAll = new javax.swing.JMenuItem();
+        jMenuItemAddObj = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
         jMenuView = new javax.swing.JMenu();
         jMenuItemNotes = new javax.swing.JMenuItem();
         jMenuItemSettings = new javax.swing.JMenuItem();
@@ -385,15 +388,24 @@ jMenuQuit.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuEdit.add(jMenuItemDelete);
 
-    jMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
+    jMenuItemSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-jMenuItem1.setText("Select all");
-jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+jMenuItemSelectAll.setText("Select all");
+jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener() {
     public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jMenuItem1ActionPerformed(evt);
+        jMenuItemSelectAllActionPerformed(evt);
     }
     });
-    jMenuEdit.add(jMenuItem1);
+    jMenuEdit.add(jMenuItemSelectAll);
+
+    jMenuItemAddObj.setText("Add Object...");
+    jMenuItemAddObj.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItemAddObjActionPerformed(evt);
+        }
+    });
+    jMenuEdit.add(jMenuItemAddObj);
+    jMenuEdit.add(jSeparator4);
 
     jMenuBar1.add(jMenuEdit);
 
@@ -750,9 +762,9 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         MainFrame.mainframe.NewPatch();
     }//GEN-LAST:event_jMenuNewActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItemSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectAllActionPerformed
         patch.SelectAll();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItemSelectAllActionPerformed
 
     private void jMenuItemNotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNotesActionPerformed
         patch.ShowNotesFrame();
@@ -817,6 +829,10 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCopyPatchToFlash());
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItemAddObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddObjActionPerformed
+        patch.ShowClassSelector(new Point(20, 20), null);
+    }//GEN-LAST:event_jMenuItemAddObjActionPerformed
+
     /* write to sdcard...
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -836,8 +852,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuGenerateCode;
     private javax.swing.JMenu jMenuHelp;
     private javax.swing.JMenuItem jMenuHelpContents;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItemAddObj;
     private javax.swing.JMenuItem jMenuItemAdjScroll;
     private javax.swing.JMenuItem jMenuItemClearPreset;
     private javax.swing.JMenuItem jMenuItemDelete;
@@ -845,6 +861,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemLock;
     private javax.swing.JMenuItem jMenuItemNotes;
     private javax.swing.JMenuItem jMenuItemPresetCurrentToInit;
+    private javax.swing.JMenuItem jMenuItemSelectAll;
     private javax.swing.JMenuItem jMenuItemSettings;
     private javax.swing.JMenuItem jMenuItemUnlock;
     private javax.swing.JMenuItem jMenuItemUploadSD;
@@ -866,6 +883,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPanel jStatusPanel;
     private javax.swing.JPanel jToolbarPanel;
     // End of variables declaration//GEN-END:variables
