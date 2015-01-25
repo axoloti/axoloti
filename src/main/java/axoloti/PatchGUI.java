@@ -295,11 +295,18 @@ public class PatchGUI extends Patch {
                         ShowClassSelector(me.getPoint(), null);
                         me.consume();
                     } else {
+                        me.consume();
                         if ((osf != null) && osf.isVisible()) {
                             osf.Accept();
                         }
                         Layers.requestFocusInWindow();
                     }
+                } else {
+                    me.consume();
+                    if ((osf != null) && osf.isVisible()) {
+                        osf.Cancel();
+                    }
+                    Layers.requestFocusInWindow();
                 }
             }
 
