@@ -91,7 +91,8 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
     }
 
     public void CopyValueFrom(ParameterInstance p) {
-        onParent = p.onParent;
+        if (p.onParent != null)
+            setOnParent(p.onParent);
         SetMidiCC(p.MidiCC);
     }
 
@@ -356,7 +357,8 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
         }
     }
 
-    public void setOnParent(boolean b) {
+    public void setOnParent(Boolean b) {
+        if (b == null) return;
         if (isOnParent() == b) {
             return;
         }

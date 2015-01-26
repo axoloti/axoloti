@@ -28,8 +28,6 @@ import components.AssignModulatorMenuItems;
 import components.AssignPresetComponent;
 import components.control.DialComponent;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -94,9 +92,9 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U {
     }
 
     @Override
-    public void setOnParent(boolean b) {
+    public void setOnParent(Boolean b) {
         super.setOnParent(b);
-        if (b) {
+        if ((b != null) && b) {
             setForeground(Color.blue);
         } else {
             setForeground(Color.black);

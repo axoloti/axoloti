@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -72,9 +72,9 @@ public abstract class ParameterInstanceInt32 extends ParameterInstance<Int32> {
     }
 
     @Override
-    public void setOnParent(boolean b) {
+    public void setOnParent(Boolean b) {
         super.setOnParent(b);
-        if (b) {
+        if ((b != null) && b) {
             setForeground(Color.blue);
         } else {
             setForeground(Color.black);
