@@ -87,7 +87,7 @@ public class Spat extends gentools {
         o.inlets.add(new InletFrac32("c", "pan control"));
         o.outlets.add(new OutletFrac32Buffer("left", "output"));
         o.outlets.add(new OutletFrac32Buffer("right", "output"));
-        o.sSRateCode = "%left% = ___SMMUL((1<<29)-(c<<2),%i1%)<<2;"
+        o.sSRateCode = "%left% = ___SMMUL((1<<29)-(%c%<<2),%i1%)<<2;"
                 + "%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;";
         return o;
     }

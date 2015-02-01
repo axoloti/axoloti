@@ -1979,4 +1979,10 @@
             <NewSha>fdb6777505be0746768fb7e222fb1389c1e96554</NewSha>
         </new>
     </ShaTransition>	
-	</transitions>
+    <ShaTransition>
+        <OldSha>f2d9a02beeb3b451541dc262fc3d1e3b1d3af031</OldSha>
+        <new>
+            <NewSha>fea4638f71dbe768d940b3334f5c187543f18ab8</NewSha>
+        </new>
+    </ShaTransition>	
+</transitions>
