@@ -38,7 +38,7 @@ public class Delay extends gentools {
     static void GenerateAll() {
         String catName = "delay";
         WriteAxoObject(catName, CreateDelwriteTilde());
-
+        WriteAxoObject(catName, CreateDelwriteTilde_SDRAM());
         WriteAxoObject(catName, new AxoObject[]{CreateDelreadTilde(), CreateDelreadTildeTilde()});
         WriteAxoObject(catName, CreateDelread2TildeTilde());
         WriteAxoObject(catName, CreatePitchToDelaytime());
@@ -134,6 +134,39 @@ public class Delay extends gentools {
                 + "int16_t array[1<<%size%];\n"
                 + "uint32_t writepos;";
         o.sInitCode = "   int i;\n"
+                + "   writepos = 0;\n"
+                + "   for(i=0;i<LENGTH;i++) array[i] = 0;\n";
+        o.sSRateCode = "  writepos = (writepos + 1)&LENGTHMASK;\n"
+                + "   array[writepos] = __SSAT(%in%>>14,16);\n";
+        return o;
+    }
+
+    static AxoObject CreateDelwriteTilde_SDRAM() {
+        AxoObject o = new AxoObject("write sdram", "delayline definition, read with delay/read");
+        String mentries[] = {"256 (5.33ms)",
+            "512 (10.66ms)",
+            "1024 (21.33ms)",
+            "2048 (42.66ms)",
+            "4096 (85.33ms)",
+            "8192 (170ms)",
+            "16384 (341ms)",
+            "32768 (682ms)",
+            "65536 (1.36s)",
+            "131072 (2.37s)",
+            "262144 (5.46s)",
+            "524288 (10.09s)"
+        };
+        String centries[] = {"8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
+        o.attributes.add(new AxoAttributeComboBox("size", mentries, centries));
+        o.inlets.add(new InletFrac32Buffer("in", "wave input"));
+        o.sLocalData = "static const uint32_t LENGTHPOW = (%size%);\n"
+                + "static const uint32_t LENGTH = (1<<%size%);\n"
+                + "static const uint32_t LENGTHMASK = ((1<<%size%)-1);\n"
+                + "int16_t *array;\n"
+                + "uint32_t writepos;";
+        o.sInitCode = "static int16_t _array[1<<%size%]  __attribute__ ((section (\".sdram\")));\n"
+                + "array = _array;\n"
+                + "   int i;\n"
                 + "   writepos = 0;\n"
                 + "   for(i=0;i<LENGTH;i++) array[i] = 0;\n";
         o.sSRateCode = "  writepos = (writepos + 1)&LENGTHMASK;\n"

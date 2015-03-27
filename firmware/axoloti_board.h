@@ -30,4 +30,18 @@ void axoloti_board_init(void);
 void adc_init(void);
 void adc_convert(void);
 
+
+#if (BOARD_AXOLOTI_V05)
+#define LED1_PORT GPIOG
+#define LED1_PIN 6
+#endif
+
+
+#ifdef BOARD_AXOLOTI_V05
+#define SDMIDI SD6
+#else
+#define SDMIDI SD1
+#endif
+
+
 #endif

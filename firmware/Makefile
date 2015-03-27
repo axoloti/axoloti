@@ -83,6 +83,11 @@ CMSIS = ../CMSIS/
 # Define linker script file here
 LDSCRIPT= STM32F407xG.ld
 
+#       codec_ADAU1961_SAI.c 
+#       stm32f4xx_fmc.c 
+#       sdram.c 
+#
+
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CSRC = $(PORTSRC) \
@@ -95,7 +100,6 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/chprintf.c \
        $(CHIBIOS)/os/various/memstreams.c \
        axoloti_control.c \
-       codec_ADAU1961.c \
        codec.c \
        axoloti.c \
        axoloti_filters.c \
@@ -260,15 +264,7 @@ UINCDIR =
 ULIBDIR = .
 
 # List all user libraries here
-ULIBS = -lm \
-	samples/808bd.o \
-	samples/808hatclose.o \
-	samples/808hatopen.o \
-	samples/808hitom.o \
-	samples/808midtom.o \
-	samples/808lotom.o \
-	samples/808snare.o 
-
+ULIBS = -lm 
 #
 # End of user defines
 ##############################################################################

@@ -33,10 +33,6 @@ int32_t buf2[BUFSIZE*2] __attribute__ ((section (".sram2")));
 int32_t rbuf[BUFSIZE*2] __attribute__ ((section (".sram2")));
 int32_t rbuf2[BUFSIZE*2] __attribute__ ((section (".sram2")));
 
-//extern stm32_dma_stream_t* i2sdma;
-
-#define NEWBOARD 1
-
 void codec_init(void) {
 #if (BOARD_STM32F4DISCOVERY)
   codec_CS43L22_i2s_init_48k();
@@ -49,7 +45,7 @@ void codec_init(void) {
     chThdSleepMilliseconds(100);
   }
 */
-#elif (BOARD_AXOLOTI_V03)
+#elif ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
   codec_ADAU1961_i2s_init(SAMPLERATE);
   codec_ADAU1961_hw_init(SAMPLERATE);
 #else
@@ -62,3 +58,11 @@ void codecStop(void) {
   codec_ADAU1961_Stop();
 #endif
 }
+
+#if (BOARD_STM32F4DISCOVERY)
+#include "codec_CS43L22.c"
+#elif (BOARD_AXOLOTI_V03)
+#include "codec_ADAU1961.c"
+#elif (BOARD_AXOLOTI_V05)
+#include "codec_ADAU1961_SAI.c"
+#endif

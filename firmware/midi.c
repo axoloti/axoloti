@@ -17,6 +17,7 @@
  */
 #include "ch.h"
 #include "hal.h"
+#include "axoloti_board.h"
 #include "midi.h"
 #include "patch.h"
 
@@ -98,16 +99,10 @@ void MidiInByteHandler(uint8_t data) {
   }
 }
 
-#define NEWBOARD 1
-
 // Midi OUT
 
 void MidiSend1(uint8_t b0) {
-#ifdef NEWBOARD
-  sdPut(&SD1, b0);
-#else
-  sdPut(&SD3,b0);
-#endif
+  sdPut(&SDMIDI, b0);
 }
 
 void MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2) {
@@ -117,7 +112,7 @@ void MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2) {
 }
 
 int MidiGetOutputBufferPending(void) {
-  return chOQGetFullI(&SD1.oqueue);
+  return chOQGetFullI(&SDMIDI.oqueue);
 }
 
 // Midi UART...
@@ -131,7 +126,7 @@ __attribute__((noreturn))
   (void)arg;
   while (1) {
     char ch;
-    ch = sdGet(&SD1);
+    ch = sdGet(&SDMIDI);
     MidiInByteHandler(ch);
   }
 }
@@ -141,19 +136,18 @@ void midi_init(void) {
    * Activates the serial driver 2 using the driver default configuration.
    * PA2(TX) and PA3(RX) are routed to USART2.
    */
-#ifdef NEWBOARD
-  palSetPadMode(GPIOB, 7, PAL_MODE_ALTERNATE(7)|PAL_MODE_INPUT_PULLUP);
+#ifdef BOARD_AXOLOTI_V05
   // RX
-  palSetPadMode(GPIOB, 6, PAL_MODE_ALTERNATE(7)|PAL_STM32_OTYPE_OPENDRAIN);
+  palSetPadMode(GPIOG, 9, PAL_MODE_ALTERNATE(8)|PAL_MODE_INPUT_PULLUP);
   // TX
-  sdStart(&SD1, &sdMidiCfg);
+  palSetPadMode(GPIOG, 14, PAL_MODE_ALTERNATE(8)|PAL_STM32_OTYPE_OPENDRAIN);
+#else
+  // RX
+  palSetPadMode(GPIOB, 7, PAL_MODE_ALTERNATE(7)|PAL_MODE_INPUT_PULLUP);
+  // TX
+  palSetPadMode(GPIOB, 6, PAL_MODE_ALTERNATE(7)|PAL_STM32_OTYPE_OPENDRAIN);
+#endif
+  sdStart(&SDMIDI, &sdMidiCfg);
   chThdCreateStatic(waThreadMidi, sizeof(waThreadMidi), NORMALPRIO, ThreadMidi,
                     NULL);
-
-#else
-  // USART3 - MIDI
-  palSetPadMode(GPIOD, 9, PAL_MODE_ALTERNATE(7)|PAL_MODE_INPUT_PULLUP);// RX
-  palSetPadMode(GPIOD, 8, PAL_MODE_ALTERNATE(7)|PAL_STM32_OTYPE_OPENDRAIN);// TX
-  sdStart(&SD3,&sdMidiCfg);
-#endif
 }

@@ -16,12 +16,19 @@
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "axoloti_defines.h"
+
+#if (BOARD_AXOLOTI_V05)
+#include "sdram.h"
+#include "stm32f4xx_fmc.h"
+#endif
+
 #include "ch.h"
-#include <stdio.h>
 #include "hal.h"
 #include "chprintf.h"
 #include "shell.h"
 #include "string.h"
+#include <stdio.h>
 
 #include "codec.h"
 #include "ui.h"
@@ -30,8 +37,13 @@
 #include "patch.h"
 #include "pconnection.h"
 #include "axoloti_control.h"
-#include "axoloti_board.h"
 #include "axoloti_math.h"
+#include "axoloti_board.h"
+
+#if (BOARD_AXOLOTI_V05)
+#include "sdram.c"
+#include "stm32f4xx_fmc.c"
+#endif
 /*===========================================================================*/
 /* Initialization and main thread.                                           */
 /*===========================================================================*/
@@ -69,7 +81,7 @@ int main(void) {
   memcpy((char *)0x20000000, (const char)0x00000000, 0x200);
 #pragma GCC diagnostic pop
   // remap SRAM1 to 0x00000000
-  SYSCFG ->MEMRMP |= 0x03;
+  SYSCFG->MEMRMP |= 0x03;
 
   halInit();
   chSysInit();
@@ -90,17 +102,22 @@ int main(void) {
 
   palSetPadMode(GPIOB, 2, PAL_MODE_INPUT_PULLDOWN);
 
+  codec_init();
   axoloti_board_init();
   adc_init();
   axoloti_math_init();
   midi_init();
-  codec_init();
 
 #if (BOARD_AXOLOTI_V03)
   axoloti_control_init();
 #endif
   ui_init();
   StartLoadPatchTread();
+
+#if (BOARD_AXOLOTI_V05)
+  configSDRAM();
+  //memTest();
+#endif
 
 #if (BOARD_AXOLOTI_V03)
   if (!palReadPad(GPIOB, 2)) // button S2 not pressed

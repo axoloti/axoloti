@@ -1,0 +1,57 @@
+<objdefs>
+   <obj.normal id="write sdram" sha="99a1c96c2133a3c1ad90f67bb7ecf68eb143f9c5">
+      <sDescription>delayline definition, read with delread~</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="wave input"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="size">
+            <MenuEntries>
+               <string>256 (5.33ms)</string>
+               <string>512 (10.66ms)</string>
+               <string>1024 (21.33ms)</string>
+               <string>2048 (42.66ms)</string>
+               <string>4096 (85.33ms)</string>
+               <string>8192 (170ms)</string>
+               <string>16384 (341ms)</string>
+               <string>32768 (682ms)</string>
+               <string>65536 (1.36s)</string>
+               <string>131072 (2.37s)</string>
+               <string>262144 (5.46s)</string>
+               <string>524288 (10.09s)</string>
+            </MenuEntries>
+            <CEntries>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+               <string>16</string>
+               <string>17</string>
+               <string>18</string>
+               <string>19</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (%size%);
+static const uint32_t LENGTH = (1<<%size%);
+static const uint32_t LENGTHMASK = ((1<<%size%)-1);
+int16_t array[1<<%size%]  __attribute__ ((section (".sdram")));
+uint32_t writepos;]]></code.declaration>
+      <code.init><![CDATA[   int i;
+   writepos = 0;
+   for(i=0;i<LENGTH;i++) array[i] = 0;
+]]></code.init>
+      <code.srate><![CDATA[  writepos = (writepos + 1)&LENGTHMASK;
+   array[writepos] = __SSAT(%in%>>14,16);
+]]></code.srate>
+   </obj.normal>
+</objdefs>

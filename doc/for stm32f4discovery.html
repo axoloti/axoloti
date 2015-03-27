@@ -8,7 +8,6 @@
         Axoloti is designed to run with the Axoloti Core board. But the STM32f4Discovery can be made to work too. 
         <H2>Modify the firmware</H2>
         <ul>
-            <li>in firmware/Makefile, change "codec_ADAU1961.c" into "codec_CS43L22.c". Make sure your text editor respects unix-style newlines in the Makefile!
             <li>in firmware/axoloti_defines.h, uncomment the line "#define BOARD_STM32F4DISCOVERY 1", and comment the line "#define BOARD_AXOLOTI_V03 1"
             <li>recompile the firmware                
             <li>flash the firmware (using STLink)

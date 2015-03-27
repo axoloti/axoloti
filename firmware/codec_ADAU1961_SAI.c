@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014, 2015 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -23,37 +23,23 @@
 #include "stm32f4xx.h"
 #include "axoloti_board.h"
 
-#define CODEC_ADAU1961_I2S_ENABLE rccEnableSPI2(FALSE)
-#define CODEC_ADAU1961_I2S_DISABLE rccDisableSPI2(FALSE)
-#define CODEC_ADAU1961_I2S SPI2
-#define CODEC_ADAU1961_I2Sext I2S2ext
-
-//#define STM_IS_I2S_MASTER true
-
-#if (BOARD_AXOLOTI_V05)
-#error "BOARD revision V05 uses SAI, please update the makefile to compile codec_ADAU1961_SAI.c"
-#elif (BOARD_STM32F4DISCOVERY)
-#error "STM32F4DISCOVERY has a different codec, please update the makefile..."
-#endif
+//#define STM_IS_I2S_MASTER 1
 
 extern void computebufI(int32_t *inp, int32_t *outp);
 
-const stm32_dma_stream_t* i2sdma_ADAU1961;
-const stm32_dma_stream_t* i2sdma_ADAU1961rx;
+#define STM32_SAI_A_DMA_STREAM STM32_DMA_STREAM_ID(2, 1)
+#define STM32_SAI_B_DMA_STREAM STM32_DMA_STREAM_ID(2, 4)
+#define SAI_A_DMA_CHANNEL 0
+#define SAI_B_DMA_CHANNEL 1
+#define STM32_SAI_A_DMA_PRIORITY 1
+#define STM32_SAI_B_DMA_PRIORITY 1
+#define STM32_SAI_A_IRQ_PRIORITY 2
+#define STM32_SAI_B_IRQ_PRIORITY 2
+
+const stm32_dma_stream_t* sai_a_dma;
+const stm32_dma_stream_t* sai_b_dma;
 
 int codec_interrupt_timestamp;
-
-#define I2S2_TX_DMA_CHANNEL \
-STM32_DMA_GETCHANNEL(STM32_SPI_SPI2_TX_DMA_STREAM /* STM32_DMA_STREAM_ID(1, 4) */, \
-STM32_SPI2_TX_DMA_CHN /* 0000 */)
-
-#define I2S2ext_RX_DMA_CHANNEL \
-STM32_DMA_GETCHANNEL(STM32_DMA_STREAM_ID(1, 3), \
-3)
-
-static const SPIConfig spi1c_cfg = {NULL, /* HW dependent part.*/GPIOE, 8,
-                                    SPI_CR1_BR_0 | SPI_CR1_BR_1 | SPI_CR1_BR_2
-                                        | SPI_CR1_CPOL | SPI_CR1_CPHA};
 
 void codec_ADAU1961_hw_reset(void) {
 }
@@ -70,22 +56,31 @@ static systime_t tmo;
 
 #define ADAU1961_I2C_ADDR (0x70>>1)
 
+#define LED1_PORT GPIOG
+#define LED1_PIN 6
+
 void CheckI2CErrors(void) {
   volatile i2cflags_t errors;
-  errors = i2cGetErrors(&I2CD2);
+  errors = i2cGetErrors(&I2CD3);
   (void)errors;
 }
 
 void ADAU1961_I2CStart(void) {
-  palSetPadMode(GPIOB, 10, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN);
-  palSetPadMode(GPIOB, 11, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN);
-  chMtxLock(&Mutex_DMAStream_1_7);
-  i2cStart(&I2CD2, &i2cfg2);
+  palSetPadMode(
+      GPIOH,
+      7,
+      PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN
+          | PAL_STM32_PUDR_PULLUP);
+  palSetPadMode(
+      GPIOH,
+      8,
+      PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN
+          | PAL_STM32_PUDR_PULLUP);
+  i2cStart(&I2CD3, &i2cfg2);
 }
 
 void ADAU1961_I2CStop(void) {
-  i2cStop(&I2CD2);
-  chMtxUnlock();
+  i2cStop(&I2CD3);
 }
 
 uint8_t ADAU1961_ReadRegister(uint16_t RegisterAddr) {
@@ -93,13 +88,13 @@ uint8_t ADAU1961_ReadRegister(uint16_t RegisterAddr) {
   i2ctxbuf[0] = RegisterAddr >> 8;
   i2ctxbuf[1] = RegisterAddr;
   ADAU1961_I2CStart();
-  i2cAcquireBus(&I2CD2);
-  status = i2cMasterTransmitTimeout(&I2CD2, ADAU1961_I2C_ADDR, i2ctxbuf, 2,
+  i2cAcquireBus(&I2CD3);
+  status = i2cMasterTransmitTimeout(&I2CD3, ADAU1961_I2C_ADDR, i2ctxbuf, 2,
                                     i2crxbuf, 1, tmo);
   if (status != RDY_OK) {
     CheckI2CErrors();
   }
-  i2cReleaseBus(&I2CD2);
+  i2cReleaseBus(&I2CD3);
   ADAU1961_I2CStop();
   chThdSleepMilliseconds(1);
   return i2crxbuf[0];
@@ -110,17 +105,17 @@ void ADAU1961_ReadRegister6(uint16_t RegisterAddr) {
   i2ctxbuf[0] = RegisterAddr >> 8;
   i2ctxbuf[1] = RegisterAddr;
   ADAU1961_I2CStart();
-  i2cAcquireBus(&I2CD2);
-  status = i2cMasterTransmitTimeout(&I2CD2, ADAU1961_I2C_ADDR, i2ctxbuf, 2,
+  i2cAcquireBus(&I2CD3);
+  status = i2cMasterTransmitTimeout(&I2CD3, ADAU1961_I2C_ADDR, i2ctxbuf, 2,
                                     i2crxbuf, 0, tmo);
   if (status != RDY_OK) {
     CheckI2CErrors();
   }
-  status = i2cMasterReceiveTimeout(&I2CD2, ADAU1961_I2C_ADDR, i2crxbuf, 6, tmo);
+  status = i2cMasterReceiveTimeout(&I2CD3, ADAU1961_I2C_ADDR, i2crxbuf, 6, tmo);
   if (status != RDY_OK) {
     CheckI2CErrors();
   }
-  i2cReleaseBus(&I2CD2);
+  i2cReleaseBus(&I2CD3);
   ADAU1961_I2CStop();
   chThdSleepMilliseconds(1);
 }
@@ -132,23 +127,23 @@ void ADAU1961_WriteRegister(uint16_t RegisterAddr, uint8_t RegisterValue) {
   i2ctxbuf[2] = RegisterValue;
 
   ADAU1961_I2CStart();
-  i2cAcquireBus(&I2CD2);
-  status = i2cMasterTransmitTimeout(&I2CD2, ADAU1961_I2C_ADDR, i2ctxbuf, 3,
+  i2cAcquireBus(&I2CD3);
+  status = i2cMasterTransmitTimeout(&I2CD3, ADAU1961_I2C_ADDR, i2ctxbuf, 3,
                                     i2crxbuf, 0, tmo);
   if (status != RDY_OK) {
     CheckI2CErrors();
-    status = i2cMasterTransmitTimeout(&I2CD2, ADAU1961_I2C_ADDR, i2ctxbuf, 3,
+    status = i2cMasterTransmitTimeout(&I2CD3, ADAU1961_I2C_ADDR, i2ctxbuf, 3,
                                       i2crxbuf, 0, tmo);
     chThdSleepMilliseconds(1);
   }
-  i2cReleaseBus(&I2CD2);
+  i2cReleaseBus(&I2CD3);
   ADAU1961_I2CStop();
   chThdSleepMilliseconds(1);
 
   uint8_t rd = ADAU1961_ReadRegister(RegisterAddr);
   if (rd != RegisterValue) {
 //    while(1){}
-    palSetPad(GPIOA, 8);
+    palSetPad(LED1_PORT, LED1_PIN);
   }
   chThdSleepMilliseconds(1);
 }
@@ -164,10 +159,10 @@ void ADAU1961_WriteRegister6(uint16_t RegisterAddr, uint8_t * RegisterValues) {
   i2ctxbuf[6] = RegisterValues[4];
   i2ctxbuf[7] = RegisterValues[5];
   ADAU1961_I2CStart();
-  i2cAcquireBus(&I2CD2);
-  status = i2cMasterTransmitTimeout(&I2CD2, ADAU1961_I2C_ADDR, i2ctxbuf, 8,
+  i2cAcquireBus(&I2CD3);
+  status = i2cMasterTransmitTimeout(&I2CD3, ADAU1961_I2C_ADDR, i2ctxbuf, 8,
                                     i2crxbuf, 0, TIME_INFINITE);
-  i2cReleaseBus(&I2CD2);
+  i2cReleaseBus(&I2CD3);
   ADAU1961_I2CStop();
   if (status != RDY_OK) {
     CheckI2CErrors();
@@ -177,18 +172,10 @@ void ADAU1961_WriteRegister6(uint16_t RegisterAddr, uint8_t * RegisterValues) {
 }
 
 void codec_ADAU1961_hw_init(uint16_t samplerate) {
-  palSetPadMode(GPIOA, 8, PAL_MODE_OUTPUT_PUSHPULL);
-
-  int k;
-  for (k = 0; k < 3; k++) {
-    palSetPad(GPIOA, 8);
-    chThdSleepMilliseconds(150);
-    palClearPad(GPIOA, 8);
-    chThdSleepMilliseconds(150);
-  }
 
   tmo = MS2ST(4);
   chThdSleepMilliseconds(5);
+
   /*
    * 1. Power down the PLL.
    * 2. Reset the PLL control register.
@@ -202,7 +189,6 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
     ADAU1961_WriteRegister(ADAU1961_REG_R0_CLKC, 0x01); // 256FS
     chThdSleepMilliseconds(10);
 #else
-    palSetPadMode(GPIOA, 8, PAL_MODE_OUTPUT_PUSHPULL);
 
     uint8_t pllreg[6];
 
@@ -236,9 +222,9 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
       if (i2ctxbuf[5] & 0x02)
         break;
       chThdSleepMilliseconds(1);
-      palTogglePad(GPIOA, 8);
+      palTogglePad(LED1_PORT, LED1_PIN);
     }
-    palClearPad(GPIOA, 8);
+    palClearPad(LED1_PORT, LED1_PIN);
 
     ADAU1961_WriteRegister(ADAU1961_REG_R0_CLKC, 0x09); // PLL = clksrc
 
@@ -350,16 +336,16 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
   chThdSleepMilliseconds(10);
 
   /*
-   i2cStop(&I2CD2);
-   i2cStart(&I2CD2, &i2cfg2);
+   i2cStop(&I2CD3);
+   i2cStart(&I2CD3, &i2cfg2);
    ADAU1961_WriteRegister(0x4000, 0x8); // 1024FS
    rd = ADAU1961_ReadRegister(0x4000);
    if (rd != 0x08){
    while(1){};
    }
 
-   i2cStop(&I2CD2);
-   i2cStart(&I2CD2, &i2cfg2);
+   i2cStop(&I2CD3);
+   i2cStart(&I2CD3, &i2cfg2);
 
 
    // power down PLL
@@ -368,8 +354,8 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
    R1[3]=0;R1[4]=0;R1[5]=0;
    ADAU1961_WriteRegister6(ADAU1961_REG_R1_PLLC,&R1[0]);
 
-   i2cStop(&I2CD2);
-   i2cStart(&I2CD2, &i2cfg2);
+   i2cStop(&I2CD3);
+   i2cStart(&I2CD3, &i2cfg2);
 
 
    // Integer PLL Parameter Settings for fS = 48 kHz
@@ -380,8 +366,8 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
    R1[0] = 0x01;
    ADAU1961_WriteRegister6(ADAU1961_REG_R1_PLLC,&R1[0]);
    // poll lock bit
-   i2cStop(&I2CD2);
-   i2cStart(&I2CD2, &i2cfg2);
+   i2cStop(&I2CD3);
+   i2cStart(&I2CD3, &i2cfg2);
 
 
    ADAU1961_WriteRegister(0x4000, 0xE); // 1024FS
@@ -390,8 +376,8 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
    while(1){};
    }
 
-   i2cStop(&I2CD2);
-   i2cStart(&I2CD2, &i2cfg2);
+   i2cStop(&I2CD3);
+   i2cStart(&I2CD3, &i2cfg2);
 
    while(1){
    ADAU1961_ReadRegister6(ADAU1961_REG_R1_PLLC);
@@ -408,204 +394,151 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
 
 }
 
-static void dma_i2s_interrupt(void* dat, uint32_t flags) {
+
+void computebufI1(int32_t * in, int32_t * out){
+  int i;
+  static int j=0;
+  for(i=0;i<16;i++){
+    out[i*2] = j;
+    out[i*2+1] = 0x00FFFF00;
+    j += 8888888;
+  }
+}
+
+static void dma_sai_a_interrupt(void* dat, uint32_t flags) {
   (void)dat;
   (void)flags;
   codec_interrupt_timestamp = hal_lld_get_counter_value();
-  if ((i2sdma_ADAU1961)->stream->CR & STM32_DMA_CR_CT) {
-    computebufI(rbuf, buf);
+  if ((sai_a_dma)->stream->CR & STM32_DMA_CR_CT) {
+    computebufI(rbuf2, buf);
   }
   else {
-    computebufI(rbuf2, buf2);
+    computebufI(rbuf, buf2);
   }
-  dmaStreamClearInterrupt(i2sdma_ADAU1961);
+  dmaStreamClearInterrupt(sai_a_dma);
 }
 
-static void dma_i2s_rxinterrupt(void* dat, uint32_t flags) {
+static void dma_sai_b_interrupt(void* dat, uint32_t flags) {
   (void)dat;
   (void)flags;
-  dmaStreamClearInterrupt(i2sdma_ADAU1961rx);
+  dmaStreamClearInterrupt(sai_b_dma);
 }
 
-static void codec_ADAU1961_dma_init(void) {
-  // TX
-  i2sdma_ADAU1961 = STM32_DMA_STREAM(STM32_SPI_SPI2_TX_DMA_STREAM);
-
-  uint32_t i2stxdmamode = STM32_DMA_CR_CHSEL(I2S2_TX_DMA_CHANNEL)
-      | STM32_DMA_CR_PL(STM32_SPI_SPI2_DMA_PRIORITY) | STM32_DMA_CR_DIR_M2P
-      | STM32_DMA_CR_TEIE | STM32_DMA_CR_TCIE | STM32_DMA_CR_DBM | // double buffer mode
-      STM32_DMA_CR_PSIZE_HWORD | STM32_DMA_CR_MSIZE_WORD;
-
-  bool_t b = dmaStreamAllocate(i2sdma_ADAU1961, STM32_SPI_SPI2_IRQ_PRIORITY,
-                               (stm32_dmaisr_t)dma_i2s_interrupt,
-                               (void *)&SPID2);
-
-//  if (!b)
-//  chprintf((BaseChannel*)&SD2, "DMA Allocated Successfully to I2S2\r\n");
-
-  dmaStreamSetPeripheral(i2sdma_ADAU1961, &(CODEC_ADAU1961_I2S->DR));
-// my double buffer test
-  dmaStreamSetMemory0(i2sdma_ADAU1961, buf);
-  dmaStreamSetMemory1(i2sdma_ADAU1961, buf2);
-  dmaStreamSetTransactionSize(i2sdma_ADAU1961, 64);
-  dmaStreamSetMode(i2sdma_ADAU1961, i2stxdmamode | STM32_DMA_CR_MINC);
-//  dmaStreamSetFIFO(i2sdma,
-
-  // RX
-#if 1
-  i2sdma_ADAU1961rx = STM32_DMA_STREAM(STM32_SPI_SPI2_RX_DMA_STREAM);
-
-  uint32_t i2srxdmamode = STM32_DMA_CR_CHSEL(3/*I2S2_RX_DMA_CHANNEL*/)
-      | STM32_DMA_CR_PL(STM32_SPI_SPI2_DMA_PRIORITY) | STM32_DMA_CR_DIR_P2M |
-//  STM32_DMA_CR_DMEIE |
-      STM32_DMA_CR_TEIE | STM32_DMA_CR_TCIE | STM32_DMA_CR_DBM | // double buffer mode
-      STM32_DMA_CR_PSIZE_HWORD | STM32_DMA_CR_MSIZE_WORD;
-
-  b = dmaStreamAllocate(i2sdma_ADAU1961rx, STM32_SPI_SPI2_IRQ_PRIORITY,
-                        (stm32_dmaisr_t)dma_i2s_rxinterrupt, (void *)&SPID2);
-
-  while (b) {
-    // failed
-  }
-//  if (!b)
-//  chprintf((BaseChannel*)&SD2, "DMA Allocated Successfully to I2S2\r\n");
-
-//  dmaStreamSetPeripheral(i2sdma_ADAU1961rx, &(CODEC_ADAU1961_I2Sext->DR));
-  dmaStreamSetPeripheral(i2sdma_ADAU1961rx, &(CODEC_ADAU1961_I2Sext->DR));
-// my double buffer test
-  dmaStreamSetMemory0(i2sdma_ADAU1961rx, rbuf2);
-  dmaStreamSetMemory1(i2sdma_ADAU1961rx, rbuf);
-  dmaStreamSetTransactionSize(i2sdma_ADAU1961rx, 64); //PLAYBACK_BUFFER_SIZE);
-  dmaStreamSetMode(i2sdma_ADAU1961rx, i2srxdmamode | STM32_DMA_CR_MINC);
-
-  dmaStreamClearInterrupt(i2sdma_ADAU1961rx);
-  dmaStreamEnable(i2sdma_ADAU1961rx);
-#endif
-  // enable
-  dmaStreamClearInterrupt(i2sdma_ADAU1961);
-  dmaStreamEnable(i2sdma_ADAU1961);
-}
+volatile SAI_Block_TypeDef *sai_a;
+volatile SAI_Block_TypeDef *sai_b;
+const stm32_dma_stream_t* sai_a_dma;
+const stm32_dma_stream_t* sai_b_dma;
 
 void codec_ADAU1961_i2s_init(uint16_t sampleRate) {
+  sai_a = SAI1_Block_A;
+  sai_b = SAI1_Block_B;
+//configure MCO
+  palSetPadMode(GPIOA, 8, PAL_MODE_OUTPUT_PUSHPULL);
+  palSetPadMode(GPIOA, 8, PAL_MODE_ALTERNATE(0));
+// led = output
+  palSetPadMode(LED1_PORT, LED1_PIN, PAL_MODE_OUTPUT_PUSHPULL);
+  int i;
+  for (i = 0; i < 10; i++) {
+    palTogglePad(LED1_PORT, LED1_PIN);
+    chThdSleepMilliseconds(100);
+  }
+// release SAI
+  palSetPadMode(GPIOE, 3, PAL_MODE_INPUT);
+  palSetPadMode(GPIOE, 4, PAL_MODE_INPUT);
+  palSetPadMode(GPIOE, 5, PAL_MODE_INPUT);
+  palSetPadMode(GPIOE, 6, PAL_MODE_INPUT);
+// configure SAI
 
-#if 0
-  /* CODEC_I2S output pins configuration: WS, SCK SD0 and SDI pins ------------------*/
-  GPIO_InitStructure.GPIO_Pin = CODEC_I2S_SCK_PIN | CODEC_I2S_SDO_PIN | CODEC_I2S_SDI_PIN | CODEC_I2S_WS_PIN;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(CODEC_I2S_GPIO, &GPIO_InitStructure);
-
-  /* CODEC_I2S pins configuration: MCK pin */
-  GPIO_InitStructure.GPIO_Pin = CODEC_I2S_MCK_PIN;
-  GPIO_Init(CODEC_I2S_MCK_GPIO, &GPIO_InitStructure);
-
-  /* Connect pins to I2S peripheral  */
-  GPIO_PinAFConfig(CODEC_I2S_GPIO, CODEC_I2S_WS_PINSRC, CODEC_I2S_GPIO_AF);
-  GPIO_PinAFConfig(CODEC_I2S_GPIO, CODEC_I2S_SCK_PINSRC, CODEC_I2S_GPIO_AF);
-  GPIO_PinAFConfig(CODEC_I2S_GPIO, CODEC_I2S_SDO_PINSRC, CODEC_I2S_GPIO_AF);
-  GPIO_PinAFConfig(CODEC_I2S_GPIO, CODEC_I2S_SDI_PINSRC, CODEC_I2S_GPIO_AF);
-  GPIO_PinAFConfig(CODEC_I2S_MCK_GPIO, CODEC_I2S_MCK_PINSRC, CODEC_I2S_GPIO_AF);
-#endif
+// PLLSAI
   /*
-   palSetPadMode(GPIOB, 12, PAL_MODE_OUTPUT_PUSHPULL|PAL_MODE_ALTERNATE(5));
-   palSetPadMode(GPIOB, 13, PAL_MODE_OUTPUT_PUSHPULL|PAL_MODE_ALTERNATE(5));
-   palSetPadMode(GPIOB, 14, PAL_MODE_ALTERNATE(5));
-   palSetPadMode(GPIOB, 15, PAL_MODE_OUTPUT_PUSHPULL|PAL_MODE_ALTERNATE(5));
-   palSetPadMode(GPIOC, 6, PAL_MODE_OUTPUT_PUSHPULL|PAL_MODE_ALTERNATE(5));
-   */
+  RCC->PLLSAICFGR = (192 << 6) | (7 << 24) | (4 << 28);
+//  RCC->DCKCFGR
 
-#if 1
-  palSetPadMode(GPIOB, 12, PAL_MODE_ALTERNATE(5));
-  // i2s2ws
-  palSetPadMode(GPIOB, 13, PAL_MODE_ALTERNATE(5));
-  // i2s2ck
-  palSetPadMode(GPIOB, 14, PAL_MODE_ALTERNATE(5));
-  // i2s2_ext_sd
-  palSetPadMode(GPIOB, 15, PAL_MODE_ALTERNATE(5));
-  // i2s2_sd
-#else // test if codec is connected
-  palSetPadMode(GPIOB, 12, PAL_MODE_INPUT); // i2s2ws
-  palSetPadMode(GPIOB, 13, PAL_MODE_INPUT);// i2s2ck
-  palSetPadMode(GPIOB, 14, PAL_MODE_INPUT);// i2s2_ext_sd
-  palSetPadMode(GPIOB, 15, PAL_MODE_INPUT);// i2s2_sd
-#endif
+  RCC->CR |= RCC_CR_PLLSAION;
+  while (!(RCC->CR & RCC_CR_PLLSAIRDY)) {
+  }
+  chThdSleepMilliseconds(1);
+*/
+  RCC->APB2ENR |= RCC_APB2ENR_SAI1EN;
+  chThdSleepMilliseconds(1);
+//  RCC->APB2RSTR |= RCC_APB2RSTR_SAI1RST;
+  chThdSleepMilliseconds(1);
+  SAI1_Block_A->CR2 = SAI_xCR2_FTH_1;
+  SAI1_Block_B->CR2 = SAI_xCR2_FTH_1;
+  SAI1_Block_A->FRCR = /*SAI_xFRCR_FSDEF |*/ SAI_xFRCR_FRL_0 | SAI_xFRCR_FRL_1
+      | SAI_xFRCR_FRL_2 | SAI_xFRCR_FRL_3 | SAI_xFRCR_FRL_4 | SAI_xFRCR_FRL_5
+      | SAI_xFRCR_FSALL_0 | SAI_xFRCR_FSALL_1 | SAI_xFRCR_FSALL_2
+      | SAI_xFRCR_FSALL_3 | SAI_xFRCR_FSALL_4 | SAI_xFRCR_FSOFF;
+  SAI1_Block_B->FRCR = /*SAI_xFRCR_FSDEF |*/ SAI_xFRCR_FRL_0 | SAI_xFRCR_FRL_1
+      | SAI_xFRCR_FRL_2 | SAI_xFRCR_FRL_3 | SAI_xFRCR_FRL_4 | SAI_xFRCR_FRL_5
+      | SAI_xFRCR_FSALL_0 | SAI_xFRCR_FSALL_1 | SAI_xFRCR_FSALL_2
+      | SAI_xFRCR_FSALL_3 | SAI_xFRCR_FSALL_4 | SAI_xFRCR_FSOFF;
+  SAI1_Block_A->SLOTR = (3 << 16) | SAI_xSLOTR_NBSLOT_0;
+  SAI1_Block_B->SLOTR = (3 << 16) | SAI_xSLOTR_NBSLOT_0;
+// SAI1_A is slave transmitter
+// SAI1_B is synchronous slave receiver
+  SAI1_Block_A->CR1 = SAI_xCR1_DS_0 | SAI_xCR1_DS_1 | SAI_xCR1_DS_2
+      | SAI_xCR1_MODE_1 | SAI_xCR1_DMAEN /*| SAI_xCR1_CKSTR*/;
+  SAI1_Block_B->CR1 = SAI_xCR1_DS_0 | SAI_xCR1_DS_1 | SAI_xCR1_DS_2
+      | SAI_xCR1_SYNCEN_0 | SAI_xCR1_MODE_1 | SAI_xCR1_MODE_0 | SAI_xCR1_DMAEN | SAI_xCR1_CKSTR;
+  chThdSleepMilliseconds(1);
+  palSetPadMode(GPIOE, 3, PAL_MODE_ALTERNATE(6));
+  palSetPadMode(GPIOE, 4, PAL_MODE_ALTERNATE(6));
+  palSetPadMode(GPIOE, 5, PAL_MODE_ALTERNATE(6));
+  palSetPadMode(GPIOE, 6, PAL_MODE_ALTERNATE(6));
 
-  palSetPadMode(GPIOC, 6, PAL_MODE_ALTERNATE(5));
-  // i2s2_mck
+  // initialize DMA
+  sai_a_dma = STM32_DMA_STREAM(STM32_SAI_A_DMA_STREAM);
+  sai_b_dma = STM32_DMA_STREAM(STM32_SAI_B_DMA_STREAM);
 
-// SPI2 in I2S Mode, Master
-  CODEC_ADAU1961_I2S_ENABLE;
+  uint32_t sai_a_dma_mode = STM32_DMA_CR_CHSEL(SAI_A_DMA_CHANNEL)
+      | STM32_DMA_CR_PL(STM32_SAI_A_DMA_PRIORITY) | STM32_DMA_CR_DIR_M2P
+      | STM32_DMA_CR_TEIE | STM32_DMA_CR_TCIE | STM32_DMA_CR_DBM | // double buffer mode
+      STM32_DMA_CR_PSIZE_WORD | STM32_DMA_CR_MSIZE_WORD;
+  uint32_t sai_b_dma_mode = STM32_DMA_CR_CHSEL(SAI_B_DMA_CHANNEL)
+      | STM32_DMA_CR_PL(STM32_SAI_B_DMA_PRIORITY) | STM32_DMA_CR_DIR_P2M
+      | STM32_DMA_CR_TEIE | STM32_DMA_CR_TCIE | STM32_DMA_CR_DBM | // double buffer mode
+      STM32_DMA_CR_PSIZE_WORD | STM32_DMA_CR_MSIZE_WORD;
 
-#if STM_IS_I2S_MASTER
-  CODEC_ADAU1961_I2S ->I2SCFGR = SPI_I2SCFGR_I2SMOD | SPI_I2SCFGR_I2SCFG_1 | SPI_I2SCFGR_DATLEN_1; /* MASTER TRANSMIT */
+  bool_t b = dmaStreamAllocate(sai_a_dma, STM32_SAI_A_IRQ_PRIORITY,
+                               (stm32_dmaisr_t)dma_sai_a_interrupt,
+                               (void *)0);
 
-  uint16_t prescale;
-  uint32_t pllfreq = STM32_PLLI2SVCO / STM32_PLLI2SR_VALUE;
-  // Master clock mode Fs * 256
-  prescale = (pllfreq * 10) / (256 * sampleRate) + 5;
-  prescale /= 10;
+  dmaStreamSetPeripheral(sai_a_dma, &(sai_a->DR));
+  dmaStreamSetMemory0(sai_a_dma, buf);
+  dmaStreamSetMemory1(sai_a_dma, buf2);
+  dmaStreamSetTransactionSize(sai_a_dma, 32);
+  dmaStreamSetMode(sai_a_dma, sai_a_dma_mode | STM32_DMA_CR_MINC);
 
-  if (prescale > 0xFF || prescale < 2)
-  prescale = 2;
+  b |= dmaStreamAllocate(sai_b_dma, STM32_SAI_B_IRQ_PRIORITY,
+                               (stm32_dmaisr_t)0,
+                               (void *)0);
 
-  if (prescale & 0x01)
-  CODEC_ADAU1961_I2S ->I2SPR = SPI_I2SPR_MCKOE | SPI_I2SPR_ODD | (prescale >> 1);
-  else
-  CODEC_ADAU1961_I2S ->I2SPR = SPI_I2SPR_MCKOE | (prescale >> 1);
+  if (b){
+    while(1){
+      chThdSleepMilliseconds(50);
+      palTogglePad(LED1_PORT, LED1_PIN);
+    }
+  }
 
-  CODEC_ADAU1961_I2Sext ->I2SCFGR = SPI_I2SCFGR_I2SMOD | SPI_I2SCFGR_I2SCFG_0 | SPI_I2SCFGR_DATLEN_1; /* SLAVE RECEIVE*/
-  CODEC_ADAU1961_I2Sext ->I2SPR = 0x0002;
+  dmaStreamSetPeripheral(sai_b_dma, &(sai_b->DR));
+  dmaStreamSetMemory0(sai_b_dma, rbuf);
+  dmaStreamSetMemory1(sai_b_dma, rbuf2);
+  dmaStreamSetTransactionSize(sai_b_dma, 32);
+  dmaStreamSetMode(sai_b_dma, sai_b_dma_mode | STM32_DMA_CR_MINC);
 
-#else
-  CODEC_ADAU1961_I2S->I2SCFGR = SPI_I2SCFGR_I2SMOD | SPI_I2SCFGR_DATLEN_1; /* SLAVE TRANSMIT, 32bit */
 
-  // generate 8MHz clock on MCK pin with PWM...
-  static const PWMConfig pwmcfg = {168000000, /* 400kHz PWM clock frequency.  */
-                                   21, /* PWM period is 128 cycles.    */
-                                   NULL, { {PWM_OUTPUT_ACTIVE_HIGH, NULL}, {
-                                       PWM_OUTPUT_ACTIVE_HIGH, NULL},
-                                          {PWM_OUTPUT_ACTIVE_HIGH, NULL}, {
-                                              PWM_OUTPUT_ACTIVE_HIGH, NULL}},
-                                   /* HW dependent part.*/
-                                   0,
-                                   0};
-  palSetPadMode(GPIOC, 6, PAL_MODE_ALTERNATE(3));
-  // i2s2_mck
-  pwmStart(&PWMD8, &pwmcfg);
-  pwmEnableChannel(&PWMD8, 0, 10);
+  dmaStreamClearInterrupt(sai_b_dma);
+  dmaStreamEnable(sai_b_dma);
 
-  CODEC_ADAU1961_I2Sext->I2SCFGR = SPI_I2SCFGR_I2SMOD | SPI_I2SCFGR_I2SCFG_0
-      | SPI_I2SCFGR_DATLEN_1; /* SLAVE RECEIVE, 32bit*/
-  CODEC_ADAU1961_I2Sext->I2SPR = 0x0002;
+  dmaStreamClearInterrupt(sai_a_dma);
+  dmaStreamEnable(sai_a_dma);
 
-#endif
-//  CODEC_ADAU1961_I2S ->I2SPR = SPI_I2SPR_MCKOE |
+  SAI1_Block_A->CR1 |= SAI_xCR1_SAIEN;
+  SAI1_Block_B->CR1 |= SAI_xCR1_SAIEN;
 
-//// FULL DUPLEX CONFIG
-
-  ;
-
-  codec_ADAU1961_dma_init();
-
-// Enable I2S DMA Request
-  CODEC_ADAU1961_I2S->CR2 = SPI_CR2_TXDMAEN;  //|SPI_CR2_RXDMAEN;
-//  CODEC_ADAU1961_I2S ->CR2 = SPI_CR2_RXNEIE;
-//  CODEC_ADAU1961_I2S ->CR2 = SPI_CR2_TXEIE;
-
-  CODEC_ADAU1961_I2Sext->CR2 = SPI_CR2_RXDMAEN;
-//  CODEC_ADAU1961_I2S ->CR2 = SPI_CR2_TXDMAEN;
-
-// Now Enable I2S
-  CODEC_ADAU1961_I2S->I2SCFGR |= SPI_I2SCFGR_I2SE;
-  CODEC_ADAU1961_I2Sext->I2SCFGR |= SPI_I2SCFGR_I2SE;
+  codec_ADAU1961_hw_init(sampleRate);
 }
 
 void codec_ADAU1961_Stop(void) {
-  CODEC_ADAU1961_I2S->I2SCFGR = 0;
-  CODEC_ADAU1961_I2Sext->I2SCFGR = 0;
-  CODEC_ADAU1961_I2S->CR2 = 0;
-  CODEC_ADAU1961_I2Sext->CR2 = 0;
-
 }

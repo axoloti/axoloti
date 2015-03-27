@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -29,11 +29,16 @@ MEMORY
     ram : org = 0x20000200, len = 0x09E00 /* 48k - first 0x200 for vector table */
     SRAM2  : org = 0x2001E000, len = 0x00002000 /* second half (8kB) of SRAM2 for DMA*/      
     CCMRAMEND  : org = 0x1000E000, len = 8k /* for stacks */    
+    sdram : org = 0xC0000000, len = 0x400000
 }
 
 __ram_start__           = ORIGIN(ram);
 __ram_size__            = LENGTH(ram);
 __ram_end__             = __ram_start__ + __ram_size__;
+
+__sdram_start__ = ORIGIN(sdram);
+__sdram_size__ = LENGTH(sdram);
+__sdram_end__ = __sdram_start__ + __sdram_size__;
 
 ENTRY(ResetHandler)
 
@@ -163,6 +168,11 @@ SECTIONS
         * (.ccmramend.*);
     } > CCMRAMEND
 
+    .sdram (NOLOAD) : ALIGN(4) SUBALIGN(4)
+    {
+        KEEP(*(.sdram))
+        KEEP(*(.sdram.*))
+    } > sdram
 }
 
 PROVIDE(end = .);

@@ -17,12 +17,8 @@
  */
 #include "hal.h"
 
-#define CODEC_ADAU1961_I2S_ENABLE rccEnableSPI2(FALSE)
-#define CODEC_ADAU1961_I2S_DISABLE rccDisableSPI2(FALSE)
-#define CODEC_ADAU1961_I2S SPI2
-#define CODEC_ADAU1961_I2Sext I2S2ext
-
 extern void codec_ADAU1961_i2s_init(uint16_t sampleRate);
+extern void codec_ADAU1961_SAI_init(uint16_t sampleRate);
 extern void codec_ADAU1961_hw_init(uint16_t samplerate);
 extern void codec_ADAU1961_hw_reset(void);
 extern void codec_ADAU1961_Stop(void);

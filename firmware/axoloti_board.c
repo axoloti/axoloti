@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -84,7 +84,7 @@ void InitPWM(void) {
 #define ADC_GRP1_BUF_DEPTH      1
 
 void adc_init(void) {
-#if (BOARD_AXOLOTI_V03)
+#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
   palSetPadMode(GPIOA, 0, PAL_MODE_INPUT_ANALOG);
   palSetPadMode(GPIOA, 1, PAL_MODE_INPUT_ANALOG);
   palSetPadMode(GPIOA, 2, PAL_MODE_INPUT_ANALOG);
