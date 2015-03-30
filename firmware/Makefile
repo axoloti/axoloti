@@ -264,7 +264,15 @@ UINCDIR =
 ULIBDIR = .
 
 # List all user libraries here
-ULIBS = -lm 
+ULIBS = -lm \
+	samples/808bd.o \
+	samples/808hatclose.o \
+	samples/808hatopen.o \
+	samples/808hitom.o \
+	samples/808midtom.o \
+	samples/808lotom.o \
+	samples/808snare.o 
+
 #
 # End of user defines
 ##############################################################################
