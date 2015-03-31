@@ -57,20 +57,16 @@ extern void MY_USBH_Init(void);
 
 #if (BOARD_STM32F4DISCOVERY)
 void ToggleGreen(void) {
-  palSetPadMode(GPIOD, 12, PAL_MODE_OUTPUT_PUSHPULL);
-  palTogglePad(GPIOD, 12);
+  palSetPadMode(GPIOD, 12, PAL_MODE_OUTPUT_PUSHPULL); palTogglePad(GPIOD, 12);
 }
 void ToggleOrange(void) {
-  palSetPadMode(GPIOD, 13, PAL_MODE_OUTPUT_PUSHPULL);
-  palTogglePad(GPIOD, 13);
+  palSetPadMode(GPIOD, 13, PAL_MODE_OUTPUT_PUSHPULL); palTogglePad(GPIOD, 13);
 }
 void ToggleRed(void) {
-  palSetPadMode(GPIOD, 14, PAL_MODE_OUTPUT_PUSHPULL);
-  palTogglePad(GPIOD, 14);
+  palSetPadMode(GPIOD, 14, PAL_MODE_OUTPUT_PUSHPULL); palTogglePad(GPIOD, 14);
 }
 void ToggleBlue(void) {
-  palSetPadMode(GPIOD, 15, PAL_MODE_OUTPUT_PUSHPULL);
-  palTogglePad(GPIOD, 15);
+  palSetPadMode(GPIOD, 15, PAL_MODE_OUTPUT_PUSHPULL); palTogglePad(GPIOD, 15);
 }
 #endif
 
@@ -93,17 +89,16 @@ int main(void) {
   InitPWM();
 
   // display SPI CS?
-  palSetPadMode(GPIOC, 1, PAL_MODE_OUTPUT_PUSHPULL);
-  palSetPad(GPIOC, 1);
+  palSetPadMode(GPIOC, 1, PAL_MODE_OUTPUT_PUSHPULL); palSetPad(GPIOC, 1);
 
   chThdSleepMilliseconds(10);
 
   sdcardInit();
 
-  palSetPadMode(GPIOB, 2, PAL_MODE_INPUT_PULLDOWN);
+  palSetPadMode(SW2_PORT, SW2_PIN, PAL_MODE_INPUT_PULLDOWN);
 
-  codec_init();
   axoloti_board_init();
+  codec_init();
   adc_init();
   axoloti_math_init();
   midi_init();
@@ -119,9 +114,9 @@ int main(void) {
   //memTest();
 #endif
 
-#if (BOARD_AXOLOTI_V03)
-  if (!palReadPad(GPIOB, 2)) // button S2 not pressed
-    SDLoadPatch("0:start.bin");
+#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
+  if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
+  SDLoadPatch("0:start.bin");
 #endif
 
   // if no patch booting or running yet
@@ -131,7 +126,8 @@ int main(void) {
     memcpy((uint8_t *)PATCHMAINLOC, 0x080E0000, 0xE000);
     if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
         && (*(uint32_t *)PATCHMAINLOC != 0)) {
-      StartPatch();
+      if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
+        StartPatch();
     }
   }
 
