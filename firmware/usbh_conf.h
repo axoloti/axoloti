@@ -31,14 +31,14 @@
 
 #define STM32F40_41xxx
 
-#include "stm32f4xx_v2.h"
+#include "stm32f4xx.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "ch.h"
 #include "chprintf.h"
-//#include "hal.h"
-extern BaseSequentialStream SD2;
+
 
 /* Includes ------------------------------------------------------------------*/
 
@@ -55,15 +55,15 @@ extern BaseSequentialStream SD2;
   * @{
   */
 
-#define USBH_MAX_NUM_ENDPOINTS                2
-#define USBH_MAX_NUM_INTERFACES               2
+#define USBH_MAX_NUM_ENDPOINTS                6
+#define USBH_MAX_NUM_INTERFACES               6
 #define USBH_MAX_NUM_CONFIGURATION            1
 #define USBH_KEEP_CFG_DESCRIPTOR              1
-#define USBH_MAX_NUM_SUPPORTED_CLASS          1
+#define USBH_MAX_NUM_SUPPORTED_CLASS          3
 #define USBH_MAX_SIZE_CONFIGURATION           0x200
 #define USBH_MAX_DATA_BUFFER                  0x200
 #define USBH_DEBUG_LEVEL                      3
-#define USBH_USE_OS                           0
+#define USBH_USE_OS                           1
 
 /** @defgroup USBH_Exported_Macros
   * @{
@@ -78,21 +78,62 @@ extern BaseSequentialStream SD2;
 extern void* fakemalloc(size_t size);
 extern void fakefree(void * p);
 
-#define osThreadId (Thread *)
-#define osMessageQId (InputQueue *)
+#define osThreadId Thread *
 
-extern void ToggleGreen(void);
-extern void ToggleOrange(void);
-extern void ToggleRed(void);
-extern void ToggleBlue(void);
+#define osThreadDef(name, fn, prio, instances, stacksz) \
+  static WORKING_AREA(wa##name, 512); \
+  Thread *name = chThdCreateStatic(wa##name, sizeof(wa##name), NORMALPRIO, fn, phost); \
+  phost->os_event = name;
+#define osThreadCreate(x,y) x
+#define osThread(x) x
 
+#if 0
+#define osMessageQId InputQueue *
+//#define osMessagePut(q,val,time) chSysLockFromIsr(); chIQPutI (q,val); chSysUnlockFromIsr();
+#define osMessagePut(q,val,time) chIQPutI (q,val);
+#define osMessageGet(q,to) \
+   (osEvent)chIQGetTimeout(q, TIME_INFINITE)
+
+#else
+#define osMessageQId Thread *
+#define osMessagePutI(q,val,time) chEvtSignalI (q,1<<val);
+#define osMessagePut(q,val,time) chEvtSignal (q,1<<val);
+#define osMessageGet(q,to) chEvtWaitOneTimeout(0xFF, MS2ST(10))
+#endif
+
+// osThreadId
+#define osMessageQDef(name, queue_sz, type) \
+  static type buf[queue_sz]; \
+  INPUTQUEUE_DECL(name, &buf, sizeof(buf), NULL, NULL)
+#define osMessageCreate(queue_def, thread_id)  &queue_def
+#define osMessageQ(x) x
+#define osWaitForever TIME_INFINITE
+#define osEventMessage 1
+typedef uint8_t osEvent;
+
+#define LOG_ON_UART 1
+#define LOG_ON_CDC 0
+
+//#define DEBUG_ON_GPIO
+
+#if LOG_ON_UART
+extern BaseSequentialStream SD2;
+#define LOGSTREAM SD2
+#define TransmitTextMessageHeader()
+#elif  LOG_ON_CDC
+extern BaseSequentialStream SDU1;
+void TransmitTextMessageHeader(void);
+#define LOGSTREAM SDU1
+#endif
 
  /* DEBUG macros */
 
 
 #if (USBH_DEBUG_LEVEL > 0)
-#define  USBH_UsrLog(...)   chprintf(&SD2,__VA_ARGS__);\
-                            chprintf(&SD2,"\n");
+#define  USBH_UsrLog(...)   TransmitTextMessageHeader();\
+                            chprintf(&LOGSTREAM,__VA_ARGS__);\
+                            chprintf(&LOGSTREAM,"\r\n");\
+                            chSequentialStreamPut(&LOGSTREAM, 0)
 #else
 #define USBH_UsrLog(...)
 #endif
@@ -100,18 +141,22 @@ extern void ToggleBlue(void);
 
 #if (USBH_DEBUG_LEVEL > 1)
 
-#define  USBH_ErrLog(...)   chprintf(&SD2,"ERROR: ") ;\
-                            chprintf(&SD2,__VA_ARGS__);\
-                            chprintf(&SD2,"\n");
+#define  USBH_ErrLog(...)   TransmitTextMessageHeader();\
+                            chprintf(&LOGSTREAM,"ERROR: ") ;\
+                            chprintf(&LOGSTREAM,__VA_ARGS__);\
+                            chprintf(&LOGSTREAM,"\r\n");\
+                            chSequentialStreamPut(&LOGSTREAM, 0)
 #else
 #define USBH_ErrLog(...)
 #endif
 
 
 #if (USBH_DEBUG_LEVEL > 2)
-#define  USBH_DbgLog(...)   chprintf(&SD2,"DEBUG : ") ;\
-                            chprintf(&SD2,__VA_ARGS__);\
-                            chprintf(&SD2,"\n");
+#define  USBH_DbgLog(...)   TransmitTextMessageHeader();\
+                            chprintf(&LOGSTREAM,"DEBUG : ") ;\
+                            chprintf(&LOGSTREAM,__VA_ARGS__);\
+                            chprintf(&LOGSTREAM,"\r\n");\
+                            chSequentialStreamPut(&LOGSTREAM, 0)
 #else
 #define USBH_DbgLog(...)
 #endif

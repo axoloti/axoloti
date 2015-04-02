@@ -93,17 +93,19 @@ typedef struct {
 typedef struct _MIDI_Process {
   uint8_t OutPipe;
   uint8_t InPipe;
-  MIDI_State_t state;
   uint8_t OutEp;
   uint8_t InEp;
+  uint16_t OutEpSize;
+  uint16_t InEpSize;
+  MIDI_State_t state;
 
   uint8_t buff[USBH_MIDI_MPS_SIZE];
-  uint16_t             length;
+//  uint16_t             length;
   uint8_t              ep_addr;
   uint16_t             poll;
   uint16_t             timer;
   uint8_t              DataReady;
-  USBH_MIDIDesc_t      HID_Desc;
+//  USBH_MIDIDesc_t      HID_Desc;
   USBH_StatusTypeDef  ( * Init)(USBH_HandleTypeDef *phost);
 } MIDI_HandleTypeDef;
 
