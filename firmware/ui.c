@@ -386,11 +386,14 @@ static void UIPollButtons2(void);
 static WORKING_AREA(waThreadUI, 1024);
 static msg_t ThreadUI(void *arg) {
   (void)(arg);
+#if CH_USE_REGISTRY
+  chRegSetThreadName("ui");
+#endif
   while (1) {
 //    AxoboardADCConvert();
     PExTransmit();
     PExReceive();
-#ifdef BOARD_AXOLOTI_V03
+#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
     do_axoloti_control();
     UIPollButtons2();
     UIUpdateLCD();

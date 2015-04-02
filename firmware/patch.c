@@ -53,6 +53,9 @@ static WORKING_AREA(waThreadDSP, 4096) __attribute__ ((section (".ccmramend")));
 static Thread *pThreadDSP = 0;
 static msg_t ThreadDSP(void *arg) {
   (void)(arg);
+#if CH_USE_REGISTRY
+  chRegSetThreadName("dsp");
+#endif
   while (1) {
     chEvtWaitOne((eventmask_t)1);
     static unsigned int tStart;
@@ -155,6 +158,9 @@ static WORKING_AREA(waThreadLoader, 1024);
 static Thread *pThreadLoader;
 static msg_t ThreadLoader(void *arg) {
   (void)arg;
+#if CH_USE_REGISTRY
+  chRegSetThreadName("loader");
+#endif
   while (1) {
     chEvtWaitOne((eventmask_t)1);
 //    StopPatch();
