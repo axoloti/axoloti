@@ -1,11 +1,9 @@
 #################
-## AxoStudio
+## Axoloti
 #################
 
 firmware/build/*
 firmware/.dep/*
-firmware/STM32_USB_Host_Library/*
-firmware/STM32F4xx_HAL_Driver/*
 control_firmware/build/*
 control_firmware/.dep/*
 portaudio-r1891-build/*
@@ -24,7 +22,6 @@ patch/xpatch.map
 .preferences.xml
 /chibios
 /target/
-/osx_tools/
 /build/
 /nbproject/private/
 /dist/
