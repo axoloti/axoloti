@@ -43,11 +43,12 @@
 #if (BOARD_AXOLOTI_V05)
 #include "sdram.c"
 #include "stm32f4xx_fmc.c"
+//#define ENABLE_USB_HOST
 #endif
 /*===========================================================================*/
 /* Initialization and main thread.                                           */
 /*===========================================================================*/
-// #define ENABLE_USB_HOST
+
 #ifdef ENABLE_USB_HOST
 #if (BOARD_AXOLOTI_V03)
 #error conflicting pins: USB_OTG_HS and I2S
@@ -103,7 +104,7 @@ int main(void) {
   axoloti_math_init();
   midi_init();
 
-#if (BOARD_AXOLOTI_V03)
+#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
   axoloti_control_init();
 #endif
   ui_init();

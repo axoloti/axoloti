@@ -111,8 +111,8 @@ extern void fakefree(void * p);
 #define osEventMessage 1
 typedef uint8_t osEvent;
 
-#define LOG_ON_UART 1
-#define LOG_ON_CDC 0
+#define LOG_ON_UART 0
+#define LOG_ON_CDC 1
 
 //#define DEBUG_ON_GPIO
 
