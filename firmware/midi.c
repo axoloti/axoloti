@@ -119,7 +119,7 @@ int MidiGetOutputBufferPending(void) {
 static const SerialConfig sdMidiCfg = {31250, // baud
     0, 0, 0};
 
-static WORKING_AREA(waThreadMidi, 1024) __attribute__ ((section (".ccmramend")));
+static WORKING_AREA(waThreadMidi, 256) __attribute__ ((section (".ccmramend")));
 
 __attribute__((noreturn))
  static msg_t ThreadMidi(void *arg) {
