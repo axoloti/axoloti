@@ -45,10 +45,12 @@
  extern "C" {
 #endif
 
-#define STM32F40_41xxx
+#define STM32F427xx 1
 #include <stdint.h>
-#include <stm32f4xx_v2.h>
-
+//#include <stm32f4xx.h>
+//#define __STM32F4xx_H
+//#include "stm32f427xx.h"
+#include "stm32f4xxc.h"
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
