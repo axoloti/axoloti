@@ -43,7 +43,7 @@
 #if (BOARD_AXOLOTI_V05)
 #include "sdram.c"
 #include "stm32f4xx_fmc.c"
-//#define ENABLE_USB_HOST
+#define ENABLE_USB_HOST
 #endif
 /*===========================================================================*/
 /* Initialization and main thread.                                           */

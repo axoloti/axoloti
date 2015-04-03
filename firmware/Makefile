@@ -142,23 +142,21 @@ CSRC = $(PORTSRC) \
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_lattice_q31.c\
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_iir_lattice_init_q31.c\
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_iir_lattice_q31.c\
-       ${CMSIS}/DSP_Lib/Source/CommonTables/arm_common_tables.c 
-# for USB host support: enable following lines, remove this comment
-# and add a backslash on the line above...
-#       STM32_USB_Host_Library/Core/Src/usbh_core.c \
-#       STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c \
-#       STM32_USB_Host_Library/Core/Src/usbh_ioreq.c \
-#       STM32_USB_Host_Library/Core/Src/usbh_pipes.c \
-#       STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c \
-#       STM32_USB_Host_Library/Class/HID/Src/usbh_hid_keybd.c \
-#       STM32_USB_Host_Library/Class/HID/Src/usbh_hid_mouse.c \
-#       STM32_USB_Host_Library/Class/HID/Src/usbh_hid_parser.c \
-#       STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c \
-#       STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
-#       STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
-#       STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_hcd.c \
-#       usbh_midi_core.c \
-#       usbh_conf.c       
+       ${CMSIS}/DSP_Lib/Source/CommonTables/arm_common_tables.c \
+       STM32_USB_Host_Library/Core/Src/usbh_core.c \
+       STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c \
+       STM32_USB_Host_Library/Core/Src/usbh_ioreq.c \
+       STM32_USB_Host_Library/Core/Src/usbh_pipes.c \
+       STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c \
+       STM32_USB_Host_Library/Class/HID/Src/usbh_hid_keybd.c \
+       STM32_USB_Host_Library/Class/HID/Src/usbh_hid_mouse.c \
+       STM32_USB_Host_Library/Class/HID/Src/usbh_hid_parser.c \
+       STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c \
+       STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
+       STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
+       STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_hcd.c \
+       usbh_midi_core.c \
+       usbh_conf.c  
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -278,7 +276,7 @@ UINCDIR =
 ULIBDIR = .
 
 # List all user libraries here
-ULIBS = -lm \
+ULIBS = -lm 
 	samples/808bd.o \
 	samples/808hatclose.o \
 	samples/808hatopen.o \
