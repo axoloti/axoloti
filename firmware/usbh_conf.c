@@ -569,10 +569,6 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost) {
       }
     }
   }
-  else if (USBH_HID_GetDeviceType(&hUSBHost) == HID_OTHER) {
-    HID_OTHER_Info_TypeDef *m_pinfo_other;
-    m_pinfo_other = USBH_HID_GetOtherInfo(phost);
-  }
 }
 
 extern void MidiInMsgHandler(uint8_t status, uint8_t data1, uint8_t data2);
