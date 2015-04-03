@@ -171,7 +171,7 @@ static USBH_StatusTypeDef USBH_HID_InterfaceInit (USBH_HandleTypeDef *phost)
     }
     else
     {
-      USBH_UsrLog ("Protocol not supported.");  
+      USBH_UsrLog ("Protocol not supported.");
       return USBH_FAIL;
     }
     
@@ -316,7 +316,7 @@ static USBH_StatusTypeDef USBH_HID_ClassRequest(USBH_HandleTypeDef *phost)
   case HID_REQ_SET_IDLE:
     
     classReqStatus = USBH_HID_SetIdle (phost, 0, 0);
-    
+
     /* set Idle */
     if (classReqStatus == USBH_OK)
     {
@@ -371,7 +371,8 @@ static USBH_StatusTypeDef USBH_HID_Process(USBH_HandleTypeDef *phost)
                             HID_Handle->length) == USBH_OK)
     {
       
-      fifo_write(&HID_Handle->fifo, HID_Handle->pData, HID_Handle->length);  
+      fifo_write(&HID_Handle->fifo, HID_Handle->pData, HID_Handle->length);
+      USBH_HID_EventCallback(phost);
       HID_Handle->state = HID_SYNC;
     }
     

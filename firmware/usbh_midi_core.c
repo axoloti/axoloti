@@ -341,7 +341,7 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
 
     case MIDI_INIT:
       MIDI_Handle->state = MIDI_GET_DATA;
-      //break;
+      break;
 
     case MIDI_GET_DATA:
       if (URB_state_in == USBH_URB_STALL){
@@ -364,11 +364,8 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
         for (i=0;i<n;i+=4){
           MIDI_CB(MIDI_Handle->buff[0+i],MIDI_Handle->buff[1+i],MIDI_Handle->buff[2+i],MIDI_Handle->buff[3+i]);
         }
-        MIDI_Handle->buff[1] = 0; // the whole buffer should be cleaned...
-        MIDI_Handle->state = MIDI_IDLE;
-//        chThdSleepMilliseconds(1);
-//        USBH_BulkReceiveData(phost, MIDI_Handle->buff, USBH_MIDI_MPS_SIZE,
-//                             MIDI_Handle->InPipe);
+        MIDI_Handle->buff[1] = 0;
+//        MIDI_Handle->state = MIDI_IDLE;
         MIDI_Handle->timer = 0;
       }
       else if (USBH_LL_GetURBState(phost, MIDI_Handle->InPipe)
@@ -393,30 +390,18 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
 /*-----------------------------------------------------------------------------------------*/
 
 static USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost){
-  MIDI_HandleTypeDef *MIDI_Handle = phost->pActiveClass->pData;
-/*
-  URB_state_in = USBH_LL_GetURBState(phost, MIDI_Handle->InPipe);
-  if (URB_state_in == USBH_URB_STALL){
-    USBH_ClrFeature(phost, MIDI_Handle->InEp);
-  } else       if (URB_state_in == USBH_URB_ERROR){
-    USBH_ClrFeature(phost, MIDI_Handle->InEp);
-  }
-*/
-  if ((MIDI_Handle->state == MIDI_IDLE)||(MIDI_Handle->state == MIDI_POLL)) {
-    MIDI_Handle->timer++;
-    if (MIDI_Handle->timer > MIDI_Handle->poll) {
-      if ((USBH_LL_GetURBState(phost, MIDI_Handle->InPipe) == USBH_URB_IDLE) ||
-          (USBH_LL_GetURBState(phost, MIDI_Handle->InPipe) == USBH_URB_DONE)) {
-        USBH_BulkReceiveData(phost, MIDI_Handle->buff, USBH_MIDI_MPS_SIZE,
-                             MIDI_Handle->InPipe);
-        MIDI_Handle->state = MIDI_POLL;
-      }
-    }
-    //MIDI_Handle->state = MIDI_GET_DATA;
-  }
-//  USBH_BulkReceiveData(phost, MIDI_Handle->buff, USBH_MIDI_MPS_SIZE,
-//                       MIDI_Handle->InPipe);
+  MIDI_HandleTypeDef *MIDI_Handle =  (MIDI_HandleTypeDef *) phost->pActiveClass->pData;
 
+  if(MIDI_Handle->state == MIDI_POLL)
+  {
+    if(( phost->Timer - MIDI_Handle->timer) >= MIDI_Handle->poll)
+    {
+      MIDI_Handle->state = MIDI_GET_DATA;
+#if (USBH_USE_OS == 1)
+    osMessagePutI ( phost->os_event, USBH_URB_EVENT, 0);
+#endif
+    }
+  }
   return USBH_OK;
 }
 

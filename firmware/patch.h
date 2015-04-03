@@ -60,6 +60,10 @@ extern volatile int patchStatus;
 // 1-> stopped
 // >1-> stopping
 
+extern int8_t hid_buttons[8];
+extern int8_t hid_mouse_x;
+extern int8_t hid_mouse_y;
+
 void InitPatch0(void);
 void StartPatch(void);
 void StopPatch(void);

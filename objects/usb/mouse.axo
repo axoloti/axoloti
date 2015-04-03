@@ -1,0 +1,24 @@
+<objdefs>
+   <obj.normal id="mouse" sha="60cf556f71f34c8fb5b5376eb6b00d1b13a19179">
+      <sDescription>USB Mouse (draft)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <int32 name="x" description="middle mouse button" SumBuffer="false"/>
+         <int32 name="y" description="middle mouse button" SumBuffer="false"/>
+         <bool32 name="left" description="left mouse button" SumBuffer="false"/>
+         <bool32 name="right" description="right mouse button" SumBuffer="false"/>
+         <bool32 name="middle" description="middle mouse button" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[%left% = hid_buttons[0];
+%right% = hid_buttons[1];
+%middle% = hid_buttons[2];
+%x% = hid_mouse_x;
+%y% = hid_mouse_y;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

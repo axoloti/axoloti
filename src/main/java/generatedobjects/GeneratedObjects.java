@@ -66,6 +66,7 @@ public class GeneratedObjects extends gentools {
         brainwave.GenerateAll();
         LTC.GenerateAll();
         Spat.GenerateAll();
+        USB.GenerateAll();
 
         {
             ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();

@@ -534,21 +534,27 @@ void MY_USBH_Init(void) {
 
 }
 
+int8_t hid_buttons[8];
+int8_t hid_mouse_x;
+int8_t hid_mouse_y;
+
 void USBH_HID_EventCallback(USBH_HandleTypeDef *phost) {
   if (USBH_HID_GetDeviceType(&hUSBHost) == HID_MOUSE) {
     HID_MOUSE_Info_TypeDef *m_pinfo_mouse;
     m_pinfo_mouse = USBH_HID_GetMouseInfo(phost);
     if (m_pinfo_mouse) {
-      if (m_pinfo_mouse->buttons[0]) {
-        USBH_DbgLog("a%u", m_pinfo_mouse->buttons[0]);
-      }
-      if (m_pinfo_mouse->buttons[1]) {
-        USBH_DbgLog("b%u", m_pinfo_mouse->buttons[1]);
-      }
-      if (m_pinfo_mouse->buttons[2]) {
-        USBH_DbgLog("c%u", m_pinfo_mouse->buttons[2]);
-      }
+//      USBH_DbgLog("btns:%u%u%u", m_pinfo_mouse->buttons[0],m_pinfo_mouse->buttons[1],m_pinfo_mouse->buttons[2]);
+      hid_buttons[0] = m_pinfo_mouse->buttons[0];
+      hid_buttons[1] = m_pinfo_mouse->buttons[1];
+      hid_buttons[2] = m_pinfo_mouse->buttons[2];
+      hid_mouse_x += m_pinfo_mouse->x;
+      hid_mouse_y += m_pinfo_mouse->y;
+    } else {
+      hid_buttons[0] = 0;
+      hid_buttons[1] = 0;
+      hid_buttons[2] = 0;
     }
+    USBH_DbgLog("btns:%u%u%u", hid_buttons[0],hid_buttons[1],hid_buttons[2]);
   }
   else if (USBH_HID_GetDeviceType(&hUSBHost) == HID_KEYBOARD) {
     HID_KEYBD_Info_TypeDef *m_pinfo_keyb;
@@ -563,7 +569,13 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost) {
       }
     }
   }
+  else if (USBH_HID_GetDeviceType(&hUSBHost) == HID_OTHER) {
+    HID_OTHER_Info_TypeDef *m_pinfo_other;
+    m_pinfo_other = USBH_HID_GetOtherInfo(phost);
+  }
 }
+
+extern void MidiInMsgHandler(uint8_t status, uint8_t data1, uint8_t data2);
 
 void MIDI_CB(uint8_t a,uint8_t b,uint8_t c,uint8_t d){
   USBH_DbgLog("M %x %x %x %x\r\n",a,b,c,d);
@@ -588,6 +600,7 @@ void* fakemalloc(size_t size){
 }
 
 void fakefree(void * p){
+  (void)p;
   memused = 0;
 }
 
