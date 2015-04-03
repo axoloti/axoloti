@@ -276,7 +276,7 @@ UINCDIR =
 ULIBDIR = .
 
 # List all user libraries here
-ULIBS = -lm 
+ULIBS = -lm \
 	samples/808bd.o \
 	samples/808hatclose.o \
 	samples/808hatopen.o \
