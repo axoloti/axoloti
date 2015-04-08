@@ -22,6 +22,7 @@
 #include "hal.h"
 #include "ui.h"
 #include "axoloti_board.h"
+#include "ff.h"
 
 typedef void (*fptr_patch_init_t)(int32_t fwID);
 typedef void (*fptr_patch_dispose_t)(void);
