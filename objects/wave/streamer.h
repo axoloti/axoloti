@@ -1,5 +1,3 @@
-#include "C:\Users\jtaelman\Documents\GitHub\axoloti\chibios/ext/fatfs/src/ff.h"
-
 
 #define SDREADFILEPINGPONGSIZE 256
 typedef struct {
