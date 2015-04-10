@@ -1,6 +1,7 @@
+#include "C:\Users\jtaelman\Documents\GitHub\axoloti\chibios/ext/fatfs/src/ff.h"
 
 
-#define SDREADFILEPINGPONGSIZE 512
+#define SDREADFILEPINGPONGSIZE 256
 typedef struct {
   union {
     int32_t i32buff[SDREADFILEPINGPONGSIZE];

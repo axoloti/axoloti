@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="play3" sha="8bc0539d57441c0ff47c7213f9528fc12b80b03f">
+   <obj.normal id="play3" sha="68357f2db7e09bf1250419b560bee8b31558a7f7">
       <sDescription>streaming playback of a mono .wav file from sdcard (testing)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -24,8 +24,9 @@
    int starttrig;
    int stoptrig;
 ]]></code.declaration>
-      <code.init><![CDATA[static sdReadFilePingpong s __attribute__ ((section (".rodata")));
-stream = &s;
+      <code.init><![CDATA[static sdReadFilePingpong s __attribute__ ((section (".data")));
+// unmap from aliased memory for DMA
+stream = (sdReadFilePingpong *)(0x20000000 | (int)&s);
 stream->pingpong = CLOSED;
 stream->doSeek = 0;
 starttrig = 0;
