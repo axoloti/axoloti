@@ -71,4 +71,22 @@
       <code.krate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
 ]]></code.krate>
    </obj.normal>
+   <obj.normal id="mux 2" sha="870b5f70b2b81a9a44450a8e1c68b85198159f41">
+      <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <charptr32 name="i1" description="input 1"/>
+         <charptr32 name="i2" description="input 2"/>
+         <charptr32 name="s" description="select"/>
+      </inlets>
+      <outlets>
+         <charptr32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+]]></code.krate>
+   </obj.normal>
 </objdefs>

@@ -119,4 +119,34 @@
 }
 ]]></code.krate>
    </obj.normal>
+   <obj.normal id="mux 6" sha="285d4a1cb1f1796806614edd23af4265cf91ac29">
+      <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32 name="i0" description="input 0"/>
+         <bool32 name="i1" description="input 1"/>
+         <bool32 name="i2" description="input 2"/>
+         <bool32 name="i3" description="input 3"/>
+         <bool32 name="i4" description="input 4"/>
+         <bool32 name="i5" description="input 5"/>
+         <charptr32 name="s" description="select"/>
+      </inlets>
+      <outlets>
+         <charptr32 name="o" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
+      case 0: %o%= %i0%;break;
+      case 1: %o%= %i1%;break;
+      case 2: %o%= %i2%;break;
+      case 3: %o%= %i3%;break;
+      case 4: %o%= %i4%;break;
+      case 5: %o%= %i5%;break;
+      default: %o%= %i5%;break;
+}
+]]></code.krate>
+   </obj.normal>
 </objdefs>
