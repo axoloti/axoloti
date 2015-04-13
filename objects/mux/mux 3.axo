@@ -95,15 +95,15 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 3" sha="745b10b8f47c43ed2eb8b1c9e7a09fceb7377173">
+   <obj.normal id="mux 3" sha="15567ca11a28708fa9f077dc66887942579eff76">
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
-         <bool32 name="i0" description="input 0"/>
-         <bool32 name="i1" description="input 1"/>
-         <bool32 name="i2" description="input 2"/>
-         <charptr32 name="s" description="select"/>
+         <charptr32 name="i0" description="input 0"/>
+         <charptr32 name="i1" description="input 1"/>
+         <charptr32 name="i2" description="input 2"/>
+         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
       </inlets>
       <outlets>
          <charptr32 name="o" description="output" SumBuffer="false"/>

@@ -90,7 +90,7 @@ public class Mux extends gentools {
         AxoObject o = new AxoObject("mux 2", "input multiplexer. Output is i1 when s is false, i2 otherwise.");
         o.inlets.add(new InletCharPtr32("i1", "input 1"));
         o.inlets.add(new InletCharPtr32("i2", "input 2"));
-        o.inlets.add(new InletCharPtr32("s", "select"));
+        o.inlets.add(new InletBool32("s", "select"));
         o.outlets.add(new OutletCharPtr32("o", "output"));
         o.sKRateCode = "   %o%= (%s%)?%i2%:%i1%;\n";
         return o;
@@ -163,9 +163,9 @@ public class Mux extends gentools {
     static AxoObject Create_inmuxns(int n) {
         AxoObject o = new AxoObject("mux " + n, "input multiplexer. Output is i1 when s < 1, i[i] when....");
         for (int i = 0; i < n; i++) {
-            o.inlets.add(new InletBool32("i" + i, "input " + i));
+            o.inlets.add(new InletCharPtr32("i" + i, "input " + i));
         }
-        o.inlets.add(new InletCharPtr32("s", "select"));
+        o.inlets.add(new InletInt32Pos("s", "select"));
         o.outlets.add(new OutletCharPtr32("o", "output"));
         o.sKRateCode = "   switch(%s%>0?%s%:0){\n";
         for (int i = 0; i < n; i++) {
