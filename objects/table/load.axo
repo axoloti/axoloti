@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="load" sha="cda31f7c4e985b172c8ab1789b5490716070d75e">
+   <obj.normal id="load" sha="8aa88869e56ef30585b3b339ceb37fdf07b05e89">
       <sDescription>load table from sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -34,17 +34,18 @@ _bw = 0;
     UINT bytes_read;
     err = f_open(&FileObject, %filename%, FA_READ | FA_OPEN_EXISTING);
     if (err != FR_OK) {TransmitTextMessage("Open failed\n"); _bw = err; return;}
-    int rem_sz = sizeof(%table%.array);
+    int rem_sz = sizeof(*%table%.array)*%table%.LENGTH;
     int offset = 0;
     while (rem_sz>0) {
       if (rem_sz>sizeof(fbuff)) {
         err = f_read(&FileObject, fbuff, sizeof(fbuff),&bytes_read);
-        memcpy((char *)(&%table%.array[0]) + offset,(char *)fbuff,sizeof(fbuff));
-        rem_sz -= sizeof(fbuff);
-        offset += sizeof(fbuff);
+        if (bytes_read == 0) break;
+        memcpy((char *)(&%table%.array[0]) + offset,(char *)fbuff,bytes_read);
+        rem_sz -= bytes_read;
+        offset += bytes_read;
       } else {
         err = f_read(&FileObject, fbuff, rem_sz,&bytes_read);
-        memcpy((char *)(&%table%.array[0]) + offset,(char *)fbuff,rem_sz);
+        memcpy((char *)(&%table%.array[0]) + offset,(char *)fbuff,bytes_read);
         rem_sz = 0;
       }
     }    if (err != FR_OK) {TransmitTextMessage("Read failed\n"); _bw = err; return;};

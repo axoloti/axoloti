@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="alloc 32b" sha="c9cc4c02436509b149863fb2d27ff1f3cfc3bcee">
+   <obj.normal id="alloc 32b" sha="2e33213a2f32ef669bc43cf0c21b22f04a8a6e06">
       <sDescription>allocate 32bit table in RAM memory</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -53,6 +53,8 @@ int32_t array[LENGTH];
 ]]></code.declaration>
       <code.init><![CDATA[{ 
   int i;
-  for(i=0;i<LENGTH;i++) array[i]=0;}%init%]]></code.init>
+  for(i=0;i<LENGTH;i++) array[i]=0;
+}
+%init%]]></code.init>
    </obj.normal>
 </objdefs>

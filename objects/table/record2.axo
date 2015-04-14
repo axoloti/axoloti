@@ -5,7 +5,7 @@
       <license>BSD</license>
       <inlets>
          <frac32buffer name="wave" description="wave"/>
-         <frac32 name="pos" description="start position in table"/>
+         <frac32.positive name="pos" description="start position in table"/>
          <bool32.risingfalling name="en" description="enable"/>
       </inlets>
       <outlets/>

@@ -1,0 +1,119 @@
+<patch-1.0>
+   <obj type="table/alloc 16b sdram" sha="e676cfd6165b33f48b68585d94681b986ca31e22" name="t1" x="14" y="14">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="524288"/>
+         <text attributeName="init">
+            <sText><![CDATA[    FIL FileObject;
+    FRESULT err;
+    UINT bytes_read;
+    err = f_open(&FileObject, "CR.RAW", FA_READ | FA_OPEN_EXISTING);
+    if (err != FR_OK) {TransmitTextMessage("Open failed\n"); return;}
+    err = f_read(&FileObject, (char *)array, LENGTH*sizeof(*array),&bytes_read);
+    if (err != FR_OK) {TransmitTextMessage("Read failed\n"); return;};
+    err = f_close(&FileObject);
+    if (err != FR_OK) {TransmitTextMessage("Close failed\n"); return;};
+]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="&lt;- init script shows how to read a file into memory at patch initialisation" x="154" y="56"/>
+   <obj type="string/c" sha="ee2b2048e59a86ec2249107bf0f2989587486d9" name="c_1" x="14" y="112">
+      <params/>
+      <attribs>
+         <table attributeName="str" table="CR.RAW"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="button_1" x="14" y="182">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/load" sha="8aa88869e56ef30585b3b339ceb37fdf07b05e89" name="load_1" x="84" y="182">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t1"/>
+      </attribs>
+   </obj>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="sine_1" x="238" y="294">
+      <params>
+         <frac32.s.map name="pitch" value="-31.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 2" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe" name="mix_1" x="336" y="294">
+      <params>
+         <frac32.u.map name="gain1" value="0.5"/>
+         <frac32.u.map name="gain2" value="2.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="dial_1" x="238" y="378">
+      <params>
+         <frac32.s.map name="value" value="16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="14" y="462">
+      <params>
+         <frac32.s.map name="pitch" value="-9.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="button_2" x="112" y="462">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/play3" sha="c255a57ea694b21f7393baddcd7d9001e9e3d6b0" name="play3_1" x="182" y="462">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="t1"/>
+      </attribs>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="308" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c_1 out"/>
+         <dest name="load_1 filename"/>
+      </net>
+      <net>
+         <source name="button_1 o"/>
+         <dest name="load_1 trig"/>
+      </net>
+      <net>
+         <source name="button_2 o"/>
+         <dest name="play3_1 stop"/>
+      </net>
+      <net>
+         <source name="play3_1 wave"/>
+         <dest name="out_1 left"/>
+         <dest name="out_1 right"/>
+      </net>
+      <net>
+         <source name="square_1 wave"/>
+         <dest name="play3_1 start"/>
+      </net>
+      <net>
+         <source name="sine_1 wave"/>
+         <dest name="mix_1 in1"/>
+      </net>
+      <net>
+         <source name="dial_1 out"/>
+         <dest name="mix_1 in2"/>
+      </net>
+      <net>
+         <source name="mix_1 out"/>
+         <dest name="play3_1 pos"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

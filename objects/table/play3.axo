@@ -1,11 +1,12 @@
 <objdefs>
-   <obj.normal id="play2" sha="98247b4a866cd88ae46eeb0743bbb1a9fff17514">
+   <obj.normal id="play3" sha="c255a57ea694b21f7393baddcd7d9001e9e3d6b0">
       <sDescription>play audio from table (non-transposed), starting from position</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
          <frac32.positive name="pos" description="start position in table"/>
-         <bool32.risingfalling name="en" description="enable"/>
+         <bool32.rising name="start" description="start playback"/>
+         <bool32.rising name="stop" description="stop playback"/>
       </inlets>
       <outlets>
          <frac32buffer name="wave" description="wave" SumBuffer="false"/>
@@ -15,22 +16,33 @@
       <attribs>
          <objref name="table"/>
       </attribs>
-      <code.declaration><![CDATA[   int ntrig;
+      <code.declaration><![CDATA[   int pstart;
+   int pstop;
    int pos;
 ]]></code.declaration>
-      <code.init><![CDATA[pos = -1;
+      <code.init><![CDATA[pos = 0;
+pstart = 0;
+pstop = 1;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((%en%>0) && !ntrig) {
-      ntrig=1;
+      <code.krate><![CDATA[   if ((%start%>0) && !pstart) {
+      pstart = 1;
+      pstop = 0;
       uint32_t asat = __USAT(%pos%,27);
       pos = asat>>(27-%table%.LENGTHPOW);
+   } else if (!(%start%>0)) {
+      pstart = 0;
    }
-   else if (!(%en%>0)) ntrig=0;
-     int32_t i;
+  if ((%stop%>0) && !pstop) {
+      pstop = 1;
+      pstart = 0;
+   } 
+
 ]]></code.krate>
-      <code.srate><![CDATA[   if (%en%>0) {
+      <code.srate><![CDATA[   if (!pstop) {
        if (pos< %table%.LENGTH)
               %wave% = %table%.array[pos++]<<%table%.GAIN;
-   } else %wave% = 0;]]></code.srate>
+	else %wave% = 0;
+   } else %wave% = 0;
+]]></code.srate>
    </obj.normal>
 </objdefs>

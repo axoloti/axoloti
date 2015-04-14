@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="save" sha="f1af8e1c1102d9f7757c12cde9e8f22a195a681e">
+   <obj.normal id="save" sha="505c7da537be6c76007d9f5c00d6731667388322">
       <sDescription>save table to sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -30,7 +30,7 @@
     UINT bytes_written;
     err = f_open(&FileObject, %filename%, FA_WRITE | FA_CREATE_ALWAYS);
     if (err != FR_OK) TransmitTextMessage("Open failed\n");
-    int rem_sz = sizeof(%table%.array);
+    int rem_sz = sizeof(*%table%.array)*%table%.LENGTH;
     int offset = 0;
     while (rem_sz>0) {
       if (rem_sz>sizeof(fbuff)) {

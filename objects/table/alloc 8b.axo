@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="alloc 8b" sha="16dc5f80ca3889cc98392d3e77ce5ed128140c96">
+   <obj.normal id="alloc 8b" sha="ccd876999d6af75dbe57dfef4d08b9635a264ac8">
       <sDescription>allocate table in RAM memory, -128..127</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -55,6 +55,8 @@ int8_t array[LENGTH];
 ]]></code.declaration>
       <code.init><![CDATA[{ 
   int i;
-  for(i=0;i<LENGTH;i++) array[i]=0;}%init%]]></code.init>
+  for(i=0;i<LENGTH;i++) array[i]=0;
+}
+%init%]]></code.init>
    </obj.normal>
 </objdefs>

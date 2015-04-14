@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="alloc 16b" sha="29b2085e28f8f45954e2be8a0ff80c909188ac7a">
-      <sDescription>allocate 16bit table in RAM memory, -128.00 .. 127.99</sDescription>
+   <obj.normal id="alloc 32b sdram" sha="4487420212d1a826e25aa61cd5abdc0238ea3207">
+      <sDescription>allocate 32bit table in SDRAM memory</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets/>
@@ -25,6 +25,12 @@
                <string>8192</string>
                <string>16384</string>
                <string>32768</string>
+               <string>65536</string>
+               <string>131072</string>
+               <string>262144</string>
+               <string>524288</string>
+               <string>1048576</string>
+               <string>2097152</string>
             </MenuEntries>
             <CEntries>
                <string>1</string>
@@ -42,18 +48,26 @@
                <string>13</string>
                <string>14</string>
                <string>15</string>
+               <string>16</string>
+               <string>17</string>
+               <string>18</string>
+               <string>19</string>
+               <string>20</string>
+               <string>21</string>
             </CEntries>
          </combo>
          <text name="init"/>
       </attribs>
-      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (%size%);
-static const uint32_t LENGTH = (1<<%size%);
-static const uint32_t LENGTHMASK = ((1<<%size%)-1);
-static const uint32_t BITS = 16;
-static const uint32_t GAIN = 12;
-int16_t array[LENGTH];
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = %size%;
+static const uint32_t LENGTH = 1<<%size%;
+static const uint32_t LENGTHMASK = (1<<%size%)-1;
+static const uint32_t BITS = 32;
+static const uint32_t GAIN = 0;
+int32_t *array;
 ]]></code.declaration>
-      <code.init><![CDATA[{ 
+      <code.init><![CDATA[static int32_t _array[LENGTH] __attribute__ ((section (".sdram")));
+array = _array;
+{ 
   int i;
   for(i=0;i<LENGTH;i++) array[i]=0;
 }

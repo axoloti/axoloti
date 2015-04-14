@@ -46,6 +46,11 @@ public class Table extends gentools {
         WriteAxoObject(catName, CreateRamTable8());
         WriteAxoObject(catName, CreateRamTable16());
         WriteAxoObject(catName, CreateRamTable32());
+
+        WriteAxoObject(catName, CreateSdRamTable8());
+        WriteAxoObject(catName, CreateSdRamTable16());
+        WriteAxoObject(catName, CreateSdRamTable32());
+
         WriteAxoObject(catName, CreateRamTable32Slider16());
         WriteAxoObject(catName, new AxoObject[]{CreateTableReadI(), CreateTableRead(), CreateTableReadTilde()});
         WriteAxoObject(catName, new AxoObject[]{CreateTableRead2(), CreateTableRead2T()});
@@ -54,6 +59,7 @@ public class Table extends gentools {
         WriteAxoObject(catName, CreateTableRecord2Tilde());
         WriteAxoObject(catName, CreateTablePlayTilde());
         WriteAxoObject(catName, CreateTablePlay2Tilde());
+        WriteAxoObject(catName, CreateTablePlay3Tilde());
         WriteAxoObject(catName, SaveTable());
         WriteAxoObject(catName, LoadTable());
     }
@@ -73,8 +79,8 @@ public class Table extends gentools {
                 + "int8_t array[LENGTH];\n";
         o.sInitCode = "{ \n"
                 + "  int i;\n"
-                + "  for(i=0;i<LENGTH;i++) array[i]=0;"
-                + "}"
+                + "  for(i=0;i<LENGTH;i++) array[i]=0;\n"
+                + "}\n"
                 + "%init%";
         return o;
     }
@@ -94,8 +100,8 @@ public class Table extends gentools {
                 + "int16_t array[LENGTH];\n";
         o.sInitCode = "{ \n"
                 + "  int i;\n"
-                + "  for(i=0;i<LENGTH;i++) array[i]=0;"
-                + "}"
+                + "  for(i=0;i<LENGTH;i++) array[i]=0;\n"
+                + "}\n"
                 + "%init%";
         return o;
     }
@@ -115,8 +121,83 @@ public class Table extends gentools {
                 + "int32_t array[LENGTH];\n";
         o.sInitCode = "{ \n"
                 + "  int i;\n"
-                + "  for(i=0;i<LENGTH;i++) array[i]=0;"
-                + "}"
+                + "  for(i=0;i<LENGTH;i++) array[i]=0;\n"
+                + "}\n"
+                + "%init%";
+        return o;
+    }
+
+    static AxoObject CreateSdRamTable8() {
+        AxoObject o = new AxoObject("alloc 8b sdram", "allocate table in SDRAM memory, -128..127");
+        String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
+            "1024", "2048", "4096", "8192", "16384", "32768",
+            "65536", "131072", "262144", "524288", "1048576", "2097152"};
+        String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
+            "16", "17", "18", "19", "20", "21"};
+        o.attributes.add(new AxoAttributeComboBox("size", mentries, centries));
+        o.attributes.add(new AxoAttributeTextEditor("init"));
+        o.sLocalData = "static const uint32_t LENGTHPOW = (%size%);\n"
+                + "static const uint32_t LENGTH = (1<<%size%);\n"
+                + "static const uint32_t LENGTHMASK = ((1<<%size%)-1);\n"
+                + "static const uint32_t BITS = 8;\n"
+                + "static const uint32_t GAIN = 20;\n"
+                + "int8_t *array;\n";
+        o.sInitCode = "static int8_t _array[LENGTH] __attribute__ ((section (\".sdram\")));\n"
+                + "array = _array;\n"
+                + "{ \n"
+                + "  int i;\n"
+                + "  for(i=0;i<LENGTH;i++) array[i]=0;\n"
+                + "}\n"
+                + "%init%";
+        return o;
+    }
+
+    static AxoObject CreateSdRamTable16() {
+        AxoObject o = new AxoObject("alloc 16b sdram", "allocate 16bit table in SDRAM memory, -128.00 .. 127.99");
+        String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
+            "1024", "2048", "4096", "8192", "16384", "32768",
+            "65536", "131072", "262144", "524288", "1048576", "2097152"};
+        String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
+            "16", "17", "18", "19", "20", "21"};
+        o.attributes.add(new AxoAttributeComboBox("size", mentries, centries));
+        o.attributes.add(new AxoAttributeTextEditor("init"));
+        o.sLocalData = "static const uint32_t LENGTHPOW = (%size%);\n"
+                + "static const uint32_t LENGTH = (1<<%size%);\n"
+                + "static const uint32_t LENGTHMASK = ((1<<%size%)-1);\n"
+                + "static const uint32_t BITS = 16;\n"
+                + "static const uint32_t GAIN = 12;\n"
+                + "int16_t *array;\n";
+        o.sInitCode = "static int16_t _array[LENGTH] __attribute__ ((section (\".sdram\")));\n"
+                + "array = _array;\n"
+                + "{ \n"
+                + "  int i;\n"
+                + "  for(i=0;i<LENGTH;i++) array[i]=0;\n"
+                + "}\n"
+                + "%init%";
+        return o;
+    }
+
+    static AxoObject CreateSdRamTable32() {
+        AxoObject o = new AxoObject("alloc 32b sdram", "allocate 32bit table in SDRAM memory");
+        String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
+            "1024", "2048", "4096", "8192", "16384", "32768",
+            "65536", "131072", "262144", "524288", "1048576", "2097152"};
+        String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
+            "16", "17", "18", "19", "20", "21"};
+        o.attributes.add(new AxoAttributeComboBox("size", mentries, centries));
+        o.attributes.add(new AxoAttributeTextEditor("init"));
+        o.sLocalData = "static const uint32_t LENGTHPOW = %size%;\n"
+                + "static const uint32_t LENGTH = 1<<%size%;\n"
+                + "static const uint32_t LENGTHMASK = (1<<%size%)-1;\n"
+                + "static const uint32_t BITS = 32;\n"
+                + "static const uint32_t GAIN = 0;\n"
+                + "int32_t *array;\n";
+        o.sInitCode = "static int32_t _array[LENGTH] __attribute__ ((section (\".sdram\")));\n"
+                + "array = _array;\n"
+                + "{ \n"
+                + "  int i;\n"
+                + "  for(i=0;i<LENGTH;i++) array[i]=0;\n"
+                + "}\n"
                 + "%init%";
         return o;
     }
@@ -265,7 +346,7 @@ public class Table extends gentools {
     static AxoObject CreateTableRecord2Tilde() {
         AxoObject o = new AxoObject("record2", "record audio into table, starting from position");
         o.inlets.add(new InletFrac32Buffer("wave", "wave"));
-        o.inlets.add(new InletFrac32("pos", "start position in table"));
+        o.inlets.add(new InletFrac32Pos("pos", "start position in table"));
         o.inlets.add(new InletBool32RisingFalling("en", "enable"));
         o.attributes.add(new AxoAttributeObjRef("table"));
         o.sLocalData = "   int ntrig;\n"
@@ -313,7 +394,7 @@ public class Table extends gentools {
     static AxoObject CreateTablePlay2Tilde() {
         AxoObject o = new AxoObject("play2", "play audio from table (non-transposed), starting from position");
         o.outlets.add(new OutletFrac32Buffer("wave", "wave"));
-        o.inlets.add(new InletFrac32("pos", "start position in table"));
+        o.inlets.add(new InletFrac32Pos("pos", "start position in table"));
         o.inlets.add(new InletBool32RisingFalling("en", "enable"));
         o.attributes.add(new AxoAttributeObjRef("table"));
         o.sLocalData = "   int ntrig;\n"
@@ -333,6 +414,40 @@ public class Table extends gentools {
         return o;
     }
 
+    static AxoObject CreateTablePlay3Tilde() {
+        AxoObject o = new AxoObject("play3", "play audio from table (non-transposed), starting from position");
+        o.outlets.add(new OutletFrac32Buffer("wave", "wave"));
+        o.inlets.add(new InletFrac32Pos("pos", "start position in table"));
+        o.inlets.add(new InletBool32Rising("start", "start playback"));
+        o.inlets.add(new InletBool32Rising("stop", "stop playback"));
+        o.attributes.add(new AxoAttributeObjRef("table"));
+        o.sLocalData = "   int pstart;\n"
+                + "   int pstop;\n"
+                + "   int pos;\n";
+        o.sInitCode = "pos = 0;\n"
+                + "pstart = 0;\n"
+                + "pstop = 1;\n";
+        o.sKRateCode = "   if ((%start%>0) && !pstart) {\n"
+                + "      pstart = 1;\n"
+                + "      pstop = 0;\n"
+                + "      uint32_t asat = __USAT(%pos%,27);\n"
+                + "      pos = asat>>(27-%table%.LENGTHPOW);\n"
+                + "   } else if (!(%start%>0)) {\n"
+                + "      pstart = 0;\n"
+                + "   }\n"
+                + "  if ((%stop%>0) && !pstop) {\n"
+                + "      pstop = 1;\n"
+                + "      pstart = 0;\n"
+                + "   } \n"
+                + "\n";
+        o.sSRateCode = "   if (!pstop) {\n"
+                + "       if (pos< %table%.LENGTH)\n"
+                + "              %wave% = %table%.array[pos++]<<%table%.GAIN;\n"
+                + "	else %wave% = 0;\n"
+                + "   } else %wave% = 0;\n";
+        return o;
+    }
+
     static AxoObject SaveTable() {
         AxoObject o = new AxoObject("save", "save table to sdcard");
         o.attributes.add(new AxoAttributeObjRef("table"));
@@ -348,7 +463,7 @@ public class Table extends gentools {
                 + "    UINT bytes_written;\n"
                 + "    err = f_open(&FileObject, %filename%, FA_WRITE | FA_CREATE_ALWAYS);\n"
                 + "    if (err != FR_OK) TransmitTextMessage(\"Open failed\\n\");\n"
-                + "    int rem_sz = sizeof(%table%.array);\n"
+                + "    int rem_sz = sizeof(*%table%.array)*%table%.LENGTH;\n"
                 + "    int offset = 0;\n"
                 + "    while (rem_sz>0) {\n"
                 + "      if (rem_sz>sizeof(fbuff)) {\n"
@@ -388,17 +503,18 @@ public class Table extends gentools {
                 + "    UINT bytes_read;\n"
                 + "    err = f_open(&FileObject, %filename%, FA_READ | FA_OPEN_EXISTING);\n"
                 + "    if (err != FR_OK) {TransmitTextMessage(\"Open failed\\n\"); _bw = err; return;}\n"
-                + "    int rem_sz = sizeof(%table%.array);\n"
+                + "    int rem_sz = sizeof(*%table%.array)*%table%.LENGTH;\n"
                 + "    int offset = 0;\n"
                 + "    while (rem_sz>0) {\n"
                 + "      if (rem_sz>sizeof(fbuff)) {\n"
                 + "        err = f_read(&FileObject, fbuff, sizeof(fbuff),&bytes_read);\n"
-                + "        memcpy((char *)(&%table%.array[0]) + offset,(char *)fbuff,sizeof(fbuff));\n"
-                + "        rem_sz -= sizeof(fbuff);\n"
-                + "        offset += sizeof(fbuff);\n"
+                + "        if (bytes_read == 0) break;\n"
+                + "        memcpy((char *)(&%table%.array[0]) + offset,(char *)fbuff,bytes_read);\n"
+                + "        rem_sz -= bytes_read;\n"
+                + "        offset += bytes_read;\n"
                 + "      } else {\n"
                 + "        err = f_read(&FileObject, fbuff, rem_sz,&bytes_read);\n"
-                + "        memcpy((char *)(&%table%.array[0]) + offset,(char *)fbuff,rem_sz);\n"
+                + "        memcpy((char *)(&%table%.array[0]) + offset,(char *)fbuff,bytes_read);\n"
                 + "        rem_sz = 0;\n"
                 + "      }\n"
                 + "    }"
