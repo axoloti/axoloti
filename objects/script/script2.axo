@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="script2" sha="1478c410b77725959c034de4a2456dd1198e9080">
+   <obj.normal id="script2" sha="f790404ab422d73d7c5acc2b56f51f461283d3fc">
       <sDescription>script with 2 inputs and 2 outputs, running in a separate thread, you must define &quot;void init(void){}&quot; and &quot;void loop(void)&quot;</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -23,7 +23,7 @@ msg_t ThreadX2(){
   setup();
   while(!chThdShouldTerminate()){
      loop();
-     chThdYield();
+     chThdSleepMilliseconds(1);
   }
   chThdExit((msg_t)0);
 }

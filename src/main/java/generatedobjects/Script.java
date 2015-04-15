@@ -103,7 +103,7 @@ public class Script extends gentools {
                 + "  setup();\n"
                 + "  while(!chThdShouldTerminate()){\n"
                 + "     loop();\n"
-                + "     chThdYield();\n"
+                + "     chThdSleepMilliseconds(1);\n"
                 + "  }\n"
                 + "  chThdExit((msg_t)0);\n"
                 + "}\n"
