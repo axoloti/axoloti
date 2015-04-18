@@ -1524,7 +1524,12 @@ public class Patch {
                 + "      }\n"
                 + "  }\n"
                 + "} else if ((status & 0xF0) == MIDI_CONTROL_CHANGE) {\n"
-                + "  int i;   for(i=0;i<%poly%;i++) getVoices()[i].MidiInHandler(status, data1, data2);\n"
+                + "  int i;\n"
+                + "  for(i=0;i<%poly%;i++) {\n"
+                + "    if (voiceChannel[i] == (status & 0x0F)){\n"
+                + "         getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE, data1, data2);\n"
+                + "    }\n"
+                + "  }\n"
                 + "  if (data1 == 64) {\n"
                 + "    if (data2>0) {\n"
                 + "      sustain = 1;\n"
@@ -1545,7 +1550,12 @@ public class Patch {
                 + "    }\n"
                 + "  }\n"
                 + "} else {"
-                + "  int i;   for(i=0;i<%poly%;i++) getVoices()[i].MidiInHandler(status&0xF0, data1, data2);\n"
+                + "  int i;\n"
+                + "  for(i=0;i<%poly%;i++) {\n"
+                + "    if (voiceChannel[i] == (status & 0x0F)){\n"
+                + "         getVoices()[i].MidiInHandler(status&0xF0, data1, data2);\n"
+                + "    }\n"
+                + "  }\n"
                 + "}\n";
         return o;
     }
