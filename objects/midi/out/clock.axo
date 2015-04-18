@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="clock" sha="1f1daad8acc3168308da7e85a8ecdc01992c2822">
+   <obj.normal id="clock" sha="b9dcbd2415a27e4361d5567f4aacd3c7c0aa64a7">
       <sDescription>Midi clock master, als outputs Midi clock, start, stop, and continue messages</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -38,17 +38,17 @@ rstp = 0;]]></code.init>
 }
 if (%run% && !_active) {
   _active = 1;
-  if (_pos24ppq)     SendMidi1(MIDI_START);
-  else     SendMidi1(MIDI_CONTINUE);
+  if (_pos24ppq)     MidiSend1(MIDI_START);
+  else     MidiSend1(MIDI_CONTINUE);
 } else if (!%run% && _active){
   _active = 0;
-  SendMidi1(MIDI_STOP);
+  MidiSend1(MIDI_STOP);
 }if (_active) {
   _posfrac += %bpm%;
   if (_posfrac & 1<<31) {
     _posfrac &= (1<<31)-1;
     _pos24ppq++;
-    SendMidi1(MIDI_TIMING_CLOCK);
+    MidiSend1(MIDI_TIMING_CLOCK);
   }
 }
 %pos4ppq% = _pos24ppq/6;
