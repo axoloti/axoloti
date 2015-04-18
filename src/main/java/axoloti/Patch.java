@@ -1527,7 +1527,7 @@ public class Patch {
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++) {\n"
                 + "    if (voiceChannel[i] == (status & 0x0F)){\n"
-                + "         getVoices()[i].MidiInHandler(status, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "  if (data1 == 64) {\n"
