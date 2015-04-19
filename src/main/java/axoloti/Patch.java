@@ -1497,6 +1497,10 @@ public class Patch {
     AxoObject GenerateAxoObjPolyChannel() {
         AxoObject o = GenerateAxoObjPoly();
         o.sLocalData += "int8_t voiceChannel[%poly%];\n";
+        o.sInitCode  += "int vc;\n"
+				     + 	"for(vc=0;vc<%poly%;vc++) {\n"
+                     +  "	voiceChannel[vc]=0xFF;\n"
+                     +  "}\n";
         o.sMidiCode = "if (((status & 0xF0) == MIDI_NOTE_ON) && (data2)) {\n"
                 + "  int min = 1<<30;\n"
                 + "  int mini = 0;\n"
@@ -1516,8 +1520,9 @@ public class Patch {
                 + "          ((status & 0xF0) == MIDI_NOTE_OFF)) {\n"
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++){\n"
-                + "    if (notePlaying[i] == data1){\n"
+                + "    if (notePlaying[i] == data1 && voiceChannel[i] == (status & 0x0F)){\n"
                 + "      voicePriority[i] = priority++;\n"
+                + "      voiceChannel[i] = 0xFF;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
                 + "        getVoices()[i].MidiInHandler(status & 0xF0, data1, data2);\n"
