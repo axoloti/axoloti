@@ -115,6 +115,21 @@ int main(void) {
   //memTest();
 #endif
 
+
+#ifdef ENABLE_USB_HOST
+// SD2 for serial debug output
+  palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7)|PAL_MODE_INPUT);// RX
+  palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL);// TX
+  palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7));// TX
+#if ENABLE_USB_HOST_DEBUG
+// 115200 baud
+  static const SerialConfig sd2Cfg = {115200,
+    0, 0, 0};
+  sdStart(&SD2, &sd2Cfg);
+#endif
+  MY_USBH_Init();
+#endif
+
 #if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
   if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
   SDLoadPatch("0:start.bin");
@@ -132,18 +147,6 @@ int main(void) {
     }
   }
 
-#ifdef ENABLE_USB_HOST
-// SD2 for serial debug output
-  palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7)|PAL_MODE_INPUT);// RX
-  palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL);// TX
-  palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7));// TX
-// 115200 baud
-  static const SerialConfig sd2Cfg = {115200,
-    0, 0, 0};
-  sdStart(&SD2, &sd2Cfg);
-
-  MY_USBH_Init();
-#endif
   while (1) {
     chThdSleepMilliseconds(1000);
   }
