@@ -49,7 +49,7 @@ unsigned int DspTime;
 static int32_t inbuf[32];
 static int32_t *outbuf;
 
-static WORKING_AREA(waThreadDSP, 4096) __attribute__ ((section (".ccmramend")));
+static WORKING_AREA(waThreadDSP, 7200) __attribute__ ((section (".ccmramend")));
 static Thread *pThreadDSP = 0;
 static msg_t ThreadDSP(void *arg) {
   (void)(arg);
@@ -178,3 +178,4 @@ void LoadPatch(char *name) {
   strcpy(loadFName, name);
   chEvtSignal(pThreadLoader, (eventmask_t)1);
 }
+

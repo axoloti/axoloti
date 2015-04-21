@@ -15,7 +15,7 @@ MEMORY
 
       SRAM (rwx) : ORIGIN = 0x00010000, LENGTH = 0x0000C000 /* 56kB in RAM1 */
       SRAM2 (rwx) : ORIGIN = 0x2001C000, LENGTH = 0x00002000 /* first 8kB in SRAM2 */
-      CCMSRAM (rw) : ORIGIN = 0x10000000, LENGTH = 0x0000E000 /* CCM - ccmramend */
+      CCMSRAM (rw) : ORIGIN = 0x10000000, LENGTH = 0x0000C000 /* CCM - ccmramend */
     sdram : org = 0xC0000000, len = 0x800000
 }
 

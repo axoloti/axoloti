@@ -28,7 +28,7 @@ MEMORY
     flash (rx): org = 0x08000000, len = 896k /* last 128kB for patch storage*/
     ram : org = 0x20000200, len = 0x09E00 /* 48k - first 0x200 for vector table */
     SRAM2  : org = 0x2001E000, len = 0x00002000 /* second half (8kB) of SRAM2 for DMA*/      
-    CCMRAMEND  : org = 0x1000E000, len = 8k /* for stacks */    
+    CCMRAMEND  : org = 0x1000C000, len = 10k /* for stacks */    
     sdram : org = 0xC0000000, len = 0x400000
 }
 
