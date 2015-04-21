@@ -1102,11 +1102,11 @@ public class Patch {
                 + "  patchMeta.pPExch = &root.PExch[0];\n"
                 + "  patchMeta.pDisplayVector = &root.displayVector[0];\n"
                 + "  patchMeta.numPEx = " + ParameterInstances.size() + ";\n"
-                + "  patchMeta.fptr_dsp_process = PatchProcess;\n"
+                + "  root.Init();\n"
+                + "  patchMeta.fptr_applyPreset = ApplyPreset;\n"
                 + "  patchMeta.fptr_patch_dispose = PatchDispose;\n"
                 + "  patchMeta.fptr_MidiInHandler = PatchMidiInHandler;\n"
-                + "  patchMeta.fptr_applyPreset = ApplyPreset;\n"
-                + "  root.Init();\n"
+                + "  patchMeta.fptr_dsp_process = PatchProcess;\n"
                 + "}\n";
         return c;
     }
