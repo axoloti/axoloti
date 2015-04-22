@@ -23,9 +23,9 @@ int32_t _gate;
 int32_t _gate2;
 uint8_t _velo;
 uint8_t _rvelo;
-uint8_t _pressure;
+uint32_t _pressure;
 int32_t _bend;
-uint8_t _timbre;
+int32_t _timbre;
 uint8_t _lastRPN_LSB; 
 uint8_t _lastRPN_MSB; 
 uint8_t _bendRange;
@@ -62,9 +62,9 @@ if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
     _rvelo = data2<<20;
     _gate = 0;
   }
-} else if ((status == %midichannel% + MIDI_CHANNEL_PRESSURE)) {
+} else if (status == %midichannel% + MIDI_CHANNEL_PRESSURE) {
   _pressure = data1<<20;
-} else if ((status == %midichannel% + MIDI_PITCH_BEND)) {
+} else if (status == %midichannel% + MIDI_PITCH_BEND) {
   _bend = ((int)((data2<<7)+data1)-0x2000)<<14;
 } else if (status == %midichannel% + MIDI_CONTROL_CHANGE) {
   if (data1 == MIDI_C_TIMBRE) {

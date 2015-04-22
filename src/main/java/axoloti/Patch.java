@@ -1638,20 +1638,26 @@ public class Patch {
                 + "  }\n"
                 + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
                 + "  if (data1 == MIDI_C_POLY) {\n" // MPE enable mode
-                + "     if (channel == %midichannel%) {\n"
-                + "       if (channel != 15) {\n" // e.g ch 1 (g), we use 2-N notes
-                + "         lowChannel = channel + 1;\n"
-                + "         highChannel = lowChannel + data2;\n"
-                + "       } else {\n"   // ch 16, we use 16(g) 15-N notes
-                + "         highChannel = channel - 1;\n"
-                + "         lowChannel = highChannel - data2;\n"
-                + "       }\n"
-                + "       for(int i=0;i<%poly%;i++) {\n"
-                + "         getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 100, lastRPN_LSB);\n"
-                + "         getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 101, lastRPN_MSB);\n"
-                + "         getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 6, pitchbendRange);\n"
-                + "       }\n" //for
-                + "    }\n" //if mainchannel
+                + "     if (data2 > 0) {\n "
+                + "       if (channel == %midichannel%) {\n"
+                + "         if (channel != 15) {\n" // e.g ch 1 (g), we use 2-N notes
+                + "           lowChannel = channel + 1;\n"
+                + "           highChannel = lowChannel + data2 - 1;\n"
+                + "         } else {\n"   // ch 16, we use 16(g) 15-N notes
+                + "           highChannel = channel - 1;\n"
+                + "           lowChannel = highChannel + 1 - data2;\n"
+                + "         }\n"
+
+                + "         for(int i=0;i<%poly%;i++) {\n"
+                + "           getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 100, lastRPN_LSB);\n"
+                + "           getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 101, lastRPN_MSB);\n"
+                + "           getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 6, pitchbendRange);\n"
+                + "         }\n" //for
+                + "      }\n" //if mainchannel
+                + "    } else {\n" // enable/disable
+                + "      lowChannel = 0;\n"   //disable, we may in the future want to turn this in to normal poly mode
+                + "      highChannel = 0;\n"
+                + "    }\n"
                 + "  }\n"// cc127
                 + "  if (channel != %midichannel%\n"
                 + "    && (channel < lowChannel || channel > highChannel))\n"
