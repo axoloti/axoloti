@@ -1245,6 +1245,10 @@ public class Patch {
             AxoObject ao = GenerateAxoObjPolyChannel();
             return ao;
         }
+        if (settings.subpatchmode == SubPatchMode.polyexpression) {
+            AxoObject ao = GenerateAxoObjPolyExpression();
+            return ao;
+        }
         return null;
     }
 
@@ -1268,6 +1272,7 @@ public class Patch {
 //    void ExportAxoObjPoly2(File f1) {
 //        String fnNoExtension = f1.getName().substring(0, f1.getName().lastIndexOf(".axo"));
 //    }
+    // Poly voices from one (or omni) midi channel
     AxoObject GenerateAxoObjPoly() {
 //        SortByPosition();
         AxoObject ao = new AxoObject("unnamedobject", FileNamePath);
@@ -1476,7 +1481,14 @@ public class Patch {
                 + "  }\n"
                 + "} else if (status == %midichannel% + MIDI_CONTROL_CHANGE) {\n"
                 + "  int i;   for(i=0;i<%poly%;i++) getVoices()[i].MidiInHandler(status, data1, data2);\n"
-                + "  if (data1 == 64) {\n"
+                
+                + "  if (data1 == 123) {\n"
+                + "    for(i=0;i<%poly%;i++){\n"
+                + "      if (pressed[i] > 0) {\n"
+                + "          getVoices()[i].MidiInHandler(MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
+                + "      }\n"
+                + "    }\n"
+                + "  } else if (data1 == 64) {\n"
                 + "    if (data2>0) {\n"
                 + "      sustain = 1;\n"
                 + "    } else if (sustain == 1) {\n"
@@ -1494,14 +1506,21 @@ public class Patch {
         return ao;
     }
 
+    // Poly (Multi) Channel supports per Channel CC/Touch
+    // all channels are independent
     AxoObject GenerateAxoObjPolyChannel() {
         AxoObject o = GenerateAxoObjPoly();
-        o.sLocalData += "int8_t voiceChannel[%poly%];\n";
-        o.sInitCode  += "int vc;\n"
-				     + 	"for(vc=0;vc<%poly%;vc++) {\n"
-                     +  "	voiceChannel[vc]=0xFF;\n"
-                     +  "}\n";
-        o.sMidiCode = "if (((status & 0xF0) == MIDI_NOTE_ON) && (data2)) {\n"
+        o.sLocalData += 
+                  "int8_t voiceChannel[%poly%];\n";
+        o.sInitCode  += 
+                  "int vc;\n"
+		+ "for (vc=0;vc<%poly%;vc++) {\n"
+                +  "   voiceChannel[vc]=0xFF;\n"
+                +  "}\n";
+        o.sMidiCode =
+                  "int msg = (status & 0xF0);\n"
+                + "int channel = (status & 0x0F);\n"
+                + "if ((msg == MIDI_NOTE_ON) && (data2)) {\n"
                 + "  int min = 1<<30;\n"
                 + "  int mini = 0;\n"
                 + "  int i;\n"
@@ -1511,60 +1530,154 @@ public class Patch {
                 + "      mini = i;\n"
                 + "    }\n"
                 + "  }\n"
-                + "  voicePriority[mini] = 100000+priority++;\n"
+                + "  voicePriority[mini] = 100000 + priority++;\n"
                 + "  notePlaying[mini] = data1;\n"
                 + "  pressed[mini] = 1;\n"
                 + "  voiceChannel[mini] = status & 0x0F;\n"
                 + "  getVoices()[mini].MidiInHandler(status & 0xF0, data1, data2);\n"
-                + "} else if ((((status & 0xF0) == MIDI_NOTE_ON) && (!data2))||\n"
-                + "          ((status & 0xF0) == MIDI_NOTE_OFF)) {\n"
+                + "} else if (((msg == MIDI_NOTE_ON) && (!data2))||\n"
+                + "            (msg == MIDI_NOTE_OFF)) {\n"
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++){\n"
-                + "    if (notePlaying[i] == data1 && voiceChannel[i] == (status & 0x0F)){\n"
+                + "    if (notePlaying[i] == data1){\n"
                 + "      voicePriority[i] = priority++;\n"
                 + "      voiceChannel[i] = 0xFF;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "        getVoices()[i].MidiInHandler(status & 0xF0, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(msg + %midichannel%, data1, data2);\n"
                 + "      }\n"
                 + "  }\n"
-                + "} else if ((status & 0xF0) == MIDI_CONTROL_CHANGE) {\n"
+                + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++) {\n"
-                + "    if (voiceChannel[i] == (status & 0x0F)){\n"
-                + "         getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE, data1, data2);\n"
+                + "    if (voiceChannel[i] == channel) {\n"
+                + "      getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
-                + "  if (data1 == 64) {\n"
+                + "  if (data1 == 123) {\n"
+                + "    for(i=0;i<%poly%;i++){\n"
+                + "      if (pressed[i] > 0) {\n"
+                + "          getVoices()[i].MidiInHandler(MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
+                + "      }\n"
+                + "    }\n"
+                + "  } else if (data1 == 64) {\n"
                 + "    if (data2>0) {\n"
                 + "      sustain = 1;\n"
                 + "    } else if (sustain == 1) {\n"
                 + "      sustain = 0;\n"
                 + "      for(i=0;i<%poly%;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(MIDI_NOTE_ON, notePlaying[i], 0);\n"
+                + "          getVoices()[i].MidiInHandler(MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n"
                 + "  }\n"
-                + "} else if ((status & 0xF0) == MIDI_PITCH_BEND) {\n"
+                + "} else if (msg == MIDI_PITCH_BEND) {\n"
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++){\n"
-                + "    if (voiceChannel[i] == (status & 0x0F)){\n"
-                + "      getVoices()[i].MidiInHandler(MIDI_PITCH_BEND, data1, data2);\n"
+                + "    if (voiceChannel[i] == channel) {\n"
+                + "      getVoices()[i].MidiInHandler(MIDI_PITCH_BEND + %midichannel%, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {"
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++) {\n"
-                + "    if (voiceChannel[i] == (status & 0x0F)){\n"
-                + "         getVoices()[i].MidiInHandler(status&0xF0, data1, data2);\n"
+                + "    if (voiceChannel[i] == channel) {\n"
+                + "         getVoices()[i].MidiInHandler(msg + %midichannel%, data1, data2);\n"
+                + "    }\n"
+                + "  }\n"
+                + "}\n";
+        return o;
+    }
+    
+    // Poly Expression supports the Midi Polyphonic Expression (MPE) Spec
+    // Can be used with (or without) the MPE objects
+    // the midi channel of the patch is the 'main/global channel'
+    AxoObject GenerateAxoObjPolyExpression() {
+        AxoObject o = GenerateAxoObjPoly();
+        o.sLocalData += 
+                  "int8_t voiceChannel[%poly%];\n";
+        o.sInitCode  += 
+                  "int vc;\n"
+		+ "for (vc=0;vc<%poly%;vc++) {\n"
+                +  "   voiceChannel[vc]=0xFF;\n"
+                +  "}\n";
+        o.sMidiCode =
+                  "int msg = (status & 0xF0);\n"
+                + "int channel = (status & 0x0F);\n"
+                + "if ((msg == MIDI_NOTE_ON) && (data2)) {\n"
+                + "  if (channel == %midichannel%) return;\n"
+                + "  int min = 1<<30;\n"
+                + "  int mini = 0;\n"
+                + "  int i;\n"
+                + "  for(i=0;i<%poly%;i++){\n"
+                + "    if (voicePriority[i] < min){\n"
+                + "      min = voicePriority[i];\n"
+                + "      mini = i;\n"
+                + "    }\n"
+                + "  }\n"
+                + "  voicePriority[mini] = 100000 + priority++;\n"
+                + "  notePlaying[mini] = data1;\n"
+                + "  pressed[mini] = 1;\n"
+                + "  voiceChannel[mini] = status & 0x0F;\n"
+                + "  getVoices()[mini].MidiInHandler(status & 0xF0, data1, data2);\n"
+                + "} else if (((msg == MIDI_NOTE_ON) && (!data2))||\n"
+                + "            (msg == MIDI_NOTE_OFF)) {\n"
+                + "  if (channel == %midichannel%) return;\n"
+                + "  int i;\n"
+                + "  for(i=0;i<%poly%;i++){\n"
+                + "    if (notePlaying[i] == data1 && voiceChannel[i] == channel){\n"
+                + "      voicePriority[i] = priority++;\n"
+                + "      voiceChannel[i] = 0xFF;\n"
+                + "      pressed[i] = 0;\n"
+                + "      if (!sustain)\n"
+                + "         getVoices()[i].MidiInHandler(msg + %midichannel%, data1, data2);\n"
+                + "      }\n"
+                + "  }\n"
+                + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
+                + "  int i;\n"
+                + "  for(i=0;i<%poly%;i++) {\n"
+                + "    if (voiceChannel[i] == channel || channel == %midichannel%) {\n"
+                + "      getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, data1, data2);\n"
+                + "    }\n"
+                + "  }\n"
+                + "  if (data1 == 123) {\n"
+                + "    for(i=0;i<%poly%;i++){\n"
+                + "      if (pressed[i] > 0) {\n"
+                + "          getVoices()[i].MidiInHandler(MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
+                + "      }\n"
+                + "    }\n"
+                + "  } else if (data1 == 64) {\n"
+                + "    if (data2>0) {\n"
+                + "      sustain = 1;\n"
+                + "    } else if (sustain == 1) {\n"
+                + "      sustain = 0;\n"
+                + "      for(i=0;i<%poly%;i++){\n"
+                + "        if (pressed[i] == 0) {\n"
+                + "          getVoices()[i].MidiInHandler(MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
+                + "        }\n"
+                + "      }\n"
+                + "    }\n"
+                + "  }\n"
+                + "} else if (msg == MIDI_PITCH_BEND) {\n"
+                + "  int i;\n"
+                + "  for(i=0;i<%poly%;i++) {\n"
+                + "    if (voiceChannel[i] == channel || channel == %midichannel%) {\n"
+                + "      getVoices()[i].MidiInHandler(MIDI_PITCH_BEND + %midichannel%, data1, data2);\n"
+                + "    }\n"
+                + "  }\n"
+                + "} else {"
+                + "  int i;\n"
+                + "  for(i=0;i<%poly%;i++) {\n"
+                + "    if (voiceChannel[i] == channel || channel == %midichannel%) {\n"
+                + "         getVoices()[i].MidiInHandler(msg + %midichannel%, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "}\n";
         return o;
     }
 
+    
     void WriteCode() {
         String c = GenerateCode3();
         //cdlg.SetCode(c);

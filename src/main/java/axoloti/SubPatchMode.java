@@ -23,5 +23,5 @@ package axoloti;
  */
 public enum SubPatchMode {
 
-    no, normal, normalBypass, polyphonic, polychannel
+    no, normal, normalBypass, polyphonic, polychannel, polyexpression
 }

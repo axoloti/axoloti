@@ -72,6 +72,9 @@ public class PatchSettingsFrame extends javax.swing.JFrame {
             case polychannel:
                 jComboBoxMode.setSelectedIndex(4);
                 break;
+            case polyexpression:
+                jComboBoxMode.setSelectedIndex(5);
+                break;
         }
         jCheckBoxHasChannelAttrib.setSelected(settings.GetMidiChannelSelector());
         jCheckBoxSaturate.setSelected(settings.getSaturate());
@@ -124,7 +127,7 @@ public class PatchSettingsFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Subpatch mode");
 
-        jComboBoxMode.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No", "Mono", "Mono with bypass", "Polyphonic", "Polyphonic Multichannel" }));
+        jComboBoxMode.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "No", "Mono", "Mono with bypass", "Polyphonic", "Polyphonic Multichannel", "Polyphonic Expression" }));
         jComboBoxMode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBoxModeActionPerformed(evt);
@@ -315,6 +318,9 @@ public class PatchSettingsFrame extends javax.swing.JFrame {
                 break;
             case 4:
                 settings.subpatchmode = SubPatchMode.polychannel;
+                break;
+            case 5:
+                settings.subpatchmode = SubPatchMode.polyexpression;
                 break;
             default:
                 Logger.getLogger(PatchSettingsFrame.class.getName()).severe("undefined subpatchmode");
