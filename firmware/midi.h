@@ -71,6 +71,7 @@
 #define MIDI_C_SOSTENUTO		0x42 // sostenuto switch
 #define MIDI_C_SOFT_PEDAL		0x43 // soft pedal
 #define MIDI_C_HOLD_2			0x45 // hold pedal 2
+#define MIDI_C_TIMBRE			0x4a // timbre
 #define MIDI_C_GENERAL_5		0x50 // general purpose controller 5
 #define MIDI_C_GENERAL_6		0x51 // general purpose controller 6
 #define MIDI_C_GENERAL_7		0x52 // general purpose controller 7
