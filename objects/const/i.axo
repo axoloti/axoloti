@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="i" sha="72ee72f7e3ae9c767d0592ae6002de57a0354300">
+      <sDescription>constant</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <int32 name="out" description="output" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="value" MinValue="-2147483648" MaxValue="2147483647" DefaultValue="0"/>
+      </attribs>
+      <code.krate><![CDATA[%out%= %value%;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

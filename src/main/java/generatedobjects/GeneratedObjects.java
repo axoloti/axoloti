@@ -35,6 +35,7 @@ public class GeneratedObjects extends gentools {
     static public void WriteAxoObjects() {
 
         Arithmetic.GenerateAll();
+        Constant.GenerateAll();
         Control.GenerateAll();
         Convert.GenerateAll();
         Delay.GenerateAll();
