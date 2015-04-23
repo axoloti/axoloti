@@ -59,6 +59,14 @@ void codecStop(void) {
 #endif
 }
 
+void codec_clearbuffer(void) {
+  int i;
+  for(i=0;i<BUFSIZE*2;i++){
+    buf[i]=0;
+    buf2[i]=0;
+  }
+}
+
 #if (BOARD_STM32F4DISCOVERY)
 #include "codec_CS43L22.c"
 #elif (BOARD_AXOLOTI_V03)

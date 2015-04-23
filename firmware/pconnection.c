@@ -30,6 +30,7 @@
 #include "string.h"
 #include "virtual_control.h"
 #include "flash.h"
+#include "exceptions.h"
 
 /* Virtual serial port over USB.*/
 SerialUSBDriver SDU1;
@@ -196,6 +197,9 @@ void PExTransmit(void) {
 
       if (!patchStatus)
         TransmitDisplayPckt();
+
+      exception_checkandreport();
+
       AckPending = 0;
     }
     TransmitLCDoverUSB();

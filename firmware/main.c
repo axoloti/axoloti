@@ -39,6 +39,7 @@
 #include "axoloti_control.h"
 #include "axoloti_math.h"
 #include "axoloti_board.h"
+#include "exceptions.h"
 
 #if (BOARD_AXOLOTI_V05)
 #include "sdram.c"
@@ -83,6 +84,8 @@ int main(void) {
   halInit();
   chSysInit();
 
+  exception_init();
+
   InitPatch0();
 
   InitPConnection();
@@ -90,7 +93,8 @@ int main(void) {
   InitPWM();
 
   // display SPI CS?
-  palSetPadMode(GPIOC, 1, PAL_MODE_OUTPUT_PUSHPULL); palSetPad(GPIOC, 1);
+  palSetPadMode(GPIOC, 1, PAL_MODE_OUTPUT_PUSHPULL);
+  palSetPad(GPIOC, 1);
 
   chThdSleepMilliseconds(10);
 
@@ -115,35 +119,38 @@ int main(void) {
   //memTest();
 #endif
 
-
 #ifdef ENABLE_USB_HOST
 // SD2 for serial debug output
-  palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7)|PAL_MODE_INPUT);// RX
-  palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL);// TX
-  palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7));// TX
+  palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7) | PAL_MODE_INPUT); // RX
+  palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL); // TX
+  palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7)); // TX
 #if ENABLE_USB_HOST_DEBUG
 // 115200 baud
-  static const SerialConfig sd2Cfg = {115200,
-    0, 0, 0};
-  sdStart(&SD2, &sd2Cfg);
+      static const SerialConfig sd2Cfg = {115200,
+        0, 0, 0};
+      sdStart(&SD2, &sd2Cfg);
 #endif
   MY_USBH_Init();
 #endif
 
+  if (!exception_check()) {
+    // only try booting a patch when no exception is to be reported
+
 #if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
-  if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
-  SDLoadPatch("0:start.bin");
+    if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
+      SDLoadPatch("0:start.bin");
 #endif
 
-  // if no patch booting or running yet
-  // try loading from flash
-  if (patchStatus) {
-    // patch in flash sector 11
-    memcpy((uint8_t *)PATCHMAINLOC, 0x080E0000, 0xE000);
-    if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
-        && (*(uint32_t *)PATCHMAINLOC != 0)) {
-      if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
-        StartPatch();
+    // if no patch booting or running yet
+    // try loading from flash
+    if (patchStatus) {
+      // patch in flash sector 11
+      memcpy((uint8_t *)PATCHMAINLOC, 0x080E0000, 0xE000);
+      if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
+          && (*(uint32_t *)PATCHMAINLOC != 0)) {
+        if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
+          StartPatch();
+      }
     }
   }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -16,22 +16,12 @@
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __CODEC_H
-#define __CODEC_H
-#include <stdint.h>
-#include "axoloti_defines.h"
+#ifndef __EXCEPTIONS_H
+#define __EXCEPTIONS_H
 
-// double buffers for DMA, interleaved stereo
-extern int32_t buf[BUFSIZE * 2]; // *2 for stereo
-extern int32_t buf2[BUFSIZE * 2];
-extern int32_t rbuf[BUFSIZE * 2];
-extern int32_t rbuf2[BUFSIZE * 2];
+void exception_init(void);
+int exception_check(void);
+void exception_clear(void);
+void exception_checkandreport(void);
 
-extern void codec_init(void);
-extern void codecStop(void);
-
-extern void computebufI(int32_t *inp, int32_t *outp);
-
-void codec_clearbuffer(void);
-
-#endif /* __CODEC_H */
+#endif

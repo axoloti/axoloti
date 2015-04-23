@@ -156,7 +156,8 @@ CSRC = $(PORTSRC) \
        STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
        STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_hcd.c \
        usbh_midi_core.c \
-       usbh_conf.c  
+       usbh_conf.c \
+       exceptions.c 
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
