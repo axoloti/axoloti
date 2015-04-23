@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -445,18 +445,21 @@ public class PatchGUI extends Patch {
                 if (n.source != null) {
                     ArrayList<OutletInstance> source2 = new ArrayList<OutletInstance>();
                     for (OutletInstance o : n.source) {
-                        String r[] = o.name.split(" ");
-                        if (r.length == 2) {
-                            String on2 = dict.get(r[0]);
+                        //String r[] = o.name.split(" ");
+                        int sepIndex = o.name.lastIndexOf(' ');
+                        String objname = o.name.substring(0, sepIndex);
+                        String outletname = o.name.substring(sepIndex + 1);
+                        if ((objname.length() > 1) && (outletname.length() > 1)) {
+                            String on2 = dict.get(objname);
                             if (on2 != null) {
 //                                o.name = on2 + " " + r[1];
                                 OutletInstance i = new OutletInstance();
-                                i.name = on2 + " " + r[1];
+                                i.name = on2 + " " + outletname;
                                 source2.add(i);
                             } else if (restoreConnectionsToExternalOutlets) {
-                                AxoObjectInstanceAbstract obj = GetObjectInstance(r[0]);
+                                AxoObjectInstanceAbstract obj = GetObjectInstance(objname);
                                 if ((obj != null) && (connectedOutlet == null)) {
-                                    OutletInstance oi = obj.GetOutletInstance(r[1]);
+                                    OutletInstance oi = obj.GetOutletInstance(outletname);
                                     if (oi != null) {
                                         connectedOutlet = oi;
                                     }
@@ -469,12 +472,14 @@ public class PatchGUI extends Patch {
                 if (n.dest != null) {
                     ArrayList<InletInstance> dest2 = new ArrayList<InletInstance>();
                     for (InletInstance o : n.dest) {
-                        String r[] = o.name.split(" ");
-                        if (r.length == 2) {
-                            String on2 = dict.get(r[0]);
+                        int sepIndex = o.name.lastIndexOf(' ');
+                        String objname = o.name.substring(0, sepIndex);
+                        String inletname = o.name.substring(sepIndex + 1);
+                        if ((objname.length() > 1) && (inletname.length() > 1)) {
+                            String on2 = dict.get(objname);
                             if (on2 != null) {
                                 InletInstance i = new InletInstance();
-                                i.name = on2 + " " + r[1];
+                                i.name = on2 + " " + inletname;
                                 dest2.add(i);
                             } else {/*
                                  AxoObjectInstanceAbstract obj = GetObjectInstance(r[0]);

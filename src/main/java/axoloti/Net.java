@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -71,14 +71,17 @@ public class Net extends JPanel {
         // InletInstances and OutletInstances actually already exist, need to replace dummies with the real ones
         ArrayList<OutletInstance> source2 = new ArrayList<OutletInstance>();
         for (OutletInstance i : source) {
-            String p[] = i.name.split(" ");
-            AxoObjectInstanceAbstract o = patch.GetObjectInstance(p[0]);
+            //String p[] = i.name.split(" ");
+            int sepIndex = i.name.lastIndexOf(' ');
+            String objname = i.name.substring(0, sepIndex);
+            String outletname = i.name.substring(sepIndex + 1);
+            AxoObjectInstanceAbstract o = patch.GetObjectInstance(objname);
             if (o == null) {
                 Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net source obj :" + i.name);
                 patch.nets.remove(this);
                 return;
             }
-            OutletInstance r = o.GetOutletInstance(p[1]);
+            OutletInstance r = o.GetOutletInstance(outletname);
             if (r == null) {
                 Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net source outlet :" + i.name);
                 patch.nets.remove(this);
@@ -88,14 +91,16 @@ public class Net extends JPanel {
         }
         ArrayList<InletInstance> dest2 = new ArrayList<InletInstance>();
         for (InletInstance i : dest) {
-            String p[] = i.name.split(" ");
-            AxoObjectInstanceAbstract o = patch.GetObjectInstance(p[0]);
+            int sepIndex = i.name.lastIndexOf(' ');
+            String objname = i.name.substring(0, sepIndex);
+            String inletname = i.name.substring(sepIndex + 1);
+            AxoObjectInstanceAbstract o = patch.GetObjectInstance(objname);
             if (o == null) {
                 Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net dest obj :" + i.name);
                 patch.nets.remove(this);
                 return;
             }
-            InletInstance r = o.GetInletInstance(p[1]);
+            InletInstance r = o.GetInletInstance(inletname);
             if (r == null) {
                 Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net dest inlet :" + i.name);
                 patch.nets.remove(this);
