@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -98,6 +98,7 @@ void midi_init(void);
 void MidiInByteHandler(uint8_t data);
 void MidiInMsgHandler(uint8_t b0, uint8_t b1, uint8_t b2);
 void MidiSend1(uint8_t b0);
+void MidiSend2(uint8_t b0, uint8_t b1);
 void MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2);
 int MidiGetOutputBufferPending(void);
 

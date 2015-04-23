@@ -105,10 +105,19 @@ void MidiSend1(uint8_t b0) {
   sdPut(&SDMIDI, b0);
 }
 
+void MidiSend2(uint8_t b0, uint8_t b1) {
+  unsigned char tx[2];
+  tx[0] = b0;
+  tx[1] = b1;
+  sdWrite(&SDMIDI, tx, 2);
+}
+
 void MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2) {
-  MidiSend1(b0);
-  MidiSend1(b1);
-  MidiSend1(b2);
+  unsigned char tx[3];
+  tx[0] = b0;
+  tx[1] = b1;
+  tx[2] = b2;
+  sdWrite(&SDMIDI, tx, 3);
 }
 
 int MidiGetOutputBufferPending(void) {
@@ -122,7 +131,7 @@ static const SerialConfig sdMidiCfg = {31250, // baud
 static WORKING_AREA(waThreadMidi, 256) __attribute__ ((section (".ccmramend")));
 
 __attribute__((noreturn))
- static msg_t ThreadMidi(void *arg) {
+  static msg_t ThreadMidi(void *arg) {
   (void)arg;
 #if CH_USE_REGISTRY
   chRegSetThreadName("midi");
@@ -141,9 +150,9 @@ void midi_init(void) {
    */
 #ifdef BOARD_AXOLOTI_V05
   // RX
-  palSetPadMode(GPIOG, 9, PAL_MODE_ALTERNATE(8)|PAL_MODE_INPUT_PULLUP);
+  palSetPadMode(GPIOG, 9, PAL_MODE_ALTERNATE(8) | PAL_MODE_INPUT_PULLUP);
   // TX
-  palSetPadMode(GPIOG, 14, PAL_MODE_ALTERNATE(8)|PAL_STM32_OTYPE_OPENDRAIN);
+  palSetPadMode(GPIOG, 14, PAL_MODE_ALTERNATE(8) | PAL_STM32_OTYPE_OPENDRAIN);
 #else
   // RX
   palSetPadMode(GPIOB, 7, PAL_MODE_ALTERNATE(7)|PAL_MODE_INPUT_PULLUP);
