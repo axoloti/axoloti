@@ -84,11 +84,16 @@ void InitPWM(void) {
 #define ADC_GRP1_BUF_DEPTH      1
 
 void adc_init(void) {
+  adc_configpads();
+  adcStart(&ADCD1, NULL);
+}
+
+void adc_configpads(void) {
 #if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
-  palSetPadMode(GPIOA, 0, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOA, 1, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOA, 2, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOA, 3, PAL_MODE_INPUT_ANALOG);
+//  palSetPadMode(GPIOA, 0, PAL_MODE_INPUT_ANALOG);
+//  palSetPadMode(GPIOA, 1, PAL_MODE_INPUT_ANALOG);
+//  palSetPadMode(GPIOA, 2, PAL_MODE_INPUT_ANALOG);
+//  palSetPadMode(GPIOA, 3, PAL_MODE_INPUT_ANALOG);
 
   palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_ANALOG);
   palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_ANALOG);
@@ -104,7 +109,6 @@ void adc_init(void) {
   palSetPadMode(GPIOC, 3, PAL_MODE_INPUT_ANALOG);
   palSetPadMode(GPIOC, 4, PAL_MODE_INPUT_ANALOG);
   palSetPadMode(GPIOC, 5, PAL_MODE_INPUT_ANALOG);
-  adcStart(&ADCD1, NULL);
 #elif (BOARD_STM32F4DISCOVERY)
 
   palSetPadMode(GPIOA, 0, PAL_MODE_INPUT_ANALOG);
@@ -125,7 +129,6 @@ void adc_init(void) {
 #else
 #error "ADC: No board defined?"
 #endif
-
 }
 
 /*

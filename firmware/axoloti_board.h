@@ -30,6 +30,7 @@ extern Mutex Mutex_DMAStream_1_7;
 
 void axoloti_board_init(void);
 void adc_init(void);
+void adc_configpads(void);
 void adc_convert(void);
 
 

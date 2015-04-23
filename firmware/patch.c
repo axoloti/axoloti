@@ -113,7 +113,7 @@ void StartPatch(void) {
   KVP_ClearObjects();
   sdAttemptMountIfUnmounted();
   // reinit pin configuration for adc
-  adc_init();
+  adc_configpads();
   patchMeta.fptr_dsp_process = 0;
   patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
   (patchMeta.fptr_patch_init)(GetFirmwareID());
@@ -178,4 +178,3 @@ void LoadPatch(char *name) {
   strcpy(loadFName, name);
   chEvtSignal(pThreadLoader, (eventmask_t)1);
 }
-
