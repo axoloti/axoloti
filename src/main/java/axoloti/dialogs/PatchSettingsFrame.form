@@ -171,12 +171,13 @@
     <Component class="javax.swing.JComboBox" name="jComboBoxMode">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="5">
+          <StringArray count="6">
             <StringItem index="0" value="No"/>
             <StringItem index="1" value="Mono"/>
             <StringItem index="2" value="Mono with bypass"/>
             <StringItem index="3" value="Polyphonic"/>
             <StringItem index="4" value="Polyphonic Multichannel"/>
+            <StringItem index="5" value="Polyphonic Expression"/>
           </StringArray>
         </Property>
       </Properties>
