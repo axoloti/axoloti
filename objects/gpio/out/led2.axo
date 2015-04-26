@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="led1" sha="3e0eed650a7f86f5b92b21aa73314e94fd342621">
+   <obj.normal id="led2" sha="ae6e0159954218651f41b73417537f0817558d23">
       <sDescription>controls the LED on the board</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -10,7 +10,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.init><![CDATA[   palSetPadMode(LED1_PORT,LED1_PIN,PAL_MODE_OUTPUT_PUSHPULL);]]></code.init>
-      <code.krate><![CDATA[   palWritePad(LED1_PORT,LED1_PIN,(%in%>0));]]></code.krate>
+      <code.init><![CDATA[   palSetPadMode(LED2_PORT,LED2_PIN,PAL_MODE_OUTPUT_PUSHPULL);]]></code.init>
+      <code.krate><![CDATA[   palWritePad(LED2_PORT,LED2_PIN,(%in%>0));]]></code.krate>
    </obj.normal>
 </objdefs>

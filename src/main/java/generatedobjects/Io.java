@@ -43,6 +43,7 @@ public class Io extends gentools {
         catName = "gpio.out";
         WriteAxoObject(catName, CreateDigitalWrite());
         WriteAxoObject(catName, CreateLED1());
+        WriteAxoObject(catName, CreateLED2());
 //        WriteAxoObject(cat,CreateADC());
 //        WriteAxoObject(cat,CreateADC2());
 //        WriteAxoObject(cat,CreateButton());
@@ -58,6 +59,8 @@ public class Io extends gentools {
         WriteAxoObject(catName, CreateADCTilde2());
         WriteAxoObject(catName, CreateADCTilde());
         WriteAxoObject(catName, CreateADCConfig());
+        WriteAxoObject(catName, CreateADCConfigL());
+        WriteAxoObject(catName, CreateADCConfigR());
         WriteAxoObject(catName, CreateADCConfigMic());
 
         catName = "audio";
@@ -223,12 +226,20 @@ public class Io extends gentools {
 
     static AxoObject CreateLED1() {
         AxoObject o = new AxoObject("led1", "controls the LED on the board");
-        o.inlets.add(new InletBool32("in", "positive = on"));
-        o.sInitCode = "   palSetPadMode(GPIOA,8,PAL_MODE_OUTPUT_PUSHPULL);";
-        o.sKRateCode = "   palWritePad(GPIOA,8,(%in%>0));";
+        o.inlets.add(new InletBool32("in", "true = on"));
+        o.sInitCode = "   palSetPadMode(LED1_PORT,LED1_PIN,PAL_MODE_OUTPUT_PUSHPULL);";
+        o.sKRateCode = "   palWritePad(LED1_PORT,LED1_PIN,(%in%>0));";
         return o;
     }
 
+    static AxoObject CreateLED2() {
+        AxoObject o = new AxoObject("led2", "controls the LED on the board");
+        o.inlets.add(new InletBool32("in", "true = on"));
+        o.sInitCode = "   palSetPadMode(LED2_PORT,LED2_PIN,PAL_MODE_OUTPUT_PUSHPULL);";
+        o.sKRateCode = "   palWritePad(LED2_PORT,LED2_PIN,(%in%>0));";
+        return o;
+    }    
+    
     static AxoObject CreatePWMOut_t3() {
         AxoObject o = new AxoObject("pwm t3", "pwm output timer 3");
         o.inlets.add(new InletFrac32("pa6", "pwm ratio"));
@@ -378,7 +389,7 @@ public class Io extends gentools {
     }
 
     static AxoObject CreateADCConfig() {
-        AxoObject o = new AxoObject("inconfig", "Audio input configuration)");
+        AxoObject o = new AxoObject("inconfig", "Audio input configuration");
         String ADCGainM[] = {
             "-12dB",
             "-9dB",
@@ -427,6 +438,110 @@ public class Io extends gentools {
         return o;
     }
 
+
+    static AxoObject CreateADCConfigL() {
+        AxoObject o = new AxoObject("inconfig l", "Audio input configuration, left channel only");
+        String ADCGainM[] = {
+            "-12dB",
+            "-9dB",
+            "-6dB",
+            "-3dB",
+            "0dB",
+            "3dB",
+            "6dB",
+            "9dB",
+            "12dB",
+            "15dB",
+            "18dB",
+            "21dB",
+            "24dB",
+            "27dB",
+            "30dB",
+            "33dB"
+        };
+        String ADCGainC[] = {
+            "0",
+            "4",
+            "8",
+            "12",
+            "16",
+            "20",
+            "24",
+            "28",
+            "32",
+            "36",
+            "40",
+            "44",
+            "48",
+            "52",
+            "56",
+            "60"
+        };
+        o.attributes.add(new AxoAttributeComboBox("gain", ADCGainM, ADCGainC));
+        String ADCBoostM[] = {"Mute", "0dB", "20dB"};
+        String ADCBoostC[] = {"0", "1", "2"};
+        o.attributes.add(new AxoAttributeComboBox("boost", ADCBoostM, ADCBoostC));
+
+        o.sInitCode = "ADAU1961_WriteRegister(0x400E,(%gain%<<2)+3);\n"
+                + "//ADAU1961_WriteRegister(0x400F,(%gain%<<2)+3);\n"
+                + "ADAU1961_WriteRegister(0x400B,(%boost%<<3)+0);\n"
+                + "//ADAU1961_WriteRegister(0x400D,(%boost%<<3)+0);\n";
+        return o;
+    }    
+    
+
+
+    static AxoObject CreateADCConfigR() {
+        AxoObject o = new AxoObject("inconfig r", "Audio input configuration, right channel only");
+        String ADCGainM[] = {
+            "-12dB",
+            "-9dB",
+            "-6dB",
+            "-3dB",
+            "0dB",
+            "3dB",
+            "6dB",
+            "9dB",
+            "12dB",
+            "15dB",
+            "18dB",
+            "21dB",
+            "24dB",
+            "27dB",
+            "30dB",
+            "33dB"
+        };
+        String ADCGainC[] = {
+            "0",
+            "4",
+            "8",
+            "12",
+            "16",
+            "20",
+            "24",
+            "28",
+            "32",
+            "36",
+            "40",
+            "44",
+            "48",
+            "52",
+            "56",
+            "60"
+        };
+        o.attributes.add(new AxoAttributeComboBox("gain", ADCGainM, ADCGainC));
+        String ADCBoostM[] = {"Mute", "0dB", "20dB"};
+        String ADCBoostC[] = {"0", "1", "2"};
+        o.attributes.add(new AxoAttributeComboBox("boost", ADCBoostM, ADCBoostC));
+
+        o.sInitCode = "//ADAU1961_WriteRegister(0x400E,(%gain%<<2)+3);\n"
+                + "ADAU1961_WriteRegister(0x400F,(%gain%<<2)+3);\n"
+                + "//ADAU1961_WriteRegister(0x400B,(%boost%<<3)+0);\n"
+                + "ADAU1961_WriteRegister(0x400D,(%boost%<<3)+0);\n";
+        return o;
+    }    
+        
+    
     static AxoObject CreateADCConfigMic() {
         AxoObject o = new AxoObject("inconfig mic", "Audio input configuration for electret microphone)");
         String BiasM[] = {
@@ -577,7 +692,7 @@ public class Io extends gentools {
         o.sInitCode = "// setup the pins\n"
                 + "palSetPadMode(GPIOA, 4, PAL_MODE_OUTPUT_PUSHPULL);// NSS\n"
                 + "palSetPadMode(GPIOA, 5, PAL_MODE_OUTPUT_PUSHPULL);// SCK\n"
-                + "palSetPadMode(GPIOA, 6, PAL_MODE_OUTPUT_PUSHPULL);// MOSI\n"
+                + "palSetPadMode(GPIOA, 7, PAL_MODE_OUTPUT_PUSHPULL);// MOSI\n"
                 + "//palSetPadMode(GPIOA, 4, PAL_MODE_ALTERNATE(5));// NSS\n"
                 + "palSetPadMode(GPIOA, 5, PAL_MODE_ALTERNATE(5));// SCK\n"
                 + "palSetPadMode(GPIOA, 6, PAL_MODE_ALTERNATE(5));// MISO\n"

@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="inconfig" sha="c5ee5e230152b248edde544704970b051688aa4f">
-      <sDescription>Audio input configuration</sDescription>
+   <obj.normal id="inconfig l" sha="e3d51b641809654307ccba3d869f4ac7b6b68f4a">
+      <sDescription>Audio input configuration, left channel only</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets/>
@@ -63,9 +63,9 @@
          <depend>ADAU1361</depend>
       </depends>
       <code.init><![CDATA[ADAU1961_WriteRegister(0x400E,(%gain%<<2)+3);
-ADAU1961_WriteRegister(0x400F,(%gain%<<2)+3);
+//ADAU1961_WriteRegister(0x400F,(%gain%<<2)+3);
 ADAU1961_WriteRegister(0x400B,(%boost%<<3)+0);
-ADAU1961_WriteRegister(0x400D,(%boost%<<3)+0);
+//ADAU1961_WriteRegister(0x400D,(%boost%<<3)+0);
 ]]></code.init>
    </obj.normal>
 </objdefs>
