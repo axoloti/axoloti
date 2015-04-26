@@ -84,7 +84,7 @@ void exception_init(void) {
       exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
       exceptiondump->type = watchdog_hard;
     }
-    else if (RCC->CSR & RCC_CSR_BORRSTF) {
+    else if ((RCC->CSR & RCC_CSR_BORRSTF) && !(RCC->CSR & RCC_CSR_PORRSTF)) {
       exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
       exceptiondump->type = brownout;
     } else {
@@ -141,6 +141,9 @@ void exception_checkandreport(void) {
       chprintf((BaseSequentialStream *)&SDU1, "i=0x%x%c", exceptiondump->i);
       chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
 
+    }
+    else if (exceptiondump->type == brownout) {
+      TransmitTextMessage("exception: brownout");
     }
     else {
       TransmitTextMessage("unknown exception?");
