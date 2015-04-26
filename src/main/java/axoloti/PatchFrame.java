@@ -225,6 +225,7 @@ public class PatchFrame extends javax.swing.JFrame {
         jMenuFile = new javax.swing.JMenu();
         jMenuNew = new javax.swing.JMenuItem();
         jMenuOpen = new javax.swing.JMenuItem();
+        jMenuClose = new javax.swing.JMenuItem();
         jMenuSave = new javax.swing.JMenuItem();
         jMenuSaveAs = new javax.swing.JMenuItem();
         jMenuSaveClip = new javax.swing.JMenuItem();
@@ -336,6 +337,16 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
     }
     });
     jMenuFile.add(jMenuOpen);
+
+    jMenuClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,
+        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+jMenuClose.setText("Close");
+jMenuClose.addActionListener(new java.awt.event.ActionListener() {
+    public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuCloseActionPerformed(evt);
+    }
+    });
+    jMenuFile.add(jMenuClose);
 
     jMenuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -833,6 +844,10 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         patch.ShowClassSelector(new Point(20, 20), null);
     }//GEN-LAST:event_jMenuItemAddObjActionPerformed
 
+    private void jMenuCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCloseActionPerformed
+        AskClose();
+    }//GEN-LAST:event_jMenuCloseActionPerformed
+
     /* write to sdcard...
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -846,6 +861,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuItem jMenuAbout;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuClose;
     private javax.swing.JMenuItem jMenuCompileCode;
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
