@@ -17,6 +17,8 @@
  */
 package qcmds;
 
+import axoloti.MainFrame;
+
 /**
  *
  * @author Johannes Taelman
@@ -33,8 +35,7 @@ public class QCmdShowDisconnect implements QCmdGUITask {
         return "Done show connect";
     }
 
-    @Override
     public void DoGUI(QCmdProcessor processor) {
-        processor.mainframe.ShowDisconnect();
+        MainFrame.mainframe.ShowDisconnect();
     }
 }

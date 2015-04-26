@@ -37,6 +37,7 @@ import jssc.SerialPortException;
 import qcmds.QCmd;
 import qcmds.QCmdSerialTask;
 import qcmds.QCmdSerialTaskNull;
+import qcmds.QCmdShowDisconnect;
 
 /**
  *
@@ -393,6 +394,8 @@ public class SerialConnection {
                 }
             }
             Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO, "transmitter: thread stopped");
+            MainFrame.mainframe.qcmdprocessor.Abort();
+            MainFrame.mainframe.qcmdprocessor.AppendToQueue(new QCmdShowDisconnect());
         }
     }
     int CpuId0 = 0;

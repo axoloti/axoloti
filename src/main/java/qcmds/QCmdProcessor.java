@@ -94,6 +94,11 @@ public class QCmdProcessor implements Runnable {
         return queue.add(cmd);
     }
 
+    public void Abort() {
+        queue.clear();
+        queueResponse.clear();
+    }
+    
     public void Panic() {
         queue.clear();
 //        shellprocessor.Panic();
@@ -140,7 +145,7 @@ public class QCmdProcessor implements Runnable {
 
     public void WaitQueueFinished() {
         while (true) {
-            if (queue.isEmpty()) {
+            if (queue.isEmpty() && queueResponse.isEmpty()) {
                 break;
             }
             try {
