@@ -106,45 +106,55 @@ public class Io extends gentools {
         return o;
     }
 
+    static String GpioPinsM[] = {
+        "PA0",
+        "PA1",
+        "PA2",
+        "PA3",
+        "PA4",
+        "PA5",
+        "PA6",
+        "PA7",
+        "PB0",
+        "PB1",
+        "PB6",
+        "PB7",
+        "PB8",
+        "PB9",
+        "PC0",
+        "PC1",
+        "PC2",
+        "PC3",
+        "PC4",
+        "PC5"
+    };
+
+    static String GpioPinsC[] = {
+        "GPIOA,0",
+        "GPIOA,1",
+        "GPIOA,2",
+        "GPIOA,3",
+        "GPIOA,4",
+        "GPIOA,5",
+        "GPIOA,6",
+        "GPIOA,7",
+        "GPIOB,0",
+        "GPIOB,1",
+        "GPIOB,6",
+        "GPIOB,7",
+        "GPIOB,8",
+        "GPIOB,9",
+        "GPIOC,0",
+        "GPIOC,1",
+        "GPIOC,2",
+        "GPIOC,3",
+        "GPIOC,4",
+        "GPIOC,5",};
+
     static AxoObject CreateDigitalRead() {
         AxoObject o = new AxoObject("digital", "external digital input");
         o.outlets.add(new OutletBool32("out", "external digital input"));
         o.sDescription = "Reads a digital input pin. 3.3V logic maximum!";
-        String GpioPinsM[] = {
-            "PA0",
-            "PA1",
-            "PA2",
-            "PA3",
-            "PA4",
-            "PA5",
-            "PA6",
-            "PA7",
-            "PB0",
-            "PB1",
-            "PC0",
-            "PC1",
-            "PC2",
-            "PC3",
-            "PC4",
-            "PC5"
-        };
-        String GpioPinsC[] = {
-            "GPIOA,0",
-            "GPIOA,1",
-            "GPIOA,2",
-            "GPIOA,3",
-            "GPIOA,4",
-            "GPIOA,5",
-            "GPIOA,6",
-            "GPIOA,7",
-            "GPIOB,0",
-            "GPIOB,1",
-            "GPIOC,0",
-            "GPIOC,1",
-            "GPIOC,2",
-            "GPIOC,3",
-            "GPIOC,4",
-            "GPIOC,5",};
         String GpioIModM[] = {
             "hi-z",
             "pullup",
@@ -174,41 +184,6 @@ public class Io extends gentools {
     static AxoObject CreateDigitalWrite() {
         AxoObject o = new AxoObject("digital", "external digital output pin control");
         o.inlets.add(new InletBool32("in", "positive = true"));
-        String GpioPinsM[] = {
-            "PA0",
-            "PA1",
-            "PA2",
-            "PA3",
-            "PA4",
-            "PA5",
-            "PA6",
-            "PA7",
-            "PB0",
-            "PB1",
-            "PC0",
-            "PC1",
-            "PC2",
-            "PC3",
-            "PC4",
-            "PC5"
-        };
-        String GpioPinsC[] = {
-            "GPIOA,0",
-            "GPIOA,1",
-            "GPIOA,2",
-            "GPIOA,3",
-            "GPIOA,4",
-            "GPIOA,5",
-            "GPIOA,6",
-            "GPIOA,7",
-            "GPIOB,0",
-            "GPIOB,1",
-            "GPIOC,0",
-            "GPIOC,1",
-            "GPIOC,2",
-            "GPIOC,3",
-            "GPIOC,4",
-            "GPIOC,5",};
         String GpioOModM[] = {
             "Push pull",
             "Open drain"
@@ -238,8 +213,8 @@ public class Io extends gentools {
         o.sInitCode = "   palSetPadMode(LED2_PORT,LED2_PIN,PAL_MODE_OUTPUT_PUSHPULL);";
         o.sKRateCode = "   palWritePad(LED2_PORT,LED2_PIN,(%in%>0));";
         return o;
-    }    
-    
+    }
+
     static AxoObject CreatePWMOut_t3() {
         AxoObject o = new AxoObject("pwm t3", "pwm output timer 3");
         o.inlets.add(new InletFrac32("pa6", "pwm ratio"));
@@ -438,7 +413,6 @@ public class Io extends gentools {
         return o;
     }
 
-
     static AxoObject CreateADCConfigL() {
         AxoObject o = new AxoObject("inconfig l", "Audio input configuration, left channel only");
         String ADCGainM[] = {
@@ -487,9 +461,7 @@ public class Io extends gentools {
                 + "ADAU1961_WriteRegister(0x400B,(%boost%<<3)+0);\n"
                 + "//ADAU1961_WriteRegister(0x400D,(%boost%<<3)+0);\n";
         return o;
-    }    
-    
-
+    }
 
     static AxoObject CreateADCConfigR() {
         AxoObject o = new AxoObject("inconfig r", "Audio input configuration, right channel only");
@@ -539,9 +511,8 @@ public class Io extends gentools {
                 + "//ADAU1961_WriteRegister(0x400B,(%boost%<<3)+0);\n"
                 + "ADAU1961_WriteRegister(0x400D,(%boost%<<3)+0);\n";
         return o;
-    }    
-        
-    
+    }
+
     static AxoObject CreateADCConfigMic() {
         AxoObject o = new AxoObject("inconfig mic", "Audio input configuration for electret microphone)");
         String BiasM[] = {

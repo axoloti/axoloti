@@ -22,6 +22,10 @@
                <string>PA7</string>
                <string>PB0</string>
                <string>PB1</string>
+               <string>PB6</string>
+               <string>PB7</string>
+               <string>PB8</string>
+               <string>PB9</string>
                <string>PC0</string>
                <string>PC1</string>
                <string>PC2</string>
@@ -40,6 +44,10 @@
                <string>GPIOA,7</string>
                <string>GPIOB,0</string>
                <string>GPIOB,1</string>
+               <string>GPIOB,6</string>
+               <string>GPIOB,7</string>
+               <string>GPIOB,8</string>
+               <string>GPIOB,9</string>
                <string>GPIOC,0</string>
                <string>GPIOC,1</string>
                <string>GPIOC,2</string>
