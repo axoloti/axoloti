@@ -10,6 +10,7 @@
    </obj>
    <comment type="patch/comment" sha="sha" name="connection will be lost" x="14" y="154"/>
    <comment type="patch/comment" sha="sha" name="if all is well, the board does a full reset, and then you can connect again and get the crash report!" x="14" y="168"/>
+   <comment type="patch/comment" sha="sha" name="this generates a bus fault. " x="29" y="199"/>
    <nets/>
    <settings>
       <subpatchmode>no</subpatchmode>

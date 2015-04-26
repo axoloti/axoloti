@@ -104,6 +104,11 @@ int main(void) {
 
   axoloti_board_init();
   codec_init();
+  if (!palReadPad(SW2_PORT, SW2_PIN)) { // button S2 not pressed
+    watchdog_enable();
+    chThdSleepMilliseconds(1);
+  }
+  start_dsp_thread();
   adc_init();
   axoloti_math_init();
   midi_init();

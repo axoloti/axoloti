@@ -2,7 +2,6 @@ Development Roadmap
 
 In order of priority (high to low)
 * undo in editor
-* watchdog in firmware
 * patch/settings/preset store from axoloti core
 * cable datatype for MIDI function calls
 * librarian for sound-sample tables in flash?

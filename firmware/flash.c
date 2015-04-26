@@ -18,25 +18,34 @@
 #include "ch.h"
 #include "hal.h"
 
-int flash_WaitForLastOperation(void) {
-  while (FLASH ->SR == FLASH_SR_BSY )
-    ;
-  return FLASH ->SR;
+
+__attribute__ ((section (".data"))) int flash_WaitForLastOperation(void) {
+  while (FLASH->SR == FLASH_SR_BSY) {
+    WWDG->CR = WWDG_CR_T;
+  }
+  return FLASH->SR;
+}
+
+__attribute__ ((section (".data"))) void flash_Erase_sector1(int sector) {
+  // assume VDD>2.7V
+  FLASH->CR &= ~FLASH_CR_PSIZE;
+  FLASH->CR |= FLASH_CR_PSIZE_1;
+  FLASH->CR &= ~FLASH_CR_SNB;
+  FLASH->CR |= FLASH_CR_SER | (sector << 3);
+  FLASH->CR |= FLASH_CR_STRT;
+  flash_WaitForLastOperation();
+
+  FLASH->CR &= (~FLASH_CR_SER);
+  FLASH->CR &= ~FLASH_CR_SER;
+  flash_WaitForLastOperation();
 }
 
 int flash_Erase_sector(int sector) {
-// assume VDD>2.7V
-  FLASH ->CR &= ~FLASH_CR_PSIZE;
-  FLASH ->CR |= FLASH_CR_PSIZE_1;
-  FLASH ->CR &= ~FLASH_CR_SNB;
-  FLASH ->CR |= FLASH_CR_SER | (sector << 3);
-  FLASH ->CR |= FLASH_CR_STRT;
-  flash_WaitForLastOperation();
-
-  FLASH ->CR &= (~FLASH_CR_SER );
-  FLASH ->CR &= ~FLASH_CR_SER;
-  flash_WaitForLastOperation();
-
+  // interrupts would cause flash execution, stall
+  // and cause watchdog trigger
+  chSysLock();
+  flash_Erase_sector1(sector);
+  chSysUnlock();
   return 0;
 }
 
@@ -45,18 +54,20 @@ int flash_ProgramWord(uint32_t Address, uint32_t Data) {
 
   flash_WaitForLastOperation();
 
-  /* if the previous operation is completed, proceed to program the new data */FLASH ->CR &=
-      ~FLASH_CR_PSIZE;
-  FLASH ->CR |= FLASH_CR_PSIZE_1;
-  FLASH ->CR |= FLASH_CR_PG;
+  /* if the previous operation is completed, proceed to program the new data */
+  FLASH->CR &= ~FLASH_CR_PSIZE;
+  FLASH->CR |= FLASH_CR_PSIZE_1;
+  FLASH->CR |= FLASH_CR_PG;
 
   *(__IO uint32_t*)Address = Data;
 
   /* Wait for last operation to be completed */
   status = flash_WaitForLastOperation();
 
-  /* if the program operation is completed, disable the PG Bit */FLASH ->CR &=
-      (~FLASH_CR_PG );
+  /* if the program operation is completed, disable the PG Bit */
+  FLASH->CR &= (~FLASH_CR_PG);
+
+  watchdog_feed();
 
   /* Return the Program Status */
   return status;
@@ -64,6 +75,6 @@ int flash_ProgramWord(uint32_t Address, uint32_t Data) {
 
 void flash_unlock(void) {
   // unlock sequence
-  FLASH ->KEYR = 0x45670123;
-  FLASH ->KEYR = 0xCDEF89AB;
+  FLASH->KEYR = 0x45670123;
+  FLASH->KEYR = 0xCDEF89AB;
 }

@@ -61,7 +61,7 @@ static msg_t ThreadDSP(void *arg) {
     static unsigned int tStart;
     CycleTime = RTT2US(hal_lld_get_counter_value() - tStart);
     tStart = hal_lld_get_counter_value();
-
+    watchdog_feed();
     if (!patchStatus) { // running
 #if (BOARD_STM32F4DISCOVERY)||(BOARD_AXOLOTI_V03)
       // swap halfwords...
@@ -122,6 +122,9 @@ void StartPatch(void) {
     return;
   }
   patchStatus = 0;
+}
+
+void start_dsp_thread(void){
   if (!pThreadDSP)
     pThreadDSP = chThdCreateStatic(waThreadDSP, sizeof(waThreadDSP), HIGHPRIO,
                                    ThreadDSP, NULL);
