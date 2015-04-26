@@ -86,8 +86,11 @@ void MidiInPitchBend(uint8_t channel, uint8_t data1, uint8_t data2);
 void PatchMidiInAllNotesOff(uint8_t channel);
 void PatchMidiInResetControllers(uint8_t channel);
 
-//#define PATCHMAINLOC 0x10000000
 #define PATCHMAINLOC 0x20010000
+
+// patch is located in sector 11
+#define PATCHFLASHLOC 0x080E0000
+#define PATCHFLASHSIZE 0xE000
 
 void StartLoadPatchTread(void);
 void LoadPatch(char *name);

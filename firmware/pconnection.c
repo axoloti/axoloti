@@ -356,13 +356,29 @@ void CopyPatchToFlash(void) {
   flash_unlock();
   flash_Erase_sector(11);
   int src_addr = PATCHMAINLOC;
-  int flash_addr = 0x080E0000;
+  int flash_addr = PATCHFLASHLOC;
   int c;
-  for (c = 0; c < 48 * 1024;) {
+  for (c = 0; c < PATCHFLASHSIZE;) {
     flash_ProgramWord(flash_addr, *(int32_t *)src_addr);
     src_addr += 4;
     flash_addr += 4;
     c += 4;
+  }
+  // verify
+  src_addr = PATCHMAINLOC;
+  flash_addr = PATCHFLASHLOC;
+  int err=0;
+  for (c = 0; c < PATCHFLASHSIZE;) {
+    if (*(int32_t *)flash_addr != *(int32_t *)src_addr)
+      err++;
+    src_addr += 4;
+    flash_addr += 4;
+    c += 4;
+  }
+  if (err) {
+    while(1){
+      // flash verify fail
+    }
   }
   AckPending = 1;
 }
