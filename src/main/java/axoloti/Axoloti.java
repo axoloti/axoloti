@@ -47,7 +47,6 @@ public class Axoloti {
                 try {
                     MainFrame frame = new MainFrame();
                     frame.setVisible(true);
-                    AboutFrame.aboutFrame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

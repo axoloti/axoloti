@@ -86,6 +86,7 @@
         <attribute name="Built-By" value="${built_by}"/>
         <attribute name="Created-By" value="${built_by}"/>
         <attribute name="Built-Date" value="${TODAY}"/>
+        <attribute name="SplashScreen-Image" value="resources/splash.png"/>
       </manifest>
 
       <!-- Compiled  class  -->
