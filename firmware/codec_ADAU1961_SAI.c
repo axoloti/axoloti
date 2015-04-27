@@ -478,7 +478,7 @@ void codec_ADAU1961_i2s_init(uint16_t sampleRate) {
 // SAI1_A is slave transmitter
 // SAI1_B is synchronous slave receiver
   SAI1_Block_A->CR1 = SAI_xCR1_DS_0 | SAI_xCR1_DS_1 | SAI_xCR1_DS_2
-      | SAI_xCR1_MODE_1 | SAI_xCR1_DMAEN /*| SAI_xCR1_CKSTR*/;
+      | SAI_xCR1_MODE_1 | SAI_xCR1_DMAEN | SAI_xCR1_CKSTR;
   SAI1_Block_B->CR1 = SAI_xCR1_DS_0 | SAI_xCR1_DS_1 | SAI_xCR1_DS_2
       | SAI_xCR1_SYNCEN_0 | SAI_xCR1_MODE_1 | SAI_xCR1_MODE_0 | SAI_xCR1_DMAEN | SAI_xCR1_CKSTR;
   chThdSleepMilliseconds(1);
