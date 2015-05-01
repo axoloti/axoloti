@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -21,6 +21,7 @@ import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
+import axoloti.inlets.InletFrac32Pos;
 import axoloti.object.AxoObject;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletFrac32;
@@ -217,10 +218,10 @@ public class Io extends gentools {
 
     static AxoObject CreatePWMOut_t3() {
         AxoObject o = new AxoObject("pwm t3", "pwm output timer 3");
-        o.inlets.add(new InletFrac32("pa6", "pwm ratio"));
-        o.inlets.add(new InletFrac32("pa7", "pwm ratio"));
-        o.inlets.add(new InletFrac32("pb0", "pwm ratio"));
-        o.inlets.add(new InletFrac32("pb1", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pa6", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pa7", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pb0", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pb1", "pwm ratio"));
         o.sInitCode = "  palSetPadMode(GPIOA, 6, PAL_MODE_ALTERNATE(2));\n"
                 + "  palSetPadMode(GPIOA, 7, PAL_MODE_ALTERNATE(2));\n"
                 + "  palSetPadMode(GPIOB, 0, PAL_MODE_ALTERNATE(2));\n"
@@ -234,8 +235,8 @@ public class Io extends gentools {
 
     static AxoObject CreatePWMOut_t4() {
         AxoObject o = new AxoObject("pwm t4", "pwm output timer 4");
-        o.inlets.add(new InletFrac32("pb8", "pwm ratio"));
-        o.inlets.add(new InletFrac32("pb9", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pb8", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pb9", "pwm ratio"));
         o.sInitCode = "  palSetPadMode(GPIOB, 8, PAL_MODE_ALTERNATE(2));\n"
                 + "  palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(2));";
         o.sKRateCode = "   pwmEnableChannel(&PWMD4, 2, (pwmcnt_t)((%pb8%>=0)?(4096-(%pb8%>>15)):4096));\n"
@@ -245,10 +246,10 @@ public class Io extends gentools {
 
     static AxoObject CreatePWMOut_t5() {
         AxoObject o = new AxoObject("pwm t5", "pwm output timer 5");
-        o.inlets.add(new InletFrac32("pa0", "pwm ratio"));
-        o.inlets.add(new InletFrac32("pa1", "pwm ratio"));
-        o.inlets.add(new InletFrac32("pa2", "pwm ratio"));
-        o.inlets.add(new InletFrac32("pa3", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pa0", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pa1", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pa2", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pa3", "pwm ratio"));
         o.sInitCode = "  palSetPadMode(GPIOA, 0, PAL_MODE_ALTERNATE(2));\n"
                 + "  palSetPadMode(GPIOA, 1, PAL_MODE_ALTERNATE(2));\n"
                 + "  palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(2));\n"
@@ -262,8 +263,8 @@ public class Io extends gentools {
 
     static AxoObject CreatePWMOut_t8() {
         AxoObject o = new AxoObject("pwm t8", "pwm output timer 8");
-        o.inlets.add(new InletFrac32("pa5", "pwm ratio"));
-        o.inlets.add(new InletFrac32("pc7", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pa5", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pc7", "pwm ratio"));
         o.sInitCode = "  palSetPadMode(GPIOA, 5, PAL_MODE_ALTERNATE(3));\n"
                 + "  palSetPadMode(GPIOC, 7, PAL_MODE_ALTERNATE(3));\n"
                 + "  PWMD8.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;\n";
@@ -274,8 +275,8 @@ public class Io extends gentools {
 
     static AxoObject CreatePWMOut_v2_t4() {
         AxoObject o = new AxoObject("pwm t4 servo", "pwm output timer 4, scaled for servo motors");
-        o.inlets.add(new InletFrac32("pb8", "pwm ratio"));
-        o.inlets.add(new InletFrac32("pb9", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pb8", "pwm ratio"));
+        o.inlets.add(new InletFrac32Pos("pb9", "pwm ratio"));
         o.sInitCode = "  palSetPadMode(GPIOB, 8, PAL_MODE_ALTERNATE(2));\n"
                 + "  palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(2));";
         o.sKRateCode = "   pwmEnableChannel(&PWMD4, 2, (pwmcnt_t)((%pb8%>=0)?(150+(%pb8%>>17)-(%pb8%>>19)):4096));\n"
