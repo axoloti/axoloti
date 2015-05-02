@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -68,12 +68,11 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
 
     @Attribute
     public String name;
-    private Outlet outlet;
+    private final Outlet outlet;
     public AxoObjectInstanceAbstract axoObj;
     OutletInstancePopupMenu popup = new OutletInstancePopupMenu(this);
     JLabel lbl;
     JComponent jack;
-    private boolean highlighted;
     NetDragging drag_net;
 
     @Override
@@ -136,7 +135,7 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
     }
 
     public String dragString() {
-        return "outlet " + axoObj.getInstanceName() + " " + outlet.name;
+        return axoObj.getInstanceName() + " " + outlet.name;
     }
 
     public OutletInstance() {
@@ -213,26 +212,16 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
                         return;
                     }
                     String s = (String) t.getTransferData(DataFlavor.stringFlavor);
-                    String p[] = s.split(" ");
-                    AxoObjectInstanceAbstract ob;
                     OutletInstance ol;
                     InletInstance il;
-                    if ((p.length == 3)
-                            && (p[0].equals("outlet"))
-                            && ((ob = axoObj.patch.GetObjectInstance(p[1])) != null)
-                            && ((ol = ob.GetOutletInstance(p[2])) != null)) {
-                        System.out.println("resolves : " + p[0] + ":" + p[1] + ":" + p[2]);
+                    if ((ol = axoObj.patch.getOutletByReference(s)) != null) {
                         Net n = axoObj.patch.AddConnection(OutletInstance.this, ol);
                         axoObj.patch.PromoteOverloading();
                         if (n != null) {
                             n.setSelected(false);
                             n.repaint();
                         }
-                    } else if ((p.length == 3)
-                            && (p[0].equals("inlet"))
-                            && ((ob = axoObj.patch.GetObjectInstance(p[1])) != null)
-                            && ((il = ob.GetInletInstance(p[2])) != null)) {
-                        System.out.println("resolves : " + p[0] + ":" + p[1] + ":" + p[2]);
+                    } else if ((il = axoObj.patch.getInletByReference(s)) != null) {
                         Net n = axoObj.patch.AddConnection(il, OutletInstance.this);
                         axoObj.patch.PromoteOverloading();
                         if (n != null) {

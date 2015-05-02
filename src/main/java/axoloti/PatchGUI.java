@@ -182,40 +182,41 @@ public class PatchGUI extends Patch {
 
         };
         Layers.setTransferHandler(TH);
-        Layers.setDropTarget(new DropTarget(ObjectLayer, new DropTargetListener() {
-            @Override
-            public void dragEnter(DropTargetDragEvent dtde) {
-            }
+        /*
+         Layers.setDropTarget(new DropTarget(ObjectLayer, new DropTargetListener() {
+         @Override
+         public void dragEnter(DropTargetDragEvent dtde) {
+         }
 
-            @Override
-            public void dragOver(DropTargetDragEvent dtde) {
-                for (Component cmp : SelectionRectLayer.getComponents()) {
-                    if (cmp instanceof NetDragging) {
-                        NetDragging nd = (NetDragging) cmp;
-                        Point ps = SelectionRectLayer.getLocationOnScreen();
-                        Point pl = new Point(dtde.getLocation().x - ps.x, dtde.getLocation().y - ps.y);
-                        nd.SetDragPoint(dtde.getLocation());
-                        SelectionRectLayer.repaint();
-                    }
-                }
-            }
+         @Override
+         public void dragOver(DropTargetDragEvent dtde) {
+         for (Component cmp : SelectionRectLayer.getComponents()) {
+         if (cmp instanceof NetDragging) {
+         NetDragging nd = (NetDragging) cmp;
+         Point ps = SelectionRectLayer.getLocationOnScreen();
+         Point pl = new Point(dtde.getLocation().x - ps.x, dtde.getLocation().y - ps.y);
+         nd.SetDragPoint(dtde.getLocation());
+         SelectionRectLayer.repaint();
+         }
+         }
+         }
 
-            @Override
-            public void dropActionChanged(DropTargetDragEvent dtde) {
+         @Override
+         public void dropActionChanged(DropTargetDragEvent dtde) {
 
-            }
+         }
 
-            @Override
-            public void dragExit(DropTargetEvent dte) {
+         @Override
+         public void dragExit(DropTargetEvent dte) {
 
-            }
+         }
 
-            @Override
-            public void drop(DropTargetDropEvent dtde) {
+         @Override
+         public void drop(DropTargetDropEvent dtde) {
 
-            }
-        }));
-
+         }
+         }));
+         */
         InputMap inputMap = Layers.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X,
                 Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "cut");
@@ -363,28 +364,52 @@ public class PatchGUI extends Patch {
         Layers.setVisible(true);
         Layers.invalidate();
         Layers.repaint();
-        /*
-         DropTarget dt = new DropTarget(){
-         @Override
-         public synchronized void drop(DropTargetDropEvent dtde) {
-         Transferable t = dtde.getTransferable();
-         try {
-         String s = (String)t.getTransferData(DataFlavor.stringFlavor);
-         AxoObjectAbstract obj = MainFrame.axoObjects.GetAxoObject(s);
-         if (obj != null) {                    
-         AddObjectInstance(obj, dtde.getLocation());
-         } else {
-         System.out.println("spilled on patch: " + s);
-         }
-         } catch (UnsupportedFlavorException ex) {
-         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (IOException ex) {
-         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-         }
-         super.drop(dtde);
-         };
-         };
-         Layers.setDropTarget(dt);*/
+
+        DropTarget dt = new DropTarget() {
+
+            @Override
+            public synchronized void dragOver(DropTargetDragEvent dtde) {
+                for (Component cmp : SelectionRectLayer.getComponents()) {
+                    if (cmp instanceof NetDragging) {
+                        NetDragging nd = (NetDragging) cmp;
+                        nd.SetDragPoint(dtde.getLocation());
+                        SelectionRectLayer.repaint();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public synchronized void drop(DropTargetDropEvent dtde) {
+                Transferable t = dtde.getTransferable();
+                try {
+                    String s = (String) t.getTransferData(DataFlavor.stringFlavor);
+                    OutletInstance ol;
+                    InletInstance il;
+                    if ((ol = getOutletByReference(s)) != null) {
+                        disconnect(ol);
+                    } else if ((il = getInletByReference(s)) != null) {
+                        disconnect(il);
+                    }
+                    /*
+                     AxoObjectAbstract obj = MainFrame.axoObjects.GetAxoObject(s);
+                     if (obj != null) {
+                     AddObjectInstance(obj, dtde.getLocation());
+                     } else {
+                     System.out.println("spilled on patch: " + s);
+                     }
+                     */
+                } catch (UnsupportedFlavorException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                super.drop(dtde);
+            }
+        ;
+        };
+        Layers.setDropTarget(dt);
+
         Layers.setPreferredSize(new Dimension(5000, 5000));
         Layers.setSize(Layers.getPreferredSize());
         Layers.setVisible(true);

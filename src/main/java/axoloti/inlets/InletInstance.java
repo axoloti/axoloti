@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -68,12 +68,11 @@ public class InletInstance extends JPanel {
 
     @Attribute
     public String name;
-    private Inlet inlet;
+    private final Inlet inlet;
     public AxoObjectInstanceAbstract axoObj;
     JLabel lbl;
     JComponent jack;
     InletInstancePopupMenu popup = new InletInstancePopupMenu(this);
-    private boolean highlighted;
     NetDragging drag_net;
 
     public String GetCName() {
@@ -93,13 +92,7 @@ public class InletInstance extends JPanel {
                     }
 
                     @Override
-                    public void dragOver(DragSourceDragEvent dsde) {/*
-                         System.out.println("drag");
-                         Point ps = ((PatchGUI) axoObj.getPatch()).SelectionRectLayer.getLocationOnScreen();
-                         Point pl = new Point(dsde.getLocation().x - ps.x, dsde.getLocation().y - ps.y);
-                         drag_net.SetDragPoint(pl);
-                         ((PatchGUI) axoObj.getPatch()).SelectionRectLayer.repaint();*/
-
+                    public void dragOver(DragSourceDragEvent dsde) {
                     }
 
                     @Override
@@ -136,7 +129,7 @@ public class InletInstance extends JPanel {
     }
 
     public String dragString() {
-        return "inlet " + axoObj.getInstanceName() + " " + inlet.name;
+        return axoObj.getInstanceName() + " " + inlet.name;
     }
 
     public InletInstance() {
@@ -193,26 +186,16 @@ public class InletInstance extends JPanel {
                         return;
                     }
                     String s = (String) t.getTransferData(DataFlavor.stringFlavor);
-                    String p[] = s.split(" ");
-                    AxoObjectInstanceAbstract ob;
                     OutletInstance ol;
                     InletInstance il;
-                    if ((p.length == 3)
-                            && (p[0].equals("outlet"))
-                            && ((ob = axoObj.patch.GetObjectInstance(p[1])) != null)
-                            && ((ol = ob.GetOutletInstance(p[2])) != null)) {
-                        System.out.println("resolves : " + p[0] + ":" + p[1] + ":" + p[2]);
+                    if ((ol = axoObj.patch.getOutletByReference(s)) != null) {
                         Net n1 = axoObj.patch.AddConnection(InletInstance.this, ol);
                         axoObj.patch.PromoteOverloading();
                         if (n1 != null) {
                             n1.setSelected(false);
                             n1.repaint();
                         }
-                    } else if ((p.length == 3)
-                            && (p[0].equals("inlet"))
-                            && ((ob = axoObj.patch.GetObjectInstance(p[1])) != null)
-                            && ((il = ob.GetInletInstance(p[2])) != null)) {
-                        System.out.println("resolves : " + p[0] + ":" + p[1] + ":" + p[2]);
+                    } else if ((il = axoObj.patch.getInletByReference(s)) != null) {
                         Net n1 = axoObj.patch.AddConnection(InletInstance.this, il);
                         axoObj.patch.PromoteOverloading();
                         if (n1 != null) {
