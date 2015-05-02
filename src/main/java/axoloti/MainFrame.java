@@ -170,6 +170,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         if (!prefs.getExpertMode()) {
             jMenuRegenerateObjects.setVisible(false);
             jMenuAutoTest.setVisible(false);
+            jMenuItemRefreshFWID.setVisible(false);
         }
         PopulateExamplesMenu(jMenuOpenExample);
 
@@ -262,6 +263,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuItemFlashSDC = new javax.swing.JMenuItem();
         jMenuItemFlashDFU = new javax.swing.JMenuItem();
         jMenuItemFlashSTLINK = new javax.swing.JMenuItem();
+        jMenuItemRefreshFWID = new javax.swing.JMenuItem();
         jMenuWindow = new javax.swing.JMenu();
         jMenuHelp = new javax.swing.JMenu();
         jMenuHelpContents = new javax.swing.JMenuItem();
@@ -493,6 +495,14 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuFirmware.add(jMenuItemFlashSTLINK);
 
+    jMenuItemRefreshFWID.setText("Refresh firmware ID");
+    jMenuItemRefreshFWID.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItemRefreshFWIDActionPerformed(evt);
+        }
+    });
+    jMenuFirmware.add(jMenuItemRefreshFWID);
+
     jMenuBoard.add(jMenuFirmware);
 
     jMenuBar1.add(jMenuBoard);
@@ -714,6 +724,10 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
         Quit();
     }//GEN-LAST:event_formWindowClosing
 
+    private void jMenuItemRefreshFWIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRefreshFWIDActionPerformed
+        updateLinkFirmwareID();
+    }//GEN-LAST:event_jMenuItemRefreshFWIDActionPerformed
+
     public void NewPatch() {
         PatchGUI patch1 = new PatchGUI();
         PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
@@ -794,6 +808,7 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemPanic;
     private javax.swing.JMenuItem jMenuItemPing;
     private javax.swing.JMenuItem jMenuItemPreferences;
+    private javax.swing.JMenuItem jMenuItemRefreshFWID;
     private javax.swing.JMenuItem jMenuNew;
     private javax.swing.JMenuItem jMenuOpen;
     private javax.swing.JMenu jMenuOpenExample;
@@ -851,6 +866,8 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     public void updateLinkFirmwareID() {
         LinkFirmwareID = FirmwareID.getFirmwareID();
+        TargetFirmwareID = LinkFirmwareID;
+        jLabelFirmwareID.setText("Firmware ID = " + LinkFirmwareID);
         Logger.getLogger(MainFrame.class.getName()).info("Link to firmware ID " + LinkFirmwareID);
     }
 
@@ -860,7 +877,6 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
             return;
         }
         TargetFirmwareID = firmwareId;
-        jLabelFirmwareID.setText("Firmware ID = " + firmwareId);
         if (!firmwareId.equals(this.LinkFirmwareID)) {
             Logger.getLogger(AxoObjects.class.getName()).severe("Firmware ID mismatch! Please flash the firmware first!");
         }
