@@ -34,6 +34,7 @@ public class PatchSettingsFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form PatchSettingsFrame
+     * @param settings settings to load/save 
      */
     public PatchSettingsFrame(PatchSettings settings) {
         initComponents();

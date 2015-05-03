@@ -51,6 +51,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form ObjectSearchFrame
+     * @param p parent 
      */
     public ObjectSearchFrame(PatchGUI p) {
         initComponents();

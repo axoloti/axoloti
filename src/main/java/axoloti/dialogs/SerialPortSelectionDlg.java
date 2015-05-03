@@ -27,10 +27,13 @@ public class SerialPortSelectionDlg extends javax.swing.JDialog {
 
     private String[] ports;
     private String port;
-    private String defPortName;
+    private final String defPortName;
 
     /**
      * Creates new form SerialPortSelectionDlg
+     * @param parent parent frame
+     * @param modal is modal
+     * @param defPortName default port name
      */
     public SerialPortSelectionDlg(java.awt.Frame parent, boolean modal, String defPortName) {
         super(parent, modal);

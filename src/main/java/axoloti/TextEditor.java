@@ -29,6 +29,7 @@ public class TextEditor extends javax.swing.JFrame {
 
     /**
      * Creates new form TextEditor
+     * @param s initial string
      */
     public TextEditor(StringRef s) {
         initComponents();
