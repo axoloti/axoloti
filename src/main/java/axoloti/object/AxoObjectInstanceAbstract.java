@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -154,7 +154,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             InstanceLabel.setText(InstanceName);
         }
         doLayout();
-        repaint();
+        getParent().repaint();
     }
 
     public AxoObjectAbstract getType() {
