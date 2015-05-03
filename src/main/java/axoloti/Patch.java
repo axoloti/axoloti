@@ -555,6 +555,7 @@ public class Patch {
         Serializer serializer = new Persister();
         try {
             serializer.write(this, f);
+            MainFrame.prefs.addRecentFile(f.getAbsolutePath());
             dirty = false;
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);

@@ -18,9 +18,11 @@
 package axoloti.utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -44,6 +46,12 @@ public class Preferences {
     Boolean MouseDialAngular;
     @Element(required = false)
     Boolean ExpertMode;
+    @ElementList(required = false)
+    ArrayList<String> recentFiles = new ArrayList<String>();
+
+    boolean isDirty = false;
+
+    final int nRecentFiles = 8;
 
     final int minimumPollInterval = 20;
 
@@ -68,6 +76,14 @@ public class Preferences {
         }
     }
 
+    void SetDirty() {
+        isDirty = true;
+    }
+
+    void ClearDirty() {
+        isDirty = false;
+    }
+
     public String[] getObjectSearchPath() {
         return ObjectSearchPath.split(";");
     }
@@ -78,6 +94,7 @@ public class Preferences {
             p += s + ";";
         }
         ObjectSearchPath = p;
+        SetDirty();
     }
 
     public String getCurrentFileDirectory() {
@@ -96,6 +113,7 @@ public class Preferences {
             i = minimumPollInterval;
         }
         PollInterval = i;
+        SetDirty();
     }
 
     public void setCurrentFileDirectory(String CurrentFileDirectory) {
@@ -104,6 +122,7 @@ public class Preferences {
         }
         this.CurrentFileDirectory = CurrentFileDirectory;
         SavePrefs();
+        SetDirty();
     }
 
     static String GetPrefsFileLoc() {
@@ -134,6 +153,7 @@ public class Preferences {
         } catch (Exception ex) {
             Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
         }
+        ClearDirty();
     }
 
     public String getComPortName() {
@@ -141,19 +161,42 @@ public class Preferences {
     }
 
     public void setComPortName(String ComPortName) {
+        if (this.ComPortName.equals(ComPortName))
+            return;
         this.ComPortName = ComPortName;
+        SetDirty();
     }
 
     public Boolean getMouseDialAngular() {
         return MouseDialAngular;
     }
 
-    public void setMouseDialAngular(Boolean MouseDialAngular) {
+    public void setMouseDialAngular(boolean MouseDialAngular) {
+        if (this.MouseDialAngular == MouseDialAngular)
+            return;
         this.MouseDialAngular = MouseDialAngular;
+        SetDirty();
     }
 
     public Boolean getExpertMode() {
         return ExpertMode;
+    }
+
+    public ArrayList<String> getRecentFiles() {
+        return recentFiles;
+    }
+
+    public void addRecentFile(String filename) {
+        for (String r : recentFiles) {
+            if (r.equals(filename)) {
+                return;
+            }
+        }
+        if (recentFiles.size() == nRecentFiles) {
+            recentFiles.remove(0);
+        }
+        recentFiles.add(filename);
+        SetDirty();
     }
 
 }

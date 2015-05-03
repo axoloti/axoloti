@@ -242,6 +242,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuNew = new javax.swing.JMenuItem();
         jMenuOpen = new javax.swing.JMenuItem();
         jMenuOpenExample = new javax.swing.JMenu();
+        recentFileMenu1 = new axoloti.menus.RecentFileMenu();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuReloadObjects = new javax.swing.JMenuItem();
         jMenuRegenerateObjects = new javax.swing.JMenuItem();
@@ -360,6 +361,9 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
 
     jMenuOpenExample.setText("Open example");
     jMenuFile.add(jMenuOpenExample);
+
+    recentFileMenu1.setText("Open recent");
+    jMenuFile.add(recentFileMenu1);
     jMenuFile.add(jSeparator2);
 
     jMenuReloadObjects.setText("Reload Objects");
@@ -776,6 +780,7 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
             patch1.setFileNamePath(f.getPath());
             pf.setVisible(true);
             patches.add(patch1);
+            MainFrame.prefs.addRecentFile(f.getAbsolutePath());
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -825,6 +830,7 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JTextPane jTextPaneLog;
+    private axoloti.menus.RecentFileMenu recentFileMenu1;
     // End of variables declaration//GEN-END:variables
 
     public void SetProgressValue(int i) {
@@ -855,6 +861,7 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
                 break;
             }
         }
+        prefs.SavePrefs();
         if (patches.isEmpty()) {
             System.exit(0);
         }

@@ -36,6 +36,11 @@
                 <Property name="text" type="java.lang.String" value="Open example"/>
               </Properties>
             </Menu>
+            <Menu class="axoloti.menus.RecentFileMenu" name="recentFileMenu1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Open recent"/>
+              </Properties>
+            </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuReloadObjects">
