@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -23,6 +23,7 @@ import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import org.simpleframework.xml.Root;
 
@@ -41,10 +42,16 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     }
 
     @Override
+    public boolean IsLocked() {
+        return false;
+    }    
+    
+    @Override
     public void PostConstructor() {
         super.PostConstructor();
         setOpaque(true);
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        add(Box.createHorizontalStrut(5));
         InstanceLabel = new LabelComponent(getInstanceName());
         InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
         InstanceLabel.addMouseListener(new MouseListener() {
