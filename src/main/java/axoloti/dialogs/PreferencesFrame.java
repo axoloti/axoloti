@@ -29,6 +29,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form PreferencesFrame
+     * @param prefs preferences to load/save
      */
     public PreferencesFrame(Preferences prefs) {
         initComponents();

@@ -29,6 +29,7 @@ public class PresetPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form PresetPanel
+     * @param p patch to recall preset
      */
     public PresetPanel(Patch p) {
         this.p = p;

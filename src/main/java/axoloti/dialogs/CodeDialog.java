@@ -25,6 +25,8 @@ public class CodeDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form CodeDialog
+     * @param parent parent frame
+     * @param modal is modal
      */
     public CodeDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
