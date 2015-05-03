@@ -23,6 +23,7 @@ import axoloti.dialogs.FileManagerFrame;
 import axoloti.dialogs.KeyboardFrame;
 import axoloti.dialogs.PreferencesFrame;
 import axoloti.object.AxoObjects;
+import axoloti.utils.Constants;
 import axoloti.utils.FirmwareID;
 import axoloti.utils.Preferences;
 import generatedobjects.GeneratedObjects;
@@ -719,8 +720,8 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuAutoTestActionPerformed
 
     private void jMenuItemFlashSDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDCActionPerformed
-        qcmdprocessor.AppendToQueue(new QCmdUploadFile(new File("firmware/build/axoloti.bin"), "firmware.bin"));
-        qcmdprocessor.AppendToQueue(new QCmdUploadPatch(new File("firmware/flasher/build/flasher.bin")));
+        qcmdprocessor.AppendToQueue(new QCmdUploadFile(new File(Constants.firmwaredir + "/build/axoloti.bin"), "firmware.bin"));
+        qcmdprocessor.AppendToQueue(new QCmdUploadPatch(new File(Constants.firmwaredir + "/flasher/build/flasher.bin")));
         qcmdprocessor.AppendToQueue(new QCmdStart());
     }//GEN-LAST:event_jMenuItemFlashSDCActionPerformed
 

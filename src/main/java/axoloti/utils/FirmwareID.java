@@ -34,7 +34,7 @@ public class FirmwareID {
         String fw1 = "";
         String fw2 = "";
         try {
-            File f = new File("firmware/build/axoloti.dmp");
+            File f = new File(Constants.firmwaredir + "/build/axoloti.dmp");
             if (!f.canRead()) {
                 return "Please compile the firmware first";
             }

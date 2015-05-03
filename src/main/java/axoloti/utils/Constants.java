@@ -28,4 +28,5 @@ public class Constants {
     public static final Font font = Font.decode("Lucida Sans Regular 9");
     public static final int xgrid = 14;
     public static final int ygrid = 14;
+    public static final String firmwaredir = "firmware";
 }

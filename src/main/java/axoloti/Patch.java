@@ -40,6 +40,7 @@ import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
+import axoloti.utils.Constants;
 import displays.DisplayInstance;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -1115,9 +1116,9 @@ public class Patch {
     String GenerateCode3() {
         SortByPosition();
         String c = "extern \"C\" { \n"
-                + "#include \"../firmware/patch.h\"\n"
-                + "#include \"../firmware/axoloti.h\"\n"
-                + "#include \"../firmware/parameter_functions.h\"\n";
+                + "#include \"../" + Constants.firmwaredir + "/patch.h\"\n"
+                + "#include \"../" + Constants.firmwaredir + "/axoloti.h\"\n"
+                + "#include \"../" + Constants.firmwaredir + "/parameter_functions.h\"\n";
         c += generateIncludes();
         c += "}\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
