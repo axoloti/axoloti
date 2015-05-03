@@ -188,12 +188,15 @@ public class AxoObjects {
             if (fileEntry.isDirectory()) {
                 String dirname = fileEntry.getName();
                 AxoObjectTreeNode s = LoadAxoObjectsFromFolder(fileEntry, prefix + "/" + dirname);
-                t.SubNodes.put(dirname, s);
-                for (AxoObjectAbstract o : t.Objects) {
-                    int i = o.id.lastIndexOf('/');
-                    if (i > 0) {
-                        if (o.id.substring(i + 1).equals(dirname)) {
-                            s.Objects.add(o);
+                if(s.Objects.size()>0 || s.SubNodes.size()>0)
+                {
+                    t.SubNodes.put(dirname, s);
+                    for (AxoObjectAbstract o : t.Objects) {
+                        int i = o.id.lastIndexOf('/');
+                        if (i > 0) {
+                            if (o.id.substring(i + 1).equals(dirname)) {
+                                s.Objects.add(o);
+                            }
                         }
                     }
                 }
@@ -240,7 +243,10 @@ public class AxoObjects {
         File folder = new File(path);
         if (folder.isDirectory()) {
             AxoObjectTreeNode t = LoadAxoObjectsFromFolder(folder, "");
-            ObjectTree.SubNodes.put(folder.getName(), t);
+            if(t.Objects.size()>0 || t.SubNodes.size()>0)
+            {
+                ObjectTree.SubNodes.put(folder.getName(), t);
+            }
         }
     }
 
