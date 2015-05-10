@@ -1,0 +1,20 @@
+download & run MinGW setup, use default settings
+http://heanet.dl.sourceforge.net/project/mingw/Installer/mingw-get-setup.exe
+then quit installation manager
+
+doubleclick
+axoloti\platform_win\src\build.bat
+
+then, in the mingw console, run 
+./build.sh
+
+
+
+Building libusb
+in axoloti\platform_win\src\libusb-1.0.19\libusb\os\threads_windows.h: add:
+#include <unistd.h>
+
+
+
+references:
+http://dfu-util.sourceforge.net/build.html
