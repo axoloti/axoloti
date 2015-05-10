@@ -1,0 +1,34 @@
+<objdefs>
+   <obj.normal id="taptempo" sha="8bb401d9aeeb03766410f8e632d1f825c8330aca">
+      <sDescription>taptempo follower</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="tap" description="tap tap tap"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="phasor" description="phasor" SumBuffer="false"/>
+         <bool32.pulse name="24ppq" description="24ppq" SumBuffer="false"/>
+         <bool32.pulse name="index" description="index" SumBuffer="false"/>
+         <frac32.positive name="int1" description="" SumBuffer="false"/>
+         <frac32.positive name="int2" description="" SumBuffer="false"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t trigtap;
+int32_t tc;
+int32_t tlatch;
+]]></code.declaration>
+      <code.init><![CDATA[trigtap = 0;
+tlatch = 0;
+tc = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((%tap% > 0) && !trigtap) {
+  tc = 0;
+  trigtap = 1;
+}%t% = tlatch;
+tc++;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

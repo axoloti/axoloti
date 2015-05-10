@@ -23,7 +23,6 @@ import axoloti.inlets.InletFrac32Bipolar;
 import axoloti.object.AxoObject;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletBool32Pulse;
-import axoloti.outlets.OutletFrac32;
 import axoloti.outlets.OutletFrac32Bipolar;
 import axoloti.outlets.OutletFrac32Pos;
 import axoloti.parameters.ParameterFrac32SMapLFOPitch;
@@ -45,6 +44,7 @@ public class Lfo extends gentools {
         WriteAxoObject(catName, CreateSaw3());
         WriteAxoObject(catName, CreateSawDown());
         WriteAxoObject(catName, CreateSawDown2());
+        WriteAxoObject(catName, CreateTaptempo());
     }
 
     static AxoObject CreateSineLFO() {
@@ -251,4 +251,45 @@ public class Lfo extends gentools {
                 + "   }";
         return o;
     }
+
+    static AxoObject CreateTaptempo() {
+        AxoObject o = new AxoObject("taptempo", "taptempo follower");
+        o.inlets.add(new InletBool32Rising("tap", "tap tap tap"));
+        o.outlets.add(new OutletFrac32Pos("phasor", "phasor"));
+        o.outlets.add(new OutletBool32Pulse("24ppq", "24ppq"));
+        o.outlets.add(new OutletBool32Pulse("index", "index"));
+        o.outlets.add(new OutletFrac32Pos("int1", ""));
+        o.outlets.add(new OutletFrac32Pos("int2", ""));
+        o.sLocalData = "int32_t trigtap;\n"
+                + "int32_t tc;\n"
+                + "int32_t tlatch;\n";
+        o.sInitCode = "trigtap = 0;\n"
+                + "tlatch = 0;\n"
+                + "tc = 0;\n";
+        o.sKRateCode
+                = "int tol = 0x10000000;\n" +
+"if ((%tap% > 0) && !trigtap) {\n" +
+"  tlatch = tc;\n" +
+"  if (tlatch<4096) {\n" +
+"     frql = 0xFFFFFFFF/(tlatch+1);\n" +
+"  }\n" +
+"  tc = 0;\n" +
+"  trigtap = 1;\n" +
+"  if ((acc>-tol)&&(acc<tol)){\n" +
+"     // low deviation: catch\n" +
+"     acc = 0;\n" +
+"  } else {\n" +
+"     // high deviation: flywheel\n" +
+"     acc = acc-(acc>>5);\n" +
+"  }\n" +
+"} else if (!(%tap% > 0)){\n" +
+"  trigtap = 0;\n" +
+"}\n" +
+"tc++;\n" +
+"acc += frql;\n" +
+"%int1% = tlatch;\n" +
+"%phasor% = acc>>4;\n";
+        return o;
+    }
+
 }
