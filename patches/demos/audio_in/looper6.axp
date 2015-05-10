@@ -1,0 +1,552 @@
+<patch-1.0>
+   <obj type="audio/inconfig l" sha="e3d51b641809654307ccba3d869f4ac7b6b68f4a" name="inconfig_1" x="0" y="0">
+      <params/>
+      <attribs>
+         <combo attributeName="gain" selection="33dB"/>
+         <combo attributeName="boost" selection="20dB"/>
+      </attribs>
+   </obj>
+   <obj type="audio/inconfig r" sha="aeb1261a9f3855951dea87dd8875ca7f9ec4debe" name="inconfig_2" x="84" y="0">
+      <params/>
+      <attribs>
+         <combo attributeName="gain" selection="0dB"/>
+         <combo attributeName="boost" selection="0dB"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_1" x="224" y="0">
+      <params>
+         <frac32.u.map name="value" MidiCC="23" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10" name="+1_1" x="308" y="0">
+      <params>
+         <frac32.u.map name="c" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_5" x="420" y="0">
+      <params>
+         <frac32.u.map name="value" MidiCC="60" value="32.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth_1" x="490" y="0">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/in stereo" sha="2215b2e513239e306346ea02ae2ee6746d6d62a5" name="in_1" x="0" y="70">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 2 g" sha="f14eeeeb6df032a7e072e970956c20613eb267f1" name="mix_3" x="84" y="70">
+      <params>
+         <frac32.u.map name="gain1" MidiCC="14" value="33.0"/>
+         <frac32.u.map name="gain2" MidiCC="15" value="33.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_1" x="224" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delay/write sdram" sha="3b156a92fef726fce69a05c2e670a365457a1728" name="d1" x="308" y="84">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="131072 (2.37s)"/>
+      </attribs>
+   </obj>
+   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_1" x="420" y="84">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="d1"/>
+      </attribs>
+   </obj>
+   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_1" x="574" y="84">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="53" value="-57.0"/>
+         <frac32.u.map name="reso" MidiCC="35" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_2" x="672" y="84">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="39" value="63.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_2" x="224" y="182">
+      <params>
+         <frac32.u.map name="value" MidiCC="24" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10" name="+1_2" x="308" y="182">
+      <params>
+         <frac32.u.map name="c" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_2" x="224" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delay/write sdram" sha="3b156a92fef726fce69a05c2e670a365457a1728" name="d2" x="308" y="266">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="131072 (2.37s)"/>
+      </attribs>
+   </obj>
+   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_2" x="420" y="266">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="d2"/>
+      </attribs>
+   </obj>
+   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_3" x="574" y="266">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="54" value="-40.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_4" x="672" y="266">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="40" value="63.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_3" x="224" y="364">
+      <params>
+         <frac32.u.map name="value" MidiCC="25" value="14.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10" name="+1_3" x="308" y="364">
+      <params>
+         <frac32.u.map name="c" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_3" x="224" y="448">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delay/write sdram" sha="3b156a92fef726fce69a05c2e670a365457a1728" name="d3" x="308" y="448">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="131072 (2.37s)"/>
+      </attribs>
+   </obj>
+   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_3" x="420" y="448">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="d3"/>
+      </attribs>
+   </obj>
+   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_5" x="574" y="448">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="55" value="-37.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_6" x="672" y="448">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="41" value="63.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_4" x="224" y="546">
+      <params>
+         <frac32.u.map name="value" MidiCC="26" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10" name="+1_4" x="308" y="546">
+      <params>
+         <frac32.u.map name="c" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_4" x="224" y="630">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delay/write sdram" sha="3b156a92fef726fce69a05c2e670a365457a1728" name="d4" x="308" y="630">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="131072 (2.37s)"/>
+      </attribs>
+   </obj>
+   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_4" x="420" y="630">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="d4"/>
+      </attribs>
+   </obj>
+   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_7" x="574" y="630">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="56" value="-37.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_8" x="672" y="630">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="42" value="63.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_6" x="224" y="728">
+      <params>
+         <frac32.u.map name="value" MidiCC="27" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10" name="+1_5" x="308" y="728">
+      <params>
+         <frac32.u.map name="c" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_5" x="224" y="812">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delay/write sdram" sha="3b156a92fef726fce69a05c2e670a365457a1728" name="d5" x="308" y="812">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="131072 (2.37s)"/>
+      </attribs>
+   </obj>
+   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_5" x="420" y="812">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="d5"/>
+      </attribs>
+   </obj>
+   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_9" x="574" y="812">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="57" value="-64.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_10" x="672" y="812">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="43" value="63.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_7" x="224" y="910">
+      <params>
+         <frac32.u.map name="value" MidiCC="28" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10" name="+1_6" x="308" y="910">
+      <params>
+         <frac32.u.map name="c" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_6" x="224" y="994">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="delay/write sdram" sha="3b156a92fef726fce69a05c2e670a365457a1728" name="d6" x="308" y="994">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="131072 (2.37s)"/>
+      </attribs>
+   </obj>
+   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_6" x="420" y="994">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="d6"/>
+      </attribs>
+   </obj>
+   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_11" x="574" y="994">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="58" value="-64.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_12" x="672" y="994">
+      <params>
+         <frac32.s.map name="pitch" MidiCC="44" value="63.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 6 g" sha="f48cf8a789f60bd24166f6e544b61ccf3a21230f" name="mix_1" x="798" y="994">
+      <params>
+         <frac32.u.map name="gain1" MidiCC="8" value="0.0"/>
+         <frac32.u.map name="gain2" MidiCC="9" value="1.5"/>
+         <frac32.u.map name="gain3" MidiCC="10" value="0.0"/>
+         <frac32.u.map name="gain4" MidiCC="11" value="0.0"/>
+         <frac32.u.map name="gain5" MidiCC="12" value="0.0"/>
+         <frac32.u.map name="gain6" MidiCC="13" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="3ade427ae7291fdf62058c4243fe718758187105" name="*c_1" x="896" y="994">
+      <params>
+         <frac32.u.map name="amp" MidiCC="7" value="17.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/muls 4" sha="bec77f5586c3b03aae932590902e4c98a554e0c9" name="muls_1" x="994" y="994">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1 g" sha="9837ebd6f7c0b2b3853ea475d91c943144e2273b" name="mix_2" x="1064" y="994">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="chorus2" sha="b0843bcaca2d6012fb8d8c1cfc5597dda5fac981" name="chorus2_1" x="1176" y="994">
+      <params>
+         <frac32.u.map name="depth" MidiCC="46" value="9.5"/>
+         <frac32.s.map name="speed" MidiCC="30" value="-46.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="1274" y="994">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="read_1 out"/>
+         <dest name="xfade_1 i2"/>
+         <dest name="hp_1 in"/>
+      </net>
+      <net>
+         <source name="xfade_1 o"/>
+         <dest name="d1 in"/>
+      </net>
+      <net>
+         <source name="chorus2_1 L"/>
+         <dest name="out_1 left"/>
+      </net>
+      <net>
+         <source name="dial_1 out"/>
+         <dest name="+1_1 in"/>
+      </net>
+      <net>
+         <source name="+1_1 out"/>
+         <dest name="xfade_1 c"/>
+      </net>
+      <net>
+         <source name="read_2 out"/>
+         <dest name="xfade_2 i2"/>
+         <dest name="hp_3 in"/>
+      </net>
+      <net>
+         <source name="xfade_2 o"/>
+         <dest name="d2 in"/>
+      </net>
+      <net>
+         <source name="dial_2 out"/>
+         <dest name="+1_2 in"/>
+      </net>
+      <net>
+         <source name="+1_2 out"/>
+         <dest name="xfade_2 c"/>
+      </net>
+      <net>
+         <source name="read_3 out"/>
+         <dest name="xfade_3 i2"/>
+         <dest name="hp_5 in"/>
+      </net>
+      <net>
+         <source name="xfade_3 o"/>
+         <dest name="d3 in"/>
+      </net>
+      <net>
+         <source name="dial_3 out"/>
+         <dest name="+1_3 in"/>
+      </net>
+      <net>
+         <source name="+1_3 out"/>
+         <dest name="xfade_3 c"/>
+      </net>
+      <net>
+         <source name="read_4 out"/>
+         <dest name="xfade_4 i2"/>
+         <dest name="hp_7 in"/>
+      </net>
+      <net>
+         <source name="xfade_4 o"/>
+         <dest name="d4 in"/>
+      </net>
+      <net>
+         <source name="dial_4 out"/>
+         <dest name="+1_4 in"/>
+      </net>
+      <net>
+         <source name="+1_4 out"/>
+         <dest name="xfade_4 c"/>
+      </net>
+      <net>
+         <source name="dial_5 out"/>
+         <dest name="smooth_1 in"/>
+      </net>
+      <net>
+         <source name="hp_1 out"/>
+         <dest name="hp_2 in"/>
+      </net>
+      <net>
+         <source name="hp_2 out"/>
+         <dest name="mix_1 in1"/>
+      </net>
+      <net>
+         <source name="hp_3 out"/>
+         <dest name="hp_4 in"/>
+      </net>
+      <net>
+         <source name="hp_4 out"/>
+         <dest name="mix_1 in2"/>
+      </net>
+      <net>
+         <source name="hp_5 out"/>
+         <dest name="hp_6 in"/>
+      </net>
+      <net>
+         <source name="hp_6 out"/>
+         <dest name="mix_1 in3"/>
+      </net>
+      <net>
+         <source name="hp_7 out"/>
+         <dest name="hp_8 in"/>
+      </net>
+      <net>
+         <source name="hp_8 out"/>
+         <dest name="mix_1 in4"/>
+      </net>
+      <net>
+         <source name="mix_1 out"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="muls_1 in"/>
+      </net>
+      <net>
+         <source name="muls_1 out"/>
+         <dest name="mix_2 in1"/>
+      </net>
+      <net>
+         <source name="mix_3 out"/>
+         <dest name="xfade_5 i1"/>
+         <dest name="xfade_6 i1"/>
+         <dest name="xfade_1 i1"/>
+         <dest name="xfade_2 i1"/>
+         <dest name="xfade_3 i1"/>
+         <dest name="xfade_4 i1"/>
+         <dest name="mix_2 bus_in"/>
+      </net>
+      <net>
+         <source name="read_5 out"/>
+         <dest name="xfade_5 i2"/>
+         <dest name="hp_9 in"/>
+      </net>
+      <net>
+         <source name="xfade_5 o"/>
+         <dest name="d5 in"/>
+      </net>
+      <net>
+         <source name="dial_6 out"/>
+         <dest name="+1_5 in"/>
+      </net>
+      <net>
+         <source name="+1_5 out"/>
+         <dest name="xfade_5 c"/>
+      </net>
+      <net>
+         <source name="read_6 out"/>
+         <dest name="xfade_6 i2"/>
+         <dest name="hp_11 in"/>
+      </net>
+      <net>
+         <source name="xfade_6 o"/>
+         <dest name="d6 in"/>
+      </net>
+      <net>
+         <source name="dial_7 out"/>
+         <dest name="+1_6 in"/>
+      </net>
+      <net>
+         <source name="+1_6 out"/>
+         <dest name="xfade_6 c"/>
+      </net>
+      <net>
+         <source name="smooth_1 out"/>
+         <dest name="read_5 timem"/>
+         <dest name="read_6 timem"/>
+         <dest name="read_1 timem"/>
+         <dest name="read_2 timem"/>
+         <dest name="read_3 timem"/>
+         <dest name="read_4 timem"/>
+      </net>
+      <net>
+         <source name="hp_9 out"/>
+         <dest name="hp_10 in"/>
+      </net>
+      <net>
+         <source name="hp_11 out"/>
+         <dest name="hp_12 in"/>
+      </net>
+      <net>
+         <source name="hp_10 out"/>
+         <dest name="mix_1 in5"/>
+      </net>
+      <net>
+         <source name="hp_12 out"/>
+         <dest name="mix_1 in6"/>
+      </net>
+      <net>
+         <source name="mix_2 out"/>
+         <dest name="chorus2_1 in"/>
+      </net>
+      <net>
+         <source name="chorus2_1 R"/>
+         <dest name="out_1 right"/>
+      </net>
+      <net>
+         <source name="in_1 left"/>
+         <dest name="mix_3 in1"/>
+      </net>
+      <net>
+         <source name="in_1 right"/>
+         <dest name="mix_3 in2"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>
