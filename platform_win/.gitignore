@@ -2,6 +2,7 @@ arm-none-eabi/
 lib/
 share/
 bin/
+include/
 contrib/
 man/
 manifest/

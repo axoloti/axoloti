@@ -1,0 +1,12 @@
+diff -rupN libusb-1.0.19/libusb/os/threads_windows.h libusb-1.0.19/libusb/os/threads_windows.h
+--- libusb-1.0.19/libusb/os/threads_windows.h	2015-05-11 20:24:49 +0200
++++ libusb-1.0.19/libusb/os/threads_windows.h	2015-05-11 20:26:04 +0200
+@@ -21,6 +21,8 @@
+ #ifndef LIBUSB_THREADS_WINDOWS_H
+ #define LIBUSB_THREADS_WINDOWS_H
+ 
++#include <unistd.h>
++
+ #define usbi_mutex_static_t     volatile LONG
+ #define USBI_MUTEX_INITIALIZER  0
+ 

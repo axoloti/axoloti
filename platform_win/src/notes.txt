@@ -11,8 +11,10 @@ then, in the mingw console, run
 
 
 Building libusb
-in axoloti\platform_win\src\libusb-1.0.19\libusb\os\threads_windows.h: add:
-#include <unistd.h>
+* patch libusb.mingw32.patch
+diff -r libusb-1.0.19 libusb-1.0.19_orig -C 4 > libusb.mingw32.patch
+
+
 
 
 
