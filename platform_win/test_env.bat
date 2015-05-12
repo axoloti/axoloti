@@ -25,10 +25,9 @@ IF %ERRORLEVEL% NEQ 0 (
 	GOTO fail
 )
 
-ECHO "ok"
+ECHO Environment OK
 goto :EOF
 
-
 :fail
-ECHO environment incomplete!
+ECHO Environment incomplete!
 PAUSE

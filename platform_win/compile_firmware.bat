@@ -1,6 +1,8 @@
 @ECHO OFF
 CALL %~dp0\path.bat
-cd %~dp0..\firmware
+call %~dp0\test_env.bat
+
+cd %FIRMWAREDIR%
 mkdir .dep
 mkdir build
 mkdir build\obj
