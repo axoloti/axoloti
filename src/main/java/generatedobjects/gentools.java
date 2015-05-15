@@ -464,7 +464,7 @@ public class gentools {
     static AxoObjectAbstract CreateIFracTwoOp(String name, String description, String expr) {
         AxoObject o_i = new AxoObject(name, description);
         o_i.outlets.add(new OutletInt32("out", "out"));
-        o_i.inlets.add(new InletInt32("in1", "in2"));
+        o_i.inlets.add(new InletInt32("in1", "in1"));
         o_i.inlets.add(new InletInt32("in2", "in2"));
         o_i.sKRateCode = expr;
         return o_i;

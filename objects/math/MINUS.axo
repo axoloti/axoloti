@@ -36,7 +36,7 @@
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
-         <int32 name="in1" description="in2"/>
+         <int32 name="in1" description="in1"/>
          <int32 name="in2" description="in2"/>
       </inlets>
       <outlets>
