@@ -36,11 +36,11 @@ then
     rm make-3.81-dep.zip
 fi
 
-if [ ! -f "bin/libiconv2.dll" ];
+if [ ! -f "bin/rm.exe" ];
 then
     wget -nc http://gnuwin32.sourceforge.net/downlinks/coreutils-bin-zip.php
     unzip -o coreutils-5.3.0-bin.zip
-    rm make-3.81-dep.zip
+    rm coreutils-5.3.0-bin.zip
 fi
 
 cd bin
