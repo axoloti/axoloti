@@ -9,6 +9,7 @@ manifest/
 chibios/
 stlink-20130324-win/
 apache-ant-1.9.4/
+ChibiOS_2.6.6/
 
 coreutils-5.3.0-bin.zip
 make-3.81-bin.zip
@@ -19,7 +20,6 @@ openocd-0.8.0.zip
 stlink-20130324-win.zip
 
 st-flash.exe
-libusb-1.0.dll
 
 GNU Tools ARM Embedded/
 gcc-arm-none-eabi-4_8-2014q2/

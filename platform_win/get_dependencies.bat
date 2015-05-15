@@ -2,7 +2,7 @@
 
 setlocal
 
-cd %~dp0
+cd %~sdp0
 
 set MINGW=C:\MinGW
 set MINGWGET=%MINGW%\bin\mingw-get.exe
@@ -19,7 +19,7 @@ if not exist %MINGWGET% (
 
 %MINGWGET% install mingw32-gcc-g++ autoconf msys-bash libtool libz msys-make msys-wget msys-unzip msys-diffutils msys-patch
 
-set PATH=%PATH%:%MINGW%\msys\1.0\bin:%MINGW%\bin
+set PATH=%PATH%;%MINGW%\msys\1.0\bin;%MINGW%\bin
 set HOME=.
 %MINGW%\msys\1.0\bin\bash.exe get_dependencies.sh
 

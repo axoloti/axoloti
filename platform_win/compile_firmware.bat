@@ -1,6 +1,6 @@
 @ECHO OFF
-CALL %~dp0\path.bat
-call %~dp0\test_env.bat
+CALL %~sdp0\path.bat
+call %~sdp0\test_env.bat
 
 cd %FIRMWAREDIR%
 mkdir .dep

@@ -4,7 +4,7 @@ set -e
 
 if [ ! -d "../chibios" ]; 
 then
-    wget http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.5/ChibiOS_2.6.5.zip
+    wget http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.6/ChibiOS_2.6.6.zip
     unzip -o ChibiOS_2.6.6.zip
     rm ChibiOS_2.6.6.zip
     mv ChibiOS_2.6.6 chibios

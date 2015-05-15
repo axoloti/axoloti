@@ -1,4 +1,4 @@
 @ECHO OFF
-CALL %~dp0\path.bat
-cd %~dp0\..\patch
+CALL %~sdp0\path.bat
+cd %~sdp0\..\patch
 make
