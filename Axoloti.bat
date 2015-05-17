@@ -28,11 +28,27 @@ for /f "tokens=2,*" %%a in ('reg query %KEY% /v %VALUE% ^| findstr %VALUE%') do 
     set JAVAHOME=%%b
 )
 
+set AXOLOTI_JAR=dist/axoloti.jar
+
+if not exist %AXOLOTI_JAR% (
+   echo Axoloti GUI is not compiled
+   echo compile it by running platform_win\build_gui.bat
+   pause
+   goto :end
+)
+
+if not defined JAVAHOME (
+   echo Java not installed, please install Java...
+   pause
+   goto :end
+)
+
 echo JavaHome: %JAVAHOME%
 
 set PATH=%JAVAHOME%\bin
 java -jar dist/axoloti.jar
 
+:end
 endlocal
 
 

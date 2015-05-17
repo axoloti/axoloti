@@ -45,7 +45,8 @@ echo "##### Compiling libusb ######"
 cd libusb-1.0.19/
 if [ ! -f "Makefile" ];
 then
-    ./configure --prefix=$PWD/../../
+# CC='gcc -static-libgcc' to avoid libgcc_s_dw2-1.dll dependency
+    ./configure --prefix=$PWD/../../ CC='gcc -static-libgcc'
 fi
 make CFLAGS="-DWINVER=0x0501"
 make install

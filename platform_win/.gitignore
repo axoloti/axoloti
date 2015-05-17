@@ -25,3 +25,5 @@ GNU Tools ARM Embedded/
 gcc-arm-none-eabi-4_8-2014q2/
 openocd/
 yagarto-tools/
+
+.bash_history
