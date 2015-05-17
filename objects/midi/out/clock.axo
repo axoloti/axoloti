@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="clock" sha="b9dcbd2415a27e4361d5567f4aacd3c7c0aa64a7">
+   <obj.normal id="clock" sha="5f08a38532f31c69e08955bff1356f2105a478b6">
       <sDescription>Midi clock master, als outputs Midi clock, start, stop, and continue messages</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -19,7 +19,10 @@
             <MaxValue v="63.5"/>
          </frac32.u.map>
       </params>
-      <attribs/>
+      <attribs>
+         <spinner name="device" MinValue="1" MaxValue="5" DefaultValue="0"/>
+         <spinner name="port" MinValue="1" MaxValue="16" DefaultValue="0"/>
+      </attribs>
       <code.declaration><![CDATA[bool _active;
 int32_t _posfrac;
 int32_t _pos24ppq;
@@ -38,17 +41,17 @@ rstp = 0;]]></code.init>
 }
 if (%run% && !_active) {
   _active = 1;
-  if (_pos24ppq)     MidiSend1(MIDI_START);
-  else     MidiSend1(MIDI_CONTINUE);
+  if (_pos24ppq)     MidiSend1((midi_device_t) %device%,%port%,MIDI_START);
+  else     MidiSend1((midi_device_t) %device%,%port%,MIDI_CONTINUE);
 } else if (!%run% && _active){
   _active = 0;
-  MidiSend1(MIDI_STOP);
+  MidiSend1((midi_device_t) %device%,%port%,MIDI_STOP);
 }if (_active) {
   _posfrac += %bpm%;
   if (_posfrac & 1<<31) {
     _posfrac &= (1<<31)-1;
     _pos24ppq++;
-    MidiSend1(MIDI_TIMING_CLOCK);
+    MidiSend1((midi_device_t) %device%,%port%,MIDI_TIMING_CLOCK);
   }
 }
 %pos4ppq% = _pos24ppq/6;

@@ -97,7 +97,7 @@
 
 typedef enum
 {
-    MIDI_DEVICE_OMNI=0,          // for filtering
+    MIDI_DEVICE_OMNI=0,          // for filtering , and for 'internal' messages
     MIDI_DEVICE_SERIAL,          // MIDI_DIN
     MIDI_DEVICE_USB_DEVICE,      // MicroUSB  (currently used in pconnection, as midi over serial */
     MIDI_DEVICE_USB_HOST,        // USB host port
@@ -105,7 +105,7 @@ typedef enum
     MIDI_DEVICE_DIGITAL_X2       // x2 pins
 } midi_device_t ;
 
-// midi port, from 1  = OMNI for filtering
+// midi port, from 1  = OMNI for filtering and internal messages
 #define MIDI_PORT_OMNI 0
 
 void midi_init(void);
@@ -113,6 +113,9 @@ void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, u
 void MidiSend1(midi_device_t dev, uint8_t port, uint8_t b0);
 void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1);
 void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
+
+// Note: this is used by a patcher, but is incorrect since it would need to know for which device
+int  MidiGetOutputBufferPending(midi_device_t dev);
 
 
 #endif

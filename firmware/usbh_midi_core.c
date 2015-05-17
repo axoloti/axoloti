@@ -62,6 +62,10 @@ void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2)
     
 }
 
+int  usbh_MidiGetOutputBufferPending()
+{
+    return 0;
+}
 
 /** @defgroup USBH_MIDI_CORE_Private_Variables
  * @{

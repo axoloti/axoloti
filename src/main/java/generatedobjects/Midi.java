@@ -631,6 +631,8 @@ public class Midi extends gentools {
 
     static AxoObject Create_clockgen() {
         AxoObject o = new AxoObject("clock", "Midi clock master, als outputs Midi clock, start, stop, and continue messages");
+        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
         o.inlets.add(new InletBool32("run", "Run"));
         o.inlets.add(new InletBool32Rising("rst", "Reset"));
         o.params.add(new ParameterFrac32UMap("bpm"));
@@ -656,19 +658,19 @@ public class Midi extends gentools {
                 + "if (%run% && !_active) {\n"
                 + "  _active = 1;\n"
                 + "  if (_pos24ppq) "
-                + "    MidiSend1(MIDI_START);\n"
+                + "    MidiSend1((midi_device_t) %device%,%port%,MIDI_START);\n"
                 + "  else "
-                + "    MidiSend1(MIDI_CONTINUE);\n"
+                + "    MidiSend1((midi_device_t) %device%,%port%,MIDI_CONTINUE);\n"
                 + "} else if (!%run% && _active){\n"
                 + "  _active = 0;\n"
-                + "  MidiSend1(MIDI_STOP);\n"
+                + "  MidiSend1((midi_device_t) %device%,%port%,MIDI_STOP);\n"
                 + "}"
                 + "if (_active) {\n"
                 + "  _posfrac += %bpm%;\n"
                 + "  if (_posfrac & 1<<31) {\n"
                 + "    _posfrac &= (1<<31)-1;\n"
                 + "    _pos24ppq++;\n"
-                + "    MidiSend1(MIDI_TIMING_CLOCK);\n"
+                + "    MidiSend1((midi_device_t) %device%,%port%,MIDI_TIMING_CLOCK);\n"
                 + "  }\n"
                 + "}\n"
                 + "%pos4ppq% = _pos24ppq/6;\n"
@@ -678,6 +680,8 @@ public class Midi extends gentools {
 
     static AxoObject Create_noteout() {
         AxoObject o = new AxoObject("note", "Midi note output");
+        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Bipolar("note", "note (-64..63)"));
         o.inlets.add(new InletFrac32Pos("velo", "velocity"));
@@ -687,38 +691,45 @@ public class Midi extends gentools {
         o.sInitCode = "ntrig=0;\n";
         o.sKRateCode = "if ((%trig%>0) && !ntrig) {\n"
                 + "lastnote = (64+(%note%>>21))&0x7F;\n"
-                + "MidiSend3(MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;\n"
+                + "MidiSend3((midi_device_t) %device%,%port%,MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;\n"
                 + "}\n"
-                + "if (!(%trig%>0) && ntrig) {MidiSend3(MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}\n";
+                + "if (!(%trig%>0) && ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}\n";
         return o;
     }
 
     static AxoObject Create_ctlout() {
         AxoObject o = new AxoObject("cc", "Midi controller output");
+        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
+        
         o.inlets.add(new InletFrac32Pos("v", "value"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3(MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
 
     static AxoObject Create_ctlout_any() {
         AxoObject o = new AxoObject("cc any", "Midi controller output to any CC number and channel");
+        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
         o.inlets.add(new InletFrac32Pos("v", "value"));
         o.inlets.add(new InletInt32Pos("cc", "midi Continous Controller number 0-127"));
         o.inlets.add(new InletInt32Pos("chan", "channel 1..16"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3(MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
 
     static AxoObject Create_ctloutauto() {
         AxoObject o = new AxoObject("cc thin", "Midi controller output, automatic thinning");
+        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
         o.inlets.add(new InletFrac32Pos("v", "value"));
@@ -728,7 +739,7 @@ public class Midi extends gentools {
         o.sInitCode = "timer = 0;\n";
         o.sKRateCode = "if (((lsend>%v%+(1<<19))||(%v%>lsend+(1<<19))) && (timer>30)) {\n"
                 + "   lsend = %v%;\n"
-                + "   MidiSend3(MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));\n"
+                + "   MidiSend3((midi_device_t) %device%,%port%,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));\n"
                 + "   timer = 0;\n"
                 + "} else timer++;\n";
         return o;
@@ -736,11 +747,13 @@ public class Midi extends gentools {
 
     static AxoObject Create_bendout() {
         AxoObject o = new AxoObject("bend", "Midi pitch bend output");
+        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Bipolar("bend", "pitch bend"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3(MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -760,8 +773,10 @@ public class Midi extends gentools {
 
     static AxoObject Create_queuestate() {
         AxoObject o = new AxoObject("queuestate", "Gets the number of pending bytes in the midi output queue. Useful to prevent midi data flooding. Zero at rest.");
+        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));        
         o.outlets.add(new OutletInt32("length", "number of pending bytes in queue"));
-        o.sKRateCode = "%length% = MidiGetOutputBufferPending();\n";
+
+        o.sKRateCode = "%length% = MidiGetOutputBufferPending((midi_device_t) %device%);\n";
         return o;
     }
 
@@ -776,9 +791,9 @@ public class Midi extends gentools {
         o.sInitCode = "ntrig=0;\n";
         o.sKRateCode = "if ((%trig%>0) && !ntrig) {\n"
                 + "lastnote = (64+(%note%>>21))&0x7F;\n"
-                + "PatchMidiInHandler(MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;\n"
+                + "PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;\n"
                 + "}\n"
-                + "if (!(%trig%>0) && ntrig) {PatchMidiInHandler(MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}\n";
+                + "if (!(%trig%>0) && ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}\n";
         return o;
     }
 
@@ -789,7 +804,7 @@ public class Midi extends gentools {
         o.inlets.add(new InletFrac32Pos("v", "value"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -801,7 +816,7 @@ public class Midi extends gentools {
         o.inlets.add(new InletInt32Pos("chan", "channel 1..16"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -817,7 +832,7 @@ public class Midi extends gentools {
         o.sInitCode = "timer = 0;\n";
         o.sKRateCode = "if (((lsend>%v%+(1<<19))||(%v%>lsend+(1<<19))) && (timer>30)) {\n"
                 + "   lsend = %v%;\n"
-                + "   PatchMidiInHandler(MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));\n"
+                + "   PatchMidiInHandler((midi_device_t) 0,0,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));\n"
                 + "   timer = 0;\n"
                 + "} else timer++;\n";
         return o;
@@ -829,7 +844,7 @@ public class Midi extends gentools {
         o.inlets.add(new InletFrac32Bipolar("bend", "pitch bend"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -861,19 +876,19 @@ public class Midi extends gentools {
                 + "if (%run% && !_active) {\n"
                 + "  _active = 1;\n"
                 + "  if (_pos24ppq) "
-                + "    PatchMidiInHandler(MIDI_START,0,0);\n"
+                + "    PatchMidiInHandler((midi_device_t) 0,0,MIDI_START,0,0);\n"
                 + "  else "
-                + "    PatchMidiInHandler(MIDI_CONTINUE,0,0);\n"
+                + "    PatchMidiInHandler((midi_device_t) 0,0,MIDI_CONTINUE,0,0);\n"
                 + "} else if (!%run% && _active){\n"
                 + "  _active = 0;\n"
-                + "  PatchMidiInHandler(MIDI_STOP,0,0);\n"
+                + "  PatchMidiInHandler((midi_device_t) 0,0,MIDI_STOP,0,0);\n"
                 + "}"
                 + "if (_active) {\n"
                 + "  _posfrac += %bpm%;\n"
                 + "  if (_posfrac & 1<<31) {\n"
                 + "    _posfrac &= (1<<31)-1;\n"
                 + "    _pos24ppq++;\n"
-                + "    PatchMidiInHandler(MIDI_TIMING_CLOCK,0,0);\n"
+                + "    PatchMidiInHandler((midi_device_t) 0,0,MIDI_TIMING_CLOCK,0,0);\n"
                 + "  }\n"
                 + "}\n"
                 + "%pos4ppq% = _pos24ppq/6;\n"

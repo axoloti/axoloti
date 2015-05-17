@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc any" sha="86d48b2affb47053582469232764da4f1d11fb38">
+   <obj.normal id="cc any" sha="e7eda788b80acbd0a96640964c1cfaf484d5520b">
       <sDescription>Midi controller output to any CC number and channel</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,10 +12,13 @@
       <outlets/>
       <displays/>
       <params/>
-      <attribs/>
+      <attribs>
+         <spinner name="device" MinValue="1" MaxValue="5" DefaultValue="0"/>
+         <spinner name="port" MinValue="1" MaxValue="16" DefaultValue="0"/>
+      </attribs>
       <code.declaration><![CDATA[int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {MidiSend3(MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}
 if (!(%trig%>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>

@@ -40,8 +40,7 @@ void usbh_midi_init(void);
 void usbh_MidiSend1(uint8_t port, uint8_t b0);
 void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1);
 void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
-
-
+int  usbh_MidiGetOutputBufferPending();
 
 //#define MIDI_MIN_POLL          10
 #define USBH_MIDI_MPS_SIZE  64

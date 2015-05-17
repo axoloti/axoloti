@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc thin" sha="340f1ee753ac70acbbe52970a81cc8549063b29a">
+   <obj.normal id="cc thin" sha="dab6968b122b82e459e1dbfb068869f13ff1bb91">
       <sDescription>Midi controller output, automatic thinning</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -10,6 +10,8 @@
       <displays/>
       <params/>
       <attribs>
+         <spinner name="device" MinValue="1" MaxValue="5" DefaultValue="0"/>
+         <spinner name="port" MinValue="1" MaxValue="16" DefaultValue="0"/>
          <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="0"/>
          <spinner name="cc" MinValue="0" MaxValue="127" DefaultValue="0"/>
       </attribs>
@@ -20,7 +22,7 @@ int timer;
 ]]></code.init>
       <code.krate><![CDATA[if (((lsend>%v%+(1<<19))||(%v%>lsend+(1<<19))) && (timer>30)) {
    lsend = %v%;
-   MidiSend3(MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));
+   MidiSend3((midi_device_t) %device%,%port%,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));
    timer = 0;
 } else timer++;
 ]]></code.krate>

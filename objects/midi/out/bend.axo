@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="bend" sha="558e140dfe5cb9a7519e288da16e9a3430e6143a">
+   <obj.normal id="bend" sha="c606ddb38c482fa16c4243c0bf86fee0f618328f">
       <sDescription>Midi pitch bend output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -11,11 +11,13 @@
       <displays/>
       <params/>
       <attribs>
+         <spinner name="device" MinValue="1" MaxValue="5" DefaultValue="0"/>
+         <spinner name="port" MinValue="1" MaxValue="16" DefaultValue="0"/>
          <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="0"/>
       </attribs>
       <code.declaration><![CDATA[int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {MidiSend3(MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}
 if (!(%trig%>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>

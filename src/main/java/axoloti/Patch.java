@@ -1468,8 +1468,8 @@ public class Patch {
          */
 
         ao.sMidiCode = ""
-                + "if ( %mididevice% > 0 && %mididevice% != dev) return; \n"
-                + "if ( %midiport% > 0 && %midiport% != port) return; \n"
+                + "if ( %mididevice% > 0 && dev > 0 && %mididevice% != dev) return;\n"
+                + "if ( %midiport% > 0 && port > 0 && %midiport% != port) return;\n"
                 + "if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {\n"
                 + "  int min = 1<<30;\n"
                 + "  int mini = 0;\n"
@@ -1528,8 +1528,8 @@ public class Patch {
                 +  "   voiceChannel[vc]=0xFF;\n"
                 +  "}\n";
         o.sMidiCode = ""
-                + "if ( %mididevice% > 0 && %mididevice% != dev) return; \n"
-                + "if ( %midiport% > 0 && %midiport% != port) return; \n"
+                + "if ( %mididevice% > 0 && dev > 0 && %mididevice% != dev) return;\n"
+                + "if ( %midiport% > 0 && port > 0 && %midiport% != port) return;\n"
                 + "int msg = (status & 0xF0);\n"
                 + "int channel = (status & 0x0F);\n"
                 + "if ((msg == MIDI_NOTE_ON) && (data2)) {\n"
@@ -1614,13 +1614,13 @@ public class Patch {
                 +  "   voiceChannel[vc]=0xFF;\n"
                 +  "}\n"
                 +  "lowChannel = %midichannel% + 1;\n"
-                +  "highChannel = %midichannel% + ( 15 - %midichannel%) ;\n"
+                +  "highChannel = %midichannel% + ( 15 - %midichannel%);\n"
                 +  "pitchbendRange = 48;\n"
                 +  "lastRPN_LSB=0xFF;\n"
                 +  "lastRPN_MSB=0xFF;\n";
         o.sMidiCode = ""
-                + "if ( %mididevice% > 0 && %mididevice% != dev) return; \n"
-                + "if ( %midiport% > 0 && %midiport% != port) return; \n"
+                + "if ( %mididevice% > 0 && dev > 0 && %mididevice% != dev) return;\n"
+                + "if ( %midiport% > 0 && port > 0 && %midiport% != port) return;\n"
                 + "int msg = (status & 0xF0);\n"
                 + "int channel = (status & 0x0F);\n"
                 + "if ((msg == MIDI_NOTE_ON) && (data2)) {\n"

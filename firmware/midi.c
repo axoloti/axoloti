@@ -20,6 +20,7 @@
 #include "axoloti_board.h"
 #include "midi.h"
 #include "serial_midi.h"
+#include "usbh_midi_core.h"
 #include "patch.h"
 
 
@@ -75,3 +76,21 @@ void midi_init(void) {
     serial_midi_init();
     usbh_midi_init();
 }
+
+
+int  MidiGetOutputBufferPending(midi_device_t dev)
+{
+    switch (dev) {
+        case MIDI_DEVICE_SERIAL: {
+            return serial_MidiGetOutputBufferPending();
+        }
+        case MIDI_DEVICE_USB_HOST: {
+            return usbh_MidiGetOutputBufferPending();
+        }
+        default: {
+            // nop
+            return 0;
+        }
+    }
+}
+

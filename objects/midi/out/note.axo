@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="note" sha="8572cb79992ae63248030b5e1d69f0460dc77e5b">
+   <obj.normal id="note" sha="588b931eb52cdd8bc574354c97d9f9e5d1b5ef4a">
       <sDescription>Midi note output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,6 +12,8 @@
       <displays/>
       <params/>
       <attribs>
+         <spinner name="device" MinValue="1" MaxValue="5" DefaultValue="0"/>
+         <spinner name="port" MinValue="1" MaxValue="16" DefaultValue="0"/>
          <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="0"/>
       </attribs>
       <code.declaration><![CDATA[int ntrig;
@@ -20,9 +22,9 @@ int lastnote;]]></code.declaration>
 ]]></code.init>
       <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {
 lastnote = (64+(%note%>>21))&0x7F;
-MidiSend3(MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;
+MidiSend3((midi_device_t) %device%,%port%,MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;
 }
-if (!(%trig%>0) && ntrig) {MidiSend3(MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}
+if (!(%trig%>0) && ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}
 ]]></code.krate>
    </obj.normal>
 </objdefs>

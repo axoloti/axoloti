@@ -124,11 +124,9 @@ void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2) {
   sdWrite(&SDMIDI, tx, 3);
 }
 
-/* unused?
 int serial_MidiGetOutputBufferPending(void) {
   return chOQGetFullI(&SDMIDI.oqueue);
 }
- */
 
 // Midi UART...
 static const SerialConfig sdMidiCfg = {31250, // baud
