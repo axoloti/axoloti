@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,26 +15,16 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __AXOLOTI_DEFINES_H
-#define __AXOLOTI_DEFINES_H
+#ifndef __SERIAL_MIDI_H
+#define __SERIAL_MIDI_H
 
 #include <stdint.h>
 
-#define PI_F 3.1415927f
-#define SAMPLERATE 48000
-#define BUFSIZE 16
-#define BUFSIZE_POW 4
-typedef int32_t int32buffer[BUFSIZE];
+void serial_midi_init(void);
+void serial_MidiSend1(uint8_t b0);
+void serial_MidiSend2(uint8_t b0, uint8_t b1);
+void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2);
 
-//#define BOARD_STM32F4DISCOVERY 1
-//#define BOARD_AXOLOTI_V03 1
-#define BOARD_AXOLOTI_V05 1
-
-#if (BOARD_STM32F4DISCOVERY)
-#elif (BOARD_AXOLOTI_V03)
-#elif (BOARD_AXOLOTI_V05)
-#else
-#error Must define board!
-#endif
+// int  serial_MidiGetOutputBufferPending(void);
 
 #endif
