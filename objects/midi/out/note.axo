@@ -12,7 +12,18 @@
       <displays/>
       <params/>
       <attribs>
-         <spinner name="device" MinValue="1" MaxValue="5" DefaultValue="0"/>
+         <combo name="device">
+            <MenuEntries>
+               <string>serial</string>
+               <string>usb device</string>
+               <string>usb host</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+            </CEntries>
+         </combo>
          <spinner name="port" MinValue="1" MaxValue="16" DefaultValue="0"/>
          <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="0"/>
       </attribs>
