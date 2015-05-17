@@ -1492,7 +1492,7 @@ public class Patch {
                 + "      voicePriority[i] = priority++;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "        getVoices()[i].MidiInHandler(status, data1, data2);\n"
+                + "        getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
                 + "      }\n"
                 + "  }\n"
                 + "} else if (status == %midichannel% + MIDI_CONTROL_CHANGE) {\n"
