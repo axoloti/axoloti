@@ -1049,7 +1049,7 @@ public class Patch {
 
     String GenerateMidiCodePlusPlus(String ClassName) {
         String c = "";
-        c += "void MidiInHandler(uint8_t status, uint8_t data1, uint8_t data2){\n";
+        c += "void MidiInHandler(midi_device_t dev, uint8_t port,uint8_t status, uint8_t data1, uint8_t data2){\n";
         c += GenerateMidiInCodePlusPlus();
         c += "}\n\n";
         return c;
@@ -1088,8 +1088,8 @@ public class Patch {
                 + "  root.Dispose();\n"
                 + "}\n\n";
 
-        c += "void PatchMidiInHandler(uint8_t status, uint8_t data1, uint8_t data2){\n"
-                + "  root.MidiInHandler(status,data1,data2);\n"
+        c += "void PatchMidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2){\n"
+                + "  root.MidiInHandler(dev, port, status, data1, data2);\n"
                 + "}\n\n";
 
         c += "void xpatch_init2(int fwid)\n"
@@ -1133,7 +1133,7 @@ public class Patch {
                 + "  xpatch_init2(fwid);\n"
                 + "}\n\n";
 
-        c += "void PatchMidiInHandler(uint8_t status, uint8_t data1, uint8_t data2);\n\n";
+        c += "void PatchMidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2);\n\n";
 
         c += "     int32buffer AudioInputLeft;\n";
         c += "     int32buffer AudioInputRight;\n";
@@ -1292,6 +1292,17 @@ public class Patch {
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
             ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
         }
+
+        // use a cut down list of those currently supported
+        String cdev[] = {"0", "1", "2", "3"};
+        String udev[] = {"omni", "serial", "usb device", "usb host"};
+//        String cdev[] = {"0", "1", "2", "3", "4", "5"};
+//        String udev[] = {"omni", "serial", "usb device", "usb host", "digital x1", "digital x2"};
+        ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
+        String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15","16"};
+        String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+        ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
+
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("inlet") || o.typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
@@ -1456,7 +1467,10 @@ public class Patch {
          + "   }\n";        
          */
 
-        ao.sMidiCode = "if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {\n"
+        ao.sMidiCode = ""
+                + "if ( %mididevice% > 0 && %mididevice% != dev) return; \n"
+                + "if ( %midiport% > 0 && %midiport% != port) return; \n"
+                + "if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {\n"
                 + "  int min = 1<<30;\n"
                 + "  int mini = 0;\n"
                 + "  int i;\n"
@@ -1469,7 +1483,7 @@ public class Patch {
                 + "  voicePriority[mini] = 100000+priority++;\n"
                 + "  notePlaying[mini] = data1;\n"
                 + "  pressed[mini] = 1;\n"
-                + "  getVoices()[mini].MidiInHandler(status, data1, data2);\n"
+                + "  getVoices()[mini].MidiInHandler(dev, port, status, data1, data2);\n"
                 + "} else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||\n"
                 + "          (status == MIDI_NOTE_OFF + %midichannel%)) {\n"
                 + "  int i;\n"
@@ -1483,7 +1497,7 @@ public class Patch {
                 + "  }\n"
                 + "} else if (status == %midichannel% + MIDI_CONTROL_CHANGE) {\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++) getVoices()[i].MidiInHandler(status, data1, data2);\n"
+                + "  for(i=0;i<%poly%;i++) getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
                 + "  if (data1 == 64) {\n"
                 + "    if (data2>0) {\n"
                 + "      sustain = 1;\n"
@@ -1491,13 +1505,13 @@ public class Patch {
                 + "      sustain = 0;\n"
                 + "      for(i=0;i<%poly%;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
+                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {"
-                + "  int i;   for(i=0;i<%poly%;i++) getVoices()[i].MidiInHandler(status, data1, data2);\n"
+                + "  int i;   for(i=0;i<%poly%;i++) getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
                 + "}\n";
         return ao;
     }
@@ -1513,8 +1527,10 @@ public class Patch {
 		+ "for (vc=0;vc<%poly%;vc++) {\n"
                 +  "   voiceChannel[vc]=0xFF;\n"
                 +  "}\n";
-        o.sMidiCode =
-                  "int msg = (status & 0xF0);\n"
+        o.sMidiCode = ""
+                + "if ( %mididevice% > 0 && %mididevice% != dev) return; \n"
+                + "if ( %midiport% > 0 && %midiport% != port) return; \n"
+                + "int msg = (status & 0xF0);\n"
                 + "int channel = (status & 0x0F);\n"
                 + "if ((msg == MIDI_NOTE_ON) && (data2)) {\n"
                 + "  int min = 1<<30;\n"
@@ -1530,7 +1546,7 @@ public class Patch {
                 + "  notePlaying[mini] = data1;\n"
                 + "  pressed[mini] = 1;\n"
                 + "  voiceChannel[mini] = status & 0x0F;\n"
-                + "  getVoices()[mini].MidiInHandler(status & 0xF0, data1, data2);\n"
+                + "  getVoices()[mini].MidiInHandler(dev, port, status & 0xF0, data1, data2);\n"
                 + "} else if (((msg == MIDI_NOTE_ON) && (!data2))||\n"
                 + "            (msg == MIDI_NOTE_OFF)) {\n"
                 + "  int i;\n"
@@ -1540,14 +1556,14 @@ public class Patch {
                 + "      voiceChannel[i] = 0xFF;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "         getVoices()[i].MidiInHandler(msg + %midichannel%, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(dev, port, msg + %midichannel%, data1, data2);\n"
                 + "      }\n"
                 + "  }\n"
                 + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++) {\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "      getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, data1, data2);\n"
+                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "  if (data1 == 64) {\n"
@@ -1557,7 +1573,7 @@ public class Patch {
                 + "      sustain = 0;\n"
                 + "      for(i=0;i<%poly%;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
+                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n"
@@ -1566,14 +1582,14 @@ public class Patch {
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++){\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "      getVoices()[i].MidiInHandler(MIDI_PITCH_BEND + %midichannel%, data1, data2);\n"
+                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_PITCH_BEND + %midichannel%, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {"
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++) {\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "         getVoices()[i].MidiInHandler(msg + %midichannel%, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(dev, port,msg + %midichannel%, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "}\n";
@@ -1602,8 +1618,10 @@ public class Patch {
                 +  "pitchbendRange = 48;\n"
                 +  "lastRPN_LSB=0xFF;\n"
                 +  "lastRPN_MSB=0xFF;\n";
-        o.sMidiCode =
-                  "int msg = (status & 0xF0);\n"
+        o.sMidiCode = ""
+                + "if ( %mididevice% > 0 && %mididevice% != dev) return; \n"
+                + "if ( %midiport% > 0 && %midiport% != port) return; \n"
+                + "int msg = (status & 0xF0);\n"
                 + "int channel = (status & 0x0F);\n"
                 + "if ((msg == MIDI_NOTE_ON) && (data2)) {\n"
                 + "  if (channel == %midichannel% \n"
@@ -1622,7 +1640,7 @@ public class Patch {
                 + "  notePlaying[mini] = data1;\n"
                 + "  pressed[mini] = 1;\n"
                 + "  voiceChannel[mini] = status & 0x0F;\n"
-                + "  getVoices()[mini].MidiInHandler(status & 0xF0, data1, data2);\n"
+                + "  getVoices()[mini].MidiInHandler(dev, port, status & 0xF0, data1, data2);\n"
                 + "} else if (((msg == MIDI_NOTE_ON) && (!data2))||\n"
                 + "            (msg == MIDI_NOTE_OFF)) {\n"
                 + "  if (channel == %midichannel%\n "
@@ -1635,7 +1653,7 @@ public class Patch {
                 + "      voiceChannel[i] = 0xFF;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "         getVoices()[i].MidiInHandler(msg + %midichannel%, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(dev, port, msg + %midichannel%, data1, data2);\n"
                 + "      }\n"
                 + "  }\n"
                 + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
@@ -1651,9 +1669,9 @@ public class Patch {
                 + "         }\n"
 
                 + "         for(int i=0;i<%poly%;i++) {\n"
-                + "           getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 100, lastRPN_LSB);\n"
-                + "           getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 101, lastRPN_MSB);\n"
-                + "           getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 6, pitchbendRange);\n"
+                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 100, lastRPN_LSB);\n"
+                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 101, lastRPN_MSB);\n"
+                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 6, pitchbendRange);\n"
                 + "         }\n" //for
                 + "      }\n" //if mainchannel
                 + "    } else {\n" // enable/disable
@@ -1667,7 +1685,7 @@ public class Patch {
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++) {\n"
                 + "    if (voiceChannel[i] == channel || channel == %midichannel%) {\n"
-                + "      getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, data1, data2);\n"
+                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "  if (data1 == MIDI_C_RPN_MSB || data1 == MIDI_C_RPN_LSB || data1 == MIDI_C_DATA_ENTRY) {\n"
@@ -1679,9 +1697,9 @@ public class Patch {
                 + "               for(i=0;i<%poly%;i++) {\n"
                 + "                 if (voiceChannel[i] != channel) {\n" // because already sent above
                 + "                   pitchbendRange = data2;\n"
-                + "                   getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 100, lastRPN_LSB);\n"
-                + "                   getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 101, lastRPN_MSB);\n"
-                + "                   getVoices()[i].MidiInHandler(MIDI_CONTROL_CHANGE + %midichannel%, 6, pitchbendRange);\n"
+                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 100, lastRPN_LSB);\n"
+                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 101, lastRPN_MSB);\n"
+                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 6, pitchbendRange);\n"
                 + "                 }\n" // if
                 + "               }\n" //for
                 + "             }\n" // if lsb/msb=0
@@ -1696,7 +1714,7 @@ public class Patch {
                 + "      sustain = 0;\n"
                 + "      for(i=0;i<%poly%;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
+                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n" //sus=1
@@ -1708,7 +1726,7 @@ public class Patch {
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++) {\n"
                 + "    if (voiceChannel[i] == channel || channel == %midichannel%) {\n"
-                + "      getVoices()[i].MidiInHandler(MIDI_PITCH_BEND + %midichannel%, data1, data2);\n"
+                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_PITCH_BEND + %midichannel%, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {" // end pb, other midi
@@ -1718,7 +1736,7 @@ public class Patch {
                 + "  int i;\n"
                 + "  for(i=0;i<%poly%;i++) {\n"
                 + "    if (voiceChannel[i] == channel || channel == %midichannel%) {\n"
-                + "         getVoices()[i].MidiInHandler(msg + %midichannel%, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(dev, port, msg + %midichannel%, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "}\n"; // other midi

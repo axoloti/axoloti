@@ -630,7 +630,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         {
             String d3 = GenerateCodeMidiHandler("");
             if (!d3.isEmpty()) {
-                s += "void MidiInHandler(uint8_t status, uint8_t data1, uint8_t data2){\n";
+                s += "void MidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2){\n";
                 s += d3;
                 s += "}\n";
             }
@@ -664,11 +664,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     @Override
     public String GenerateCallMidiHandler() {
         if ((getType().sMidiCode != null) && (!getType().sMidiCode.isEmpty())) {
-            return getCInstanceName() + "_i.MidiInHandler(status, data1, data2);\n";
+            return getCInstanceName() + "_i.MidiInHandler(dev, port, status, data1, data2);\n";
         }
         for (ParameterInstance pi : getParameterInstances()) {
             if (!pi.GenerateCodeMidiHandler("").isEmpty()) {
-                return getCInstanceName() + "_i.MidiInHandler(status, data1, data2);\n";
+                return getCInstanceName() + "_i.MidiInHandler(dev, port, status, data1, data2);\n";
             }
         }
         return "";
