@@ -19,6 +19,7 @@ package generatedobjects;
 
 import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
+import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletBool32Rising;
 import axoloti.inlets.InletFrac32Bipolar;
@@ -631,7 +632,11 @@ public class Midi extends gentools {
 
     static AxoObject Create_clockgen() {
         AxoObject o = new AxoObject("clock", "Midi clock master, als outputs Midi clock, start, stop, and continue messages");
-        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        String cdev[] = {"1", "2", "3"};
+        String udev[] = {"serial", "usb device", "usb host"};
+//        String cdev[] = {"1", "2", "3", "4", "5"};
+//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
         o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
         o.inlets.add(new InletBool32("run", "Run"));
         o.inlets.add(new InletBool32Rising("rst", "Reset"));
@@ -680,7 +685,12 @@ public class Midi extends gentools {
 
     static AxoObject Create_noteout() {
         AxoObject o = new AxoObject("note", "Midi note output");
-        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+
+        String cdev[] = {"1", "2", "3"};
+        String udev[] = {"serial", "usb device", "usb host"};
+//        String cdev[] = {"1", "2", "3", "4", "5"};
+//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
         o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Bipolar("note", "note (-64..63)"));
@@ -689,7 +699,8 @@ public class Midi extends gentools {
         o.sLocalData = "int ntrig;\n"
                 + "int lastnote;";
         o.sInitCode = "ntrig=0;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {\n"
+        o.sKRateCode = "" 
+                + "if ((%trig%>0) && !ntrig) {\n"
                 + "lastnote = (64+(%note%>>21))&0x7F;\n"
                 + "MidiSend3((midi_device_t) %device%,%port%,MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;\n"
                 + "}\n"
@@ -699,7 +710,11 @@ public class Midi extends gentools {
 
     static AxoObject Create_ctlout() {
         AxoObject o = new AxoObject("cc", "Midi controller output");
-        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        String cdev[] = {"1", "2", "3"};
+        String udev[] = {"serial", "usb device", "usb host"};
+//        String cdev[] = {"1", "2", "3", "4", "5"};
+//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
         o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
@@ -714,7 +729,11 @@ public class Midi extends gentools {
 
     static AxoObject Create_ctlout_any() {
         AxoObject o = new AxoObject("cc any", "Midi controller output to any CC number and channel");
-        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        String cdev[] = {"1", "2", "3"};
+        String udev[] = {"serial", "usb device", "usb host"};
+//        String cdev[] = {"1", "2", "3", "4", "5"};
+//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
         o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
         o.inlets.add(new InletFrac32Pos("v", "value"));
         o.inlets.add(new InletInt32Pos("cc", "midi Continous Controller number 0-127"));
@@ -728,7 +747,11 @@ public class Midi extends gentools {
 
     static AxoObject Create_ctloutauto() {
         AxoObject o = new AxoObject("cc thin", "Midi controller output, automatic thinning");
-        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        String cdev[] = {"1", "2", "3"};
+        String udev[] = {"serial", "usb device", "usb host"};
+//        String cdev[] = {"1", "2", "3", "4", "5"};
+//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
         o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
@@ -747,7 +770,11 @@ public class Midi extends gentools {
 
     static AxoObject Create_bendout() {
         AxoObject o = new AxoObject("bend", "Midi pitch bend output");
-        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));
+        String cdev[] = {"1", "2", "3"};
+        String udev[] = {"serial", "usb device", "usb host"};
+//        String cdev[] = {"1", "2", "3", "4", "5"};
+//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
         o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Bipolar("bend", "pitch bend"));
@@ -773,7 +800,11 @@ public class Midi extends gentools {
 
     static AxoObject Create_queuestate() {
         AxoObject o = new AxoObject("queuestate", "Gets the number of pending bytes in the midi output queue. Useful to prevent midi data flooding. Zero at rest.");
-        o.attributes.add(new AxoAttributeSpinner("device", 1, 5, 0));        
+        String cdev[] = {"1", "2", "3"};
+        String udev[] = {"serial", "usb device", "usb host"};
+//        String cdev[] = {"1", "2", "3", "4", "5"};
+//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
         o.outlets.add(new OutletInt32("length", "number of pending bytes in queue"));
 
         o.sKRateCode = "%length% = MidiGetOutputBufferPending((midi_device_t) %device%);\n";
