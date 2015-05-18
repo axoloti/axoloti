@@ -105,7 +105,8 @@ typedef struct _MIDI_Process {
   uint8_t InEp;
   uint16_t OutEpSize;
   uint16_t InEpSize;
-  MIDI_State_t state;
+  MIDI_State_t state_in;
+  MIDI_State_t state_out;
 
   uint8_t buff[USBH_MIDI_MPS_SIZE];
 //  uint16_t             length;
