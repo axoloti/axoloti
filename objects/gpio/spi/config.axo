@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="config" sha="8491453740b6fc6b2fcf5de6e9eb65baa370f6e4">
+   <obj.normal id="config" sha="de87118df6aa11e19d10babb34b404522255b5a3">
       <sDescription>Configures a SPI interface. Pin mapping: PA4=NSS PA5=SCK PA6=MISO PA7=MOSI</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -67,7 +67,7 @@
       <code.init><![CDATA[// setup the pins
 palSetPadMode(GPIOA, 4, PAL_MODE_OUTPUT_PUSHPULL);// NSS
 palSetPadMode(GPIOA, 5, PAL_MODE_OUTPUT_PUSHPULL);// SCK
-palSetPadMode(GPIOA, 6, PAL_MODE_OUTPUT_PUSHPULL);// MOSI
+palSetPadMode(GPIOA, 7, PAL_MODE_OUTPUT_PUSHPULL);// MOSI
 //palSetPadMode(GPIOA, 4, PAL_MODE_ALTERNATE(5));// NSS
 palSetPadMode(GPIOA, 5, PAL_MODE_ALTERNATE(5));// SCK
 palSetPadMode(GPIOA, 6, PAL_MODE_ALTERNATE(5));// MISO

@@ -4,8 +4,8 @@
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
-         <frac32 name="pa5" description="pwm ratio"/>
-         <frac32 name="pc7" description="pwm ratio"/>
+         <frac32.positive name="pa5" description="pwm ratio"/>
+         <frac32.positive name="pc7" description="pwm ratio"/>
       </inlets>
       <outlets/>
       <displays/>
