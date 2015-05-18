@@ -24,7 +24,7 @@ set HOME=.
 %MINGW%\msys\1.0\bin\bash.exe get_dependencies.sh
 
 pause
-compile_gui.bat
+build_gui.bat
 
 echo READY
 echo Launch Axoloti by double clicking Axoloti\axoloti.bat

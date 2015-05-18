@@ -4,10 +4,10 @@
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
-         <frac32 name="pa0" description="pwm ratio"/>
-         <frac32 name="pa1" description="pwm ratio"/>
-         <frac32 name="pa2" description="pwm ratio"/>
-         <frac32 name="pa3" description="pwm ratio"/>
+         <frac32.positive name="pa0" description="pwm ratio"/>
+         <frac32.positive name="pa1" description="pwm ratio"/>
+         <frac32.positive name="pa2" description="pwm ratio"/>
+         <frac32.positive name="pa3" description="pwm ratio"/>
       </inlets>
       <outlets/>
       <displays/>
