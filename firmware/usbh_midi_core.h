@@ -40,7 +40,7 @@ void usbh_midi_init(void);
 void usbh_MidiSend1(uint8_t port, uint8_t b0);
 void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1);
 void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
-int  usbh_MidiGetOutputBufferPending();
+int  usbh_MidiGetOutputBufferPending(void);
 
 //#define MIDI_MIN_POLL          10
 #define USBH_MIDI_MPS_SIZE  64
@@ -107,13 +107,16 @@ typedef struct _MIDI_Process {
   uint16_t InEpSize;
   MIDI_State_t state_in;
   MIDI_State_t state_out;
+  bool input_valid;
+  bool output_valid;
 
-  uint8_t buff[USBH_MIDI_MPS_SIZE];
+  uint8_t buff_in[USBH_MIDI_MPS_SIZE];
+  uint8_t buff_out[USBH_MIDI_MPS_SIZE];
 //  uint16_t             length;
-  uint8_t              ep_addr;
+//  uint8_t              ep_addr;
   uint16_t             poll;
   uint16_t             timer;
-  uint8_t              DataReady;
+//  uint8_t              DataReady;
 //  USBH_MIDIDesc_t      HID_Desc;
   USBH_StatusTypeDef  ( * Init)(USBH_HandleTypeDef *phost);
 } MIDI_HandleTypeDef;
@@ -126,7 +129,7 @@ extern USBH_Class_cb_TypeDef MIDI_cb;
 
 extern void MIDI_CB(uint8_t a,uint8_t b,uint8_t c,uint8_t d);
 
-uint8_t MIDI_RcvData(uint8_t *outBuf);
+//uint8_t MIDI_RcvData(uint8_t *outBuf);
 
 typedef USBH_HandleTypeDef USB_OTG_CORE_HANDLE;
 
