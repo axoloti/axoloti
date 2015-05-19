@@ -43,7 +43,8 @@ void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
 int  usbh_MidiGetOutputBufferPending(void);
 
 //#define MIDI_MIN_POLL          10
-#define USBH_MIDI_MPS_SIZE  64
+#define USBH_MIDI_EPS_IN_SIZE  32
+#define USBH_MIDI_EPS_OUT_SIZE 32
 #define USB_AUDIO_CLASS 0x01
 #define USB_MIDISTREAMING_SubCLASS 0x03
 
@@ -110,8 +111,8 @@ typedef struct _MIDI_Process {
   bool input_valid;
   bool output_valid;
 
-  uint8_t buff_in[USBH_MIDI_MPS_SIZE];
-  uint8_t buff_out[USBH_MIDI_MPS_SIZE];
+  uint8_t buff_in[USBH_MIDI_EPS_IN_SIZE];
+  uint8_t buff_out[USBH_MIDI_EPS_OUT_SIZE];
 //  uint16_t             length;
 //  uint8_t              ep_addr;
   uint16_t             poll;
