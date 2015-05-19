@@ -402,7 +402,6 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
             if (send_ring_buffer.read_ptr != send_ring_buffer.write_ptr)
             {
                 send_ring_buffer.read_ptr =(send_ring_buffer.read_ptr + 1) % RING_BUFFER_SIZE;
-                USBH_UsrLog("USB Host Output sending data @ %i", send_ring_buffer.read_ptr  );
                 USBH_DbgLog("USB Host Output sending data @ %i", send_ring_buffer.read_ptr  );
 
                 USBH_DbgLog("USB Host Output sending data : %x, %x, %x %x",
