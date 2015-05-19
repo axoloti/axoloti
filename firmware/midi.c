@@ -63,7 +63,7 @@ void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t 
             break;
         }
         case MIDI_DEVICE_USB_HOST: {
-            usbh_MidiSend2(port, b0,b1);
+            usbh_MidiSend3(port,b0,b1,b2);
             break;
         }
         default: {
