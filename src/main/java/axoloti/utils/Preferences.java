@@ -17,6 +17,7 @@
  */
 package axoloti.utils;
 
+import axoloti.MainFrame;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -48,6 +49,8 @@ public class Preferences {
     Boolean ExpertMode;
     @ElementList(required = false)
     ArrayList<String> recentFiles = new ArrayList<String>();
+    @Element(required = false)
+    String MidiInputDevice;
 
     boolean isDirty = false;
 
@@ -73,6 +76,9 @@ public class Preferences {
         }
         if (ExpertMode == null) {
             ExpertMode = false;
+        }
+        if (MidiInputDevice == null) {
+            MidiInputDevice = "";
         }
     }
 
@@ -185,6 +191,7 @@ public class Preferences {
     public ArrayList<String> getRecentFiles() {
         return recentFiles;
     }
+   
 
     public void addRecentFile(String filename) {
         for (String r : recentFiles) {
@@ -199,4 +206,16 @@ public class Preferences {
         SetDirty();
     }
 
+    public String getMidiInputDevice() {
+        return MidiInputDevice;
+    }
+
+    public void setMidiInputDevice(String MidiInputDevice) {
+        if(this.MidiInputDevice.equals(MidiInputDevice)) {
+            return;
+        }
+        this.MidiInputDevice = MidiInputDevice;
+        MainFrame.mainframe.initMidiInput(this.MidiInputDevice);
+        SetDirty();
+    }
 }
