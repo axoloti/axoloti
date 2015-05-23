@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="bend" sha="dd9c5285086369846d3afbff18b34630ce90755d">
+   <obj.normal id="bend" sha="1b7bc091bd4f01f72e5750684a176d9f4c88704c">
       <sDescription>Midi pitch bend output. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -15,7 +15,7 @@
       </attribs>
       <code.declaration><![CDATA[int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}
 if (!(%trig%>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc thin" sha="970061517641cff6d9187b1ee39abd939aaf8f1d">
+   <obj.normal id="cc thin" sha="55debd59a25a691668720b475f466386175d2fcc">
       <sDescription>Midi controller output, automatic thinning. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -20,7 +20,7 @@ int timer;
 ]]></code.init>
       <code.krate><![CDATA[if (((lsend>%v%+(1<<19))||(%v%>lsend+(1<<19))) && (timer>30)) {
    lsend = %v%;
-   PatchMidiInHandler(MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));
+   PatchMidiInHandler(MIDI_DEVICE_INTERNAL ,0,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));
    timer = 0;
 } else timer++;
 ]]></code.krate>

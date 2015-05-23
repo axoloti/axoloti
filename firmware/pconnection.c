@@ -676,7 +676,7 @@ void PExReceiveByte(unsigned char c) {
       break;
     case 6:
       midi_r[2] = c;
-      MidiInMsgHandler(midi_r[0], midi_r[1], midi_r[2]);
+      MidiInMsgHandler(MIDI_DEVICE_INTERNAL, 1,midi_r[0], midi_r[1], midi_r[2]);
       header = 0;
       state = 0;
       break;

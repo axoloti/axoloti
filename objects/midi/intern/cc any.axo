@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc any" sha="dec68a24c8e41f16766599e71618e83ea4e6f829">
+   <obj.normal id="cc any" sha="6d8a88faffac1b31cc539f0a29b2d3f5673b43cb">
       <sDescription>Midi controller output to any CC number and channel. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -15,7 +15,7 @@
       <attribs/>
       <code.declaration><![CDATA[int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}
 if (!(%trig%>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="note" sha="601f57c317af33226524f5c49537789f8d7967eb">
+   <obj.normal id="note" sha="8e06133dfab6e95b6290397e24947240b292f007">
       <sDescription>Midi note output. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -20,9 +20,9 @@ int lastnote;]]></code.declaration>
 ]]></code.init>
       <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {
 lastnote = (64+(%note%>>21))&0x7F;
-PatchMidiInHandler(MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;
+PatchMidiInHandler(MIDI_DEVICE_INTERNAL,0,MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;
 }
-if (!(%trig%>0) && ntrig) {PatchMidiInHandler(MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}
+if (!(%trig%>0) && ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}
 ]]></code.krate>
    </obj.normal>
 </objdefs>

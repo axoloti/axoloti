@@ -82,6 +82,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
     QCmdProcessor qcmdprocessor;
     Thread qcmdprocessorThread;
     static public Cursor transparentCursor;
+    AxolotiMidiInput midiInput;
 
     /**
      * Creates new form MainFrame
@@ -177,6 +178,8 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
         axoObjects = new AxoObjects();
         axoObjects.LoadAxoObjects();
+        midiInput = new AxolotiMidiInput();
+        initMidiInput(prefs.getMidiInputDevice());
     }
 
     void PopulateExamplesMenu(JMenu parent) {
@@ -903,4 +906,7 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     }
 
+    public void initMidiInput(String midiInputDevice) {
+        midiInput.start(midiInputDevice);
+    }
 }

@@ -21,6 +21,8 @@
 #include "sdcard.h"
 #include "string.h"
 #include "axoloti_board.h"
+#include "midi.h"
+
 
 patchMeta_t patchMeta;
 
@@ -148,9 +150,9 @@ void computebufI(int32_t *inp, int32_t *outp) {
     }
 }
 
-void MidiInMsgHandler(uint8_t status, uint8_t data1, uint8_t data2) {
+void MidiInMsgHandler(midi_device_t  dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2) {
   if (!patchStatus) {
-    (patchMeta.fptr_MidiInHandler)(status, data1, data2);
+    (patchMeta.fptr_MidiInHandler)(dev, port, status, data1, data2);
   }
 }
 

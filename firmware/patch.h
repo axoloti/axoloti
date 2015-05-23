@@ -23,11 +23,12 @@
 #include "ui.h"
 #include "axoloti_board.h"
 #include "ff.h"
+#include "midi.h"
 
 typedef void (*fptr_patch_init_t)(int32_t fwID);
 typedef void (*fptr_patch_dispose_t)(void);
 typedef void (*fptr_patch_dsp_process_t)(int32_t *, int32_t *);
-typedef void (*fptr_patch_midi_in_handler_t)(uint8_t, uint8_t, uint8_t);
+typedef void (*fptr_patch_midi_in_handler_t)(midi_device_t dev, uint8_t port, uint8_t, uint8_t, uint8_t);
 typedef void (*fptr_patch_applyPreset_t)(int32_t);
 
 typedef struct {
@@ -69,6 +70,7 @@ void InitPatch0(void);
 void StartPatch(void);
 void StopPatch(void);
 
+/* USUSED?
 void PatchProcess(int16_t * inbuf, int16_t * outbuf);
 void PatchInit(void);
 void PatchMidiInNoteOn(uint8_t channel, uint8_t note, uint8_t velocity);
@@ -85,6 +87,7 @@ void MidiInPitchBend(uint8_t channel, uint8_t data1, uint8_t data2);
 void MidiInPitchBend(uint8_t channel, uint8_t data1, uint8_t data2);
 void PatchMidiInAllNotesOff(uint8_t channel);
 void PatchMidiInResetControllers(uint8_t channel);
+*/
 
 #define PATCHMAINLOC 0x20010000
 

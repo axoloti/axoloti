@@ -94,12 +94,31 @@
 #define MIDI_C_OMNI_ON			0x7d // omni on all notes off
 #define MIDI_C_MONO				0x7e // mono on all notes off
 #define MIDI_C_POLY				0x7f // poly on all notes off
+
+typedef enum
+{
+    MIDI_DEVICE_OMNI = 0,          // for filtering
+    MIDI_DEVICE_DIN,             // MIDI_DIN
+    MIDI_DEVICE_USB_DEVICE,      // MicroUSB  - not implemented
+    MIDI_DEVICE_USB_HOST,        // USB host port
+    MIDI_DEVICE_DIGITAL_X1,      // x1 pins - not implemented
+    MIDI_DEVICE_DIGITAL_X2,       // x2 pins - not implemented
+    MIDI_DEVICE_INTERNAL = 0x0F     // internal (to the board) midi
+} midi_device_t ;
+
+// midi port, from 1  = OMNI for filtering and internal messages
+#define MIDI_PORT_OMNI 0
+
 void midi_init(void);
-void MidiInByteHandler(uint8_t data);
-void MidiInMsgHandler(uint8_t b0, uint8_t b1, uint8_t b2);
-void MidiSend1(uint8_t b0);
-void MidiSend2(uint8_t b0, uint8_t b1);
-void MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2);
-int MidiGetOutputBufferPending(void);
+void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
+
+
+void MidiSend1(midi_device_t dev, uint8_t port, uint8_t b0);
+void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1);
+void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
+
+// Note: this is used by a patcher, but is incorrect since it would need to know for which device
+int  MidiGetOutputBufferPending(midi_device_t dev);
+
 
 #endif

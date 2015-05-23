@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc any" sha="86d48b2affb47053582469232764da4f1d11fb38">
+   <obj.normal id="cc any" sha="57c54018f54ca520bf43faf662fbf0bab292b48e">
       <sDescription>Midi controller output to any CC number and channel</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,10 +12,31 @@
       <outlets/>
       <displays/>
       <params/>
-      <attribs/>
+      <attribs>
+         <combo name="device">
+            <MenuEntries>
+               <string>din</string>
+               <string>usb host port 1</string>
+               <string>usb host port 2</string>
+               <string>usb host port 3</string>
+               <string>usb host port 4</string>
+               <string>internal port 1</string>
+               <string>internal port 2</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1, 1</string>
+               <string>3, 1</string>
+               <string>3, 2</string>
+               <string>3, 3</string>
+               <string>3, 4</string>
+               <string>15, 1</string>
+               <string>15, 2</string>
+            </CEntries>
+         </combo>
+      </attribs>
       <code.declaration><![CDATA[int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {MidiSend3(MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}
+      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%, MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}
 if (!(%trig%>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>

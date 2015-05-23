@@ -8,12 +8,7 @@
  *
  * @verbatim
  *
- *          ===================================================================
- *                                MIDI Class  Description
- *          ===================================================================
- *
- *
- *  @endverbatim
+ * @endverbatim
  *
  ******************************************************************************
  *
@@ -41,17 +36,104 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usbh_midi_core.h"
 
-/** @defgroup USBH_MIDI_CORE_Private_Variables
- * @{
- */
-//extern USB_OTG_CORE_HANDLE USB_OTG_Core_dev;
-
-
-USB_Setup_TypeDef MIDI_Setup;
 
 
 #define _USB_H_
 #include "ch.h"
+
+USB_Setup_TypeDef MIDI_Setup;
+
+#define RING_BUFFER_SIZE 5
+
+typedef struct
+{
+    uint8_t data[4];
+} MIDIEvent_t;
+
+
+// very simple ring buffer
+static struct {
+    MIDIEvent_t event[RING_BUFFER_SIZE];
+    uint8_t read_ptr;
+    uint8_t write_ptr;
+} send_ring_buffer  __attribute__ ((section (".ccmramend")));;
+
+
+
+void usbh_midi_init(void)
+{
+    send_ring_buffer.read_ptr = send_ring_buffer.write_ptr = 0;
+}
+
+
+// the Send etc, work for everything except Sysex
+inline uint8_t calcDS(uint8_t b0) {
+    // this works for everything bar SysEx,
+    // for sysex you need to use 0x4-0x7 to pack messages
+    return (b0 & 0xF0 ) >> 4;
+    
+}
+
+inline uint8_t calcCIN(uint8_t port, uint8_t b0) {
+    uint8_t ds  = calcDS(b0);
+    uint8_t cin = ((( port - 1) & 0x0F) << 4)  | ds;
+    return cin;
+}
+
+
+void usbh_MidiSend1(uint8_t port, uint8_t b0) {
+    USBH_DbgLog("usbh_MidiSend1");
+    uint8_t next = (send_ring_buffer.write_ptr+ 1) % RING_BUFFER_SIZE;
+    
+    if(next == send_ring_buffer.read_ptr) {
+        USBH_ErrLog("usbh_MidiSend1 : ring buffer overflow");
+    }
+    
+    send_ring_buffer.event[next].data[0]=calcCIN(port, b0);
+    send_ring_buffer.event[next].data[1]=b0;
+    send_ring_buffer.event[next].data[2]=0;
+    send_ring_buffer.event[next].data[3]=0;
+    send_ring_buffer.write_ptr=next;
+}
+
+void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1) {
+    USBH_DbgLog("usbh_MidiSend2");
+    uint8_t next = (send_ring_buffer.write_ptr+ 1) % RING_BUFFER_SIZE;
+    
+    if(next == send_ring_buffer.read_ptr) {
+        USBH_ErrLog("usbh_MidiSend2 : ring buffer overflow");
+    }
+    
+    send_ring_buffer.event[next].data[0]=calcCIN(port, b0);
+    send_ring_buffer.event[next].data[1]=b0;
+    send_ring_buffer.event[next].data[2]=b1;
+    send_ring_buffer.event[next].data[3]=0;
+    send_ring_buffer.write_ptr=next;
+}
+
+void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
+    USBH_DbgLog("usbh_MidiSend3");
+    uint8_t next = (send_ring_buffer.write_ptr+ 1) % RING_BUFFER_SIZE;
+    
+    if(next == send_ring_buffer.read_ptr) {
+        USBH_ErrLog("usbh_MidiSend3 : ring buffer overflow");
+    }
+    
+    send_ring_buffer.event[next].data[0]=calcCIN(port, b0);
+    send_ring_buffer.event[next].data[1]=b0;
+    send_ring_buffer.event[next].data[2]=b1;
+    send_ring_buffer.event[next].data[3]=b2;
+    send_ring_buffer.write_ptr=next;
+}
+
+int  usbh_MidiGetOutputBufferPending(void) {
+    return 0;
+}
+
+/** @defgroup USBH_MIDI_CORE_Private_Variables
+ * @{
+ */
+
 
 
 
@@ -62,10 +144,9 @@ static USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (USBH_HandleTypeDef *phost)
 static USBH_StatusTypeDef USBH_MIDI_ClassRequest(USBH_HandleTypeDef *phost);
 static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost);
 static USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost);
-//static void  USBH_MIDI_ParseHIDDesc (HID_DescTypeDef *desc, uint8_t *buf);
 
-USBH_ClassTypeDef  MIDI_Class =
-{
+
+USBH_ClassTypeDef  MIDI_Class = {
   "MID",
   USB_AUDIO_CLASS,
   USBH_MIDI_InterfaceInit,
@@ -78,6 +159,16 @@ USBH_ClassTypeDef  MIDI_Class =
 
 #define MIDI_MIN_POLL 2
 
+inline bool isValidInput(MIDI_HandleTypeDef* pH)
+{
+    return pH->input_valid;
+}
+
+inline bool isValidOutput(MIDI_HandleTypeDef* pH)
+{
+    return pH->output_valid;
+}
+
 /*-----------------------------------------------------------------------------------------*/
 /**
  * @brief  USBH_MIDI_InterfaceInit
@@ -88,187 +179,102 @@ USBH_ClassTypeDef  MIDI_Class =
  */
 static USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
 
-  USBH_StatusTypeDef status = USBH_FAIL;
-  MIDI_HandleTypeDef *MIDI_Handle;
+    USBH_StatusTypeDef status = USBH_FAIL;
+    MIDI_HandleTypeDef *MIDI_Handle;
 
-  uint8_t max_ep;
-  uint8_t num = 0;
-  uint8_t interface;
+    uint8_t interface;
+    send_ring_buffer.read_ptr = send_ring_buffer.write_ptr = 0;
 
-  for(interface=0; interface<phost->device.CfgDesc.bNumInterfaces && interface < USBH_MAX_NUM_INTERFACES; interface++) {
+    // this is limited to one midi interface, and also currently only 1 input and 1 output endpoint on that interface
+    
+    for(interface=0; interface<phost->device.CfgDesc.bNumInterfaces && interface < USBH_MAX_NUM_INTERFACES; interface++) {
+        if( (phost->device.CfgDesc.Itf_Desc[interface].bInterfaceClass == USB_AUDIO_CLASS) &&
+            (phost->device.CfgDesc.Itf_Desc[interface].bInterfaceSubClass == USB_MIDISTREAMING_SubCLASS) ) {
 
-  if( (phost->device.CfgDesc.Itf_Desc[interface].bInterfaceClass == USB_AUDIO_CLASS) &&
-      (phost->device.CfgDesc.Itf_Desc[interface].bInterfaceSubClass == USB_MIDISTREAMING_SubCLASS) ) {
-
-    USBH_SelectInterface(phost, interface);
-    phost->pActiveClass->pData = (MIDI_HandleTypeDef *)USBH_malloc(
-        sizeof(MIDI_HandleTypeDef));
-    MIDI_Handle = phost->pActiveClass->pData;
-
-    MIDI_Handle->state = MIDI_INIT;
-    MIDI_Handle->ep_addr =
-        phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[0].bEndpointAddress;
-    MIDI_Handle->poll =
-        phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[0].bInterval;
-
-    if (MIDI_Handle->poll < MIDI_MIN_POLL) {
-      MIDI_Handle->poll = MIDI_MIN_POLL;
-    }
-
-    if(phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[0].bEndpointAddress & 0x80)
-    {
-      MIDI_Handle->InEp = (phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[0].bEndpointAddress);
-      MIDI_Handle->InEpSize  = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[0].wMaxPacketSize;
-    }
-    else
-    {
-      MIDI_Handle->OutEp = (phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[0].bEndpointAddress);
-      MIDI_Handle->OutEpSize  = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[0].wMaxPacketSize;
-    }
-
-    if(phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[1].bEndpointAddress & 0x80)
-    {
-      MIDI_Handle->InEp = (phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[1].bEndpointAddress);
-      MIDI_Handle->InEpSize  = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[1].wMaxPacketSize;
-    }
-    else
-    {
-      MIDI_Handle->OutEp = (phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[1].bEndpointAddress);
-      MIDI_Handle->OutEpSize  = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[1].wMaxPacketSize;
-    }
-
-#if 0
-    /* Check fo available number of endpoints */
-    /* Find the number of EPs in the Interface Descriptor */
-    /* Choose the lower number in order not to overrun the buffer allocated */
-    max_ep =
-        ((phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].bNumEndpoints
-            <= USBH_MAX_NUM_ENDPOINTS) ? phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].bNumEndpoints :
-                                         USBH_MAX_NUM_ENDPOINTS);
-
-    /* Decode endpoint IN and OUT address from interface descriptor */
-    for (; num < max_ep; num++) {
-      if (phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[num].bEndpointAddress
-          & 0x80) {
-        MIDI_Handle->InEp =
-            (phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[num].bEndpointAddress);
-        MIDI_Handle->InPipe =\
- USBH_AllocPipe(phost, MIDI_Handle->InEp);
-
-        /* Open pipe for IN endpoint */
-        USBH_OpenPipe(phost, MIDI_Handle->InPipe, MIDI_Handle->InEp,
-                      phost->device.address, phost->device.speed,
-                      USB_EP_TYPE_BULK, MIDI_Handle->length);
-
-      }
-#if 0
-      else {
-        MIDI_Handle->OutEp =
-            (phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[num].bEndpointAddress);
-        MIDI_Handle->OutPipe =\
- USBH_AllocPipe(phost, MIDI_Handle->OutEp);
-
-        /* Open pipe for OUT endpoint */
-        USBH_OpenPipe(phost, MIDI_Handle->OutPipe, MIDI_Handle->OutEp,
-                      phost->device.address, phost->device.speed,
-                      USB_EP_TYPE_BULK, MIDI_Handle->length);
-      }
-#endif
-    }
-#endif
-
-    MIDI_Handle->OutPipe = USBH_AllocPipe(phost, MIDI_Handle->OutEp);
-    MIDI_Handle->InPipe = USBH_AllocPipe(phost, MIDI_Handle->InEp);
-    /* Open the new channels */
-    USBH_OpenPipe  (phost,
-                    MIDI_Handle->OutPipe,
-                    MIDI_Handle->OutEp,
-                    phost->device.address,
-                    phost->device.speed,
-                    USB_EP_TYPE_BULK,
-                    MIDI_Handle->OutEpSize);
-
-    USBH_OpenPipe  (phost,
-                    MIDI_Handle->InPipe,
-                    MIDI_Handle->InEp,
-                    phost->device.address,
-                    phost->device.speed,
-                    USB_EP_TYPE_BULK,
-                    MIDI_Handle->InEpSize);
+            // bizarre, why select the interface... all it does is put it in current interface and then log it,
+            // but we may not even actually use it !?
+            USBH_SelectInterface(phost, interface);
+            phost->pActiveClass->pData = (MIDI_HandleTypeDef *)USBH_malloc(sizeof(MIDI_HandleTypeDef));
+            MIDI_Handle = phost->pActiveClass->pData;
+            MIDI_Handle->state_in = MIDI_INIT;
+            MIDI_Handle->state_out = MIDI_INIT;
 
 
-    USBH_LL_SetToggle  (phost, MIDI_Handle->InPipe,0);
-    USBH_LL_SetToggle  (phost, MIDI_Handle->OutPipe,0);
+            uint8_t num_ep = ((phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].bNumEndpoints <= USBH_MAX_NUM_ENDPOINTS)
+                              ? phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].bNumEndpoints
+                              : USBH_MAX_NUM_ENDPOINTS);
+
+            // eventually we should be looking for multiple input and output EP, for output we then just write to the one indicated
+            // by the CID, for READ we may have to consider allowing the user to select which ports they are interested in (for efficiency?)
+            // but for the moment just pick the first input and the first output
+            MIDI_Handle->input_valid = false;
+            MIDI_Handle->output_valid = false;
+
+            uint8_t i=0;
+            for (; i< num_ep && (!isValidInput(MIDI_Handle) || !isValidOutput(MIDI_Handle)) ; i++) {
+                
+                uint8_t iv = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bInterval;
+                // select longest poll time
+                MIDI_Handle->poll = iv > MIDI_Handle->poll ? iv : MIDI_Handle->poll;
 
 
-    status = USBH_OK;
-  }
-  }
+                if(!isValidInput(MIDI_Handle) && phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bEndpointAddress & 0x80) {
+                    MIDI_Handle->InEp = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bEndpointAddress;
+                    MIDI_Handle->InEpSize  = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].wMaxPacketSize;
+                    if(MIDI_Handle->InEpSize >USBH_MIDI_EPS_IN_SIZE) MIDI_Handle->InEpSize = USBH_MIDI_EPS_IN_SIZE;
+                    MIDI_Handle->input_valid = true;
+                }
+                if(!isValidOutput(MIDI_Handle) && phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bEndpointAddress)
+                {
+                    MIDI_Handle->OutEp = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bEndpointAddress;
+                    MIDI_Handle->OutEpSize  = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].wMaxPacketSize;
+                    if(MIDI_Handle->OutEpSize >USBH_MIDI_EPS_IN_SIZE) MIDI_Handle->OutEpSize = USBH_MIDI_EPS_OUT_SIZE;
+                    MIDI_Handle->output_valid = true;
+                }
+                
+            } // each endpoint, or until ive found both input and output endpoint
+
+            if (MIDI_Handle->poll < MIDI_MIN_POLL) {
+                MIDI_Handle->poll = MIDI_MIN_POLL;
+            }
+
+
+            if (isValidOutput(MIDI_Handle)) {
+                USBH_UsrLog("USB Host Output connected to %x : %x", interface, MIDI_Handle->OutEp );
+
+                MIDI_Handle->OutPipe = USBH_AllocPipe(phost, MIDI_Handle->OutEp);
+                USBH_OpenPipe  (phost,
+                                MIDI_Handle->OutPipe,
+                                MIDI_Handle->OutEp,
+                                phost->device.address,
+                                phost->device.speed,
+                                USB_EP_TYPE_BULK,
+                                MIDI_Handle->OutEpSize);
+                USBH_LL_SetToggle  (phost, MIDI_Handle->OutPipe,0);
+            }
+            
+            if (isValidInput(MIDI_Handle)) {
+                USBH_UsrLog("USB Host Input connected to %x : %x", interface, MIDI_Handle->InEp );
+
+                MIDI_Handle->InPipe = USBH_AllocPipe(phost, MIDI_Handle->InEp);
+                USBH_OpenPipe  (phost,
+                                MIDI_Handle->InPipe,
+                                MIDI_Handle->InEp,
+                                phost->device.address,
+                                phost->device.speed,
+                                USB_EP_TYPE_BULK,
+                                MIDI_Handle->InEpSize);
+                USBH_LL_SetToggle  (phost, MIDI_Handle->InPipe,0);
+            }
+            status = USBH_OK;
+            return status;
+        } // if, a midi interface
+  
+    }// for each interface
+    
   return status;
 }
-#if 0 // original code
-if((phost->device_prop.Itf_Desc[0].bInterfaceClass == USB_AUDIO_CLASS) &&
-    (pphost->device_prop.Itf_Desc[0].bInterfaceSubClass == USB_MIDISTREAMING_SubCLASS))
-{
-  if(phost->device_prop.Ep_Desc[0][0].bEndpointAddress & 0x80)
-  {
-    MIDI_Machine.MIDIBulkInEp = (phost->device_prop.Ep_Desc[0][0].bEndpointAddress);
-    MIDI_Machine.MIDIBulkInEpSize = phost->device_prop.Ep_Desc[0][0].wMaxPacketSize;
-  }
-  else
-  {
-    MIDI_Machine.MIDIBulkOutEp = (phost->device_prop.Ep_Desc[0][0].bEndpointAddress);
-    MIDI_Machine.MIDIBulkOutEpSize = phost->device_prop.Ep_Desc[0] [0].wMaxPacketSize;
-  }
 
-  if(pphost->device_prop.Ep_Desc[0][1].bEndpointAddress & 0x80)
-
-  {
-    MIDI_Machine.MIDIBulkInEp = (pphost->device_prop.Ep_Desc[0][1].bEndpointAddress);
-    MIDI_Machine.MIDIBulkInEpSize = pphost->device_prop.Ep_Desc[0][1].wMaxPacketSize;
-  }
-  else
-  {
-    MIDI_Machine.MIDIBulkOutEp = (pphost->device_prop.Ep_Desc[0][1].bEndpointAddress);
-    MIDI_Machine.MIDIBulkOutEpSize = pphost->device_prop.Ep_Desc[0][1].wMaxPacketSize;
-  }
-
-  MIDI_Machine.hc_num_out = USBH_Alloc_Channel(pdev,
-      MIDI_Machine.MIDIBulkOutEp);
-  MIDI_Machine.hc_num_in = USBH_Alloc_Channel(pdev,
-      MIDI_Machine.MIDIBulkInEp);
-
-  /* Open the new channels */
-  USBH_Open_Channel (pdev,
-      MIDI_Machine.hc_num_out,
-      pphost->device_prop.address,
-      pphost->device_prop.speed,
-      EP_TYPE_BULK,
-      MIDI_Machine.MIDIBulkOutEpSize);
-
-  USBH_Open_Channel (pdev,
-      MIDI_Machine.hc_num_in,
-      pphost->device_prop.address,
-      pphost->device_prop.speed,
-      EP_TYPE_BULK,
-      MIDI_Machine.MIDIBulkInEpSize);
-
-  MIDI_Machine.state = MIDI_GET_DATA;
-  start_toggle =0;
-  status = USBH_OK;
-
-}
-
-else
-{
-  phost->
-  usr_cb->DeviceNotSupported();
-}
-
-return status;
-
-}
-#endif
 
 /*-----------------------------------------------------------------------------------------*/
 /**
@@ -278,23 +284,20 @@ return status;
  * @param  hdev: Selected device property
  * @retval None
  */
-USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (USBH_HandleTypeDef *phost){
-#if 0
-  if (MIDI_Machine.hc_num_out) {
-    USB_OTG_HC_Halt(pdev, MIDI_Machine.hc_num_out);
-    USBH_Free_Channel(pdev, MIDI_Machine.hc_num_out);
-    MIDI_Machine.hc_num_out = 0; /* Reset the Channel as Free */
-  }
-
-  if (MIDI_Machine.hc_num_in) {
-    USB_OTG_HC_Halt(pdev, MIDI_Machine.hc_num_in);
-    USBH_Free_Channel(pdev, MIDI_Machine.hc_num_in);
-    MIDI_Machine.hc_num_in = 0; /* Reset the Channel as Free */
-  }
-  start_toggle = 0;
-#else
-  return USBH_OK;
-#endif
+USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (__attribute__((__unused__))  USBH_HandleTypeDef *phost) {
+//    if (isValidOutput(MIDI_Handle) {
+//        USB_OTG_HC_Halt(phost, MIDI_Handle->OutPipe);
+//        USBH_Free_Channel(phost, MIDI_Handle->OutPipe);
+//        MIDI_Handle->OutPipe = 0;
+//        MIDI_Handle->output_valid = false;
+//    }
+//    if (isValidInput(MIDI_Handle) {
+//        USB_OTG_HC_Halt(phost, MIDI_Handle->InPipe);
+//        USBH_Free_Channel(phost, MIDI_Handle->InPipe);
+//        MIDI_Handle->InPipe = 0;
+//        MIDI_Handle->input_valid = false;
+//    }
+    return USBH_OK;
 }
 /*-----------------------------------------------------------------------------------------*/
 /**
@@ -305,10 +308,10 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (USBH_HandleTypeDef *phost){
  * @param  hdev: Selected device property
  * @retval  USBH_Status :Response for USB Set Protocol request
  */
-static USBH_StatusTypeDef USBH_MIDI_ClassRequest(USBH_HandleTypeDef *phost) {
-  USBH_StatusTypeDef status = USBH_OK;
+static USBH_StatusTypeDef USBH_MIDI_ClassRequest(__attribute__((__unused__))  USBH_HandleTypeDef *phost) {
+    USBH_StatusTypeDef status = USBH_OK;
 
-  return status;
+    return status;
 }
 
 /*-----------------------------------------------------------------------------------------*/
@@ -322,109 +325,160 @@ static USBH_StatusTypeDef USBH_MIDI_ClassRequest(USBH_HandleTypeDef *phost) {
 
 volatile USBH_URBStateTypeDef URB_state_in;
 volatile USBH_URBStateTypeDef URB_state_out;
-volatile int state_in;
-volatile int state_out;
+//volatile int state_in;
+//volatile int state_out;
+
+// PING = 1 for HS, apparently ,but 0 or 1 makes no difference
+#define SEND_DATA_DO_PING 0
 
 static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
-  USBH_StatusTypeDef status = USBH_OK;
-  MIDI_HandleTypeDef *MIDI_Handle = phost->pActiveClass->pData;
-  URB_state_in = USBH_LL_GetURBState(phost, MIDI_Handle->InPipe);
-  URB_state_out = USBH_LL_GetURBState(phost, MIDI_Handle->OutPipe);
-  state_in = HAL_HCD_GetState(phost->pData, MIDI_Handle->InPipe);
-  state_out = HAL_HCD_GetState(phost->pData, MIDI_Handle->InPipe);
+    
+    USBH_StatusTypeDef status = USBH_OK;
+    MIDI_HandleTypeDef *MIDI_Handle = phost->pActiveClass->pData;
+    URB_state_in    = USBH_LL_GetURBState(phost, MIDI_Handle->InPipe);
+    URB_state_out   = USBH_LL_GetURBState(phost, MIDI_Handle->OutPipe);
+//    state_in        = HAL_HCD_GetState(phost->pData, MIDI_Handle->InPipe);
+//    state_out       = HAL_HCD_GetState(phost->pData, MIDI_Handle->OutPipe);
 
 
 //  if (HCD_IsDeviceConnected(pdev)) {
     //appliStatus = pphost->usr_cb->UserApplication(); // this will call USBH_USR_MIDI_Application()
 
-    switch (MIDI_Handle->state) {
+    switch (MIDI_Handle->state_in) {
+        case MIDI_INIT:
+            MIDI_Handle->state_in = MIDI_GET_DATA;
+            break;
 
-    case MIDI_INIT:
-      MIDI_Handle->state = MIDI_GET_DATA;
-      break;
+        case MIDI_GET_DATA:
+            if (URB_state_in == USBH_URB_STALL) {
+                USBH_ClrFeature(phost, MIDI_Handle->InEp);
+            } else if (URB_state_in == USBH_URB_ERROR) {
+                USBH_ClrFeature(phost, MIDI_Handle->InEp);
+            }
 
-    case MIDI_GET_DATA:
-      if (URB_state_in == USBH_URB_STALL){
-        USBH_ClrFeature(phost, MIDI_Handle->InEp);
-      } else       if (URB_state_in == USBH_URB_ERROR){
-        USBH_ClrFeature(phost, MIDI_Handle->InEp);
-      }
+            USBH_BulkReceiveData(phost, MIDI_Handle->buff_in, MIDI_Handle->InEpSize, MIDI_Handle->InPipe);
+            MIDI_Handle->state_in = MIDI_POLL;
+            //STM_EVAL_LEDOn(LED_Blue);
+            break;
 
-      USBH_BulkReceiveData(phost, MIDI_Handle->buff, USBH_MIDI_MPS_SIZE,
-                           MIDI_Handle->InPipe);
-      MIDI_Handle->state = MIDI_POLL;
-      //STM_EVAL_LEDOn(LED_Blue);
+        case MIDI_POLL:
+            if (URB_state_in == USBH_URB_DONE) {
+                int i;
+                
+                int n = USBH_LL_GetLastXferSize(phost, MIDI_Handle->InPipe);
+                for (i=0; i<n; i+=4) {
+                    MIDI_CB(MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
+                }
+                    
+                MIDI_Handle->buff_in[1] = 0;
+                // MIDI_Handle->state_in = MIDI_IDLE;
+                MIDI_Handle->timer = 0;
+                
+            } else if (URB_state_in == USBH_URB_STALL) {
+                if (USBH_ClrFeature(phost, MIDI_Handle->InEp) == USBH_OK) {
+                    MIDI_Handle->state_in = MIDI_GET_DATA;
+                }
+            } // if STALL
+            break;
 
-      break;
+        default:
+            break;
+    } // case
 
-    case MIDI_POLL:
-      if (USBH_LL_GetURBState(phost, MIDI_Handle->InPipe) == USBH_URB_DONE) {
-        int i;
-        int n = USBH_LL_GetLastXferSize(phost, MIDI_Handle->InPipe);
-        for (i=0;i<n;i+=4){
-          MIDI_CB(MIDI_Handle->buff[0+i],MIDI_Handle->buff[1+i],MIDI_Handle->buff[2+i],MIDI_Handle->buff[3+i]);
-        }
-        MIDI_Handle->buff[1] = 0;
-//        MIDI_Handle->state = MIDI_IDLE;
-        MIDI_Handle->timer = 0;
-      }
-      else if (USBH_LL_GetURBState(phost, MIDI_Handle->InPipe)
-          == USBH_URB_STALL) /* IN Endpoint Stalled */
-          {
-
-        /* Issue Clear Feature on IN endpoint */
-        if (USBH_ClrFeature(phost, MIDI_Handle->InEp) == USBH_OK) {
-          /* Change state to issue next IN token */
-          MIDI_Handle->state = MIDI_GET_DATA;
-      }
-
-    }
-    break;
-
-    default:
-    break;
-  }
-  return status;
-
-}
-/*-----------------------------------------------------------------------------------------*/
-
-static USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost){
-  MIDI_HandleTypeDef *MIDI_Handle =  (MIDI_HandleTypeDef *) phost->pActiveClass->pData;
-
-  if(MIDI_Handle->state == MIDI_POLL)
-  {
-    if(( phost->Timer - MIDI_Handle->timer) >= MIDI_Handle->poll)
+    switch (MIDI_Handle->state_out)
     {
-      MIDI_Handle->state = MIDI_GET_DATA;
-#if (USBH_USE_OS == 1)
-    osMessagePutI ( phost->os_event, USBH_URB_EVENT, 0);
-#endif
-    }
-  }
-  return USBH_OK;
+        case MIDI_INIT:
+            MIDI_Handle->state_out = MIDI_SEND_DATA;
+            break;
+            
+        case MIDI_SEND_DATA:
+            
+            if (URB_state_out == USBH_URB_STALL) {
+                USBH_ClrFeature(phost, MIDI_Handle->OutEp);
+            } else if (URB_state_out == USBH_URB_ERROR) {
+                USBH_ClrFeature(phost, MIDI_Handle->OutEp);
+            }
+            
+            if (send_ring_buffer.read_ptr != send_ring_buffer.write_ptr)
+            {
+                send_ring_buffer.read_ptr =(send_ring_buffer.read_ptr + 1) % RING_BUFFER_SIZE;
+                USBH_DbgLog("USB Host Output sending data @ %i", send_ring_buffer.read_ptr  );
+
+                USBH_DbgLog("USB Host Output sending data : %x, %x, %x %x",
+                            send_ring_buffer.event[send_ring_buffer.read_ptr].data[0],
+                            send_ring_buffer.event[send_ring_buffer.read_ptr].data[1],
+                            send_ring_buffer.event[send_ring_buffer.read_ptr].data[2],
+                            send_ring_buffer.event[send_ring_buffer.read_ptr].data[3]);
+                
+                MIDI_Handle->buff_out[0] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[0];
+                MIDI_Handle->buff_out[1] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[1];
+                MIDI_Handle->buff_out[2] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[2];
+                MIDI_Handle->buff_out[3] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[3];
+                
+                // later, use MIDI_Handle->OutEpSize
+                USBH_BulkSendData(phost, MIDI_Handle->buff_out, 4, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
+                
+                // now poll for completion
+                MIDI_Handle->state_out = MIDI_POLL;
+            }
+            
+            break;
+            
+        case MIDI_POLL:
+            if(URB_state_out == USBH_URB_DONE) {
+                USBH_DbgLog("USB Host Output  URB DONE");
+                MIDI_Handle->state_out = MIDI_SEND_DATA;
+            }
+            else if(URB_state_out == USBH_URB_NOTREADY) {
+                USBH_DbgLog("USB Host Output  NOT READY");
+                // send again
+                USBH_BulkSendData(phost, MIDI_Handle->buff_out, 4, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
+                MIDI_Handle->state_out = MIDI_POLL;
+            } else if (URB_state_out == USBH_URB_IDLE) {
+                // wait
+                USBH_DbgLog("USB Host Output  IDLE");
+                MIDI_Handle->state_out = MIDI_SEND_DATA;
+            } else if (URB_state_out == USBH_URB_ERROR) {
+                // giveup
+                USBH_ErrLog("USB Host Output  Error sending data");
+                MIDI_Handle->state_out = MIDI_SEND_DATA;
+            } else if (URB_state_out == USBH_URB_STALL) {
+                // stalled, reset ep
+                if (USBH_ClrFeature(phost, MIDI_Handle->OutEp) == USBH_OK) {
+                    MIDI_Handle->state_out = MIDI_SEND_DATA;
+                    USBH_DbgLog("USB Host Output STALLED and cleared");
+                }
+                else {
+                    USBH_ErrLog("USB Host Output  write pipe stalled unable to clear");
+                    MIDI_Handle->state_out = MIDI_SEND_DATA;
+                }
+            } else {
+                // giveup
+                USBH_ErrLog("USB Host Output  unknown state sending data %x ", URB_state_out);
+                MIDI_Handle->state_out = MIDI_SEND_DATA;
+            }
+            break;
+            
+        default:
+            break;
+    } // case
+    
+    return status;
 }
-
-/* Receive data from MIDI device *//*
-uint8_t MIDI_RcvData(uint8_t *outBuf) {
-URB_STATE urb_status;
-urb_status = HCD_GetURB_State(&USB_OTG_Core_dev, MIDI_Machine.hc_num_in);
-
-if (urb_status <= URB_DONE) {
-  USBH_BulkReceiveData(&USB_OTG_Core_dev, MIDI_Machine.buff, 64,
-                       MIDI_Machine.hc_num_in);
-  if (MIDI_Machine.buff[0] == 0 && MIDI_Machine.buff[1] == 0
-      && MIDI_Machine.buff[2] == 0 && MIDI_Machine.buff[3] == 0)
-    return 0;
-  outBuf[0] = MIDI_Machine.buff[1];
-  outBuf[1] = MIDI_Machine.buff[2];
-  outBuf[2] = MIDI_Machine.buff[3];
-  return MIDI_lookupMsgSize(MIDI_Machine.buff[1]);
-}
-else
-  return 0;
-
-}*/
 /*-----------------------------------------------------------------------------------------*/
 
-/*****************************END OF FILE****/
+static USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost) {
+    MIDI_HandleTypeDef *MIDI_Handle =  (MIDI_HandleTypeDef *) phost->pActiveClass->pData;
+
+    // this needs tidying up, we should sync the two state machines.... so send data and get data
+    // are called periodically.... but long term we probably want to use a queue,
+    if(MIDI_Handle->state_in == MIDI_POLL ) {
+        if(( phost->Timer - MIDI_Handle->timer) >= MIDI_Handle->poll) {
+            MIDI_Handle->state_in = MIDI_GET_DATA;
+            #if (USBH_USE_OS == 1)
+            osMessagePutI ( phost->os_event, USBH_URB_EVENT, 0);
+            #endif
+        }
+    }
+    return USBH_OK;
+}

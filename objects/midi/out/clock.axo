@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="clock" sha="b9dcbd2415a27e4361d5567f4aacd3c7c0aa64a7">
+   <obj.normal id="clock" sha="2e1ff23ac85034ded776c411284443b01ea9cd80">
       <sDescription>Midi clock master, als outputs Midi clock, start, stop, and continue messages</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -19,7 +19,28 @@
             <MaxValue v="63.5"/>
          </frac32.u.map>
       </params>
-      <attribs/>
+      <attribs>
+         <combo name="device">
+            <MenuEntries>
+               <string>din</string>
+               <string>usb host port 1</string>
+               <string>usb host port 2</string>
+               <string>usb host port 3</string>
+               <string>usb host port 4</string>
+               <string>internal port 1</string>
+               <string>internal port 2</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1, 1</string>
+               <string>3, 1</string>
+               <string>3, 2</string>
+               <string>3, 3</string>
+               <string>3, 4</string>
+               <string>15, 1</string>
+               <string>15, 2</string>
+            </CEntries>
+         </combo>
+      </attribs>
       <code.declaration><![CDATA[bool _active;
 int32_t _posfrac;
 int32_t _pos24ppq;
@@ -38,17 +59,17 @@ rstp = 0;]]></code.init>
 }
 if (%run% && !_active) {
   _active = 1;
-  if (_pos24ppq)     MidiSend1(MIDI_START);
-  else     MidiSend1(MIDI_CONTINUE);
+  if (_pos24ppq)     MidiSend1((midi_device_t) %device%, MIDI_START);
+  else     MidiSend1((midi_device_t) %device%, MIDI_CONTINUE);
 } else if (!%run% && _active){
   _active = 0;
-  MidiSend1(MIDI_STOP);
+  MidiSend1((midi_device_t) %device%, MIDI_STOP);
 }if (_active) {
   _posfrac += %bpm%;
   if (_posfrac & 1<<31) {
     _posfrac &= (1<<31)-1;
     _pos24ppq++;
-    MidiSend1(MIDI_TIMING_CLOCK);
+    MidiSend1((midi_device_t) %device%,MIDI_TIMING_CLOCK);
   }
 }
 %pos4ppq% = _pos24ppq/6;

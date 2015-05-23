@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="note" sha="8572cb79992ae63248030b5e1d69f0460dc77e5b">
+   <obj.normal id="note" sha="ddd6201b4f86d0de5de18ebbe51b813c965de9a">
       <sDescription>Midi note output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,6 +12,26 @@
       <displays/>
       <params/>
       <attribs>
+         <combo name="device">
+            <MenuEntries>
+               <string>din</string>
+               <string>usb host port 1</string>
+               <string>usb host port 2</string>
+               <string>usb host port 3</string>
+               <string>usb host port 4</string>
+               <string>internal port 1</string>
+               <string>internal port 2</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1, 1</string>
+               <string>3, 1</string>
+               <string>3, 2</string>
+               <string>3, 3</string>
+               <string>3, 4</string>
+               <string>15, 1</string>
+               <string>15, 2</string>
+            </CEntries>
+         </combo>
          <spinner name="channel" MinValue="1" MaxValue="16" DefaultValue="0"/>
       </attribs>
       <code.declaration><![CDATA[int ntrig;
@@ -20,9 +40,9 @@ int lastnote;]]></code.declaration>
 ]]></code.init>
       <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {
 lastnote = (64+(%note%>>21))&0x7F;
-MidiSend3(MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;
+MidiSend3((midi_device_t) %device%, MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;
 }
-if (!(%trig%>0) && ntrig) {MidiSend3(MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}
+if (!(%trig%>0) && ntrig) {MidiSend3((midi_device_t) %device%, MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}
 ]]></code.krate>
    </obj.normal>
 </objdefs>
