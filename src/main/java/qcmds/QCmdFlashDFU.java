@@ -46,7 +46,7 @@ public class QCmdFlashDFU extends QCmdShellTask {
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
             return "/bin/sh platform_linux/upload_fw_dfu.sh";
         } else {
-            Logger.getLogger(QCmdFlashSTLink.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
+            Logger.getLogger(QCmdFlashDFU.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;
         }
     }

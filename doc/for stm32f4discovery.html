@@ -5,16 +5,17 @@
     </head>
     <body>
         <H1>Using the STM32f4Discovery board</H1>
-        Axoloti is designed to run with the Axoloti Core board. But the STM32f4Discovery can be made to work too. 
+        Axoloti is designed to run with the Axoloti Core board. But the STM32f4Discovery can be made to work too. Connect both the mini USB port and the micro USB port to your computer. 
         <H2>Modify the firmware</H2>
         <ul>
             <li>in firmware/axoloti_defines.h, uncomment the line "#define BOARD_STM32F4DISCOVERY 1", and comment the line "#define BOARD_AXOLOTI_V03 1"
             <li>recompile the firmware                
-            <li>flash the firmware (using STLink)
+            <li>flash the firmware (using DFU mode)
         </ul>
         <H2>DFU Mode</H2>
-        For firmware flashing, DFU-mode for flashing can be enabled - not by pressing S1 as documented for the Axoloti Core - but by connecting the BOOT0 pin to VDD during powerup or reset.
-        You can use one of the jumpers from the backside of the kit to connect the BOOT0 pin to VDD.
+        For firmware flashing, DFU-mode for flashing can be enabled - not by pressing S1 as documented for the Axoloti Core - but by connecting the BOOT0 pin to VDD, and the PB2 pin to GND during powerup or reset.
+        You can use the jumpers from the backside of the kit for this purpose.
+        After flashing, remove the jumpers again from BOOT0 and PB2, and press the reset button.
         <H2>Limitations</H2>
         <ul>            
             <li>SDcard cannot be used (pin conflict with the audio DAC)
