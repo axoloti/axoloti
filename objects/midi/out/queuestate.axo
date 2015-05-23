@@ -12,14 +12,14 @@
       <attribs>
          <combo name="device">
             <MenuEntries>
-               <string>serial</string>
-               <string>usb device</string>
+               <string>din</string>
                <string>usb host</string>
+               <string>internal</string>
             </MenuEntries>
             <CEntries>
                <string>1</string>
-               <string>2</string>
                <string>3</string>
+               <string>15</string>
             </CEntries>
          </combo>
       </attribs>

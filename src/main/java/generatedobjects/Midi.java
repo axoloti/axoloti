@@ -632,12 +632,17 @@ public class Midi extends gentools {
 
     static AxoObject Create_clockgen() {
         AxoObject o = new AxoObject("clock", "Midi clock master, als outputs Midi clock, start, stop, and continue messages");
-        String cdev[] = {"1", "2", "3"};
-        String udev[] = {"serial", "usb device", "usb host"};
-//        String cdev[] = {"1", "2", "3", "4", "5"};
-//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
-        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
-        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
+        String cdev[] = {"1, 1", "3, 1", "3, 2", "3, 3","3, 4","15, 1","15, 2"};
+        String udev[] = {   
+            "din",
+            "usb host port 1",
+            "usb host port 2",
+            "usb host port 3",
+            "usb host port 4",
+            "internal port 1",
+            "internal port 2"
+        };
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));   
         o.inlets.add(new InletBool32("run", "Run"));
         o.inlets.add(new InletBool32Rising("rst", "Reset"));
         o.params.add(new ParameterFrac32UMap("bpm"));
@@ -663,19 +668,19 @@ public class Midi extends gentools {
                 + "if (%run% && !_active) {\n"
                 + "  _active = 1;\n"
                 + "  if (_pos24ppq) "
-                + "    MidiSend1((midi_device_t) %device%,%port%,MIDI_START);\n"
+                + "    MidiSend1((midi_device_t) %device%, MIDI_START);\n"
                 + "  else "
-                + "    MidiSend1((midi_device_t) %device%,%port%,MIDI_CONTINUE);\n"
+                + "    MidiSend1((midi_device_t) %device%, MIDI_CONTINUE);\n"
                 + "} else if (!%run% && _active){\n"
                 + "  _active = 0;\n"
-                + "  MidiSend1((midi_device_t) %device%,%port%,MIDI_STOP);\n"
+                + "  MidiSend1((midi_device_t) %device%, MIDI_STOP);\n"
                 + "}"
                 + "if (_active) {\n"
                 + "  _posfrac += %bpm%;\n"
                 + "  if (_posfrac & 1<<31) {\n"
                 + "    _posfrac &= (1<<31)-1;\n"
                 + "    _pos24ppq++;\n"
-                + "    MidiSend1((midi_device_t) %device%,%port%,MIDI_TIMING_CLOCK);\n"
+                + "    MidiSend1((midi_device_t) %device%,MIDI_TIMING_CLOCK);\n"
                 + "  }\n"
                 + "}\n"
                 + "%pos4ppq% = _pos24ppq/6;\n"
@@ -686,12 +691,18 @@ public class Midi extends gentools {
     static AxoObject Create_noteout() {
         AxoObject o = new AxoObject("note", "Midi note output");
 
-        String cdev[] = {"1", "2", "3"};
-        String udev[] = {"serial", "usb device", "usb host"};
-//        String cdev[] = {"1", "2", "3", "4", "5"};
-//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        String cdev[] = {"1, 1", "3, 1", "3, 2", "3, 3","3, 4","15, 1","15, 2"};
+        String udev[] = {   
+            "din",
+            "usb host port 1",
+            "usb host port 2",
+            "usb host port 3",
+            "usb host port 4",
+            "internal port 1",
+            "internal port 2"
+        };
         o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
-        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
+
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Bipolar("note", "note (-64..63)"));
         o.inlets.add(new InletFrac32Pos("velo", "velocity"));
@@ -702,57 +713,78 @@ public class Midi extends gentools {
         o.sKRateCode = "" 
                 + "if ((%trig%>0) && !ntrig) {\n"
                 + "lastnote = (64+(%note%>>21))&0x7F;\n"
-                + "MidiSend3((midi_device_t) %device%,%port%,MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;\n"
+                + "MidiSend3((midi_device_t) %device%, MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;\n"
                 + "}\n"
-                + "if (!(%trig%>0) && ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}\n";
+                + "if (!(%trig%>0) && ntrig) {MidiSend3((midi_device_t) %device%, MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}\n";
         return o;
     }
 
     static AxoObject Create_ctlout() {
         AxoObject o = new AxoObject("cc", "Midi controller output");
-        String cdev[] = {"1", "2", "3"};
-        String udev[] = {"serial", "usb device", "usb host"};
-//        String cdev[] = {"1", "2", "3", "4", "5"};
-//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        String cdev[] = {"1, 1", "3, 1", "3, 2", "3, 3","3, 4","15, 1","15, 2"};
+
+        String udev[] = {   
+            "din",
+            "usb host port 1",
+            "usb host port 2",
+            "usb host port 3",
+            "usb host port 4",
+            "internal port 1",
+            "internal port 2"
+        };
         o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
-        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
+    
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
         
         o.inlets.add(new InletFrac32Pos("v", "value"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%, MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
 
     static AxoObject Create_ctlout_any() {
         AxoObject o = new AxoObject("cc any", "Midi controller output to any CC number and channel");
-        String cdev[] = {"1", "2", "3"};
-        String udev[] = {"serial", "usb device", "usb host"};
-//        String cdev[] = {"1", "2", "3", "4", "5"};
-//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        String cdev[] = {"1, 1", "3, 1", "3, 2", "3, 3","3, 4","15, 1","15, 2"};
+
+        String udev[] = {   
+            "din",
+            "usb host port 1",
+            "usb host port 2",
+            "usb host port 3",
+            "usb host port 4",
+            "internal port 1",
+            "internal port 2"
+        };
         o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
-        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));        
+
         o.inlets.add(new InletFrac32Pos("v", "value"));
         o.inlets.add(new InletInt32Pos("cc", "midi Continous Controller number 0-127"));
         o.inlets.add(new InletInt32Pos("chan", "channel 1..16"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%, MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
 
     static AxoObject Create_ctloutauto() {
         AxoObject o = new AxoObject("cc thin", "Midi controller output, automatic thinning");
-        String cdev[] = {"1", "2", "3"};
-        String udev[] = {"serial", "usb device", "usb host"};
-//        String cdev[] = {"1", "2", "3", "4", "5"};
-//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+         String cdev[] = {"1, 1", "3, 1", "3, 2", "3, 3","3, 4","15, 1","15, 2"};
+
+        String udev[] = {   
+            "din",
+            "usb host port 1",
+            "usb host port 2",
+            "usb host port 3",
+            "usb host port 4",
+            "internal port 1",
+            "internal port 2"
+        };
         o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
-        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));
+
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
         o.inlets.add(new InletFrac32Pos("v", "value"));
@@ -762,7 +794,7 @@ public class Midi extends gentools {
         o.sInitCode = "timer = 0;\n";
         o.sKRateCode = "if (((lsend>%v%+(1<<19))||(%v%>lsend+(1<<19))) && (timer>30)) {\n"
                 + "   lsend = %v%;\n"
-                + "   MidiSend3((midi_device_t) %device%,%port%,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));\n"
+                + "   MidiSend3((midi_device_t) %device%, MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));\n"
                 + "   timer = 0;\n"
                 + "} else timer++;\n";
         return o;
@@ -770,17 +802,24 @@ public class Midi extends gentools {
 
     static AxoObject Create_bendout() {
         AxoObject o = new AxoObject("bend", "Midi pitch bend output");
-        String cdev[] = {"1", "2", "3"};
-        String udev[] = {"serial", "usb device", "usb host"};
-//        String cdev[] = {"1", "2", "3", "4", "5"};
-//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+         String cdev[] = {"1, 1", "3, 1", "3, 2", "3, 3","3, 4","15, 1","15, 2"};
+
+        String udev[] = {   
+            "din",
+            "usb host port 1",
+            "usb host port 2",
+            "usb host port 3",
+            "usb host port 4",
+            "internal port 1",
+            "internal port 2"
+        };
         o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
-        o.attributes.add(new AxoAttributeSpinner("port", 1, 16, 0));
+
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Bipolar("bend", "pitch bend"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device%,%port%,MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device% , MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -800,10 +839,8 @@ public class Midi extends gentools {
 
     static AxoObject Create_queuestate() {
         AxoObject o = new AxoObject("queuestate", "Gets the number of pending bytes in the midi output queue. Useful to prevent midi data flooding. Zero at rest.");
-        String cdev[] = {"1", "2", "3"};
-        String udev[] = {"serial", "usb device", "usb host"};
-//        String cdev[] = {"1", "2", "3", "4", "5"};
-//        String udev[] = {"serial", "usb device", "usb host", "digital x1", "digital x2"};
+        String cdev[] = {"1", "3", "15"};
+        String udev[] = {"din", "usb host", "internal"};
         o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
         o.outlets.add(new OutletInt32("length", "number of pending bytes in queue"));
 
@@ -822,7 +859,7 @@ public class Midi extends gentools {
         o.sInitCode = "ntrig=0;\n";
         o.sKRateCode = "if ((%trig%>0) && !ntrig) {\n"
                 + "lastnote = (64+(%note%>>21))&0x7F;\n"
-                + "PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;\n"
+                + "PatchMidiInHandler(MIDI_DEVICE_INTERNAL,0,MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;\n"
                 + "}\n"
                 + "if (!(%trig%>0) && ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}\n";
         return o;
@@ -835,7 +872,7 @@ public class Midi extends gentools {
         o.inlets.add(new InletFrac32Pos("v", "value"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -847,7 +884,7 @@ public class Midi extends gentools {
         o.inlets.add(new InletInt32Pos("chan", "channel 1..16"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_CONTROL_CHANGE + ((%chan%-1)&0xF),%cc%,__USAT(%v%>>20,7));  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -863,7 +900,7 @@ public class Midi extends gentools {
         o.sInitCode = "timer = 0;\n";
         o.sKRateCode = "if (((lsend>%v%+(1<<19))||(%v%>lsend+(1<<19))) && (timer>30)) {\n"
                 + "   lsend = %v%;\n"
-                + "   PatchMidiInHandler((midi_device_t) 0,0,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));\n"
+                + "   PatchMidiInHandler(MIDI_DEVICE_INTERNAL ,0,MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));\n"
                 + "   timer = 0;\n"
                 + "} else timer++;\n";
         return o;
@@ -875,7 +912,7 @@ public class Midi extends gentools {
         o.inlets.add(new InletFrac32Bipolar("bend", "pitch bend"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -907,19 +944,19 @@ public class Midi extends gentools {
                 + "if (%run% && !_active) {\n"
                 + "  _active = 1;\n"
                 + "  if (_pos24ppq) "
-                + "    PatchMidiInHandler((midi_device_t) 0,0,MIDI_START,0,0);\n"
+                + "    PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_START,0,0);\n"
                 + "  else "
-                + "    PatchMidiInHandler((midi_device_t) 0,0,MIDI_CONTINUE,0,0);\n"
+                + "    PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_CONTINUE,0,0);\n"
                 + "} else if (!%run% && _active){\n"
                 + "  _active = 0;\n"
-                + "  PatchMidiInHandler((midi_device_t) 0,0,MIDI_STOP,0,0);\n"
+                + "  PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_STOP,0,0);\n"
                 + "}"
                 + "if (_active) {\n"
                 + "  _posfrac += %bpm%;\n"
                 + "  if (_posfrac & 1<<31) {\n"
                 + "    _posfrac &= (1<<31)-1;\n"
                 + "    _pos24ppq++;\n"
-                + "    PatchMidiInHandler((midi_device_t) 0,0,MIDI_TIMING_CLOCK,0,0);\n"
+                + "    PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_TIMING_CLOCK,0,0);\n"
                 + "  }\n"
                 + "}\n"
                 + "%pos4ppq% = _pos24ppq/6;\n"

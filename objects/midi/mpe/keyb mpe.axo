@@ -58,6 +58,7 @@ if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
   _note = data1-64;
   _gate = 1<<27;
   _gate2 = 0;
+  _pitch = (_note << 21) + ((_bend >> 6)* _bendRange );
 } else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||
           (status == MIDI_NOTE_OFF + %midichannel%)) {
   if (_note == data1-64) {
@@ -67,8 +68,6 @@ if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
 } else if (status == %midichannel% + MIDI_CHANNEL_PRESSURE) {
   _pressure = data1<<20;
 } else if (status == %midichannel% + MIDI_PITCH_BEND) {
-  _bend = ((int)((data2<<7)+data1)-0x2000)<<14;
-  //_pitch = _note << 21 + ;
   _bend = ((int)((data2<<7)+data1)-0x2000)<<14;
   _pitch = (_note << 21) + ((_bend >> 6)* _bendRange );
 } else if (status == %midichannel% + MIDI_CONTROL_CHANGE) {

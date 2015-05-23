@@ -97,12 +97,13 @@
 
 typedef enum
 {
-    MIDI_DEVICE_OMNI=0,          // for filtering , and for 'internal' messages
-    MIDI_DEVICE_SERIAL,          // MIDI_DIN
-    MIDI_DEVICE_USB_DEVICE,      // MicroUSB  (currently used in pconnection, as midi over serial */
+    MIDI_DEVICE_OMNI = 0,          // for filtering
+    MIDI_DEVICE_DIN,             // MIDI_DIN
+    MIDI_DEVICE_USB_DEVICE,      // MicroUSB  - not implemented
     MIDI_DEVICE_USB_HOST,        // USB host port
-    MIDI_DEVICE_DIGITAL_X1,      // x1 pins
-    MIDI_DEVICE_DIGITAL_X2       // x2 pins
+    MIDI_DEVICE_DIGITAL_X1,      // x1 pins - not implemented
+    MIDI_DEVICE_DIGITAL_X2,       // x2 pins - not implemented
+    MIDI_DEVICE_INTERNAL = 0x0F     // internal (to the board) midi
 } midi_device_t ;
 
 // midi port, from 1  = OMNI for filtering and internal messages
@@ -110,6 +111,8 @@ typedef enum
 
 void midi_init(void);
 void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
+
+
 void MidiSend1(midi_device_t dev, uint8_t port, uint8_t b0);
 void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1);
 void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);

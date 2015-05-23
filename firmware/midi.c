@@ -26,12 +26,16 @@
 
 void MidiSend1(midi_device_t dev, uint8_t   port, uint8_t b0) {
     switch (dev) {
-        case MIDI_DEVICE_SERIAL: {
+        case MIDI_DEVICE_DIN: {
             serial_MidiSend1(b0);
             break;
         }
         case MIDI_DEVICE_USB_HOST: {
             usbh_MidiSend1(port, b0);
+            break;
+        }
+        case MIDI_DEVICE_INTERNAL: {
+            MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, 0, 0);
             break;
         }
         default: {
@@ -42,12 +46,16 @@ void MidiSend1(midi_device_t dev, uint8_t   port, uint8_t b0) {
 
 void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1) {
     switch (dev) {
-        case MIDI_DEVICE_SERIAL: {
+        case MIDI_DEVICE_DIN: {
             serial_MidiSend2(b0,b1);
             break;
         }
         case MIDI_DEVICE_USB_HOST: {
             usbh_MidiSend2(port, b0,b1);
+            break;
+        }
+        case MIDI_DEVICE_INTERNAL: {
+            MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, b1, 0);
             break;
         }
         default: {
@@ -58,12 +66,16 @@ void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1) {
 
 void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
     switch (dev) {
-        case MIDI_DEVICE_SERIAL: {
+        case MIDI_DEVICE_DIN: {
             serial_MidiSend3(b0,b1,b2);
             break;
         }
         case MIDI_DEVICE_USB_HOST: {
             usbh_MidiSend3(port,b0,b1,b2);
+            break;
+        }
+        case MIDI_DEVICE_INTERNAL: {
+            MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, b1, b2);
             break;
         }
         default: {
@@ -81,11 +93,14 @@ void midi_init(void) {
 int  MidiGetOutputBufferPending(midi_device_t dev)
 {
     switch (dev) {
-        case MIDI_DEVICE_SERIAL: {
+        case MIDI_DEVICE_DIN: {
             return serial_MidiGetOutputBufferPending();
         }
         case MIDI_DEVICE_USB_HOST: {
             return usbh_MidiGetOutputBufferPending();
+        }
+        case MIDI_DEVICE_INTERNAL: {
+            return 0;
         }
         default: {
             // nop
