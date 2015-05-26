@@ -35,7 +35,7 @@ public class OutletFrac32Buffer extends Outlet {
     }
 
     @Override
-    DataType getDatatype() {
+    public DataType getDatatype() {
         return Frac32buffer.d;
     }
 }

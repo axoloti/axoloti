@@ -35,7 +35,7 @@ public class OutletBool32 extends Outlet {
     }
 
     @Override
-    DataType getDatatype() {
+    public DataType getDatatype() {
         return Bool32.d;
     }
 }

@@ -35,7 +35,7 @@ public class OutletInt32 extends Outlet {
     }
 
     @Override
-    DataType getDatatype() {
+    public DataType getDatatype() {
         return Int32.d;
     }
 }
