@@ -25,6 +25,7 @@ import axoloti.parameters.Parameter;
 import displays.Display;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
@@ -62,6 +63,18 @@ public class AxoObjectEditor extends JFrame {
         }
         for (Display i : obj.displays) {
             ((DefaultTableModel) jTableAttribs.getModel()).addRow(new Object[]{ i.name,i.getDatatype()==null? i.getClass().getSimpleName(): i.getDatatype().CType()});
+        }
+        
+        if (obj.includes != null) {
+            for (String i : obj.includes) {
+                ((DefaultListModel) jListIncludes.getModel()).addElement(i);
+            }
+        }
+
+        if (obj.depends != null ) {
+            for (String i : obj.depends) {
+                ((DefaultListModel) jListDepends.getModel()).addElement(i);
+            }
         }
 
         
@@ -134,6 +147,13 @@ public class AxoObjectEditor extends JFrame {
         jPanelMidiCode = new javax.swing.JPanel();
         jScrollPane10 = new javax.swing.JScrollPane();
         jTextAreaMidiCode = new javax.swing.JTextArea();
+        jPanelDepends = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jListIncludes = new javax.swing.JList();
+        jLabel6 = new javax.swing.JLabel();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        jListDepends = new javax.swing.JList();
         jLabel2 = new javax.swing.JLabel();
 
         jInternalFrame1.setVisible(true);
@@ -168,11 +188,11 @@ public class AxoObjectEditor extends JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 535, Short.MAX_VALUE)
+            .addGap(0, 182, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 453, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
 
         jSplitPane1.setRightComponent(jPanel2);
@@ -200,8 +220,10 @@ public class AxoObjectEditor extends JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableInlets.setColumnSelectionAllowed(true);
         jTableInlets.getTableHeader().setReorderingAllowed(false);
         jScrollPane11.setViewportView(jTableInlets);
+        jTableInlets.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         if (jTableInlets.getColumnModel().getColumnCount() > 0) {
             jTableInlets.getColumnModel().getColumn(0).setPreferredWidth(50);
             jTableInlets.getColumnModel().getColumn(1).setPreferredWidth(50);
@@ -217,7 +239,7 @@ public class AxoObjectEditor extends JFrame {
         );
         jPanelInletsLayout.setVerticalGroup(
             jPanelInletsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 432, Short.MAX_VALUE)
+            .addGap(0, 445, Short.MAX_VALUE)
             .addGroup(jPanelInletsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelInletsLayout.createSequentialGroup()
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -243,7 +265,10 @@ public class AxoObjectEditor extends JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableOutlets.setColumnSelectionAllowed(true);
+        jTableOutlets.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTableOutlets);
+        jTableOutlets.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.GroupLayout jPanelOutletsLayout = new javax.swing.GroupLayout(jPanelOutlets);
         jPanelOutlets.setLayout(jPanelOutletsLayout);
@@ -255,10 +280,10 @@ public class AxoObjectEditor extends JFrame {
         );
         jPanelOutletsLayout.setVerticalGroup(
             jPanelOutletsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 432, Short.MAX_VALUE)
+            .addGap(0, 445, Short.MAX_VALUE)
             .addGroup(jPanelOutletsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelOutletsLayout.createSequentialGroup()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
                     .addContainerGap()))
         );
 
@@ -280,7 +305,10 @@ public class AxoObjectEditor extends JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableAttribs.setColumnSelectionAllowed(true);
+        jTableAttribs.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTableAttribs);
+        jTableAttribs.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.GroupLayout jPanelAttributesLayout = new javax.swing.GroupLayout(jPanelAttributes);
         jPanelAttributes.setLayout(jPanelAttributesLayout);
@@ -292,10 +320,10 @@ public class AxoObjectEditor extends JFrame {
         );
         jPanelAttributesLayout.setVerticalGroup(
             jPanelAttributesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 432, Short.MAX_VALUE)
+            .addGap(0, 445, Short.MAX_VALUE)
             .addGroup(jPanelAttributesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelAttributesLayout.createSequentialGroup()
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
                     .addContainerGap()))
         );
 
@@ -317,7 +345,10 @@ public class AxoObjectEditor extends JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTableParams.setColumnSelectionAllowed(true);
+        jTableParams.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(jTableParams);
+        jTableParams.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.GroupLayout jPanelParametersLayout = new javax.swing.GroupLayout(jPanelParameters);
         jPanelParameters.setLayout(jPanelParametersLayout);
@@ -331,11 +362,11 @@ public class AxoObjectEditor extends JFrame {
         );
         jPanelParametersLayout.setVerticalGroup(
             jPanelParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 432, Short.MAX_VALUE)
+            .addGap(0, 445, Short.MAX_VALUE)
             .addGroup(jPanelParametersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanelParametersLayout.createSequentialGroup()
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 6, Short.MAX_VALUE)))
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Parameters", jPanelParameters);
@@ -352,7 +383,7 @@ public class AxoObjectEditor extends JFrame {
         );
         jPanelLocalDataLayout.setVerticalGroup(
             jPanelLocalDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+            .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Local Data", jPanelLocalData);
@@ -371,7 +402,7 @@ public class AxoObjectEditor extends JFrame {
         );
         jPanelInitCodeLayout.setVerticalGroup(
             jPanelInitCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Init Code", jPanelInitCode);
@@ -390,7 +421,7 @@ public class AxoObjectEditor extends JFrame {
         );
         jPanelKRateCodeLayout.setVerticalGroup(
             jPanelKRateCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("K-rate Code", jPanelKRateCode);
@@ -409,7 +440,7 @@ public class AxoObjectEditor extends JFrame {
         );
         jPanelSRateCodeLayout.setVerticalGroup(
             jPanelSRateCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("S-rate Code", jPanelSRateCode);
@@ -426,7 +457,7 @@ public class AxoObjectEditor extends JFrame {
         );
         jPanelDisposeCodeLayout.setVerticalGroup(
             jPanelDisposeCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+            .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Dispose Code", jPanelDisposeCode);
@@ -445,10 +476,47 @@ public class AxoObjectEditor extends JFrame {
         );
         jPanelMidiCodeLayout.setVerticalGroup(
             jPanelMidiCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+            .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("MIDI Code", jPanelMidiCode);
+
+        jLabel5.setText("Includes");
+
+        jListIncludes.setModel(new DefaultListModel());
+        jScrollPane4.setViewportView(jListIncludes);
+
+        jLabel6.setText("Dependancies");
+
+        jListDepends.setModel(new DefaultListModel());
+        jScrollPane12.setViewportView(jListDepends);
+
+        javax.swing.GroupLayout jPanelDependsLayout = new javax.swing.GroupLayout(jPanelDepends);
+        jPanelDepends.setLayout(jPanelDependsLayout);
+        jPanelDependsLayout.setHorizontalGroup(
+            jPanelDependsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelDependsLayout.createSequentialGroup()
+                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane12)
+        );
+        jPanelDependsLayout.setVerticalGroup(
+            jPanelDependsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelDependsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Dependancies", jPanelDepends);
 
         jPanel1.add(jTabbedPane1);
 
@@ -468,9 +536,14 @@ public class AxoObjectEditor extends JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JList jListDepends;
+    private javax.swing.JList jListIncludes;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelAttributes;
+    private javax.swing.JPanel jPanelDepends;
     private javax.swing.JPanel jPanelDisposeCode;
     private javax.swing.JPanel jPanelInitCode;
     private javax.swing.JPanel jPanelInlets;
@@ -483,8 +556,10 @@ public class AxoObjectEditor extends JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
