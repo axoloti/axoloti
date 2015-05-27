@@ -31,7 +31,7 @@ public abstract class Inlet {
     @Attribute
     public String name;
     @Attribute(required = false)
-    String description;
+    public String description;
 
     public Inlet() {
     }

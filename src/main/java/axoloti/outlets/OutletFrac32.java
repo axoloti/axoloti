@@ -35,7 +35,7 @@ public class OutletFrac32 extends Outlet {
     }
 
     @Override
-    DataType getDatatype() {
+    public DataType getDatatype() {
         return Frac32.d;
     }
 }
