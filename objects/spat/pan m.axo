@@ -8,8 +8,8 @@
          <frac32 name="c" description="pan control"/>
       </inlets>
       <outlets>
-         <frac32 name="left" description="output" SumBuffer="false"/>
-         <frac32 name="right" description="output" SumBuffer="false"/>
+         <frac32 name="left" description="output"/>
+         <frac32 name="right" description="output"/>
       </outlets>
       <displays/>
       <params/>
@@ -25,8 +25,8 @@
          <frac32 name="c" description="pan control"/>
       </inlets>
       <outlets>
-         <frac32buffer name="left" description="output" SumBuffer="false"/>
-         <frac32buffer name="right" description="output" SumBuffer="false"/>
+         <frac32buffer name="left" description="output"/>
+         <frac32buffer name="right" description="output"/>
       </outlets>
       <displays/>
       <params/>

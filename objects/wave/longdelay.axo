@@ -8,9 +8,9 @@
          <frac32 name="delay" description="delay time"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="delay out" SumBuffer="false"/>
-         <int32.bipolar name="state" description="recording state" SumBuffer="false"/>
-         <int32.bipolar name="state2" description="playback state" SumBuffer="false"/>
+         <frac32buffer name="out" description="delay out"/>
+         <int32.bipolar name="state" description="recording state"/>
+         <int32.bipolar name="state2" description="playback state"/>
       </outlets>
       <displays/>
       <params/>

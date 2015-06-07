@@ -10,10 +10,10 @@
          <frac32buffer name="in4" description="in4"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out1" description="out1" SumBuffer="false"/>
-         <frac32buffer name="out2" description="out2" SumBuffer="false"/>
-         <frac32buffer name="out3" description="out3" SumBuffer="false"/>
-         <frac32buffer name="out4" description="out4" SumBuffer="false"/>
+         <frac32buffer name="out1" description="out1"/>
+         <frac32buffer name="out2" description="out2"/>
+         <frac32buffer name="out3" description="out3"/>
+         <frac32buffer name="out4" description="out4"/>
       </outlets>
       <displays/>
       <params>

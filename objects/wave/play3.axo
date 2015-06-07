@@ -10,7 +10,7 @@
          <charptr32 name="filename" description="file name"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="output" SumBuffer="false"/>
+         <frac32buffer name="out" description="output"/>
       </outlets>
       <displays/>
       <params/>

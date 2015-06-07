@@ -9,7 +9,7 @@
          <bool32.rising name="stop" description="trigger"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="output" SumBuffer="false"/>
+         <frac32buffer name="out" description="output"/>
       </outlets>
       <displays/>
       <params/>

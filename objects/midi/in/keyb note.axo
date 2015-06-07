@@ -5,9 +5,9 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <bool32 name="gate" description="key pressed?" SumBuffer="false"/>
-         <frac32.positive name="velocity" description="note-on velocity" SumBuffer="false"/>
-         <frac32.positive name="releaseVelocity" description="note-off velocity" SumBuffer="false"/>
+         <bool32 name="gate" description="key pressed?"/>
+         <frac32.positive name="velocity" description="note-on velocity"/>
+         <frac32.positive name="releaseVelocity" description="note-off velocity"/>
       </outlets>
       <displays/>
       <params/>

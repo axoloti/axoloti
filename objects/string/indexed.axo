@@ -7,7 +7,7 @@
          <int32 name="index" description="index"/>
       </inlets>
       <outlets>
-         <charptr32 name="out" description="string" SumBuffer="false"/>
+         <charptr32 name="out" description="string"/>
       </outlets>
       <displays/>
       <params/>

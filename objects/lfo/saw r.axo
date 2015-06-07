@@ -8,8 +8,8 @@
          <bool32.rising name="reset" description="reset phase"/>
       </inlets>
       <outlets>
-         <frac32.positive name="wave" description="saw wave" SumBuffer="false"/>
-         <bool32.pulse name="sync" description="sync output" SumBuffer="false"/>
+         <frac32.positive name="wave" description="saw wave"/>
+         <bool32.pulse name="sync" description="sync output"/>
       </outlets>
       <displays/>
       <params>

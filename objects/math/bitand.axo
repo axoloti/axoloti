@@ -8,7 +8,7 @@
          <int32 name="in2" description="in2"/>
       </inlets>
       <outlets>
-         <int32 name="out" description="out" SumBuffer="false"/>
+         <int32 name="out" description="out"/>
       </outlets>
       <displays/>
       <params/>

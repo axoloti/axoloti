@@ -7,7 +7,7 @@
          <frac32 name="pitchm" description="phase increment"/>
       </inlets>
       <outlets>
-         <frac32 name="delay" description="delay time" SumBuffer="false"/>
+         <frac32 name="delay" description="delay time"/>
       </outlets>
       <displays/>
       <params>

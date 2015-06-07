@@ -8,7 +8,7 @@
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <frac32 name="o" description="output" SumBuffer="false"/>
+         <frac32 name="o" description="output"/>
       </outlets>
       <displays/>
       <params/>
@@ -29,7 +29,7 @@ if (!(%trig%>0)) ntrig=0;
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <int32 name="o" description="output" SumBuffer="false"/>
+         <int32 name="o" description="output"/>
       </outlets>
       <displays/>
       <params/>

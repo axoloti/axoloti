@@ -7,7 +7,7 @@
          <frac32 name="phase" description="phase"/>
       </inlets>
       <outlets>
-         <frac32 name="out" description="cos(phase)" SumBuffer="false"/>
+         <frac32 name="out" description="cos(phase)"/>
       </outlets>
       <displays/>
       <params/>
@@ -25,7 +25,7 @@
          <frac32buffer name="phase" description="phase"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="cos(phase)" SumBuffer="false"/>
+         <frac32buffer name="out" description="cos(phase)"/>
       </outlets>
       <displays/>
       <params/>

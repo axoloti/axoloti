@@ -7,7 +7,7 @@
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <frac32buffer.positive name="out" description="dirac impulse" SumBuffer="false"/>
+         <frac32buffer.positive name="out" description="dirac impulse"/>
       </outlets>
       <displays/>
       <params/>

@@ -8,8 +8,8 @@
          <int32 name="def" description="default value"/>
       </inlets>
       <outlets>
-         <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
-         <int32 name="o" description="output" SumBuffer="false"/>
+         <int32 name="chain" description="chain out (in-16)"/>
+         <int32 name="o" description="output"/>
       </outlets>
       <displays/>
       <params>

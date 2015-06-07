@@ -7,7 +7,7 @@
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <bool32.pulse name="pulse" description="pulse output" SumBuffer="false"/>
+         <bool32.pulse name="pulse" description="pulse output"/>
       </outlets>
       <displays/>
       <params>

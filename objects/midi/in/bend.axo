@@ -5,8 +5,8 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <frac32.bipolar name="bend" description="pitch bend, -64..64" SumBuffer="false"/>
-         <bool32.pulse name="trig" description="trigger output" SumBuffer="false"/>
+         <frac32.bipolar name="bend" description="pitch bend, -64..64"/>
+         <bool32.pulse name="trig" description="trigger output"/>
       </outlets>
       <displays/>
       <params/>

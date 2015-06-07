@@ -7,7 +7,7 @@
          <int32 name="in" description="in"/>
       </inlets>
       <outlets>
-         <bool32 name="o" description="output" SumBuffer="false"/>
+         <bool32 name="o" description="output"/>
       </outlets>
       <displays/>
       <params>

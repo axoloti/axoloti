@@ -10,7 +10,7 @@
          <bool32.rising name="load" description="load trigger"/>
       </inlets>
       <outlets>
-         <bool32 name="out" description="lfs pattern" SumBuffer="false"/>
+         <bool32 name="out" description="lfs pattern"/>
       </outlets>
       <displays/>
       <params/>

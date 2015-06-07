@@ -5,7 +5,7 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <frac32.bipolar name="out" description="pink noise" SumBuffer="false"/>
+         <frac32.bipolar name="out" description="pink noise"/>
       </outlets>
       <displays/>
       <params/>

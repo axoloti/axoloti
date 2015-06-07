@@ -5,7 +5,7 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <frac32buffer name="wave" description="Left channel" SumBuffer="false"/>
+         <frac32buffer name="wave" description="Left channel"/>
       </outlets>
       <displays>
          <frac32.vu name="vu" noLabel="true"/>

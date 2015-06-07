@@ -7,8 +7,8 @@
          <frac32 name="i1" description="input"/>
       </inlets>
       <outlets>
-         <frac32 name="left" description="output" SumBuffer="false"/>
-         <frac32 name="right" description="output" SumBuffer="false"/>
+         <frac32 name="left" description="output"/>
+         <frac32 name="right" description="output"/>
       </outlets>
       <displays/>
       <params>
@@ -28,8 +28,8 @@
          <frac32buffer name="i1" description="input"/>
       </inlets>
       <outlets>
-         <frac32buffer name="left" description="output" SumBuffer="false"/>
-         <frac32buffer name="right" description="output" SumBuffer="false"/>
+         <frac32buffer name="left" description="output"/>
+         <frac32buffer name="right" description="output"/>
       </outlets>
       <displays/>
       <params>

@@ -9,8 +9,8 @@
          <bool32.rising name="r" description="reset"/>
       </inlets>
       <outlets>
-         <int32 name="o" description="output" SumBuffer="false"/>
-         <bool32.pulse name="c" description="carry pulse" SumBuffer="false"/>
+         <int32 name="o" description="output"/>
+         <bool32.pulse name="c" description="carry pulse"/>
       </outlets>
       <displays/>
       <params>

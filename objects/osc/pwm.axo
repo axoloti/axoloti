@@ -8,7 +8,7 @@
          <frac32.positive name="pwm" description="pwm ratio"/>
       </inlets>
       <outlets>
-         <frac32buffer.bipolar name="wave" description="pwm wave, anti-aliased" SumBuffer="false"/>
+         <frac32buffer.bipolar name="wave" description="pwm wave, anti-aliased"/>
       </outlets>
       <displays/>
       <params>

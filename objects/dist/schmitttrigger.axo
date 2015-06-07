@@ -7,7 +7,7 @@
          <frac32buffer name="in" description="audio input"/>
       </inlets>
       <outlets>
-         <frac32buffer.bipolar name="out" description="audio output" SumBuffer="false"/>
+         <frac32buffer.bipolar name="out" description="audio output"/>
       </outlets>
       <displays/>
       <params>

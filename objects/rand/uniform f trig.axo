@@ -7,7 +7,7 @@
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <frac32.bipolar name="rand" description="random number" SumBuffer="false"/>
+         <frac32.bipolar name="rand" description="random number"/>
       </outlets>
       <displays/>
       <params/>

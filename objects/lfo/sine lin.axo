@@ -7,7 +7,7 @@
          <frac32 name="frequency" description="phase increment"/>
       </inlets>
       <outlets>
-         <frac32.bipolar name="out" description="sine wave LFO, cheap and bad quality" SumBuffer="false"/>
+         <frac32.bipolar name="out" description="sine wave LFO, cheap and bad quality"/>
       </outlets>
       <displays/>
       <params/>

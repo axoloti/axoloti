@@ -7,7 +7,7 @@
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <frac32buffer.bipolar name="out" description="lfs burst" SumBuffer="false"/>
+         <frac32buffer.bipolar name="out" description="lfs burst"/>
       </outlets>
       <displays/>
       <params/>

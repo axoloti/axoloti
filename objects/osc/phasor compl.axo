@@ -8,8 +8,8 @@
          <frac32buffer name="fm" description="phase increment"/>
       </inlets>
       <outlets>
-         <frac32buffer.positive name="phasor0" description="phasor wave" SumBuffer="false"/>
-         <frac32buffer.positive name="phasor180" description="phasor wave, 180 degrees shifted" SumBuffer="false"/>
+         <frac32buffer.positive name="phasor0" description="phasor wave"/>
+         <frac32buffer.positive name="phasor180" description="phasor wave, 180 degrees shifted"/>
       </outlets>
       <displays/>
       <params>

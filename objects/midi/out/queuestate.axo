@@ -5,7 +5,7 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <int32 name="length" description="number of pending bytes in queue" SumBuffer="false"/>
+         <int32 name="length" description="number of pending bytes in queue"/>
       </outlets>
       <displays/>
       <params/>

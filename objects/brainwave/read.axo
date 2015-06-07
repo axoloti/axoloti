@@ -5,17 +5,17 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <frac32 name="quality" description="signal quality" SumBuffer="false"/>
-         <frac32 name="attention" description="attention" SumBuffer="false"/>
-         <frac32 name="meditation" description="meditation" SumBuffer="false"/>
-         <frac32 name="low_alpha" description="low alpha" SumBuffer="false"/>
-         <frac32 name="high_alpha" description="high_alpha" SumBuffer="false"/>
-         <frac32 name="low_beta" description="low beta" SumBuffer="false"/>
-         <frac32 name="high_beta" description="high_beta" SumBuffer="false"/>
-         <frac32 name="low_gamma" description="low gamma" SumBuffer="false"/>
-         <frac32 name="high_gamma" description="high_gamma" SumBuffer="false"/>
-         <frac32 name="delta" description="delta" SumBuffer="false"/>
-         <frac32 name="theta" description="theta" SumBuffer="false"/>
+         <frac32 name="quality" description="signal quality"/>
+         <frac32 name="attention" description="attention"/>
+         <frac32 name="meditation" description="meditation"/>
+         <frac32 name="low_alpha" description="low alpha"/>
+         <frac32 name="high_alpha" description="high_alpha"/>
+         <frac32 name="low_beta" description="low beta"/>
+         <frac32 name="high_beta" description="high_beta"/>
+         <frac32 name="low_gamma" description="low gamma"/>
+         <frac32 name="high_gamma" description="high_gamma"/>
+         <frac32 name="delta" description="delta"/>
+         <frac32 name="theta" description="theta"/>
       </outlets>
       <displays/>
       <params/>

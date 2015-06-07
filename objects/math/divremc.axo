@@ -7,8 +7,8 @@
          <int32 name="a" description="nominator"/>
       </inlets>
       <outlets>
-         <int32 name="div" description="a divided by denominator" SumBuffer="false"/>
-         <int32 name="rem" description="remainder of division by denominator" SumBuffer="false"/>
+         <int32 name="div" description="a divided by denominator"/>
+         <int32 name="rem" description="remainder of division by denominator"/>
       </outlets>
       <displays/>
       <params/>

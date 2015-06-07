@@ -5,11 +5,11 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <int32 name="h" description="hours" SumBuffer="false"/>
-         <int32 name="m" description="minutes" SumBuffer="false"/>
-         <int32 name="s" description="seconds" SumBuffer="false"/>
-         <int32 name="f" description="frames" SumBuffer="false"/>
-         <frac32buffer name="out" description="ltc output" SumBuffer="false"/>
+         <int32 name="h" description="hours"/>
+         <int32 name="m" description="minutes"/>
+         <int32 name="s" description="seconds"/>
+         <int32 name="f" description="frames"/>
+         <frac32buffer name="out" description="ltc output"/>
       </outlets>
       <displays/>
       <params/>

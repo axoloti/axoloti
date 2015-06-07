@@ -5,7 +5,7 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <frac32 name="wave" description="white noise" SumBuffer="false"/>
+         <frac32 name="wave" description="white noise"/>
       </outlets>
       <displays/>
       <params/>

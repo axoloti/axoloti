@@ -8,7 +8,7 @@
          <frac32.bipolar name="delaym" description="delay modulation"/>
       </inlets>
       <outlets>
-         <bool32.pulse name="pulse" description="pulse output" SumBuffer="false"/>
+         <bool32.pulse name="pulse" description="pulse output"/>
       </outlets>
       <displays/>
       <params>

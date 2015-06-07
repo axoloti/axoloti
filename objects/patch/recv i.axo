@@ -5,7 +5,7 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <int32 name="v" description="v" SumBuffer="false"/>
+         <int32 name="v" description="v"/>
       </outlets>
       <displays/>
       <params/>

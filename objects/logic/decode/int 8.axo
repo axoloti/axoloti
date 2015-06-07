@@ -7,15 +7,15 @@
          <int32 name="i1" description="input 1"/>
       </inlets>
       <outlets>
-         <bool32 name="o0" description="output 0" SumBuffer="false"/>
-         <bool32 name="o1" description="output 1" SumBuffer="false"/>
-         <bool32 name="o2" description="output 2" SumBuffer="false"/>
-         <bool32 name="o3" description="output 3" SumBuffer="false"/>
-         <bool32 name="o4" description="output 4" SumBuffer="false"/>
-         <bool32 name="o5" description="output 5" SumBuffer="false"/>
-         <bool32 name="o6" description="output 6" SumBuffer="false"/>
-         <bool32 name="o7" description="output 7" SumBuffer="false"/>
-         <int32 name="chain" description="chain output" SumBuffer="false"/>
+         <bool32 name="o0" description="output 0"/>
+         <bool32 name="o1" description="output 1"/>
+         <bool32 name="o2" description="output 2"/>
+         <bool32 name="o3" description="output 3"/>
+         <bool32 name="o4" description="output 4"/>
+         <bool32 name="o5" description="output 5"/>
+         <bool32 name="o6" description="output 6"/>
+         <bool32 name="o7" description="output 7"/>
+         <int32 name="chain" description="chain output"/>
       </outlets>
       <displays/>
       <params/>

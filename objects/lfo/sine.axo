@@ -7,7 +7,7 @@
          <frac32.bipolar name="pitchm" description="pitch modulation"/>
       </inlets>
       <outlets>
-         <frac32.bipolar name="wave" description="sine wave" SumBuffer="false"/>
+         <frac32.bipolar name="wave" description="sine wave"/>
       </outlets>
       <displays/>
       <params>

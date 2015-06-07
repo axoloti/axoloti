@@ -5,8 +5,8 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <frac32 name="out1_" description="out1" SumBuffer="false"/>
-         <frac32 name="out2_" description="out2" SumBuffer="false"/>
+         <frac32 name="out1_" description="out1"/>
+         <frac32 name="out2_" description="out2"/>
       </outlets>
       <displays/>
       <params/>

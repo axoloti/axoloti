@@ -7,7 +7,7 @@
          <int32 name="s" description="select"/>
       </inlets>
       <outlets>
-         <frac32 name="o" description="output" SumBuffer="false"/>
+         <frac32 name="o" description="output"/>
       </outlets>
       <displays/>
       <params>

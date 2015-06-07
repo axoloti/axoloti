@@ -7,7 +7,7 @@
          <int32 class="axoloti.inlets.InletInt32Pos" name="a" description="index"/>
       </inlets>
       <outlets>
-         <frac32 name="o" description="table[a]" SumBuffer="false"/>
+         <frac32 name="o" description="table[a]"/>
       </outlets>
       <displays/>
       <params/>
@@ -25,7 +25,7 @@
          <frac32.positive name="a" description="index in fraction of table size"/>
       </inlets>
       <outlets>
-         <frac32 name="o" description="table[a]" SumBuffer="false"/>
+         <frac32 name="o" description="table[a]"/>
       </outlets>
       <displays/>
       <params/>
@@ -43,7 +43,7 @@
          <frac32buffer.positive name="a" description="index in fraction of table size"/>
       </inlets>
       <outlets>
-         <frac32buffer name="o" description="table[a]" SumBuffer="false"/>
+         <frac32buffer name="o" description="table[a]"/>
       </outlets>
       <displays/>
       <params/>

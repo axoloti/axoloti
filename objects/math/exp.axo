@@ -7,7 +7,7 @@
          <frac32.positive name="a" description="input"/>
       </inlets>
       <outlets>
-         <frac32 name="result" description="output" SumBuffer="false"/>
+         <frac32 name="result" description="output"/>
       </outlets>
       <displays/>
       <params/>
@@ -27,7 +27,7 @@ else %result% = expt[ei]>>(-s);
          <frac32buffer.positive name="a" description="input"/>
       </inlets>
       <outlets>
-         <frac32buffer name="result" description="output" SumBuffer="false"/>
+         <frac32buffer name="result" description="output"/>
       </outlets>
       <displays/>
       <params/>

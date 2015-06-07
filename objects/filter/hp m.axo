@@ -9,7 +9,7 @@
          <frac32 name="resom" description="filter resonance"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="filter output" SumBuffer="false"/>
+         <frac32buffer name="out" description="filter output"/>
       </outlets>
       <displays/>
       <params>

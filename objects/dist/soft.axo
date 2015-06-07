@@ -7,7 +7,7 @@
          <frac32 name="in" description="input"/>
       </inlets>
       <outlets>
-         <frac32.bipolar name="out" description="output" SumBuffer="false"/>
+         <frac32.bipolar name="out" description="output"/>
       </outlets>
       <displays/>
       <params/>
@@ -26,7 +26,7 @@ int32_t tsq31p3 = ___SMMUL(tsq31,___SMMUL(tsq31,tsq31));
          <frac32buffer name="in" description="audio input"/>
       </inlets>
       <outlets>
-         <frac32buffer.bipolar name="out" description="audio output" SumBuffer="false"/>
+         <frac32buffer.bipolar name="out" description="audio output"/>
       </outlets>
       <displays/>
       <params/>

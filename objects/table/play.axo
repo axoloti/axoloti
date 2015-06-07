@@ -7,7 +7,7 @@
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <frac32buffer name="wave" description="wave" SumBuffer="false"/>
+         <frac32buffer name="wave" description="wave"/>
       </outlets>
       <displays/>
       <params/>

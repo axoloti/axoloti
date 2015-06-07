@@ -7,7 +7,7 @@
          <frac32buffer name="pos" description="position"/>
       </inlets>
       <outlets>
-         <frac32buffer name="o" description="output" SumBuffer="false"/>
+         <frac32buffer name="o" description="output"/>
       </outlets>
       <displays/>
       <params/>

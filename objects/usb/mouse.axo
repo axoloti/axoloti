@@ -5,11 +5,11 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <int32 name="x" description="middle mouse button" SumBuffer="false"/>
-         <int32 name="y" description="middle mouse button" SumBuffer="false"/>
-         <bool32 name="left" description="left mouse button" SumBuffer="false"/>
-         <bool32 name="right" description="right mouse button" SumBuffer="false"/>
-         <bool32 name="middle" description="middle mouse button" SumBuffer="false"/>
+         <int32 name="x" description="middle mouse button"/>
+         <int32 name="y" description="middle mouse button"/>
+         <bool32 name="left" description="left mouse button"/>
+         <bool32 name="right" description="right mouse button"/>
+         <bool32 name="middle" description="middle mouse button"/>
       </outlets>
       <displays/>
       <params/>

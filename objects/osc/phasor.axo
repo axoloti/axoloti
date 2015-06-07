@@ -8,7 +8,7 @@
          <frac32buffer name="fm" description="phase increment"/>
       </inlets>
       <outlets>
-         <frac32buffer.positive name="phasor" description="phasor wave" SumBuffer="false"/>
+         <frac32buffer.positive name="phasor" description="phasor wave"/>
       </outlets>
       <displays/>
       <params>

@@ -8,7 +8,7 @@
          <frac32buffer name="mod" description="modulator"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="output" SumBuffer="false"/>
+         <frac32buffer name="out" description="output"/>
       </outlets>
       <displays/>
       <params>

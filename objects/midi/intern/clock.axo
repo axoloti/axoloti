@@ -8,9 +8,9 @@
          <bool32.rising name="rst" description="Reset"/>
       </inlets>
       <outlets>
-         <bool32 name="active" description="Song is playing" SumBuffer="false"/>
-         <int32 name="pos4ppq" description="Position in 4 counts per quarter" SumBuffer="false"/>
-         <int32 name="pos24ppq" description="Position in 24 counts per quarter" SumBuffer="false"/>
+         <bool32 name="active" description="Song is playing"/>
+         <int32 name="pos4ppq" description="Position in 4 counts per quarter"/>
+         <int32 name="pos24ppq" description="Position in 24 counts per quarter"/>
       </outlets>
       <displays/>
       <params>

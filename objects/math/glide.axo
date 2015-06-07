@@ -8,7 +8,7 @@
          <bool32 name="en" description="enable"/>
       </inlets>
       <outlets>
-         <frac32 name="out" description="output" SumBuffer="false"/>
+         <frac32 name="out" description="output"/>
       </outlets>
       <displays/>
       <params>

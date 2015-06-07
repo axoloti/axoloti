@@ -11,11 +11,11 @@
          <int32 name="def4" description="default value track 4"/>
       </inlets>
       <outlets>
-         <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
-         <int32 name="o1" description="output track 1" SumBuffer="false"/>
-         <int32 name="o2" description="output track 2" SumBuffer="false"/>
-         <int32 name="o3" description="output track 3" SumBuffer="false"/>
-         <int32 name="o4" description="output track 4" SumBuffer="false"/>
+         <int32 name="chain" description="chain out (in-16)"/>
+         <int32 name="o1" description="output track 1"/>
+         <int32 name="o2" description="output track 2"/>
+         <int32 name="o3" description="output track 3"/>
+         <int32 name="o4" description="output track 4"/>
       </outlets>
       <displays/>
       <params>

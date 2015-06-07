@@ -5,10 +5,10 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <int32.positive name="value" description="midi CC value 0..127" SumBuffer="false"/>
-         <int32.positive name="cc" description="midi CC number 0..127" SumBuffer="false"/>
-         <int32.positive name="channel" description="midi channel 1..16" SumBuffer="false"/>
-         <bool32.pulse name="trig" description="trigger output" SumBuffer="false"/>
+         <int32.positive name="value" description="midi CC value 0..127"/>
+         <int32.positive name="cc" description="midi CC number 0..127"/>
+         <int32.positive name="channel" description="midi channel 1..16"/>
+         <bool32.pulse name="trig" description="trigger output"/>
       </outlets>
       <displays/>
       <params/>

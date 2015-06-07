@@ -10,7 +10,7 @@
          <frac32 name="in3" description="input 3"/>
       </inlets>
       <outlets>
-         <frac32 name="out" description="mix out" SumBuffer="false"/>
+         <frac32 name="out" description="mix out"/>
       </outlets>
       <displays/>
       <params>
@@ -46,7 +46,7 @@
          <frac32buffer name="in3" description="input 3"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="mix out" SumBuffer="false"/>
+         <frac32buffer name="out" description="mix out"/>
       </outlets>
       <displays/>
       <params>

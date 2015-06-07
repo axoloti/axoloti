@@ -5,7 +5,7 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <bool32 name="out" description="external digital input" SumBuffer="false"/>
+         <bool32 name="out" description="external digital input"/>
       </outlets>
       <displays/>
       <params/>

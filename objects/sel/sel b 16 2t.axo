@@ -9,9 +9,9 @@
          <bool32 name="def2" description="default value channel 2"/>
       </inlets>
       <outlets>
-         <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
-         <bool32 name="o1" description="output channel 1" SumBuffer="false"/>
-         <bool32 name="o2" description="output channel 2" SumBuffer="false"/>
+         <int32 name="chain" description="chain out (in-16)"/>
+         <bool32 name="o1" description="output channel 1"/>
+         <bool32 name="o2" description="output channel 2"/>
       </outlets>
       <displays/>
       <params>

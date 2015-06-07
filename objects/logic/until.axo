@@ -9,8 +9,8 @@
          <bool32.rising name="pause" description="pause triggering when true"/>
       </inlets>
       <outlets>
-         <bool32.pulse name="o" description="repetitive pulse" SumBuffer="false"/>
-         <int32.positive name="count" description="repetitive pulse" SumBuffer="false"/>
+         <bool32.pulse name="o" description="repetitive pulse"/>
+         <int32.positive name="count" description="repetitive pulse"/>
       </outlets>
       <displays/>
       <params/>

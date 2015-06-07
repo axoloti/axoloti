@@ -5,11 +5,11 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <frac32.bipolar name="note" description="midi note number" SumBuffer="false"/>
-         <bool32 name="gate" description="key pressed - holds on legato notes" SumBuffer="false"/>
-         <bool32 name="gate2" description="key pressed - retriggers on legato notes" SumBuffer="false"/>
-         <frac32.positive name="velocity" description="note-on velocity" SumBuffer="false"/>
-         <frac32.positive name="releaseVelocity" description="note-off velocity" SumBuffer="false"/>
+         <frac32.bipolar name="note" description="midi note number"/>
+         <bool32 name="gate" description="key pressed - holds on legato notes"/>
+         <bool32 name="gate2" description="key pressed - retriggers on legato notes"/>
+         <frac32.positive name="velocity" description="note-on velocity"/>
+         <frac32.positive name="releaseVelocity" description="note-off velocity"/>
       </outlets>
       <displays/>
       <params/>

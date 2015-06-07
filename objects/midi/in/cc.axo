@@ -5,8 +5,8 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <frac32.positive name="midiCC" description="midi CC 0-63.5" SumBuffer="false"/>
-         <bool32.pulse name="trig" description="trigger output" SumBuffer="false"/>
+         <frac32.positive name="midiCC" description="midi CC 0-63.5"/>
+         <bool32.pulse name="trig" description="trigger output"/>
       </outlets>
       <displays/>
       <params/>

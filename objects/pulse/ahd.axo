@@ -7,7 +7,7 @@
          <bool32.risingfalling name="gate" description="gate"/>
       </inlets>
       <outlets>
-         <frac32buffer.positive name="env" description="envelope output" SumBuffer="false"/>
+         <frac32buffer.positive name="env" description="envelope output"/>
       </outlets>
       <displays/>
       <params>

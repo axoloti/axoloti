@@ -7,7 +7,7 @@
          <int32 class="axoloti.inlets.InletInt32Pos" name="in" description="input"/>
       </inlets>
       <outlets>
-         <int32.positive name="chain_out" description="chain output" SumBuffer="false"/>
+         <int32.positive name="chain_out" description="chain output"/>
       </outlets>
       <displays>
          <int32.bar16 name="v1" noLabel="true"/>

@@ -8,7 +8,7 @@
          <frac32buffer.bipolar name="pm" description="phase modulation"/>
       </inlets>
       <outlets>
-         <frac32buffer.positive name="phasor" description="phasor wave" SumBuffer="false"/>
+         <frac32buffer.positive name="phasor" description="phasor wave"/>
       </outlets>
       <displays/>
       <params>

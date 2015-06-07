@@ -15,15 +15,15 @@
          <bool32 name="def8" description="default value channel 8"/>
       </inlets>
       <outlets>
-         <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
-         <bool32 name="o1" description="output channel 1" SumBuffer="false"/>
-         <bool32 name="o2" description="output channel 2" SumBuffer="false"/>
-         <bool32 name="o3" description="output channel 3" SumBuffer="false"/>
-         <bool32 name="o4" description="output channel 4" SumBuffer="false"/>
-         <bool32 name="o5" description="output channel 5" SumBuffer="false"/>
-         <bool32 name="o6" description="output channel 6" SumBuffer="false"/>
-         <bool32 name="o7" description="output channel 7" SumBuffer="false"/>
-         <bool32 name="o8" description="output channel 8" SumBuffer="false"/>
+         <int32 name="chain" description="chain out (in-16)"/>
+         <bool32 name="o1" description="output channel 1"/>
+         <bool32 name="o2" description="output channel 2"/>
+         <bool32 name="o3" description="output channel 3"/>
+         <bool32 name="o4" description="output channel 4"/>
+         <bool32 name="o5" description="output channel 5"/>
+         <bool32 name="o6" description="output channel 6"/>
+         <bool32 name="o7" description="output channel 7"/>
+         <bool32 name="o8" description="output channel 8"/>
       </outlets>
       <displays/>
       <params>

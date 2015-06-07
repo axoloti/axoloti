@@ -7,7 +7,7 @@
          <frac32 name="in" description="in"/>
       </inlets>
       <outlets>
-         <frac32 name="out" description="out" SumBuffer="false"/>
+         <frac32 name="out" description="out"/>
       </outlets>
       <displays/>
       <params/>
@@ -27,7 +27,7 @@ aif = _VSQRTF(aif);
          <frac32buffer name="in" description="in"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="out" SumBuffer="false"/>
+         <frac32buffer name="out" description="out"/>
       </outlets>
       <displays/>
       <params/>

@@ -7,7 +7,7 @@
          <frac32 name="timem" description="delay time (fraction of total delayline size)"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="wave" SumBuffer="false"/>
+         <frac32buffer name="out" description="wave"/>
       </outlets>
       <displays/>
       <params>
@@ -32,7 +32,7 @@
          <frac32buffer name="timem" description="delay time (fraction of total delayline size)"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="wave" SumBuffer="false"/>
+         <frac32buffer name="out" description="wave"/>
       </outlets>
       <displays/>
       <params>

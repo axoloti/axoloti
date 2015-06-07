@@ -9,7 +9,7 @@
          <frac32 name="feedbackm" description="feedback"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="output" SumBuffer="false"/>
+         <frac32buffer name="out" description="output"/>
       </outlets>
       <displays/>
       <params>

@@ -7,7 +7,7 @@
          <frac32 name="in" description="input"/>
       </inlets>
       <outlets>
-         <frac32 name="out" description="output" SumBuffer="false"/>
+         <frac32 name="out" description="output"/>
       </outlets>
       <displays/>
       <params/>
@@ -29,7 +29,7 @@ acc = __SSAT(acc,28);
          <frac32buffer name="in" description="input"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="output" SumBuffer="false"/>
+         <frac32buffer name="out" description="output"/>
       </outlets>
       <displays/>
       <params/>

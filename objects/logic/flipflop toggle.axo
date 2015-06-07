@@ -9,7 +9,7 @@
          <bool32.rising name="reset" description="reset"/>
       </inlets>
       <outlets>
-         <bool32 name="o" description="output" SumBuffer="false"/>
+         <bool32 name="o" description="output"/>
       </outlets>
       <displays/>
       <params/>

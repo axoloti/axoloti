@@ -5,8 +5,8 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <frac32buffer name="left" description="Left channel" SumBuffer="false"/>
-         <frac32buffer name="right" description="Right channel" SumBuffer="false"/>
+         <frac32buffer name="left" description="Left channel"/>
+         <frac32buffer name="right" description="Right channel"/>
       </outlets>
       <displays>
          <frac32.vu name="vuLeft"/>

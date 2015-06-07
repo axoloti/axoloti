@@ -16,15 +16,15 @@
          <int32 class="axoloti.inlets.InletInt32Bipolar" name="int_bip" description="bipolar integer"/>
       </inlets>
       <outlets>
-         <frac32.positive name="o_pos" description="positive fractional" SumBuffer="false"/>
-         <frac32.bipolar name="o_bip" description="bipolar fractional" SumBuffer="false"/>
-         <frac32buffer.positive name="o_pos_b" description="positive fractional buffer" SumBuffer="false"/>
-         <frac32buffer.bipolar name="o_bip_b" description="bipolar fractional input buffer" SumBuffer="false"/>
-         <bool32 name="o_bool" description="bool" SumBuffer="false"/>
-         <bool32.pulse name="o_bool_p" description="boolean pulse" SumBuffer="false"/>
-         <int32 name="o_int" description="integer" SumBuffer="false"/>
-         <int32.positive name="o_int_pos" description="positive integer" SumBuffer="false"/>
-         <int32.bipolar name="o_int_bip" description="bipolar integer" SumBuffer="false"/>
+         <frac32.positive name="o_pos" description="positive fractional"/>
+         <frac32.bipolar name="o_bip" description="bipolar fractional"/>
+         <frac32buffer.positive name="o_pos_b" description="positive fractional buffer"/>
+         <frac32buffer.bipolar name="o_bip_b" description="bipolar fractional input buffer"/>
+         <bool32 name="o_bool" description="bool"/>
+         <bool32.pulse name="o_bool_p" description="boolean pulse"/>
+         <int32 name="o_int" description="integer"/>
+         <int32.positive name="o_int_pos" description="positive integer"/>
+         <int32.bipolar name="o_int_bip" description="bipolar integer"/>
       </outlets>
       <displays/>
       <params/>

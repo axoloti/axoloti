@@ -5,7 +5,7 @@
       <license>BSD</license>
       <inlets/>
       <outlets>
-         <frac32buffer.bipolar name="out" description="lfs pattern" SumBuffer="false"/>
+         <frac32buffer.bipolar name="out" description="lfs pattern"/>
       </outlets>
       <displays/>
       <params/>

@@ -13,7 +13,7 @@
          <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
       </inlets>
       <outlets>
-         <frac32 name="o" description="output" SumBuffer="false"/>
+         <frac32 name="o" description="output"/>
       </outlets>
       <displays/>
       <params/>
@@ -43,7 +43,7 @@
          <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
       </inlets>
       <outlets>
-         <int32 name="o" description="output" SumBuffer="false"/>
+         <int32 name="o" description="output"/>
       </outlets>
       <displays/>
       <params/>
@@ -73,7 +73,7 @@
          <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
       </inlets>
       <outlets>
-         <frac32buffer name="o" description="output" SumBuffer="false"/>
+         <frac32buffer name="o" description="output"/>
       </outlets>
       <displays/>
       <params/>
@@ -103,7 +103,7 @@
          <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
       </inlets>
       <outlets>
-         <bool32 name="o" description="output" SumBuffer="false"/>
+         <bool32 name="o" description="output"/>
       </outlets>
       <displays/>
       <params/>
@@ -133,7 +133,7 @@
          <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
       </inlets>
       <outlets>
-         <charptr32 name="o" description="output" SumBuffer="false"/>
+         <charptr32 name="o" description="output"/>
       </outlets>
       <displays/>
       <params/>

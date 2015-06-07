@@ -10,11 +10,11 @@
       </ModulationSources>
       <inlets/>
       <outlets>
-         <frac32.bipolar name="note" description="midi note number (-64..63)" SumBuffer="false"/>
-         <bool32 name="gate" description="key pressed, no retrigger legato" SumBuffer="false"/>
-         <bool32 name="gate2" description="key pressed, retrigger on legato" SumBuffer="false"/>
-         <frac32.positive name="velocity" description="note-on velocity" SumBuffer="false"/>
-         <frac32.positive name="releaseVelocity" description="note-off velocity" SumBuffer="false"/>
+         <frac32.bipolar name="note" description="midi note number (-64..63)"/>
+         <bool32 name="gate" description="key pressed, no retrigger legato"/>
+         <bool32 name="gate2" description="key pressed, retrigger on legato"/>
+         <frac32.positive name="velocity" description="note-on velocity"/>
+         <frac32.positive name="releaseVelocity" description="note-off velocity"/>
       </outlets>
       <displays/>
       <params/>

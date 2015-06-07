@@ -8,7 +8,7 @@
          <int32 name="in2" description="in2"/>
       </inlets>
       <outlets>
-         <bool32 name="out" description="out" SumBuffer="false"/>
+         <bool32 name="out" description="out"/>
       </outlets>
       <displays/>
       <params/>
@@ -24,7 +24,7 @@
          <frac32 name="in2" description="in2"/>
       </inlets>
       <outlets>
-         <bool32 name="out" description="out" SumBuffer="false"/>
+         <bool32 name="out" description="out"/>
       </outlets>
       <displays/>
       <params/>

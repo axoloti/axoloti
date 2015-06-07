@@ -8,7 +8,7 @@
          <frac32buffer name="a" description="audio input"/>
       </inlets>
       <outlets>
-         <frac32buffer name="o" description="output" SumBuffer="false"/>
+         <frac32buffer name="o" description="output"/>
       </outlets>
       <displays/>
       <params/>

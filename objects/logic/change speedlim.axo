@@ -7,7 +7,7 @@
          <int32 name="in" description="in"/>
       </inlets>
       <outlets>
-         <bool32 name="trig" description="trigger pulse" SumBuffer="false"/>
+         <bool32 name="trig" description="trigger pulse"/>
       </outlets>
       <displays/>
       <params>
@@ -43,7 +43,7 @@ pval = 0;
          <frac32 name="in" description="in"/>
       </inlets>
       <outlets>
-         <bool32 name="trig" description="trigger pulse" SumBuffer="false"/>
+         <bool32 name="trig" description="trigger pulse"/>
       </outlets>
       <displays/>
       <params>

@@ -7,7 +7,7 @@
          <frac32 name="a" description="a"/>
       </inlets>
       <outlets>
-         <frac32 name="result" description="a amplified in 6dB steps" SumBuffer="false"/>
+         <frac32 name="result" description="a amplified in 6dB steps"/>
       </outlets>
       <displays/>
       <params/>
@@ -24,7 +24,7 @@
          <frac32buffer name="a" description="a"/>
       </inlets>
       <outlets>
-         <frac32buffer name="result" description="a amplified with i 6dB steps" SumBuffer="false"/>
+         <frac32buffer name="result" description="a amplified with i 6dB steps"/>
       </outlets>
       <displays/>
       <params/>

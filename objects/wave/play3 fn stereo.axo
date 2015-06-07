@@ -9,8 +9,8 @@
          <bool32.rising name="stop" description="trigger"/>
       </inlets>
       <outlets>
-         <frac32buffer name="outl" description="output left" SumBuffer="false"/>
-         <frac32buffer name="outr" description="output right" SumBuffer="false"/>
+         <frac32buffer name="outl" description="output left"/>
+         <frac32buffer name="outr" description="output right"/>
       </outlets>
       <displays/>
       <params/>

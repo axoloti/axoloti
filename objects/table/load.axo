@@ -8,7 +8,7 @@
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <int32 name="bw" description="bw" SumBuffer="false"/>
+         <int32 name="bw" description="bw"/>
       </outlets>
       <displays/>
       <params/>

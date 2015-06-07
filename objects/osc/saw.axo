@@ -7,7 +7,7 @@
          <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
       </inlets>
       <outlets>
-         <frac32buffer.bipolar name="wave" description="saw wave, anti-aliased" SumBuffer="false"/>
+         <frac32buffer.bipolar name="wave" description="saw wave, anti-aliased"/>
       </outlets>
       <displays/>
       <params>

@@ -8,7 +8,7 @@
          <bool32.risingfalling name="en" description="enable"/>
       </inlets>
       <outlets>
-         <frac32buffer name="wave" description="wave" SumBuffer="false"/>
+         <frac32buffer name="wave" description="wave"/>
       </outlets>
       <displays/>
       <params/>

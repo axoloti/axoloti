@@ -8,7 +8,7 @@
          <frac32buffer name="sync" description="sync input, resets oscillaotr phase on rising zero-crossing"/>
       </inlets>
       <outlets>
-         <frac32buffer.bipolar name="wave" description="square wave, anti-aliased" SumBuffer="false"/>
+         <frac32buffer.bipolar name="wave" description="square wave, anti-aliased"/>
       </outlets>
       <displays/>
       <params>

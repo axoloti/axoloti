@@ -9,9 +9,9 @@
          <int32 name="def2" description="default value track 2"/>
       </inlets>
       <outlets>
-         <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
-         <int32 name="o1" description="output track 1" SumBuffer="false"/>
-         <int32 name="o2" description="output track 2" SumBuffer="false"/>
+         <int32 name="chain" description="chain out (in-16)"/>
+         <int32 name="o1" description="output track 1"/>
+         <int32 name="o2" description="output track 2"/>
       </outlets>
       <displays/>
       <params>

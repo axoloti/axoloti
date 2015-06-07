@@ -7,7 +7,7 @@
          <frac32buffer name="in" description="filter input"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="filter output" SumBuffer="false"/>
+         <frac32buffer name="out" description="filter output"/>
       </outlets>
       <displays/>
       <params>

@@ -7,7 +7,7 @@
          <frac32 name="a" description="a"/>
       </inlets>
       <outlets>
-         <frac32 name="result" description="a-1" SumBuffer="false"/>
+         <frac32 name="result" description="a-1"/>
       </outlets>
       <displays/>
       <params/>
@@ -22,7 +22,7 @@
          <int32 name="a" description="a"/>
       </inlets>
       <outlets>
-         <int32 name="result" description="a-1" SumBuffer="false"/>
+         <int32 name="result" description="a-1"/>
       </outlets>
       <displays/>
       <params/>
@@ -37,7 +37,7 @@
          <frac32buffer name="a" description="a"/>
       </inlets>
       <outlets>
-         <frac32buffer name="result" description="a-1" SumBuffer="false"/>
+         <frac32buffer name="result" description="a-1"/>
       </outlets>
       <displays/>
       <params/>

@@ -15,15 +15,15 @@
          <int32 name="def8" description="default value track 8"/>
       </inlets>
       <outlets>
-         <int32 name="chain" description="chain out (in-16)" SumBuffer="false"/>
-         <int32 name="o1" description="output track 1" SumBuffer="false"/>
-         <int32 name="o2" description="output track 2" SumBuffer="false"/>
-         <int32 name="o3" description="output track 3" SumBuffer="false"/>
-         <int32 name="o4" description="output track 4" SumBuffer="false"/>
-         <int32 name="o5" description="output track 5" SumBuffer="false"/>
-         <int32 name="o6" description="output track 6" SumBuffer="false"/>
-         <int32 name="o7" description="output track 7" SumBuffer="false"/>
-         <int32 name="o8" description="output track 8" SumBuffer="false"/>
+         <int32 name="chain" description="chain out (in-16)"/>
+         <int32 name="o1" description="output track 1"/>
+         <int32 name="o2" description="output track 2"/>
+         <int32 name="o3" description="output track 3"/>
+         <int32 name="o4" description="output track 4"/>
+         <int32 name="o5" description="output track 5"/>
+         <int32 name="o6" description="output track 6"/>
+         <int32 name="o7" description="output track 7"/>
+         <int32 name="o8" description="output track 8"/>
       </outlets>
       <displays/>
       <params>

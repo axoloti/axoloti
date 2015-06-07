@@ -9,7 +9,7 @@
          <frac32buffer name="pm" description="phase modulation"/>
       </inlets>
       <outlets>
-         <frac32buffer.bipolar name="wave" description="sine wave" SumBuffer="false"/>
+         <frac32buffer.bipolar name="wave" description="sine wave"/>
       </outlets>
       <displays/>
       <params>
