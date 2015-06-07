@@ -23,6 +23,7 @@ import axoloti.dialogs.FileManagerFrame;
 import axoloti.dialogs.KeyboardFrame;
 import axoloti.dialogs.PreferencesFrame;
 import axoloti.object.AxoObjects;
+import axoloti.usb.Usb;
 import axoloti.utils.Constants;
 import axoloti.utils.FirmwareID;
 import axoloti.utils.Preferences;
@@ -268,6 +269,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuItemFlashSDC = new javax.swing.JMenuItem();
         jMenuItemFlashDFU = new javax.swing.JMenuItem();
         jMenuItemRefreshFWID = new javax.swing.JMenuItem();
+        jMenuItemListUSB = new javax.swing.JMenuItem();
         jMenuWindow = new javax.swing.JMenu();
         jMenuHelp = new javax.swing.JMenu();
         jMenuHelpContents = new javax.swing.JMenuItem();
@@ -504,6 +506,14 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     jMenuBoard.add(jMenuFirmware);
 
+    jMenuItemListUSB.setText("List USB Devices");
+    jMenuItemListUSB.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItemListUSBActionPerformed(evt);
+        }
+    });
+    jMenuBoard.add(jMenuItemListUSB);
+
     jMenuBar1.add(jMenuBoard);
 
     jMenuWindow.setText("Window");
@@ -721,6 +731,10 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompileFirmware());
     }//GEN-LAST:event_jMenuItemFCompileActionPerformed
 
+    private void jMenuItemListUSBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemListUSBActionPerformed
+        Usb.listDevices();
+    }//GEN-LAST:event_jMenuItemListUSBActionPerformed
+
     public void NewPatch() {
         PatchGUI patch1 = new PatchGUI();
         PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
@@ -798,6 +812,7 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemFDisconnect;
     private javax.swing.JMenuItem jMenuItemFlashDFU;
     private javax.swing.JMenuItem jMenuItemFlashSDC;
+    private javax.swing.JMenuItem jMenuItemListUSB;
     private javax.swing.JMenuItem jMenuItemPanic;
     private javax.swing.JMenuItem jMenuItemPing;
     private javax.swing.JMenuItem jMenuItemPreferences;

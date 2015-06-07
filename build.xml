@@ -95,6 +95,14 @@
       <!-- Include external library -->
       <zipfileset excludes="META-INF/*.SF" src="lib/jssc.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/simple-xml-2.7.1.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/usb4java-1.2.0.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-linux-arm.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-linux-x86.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-linux-x86_64.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86_64.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
 
       <!-- include source files -->
       <fileset dir="src">
