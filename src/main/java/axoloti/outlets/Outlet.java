@@ -32,8 +32,8 @@ public class Outlet {
     public String name;
     @Attribute(required = false)
     public String description;
-    @Attribute(required = false)
-    boolean SumBuffer = false;
+    @Deprecated @Attribute(required = false)
+    Boolean SumBuffer;
 
     public DataType getDatatype() {
         return null;
