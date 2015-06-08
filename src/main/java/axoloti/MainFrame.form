@@ -112,12 +112,12 @@
             <Property name="text" type="java.lang.String" value="Board"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuSelectCom">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSelectCom">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Select serial port"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuSelectComActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemSelectComActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFConnect">

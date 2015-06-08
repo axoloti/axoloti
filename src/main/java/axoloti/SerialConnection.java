@@ -112,6 +112,9 @@ public class SerialConnection {
                 Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
             connected = false;
+            CpuId0 = 0;
+            CpuId1 = 0;
+            CpuId2 = 0;
         }
     }
 

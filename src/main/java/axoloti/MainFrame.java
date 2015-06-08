@@ -133,12 +133,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     jTextPaneLog.setCaretPosition(jTextPaneLog.getText().length());
-//                    jTextPaneLog.invalidate();
                     jTextPaneLog.validate();
-//                    jScrollPaneLog.do();
-                    //revalidate();
-//                    jScrollPaneLog.getVerticalScrollBar().doLayout();
-//                    jScrollPaneLog.getVerticalScrollBar().setValue(jScrollPaneLog.getVerticalScrollBar().getMaximum());
                 }
             }
 
@@ -182,6 +177,8 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         axoObjects.LoadAxoObjects();
         midiInput = new AxolotiMidiInput();
         initMidiInput(prefs.getMidiInputDevice());
+
+        ShowDisconnect();
     }
 
     void PopulateExamplesMenu(JMenu parent) {
@@ -260,7 +257,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuEdit = new javax.swing.JMenu();
         jMenuItemCopy = new javax.swing.JMenuItem();
         jMenuBoard = new javax.swing.JMenu();
-        jMenuSelectCom = new javax.swing.JMenuItem();
+        jMenuItemSelectCom = new javax.swing.JMenuItem();
         jMenuItemFConnect = new javax.swing.JMenuItem();
         jMenuItemFDisconnect = new javax.swing.JMenuItem();
         jMenuItemPing = new javax.swing.JMenuItem();
@@ -430,13 +427,13 @@ jMenuBar1.add(jMenuEdit);
 
 jMenuBoard.setText("Board");
 
-jMenuSelectCom.setText("Select serial port");
-jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
+jMenuItemSelectCom.setText("Select serial port");
+jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jMenuSelectComActionPerformed(evt);
+        jMenuItemSelectComActionPerformed(evt);
     }
     });
-    jMenuBoard.add(jMenuSelectCom);
+    jMenuBoard.add(jMenuItemSelectCom);
 
     jMenuItemFConnect.setText("Connect");
     jMenuItemFConnect.addActionListener(new java.awt.event.ActionListener() {
@@ -639,9 +636,9 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
         qcmdprocessor.serialconnection.connect();
     }//GEN-LAST:event_jMenuItemFConnectActionPerformed
 
-    private void jMenuSelectComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSelectComActionPerformed
+    private void jMenuItemSelectComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectComActionPerformed
         qcmdprocessor.serialconnection.SelectSerialPort();
-    }//GEN-LAST:event_jMenuSelectComActionPerformed
+    }//GEN-LAST:event_jMenuItemSelectComActionPerformed
 
     private void jMenuQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuQuitActionPerformed
         Quit();
@@ -837,13 +834,13 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemPing;
     private javax.swing.JMenuItem jMenuItemPreferences;
     private javax.swing.JMenuItem jMenuItemRefreshFWID;
+    private javax.swing.JMenuItem jMenuItemSelectCom;
     private javax.swing.JMenuItem jMenuNew;
     private javax.swing.JMenuItem jMenuOpen;
     private javax.swing.JMenu jMenuOpenExample;
     private javax.swing.JMenuItem jMenuQuit;
     private javax.swing.JMenuItem jMenuRegenerateObjects;
     private javax.swing.JMenuItem jMenuReloadObjects;
-    private javax.swing.JMenuItem jMenuSelectCom;
     private javax.swing.JMenu jMenuWindow;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelProgress;
@@ -869,6 +866,15 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
             p.patchframe.ShowDisconnect();
         }
         jCheckBoxConnect.setSelected(false);
+
+        jCheckBoxConnect.setSelected(false);
+        jMenuItemEnterDFU.setEnabled(false);
+        jMenuItemFDisconnect.setEnabled(false);
+
+        jMenuItemFConnect.setEnabled(true);
+        jMenuItemSelectCom.setEnabled(true);
+
+        setCpuID(null);
     }
 
     public void ShowConnect() {
@@ -876,6 +882,11 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
             p.patchframe.ShowConnect();
         }
         jCheckBoxConnect.setSelected(true);
+        jMenuItemEnterDFU.setEnabled(true);
+        jMenuItemFDisconnect.setEnabled(true);
+
+        jMenuItemFConnect.setEnabled(false);
+        jMenuItemSelectCom.setEnabled(false);
     }
 
     void Quit() {
@@ -891,7 +902,11 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }
 
     void setCpuID(String cpuId) {
-        jLabelCPUID.setText("Cpu ID = " + cpuId);
+        if (cpuId == null) {
+            jLabelCPUID.setText(" ");
+        } else {
+            jLabelCPUID.setText("Cpu ID = " + cpuId);
+        }
     }
 
     public void updateLinkFirmwareID() {

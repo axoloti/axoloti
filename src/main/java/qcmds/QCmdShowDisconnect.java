@@ -27,12 +27,12 @@ public class QCmdShowDisconnect implements QCmdGUITask {
 
     @Override
     public String GetStartMessage() {
-        return "Start show disconnect";
+        return null;
     }
 
     @Override
     public String GetDoneMessage() {
-        return "Done show connect";
+        return null;
     }
 
     public void DoGUI(QCmdProcessor processor) {

@@ -35,21 +35,16 @@ public class QCmdBringToDFUMode implements QCmdSerialTask {
 
     @Override
     public String GetDoneMessage() {
-        return "Done enabling DFU";
+        return "Done enabling DFU. Serial connection will now break, but firmware can be flashed with DFU.";
     }
 
     @Override
     public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.BringToDFU();
         try {
-            serialConnection.TransmitStart();
-            if (serialConnection.WaitSync()) {
-                return this;
-            } else {
-                return new QCmdDisconnect();
-            }
+            serialConnection.BringToDFU();
+            return this;
         } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdPing.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QCmdBringToDFUMode.class.getName()).log(Level.SEVERE, null, ex);
             return new QCmdDisconnect();
         }
     }
