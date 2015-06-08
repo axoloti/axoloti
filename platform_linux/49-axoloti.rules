@@ -1,0 +1,2 @@
+# 0483:df11 - Axoloti Core (STM32 microcontroller) in DFU mode
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE:="0666"

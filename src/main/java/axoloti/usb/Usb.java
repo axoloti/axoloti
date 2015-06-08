@@ -17,6 +17,7 @@
  */
 package axoloti.usb;
 
+import axoloti.utils.OSDetect;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.usb4java.*;
@@ -54,7 +55,7 @@ public class Usb {
             throw new LibUsbException("Unable to get device list", result);
         }
         try {
-            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "Relevant USB Devices:");
+            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "Relevant USB Devices currently attached:");
             boolean hasOne = false;
             // Iterate over all devices and scan for the right one
             for (Device device : list) {
@@ -94,8 +95,50 @@ public class Usb {
     }
 
     public static boolean isDFUDeviceAvailable() {
-        Device d = findDevice(VID_STM, PID_STM_DFU);
-        return d != null;
+        initialize();
+        // Read the USB device list
+        DeviceList list = new DeviceList();
+        int result = LibUsb.getDeviceList(null, list);
+        if (result < 0) {
+            Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Unable to get device list");
+            return false;
+        }
+
+        try {
+            // Iterate over all devices and scan for the right one
+            for (Device device : list) {
+                DeviceDescriptor descriptor = new DeviceDescriptor();
+                result = LibUsb.getDeviceDescriptor(device, descriptor);
+                if (result != LibUsb.SUCCESS) {
+                    throw new LibUsbException("Unable to read device descriptor", result);
+                }
+                if (descriptor.idVendor() == VID_STM && descriptor.idProduct() == PID_STM_DFU) {
+                    DeviceHandle handle = new DeviceHandle();
+                    result = LibUsb.open(device, handle);
+                    if (result < 0) {
+                        Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "DFU device found, but can't get access : "
+                                + LibUsb.strError(result));
+                        switch (axoloti.utils.OSDetect.getOS()) {
+                            case WIN:
+                                Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Please install the \"STM32 Bootloader WinUSB\" driver.");
+                                break;
+                            case LINUX:
+                                Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Probably need to add a udev rule.");
+                                break;
+                            default:
+                        }
+                        return false;
+                    } else {
+                        LibUsb.close(handle);
+                        return true;
+                    }
+                }
+            }
+        } finally {
+            // Ensure the allocated device list is freed
+            LibUsb.freeDeviceList(list, true);
+        }
+        return false;
     }
 
     public static boolean isSerialDeviceAvailable() {

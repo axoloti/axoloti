@@ -35,7 +35,7 @@ public class QCmdFlashDFU extends QCmdShellTask {
     @Override
     public String GetDoneMessage() {
         if (success) {
-            return "Done flashing firmware with DFU. Now disconnect USB and power from Axoloti Core, and plug it in again to leave DFU mode!";
+            return "Done flashing firmware with DFU.";
         } else {
             return "Flashing firmware failed!";
         }
