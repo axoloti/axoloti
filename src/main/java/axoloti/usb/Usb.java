@@ -27,6 +27,10 @@ import org.usb4java.*;
  */
 public class Usb {
 
+    static final short VID_STM = 0x0483;
+    static final short PID_STM_DFU = (short) 0xDF11;
+    static final short PID_STM_CDC = (short) 0x5740;
+
     public Usb() {
     }
 
@@ -50,14 +54,38 @@ public class Usb {
             throw new LibUsbException("Unable to get device list", result);
         }
         try {
+            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "Relevant USB Devices:");
+            boolean hasOne = false;
             // Iterate over all devices and scan for the right one
             for (Device device : list) {
                 DeviceDescriptor descriptor = new DeviceDescriptor();
                 result = LibUsb.getDeviceDescriptor(device, descriptor);
-                if (result != LibUsb.SUCCESS) {
+                if (result == LibUsb.SUCCESS) {
+                    if (descriptor.idVendor() == VID_STM) {
+                        if (descriptor.idProduct() == PID_STM_CDC) {
+                            hasOne = true;
+                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* USB Serial port device");
+                        } else if (descriptor.idProduct() == PID_STM_DFU) {
+                            hasOne = true;
+                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* DFU device");
+                            // try to open it to check if correct driver is installed
+                            DeviceHandle handle = new DeviceHandle();
+                            result = LibUsb.open(device, handle);
+                            if (result < 0) {
+                                Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  but can't get access : "
+                                        + LibUsb.strError(result));
+                            } else {
+                                Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  driver ok");
+                                LibUsb.close(handle);
+                            }
+                        }
+                    }
+                } else {
                     throw new LibUsbException("Unable to read device descriptor", result);
                 }
-                Logger.getLogger(Usb.class.getName()).log(Level.INFO, descriptor.dump());
+            }
+            if (!hasOne) {
+                Logger.getLogger(Usb.class.getName()).log(Level.INFO, "none found...");
             }
         } finally {
             // Ensure the allocated device list is freed
@@ -66,21 +94,13 @@ public class Usb {
     }
 
     public static boolean isDFUDeviceAvailable() {
-        Device d = findDevice((short) 0x0483, (short) 0xDF11);
-        if (d == null) {
-            return false;
-        } else {
-            return true;
-        }
+        Device d = findDevice(VID_STM, PID_STM_DFU);
+        return d != null;
     }
 
     public static boolean isSerialDeviceAvailable() {
-        Device d = findDevice((short) 0x0483, (short) 0x5740);
-        if (d == null) {
-            return false;
-        } else {
-            return true;
-        }
+        Device d = findDevice(VID_STM, PID_STM_CDC);
+        return d != null;
     }
 
     public static Device findDevice(short vendorId, short productId) {
