@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -946,8 +946,11 @@ public class Patch {
         String c = "";
         c += "//--------- <nets> -----------//\n";
         for (Net n : nets) {
-            // check if net has multiple sources
-            c += "    " + n.CType() + " " + n.CName() + ";\n";
+            if (n.CType() != null) {
+                c += "    " + n.CType() + " " + n.CName() + ";\n";
+            } else {
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Net has no data type!");
+            }
         }
         c += "//--------- </nets> ----------//\n";
         c += "//--------- <zero> ----------//\n";
@@ -1020,7 +1023,11 @@ public class Patch {
         for (Net n : nets) {
             // check if net has multiple sources
             if (n.NeedsLatch()) {
-                c += n.GetDataType().GenerateCopyCode(n.CName() + "Latch", n.CName());
+                if (n.GetDataType() != null) {
+                    c += n.GetDataType().GenerateCopyCode(n.CName() + "Latch", n.CName());
+                } else {
+                    Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Only inlets connected on net!");
+                }
             }
         }
         c += "//--------- </net latch copy> ----------//\n";
@@ -1297,7 +1304,7 @@ public class Patch {
         String cdev[] = {"0", "1", "3", "15"};
         String udev[] = {"omni", "din", "usb host", "internal"};
         ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
-        String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15","16"};
+        String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
 
@@ -1518,13 +1525,13 @@ public class Patch {
     // all channels are independent
     AxoObject GenerateAxoObjPolyChannel() {
         AxoObject o = GenerateAxoObjPoly();
-        o.sLocalData += 
-                  "int8_t voiceChannel[%poly%];\n";
-        o.sInitCode  += 
-                  "int vc;\n"
-		+ "for (vc=0;vc<%poly%;vc++) {\n"
-                +  "   voiceChannel[vc]=0xFF;\n"
-                +  "}\n";
+        o.sLocalData
+                += "int8_t voiceChannel[%poly%];\n";
+        o.sInitCode
+                += "int vc;\n"
+                + "for (vc=0;vc<%poly%;vc++) {\n"
+                + "   voiceChannel[vc]=0xFF;\n"
+                + "}\n";
         o.sMidiCode = ""
                 + "if ( %mididevice% > 0 && dev > 0 && %mididevice% != dev) return;\n"
                 + "if ( %midiport% > 0 && port > 0 && %midiport% != port) return;\n"
@@ -1593,29 +1600,29 @@ public class Patch {
                 + "}\n";
         return o;
     }
-    
+
     // Poly Expression supports the Midi Polyphonic Expression (MPE) Spec
     // Can be used with (or without) the MPE objects
     // the midi channel of the patch is the 'main/global channel'
     AxoObject GenerateAxoObjPolyExpression() {
         AxoObject o = GenerateAxoObjPoly();
-        o.sLocalData += 
-                  "int8_t voiceChannel[%poly%];\n"
+        o.sLocalData
+                += "int8_t voiceChannel[%poly%];\n"
                 + "int8_t pitchbendRange;\n"
                 + "int8_t lowChannel;\n"
                 + "int8_t highChannel;\n"
                 + "int8_t lastRPN_LSB;\n"
                 + "int8_t lastRPN_MSB;\n";
-        o.sInitCode  += 
-                  "int vc;\n"
-		+ "for (vc=0;vc<%poly%;vc++) {\n"
-                +  "   voiceChannel[vc]=0xFF;\n"
-                +  "}\n"
-                +  "lowChannel = %midichannel% + 1;\n"
-                +  "highChannel = %midichannel% + ( 15 - %midichannel%);\n"
-                +  "pitchbendRange = 48;\n"
-                +  "lastRPN_LSB=0xFF;\n"
-                +  "lastRPN_MSB=0xFF;\n";
+        o.sInitCode
+                += "int vc;\n"
+                + "for (vc=0;vc<%poly%;vc++) {\n"
+                + "   voiceChannel[vc]=0xFF;\n"
+                + "}\n"
+                + "lowChannel = %midichannel% + 1;\n"
+                + "highChannel = %midichannel% + ( 15 - %midichannel%);\n"
+                + "pitchbendRange = 48;\n"
+                + "lastRPN_LSB=0xFF;\n"
+                + "lastRPN_MSB=0xFF;\n";
         o.sMidiCode = ""
                 + "if ( %mididevice% > 0 && dev > 0 && %mididevice% != dev) return;\n"
                 + "if ( %midiport% > 0 && port > 0 && %midiport% != port) return;\n"
@@ -1661,11 +1668,10 @@ public class Patch {
                 + "         if (channel != 15) {\n" // e.g ch 1 (g), we use 2-N notes
                 + "           lowChannel = channel + 1;\n"
                 + "           highChannel = lowChannel + data2 - 1;\n"
-                + "         } else {\n"   // ch 16, we use 16(g) 15-N notes
+                + "         } else {\n" // ch 16, we use 16(g) 15-N notes
                 + "           highChannel = channel - 1;\n"
                 + "           lowChannel = highChannel + 1 - data2;\n"
                 + "         }\n"
-
                 + "         for(int i=0;i<%poly%;i++) {\n"
                 + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 100, lastRPN_LSB);\n"
                 + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 101, lastRPN_MSB);\n"
@@ -1673,7 +1679,7 @@ public class Patch {
                 + "         }\n" //for
                 + "      }\n" //if mainchannel
                 + "    } else {\n" // enable/disable
-                + "      lowChannel = 0;\n"   //disable, we may in the future want to turn this in to normal poly mode
+                + "      lowChannel = 0;\n" //disable, we may in the future want to turn this in to normal poly mode
                 + "      highChannel = 0;\n"
                 + "    }\n"
                 + "  }\n"// cc127
@@ -1702,7 +1708,7 @@ public class Patch {
                 + "               }\n" //for
                 + "             }\n" // if lsb/msb=0
                 + "           }\n" // case 6
-                + "           break;\n"  
+                + "           break;\n"
                 + "         default: break;\n"
                 + "     }\n" //switch
                 + "  } else if (data1 == 64) {\n" //end //cc 101,100,6, cc64
@@ -1741,7 +1747,6 @@ public class Patch {
         return o;
     }
 
-    
     void WriteCode() {
         String c = GenerateCode3();
         //cdlg.SetCode(c);
