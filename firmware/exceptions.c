@@ -47,28 +47,87 @@ typedef enum {
   watchdog_soft,
   watchdog_hard,
   brownout,
+  goto_DFU
 } faulttype;
 
 typedef struct {
-  uint32_t magicnumber;
-  faulttype type;
-  uint32_t r0;
-  uint32_t r1;
-  uint32_t r2;
-  uint32_t r3;
-  uint32_t r12;
-  uint32_t lr;
-  uint32_t pc;
-  uint32_t psr;
-  uint32_t ipsr;
-  uint32_t cfsr;
-  uint32_t hfsr;
-  uint32_t mmfar;
-  uint32_t bfar;
-  uint32_t i;
+  volatile uint32_t magicnumber;
+  volatile faulttype type;
+  volatile uint32_t r0;
+  volatile uint32_t r1;
+  volatile uint32_t r2;
+  volatile uint32_t r3;
+  volatile uint32_t r12;
+  volatile uint32_t lr;
+  volatile uint32_t pc;
+  volatile uint32_t psr;
+  volatile uint32_t ipsr;
+  volatile uint32_t cfsr;
+  volatile uint32_t hfsr;
+  volatile uint32_t mmfar;
+  volatile uint32_t bfar;
+  volatile uint32_t i;
 } exceptiondump_t;
 
 #define exceptiondump ((exceptiondump_t *)BKPSRAM_BASE)
+
+/**
+ * @brief   Jumps into the System ROM bootloader
+ * @details This will only work before other initializations!
+ */
+void BootLoaderInit() {
+  int reg, psp;
+  reg = 0;
+  asm volatile ("msr     CONTROL, %0" : : "r" (reg));
+  asm volatile ("isb");
+  psp = 0;
+  asm volatile ("cpsie   i");
+  asm volatile ("msr     PSP, %0" : : "r" (psp));
+  SCB_FPCCR = 0;
+  asm volatile ("LDR     R0, =0x40023844 ;");
+  // RCC_APB2ENR (+0x18)
+  asm volatile ("LDR     R1, =0x4000 ;");
+  // ENABLE SYSCFG CLOCK (1)
+  asm volatile ("STR     R1, [R0, #0]    ;");
+  asm volatile ("NOP");
+  asm volatile ("NOP");
+  asm volatile ("NOP");
+  asm volatile ("LDR     R0, =0x40013800 ;");
+  // SYSCFG_CFGR1 (+0x00)
+  asm volatile ("LDR     R1, =0x1 ;");
+  // MAP ROM
+  asm volatile ("STR     R1, [R0, #0]    ;");
+  // MAP ROM AT ZERO (1)
+  asm volatile ("NOP");
+  asm volatile ("NOP");
+  asm volatile ("NOP");
+  asm volatile ("MOVS    R1, #0          ;");
+  //  ADDRESS OF ZERO
+  asm volatile ("LDR     R0, [R1, #0]    ;");
+  // SP @ +0
+  asm volatile ("MOV     SP, R0");
+  asm volatile ("LDR     R0, [R1, #4]    ;");
+  // PC @ +4
+  asm volatile ("NOP");
+  asm volatile ("BX      R0");
+}
+
+/**
+ * @brief   Check exception magic bytes for DFU mode request.
+ * @details Enables access to battery backup SRAM.
+ */
+void exception_check_DFU(void) {
+  RCC->APB1ENR |= RCC_APB1ENR_PWREN;
+  PWR->CR |= PWR_CR_DBP;
+  RCC->AHB1ENR |= RCC_AHB1ENR_BKPSRAMEN;
+  asm volatile ("NOP");
+  asm volatile ("NOP");
+  asm volatile ("NOP");
+  if (exception_check() && (exceptiondump->type == goto_DFU)) {
+    exception_clear();
+    BootLoaderInit();
+  }
+}
 
 void exception_init(void) {
   RCC->AHB1ENR |= RCC_AHB1ENR_BKPSRAMEN;
@@ -87,7 +146,8 @@ void exception_init(void) {
     else if ((RCC->CSR & RCC_CSR_BORRSTF) && !(RCC->CSR & RCC_CSR_PORRSTF)) {
       exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
       exceptiondump->type = brownout;
-    } else {
+    }
+    else {
       exceptiondump->type = -1;
       exceptiondump->lr = 0;
       exceptiondump->pc = 0;
@@ -123,6 +183,33 @@ void exception_clear(void) {
   exceptiondump->magicnumber = 0;
 }
 
+/**
+ * @brief   Initiate jumping into the system ROM bootloader.
+ * @details By writing magic bytes and going through a soft reboot...
+ */
+void exception_initiate_dfu(void) {
+  exceptiondump->r0 = 1;
+  exceptiondump->r1 = 2;
+  exceptiondump->r2 = 3;
+  exceptiondump->r3 = 4;
+  palSetPadMode(GPIOA, 11, PAL_MODE_INPUT);
+  palSetPadMode(GPIOA, 12, PAL_MODE_INPUT);
+  volatile int i = 20;
+  while (i--) {
+    volatile int j = 1 << 12;
+    palTogglePad(LED1_PORT, LED1_PIN);
+    while (j--) {
+      volatile int k = 1 << 8;
+      while (k--) {
+      }
+      watchdog_feed();
+    }
+  }
+  exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
+  exceptiondump->type = goto_DFU;
+  NVIC_SystemReset();
+}
+
 void exception_checkandreport(void) {
   if (exception_check()) {
     bool report_registers = 0;
@@ -140,7 +227,6 @@ void exception_checkandreport(void) {
       TransmitTextMessageHeader();
       chprintf((BaseSequentialStream *)&SDU1, "i=0x%x%c", exceptiondump->i);
       chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
-
     }
     else if (exceptiondump->type == brownout) {
       TransmitTextMessage("exception: brownout");
@@ -167,20 +253,23 @@ void exception_checkandreport(void) {
       chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
 
       TransmitTextMessageHeader();
-      chprintf((BaseSequentialStream *)&SDU1, "cfsr=0x%x%c", exceptiondump->cfsr);
+      chprintf((BaseSequentialStream *)&SDU1, "cfsr=0x%x%c",
+      exceptiondump->cfsr);
       chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
 
-      if (exceptiondump->cfsr & (1<<15)) {
+      if (exceptiondump->cfsr & (1 << 15)) {
         // BFARVALID
         TransmitTextMessageHeader();
-        chprintf((BaseSequentialStream *)&SDU1, "bfar=0x%x%c", exceptiondump->bfar);
+        chprintf((BaseSequentialStream *)&SDU1, "bfar=0x%x%c",
+        exceptiondump->bfar);
         chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
       }
 
-      if (exceptiondump->cfsr & (1<<7)) {
+      if (exceptiondump->cfsr & (1 << 7)) {
         // MMARVALID
         TransmitTextMessageHeader();
-        chprintf((BaseSequentialStream *)&SDU1, "mmfar=0x%x%c", exceptiondump->mmfar);
+        chprintf((BaseSequentialStream *)&SDU1, "mmfar=0x%x%c",
+        exceptiondump->mmfar);
         chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
       }
     }

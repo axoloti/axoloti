@@ -202,8 +202,13 @@ public class SerialConnection {
         serialPort.writeBytes(data);
     }
 
-    public void BringToDFU() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void BringToDFU() throws SerialPortException {
+        byte[] data = new byte[4];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'D';
+        serialPort.writeBytes(data);
     }
 
     public void SendMidi(int m0, int m1, int m2) throws SerialPortException {

@@ -41,7 +41,11 @@ public class QCmdCompilePatch extends QCmdShellTask {
 
     @Override
     public String GetDoneMessage() {
-        return "Done compiling patch";
+        if (success) {
+            return "Done compiling patch";
+        } else {
+            return "Compiling patch failed!";
+        }
     }
 
     @Override
@@ -58,6 +62,7 @@ public class QCmdCompilePatch extends QCmdShellTask {
         }
     }
 
+    @Override
     QCmd err() {
         return new QCmdShowCompileFail(p);
     }

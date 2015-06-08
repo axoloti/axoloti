@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 public abstract class QCmdShellTask implements QCmd {
 
     abstract String GetExec();
+    boolean success;
 
     class StreamHandlerThread implements Runnable {
 
@@ -72,10 +73,10 @@ public abstract class QCmdShellTask implements QCmd {
             thd_out.join();
             thd_err.join();
             if (p1.exitValue() == 0) {
-//                Logger.getLogger(QCmdCompilePatch.class.getName()).log(Level.SEVERE, "compile success, exit value: " + p1.exitValue());
-                shellProcessor.println("shell task successful!");
+                success = true;
             } else {
                 Logger.getLogger(QCmdCompilePatch.class.getName()).log(Level.SEVERE, "shell task failed, exit value: " + p1.exitValue());
+                success = false;
                 return err();
             }
         } catch (InterruptedException ex) {

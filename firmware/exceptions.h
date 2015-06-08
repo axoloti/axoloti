@@ -24,4 +24,6 @@ int exception_check(void);
 void exception_clear(void);
 void exception_checkandreport(void);
 void watchdog_enable(void);
+void exception_check_DFU(void);
+void exception_initiate_dfu(void);
 #endif

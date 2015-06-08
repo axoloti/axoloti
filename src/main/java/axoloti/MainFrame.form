@@ -170,9 +170,18 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashSDC">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Flash using sdcard"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFlashSDCActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemEnterDFU">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Enter DFU"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemEnterDFUActionPerformed"/>
                   </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashDFU">

@@ -65,7 +65,25 @@ public class Usb {
         }
     }
 
-    public Device findDevice(short vendorId, short productId) {
+    public static boolean isDFUDeviceAvailable() {
+        Device d = findDevice((short) 0x0483, (short) 0xDF11);
+        if (d == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isSerialDeviceAvailable() {
+        Device d = findDevice((short) 0x0483, (short) 0x5740);
+        if (d == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static Device findDevice(short vendorId, short productId) {
         initialize();
         // Read the USB device list
         DeviceList list = new DeviceList();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -64,125 +64,35 @@ int GetFirmwareID(void) {
   return (i2 << 16) + (i1 & 0xFFFE);
 }
 
-void RCC_DeInit(void) {
-#if 0 // does not work
-  /* Set HSION bit */
-  RCC->CR |= (uint32_t)0x00000001;
-
-  /* Reset CFGR register */
-  RCC->CFGR = 0x00000000;
-
-  /* Reset HSEON, CSSON, PLLON, PLLI2S and PLLSAI(STM32F42/43xxx devices) bits */
-  RCC->CR &= (uint32_t)0xEAF6FFFF;
-
-  /* Reset PLLCFGR register */
-  RCC->PLLCFGR = 0x24003010;
-
-  /* Reset PLLI2SCFGR register */
-  RCC->PLLI2SCFGR = 0x20003000;
-
-  /* Reset PLLSAICFGR register, only available for STM32F42/43xxx devices */
-  RCC->PLLSAICFGR = 0x24003000;
-
-  /* Reset HSEBYP bit */
-  RCC->CR &= (uint32_t)0xFFFBFFFF;
-
-  /* Disable all interrupts */
-  RCC->CIR = 0x00000000;
-
-  /* Disable Timers clock prescalers selection, only available for STM32F42/43xxx devices */
-  RCC->DCKCFGR = 0x00000000;
-#endif
-}
-
-void BootLoaderInit(void) {
-  void (*SysMemBootJump)(void) = (void (*)(void)) (*((u32 *)0x1FFF0004));
-  /*
-   usbStop(&USBD1);
-   sdStop(&SD1);
-   sdStop(&SD3);
-   spiStop(&SPID3);
-   i2cStop(&I2CD2);
-   codecStop();
-   sdcStop(&SDCD1);
-   */
-  //    RCC_DeInit();
-      chSysDisable();
-
-      rccResetAHB1(~0);
-      rccResetAHB2(~0);
-      rccResetAHB3(~0);
-      rccResetAPB1(~0);
-      rccResetAPB2(~0);
-
-      __set_PRIMASK(1);
-
-      RCC->CR |= RCC_CR_HSION;
-      RCC->CR &= ~RCC_CR_PLLI2SON;
-      RCC->CR &= ~RCC_CR_CSSON;
-
-      while ((RCC->CR & RCC_CR_HSIRDY) == 0)
-      ;
-
-      RCC->CFGR &= ~0x03;// select HSI clock
-      while (RCC->CFGR & 0x0C)
-      ;
-      // turn pll off
-      RCC->CR &= ~RCC_CR_PLLON;
-
-//  RCC->PLLCFGR = 0x24003010;
-
-      RCC_DeInit();
-      SysTick->CTRL = 0;
-      SysTick->LOAD = 0;
-      SysTick->VAL = 0;
-      __set_PRIMASK(1);
-
-      /*
-
-       RCC->APB1ENR = 0;
-       RCC->APB2ENR = 0;
-       RCC->CFGR &= 0x300; // preserve reserved bits
-       */
-      SYSCFG->MEMRMP |= 0x01;
-      SYSCFG->MEMRMP &= ~0x02;
-
-      __set_MSP(0x20001000);
-      SysMemBootJump();
-
-      while(1)
-      ;
-    }
-
 void TransmitDisplayPckt(void) {
   if (patchMeta.pDisplayVector == 0)
     return;
   unsigned int length = 12 + (patchMeta.pDisplayVector[2] * 4);
   if (length > 2048)
     return; // FIXME
-  chSequentialStreamWrite((BaseSequentialStream *)&SDU1,
-                          (const unsigned char*)&patchMeta.pDisplayVector[0],
+  chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+                          (const unsigned char* )&patchMeta.pDisplayVector[0],
                           length);
 }
 
 void TransmitTextMessageHeader(void) {
   int h = 0x546F7841; // "AxoT"
-  chSequentialStreamWrite((BaseSequentialStream *)&SDU1,
-                          (const unsigned char*)&h, 4);
+  chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+                          (const unsigned char* )&h, 4);
 }
 
 void TransmitTextMessage(const char *c) {
   TransmitTextMessageHeader();
   unsigned int l = strlen(c);
-  chSequentialStreamWrite((BaseSequentialStream *)&SDU1,
-                          (const unsigned char*)&c[0], l);
-  chSequentialStreamPut((BaseSequentialStream *)&SDU1, 0);
+  chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+                          (const unsigned char* )&c[0], l);
+  chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
   chThdSleep(10);
 }
 
 void PExTransmit(void) {
   int i;
-  if (chOQIsEmptyI(&SDU1.oqueue) ) {
+  if (chOQIsEmptyI(&SDU1.oqueue)) {
     if (AckPending) {
       int ack[7];
       ack[0] = 0x416F7841; // "AxoA"
@@ -192,8 +102,8 @@ void PExTransmit(void) {
       ack[4] = *((int*)0x1FFF7A10); // CPU unique ID
       ack[5] = *((int*)0x1FFF7A14); // CPU unique ID
       ack[6] = *((int*)0x1FFF7A18); // CPU unique ID
-      chSequentialStreamWrite((BaseSequentialStream *)&SDU1,
-                              (const unsigned char*)&ack[0], 7*4);
+      chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+                              (const unsigned char* )&ack[0], 7 * 4);
 
       if (!patchStatus)
         TransmitDisplayPckt();
@@ -212,8 +122,8 @@ void PExTransmit(void) {
           msg.header = 0x506F7841; //"AxoP"
           msg.index = i;
           msg.value = v;
-          chSequentialStreamWrite((BaseSequentialStream *)&SDU1,
-                                  (const unsigned char*)&msg, sizeof(msg));
+          chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+                                  (const unsigned char* )&msg, sizeof(msg));
         }
       }
     }
@@ -265,8 +175,8 @@ static FRESULT scan_files(char *path) {
          */
         strcpy(&((char*)fbuff)[8], fn);
         int l = strlen((char *)(&fbuff[2]));
-        chSequentialStreamWrite((BaseSequentialStream *)&SDU1,
-                                (const unsigned char*)fbuff, l+9);
+        chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+                                (const unsigned char* )fbuff, l + 9);
       }
     }
   }
@@ -296,8 +206,8 @@ void ReadDirectoryListing(void) {
   fbuff[1] = clusters;
   fbuff[2] = fsp->csize;
   fbuff[3] = MMCSD_BLOCK_SIZE;
-  chSequentialStreamWrite((BaseSequentialStream *)&SDU1,
-                          (const unsigned char*)(&fbuff[0]), 16);
+  chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+                          (const unsigned char* )(&fbuff[0]), 16);
   chThdSleepMilliseconds(10);
   fbuff[0] = 0;
   scan_files((char *)&fbuff[0]);
@@ -367,7 +277,7 @@ void CopyPatchToFlash(void) {
   // verify
   src_addr = PATCHMAINLOC;
   flash_addr = PATCHFLASHLOC;
-  int err=0;
+  int err = 0;
   for (c = 0; c < PATCHFLASHSIZE;) {
     if (*(int32_t *)flash_addr != *(int32_t *)src_addr)
       err++;
@@ -376,7 +286,7 @@ void CopyPatchToFlash(void) {
     c += 4;
   }
   if (err) {
-    while(1){
+    while (1) {
       // flash verify fail
     }
   }
@@ -451,7 +361,7 @@ void PExReceiveByte(unsigned char c) {
         state = 0;
         header = 0;
         StopPatch();
-        BootLoaderInit();
+        exception_initiate_dfu();
       }
       else if (c == 'F') { // copy to flash
         state = 0;
@@ -676,7 +586,8 @@ void PExReceiveByte(unsigned char c) {
       break;
     case 6:
       midi_r[2] = c;
-      MidiInMsgHandler(MIDI_DEVICE_INTERNAL, 1,midi_r[0], midi_r[1], midi_r[2]);
+      MidiInMsgHandler(MIDI_DEVICE_INTERNAL, 1, midi_r[0], midi_r[1],
+                       midi_r[2]);
       header = 0;
       state = 0;
       break;
@@ -864,7 +775,7 @@ void PExReceiveByte(unsigned char c) {
 void PExReceive(void) {
   if (!AckPending) {
     unsigned char received;
-    while (chnReadTimeout(&SDU1, &received, 1, TIME_IMMEDIATE )) {
+    while (chnReadTimeout(&SDU1, &received, 1, TIME_IMMEDIATE)) {
       PExReceiveByte(received);
     }
   }

@@ -57,6 +57,7 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+import qcmds.QCmdBringToDFUMode;
 import qcmds.QCmdPing;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStart;
@@ -267,6 +268,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuFirmware = new javax.swing.JMenu();
         jMenuItemFCompile = new javax.swing.JMenuItem();
         jMenuItemFlashSDC = new javax.swing.JMenuItem();
+        jMenuItemEnterDFU = new javax.swing.JMenuItem();
         jMenuItemFlashDFU = new javax.swing.JMenuItem();
         jMenuItemRefreshFWID = new javax.swing.JMenuItem();
         jMenuItemListUSB = new javax.swing.JMenuItem();
@@ -481,12 +483,21 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     jMenuFirmware.add(jMenuItemFCompile);
 
     jMenuItemFlashSDC.setText("Flash using sdcard");
+    jMenuItemFlashSDC.setEnabled(false);
     jMenuItemFlashSDC.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuItemFlashSDCActionPerformed(evt);
         }
     });
     jMenuFirmware.add(jMenuItemFlashSDC);
+
+    jMenuItemEnterDFU.setText("Enter DFU");
+    jMenuItemEnterDFU.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItemEnterDFUActionPerformed(evt);
+        }
+    });
+    jMenuFirmware.add(jMenuItemEnterDFU);
 
     jMenuItemFlashDFU.setText("Flash with DFU");
     jMenuItemFlashDFU.addActionListener(new java.awt.event.ActionListener() {
@@ -716,9 +727,13 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuItemRefreshFWIDActionPerformed
 
     private void jMenuItemFlashDFUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashDFUActionPerformed
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdDisconnect());
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdFlashDFU());
+        if (Usb.isDFUDeviceAvailable()) {
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdDisconnect());
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdFlashDFU());
+        } else {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "No devices in DFU mode detected. To bring Axoloti Core in DFU mode, remove power from Axoloti Core, and power it up while holding button S1. The USB port needs to be connected with this computer too...");
+        }
     }//GEN-LAST:event_jMenuItemFlashDFUActionPerformed
 
     private void jMenuItemFlashSDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDCActionPerformed
@@ -734,6 +749,10 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private void jMenuItemListUSBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemListUSBActionPerformed
         Usb.listDevices();
     }//GEN-LAST:event_jMenuItemListUSBActionPerformed
+
+    private void jMenuItemEnterDFUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEnterDFUActionPerformed
+        qcmdprocessor.AppendToQueue(new QCmdBringToDFUMode());
+    }//GEN-LAST:event_jMenuItemEnterDFUActionPerformed
 
     public void NewPatch() {
         PatchGUI patch1 = new PatchGUI();
@@ -785,7 +804,7 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
             patches.add(patch1);
             MainFrame.prefs.addRecentFile(f.getAbsolutePath());
         } catch (Exception ex) {
-            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -807,6 +826,7 @@ jMenuSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenu jMenuHelp;
     private javax.swing.JMenuItem jMenuHelpContents;
     private javax.swing.JMenuItem jMenuItemCopy;
+    private javax.swing.JMenuItem jMenuItemEnterDFU;
     private javax.swing.JMenuItem jMenuItemFCompile;
     private javax.swing.JMenuItem jMenuItemFConnect;
     private javax.swing.JMenuItem jMenuItemFDisconnect;
