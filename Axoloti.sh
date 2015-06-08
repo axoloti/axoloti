@@ -13,13 +13,16 @@ case "$unamestr" in
 	;;
 esac
 
-case "$platform" in
-	mac)
-		java -Xdock:name=AxoStudio -Djava.library.path=$rootdir/dist/lib -jar $rootdir/dist/Axoloti.jar
-	;;
-	linux)
-#		java -Djava.library.path=$rootdir/dist/lib -jar $rootdir/dist/Axoloti.jar
-#		java -cp $rootdir/dist/lib/jssc.jar -cp $rootdir/dist/lib/simple-xml-2.7.1.jar  -jar $rootdir/dist/Axoloti.jar
-		java -Djava.library.path=$rootdir/dist/lib/jssc.jar -Djava.library.path=$rootdir/dist/lib/simple-xml-2.7.1.jar -jar $rootdir/dist/Axoloti.jar
-	;;
-esac
+if [-f $rootdir/dist/Axoloti.jar ]
+then
+    case "$platform" in
+        mac)
+                java -Xdock:name=Axoloti -Djava.library.path=$rootdir/dist/lib -jar $rootdir/dist/Axoloti.jar
+        ;;
+        linux)
+                java -Djava.library.path=$rootdir/dist/lib/jssc.jar -Djava.library.path=$rootdir/dist/lib/simple-xml-2.7.1.jar -jar $rootdir/dist/Axoloti.jar
+        ;;
+    esac
+else
+    echo "Axoloti.jar does not exist."
+fi
