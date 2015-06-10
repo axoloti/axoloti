@@ -1,106 +1,166 @@
 #!/bin/bash
 
-PLATFORM_ROOT=$(pwd)
+set -e
 
-mkdir bin
-mkdir lib
-mkdir src
+PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
 
-cd $PLATFORM_ROOT/src
-curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.6/ChibiOS_2.6.6.zip > ChibiOS_2.6.6.zip
-unzip -o ChibiOS_2.6.6.zip
-mv ChibiOS_2.6.6 chibios
-cd chibios/ext
-unzip -o ./fatfs-0.9-patched.zip
-cd ../../
-mv chibios ../..
+cd "$PLATFORM_ROOT"
 
+if [ ! -d "${PLATFORM_ROOT}/bin" ]; 
+then
+    mkdir "${PLATFORM_ROOT}/bin"
+fi
 
-curl -L https://launchpad.net/gcc-arm-embedded/4.8/4.8-2014-q3-update/+download/gcc-arm-none-eabi-4_8-2014q3-20140805-mac.tar.bz2 > gcc-arm-none-eabi-4_8-2014q3-20140805-mac.tar.bz2
-curl -L http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-1.0.9/libusb-1.0.9.tar.bz2 > libusb-1.0.9.tar.bz2
-curl -L http://dfu-util.sourceforge.net/releases/dfu-util-0.8.tar.gz > dfu-util-0.8.tar.gz
-curl -L https://github.com/texane/stlink/archive/master.zip > stlink-master.zip
-curl -L http://ftp.gnu.org/gnu/make/make-3.82.tar.gz > make-3.82.tar.gz
-tar xfvj gcc-arm-none-eabi-4_8-2014q3-20140805-mac.tar.bz2
-mv gcc-arm-none-eabi-4_8-2014q3 ..
-tar xfvj libusb-1.0.9.tar.bz2
-tar xfvz dfu-util-0.8.tar.gz
-unzip -o stlink-master.zip
-tar xfvz make-3.82.tar.gz
+if [ ! -d "${PLATFORM_ROOT}/lib" ]; 
+then
+    mkdir "${PLATFORM_ROOT}/lib"
+fi
 
+if [ ! -d "${PLATFORM_ROOT}/src" ]; 
+then
+    mkdir "${PLATFORM_ROOT}/src"
+fi
 
-cd $PLATFORM_ROOT/src/libusb-1.0.9
-./configure --prefix=$PLATFORM_ROOT/i386 CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
-make 
-make install
-make clean
-./configure --prefix=$PLATFORM_ROOT/x86_64 CFLAGS="-arch x86_64 -mmacosx-version-min=10.5" LDFLAGS="-arch x86_64"
-make 
-make install
-make clean
+if [ ! -d "${PLATFORM_ROOT}/../chibios" ]; 
+then
+    cd "${PLATFORM_ROOT}/src"
+    ARDIR=ChibiOS_2.6.6
+    ARCHIVE=${ARDIR}.zip
+    if [ ! -f ${ARCHIVE} ]; 
+    then
+        curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.6/$ARCHIVE > $ARCHIVE
+    else
+        echo "${ARCHIVE} already downloaded"
+    fi
+    unzip -o ${ARCHIVE}
+    mv ${ARDIR} chibios
+    cd chibios/ext
+    unzip -o ./fatfs-0.9-patched.zip
+    cd ../../
+    mv chibios ../..
+else
+    echo "chibios directory already present, skipping..."
+fi
 
-cd $PLATFORM_ROOT/
-lipo -create x86_64/lib/libusb-1.0.0.dylib i386/lib/libusb-1.0.0.dylib -output lib/libusb-1.0.0.dylib
-
-cd $PLATFORM_ROOT/lib
-install_name_tool -id libusb-1.0.0.dylib libusb-1.0.0.dylib
-
-cd $PLATFORM_ROOT/src/dfu-util-0.8
-./configure --prefix=$PLATFORM_ROOT/i386 USB_LIBS=$PLATFORM_ROOT/lib/libusb-1.0.0.dylib USB_CFLAGS=-I$PLATFORM_ROOT/i386/include/libusb-1.0/ CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
-make 
-make install
-make clean
-
-cd $PLATFORM_ROOT/src/dfu-util-0.8
-make clean
-./configure --prefix=$PLATFORM_ROOT/x86_64 USB_LIBS=$PLATFORM_ROOT/lib/libusb-1.0.0.dylib USB_CFLAGS=-I$PLATFORM_ROOT/x86_64/include/libusb-1.0/ CFLAGS="-arch x86_64 -mmacosx-version-min=10.5" LDFLAGS="-arch x86_64"
-make 
-make install
-make clean
-
-cd $PLATFORM_ROOT/
-lipo -create x86_64/bin/dfu-util i386/bin/dfu-util -output bin/dfu-util
+if [ ! -f "$PLATFORM_ROOT/bin/arm-none-eabi-gcc" ]; 
+then
+    ARCHIVE=gcc-arm-none-eabi-4_8-2014q3-20140805-mac.tar.bz2
+    if [ ! -f ${ARCHIVE} ]; 
+    then
+        curl -L https://launchpad.net/gcc-arm-embedded/4.8/4.8-2014-q3-update/+download/$ARCHIVE > $ARCHIVE
+    else
+        echo "${ARCHIVE} already downloaded"
+    fi
+    tar xfvj ${ARCHIVE}
+    cp -r gcc-arm-none-eabi-4_8-2014q3/* .
+    rm -rv gcc-arm-none-eabi-4_8-2014q3
+else
+    echo "bin/arm-none-eabi-gcc already present, skipping..."
+fi
 
 
-cd $PLATFORM_ROOT/src/make-3.82
-./configure --prefix=$PLATFORM_ROOT/i386 CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
-make 
-make install
-make clean
+if [ ! -f "$PLATFORM_ROOT/bin/libusb-1.0.0.dylib" ]; 
+then
+    cd "${PLATFORM_ROOT}/src"
+    ARDIR=libusb-1.0.19
+    ARCHIVE=${ARDIR}.tar.bz2
+    if [ ! -f ${ARCHIVE} ]; 
+    then
+        curl -L http://sourceforge.net/projects/libusb/files/libusb-1.0/$ARDIR/$ARCHIVE/download > $ARCHIVE
+    else
+        echo "${ARCHIVE} already downloaded"
+    fi
+    tar xfvj ${ARCHIVE}
+    
+    cd "${PLATFORM_ROOT}/src/libusb-1.0.19"
 
+    patch -N -p1 < ../libusb.stdfu.patch
 
-cd $PLATFORM_ROOT/src/make-3.82
-./configure --prefix=$PLATFORM_ROOT/x86_64 CFLAGS="-arch x86_64 -mmacosx-version-min=10.5" LDFLAGS="-arch x86_64"
-make 
-make install
-make clean
+    ./configure --prefix="${PLATFORM_ROOT}/i386" CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
+    make 
+    make install
+    make clean
+    ./configure --prefix="${PLATFORM_ROOT}/x86_64" CFLAGS="-arch x86_64 -mmacosx-version-min=10.5" LDFLAGS="-arch x86_64"
+    make 
+    make install
+    make clean
 
-cd $PLATFORM_ROOT/
-lipo -create x86_64/bin/make i386/bin/make -output bin/make
+    cd $PLATFORM_ROOT/
+    lipo -create x86_64/lib/libusb-1.0.0.dylib i386/lib/libusb-1.0.0.dylib -output lib/libusb-1.0.0.dylib
 
+    cd $PLATFORM_ROOT/lib
+    install_name_tool -id libusb-1.0.0.dylib libusb-1.0.0.dylib
+else
+    echo "libusb already present, skipping..."
+fi
 
-cd $PLATFORM_ROOT/src/stlink-master
-./autogen.sh
-./configure --prefix=$PLATFORM_ROOT/i386 USB_LIBS=$PLATFORM_ROOT/lib/libusb-1.0.0.dylib USB_CFLAGS=-I$PLATFORM_ROOT/i386/include/libusb-1.0/ CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
-make
-make install
-make clean
+if [ ! -f "${PLATFORM_ROOT}/bin/dfu-util" ]; 
+then
+    cd "${PLATFORM_ROOT}/src"
+    ARDIR=dfu-util-0.8
+    ARCHIVE=${ARDIR}.tar.gz
+    if [ ! -f $ARCHIVE ]; 
+    then
+        curl -L http://dfu-util.sourceforge.net/releases/$ARCHIVE > $ARCHIVE
+    else
+        echo "$ARCHIVE already downloaded"
+    fi
+    tar xfvz ${ARCHIVE}
 
-cd $PLATFORM_ROOT/src/stlink-master
-./autogen.sh
-./configure --prefix=$PLATFORM_ROOT/x86_64 USB_LIBS=$PLATFORM_ROOT/lib/libusb-1.0.0.dylib USB_CFLAGS=-I$PLATFORM_ROOT/x86_64/include/libusb-1.0/ CFLAGS="-arch x86_64 -mmacosx-version-min=10.5" LDFLAGS="-arch x86_64"
-make
-make install
-make clean
+    cd "${PLATFORM_ROOT}/src/${ARDIR}"
+    ./configure --prefix="${PLATFORM_ROOT}/i386" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.0.dylib" USB_CFLAGS=-I${PLATFORM_ROOT}/i386/include/libusb-1.0/ CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
+    make 
+    make install
+    make clean
 
-cd $PLATFORM_ROOT/
-lipo -create x86_64/bin/st-util i386/bin/st-util -output bin/st-util
+    cd "$PLATFORM_ROOT/src/$ARDIR"
+    make clean
+    ./configure --prefix="${PLATFORM_ROOT}/x86_64" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.0.dylib" USB_CFLAGS=-I${PLATFORM_ROOT}/x86_64/include/libusb-1.0/ CFLAGS="-arch x86_64 -mmacosx-version-min=10.5" LDFLAGS="-arch x86_64"
+    make 
+    make install
+    make clean
 
+    cd "$PLATFORM_ROOT"
+    lipo -create x86_64/bin/dfu-util i386/bin/dfu-util -output bin/dfu-util
+else
+    echo "dfu-util already present, skipping..."
+fi
 
-cp -v $PLATFORM_ROOT/lib/* $PLATFORM_ROOT/bin/
+if [ ! -f "$PLATFORM_ROOT/bin/make" ]; 
+then
+    cd "${PLATFORM_ROOT}/src"
+    ARDIR=make-3.82
+    ARCHIVE=${ARDIR}.tar.gz
 
-file bin/make
-file bin/st-util
-file bin/dfu-util
-file bin/libusb-1.0.0.dylib
+    if [ ! -f ${ARCHIVE} ]; 
+    then
+        curl -L http://ftp.gnu.org/gnu/make/$ARCHIVE > $ARCHIVE
+    else
+        echo "${ARCHIVE} already downloaded"
+    fi
 
+    tar xfvz $ARCHIVE
+
+    cd "${PLATFORM_ROOT}/src/${ARDIR}"
+    ./configure --prefix="${PLATFORM_ROOT}/i386" CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
+    make 
+    make install
+    make clean
+
+    cd "${PLATFORM_ROOT}/src/${ARDIR}"
+    ./configure --prefix="${PLATFORM_ROOT}/x86_64" CFLAGS="-arch x86_64 -mmacosx-version-min=10.5" LDFLAGS="-arch x86_64"
+    make 
+    make install
+    make clean
+
+    cd "${PLATFORM_ROOT}"
+    lipo -create x86_64/bin/make i386/bin/make -output bin/make
+fi
+
+cp -v "${PLATFORM_ROOT}/lib/"*.dylib "${PLATFORM_ROOT}/bin/"
+
+file "${PLATFORM_ROOT}/bin/make"
+file "${PLATFORM_ROOT}/bin/dfu-util"
+file "${PLATFORM_ROOT}/bin/libusb-1.0.0.dylib"
+
+echo "DONE!"
