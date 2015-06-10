@@ -11,16 +11,22 @@ case "$unamestr" in
 		platform='mac'
 		rootdir="$(cd $(dirname $0); pwd -P)"
 	;;
+        *)
+                echo "unknown OS : $unamestr, aborting..."
+                exit
+        ;;
 esac
 
-if [-f $rootdir/dist/Axoloti.jar ]
+which java >/dev/null || echo "java not found in path" 
+
+if [ -f $rootdir/dist/Axoloti.jar ]
 then
     case "$platform" in
         mac)
-                java -Xdock:name=Axoloti -Djava.library.path=$rootdir/dist/lib -jar $rootdir/dist/Axoloti.jar
+                java -Xdock:name=Axoloti -jar $rootdir/dist/Axoloti.jar
         ;;
         linux)
-                java -Djava.library.path=$rootdir/dist/lib/jssc.jar -Djava.library.path=$rootdir/dist/lib/simple-xml-2.7.1.jar -jar $rootdir/dist/Axoloti.jar
+                java -jar $rootdir/dist/Axoloti.jar
         ;;
     esac
 else
