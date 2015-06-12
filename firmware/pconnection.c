@@ -31,13 +31,22 @@
 #include "virtual_control.h"
 #include "flash.h"
 #include "exceptions.h"
+#include "crc32.h"
+#include "flash.h"
+#include "watchdog.h"
 
 /* Virtual serial port over USB.*/
 SerialUSBDriver SDU1;
 
 void BootLoaderInit(void);
 
+uint32_t fwid;
+
 void InitPConnection(void) {
+
+  extern int32_t _flash_end;
+  fwid = CalcCRC32((uint8_t *)(FLASH_BASE_ADDR), (uint32_t)(&_flash_end) & 0x07FFFFF);
+
   /*
    * Initializes a serial-over-USB CDC driver.
    */
@@ -53,15 +62,12 @@ void InitPConnection(void) {
   chThdSleepMilliseconds(1000);
   usbStart(serusbcfg.usbp, &usbcfg);
   usbConnectBus(serusbcfg.usbp);
-//  BootLoaderInit();
 }
 
 int AckPending = 0;
 
 int GetFirmwareID(void) {
-  int i1 = (int)&KVP_RegisterObject;
-  int i2 = (int)&patchMeta;
-  return (i2 << 16) + (i1 & 0xFFFE);
+  return fwid;
 }
 
 void TransmitDisplayPckt(void) {

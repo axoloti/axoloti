@@ -19,10 +19,12 @@ package axoloti.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.CRC32;
 
 /**
  *
@@ -31,25 +33,25 @@ import java.util.logging.Logger;
 public class FirmwareID {
 
     static public String getFirmwareID() {
-        String fw1 = "";
-        String fw2 = "";
         try {
-            File f = new File(Constants.firmwaredir + "/build/axoloti.dmp");
+            File f = new File(Constants.firmwaredir + "/build/axoloti.bin");
             if (!f.canRead()) {
                 return "Please compile the firmware first";
             }
-            BufferedReader br = new BufferedReader(new FileReader(f));
-            for (String line; (line = br.readLine()) != null;) {
-                if (line.contains("patchMeta")) {
-                    fw1 = line.substring(4, 8);
-                }
-                if (line.contains("KVP_RegisterObject")) {
-                    fw2 = line.substring(4, 8);
-                }
+            int tlength = (int) f.length();
+            FileInputStream inputStream = new FileInputStream(f);
+            byte[] bb = new byte[tlength];
+            int nRead = inputStream.read(bb, 0, tlength);
+            if (nRead != tlength) {
+                Logger.getLogger(FirmwareID.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
             }
+            CRC32 zcrc = new CRC32();
+            zcrc.update(bb);
+            int zcrcv = (int) zcrc.getValue();
+            return String.format("%08X", zcrcv);
         } catch (IOException ex) {
             Logger.getLogger(FirmwareID.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return (fw1 + fw2).toUpperCase();
+        return "";
     }
 }

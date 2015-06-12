@@ -24,10 +24,52 @@
 #include "ui.h"
 #include "axoloti_control.h"
 #include "axoloti_board.h"
+#if 0
 #include "sdcard.h"
 #include "ff.h"
+#endif
+#include "crc32.h"
+#include "sdram.h"
+#include "exceptions.h"
+#include "flash.h"
 
 extern int _vectors;
+
+#define AXOLOTICONTROL FALSE
+#define SERIALDEBUG TRUE
+
+#if SERIALDEBUG
+#define DBGPRINTCHAR(x) sdPut(&SD2,x);   //chThdSleepMilliseconds(1);
+
+void dbgPrintHexDigit(uint8_t b) {
+  if (b > 9) {
+    DBGPRINTCHAR('a' + b - 10);
+  }
+  else {
+    DBGPRINTCHAR('0' + b);
+  }
+}
+
+#define DBGPRINTHEX(x) \
+    DBGPRINTCHAR(' '); \
+    DBGPRINTCHAR('0'); \
+    DBGPRINTCHAR('x'); \
+    dbgPrintHexDigit((x>>28)&0x0f); \
+    dbgPrintHexDigit((x>>24)&0x0f); \
+    dbgPrintHexDigit((x>>20)&0x0f); \
+    dbgPrintHexDigit((x>>16)&0x0f); \
+    dbgPrintHexDigit((x>>12)&0x0f); \
+    dbgPrintHexDigit((x>>8)&0x0f); \
+    dbgPrintHexDigit((x>>4)&0x0f); \
+    dbgPrintHexDigit((x)&0x0f); \
+    DBGPRINTCHAR('\r'); \
+    DBGPRINTCHAR('\n');
+#else 
+#define DBGPRINTCHAR(x)
+#define DBGPRINTHEX(x)
+#endif
+
+#define FLASH_BASE_ADDR 0x08000000
 
 // dummy ui hooks...
 
@@ -37,86 +79,29 @@ Btn_Nav_States_struct Btn_Nav_Or;
 Btn_Nav_States_struct Btn_Nav_And;
 int8_t EncBuffer[4];
 
-
-void refresh_LCD(void){
+void refresh_LCD(void) {
+#if AXOLOTICONTROL
   int i;
-  for(i=0;i<9;i++){
+  for(i=0;i<9;i++) {
     do_axoloti_control();
     chThdSleepMilliseconds(20);
   }
+#endif
 }
 
-void DispayAbortErr(int err){
-  LCD_drawStringN(0,5,"error code:",128);
-  LCD_drawNumber3D(0,6,(int)err);
+void DispayAbortErr(int err) {
+  DBGPRINTCHAR('0' + err);
+  LCD_drawStringN(0, 5, "error code:", 128);
+  LCD_drawNumber3D(0, 6, (int)err);
   refresh_LCD();
-  while(1){
-    palWritePad(GPIOA,8,1);
+  int i = 10;
+  while (i--) {
+    palWritePad(LED1_PORT, LED1_PIN, 1);
     chThdSleepMilliseconds(1000);
-    palWritePad(GPIOA,8,0);
+    palWritePad(LED1_PORT, LED1_PIN, 0);
     chThdSleepMilliseconds(1000);
   }
-}
-
-
-int FLASH_WaitForLastOperation(void)
-{
-  while(FLASH->SR == FLASH_SR_BSY)
-    ;
-  return FLASH->SR;
-}
-
-int Erase_sector(int sector ){
-// assume VDD>2.7V
-    FLASH->CR &=  ~FLASH_CR_PSIZE;
-    FLASH->CR |= FLASH_CR_PSIZE_1;
-    FLASH->CR &= ~FLASH_CR_SNB;
-    FLASH->CR |= FLASH_CR_SER | (sector<<3);
-    FLASH->CR |= FLASH_CR_STRT;
-    FLASH_WaitForLastOperation();
-
-    FLASH->CR &= (~FLASH_CR_SER);
-    FLASH->CR &= ~FLASH_CR_SER;
-    FLASH_WaitForLastOperation();
-
-    return 0;
-}
-
-int FLASH_ProgramWord(uint32_t Address, uint32_t Data)
-{
-  int status;
-
-  FLASH_WaitForLastOperation();
-
-    /* if the previous operation is completed, proceed to program the new data */
-  FLASH->CR &=  ~FLASH_CR_PSIZE;
-  FLASH->CR |= FLASH_CR_PSIZE_1;
-    FLASH->CR |= FLASH_CR_PG;
-
-    *(__IO uint32_t*)Address = Data;
-
-    /* Wait for last operation to be completed */
-    status = FLASH_WaitForLastOperation();
-
-    /* if the program operation is completed, disable the PG Bit */
-    FLASH->CR &= (~FLASH_CR_PG);
-
-  /* Return the Program Status */
-  return status;
-}
-
-
-#define BUFSIZE 4096
-uint8_t BUF[BUFSIZE];
-
-int FLASH_ProgramBuf(int offset){
-  int i;
-  for(i=0;i<BUFSIZE;){
-    FLASH_ProgramWord(offset,*((uint32_t *)&BUF[i]));
-    i+=4;
-    offset +=4;
-  }
-  return 0;
+  NVIC_SystemReset();
 }
 
 int main(void) {
@@ -125,89 +110,157 @@ int main(void) {
   // remap SRAM1 to 0x00000000
   SYSCFG->MEMRMP |= 0x03;
 
+//  FMC_SDRAMDeInit(0);
+//  RCC->AHB3RSTR |= 1; //RCC_AHB3RSTR_FMCRST
+  RCC->AHB3ENR |= 1; //RCC_AHB3ENR_FMCEN;
+
+//  HAL_DeInit();
+//  HAL_Init();
+  watchdog_feed();
   halInit();
   chSysInit();
+  watchdog_feed();
+  configSDRAM();
 
-  axoloti_board_init();
+#ifdef SERIALDEBUG
+// SD2 for serial debug output
+  palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7) | PAL_MODE_INPUT); // RX
+  palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL); // TX
+  palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7)); // TX
+// 115200 baud
+  static const SerialConfig sd2Cfg = {115200, 0, 0, 0};
+  sdStart(&SD2, &sd2Cfg);
+#endif
 
-  axoloti_control_init();
-  LCD_drawStringN(0,0,"--- Axoloti ---",128);
-  LCD_drawStringN(0,1,"Flashing firmware",128);
-  LCD_drawStringN(0,2,"  from SDCard",128);
-  refresh_LCD();
+  DBGPRINTCHAR('a');
 
-  int i=0;
-  sdcardInit();
+  uint32_t pbuf[16];
+  SDRAM_ReadBuffer(&pbuf[0],0+0x050000,16);
+  DBGPRINTCHAR('x');
 
-  if (!fs_ready) {
-    LCD_drawStringN(0,3,"No file system found.",128);
-    LCD_drawStringN(0,4,"Aborting!",128);
-    refresh_LCD();
-    while(1){
-      palWritePad(GPIOA,8,1);
-      chThdSleepMilliseconds(1000);
-      palWritePad(GPIOA,8,0);
-      chThdSleepMilliseconds(500);
-    }
+  watchdog_feed();
+
+  uint32_t *sdram32 = (uint32_t *)SDRAM_BANK_ADDR;
+  uint8_t *sdram8 = (uint8_t *)SDRAM_BANK_ADDR;
+
+  if ((sdram8[0] != 'f') || (sdram8[1] != 'l') || (sdram8[2] != 'a')
+      || (sdram8[3] != 's') || (sdram8[4] != 'c') || (sdram8[5] != 'o')
+      || (sdram8[6] != 'p') || (sdram8[7] != 'y')) {
+    DispayAbortErr(1);
+  }
+  DBGPRINTCHAR('b');
+
+  uint32_t flength = sdram32[2];
+  uint32_t fcrc = sdram32[3];
+
+  if (flength > 1 * 1024 * 1024) {
+    DispayAbortErr(2);
   }
 
-  FIL f;
-  FRESULT err;
-  err = f_open(&f, "firmware.bin", FA_READ | FA_OPEN_EXISTING);
-  if (err != FR_OK)
-    DispayAbortErr((int)err);
+  DBGPRINTCHAR('c');
 
-  UINT bytes_read = 0;
-  int offset = 0x08000000; // flash base adress
-  err = f_read(&f,BUF, BUFSIZE, &bytes_read);
-  if (err != FR_OK)
-    DispayAbortErr((int)err);
+  DBGPRINTHEX(flength);
+
+  uint32_t ccrc = CalcCRC32((uint8_t *)(SDRAM_BANK_ADDR + 0x010), flength);
+
+  DBGPRINTCHAR('d');
+
+  DBGPRINTHEX(ccrc);
+  DBGPRINTHEX(fcrc);
+
+  if (ccrc != fcrc) {
+    DispayAbortErr(3);
+  }
+
+  DBGPRINTCHAR('e');
+
 
   // unlock sequence
   FLASH->KEYR = 0x45670123;
   FLASH->KEYR = 0xCDEF89AB;
 
+  uint32_t i;
 
-  for(i=0;i<12;i++){
-    Erase_sector(i);
+
+  for(i=0;i<12;i++) {
+    flash_Erase_sector(i);
     LCD_drawStringN(0,3,"Erased sector",128);
     LCD_drawNumber3D(80,3,i);
     refresh_LCD();
-    palWritePad(GPIOA,8,1);
+    palWritePad(LED1_PORT,LED1_PIN,1);
     chThdSleepMilliseconds(100);
-    palWritePad(GPIOA,8,0);
+    palWritePad(LED1_PORT,LED1_PIN,0);
+    DBGPRINTCHAR('f');
+    DBGPRINTHEX(i);
   }
 
-  FLASH_ProgramBuf(offset);
+  DBGPRINTCHAR('g');
 
-  while(bytes_read){
-    err = f_read(&f,BUF, BUFSIZE, &bytes_read);
-    if (err != FR_OK)
-      DispayAbortErr((int)err);
-    offset+=BUFSIZE;
-    FLASH_ProgramBuf(offset);
-    LCD_drawStringN(0,3,"Written block",128);
-    LCD_drawNumber3D(80,3,(offset&0xFFFFFF)/BUFSIZE);
-    refresh_LCD();
-    palWritePad(GPIOA,8,1);
-    chThdSleepMilliseconds(100);
-    palWritePad(GPIOA,8,0);
+  DBGPRINTHEX(flength);
+
+  ccrc = CalcCRC32((uint8_t *)(SDRAM_BANK_ADDR + 0x010), flength);
+
+  DBGPRINTCHAR('h');
+
+  DBGPRINTHEX(ccrc);
+  DBGPRINTHEX(fcrc);
+
+  if (ccrc != fcrc) {
+    DispayAbortErr(4);
   }
 
-  LCD_drawStringN(0,4,"Flashing done.",128);
-  refresh_LCD();
+  DBGPRINTCHAR('i');
 
-  palSetPadMode(GPIOA,8,PAL_MODE_OUTPUT_PUSHPULL);
-  for(i=0;i<10;i++)  {
-    palWritePad(GPIOA,8,1);
-    chThdSleepMilliseconds(1000);
-    palWritePad(GPIOA,8,0);
-    chThdSleepMilliseconds(500);
-    LCD_drawNumber3D(0,7,i);
-    i++;
-    refresh_LCD();
+
+  int destptr = FLASH_BASE_ADDR; // flash base adress
+  uint32_t *srcptr = (uint32_t *)(SDRAM_BANK_ADDR + 0x010); // sdram base adress + header offset
+
+  for(i=0;i<(flength+3)/4;i++){
+    uint32_t d = *srcptr;
+    flash_ProgramWord(destptr,d);
+    if ((FLASH->SR != 0)&&(FLASH->SR != 1)){
+      DBGPRINTCHAR('z');
+      DBGPRINTHEX(FLASH->SR);
+    }
+//    DBGPRINTHEX(f);
+    if ((i&0xFFF) == 0){
+      palWritePad(LED1_PORT,LED1_PIN,1);
+      chThdSleepMilliseconds(100);
+      palWritePad(LED1_PORT,LED1_PIN,0);
+      DBGPRINTCHAR('j');
+      DBGPRINTHEX(destptr);
+      DBGPRINTHEX(*(srcptr));
+    }
+    destptr+=4;
+    srcptr++;
   }
 
+  DBGPRINTCHAR('k');
+
+  ccrc = CalcCRC32((uint8_t *)(FLASH_BASE_ADDR), flength);
+
+  DBGPRINTCHAR('l');
+
+  DBGPRINTHEX(ccrc);
+  DBGPRINTHEX(fcrc);
+
+  if (ccrc != fcrc) {
+    DispayAbortErr(5);
+  }
+
+  DBGPRINTCHAR('\r');
+  DBGPRINTCHAR('\n');
+  DBGPRINTCHAR('S');
+  DBGPRINTCHAR('U');
+  DBGPRINTCHAR('C');
+  DBGPRINTCHAR('C');
+  DBGPRINTCHAR('E');
+  DBGPRINTCHAR('S');
+  DBGPRINTCHAR('S');
+  DBGPRINTCHAR('\r');
+  DBGPRINTCHAR('\n');
+
+  chThdSleepMilliseconds(10);
   NVIC_SystemReset();
   return 0;
 }

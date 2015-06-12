@@ -16,15 +16,30 @@
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EXCEPTIONS_H
-#define __EXCEPTIONS_H
+#include "watchdog.h"
 
-void exception_init(void);
-int exception_check(void);
-void exception_clear(void);
-void exception_checkandreport(void);
-void watchdog_enable(void);
-void exception_check_DFU(void);
-void exception_initiate_dfu(void);
-void watchdog_feed(void);
+#include "ch.h"
+#include "hal.h"
+
+#define WATCHDOG_ENABLED TRUE
+
+
+void watchdog_init(void) {
+#if WATCHDOG_ENABLED
+  RCC->APB1ENR |= RCC_APB1ENR_WWDGEN;
+  // disable watchdog when debugger active?
+  DBGMCU->APB1FZ |= DBGMCU_APB1_FZ_DBG_WWDG_STOP;
+  WWDG->CFR = WWDG_CFR_W | WWDG_CFR_WDGTB0 | WWDG_CFR_WDGTB1 | WWDG_CFR_EWI;
+  WWDG->CR = WWDG_CR_T | WWDG_CR_WDGA;
+  WWDG->SR = 0;
+  nvicEnableVector(WWDG_IRQn, CORTEX_PRIORITY_MASK(0));
 #endif
+}
+
+void watchdog_feed(void) {
+#if WATCHDOG_ENABLED
+  if ((WWDG->CR & WWDG_CR_T) != WWDG_CR_T)
+    WWDG->CR = WWDG_CR_T;
+#endif
+}
+

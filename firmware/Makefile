@@ -158,7 +158,9 @@ CSRC = $(PORTSRC) \
        usbh_midi_core.c \
        usbh_conf.c \
        serial_midi.c \
-       exceptions.c 
+       crc32.c \
+       exceptions.c \
+       watchdog.c 
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

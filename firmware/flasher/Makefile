@@ -66,26 +66,13 @@ PROJECT = flasher
 # Imported source files and paths
 CHIBIOS = ../../chibios
 
-include ../board.mk
+include board.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
 include $(CHIBIOS)/os/kernel/kernel.mk
 include $(CHIBIOS)/test/test.mk
 	
-# not using fatfs.mk, since ccsbcs.c should not be included in nonLFN fatfs config
-# include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
-
-#include $(CHIBIOS)/test/test.mk
-FATFSSRC = ${CHIBIOS}/os/various/fatfs_bindings/fatfs_diskio.c \
-           ${CHIBIOS}/os/various/fatfs_bindings/fatfs_syscall.c \
-           ${CHIBIOS}/ext/fatfs/src/ff.c 
-
-FATFSINC = ${CHIBIOS}/ext/fatfs/src
-
-CMSIS = ../CMSIS/
-
-
 # Define linker script file here
 LDSCRIPT= STM32F407xG.ld
 
@@ -96,15 +83,20 @@ CSRC = $(PORTSRC) \
        $(HALSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
-       $(FATFSSRC) \
        $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/chprintf.c \
        $(CHIBIOS)/os/various/memstreams.c \
+       ../STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
        ../glcdfont.c \
        ../axoloti_control.c \
        ../axoloti_board.c \
-       ../sdcard.c \
+       ../sdram.c \
+       ../crc32.c \
+       ../flash.c \
+       ../watchdog.c \
+       ../stm32f4xx_fmc.c \
        main.c  
+
        
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -137,7 +129,8 @@ INCDIR = ../ \
 		 $(PORTINC) $(KERNINC) $(TESTINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) \
          $(FATFSINC) \
-         $(CHIBIOS)/os/various
+         $(CHIBIOS)/os/various \
+         ../STM32F4xx_HAL_Driver/Inc 
 
 #
 # Project, sources and paths
@@ -149,7 +142,6 @@ INCDIR = ../ \
 
 MCU  = cortex-m4
 
-#TRGT = arm-elf-
 TRGT = arm-none-eabi-
 CC   = $(TRGT)gcc
 CPPC = $(TRGT)g++
@@ -225,22 +217,5 @@ ULIBS =
 # End of user defines
 ##############################################################################
 
-ifeq ($(USE_FPU),yes)
-  USE_OPT += -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fsingle-precision-constant
-    DDEFS += -D__FPU_PRESENT=TRUE
-    DDEFS += -DARM_MATH_CM4=TRUE
-else
-#  DDEFS += -DCORTEX_USE_FPU=FALSE
-endif
-
-
-	DDEFS += -DARM_MATH_CM4=TRUE
-	
-ifeq ($(USE_FWLIB),yes)
-  include $(CHIBIOS)/ext/stm32lib/stm32lib.mk
-  CSRC += $(STM32SRC)
-  INCDIR += $(STM32INC)
-  USE_OPT += -DUSE_STDPERIPH_DRIVER
-endif
-
-include $(CHIBIOS)/os/ports/GCC/ARMCMx/rules.mk
+RULESPATH = $(CHIBIOS)/os/ports/GCC/ARMCMx
+include $(RULESPATH)/rules.mk

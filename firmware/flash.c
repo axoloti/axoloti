@@ -17,6 +17,7 @@
  */
 #include "ch.h"
 #include "hal.h"
+#include "watchdog.h"
 
 
 __attribute__ ((section (".data"))) int flash_WaitForLastOperation(void) {

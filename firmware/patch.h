@@ -70,24 +70,7 @@ void InitPatch0(void);
 void StartPatch(void);
 void StopPatch(void);
 
-/* USUSED?
-void PatchProcess(int16_t * inbuf, int16_t * outbuf);
-void PatchInit(void);
-void PatchMidiInNoteOn(uint8_t channel, uint8_t note, uint8_t velocity);
-void PatchMidiInNoteOff(uint8_t channel, uint8_t note, uint8_t velocity);
-void PatchMidiInControlChange(uint8_t channel, uint8_t cc, uint8_t val);
-void PatchMidiInPitchBend(uint8_t channel, uint8_t data1, uint8_t data2);
-void PatchMidiInAllNotesOff(uint8_t channel);
-
-void computebuf(short *inp, short *outp);
-void MidiInNoteOn(uint8_t channel, uint8_t note, uint8_t velocity);
-void MidiInNoteOff(uint8_t channel, uint8_t note, uint8_t velocity);
-void MidiInControlChange(uint8_t channel, uint8_t cc, uint8_t val);
-void MidiInPitchBend(uint8_t channel, uint8_t data1, uint8_t data2);
-void MidiInPitchBend(uint8_t channel, uint8_t data1, uint8_t data2);
-void PatchMidiInAllNotesOff(uint8_t channel);
-void PatchMidiInResetControllers(uint8_t channel);
-*/
+void start_dsp_thread(void);
 
 #define PATCHMAINLOC 0x20010000
 

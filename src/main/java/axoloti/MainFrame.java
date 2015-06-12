@@ -62,7 +62,7 @@ import qcmds.QCmdPing;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStart;
 import qcmds.QCmdStop;
-import qcmds.QCmdUploadFile;
+import qcmds.QCmdUploadFWSDRam;
 import qcmds.QCmdUploadPatch;
 
 /**
@@ -264,7 +264,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuItemPanic = new javax.swing.JMenuItem();
         jMenuFirmware = new javax.swing.JMenu();
         jMenuItemFCompile = new javax.swing.JMenuItem();
-        jMenuItemFlashSDC = new javax.swing.JMenuItem();
+        jMenuItemFlashSDR = new javax.swing.JMenuItem();
         jMenuItemEnterDFU = new javax.swing.JMenuItem();
         jMenuItemFlashDFU = new javax.swing.JMenuItem();
         jMenuItemRefreshFWID = new javax.swing.JMenuItem();
@@ -479,14 +479,13 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuFirmware.add(jMenuItemFCompile);
 
-    jMenuItemFlashSDC.setText("Flash using sdcard");
-    jMenuItemFlashSDC.setEnabled(false);
-    jMenuItemFlashSDC.addActionListener(new java.awt.event.ActionListener() {
+    jMenuItemFlashSDR.setText("Flash (using sdram)");
+    jMenuItemFlashSDR.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemFlashSDCActionPerformed(evt);
+            jMenuItemFlashSDRActionPerformed(evt);
         }
     });
-    jMenuFirmware.add(jMenuItemFlashSDC);
+    jMenuFirmware.add(jMenuItemFlashSDR);
 
     jMenuItemEnterDFU.setText("Enter DFU");
     jMenuItemEnterDFU.addActionListener(new java.awt.event.ActionListener() {
@@ -496,7 +495,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuFirmware.add(jMenuItemEnterDFU);
 
-    jMenuItemFlashDFU.setText("Flash with DFU");
+    jMenuItemFlashDFU.setText("Flash (using DFU)");
     jMenuItemFlashDFU.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuItemFlashDFUActionPerformed(evt);
@@ -733,11 +732,12 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     }//GEN-LAST:event_jMenuItemFlashDFUActionPerformed
 
-    private void jMenuItemFlashSDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDCActionPerformed
-        qcmdprocessor.AppendToQueue(new QCmdUploadFile(new File(Constants.firmwaredir + "/build/axoloti.bin"), "firmware.bin"));
+    private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDRActionPerformed
+//        qcmdprocessor.AppendToQueue(new QCmdUploadFile(new File(Constants.firmwaredir + "/build/axoloti.bin"), "firmware.bin"));
+        qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
         qcmdprocessor.AppendToQueue(new QCmdUploadPatch(new File(Constants.firmwaredir + "/flasher/build/flasher.bin")));
         qcmdprocessor.AppendToQueue(new QCmdStart());
-    }//GEN-LAST:event_jMenuItemFlashSDCActionPerformed
+    }//GEN-LAST:event_jMenuItemFlashSDRActionPerformed
 
     private void jMenuItemFCompileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFCompileActionPerformed
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompileFirmware());
@@ -828,7 +828,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemFConnect;
     private javax.swing.JMenuItem jMenuItemFDisconnect;
     private javax.swing.JMenuItem jMenuItemFlashDFU;
-    private javax.swing.JMenuItem jMenuItemFlashSDC;
+    private javax.swing.JMenuItem jMenuItemFlashSDR;
     private javax.swing.JMenuItem jMenuItemListUSB;
     private javax.swing.JMenuItem jMenuItemPanic;
     private javax.swing.JMenuItem jMenuItemPing;
@@ -862,31 +862,30 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }
 
     public void ShowDisconnect() {
-        for (Patch p : patches) {
-            p.patchframe.ShowDisconnect();
-        }
-        jCheckBoxConnect.setSelected(false);
-
-        jCheckBoxConnect.setSelected(false);
-        jMenuItemEnterDFU.setEnabled(false);
-        jMenuItemFDisconnect.setEnabled(false);
-
-        jMenuItemFConnect.setEnabled(true);
-        jMenuItemSelectCom.setEnabled(true);
-
-        setCpuID(null);
+        ShowConnectDisconnect(false);
     }
 
     public void ShowConnect() {
-        for (Patch p : patches) {
-            p.patchframe.ShowConnect();
-        }
-        jCheckBoxConnect.setSelected(true);
-        jMenuItemEnterDFU.setEnabled(true);
-        jMenuItemFDisconnect.setEnabled(true);
+        ShowConnectDisconnect(true);
+    }
 
-        jMenuItemFConnect.setEnabled(false);
-        jMenuItemSelectCom.setEnabled(false);
+    void ShowConnectDisconnect(boolean connect) {
+        for (Patch p : patches) {
+            if (connect) {
+                p.patchframe.ShowConnect();
+            } else {
+                p.patchframe.ShowDisconnect();
+            }
+        }
+        jCheckBoxConnect.setSelected(connect);
+        jMenuItemEnterDFU.setEnabled(connect);
+        jMenuItemFlashSDR.setEnabled(connect);
+        jMenuItemFDisconnect.setEnabled(connect);
+
+        jMenuItemFConnect.setEnabled(!connect);
+        jMenuItemSelectCom.setEnabled(!connect);
+
+        setCpuID(null);
     }
 
     void Quit() {
@@ -913,7 +912,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         LinkFirmwareID = FirmwareID.getFirmwareID();
         TargetFirmwareID = LinkFirmwareID;
         jLabelFirmwareID.setText("Firmware ID = " + LinkFirmwareID);
-        Logger.getLogger(MainFrame.class.getName()).info("Link to firmware ID " + LinkFirmwareID);
+        Logger.getLogger(MainFrame.class.getName()).info("Link to firmware CRC " + LinkFirmwareID);
     }
 
 //    boolean isFirmwareUpgrading = false;
@@ -923,7 +922,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
         TargetFirmwareID = firmwareId;
         if (!firmwareId.equals(this.LinkFirmwareID)) {
-            Logger.getLogger(AxoObjects.class.getName()).severe("Firmware ID mismatch! Please flash the firmware first!");
+            Logger.getLogger(AxoObjects.class.getName()).severe("Firmware CRC mismatch! Please flash the firmware first! Target firmware CRC = " + firmwareId);
         }
     }
 

@@ -143,6 +143,12 @@ SECTIONS
         PROVIDE(_edata = .);
     } > ram AT > flash
 
+
+    .flashend :
+    {
+        PROVIDE(_flash_end = .);
+    } > flash
+
     .bss :
     {
         . = ALIGN(4);

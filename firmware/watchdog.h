@@ -16,15 +16,10 @@
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EXCEPTIONS_H
-#define __EXCEPTIONS_H
+#ifndef __WATCHDOG_H
+#define __WATCHDOG_H
 
-void exception_init(void);
-int exception_check(void);
-void exception_clear(void);
-void exception_checkandreport(void);
-void watchdog_enable(void);
-void exception_check_DFU(void);
-void exception_initiate_dfu(void);
+void watchdog_init(void);
 void watchdog_feed(void);
+
 #endif

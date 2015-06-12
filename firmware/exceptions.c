@@ -134,9 +134,6 @@ void exception_init(void) {
   RCC->APB1ENR |= RCC_APB1ENR_WWDGEN;
   chThdSleepMilliseconds(1);
 
-  // disable watchdog when debugger active?
-  DBGMCU->APB1FZ |= DBGMCU_APB1_FZ_DBG_WWDG_STOP;
-  WWDG->CFR = WWDG_CFR_W | WWDG_CFR_WDGTB0 | WWDG_CFR_WDGTB1 | WWDG_CFR_EWI;
   if (!exception_check()) {
     if (RCC->CSR & RCC_CSR_WWDGRSTF) {
       // no exception found, but watchdog caused a reset?
@@ -157,20 +154,12 @@ void exception_init(void) {
     // clear reset flags
     RCC->CSR |= RCC_CSR_RMVF;
   }
+#if WATCHDOG_ENABLED
   WWDG->SR = 0;
   WWDG->CR = 0x7F;
+#endif
 }
 
-void watchdog_enable(void) {
-  WWDG->CR = WWDG_CR_T | WWDG_CR_WDGA;
-  WWDG->SR = 0;
-  nvicEnableVector(WWDG_IRQn, CORTEX_PRIORITY_MASK(0));
-}
-
-void watchdog_feed(void) {
-  if ((WWDG->CR & WWDG_CR_T) != WWDG_CR_T)
-    WWDG->CR = WWDG_CR_T;
-}
 
 int exception_check(void) {
   if (exceptiondump->magicnumber == ERROR_MAGIC_NUMBER)
@@ -344,7 +333,9 @@ void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress) {
   exceptiondump->mmfar = SCB->MMFAR;
   exceptiondump->bfar = SCB->BFAR;
 
+#if WATCHDOG_ENABLED
   WWDG->CR = WWDG_CR_T;
+#endif
 
   palClearPad(LED1_PORT, LED1_PIN);
 

@@ -15,16 +15,11 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef __crc32_h
+#define __crc32_h
 
-#ifndef __EXCEPTIONS_H
-#define __EXCEPTIONS_H
+#include <stdint.h>
 
-void exception_init(void);
-int exception_check(void);
-void exception_clear(void);
-void exception_checkandreport(void);
-void watchdog_enable(void);
-void exception_check_DFU(void);
-void exception_initiate_dfu(void);
-void watchdog_feed(void);
+uint32_t CalcCRC32(uint8_t *buffer, uint32_t size);
+
 #endif

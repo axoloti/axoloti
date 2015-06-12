@@ -15,16 +15,24 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
+package axoloti.targetprofile;
 
-#ifndef __EXCEPTIONS_H
-#define __EXCEPTIONS_H
+/**
+ *
+ * @author Johannes Taelman
+ */
+public class axoloti_core {
 
-void exception_init(void);
-int exception_check(void);
-void exception_clear(void);
-void exception_checkandreport(void);
-void watchdog_enable(void);
-void exception_check_DFU(void);
-void exception_initiate_dfu(void);
-void watchdog_feed(void);
-#endif
+    public int getPatchAddr() {
+        // SRAM1 - must match with ramlink.ld
+        return 0x20010000;
+    }
+
+    public int getSDRAMAddr() {
+        return 0xC0000000;
+    }
+
+    public int getSDRAMSize() {
+        return 8 * 1024 * 1024;
+    }
+}

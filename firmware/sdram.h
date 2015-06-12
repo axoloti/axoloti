@@ -110,6 +110,8 @@ extern "C" {
   void SDRAM_ReadBuffer(uint32_t* pBuffer, uint32_t uwReadAddress,
                         uint32_t uwBufferSize);
 
+  void configSDRAM(void);
+
 #ifdef __cplusplus
 }
 #endif

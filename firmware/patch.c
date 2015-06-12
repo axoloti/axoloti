@@ -22,7 +22,8 @@
 #include "string.h"
 #include "axoloti_board.h"
 #include "midi.h"
-
+#include "watchdog.h"
+#include "pconnection.h"
 
 patchMeta_t patchMeta;
 

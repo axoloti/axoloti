@@ -78,10 +78,9 @@ public class QCmdUploadPatch implements QCmdSerialTask {
                 if (nRead != l) {
                     Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
                 }
-                serialConnection.UploadFragment(buffer, offset);
+                serialConnection.UploadFragment(buffer, serialConnection.getTargetProfile().getPatchAddr() + offset);
                 offset += nRead;
             } while (tlength > 0);
-//            
             inputStream.close();
             if (serialConnection.WaitSync()) {
                 return this;
