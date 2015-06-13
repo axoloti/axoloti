@@ -86,13 +86,14 @@ void TransmitDisplayPckt(void) {
 
 void LogTextMessage(const char* format, ...) {
   if (connected ) {
-    va_list argptr;
-    va_start(argptr, format);
     int h = 0x546F7841; // "AxoT"
     chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
                             (const unsigned char* )&h, 4);
-    chprintf((BaseSequentialStream *)&SDU1, format, argptr);
-    va_end(argptr);
+
+    va_list ap;
+    va_start(ap, format);
+    chvprintf((BaseSequentialStream * )&SDU1, format, ap);
+    va_end(ap);
     chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
   }
 }

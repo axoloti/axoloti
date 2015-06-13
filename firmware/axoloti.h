@@ -36,8 +36,7 @@ extern void ADAU1961_WriteRegister(uint16_t RegisterAddr,
                                    uint8_t RegisterValue);
 extern void ADAU1961_I2CStart();
 extern void ADAU1961_I2CStop();
-extern void TransmitTextMessage(const char *c);
-extern void TransmitTextMessageHeader(void);
+void LogTextMessage(const char* format, ...);
 
 extern SerialUSBDriver SDU1;
 #endif
