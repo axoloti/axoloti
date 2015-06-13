@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -18,13 +18,12 @@
 #ifndef __PCONNECTION_H
 #define __PCONNECTION_H
 
-extern SerialUSBDriver SDU1;
+//extern SerialUSBDriver SDU1;
 void PExTransmit(void);
 void PExReceive(void);
 void InitPConnection(void);
 extern void BootLoaderInit(void);
-void TransmitTextMessage(const char *c);
-void TransmitTextMessageHeader(void);
+void LogTextMessage(const char* format, ...);
 int GetFirmwareID(void);
 
 #endif

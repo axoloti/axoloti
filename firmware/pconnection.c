@@ -17,6 +17,7 @@
  */
 #include "ch.h"
 #include "hal.h"
+#include "chprintf.h"
 #include "pconnection.h"
 #include "axoloti_control.h"
 #include "parameters.h"
@@ -45,7 +46,8 @@ uint32_t fwid;
 void InitPConnection(void) {
 
   extern int32_t _flash_end;
-  fwid = CalcCRC32((uint8_t *)(FLASH_BASE_ADDR), (uint32_t)(&_flash_end) & 0x07FFFFF);
+  fwid = CalcCRC32((uint8_t *)(FLASH_BASE_ADDR),
+                   (uint32_t)(&_flash_end) & 0x07FFFFF);
 
   /*
    * Initializes a serial-over-USB CDC driver.
@@ -65,6 +67,7 @@ void InitPConnection(void) {
 }
 
 int AckPending = 0;
+bool connected = 0;
 
 int GetFirmwareID(void) {
   return fwid;
@@ -81,19 +84,17 @@ void TransmitDisplayPckt(void) {
                           length);
 }
 
-void TransmitTextMessageHeader(void) {
-  int h = 0x546F7841; // "AxoT"
-  chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
-                          (const unsigned char* )&h, 4);
-}
-
-void TransmitTextMessage(const char *c) {
-  TransmitTextMessageHeader();
-  unsigned int l = strlen(c);
-  chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
-                          (const unsigned char* )&c[0], l);
-  chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
-  chThdSleep(10);
+void LogTextMessage(const char* format, ...) {
+  if (connected ) {
+    va_list argptr;
+    va_start(argptr, format);
+    int h = 0x546F7841; // "AxoT"
+    chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+                            (const unsigned char* )&h, 4);
+    chprintf((BaseSequentialStream *)&SDU1, format, argptr);
+    va_end(argptr);
+    chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
+  }
 }
 
 void PExTransmit(void) {
@@ -114,8 +115,8 @@ void PExTransmit(void) {
       if (!patchStatus)
         TransmitDisplayPckt();
 
+      connected = 1;
       exception_checkandreport();
-
       AckPending = 0;
     }
     TransmitLCDoverUSB();
@@ -196,7 +197,7 @@ void ReadDirectoryListing(void) {
 
   err = f_getfree("/", &clusters, &fsp);
   if (err != FR_OK) {
-    TransmitTextMessage("FS: f_getfree() failed\r\n");
+    LogTextMessage("FS: f_getfree() failed\r\n");
     return;
   }
   /*
@@ -223,13 +224,13 @@ void ReadDirectoryListing(void) {
  *
  * "AxoP" (int value, int16 index) -> parameter set
  * "AxoR" (int length, data) -> preset data set
- * "AxoW" (int length, int offset, char[length] data) -> data write
+ * "AxoW" (int length, int addr, char[length] data) -> data write
  * "Axow" (int length, int offset, char[12] filename, char[length] data) -> data write to sdcard
  * "AxoS" -> start patch
  * "Axos" -> stop patch
  * "AxoT" (char number) -> apply preset
  * "AxoM" (char char char) -> 3 byte midi message
- * "AxoD" go to DFU mode (not working!)
+ * "AxoD" go to DFU mode
  * "AxoF" copy patch code to flash (assumes patch is stopped)
  * "Axod" read directory listing
  * "AxoC (int length) (char[] filename)" create and open file on sdcard
@@ -248,15 +249,15 @@ void CreateFile(void) {
   FRESULT err;
   err = f_open(&pFile, &FileName[0], FA_WRITE | FA_CREATE_ALWAYS);
   if (err != FR_OK) {
-    TransmitTextMessage("File open failed");
+    LogTextMessage("File open failed");
   }
   err = f_lseek(&pFile, pFileSize);
   if (err != FR_OK) {
-    TransmitTextMessage("File resize failed");
+    LogTextMessage("File resize failed");
   }
   err = f_lseek(&pFile, 0);
   if (err != FR_OK) {
-    TransmitTextMessage("File seek failed");
+    LogTextMessage("File seek failed");
   }
 }
 
@@ -264,7 +265,7 @@ void CloseFile(void) {
   FRESULT err;
   err = f_close(&pFile);
   if (err != FR_OK) {
-    TransmitTextMessage("File close failed");
+    LogTextMessage("File close failed");
   }
 }
 
@@ -553,16 +554,16 @@ void PExReceiveByte(unsigned char c) {
           sdAttemptMountIfUnmounted();
           err = f_open(&pFile, &FileName[0], FA_WRITE | FA_CREATE_ALWAYS);
           if (err != FR_OK) {
-            TransmitTextMessage("File open failed");
+            LogTextMessage("File open failed");
           }
           int bytes_written;
           err = f_write(&pFile, (char *)offset, length, (void *)&bytes_written);
           if (err != FR_OK) {
-            TransmitTextMessage("File write failed");
+            LogTextMessage("File write failed");
           }
           err = f_close(&pFile);
           if (err != FR_OK) {
-            TransmitTextMessage("File close failed");
+            LogTextMessage("File close failed");
           }
           AckPending = 1;
         }
@@ -667,7 +668,7 @@ void PExReceiveByte(unsigned char c) {
           err = f_write(&pFile, (char *)0x20010000, length,
                         (void *)&bytes_written);
           if (err != FR_OK) {
-            TransmitTextMessage("File write failed");
+            LogTextMessage("File write failed");
           }
           AckPending = 1;
         }

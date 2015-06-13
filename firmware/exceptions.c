@@ -203,63 +203,38 @@ void exception_checkandreport(void) {
   if (exception_check()) {
     bool report_registers = 0;
     if (exceptiondump->type == fault) {
-      TransmitTextMessage("exception report:");
+      LogTextMessage("exception report:");
       report_registers = 1;
     }
     else if (exceptiondump->type == watchdog_soft) {
-      TransmitTextMessage("exception: soft watchdog");
+      LogTextMessage("exception: soft watchdog");
       report_registers = 1;
     }
     else if (exceptiondump->type == watchdog_hard) {
-      TransmitTextMessage("exception: hard watchdog");
-
-      TransmitTextMessageHeader();
-      chprintf((BaseSequentialStream *)&SDU1, "i=0x%x%c", exceptiondump->i);
-      chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
+      LogTextMessage("exception: hard watchdog i=0x%x", exceptiondump->i);
     }
     else if (exceptiondump->type == brownout) {
-      TransmitTextMessage("exception: brownout");
+      LogTextMessage("exception: brownout");
     }
     else {
-      TransmitTextMessage("unknown exception?");
+      LogTextMessage("unknown exception?");
     }
 
     if (report_registers) {
-      TransmitTextMessageHeader();
-      chprintf((BaseSequentialStream *)&SDU1, "pc=0x%x%c", exceptiondump->pc);
-      chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
-
-      TransmitTextMessageHeader();
-      chprintf((BaseSequentialStream *)&SDU1, "psr=0x%x%c", exceptiondump->psr);
-      chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
-
-      TransmitTextMessageHeader();
-      chprintf((BaseSequentialStream *)&SDU1, "lr=0x%x%c", exceptiondump->lr);
-      chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
-
-      TransmitTextMessageHeader();
-      chprintf((BaseSequentialStream *)&SDU1, "r12=0x%x%c", exceptiondump->r12);
-      chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
-
-      TransmitTextMessageHeader();
-      chprintf((BaseSequentialStream *)&SDU1, "cfsr=0x%x%c",
-      exceptiondump->cfsr);
-      chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
+      LogTextMessage("pc=0x%x", exceptiondump->pc);
+      LogTextMessage("psr=0x%x", exceptiondump->psr);
+      LogTextMessage("lr=0x%x", exceptiondump->lr);
+      LogTextMessage("r12=0x%x", exceptiondump->r12);
+      LogTextMessage("cfsr=0x%x",exceptiondump->cfsr);
 
       if (exceptiondump->cfsr & (1 << 15)) {
         // BFARVALID
-        TransmitTextMessageHeader();
-        chprintf((BaseSequentialStream *)&SDU1, "bfar=0x%x%c",
-        exceptiondump->bfar);
-        chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
+        LogTextMessage("bfar=0x%x",exceptiondump->bfar);
       }
 
       if (exceptiondump->cfsr & (1 << 7)) {
         // MMARVALID
-        TransmitTextMessageHeader();
-        chprintf((BaseSequentialStream *)&SDU1, "mmfar=0x%x%c",
-        exceptiondump->mmfar);
-        chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
+        LogTextMessage("mmfar=0x%x",exceptiondump->mmfar);
       }
     }
     exception_clear();

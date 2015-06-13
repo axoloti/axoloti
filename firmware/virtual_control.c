@@ -20,6 +20,8 @@
 #include "axoloti_control.h"
 #include "pconnection.h"
 
+extern SerialUSBDriver SDU1;
+
 void TransmitLCDoverUSB(void) {
   static int r = 0;
   r++;
