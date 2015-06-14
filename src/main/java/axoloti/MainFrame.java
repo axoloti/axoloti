@@ -735,7 +735,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDRActionPerformed
 //        qcmdprocessor.AppendToQueue(new QCmdUploadFile(new File(Constants.firmwaredir + "/build/axoloti.bin"), "firmware.bin"));
         qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
-        qcmdprocessor.AppendToQueue(new QCmdUploadPatch(new File(Constants.firmwaredir + "/flasher/build/flasher.bin")));
+        qcmdprocessor.AppendToQueue(new QCmdUploadPatch(new File(Constants.firmwaredir + "/flasher/flasher_build/flasher.bin")));
         qcmdprocessor.AppendToQueue(new QCmdStart());
     }//GEN-LAST:event_jMenuItemFlashSDRActionPerformed
 

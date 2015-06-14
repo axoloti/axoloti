@@ -5,4 +5,6 @@ export PATH=$PATH:$PWD/gcc-arm-none-eabi-4_8-2014q3/bin/:$PWD/bin
 #pwd
 cd ../firmware
 make
+cd flasher
+make
 
