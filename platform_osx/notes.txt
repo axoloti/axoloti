@@ -2,68 +2,10 @@ Scripts in this directory
 -------------------------
 
 build.sh 
-builds all needed tools except arm-none-eabi-gcc as universal binaries
-
-fixperms.osx.sh 
-restores the execute permissions of the binaries
-
-mrproper.sh 
-removes all the compiled code and the executables
+Downloads and builds all needed mac-specific tools. Requires a minimal xcode install.
 
 distclean.sh
-removes all unneeded files after compilation, but keeps the executables
+removes all unneeded source files, but keeps the executables
 
-
-**** outdated ****
-
-NEWER OSX COMPILE NOTES
-+++++++++++++++++++++
-cd src
-tar xfv libusb-1.0.9.tar
-cd libusb-1.0.9
-./configure --prefix=/Users/edm/AxoStudio/platform_osx/
-make
-make install
-make clean
-cd ../../lib
-install_name_tool -id libusb-1.0.0.dylib libusb-1.0.0.dylib
-cd ../src
-tar xfv dfu-util-0.7.tar
-cd dfu-util-0.7
-
-./configure --prefix=/Users/edm/AxoStudio/platform_osx/ USB_LIBS="-L../../lib/ -L../../../lib -lusb-1.0.0" USB_CFLAGS="-I/Users/edm/AxoStudio/platform_osx/include/libusb-1.0/ -I/Users/edm/AxoStudio/osx_tools/include/"
-make
-make install
-
-# for checking deps
-# otool -L 
-
-
-
-OSX install notes
------------------
-
-%%%sudo port install arm-none-eabi-gcc
-sudo port install libusb automake autoconf pkgconfig
-sudo port -n upgrade --force libiconv
-
-git clone https://github.com/texane/stlink.git stlink-utility
-cd stlink-utility
-
-LIBRARY_PATH=/opt/local/lib
-C_INCLUDE_PATH=/opt/local/include
-aclocal --force -I /opt/local/share/aclocal
-./autogen.sh
-sudo ./configure
-sudo make
-
-These directories must exist before building (error
-
-mkdir AxoStudio/build
-mkdir AxoStudio/build/obj
-mkdir AxoStudio/build/lst
-
-
- adding:
-ACLOCAL_AMFLAGS = -I /opt/local/share/aclocal
-to Makefile.am
+mrproper.sh 
+removes all the source files and the executables

@@ -733,10 +733,15 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuItemFlashDFUActionPerformed
 
     private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDRActionPerformed
-//        qcmdprocessor.AppendToQueue(new QCmdUploadFile(new File(Constants.firmwaredir + "/build/axoloti.bin"), "firmware.bin"));
-        qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
-        qcmdprocessor.AppendToQueue(new QCmdUploadPatch(new File(Constants.firmwaredir + "/flasher/flasher_build/flasher.bin")));
-        qcmdprocessor.AppendToQueue(new QCmdStart());
+        String fname = Constants.firmwaredir + "/flasher/flasher_build/flasher.bin";
+        File f = new File(fname);
+        if (f.canRead()) {
+            qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
+            qcmdprocessor.AppendToQueue(new QCmdUploadPatch());
+            qcmdprocessor.AppendToQueue(new QCmdStart());
+        } else {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can't read flasher, please compile firmware! (file: " + fname + " )");
+        }
     }//GEN-LAST:event_jMenuItemFlashSDRActionPerformed
 
     private void jMenuItemFCompileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFCompileActionPerformed
