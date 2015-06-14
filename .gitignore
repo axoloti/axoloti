@@ -3,6 +3,7 @@
 #################
 
 firmware/build/*
+firmware/flasher/flasher_build/*
 firmware/.dep/*
 control_firmware/build/*
 control_firmware/.dep/*

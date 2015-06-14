@@ -62,6 +62,7 @@ endif
 
 # Define project name here
 PROJECT = flasher
+BUILDDIR = flasher_build
 
 # Imported source files and paths
 CHIBIOS = ../../chibios
@@ -213,6 +214,9 @@ ULIBDIR = .
 
 # List all user libraries here
 ULIBS =
+
+
+VPATH = .
 #
 # End of user defines
 ##############################################################################
