@@ -28,6 +28,7 @@ then
     ARCHIVE=${ARDIR}.zip
     if [ ! -f ${ARCHIVE} ]; 
     then
+        echo "downloading ${ARCHIVE}"
         curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.6/$ARCHIVE > $ARCHIVE
     else
         echo "${ARCHIVE} already downloaded"
@@ -47,6 +48,7 @@ then
     ARCHIVE=gcc-arm-none-eabi-4_8-2014q3-20140805-mac.tar.bz2
     if [ ! -f ${ARCHIVE} ]; 
     then
+        echo "downloading ${ARCHIVE}"
         curl -L https://launchpad.net/gcc-arm-embedded/4.8/4.8-2014-q3-update/+download/$ARCHIVE > $ARCHIVE
     else
         echo "${ARCHIVE} already downloaded"
@@ -66,6 +68,7 @@ then
     ARCHIVE=${ARDIR}.tar.bz2
     if [ ! -f ${ARCHIVE} ]; 
     then
+        echo "downloading ${ARCHIVE}"
         curl -L http://sourceforge.net/projects/libusb/files/libusb-1.0/$ARDIR/$ARCHIVE/download > $ARCHIVE
     else
         echo "${ARCHIVE} already downloaded"
@@ -101,6 +104,7 @@ then
     ARCHIVE=${ARDIR}.tar.gz
     if [ ! -f $ARCHIVE ]; 
     then
+        echo "downloading ${ARCHIVE}"
         curl -L http://dfu-util.sourceforge.net/releases/$ARCHIVE > $ARCHIVE
     else
         echo "$ARCHIVE already downloaded"
@@ -134,6 +138,7 @@ then
 
     if [ ! -f ${ARCHIVE} ]; 
     then
+        echo "downloading ${ARCHIVE}"
         curl -L http://ftp.gnu.org/gnu/make/$ARCHIVE > $ARCHIVE
     else
         echo "${ARCHIVE} already downloaded"
