@@ -67,6 +67,7 @@ public class gentools {
         return s;
     }
 
+    @Deprecated
     static void CheckString(AxoObject o, String s) {
         for (Parameter p : o.params) {
             s = s.replaceAll("%" + p.name + "%", "");
@@ -111,12 +112,6 @@ public class gentools {
 
     }
 
-    /*
-     depends tags
-     BUFSIZE=16
-     ADAU1361
-    
-     */
     static void PostProcessObject(AxoObjectAbstract o, String prefix) {
         if (o instanceof AxoObject) {
             // remove labels when there's only a single parameter
@@ -195,6 +190,61 @@ public class gentools {
             o.SetIncludes(null);
         }
         o.GenerateSHA();
+        if (o instanceof AxoObject) {
+            // remove labels when there's only a single parameter
+            o.id = prefix + o.id;
+            AxoObject oo = (AxoObject) o;
+            for (Parameter p : oo.params) {
+                if (oo.sKRateCode != null) {
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                }
+                if (oo.sSRateCode != null) {
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                }
+            }
+            for (Inlet p : oo.inlets) {
+                if (p instanceof InletFrac32Buffer){
+                    if (oo.sKRateCode != null) {
+                        oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    }
+                    if (oo.sSRateCode != null) {                    
+                        oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName() + "[buffer_index]");
+                    }
+                } else {
+                    if (oo.sKRateCode != null) {
+                        oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    }
+                    if (oo.sSRateCode != null) {                    
+                        oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    }                    
+                }
+            }
+            for (Outlet p : oo.outlets) {
+                if (p instanceof OutletFrac32Buffer){
+                    if (oo.sKRateCode != null) {
+                        oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    }
+                    if (oo.sSRateCode != null) {
+                        oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName() + "[buffer_index]");
+                    }
+                } else {
+                    if (oo.sKRateCode != null) {
+                        oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    }
+                    if (oo.sSRateCode != null) {
+                        oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    }                    
+                }
+            }
+            for (displays.Display p : oo.displays) {
+                if (oo.sInitCode != null) {
+                    oo.sInitCode = oo.sInitCode.replaceAll("%" + p.name + "%", p.GetCName());
+                }
+                if (oo.sKRateCode != null) {
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                }
+            }
+        }
     }
 
     static public void WriteAxoObject(String path, AxoObjectAbstract o) {

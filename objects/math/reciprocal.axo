@@ -12,11 +12,11 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[if (%in%) {
-      float inf = %in%;
-      %out% = (int)(281474976710656.f/inf);
+      <code.krate><![CDATA[if (inlet_in) {
+      float inf = inlet_in;
+      outlet_out = (int)(281474976710656.f/inf);
     } else
-        %out% = 1<<27;
+        outlet_out = 1<<27;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="reciprocal" sha="d4d6b03818ac9b3fa60fa7449f3414ebc196e238">
@@ -32,11 +32,11 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[if (%in%) {
-      float inf = %in%;
-      %out% = (int)(281474976710656.f/inf);
+      <code.srate><![CDATA[if (inlet_in[buffer_index]) {
+      float inf = inlet_in[buffer_index];
+      outlet_out[buffer_index] = (int)(281474976710656.f/inf);
     } else
-        %out% = 1<<27;
+        outlet_out[buffer_index] = 1<<27;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

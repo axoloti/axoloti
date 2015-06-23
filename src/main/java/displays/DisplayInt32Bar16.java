@@ -17,6 +17,7 @@
  */
 package displays;
 
+import axoloti.datatypes. Int32;
 import java.security.MessageDigest;
 
 /**
@@ -42,4 +43,10 @@ public class DisplayInt32Bar16 extends Display {
         super.updateSHA(md);
         md.update("int32.bar16".getBytes());
     }
+    
+    @Override
+    public  Int32 getDatatype() {
+        return  Int32.d;
+    }    
+    
 }

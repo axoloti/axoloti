@@ -76,7 +76,7 @@ public class InletInstance extends JPanel {
     NetDragging drag_net;
 
     public String GetCName() {
-        return "inlet_" + CharEscape.CharEscape(inlet.name);
+        return inlet.GetCName();
     }
 
     class DragGestureListImp implements DragGestureListener {

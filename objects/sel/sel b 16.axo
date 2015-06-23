@@ -16,9 +16,9 @@
          <bin16 name="b16" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16))   %o%=%b16%&(1<<%in%);
-else %o% = %def%;
-%chain% = %in%-16;
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<16))   outlet_o=param_b16&(1<<inlet_in);
+else outlet_o = inlet_def;
+outlet_chain = inlet_in-16;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

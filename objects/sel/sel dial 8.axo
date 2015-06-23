@@ -45,15 +45,15 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0) {
-      case 0: %o%= %v0%; break;
-      case 1: %o%= %v1%; break;
-      case 2: %o%= %v2%; break;
-      case 3: %o%= %v3%; break;
-      case 4: %o%= %v4%; break;
-      case 5: %o%= %v5%; break;
-      case 6: %o%= %v6%; break;
-      case 7: default: %o%= %v7%; break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0) {
+      case 0: outlet_o= param_v0; break;
+      case 1: outlet_o= param_v1; break;
+      case 2: outlet_o= param_v2; break;
+      case 3: outlet_o= param_v3; break;
+      case 4: outlet_o= param_v4; break;
+      case 5: outlet_o= param_v5; break;
+      case 6: outlet_o= param_v6; break;
+      case 7: default: outlet_o= param_v7; break;
    }
 ]]></code.krate>
    </obj.normal>

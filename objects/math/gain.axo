@@ -17,7 +17,7 @@
          </frac32.u.map.gain16>
       </params>
       <attribs/>
-      <code.krate><![CDATA[%out%= __SSAT(___SMMUL(%amp%,__SSAT(%in%,28)<<4)<<1,28);
+      <code.krate><![CDATA[outlet_out= __SSAT(___SMMUL(param_amp,__SSAT(inlet_in,28)<<4)<<1,28);
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="gain" sha="60c5fcc3503670dd02f8989bba108d80be59b518">
@@ -38,7 +38,7 @@
          </frac32.u.map.gain16>
       </params>
       <attribs/>
-      <code.srate><![CDATA[%out%= __SSAT(___SMMUL(%amp%,__SSAT(%in%,28)<<4)<<1,28);
+      <code.srate><![CDATA[outlet_out[buffer_index]= __SSAT(___SMMUL(param_amp,__SSAT(inlet_in[buffer_index],28)<<4)<<1,28);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

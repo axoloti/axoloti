@@ -77,23 +77,23 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0) {
-      case 0: %o%= %v0%; break;
-      case 1: %o%= %v1%; break;
-      case 2: %o%= %v2%; break;
-      case 3: %o%= %v3%; break;
-      case 4: %o%= %v4%; break;
-      case 5: %o%= %v5%; break;
-      case 6: %o%= %v6%; break;
-      case 7: %o%= %v7%; break;
-      case 8: %o%= %v8%; break;
-      case 9: %o%= %v9%; break;
-      case 10: %o%= %v10%; break;
-      case 11: %o%= %v11%; break;
-      case 12: %o%= %v12%; break;
-      case 13: %o%= %v13%; break;
-      case 14: %o%= %v14%; break;
-      case 15: default: %o%= %v15%; break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0) {
+      case 0: outlet_o= param_v0; break;
+      case 1: outlet_o= param_v1; break;
+      case 2: outlet_o= param_v2; break;
+      case 3: outlet_o= param_v3; break;
+      case 4: outlet_o= param_v4; break;
+      case 5: outlet_o= param_v5; break;
+      case 6: outlet_o= param_v6; break;
+      case 7: outlet_o= param_v7; break;
+      case 8: outlet_o= param_v8; break;
+      case 9: outlet_o= param_v9; break;
+      case 10: outlet_o= param_v10; break;
+      case 11: outlet_o= param_v11; break;
+      case 12: outlet_o= param_v12; break;
+      case 13: outlet_o= param_v13; break;
+      case 14: outlet_o= param_v14; break;
+      case 15: default: outlet_o= param_v15; break;
    }
 ]]></code.krate>
    </obj.normal>

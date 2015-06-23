@@ -14,7 +14,7 @@
       <attribs>
          <objref name="table"/>
       </attribs>
-      <code.krate><![CDATA[   uint32_t asat = __USAT(%a%,27);
+      <code.krate><![CDATA[   uint32_t asat = __USAT(inlet_a,27);
     int index = asat>>(27-%table%.LENGTHPOW);
    int32_t y1 = %table%.array[index]<<%table%.GAIN;
    int32_t y2 = %table%.array[(index+1)&%table%.LENGTHMASK]<<%table%.GAIN;
@@ -22,7 +22,7 @@
   int32_t rr;
   rr = ___SMMUL(y1,(1<<30)-frac);
   rr = ___SMMLA(y2,frac,rr);
-%o%= rr<<2;
+outlet_o= rr<<2;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="read interp" sha="b0519acd115f068f0851ae0be434a57888454c06">
@@ -40,7 +40,7 @@
       <attribs>
          <objref name="table"/>
       </attribs>
-      <code.srate><![CDATA[   uint32_t asat = __USAT(%a%,27);
+      <code.srate><![CDATA[   uint32_t asat = __USAT(inlet_a[buffer_index],27);
     int index = asat>>(27-%table%.LENGTHPOW);
    int32_t y1 = %table%.array[index]<<%table%.GAIN;
    int32_t y2 = %table%.array[(index+1)&%table%.LENGTHMASK]<<%table%.GAIN;
@@ -48,7 +48,7 @@
   int32_t rr;
   rr = ___SMMUL(y1,(1<<30)-frac);
   rr = ___SMMLA(y2,frac,rr);
-%o%= rr<<2;
+outlet_o[buffer_index]= rr<<2;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -12,7 +12,7 @@
          <bin16 name="b16" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[%o%=%b16%;
+      <code.krate><![CDATA[outlet_o=param_b16;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

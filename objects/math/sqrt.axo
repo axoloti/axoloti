@@ -12,11 +12,11 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[int32_t ai = %in%>0?%in%:-%in%;
+      <code.krate><![CDATA[int32_t ai = inlet_in>0?inlet_in:-inlet_in;
 float aif = ai;
 aif *= (1<<27);
 aif = _VSQRTF(aif);
-%out%= (int)aif;
+outlet_out= (int)aif;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="sqrt" sha="4f48bc4fdb1725807a923dfb6e48225df40a992c">
@@ -32,11 +32,11 @@ aif = _VSQRTF(aif);
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[int32_t ai = %in%>0?%in%:-%in%;
+      <code.srate><![CDATA[int32_t ai = inlet_in[buffer_index]>0?inlet_in[buffer_index]:-inlet_in[buffer_index];
 float aif = ai;
 aif *= (1<<27);
 aif = _VSQRTF(aif);
-%out%= (int)aif;
+outlet_out[buffer_index]= (int)aif;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -17,8 +17,8 @@ int8_t ntrig;
       <code.init><![CDATA[_pgm = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%o% = _pgm;
-%trig% = ntrig;
+      <code.krate><![CDATA[outlet_o = _pgm;
+outlet_trig = ntrig;
 ntrig = 0;
 ]]></code.krate>
       <code.midihandler><![CDATA[if (status == MIDI_PROGRAM_CHANGE + %midichannel%) {  _pgm = data1;

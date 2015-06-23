@@ -14,7 +14,7 @@
          </int32.vradio>
       </params>
       <attribs/>
-      <code.krate><![CDATA[%out%= %value%;
+      <code.krate><![CDATA[outlet_out= param_value;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

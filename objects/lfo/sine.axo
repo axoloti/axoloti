@@ -20,11 +20,11 @@
       <code.declaration><![CDATA[uint32_t Phase;]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
       <code.krate><![CDATA[   {      int32_t freq;
-      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
       Phase += freq>>2;
       int32_t r;
       SINE2TINTERP(Phase,r)
-      %wave%= (r>>4);
+      outlet_wave= (r>>4);
    }]]></code.krate>
    </obj.normal>
 </objdefs>

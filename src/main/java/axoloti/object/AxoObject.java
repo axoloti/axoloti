@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -123,7 +123,7 @@ public class AxoObject extends AxoObjectAbstract {
     @Element(required = false)
     private Boolean providesModulationSource;
     @Element(required = false)
-    Boolean rotatedParams;
+    private Boolean rotatedParams;
     @ElementList(required = false)
     public ArrayList<String> ModulationSources;
     @Path("inlets")

@@ -7,7 +7,7 @@
          <frac32buffer name="in" description="input wave"/>
       </inlets>
       <outlets>
-         <frac32.positive name="amp" description="amplitude" SumBuffer="false"/>
+         <frac32.positive name="amp" description="amplitude"/>
       </outlets>
       <displays/>
       <params/>
@@ -40,12 +40,12 @@
       <code.init><![CDATA[accu = 0;
 ]]></code.init>
       <code.krate><![CDATA[ int sabs = 0;
-int i;  for(i=0;i<BUFSIZE;i++){    int32_t v = %in%[i];
+int i;  for(i=0;i<BUFSIZE;i++){    int32_t v = inlet_in[i];
     sabs += v>0?v:-v;
   }
   accu -= accu>>%time%;
   accu += sabs>>(%time%+4);
-  %amp% = accu;
+  outlet_amp = accu;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

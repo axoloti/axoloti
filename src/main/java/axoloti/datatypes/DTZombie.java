@@ -59,4 +59,10 @@ public class DTZombie implements DataType {
     public String GenerateCopyCode(String dest, String source) {
         return "";
     }
+    
+    @Override
+    public boolean isPointer() {
+        return false;
+    }    
+    
 }

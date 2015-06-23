@@ -30,20 +30,20 @@
    dtrig = 0;
    rtrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%c%=0;
-if ((%inc%>0) && !ntrig) {
-   count++; if (count>=%maximum%) {count = 0; %c% = 1;}
+      <code.krate><![CDATA[outlet_c=0;
+if ((inlet_inc>0) && !ntrig) {
+   count++; if (count>=param_maximum) {count = 0; outlet_c = 1;}
    ntrig=1;
 }
-else if (!(%inc%>0)) ntrig=0;
-if ((%dec%>0) && !dtrig) {
-   count--; if (count<0) {count = %maximum%; %c% = 1;}
+else if (!(inlet_inc>0)) ntrig=0;
+if ((inlet_dec>0) && !dtrig) {
+   count--; if (count<0) {count = param_maximum; outlet_c = 1;}
    dtrig=1;
 }
-else if (!(%dec%>0)) dtrig=0;
-if ((%r%>0) && !rtrig) {count=0; rtrig = 1;}
-else if (!(%r%>0)) rtrig=0;
-%o%= count;
+else if (!(inlet_dec>0)) dtrig=0;
+if ((inlet_r>0) && !rtrig) {count=0; rtrig = 1;}
+else if (!(inlet_r>0)) rtrig=0;
+outlet_o= count;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

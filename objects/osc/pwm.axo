@@ -28,7 +28,7 @@
     for(j=0;j<blepvoices;j++)
       oscp[j] = &blept[BLEPSIZE-1];   nextvoice = 0;]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
   int j;
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
@@ -45,15 +45,15 @@
       else if (freq)
          x = (osc_p<<6)/freq;
       oscp[nextvoice] = &blept[x];
-      pwmp = %pwm%;
+      pwmp = inlet_pwm;
     }
     if ((osc_p-(pwmp<<4)>0)&&!(p-(pwmp<<4)>0)){   // dispatch
       nextvoice = (nextvoice+1)&(blepvoices-1);
       int32_t x = 0;
       if (freq>>24)
-        x = (osc_p-(%pwm%<<4))/(freq>>6);
+        x = (osc_p-(inlet_pwm<<4))/(freq>>6);
       else if (freq)
-        x = ((osc_p-(%pwm%<<4))<<6)/(freq);
+        x = ((osc_p-(inlet_pwm<<4))<<6)/(freq);
       oscp[nextvoice] = &blept[x];
     }
     for(i=0;i<blepvoices;i++){ // sample
@@ -64,7 +64,7 @@
       oscp[i]=t;
     }
     sum -= ((((nextvoice+1)&1)<<1)-1)<<13;
-    %wave%[j]=sum<<13;
+    outlet_wave[j]=sum<<13;
   }]]></code.krate>
    </obj.normal>
 </objdefs>

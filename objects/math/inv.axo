@@ -12,7 +12,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= -%in%;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= -inlet_in;]]></code.krate>
    </obj.normal>
    <obj.normal id="inv" sha="dd3d98b9ec6f2b9231cb1d00d0f9667152537120">
       <sDescription>negate, negative, y = -x</sDescription>
@@ -27,7 +27,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%out%= -%in%;]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= -inlet_in[buffer_index];]]></code.srate>
    </obj.normal>
    <obj.normal id="inv" sha="b6663af37c308ec4958da4ae0caf98567f135536">
       <sDescription>negate, negative, y = -x</sDescription>
@@ -42,6 +42,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= -%in%;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= -inlet_in;]]></code.krate>
    </obj.normal>
 </objdefs>

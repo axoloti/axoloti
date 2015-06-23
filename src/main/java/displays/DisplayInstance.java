@@ -42,6 +42,10 @@ public abstract class DisplayInstance extends JPanel {
     public DisplayInstance() {
     }
 
+    public String GetCName(){
+        return display.GetCName();
+    }
+
     public int getLength() { // length in 32-bit words
         return display.getLength();
     }

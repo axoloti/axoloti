@@ -25,9 +25,9 @@
 ]]></code.declaration>
       <code.init><![CDATA[   val = 0;
 ]]></code.init>
-      <code.krate><![CDATA[   if (%in%>val)      val = ___SMMLA(val-%in%, (-1<<26)+(%risetime%>>1),val);
-      else val = ___SMMLA(val-%in%,(-1<<26)+(%falltime%>>1),val);
-   %out% = val;
+      <code.krate><![CDATA[   if (inlet_in>val)      val = ___SMMLA(val-inlet_in, (-1<<26)+(param_risetime>>1),val);
+      else val = ___SMMLA(val-inlet_in,(-1<<26)+(param_falltime>>1),val);
+   outlet_out = val;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

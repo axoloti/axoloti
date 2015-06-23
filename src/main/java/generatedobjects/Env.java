@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -48,41 +48,44 @@ public class Env extends gentools {
 
         catName = "env";
         WriteAxoObject(catName, Create_envd_new());
+        // need to clean up the envelopes...
+/* 
+         catName = "env_old";
+        */
+         WriteAxoObject(catName, Create_envadsr());
+         WriteAxoObject(catName, Create_envad());
+         WriteAxoObject(catName, Create_envd_new());
+         WriteAxoObject(catName, Create_envd2());
+         WriteAxoObject(catName, Create_envhd());
+         WriteAxoObject(catName, Create_envhd2());
+         WriteAxoObject(catName, Create_envahd());
+         WriteAxoObject(catName, Create_envahd2());
+         WriteAxoObject(catName, CreateEnvFollower());
 
-        catName = "env_old";
-        WriteAxoObject(catName, Create_envadsr());
-        WriteAxoObject(catName, Create_envad());
-        WriteAxoObject(catName, Create_envd());
-        WriteAxoObject(catName, Create_envd2());
-        WriteAxoObject(catName, Create_envhd());
-        WriteAxoObject(catName, Create_envhd2());
-        WriteAxoObject(catName, Create_envahd());
-        WriteAxoObject(catName, Create_envahd2());
-        WriteAxoObject(catName, CreateEnvFollower());
+         WriteAxoObject(catName, Create_envdlin());
+         WriteAxoObject(catName, Create_envhdlin());
+         WriteAxoObject(catName, Create_envahdlin());
 
-        WriteAxoObject(catName, Create_envdlin());
-        WriteAxoObject(catName, Create_envhdlin());
-        WriteAxoObject(catName, Create_envahdlin());
+         WriteAxoObject(catName, Create_envdlinx());
+         WriteAxoObject(catName, Create_envhdlinx());
+         WriteAxoObject(catName, Create_envahdlinx());
 
-        WriteAxoObject(catName, Create_envdlinx());
-        WriteAxoObject(catName, Create_envhdlinx());
-        WriteAxoObject(catName, Create_envahdlinx());
+         WriteAxoObject(catName, Create_envdlinmx());
+         WriteAxoObject(catName, Create_envhdlinmx());
+         WriteAxoObject(catName, Create_envahdlinmx());
 
-        WriteAxoObject(catName, Create_envdlinmx());
-        WriteAxoObject(catName, Create_envhdlinmx());
-        WriteAxoObject(catName, Create_envahdlinmx());
+         WriteAxoObject(catName, Create_line2());
+         WriteAxoObject(catName, Create_line3());
 
-        WriteAxoObject(catName, Create_line2());
-        WriteAxoObject(catName, Create_line3());
+         WriteAxoObject(catName, Create_line2x());
+         WriteAxoObject(catName, Create_line3x());
 
-        WriteAxoObject(catName, Create_line2x());
-        WriteAxoObject(catName, Create_line3x());
+         WriteAxoObject(catName, Create_line2mx());
+         WriteAxoObject(catName, Create_line3mx());
 
-        WriteAxoObject(catName, Create_line2mx());
-        WriteAxoObject(catName, Create_line3mx());
-
-        WriteAxoObject(catName, Create_line2bp());
-        WriteAxoObject(catName, Create_line3bp());
+         WriteAxoObject(catName, Create_line2bp());
+         WriteAxoObject(catName, Create_line3bp());
+         
     }
 
     static AxoObject Create_envd_new() {

@@ -33,18 +33,18 @@
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
     int i;
-    int i1 = %trig%[j]>>2;
+    int i1 = inlet_trig[j]>>2;
     if ((i1>0)&&!(i0>0)){   // dispatch
       nextvoice = (nextvoice+1)&(blepvoices-1);
       int32_t x = (i1<<6)/(i1-i0);
       oscp[nextvoice] = &blept[x];
-      int32_t val = (((64-x)*(%in%[j]>>2)) + (x*(in0>>2)))>>6;
+      int32_t val = (((64-x)*(inlet_in[j]>>2)) + (x*(in0>>2)))>>6;
       vgain[nextvoice] = (acc-val)<<2;
       acc = val;
     }
     int32_t sum=0;
     i0 = i1;
-    in0 = %in%[j];
+    in0 = inlet_in[j];
     for(i=0;i<blepvoices;i++){ // sample
       int16_t *t = oscp[i];
       sum =___SMMLA((16384-(*t))<<16,vgain[i],sum);
@@ -54,7 +54,7 @@
       }
       oscp[i]=t;
     }
-    %out%[j]=(sum+acc)<<1;
+    outlet_out[j]=(sum+acc)<<1;
   }]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -12,7 +12,7 @@
          <bool32.mom name="b" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[%o%=%b%;
+      <code.krate><![CDATA[outlet_o=param_b;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

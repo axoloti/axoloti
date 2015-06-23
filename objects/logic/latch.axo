@@ -15,9 +15,9 @@
       <attribs/>
       <code.declaration><![CDATA[   int ntrig;   int latch;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {latch = %i%; ntrig=1;}
-if (!(%trig%>0)) ntrig=0;
-%o%= latch;
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {latch = inlet_i; ntrig=1;}
+if (!(inlet_trig>0)) ntrig=0;
+outlet_o= latch;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="latch" sha="6b75d9b8a5bb2dff725df2beb52d112d68a61e7a">
@@ -36,9 +36,9 @@ if (!(%trig%>0)) ntrig=0;
       <attribs/>
       <code.declaration><![CDATA[   int ntrig;   int latch;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {latch = %i%; ntrig=1;}
-if (!(%trig%>0)) ntrig=0;
-%o%= latch;
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {latch = inlet_i; ntrig=1;}
+if (!(inlet_trig>0)) ntrig=0;
+outlet_o= latch;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

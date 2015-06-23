@@ -18,9 +18,9 @@
       <code.init><![CDATA[ntrig = 0;
 op = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {op = !op; ntrig=1;}
-if (!(%trig%>0)) ntrig=0;
-%o%= op;
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {op = !op; ntrig=1;}
+if (!(inlet_trig>0)) ntrig=0;
+outlet_o= op;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

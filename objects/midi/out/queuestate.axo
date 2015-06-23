@@ -23,7 +23,7 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.krate><![CDATA[%length% = MidiGetOutputBufferPending((midi_device_t) %device%);
+      <code.krate><![CDATA[outlet_length = MidiGetOutputBufferPending((midi_device_t) %device%);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

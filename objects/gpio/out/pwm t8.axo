@@ -15,8 +15,8 @@
   palSetPadMode(GPIOC, 7, PAL_MODE_ALTERNATE(3));
   PWMD8.tim->CCER |= STM32_TIM_CCER_CC1NE | STM32_TIM_CCER_CC1NP;
 ]]></code.init>
-      <code.krate><![CDATA[   pwmEnableChannel(&PWMD8, 0, (pwmcnt_t)((%pa5%>=0)?(4096-(%pa5%>>15)):4096));
-   pwmEnableChannel(&PWMD8, 1, (pwmcnt_t)((%pc7%>=0)?(4096-(%pc7%>>15)):4096));
+      <code.krate><![CDATA[   pwmEnableChannel(&PWMD8, 0, (pwmcnt_t)((inlet_pa5>=0)?(4096-(inlet_pa5>>15)):4096));
+   pwmEnableChannel(&PWMD8, 1, (pwmcnt_t)((inlet_pc7>=0)?(4096-(inlet_pc7>>15)):4096));
 ]]></code.krate>
    </obj.normal>
 </objdefs>

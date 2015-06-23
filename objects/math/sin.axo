@@ -13,8 +13,8 @@
       <params/>
       <attribs/>
       <code.krate><![CDATA[       int32_t r;
-       SINE2TINTERP(%phase%<<4,r)
-       %out%= (r>>4);
+       SINE2TINTERP(inlet_phase<<4,r)
+       outlet_out= (r>>4);
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="sin" sha="1071012784f2bd65a87a083ab2b7c3d46db76c52">
@@ -31,8 +31,8 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[       int32_t r;
-       SINE2TINTERP(%phase%<<4,r)
-       %out%= (r>>4);
+       SINE2TINTERP(inlet_phase[buffer_index]<<4,r)
+       outlet_out[buffer_index]= (r>>4);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -29,19 +29,19 @@
    dtrig = 0;
    rtrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%inc%>0) && !ntrig) {
-   count++; if (count>=%maximum%) {count = %maximum%-1; }
+      <code.krate><![CDATA[if ((inlet_inc>0) && !ntrig) {
+   count++; if (count>=param_maximum) {count = param_maximum-1; }
    ntrig=1;
 }
-else if (!(%inc%>0)) ntrig=0;
-if ((%dec%>0) && !dtrig) {
+else if (!(inlet_inc>0)) ntrig=0;
+if ((inlet_dec>0) && !dtrig) {
    count--; if (count<0) {count = 0;}
    dtrig=1;
 }
-else if (!(%dec%>0)) dtrig=0;
-if ((%r%>0) && !rtrig) {count=0; rtrig = 1;}
-else if (!(%r%>0)) rtrig=0;
-%o%= count;
+else if (!(inlet_dec>0)) dtrig=0;
+if ((inlet_r>0) && !rtrig) {count=0; rtrig = 1;}
+else if (!(inlet_r>0)) rtrig=0;
+outlet_o= count;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

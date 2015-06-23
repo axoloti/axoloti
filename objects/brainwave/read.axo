@@ -65,17 +65,17 @@ _theta = 0;
       <code.dispose><![CDATA[chThdTerminate(Thd);
 chThdWait(Thd);
 ]]></code.dispose>
-      <code.krate><![CDATA[%quality% = this->_quality;
-%attention% = this->_attention;
-%meditation% = this->_meditation;
-%low_alpha% = this->_low_alpha;
-%high_alpha% = this->_high_alpha;
-%low_beta% = this->_low_beta;
-%high_beta% = this->_high_beta;
-%low_gamma% = this->_low_gamma;
-%high_gamma% = this->_high_gamma;
-%delta% = this->_delta;
-%theta% = this->_theta;
+      <code.krate><![CDATA[outlet_quality = this->_quality;
+outlet_attention = this->_attention;
+outlet_meditation = this->_meditation;
+outlet_low__alpha = this->_low_alpha;
+outlet_high__alpha = this->_high_alpha;
+outlet_low__beta = this->_low_beta;
+outlet_high__beta = this->_high_beta;
+outlet_low__gamma = this->_low_gamma;
+outlet_high__gamma = this->_high_gamma;
+outlet_delta = this->_delta;
+outlet_theta = this->_theta;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

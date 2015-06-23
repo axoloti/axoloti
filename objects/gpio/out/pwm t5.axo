@@ -20,10 +20,10 @@
   palSetPadMode(GPIOA, 1, PAL_MODE_ALTERNATE(2));
   palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(2));
   palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(2));]]></code.init>
-      <code.krate><![CDATA[   pwmEnableChannel(&PWMD5, 0, (pwmcnt_t)((%pa0%>=0)?(4096-(%pa0%>>15)):4096));
-   pwmEnableChannel(&PWMD5, 1, (pwmcnt_t)((%pa1%>=0)?(4096-(%pa1%>>15)):4096));
-   pwmEnableChannel(&PWMD5, 2, (pwmcnt_t)((%pa2%>=0)?(4096-(%pa2%>>15)):4096));
-   pwmEnableChannel(&PWMD5, 3, (pwmcnt_t)((%pa3%>=0)?(4096-(%pa3%>>15)):4096));
+      <code.krate><![CDATA[   pwmEnableChannel(&PWMD5, 0, (pwmcnt_t)((inlet_pa0>=0)?(4096-(inlet_pa0>>15)):4096));
+   pwmEnableChannel(&PWMD5, 1, (pwmcnt_t)((inlet_pa1>=0)?(4096-(inlet_pa1>>15)):4096));
+   pwmEnableChannel(&PWMD5, 2, (pwmcnt_t)((inlet_pa2>=0)?(4096-(inlet_pa2>>15)):4096));
+   pwmEnableChannel(&PWMD5, 3, (pwmcnt_t)((inlet_pa3>=0)?(4096-(inlet_pa3>>15)):4096));
 ]]></code.krate>
    </obj.normal>
 </objdefs>

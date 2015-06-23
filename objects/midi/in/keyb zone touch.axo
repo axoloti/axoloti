@@ -27,11 +27,11 @@ uint8_t _touch;
 _note = 0;
 _touch = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%note%= _note<<21;
-%gate%= _gate<<27;
-%velocity%= _velo<<20;
-%touch% = _touch<<20;
-%releaseVelocity%= _rvelo<<20;
+      <code.krate><![CDATA[outlet_note= _note<<21;
+outlet_gate= _gate<<27;
+outlet_velocity= _velo<<20;
+outlet_touch = _touch<<20;
+outlet_releaseVelocity= _rvelo<<20;
 ]]></code.krate>
       <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
   if ((data1 >= %startNote%)&&(data1 <= %endNote%)) {

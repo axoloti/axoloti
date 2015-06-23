@@ -18,16 +18,16 @@
 ]]></code.declaration>
       <code.init><![CDATA[pos = -1;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) {
+      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {
       ntrig=1;
       pos = 0;
    }
-   else if (!(%trig%>0)) ntrig=0;
+   else if (!(inlet_trig>0)) ntrig=0;
      int32_t i;
    if (pos>=0) {
        if ((pos+BUFSIZE)< %table%.LENGTH)
           for(i=0;i<BUFSIZE;i++){
-              %table%.array[pos++] = __SSAT(%wave%[i],28)>>%table%.GAIN;
+              %table%.array[pos++] = __SSAT(inlet_wave[i],28)>>%table%.GAIN;
           }
        else pos = -1;
    }]]></code.krate>

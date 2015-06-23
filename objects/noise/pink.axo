@@ -41,7 +41,7 @@ if (o==-1){
    sum += obuf[o];
 }
 seed = (seed * 196314165) + 907633515;
-%out% = sum + (((int32_t)seed)>>7);
+outlet_out[buffer_index] = sum + (((int32_t)seed)>>7);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

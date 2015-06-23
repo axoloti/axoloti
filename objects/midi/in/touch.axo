@@ -17,8 +17,8 @@ int32_t ntrig;
       <code.init><![CDATA[_press = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%o% = _press;
-%trig% = ntrig;
+      <code.krate><![CDATA[outlet_o = _press;
+outlet_trig = ntrig;
 ntrig = 0;
 ]]></code.krate>
       <code.midihandler><![CDATA[if (status == MIDI_CHANNEL_PRESSURE + %midichannel%) {  _press = (data1)<<20;

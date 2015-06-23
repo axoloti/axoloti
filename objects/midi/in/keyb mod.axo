@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="keyb mod" sha="1f9511604a7de9409684f65842ddc95687a6ac65">
+   <obj.normal id="keyb mod" sha="95d8164caf35fbc234bd43cc4c2536e587bd8d2c">
       <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity modulation source</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -28,26 +28,26 @@ uint8_t _rvelo;
       <code.init><![CDATA[_gate = 0;
 _note = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%note%= _note<<21;
-%gate%= _gate;
-%gate2%= _gate2;
+      <code.krate><![CDATA[outlet_note= _note<<21;
+outlet_gate= _gate;
+outlet_gate2= _gate2;
 _gate2 = _gate;
-%velocity%= _velo<<20;
-%releaseVelocity%= _rvelo<<20;
+outlet_velocity= _velo<<20;
+outlet_releaseVelocity= _rvelo<<20;
 ]]></code.krate>
       <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
   _velo = data2;
   _note = data1-64;
   _gate = 1<<27;
   _gate2 = 0;
-  PExModulationSourceChange(&parent2->PExModulationSources[MODULATOR_%name%_velocity][0],NMODULATIONTARGETS,_velo<<20);
-  PExModulationSourceChange(&parent2->PExModulationSources[MODULATOR_%name%_note][0],NMODULATIONTARGETS,_note<<20);
+  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_%name%_velocity][0],NMODULATIONTARGETS,_velo<<20);
+  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_%name%_note][0],NMODULATIONTARGETS,_note<<20);
 } else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||
           (status == MIDI_NOTE_OFF + %midichannel%)) {
   if (_note == data1-64) {
     _rvelo = data2;
     _gate = 0;
-  PExModulationSourceChange(&parent2->PExModulationSources[MODULATOR_%name%_releasevelocity][0],NMODULATIONTARGETS,_rvelo<<20);
+  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_%name%_releasevelocity][0],NMODULATIONTARGETS,_rvelo<<20);
   }
 } else if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {
   _gate = 0;

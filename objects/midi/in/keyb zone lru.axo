@@ -32,12 +32,12 @@ p = 1;
 int j;
 for(j=0;j<%endNote%-%startNote%+1;j++) np[j]=0;
 ]]></code.init>
-      <code.krate><![CDATA[%note%= _note<<21;
-%gate%= _gate;
-%gate2%= _gate2;
+      <code.krate><![CDATA[outlet_note= _note<<21;
+outlet_gate= _gate;
+outlet_gate2= _gate2;
 _gate2 = _gate;
-%velocity%= _velo<<20;
-%releaseVelocity%= _rvelo<<20;
+outlet_velocity= _velo<<20;
+outlet_releaseVelocity= _rvelo<<20;
 ]]></code.krate>
       <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
   if ((data1 >= %startNote%)&&(data1 <= %endNote%)) {

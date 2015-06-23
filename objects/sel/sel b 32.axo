@@ -16,9 +16,9 @@
          <bin32 name="b32" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<32))   %o%=%b32%&(1<<%in%);
-else %o% = %def%;
-%chain% = %in%-32;
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<32))   outlet_o=param_b32&(1<<inlet_in);
+else outlet_o = inlet_def;
+outlet_chain = inlet_in-32;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

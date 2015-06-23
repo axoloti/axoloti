@@ -16,12 +16,12 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      default: %o%= %i3%;break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
+      case 0: outlet_o= inlet_i0;break;
+      case 1: outlet_o= inlet_i1;break;
+      case 2: outlet_o= inlet_i2;break;
+      case 3: outlet_o= inlet_i3;break;
+      default: outlet_o= inlet_i3;break;
 }
 ]]></code.krate>
    </obj.normal>
@@ -42,12 +42,12 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      default: %o%= %i3%;break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
+      case 0: outlet_o= inlet_i0;break;
+      case 1: outlet_o= inlet_i1;break;
+      case 2: outlet_o= inlet_i2;break;
+      case 3: outlet_o= inlet_i3;break;
+      default: outlet_o= inlet_i3;break;
 }
 ]]></code.krate>
    </obj.normal>
@@ -68,12 +68,12 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   switch(%s%>0?%s%:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      default: %o%= %i3%;break;
+      <code.srate><![CDATA[   switch(inlet_s>0?inlet_s:0){
+      case 0: outlet_o[buffer_index]= inlet_i0[buffer_index];break;
+      case 1: outlet_o[buffer_index]= inlet_i1[buffer_index];break;
+      case 2: outlet_o[buffer_index]= inlet_i2[buffer_index];break;
+      case 3: outlet_o[buffer_index]= inlet_i3[buffer_index];break;
+      default: outlet_o[buffer_index]= inlet_i3[buffer_index];break;
 }
 ]]></code.srate>
    </obj.normal>
@@ -94,12 +94,12 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      default: %o%= %i3%;break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
+      case 0: outlet_o= inlet_i0;break;
+      case 1: outlet_o= inlet_i1;break;
+      case 2: outlet_o= inlet_i2;break;
+      case 3: outlet_o= inlet_i3;break;
+      default: outlet_o= inlet_i3;break;
 }
 ]]></code.krate>
    </obj.normal>
@@ -120,12 +120,12 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      default: %o%= %i3%;break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
+      case 0: outlet_o= inlet_i0;break;
+      case 1: outlet_o= inlet_i1;break;
+      case 2: outlet_o= inlet_i2;break;
+      case 3: outlet_o= inlet_i3;break;
+      default: outlet_o= inlet_i3;break;
 }
 ]]></code.krate>
    </obj.normal>

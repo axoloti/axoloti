@@ -26,7 +26,7 @@ pval = 0;
       <code.krate><![CDATA[int i;
 if (index<0) {
    for(i=0;i<16;i++){
-      int32_t val = (%in%[i])>(1<<19);
+      int32_t val = (inlet_in[i])>(1<<19);
       if (val&&(!pval)){
          index=0; break;
       }
@@ -34,7 +34,7 @@ if (index<0) {
    }
    if (index == 0){
       for(;i<16;i++){
-         t[index++]=(uint8_t)(%in%[i]>>21);
+         t[index++]=(uint8_t)(inlet_in[i]>>21);
       }
    }
 } else {    for(i=0;i<16;i++){
@@ -42,12 +42,12 @@ if (index<0) {
          index=-1;
          break;
       }
-      t[index++]=(uint8_t)(%in%[i]>>21);
+      t[index++]=(uint8_t)(inlet_in[i]>>21);
    }
-   if ((index==-1)&&(!%hold%)){
+   if ((index==-1)&&(!inlet_hold)){
      for(i=0;i<128;i++)
-       %scope%[i]=t[i];
-     pval = (%in%[BUFSIZE-1])>(1<<19);
+       disp_scope[i]=t[i];
+     pval = (inlet_in[BUFSIZE-1])>(1<<19);
    }
 }
 ]]></code.krate>

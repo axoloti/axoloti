@@ -25,8 +25,8 @@
 ]]></code.init>
       <code.krate><![CDATA[  {
       int32_t freq;
-      MTOF(%pitch% + %pitchm%,freq);
-      f_filter_biquad_A(&fd,%in%,%out%,freq,INT_MAX - (__USAT(%resonance%,27)<<4));
+      MTOF(param_pitch + inlet_pitchm,freq);
+      f_filter_biquad_A(&fd,inlet_in,outlet_out,freq,INT_MAX - (__USAT(inlet_resonance,27)<<4));
    }
 ]]></code.krate>
    </obj.normal>

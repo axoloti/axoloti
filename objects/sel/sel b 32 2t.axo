@@ -19,13 +19,13 @@
          <bin32 name="p2" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<32)) {   %o1%=%p1%&(1<<%in%);
-   %o2%=%p2%&(1<<%in%);
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<32)) {   outlet_o1=param_p1&(1<<inlet_in);
+   outlet_o2=param_p2&(1<<inlet_in);
 } else {
-   %o1% = %def1%;
-   %o2% = %def2%;
+   outlet_o1 = inlet_def1;
+   outlet_o2 = inlet_def2;
 }
-%chain% = %in%-32;
+outlet_chain = inlet_in-32;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

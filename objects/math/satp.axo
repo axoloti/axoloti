@@ -12,7 +12,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= __USAT(%in%,27);]]></code.krate>
+      <code.krate><![CDATA[outlet_out= __USAT(inlet_in,27);]]></code.krate>
    </obj.normal>
    <obj.normal id="satp" sha="c3a9f3c72a58d5781087813c2c396865b86a41d4">
       <sDescription>saturate to normal positive range</sDescription>
@@ -27,6 +27,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%out%= __USAT(%in%,27);]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= __USAT(inlet_in[buffer_index],27);]]></code.srate>
    </obj.normal>
 </objdefs>

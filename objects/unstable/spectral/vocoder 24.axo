@@ -36,17 +36,17 @@ int i;
 for(i=0;i<BUFSIZE;i++) o[i]=0;
 for(i=0;i<20;i++){
 int32buffer t;
-biquad_dsp(&bsmod[i],&bc[i],%mod%,t);
+biquad_dsp(&bsmod[i],&bc[i],inlet_mod,t);
 long int accu = 0;
 int j;
 for(j=0;j<BUFSIZE;j++) accu += (t[j]>0?t[j]:-t[j]);
 val[i] -= val[i]>>6;
 val[i] += accu>>6;
-biquad_dsp(&bscar[i],&bc[i],%car%,t);
+biquad_dsp(&bscar[i],&bc[i],inlet_car,t);
 for(j=0;j<BUFSIZE;j++) o[j] += ___SMMUL(t[j],val[i]);
 }
 int j;
- for(j=0;j<BUFSIZE;j++) %out%[j] = o[j];
+ for(j=0;j<BUFSIZE;j++) outlet_out[j] = o[j];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

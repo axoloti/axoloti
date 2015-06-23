@@ -51,7 +51,8 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance {
 
     @Override
     public String valueName(String vprefix) {
-        return "((uint8_t *)&parent2->displayVector[" + offset + "])";
+//        return "((uint8_t *)&parent2->displayVector[" + offset + "])";
+        return "(int8_t *)(&displayVector[" + offset + "])";
     }
 
     byte dst[] = new byte[n];

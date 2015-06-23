@@ -17,6 +17,6 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in%< %c%;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in< param_c;]]></code.krate>
    </obj.normal>
 </objdefs>

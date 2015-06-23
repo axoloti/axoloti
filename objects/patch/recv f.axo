@@ -12,7 +12,7 @@
       <attribs>
          <objref name="sender"/>
       </attribs>
-      <code.krate><![CDATA[%v% = %sender%._v;
+      <code.krate><![CDATA[outlet_v = %sender%._v;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

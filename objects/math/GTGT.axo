@@ -14,7 +14,7 @@
       <attribs>
          <spinner name="shift" MinValue="0" MaxValue="31" DefaultValue="1"/>
       </attribs>
-      <code.krate><![CDATA[%result%= %a% >> %shift%;]]></code.krate>
+      <code.krate><![CDATA[outlet_result= inlet_a >> %shift%;]]></code.krate>
    </obj.normal>
    <obj.normal id="&gt;&gt;" sha="d41e14ea0466939c31478842f4b0d0401cbd7bf5">
       <sDescription>attenuates a s-rate signal with &quot;shift&quot; times 6dB</sDescription>
@@ -31,6 +31,6 @@
       <attribs>
          <spinner name="shift" MinValue="0" MaxValue="31" DefaultValue="1"/>
       </attribs>
-      <code.srate><![CDATA[%result%= %a% >> %shift%;]]></code.srate>
+      <code.srate><![CDATA[outlet_result[buffer_index]= inlet_a[buffer_index] >> %shift%;]]></code.srate>
    </obj.normal>
 </objdefs>

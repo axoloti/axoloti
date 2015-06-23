@@ -163,7 +163,7 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
     }
 
     public String GetCName() {
-        return "outlet_" + CharEscape.CharEscape(outlet.name);
+        return outlet.GetCName();
     }
 
     public final void PostConstructor() {

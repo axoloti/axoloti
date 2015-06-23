@@ -14,7 +14,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+      <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="mux 2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f">
@@ -32,7 +32,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+      <code.srate><![CDATA[   outlet_o[buffer_index]= (inlet_s)?inlet_i2[buffer_index]:inlet_i1[buffer_index];
 ]]></code.srate>
    </obj.normal>
    <obj.normal id="mux 2" sha="138891901c8849485b260a487f3b0fc188f6bae2">
@@ -50,7 +50,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+      <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="mux 2" sha="b27da86e6781ea0d7128a77aafd60d04e253d3b3">
@@ -68,7 +68,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+      <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="mux 2" sha="6a168ec6f8365e1284be6c580b0ba4ad56703576">
@@ -86,7 +86,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+      <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

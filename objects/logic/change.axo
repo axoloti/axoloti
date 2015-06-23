@@ -18,13 +18,13 @@
       <code.init><![CDATA[ptrig = 0;
 pval = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((pval != %in%)&(!ptrig)) { 
-  %trig% = 1;
-  pval = %in%;
+      <code.krate><![CDATA[if ((pval != inlet_in)&(!ptrig)) { 
+  outlet_trig = 1;
+  pval = inlet_in;
   ptrig = 1;
 } else {
   ptrig = 0;
-  %trig% = 0;
+  outlet_trig = 0;
 }
 ]]></code.krate>
    </obj.normal>
@@ -47,13 +47,13 @@ pval = 0;
       <code.init><![CDATA[ptrig = 0;
 pval = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((pval != %in%)&(!ptrig)) { 
-  %trig% = 1;
-  pval = %in%;
+      <code.krate><![CDATA[if ((pval != inlet_in)&(!ptrig)) { 
+  outlet_trig = 1;
+  pval = inlet_in;
   ptrig = 1;
 } else {
   ptrig = 0;
-  %trig% = 0;
+  outlet_trig = 0;
 }
 ]]></code.krate>
    </obj.normal>

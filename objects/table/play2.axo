@@ -20,17 +20,17 @@
 ]]></code.declaration>
       <code.init><![CDATA[pos = -1;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((%en%>0) && !ntrig) {
+      <code.krate><![CDATA[   if ((inlet_en>0) && !ntrig) {
       ntrig=1;
-      uint32_t asat = __USAT(%pos%,27);
+      uint32_t asat = __USAT(inlet_pos,27);
       pos = asat>>(27-%table%.LENGTHPOW);
    }
-   else if (!(%en%>0)) ntrig=0;
+   else if (!(inlet_en>0)) ntrig=0;
      int32_t i;
 ]]></code.krate>
-      <code.srate><![CDATA[   if (%en%>0) {
+      <code.srate><![CDATA[   if (inlet_en>0) {
        if (pos< %table%.LENGTH)
-              %wave% = %table%.array[pos++]<<%table%.GAIN;
-   } else %wave% = 0;]]></code.srate>
+              outlet_wave[buffer_index] = %table%.array[pos++]<<%table%.GAIN;
+   } else outlet_wave[buffer_index] = 0;]]></code.srate>
    </obj.normal>
 </objdefs>

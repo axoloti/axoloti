@@ -19,8 +19,8 @@ int32_t ntrig;
 ]]></code.declaration>
       <code.init><![CDATA[ccv = %default%;
 ]]></code.init>
-      <code.krate><![CDATA[%midiCC%= ccv;
-%trig% = ntrig;
+      <code.krate><![CDATA[outlet_midiCC= ccv;
+outlet_trig = ntrig;
 ntrig = 0;
 ]]></code.krate>
       <code.midihandler><![CDATA[if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == %cc%)) { ccv = data2; ntrig = 1;}

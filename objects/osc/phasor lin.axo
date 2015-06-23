@@ -20,10 +20,10 @@
       <attribs/>
       <code.declaration><![CDATA[uint32_t Phase; ]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
-      <code.srate><![CDATA[Phase += (%freq% + %freqm%)<<4;
+      <code.srate><![CDATA[Phase += (param_freq + inlet_freqm)<<4;
 int32_t r;
-int32_t p2 = Phase + (%pm%<<4);
-%phasor%= (p2>>4);
+int32_t p2 = Phase + (inlet_pm[buffer_index]<<4);
+outlet_phasor[buffer_index]= (p2>>4);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

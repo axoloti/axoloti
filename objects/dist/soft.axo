@@ -12,10 +12,10 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[int32_t ts = __SSAT(%in%,28);
+      <code.krate><![CDATA[int32_t ts = __SSAT(inlet_in,28);
 int32_t tsq31 = ts<<3;
 int32_t tsq31p3 = ___SMMUL(tsq31,___SMMUL(tsq31,tsq31));
-%out% = ts + (ts>>1) - (tsq31p3);
+outlet_out = ts + (ts>>1) - (tsq31p3);
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="soft" sha="4de9b281f2a362671b6dc8606f5d039535893f45">
@@ -31,10 +31,10 @@ int32_t tsq31p3 = ___SMMUL(tsq31,___SMMUL(tsq31,tsq31));
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[int32_t ts = __SSAT(%in%,28);
+      <code.srate><![CDATA[int32_t ts = __SSAT(inlet_in[buffer_index],28);
 int32_t tsq31 = ts<<3;
 int32_t tsq31p3 = ___SMMUL(tsq31,___SMMUL(tsq31,tsq31));
-%out% = ts + (ts>>1) - (tsq31p3);
+outlet_out[buffer_index] = ts + (ts>>1) - (tsq31p3);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

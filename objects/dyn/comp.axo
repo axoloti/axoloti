@@ -37,16 +37,16 @@ int32_t frac_exp(int32_t a) {
 	else return expt[ei]>>(-s);
 }
 ]]></code.declaration>
-      <code.krate><![CDATA[int32_t inlog = frac_log(%in%);
-int32_t treshlog = frac_log(%tresh%);
+      <code.krate><![CDATA[int32_t inlog = frac_log(inlet_in);
+int32_t treshlog = frac_log(param_tresh);
 int32_t over = inlog-treshlog;
 int32_t gain;
 if (over<0){
 	gain = 0x80000;
 } else {
-	gain = frac_exp(-___SMMUL(over,%ratio%)<<5);
+	gain = frac_exp(-___SMMUL(over,param_ratio)<<5);
 }
-%out% = gain<<8;//___SMMUL(%in%,gain);
+outlet_out = gain<<8;//___SMMUL(inlet_in,gain);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

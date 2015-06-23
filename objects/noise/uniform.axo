@@ -10,6 +10,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%wave%= (int32_t)(GenerateRandomNumber())>>4;]]></code.srate>
+      <code.srate><![CDATA[outlet_wave[buffer_index]= (int32_t)(GenerateRandomNumber())>>4;]]></code.srate>
    </obj.normal>
 </objdefs>

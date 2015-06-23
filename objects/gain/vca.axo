@@ -16,11 +16,11 @@
       <code.declaration><![CDATA[   int32_t prev;
     int32_t step;
 ]]></code.declaration>
-      <code.krate><![CDATA[   step = (%v% - prev)>>4;
+      <code.krate><![CDATA[   step = (inlet_v - prev)>>4;
    int32_t i = prev;
-   prev = %v%;
+   prev = inlet_v;
 ]]></code.krate>
-      <code.srate><![CDATA[   %o% =  ___SMMUL(%a%,i)<<5;
+      <code.srate><![CDATA[   outlet_o[buffer_index] =  ___SMMUL(inlet_a[buffer_index],i)<<5;
    i += step;
 ]]></code.srate>
    </obj.normal>

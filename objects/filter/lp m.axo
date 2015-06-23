@@ -28,9 +28,9 @@
       <code.init><![CDATA[biquad_clearstate(&bs);
 ]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOF(%pitch% + %pitchm%,freq);
-      biquad_lp_coefs(&bc,freq,INT_MAX - (__USAT(%resom% + %reso%,27)<<4));
-      biquad_dsp(&bs,&bc,%in%,%out%);
+      MTOF(param_pitch + inlet_pitchm,freq);
+      biquad_lp_coefs(&bc,freq,INT_MAX - (__USAT(inlet_resom + param_reso,27)<<4));
+      biquad_dsp(&bs,&bc,inlet_in,outlet_out);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

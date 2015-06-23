@@ -21,7 +21,7 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%s% > 0)?%v1%:%v0%;
+      <code.krate><![CDATA[   outlet_o= (inlet_s > 0)?param_v1:param_v0;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -12,7 +12,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[  MTOF(%pitch%,%frequency%);
+      <code.krate><![CDATA[  MTOF(inlet_pitch,outlet_frequency);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -16,8 +16,8 @@
 ]]></code.declaration>
       <code.init><![CDATA[   _ap = 0;
 ]]></code.init>
-      <code.krate><![CDATA[   %d%= %a% - _ap;
-   _ap = %a%;
+      <code.krate><![CDATA[   outlet_d= inlet_a - _ap;
+   _ap = inlet_a;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="delta" sha="a0571010403326d85c9c2c55e100910e30e1bbe4">
@@ -37,8 +37,8 @@
 ]]></code.declaration>
       <code.init><![CDATA[   _ap = 0;
 ]]></code.init>
-      <code.srate><![CDATA[   %d%= %a% - _ap;
-   _ap = %a%;
+      <code.srate><![CDATA[   outlet_d[buffer_index]= inlet_a[buffer_index] - _ap;
+   _ap = inlet_a[buffer_index];
 ]]></code.srate>
    </obj.normal>
    <obj.normal id="delta" sha="4eff7b00344b2ded521b17825739badbe9863de9">
@@ -58,8 +58,8 @@
 ]]></code.declaration>
       <code.init><![CDATA[   _ap = 0;
 ]]></code.init>
-      <code.krate><![CDATA[   %d%= %a% - _ap;
-   _ap = %a%;
+      <code.krate><![CDATA[   outlet_d= inlet_a - _ap;
+   _ap = inlet_a;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

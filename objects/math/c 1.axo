@@ -10,7 +10,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%o%= 1;
+      <code.krate><![CDATA[outlet_o= 1;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -53,7 +53,7 @@ array = _array;
    for(i=0;i<LENGTH;i++) array[i] = 0;
 ]]></code.init>
       <code.srate><![CDATA[  writepos = (writepos + 1)&LENGTHMASK;
-   array[writepos] = __SSAT(%in%>>14,16);
+   array[writepos] = __SSAT(inlet_in[buffer_index]>>14,16);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

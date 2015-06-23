@@ -26,6 +26,6 @@ int32_t n=0;
 for(i=0;i<8;i++){
    seeds[i] = (seeds[i] * 196314165) + 907633515;   n += ((int32_t)(seeds[i]))>>7;
 }
-%wave%= n;]]></code.srate>
+outlet_wave[buffer_index]= n;]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -25,18 +25,18 @@
          <int2x16 name="t4"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {
-   %o1%=(%t1%>>(%in%*2))&3;
-   %o2%=(%t2%>>(%in%*2))&3;
-   %o3%=(%t3%>>(%in%*2))&3;
-   %o4%=(%t4%>>(%in%*2))&3;
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<16)) {
+   outlet_o1=(param_t1>>(inlet_in*2))&3;
+   outlet_o2=(param_t2>>(inlet_in*2))&3;
+   outlet_o3=(param_t3>>(inlet_in*2))&3;
+   outlet_o4=(param_t4>>(inlet_in*2))&3;
 }else {
-   %o1% = %def1%;
-   %o2% = %def2%;
-   %o3% = %def3%;
-   %o4% = %def4%;
+   outlet_o1 = inlet_def1;
+   outlet_o2 = inlet_def2;
+   outlet_o3 = inlet_def3;
+   outlet_o4 = inlet_def4;
 }
-%chain% = %in%-16;
+outlet_chain = inlet_in-16;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

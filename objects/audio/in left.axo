@@ -14,9 +14,9 @@
       <attribs/>
       <code.krate><![CDATA[int j;
 for(j=0;j<BUFSIZE;j++){
-   %wave%[j] = AudioInputLeft[j];
+   outlet_wave[j] = AudioInputLeft[j];
 }
-%vu%=%wave%[0];
+disp_vu=outlet_wave[0];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

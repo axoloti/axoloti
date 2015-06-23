@@ -14,7 +14,7 @@
       <attribs>
          <objref name="table"/>
       </attribs>
-      <code.krate><![CDATA[   %o%= %table%.array[__USAT(%a%,%table%.LENGTHPOW)]<<%table%.GAIN;
+      <code.krate><![CDATA[   outlet_o= %table%.array[__USAT(inlet_a,%table%.LENGTHPOW)]<<%table%.GAIN;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="read" sha="82c9c4b6ab49cd6326cdc2f95f03e145789c6791">
@@ -32,7 +32,7 @@
       <attribs>
          <objref name="table"/>
       </attribs>
-      <code.krate><![CDATA[   %o%= %table%.array[__USAT(%a%,27)>>(27-%table%.LENGTHPOW)]<<%table%.GAIN;
+      <code.krate><![CDATA[   outlet_o= %table%.array[__USAT(inlet_a,27)>>(27-%table%.LENGTHPOW)]<<%table%.GAIN;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="read" sha="13db20ba539824a51f60bb0ae362e2af0044c354">
@@ -50,7 +50,7 @@
       <attribs>
          <objref name="table"/>
       </attribs>
-      <code.srate><![CDATA[   %o%= %table%.array[__USAT(%a%,27)>>(27-%table%.LENGTHPOW)]<<%table%.GAIN;
+      <code.srate><![CDATA[   outlet_o[buffer_index]= %table%.array[__USAT(inlet_a[buffer_index],27)>>(27-%table%.LENGTHPOW)]<<%table%.GAIN;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -24,15 +24,15 @@
 pstart = 0;
 pstop = 1;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((%start%>0) && !pstart) {
+      <code.krate><![CDATA[   if ((inlet_start>0) && !pstart) {
       pstart = 1;
       pstop = 0;
-      uint32_t asat = __USAT(%pos%,27);
+      uint32_t asat = __USAT(inlet_pos,27);
       pos = asat>>(27-%table%.LENGTHPOW);
-   } else if (!(%start%>0)) {
+   } else if (!(inlet_start>0)) {
       pstart = 0;
    }
-  if ((%stop%>0) && !pstop) {
+  if ((inlet_stop>0) && !pstop) {
       pstop = 1;
       pstart = 0;
    } 
@@ -40,9 +40,9 @@ pstop = 1;
 ]]></code.krate>
       <code.srate><![CDATA[   if (!pstop) {
        if (pos< %table%.LENGTH)
-              %wave% = %table%.array[pos++]<<%table%.GAIN;
-	else %wave% = 0;
-   } else %wave% = 0;
+              outlet_wave[buffer_index] = %table%.array[pos++]<<%table%.GAIN;
+	else outlet_wave[buffer_index] = 0;
+   } else outlet_wave[buffer_index] = 0;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

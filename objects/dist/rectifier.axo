@@ -35,7 +35,7 @@
   const int16_t *lastblep = &blt[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
     int i;
-    int in0 = %in%[j]>>2;
+    int in0 = inlet_in[j]>>2;
     int32_t sum = 0;
     if ((in0>0)&&(in1<0)){   // dispatch
 	// rising
@@ -61,7 +61,7 @@
       if (t>=lastblep) t=lastblep;
       oscp[i]=t;
     }
-    %out%[j]=sum<<2;
+    outlet_out[j]=sum<<2;
   }
 ]]></code.krate>
    </obj.normal>

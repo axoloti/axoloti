@@ -16,11 +16,11 @@
          <spinner name="denominator" MinValue="1" MaxValue="128" DefaultValue="1"/>
       </attribs>
       <code.krate><![CDATA[int r;
-if (%a% >=0)
-  r = ((unsigned int)%a%)/%denominator%;
-else  r = -(((unsigned int)(%denominator%-%a%))/%denominator%);
-%div%= r;
-%rem% = %a%-(r*%denominator%);
+if (inlet_a >=0)
+  r = ((unsigned int)inlet_a)/%denominator%;
+else  r = -(((unsigned int)(%denominator%-inlet_a))/%denominator%);
+outlet_div= r;
+outlet_rem = inlet_a-(r*%denominator%);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

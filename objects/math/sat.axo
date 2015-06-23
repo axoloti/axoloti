@@ -12,7 +12,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= __SSAT(%in%,28);]]></code.krate>
+      <code.krate><![CDATA[outlet_out= __SSAT(inlet_in,28);]]></code.krate>
    </obj.normal>
    <obj.normal id="sat" sha="b8886ae94381bc8961d0cbacd7e625a168dc08d5">
       <sDescription>saturate to normal range</sDescription>
@@ -27,6 +27,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%out%= __SSAT(%in%,28);]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= __SSAT(inlet_in[buffer_index],28);]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -19,7 +19,7 @@
       <attribs>
          <objref name="delayname"/>
       </attribs>
-      <code.srate><![CDATA[      uint32_t tmp_d =  __USAT(%time% + %timem%,27);
+      <code.srate><![CDATA[      uint32_t tmp_d =  __USAT(param_time + inlet_timem[buffer_index],27);
       uint32_t tmp_di = %delayname%.writepos - (tmp_d>>(27-%delayname%.LENGTHPOW)) - BUFSIZE + buffer_index -1;
       uint32_t tmp_w1 = (tmp_d<<(%delayname%.LENGTHPOW+3)) & 0x3FFFFFFF;
       uint32_t tmp_w2 = (1<<30) - tmp_w1;
@@ -27,7 +27,7 @@
       int32_t tmp_a2 = %delayname%.array[(tmp_di+1)&%delayname%.LENGTHMASK]<<16;
       int32_t tmp_r = ___SMMUL(tmp_a1,tmp_w1);
       tmp_r = ___SMMLA(tmp_a2,tmp_w2,tmp_r);
-      %out%= tmp_r;
+      outlet_out[buffer_index]= tmp_r;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

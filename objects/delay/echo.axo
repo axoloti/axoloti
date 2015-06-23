@@ -24,9 +24,9 @@ int16_t delayline[%delaylength%];
    delayrindex = 1;
 ]]></code.init>
       <code.srate><![CDATA[ int32_t rd = delayline[delayrindex++];
-delayline[delaywindex++] = __SSAT(%in%>>14,16);
+delayline[delaywindex++] = __SSAT(inlet_in[buffer_index]>>14,16);
 if (delayrindex == %delaylength%) delayrindex = 0;
 if (delaywindex == %delaylength%) delaywindex = 0;
-%out% = rd<<14;]]></code.srate>
+outlet_out[buffer_index] = rd<<14;]]></code.srate>
    </obj.normal>
 </objdefs>

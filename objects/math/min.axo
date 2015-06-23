@@ -13,7 +13,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= (%in1%<%in2%)?%in1%:%in2%;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= (inlet_in1<inlet_in2)?inlet_in1:inlet_in2;]]></code.krate>
    </obj.normal>
    <obj.normal id="min" sha="75b4e88c0bf1aed550d559a1ea7974644e1a2274">
       <sDescription>minimum</sDescription>
@@ -29,7 +29,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%out%= (%in1%<%in2%)?%in1%:%in2%;]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= (inlet_in1[buffer_index]<inlet_in2[buffer_index])?inlet_in1[buffer_index]:inlet_in2[buffer_index];]]></code.srate>
    </obj.normal>
    <obj.normal id="min" sha="cfb037f0ea418a3cace92ef28a72962a2b6db14">
       <sDescription>minimum</sDescription>
@@ -45,6 +45,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= (%in1%<%in2%)?%in1%:%in2%;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= (inlet_in1<inlet_in2)?inlet_in1:inlet_in2;]]></code.krate>
    </obj.normal>
 </objdefs>

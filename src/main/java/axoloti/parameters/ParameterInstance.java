@@ -73,7 +73,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
     @Attribute(required = false)
     Integer MidiCC = null;
     AssignMidiCCComponent midiAssign;
-
+    
     public ParameterInstance() {
     }
 
@@ -90,6 +90,10 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
         }
     }
 
+    public String GetCName() {
+        return parameter.GetCName();
+    }
+    
     public void CopyValueFrom(ParameterInstance p) {
         if (p.onParent != null)
             setOnParent(p.onParent);
@@ -261,8 +265,8 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
     }
 
     public String indexName() {
-        //return "PEX_" + axoObj.GetCInstanceName()  + "_" + parameter.name;
-        return ("" + index);
+        return "PARAM_INDEX_" + axoObj.getLegalName() + "_" + getLegalName();
+//        return ("" + index);
     }
 
     public String getLegalName() {
@@ -293,7 +297,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
         if ((onParent != null) && (onParent) && (enableOnParent)) {
             return "%" + ControlOnParentName() + "%";
         } else {
-            return "parent2->" + PExName(vprefix) + ".finalvalue";
+            return PExName(vprefix) + ".finalvalue";
         }
     }
 
@@ -335,7 +339,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
     String GenerateMidiCCCodeSub(String vprefix, String value) {
         if (MidiCC != null) {
             return "        if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == " + MidiCC + ")) {\n"
-                    + "            PExParameterChange(&parent2->" + PExName(vprefix) + "," + value + ", 0xFFFD);\n"
+                    + "            PExParameterChange(&parent->" + PExName(vprefix) + "," + value + ", 0xFFFD);\n"
                     + "        }\n";
         } else {
             return "";
@@ -346,6 +350,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
         Parameter pcopy = parameter.getClone();
         pcopy.name = ControlOnParentName();
         pcopy.noLabel = null;
+        pcopy.PropagateToChild = axoObj.getLegalName() + "_" + getLegalName();
         return pcopy;
     }
 

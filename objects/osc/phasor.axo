@@ -21,10 +21,10 @@
       <code.declaration><![CDATA[uint32_t Phase;]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
       <code.krate><![CDATA[   uint32_t freq;
-   MTOFEXTENDED(%pitch% + %pitchm%,freq);
+   MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
 ]]></code.krate>
-      <code.srate><![CDATA[Phase += (freq>>0) + %fm%;
-   %phasor% = Phase>>5;
+      <code.srate><![CDATA[Phase += (freq>>0) + inlet_fm[buffer_index];
+   outlet_phasor[buffer_index] = Phase>>5;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

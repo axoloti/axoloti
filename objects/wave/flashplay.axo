@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="flashplay" sha="fa9d96b0101e245814c5df3a60d5dd75583462ad">
+   <obj.normal id="flashplay" sha="e97bdec1578cc24d2cd8147a1f004f866c971d16">
       <sDescription>Single-shot playback of a sample table in flash, without transposition</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -7,7 +7,7 @@
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <frac32buffer name="out" description="wave" SumBuffer="false"/>
+         <frac32buffer name="out" description="wave"/>
       </outlets>
       <displays/>
       <params/>
@@ -41,13 +41,13 @@ _pos=(int32_t)&_binary_%sample%_raw_size;
 ]]></code.init>
       <code.krate><![CDATA[extern int16_t _binary_%sample%_raw_size;
 extern int16_t _binary_%sample%_raw_start;
-if ((%trig%>0) && !ntrig) {_pos=0;  ntrig=1;}
-if (!(%trig%>0)) ntrig=0;
+if ((inlet_trig>0) && !ntrig) {_pos=0;  ntrig=1;}
+if (!(inlet_trig>0)) ntrig=0;
      int32_t i;
 if (_pos<((int)(&_binary_%sample%_raw_size)/2)-BUFSIZE) {
-    for(i=0;i<BUFSIZE;i++) (%out%)[i] = (((int16_t *)(&_binary_%sample%_raw_start))[_pos++])<<12;
+    for(i=0;i<BUFSIZE;i++) (outlet_out)[i] = (((int16_t *)(&_binary_%sample%_raw_start))[_pos++])<<12;
 } else {
-    for(i=0;i<BUFSIZE;i++) (%out%)[i] = 10000;
+    for(i=0;i<BUFSIZE;i++) (outlet_out)[i] = 0;
 }
 ]]></code.krate>
    </obj.normal>

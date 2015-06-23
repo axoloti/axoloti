@@ -18,7 +18,7 @@
 ]]></code.declaration>
       <code.init><![CDATA[  init_filter_biquad_A(&fd);
 ]]></code.init>
-      <code.krate><![CDATA[ f_filter_biquad_A(&fd,%in%,%out%,%frequency%,INT_MAX - (__USAT(%resonance%,27)<<4));
+      <code.krate><![CDATA[ f_filter_biquad_A(&fd,inlet_in,outlet_out,inlet_frequency,INT_MAX - (__USAT(inlet_resonance,27)<<4));
 ]]></code.krate>
    </obj.normal>
 </objdefs>

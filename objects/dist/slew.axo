@@ -21,19 +21,19 @@
 ]]></code.declaration>
       <code.init><![CDATA[acc = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if (%in%>acc){
-  if ((%in%-acc)>%slew%)
-    acc += %slew%;
+      <code.krate><![CDATA[if (inlet_in>acc){
+  if ((inlet_in-acc)>param_slew)
+    acc += param_slew;
   else
-    acc = %in%;
+    acc = inlet_in;
 } else {
-  if ((acc-%in%)>%slew%)
-    acc -= %slew%;
+  if ((acc-inlet_in)>param_slew)
+    acc -= param_slew;
   else
-    acc = %in%;
+    acc = inlet_in;
 }
 acc = __SSAT(acc,28);
-%out% = acc;
+outlet_out = acc;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="slew" sha="b21f230004310005f3550792d307774153a89670">
@@ -58,19 +58,19 @@ acc = __SSAT(acc,28);
 ]]></code.declaration>
       <code.init><![CDATA[acc = 0;
 ]]></code.init>
-      <code.srate><![CDATA[if (%in%>acc){
-  if ((%in%-acc)>%slew%)
-    acc += %slew%;
+      <code.srate><![CDATA[if (inlet_in[buffer_index]>acc){
+  if ((inlet_in[buffer_index]-acc)>param_slew)
+    acc += param_slew;
   else
-    acc = %in%;
+    acc = inlet_in[buffer_index];
 } else {
-  if ((acc-%in%)>%slew%)
-    acc -= %slew%;
+  if ((acc-inlet_in[buffer_index])>param_slew)
+    acc -= param_slew;
   else
-    acc = %in%;
+    acc = inlet_in[buffer_index];
 }
 acc = __SSAT(acc,28);
-%out% = acc;
+outlet_out[buffer_index] = acc;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

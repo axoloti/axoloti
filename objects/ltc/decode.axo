@@ -53,14 +53,14 @@ bo=0;
 sexp =(SAMPLERATE/160)/%fps%;
 subsample = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%h% = h;
-%m% = m;
-%s% = s;
-%f% = f;
-%smp% = subsample;
-%sync%=0;
+      <code.krate><![CDATA[outlet_h = h;
+outlet_m = m;
+outlet_s = s;
+outlet_f = f;
+outlet_smp = subsample;
+outlet_sync=0;
 ]]></code.krate>
-      <code.srate><![CDATA[int32_t i1 = %in%>>2;
+      <code.srate><![CDATA[int32_t i1 = inlet_in[buffer_index]>>2;
 int transition = ((psample>0)!=(i1>0));
 
 if (b == -1) {
@@ -88,7 +88,7 @@ if (b == -1) {
 				}
 				subsample = ((_i0<<6)/(_i0-_i1)) + 64*buffer_index;
                              if (f == 0) {
-                                 %sync% = 1;
+                                 outlet_sync = 1;
                              }
 			}
 		}

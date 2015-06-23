@@ -12,7 +12,7 @@
       </displays>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%v%=%in%;
+      <code.krate><![CDATA[disp_v=inlet_in;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="hex" sha="d872fe33dc9fb1838bb5864ed0f7a57d80e63937">
@@ -28,7 +28,7 @@
       </displays>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%v%=%in%;
+      <code.krate><![CDATA[disp_v=inlet_in;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="hex" sha="de6b83af9149f73fe665ab94616327c2c8162d88">
@@ -44,7 +44,7 @@
       </displays>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%v%=(int32_t)%in%;
+      <code.krate><![CDATA[disp_v=(int32_t)inlet_in;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

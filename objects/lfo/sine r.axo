@@ -22,17 +22,17 @@
       <code.declaration><![CDATA[uint32_t Phase;uint32_t r;
 ]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
-      <code.krate><![CDATA[      if (%reset% && r) {
-         Phase = %phase% << 4;
+      <code.krate><![CDATA[      if (inlet_reset && r) {
+         Phase = inlet_phase << 4;
          r = 0;
       } else {
-         if (!%reset%) r = 1;
+         if (!inlet_reset) r = 1;
      }   {      int32_t freq;
-      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
       Phase += freq>>2;
       int32_t r;
       SINE2TINTERP(Phase,r)
-      %wave%= (r>>4);
+      outlet_wave= (r>>4);
    }]]></code.krate>
    </obj.normal>
 </objdefs>

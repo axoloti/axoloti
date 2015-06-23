@@ -21,8 +21,8 @@
 ]]></code.declaration>
       <code.init><![CDATA[   val = 0;
 ]]></code.init>
-      <code.krate><![CDATA[   val = ___SMMLA(val-%in%,(-1<<26)+(%time%>>1),val);
-   %out%= val;
+      <code.krate><![CDATA[   val = ___SMMLA(val-inlet_in,(-1<<26)+(param_time>>1),val);
+   outlet_out= val;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

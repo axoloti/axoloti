@@ -335,10 +335,10 @@
 ]]></code.init>
       <code.srate><![CDATA[  if (state & 1)  {
      state = (state >> 1) ^ %polynomial%;
-     %out% = 1<<27;
+     outlet_out[buffer_index] = 1<<27;
   } else {
     state = (state >> 1);
-     %out% = -1<<27;
+     outlet_out[buffer_index] = -1<<27;
   }
 ]]></code.srate>
    </obj.normal>

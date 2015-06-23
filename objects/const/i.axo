@@ -12,7 +12,7 @@
       <attribs>
          <spinner name="value" MinValue="-2147483648" MaxValue="2147483647" DefaultValue="0"/>
       </attribs>
-      <code.krate><![CDATA[%out%= %value%;
+      <code.krate><![CDATA[outlet_out= %value%;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

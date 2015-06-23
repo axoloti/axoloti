@@ -12,11 +12,11 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[int8_t s = (%a%>>24)+4;
-uint8_t ei = %a%>>16;
+      <code.krate><![CDATA[int8_t s = (inlet_a>>24)+4;
+uint8_t ei = inlet_a>>16;
 if (s>=0)
-     %result% = expt[ei]<<s;
-else %result% = expt[ei]>>(-s);
+     outlet_result = expt[ei]<<s;
+else outlet_result = expt[ei]>>(-s);
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="exp" sha="5643db429ae8ad03e3d2e4b1fa362999d16aeb32">
@@ -32,11 +32,11 @@ else %result% = expt[ei]>>(-s);
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[int8_t s = (%a%>>24)+4;
-uint8_t ei = %a%>>16;
+      <code.srate><![CDATA[int8_t s = (inlet_a[buffer_index]>>24)+4;
+uint8_t ei = inlet_a[buffer_index]>>16;
 if (s>=0)
-     %result% = expt[ei]<<s;
-else %result% = expt[ei]>>(-s);
+     outlet_result[buffer_index] = expt[ei]<<s;
+else outlet_result[buffer_index] = expt[ei]>>(-s);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

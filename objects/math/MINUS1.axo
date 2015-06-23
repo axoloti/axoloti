@@ -12,7 +12,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%result%= %a%-(1<<21);]]></code.krate>
+      <code.krate><![CDATA[outlet_result= inlet_a-(1<<21);]]></code.krate>
    </obj.normal>
    <obj.normal id="-1" sha="348845f992e2b55fcb1530bb50f20aa1796b3b77">
       <sDescription>subtracts one unit</sDescription>
@@ -27,7 +27,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%result%= %a%-1;]]></code.krate>
+      <code.krate><![CDATA[outlet_result= inlet_a-1;]]></code.krate>
    </obj.normal>
    <obj.normal id="-1" sha="865bc959b6c58808058326cd97c849581add4863">
       <sDescription>subtracts one unit</sDescription>
@@ -42,6 +42,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%result%= %a%-(1<<21);]]></code.krate>
+      <code.krate><![CDATA[outlet_result= inlet_a-(1<<21);]]></code.krate>
    </obj.normal>
 </objdefs>

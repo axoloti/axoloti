@@ -90,4 +90,9 @@ public class Int32 implements DataType {
         int hash = 8;
         return hash;
     }
+    
+    @Override
+    public boolean isPointer() {
+        return false;
+    }    
 }

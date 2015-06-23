@@ -23,9 +23,9 @@
          </frac32.u.map.squaregain>
       </params>
       <attribs/>
-      <code.krate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
-   accum = ___SMMLA(%in2%,%gain2%,accum);
-;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+      <code.krate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
+   accum = ___SMMLA(inlet_in2,param_gain2,accum);
+;   outlet_out=  __SSAT(inlet_bus__in + (accum<<1),28);
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="mix 2 sq" sha="a8febd2e69615b475731e131166bc1b5cdf7c950">
@@ -52,9 +52,9 @@
          </frac32.u.map.squaregain>
       </params>
       <attribs/>
-      <code.srate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
-   accum = ___SMMLA(%in2%,%gain2%,accum);
-;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+      <code.srate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1[buffer_index],param_gain1);
+   accum = ___SMMLA(inlet_in2[buffer_index],param_gain2,accum);
+;   outlet_out[buffer_index]=  __SSAT(inlet_bus__in[buffer_index] + (accum<<1),28);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -10,6 +10,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%wave%= (int32_t)(GenerateRandomNumber())>>4;]]></code.krate>
+      <code.krate><![CDATA[outlet_wave= (int32_t)(GenerateRandomNumber())>>4;]]></code.krate>
    </obj.normal>
 </objdefs>

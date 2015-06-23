@@ -27,12 +27,12 @@
       <code.init><![CDATA[  ntrig = 0;
 _bw = 0;
 ]]></code.init>
-      <code.krate><![CDATA[  if ((%trig%>0) && !ntrig) {
+      <code.krate><![CDATA[  if ((inlet_trig>0) && !ntrig) {
     ntrig=1;
     FIL FileObject;
     FRESULT err;
     UINT bytes_read;
-    err = f_open(&FileObject, %filename%, FA_READ | FA_OPEN_EXISTING);
+    err = f_open(&FileObject, inlet_filename, FA_READ | FA_OPEN_EXISTING);
     if (err != FR_OK) {TransmitTextMessage("Open failed\n"); _bw = err; return;}
     int rem_sz = sizeof(*%table%.array)*%table%.LENGTH;
     int offset = 0;
@@ -52,8 +52,8 @@ _bw = 0;
     err = f_close(&FileObject);
     if (err != FR_OK) {TransmitTextMessage("Close failed\n");_bw = err; return;};
   }
-  else if (!(%trig%>0)) ntrig=0;
-%bw% = _bw;
+  else if (!(inlet_trig>0)) ntrig=0;
+outlet_bw = _bw;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

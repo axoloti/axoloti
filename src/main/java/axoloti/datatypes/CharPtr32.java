@@ -81,4 +81,9 @@ public class CharPtr32 implements DataType {
         int hash = 9;
         return hash;
     }
+    
+    @Override
+    public boolean isPointer() {
+        return true;
+    }    
 }

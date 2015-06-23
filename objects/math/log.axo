@@ -13,10 +13,10 @@
       <params/>
       <attribs/>
       <code.krate><![CDATA[Float_t f;
-f.f = %a%;
+f.f = inlet_a;
 int32_t r1 = ((f.parts.exponent&0x7F)-18) << 24;
 int32_t r3 = logt[f.parts.mantissa>>15]<<10;
-%result% = r1 + r3;
+outlet_result = r1 + r3;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="log" sha="ff1f4aeb54fc1d404d0bb1720dc013b79eaf36e8">
@@ -33,10 +33,10 @@ int32_t r3 = logt[f.parts.mantissa>>15]<<10;
       <params/>
       <attribs/>
       <code.srate><![CDATA[Float_t f;
-f.f = %a%;
+f.f = inlet_a[buffer_index];
 int32_t r1 = ((f.parts.exponent&0x7F)-18) << 24;
 int32_t r3 = logt[f.parts.mantissa>>15]<<10;
-%result% = r1 + r3;
+outlet_result[buffer_index] = r1 + r3;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -27,9 +27,9 @@
 ]]></code.declaration>
       <code.init><![CDATA[   val = 0;
 ]]></code.init>
-      <code.srate><![CDATA[   if (%gate%>0) val = ___SMMLA((1<<27)-val,(1<<26)-(%a%>>1)-(%am%>>1),val);
-   else val = ___SMMLA(val,(-1<<26)+(%d%>>1)+(%dm%>>1),val);
-   %env%= val;
+      <code.srate><![CDATA[   if (inlet_gate>0) val = ___SMMLA((1<<27)-val,(1<<26)-(param_a>>1)-(inlet_am>>1),val);
+   else val = ___SMMLA(val,(-1<<26)+(param_d>>1)+(inlet_dm>>1),val);
+   outlet_env[buffer_index]= val;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

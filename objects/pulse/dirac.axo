@@ -16,15 +16,15 @@
 ]]></code.declaration>
       <code.init><![CDATA[ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {
    ntrig = 1;
    int i;
-   %out%[0]=1<<27;
-   for(i=1;i<BUFSIZE;i++) %out%[i]=0;
+   outlet_out[0]=1<<27;
+   for(i=1;i<BUFSIZE;i++) outlet_out[i]=0;
 } else {
    int i;
-   for(i=0;i<BUFSIZE;i++) %out%[i]=0;
-   if (!(%trig%>0)) ntrig=0;
+   for(i=0;i<BUFSIZE;i++) outlet_out[i]=0;
+   if (!(inlet_trig>0)) ntrig=0;
 }
 ]]></code.krate>
    </obj.normal>

@@ -21,11 +21,11 @@
 p_reset = 0;
 op = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%set%>0) && !p_set) {op = 1; p_set=1;}
-if ((%reset%>0) && !p_reset) {op = 0; p_reset=1;}
-if (!(%set%>0)) p_set=0;
-if (!(%reset%>0)) p_reset=0;
-%o%= (op<<27);
+      <code.krate><![CDATA[if ((inlet_set>0) && !p_set) {op = 1; p_set=1;}
+if ((inlet_reset>0) && !p_reset) {op = 0; p_reset=1;}
+if (!(inlet_set>0)) p_set=0;
+if (!(inlet_reset>0)) p_reset=0;
+outlet_o= (op<<27);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

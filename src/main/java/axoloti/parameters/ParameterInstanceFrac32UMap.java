@@ -147,9 +147,9 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U {
                     continue;
                 }
                 int modulation_index = mod.Modulations.indexOf(m);
-                s += "  parent2->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].PEx = &" + PExName(vprefix) + ";\n";
-                s += "  parent2->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].amount = " + m.getValue().getRaw() + ";\n";
-                s += "  parent2->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].prod = 0;\n";
+                s += "  parent->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].PEx = &" + PExName(vprefix) + ";\n";
+                s += "  parent->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].amount = " + m.getValue().getRaw() + ";\n";
+                s += "  parent->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].prod = 0;\n";
             }
         }
         return s;

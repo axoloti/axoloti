@@ -14,8 +14,8 @@
       <attribs/>
       <code.krate><![CDATA[   {
        int32_t r;
-       HANNING2TINTERP(%phase%<<5,r)
-       %win%= (r>>4);
+       HANNING2TINTERP(inlet_phase<<5,r)
+       outlet_win= (r>>4);
    }]]></code.krate>
    </obj.normal>
    <obj.normal id="window" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d">
@@ -33,8 +33,8 @@
       <attribs/>
       <code.srate><![CDATA[   {
        int32_t r;
-       HANNING2TINTERP(%phase%<<5,r)
-       %win%= (r>>4);
+       HANNING2TINTERP(inlet_phase[buffer_index]<<5,r)
+       outlet_win[buffer_index]= (r>>4);
    }]]></code.srate>
    </obj.normal>
 </objdefs>

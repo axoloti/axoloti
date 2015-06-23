@@ -34,14 +34,14 @@ int16_t delayline[%delaylength%];
    delaywindex = 0;
    delayrindex = 1;
 ]]></code.init>
-      <code.krate><![CDATA[  int32_t _mix = %mix% + %mixm%;
-   int32_t _fdbk = %feedback% + %feedbackm%;
+      <code.krate><![CDATA[  int32_t _mix = param_mix + inlet_mixm;
+   int32_t _fdbk = param_feedback + inlet_feedbackm;
 ]]></code.krate>
       <code.srate><![CDATA[ int32_t rd = delayline[delayrindex++];
-delayline[delaywindex++] = __SSAT((%in%>>15) + ___SMMUL(rd<<5,_fdbk),16);
+delayline[delaywindex++] = __SSAT((inlet_in[buffer_index]>>15) + ___SMMUL(rd<<5,_fdbk),16);
 if (delayrindex == %delaylength%) delayrindex = 0;
 if (delaywindex == %delaylength%) delaywindex = 0;
-%out% = (%in%>>1) + (___SMMUL(rd<<16,_mix<<2));
+outlet_out[buffer_index] = (inlet_in[buffer_index]>>1) + (___SMMUL(rd<<16,_mix<<2));
 ]]></code.srate>
    </obj.normal>
 </objdefs>

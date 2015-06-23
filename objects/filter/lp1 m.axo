@@ -23,10 +23,10 @@
       <code.init><![CDATA[val = 0;
 ]]></code.init>
       <code.krate><![CDATA[int32_t f;
-   MTOF(%freq%+%freqm%,f);
+   MTOF(param_freq+inlet_freqm,f);
 ]]></code.krate>
-      <code.srate><![CDATA[   val = ___SMMLA((%in%-val)<<1,f,val);
-   %out%= val;
+      <code.srate><![CDATA[   val = ___SMMLA((inlet_in[buffer_index]-val)<<1,f,val);
+   outlet_out[buffer_index]= val;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

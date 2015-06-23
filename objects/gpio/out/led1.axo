@@ -11,6 +11,6 @@
       <params/>
       <attribs/>
       <code.init><![CDATA[   palSetPadMode(LED1_PORT,LED1_PIN,PAL_MODE_OUTPUT_PUSHPULL);]]></code.init>
-      <code.krate><![CDATA[   palWritePad(LED1_PORT,LED1_PIN,(%in%>0));]]></code.krate>
+      <code.krate><![CDATA[   palWritePad(LED1_PORT,LED1_PIN,(inlet_in>0));]]></code.krate>
    </obj.normal>
 </objdefs>

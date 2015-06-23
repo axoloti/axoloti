@@ -20,9 +20,9 @@ uint8_t _rvelo;
 ]]></code.declaration>
       <code.init><![CDATA[_gate = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%gate%= _gate<<27;
-%velocity%= _velo<<20;
-%releaseVelocity%= _rvelo<<20;
+      <code.krate><![CDATA[outlet_gate= _gate<<27;
+outlet_velocity= _velo<<20;
+outlet_releaseVelocity= _rvelo<<20;
 ]]></code.krate>
       <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {if (data1 == %note%) {
    _velo = data2;

@@ -19,9 +19,9 @@
       <attribs>
          <objref name="delayname"/>
       </attribs>
-      <code.krate><![CDATA[   uint32_t delay = %delayname%.writepos - (__USAT(%time% + %timem%,27)>>(27-%delayname%.LENGTHPOW)) - BUFSIZE;
+      <code.krate><![CDATA[   uint32_t delay = %delayname%.writepos - (__USAT(param_time + inlet_timem,27)>>(27-%delayname%.LENGTHPOW)) - BUFSIZE;
 ]]></code.krate>
-      <code.srate><![CDATA[  %out%= %delayname%.array[(delay++) & %delayname%.LENGTHMASK]<<14;
+      <code.srate><![CDATA[  outlet_out[buffer_index]= %delayname%.array[(delay++) & %delayname%.LENGTHMASK]<<14;
 ]]></code.srate>
    </obj.normal>
    <obj.normal id="read" sha="9428f1942521d9e80e7ca58ea38e1d417220e94f">
@@ -44,8 +44,8 @@
       <attribs>
          <objref name="delayname"/>
       </attribs>
-      <code.srate><![CDATA[      uint32_t delay1 = %delayname%.writepos - (__USAT(%time% + %timem%,27)>>(27-%delayname%.LENGTHPOW)) - BUFSIZE + buffer_index;
-      %out%= %delayname%.array[delay1 & %delayname%.LENGTHMASK]<<14;
+      <code.srate><![CDATA[      uint32_t delay1 = %delayname%.writepos - (__USAT(param_time + inlet_timem[buffer_index],27)>>(27-%delayname%.LENGTHPOW)) - BUFSIZE + buffer_index;
+      outlet_out[buffer_index]= %delayname%.array[delay1 & %delayname%.LENGTHMASK]<<14;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

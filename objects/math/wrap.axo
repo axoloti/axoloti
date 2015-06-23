@@ -14,7 +14,7 @@
       <attribs>
          <spinner name="bits" MinValue="0" MaxValue="27" DefaultValue="7"/>
       </attribs>
-      <code.krate><![CDATA[   %b%= (%a%<<%bits%) & ((1<<27)-1);
+      <code.krate><![CDATA[   outlet_b= (inlet_a<<%bits%) & ((1<<27)-1);
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="wrap" sha="ab95c4e2b122c98a94e2f369315e05c4809b07a8">
@@ -32,7 +32,7 @@
       <attribs>
          <spinner name="bits" MinValue="0" MaxValue="27" DefaultValue="7"/>
       </attribs>
-      <code.srate><![CDATA[   %b%= (%a%<<%bits%) & ((1<<27)-1);
+      <code.srate><![CDATA[   outlet_b[buffer_index]= (inlet_a[buffer_index]<<%bits%) & ((1<<27)-1);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

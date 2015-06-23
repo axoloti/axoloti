@@ -7,7 +7,7 @@
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <frac32.positive name="env" description="envelope output" SumBuffer="false"/>
+         <frac32.positive name="env" description="envelope output"/>
       </outlets>
       <displays/>
       <params>
@@ -21,9 +21,9 @@
 ]]></code.declaration>
       <code.init><![CDATA[val = 0;
 ]]></code.init>
-      <code.krate><![CDATA[   if (%trig%>0) val =1<<27;
-   else val -= ___SMMUL(val, %d%>>1);
-   %env% = val;
+      <code.krate><![CDATA[   if (inlet_trig>0) val =1<<27;
+   else val -= ___SMMUL(val, param_d>>1);
+   outlet_env = val;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

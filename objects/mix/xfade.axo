@@ -15,9 +15,9 @@
       <params/>
       <attribs/>
       <code.krate><![CDATA[   {
-      int64_t a = (int64_t)%i2% * %c%;
-      a += (int64_t)%i1% * ((128<<20)-%c%);
-      %o%= a>>27;
+      int64_t a = (int64_t)inlet_i2 * inlet_c;
+      a += (int64_t)inlet_i1 * ((128<<20)-inlet_c);
+      outlet_o= a>>27;
    }
 ]]></code.krate>
    </obj.normal>
@@ -37,9 +37,9 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[   {
-      int64_t a = (int64_t)%i2% * %c%;
-      a += (int64_t)%i1% * ((128<<20)-%c%);
-      %o%= a>>27;
+      int64_t a = (int64_t)inlet_i2[buffer_index] * inlet_c[buffer_index];
+      a += (int64_t)inlet_i1[buffer_index] * ((128<<20)-inlet_c[buffer_index]);
+      outlet_o[buffer_index]= a>>27;
    }
 ]]></code.srate>
    </obj.normal>
@@ -58,12 +58,12 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   int32_t ccompl = ((128<<20)-%c%);
+      <code.krate><![CDATA[   int32_t ccompl = ((128<<20)-inlet_c);
 ]]></code.krate>
       <code.srate><![CDATA[   {
-      int64_t a = (int64_t)%i2% * %c%;
-      a += (int64_t)%i1% * ccompl;
-      %o%= a>>27;
+      int64_t a = (int64_t)inlet_i2[buffer_index] * inlet_c;
+      a += (int64_t)inlet_i1[buffer_index] * ccompl;
+      outlet_o[buffer_index]= a>>27;
    }
 ]]></code.srate>
    </obj.normal>

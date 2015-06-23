@@ -20,11 +20,11 @@
 rtrig = 0;
 accu = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {accu += %i%; ntrig=1; accu = __SSAT(accu,28);}
-if (!(%trig%>0)) ntrig=0;
-if ((%rst%>0) && !rtrig) {accu = 0; rtrig=1;}
-if (!(%rst%>0)) rtrig=0;
-%o%= accu;
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {accu += inlet_i; ntrig=1; accu = __SSAT(accu,28);}
+if (!(inlet_trig>0)) ntrig=0;
+if ((inlet_rst>0) && !rtrig) {accu = 0; rtrig=1;}
+if (!(inlet_rst>0)) rtrig=0;
+outlet_o= accu;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

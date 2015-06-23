@@ -19,8 +19,8 @@ DAC->CR |= 0x00030003;
       <code.dispose><![CDATA[DAC->CR = 0x0;
 RCC->APB1ENR &= ~0x20000000;
 ]]></code.dispose>
-      <code.krate><![CDATA[DAC->DHR12R1 = %PA4%>>15;
-DAC->DHR12R2 = %PA5%>>15;
+      <code.krate><![CDATA[DAC->DHR12R1 = inlet_PA4>>15;
+DAC->DHR12R2 = inlet_PA5>>15;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

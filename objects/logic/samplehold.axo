@@ -17,9 +17,9 @@
 ]]></code.declaration>
       <code.init><![CDATA[hold = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if (%s_h%<=0)
-   hold = %in%;
-%out% = hold;
+      <code.krate><![CDATA[if (inlet_s__h<=0)
+   hold = inlet_in;
+outlet_out = hold;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="samplehold" sha="37856879cf6c0ba2d84d25bca330b3c3615d474">
@@ -40,9 +40,9 @@
 ]]></code.declaration>
       <code.init><![CDATA[hold = 0;
 ]]></code.init>
-      <code.srate><![CDATA[if (%s_h%<=0)
-   hold = %in%;
-%out% = hold;
+      <code.srate><![CDATA[if (inlet_s__h[buffer_index]<=0)
+   hold = inlet_in[buffer_index];
+outlet_out[buffer_index] = hold;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

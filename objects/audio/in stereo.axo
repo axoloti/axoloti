@@ -16,11 +16,11 @@
       <attribs/>
       <code.krate><![CDATA[int j;
 for(j=0;j<BUFSIZE;j++){
-   %left%[j] = AudioInputLeft[j];
-   %right%[j] = AudioInputRight[j];
+   outlet_left[j] = AudioInputLeft[j];
+   outlet_right[j] = AudioInputRight[j];
 }
-%vuLeft%=%left%[0];
-%vuRight%=%right%[0];
+disp_vuLeft=outlet_left[0];
+disp_vuRight=outlet_right[0];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

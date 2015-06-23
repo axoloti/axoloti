@@ -20,9 +20,9 @@ int32_t _pos_shadow;
 _pos = 0;
 _pos_shadow = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%active% = _active;
-%pos4ppq% = _pos/6;
-%pos24ppq% = _pos;
+      <code.krate><![CDATA[outlet_active = _active;
+outlet_pos4ppq = _pos/6;
+outlet_pos24ppq = _pos;
 ]]></code.krate>
       <code.midihandler><![CDATA[if (status == MIDI_TIMING_CLOCK) {
   _active = 1;

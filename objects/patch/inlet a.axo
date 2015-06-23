@@ -12,6 +12,6 @@
       <attribs/>
       <code.declaration><![CDATA[int32buffer _inlet;
 ]]></code.declaration>
-      <code.srate><![CDATA[   %inlet% = _inlet[buffer_index];]]></code.srate>
+      <code.srate><![CDATA[   outlet_inlet[buffer_index] = _inlet[buffer_index];]]></code.srate>
    </obj.normal>
 </objdefs>

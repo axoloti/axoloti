@@ -18,7 +18,7 @@
          </frac32.s.map.ratio>
       </params>
       <attribs/>
-      <code.krate><![CDATA[%left% = ___SMMUL((1<<29)-(%c%<<2),%i1%)<<2;%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;]]></code.krate>
+      <code.krate><![CDATA[outlet_left = ___SMMUL((1<<29)-(param_c<<2),inlet_i1)<<2;outlet_right = ___SMMUL((1<<29)+(param_c<<2),inlet_i1)<<2;]]></code.krate>
    </obj.normal>
    <obj.normal id="pan" sha="ae1048aeefcb0da9fc2ba40a0e6396e222807375">
       <sDescription>stereo balance (panorama)</sDescription>
@@ -39,6 +39,6 @@
          </frac32.s.map.ratio>
       </params>
       <attribs/>
-      <code.srate><![CDATA[%left% = ___SMMUL((1<<29)-(%c%<<2),%i1%)<<2;%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;]]></code.srate>
+      <code.srate><![CDATA[outlet_left[buffer_index] = ___SMMUL((1<<29)-(param_c<<2),inlet_i1[buffer_index])<<2;outlet_right[buffer_index] = ___SMMUL((1<<29)+(param_c<<2),inlet_i1[buffer_index])<<2;]]></code.srate>
    </obj.normal>
 </objdefs>

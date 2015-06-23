@@ -29,11 +29,11 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0) {
-      case 0: %o%= %v0%; break;
-      case 1: %o%= %v1%; break;
-      case 2: %o%= %v2%; break;
-      case 3: default: %o%= %v3%; break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0) {
+      case 0: outlet_o= param_v0; break;
+      case 1: outlet_o= param_v1; break;
+      case 2: outlet_o= param_v2; break;
+      case 3: default: outlet_o= param_v3; break;
    }
 ]]></code.krate>
    </obj.normal>

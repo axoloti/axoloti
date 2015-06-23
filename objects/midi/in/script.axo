@@ -17,8 +17,8 @@
 ]]></code.declaration>
       <code.init><![CDATA[out1=0;out2=0;
 ]]></code.init>
-      <code.krate><![CDATA[%out1_% = this->out1;
-%out2_% = this->out2;
+      <code.krate><![CDATA[outlet_out1__ = this->out1;
+outlet_out2__ = this->out2;
 ]]></code.krate>
       <code.midihandler><![CDATA[%script%]]></code.midihandler>
    </obj.normal>

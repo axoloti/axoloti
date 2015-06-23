@@ -16,11 +16,11 @@
       </attribs>
       <code.declaration><![CDATA[   int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) {
+      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {
       ntrig=1;
-      %table%.array[__USAT(%a%,27)>>(27-%table%.LENGTHPOW)]=__SSAT(%v%,28)>>%table%.GAIN;
+      %table%.array[__USAT(inlet_a,27)>>(27-%table%.LENGTHPOW)]=__SSAT(inlet_v,28)>>%table%.GAIN;
    }
-   if (!(%trig%>0)) ntrig=0;
+   if (!(inlet_trig>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="write" sha="27fd4ced2949a883990a38df165fea0d15e1bc2b">
@@ -40,12 +40,12 @@
       </attribs>
       <code.declaration><![CDATA[   int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) {
+      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {
       ntrig=1;
-      if (%a%<%table%.LENGTH)
-         %table%.array[%a%]=__SSAT(%v%,28)>>%table%.GAIN;
+      if (inlet_a<%table%.LENGTH)
+         %table%.array[inlet_a]=__SSAT(inlet_v,28)>>%table%.GAIN;
    }
-   if (!(%trig%>0)) ntrig=0;
+   if (!(inlet_trig>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

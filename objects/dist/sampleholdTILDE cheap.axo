@@ -19,11 +19,11 @@
       <code.init><![CDATA[  in0 = 0;
   hold = 0;
 ]]></code.init>
-      <code.srate><![CDATA[  if ((%trig%>0)&&!(in0>0)){
-    hold = %in%>>1;
+      <code.srate><![CDATA[  if ((inlet_trig[buffer_index]>0)&&!(in0>0)){
+    hold = inlet_in[buffer_index]>>1;
   }
-  in0 = %trig%;
-  %out% = hold;
+  in0 = inlet_trig[buffer_index];
+  outlet_out[buffer_index] = hold;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

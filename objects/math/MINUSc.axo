@@ -17,7 +17,7 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in%- %c%;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in- param_c;]]></code.krate>
    </obj.normal>
    <obj.normal id="-c" sha="3ce2337e3d146554f568711a6b81d3578b0c92e0">
       <sDescription>subtract constant</sDescription>
@@ -37,6 +37,6 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.srate><![CDATA[%out%= %in%- %c%;]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index]- param_c;]]></code.srate>
    </obj.normal>
 </objdefs>

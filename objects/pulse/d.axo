@@ -23,11 +23,11 @@ int ntrig;
       <code.init><![CDATA[val = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) { val =1<<27; ntrig=1;}
-   else { if (!(%trig%>0)) ntrig=0; }
+      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) { val =1<<27; ntrig=1;}
+   else { if (!(inlet_trig>0)) ntrig=0; }
 ]]></code.krate>
-      <code.srate><![CDATA[   %env% = val;
-val -= ___SMMUL(val, %d%>>1);
+      <code.srate><![CDATA[   outlet_env[buffer_index] = val;
+val -= ___SMMUL(val, param_d>>1);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

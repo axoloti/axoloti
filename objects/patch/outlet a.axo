@@ -12,7 +12,7 @@
       <attribs/>
       <code.declaration><![CDATA[int32buffer _outlet;
 ]]></code.declaration>
-      <code.srate><![CDATA[   _outlet[buffer_index] = %outlet%;
+      <code.srate><![CDATA[   _outlet[buffer_index] = inlet_outlet[buffer_index];
 ]]></code.srate>
    </obj.normal>
 </objdefs>

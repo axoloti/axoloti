@@ -40,6 +40,7 @@ import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
+import axoloti.utils.CharEscape;
 import axoloti.utils.Constants;
 import displays.DisplayInstance;
 import java.awt.Dimension;
@@ -728,13 +729,13 @@ public class Patch {
     /* the c++ code generator */
     String GeneratePexchAndDisplayCode() {
         String c = "";
-        c += "    static const int NPEXCH = " + +ParameterInstances.size() + ";\n";
+        c += "    static const uint32_t NPEXCH = " + +ParameterInstances.size() + ";\n";
         c += "    ParameterExchange_t PExch[NPEXCH];\n";
-        c += "    int displayVector[" + (displayDataLength + 3) + "];\n";
-        c += "    static const int NPRESETS = " + settings.GetNPresets() + ";\n";
-        c += "    static const int NPRESET_ENTRIES = " + settings.GetNPresetEntries() + ";\n";
-        c += "    static const int NMODULATIONSOURCES = " + settings.GetNModulationSources() + ";\n";
-        c += "    static const int NMODULATIONTARGETS = " + settings.GetNModulationTargetsPerSource() + ";\n";
+        c += "    int32_t displayVector[" + (displayDataLength + 3) + "];\n";
+        c += "    static const uint32_t NPRESETS = " + settings.GetNPresets() + ";\n";
+        c += "    static const uint32_t NPRESET_ENTRIES = " + settings.GetNPresetEntries() + ";\n";
+        c += "    static const uint32_t NMODULATIONSOURCES = " + settings.GetNModulationSources() + ";\n";
+        c += "    static const uint32_t NMODULATIONTARGETS = " + settings.GetNModulationTargetsPerSource() + ";\n";
         c += "    PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS];\n";
         /*
          c += "    void PExParameterChange(int index, int32_t value, int32_t mask) {\n"
@@ -794,7 +795,7 @@ public class Patch {
     String GenerateStructCodePlusPlusSub(String classname, boolean enableOnParent) {
         String c = "";
         c += GeneratePexchAndDisplayCode();
-        c += GenerateObjectCode(classname, enableOnParent, "parent2->");
+        c += GenerateObjectCode(classname, enableOnParent, "parent->");
         return c;
     }
 
@@ -871,15 +872,17 @@ public class Patch {
     String GenerateObjInitCodePlusPlusSub(String className, String parentReference) {
         String c = "";
         for (AxoObjectInstanceAbstract o : objectinstances) {
-//            if (o.hasStruct()) {
-//                c += "   " + o.GenerateInitFunctionName() + "( &data->" + o.getInstanceName() + ");\n";
-//            } else {
-//                c += "   " + o.GenerateInitFunctionName() + "();\n";
             String s = o.getCInstanceName();
             if (!s.isEmpty()) {
-                c += "   " + o.getCInstanceName() + "_i.Init(" + parentReference + ");\n";
+                c += "   " + o.getCInstanceName() + "_i.Init(" + parentReference;
+                for (DisplayInstance i : o.GetDisplayInstances()) {
+                    if (i.display.getLength() > 0) {
+                        c += ", ";
+                        c += i.valueName("");
+                    }
+                }
+                c += " );\n";
             }
-            //            }
         }
         return c;
     }
@@ -895,8 +898,7 @@ public class Patch {
         c += "      PExch[j].modvalue = p[j];\n";
         c += "      PExch[j].signals = 0;\n";
         c += "      PExch[j].pfunction = 0;\n";
-        c += "      PExch[j].finalvalue = p[j];\n"; /*TBC*/
-
+//        c += "      PExch[j].finalvalue = p[j];\n"; /*TBC*/
         c += "   }\n";
         c += "   for(i=0;i<NMODULATIONSOURCES;i++) {\n"
                 + "	 for(j=0;j<NMODULATIONTARGETS;j++) {\n"
@@ -915,6 +917,14 @@ public class Patch {
         c += "void Init() {\n";
         c += GenerateParamInitCodePlusPlusSub("", "this");
         c += GenerateObjInitCodePlusPlusSub("", "this");
+        c += "      int k;\n"
+                + "      for (k = 0; k < NPEXCH; k++) {\n"
+                + "        if (PExch[k].pfunction){\n"
+                + "          (PExch[k].pfunction)(&PExch[k]);\n"
+                + "        } else {\n"
+                + "          PExch[k].finalvalue = PExch[k].value;\n"
+                + "        }\n"
+                + "      }\n";
         c += "}\n\n";
         return c;
     }
@@ -942,7 +952,7 @@ public class Patch {
         return c;
     }
 
-    String GenerateDSPCodePlusPlusSub(String ClassName) {
+    String GenerateDSPCodePlusPlusSub(String ClassName, boolean enableOnParent) {
         String c = "";
         c += "//--------- <nets> -----------//\n";
         for (Net n : nets) {
@@ -1012,6 +1022,24 @@ public class Patch {
                 }
                 needsComma = true;
             }
+            for (ParameterInstance i : o.getParameterInstances()) {
+                if (i.parameter.PropagateToChild == null) {
+                    if (needsComma) {
+                        c += ", ";
+                    }
+                    c += i.variableName("", false);
+                    needsComma = true;
+                }
+            }
+            for (DisplayInstance i : o.GetDisplayInstances()) {
+                if (i.display.getLength() > 0) {
+                    if (needsComma) {
+                        c += ", ";
+                    }
+                    c += i.valueName("");
+                    needsComma = true;
+                }
+            }
             c += ");\n";
 //            c += "// --------" + o.getInstanceName() + "---------\n";
 //            c += o.GenerateKRateCode("data->");
@@ -1042,14 +1070,14 @@ public class Patch {
         return c;
     }
 
-    String GenerateDSPCodePlusPlus(String ClassName) {
+    String GenerateDSPCodePlusPlus(String ClassName, boolean enableOnParent) {
         String c;
         c = "/* krate */\n";
         c += "void dsp (void) {\n";
         c += "  int i;\n";
         c += "  for(i=0;i<BUFSIZE;i++) AudioOutputLeft[i]=0;\n";
         c += "  for(i=0;i<BUFSIZE;i++) AudioOutputRight[i]=0;\n";
-        c += GenerateDSPCodePlusPlusSub(ClassName);
+        c += GenerateDSPCodePlusPlusSub(ClassName, enableOnParent);
         c += "}\n\n";
         return c;
     }
@@ -1147,12 +1175,17 @@ public class Patch {
         c += "     int32buffer AudioOutputLeft;\n";
         c += "     int32buffer AudioOutputRight;\n";
 
+        c += "static void PropagateToSub(ParameterExchange_t *origin) {\n"
+                + "      ParameterExchange_t *pex = (ParameterExchange_t *)origin->finalvalue;\n"
+                + "      PExParameterChange(pex,origin->modvalue,0xFFFFFFEE);\n"
+                + "}\n";
+
         c += GenerateStructCodePlusPlus("rootc", false, "rootc")
                 + GenerateParamInitCode3("rootc")
                 + GeneratePresetCode3("rootc")
                 + GenerateInitCodePlusPlus("rootc")
                 + GenerateDisposeCodePlusPlus("rootc")
-                + GenerateDSPCodePlusPlus("rootc")
+                + GenerateDSPCodePlusPlus("rootc", false)
                 + GenerateMidiCodePlusPlus("rootc")
                 + GeneratePatchCodePlusPlus("rootc");
         if (settings == null) {
@@ -1217,18 +1250,18 @@ public class Patch {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("inlet") || o.typeName.equals("inlet_i") || o.typeName.equals("inlet_b")
                     || o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
-                ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = %" + o.getInstanceName() + "%;\n";
+                ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getInstanceName() + ";\n";
             } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
-                ao.sKRateCode += "   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = %" + o.getInstanceName() + "%[i];\n";
+                ao.sKRateCode += "   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = inlet_" + o.getInstanceName() + "[i];\n";
             }
         }
-        ao.sKRateCode += GenerateDSPCodePlusPlusSub("%parent%");
+        ao.sKRateCode += GenerateDSPCodePlusPlusSub("%parent%", true);
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("outlet") || o.typeName.equals("outlet_i") || o.typeName.equals("outlet_b")
                     || o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   %" + o.getInstanceName() + "% = " + o.getCInstanceName() + "_i._outlet;\n";
+                ao.sKRateCode += "   outlet_" + o.getInstanceName() + " = " + o.getCInstanceName() + "_i._outlet;\n";
             } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
-                ao.sKRateCode += "      for(i=0;i<BUFSIZE;i++) %" + o.getInstanceName() + "%[i] = " + o.getCInstanceName() + "_i._outlet[i];\n";
+                ao.sKRateCode += "      for(i=0;i<BUFSIZE;i++) outlet_" + o.getInstanceName() + "[i] = " + o.getCInstanceName() + "_i._outlet[i];\n";
             }
         }
 
@@ -1335,12 +1368,19 @@ public class Patch {
 
         ao.sLocalData = GenerateParamInitCode3("");
         ao.sLocalData += GeneratePexchAndDisplayCode();
+        ao.sLocalData += "/* parameter instance indices */\n";
+        int k = 0;
+        for (ParameterInstance p : ParameterInstances) {
+            ao.sLocalData += "static const int PARAM_INDEX_" + p.axoObj.getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
+            k++;
+        }
+
         ao.sLocalData += GeneratePresetCode3("");
         ao.sLocalData += "class voice {\n";
         ao.sLocalData += "   public:\n";
         ao.sLocalData += "   int polyIndex;\n";
         ao.sLocalData += GeneratePexchAndDisplayCode();
-        ao.sLocalData += GenerateObjectCode("voice", true, "parent2->common->");
+        ao.sLocalData += GenerateObjectCode("voice", true, "parent->common->");
         ao.sLocalData += "%parent% *common;\n";
         ao.sLocalData += "void Init(voice *parent) {\n";
         ao.sLocalData += "        int i;\n"
@@ -1350,7 +1390,7 @@ public class Patch {
         ao.sLocalData += GenerateObjInitCodePlusPlusSub("voice", "parent");
         ao.sLocalData += "}\n\n";
         ao.sLocalData += "void dsp(void) {\n int i;\n";
-        ao.sLocalData += GenerateDSPCodePlusPlusSub("");
+        ao.sLocalData += GenerateDSPCodePlusPlusSub("", true);
         ao.sLocalData += "}\n";
         ao.sLocalData += "void dispose(void) {\n int i;\n";
         ao.sLocalData += GenerateDisposeCodePlusPlusSub("");
@@ -1367,7 +1407,6 @@ public class Patch {
                 + "      int vi;\n"
                 + "      for (vi = 0; vi < %poly%; vi++) {\n"
                 + "        PExParameterChange(pex,origin->modvalue,0xFFFFFFEE);\n"
-                //                + "        pex += sizeof(voice); // dirty trick...\n"
                 + "          pex = (ParameterExchange_t *)((int)pex + sizeof(voice)); // dirty trick...\n"
                 + "      }"
                 + "}\n";
@@ -1401,7 +1440,7 @@ public class Patch {
                 + "        } else {\n"
                 + "          PExch[k].finalvalue = PExch[k].value;\n"
                 + "        }\n"
-                + "      }"
+                + "      }\n"
                 + "priority=0;\n"
                 + "sustain=0;\n";
         ao.sDisposeCode = "int vi; for(vi=0;vi<%poly%;vi++) {\n"
@@ -1412,11 +1451,11 @@ public class Patch {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("outlet") || o.typeName.equals("outlet_i") || o.typeName.equals("outlet_b")
                     || o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   %" + o.getInstanceName() + "% = 0;\n";
+                ao.sKRateCode += "   outlet_" + o.getInstanceName() + " = 0;\n";
             } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
-                        + "      for(j=0;j<BUFSIZE;j++) %" + o.getInstanceName() + "%[j] = 0;\n"
+                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getInstanceName() + "[j] = 0;\n"
                         + "}\n";
             }
         }
@@ -1425,9 +1464,9 @@ public class Patch {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("inlet") || o.typeName.equals("inlet_i") || o.typeName.equals("inlet_b")
                     || o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
-                ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = %" + o.getInstanceName() + "%;\n";
+                ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = inlet_" + o.getInstanceName() + ";\n";
             } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
-                ao.sKRateCode += "{int j; for(j=0;j<BUFSIZE;j++) getVoices()[vi]." + o.getCInstanceName() + "_i._inlet[j] = %" + o.getInstanceName() + "%[j];}\n";
+                ao.sKRateCode += "{int j; for(j=0;j<BUFSIZE;j++) getVoices()[vi]." + o.getCInstanceName() + "_i._inlet[j] = inlet_" + o.getInstanceName() + "[j];}\n";
             }
         }
         ao.sKRateCode += "getVoices()[vi].dsp();\n";
@@ -1435,11 +1474,11 @@ public class Patch {
             if (o.typeName.equals("outlet") || o.typeName.equals("patch/outlet f")
                     || o.typeName.equals("outlet_i") || o.typeName.equals("patch/outlet i")
                     || o.typeName.equals("outlet_b") || o.typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   %" + o.getInstanceName() + "% += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
+                ao.sKRateCode += "   outlet_" + o.getInstanceName() + " += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
             } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
-                        + "      for(j=0;j<BUFSIZE;j++) %" + o.getInstanceName() + "%[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
+                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getInstanceName() + "[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
                         + "}\n";
             }
         }

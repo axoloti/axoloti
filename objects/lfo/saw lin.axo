@@ -20,14 +20,14 @@ uint32_t r;
    r = 1;
 ]]></code.init>
       <code.krate><![CDATA[   {
-      if (%reset% && r) {
+      if (inlet_reset && r) {
          Phase = 0;
          r = 0;
       } else {
-         if (!%reset%) r = 1;
-         Phase += %freq%>>2;
+         if (!inlet_reset) r = 1;
+         Phase += inlet_freq>>2;
       }
-      %wave%= (Phase>>5);
+      outlet_wave= (Phase>>5);
    }]]></code.krate>
    </obj.normal>
 </objdefs>

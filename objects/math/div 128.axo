@@ -12,7 +12,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in%>>7;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in>>7;]]></code.krate>
    </obj.normal>
    <obj.normal id="div 128" sha="aa7549935e09851ad1af5dc9e994f4127f92eb78">
       <sDescription>divide by 128</sDescription>
@@ -27,7 +27,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%out%= %in%>>7;]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index]>>7;]]></code.srate>
    </obj.normal>
    <obj.normal id="div 128" sha="ab65359b0336a54beb70c69ca18ae7e17c5eee9d">
       <sDescription>divide by 128</sDescription>
@@ -42,6 +42,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in%>>7;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in>>7;]]></code.krate>
    </obj.normal>
 </objdefs>

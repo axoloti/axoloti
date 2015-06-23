@@ -20,15 +20,15 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%o0% = (%i1% == 0)?1:0;
-%o1% = (%i1% == 1)?1:0;
-%o2% = (%i1% == 2)?1:0;
-%o3% = (%i1% == 3)?1:0;
-%o4% = (%i1% == 4)?1:0;
-%o5% = (%i1% == 5)?1:0;
-%o6% = (%i1% == 6)?1:0;
-%o7% = (%i1% == 7)?1:0;
-%chain% = (%i1% - 8);
+      <code.krate><![CDATA[outlet_o0 = (inlet_i1 == 0)?1:0;
+outlet_o1 = (inlet_i1 == 1)?1:0;
+outlet_o2 = (inlet_i1 == 2)?1:0;
+outlet_o3 = (inlet_i1 == 3)?1:0;
+outlet_o4 = (inlet_i1 == 4)?1:0;
+outlet_o5 = (inlet_i1 == 5)?1:0;
+outlet_o6 = (inlet_i1 == 6)?1:0;
+outlet_o7 = (inlet_i1 == 7)?1:0;
+outlet_chain = (inlet_i1 - 8);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

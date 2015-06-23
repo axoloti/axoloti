@@ -203,7 +203,7 @@ public class Patch extends gentools {
 //        o.sInitCode = "int i;\n"
 //                + "for(i=0;i<NMODULATIONTARGETS;i++)\n"
 //                + "   parent2->PExModulationSources[MODULATOR_%name%][i].PEx = 0;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PExModulationSourceChange(&parent2->PExModulationSources[MODULATOR_%name%][0],NMODULATIONTARGETS,%v%);  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_%name%][0],NMODULATIONTARGETS,%v%);  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -219,7 +219,7 @@ public class Patch extends gentools {
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
         o.sInitCode = "ntrig = 0;\n";
-        o.sKRateCode = "   if ((%trig%>0) && !ntrig) {parent2->ApplyPreset(%preset%) ; ntrig=1;}\n"
+        o.sKRateCode = "   if ((%trig%>0) && !ntrig) {parent->ApplyPreset(%preset%) ; ntrig=1;}\n"
                 + "   else if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -245,7 +245,7 @@ public class Patch extends gentools {
     static AxoObject CreatePolyIndex() {
         AxoObject o = new AxoObject("polyindex", "Outputs the voice index number from 0 to n-1. Only works in a polyphonic sub-patch!");
         o.outlets.add(new OutletInt32Pos("index", "index from 0 to n-1"));
-        o.sKRateCode = "%index% = parent2->polyIndex;\n";
+        o.sKRateCode = "%index% = parent->polyIndex;\n";
         return o;
     }
 

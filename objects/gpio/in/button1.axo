@@ -11,6 +11,6 @@
       <params/>
       <attribs/>
       <code.init><![CDATA[   palSetPadMode(GPIOB,2,PAL_MODE_INPUT_PULLDOWN);]]></code.init>
-      <code.krate><![CDATA[%out%= palReadPad(GPIOB,2);]]></code.krate>
+      <code.krate><![CDATA[outlet_out= palReadPad(GPIOB,2);]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -12,7 +12,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%i%-(1<<26))<<1;
+      <code.krate><![CDATA[   outlet_o= (inlet_i-(1<<26))<<1;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="unipolar2bipolar" sha="8525be5d55df51043f07b379c6d326988e993946">
@@ -28,7 +28,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   %o%= (%i%-(1<<26))<<1;
+      <code.srate><![CDATA[   outlet_o[buffer_index]= (inlet_i[buffer_index]-(1<<26))<<1;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -14,7 +14,7 @@
       <attribs>
          <spinner name="shift" MinValue="0" MaxValue="31" DefaultValue="1"/>
       </attribs>
-      <code.krate><![CDATA[%result%= %a% << %shift%;]]></code.krate>
+      <code.krate><![CDATA[outlet_result= inlet_a << %shift%;]]></code.krate>
    </obj.normal>
    <obj.normal id="&lt;&lt;" sha="96e73302a673e4ad502914a3d6baa8aeb6bbdc15">
       <sDescription>Left shift. Doubles the value &quot;shift&quot; times, with overflow. If overflow is not desireable, use &quot;muls&quot;.</sDescription>
@@ -31,6 +31,6 @@
       <attribs>
          <spinner name="shift" MinValue="0" MaxValue="31" DefaultValue="1"/>
       </attribs>
-      <code.srate><![CDATA[%result%= %a% << %shift%;]]></code.srate>
+      <code.srate><![CDATA[outlet_result[buffer_index]= inlet_a[buffer_index] << %shift%;]]></code.srate>
    </obj.normal>
 </objdefs>

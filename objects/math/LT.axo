@@ -13,7 +13,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in1%<%in2% ;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in1<inlet_in2 ;]]></code.krate>
    </obj.normal>
    <obj.normal id="&lt;" sha="bacd74988af26096b659869e2ac872f4bac10775">
       <sDescription>less than</sDescription>
@@ -29,6 +29,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in1%<%in2% ;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in1<inlet_in2 ;]]></code.krate>
    </obj.normal>
 </objdefs>

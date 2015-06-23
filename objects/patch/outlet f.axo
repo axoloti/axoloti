@@ -12,7 +12,7 @@
       <attribs/>
       <code.declaration><![CDATA[int32_t _outlet;
 ]]></code.declaration>
-      <code.krate><![CDATA[  _outlet = %outlet%;
+      <code.krate><![CDATA[  _outlet = inlet_outlet;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

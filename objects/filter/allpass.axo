@@ -27,13 +27,13 @@ for (i=0;i<%delay%;i++)
    d[i] = 0;
 dpos = 0;
 ]]></code.init>
-      <code.krate><![CDATA[int32_t g2 = %g%<<4;
+      <code.krate><![CDATA[int32_t g2 = param_g<<4;
 int32_t g2c = ((1<<31)-1)-g2;
 ]]></code.krate>
       <code.srate><![CDATA[int32_t dout =  d[dpos]<<16;
-int32_t din = ___SMMLA(g2,dout,%in%>>1);
+int32_t din = ___SMMLA(g2,dout,inlet_in[buffer_index]>>1);
 d[dpos++]=din>>15;
-%out% = ___SMMLS(g2,din<<1,dout>>1)<<1;
+outlet_out[buffer_index] = ___SMMLS(g2,din<<1,dout>>1)<<1;
 if (dpos == %delay%) dpos = 0;
 ]]></code.srate>
    </obj.normal>

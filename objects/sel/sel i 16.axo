@@ -80,26 +80,26 @@
          </int32.mini>
       </params>
       <attribs/>
-      <code.krate><![CDATA[switch(%in%){
-case 0: %o% = %i0%; break;
-case 1: %o% = %i1%; break;
-case 2: %o% = %i2%; break;
-case 3: %o% = %i3%; break;
-case 4: %o% = %i4%; break;
-case 5: %o% = %i5%; break;
-case 6: %o% = %i6%; break;
-case 7: %o% = %i7%; break;
-case 8: %o% = %i8%; break;
-case 9: %o% = %i9%; break;
-case 10: %o% = %i10%; break;
-case 11: %o% = %i11%; break;
-case 12: %o% = %i12%; break;
-case 13: %o% = %i13%; break;
-case 14: %o% = %i14%; break;
-case 15: %o% = %i15%; break;
-default: %o% = %def%;
+      <code.krate><![CDATA[switch(inlet_in){
+case 0: outlet_o = param_i0; break;
+case 1: outlet_o = param_i1; break;
+case 2: outlet_o = param_i2; break;
+case 3: outlet_o = param_i3; break;
+case 4: outlet_o = param_i4; break;
+case 5: outlet_o = param_i5; break;
+case 6: outlet_o = param_i6; break;
+case 7: outlet_o = param_i7; break;
+case 8: outlet_o = param_i8; break;
+case 9: outlet_o = param_i9; break;
+case 10: outlet_o = param_i10; break;
+case 11: outlet_o = param_i11; break;
+case 12: outlet_o = param_i12; break;
+case 13: outlet_o = param_i13; break;
+case 14: outlet_o = param_i14; break;
+case 15: outlet_o = param_i15; break;
+default: outlet_o = inlet_def;
 }
-%chain% = %in%-16;
+outlet_chain = inlet_in-16;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

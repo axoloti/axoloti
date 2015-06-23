@@ -17,15 +17,15 @@
       </displays>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[if (!%hold%){
+      <code.krate><![CDATA[if (!inlet_hold){
 int8_t t[16];
 int i;
 for(i=0;i<16;i++)
-   t[i] = (uint8_t)(%in%[i]>>21);
-%v0%=*((int32_t*)(&t[0]));
-%v1%=*((int32_t*)(&t[4]));
-%v2%=*((int32_t*)(&t[8]));
-%v3%=*((int32_t*)(&t[12]));
+   t[i] = (uint8_t)(inlet_in[i]>>21);
+disp_v0=*((int32_t*)(&t[0]));
+disp_v1=*((int32_t*)(&t[4]));
+disp_v2=*((int32_t*)(&t[8]));
+disp_v3=*((int32_t*)(&t[12]));
 }
 ]]></code.krate>
    </obj.normal>

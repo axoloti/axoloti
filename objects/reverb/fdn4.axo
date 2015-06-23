@@ -46,12 +46,12 @@ d2p = 0;
 d3p = 0;
 d4p = 0;
 ]]></code.init>
-      <code.krate><![CDATA[int32_t g2 = 755299123+%g%;
+      <code.krate><![CDATA[int32_t g2 = 755299123+param_g;
 ]]></code.krate>
-      <code.srate><![CDATA[int32_t i1 = %in1% + d1d[d1p];
-int32_t i2 = %in2% + d2d[d2p];
-int32_t i3 = %in3% + d3d[d3p];
-int32_t i4 = %in4% + d4d[d4p];
+      <code.srate><![CDATA[int32_t i1 = inlet_in1[buffer_index] + d1d[d1p];
+int32_t i2 = inlet_in2[buffer_index] + d2d[d2p];
+int32_t i3 = inlet_in3[buffer_index] + d3d[d3p];
+int32_t i4 = inlet_in4[buffer_index] + d4d[d4p];
 int32_t t1 = i2 + i3;
 int32_t t2 = -i1 - i4;
 int32_t t3 = i1 - i4;
@@ -72,10 +72,10 @@ if (d1p == %d1%) d1p = 0;
 if (d2p == %d2%) d2p = 0;
 if (d3p == %d3%) d3p = 0;
 if (d4p == %d4%) d4p = 0;
-%out1% = o1;
-%out2% = o2;
-%out3% = o3;
-%out4% = o4;
+outlet_out1[buffer_index] = o1;
+outlet_out2[buffer_index] = o2;
+outlet_out3[buffer_index] = o3;
+outlet_out4[buffer_index] = o4;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

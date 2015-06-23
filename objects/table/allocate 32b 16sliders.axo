@@ -84,22 +84,22 @@ int32_t array[LENGTH];
       <code.init><![CDATA[{ 
   int i;
   for(i=0;i<LENGTH;i++) array[i]=0;}]]></code.init>
-      <code.krate><![CDATA[array[0] = %b0%;
-array[1] = %b1%;
-array[2] = %b2%;
-array[3] = %b3%;
-array[4] = %b4%;
-array[5] = %b5%;
-array[6] = %b6%;
-array[7] = %b7%;
-array[8] = %b8%;
-array[9] = %b9%;
-array[10] = %b10%;
-array[11] = %b11%;
-array[12] = %b12%;
-array[13] = %b13%;
-array[14] = %b14%;
-array[15] = %b15%;
+      <code.krate><![CDATA[array[0] = param_b0;
+array[1] = param_b1;
+array[2] = param_b2;
+array[3] = param_b3;
+array[4] = param_b4;
+array[5] = param_b5;
+array[6] = param_b6;
+array[7] = param_b7;
+array[8] = param_b8;
+array[9] = param_b9;
+array[10] = param_b10;
+array[11] = param_b11;
+array[12] = param_b12;
+array[13] = param_b13;
+array[14] = param_b14;
+array[15] = param_b15;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

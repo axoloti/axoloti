@@ -20,18 +20,18 @@
       <code.init><![CDATA[pos = -1;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) {
+      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {
       ntrig=1;
       pos = 0;
    }
-   else if (!(%trig%>0)) ntrig=0;
+   else if (!(inlet_trig>0)) ntrig=0;
    int32_t i;
    if ((pos>=0)&&((pos+BUFSIZE)< %table%.LENGTH))
        for(i=0;i<BUFSIZE;i++){
-           %wave%[i]= %table%.array[pos++]<<%table%.GAIN;
+           outlet_wave[i]= %table%.array[pos++]<<%table%.GAIN;
        }
    else {       pos = -1;
-       for(i=0;i<BUFSIZE;i++) %wave%[i]= 0;
+       for(i=0;i<BUFSIZE;i++) outlet_wave[i]= 0;
    }]]></code.krate>
    </obj.normal>
 </objdefs>

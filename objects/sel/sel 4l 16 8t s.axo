@@ -25,23 +25,23 @@
          <int2x16 name="t7"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {
-   switch(%row%){
-    case 0: %o%=(%t0%>>(%in%*2))&3; break;
-    case 1: %o%=(%t1%>>(%in%*2))&3; break;
-    case 2: %o%=(%t2%>>(%in%*2))&3; break;
-    case 3: %o%=(%t3%>>(%in%*2))&3; break;
-    case 4: %o%=(%t4%>>(%in%*2))&3; break;
-    case 5: %o%=(%t5%>>(%in%*2))&3; break;
-    case 6: %o%=(%t6%>>(%in%*2))&3; break;
-    case 7: %o%=(%t7%>>(%in%*2))&3; break;
-    default: %o% = %def%;
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<16)) {
+   switch(inlet_row){
+    case 0: outlet_o=(param_t0>>(inlet_in*2))&3; break;
+    case 1: outlet_o=(param_t1>>(inlet_in*2))&3; break;
+    case 2: outlet_o=(param_t2>>(inlet_in*2))&3; break;
+    case 3: outlet_o=(param_t3>>(inlet_in*2))&3; break;
+    case 4: outlet_o=(param_t4>>(inlet_in*2))&3; break;
+    case 5: outlet_o=(param_t5>>(inlet_in*2))&3; break;
+    case 6: outlet_o=(param_t6>>(inlet_in*2))&3; break;
+    case 7: outlet_o=(param_t7>>(inlet_in*2))&3; break;
+    default: outlet_o = inlet_def;
    }
 }else {
-   %o% = %def%;
+   outlet_o = inlet_def;
 }
-%chain% = %in%-16;
-%chainrow% = %row%-8;
+outlet_chain = inlet_in-16;
+outlet_chainrow = inlet_row-8;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

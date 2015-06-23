@@ -23,21 +23,21 @@ int ntrig;
       <code.init><![CDATA[val = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%trig% > 0) && !ntrig) {
+      <code.krate><![CDATA[if ((inlet_trig > 0) && !ntrig) {
   val = 1 << 30;
   ntrig = 1;
-  %pulse% = 0;
+  outlet_pulse = 0;
 }
 else {
-  if (!(%trig% > 0))
+  if (!(inlet_trig > 0))
     ntrig = 0;
   if (val>0) {
     int32_t t;
-    MTOF(-%delay%,t);
+    MTOF(-param_delay,t);
      val -= t>>3;
-     if (val<=0) %pulse% = 1;
-     else %pulse% = 0;
-  } else %pulse% = 0;
+     if (val<=0) outlet_pulse = 1;
+     else outlet_pulse = 0;
+  } else outlet_pulse = 0;
 }
 ]]></code.krate>
    </obj.normal>

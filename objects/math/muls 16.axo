@@ -12,7 +12,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= __SSAT(%in%,24)<<4;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= __SSAT(inlet_in,24)<<4;]]></code.krate>
    </obj.normal>
    <obj.normal id="muls 16" sha="fc43d4b12bedaf555251f39a12909179bdaa71bb">
       <sDescription>saturated multiply by 16</sDescription>
@@ -27,6 +27,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%out%= __SSAT(%in%,24)<<4;]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= __SSAT(inlet_in[buffer_index],24)<<4;]]></code.srate>
    </obj.normal>
 </objdefs>

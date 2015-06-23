@@ -15,8 +15,8 @@
       </attribs>
       <code.declaration><![CDATA[int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}
-if (!(%trig%>0)) ntrig=0;
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_PITCH_BEND + (%channel%-1),(inlet_bend>>14)&0x7F,(inlet_bend>>21)+64);  ntrig=1;}
+if (!(inlet_trig>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

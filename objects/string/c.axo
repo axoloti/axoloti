@@ -16,7 +16,7 @@
 ]]></code.declaration>
       <code.init><![CDATA[strcpy(&c[0],"%str%");
 ]]></code.init>
-      <code.krate><![CDATA[%out% = &c[0];
+      <code.krate><![CDATA[outlet_out = &c[0];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

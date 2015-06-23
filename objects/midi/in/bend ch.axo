@@ -19,8 +19,8 @@ int32_t ntrig;
       <code.init><![CDATA[_bend = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%bend% = _bend;
-%trig% = ntrig;
+      <code.krate><![CDATA[outlet_bend = _bend;
+outlet_trig = ntrig;
 ntrig = 0;
 ]]></code.krate>
       <code.midihandler><![CDATA[if (status == MIDI_PITCH_BEND + %channel% - 1) {  _bend = ((int)((data2<<7)+data1)-0x2000)<<14;

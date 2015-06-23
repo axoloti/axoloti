@@ -58,15 +58,15 @@ static const int NUMSTAGES=2;
           (q31_t *) &eq5coefs[190*4 + 10*(%high% + 9)],
           &biquadStateBand5Q31[0], 2);
 ]]></code.init>
-      <code.krate><![CDATA[S2.pCoeffs = (q31_t*)&eq5coefs[190*1 + 10*(%lowmid% + 9)];
-S3.pCoeffs = (q31_t*)&eq5coefs[190*2 + 10*(%mid% + 9)];
-S4.pCoeffs = (q31_t*)&eq5coefs[190*3 + 10*(%highmid% + 9)];
-S5.pCoeffs = (q31_t*)&eq5coefs[190*4 + 10*(%high% + 9)];
+      <code.krate><![CDATA[S2.pCoeffs = (q31_t*)&eq5coefs[190*1 + 10*(param_lowmid + 9)];
+S3.pCoeffs = (q31_t*)&eq5coefs[190*2 + 10*(param_mid + 9)];
+S4.pCoeffs = (q31_t*)&eq5coefs[190*3 + 10*(param_highmid + 9)];
+S5.pCoeffs = (q31_t*)&eq5coefs[190*4 + 10*(param_high + 9)];
 
-arm_biquad_cascade_df1_q31(&S2, (q31_t *)%in%, (q31_t *)%out%, BUFSIZE);
-arm_biquad_cascade_df1_q31(&S3, (q31_t *)%out%, (q31_t *)%out%, BUFSIZE);
-arm_biquad_cascade_df1_q31(&S4, (q31_t *)%out%, (q31_t *)%out%, BUFSIZE);
-arm_biquad_cascade_df1_q31(&S5, (q31_t *)%out%, (q31_t *)%out%, BUFSIZE);
+arm_biquad_cascade_df1_q31(&S2, (q31_t *)inlet_in, (q31_t *)outlet_out, BUFSIZE);
+arm_biquad_cascade_df1_q31(&S3, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZE);
+arm_biquad_cascade_df1_q31(&S4, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZE);
+arm_biquad_cascade_df1_q31(&S5, (q31_t *)outlet_out, (q31_t *)outlet_out, BUFSIZE);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

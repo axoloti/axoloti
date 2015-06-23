@@ -16,9 +16,9 @@
 ]]></code.declaration>
       <code.init><![CDATA[acc = 0;
 ]]></code.init>
-      <code.krate><![CDATA[acc += %in%;
+      <code.krate><![CDATA[acc += inlet_in;
 acc = __SSAT(acc,28);
-%out% = acc;
+outlet_out = acc;
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="integrator" sha="258aa5314b5a0fdaf5826e571b324b6047b34757">
@@ -38,9 +38,9 @@ acc = __SSAT(acc,28);
 ]]></code.declaration>
       <code.init><![CDATA[acc = 0;
 ]]></code.init>
-      <code.srate><![CDATA[acc += %in%;
+      <code.srate><![CDATA[acc += inlet_in[buffer_index];
 acc = __SSAT(acc,28);
-%out% = acc;
+outlet_out[buffer_index] = acc;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

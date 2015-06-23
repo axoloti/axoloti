@@ -14,7 +14,7 @@
       <attribs/>
       <code.declaration><![CDATA[uint32_t Phase;]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
-      <code.krate><![CDATA[Phase += %frequency%;
-%out%= sinet[Phase>>22]<<12;]]></code.krate>
+      <code.krate><![CDATA[Phase += inlet_frequency;
+outlet_out= sinet[Phase>>22]<<12;]]></code.krate>
    </obj.normal>
 </objdefs>

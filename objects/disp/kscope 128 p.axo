@@ -22,12 +22,12 @@ for(i=0;i<128;i++) t[i]=0;
 index = 0;
 ]]></code.init>
       <code.krate><![CDATA[int i;
-t[index++] = (uint8_t)(%in%>>20);
+t[index++] = (uint8_t)(inlet_in>>20);
 if (index == 128){
   index = 0;
-  if (!%hold%){
+  if (!inlet_hold){
     for(i=0;i<128;i++)
-      %scope%[i]=t[i];
+      disp_scope[i]=t[i];
   }
 }
 ]]></code.krate>

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -39,8 +39,9 @@ public class Strings extends gentools {
         AxoObject o = new AxoObject("c", "constant string");
         o.attributes.add(new AxoAttributeTablename("str"));
         o.outlets.add(new OutletCharPtr32("out", "string"));
-        o.sLocalData = "char *c = \"%str%\";\n";
-        o.sKRateCode = "%out% = c;\n";
+        o.sLocalData = "char c[64];\n";
+        o.sInitCode = "strcpy(&c[0],\"%str%\");\n";
+        o.sKRateCode = "%out% = &c[0];\n";
         return o;
     }
 

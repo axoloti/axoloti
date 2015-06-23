@@ -25,16 +25,16 @@ uint32_t r;
    r = 1;
 ]]></code.init>
       <code.krate><![CDATA[   {
-      if (%reset% && r) {
+      if (inlet_reset && r) {
          Phase = 0;
          r = 0;
       } else {
-         if (!%reset%) r = 1;
+         if (!inlet_reset) r = 1;
          int32_t freq;
-         MTOFEXTENDED(%pitch% + %pitchm%,freq);
+         MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
          Phase += freq>>2;
       }
-      %wave%= (Phase>0)?1:0;
+      outlet_wave= (Phase>0)?1:0;
    }]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -20,10 +20,10 @@
 ]]></code.declaration>
       <code.init><![CDATA[in_prev = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16))   %o%=(in_prev!=%in%)&&(%b16%&(1<<%in%));
-else %o% = %def%;
-%chain% = %in%-16;
-in_prev = %in%;
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<16))   outlet_o=(in_prev!=inlet_in)&&(param_b16&(1<<inlet_in));
+else outlet_o = inlet_def;
+outlet_chain = inlet_in-16;
+in_prev = inlet_in;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

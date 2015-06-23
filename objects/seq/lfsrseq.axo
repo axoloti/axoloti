@@ -344,19 +344,19 @@
    rtrig = 0;
    ltrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {
   ntrig=1;
   if (state & 1)  {
      state = (state >> 1) ^ %polynomial%;
   } else {
     state = (state >> 1);
   }
-} else if (!(%trig%>0)) ntrig=0;
-if ((%r%>0) && !rtrig) {state=1; rtrig = 1;}
-else if (!(%r%>0)) rtrig=0;
-if ((%load%>0) && !ltrig) {state=%lval%; ltrig = 1;}
-else if (!(%load%>0)) ltrig=0;
-%out% = state & 1;
+} else if (!(inlet_trig>0)) ntrig=0;
+if ((inlet_r>0) && !rtrig) {state=1; rtrig = 1;}
+else if (!(inlet_r>0)) rtrig=0;
+if ((inlet_load>0) && !ltrig) {state=inlet_lval; ltrig = 1;}
+else if (!(inlet_load>0)) ltrig=0;
+outlet_out = state & 1;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

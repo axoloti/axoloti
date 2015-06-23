@@ -13,7 +13,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in1%-%in2% ;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in1-inlet_in2 ;]]></code.krate>
    </obj.normal>
    <obj.normal id="-" sha="86190d21676ef888e72ad0ae4fde0d817119f21c">
       <sDescription>subtract</sDescription>
@@ -29,7 +29,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%out%= %in1%-%in2% ;]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in1[buffer_index]-inlet_in2[buffer_index] ;]]></code.srate>
    </obj.normal>
    <obj.normal id="-" sha="bfe9c7f97b2e72bd54afeb62ab2c40dbf3a5a82">
       <sDescription>subtract</sDescription>
@@ -45,6 +45,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in1%-%in2% ;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in1-inlet_in2 ;]]></code.krate>
    </obj.normal>
 </objdefs>

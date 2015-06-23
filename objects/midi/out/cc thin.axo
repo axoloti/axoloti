@@ -38,9 +38,9 @@ int timer;
 ]]></code.declaration>
       <code.init><![CDATA[timer = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if (((lsend>%v%+(1<<19))||(%v%>lsend+(1<<19))) && (timer>30)) {
-   lsend = %v%;
-   MidiSend3((midi_device_t) %device%, MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(%v%>>20,7));
+      <code.krate><![CDATA[if (((lsend>inlet_v+(1<<19))||(inlet_v>lsend+(1<<19))) && (timer>30)) {
+   lsend = inlet_v;
+   MidiSend3((midi_device_t) %device%, MIDI_CONTROL_CHANGE + (%channel%-1),%cc%,__USAT(inlet_v>>20,7));
    timer = 0;
 } else timer++;
 ]]></code.krate>

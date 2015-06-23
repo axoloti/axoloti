@@ -29,30 +29,30 @@ bool rstp;
 _posfrac = 0;
 _pos24ppq = 0;
 rstp = 0;]]></code.init>
-      <code.krate><![CDATA[if (%rst% & !rstp){
+      <code.krate><![CDATA[if (inlet_rst & !rstp){
    rstp = 1;
    _posfrac = 0;
    _pos24ppq = 0;
-} else if (!%rst%){
+} else if (!inlet_rst){
    rstp = 0;
 }
-if (%run% && !_active) {
+if (inlet_run && !_active) {
   _active = 1;
   if (_pos24ppq)     PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_START,0,0);
   else     PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_CONTINUE,0,0);
-} else if (!%run% && _active){
+} else if (!inlet_run && _active){
   _active = 0;
   PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_STOP,0,0);
 }if (_active) {
-  _posfrac += %bpm%;
+  _posfrac += param_bpm;
   if (_posfrac & 1<<31) {
     _posfrac &= (1<<31)-1;
     _pos24ppq++;
     PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_TIMING_CLOCK,0,0);
   }
 }
-%pos4ppq% = _pos24ppq/6;
-%pos24ppq% = _pos24ppq;
+outlet_pos4ppq = _pos24ppq/6;
+outlet_pos24ppq = _pos24ppq;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

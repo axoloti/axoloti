@@ -70,6 +70,6 @@
          </combo>
       </attribs>
       <code.init><![CDATA[   palSetPadMode(%pad%,%mode%);]]></code.init>
-      <code.krate><![CDATA[%out%= palReadPad(%pad%)<<27;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= palReadPad(%pad%)<<27;]]></code.krate>
    </obj.normal>
 </objdefs>

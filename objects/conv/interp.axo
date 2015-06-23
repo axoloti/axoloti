@@ -15,11 +15,11 @@
       <code.declaration><![CDATA[   int32_t _prev;
     int32_t _step;
 ]]></code.declaration>
-      <code.krate><![CDATA[   _step = (%i% - _prev)>>4;
+      <code.krate><![CDATA[   _step = (inlet_i - _prev)>>4;
    int32_t _i = _prev;
-   _prev = %i%;
+   _prev = inlet_i;
 ]]></code.krate>
-      <code.srate><![CDATA[   %o% = _i;
+      <code.srate><![CDATA[   outlet_o[buffer_index] = _i;
    _i += _step;
 ]]></code.srate>
    </obj.normal>

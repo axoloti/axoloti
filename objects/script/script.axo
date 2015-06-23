@@ -34,10 +34,10 @@ Thread *Thd;
       <code.dispose><![CDATA[chThdTerminate(Thd);
 chThdWait(Thd);
 ]]></code.dispose>
-      <code.krate><![CDATA[%out1_% = this->out1;
-%out2_% = this->out2;
-this->in1 = %in1_%;
-this->in2 = %in2_%;
+      <code.krate><![CDATA[outlet_out1__ = this->out1;
+outlet_out2__ = this->out2;
+this->in1 = inlet_in1__;
+this->in2 = inlet_in2__;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

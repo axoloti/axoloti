@@ -80,7 +80,7 @@ static const uint32_t BITS = 16;
 static const uint32_t GAIN = 12;
 ]]></code.declaration>
       <code.srate><![CDATA[extern int16_t _binary_%sample%_raw_start;
-   uint32_t asat = __USAT(%pos%,27);
+   uint32_t asat = __USAT(inlet_pos[buffer_index],27);
     int index = asat>>(27-LENGTHPOW);
    int32_t y1 = (((int16_t *)(&_binary_%sample%_raw_start))[index])<<GAIN;
    int32_t y2 = (((int16_t *)(&_binary_%sample%_raw_start))[index+1])<<GAIN;
@@ -88,7 +88,7 @@ static const uint32_t GAIN = 12;
   int32_t rr;
   rr = ___SMMUL(y1,(1<<30)-frac);
   rr = ___SMMLA(y2,frac,rr);
-%o%= rr<<2;
+outlet_o[buffer_index]= rr<<2;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

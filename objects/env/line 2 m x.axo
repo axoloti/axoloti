@@ -9,8 +9,8 @@
          <frac32.bipolar name="tBm" description="time B (v1..v2) modulation"/>
       </inlets>
       <outlets>
-         <frac32.positive name="out" description="output" SumBuffer="false"/>
-         <int32.positive name="phase" description="phase index" SumBuffer="false"/>
+         <frac32.positive name="out" description="output"/>
+         <int32.positive name="phase" description="phase index"/>
       </outlets>
       <displays/>
       <params>
@@ -45,40 +45,40 @@ int32_t ntrig;
 val = %v2%;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%trig% > 0) && (!ntrig)) {
+      <code.krate><![CDATA[if ((inlet_trig > 0) && (!ntrig)) {
   time1 = 0;
   phase1 = 1;
-  val = %v0%;
+  val = param_v0;
   ntrig = 1;
 }
 else if (phase1 == 1) {
   int32_t t;
-  int32_t tA2 = %tA% + %tAm%;
+  int32_t tA2 = param_tA + inlet_tAm;
   MTOF(-tA2,t);
   time1 += t>>2;
   if (time1>=0)
-     val = %v0% + (___SMMUL(%v1%-%v0%,time1)<<1);
+     val = param_v0 + (___SMMUL(param_v1-param_v0,time1)<<1);
   else {
     phase1 = 2;
-    val = %v1%;
+    val = param_v1;
     time1 = 0;
   }
 }
 else if (phase1 == 2) {
   int32_t t;
-  int32_t tB2 = %tB% + %tBm%;
+  int32_t tB2 = param_tB + inlet_tBm;
   MTOF(-tB2,t);
   time1 += t>>2;
   if (time1>=0)
-     val = %v1% + (___SMMUL(%v2%-%v1%,time1)<<1);
+     val = param_v1 + (___SMMUL(param_v2-param_v1,time1)<<1);
   else {
     phase1 = 0;
-    val = %v2%;
+    val = param_v2;
   }
 }
-if (!(%trig% > 0)) ntrig = 0;
-%out% = val;
-%phase% = phase1;
+if (!(inlet_trig > 0)) ntrig = 0;
+outlet_out = val;
+outlet_phase = phase1;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

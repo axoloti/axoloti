@@ -18,8 +18,8 @@
       </params>
       <attribs/>
       <code.krate><![CDATA[   int32_t freq;
-   MTOF(0-%pitch% - %pitchm%,freq);
-   %delay% = freq;
+   MTOF(0-param_pitch - inlet_pitchm,freq);
+   outlet_delay = freq;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -30,7 +30,6 @@ public abstract class Display {
 
     @Attribute
     public String name;
-    private DataType datatype;
     @Attribute(required = false)
     public Boolean noLabel;
 
@@ -44,7 +43,11 @@ public abstract class Display {
     public int getLength() {
         return 1;
     }
-
+    
+    public String GetCName(){
+        return "disp_" + name;
+    }    
+    
     public DisplayInstance CreateInstance(AxoObjectInstance o) {
         // resolve deserialized object, copy value and remove
         DisplayInstance pidn = null;
@@ -78,9 +81,7 @@ public abstract class Display {
 
     public abstract DisplayInstance InstanceFactory();
 
-    public DataType getDatatype() {
-        return datatype;
-    }
+    public abstract DataType getDatatype();
 
     public void updateSHA(MessageDigest md) {
         md.update(name.getBytes());

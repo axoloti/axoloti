@@ -16,8 +16,8 @@
       </depends>
       <code.init><![CDATA[  palSetPadMode(GPIOB, 8, PAL_MODE_ALTERNATE(2));
   palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(2));]]></code.init>
-      <code.krate><![CDATA[   pwmEnableChannel(&PWMD4, 2, (pwmcnt_t)((%pb8%>=0)?(4096-(%pb8%>>15)):4096));
-   pwmEnableChannel(&PWMD4, 3, (pwmcnt_t)((%pb9%>=0)?(4096-(%pb9%>>15)):4096));
+      <code.krate><![CDATA[   pwmEnableChannel(&PWMD4, 2, (pwmcnt_t)((inlet_pb8>=0)?(4096-(inlet_pb8>>15)):4096));
+   pwmEnableChannel(&PWMD4, 3, (pwmcnt_t)((inlet_pb9>=0)?(4096-(inlet_pb9>>15)):4096));
 ]]></code.krate>
    </obj.normal>
 </objdefs>

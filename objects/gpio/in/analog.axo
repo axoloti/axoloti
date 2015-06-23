@@ -49,6 +49,6 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.krate><![CDATA[%out%= adcvalues[%channel%]<<15;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= adcvalues[%channel%]<<15;]]></code.krate>
    </obj.normal>
 </objdefs>

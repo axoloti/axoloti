@@ -19,6 +19,7 @@ package axoloti.parameters;
 
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
+import axoloti.utils.CharEscape;
 import generatedobjects.GeneratedObjects;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -41,18 +42,25 @@ public abstract class Parameter<dt extends DataType> {
 //    Value<dt> defaultVal;
     @Attribute(required = false)
     public Boolean noLabel;
-    private dt datatype;
+    
+    public String PropagateToChild;
 
-    String CType() {
-        return datatype.CType();
+
+    public String CType() {
+        // fixme
+        return "int";
     }
-
+    
     public Parameter() {
     }
 
     public Parameter(String name) {
         this.name = name;
     }
+
+    public String GetCName() {
+        return "param_" + CharEscape.CharEscape(name);
+    }        
 
     public ParameterInstance<dt> CreateInstance(AxoObjectInstance o) {
         // resolve deserialized object, copy value and remove

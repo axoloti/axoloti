@@ -25,24 +25,24 @@ pval = 0;
 ]]></code.init>
       <code.krate><![CDATA[int i;
 if (index<0) {
-      int32_t val = (%in%)>(1<<19);
+      int32_t val = (inlet_in)>(1<<19);
       if (val&&(!pval)){
          index=0;
       }
       pval = val;
    if (index == 0){
-         t[index++]=(uint8_t)(%in%>>21);
+         t[index++]=(uint8_t)(inlet_in>>21);
    }
 } else { 
    if(index==128) {
       index=-1;
    } else 
-      t[index++]=(uint8_t)(%in%>>21);
-   if ((index==-1)&&(!%hold%)){
+      t[index++]=(uint8_t)(inlet_in>>21);
+   if ((index==-1)&&(!inlet_hold)){
      int i;
      for(i=0;i<128;i++)
-       %scope%[i]=t[i];
-     pval = %in%>(1<<19);
+       disp_scope[i]=t[i];
+     pval = inlet_in>(1<<19);
    }
 }
 ]]></code.krate>

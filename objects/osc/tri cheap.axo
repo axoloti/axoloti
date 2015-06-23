@@ -22,14 +22,14 @@
       <code.init><![CDATA[    osc_p=0;
 ]]></code.init>
       <code.krate><![CDATA[  uint32_t freq;
-  MTOFEXTENDED(%pitch% + %pitchm%,freq);
+  MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
   int j;
   for(j=0;j<BUFSIZE;j++){
     osc_p+=freq;
     if (osc_p>0){
-       %wave%[j] = ((1<<30)-(osc_p))>>4;
+       outlet_wave[j] = ((1<<30)-(osc_p))>>4;
     } else {
-       %wave%[j] = (osc_p+(1<<30))>>4;
+       outlet_wave[j] = (osc_p+(1<<30))>>4;
     }
 }
 ]]></code.krate>

@@ -23,10 +23,10 @@ _channel = 1;
 _value = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%value%= _value;
-%cc% = _cc;
-%channel% = _channel;
-%trig% = ntrig;
+      <code.krate><![CDATA[outlet_value= _value;
+outlet_cc = _cc;
+outlet_channel = _channel;
+outlet_trig = ntrig;
 ntrig = 0;
 ]]></code.krate>
       <code.midihandler><![CDATA[if ((status&0xF0) == MIDI_CONTROL_CHANGE) {

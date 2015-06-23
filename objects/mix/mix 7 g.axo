@@ -48,14 +48,14 @@
          </frac32.u.map.gain>
       </params>
       <attribs/>
-      <code.krate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
-   accum = ___SMMLA(%in2%,%gain2%,accum);
-;   accum = ___SMMLA(%in3%,%gain3%,accum);
-;   accum = ___SMMLA(%in4%,%gain4%,accum);
-;   accum = ___SMMLA(%in5%,%gain5%,accum);
-;   accum = ___SMMLA(%in6%,%gain6%,accum);
-;   accum = ___SMMLA(%in7%,%gain7%,accum);
-;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+      <code.krate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
+   accum = ___SMMLA(inlet_in2,param_gain2,accum);
+;   accum = ___SMMLA(inlet_in3,param_gain3,accum);
+;   accum = ___SMMLA(inlet_in4,param_gain4,accum);
+;   accum = ___SMMLA(inlet_in5,param_gain5,accum);
+;   accum = ___SMMLA(inlet_in6,param_gain6,accum);
+;   accum = ___SMMLA(inlet_in7,param_gain7,accum);
+;   outlet_out=  __SSAT(inlet_bus__in + (accum<<1),28);
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="mix 7 g" sha="2b5d2e7b94cd9579873d09caf46c2017817b9c2f">
@@ -107,14 +107,14 @@
          </frac32.u.map.gain>
       </params>
       <attribs/>
-      <code.srate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
-   accum = ___SMMLA(%in2%,%gain2%,accum);
-;   accum = ___SMMLA(%in3%,%gain3%,accum);
-;   accum = ___SMMLA(%in4%,%gain4%,accum);
-;   accum = ___SMMLA(%in5%,%gain5%,accum);
-;   accum = ___SMMLA(%in6%,%gain6%,accum);
-;   accum = ___SMMLA(%in7%,%gain7%,accum);
-;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+      <code.srate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1[buffer_index],param_gain1);
+   accum = ___SMMLA(inlet_in2[buffer_index],param_gain2,accum);
+;   accum = ___SMMLA(inlet_in3[buffer_index],param_gain3,accum);
+;   accum = ___SMMLA(inlet_in4[buffer_index],param_gain4,accum);
+;   accum = ___SMMLA(inlet_in5[buffer_index],param_gain5,accum);
+;   accum = ___SMMLA(inlet_in6[buffer_index],param_gain6,accum);
+;   accum = ___SMMLA(inlet_in7[buffer_index],param_gain7,accum);
+;   outlet_out[buffer_index]=  __SSAT(inlet_bus__in[buffer_index] + (accum<<1),28);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

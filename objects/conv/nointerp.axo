@@ -12,7 +12,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   %o% = %i%;
+      <code.srate><![CDATA[   outlet_o[buffer_index] = inlet_i;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -37,25 +37,25 @@
          <bin32 name="p8" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<32)) {   %o1%=%p1%&(1<<%in%);
-   %o2%=%p2%&(1<<%in%);
-   %o3%=%p3%&(1<<%in%);
-   %o4%=%p4%&(1<<%in%);
-   %o5%=%p5%&(1<<%in%);
-   %o6%=%p6%&(1<<%in%);
-   %o7%=%p7%&(1<<%in%);
-   %o8%=%p8%&(1<<%in%);
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<32)) {   outlet_o1=param_p1&(1<<inlet_in);
+   outlet_o2=param_p2&(1<<inlet_in);
+   outlet_o3=param_p3&(1<<inlet_in);
+   outlet_o4=param_p4&(1<<inlet_in);
+   outlet_o5=param_p5&(1<<inlet_in);
+   outlet_o6=param_p6&(1<<inlet_in);
+   outlet_o7=param_p7&(1<<inlet_in);
+   outlet_o8=param_p8&(1<<inlet_in);
 } else {
-   %o1% = %def1%;
-   %o2% = %def2%;
-   %o3% = %def3%;
-   %o4% = %def4%;
-   %o5% = %def5%;
-   %o6% = %def6%;
-   %o7% = %def7%;
-   %o8% = %def8%;
+   outlet_o1 = inlet_def1;
+   outlet_o2 = inlet_def2;
+   outlet_o3 = inlet_def3;
+   outlet_o4 = inlet_def4;
+   outlet_o5 = inlet_def5;
+   outlet_o6 = inlet_def6;
+   outlet_o7 = inlet_def7;
+   outlet_o8 = inlet_def8;
 }
-%chain% = %in%-32;
+outlet_chain = inlet_in-32;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -31,14 +31,14 @@ for (i=0;i<%delay%;i++)
    d[i] = 0;
 dpos = 0;
 ]]></code.init>
-      <code.krate><![CDATA[int32_t a2 = %a%<<4;
-int32_t b2 = %b%<<4;
+      <code.krate><![CDATA[int32_t a2 = param_a<<4;
+int32_t b2 = param_b<<4;
 ]]></code.krate>
       <code.srate><![CDATA[int32_t dout =  d[dpos]<<16;
-int32_t din = ___SMMUL(b2,%in%);
+int32_t din = ___SMMUL(b2,inlet_in[buffer_index]);
 din = ___SMMLA(a2,dout,din);
 d[dpos++]=din>>15;
-%out% = din;
+outlet_out[buffer_index] = din;
 if (dpos == %delay%) dpos = 0;
 ]]></code.srate>
    </obj.normal>

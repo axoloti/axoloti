@@ -42,14 +42,14 @@ typedef struct {
   fptr_patch_dsp_process_t fptr_dsp_process;
   fptr_patch_midi_in_handler_t fptr_MidiInHandler;
   fptr_patch_applyPreset_t fptr_applyPreset;
-  int numPEx;
+  uint32_t numPEx;
   ParameterExchange_t *pPExch;
-  int *pDisplayVector;
-  int patchID;
-  int initpreset_size;
+  int32_t *pDisplayVector;
+  uint32_t patchID;
+  uint32_t initpreset_size;
   void *pInitpreset;
-  int npresets;
-  int npreset_entries;
+  uint32_t npresets;
+  uint32_t npreset_entries;
   PresetParamChange_t *pPresets; // is a npreset array of npreset_entries of PresetParamChange_t
 } patchMeta_t;
 

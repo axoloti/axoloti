@@ -17,11 +17,11 @@
       </displays>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%v1%=%in%;
-%v2%=%in%-16;
-%v3%=%in%-32;
-%v4%=%in%-48;
-%chain_out% = %in%-64;
+      <code.krate><![CDATA[disp_v1=inlet_in;
+disp_v2=inlet_in-16;
+disp_v3=inlet_in-32;
+disp_v4=inlet_in-48;
+outlet_chain__out = inlet_in-64;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

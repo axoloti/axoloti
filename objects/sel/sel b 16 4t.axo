@@ -25,17 +25,17 @@
          <bin16 name="p4" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {   %o1%=%p1%&(1<<%in%);
-   %o2%=%p2%&(1<<%in%);
-   %o3%=%p3%&(1<<%in%);
-   %o4%=%p4%&(1<<%in%);
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<16)) {   outlet_o1=param_p1&(1<<inlet_in);
+   outlet_o2=param_p2&(1<<inlet_in);
+   outlet_o3=param_p3&(1<<inlet_in);
+   outlet_o4=param_p4&(1<<inlet_in);
 } else {
-   %o1% = %def1%;
-   %o2% = %def2%;
-   %o3% = %def3%;
-   %o4% = %def4%;
+   outlet_o1 = inlet_def1;
+   outlet_o2 = inlet_def2;
+   outlet_o3 = inlet_def3;
+   outlet_o4 = inlet_def4;
 }
-%chain% = %in%-16;
+outlet_chain = inlet_in-16;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -22,9 +22,9 @@
       <code.init><![CDATA[val = 0;
 ]]></code.init>
       <code.krate><![CDATA[int32_t f;
-   MTOF(%freq%,f);
-   val = ___SMMLA((%in%-val)<<1,f,val);
-   %out%= val;
+   MTOF(param_freq,f);
+   val = ___SMMLA((inlet_in-val)<<1,f,val);
+   outlet_out= val;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

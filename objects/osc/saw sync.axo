@@ -30,7 +30,7 @@
       oscp[j] = &blept[BLEPSIZE-1];   nextvoice = 0;  i0 = 0;
 ]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
   int j;
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
@@ -38,7 +38,7 @@
     int p;
     p = osc_p;
     osc_p = p+freq;
-    int i1 = %sync%[j]>>2;
+    int i1 = inlet_sync[j]>>2;
     if ((i1>0)&&!(i0>0)){   // phase reset
       nextvoice = (nextvoice+1)&(blepvoices-1);
       int32_t x = 64-((-i0<<6)/(i1-i0));
@@ -62,7 +62,7 @@
     }
     //sum = -sum;
     uint32_t g = osc_p;
-    %wave%[j]=(g>>5)+sum-(1<<26);
+    outlet_wave[j]=(g>>5)+sum-(1<<26);
   }]]></code.krate>
    </obj.normal>
 </objdefs>

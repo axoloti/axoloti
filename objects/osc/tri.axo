@@ -34,7 +34,7 @@
    nextvoice = 0;
 ]]></code.init>
       <code.krate><![CDATA[  uint32_t freq;
-  MTOFEXTENDED(%pitch% + %pitchm%,freq);
+  MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
   int j;
   const int16_t *lastblep = &blt[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
@@ -65,7 +65,7 @@
       if (t>=lastblep) t=lastblep;
       oscp[i]=t;
     }
-    %wave%[j]=tri + (sum>>3);
+    outlet_wave[j]=tri + (sum>>3);
   }
 ]]></code.krate>
    </obj.normal>

@@ -22,15 +22,15 @@ int pval;]]></code.declaration>
 offset = strlen("%prefix%");
 pval = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if (%index% != pval){   pval = %index%;
-   int i = %index%;   int i0 = i/10;
+      <code.krate><![CDATA[if (inlet_index != pval){   pval = inlet_index;
+   int i = inlet_index;   int i0 = i/10;
    c[offset+2] = '0'+i-10*i0;
    i = i0; i0 = i/10;
    c[offset+1] = '0'+i-10*i0;
    i = i0; i0 = i/10;
    c[offset+0] = '0'+i-10*i0;
 }
-%out% = &c[0];
+outlet_out = &c[0];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

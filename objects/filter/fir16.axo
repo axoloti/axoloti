@@ -22,12 +22,12 @@ q31_t state[BUFSIZE + BUFSIZE -1];
 	&state[0],
 	BUFSIZE);
 ]]></code.init>
-      <code.krate><![CDATA[f.pCoeffs = (q31_t*)%coefs%;
+      <code.krate><![CDATA[f.pCoeffs = (q31_t*)inlet_coefs;
 
 arm_fir_fast_q31(
   &f,
-  (q31_t*)%in%,
-  %out%,
+  (q31_t*)inlet_in,
+  outlet_out,
   BUFSIZE);
 ]]></code.krate>
    </obj.normal>
