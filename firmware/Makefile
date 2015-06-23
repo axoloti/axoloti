@@ -158,6 +158,8 @@ CSRC = $(PORTSRC) \
        usbh_midi_core.c \
        usbh_conf.c \
        serial_midi.c \
+       bulk_usb.c \
+       midi_usb.c \
        crc32.c \
        exceptions.c \
        watchdog.c 

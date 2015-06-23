@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
+import axoloti.Connection;
 import jssc.SerialPortException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,14 +64,9 @@ public class QCmdVirtualButton implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
-        try {
-            serialConnection.TransmitVirtualButton(b_or, b_and, enc1, enc2, enc3, enc4);
-            return this;
-        } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdPing.class.getName()).log(Level.SEVERE, null, ex);
-            return new QCmdDisconnect();
-        }
+    public QCmd Do(Connection connection) {
+        connection.ClearSync();
+        connection.TransmitVirtualButton(b_or, b_and, enc1, enc2, enc3, enc4);
+        return this;
     }
 }

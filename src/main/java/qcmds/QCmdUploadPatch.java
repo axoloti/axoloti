@@ -17,12 +17,11 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
+import axoloti.Connection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import jssc.SerialPortException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,8 +52,8 @@ public class QCmdUploadPatch implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
+    public QCmd Do(Connection connection) {
+        connection.ClearSync();
         try {
             if (f == null) {
                 f = new File("patch/xpatch.bin");
@@ -78,19 +77,17 @@ public class QCmdUploadPatch implements QCmdSerialTask {
                 if (nRead != l) {
                     Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
                 }
-                serialConnection.UploadFragment(buffer, serialConnection.getTargetProfile().getPatchAddr() + offset);
+                connection.UploadFragment(buffer, connection.getTargetProfile().getPatchAddr() + offset);
                 offset += nRead;
             } while (tlength > 0);
             inputStream.close();
-            if (serialConnection.WaitSync()) {
+            if (connection.WaitSync()) {
                 return this;
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
         } catch (IOException ex) {
             Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "IOException", ex);
-        } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "SerialPortException", ex);
         }
         return new QCmdDisconnect();
     }

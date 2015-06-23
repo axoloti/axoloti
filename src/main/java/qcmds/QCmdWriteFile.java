@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
+import axoloti.Connection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -54,8 +54,8 @@ public class QCmdWriteFile implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
+    public QCmd Do(Connection Connection) {
+        Connection.ClearSync();
         try {
             Thread.sleep(100);
             File f = new File("patch/xpatch.bin");
@@ -98,11 +98,11 @@ public class QCmdWriteFile implements QCmdSerialTask {
                 filename[i] = 0;
             }
             Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "filename on SD: " + new String(filename));
-            serialConnection.ClearSync();
-            serialConnection.writeBytes(data);
-            serialConnection.writeBytes(filename);
-            serialConnection.writeBytes(buffer);
-            if (serialConnection.WaitSync()) {
+            Connection.ClearSync();
+            Connection.writeBytes(data);
+            Connection.writeBytes(filename);
+            Connection.writeBytes(buffer);
+            if (Connection.WaitSync()) {
                 return this;
             } else {
                 return new QCmdDisconnect();
@@ -112,8 +112,6 @@ public class QCmdWriteFile implements QCmdSerialTask {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SerialPortException ex) {
             Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new QCmdDisconnect();

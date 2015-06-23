@@ -17,10 +17,7 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
-import jssc.SerialPortException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import axoloti.Connection;
 
 /**
  *
@@ -35,14 +32,9 @@ public class QCmdSerialDialTX implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
-        try {
-            serialConnection.writeBytes(b);
-        } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdPing.class.getName()).log(Level.INFO, null, ex);
-            return new QCmdDisconnect();
-        }
+    public QCmd Do(Connection connection) {
+        connection.ClearSync();
+        connection.writeBytes(b);
         return this;
     }
 

@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
+import axoloti.Connection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -54,8 +54,8 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
+    public QCmd Do(Connection connection) {
+        connection.ClearSync();
         try {
             if (f == null) {
                 f = new File("firmware/build/axoloti.bin");
@@ -95,7 +95,7 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
             header[13] = (byte) (zcrcv >> 8);
             header[14] = (byte) (zcrcv >> 16);
             header[15] = (byte) (zcrcv >> 24);
-            serialConnection.UploadFragment(header, serialConnection.getTargetProfile().getSDRAMAddr() + offset);
+            connection.UploadFragment(header, connection.getTargetProfile().getSDRAMAddr() + offset);
             offset += header.length;
             int MaxBlockSize = 32768;
             do {
@@ -112,19 +112,17 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
                 if (nRead != l) {
                     Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
                 }
-                serialConnection.UploadFragment(buffer, serialConnection.getTargetProfile().getSDRAMAddr() + offset);
+                connection.UploadFragment(buffer, connection.getTargetProfile().getSDRAMAddr() + offset);
                 offset += nRead;
             } while (tlength > 0);
             inputStream.close();
-            if (serialConnection.WaitSync()) {
+            if (connection.WaitSync()) {
                 return this;
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
         } catch (IOException ex) {
             Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "IOException", ex);
-        } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "SerialPortException", ex);
         }
         return new QCmdDisconnect();
     }

@@ -18,11 +18,10 @@
 #include "ch.h"
 #include "hal.h"
 #include "axoloti_control.h"
-#include "pconnection.h"
-
-extern SerialUSBDriver SDU1;
+#include "usbcfg.h"
 
 void TransmitLCDoverUSB(void) {
+
   static int r = 0;
   r++;
   if (r == (LCDROWS + 1))
@@ -30,13 +29,14 @@ void TransmitLCDoverUSB(void) {
 
   if (r < LCDROWS) {
     chSequentialStreamWrite(
-        (BaseSequentialStream *)&SDU1,
+        (BaseSequentialStream *)&BDU1,
         (const unsigned char*)&lcd_buffer[r * (LCDHEADER + LCDWIDTH)],
         LCDHEADER + LCDWIDTH);
   }
   else {
-    chSequentialStreamWrite((BaseSequentialStream *)&SDU1,
+    chSequentialStreamWrite((BaseSequentialStream *)&BDU1,
                             (const unsigned char*)&led_buffer[0],
                             LCDHEADER + LCDWIDTH);
   }
+
 }

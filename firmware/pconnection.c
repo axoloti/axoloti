@@ -35,13 +35,37 @@
 #include "crc32.h"
 #include "flash.h"
 #include "watchdog.h"
+#include "usbcfg.h"
+#include "bulk_usb.h"
+#include "midi.h"
+#include "midi_usb.h"
+#include "watchdog.h"
 
 /* Virtual serial port over USB.*/
-SerialUSBDriver SDU1;
+//SerialUSBDriver SDU1;
+
+//#define SDU1 BDU1
+#define DEBUG_SERIAL 1
 
 void BootLoaderInit(void);
 
 uint32_t fwid;
+
+
+static WORKING_AREA(waThreadUSBDMidi, 256);
+
+__attribute__((noreturn))
+  static msg_t ThreadUSBDMidi(void *arg) {
+  (void)arg;
+#if CH_USE_REGISTRY
+  chRegSetThreadName("usbdmidi");
+#endif
+  uint8_t r[4];
+  while (1) {
+    chnReadTimeout(&MDU1, &r, 4, TIME_INFINITE);
+    MidiInMsgHandler(MIDI_DEVICE_USB_DEVICE, (( r[0] & 0xF0) >> 4)+ 1, r[1], r[2], r[3]);
+  }
+}
 
 void InitPConnection(void) {
 
@@ -52,18 +76,23 @@ void InitPConnection(void) {
   /*
    * Initializes a serial-over-USB CDC driver.
    */
-  sduObjectInit(&SDU1);
-  sduStart(&SDU1, &serusbcfg);
+  mduObjectInit(&MDU1);
+  mduStart(&MDU1, &midiusbcfg);
+  bduObjectInit(&BDU1);
+  bduStart(&BDU1, &bulkusbcfg);
 
   /*
    * Activates the USB driver and then the USB bus pull-up on D+.
    * Note, a delay is inserted in order to not have to disconnect the cable
    * after a reset.
    */
-  usbDisconnectBus(serusbcfg.usbp);
+  usbDisconnectBus(midiusbcfg.usbp);
   chThdSleepMilliseconds(1000);
-  usbStart(serusbcfg.usbp, &usbcfg);
-  usbConnectBus(serusbcfg.usbp);
+  usbStart(midiusbcfg.usbp, &usbcfg);
+  usbConnectBus(midiusbcfg.usbp);
+
+  chThdCreateStatic(waThreadUSBDMidi, sizeof(waThreadUSBDMidi), NORMALPRIO, ThreadUSBDMidi,
+                    NULL);
 }
 
 int AckPending = 0;
@@ -79,7 +108,7 @@ void TransmitDisplayPckt(void) {
   unsigned int length = 12 + (patchMeta.pDisplayVector[2] * 4);
   if (length > 2048)
     return; // FIXME
-  chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+  chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                           (const unsigned char* )&patchMeta.pDisplayVector[0],
                           length);
 }
@@ -87,20 +116,20 @@ void TransmitDisplayPckt(void) {
 void LogTextMessage(const char* format, ...) {
   if (connected ) {
     int h = 0x546F7841; // "AxoT"
-    chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+    chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                             (const unsigned char* )&h, 4);
 
     va_list ap;
     va_start(ap, format);
-    chvprintf((BaseSequentialStream * )&SDU1, format, ap);
+    chvprintf((BaseSequentialStream * )&BDU1, format, ap);
     va_end(ap);
-    chSequentialStreamPut((BaseSequentialStream * )&SDU1, 0);
+    chSequentialStreamPut((BaseSequentialStream * )&BDU1, 0);
   }
 }
 
 void PExTransmit(void) {
   int i;
-  if (chOQIsEmptyI(&SDU1.oqueue)) {
+  if (chOQIsEmptyI(&BDU1.oqueue)) {
     if (AckPending) {
       int ack[7];
       ack[0] = 0x416F7841; // "AxoA"
@@ -110,8 +139,12 @@ void PExTransmit(void) {
       ack[4] = *((int*)0x1FFF7A10); // CPU unique ID
       ack[5] = *((int*)0x1FFF7A14); // CPU unique ID
       ack[6] = *((int*)0x1FFF7A18); // CPU unique ID
-      chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+      chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                               (const unsigned char* )&ack[0], 7 * 4);
+
+#ifdef DEBUG_SERIAL
+      chprintf((BaseSequentialStream * )&SD2,"ack!\r\n");
+#endif
 
       if (!patchStatus)
         TransmitDisplayPckt();
@@ -130,7 +163,7 @@ void PExTransmit(void) {
           msg.header = 0x506F7841; //"AxoP"
           msg.index = i;
           msg.value = v;
-          chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+          chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                                   (const unsigned char* )&msg, sizeof(msg));
         }
       }
@@ -183,7 +216,7 @@ static FRESULT scan_files(char *path) {
          */
         strcpy(&((char*)fbuff)[8], fn);
         int l = strlen((char *)(&fbuff[2]));
-        chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+        chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                                 (const unsigned char* )fbuff, l + 9);
       }
     }
@@ -214,7 +247,7 @@ void ReadDirectoryListing(void) {
   fbuff[1] = clusters;
   fbuff[2] = fsp->csize;
   fbuff[3] = MMCSD_BLOCK_SIZE;
-  chSequentialStreamWrite((BaseSequentialStream * )&SDU1,
+  chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                           (const unsigned char* )(&fbuff[0]), 16);
   chThdSleepMilliseconds(10);
   fbuff[0] = 0;
@@ -300,6 +333,7 @@ void CopyPatchToFlash(void) {
   }
   AckPending = 1;
 }
+
 
 void PExReceiveByte(unsigned char c) {
   static char header = 0;
@@ -392,6 +426,9 @@ void PExReceiveByte(unsigned char c) {
       else if (c == 'p') { // ping
         state = 0;
         header = 0;
+#ifdef DEBUG_SERIAL
+        chprintf((BaseSequentialStream * )&SD2,"ping\r\n");
+#endif
         AckPending = 1;
       }
       else if (c == 'c') { // close sdcard file
@@ -780,11 +817,22 @@ void PExReceiveByte(unsigned char c) {
   }
 }
 
+
 void PExReceive(void) {
   if (!AckPending) {
     unsigned char received;
-    while (chnReadTimeout(&SDU1, &received, 1, TIME_IMMEDIATE)) {
+    while (chnReadTimeout(&BDU1, &received, 1, TIME_IMMEDIATE)) {
       PExReceiveByte(received);
     }
   }
 }
+
+/*
+void USBDMidiPoll(void) {
+  uint8_t r[4];
+  while (chnReadTimeout(&MDU1, &r, 4, TIME_IMMEDIATE)) {
+    MidiInMsgHandler(MIDI_DEVICE_USB_DEVICE, (( r[0] & 0xF0) >> 4)+ 1, r[1], r[2], r[3]);
+  }
+}
+*/
+

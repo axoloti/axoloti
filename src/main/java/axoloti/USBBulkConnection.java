@@ -17,24 +17,25 @@
  */
 package axoloti;
 
-import axoloti.dialogs.SerialPortSelectionDlg;
+/**
+ * Replaces the old packet-over-serial protocol
+ * with vendor-specific usb bulk transport
+ */
+
 import axoloti.parameters.ParameterInstance;
 import axoloti.targetprofile.axoloti_core;
 import displays.DisplayInstance;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
+import java.nio.IntBuffer;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
-
-import jssc.*;
-import jssc.SerialPortException;
+import org.usb4java.*;
 import qcmds.QCmd;
 import qcmds.QCmdSerialTask;
 import qcmds.QCmdSerialTaskNull;
@@ -44,35 +45,46 @@ import qcmds.QCmdShowDisconnect;
  *
  * @author Johannes Taelman
  */
-@Deprecated
-public class SerialConnection extends Connection {
+public class USBBulkConnection extends Connection {
 
     Patch patch;
-    private SerialPort serialPort;
     boolean disconnectRequested;
     boolean connected;
     Thread transmitterThread;
+    Thread receiverThread;
     BlockingQueue<QCmdSerialTask> queueSerialTask;
     private BlockingQueue<QCmd> queueResponse;
     String portName;
-    private axoloti_core targetProfile = new axoloti_core();
+    private final axoloti_core targetProfile = new axoloti_core();
+    private final Context context;
+    private DeviceHandle handle;
+    private Device device;
 
-    public SerialConnection(Patch patch, BlockingQueue<QCmd> queueResponse) {
+    private final short bulkVID = (short) 0x16C0;
+    private final short bulkPID = (short) 0x0442;
+    private final int interfaceNumber = 2;
+
+    public USBBulkConnection(Patch patch, BlockingQueue<QCmd> queueResponse) {
         this.sync = new Sync();
         this.patch = patch;
         this.queueResponse = queueResponse;
         disconnectRequested = false;
         connected = false;
         queueSerialTask = new ArrayBlockingQueue<QCmdSerialTask>(10);
+        context = new Context();
+        int result = LibUsb.init(context);
+        if (result != LibUsb.SUCCESS) {
+            throw new LibUsbException("Unable to initialize libusb.", result);
+        }
     }
-
-    @Override
-    public void SelectSerialPort() {
-        SerialPortSelectionDlg spsDlg = new SerialPortSelectionDlg(null, true, portName);
-        spsDlg.setVisible(true);
-        portName = spsDlg.getPort();
-        Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO, "port: " + portName);
-    }
+    /*
+     void SelectSerialPort() {
+     SerialPortSelectionDlg spsDlg = new SerialPortSelectionDlg(null, true, portName);
+     spsDlg.setVisible(true);
+     portName = spsDlg.getPort();
+     Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: " + portName);
+     }
+     */
 
     public void setPatch(Patch patch) {
         this.patch = patch;
@@ -97,32 +109,87 @@ public class SerialConnection extends Connection {
     public void disconnect() {
         if (connected) {
             disconnectRequested = true;
+            connected = false;            
             MainFrame.mainframe.ShowDisconnect();
             queueSerialTask.clear();
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
             queueSerialTask.add(new QCmdSerialTaskNull());
             queueSerialTask.add(new QCmdSerialTaskNull());
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO, "Disconnect request");
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Disconnect request");
+            /*
+             try {
+             serialPort.purgePort(jssc.SerialPort.PURGE_RXCLEAR | jssc.SerialPort.PURGE_TXCLEAR);
+             serialPort.closePort();
+             } catch (SerialPortException ex) {
+             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+             }
+             */
+        synchronized (sync) {
+            sync.Acked = 0;
+            sync.notifyAll();
+        }
+            
             try {
-                serialPort.purgePort(jssc.SerialPort.PURGE_RXCLEAR | jssc.SerialPort.PURGE_TXCLEAR);
-                serialPort.closePort();
-            } catch (SerialPortException ex) {
-                Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, null, ex);
+                if (receiverThread.isAlive()) {
+                    receiverThread.join();
+                }
+                if (transmitterThread.isAlive()) {
+                    transmitterThread.join();
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
-            connected = false;
+
+            int result = LibUsb.releaseInterface(handle, interfaceNumber);
+            if (result != LibUsb.SUCCESS) {
+                throw new LibUsbException("Unable to release interface", result);
+            }
+
+            LibUsb.close(handle);
+            handle = null;
             CpuId0 = 0;
             CpuId1 = 0;
             CpuId2 = 0;
         }
+    }
+
+    public Device getDevice() {
+        // Read the USB device list
+        DeviceList list = new DeviceList();
+        int result = LibUsb.getDeviceList(context, list);
+        if (result < 0) {
+            throw new LibUsbException("Unable to get device list", result);
+        }
+
+        try {
+            // Iterate over all devices and scan for the right one
+            for (Device device : list) {
+                DeviceDescriptor descriptor = new DeviceDescriptor();
+                result = LibUsb.getDeviceDescriptor(device, descriptor);
+                if (result != LibUsb.SUCCESS) {
+                    throw new LibUsbException("Unable to read device descriptor", result);
+                }
+                if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "USB device found");
+                    return device;
+                }
+            }
+        } finally {
+            // Ensure the allocated device list is freed
+            //LibUsb.freeDeviceList(list, true);
+        }
+        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "No USB device found with matching PID/VID");
+        // Device not found
+        return null;
     }
 
     @Override
@@ -137,74 +204,82 @@ public class SerialConnection extends Connection {
         if (portName == null) {
             portName = MainFrame.prefs.getComPortName();
         }
-        List<String> pl = Arrays.asList(SerialPortList.getPortNames());
-        if ((portName == null) || (portName.isEmpty()) || (!pl.contains(portName))) {
-            SelectSerialPort();
-            if (portName == null) {
-                return false;
-            }
-            if (portName.isEmpty()) {
-                return false;
-            }
-            MainFrame.prefs.setComPortName(portName);
-            MainFrame.prefs.SavePrefs();
+
+        handle = new DeviceHandle();
+        device = getDevice();
+        if (device == null) {
+            return false;
         }
-        try {
-            Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO, "Initiating connect to " + portName);
-            serialPort = new SerialPort(portName);
-            serialPort.openPort();
+        int result = LibUsb.open(device, handle);
+        if (result != LibUsb.SUCCESS) {
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Unable to open USB device, err" + result);
+            return false;
+        }
 
-            serialPort.setParams(115200, 8, 1, 0);//Set params
-            serialPort.setEventsMask(SerialPort.MASK_RXCHAR);
-            serialPort.addEventListener(new SerialPortEventListener() {
-                @Override
-                public void serialEvent(SerialPortEvent spe) {
-                    if (spe.isRXCHAR()) {
-                        try {
-                            byte[] r = serialPort.readBytes();
-                            if (r != null) {
-                                for (byte b : r) {
-                                    processByte(b);
-                                }
-                            }
-                        } catch (SerialPortException ex) {
-                            Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+        {
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Initiating connect to " + portName);
+            /*
+             serialPort.addEventListener(new SerialPortEventListener() {
+             @Override
+             public void serialEvent(SerialPortEvent spe) {
+             if (spe.isRXCHAR()) {
+             try {
+             byte[] r = serialPort.readBytes();
+             if (r != null) {
+             for (byte b : r) {
+             processByte(b);
+             }
+             }
+             } catch (SerialPortException ex) {
+             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+             }
 
-                    }
-                }
-            });
+             }
+             }
+             });*/
+
+            result = LibUsb.claimInterface(handle, interfaceNumber);
+            if (result != LibUsb.SUCCESS) {
+                throw new LibUsbException("Unable to claim interface", result);
+            }
+
             GoIdleState();
             TransmitPing();
             TransmitPing();
-            Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO, "creating tx thread...");
-            transmitterThread = new Thread(new SerialTransmitter());
-            transmitterThread.setName("SerialTransmitter");
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "creating rx and tx thread...");
+            transmitterThread = new Thread(new Transmitter());
+            transmitterThread.setName("Transmitter");
             transmitterThread.start();
+            receiverThread = new Thread(new Receiver());
+            receiverThread.setName("Receiver");
+            receiverThread.start();
+
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             connected = true;
-            Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, "connected");
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "connected");
             MainFrame.mainframe.ShowConnect();
             return true;
 
-        } catch (SerialPortException ex) {
-            Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        MainFrame.mainframe.ShowDisconnect();
-        return false;
+//        MainFrame.mainframe.ShowDisconnect();
+//        return false;
     }
 
+    @Override
     public void writeBytes(byte[] data) {
-        try {
-            serialPort.writeBytes(data);
-        } catch (SerialPortException ex) {
-            Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, null, ex);
+        ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
+        buffer.put(data);
+        IntBuffer transfered = IntBuffer.allocate(1);
+        int result = LibUsb.bulkTransfer(handle, (byte) 0x02, buffer, transfered, 1000);
+        if (result != LibUsb.SUCCESS) {
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Control transfer failed: " + result);
         }
+        //System.out.println(transfered.get() + " bytes sent");
     }
 
     @Override
@@ -253,12 +328,13 @@ public class SerialConnection extends Connection {
         data[5] = (byte) (len >> 8);
         data[6] = (byte) (len >> 16);
         data[7] = (byte) (len >> 24);
-        try {
-            serialPort.writeBytes(data);
-            serialPort.writeBytes(b);
-        } catch (SerialPortException ex) {
-            Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        writeBytes(data);
+        writeBytes(b);
+    }
+
+    @Override
+    public void SelectSerialPort() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     class Sync {
@@ -278,7 +354,7 @@ public class SerialConnection extends Connection {
     public boolean WaitSync() {
         synchronized (sync) {
             try {
-                sync.wait(2000);
+                sync.wait(1000);
             } catch (InterruptedException ex) {
                 //              Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, "Sync wait interrupted");
             }
@@ -341,7 +417,7 @@ public class SerialConnection extends Connection {
         writeBytes(data);
         writeBytes(buffer);
         WaitSync();
-        Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO, "block uploaded @ 0x" + Integer.toHexString(offset) + " length " + buffer.length);
+        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "block uploaded @ 0x" + Integer.toHexString(offset) + " length " + buffer.length);
     }
 
     @Override
@@ -418,21 +494,46 @@ public class SerialConnection extends Connection {
         WaitSync();
     }
 
-    class SerialTransmitter implements Runnable {
+    class Receiver implements Runnable {
 
         @Override
         public void run() {
-//            Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO,"transmitter: thread started");
+            ByteBuffer recvbuffer = ByteBuffer.allocateDirect(32768);
+            IntBuffer transfered = IntBuffer.allocate(1);
+            while (!disconnectRequested) {
+                int result = LibUsb.bulkTransfer(handle, (byte) 0x82, recvbuffer, transfered, 1000);
+                if (result != LibUsb.SUCCESS) {
+                    //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receive: " + result);
+                }
+                {
+                    int sz = transfered.get(0);
+                    if (sz != 0) {
+//                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receive sz: " + sz);
+                    }
+                    for (int i = 0; i < sz; i++) {
+                        processByte(recvbuffer.get(i));
+                    }
+                }
+            }
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receiver: thread stopped");
+            MainFrame.mainframe.qcmdprocessor.Abort();
+            MainFrame.mainframe.qcmdprocessor.AppendToQueue(new QCmdShowDisconnect());
+        }
+    }
+
+    class Transmitter implements Runnable {
+
+        @Override
+        public void run() {
             while (!disconnectRequested) {
                 try {
                     QCmdSerialTask cmd = queueSerialTask.take();
-//                    Logger.getLogger(ShellProcessor.class.getName()).log(Level.INFO, "SerialConnection : "+ cmd.GetStartMessage());                
-                    queueResponse.add(cmd.Do(SerialConnection.this));
+                    queueResponse.add(cmd.Do(USBBulkConnection.this));
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO, "transmitter: thread stopped");
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "transmitter: thread stopped");
             MainFrame.mainframe.qcmdprocessor.Abort();
             MainFrame.mainframe.qcmdprocessor.AppendToQueue(new QCmdShowDisconnect());
         }
@@ -467,16 +568,16 @@ public class SerialConnection extends Connection {
             @Override
             public void run() {
                 if (patch == null) {
-                    Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO, "Rx paramchange patch null" + index + " " + value);
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange patch null" + index + " " + value);
                     return;
                 }
                 if (index >= patch.ParameterInstances.size()) {
-                    Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO, "Rx paramchange index out of range" + index + " " + value);
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange index out of range" + index + " " + value);
                     return;
                 }
                 ParameterInstance pi = patch.ParameterInstances.get(index);
                 if (pi == null) {
-                    Logger.getLogger(SerialConnection.class.getName()).log(Level.INFO, "Rx paramchange parameterInstance null" + index + " " + value);
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange parameterInstance null" + index + " " + value);
                     return;
                 }
 //                System.out.println("rcv ppc objname:" + pi.axoObj.getInstanceName() + " pname:"+ pi.name);
@@ -533,7 +634,7 @@ public class SerialConnection extends Connection {
 
     void DisplayPackHeader(int i1, int i2) {
         if (i2 > 1024) {
-            Logger.getLogger(SerialConnection.class.getName()).fine("Lots of data coming! " + Integer.toHexString(i1) + " / " + Integer.toHexString(i2));
+            Logger.getLogger(USBBulkConnection.class.getName()).fine("Lots of data coming! " + Integer.toHexString(i1) + " / " + Integer.toHexString(i2));
         } else {
 //            Logger.getLogger(SerialConnection.class.getName()).info("OK! " + Integer.toHexString(i1) + " / " + Integer.toHexString(i2));
         }
@@ -658,7 +759,7 @@ public class SerialConnection extends Connection {
                         }
                         break;
                     default:
-                        Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, "receiver: invalid header");
+                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "receiver: invalid header");
                         GoIdleState();
                         break;
                 }
@@ -723,7 +824,7 @@ public class SerialConnection extends Connection {
                     //textRcvBuffer.append((char) cc);
                     textRcvBuffer.limit(textRcvBuffer.position());
                     textRcvBuffer.rewind();
-                    Logger.getLogger(SerialConnection.class.getName()).info("Axoloti says: " + textRcvBuffer.toString());
+                    Logger.getLogger(USBBulkConnection.class.getName()).info("Axoloti says: " + textRcvBuffer.toString());
                     GoIdleState();
                 }
                 break;
@@ -766,6 +867,7 @@ public class SerialConnection extends Connection {
         }
     }
 
+    @Override
     public axoloti_core getTargetProfile() {
         return targetProfile;
     }

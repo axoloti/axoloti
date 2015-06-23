@@ -398,7 +398,7 @@ static msg_t ThreadUI(void *arg) {
     UIPollButtons2();
     UIUpdateLCD();
 #endif
-    chThdSleepMilliseconds(10);
+    chThdSleepMilliseconds(2);
   }
   return (msg_t)0;
 }

@@ -17,7 +17,6 @@
  */
 package axoloti.usb;
 
-import axoloti.utils.OSDetect;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.usb4java.*;
@@ -28,9 +27,11 @@ import org.usb4java.*;
  */
 public class Usb {
 
-    static final short VID_STM = 0x0483;
+    static final short VID_STM = (short) 0x0483;
     static final short PID_STM_DFU = (short) 0xDF11;
     static final short PID_STM_CDC = (short) 0x5740;
+    static final short VID_AXOLOTI = (short) 0x16C0;
+    static final short PID_AXOLOTI = (short) 0x0442;
 
     public Usb() {
     }
@@ -79,7 +80,12 @@ public class Usb {
                                 Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  driver ok");
                                 LibUsb.close(handle);
                             }
+                        } else {
+                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* other STM device:\n" + descriptor.dump());
                         }
+                    } else if (descriptor.idVendor() == VID_AXOLOTI && descriptor.idProduct() == PID_AXOLOTI) {
+                        hasOne = true;
+                        Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* Axoloti USB device");
                     }
                 } else {
                     throw new LibUsbException("Unable to read device descriptor", result);

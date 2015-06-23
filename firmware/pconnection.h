@@ -18,7 +18,7 @@
 #ifndef __PCONNECTION_H
 #define __PCONNECTION_H
 
-//extern SerialUSBDriver SDU1;
+void USBDMidiPoll(void);
 void PExTransmit(void);
 void PExReceive(void);
 void InitPConnection(void);

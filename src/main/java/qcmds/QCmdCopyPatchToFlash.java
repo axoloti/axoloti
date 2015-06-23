@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
+import axoloti.Connection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,17 +36,12 @@ public class QCmdCopyPatchToFlash implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
-        try {
-            serialConnection.TransmitCopyToFlash();
-            if (serialConnection.WaitSync()) {
-                return this;
-            } else {
-                return new QCmdDisconnect();
-            }
-        } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdPing.class.getName()).log(Level.SEVERE, null, ex);
+    public QCmd Do(Connection connection) {
+        connection.ClearSync();
+        connection.TransmitCopyToFlash();
+        if (connection.WaitSync()) {
+            return this;
+        } else {
             return new QCmdDisconnect();
         }
     }

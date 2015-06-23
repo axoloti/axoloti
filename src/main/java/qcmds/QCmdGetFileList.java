@@ -17,10 +17,7 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jssc.SerialPortException;
+import axoloti.Connection;
 
 /**
  *
@@ -39,14 +36,9 @@ public class QCmdGetFileList implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
-        try {
-            serialConnection.TransmitGetFileList();
-            return this;
-        } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdPing.class.getName()).log(Level.SEVERE, null, ex);
-            return new QCmdDisconnect();
-        }
+    public QCmd Do(Connection connection) {
+        connection.ClearSync();
+        connection.TransmitGetFileList();
+        return this;
     }
 }

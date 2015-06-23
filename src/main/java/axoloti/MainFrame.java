@@ -737,7 +737,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         File f = new File(fname);
         if (f.canRead()) {
             qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
-            qcmdprocessor.AppendToQueue(new QCmdUploadPatch());
+            qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
             qcmdprocessor.AppendToQueue(new QCmdStart());
         } else {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can't read flasher, please compile firmware! (file: " + fname + " )");
@@ -915,7 +915,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     public void updateLinkFirmwareID() {
         LinkFirmwareID = FirmwareID.getFirmwareID();
-        TargetFirmwareID = LinkFirmwareID;
+        //TargetFirmwareID = LinkFirmwareID;
         jLabelFirmwareID.setText("Firmware ID = " + LinkFirmwareID);
         Logger.getLogger(MainFrame.class.getName()).info("Link to firmware CRC " + LinkFirmwareID);
     }

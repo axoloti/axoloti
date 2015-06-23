@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
+import axoloti.Connection;
 import jssc.SerialPortException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,18 +48,13 @@ public class QCmdPing implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
-        try {
-            serialConnection.TransmitPing();
-            if (serialConnection.WaitSync() || (noCauseDisconnect)) {
-                return this;
-            } else {
-                Logger.getLogger(QCmdPing.class.getName()).log(Level.SEVERE, "Ping: WaitSync Timeout, disconnecting now");
-                return new QCmdDisconnect();
-            }
-        } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdPing.class.getName()).log(Level.SEVERE, "Ping: SerialPortException", ex);
+    public QCmd Do(Connection connection) {
+        connection.ClearSync();
+        connection.TransmitPing();
+        if (connection.WaitSync() || (noCauseDisconnect)) {
+            return this;
+        } else {
+            Logger.getLogger(QCmdPing.class.getName()).log(Level.SEVERE, "Ping: WaitSync Timeout, disconnecting now");
             return new QCmdDisconnect();
         }
     }
