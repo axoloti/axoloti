@@ -42,7 +42,7 @@ struct KeyValuePair *KvpsDisplay;
 struct KeyValuePair *ObjectKvpRoot;
 #define MAXOBJECTS 256
 struct KeyValuePair *ObjectKvps[MAXOBJECTS];
-#define MAXTMPMENUITEMS 16
+#define MAXTMPMENUITEMS 15
 KeyValuePair_s TmpMenuKvps[MAXTMPMENUITEMS];
 KeyValuePair_s ADCkvps[3];
 
