@@ -23,7 +23,9 @@
                <string>65536 (1.36s)</string>
                <string>131072 (2.37s)</string>
                <string>262144 (5.46s)</string>
-               <string>524288 (10.09s)</string>
+               <string>524288 (10.9s)</string>
+               <string>1048576 (21.8s)</string>
+               <string>2097152 (43.7s)</string>
             </MenuEntries>
             <CEntries>
                <string>8</string>
@@ -38,6 +40,8 @@
                <string>17</string>
                <string>18</string>
                <string>19</string>
+               <string>20</string>
+               <string>21</string>
             </CEntries>
          </combo>
       </attribs>
