@@ -1455,7 +1455,7 @@ public class Patch {
             } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
-                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getInstanceName() + "[j] = 0;\n"
+                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] = 0;\n"
                         + "}\n";
             }
         }
@@ -1478,7 +1478,7 @@ public class Patch {
             } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
-                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getInstanceName() + "[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
+                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName()+ "[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
                         + "}\n";
             }
         }
