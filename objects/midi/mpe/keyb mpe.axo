@@ -41,16 +41,16 @@ _timbre = 0;
 _bendRange = 48;
 ]]></code.init>
       <code.krate><![CDATA[
-%note%= _note<<21;
-%gate%= _gate;
-%gate2%= _gate2;
+outlet_note= _note<<21;
+outlet_gate= _gate;
+outlet_gate2= _gate2;
 _gate2 = _gate;
-%velocity%= _velo;
-%releaseVelocity%= _rvelo;
-%pressure% = _pressure;
-%bend% = _bend;
-%timbre% = _timbre;
-%pitch% = _pitch;
+outlet_velocity= _velo;
+outlet_releaseVelocity= _rvelo;
+outlet_pressure = _pressure;
+outlet_bend = _bend;
+outlet_timbre = _timbre;
+outlet_pitch = _pitch;
 ]]></code.krate>
       <code.midihandler><![CDATA[
 if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
