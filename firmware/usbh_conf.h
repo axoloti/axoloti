@@ -111,20 +111,7 @@ extern void fakefree(void * p);
 #define osEventMessage 1
 typedef uint8_t osEvent;
 
-#define LOG_ON_UART 0
-#define LOG_ON_CDC 1
-
 //#define DEBUG_ON_GPIO
-
-#if LOG_ON_UART
-extern BaseSequentialStream SD2;
-#define LOGSTREAM SD2
-#define TransmitTextMessageHeader()
-#elif  LOG_ON_CDC
-extern BaseSequentialStream SDU1;
-void TransmitTextMessageHeader(void);
-#define LOGSTREAM SDU1
-#endif
 
  /* DEBUG macros */
 
