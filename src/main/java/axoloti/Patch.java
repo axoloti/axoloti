@@ -1451,7 +1451,7 @@ public class Patch {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("outlet") || o.typeName.equals("outlet_i") || o.typeName.equals("outlet_b")
                     || o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   outlet_" + o.getInstanceName() + " = 0;\n";
+                ao.sKRateCode += "   outlet_" + o.getLegalName() + " = 0;\n";
             } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
@@ -1474,7 +1474,7 @@ public class Patch {
             if (o.typeName.equals("outlet") || o.typeName.equals("patch/outlet f")
                     || o.typeName.equals("outlet_i") || o.typeName.equals("patch/outlet i")
                     || o.typeName.equals("outlet_b") || o.typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   outlet_" + o.getInstanceName() + " += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
+                ao.sKRateCode += "   outlet_" + o.getLegalName() + " += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
             } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
