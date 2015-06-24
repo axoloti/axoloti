@@ -1334,8 +1334,8 @@ public class Patch {
         }
 
         // use a cut down list of those currently supported
-        String cdev[] = {"0", "1", "3", "15"};
-        String udev[] = {"omni", "din", "usb host", "internal"};
+        String cdev[] = {"0", "1", "2", "3", "15"};
+        String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
         ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
         String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
