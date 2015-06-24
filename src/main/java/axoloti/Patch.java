@@ -1250,18 +1250,18 @@ public class Patch {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("inlet") || o.typeName.equals("inlet_i") || o.typeName.equals("inlet_b")
                     || o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
-                ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getInstanceName() + ";\n";
+                ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
             } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
-                ao.sKRateCode += "   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = inlet_" + o.getInstanceName() + "[i];\n";
+                ao.sKRateCode += "   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = inlet_" + o.getLegalName() + "[i];\n";
             }
         }
         ao.sKRateCode += GenerateDSPCodePlusPlusSub("%parent%", true);
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("outlet") || o.typeName.equals("outlet_i") || o.typeName.equals("outlet_b")
                     || o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   outlet_" + o.getInstanceName() + " = " + o.getCInstanceName() + "_i._outlet;\n";
+                ao.sKRateCode += "   outlet_" + o.getLegalName() + " = " + o.getCInstanceName() + "_i._outlet;\n";
             } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
-                ao.sKRateCode += "      for(i=0;i<BUFSIZE;i++) outlet_" + o.getInstanceName() + "[i] = " + o.getCInstanceName() + "_i._outlet[i];\n";
+                ao.sKRateCode += "      for(i=0;i<BUFSIZE;i++) outlet_" + o.getLegalName() + "[i] = " + o.getCInstanceName() + "_i._outlet[i];\n";
             }
         }
 
@@ -1464,9 +1464,9 @@ public class Patch {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("inlet") || o.typeName.equals("inlet_i") || o.typeName.equals("inlet_b")
                     || o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
-                ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = inlet_" + o.getInstanceName() + ";\n";
+                ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
             } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
-                ao.sKRateCode += "{int j; for(j=0;j<BUFSIZE;j++) getVoices()[vi]." + o.getCInstanceName() + "_i._inlet[j] = inlet_" + o.getInstanceName() + "[j];}\n";
+                ao.sKRateCode += "{int j; for(j=0;j<BUFSIZE;j++) getVoices()[vi]." + o.getCInstanceName() + "_i._inlet[j] = inlet_" + o.getLegalName() + "[j];}\n";
             }
         }
         ao.sKRateCode += "getVoices()[vi].dsp();\n";
@@ -1478,7 +1478,7 @@ public class Patch {
             } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
-                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName()+ "[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
+                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
                         + "}\n";
             }
         }
