@@ -138,7 +138,7 @@ bool parseChar(uint8_t latestByte){
 				// Packet exceeded max length
 				// Send an error
 				//sprintf(latestError, "ERROR: Packet too long %i", packetLength);
-				TransmitTextMessage("ERROR: Packet too long");
+				LogTextMessage("ERROR: Packet too long");
 				inPacket = false;
 			}
 		}
@@ -164,7 +164,7 @@ bool parseChar(uint8_t latestByte){
 				else {
 					// Parsing failed, send an error.
 //					sprintf(latestError, "ERROR: Could not parse");
-				TransmitTextMessage("ERROR: Could not parse");
+				LogTextMessage("ERROR: Could not parse");
 					
 					// good place to print the packet if debugging
 				}
@@ -172,7 +172,7 @@ bool parseChar(uint8_t latestByte){
 			else {
 				// Checksum mismatch, send an error.
 //				sprintf(latestError, "ERROR: Checksum");
-				TransmitTextMessage("ERROR: Checksum");
+				LogTextMessage("ERROR: Checksum");
 				// good place to print the packet if debugging
 			}
 			// End of packet

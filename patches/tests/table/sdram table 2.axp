@@ -8,11 +8,11 @@
     FRESULT err;
     UINT bytes_read;
     err = f_open(&FileObject, "CR.RAW", FA_READ | FA_OPEN_EXISTING);
-    if (err != FR_OK) {TransmitTextMessage("Open failed\n"); return;}
+    if (err != FR_OK) {LogTextMessage("Open failed\n"); return;}
     err = f_read(&FileObject, (char *)array, LENGTH*sizeof(*array),&bytes_read);
-    if (err != FR_OK) {TransmitTextMessage("Read failed\n"); return;};
+    if (err != FR_OK) {LogTextMessage("Read failed\n"); return;};
     err = f_close(&FileObject);
-    if (err != FR_OK) {TransmitTextMessage("Close failed\n"); return;};
+    if (err != FR_OK) {LogTextMessage("Close failed\n"); return;};
 ]]></sText>
          </text>
       </attribs>
