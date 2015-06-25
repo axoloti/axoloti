@@ -76,7 +76,7 @@ void start_dsp_thread(void);
 
 // patch is located in sector 11
 #define PATCHFLASHLOC 0x080E0000
-#define PATCHFLASHSIZE 0xE000
+#define PATCHFLASHSIZE 0xB000
 
 void StartLoadPatchTread(void);
 void LoadPatch(char *name);
