@@ -13,7 +13,7 @@ MEMORY
   72kB for program!
 */
 
-      SRAM (rwx) : ORIGIN = 0x00010000, LENGTH = 0x0000A000 /* 56kB in RAM1 */
+      SRAM (rwx) : ORIGIN = 0x00011000, LENGTH = 0x00009000 
       CCMSRAM (rwx) : ORIGIN = 0x10000000, LENGTH = 0x0000E000 /* CCM - ccmramend */
 }
 

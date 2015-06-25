@@ -70,7 +70,7 @@ public class QCmdWriteFile implements QCmdSerialTask {
             data[1] = 'x';
             data[2] = 'o';
             data[3] = 'w';
-            int tvalue = 0x20010000; // not CCM : 
+            int tvalue = Connection.getTargetProfile().getPatchAddr();
             data[4] = (byte) tvalue;
             data[5] = (byte) (tvalue >> 8);
             data[6] = (byte) (tvalue >> 16);
