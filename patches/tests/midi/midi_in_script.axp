@@ -6,7 +6,7 @@
          <text attributeName="script">
             <sText><![CDATA[if (status == MIDI_CONTROL_CHANGE + %midichannel%) {
 	if ((data1 >= 52)&&(data1<60)) {
-		parent2->ApplyPreset(data1-51);
+		parent->ApplyPreset(data1-51);
 	}
 }]]></sText>
          </text>

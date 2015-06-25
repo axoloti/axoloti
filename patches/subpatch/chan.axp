@@ -65,7 +65,7 @@
    <obj type="recv" name="recv1" x="200" y="0">
       <params/>
       <attribs>
-         <table attributeName="sender" table="parent2-&gt;instanceena"/>
+         <table attributeName="sender" table="parent-&gt;instanceena"/>
       </attribs>
    </obj>
    <obj type="latch" name="latch1" x="400" y="40">

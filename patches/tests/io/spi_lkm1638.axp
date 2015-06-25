@@ -107,14 +107,14 @@ void update_leds(){
 void loop(){
 	chThdSleepMilliseconds(1);
 	uint8_t buttons = tm1638_read_buttons();
-	state8g = parent2->PExch[PARAM_INDEX_seqg_b16].value;
-    	state8r = parent2->PExch[PARAM_INDEX_seqr_b16].value;
+	state8g = parent->PExch[PARAM_INDEX_seqg_b16].value;
+    	state8r = parent->PExch[PARAM_INDEX_seqr_b16].value;
 	uint8_t buttons_pressed = buttons & ~buttons_prev;
 	if (buttons_pressed) {
 		state8g = state8g ^ buttons_pressed;
 		state8r = state8r ^ (state8g & buttons_pressed);
-		PExParameterChange(&parent2->PExch[PARAM_INDEX_seqg_b16],state8g,0xFFFD);
-		PExParameterChange(&parent2->PExch[PARAM_INDEX_seqr_b16],state8r,0xFFFD);
+		PExParameterChange(&parent->PExch[PARAM_INDEX_seqg_b16],state8g,0xFFFD);
+		PExParameterChange(&parent->PExch[PARAM_INDEX_seqr_b16],state8r,0xFFFD);
 	}
 	update_leds();
 	buttons_prev = buttons;

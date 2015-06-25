@@ -20,16 +20,16 @@ void loop(void){
 	}
 
 	// set parameter
-	PExParameterChange(&parent2->PExch[PARAM_INDEX_c1_value],ConvertIntToFrac(i),0xFFFD);
+	PExParameterChange(&parent->PExch[PARAM_INDEX_c1_value],ConvertIntToFrac(i),0xFFFD);
 
 	// set parameter to reverse count
-	PExParameterChange(&parent2->PExch[PARAM_INDEX_c2_value],ConvertIntToFrac(63-i),0xFFFD);
+	PExParameterChange(&parent->PExch[PARAM_INDEX_c2_value],ConvertIntToFrac(63-i),0xFFFD);
 
 	// set one bit to true
-	PExParameterChange(&parent2->PExch[PARAM_INDEX_cb16__1_b16],(1<<(i&0x0F)),0xFFFD);
+	PExParameterChange(&parent->PExch[PARAM_INDEX_cb16__1_b16],(1<<(i&0x0F)),0xFFFD);
 
 	// shows the bits of the counter
-	PExParameterChange(&parent2->PExch[PARAM_INDEX_cb16__2_b16],i,0xFFFD);
+	PExParameterChange(&parent->PExch[PARAM_INDEX_cb16__2_b16],i,0xFFFD);
 }]]></sText>
          </text>
       </attribs>
