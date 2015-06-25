@@ -238,7 +238,7 @@ public class Patch extends gentools {
     static AxoObject CreateInitMsg() {
         AxoObject o = new AxoObject("initmsg", "prints a message on patch init");
         o.attributes.add(new AxoAttributeTablename("message"));
-        o.sInitCode = "TransmitTextMessage(\"%message%\");\n";
+        o.sInitCode = "LogTextMessage(\"%message%\");\n";
         return o;
     }
 

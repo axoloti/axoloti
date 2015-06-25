@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="save" sha="505c7da537be6c76007d9f5c00d6731667388322">
+   <obj.normal id="save" sha="a722ebfda4ff4eac184af7cba9f84968d501a6bc">
       <sDescription>save table to sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,7 +29,7 @@
     FRESULT err;
     UINT bytes_written;
     err = f_open(&FileObject, inlet_filename, FA_WRITE | FA_CREATE_ALWAYS);
-    if (err != FR_OK) TransmitTextMessage("Open failed\n");
+    if (err != FR_OK) LogTextMessage("Open failed\n");
     int rem_sz = sizeof(*%table%.array)*%table%.LENGTH;
     int offset = 0;
     while (rem_sz>0) {
@@ -43,9 +43,9 @@
         err = f_write(&FileObject, fbuff, rem_sz, &bytes_written);
         rem_sz = 0;
       }
-    }    if (err != FR_OK) TransmitTextMessage("Write failed\n");
+    }    if (err != FR_OK) LogTextMessage("Write failed\n");
     err = f_close(&FileObject);
-    if (err != FR_OK) TransmitTextMessage("Close failed\n");
+    if (err != FR_OK) LogTextMessage("Close failed\n");
   }
   else if (!(inlet_trig>0)) ntrig=0;
 ]]></code.krate>
