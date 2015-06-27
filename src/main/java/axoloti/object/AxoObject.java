@@ -121,6 +121,8 @@ import org.simpleframework.xml.*;
 public class AxoObject extends AxoObjectAbstract {
 
     @Element(required = false)
+    public String helpPatch;
+    @Element(required = false)
     private Boolean providesModulationSource;
     @Element(required = false)
     private Boolean rotatedParams;
@@ -527,4 +529,19 @@ public class AxoObject extends AxoObjectAbstract {
     public Set<String> GetDepends() {
         return depends;
     }
+
+    public File GetHelpPatchFile() {
+        if (helpPatch == null) {
+            return null;
+        }
+        File o = new File(sPath);
+        String p = o.getParent() + File.separator + helpPatch;
+        File f = new File(p);
+        if (f.isFile() && f.canRead()) {
+            return f;
+        } else {
+            return null;
+        }
+    }
+
 }

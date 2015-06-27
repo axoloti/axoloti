@@ -41,6 +41,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -175,6 +176,16 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             }
         });
         popup.add(popm_substitute);
+        if (getType().GetHelpPatchFile() != null) {
+            MenuItem popm_help = new MenuItem("help");
+            popm_help.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    MainFrame.mainframe.OpenPatch(getType().GetHelpPatchFile());
+                }
+            });
+            popup.add(popm_help);
+        }
 
         /*
          h.add(Box.createHorizontalStrut(3));
@@ -483,19 +494,19 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             if (p.parameter.PropagateToChild != null) {
                 c += "// on Parent: propagate " + p.name + " " + enableOnParent + " " + getLegalName() + "" + p.parameter.PropagateToChild + "\n";
                 c += p.PExName("parent->") + ".pfunction = PropagateToSub;\n";
-                c += p.PExName("parent->") + ".finalvalue = (int32_t)(&(parent->instance" + 
-                        getLegalName() + "_i.PExch[instance" + getLegalName() + "::PARAM_INDEX_" 
+                c += p.PExName("parent->") + ".finalvalue = (int32_t)(&(parent->instance"
+                        + getLegalName() + "_i.PExch[instance" + getLegalName() + "::PARAM_INDEX_"
                         + p.parameter.PropagateToChild + "]));\n";
             } else {
                 c += p.GenerateCodeInit("parent->", "");
             }
  //           if ((p.isOnParent() && !enableOnParent)) {
-                //c += "// on Parent: propagate " + p.name + "\n";
-                //String parentparametername = classname.substring(8);
-                //c += "// classname : " + classname + " : " + parentparametername + "\n";
-                //c += "parent->PExch[PARAM_INDEX_" + parentparametername + "_" + getLegalName() + "].pfunction = PropagateToSub;\n";
-                //c += "parent->parent->PExch[PARAM_INDEX_" + parentparametername + "_" + getLegalName() + "].finalvalue = (int32_t)(&(" + p.PExName("parent->") + "));\n";
-   //         }
+            //c += "// on Parent: propagate " + p.name + "\n";
+            //String parentparametername = classname.substring(8);
+            //c += "// classname : " + classname + " : " + parentparametername + "\n";
+            //c += "parent->PExch[PARAM_INDEX_" + parentparametername + "_" + getLegalName() + "].pfunction = PropagateToSub;\n";
+            //c += "parent->parent->PExch[PARAM_INDEX_" + parentparametername + "_" + getLegalName() + "].finalvalue = (int32_t)(&(" + p.PExName("parent->") + "));\n";
+            //         }
         }
         for (DisplayInstance p : displayInstances) {
             c += p.GenerateCodeInit("");

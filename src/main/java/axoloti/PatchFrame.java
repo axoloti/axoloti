@@ -679,6 +679,9 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                 if (file.getName().endsWith("axp")) {
                     return true;
                 }
+                if (file.getName().endsWith("axh")) {
+                    return true;
+                }
                 return false;
             }
 
