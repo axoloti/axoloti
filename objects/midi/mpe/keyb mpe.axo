@@ -1,24 +1,26 @@
 <objdefs>
-   <obj.normal id="keyb mpe" sha="2810D483315FF0CC5C9E5EE7343F6AAFD1780297">
+   <obj.normal id="keyb mpe" sha="df6476c993ae8899573dbd0c881e717e5eec19ea">
       <sDescription>Keyboard input for MIDI polyphonic expression</sDescription>
       <author>Mark Harris</author>
       <license>BSD</license>
+      <helpPatch>keyb mpe.axh</helpPatch>
       <inlets/>
       <outlets>
-         <frac32.bipolar  name="note" description="midi note number (-64..63)" SumBuffer="false"/>
-         <bool32 name="gate" description="key pressed, no retrigger legato" SumBuffer="false"/>
-         <bool32 name="gate2" description="key pressed, retrigger on legato" SumBuffer="false"/>
-         <frac32.positive name="velocity" description="note-on velocity" SumBuffer="false"/>
-         <frac32.positive name="releaseVelocity" description="note-off velocity" SumBuffer="false"/>
-         <frac32.positive name="pressure" description="continuous pressure" SumBuffer="false"/>
-         <frac32.bipolar  name="bend" description="continuous pitchbend (-64..63)" SumBuffer="false"/>
-         <frac32.bipolar  name="timbre" description="continuous timbre (-64..63)" SumBuffer="false"/>
-         <frac32.bipolar  name="pitch" description="pitch including pitchbend" SumBuffer="false"/>
+         <frac32.bipolar name="note" description="midi note number (-64..63)"/>
+         <bool32 name="gate" description="key pressed, no retrigger legato"/>
+         <bool32 name="gate2" description="key pressed, retrigger on legato"/>
+         <frac32.positive name="velocity" description="note-on velocity"/>
+         <frac32.positive name="releaseVelocity" description="note-off velocity"/>
+         <frac32.positive name="pressure" description="continuous pressure"/>
+         <frac32 name="bend" description="continuous pitchbend (-64..63)"/>
+         <frac32 name="timbre" description="continuous timbre (-64..63)"/>
+         <frac32 name="pitch" description="pitch including pitchbend"/>
       </outlets>
       <displays/>
       <params/>
       <attribs/>
-      <code.declaration><![CDATA[int8_t _note;
+      <code.declaration><![CDATA[
+int8_t _note;
 int32_t _gate;
 int32_t _gate2;
 uint8_t _velo;
@@ -26,11 +28,10 @@ uint8_t _rvelo;
 uint32_t _pressure;
 int32_t _bend;
 int32_t _timbre;
-uint8_t _lastRPN_LSB; 
-uint8_t _lastRPN_MSB; 
+uint8_t _lastRPN_LSB;
+uint8_t _lastRPN_MSB;
 uint8_t _bendRange;
 int32_t _pitch;
-
 ]]></code.declaration>
       <code.init><![CDATA[
 _gate = 0;
