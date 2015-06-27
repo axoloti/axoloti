@@ -105,7 +105,7 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U {
     public void updateV() {
         super.updateV();
         if (ctrl != null) {
-            ctrl.setValue(value.getDouble());
+            ctrl.setValue(value.getDouble());            
         }
     }
 

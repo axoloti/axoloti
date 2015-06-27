@@ -73,7 +73,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
     @Attribute(required = false)
     Integer MidiCC = null;
     AssignMidiCCComponent midiAssign;
-    
+
     public ParameterInstance() {
     }
 
@@ -93,10 +93,11 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
     public String GetCName() {
         return parameter.GetCName();
     }
-    
+
     public void CopyValueFrom(ParameterInstance p) {
-        if (p.onParent != null)
+        if (p.onParent != null) {
             setOnParent(p.onParent);
+        }
         SetMidiCC(p.MidiCC);
     }
 
@@ -152,6 +153,11 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
                 handleAdjustment();
+                if (axoObj != null) {
+                    if (axoObj.getPatch() != null) {
+                        axoObj.getPatch().SetDirty();
+                    }
+                }
             }
         });
         updateV();
@@ -249,7 +255,13 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
 
     public abstract Value<dt> getValue();
 
-    public abstract void setValue(Value<dt> value);
+    public void setValue(Value<dt> value) {
+        if (axoObj != null) {
+            if (axoObj.getPatch() != null) {
+                axoObj.getPatch().SetDirty();
+            }
+        }
+    }
 
     public void SetValueRaw(int v) {
         getValue().setRaw(v);
@@ -363,7 +375,9 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
     }
 
     public void setOnParent(Boolean b) {
-        if (b == null) return;
+        if (b == null) {
+            return;
+        }
         if (isOnParent() == b) {
             return;
         }

@@ -80,6 +80,7 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
 
     @Override
     public void setValue(Value<Frac32> value) {
+        super.setValue(value);
         this.value.setDouble(value.getDouble());
         updateV();
     }
@@ -120,6 +121,7 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
         n.getValue().setDouble(amount);
         n.destination = this;
         axoObj.patch.updateModulation(n);
+        axoObj.patch.SetDirty();
     }
 
     public ArrayList<Modulation> getModulators() {
