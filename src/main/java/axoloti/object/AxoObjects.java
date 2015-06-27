@@ -94,6 +94,7 @@ public class AxoObjects {
                 if (f.isFile()) {
                     AxoObjectAbstract o = new AxoObjectFromPatch(f);
                     o.createdFromRelativePath = true;
+                    o.sPath=f.getPath();
                     if (o != null) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : " + fnameP);
                         set.add(o);
@@ -116,6 +117,8 @@ public class AxoObjects {
                 File f = new File(fname);
                 if (f.isFile()) {
                     AxoObjectAbstract o = new AxoObjectFromPatch(f);
+                    o.createdFromRelativePath = true;
+                    o.sPath = n + ".axp";
                     if (o != null) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file succeeded :" + fname);
                         set.add(o);
