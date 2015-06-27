@@ -474,7 +474,7 @@ public class PatchGUI extends Patch {
                         int sepIndex = o.name.lastIndexOf(' ');
                         String objname = o.name.substring(0, sepIndex);
                         String outletname = o.name.substring(sepIndex + 1);
-                        if ((objname.length() > 1) && (outletname.length() > 1)) {
+                        if ((objname.length() > 0) && (outletname.length() > 0)) {
                             String on2 = dict.get(objname);
                             if (on2 != null) {
 //                                o.name = on2 + " " + r[1];
@@ -500,7 +500,7 @@ public class PatchGUI extends Patch {
                         int sepIndex = o.name.lastIndexOf(' ');
                         String objname = o.name.substring(0, sepIndex);
                         String inletname = o.name.substring(sepIndex + 1);
-                        if ((objname.length() > 1) && (inletname.length() > 1)) {
+                        if ((objname.length() > 0) && (inletname.length() > 0)) {
                             String on2 = dict.get(objname);
                             if (on2 != null) {
                                 InletInstance i = new InletInstance();
