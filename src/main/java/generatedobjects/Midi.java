@@ -79,6 +79,9 @@ public class Midi extends gentools {
         WriteAxoObject(catName, Create_intern_ctlout_any());
         WriteAxoObject(catName, Create_intern_bendout());
         WriteAxoObject(catName, Create_intern_clockgen());
+        
+        catName = "midi.mpe";
+        WriteAxoObject(catName, Create_keyb_mpe());
     }
     /*
      static AxoObject Create_ctlin() {
@@ -961,6 +964,94 @@ public class Midi extends gentools {
                 + "}\n"
                 + "%pos4ppq% = _pos24ppq/6;\n"
                 + "%pos24ppq% = _pos24ppq;\n";
+        return o;
+    }
+    
+    static AxoObject Create_keyb_mpe() {
+        AxoObject o = new AxoObject("keyb mpe", "Keyboard input for MIDI polyphonic expression");
+        o.sAuthor = "Mark Harris";
+        o.helpPatch = "keyb mpe.axh";
+        o.outlets.add(new OutletFrac32Bipolar("note", "midi note number (-64..63)"));
+        o.outlets.add(new OutletBool32("gate", "key pressed, no retrigger legato"));
+        o.outlets.add(new OutletBool32("gate2", "key pressed, retrigger on legato"));
+        o.outlets.add(new OutletFrac32Pos("velocity", "note-on velocity"));
+        o.outlets.add(new OutletFrac32Pos("releaseVelocity", "note-off velocity"));
+        o.outlets.add(new OutletFrac32Pos("pressure", "continuous pressure"));
+        o.outlets.add(new OutletFrac32("bend", "continuous pitchbend (-64..63)"));
+        o.outlets.add(new OutletFrac32("timbre", "continuous timbre (-64..63)"));
+        o.outlets.add(new OutletFrac32("pitch", "pitch including pitchbend"));
+        o.sLocalData = "\n" +
+                "int8_t _note;\n" +
+                "int32_t _gate;\n" +
+                "int32_t _gate2;\n" +
+                "uint8_t _velo;\n" +
+                "uint8_t _rvelo;\n" +
+                "uint32_t _pressure;\n" +
+                "int32_t _bend;\n" +
+                "int32_t _timbre;\n" +
+                "uint8_t _lastRPN_LSB;\n" +
+                "uint8_t _lastRPN_MSB;\n" +
+                "uint8_t _bendRange;\n" +
+                "int32_t _pitch;\n";
+                
+        o.sInitCode = "\n" +
+                "_gate = 0;\n" +
+                "_note = 0;\n" +
+                "_pressure = 0;\n" +
+                "_bend = 0;\n" +
+                "_timbre = 0;\n" +
+                "_bendRange = 48;\n";
+                
+        o.sMidiCode = "\n" +
+                "if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {\n" +
+                "  _velo = data2<<20;\n" +
+                "  _note = data1-64;\n" +
+                "  _gate = 1<<27;\n" +
+                "  _gate2 = 0;\n" +
+                "  _pitch = (_note << 21) + ((_bend >> 6)* _bendRange );\n" +
+                "} else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||\n" +
+                "          (status == MIDI_NOTE_OFF + %midichannel%)) {\n" +
+                "  if (_note == data1-64) {\n" +
+                "    _rvelo = data2<<20;\n" +
+                "    _gate = 0;\n" +
+                "  }\n" +
+                "} else if (status == %midichannel% + MIDI_CHANNEL_PRESSURE) {\n" +
+                "  _pressure = data1<<20;\n" +
+                "} else if (status == %midichannel% + MIDI_PITCH_BEND) {\n" +
+                "  _bend = ((int)((data2<<7)+data1)-0x2000)<<14;\n" +
+                "  _pitch = (_note << 21) + ((_bend >> 6)* _bendRange );\n" +
+                "} else if (status == %midichannel% + MIDI_CONTROL_CHANGE) {\n" +
+                "  if (data1 == MIDI_C_TIMBRE) {\n" +
+                "    _timbre = ((int)(data2<<7)-0x2000)<<14;\n" +
+                "  } else if(data1 == MIDI_C_ALL_NOTES_OFF) {\n" +
+                "    _gate = 0;\n" +
+                "  } else if (data1 == MIDI_C_RPN_MSB || data1 == MIDI_C_RPN_LSB || data1 == MIDI_C_DATA_ENTRY) {\n" +
+                "    switch(data1) {\n" +
+                "         case MIDI_C_RPN_LSB: _lastRPN_LSB = data2; break;\n" +
+                "         case MIDI_C_RPN_MSB: _lastRPN_MSB = data2; break;\n" +
+                "         case MIDI_C_DATA_ENTRY: {\n" +
+                "              if (_lastRPN_LSB == 0 && _lastRPN_MSB == 0) {\n" +
+                "                _bendRange = data2;\n" +
+                "              }\n" +
+                "            }\n" +
+                "            break;\n" +
+                "        default: break;\n" +
+                "    }\n" +
+                "  }\n" +
+                "}\n";
+        
+        o.sKRateCode = "\n" +
+                "outlet_note= _note<<21;\n" +
+                "outlet_gate= _gate;\n" +
+                "outlet_gate2= _gate2;\n" +
+                "_gate2 = _gate;\n" +
+                "outlet_velocity= _velo;\n" +
+                "outlet_releaseVelocity= _rvelo;\n" +
+                "outlet_pressure = _pressure;\n" +
+                "outlet_bend = _bend;\n" +
+                "outlet_timbre = _timbre;\n" +
+                "outlet_pitch = _pitch;\n";
+        
         return o;
     }
 }
