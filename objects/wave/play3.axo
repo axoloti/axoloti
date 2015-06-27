@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="play3" sha="68357f2db7e09bf1250419b560bee8b31558a7f7">
+   <obj.normal id="play3" uuid="7df775b43e437b96dc1c1b8d34d71c1e405ff15c" sha="68357f2db7e09bf1250419b560bee8b31558a7f7">
       <sDescription>streaming playback of a mono .wav file from sdcard (testing)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="in stereo" sha="2215b2e513239e306346ea02ae2ee6746d6d62a5">
+   <obj.normal id="in stereo" uuid="bee32113ad66d81ee2f65a9af71811c85b9e3bdf" sha="2215b2e513239e306346ea02ae2ee6746d6d62a5">
       <sDescription>Audio input, stereo</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="read interp" sha="22a07dcbe5007bc4095bed25946486e7c98caf23">
+   <obj.normal id="read interp" uuid="8812db7c20434fbfe6a33370815d024e6c080a24" sha="22a07dcbe5007bc4095bed25946486e7c98caf23">
       <sDescription>delay read, linear interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

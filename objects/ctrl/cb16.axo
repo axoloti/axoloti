@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cb16" sha="10460eadb48a887eafeedcf4c65933030e4eabdd">
+   <obj.normal id="cb16" uuid="7c2bba7fe4d0b8a948b48a31e7ad6ed67f84ad44" sha="10460eadb48a887eafeedcf4c65933030e4eabdd">
       <sDescription>constant from 16 flags</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

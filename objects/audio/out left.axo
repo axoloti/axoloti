@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7">
+   <obj.normal id="out left" uuid="14ecb64a7b50293749bdcf59f6adf427647e4c5f" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7">
       <sDescription>Audio output, left channel (or mono)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

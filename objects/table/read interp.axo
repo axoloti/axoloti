@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="read interp" sha="2dfc3a1a00aeb03244b8ef0259d6c004c06cdbc">
+   <obj.normal id="read interp" uuid="ffe59224a872fe9975f8f615cbbf45177e571947" sha="2dfc3a1a00aeb03244b8ef0259d6c004c06cdbc">
       <sDescription>read from table, linear interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -25,7 +25,7 @@
 outlet_o= rr<<2;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="read interp" sha="b0519acd115f068f0851ae0be434a57888454c06">
+   <obj.normal id="read interp" uuid="460dc7ddd860743fe8cdc067c05b3396fe9bab6e" sha="b0519acd115f068f0851ae0be434a57888454c06">
       <sDescription>read from table, linear interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

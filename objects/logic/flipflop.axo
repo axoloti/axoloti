@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="flipflop" sha="628e0943cc67719faff47fcfe4c3caf52958287e">
+   <obj.normal id="flipflop" uuid="4a15147b1bac50de86d46d0872af07b81aa3fb18" sha="628e0943cc67719faff47fcfe4c3caf52958287e">
       <sDescription>flipflop</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

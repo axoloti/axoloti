@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="modsource" sha="2784bc04bfda20ae6e0c18b0130c012543c9ec4c">
+   <obj.normal id="modsource" uuid="b9e04c8b21c25d7865a2e27585c86c297d7cd5e4" sha="2784bc04bfda20ae6e0c18b0130c012543c9ec4c">
       <sDescription>generic modulation source</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

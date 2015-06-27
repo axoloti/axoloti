@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="polyindex" sha="9deec2552865f0258f501f9e572496353680f3df">
+   <obj.normal id="polyindex" uuid="1099bb9e834f743eaef9143443a3b4b112239a67" sha="9deec2552865f0258f501f9e572496353680f3df">
       <sDescription>Outputs the voice index number from 0 to n-1. Only works in a polyphonic sub-patch!</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

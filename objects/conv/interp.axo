@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="interp" sha="5a9175b8d44d830756d1599a86b4a6a49813a19b">
+   <obj.normal id="interp" uuid="263d2e1416a741cc3c3b7bd69caa4e9c9f5cea1a" sha="5a9175b8d44d830756d1599a86b4a6a49813a19b">
       <sDescription>linear interpolation from k- to s-rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

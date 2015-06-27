@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="hd m" sha="c11c0e57918d0fba8546f18cee57d398ca8cbd90">
+   <obj.normal id="hd m" uuid="737a5f55938a4e5acb007925611cee2da7c8b2ab" sha="c11c0e57918d0fba8546f18cee57d398ca8cbd90">
       <sDescription>hold/decay envelope with decay time modulation input, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="mouse" sha="60cf556f71f34c8fb5b5376eb6b00d1b13a19179">
+   <obj.normal id="mouse" uuid="4acbdf6b28526a3dd431c308a8eb59708af25d1e" sha="60cf556f71f34c8fb5b5376eb6b00d1b13a19179">
       <sDescription>USB Mouse (draft)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

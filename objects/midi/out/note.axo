@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="note" sha="ddd6201b4f86d0de5de18ebbe51b813c965de9a">
+   <obj.normal id="note" uuid="5f4c7235d1816faa6ba6bcc127849e8b0960a31f" sha="ddd6201b4f86d0de5de18ebbe51b813c965de9a">
       <sDescription>Midi note output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

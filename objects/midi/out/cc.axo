@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc" sha="2ac36fcac1c8d569d54956daebb88019e034e322">
+   <obj.normal id="cc" uuid="959d5a2cae2488d0e172a2a3e571ac595aee3de4" sha="2ac36fcac1c8d569d54956daebb88019e034e322">
       <sDescription>Midi controller output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

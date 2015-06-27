@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="oneliner_k" sha="215ebed562f5105b7cff0ec13065e31a257ab1ee">
+   <obj.normal id="oneliner_k" uuid="6a49fbb42d320b393b36333a1377057d31a5f372" sha="215ebed562f5105b7cff0ec13065e31a257ab1ee">
       <sDescription>k-rate c one-liner</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

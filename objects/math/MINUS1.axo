@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="-1" sha="8c73607cd554d831a8e1cf35b9357f89eadee0c8">
+   <obj.normal id="-1" uuid="ffa9e78f67d5b31804ee257d7f4663d3d2e5e8c3" sha="8c73607cd554d831a8e1cf35b9357f89eadee0c8">
       <sDescription>subtracts one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +14,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_result= inlet_a-(1<<21);]]></code.krate>
    </obj.normal>
-   <obj.normal id="-1" sha="348845f992e2b55fcb1530bb50f20aa1796b3b77">
+   <obj.normal id="-1" uuid="8912c303ffba29fc2c8aa599bec3d4a5e8e5700e" sha="348845f992e2b55fcb1530bb50f20aa1796b3b77">
       <sDescription>subtracts one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,7 +29,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_result= inlet_a-1;]]></code.krate>
    </obj.normal>
-   <obj.normal id="-1" sha="865bc959b6c58808058326cd97c849581add4863">
+   <obj.normal id="-1" uuid="760e939c8fbdc437fab3bedf63740cbdf0321a1" sha="865bc959b6c58808058326cd97c849581add4863">
       <sDescription>subtracts one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

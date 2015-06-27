@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="pulselengthmx" sha="5d90a67235df290cb66eace59a15336edcb9bb32">
+   <obj.normal id="pulselengthmx" uuid="160a9d7ac5ba6b492c7567839a7c159e1287ff91" sha="5d90a67235df290cb66eace59a15336edcb9bb32">
       <sDescription>Generates a single pulse after after a rising edge on trigger input. A new trigger before the pulse ends at the output, will extend the pulse. This version has a modulation input for the delay time. Extended range.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

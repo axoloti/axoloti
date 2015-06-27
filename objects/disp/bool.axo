@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="bool" sha="dbe010de4c0550687a72792c4584e4c4964751a6">
+   <obj.normal id="bool" uuid="c11816a6fe639ccf5ebadf5a56fc20466b6da80f" sha="dbe010de4c0550687a72792c4584e4c4964751a6">
       <sDescription>display boolean</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

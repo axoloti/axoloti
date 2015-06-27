@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sel fp 16" sha="136d3fe6eb37e18d92e4b88db321db2e600aec6e">
+   <obj.normal id="sel fp 16" uuid="5e67985169146bc60af60615e5c2e662f356e9e8" sha="136d3fe6eb37e18d92e4b88db321db2e600aec6e">
       <sDescription>select one out of 16 positive fractionals, with chain i/o</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="muls 2" sha="66864ec326f7bc31d57563047135e75259b46642">
+   <obj.normal id="muls 2" uuid="370a882d1582c12a09a32e2b6f9f47e9b8a9e160" sha="66864ec326f7bc31d57563047135e75259b46642">
       <sDescription>saturated multiply by 2</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +14,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= __SSAT(inlet_in,27)<<1;]]></code.krate>
    </obj.normal>
-   <obj.normal id="muls 2" sha="17100b9369a00a2265f0f754ff1c0ec87f9c6690">
+   <obj.normal id="muls 2" uuid="328ab02c736b8f4720e71a26dc9dbc8a4940e682" sha="17100b9369a00a2265f0f754ff1c0ec87f9c6690">
       <sDescription>saturated multiply by 2</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

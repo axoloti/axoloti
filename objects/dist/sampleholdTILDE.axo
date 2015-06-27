@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="samplehold~" sha="252bae103bd8e122a6fa41a92000c8c6abc39c7b">
+   <obj.normal id="samplehold~" uuid="8a16486a6b284213d0dc77708d55fa2844e5cea9" sha="252bae103bd8e122a6fa41a92000c8c6abc39c7b">
       <sDescription>high quality audio rate sample and hold using blit synthesis (bandwidth limited)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

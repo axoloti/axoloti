@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="indexed" sha="4c1c90721e5f530e9fbdcfa373edaffe908e605b">
+   <obj.normal id="indexed" uuid="c0f17d9dbe96a93fe14670c48c47a5eac809e4b0" sha="4c1c90721e5f530e9fbdcfa373edaffe908e605b">
       <sDescription>generates string: prefix000suffix</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

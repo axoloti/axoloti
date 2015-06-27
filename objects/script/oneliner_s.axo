@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="oneliner_s" sha="77cab44892dd2c25c84922c4358fdf6cda793703">
+   <obj.normal id="oneliner_s" uuid="39b218fd4bd0bcce4e503d0773f9d06e9adb999" sha="77cab44892dd2c25c84922c4358fdf6cda793703">
       <sDescription>s-rate c one-liner</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

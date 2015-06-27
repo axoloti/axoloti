@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="inconfig mic" sha="c1646b3d341da67814395a38979e26f6a1618171">
+   <obj.normal id="inconfig mic" uuid="63068be555fdd76e69d284b2aa8023098d162781" sha="c1646b3d341da67814395a38979e26f6a1618171">
       <sDescription>Audio input configuration for electret microphone)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sel fb 16" sha="327cbafa4c76b1b7accb1d3bcf9b6f21803efd9a">
+   <obj.normal id="sel fb 16" uuid="2de86d40a1cb4d2bec188d0877c392f0b1a3b9c2" sha="327cbafa4c76b1b7accb1d3bcf9b6f21803efd9a">
       <sDescription>select one out of 16 bipolar fractionals, with chain i/o</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

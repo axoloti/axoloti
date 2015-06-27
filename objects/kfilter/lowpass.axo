@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="lowpass" sha="590df048ba2f7ab209a2bd1e88e49c2aae1051e0">
+   <obj.normal id="lowpass" uuid="dab73268c138edd555ce00c2b8baa12d34b1b509" sha="590df048ba2f7ab209a2bd1e88e49c2aae1051e0">
       <sDescription>1st order lowpass filter, control rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

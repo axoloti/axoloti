@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="alloc 32b sdram" sha="4487420212d1a826e25aa61cd5abdc0238ea3207">
+   <obj.normal id="alloc 32b sdram" uuid="20e0925356bd976f67040b3a11266d0cda953db0" sha="4487420212d1a826e25aa61cd5abdc0238ea3207">
       <sDescription>allocate 32bit table in SDRAM memory</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

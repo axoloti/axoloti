@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="delayedpulseduration" sha="1d15da5cfdebb5ff85c4f5b6f10a220ac63b551c">
+   <obj.normal id="delayedpulseduration" uuid="51be5b1180a1e27385782ee9cf07ba94648d5a2f" sha="1d15da5cfdebb5ff85c4f5b6f10a220ac63b551c">
       <sDescription>Generates a pulse with a duration after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

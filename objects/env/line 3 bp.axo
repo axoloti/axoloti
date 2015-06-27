@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="line 3 bp" sha="dba386300a7d2d11d199130f2b7fc9fd187e2bd8">
+   <obj.normal id="line 3 bp" uuid="3f9a13ebb1527a03abea80cd1d197ba19d28cbdc" sha="dba386300a7d2d11d199130f2b7fc9fd187e2bd8">
       <sDescription>Three piecewise linear ramps, bipolar version</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

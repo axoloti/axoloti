@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="queuestate" sha="285ac1c9764f8f7b721aa750f5bd63f63e2578d5">
+   <obj.normal id="queuestate" uuid="7c3fe9c0b31305f2ef6b5318c4f82908c05989f4" sha="285ac1c9764f8f7b721aa750f5bd63f63e2578d5">
       <sDescription>Gets the number of pending bytes in the midi output queue. Useful to prevent midi data flooding. Zero at rest.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

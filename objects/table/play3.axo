@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="play3" sha="c255a57ea694b21f7393baddcd7d9001e9e3d6b0">
+   <obj.normal id="play3" uuid="67c997019847ab2a9d6091c2e5c1204873770c36" sha="c255a57ea694b21f7393baddcd7d9001e9e3d6b0">
       <sDescription>play audio from table (non-transposed), starting from position</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sat" sha="90497cb6406668eff34f70aea78bc62d638ee6fe">
+   <obj.normal id="sat" uuid="622079e30ddca18897b59b6cc6c9a56e49285974" sha="90497cb6406668eff34f70aea78bc62d638ee6fe">
       <sDescription>saturate to normal range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +14,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= __SSAT(inlet_in,28);]]></code.krate>
    </obj.normal>
-   <obj.normal id="sat" sha="b8886ae94381bc8961d0cbacd7e625a168dc08d5">
+   <obj.normal id="sat" uuid="9bdf6cc16f4d7c614873608b9e3188d7a636324d" sha="b8886ae94381bc8961d0cbacd7e625a168dc08d5">
       <sDescription>saturate to normal range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

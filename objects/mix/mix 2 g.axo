@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="mix 2 g" sha="6305d27c723353f0d434c0ab30735c5dd11b7670">
+   <obj.normal id="mix 2 g" uuid="c3c2980ce4f84b882b90893909208f37a65ff2dd" sha="6305d27c723353f0d434c0ab30735c5dd11b7670">
       <sDescription>2 input k-rate mixer, shows gain units</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -28,7 +28,7 @@
 ;   outlet_out=  __SSAT(inlet_bus__in + (accum<<1),28);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mix 2 g" sha="f14eeeeb6df032a7e072e970956c20613eb267f1">
+   <obj.normal id="mix 2 g" uuid="d91ba75e556d0f28a6ff5e2ba794a7cc9c59c485" sha="f14eeeeb6df032a7e072e970956c20613eb267f1">
       <sDescription>2 input s-rate mixer, shows gain units</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

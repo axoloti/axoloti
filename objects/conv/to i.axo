@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="to i" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d">
+   <obj.normal id="to i" uuid="5ebe93bd6d15950a0c2ac299f509f3adb69b0398" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d">
       <sDescription>convert to integer output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

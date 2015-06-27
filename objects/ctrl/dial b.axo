@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705">
+   <obj.normal id="dial b" uuid="9c75e59b9331238b4441485899100556d8709696" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705">
       <sDescription>bipolar constant value dial</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

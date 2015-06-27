@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="glide" sha="f8cb232fe6c6730b20faafffc0212f3717edbeb">
+   <obj.normal id="glide" uuid="ffabe02cd14757d25b73d59cf2de2eddd24a423e" sha="f8cb232fe6c6730b20faafffc0212f3717edbeb">
       <sDescription>exponential smooth with enable</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

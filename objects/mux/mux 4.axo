@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="mux 4" sha="868ef20dcb0c47514ee473fd70c3e42cf81d71b8">
+   <obj.normal id="mux 4" uuid="f2b15837b3da1785520f255bbec6709c4f253d97" sha="868ef20dcb0c47514ee473fd70c3e42cf81d71b8">
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -25,7 +25,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 4" sha="75f06fecb427e34a1ab0a6f91706320ec1fd39ac">
+   <obj.normal id="mux 4" uuid="63881ad3ea1dba7a2d0b4cb4fa55a442888ab8c3" sha="75f06fecb427e34a1ab0a6f91706320ec1fd39ac">
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -51,7 +51,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 4" sha="4145bfd8751449238db95f24fb1cd2a69972d026">
+   <obj.normal id="mux 4" uuid="4171cff9a0fc08b5317fccaf04acd2c06c9a9a3d" sha="4145bfd8751449238db95f24fb1cd2a69972d026">
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -77,7 +77,7 @@
 }
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="mux 4" sha="ee02935bddb41185115fef2562f9468b643521af">
+   <obj.normal id="mux 4" uuid="a35d392549f1f915f483ab3cc2317a596aa78fe7" sha="ee02935bddb41185115fef2562f9468b643521af">
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -103,7 +103,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 4" sha="3a3ff53ee19aa920d58d37b15e29e53f240c7c76">
+   <obj.normal id="mux 4" uuid="35ebcf48b488e8d74474244d2cf9a930ee6c5c04" sha="3a3ff53ee19aa920d58d37b15e29e53f240c7c76">
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

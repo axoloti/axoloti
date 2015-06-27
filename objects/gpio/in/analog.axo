@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e">
+   <obj.normal id="analog" uuid="c82e262f042a2fedfe9aad41c0d02014abfd3fa1" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e">
       <sDescription>Reads an external analog voltage. Voltage range 0 to 3.3V maps to 0..127, with 12-bit precision.Apply no more than 3.3V!</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

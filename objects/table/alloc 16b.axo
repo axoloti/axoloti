@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="alloc 16b" sha="29b2085e28f8f45954e2be8a0ff80c909188ac7a">
+   <obj.normal id="alloc 16b" uuid="60baeeb09271188644386ffc825719eadd414c92" sha="29b2085e28f8f45954e2be8a0ff80c909188ac7a">
       <sDescription>allocate 16bit table in RAM memory, -128.00 .. 127.99</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

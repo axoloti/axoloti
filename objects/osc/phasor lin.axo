@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="phasor lin" sha="85a94c8b1e1234a16675b4fcec831564681774c1">
+   <obj.normal id="phasor lin" uuid="af3a3231ff44eac2ec679a9f13b2cd1f99c12a92" sha="85a94c8b1e1234a16675b4fcec831564681774c1">
       <sDescription>phasor with linear frequency (goes all the way to 0)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

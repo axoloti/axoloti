@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="counter2" sha="15f2cb0c8e4088e3a7bd37444354cfabe7d005cf">
+   <obj.normal id="counter2" uuid="bddace08a7825d1686fd164466f13482e5fc265a" sha="15f2cb0c8e4088e3a7bd37444354cfabe7d005cf">
       <sDescription>cyclic up/down counter</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="abs" sha="56b0e9ebf07d4a6d8f04db3682899c48c85cc389">
+   <obj.normal id="abs" uuid="1659819804c803c1bf23c10a21c30b2f417a3910" sha="56b0e9ebf07d4a6d8f04db3682899c48c85cc389">
       <sDescription>absolute value</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +14,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= inlet_in>0?inlet_in:-inlet_in;]]></code.krate>
    </obj.normal>
-   <obj.normal id="abs" sha="d9aef12fddc085a0a8a7a9868f1c845c538a9209">
+   <obj.normal id="abs" uuid="9b8e5cf47524b8afe6848caa4db3c77ad490562b" sha="d9aef12fddc085a0a8a7a9868f1c845c538a9209">
       <sDescription>absolute value</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,7 +29,7 @@
       <attribs/>
       <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index]>0?inlet_in[buffer_index]:-inlet_in[buffer_index];]]></code.srate>
    </obj.normal>
-   <obj.normal id="abs" sha="c35ca1940c32617a5fff7d876c1dbec0a1bbf4b0">
+   <obj.normal id="abs" uuid="3ffca6a4a2ae8c62705109c3ce6f447c82a36ea1" sha="c35ca1940c32617a5fff7d876c1dbec0a1bbf4b0">
       <sDescription>absolute value</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

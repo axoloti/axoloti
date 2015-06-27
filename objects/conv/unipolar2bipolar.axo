@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="unipolar2bipolar" sha="1036bdea372166d396fc75329ed1d057bd4af3fb">
+   <obj.normal id="unipolar2bipolar" uuid="e0245db2caa803a8667d6b96dc37f738739535e4" sha="1036bdea372166d396fc75329ed1d057bd4af3fb">
       <sDescription>unipolar to bipolar</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -15,7 +15,7 @@
       <code.krate><![CDATA[   outlet_o= (inlet_i-(1<<26))<<1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="unipolar2bipolar" sha="8525be5d55df51043f07b379c6d326988e993946">
+   <obj.normal id="unipolar2bipolar" uuid="db5df4900f65208789f428522b17b7e31ecd5359" sha="8525be5d55df51043f07b379c6d326988e993946">
       <sDescription>unipolar to bipolar</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

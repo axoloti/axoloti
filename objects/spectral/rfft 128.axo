@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="rfft 128" sha="2199e7d35382f21db955b42319cf8130b165f5f">
+   <obj.normal id="rfft 128" uuid="be302cbf56e4fece9f26f69364df59e173448ba" sha="2199e7d35382f21db955b42319cf8130b165f5f">
       <sDescription>spectral analyzer display using 128 input points fft</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="note" sha="8e06133dfab6e95b6290397e24947240b292f007">
+   <obj.normal id="note" uuid="689b9a21294ebc8de40bcd599b5e5cb6e53a0a38" sha="8e06133dfab6e95b6290397e24947240b292f007">
       <sDescription>Midi note output. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

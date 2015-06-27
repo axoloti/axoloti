@@ -60,6 +60,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public String typeName;
     @Attribute(name = "sha", required = false)
     public String typeSHA;
+    @Attribute(name = "uuid", required = false)
+    public String typeUUID;
     @Attribute(name = "name")
     private String InstanceName;
     @Attribute
@@ -121,6 +123,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         }
 
         typeSHA = type.getSHA();
+        typeUUID = type.getUUID();
         this.InstanceName = InstanceName1;
         this.x = location.x;
         this.y = location.y;
@@ -166,7 +169,14 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         if (type != null) {
             return type;
         }
-        if (typeSHA != null) {
+        if (typeUUID != null) {
+            type = MainFrame.axoObjects.GetAxoObjectFromUUID(typeUUID);
+            if (type != null) {
+                System.out.println("restored from UUID:" + type.id);
+                typeName = type.id;
+            }            
+        }
+        if ((type == null)&&(typeSHA != null)) {
             type = MainFrame.axoObjects.GetAxoObjectFromSHA(typeSHA);
             if (type != null) {
                 System.out.println("restored from SHA:" + type.id);

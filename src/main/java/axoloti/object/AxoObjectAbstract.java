@@ -39,6 +39,9 @@ public class AxoObjectAbstract implements Comparable {
     @Attribute
     public String id;
 
+    @Attribute(required = false)
+    public String uuid;
+
     public String shortId;
 
     @Attribute(required = false)
@@ -118,6 +121,13 @@ public class AxoObjectAbstract implements Comparable {
         return sha;
     }
 
+    public String getUUID() {
+        if (uuid == null) {
+            GenerateUUID();
+        }
+        return uuid;
+    }
+
     public void GenerateSHA() {
         sha = "sha";
     }
@@ -146,5 +156,8 @@ public class AxoObjectAbstract implements Comparable {
 
     public Modulator[] getModulators() {
         return null;
+    }
+
+    public void GenerateUUID() {
     }
 }

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="longdelay" sha="cc97016f13e4d17b2b346ce72e6918290bb07b67">
+   <obj.normal id="longdelay" uuid="d52c728f516ac16126e04ff71ac8846ccdce39ec" sha="cc97016f13e4d17b2b346ce72e6918290bb07b67">
       <sDescription>streaming echo via sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

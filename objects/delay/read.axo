@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b">
+   <obj.normal id="read" uuid="456f034f08d78e2c29170c3162428fc05a687aa0" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b">
       <sDescription>delay read, non-interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -24,7 +24,7 @@
       <code.srate><![CDATA[  outlet_out[buffer_index]= %delayname%.array[(delay++) & %delayname%.LENGTHMASK]<<14;
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="read" sha="9428f1942521d9e80e7ca58ea38e1d417220e94f">
+   <obj.normal id="read" uuid="94f0da4df26bc7333dde41ad4dfa1970f59e057d" sha="9428f1942521d9e80e7ca58ea38e1d417220e94f">
       <sDescription>delay read, non-interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

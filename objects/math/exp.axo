@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1">
+   <obj.normal id="exp" uuid="b0fb81685ef36f3f6e6c2a85e25dff7bca02936a" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1">
       <sDescription>exponent function, y=pow(2,(x/8)-2)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -19,7 +19,7 @@ if (s>=0)
 else outlet_result = expt[ei]>>(-s);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="exp" sha="5643db429ae8ad03e3d2e4b1fa362999d16aeb32">
+   <obj.normal id="exp" uuid="8e494a968aaac9a9655e59b6f3cc681c0743e9de" sha="5643db429ae8ad03e3d2e4b1fa362999d16aeb32">
       <sDescription>exponent function, y=pow(2,(x/8)-2)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

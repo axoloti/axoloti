@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39">
+   <obj.normal id="scope 128 b trig" uuid="c75a01a787709940879ec3e35993e6a4ff9e27" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39">
       <sDescription>bipolar audio rate signal oscilloscope (time domain), showing 128 consecutive samples after the signal becomes positive.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

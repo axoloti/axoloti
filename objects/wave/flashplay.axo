@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="flashplay" sha="e97bdec1578cc24d2cd8147a1f004f866c971d16">
+   <obj.normal id="flashplay" uuid="e8203994c72dfe935d553045f6224fbcaedc59fa" sha="e97bdec1578cc24d2cd8147a1f004f866c971d16">
       <sDescription>Single-shot playback of a sample table in flash, without transposition</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

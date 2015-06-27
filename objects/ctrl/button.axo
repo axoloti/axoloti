@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4">
+   <obj.normal id="button" uuid="81218d67c04362ac6458a473feec6cda2a445779" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4">
       <sDescription>constant boolean, momentary control</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

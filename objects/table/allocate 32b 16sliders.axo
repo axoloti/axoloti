@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="allocate 32b 16sliders" sha="2227408087d0108a79d19893c9bcca8343f9f004">
+   <obj.normal id="allocate 32b 16sliders" uuid="ee38190870a0f530664d5ec4d6a108508b025bdf" sha="2227408087d0108a79d19893c9bcca8343f9f004">
       <sDescription>table in RAM memory, direct from sliders</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

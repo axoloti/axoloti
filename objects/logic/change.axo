@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="change" sha="2473451a71c0ec362331c67ef644bc59197a247d">
+   <obj.normal id="change" uuid="81acff49ce7e59dfc8d689255070af01de6937c4" sha="2473451a71c0ec362331c67ef644bc59197a247d">
       <sDescription>Generates a trigger pulse when current input value is different from previous value.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -28,7 +28,7 @@ pval = 0;
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="change" sha="f80233f48404b59940f740ca338756232392f909">
+   <obj.normal id="change" uuid="c9da345eb1b9cbae02da483e47dade6f71dab152" sha="f80233f48404b59940f740ca338756232392f909">
       <sDescription>Generates a trigger pulse when current input value is different from previous value.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

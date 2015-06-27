@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="keyb mpe" sha="df6476c993ae8899573dbd0c881e717e5eec19ea">
+   <obj.normal id="keyb mpe" uuid="6b0499f6e73f8b4e3b592d82022955e70d850717" sha="df6476c993ae8899573dbd0c881e717e5eec19ea">
       <sDescription>Keyboard input for MIDI polyphonic expression</sDescription>
       <author>Mark Harris</author>
       <license>BSD</license>

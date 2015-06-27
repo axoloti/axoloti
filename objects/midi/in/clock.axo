@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="clock" sha="13586a64672deab674298a2d8c8ad917b055c653">
+   <obj.normal id="clock" uuid="70e52177ae7bbe8a826feba00980c57a52628b63" sha="13586a64672deab674298a2d8c8ad917b055c653">
       <sDescription>Midi clock slave</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

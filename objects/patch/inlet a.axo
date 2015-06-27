@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="inlet a" sha="2944bdbaeb2a8a42d5a97163275d052f75668a86">
+   <obj.normal id="inlet a" uuid="dd294c6d6b4581ae4c79aff10121669c97b83f90" sha="2944bdbaeb2a8a42d5a97163275d052f75668a86">
       <sDescription>Fractional buffer (audio) inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

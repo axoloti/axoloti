@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="alloc 8b" sha="ccd876999d6af75dbe57dfef4d08b9635a264ac8">
+   <obj.normal id="alloc 8b" uuid="556ae18982c286f01315353614570e806196f8c9" sha="ccd876999d6af75dbe57dfef4d08b9635a264ac8">
       <sDescription>allocate table in RAM memory, -128..127</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

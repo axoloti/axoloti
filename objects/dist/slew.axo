@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="slew" sha="521ab25a6a0aa5d12cbe59b5c1f9630a2f01e167">
+   <obj.normal id="slew" uuid="a8cb09a7ebd76cbc6ee63c2c8ff56af284995eac" sha="521ab25a6a0aa5d12cbe59b5c1f9630a2f01e167">
       <sDescription>symetric slew rate limiter (not bandwidth limited)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -36,7 +36,7 @@ acc = __SSAT(acc,28);
 outlet_out = acc;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="slew" sha="b21f230004310005f3550792d307774153a89670">
+   <obj.normal id="slew" uuid="fe4d05257f78d1a1932a78c2d8ea207691d9ec4" sha="b21f230004310005f3550792d307774153a89670">
       <sDescription>symetric slew rate limiter (not bandwidth limited)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

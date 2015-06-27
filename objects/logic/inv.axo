@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="inv" sha="77e1f7e6c23d3e299a726997943d432a8cde98bd">
+   <obj.normal id="inv" uuid="b4e9cda9774a9322ecf355e268fa33697e78c6c3" sha="77e1f7e6c23d3e299a726997943d432a8cde98bd">
       <sDescription>invert</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

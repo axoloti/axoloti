@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="demux 6" sha="1cfce3391269a8d8bdfd752619d4bce778538c82">
+   <obj.normal id="demux 6" uuid="330e075234fdb3420a5fa459fd1cb5bf753c1543" sha="1cfce3391269a8d8bdfd752619d4bce778538c82">
       <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -84,7 +84,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 6" sha="753569248056d05cab68fb61cabbe55897984e6">
+   <obj.normal id="demux 6" uuid="382079e561c24190b5285343b14fb2c24dc8698d" sha="753569248056d05cab68fb61cabbe55897984e6">
       <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -169,7 +169,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 6" sha="92207c0aae020018a636a519eda04cf89338456c">
+   <obj.normal id="demux 6" uuid="3bca255c7dd50b84504f6fb55b8f682e3a5b123e" sha="92207c0aae020018a636a519eda04cf89338456c">
       <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -254,7 +254,7 @@
 }
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="demux 6" sha="1fa6623ce71de2739aa1aa28ba64f03f1a37601b">
+   <obj.normal id="demux 6" uuid="512939979eae568b92059592184ad8be7d0b169d" sha="1fa6623ce71de2739aa1aa28ba64f03f1a37601b">
       <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="and 2" sha="1938611ef1b57af3c7b1965081b17bf8e194d9a6">
+   <obj.normal id="and 2" uuid="6bdd0536277473d0157d0fab294ae42268f59b77" sha="1938611ef1b57af3c7b1965081b17bf8e194d9a6">
       <sDescription>logic AND with 2 inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

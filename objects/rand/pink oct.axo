@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="pink oct" sha="a591724f2d4958930ffd8ca14d025f0ce1d728c0">
+   <obj.normal id="pink oct" uuid="8bb955eac77dd0b1b72fdb50bfe315111e380ca" sha="a591724f2d4958930ffd8ca14d025f0ce1d728c0">
       <sDescription>Cheap almost pink noise. Range -64..64. Configureable number of octaves.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

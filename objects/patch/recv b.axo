@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="recv b" sha="b4a6ad7642ca5b9868654de667864d99915efb64">
+   <obj.normal id="recv b" uuid="3113c704215a80be479ff95acfa510873bb9cfca" sha="b4a6ad7642ca5b9868654de667864d99915efb64">
       <sDescription>receive (from send), boolean type</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="bend" sha="1b7bc091bd4f01f72e5750684a176d9f4c88704c">
+   <obj.normal id="bend" uuid="12fcb1b4287b8759f286e0aca25318ad832a2415" sha="1b7bc091bd4f01f72e5750684a176d9f4c88704c">
       <sDescription>Midi pitch bend output. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="xfade" sha="26e6531ae932c0933646b409d957264faeee6fca">
+   <obj.normal id="xfade" uuid="c8f5e2865f0f8ebefed8f77bbcfc062bcabc1990" sha="26e6531ae932c0933646b409d957264faeee6fca">
       <sDescription>crossfade between two inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -21,7 +21,7 @@
    }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="xfade" sha="e301a25211e0b6899b8b54c25e7ac5d9f404eda0">
+   <obj.normal id="xfade" uuid="49345fca38f5f831006b2ed18467c27dae9e8e88" sha="e301a25211e0b6899b8b54c25e7ac5d9f404eda0">
       <sDescription>crossfade between two inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -43,7 +43,7 @@
    }
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890">
+   <obj.normal id="xfade~" uuid="5fa6d2245f2d6547ea0fbc994cc4353f25d368f8" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890">
       <sDescription>crossfade between two inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

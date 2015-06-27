@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="line 2 bp" sha="827cf0469acf1665f458cc68ecd126116158453">
+   <obj.normal id="line 2 bp" uuid="bcf7968e15e556d84c1564a8f830028027a9db1c" sha="827cf0469acf1665f458cc68ecd126116158453">
       <sDescription>two piecewise linear ramps, bipolar version</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

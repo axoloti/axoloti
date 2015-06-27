@@ -190,6 +190,7 @@ public class gentools {
             o.SetIncludes(null);
         }
         o.GenerateSHA();
+        o.GenerateUUID();
         if (o instanceof AxoObject) {
             // remove labels when there's only a single parameter
             o.id = prefix + o.id;

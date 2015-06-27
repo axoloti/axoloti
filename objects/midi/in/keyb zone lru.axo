@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="keyb zone lru" sha="b9b28cf52b3421368e367f3718404222910c57a5">
+   <obj.normal id="keyb zone lru" uuid="508c86c18413f6ecfe8e480b565fb764c6007aaf" sha="b9b28cf52b3421368e367f3718404222910c57a5">
       <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity, least recently used</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

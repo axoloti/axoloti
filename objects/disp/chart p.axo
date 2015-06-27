@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067">
+   <obj.normal id="chart p" uuid="f9a3a2f77862ee4e58585471e312362d41a98a61" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067">
       <sDescription>positive k-rate signal chart plotter</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

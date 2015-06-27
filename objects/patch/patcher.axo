@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal class="axoloti.object.AxoObjectPatcher" id="patcher" sha="da39a3ee5e6b4b0d3255bfef95601890afd80709">
+   <obj.normal class="axoloti.object.AxoObjectPatcher" id="patcher" uuid="6e847f42171967035f0bfc19deb298cdef0708ca" sha="da39a3ee5e6b4b0d3255bfef95601890afd80709">
       <sDescription>Subpatch object stored in the patch document (IN DEVELOPMENT!)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

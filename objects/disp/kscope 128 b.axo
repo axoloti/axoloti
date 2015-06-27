@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="kscope 128 b" sha="187931f6934dab0686ca4d2b338cd8688db4f3e6">
+   <obj.normal id="kscope 128 b" uuid="caddfc30fa28e2385ca0a16d802806c90d8421e1" sha="187931f6934dab0686ca4d2b338cd8688db4f3e6">
       <sDescription>bipolar control rate signal oscilloscope (time domain), showing 128 consecutive samples</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

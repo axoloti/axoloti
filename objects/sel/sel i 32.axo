@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sel i 32" sha="a1e35c357b6ecf6a37b148ca71c2d38031c8e586">
+   <obj.normal id="sel i 32" uuid="6c447360fe605817d07d485b7f97770427b5bc0b" sha="a1e35c357b6ecf6a37b148ca71c2d38031c8e586">
       <sDescription>select one out of 32 integers, with chain i/o</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

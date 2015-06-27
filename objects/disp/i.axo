@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="i" sha="f181c855026fdce66f3c38cd8c5438343d6f0869">
+   <obj.normal id="i" uuid="b3f11c43dad5ed801745c0e288c111e38e8af908" sha="f181c855026fdce66f3c38cd8c5438343d6f0869">
       <sDescription>display integer</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

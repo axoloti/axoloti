@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="ad" sha="80b6e4194c0eed6d34df6c297255b4f1c051a292">
+   <obj.normal id="ad" uuid="a98948afeb985b5af76c283b43dbca0b38b79332" sha="80b6e4194c0eed6d34df6c297255b4f1c051a292">
       <sDescription>Attack/decay envelope</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

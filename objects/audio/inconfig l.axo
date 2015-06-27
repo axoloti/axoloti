@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="inconfig l" sha="e3d51b641809654307ccba3d869f4ac7b6b68f4a">
+   <obj.normal id="inconfig l" uuid="c1d8eb0c9dd63e3b071c356be6db7febf2ee0493" sha="e3d51b641809654307ccba3d869f4ac7b6b68f4a">
       <sDescription>Audio input configuration, left channel only</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

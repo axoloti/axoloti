@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="pwm t4 servo" sha="f32eef1b7cb40ea3149442457b990414f3456e8d">
+   <obj.normal id="pwm t4 servo" uuid="c47665fc79298a69687a9fd1fd89e4b6faa2e0a9" sha="f32eef1b7cb40ea3149442457b990414f3456e8d">
       <sDescription>pwm output timer 4, scaled for servo motors</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

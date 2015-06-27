@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="load" sha="3e3f6c57105be73d74299351d14de67519d585c5">
+   <obj.normal id="load" uuid="510e99bed3f70b55aa2c324d83ea358052b0ae8a" sha="3e3f6c57105be73d74299351d14de67519d585c5">
       <sDescription>load table from sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="div 256" sha="d38dcba9fc7e97e1a69ac902a2cc595e87eca024">
+   <obj.normal id="div 256" uuid="2a72ed3f8d7ab958666810789be99e6aa4c9731b" sha="d38dcba9fc7e97e1a69ac902a2cc595e87eca024">
       <sDescription>divide by 256</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +14,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= inlet_in>>8;]]></code.krate>
    </obj.normal>
-   <obj.normal id="div 256" sha="d5da30d88b10f5028af87030cfd738e963a4ffd2">
+   <obj.normal id="div 256" uuid="95fd319e8d96ee54f11ad09640063e1948c8415f" sha="d5da30d88b10f5028af87030cfd738e963a4ffd2">
       <sDescription>divide by 256</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,7 +29,7 @@
       <attribs/>
       <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index]>>8;]]></code.srate>
    </obj.normal>
-   <obj.normal id="div 256" sha="27cb176484e00732cd0ba0e62055460b79a54362">
+   <obj.normal id="div 256" uuid="4c834f3feb68fa3d8e04d68681bb0f05ec647ec" sha="27cb176484e00732cd0ba0e62055460b79a54362">
       <sDescription>divide by 256</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

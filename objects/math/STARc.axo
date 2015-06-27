@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e">
+   <obj.normal id="*c" uuid="47a5df0733b2773796f7ba1966ddf1ee0060627b" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e">
       <sDescription>Multiply (attenuate) with a constant value</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -20,7 +20,7 @@
       <code.krate><![CDATA[outlet_out= ___SMMUL(param_amp,inlet_in)<<1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="*c" sha="3ade427ae7291fdf62058c4243fe718758187105">
+   <obj.normal id="*c" uuid="1055589a6f014ea38c81c129fa18f84c572de0d0" sha="3ade427ae7291fdf62058c4243fe718758187105">
       <sDescription>Multiply (attenuate) with a constant value</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

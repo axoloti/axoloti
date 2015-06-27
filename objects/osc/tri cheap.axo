@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="tri cheap" sha="ac4f3ba94a25676dda2257e2e9377643c6125d8c">
+   <obj.normal id="tri cheap" uuid="a56c32d59258d000d3efea98b0be2c3c5d8fba5c" sha="ac4f3ba94a25676dda2257e2e9377643c6125d8c">
       <sDescription>Non-bandwith limited triangle wave oscillator, cheap sound</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

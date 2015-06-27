@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="&lt;&lt;" sha="1d2ab772fa460c260d0414b756782e30821e5444">
+   <obj.normal id="&lt;&lt;" uuid="f095b8a4198267b57c9aa18a71c6b64369d2aa75" sha="1d2ab772fa460c260d0414b756782e30821e5444">
       <sDescription>Left shift. Doubles the value &quot;shift&quot; times, with overflow. If overflow is not desireable, use &quot;muls&quot;.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -16,7 +16,7 @@
       </attribs>
       <code.krate><![CDATA[outlet_result= inlet_a << %shift%;]]></code.krate>
    </obj.normal>
-   <obj.normal id="&lt;&lt;" sha="96e73302a673e4ad502914a3d6baa8aeb6bbdc15">
+   <obj.normal id="&lt;&lt;" uuid="b70e16ed5e102083d0ad674579ba0b81bb7f70b8" sha="96e73302a673e4ad502914a3d6baa8aeb6bbdc15">
       <sDescription>Left shift. Doubles the value &quot;shift&quot; times, with overflow. If overflow is not desireable, use &quot;muls&quot;.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

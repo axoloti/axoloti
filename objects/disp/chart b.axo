@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="chart b" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373">
+   <obj.normal id="chart b" uuid="f968a4f35c2b0224b7980a6db2afd5d1ebe112f3" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373">
       <sDescription>bipolar k-rate signal chart plotter</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

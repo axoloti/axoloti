@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="lp svf" sha="eb3d3cd693bdf5d987e7affc265ff1c45452395b">
+   <obj.normal id="lp svf" uuid="e879278f9fb6464fa0dca71d9cfa244c69acc446" sha="eb3d3cd693bdf5d987e7affc265ff1c45452395b">
       <sDescription>Low pass filter, state-variable type</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

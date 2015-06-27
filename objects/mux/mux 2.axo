@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="mux 2" sha="804f2e81d6fe3e310497e5cfa0fec8560435c2ac">
+   <obj.normal id="mux 2" uuid="351f56d4303a748b5002e40657d95d78328a6be9" sha="804f2e81d6fe3e310497e5cfa0fec8560435c2ac">
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -17,7 +17,7 @@
       <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f">
+   <obj.normal id="mux 2" uuid="275c7852248b81f9d4ad2953cbb6146cb05bafbb" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f">
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -35,7 +35,7 @@
       <code.srate><![CDATA[   outlet_o[buffer_index]= (inlet_s)?inlet_i2[buffer_index]:inlet_i1[buffer_index];
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="mux 2" sha="138891901c8849485b260a487f3b0fc188f6bae2">
+   <obj.normal id="mux 2" uuid="99c286697fb73a8715b9b03b51d00f5d4203a4e8" sha="138891901c8849485b260a487f3b0fc188f6bae2">
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -53,7 +53,7 @@
       <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 2" sha="b27da86e6781ea0d7128a77aafd60d04e253d3b3">
+   <obj.normal id="mux 2" uuid="2ae7e0d4661172e8e64767279f8ff350cd8131c1" sha="b27da86e6781ea0d7128a77aafd60d04e253d3b3">
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -71,7 +71,7 @@
       <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 2" sha="6a168ec6f8365e1284be6c580b0ba4ad56703576">
+   <obj.normal id="mux 2" uuid="6e8e7c8d1740769a7571a50b353c28e70d1934cd" sha="6a168ec6f8365e1284be6c580b0ba4ad56703576">
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

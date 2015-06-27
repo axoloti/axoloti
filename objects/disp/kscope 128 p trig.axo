@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="kscope 128 p trig" sha="c693fd16d4c5da24d8fba4f073fac24bbc968a8">
+   <obj.normal id="kscope 128 p trig" uuid="75c78f58c01d37d29c4a45977675195cba03516d" sha="c693fd16d4c5da24d8fba4f073fac24bbc968a8">
       <sDescription>positive control rate signal oscilloscope (time domain), showing 128 consecutive samples after the signal becomes positive.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

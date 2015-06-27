@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30">
+   <obj.normal id="dial p" uuid="3ea1c972da5c8fd1ff8fec303da4dee867b3356b" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30">
       <sDescription>displays positive k-rate signals</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="clock" sha="2e1ff23ac85034ded776c411284443b01ea9cd80">
+   <obj.normal id="clock" uuid="5d74bfe486cbc3f79d4408a2dcc2a054d89310dc" sha="2e1ff23ac85034ded776c411284443b01ea9cd80">
       <sDescription>Midi clock master, als outputs Midi clock, start, stop, and continue messages</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

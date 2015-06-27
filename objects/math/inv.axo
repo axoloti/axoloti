@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="inv" sha="7b02dcb8eae6c8e1f4f1f9f532ad6cd7f0d9a69">
+   <obj.normal id="inv" uuid="bb30c1321c7ef073def81ede46f2dba2dd1fd8d1" sha="7b02dcb8eae6c8e1f4f1f9f532ad6cd7f0d9a69">
       <sDescription>negate, negative, y = -x</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +14,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= -inlet_in;]]></code.krate>
    </obj.normal>
-   <obj.normal id="inv" sha="dd3d98b9ec6f2b9231cb1d00d0f9667152537120">
+   <obj.normal id="inv" uuid="2aa7f7f0aa612aef3dd62b1eb791b55c4e92ee72" sha="dd3d98b9ec6f2b9231cb1d00d0f9667152537120">
       <sDescription>negate, negative, y = -x</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,7 +29,7 @@
       <attribs/>
       <code.srate><![CDATA[outlet_out[buffer_index]= -inlet_in[buffer_index];]]></code.srate>
    </obj.normal>
-   <obj.normal id="inv" sha="b6663af37c308ec4958da4ae0caf98567f135536">
+   <obj.normal id="inv" uuid="1d8fae8315bc4ddcebc52b6c314c91007ce948f9" sha="b6663af37c308ec4958da4ae0caf98567f135536">
       <sDescription>negate, negative, y = -x</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

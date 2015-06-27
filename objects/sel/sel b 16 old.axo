@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sel b 16 old" sha="97ad485b73daf320d93b238aee389562a0a5a9fb">
+   <obj.normal id="sel b 16 old" uuid="8baf3faf79153087c3a938988d8348340015b437" sha="97ad485b73daf320d93b238aee389562a0a5a9fb">
       <sDescription>select one out of 16 booleans</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

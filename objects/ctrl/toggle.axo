@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c">
+   <obj.normal id="toggle" uuid="782a03940052a30b38ebfcbbdcc8cb0126fef3c3" sha="a104f377191a424d537741cdfd7d5348bc16590c">
       <sDescription>constant boolean, toggle control</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

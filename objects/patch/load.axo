@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="load" sha="dfb6f545e11f28d876ca35293a6c83e87dc43438">
+   <obj.normal id="load" uuid="ccffc64f2a54d5262dd4d5e64dd519c3ef801c27" sha="dfb6f545e11f28d876ca35293a6c83e87dc43438">
       <sDescription>load a patch from sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

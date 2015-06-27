@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="digital" sha="2f30b715e37909ba002025b878ae5a39554052c8">
+   <obj.normal id="digital" uuid="87fdeee75b9335e586a26a9cc6817b49389b80db" sha="2f30b715e37909ba002025b878ae5a39554052c8">
       <sDescription>external digital output pin control</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

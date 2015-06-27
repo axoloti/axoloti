@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="script" sha="ba13a90be49d2157146d885c2cdf29e2c36cf457">
+   <obj.normal id="script" uuid="8a088ece2405f2eaf1ab991b5aad4c4256a90f23" sha="ba13a90be49d2157146d885c2cdf29e2c36cf457">
       <sDescription>script with 2 inputs and 2 outputs, running in a separate thread</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

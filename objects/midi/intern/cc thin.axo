@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc thin" sha="55debd59a25a691668720b475f466386175d2fcc">
+   <obj.normal id="cc thin" uuid="46cd67eb41b1f745bd8c5943ecc53798166c9ad6" sha="55debd59a25a691668720b475f466386175d2fcc">
       <sDescription>Midi controller output, automatic thinning. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

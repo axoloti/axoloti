@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="+c" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10">
+   <obj.normal id="+c" uuid="9af51ad0668fec388115a73d810f6c96fb803c06" sha="4c5cd6eb0ec18a1bab81a4aa3b4f53834edeb10">
       <sDescription>add constant</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -19,7 +19,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= inlet_in+ param_c;]]></code.krate>
    </obj.normal>
-   <obj.normal id="+c" sha="dd36bdfc156063826c3897754f7ef30fd2895c89">
+   <obj.normal id="+c" uuid="84c19f275f8806656b7f0b61f57bcf2bb043a45a" sha="dd36bdfc156063826c3897754f7ef30fd2895c89">
       <sDescription>add constant</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

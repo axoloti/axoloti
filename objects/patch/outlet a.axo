@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="outlet a" sha="72226293648dde4dd4739bc1b8bc46a6bf660595">
+   <obj.normal id="outlet a" uuid="66c82736e051ab1c92bceec4f14c50d24432328b" sha="72226293648dde4dd4739bc1b8bc46a6bf660595">
       <sDescription>Fractional buffer (audio) outlet. The outlet object becomes an outlet connector when this patch is used as an object (subpatch)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

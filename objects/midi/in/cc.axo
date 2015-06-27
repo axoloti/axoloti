@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc" sha="3013048b944c544b71bd052b735476d68e232bee">
+   <obj.normal id="cc" uuid="4715e105d9af5f9ae9346d73d56e601bfb4cfd6a" sha="3013048b944c544b71bd052b735476d68e232bee">
       <sDescription>Receives Midi Continuous Controller messages</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

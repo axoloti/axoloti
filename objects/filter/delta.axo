@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="delta" sha="c1baa08776e10d0bfde6633563f02611494ab6cd">
+   <obj.normal id="delta" uuid="69950d714a636a8891aa53f0eb8e292c4c594663" sha="c1baa08776e10d0bfde6633563f02611494ab6cd">
       <sDescription>pseudo derivative, difference between previous and current value</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -20,7 +20,7 @@
    _ap = inlet_a;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="delta" sha="a0571010403326d85c9c2c55e100910e30e1bbe4">
+   <obj.normal id="delta" uuid="470e367c9df024c57e88865497e066d285f4c44" sha="a0571010403326d85c9c2c55e100910e30e1bbe4">
       <sDescription>pseudo derivative, difference between previous and current value</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -41,7 +41,7 @@
    _ap = inlet_a[buffer_index];
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="delta" sha="4eff7b00344b2ded521b17825739badbe9863de9">
+   <obj.normal id="delta" uuid="e1e13fe031ee48f79ec1b29ea083e4ff5f753c48" sha="4eff7b00344b2ded521b17825739badbe9863de9">
       <sDescription>pseudo derivative, difference between previous and current value</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

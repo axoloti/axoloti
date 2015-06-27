@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="eq4" sha="518b736fd39d7b359aad0043072946b6141c773b">
+   <obj.normal id="eq4" uuid="bc1acaec5fac03319cffb55d3b40749dade5f055" sha="518b736fd39d7b359aad0043072946b6141c773b">
       <sDescription>Four-band equalizer. The transition frequencies are 100, 500, 2000, and 6000 Hz. Lower quality version. The low band is ommitted.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

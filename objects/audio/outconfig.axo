@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="outconfig" sha="2aa0e0cba0ec5538ada88b36303a2632fc2a8b1a">
+   <obj.normal id="outconfig" uuid="e6529125eddd86079c0db2045a33f6e92fcb6d6b" sha="2aa0e0cba0ec5538ada88b36303a2632fc2a8b1a">
       <sDescription>Audio output configuration)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

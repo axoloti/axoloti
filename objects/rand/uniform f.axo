@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="uniform f" sha="a5949c689afce5a3097108fd569d13ffda3895f6">
+   <obj.normal id="uniform f" uuid="8ce79a5ef759f996990c44c453436c8e561330da" sha="a5949c689afce5a3097108fd569d13ffda3895f6">
       <sDescription>uniform distributed (white) noise, k-rate generation. Range -64..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

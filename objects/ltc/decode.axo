@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="decode" sha="b75498b96464589a34f8644aceb296a5f682bb33">
+   <obj.normal id="decode" uuid="a5c4b2ad62a2156fa6fd53d4e9520af4971f1d74" sha="b75498b96464589a34f8644aceb296a5f682bb33">
       <sDescription>LTC (linear timecode) decoder.  Does not support drop-frame format. This implementation only works when the system clock is 48kHz or 96kHz, not at 44.1kHz!</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

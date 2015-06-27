@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="square" sha="24c5025966e821443cc8e104039bc46f72de3607">
+   <obj.normal id="square" uuid="32b2f1b295af1187d4529c790a7aa2a13259b692" sha="24c5025966e821443cc8e104039bc46f72de3607">
       <sDescription>Bandwith limited square wave oscillator</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

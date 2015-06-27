@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd">
+   <obj.normal id="log" uuid="6dcd0da512ccd37567e0387bff127a404a8f46ec" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd">
       <sDescription>logarithm, y=16+8*log2(x)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -19,7 +19,7 @@ int32_t r3 = logt[f.parts.mantissa>>15]<<10;
 outlet_result = r1 + r3;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="log" sha="ff1f4aeb54fc1d404d0bb1720dc013b79eaf36e8">
+   <obj.normal id="log" uuid="777f7e7b1293a17eb108be813e558d1f7ca14004" sha="ff1f4aeb54fc1d404d0bb1720dc013b79eaf36e8">
       <sDescription>logarithm, y=16+8*log2(x)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

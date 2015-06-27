@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="inlet b" sha="e98d5f4c7b741588feaffc8629026f8d8e59e3ef">
+   <obj.normal id="inlet b" uuid="2592de5cbeea06a02a166fe81abbd0335b524a8d" sha="e98d5f4c7b741588feaffc8629026f8d8e59e3ef">
       <sDescription>Boolean inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

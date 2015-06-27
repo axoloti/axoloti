@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="change speedlim" sha="66643745eb6dc4d0abbde79a0360d8b6011c3e99">
+   <obj.normal id="change speedlim" uuid="cff83e4c70db3f00c5c18935d005eec117efbe5b" sha="66643745eb6dc4d0abbde79a0360d8b6011c3e99">
       <sDescription>Generates a trigger pulse when current input value is different from previous value, with a minimum time interval between pulses.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -35,7 +35,7 @@ pval = 0;
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="change speedlim" sha="8139aa36b2337921d024c8963005fa8129f270ce">
+   <obj.normal id="change speedlim" uuid="a6fea9425253511f70598499ae9418896d16c6f3" sha="8139aa36b2337921d024c8963005fa8129f270ce">
       <sDescription>Generates a trigger pulse when current input value is different from previous value, with a minimum time interval between pulses.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

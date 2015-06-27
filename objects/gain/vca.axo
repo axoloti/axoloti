@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf">
+   <obj.normal id="vca" uuid="36a5545ad97d82bba8d11d77dcc782fa621e48fa" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf">
       <sDescription>&quot;voltage controlled amplifier&quot;, multiplies v and a inputs, with linear interpolation from k- to s-rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

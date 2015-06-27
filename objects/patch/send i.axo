@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="send i" sha="1e4343a5dec42cd8476c6e0434396f139684ac0f">
+   <obj.normal id="send i" uuid="3c61191dfd725658b4efdcdfee91cfb6ead882d6" sha="1e4343a5dec42cd8476c6e0434396f139684ac0f">
       <sDescription>send (to recv object), integer type</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="config" sha="1ea9db31ce7ec2874d2a8315213c733a6b3c2dcf">
+   <obj.normal id="config" uuid="dfba7aade0868074c2861c98e2a9a92f3178a51b" sha="1ea9db31ce7ec2874d2a8315213c733a6b3c2dcf">
       <sDescription>Configures a I2C interface. PB8=SCL PB9=SDA</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

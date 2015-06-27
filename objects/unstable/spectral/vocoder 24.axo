@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="vocoder 24" sha="6d9336d0af616451a51bbcc4675a9fce48d495e1">
+   <obj.normal id="vocoder 24" uuid="d5ce0b7d1223128488760b0e76bb4ba4bfadd2a5" sha="6d9336d0af616451a51bbcc4675a9fce48d495e1">
       <sDescription>channel vocoder v1</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

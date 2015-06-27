@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="modsource_cc" sha="ef2695e0bacec13f86b5e8d4939cc54543af062">
+   <obj.normal id="modsource_cc" uuid="c933d0bd7c37ebcd1638db5d1920a6d21d387d6e" sha="ef2695e0bacec13f86b5e8d4939cc54543af062">
       <sDescription>midi cc modulation source</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

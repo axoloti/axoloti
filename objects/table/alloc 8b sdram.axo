@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="alloc 8b sdram" sha="7035dd1400bf99e02eead5e2e96ca5786d7ad08a">
+   <obj.normal id="alloc 8b sdram" uuid="5a336d47e7f0a7c01e03394f88028298ba53ee92" sha="7035dd1400bf99e02eead5e2e96ca5786d7ad08a">
       <sDescription>allocate table in SDRAM memory, -128..127</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

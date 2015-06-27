@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="touch" sha="cb01f331517bc8be44bcf77add271dab64bb90df">
+   <obj.normal id="touch" uuid="ed1c962c8afcb9914e2d55ec1abd280db7b034dd" sha="cb01f331517bc8be44bcf77add271dab64bb90df">
       <sDescription>Midi channel pressure input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

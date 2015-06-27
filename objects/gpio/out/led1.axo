@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="led1" sha="3e0eed650a7f86f5b92b21aa73314e94fd342621">
+   <obj.normal id="led1" uuid="ab7b6d6a6305bdea7133c179cc3a334a36fea71b" sha="3e0eed650a7f86f5b92b21aa73314e94fd342621">
       <sDescription>controls the LED on the board</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -446,6 +446,33 @@ public class AxoObject extends AxoObjectAbstract {
         }
     }
 
+    @Override
+    public void GenerateUUID() {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA");
+            md.update(id.getBytes());
+            for (Inlet i : inlets) {
+                i.updateSHA(md);
+            }
+            for (Outlet i : outlets) {
+                i.updateSHA(md);
+            }
+            for (Parameter i : params) {
+                i.updateSHA(md);
+            }
+            for (AxoAttribute i : attributes) {
+                i.updateSHA(md);
+            }
+            for (Display i : displays) {
+                i.updateSHA(md);
+            }
+            uuid = (new BigInteger(1, md.digest())).toString(16);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     public Boolean getRotatedParams() {
         if (rotatedParams == null) {
             return false;

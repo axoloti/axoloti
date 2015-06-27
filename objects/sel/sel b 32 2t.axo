@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sel b 32 2t" sha="54680674d94d39ac08ad4e8d2c16bb9d4732e3fb">
+   <obj.normal id="sel b 32 2t" uuid="beb48368cce522fe090a375cc5f1b1a2fc139eb2" sha="54680674d94d39ac08ad4e8d2c16bb9d4732e3fb">
       <sDescription>select one out of 32 booleans, chainable, 2 tracks</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

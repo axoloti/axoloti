@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="ibar 64" sha="9670d4ffe8212b7b9873dff03a5bfc9b1548922b">
+   <obj.normal id="ibar 64" uuid="8151706cc39f9f4685628e36f7909713f72ba5b3" sha="9670d4ffe8212b7b9873dff03a5bfc9b1548922b">
       <sDescription>display integer bar</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

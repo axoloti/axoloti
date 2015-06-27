@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="double" sha="c633387a1d72b98c2decbdfee1f60ab6893c82b">
+   <obj.normal id="double" uuid="fc0d1012f00106e82476ccf727e032d34996b29" sha="c633387a1d72b98c2decbdfee1f60ab6893c82b">
       <sDescription>multiply by two</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +14,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= inlet_in<<1;]]></code.krate>
    </obj.normal>
-   <obj.normal id="double" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2">
+   <obj.normal id="double" uuid="973df9c57622f4ddf7d564dfc1fd366ee7e81b07" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2">
       <sDescription>multiply by two</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,7 +29,7 @@
       <attribs/>
       <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index]<<1;]]></code.srate>
    </obj.normal>
-   <obj.normal id="double" sha="147c4e9ea8ef434bd2a959cddc03995ae3e2d314">
+   <obj.normal id="double" uuid="8b1ec0a3910a13379dd5a37853a82f72d830c865" sha="147c4e9ea8ef434bd2a959cddc03995ae3e2d314">
       <sDescription>multiply by two</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

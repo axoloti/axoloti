@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="comp" sha="32cf18b5f858588a4bec8b21d3f519e2a9689471">
+   <obj.normal id="comp" uuid="12fda9651714abb1172324d7eaca239629ca9283" sha="32cf18b5f858588a4bec8b21d3f519e2a9689471">
       <sDescription>Dynamic range compressor. Gain calculation only. Envelope follower, attatck, decay and VCA are not included.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

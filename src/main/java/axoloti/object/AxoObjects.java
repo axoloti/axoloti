@@ -43,9 +43,14 @@ public class AxoObjects {
     public AxoObjectTreeNode ObjectTree;
     public ArrayList<AxoObjectAbstract> ObjectList;
     HashMap<String, AxoObjectAbstract> ObjectHashMap;
+    HashMap<String, AxoObjectAbstract> ObjectUUIDMap;
 
     TransitionManager transitionmgr;
 
+    public AxoObjectAbstract GetAxoObjectFromUUID(String n) {
+        return ObjectUUIDMap.get(n);
+    }
+    
     public AxoObjectAbstract GetAxoObjectFromSHA(String n) {
         AxoObjectAbstract ao = transitionmgr.GetObjectFromSha(n);
         if (ao != null) {
@@ -140,6 +145,7 @@ public class AxoObjects {
         ObjectTree = new AxoObjectTreeNode("/");
         ObjectList = new ArrayList<AxoObjectAbstract>();
         ObjectHashMap = new HashMap<String, AxoObjectAbstract>();
+        ObjectUUIDMap = new HashMap<String, AxoObjectAbstract>();
     }
 
     public AxoObjectTreeNode LoadAxoObjectsFromFolder(File folder, String prefix) {
@@ -229,6 +235,12 @@ public class AxoObjects {
                                         + "\nPath: " + ObjectHashMap.get(a.getSHA()).sPath);
                             }
                             ObjectHashMap.put(a.getSHA(), a);
+                            if (ObjectUUIDMap.containsKey(a.getUUID())) {
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
+                                        "Duplicate UUID! " + fileEntry.getAbsolutePath() + "\nOriginal name: " + ObjectHashMap.get(a.getUUID()).id
+                                        + "\nPath: " + ObjectHashMap.get(a.getUUID()).sPath);
+                            }
+                            ObjectUUIDMap.put(a.getUUID(), a);
                         }
                     } catch (Exception ex) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ex);
