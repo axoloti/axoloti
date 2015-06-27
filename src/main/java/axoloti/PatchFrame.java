@@ -693,7 +693,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File fileToBeSaved = fc.getSelectedFile();
-            if (!fileToBeSaved.getAbsolutePath().endsWith(".axp")) {
+            if (! (fileToBeSaved.getAbsolutePath().endsWith(".axp") ||
+                    fileToBeSaved.getAbsolutePath().endsWith(".axh"))) {
                 fileToBeSaved = new File(fc.getSelectedFile() + ".axp");
             }
             patch.setFileNamePath(fileToBeSaved.getPath());

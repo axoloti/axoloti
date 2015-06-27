@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="demux 7" sha="87c3522d55b43b71e5ddb5d8294977a441c295e6">
+   <obj.normal id="demux 7" sha="e8d731ad8fb3fb4c3be6a0d64818016baa2e6596">
       <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, or to outlet o2 when true.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,79 +29,79 @@
       <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
       case 0: 
          outlet_o0 = inlet_i;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 1: 
-         outlet_o0 = %d%0%;
+         outlet_o0 = inlet_d0;
          outlet_o1 = inlet_i;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 2: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
          outlet_o2 = inlet_i;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 3: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
          outlet_o3 = inlet_i;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 4: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
          outlet_o4 = inlet_i;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 5: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
          outlet_o5 = inlet_i;
-         outlet_o6 = %d%6%;
+         outlet_o6 = inlet_d6;
          break;
       case 6: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
          outlet_o6 = inlet_i;
          break;
-      default: %o%= %i6%;break;
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+      default:
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 7" sha="cbe21da03fec6d1e8200dde34e6663cd7227a44a">
+   <obj.normal id="demux 7" sha="fd70da63362738f7ce0ee5114ef951c0168fc54b">
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -131,75 +131,75 @@
       <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
       case 0: 
          outlet_o0 = inlet_i;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 1: 
-         outlet_o0 = %d%0%;
+         outlet_o0 = inlet_d0;
          outlet_o1 = inlet_i;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 2: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
          outlet_o2 = inlet_i;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 3: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
          outlet_o3 = inlet_i;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 4: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
          outlet_o4 = inlet_i;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 5: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
          outlet_o5 = inlet_i;
-         outlet_o6 = %d%6%;
+         outlet_o6 = inlet_d6;
          break;
       case 6: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
          outlet_o6 = inlet_i;
          break;
-      default: %o%= %i6%;break;
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+      default:
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
 }
 ]]></code.krate>
    </obj.normal>
@@ -235,7 +235,7 @@
 }
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="demux 7" sha="257e27635ee1158bb805243638e04f12a635b3e">
+   <obj.normal id="demux 7" sha="2ee611ecff598e3c8f2babc195fa58520f4989ea">
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -265,75 +265,75 @@
       <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
       case 0: 
          outlet_o0 = inlet_i;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 1: 
-         outlet_o0 = %d%0%;
+         outlet_o0 = inlet_d0;
          outlet_o1 = inlet_i;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 2: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
          outlet_o2 = inlet_i;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 3: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
          outlet_o3 = inlet_i;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 4: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
          outlet_o4 = inlet_i;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 5: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
          outlet_o5 = inlet_i;
-         outlet_o6 = %d%6%;
+         outlet_o6 = inlet_d6;
          break;
       case 6: 
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
          outlet_o6 = inlet_i;
          break;
-      default: %o%= %i6%;break;
-         outlet_o0 = %d%0%;
-         outlet_o1 = %d%1%;
-         outlet_o2 = %d%2%;
-         outlet_o3 = %d%3%;
-         outlet_o4 = %d%4%;
-         outlet_o5 = %d%5%;
-         outlet_o6 = %d%6%;
+      default:
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
 }
 ]]></code.krate>
    </obj.normal>

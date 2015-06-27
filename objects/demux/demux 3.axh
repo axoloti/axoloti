@@ -1,0 +1,102 @@
+<patch-1.0>
+   <comment type="patch/comment" sha="sha" name="Demultiplexer" x="14" y="14"/>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="input" x="28" y="56">
+      <params>
+         <frac32.s.map name="value" value="42.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/i radio 4 h" sha="d36bd5558e3bdc4c9771c17096f48be51e513740" name="i_1" x="154" y="126">
+      <params>
+         <int32.hradio name="value" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="default0" x="28" y="140">
+      <params>
+         <frac32.s.map name="value" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="default1" x="28" y="224">
+      <params>
+         <frac32.s.map name="value" value="2.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="demux/demux 3" sha="ba1c797491cc2cd96e9dc0058ad0a4c91fe9c388" name="demux_1" x="140" y="224">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="out 0" x="252" y="224">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="default2" x="28" y="308">
+      <params>
+         <frac32.s.map name="value" value="2.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="out 1" x="252" y="308">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="out 2" x="252" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="other variants:" x="28" y="462"/>
+   <obj type="demux/demux 3" sha="cd750d64990f036459c7562b4363532dd442d7f" name="demux_2" x="28" y="504">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="demux/demux 3" sha="9f5b7295428284f4bdb86dd861235557a3e40194" name="demux_3" x="28" y="616">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="input out"/>
+         <dest name="demux_1 i"/>
+      </net>
+      <net>
+         <source name="demux_1 o0"/>
+         <dest name="out 0 in"/>
+      </net>
+      <net>
+         <source name="demux_1 o1"/>
+         <dest name="out 1 in"/>
+      </net>
+      <net>
+         <source name="default0 out"/>
+         <dest name="demux_1 d0"/>
+      </net>
+      <net>
+         <source name="default1 out"/>
+         <dest name="demux_1 d1"/>
+      </net>
+      <net>
+         <source name="i_1 out"/>
+         <dest name="demux_1 s"/>
+      </net>
+      <net>
+         <source name="demux_1 o2"/>
+         <dest name="out 2 in"/>
+      </net>
+      <net>
+         <source name="default2 out"/>
+         <dest name="demux_1 d2"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>192</x>
+      <y>116</y>
+      <width>421</width>
+      <height>896</height>
+   </windowPos>
+</patch-1.0>
