@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -35,6 +35,7 @@ public class GeneratedObjects extends gentools {
     static public void WriteAxoObjects() {
 
         Arithmetic.GenerateAll();
+        Demux.GenerateAll();
         Constant.GenerateAll();
         Control.GenerateAll();
         Convert.GenerateAll();

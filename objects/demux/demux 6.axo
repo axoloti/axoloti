@@ -1,8 +1,9 @@
 <objdefs>
    <obj.normal id="demux 6" sha="1cfce3391269a8d8bdfd752619d4bce778538c82">
-      <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, or to outlet o2 when true.</sDescription>
+      <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>demux 3.axh</helpPatch>
       <inlets>
          <frac32 name="i" description="input"/>
          <frac32 name="d0" description="default 0"/>
@@ -11,7 +12,7 @@
          <frac32 name="d3" description="default 3"/>
          <frac32 name="d4" description="default 4"/>
          <frac32 name="d5" description="default 5"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <frac32 name="o0" description="output 0"/>
@@ -84,9 +85,10 @@
 ]]></code.krate>
    </obj.normal>
    <obj.normal id="demux 6" sha="753569248056d05cab68fb61cabbe55897984e6">
-      <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
+      <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>demux 3.axh</helpPatch>
       <inlets>
          <int32 name="i" description="input"/>
          <int32 name="d0" description="default 0"/>
@@ -95,7 +97,7 @@
          <int32 name="d3" description="default 3"/>
          <int32 name="d4" description="default 4"/>
          <int32 name="d5" description="default 5"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <int32 name="o0" description="output 0"/>
@@ -167,13 +169,20 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 6" sha="6ac2a4142350787da5f18674419167e1859d65d1">
-      <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
+   <obj.normal id="demux 6" sha="92207c0aae020018a636a519eda04cf89338456c">
+      <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>demux 3.axh</helpPatch>
       <inlets>
          <frac32buffer name="i" description="input"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <frac32buffer name="d0" description="default 0"/>
+         <frac32buffer name="d1" description="default 1"/>
+         <frac32buffer name="d2" description="default 2"/>
+         <frac32buffer name="d3" description="default 3"/>
+         <frac32buffer name="d4" description="default 4"/>
+         <frac32buffer name="d5" description="default 5"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <frac32buffer name="o0" description="output 0"/>
@@ -187,20 +196,69 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[   switch(inlet_s>0?inlet_s:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      case 4: %o%= %i4%;break;
-      case 5: %o%= %i5%;break;
-      default: %o%= %i5%;break;
+      case 0: 
+         outlet_o0[buffer_index] = inlet_i[buffer_index];
+         outlet_o1[buffer_index] = inlet_d1[buffer_index];
+         outlet_o2[buffer_index] = inlet_d2[buffer_index];
+         outlet_o3[buffer_index] = inlet_d3[buffer_index];
+         outlet_o4[buffer_index] = inlet_d4[buffer_index];
+         outlet_o5[buffer_index] = inlet_d5[buffer_index];
+         break;
+      case 1: 
+         outlet_o0[buffer_index] = inlet_d0[buffer_index];
+         outlet_o1[buffer_index] = inlet_i[buffer_index];
+         outlet_o2[buffer_index] = inlet_d2[buffer_index];
+         outlet_o3[buffer_index] = inlet_d3[buffer_index];
+         outlet_o4[buffer_index] = inlet_d4[buffer_index];
+         outlet_o5[buffer_index] = inlet_d5[buffer_index];
+         break;
+      case 2: 
+         outlet_o0[buffer_index] = inlet_d0[buffer_index];
+         outlet_o1[buffer_index] = inlet_d1[buffer_index];
+         outlet_o2[buffer_index] = inlet_i[buffer_index];
+         outlet_o3[buffer_index] = inlet_d3[buffer_index];
+         outlet_o4[buffer_index] = inlet_d4[buffer_index];
+         outlet_o5[buffer_index] = inlet_d5[buffer_index];
+         break;
+      case 3: 
+         outlet_o0[buffer_index] = inlet_d0[buffer_index];
+         outlet_o1[buffer_index] = inlet_d1[buffer_index];
+         outlet_o2[buffer_index] = inlet_d2[buffer_index];
+         outlet_o3[buffer_index] = inlet_i[buffer_index];
+         outlet_o4[buffer_index] = inlet_d4[buffer_index];
+         outlet_o5[buffer_index] = inlet_d5[buffer_index];
+         break;
+      case 4: 
+         outlet_o0[buffer_index] = inlet_d0[buffer_index];
+         outlet_o1[buffer_index] = inlet_d1[buffer_index];
+         outlet_o2[buffer_index] = inlet_d2[buffer_index];
+         outlet_o3[buffer_index] = inlet_d3[buffer_index];
+         outlet_o4[buffer_index] = inlet_i[buffer_index];
+         outlet_o5[buffer_index] = inlet_d5[buffer_index];
+         break;
+      case 5: 
+         outlet_o0[buffer_index] = inlet_d0[buffer_index];
+         outlet_o1[buffer_index] = inlet_d1[buffer_index];
+         outlet_o2[buffer_index] = inlet_d2[buffer_index];
+         outlet_o3[buffer_index] = inlet_d3[buffer_index];
+         outlet_o4[buffer_index] = inlet_d4[buffer_index];
+         outlet_o5[buffer_index] = inlet_i[buffer_index];
+         break;
+      default:
+         outlet_o0[buffer_index] = inlet_d0[buffer_index];
+         outlet_o1[buffer_index] = inlet_d1[buffer_index];
+         outlet_o2[buffer_index] = inlet_d2[buffer_index];
+         outlet_o3[buffer_index] = inlet_d3[buffer_index];
+         outlet_o4[buffer_index] = inlet_d4[buffer_index];
+         outlet_o5[buffer_index] = inlet_d5[buffer_index];
 }
 ]]></code.srate>
    </obj.normal>
    <obj.normal id="demux 6" sha="1fa6623ce71de2739aa1aa28ba64f03f1a37601b">
-      <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
+      <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>demux 3.axh</helpPatch>
       <inlets>
          <bool32 name="i" description="input"/>
          <bool32 name="d0" description="default 0"/>
@@ -209,7 +267,7 @@
          <bool32 name="d3" description="default 3"/>
          <bool32 name="d4" description="default 4"/>
          <bool32 name="d5" description="default 5"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <bool32 name="o0" description="output 0"/>

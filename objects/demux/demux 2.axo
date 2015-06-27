@@ -3,6 +3,7 @@
       <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>demux 2.axh</helpPatch>
       <inlets>
          <frac32 name="i" description="input"/>
          <frac32 name="d0" description="default 0"/>
@@ -24,6 +25,7 @@
       <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>demux 2.axh</helpPatch>
       <inlets>
          <frac32buffer name="i" description="input"/>
          <frac32buffer name="d0" description="default 0"/>
@@ -45,6 +47,7 @@
       <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>demux 2.axh</helpPatch>
       <inlets>
          <int32 name="i" description="input"/>
          <int32 name="d0" description="default 0"/>
@@ -66,6 +69,7 @@
       <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>demux 2.axh</helpPatch>
       <inlets>
          <bool32 name="i" description="input"/>
          <bool32 name="d0" description="default 0"/>

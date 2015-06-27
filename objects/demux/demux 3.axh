@@ -1,57 +1,61 @@
 <patch-1.0>
    <comment type="patch/comment" sha="sha" name="Demultiplexer" x="14" y="14"/>
-   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="input" x="28" y="56">
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="input" x="28" y="42">
       <params>
          <frac32.s.map name="value" value="42.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="ctrl/i radio 4 h" sha="d36bd5558e3bdc4c9771c17096f48be51e513740" name="i_1" x="154" y="126">
-      <params>
-         <int32.hradio name="value" value="0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="default0" x="28" y="140">
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="default0" x="28" y="126">
       <params>
          <frac32.s.map name="value" value="1.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="default1" x="28" y="224">
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="default1" x="28" y="210">
       <params>
          <frac32.s.map name="value" value="2.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="demux/demux 3" sha="ba1c797491cc2cd96e9dc0058ad0a4c91fe9c388" name="demux_1" x="140" y="224">
-      <params/>
+   <obj type="ctrl/i radio 4 h" sha="d36bd5558e3bdc4c9771c17096f48be51e513740" name="select" x="154" y="224">
+      <params>
+         <int32.hradio name="value" value="0"/>
+      </params>
       <attribs/>
    </obj>
-   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="out 0" x="252" y="224">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="default2" x="28" y="308">
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="default2" x="28" y="294">
       <params>
          <frac32.s.map name="value" value="2.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="out 1" x="252" y="308">
+   <obj type="demux/demux 3" sha="7dd4924b110392a51e183ca56de9badd8f051e96" name="demux_1" x="154" y="294">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="out 2" x="252" y="392">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="out 0" x="266" y="294">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="other variants:" x="28" y="462"/>
-   <obj type="demux/demux 3" sha="cd750d64990f036459c7562b4363532dd442d7f" name="demux_2" x="28" y="504">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="out 1" x="266" y="378">
       <params/>
       <attribs/>
    </obj>
-   <obj type="demux/demux 3" sha="9f5b7295428284f4bdb86dd861235557a3e40194" name="demux_3" x="28" y="616">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="out 2" x="266" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="other variants:" x="14" y="574"/>
+   <obj type="demux/demux 3" sha="129c7ffdc1dc207405715ead5330b62739fe0b56" name="demux_2" x="28" y="602">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="demux/demux 3" sha="ff3e2fe58a7827567c4bb577e440af6d839ff80d" name="demux_4" x="140" y="602">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="demux/demux 3" sha="e1328a696346136f1a4a3c7c3b71856e971c9caa" name="demux_3" x="252" y="602">
       <params/>
       <attribs/>
    </obj>
@@ -77,7 +81,7 @@
          <dest name="demux_1 d1"/>
       </net>
       <net>
-         <source name="i_1 out"/>
+         <source name="select out"/>
          <dest name="demux_1 s"/>
       </net>
       <net>
@@ -96,7 +100,7 @@
    <windowPos>
       <x>192</x>
       <y>116</y>
-      <width>421</width>
+      <width>647</width>
       <height>896</height>
    </windowPos>
 </patch-1.0>
