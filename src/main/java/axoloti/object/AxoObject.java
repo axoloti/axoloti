@@ -40,6 +40,8 @@ import axoloti.inlets.InletFrac32BufferBipolar;
 import axoloti.inlets.InletFrac32BufferPos;
 import axoloti.inlets.InletFrac32Pos;
 import axoloti.inlets.InletInt32;
+import axoloti.inlets.InletInt32Bipolar;
+import axoloti.inlets.InletInt32Pos;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletBool32Pulse;
@@ -138,6 +140,8 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = "frac32.bipolar", type = InletFrac32Bipolar.class, inline = true, required = false),
         @ElementList(entry = "charptr32", type = InletCharPtr32.class, inline = true, required = false),
         @ElementList(entry = "int32", type = InletInt32.class, inline = true, required = false),
+        @ElementList(entry = "int32.positive", type = InletInt32Pos.class, inline = true, required = false),
+        @ElementList(entry = "int32.bipolar", type = InletInt32Bipolar.class, inline = true, required = false),
         @ElementList(entry = "frac32buffer", type = InletFrac32Buffer.class, inline = true, required = false),
         @ElementList(entry = "frac32buffer.positive", type = InletFrac32BufferPos.class, inline = true, required = false),
         @ElementList(entry = "frac32buffer.bipolar", type = InletFrac32BufferBipolar.class, inline = true, required = false)

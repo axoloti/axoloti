@@ -11,7 +11,7 @@
          <frac32 name="i4" description="input 4"/>
          <frac32 name="i5" description="input 5"/>
          <frac32 name="i6" description="input 6"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <frac32 name="o" description="output"/>
@@ -43,7 +43,7 @@
          <int32 name="i4" description="input 4"/>
          <int32 name="i5" description="input 5"/>
          <int32 name="i6" description="input 6"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <int32 name="o" description="output"/>
@@ -75,7 +75,7 @@
          <frac32buffer name="i4" description="input 4"/>
          <frac32buffer name="i5" description="input 5"/>
          <frac32buffer name="i6" description="input 6"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <frac32buffer name="o" description="output"/>
@@ -107,7 +107,7 @@
          <bool32 name="i4" description="input 4"/>
          <bool32 name="i5" description="input 5"/>
          <bool32 name="i6" description="input 6"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <bool32 name="o" description="output"/>
@@ -139,7 +139,7 @@
          <charptr32 name="i4" description="input 4"/>
          <charptr32 name="i5" description="input 5"/>
          <charptr32 name="i6" description="input 6"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <charptr32 name="o" description="output"/>

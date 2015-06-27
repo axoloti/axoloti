@@ -5,8 +5,8 @@
       <license>BSD</license>
       <inlets>
          <frac32.positive name="v" description="value"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="cc" description="midi Continous Controller number 0-127"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="chan" description="channel 1..16"/>
+         <int32.positive name="cc" description="midi Continous Controller number 0-127"/>
+         <int32.positive name="chan" description="channel 1..16"/>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets/>

@@ -28,7 +28,7 @@
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="a" description="index (integer, not fraction)"/>
+         <int32.positive name="a" description="index (integer, not fraction)"/>
          <frac32 name="v" description="value"/>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
