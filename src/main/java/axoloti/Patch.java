@@ -45,6 +45,7 @@ import axoloti.utils.Constants;
 import displays.DisplayInstance;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -87,6 +88,8 @@ public class Patch {
     PatchSettings settings;
     @Element(required = false, data = true)
     String notes = "";
+    @Element(required = false)
+    Rectangle windowPos;
     private String FileNamePath;
     PatchFrame patchframe;
     ArrayList<ParameterInstance> ParameterInstances = new ArrayList<ParameterInstance>();
@@ -203,6 +206,7 @@ public class Patch {
         if (settings == null) {
             settings = new PatchSettings();
         }
+        SetDirty(false);
     }
 
     public ArrayList<ParameterInstance> getParameterInstances() {
@@ -220,6 +224,10 @@ public class Patch {
 
     public void SetDirty() {
         dirty = true;
+    }
+
+    public void SetDirty(boolean f) {
+        dirty = f;
     }
 
     public boolean isDirty() {
@@ -2140,5 +2148,9 @@ public class Patch {
             return null;
         }
         return FileNamePath.substring(0, i);
+    }
+
+    public Rectangle getWindowPos() {
+        return windowPos;
     }
 }

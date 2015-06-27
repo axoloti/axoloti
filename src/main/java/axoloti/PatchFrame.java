@@ -23,6 +23,7 @@ import axoloti.utils.Constants;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -86,7 +87,13 @@ public class PatchFrame extends javax.swing.JFrame {
         jMenuEdit.add(menuItem);
 
         UpdateConnectStatus();
-        setExtendedState(MAXIMIZED_BOTH);
+        if (patch.getWindowPos() != null) {
+            setBounds(patch.getWindowPos());
+        } else {
+            patch.AdjustSize();
+            Dimension d = patch.Layers.getSize();
+            setSize(d.width + 50, d.height + 200);
+        }
 
         if (!MainFrame.prefs.getExpertMode()) {
             jSeparator3.setVisible(false);

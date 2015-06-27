@@ -854,6 +854,7 @@ public class PatchGUI extends Patch {
         if (NotesFrame != null) {
             this.notes = NotesFrame.GetText();
         }
+        windowPos = patchframe.getBounds();
     }
 
     @Override
