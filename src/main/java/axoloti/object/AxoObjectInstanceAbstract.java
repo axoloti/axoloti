@@ -88,9 +88,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         if (type.createdFromRelativePath && (patch1 != null)) {
             String pPath = patch1.getFileNamePath();
             String oPath = type.sPath;
-            if (pPath.endsWith(".axp") || pPath.endsWith(".axo")) {
-                pPath = pPath.substring(0, pPath.length() - 4);
-            }
+
             if (oPath.endsWith(".axp") || oPath.endsWith(".axo")) {
                 oPath = oPath.substring(0, oPath.length() - 4);
             }
