@@ -1,0 +1,87 @@
+<patch-1.0>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="dial_1" x="14" y="28">
+      <params>
+         <frac32.s.map name="value" value="42.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="dial_4" x="14" y="112">
+      <params>
+         <frac32.s.map name="value" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="toggle_1" x="126" y="126">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="dial_5" x="14" y="196">
+      <params>
+         <frac32.s.map name="value" value="2.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="demux/demux 2" sha="2d40dd15da76b6f8c1b6a813d1c533739354cf58" name="demux_1" x="126" y="196">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="dial_2" x="238" y="196">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="dial_3" x="238" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="sha" name="other variants:" x="14" y="364"/>
+   <obj type="demux/demux 2" sha="51521ba16c909fd0a9e8900319ff9b45db9f15a5" name="demux_2" x="14" y="406">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="demux/demux 2" sha="3f50a68e59f6c39fc71bf093329b3eccb942980c" name="demux_3" x="14" y="504">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="demux/demux 2" sha="89626563233c852f6e574337e97a22a06b465d70" name="demux_4" x="14" y="602">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="dial_1 out"/>
+         <dest name="demux_1 i"/>
+      </net>
+      <net>
+         <source name="toggle_1 o"/>
+         <dest name="demux_1 s"/>
+      </net>
+      <net>
+         <source name="demux_1 o0"/>
+         <dest name="dial_2 in"/>
+      </net>
+      <net>
+         <source name="demux_1 o1"/>
+         <dest name="dial_3 in"/>
+      </net>
+      <net>
+         <source name="dial_4 out"/>
+         <dest name="demux_1 d0"/>
+      </net>
+      <net>
+         <source name="dial_5 out"/>
+         <dest name="demux_1 d1"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>192</x>
+      <y>116</y>
+      <width>530</width>
+      <height>896</height>
+   </windowPos>
+</patch-1.0>
