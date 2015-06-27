@@ -153,10 +153,10 @@ public class Midi extends gentools {
         o.outlets.add(new OutletFrac32Pos("midiCC", "midi CC 0-63.5"));
         o.outlets.add(new OutletBool32Pulse("trig", "trigger output"));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
-        o.attributes.add(new AxoAttributeSpinner("default", 0, 64, 0));
+        o.attributes.add(new AxoAttributeSpinner("default", 0, 127, 0));
         o.sLocalData = "int32_t ccv;\n"
                 + "int32_t ntrig;\n";
-        o.sInitCode = "ccv = %default%;\n";
+        o.sInitCode = "ccv = %default% << 20;\n";
         o.sMidiCode = "if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == %cc%)) { ccv = data2<<20; ntrig = 1;}\n";
         o.sKRateCode = "%midiCC%= ccv;\n"
                 + "%trig% = ntrig;\n"
