@@ -152,8 +152,8 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
         getControlComponent().addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
-                handleAdjustment();
-                if (axoObj != null) {
+                boolean changed = handleAdjustment();
+                if (axoObj != null && changed) {
                     if (axoObj.getPatch() != null) {
                         axoObj.getPatch().SetDirty();
                     }
@@ -445,7 +445,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
 
     abstract public ACtrlComponent getControlComponent();
 
-    abstract public void handleAdjustment();
+    abstract public boolean handleAdjustment();
 
     void SetMidiCC(Integer cc) {
         if ((cc != null) && (cc >= 0)) {
