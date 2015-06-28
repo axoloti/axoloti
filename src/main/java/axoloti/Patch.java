@@ -118,6 +118,7 @@ public class Patch {
 
     void GoLive() {
         ShowPreset(0);
+        ClearDirty();
         WriteCode();
         presetUpdatePending = false;
         GetQCmdProcessor().SetPatch(this);
@@ -206,7 +207,7 @@ public class Patch {
         if (settings == null) {
             settings = new PatchSettings();
         }
-        SetDirty(false);
+        ClearDirty();
     }
 
     public ArrayList<ParameterInstance> getParameterInstances() {
@@ -222,12 +223,19 @@ public class Patch {
         return null;
     }
 
+    public void ClearDirty() {
+        dirty = false;
+    }
+
     public void SetDirty() {
         dirty = true;
     }
 
+    @Deprecated
     public void SetDirty(boolean f) {
-        dirty = f;
+        // use Set and ClearDirty
+        if (f) SetDirty();
+        else ClearDirty();
     }
 
     public boolean isDirty() {

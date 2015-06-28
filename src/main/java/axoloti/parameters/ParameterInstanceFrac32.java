@@ -148,7 +148,7 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
     }
 
     @Override
-    public void handleAdjustment() {
+    public boolean handleAdjustment() {
         Preset p = GetPreset(presetEditActive);
         if (p != null) {
             p.value = new ValueFrac32(getControlComponent().getValue());
@@ -158,6 +158,11 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
                 needsTransmit = true;
                 UpdateUnit();
             }
+            else {
+                return false;
+            }
+                
         }
-    }
+        return true;
+    }    
 }
