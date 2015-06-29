@@ -25,8 +25,7 @@ sdReadFilePingpong sdStreams[2] __attribute__ ((section (".sram")));
 #define PRE_SIZE (1024*1024*128)
 
 void reportFError(FRESULT err){
-      TransmitTextMessageHeader();
-      chprintf((BaseSequentialStream *)&SDU1, "fatfs err %i\r\n%c",err,0);
+      LogTextMessage("fatfs err %i\r\n",err);
 }
 
 void BenchmarkBS(int bufsize, int nstreams){
@@ -52,19 +51,18 @@ void BenchmarkBS(int bufsize, int nstreams){
   for(i=0;i<nstreams;i++){
       sdReadFilePingpong *s = (sdReadFilePingpong*)(0x20000000 | (int)&sdStreams[i]);
     err = f_open(&s->f, &s->filename[0], FA_WRITE | FA_CREATE_ALWAYS);
-    if (err) reportFError(err); else TransmitTextMessage("Open OK...");
+    if (err) reportFError(err); else LogTextMessage("Open OK...");
     err = f_lseek(&s->f, PRE_SIZE);
-    if (err) reportFError(err); else TransmitTextMessage("lseek1 OK...");
+    if (err) reportFError(err); else LogTextMessage("lseek1 OK...");
     err = f_lseek(&s->f, 0);
-    if (err) reportFError(err); else TransmitTextMessage("lseek2 OK...");
+    if (err) reportFError(err); else LogTextMessage("lseek2 OK...");
 
     s->f.cltbl = &s->clmt[0]; /* Enable fast seek feature (cltbl != NULL) */
     s->clmt[0] = SZ_TBL; /* Set table size */
     err = f_lseek(&s->f, CREATE_LINKMAP); /* Create CLMT */
     if (err) {
-      TransmitTextMessageHeader();
-      chprintf((BaseSequentialStream *)&SDU1, "lseek err %i\r\n%c",err,0);
-    }else TransmitTextMessage("lseek3 OK...");
+      LogTextMessage("lseek err %i\r\n",err);
+    }else LogTextMessage("lseek3 OK...");
   }
   // write
   int t1 = chTimeNow();
@@ -93,8 +91,7 @@ void BenchmarkBS(int bufsize, int nstreams){
     s->clmt[0] = SZ_TBL; /* Set table size */
     err = f_lseek(&s->f, CREATE_LINKMAP); /* Create CLMT */
     if (err) {
-        TransmitTextMessageHeader();
-        chprintf((BaseSequentialStream *)&SDU1, "lseek err %i\r\n%c",err,0);
+        LogTextMessage("lseek err %i\r\n",err);
     }
   }
   // read
@@ -112,21 +109,20 @@ void BenchmarkBS(int bufsize, int nstreams){
       sdReadFilePingpong *s = (sdReadFilePingpong*)(0x20000000 | (int)&sdStreams[i]);
     err = f_close(&s->f);
   }
-  TransmitTextMessageHeader();
-  chprintf((BaseSequentialStream *)&SDU1, "nstreams = %i, ",nstreams);
-  chprintf((BaseSequentialStream *)&SDU1, "NBUFFERS = %i, ",nbuf);
-  chprintf((BaseSequentialStream *)&SDU1, "BUFSIZE = %i\r\n",bufsize);
-  chprintf((BaseSequentialStream *)&SDU1, "open : %i ms\r\n",t1-t0);
-//  chprintf((BaseSequentialStream *)&SDU1, "write : %i ms\r\n",t2-t1);
-  chprintf((BaseSequentialStream *)&SDU1, "write BW : %i kB/s\r\n",(nstreams*nbuf*bufsize)/(t2-t1));
-  chprintf((BaseSequentialStream *)&SDU1, "close : %i ms\r\n",t3-t2);
-  chprintf((BaseSequentialStream *)&SDU1, "open : %i ms\r\n",t4-t3);
-//  chprintf((BaseSequentialStream *)&SDU1, "read : %i ms\r\n",t5-t4,0);
-  chprintf((BaseSequentialStream *)&SDU1, "read BW : %i kB/s\r\n%c",(nstreams*nbuf*bufsize)/(t5-t4),0);
+  LogTextMessage("nstreams = %i, ",nstreams);
+  LogTextMessage("NBUFFERS = %i, ",nbuf);
+  LogTextMessage("BUFSIZE = %i\r\n",bufsize);
+  LogTextMessage("open : %i ms\r\n",t1-t0);
+//  LogTextMessage("write : %i ms\r\n",t2-t1);
+  LogTextMessage("write BW : %i kB/s\r\n",(nstreams*nbuf*bufsize)/(t2-t1));
+  LogTextMessage("close : %i ms\r\n",t3-t2);
+  LogTextMessage("open : %i ms\r\n",t4-t3);
+//  LogTextMessage("read : %i ms\r\n",t5-t4,0);
+  LogTextMessage("read BW : %i kB/s\r\n",(nstreams*nbuf*bufsize)/(t5-t4));
 }
 
 static msg_t ThreadBenchmarkSD(void *arg) {
-  TransmitTextMessage("Starting sdcard benchmark. Wait...");
+  LogTextMessage("Starting sdcard benchmark. Wait...");
   BenchmarkBS(SDREADFILEPINGPONGSIZE * 4, 1);
   BenchmarkBS(SDREADFILEPINGPONGSIZE * 4, 2);
   BenchmarkBS(SDREADFILEPINGPONGSIZE * 2, 1);
@@ -135,7 +131,7 @@ static msg_t ThreadBenchmarkSD(void *arg) {
   BenchmarkBS(SDREADFILEPINGPONGSIZE * 1, 2);
   BenchmarkBS(SDREADFILEPINGPONGSIZE / 2, 1);
   BenchmarkBS(SDREADFILEPINGPONGSIZE / 2, 2);
-  TransmitTextMessage("SDCard benchmark finished.");
+  LogTextMessage("SDCard benchmark finished.");
 }
 
 static WORKING_AREA(waThreadSD0, 1024) __attribute__ ((section (".data")));
