@@ -234,8 +234,11 @@ public class Patch {
     @Deprecated
     public void SetDirty(boolean f) {
         // use Set and ClearDirty
-        if (f) SetDirty();
-        else ClearDirty();
+        if (f) {
+            SetDirty();
+        } else {
+            ClearDirty();
+        }
     }
 
     public boolean isDirty() {
@@ -1155,6 +1158,7 @@ public class Patch {
                 + "  patchMeta.pPExch = &root.PExch[0];\n"
                 + "  patchMeta.pDisplayVector = &root.displayVector[0];\n"
                 + "  patchMeta.numPEx = " + ParameterInstances.size() + ";\n"
+                + "  patchMeta.patchID = " + GetIID() + ";\n"
                 + "  root.Init();\n"
                 + "  patchMeta.fptr_applyPreset = ApplyPreset;\n"
                 + "  patchMeta.fptr_patch_dispose = PatchDispose;\n"
@@ -1164,7 +1168,19 @@ public class Patch {
         return c;
     }
 
+    int IID = -1; // iid identifies the patch
+
+    int GetIID() {
+        return IID;
+    }
+
+    void CreateIID() {
+        java.util.Random r = new java.util.Random();
+        IID = r.nextInt();
+    }
+
     String GenerateCode3() {
+        CreateIID();
         SortByPosition();
         String c = "extern \"C\" { \n"
                 + "#include \"../" + Constants.firmwaredir + "/patch.h\"\n"
@@ -1804,16 +1820,15 @@ public class Patch {
 
     void WriteCode() {
         String c = GenerateCode3();
-        //cdlg.SetCode(c);
 
         try {
             FileOutputStream f = new FileOutputStream("patch/xpatch.cpp");
             f.write(c.getBytes());
             f.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, ex.toString());
         } catch (IOException ex) {
-            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, ex.toString());
         }
         Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Generate code complete");
     }

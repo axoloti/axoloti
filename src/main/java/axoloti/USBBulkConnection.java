@@ -18,10 +18,9 @@
 package axoloti;
 
 /**
- * Replaces the old packet-over-serial protocol
- * with vendor-specific usb bulk transport
+ * Replaces the old packet-over-serial protocol with vendor-specific usb bulk
+ * transport
  */
-
 import axoloti.parameters.ParameterInstance;
 import axoloti.targetprofile.axoloti_core;
 import displays.DisplayInstance;
@@ -109,7 +108,7 @@ public class USBBulkConnection extends Connection {
     public void disconnect() {
         if (connected) {
             disconnectRequested = true;
-            connected = false;            
+            connected = false;
             MainFrame.mainframe.ShowDisconnect();
             queueSerialTask.clear();
             try {
@@ -133,11 +132,11 @@ public class USBBulkConnection extends Connection {
              Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
              }
              */
-        synchronized (sync) {
-            sync.Acked = 0;
-            sync.notifyAll();
-        }
-            
+            synchronized (sync) {
+                sync.Acked = 0;
+                sync.notifyAll();
+            }
+
             try {
                 if (receiverThread.isAlive()) {
                     receiverThread.join();
@@ -542,6 +541,7 @@ public class USBBulkConnection extends Connection {
     int CpuId1 = 0;
     int CpuId2 = 0;
     int FirmwareId = -1;
+    int IID = 0;
 
     void Acknowledge(int FirmwareId, int DSPLoad, int PatchID, int CpuId0, int CpuId1, int CpuId2) {
         synchronized (sync) {
@@ -558,6 +558,7 @@ public class USBBulkConnection extends Connection {
             this.FirmwareId = FirmwareId;
             MainFrame.mainframe.setFirmwareID((String.format("%08X", FirmwareId)));
         }
+        IID = PatchID;
         if (patch != null) {
             patch.SetDSPLoad(DSPLoad);
         }
@@ -566,24 +567,43 @@ public class USBBulkConnection extends Connection {
     void RPacketParamChange(final int index, final int value) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void run() {
+            public
+                    void run() {
                 if (patch == null) {
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange patch null" + index + " " + value);
+                    Logger.getLogger(USBBulkConnection.class
+                            .getName()).log(Level.INFO, "Rx paramchange patch null" + index + " " + value);
+
                     return;
                 }
+                if (!patch.IsLocked()) {
+                    return;
+
+                }
                 if (index >= patch.ParameterInstances.size()) {
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange index out of range" + index + " " + value);
+                    Logger.getLogger(USBBulkConnection.class
+                            .getName()).log(Level.INFO, "Rx paramchange index out of range" + index + " " + value);
+
                     return;
                 }
                 ParameterInstance pi = patch.ParameterInstances.get(index);
+
                 if (pi == null) {
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange parameterInstance null" + index + " " + value);
+                    Logger.getLogger(USBBulkConnection.class
+                            .getName()).log(Level.INFO, "Rx paramchange parameterInstance null" + index + " " + value);
                     return;
                 }
+
+                if (patch.GetIID() != IID) {
+                    Logger.getLogger(USBBulkConnection.class
+                            .getName()).log(Level.INFO, "Rx paramchange IID mismatch" + index + " " + value);
+                    return;
+                }
+
 //                System.out.println("rcv ppc objname:" + pi.axoObj.getInstanceName() + " pname:"+ pi.name);
                 pi.SetValueRaw(value);
             }
         });
+
     }
 
     enum ReceiverState {
@@ -630,6 +650,7 @@ public class USBBulkConnection extends Connection {
         }
 //            System.out.println("s " + dataIndex + "  v=" + Integer.toHexString(packetData[dataIndex>>2]) + " c=");
         dataIndex++;
+
     }
 
     void DisplayPackHeader(int i1, int i2) {
@@ -761,6 +782,7 @@ public class USBBulkConnection extends Connection {
                     default:
                         Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "receiver: invalid header");
                         GoIdleState();
+
                         break;
                 }
                 break;
