@@ -834,6 +834,24 @@ public class PatchGUI extends Patch {
     void SetDSPLoad(int pct) {
         patchframe.ShowDSPLoad(pct);
     }
+    
+    Dimension GetInitialSize() {
+        int mx = 100; // min size
+        int my = 100;
+        for (AxoObjectInstanceAbstract i : objectinstances) {
+            
+            Dimension s=i.getPreferredSize();
+
+            int ox = i.getX() + (int) s.getWidth();
+            int oy = i.getY() + (int) s.getHeight();
+
+            if (ox > mx) mx = ox;
+            if (oy > my) my = oy;
+        }
+        // adding more, as getPreferredSize is not returning true dimension of 
+        // object
+        return new Dimension(mx+300,my+300);
+    }
 
     @Override
     public void AdjustSize() {

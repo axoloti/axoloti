@@ -90,9 +90,8 @@ public class PatchFrame extends javax.swing.JFrame {
         if (patch.getWindowPos() != null) {
             setBounds(patch.getWindowPos());
         } else {
-            patch.AdjustSize();
-            Dimension d = patch.Layers.getSize();
-            setSize(d.width + 50, d.height + 200);
+            Dimension d = patch.GetInitialSize();
+            setSize(d);
         }
 
         if (!MainFrame.prefs.getExpertMode()) {
