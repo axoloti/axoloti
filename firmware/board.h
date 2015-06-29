@@ -817,7 +817,7 @@
  * PF7  - PIN7                      (input floating).
  * PF8  - PIN8                      (input floating).
  * PF9  - PIN9                      (input floating).
- * PF10 - PIN10                     (input floating).
+ * PF10 - PIN10                     (5V /2 supply monitor).
  * PF11 - PIN11                     fmc
  * PF12 - PIN12                     fmc
  * PF13 - PIN13                     fmc
@@ -834,7 +834,7 @@
                                      PIN_MODE_INPUT(GPIOF_PIN7) |           \
                                      PIN_MODE_INPUT(GPIOF_PIN8) |           \
                                      PIN_MODE_INPUT(GPIOF_PIN9) |           \
-                                     PIN_MODE_INPUT(GPIOF_PIN10) |          \
+                                     PIN_MODE_ANALOG(GPIOF_PIN10) |         \
                                      PIN_MODE_ALTERNATE(GPIOF_PIN11) |      \
                                      PIN_MODE_ALTERNATE(GPIOF_PIN12) |      \
                                      PIN_MODE_ALTERNATE(GPIOF_PIN13) |      \

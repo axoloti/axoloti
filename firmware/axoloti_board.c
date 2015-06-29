@@ -87,8 +87,8 @@ void InitPWM(void) {
 
 void adc_init(void) {
   adc_configpads();
-  adcSTM32EnableTSVREFE();
   adcStart(&ADCD1, NULL);
+  adcSTM32EnableTSVREFE();
 }
 
 void adc_configpads(void) {
@@ -155,7 +155,7 @@ static const ADCConversionGroup adcgrpcfg1 = {FALSE,      //circular buffer mode
     ADC_CR2_SWSTART, /* CR2 */
     ADC_SMPR1_SMP_AN10(ADC_SAMPLE_84) | ADC_SMPR1_SMP_AN11(ADC_SAMPLE_84)
         | ADC_SMPR1_SMP_AN12(ADC_SAMPLE_84) | ADC_SMPR1_SMP_AN13(ADC_SAMPLE_84)
-        | ADC_SMPR1_SMP_AN14(ADC_SAMPLE_84) | ADC_SMPR1_SMP_AN15(ADC_SAMPLE_84), //sample times ch10-18
+        | ADC_SMPR1_SMP_AN14(ADC_SAMPLE_84) | ADC_SMPR1_SMP_AN15(ADC_SAMPLE_480), //sample times ch10-18
     ADC_SMPR2_SMP_AN0(ADC_SAMPLE_84) | ADC_SMPR2_SMP_AN1(ADC_SAMPLE_84)
         | ADC_SMPR2_SMP_AN2(ADC_SAMPLE_84) | ADC_SMPR2_SMP_AN3(ADC_SAMPLE_84)
         | ADC_SMPR2_SMP_AN4(ADC_SAMPLE_84) | ADC_SMPR2_SMP_AN5(ADC_SAMPLE_84)
