@@ -218,15 +218,15 @@ public class PatchFrame extends javax.swing.JFrame {
 
         jToolbarPanel = new javax.swing.JPanel();
         jCheckBoxLive = new javax.swing.JCheckBox();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
         jLabel1 = new javax.swing.JLabel();
         jProgressBarDSPLoad = new javax.swing.JProgressBar();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
+        jScrollPane1 = new javax.swing.JScrollPane();
         jStatusPanel = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuNew = new javax.swing.JMenuItem();
@@ -274,14 +274,18 @@ public class PatchFrame extends javax.swing.JFrame {
                 formWindowClosing(evt);
             }
         });
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-        jToolbarPanel.setAlignmentX(0.0F);
-        jToolbarPanel.setMinimumSize(new java.awt.Dimension(100, 39));
+        jToolbarPanel.setAlignmentX(1.0F);
+        jToolbarPanel.setAlignmentY(0.0F);
+        jToolbarPanel.setMaximumSize(new java.awt.Dimension(32767, 0));
+        jToolbarPanel.setPreferredSize(new java.awt.Dimension(212, 49));
         jToolbarPanel.setLayout(new javax.swing.BoxLayout(jToolbarPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         jCheckBoxLive.setText("Live");
         jCheckBoxLive.setEnabled(false);
         jCheckBoxLive.setFocusable(false);
+        jCheckBoxLive.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jCheckBoxLive.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jCheckBoxLive.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jCheckBoxLive.addActionListener(new java.awt.event.ActionListener() {
@@ -290,18 +294,31 @@ public class PatchFrame extends javax.swing.JFrame {
             }
         });
         jToolbarPanel.add(jCheckBoxLive);
+
+        filler2.setAlignmentX(0.0F);
         jToolbarPanel.add(filler2);
 
         jLabel1.setText("DSP load ");
         jToolbarPanel.add(jLabel1);
 
         jProgressBarDSPLoad.setToolTipText("");
+        jProgressBarDSPLoad.setAlignmentX(0.0F);
         jProgressBarDSPLoad.setMaximumSize(new java.awt.Dimension(100, 16));
+        jProgressBarDSPLoad.setMinimumSize(new java.awt.Dimension(60, 16));
         jProgressBarDSPLoad.setName(""); // NOI18N
         jProgressBarDSPLoad.setPreferredSize(new java.awt.Dimension(100, 16));
         jProgressBarDSPLoad.setStringPainted(true);
         jToolbarPanel.add(jProgressBarDSPLoad);
+
+        filler3.setAlignmentX(0.0F);
         jToolbarPanel.add(filler3);
+
+        getContentPane().add(jToolbarPanel);
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setAutoscrolls(true);
+        getContentPane().add(jScrollPane1);
 
         jStatusPanel.setMaximumSize(new java.awt.Dimension(605, 16));
         jStatusPanel.setLayout(new javax.swing.BoxLayout(jStatusPanel, javax.swing.BoxLayout.LINE_AXIS));
@@ -318,8 +335,7 @@ public class PatchFrame extends javax.swing.JFrame {
         jLabel2.setPreferredSize(new java.awt.Dimension(250, 14));
         jStatusPanel.add(jLabel2);
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        getContentPane().add(jStatusPanel);
 
         jMenuFile.setMnemonic('F');
         jMenuFile.setText("File");
@@ -616,28 +632,6 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     jMenuBar1.add(jMenuHelp);
 
     setJMenuBar(jMenuBar1);
-
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-    getContentPane().setLayout(layout);
-    layout.setHorizontalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(jToolbarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-        .addComponent(jScrollPane1)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jStatusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
-    );
-    layout.setVerticalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addComponent(jToolbarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
-            .addGap(24, 24, 24))
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 465, Short.MAX_VALUE)
-                .addComponent(jStatusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-    );
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
