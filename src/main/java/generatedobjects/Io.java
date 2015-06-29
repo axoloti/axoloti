@@ -81,7 +81,7 @@ public class Io extends gentools {
     static AxoObject CreateAnalogRead() {
         AxoObject o = new AxoObject("analog", "external analog control voltage input");
         o.outlets.add(new OutletFrac32("out", "external analog control voltage input"));
-        o.sDescription = "Reads an external analog voltage. Voltage range 0 to 3.3V maps to 0..127, with 12-bit precision."
+        o.sDescription = "Reads an external analog voltage. Voltage range 0 to 3.3V maps to 0..64, with 12-bit precision. "
                 + "Apply no more than 3.3V!";
         String mentries[] = {
             "PA0 (ADC1_IN0)",

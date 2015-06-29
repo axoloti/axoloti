@@ -90,7 +90,7 @@ public class Script extends gentools {
     }
 
     static AxoObject Create_Script2() {
-        AxoObject o = new AxoObject("script2", "script with 2 inputs and 2 outputs, running in a separate thread, you must define \"void init(void){}\" and \"void loop(void)\"");
+        AxoObject o = new AxoObject("script2", "script with 2 inputs and 2 outputs, running in a separate thread, you must define \"void setup(void){}\" and \"void loop(void)\"");
         o.inlets.add(new InletFrac32("in1_", "in1"));
         o.inlets.add(new InletFrac32("in2_", "in2"));
         o.outlets.add(new OutletFrac32("out1_", "out1"));
