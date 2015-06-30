@@ -50,7 +50,11 @@ public abstract class QCmdShellTask implements QCmd {
             try {
                 line = br.readLine();
                 while (line != null) {
-                    Logger.getLogger(QCmdCompilePatch.class.getName()).info(line);
+                    if (line.contains("error")) {
+                        Logger.getLogger(QCmdCompilePatch.class.getName()).severe(line);
+                    } else {
+                        Logger.getLogger(QCmdCompilePatch.class.getName()).info(line);
+                    }
                     line = br.readLine();
                 }
             } catch (IOException ex) {
