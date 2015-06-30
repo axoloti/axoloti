@@ -315,94 +315,21 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
     ADAU1961_WriteRegister(ADAU1961_REG_R35_PWRMGMT, 0x03); //enable L&R
 
     ADAU1961_WriteRegister(ADAU1961_REG_R4_RMIXL0, 0x01); // mixer1 enable, mute LINP and LINR
-    ADAU1961_WriteRegister(ADAU1961_REG_R5_RMIXL1, 0x17); // unmute PGA, 6dB gain on aux, 20dB boost
+    ADAU1961_WriteRegister(ADAU1961_REG_R5_RMIXL1, 0x08); // unmute PGA, aux mute, 0 dB boost
     ADAU1961_WriteRegister(ADAU1961_REG_R6_RMIXR0, 0x01); // mixer2 enable, mute LINP and LINR
-    ADAU1961_WriteRegister(ADAU1961_REG_R7_RMIXR1, 0x17); // unmute PGA, 6dB gain on aux, 20 dB boost
+    ADAU1961_WriteRegister(ADAU1961_REG_R7_RMIXR1, 0x08); // unmute PGA, aux mute, 0 dB boost
 
-    ADAU1961_WriteRegister(ADAU1961_REG_R8_LDIVOL, 0x7F); // not 35.25 dB gain!
-    ADAU1961_WriteRegister(ADAU1961_REG_R9_RDIVOL, 0x7F); // not 35.25 dB gain!
+    ADAU1961_WriteRegister(ADAU1961_REG_R8_LDIVOL, 0x43); // 0dB gain
+    ADAU1961_WriteRegister(ADAU1961_REG_R9_RDIVOL, 0x43); // 0dB gain
 
     // capless headphone config
     ADAU1961_WriteRegister(ADAU1961_REG_R33_PMONO, 0x03);   //MONOM+MOMODE
-    ADAU1961_WriteRegister(ADAU1961_REG_R28_PLRMM, 0x01); // MX7EN, COMMON MODE OUT
-    ADAU1961_WriteRegister(ADAU1961_REG_R29_PHPLVOL, 0xE3);
-    ADAU1961_WriteRegister(ADAU1961_REG_R30_PHPRVOL, 0xE3);
-
+    ADAU1961_WriteRegister(ADAU1961_REG_R28_PLRMM, 0x01);  // MX7EN, COMMON MODE OUT
+    ADAU1961_WriteRegister(ADAU1961_REG_R29_PHPLVOL, 0xC3);
+    ADAU1961_WriteRegister(ADAU1961_REG_R30_PHPRVOL, 0xC3);
   }
-
-  // slave
-//  ADAU1961_WriteRegister(ADAU1961_REG_R15_SERP0, 0x01); // codec is I2S master for testing....
 
   chThdSleepMilliseconds(10);
-
-  /*
-   i2cStop(&I2CD3);
-   i2cStart(&I2CD3, &i2cfg2);
-   ADAU1961_WriteRegister(0x4000, 0x8); // 1024FS
-   rd = ADAU1961_ReadRegister(0x4000);
-   if (rd != 0x08){
-   while(1){};
-   }
-
-   i2cStop(&I2CD3);
-   i2cStart(&I2CD3, &i2cfg2);
-
-
-   // power down PLL
-   uint8_t R1[6];
-   R1[0]=0;R1[1]=0;R1[2]=0;
-   R1[3]=0;R1[4]=0;R1[5]=0;
-   ADAU1961_WriteRegister6(ADAU1961_REG_R1_PLLC,&R1[0]);
-
-   i2cStop(&I2CD3);
-   i2cStart(&I2CD3, &i2cfg2);
-
-
-   // Integer PLL Parameter Settings for fS = 48 kHz
-   // (PLL Output = 49.152 MHz = 1024 � fS)
-   R1[4] = 0x20;
-   R1[5] = 0x01;
-   R1[1] = 0x20;
-   R1[0] = 0x01;
-   ADAU1961_WriteRegister6(ADAU1961_REG_R1_PLLC,&R1[0]);
-   // poll lock bit
-   i2cStop(&I2CD3);
-   i2cStart(&I2CD3, &i2cfg2);
-
-
-   ADAU1961_WriteRegister(0x4000, 0xE); // 1024FS
-   rd = ADAU1961_ReadRegister(0x4000);
-   if (rd != 0xE){
-   while(1){};
-   }
-
-   i2cStop(&I2CD3);
-   i2cStart(&I2CD3, &i2cfg2);
-
-   while(1){
-   ADAU1961_ReadRegister6(ADAU1961_REG_R1_PLLC);
-   if (i2crxbuf[5] & 0x02) break;
-   chThdSleepMilliseconds(5);
-   }
-   // mclk = 12.319MHz
-   ADAU1961_WriteRegister(0x4000, 0xE); // 1024FS
-   rd = ADAU1961_ReadRegister(0x4000);
-   if (rd != 0xE){
-   while(1){};
-   }
-   */
-
-}
-
-
-void computebufI1(int32_t * in, int32_t * out){
-  int i;
-  static int j=0;
-  for(i=0;i<16;i++){
-    out[i*2] = j;
-    out[i*2+1] = 0x00FFFF00;
-    j += 8888888;
-  }
 }
 
 static void dma_sai_a_interrupt(void* dat, uint32_t flags) {
@@ -448,20 +375,7 @@ void codec_ADAU1961_i2s_init(uint16_t sampleRate) {
   palSetPadMode(GPIOE, 5, PAL_MODE_INPUT);
   palSetPadMode(GPIOE, 6, PAL_MODE_INPUT);
 // configure SAI
-
-// PLLSAI
-  /*
-  RCC->PLLSAICFGR = (192 << 6) | (7 << 24) | (4 << 28);
-//  RCC->DCKCFGR
-
-  RCC->CR |= RCC_CR_PLLSAION;
-  while (!(RCC->CR & RCC_CR_PLLSAIRDY)) {
-  }
-  chThdSleepMilliseconds(1);
-*/
   RCC->APB2ENR |= RCC_APB2ENR_SAI1EN;
-  chThdSleepMilliseconds(1);
-//  RCC->APB2RSTR |= RCC_APB2RSTR_SAI1RST;
   chThdSleepMilliseconds(1);
   SAI1_Block_A->CR2 = SAI_xCR2_FTH_1;
   SAI1_Block_B->CR2 = SAI_xCR2_FTH_1;
