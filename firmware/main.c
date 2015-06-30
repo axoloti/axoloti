@@ -44,6 +44,7 @@
 
 #include "chprintf.h"
 #include "usbcfg.h"
+#include "sysmon.h"
 
 #if (BOARD_AXOLOTI_V05)
 #include "sdram.c"
@@ -91,6 +92,9 @@ int main(void) {
   halInit();
   chSysInit();
 
+  sdcard_init();
+  sysmon_init();
+
 #if ENABLE_SERIAL_DEBUG
 // SD2 for serial debug output
   palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7) | PAL_MODE_INPUT); // RX
@@ -116,8 +120,6 @@ int main(void) {
   palSetPad(GPIOC, 1);
 
   chThdSleepMilliseconds(10);
-
-  sdcardInit();
 
   palSetPadMode(SW2_PORT, SW2_PIN, PAL_MODE_INPUT_PULLDOWN);
 
@@ -152,7 +154,7 @@ int main(void) {
 
 #if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
     if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
-      SDLoadPatch("0:start.bin");
+      sdcard_loadPatch("0:start.bin");
 #endif
 
     // if no patch booting or running yet

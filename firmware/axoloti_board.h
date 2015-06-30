@@ -20,7 +20,6 @@
 
 #include "axoloti_defines.h"
 
-void BlinkenLights(void);
 void InitPWM(void);
 
 #define ADC_CHANNELS 16
@@ -39,8 +38,16 @@ void adc_convert(void);
 #define LED1_PIN 6
 #define LED2_PORT GPIOC
 #define LED2_PIN 6
+// SW1 is also BOOT0
+#define SW1_PORT GPIOB
+#define SW1_PIN 5
 #define SW2_PORT GPIOA
 #define SW2_PIN 10
+#define OCFLAG_PORT GPIOG
+#define OCFLAG_PIN 13
+#define SDCSW_PORT GPIOD
+#define SDCSW_PIN 13
+
 #elif (BOARD_AXOLOTI_V03)
 #define LED1_PORT GPIOA
 #define LED1_PIN 8

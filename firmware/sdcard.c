@@ -141,7 +141,7 @@ static void RemoveHandler(eventid_t id) {
 }
 #endif
 
-void sdcardInit(void) {
+void sdcard_init(void) {
   /*
    static const evhandler_t evhndl[] = {
    InsertHandler,
@@ -178,16 +178,20 @@ void sdcardInit(void) {
   }
 }
 
-void sdAttemptMountIfUnmounted() {
+void sdcard_attemptMountIfUnmounted() {
   if (fs_ready)
     return;
   InsertHandler(0);
 }
 
+void sdcard_unmount(void){
+  RemoveHandler(0);
+}
+
 /* Generic large buffer.*/
 uint32_t fbuff[256] __attribute__ ((section (".sram2")));
 
-void SDLoadPatch(char *fname) {
+void sdcard_loadPatch(char *fname) {
   FIL FileObject;
   FRESULT err;
   uint32_t bytes_read;

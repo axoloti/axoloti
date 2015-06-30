@@ -162,7 +162,8 @@ CSRC = $(PORTSRC) \
        midi_usb.c \
        crc32.c \
        exceptions.c \
-       watchdog.c 
+       watchdog.c \
+       sysmon.c 
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -282,14 +283,14 @@ UINCDIR =
 ULIBDIR = .
 
 # List all user libraries here
-ULIBS = -lm 
-#	samples/808bd.o \
-#	samples/808hatclose.o \
-#	samples/808hatopen.o \
-#	samples/808hitom.o \
-#	samples/808midtom.o \
-#	samples/808lotom.o \
-#	samples/808snare.o 
+ULIBS = -lm \
+	samples/808bd.o \
+	samples/808hatclose.o \
+	samples/808hatopen.o \
+	samples/808hitom.o \
+	samples/808midtom.o \
+	samples/808lotom.o \
+	samples/808snare.o 
 
 #
 # End of user defines

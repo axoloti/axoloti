@@ -22,6 +22,7 @@
 #include "codec.h"
 #include "stm32f4xx.h"
 #include "axoloti_board.h"
+#include "sysmon.h"
 
 //#define STM_IS_I2S_MASTER 1
 
@@ -184,7 +185,6 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
    * 5. Assert the core clock enable bit after the PLL lock is acquired.
    */
 
-  while (1) {
 #ifdef STM_IS_I2S_MASTER
     ADAU1961_WriteRegister(ADAU1961_REG_R0_CLKC, 0x01); // 256FS
     chThdSleepMilliseconds(10);
@@ -216,15 +216,18 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
 
     ADAU1961_WriteRegister6(ADAU1961_REG_R1_PLLC, &pllreg[0]);
 
-    while (1) {
+    int i = 1000;
+    while(i) {
       // wait for PLL
       ADAU1961_ReadRegister6(ADAU1961_REG_R1_PLLC);
       if (i2ctxbuf[5] & 0x02)
         break;
       chThdSleepMilliseconds(1);
-      palTogglePad(LED1_PORT, LED1_PIN);
+      i--;
     }
-    palClearPad(LED1_PORT, LED1_PIN);
+    if (!i){
+      setErrorFlag(ERROR_CODEC_I2C);
+    }
 
     ADAU1961_WriteRegister(ADAU1961_REG_R0_CLKC, 0x09); // PLL = clksrc
 
@@ -279,10 +282,8 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
     ADAU1961_WriteRegister(ADAU1961_REG_R41_CPORTP1, 0xAA);
     ADAU1961_WriteRegister(ADAU1961_REG_R42_JACKDETP, 0x00);
 
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(10);
 
-    break;
-  }
 
 #if 0
   while(1) {

@@ -22,33 +22,6 @@
 
 //#define ENABLE_SERIAL_DEBUG 1
 
-void BlinkenLights(void) {
-  // LEDS
-  palSetPadMode(GPIOE, 9, PAL_MODE_OUTPUT_PUSHPULL);
-  palSetPadMode(GPIOE, 11, PAL_MODE_OUTPUT_PUSHPULL);
-  palSetPadMode(GPIOE, 13, PAL_MODE_OUTPUT_PUSHPULL);
-  palSetPadMode(GPIOE, 14, PAL_MODE_OUTPUT_PUSHPULL);
-  int k;
-  for (k = 0; k < 1; k++) {
-    palSetPad(GPIOE, 9);
-    chThdSleepMilliseconds(50);
-    palClearPad(GPIOE, 9);
-    palSetPad(GPIOE, 11);
-    chThdSleepMilliseconds(50);
-    palClearPad(GPIOE, 11);
-    palSetPad(GPIOE, 13);
-    chThdSleepMilliseconds(50);
-    palClearPad(GPIOE, 13);
-    palSetPad(GPIOE, 14);
-    chThdSleepMilliseconds(50);
-    palClearPad(GPIOE, 14);
-  }
-  palClearPad(GPIOE, 9);
-  palClearPad(GPIOE, 11);
-  palClearPad(GPIOE, 13);
-  palClearPad(GPIOE, 14);
-}
-
 Mutex Mutex_DMAStream_1_7; // shared: SPI3 (axoloti control) and I2C2 (codec)
 
 void axoloti_board_init(void) {

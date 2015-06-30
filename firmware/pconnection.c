@@ -279,7 +279,7 @@ FIL pFile;
 int pFileSize;
 
 void CreateFile(void) {
-  sdAttemptMountIfUnmounted();
+  sdcard_attemptMountIfUnmounted();
   FRESULT err;
   err = f_open(&pFile, &FileName[0], FA_WRITE | FA_CREATE_ALWAYS);
   if (err != FR_OK) {
@@ -589,7 +589,7 @@ void PExReceiveByte(unsigned char c) {
           FRESULT err;
           header = 0;
           state = 0;
-          sdAttemptMountIfUnmounted();
+          sdcard_attemptMountIfUnmounted();
           err = f_open(&pFile, &FileName[0], FA_WRITE | FA_CREATE_ALWAYS);
           if (err != FR_OK) {
             LogTextMessage("File open failed");

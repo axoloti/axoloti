@@ -114,7 +114,7 @@ void StopPatch(void) {
 
 void StartPatch(void) {
   KVP_ClearObjects();
-  sdAttemptMountIfUnmounted();
+  sdcard_attemptMountIfUnmounted();
   // reinit pin configuration for adc
   adc_configpads();
   patchMeta.fptr_dsp_process = 0;
@@ -170,7 +170,7 @@ static msg_t ThreadLoader(void *arg) {
   while (1) {
     chEvtWaitOne((eventmask_t)1);
 //    StopPatch();
-    SDLoadPatch(loadFName);
+    sdcard_loadPatch(loadFName);
   }
   return (msg_t)0;
 }

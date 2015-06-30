@@ -937,7 +937,7 @@
  * PG10 - PIN10                     (input floating).
  * PG11 - PIN11                     (input floating).
  * PG12 - PIN12                     (input floating).
- * PG13 - PIN13                     (input floating).
+ * PG13 - PIN13                     (usb host overcurrent flag).
  * PG14 - PIN14                     (input floating).
  * PG15 - PIN15                     fmc
  */

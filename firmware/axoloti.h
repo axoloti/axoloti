@@ -29,6 +29,7 @@
 #include "ui.h"
 #include "midi.h"
 #include "sdcard.h"
+#include "sysmon.h"
 
 void axoloti_init(void);
 

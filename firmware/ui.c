@@ -297,7 +297,7 @@ void EnterMenuLoadFile(void) {
   char str[20] = "0:";
   strcat(str, F->keyname);
 
-  SDLoadPatch(str);
+  sdcard_loadPatch(str);
 }
 
 void EnterMenuLoad(void) {
