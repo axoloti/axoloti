@@ -674,6 +674,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         if (pp == null) {
             pp = new PreferencesFrame(MainFrame.prefs);
         }
+        pp.setState(java.awt.Frame.NORMAL);
         pp.setVisible(true);
     }//GEN-LAST:event_jMenuItemPreferencesActionPerformed
 

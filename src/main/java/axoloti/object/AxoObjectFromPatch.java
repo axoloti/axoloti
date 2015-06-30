@@ -107,6 +107,7 @@ public class AxoObjectFromPatch extends AxoObject {
             pg.setFileNamePath(id);
             pg.PostContructor();
         }
+        pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);
     }
 
