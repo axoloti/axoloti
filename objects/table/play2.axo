@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="play2" uuid="1f6df3a9960b5daffcf91e31f7c5edb5a543dc55" sha="98247b4a866cd88ae46eeb0743bbb1a9fff17514">
+   <obj.normal id="play2" uuid="1f6df3a9960b5daffcf91e31f7c5edb5a543dc55" sha="88d887b7b3460755fdfb86dec1521b0004b30a2e">
+      <upgradeSha>98247b4a866cd88ae46eeb0743bbb1a9fff17514</upgradeSha>
       <sDescription>play audio from table (non-transposed), starting from position</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -23,14 +24,14 @@
       <code.krate><![CDATA[   if ((inlet_en>0) && !ntrig) {
       ntrig=1;
       uint32_t asat = __USAT(inlet_pos,27);
-      pos = asat>>(27-%table%.LENGTHPOW);
+      pos = asat>>(27-attr_table.LENGTHPOW);
    }
    else if (!(inlet_en>0)) ntrig=0;
      int32_t i;
 ]]></code.krate>
       <code.srate><![CDATA[   if (inlet_en>0) {
-       if (pos< %table%.LENGTH)
-              outlet_wave[buffer_index] = %table%.array[pos++]<<%table%.GAIN;
+       if (pos< attr_table.LENGTH)
+              outlet_wave[buffer_index] = attr_table.array[pos++]<<attr_table.GAIN;
    } else outlet_wave[buffer_index] = 0;]]></code.srate>
    </obj.normal>
 </objdefs>

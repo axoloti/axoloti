@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="analyzer 24" uuid="c7289f37cf26a89301ba5e39c3829a7caa8b1d48" sha="ebec0496c981fe053637f2258879d50dc0661e73">
+   <obj.normal id="analyzer 24" uuid="c7289f37cf26a89301ba5e39c3829a7caa8b1d48" sha="f0646919be9d003baf8ff95a82c153c661d23491">
+      <upgradeSha>ebec0496c981fe053637f2258879d50dc0661e73</upgradeSha>
       <sDescription>spectral analyzer made out of two 2nd order bandpass filters per band, decibel scale (vertical), steeper filters</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

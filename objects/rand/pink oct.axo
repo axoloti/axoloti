@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="pink oct" uuid="8bb955eac77dd0b1b72fdb50bfe315111e380ca" sha="a591724f2d4958930ffd8ca14d025f0ce1d728c0">
+   <obj.normal id="pink oct" uuid="8bb955eac77dd0b1b72fdb50bfe315111e380ca" sha="1fe0ab66d771dca042fba630a336ab5d07f3cf3">
+      <upgradeSha>a591724f2d4958930ffd8ca14d025f0ce1d728c0</upgradeSha>
       <sDescription>Cheap almost pink noise. Range -64..64. Configureable number of octaves.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -31,7 +32,7 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.declaration><![CDATA[static const int noct = %octaves%;
+      <code.declaration><![CDATA[static const int noct = attr_octaves;
 int32_t obuf[noct];
 int32_t sum;
 uint32_t seed;
@@ -53,7 +54,7 @@ sum = 0;
 seed = 0x830af41e + GenerateRandomNumber();
 ]]></code.init>
       <code.krate><![CDATA[int o = dyadictree()[index++];
-if (o==%octaves%){
+if (o==attr_octaves){
    index=0;
 } else {
    sum -= obuf[o];
@@ -62,7 +63,7 @@ if (o==%octaves%){
    sum += obuf[o];
 }
 seed = (seed * 196314165) + 907633515;
-outlet_out = sum + (((int32_t)seed)>>%octaves%);
+outlet_out = sum + (((int32_t)seed)>>attr_octaves);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

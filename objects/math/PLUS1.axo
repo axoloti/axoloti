@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="+1" uuid="467d7c0fc6e97cd205335863c983edccff292c99" sha="61413e41a22dba4d3f6a4be145c06146934f7120">
+   <obj.normal id="+1" uuid="467d7c0fc6e97cd205335863c983edccff292c99" sha="1bffe2143076d9d67735f75abda79ef4c82db4ac">
+      <upgradeSha>61413e41a22dba4d3f6a4be145c06146934f7120</upgradeSha>
       <sDescription>adds one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +15,8 @@
       <attribs/>
       <code.krate><![CDATA[outlet_result= inlet_a+(1<<21);]]></code.krate>
    </obj.normal>
-   <obj.normal id="+1" uuid="10c254ad25cb0cfb87dc92f9e08fbf68c335d3fa" sha="4fe729a7a54d99c1d63a2bdb85652b2031c32726">
+   <obj.normal id="+1" uuid="10c254ad25cb0cfb87dc92f9e08fbf68c335d3fa" sha="2e8219f3e40a6f1b07008f9f6233b252761e8f09">
+      <upgradeSha>4fe729a7a54d99c1d63a2bdb85652b2031c32726</upgradeSha>
       <sDescription>adds one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,7 +31,8 @@
       <attribs/>
       <code.krate><![CDATA[outlet_result= inlet_a+1;]]></code.krate>
    </obj.normal>
-   <obj.normal id="+1" uuid="6f32282816a40d6021b405d21d533beb34da9095" sha="123c22afb731c850f5fca5eece7dd54edffe2a9f">
+   <obj.normal id="+1" uuid="6f32282816a40d6021b405d21d533beb34da9095" sha="ff9e29661d8aed5a8a985b1ccc151e9917cf8771">
+      <upgradeSha>123c22afb731c850f5fca5eece7dd54edffe2a9f</upgradeSha>
       <sDescription>adds one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

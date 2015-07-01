@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="max" uuid="266afe4044138a6fb25d380c36e1079706dbb142" sha="20afa00d9bda41229b9b117cd43cb6fc44a7c9d">
+   <obj.normal id="max" uuid="266afe4044138a6fb25d380c36e1079706dbb142" sha="2e45c73fd916fada1d9c38d4e5a16868b8095e26">
+      <upgradeSha>20afa00d9bda41229b9b117cd43cb6fc44a7c9d</upgradeSha>
       <sDescription>maximum</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -15,7 +16,8 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= (inlet_in1>inlet_in2)?inlet_in1:inlet_in2;]]></code.krate>
    </obj.normal>
-   <obj.normal id="max" uuid="158b33b552ea246181100331b9957375fbf98e5a" sha="6e94a93047c9310dc305d1794ea81db4225e0e1c">
+   <obj.normal id="max" uuid="158b33b552ea246181100331b9957375fbf98e5a" sha="8297188b88be352fde8fcb38e5fe95363a95fed7">
+      <upgradeSha>6e94a93047c9310dc305d1794ea81db4225e0e1c</upgradeSha>
       <sDescription>maximum</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -31,7 +33,8 @@
       <attribs/>
       <code.srate><![CDATA[outlet_out[buffer_index]= (inlet_in1[buffer_index]>inlet_in2[buffer_index])?inlet_in1[buffer_index]:inlet_in2[buffer_index];]]></code.srate>
    </obj.normal>
-   <obj.normal id="max" uuid="614e55ecac016dfa61f844ebc233d4a4d35f0d96" sha="b0cbcf7429c20a63b4c1dd6df674c6a62b6207a3">
+   <obj.normal id="max" uuid="614e55ecac016dfa61f844ebc233d4a4d35f0d96" sha="1e2aaffb39a2cf8c4c725f7fb14421fc8da0ff36">
+      <upgradeSha>b0cbcf7429c20a63b4c1dd6df674c6a62b6207a3</upgradeSha>
       <sDescription>maximum</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="pan m" uuid="78690c794a79967c9d8c08354a5121457194aa2a" sha="6a0b5d25068ca25bf4d7ffbe3fd617fcbb5ecec9">
+   <obj.normal id="pan m" uuid="78690c794a79967c9d8c08354a5121457194aa2a" sha="4d5d8c47c2ede8c8bf61d50e38006ecb874ca7e7">
+      <upgradeSha>6a0b5d25068ca25bf4d7ffbe3fd617fcbb5ecec9</upgradeSha>
       <sDescription>stereo balance (panorama) with modulation input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -16,7 +17,8 @@
       <attribs/>
       <code.krate><![CDATA[outlet_left = ___SMMUL((1<<29)-(inlet_c<<2),inlet_i1)<<2;outlet_right = ___SMMUL((1<<29)+(inlet_c<<2),inlet_i1)<<2;]]></code.krate>
    </obj.normal>
-   <obj.normal id="pan m" uuid="d20b41b75b54a07c170bb7456c7fb26282faf8f2" sha="fea4638f71dbe768d940b3334f5c187543f18ab8">
+   <obj.normal id="pan m" uuid="d20b41b75b54a07c170bb7456c7fb26282faf8f2" sha="93d05136763e966015191b4753198e95d90dd64c">
+      <upgradeSha>fea4638f71dbe768d940b3334f5c187543f18ab8</upgradeSha>
       <sDescription>stereo balance (panorama) with modulation input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

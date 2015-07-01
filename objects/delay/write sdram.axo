@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="write sdram" uuid="74a669d8e784e74d1851940fb2703f600e9ee952" sha="3b156a92fef726fce69a05c2e670a365457a1728">
+   <obj.normal id="write sdram" uuid="74a669d8e784e74d1851940fb2703f600e9ee952" sha="ccc0fca1df0b5969e5e326c1c05d5394d1d2256a">
+      <upgradeSha>3b156a92fef726fce69a05c2e670a365457a1728</upgradeSha>
       <sDescription>delayline definition, read with delay/read</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -45,12 +46,12 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (%size%);
-static const uint32_t LENGTH = (1<<%size%);
-static const uint32_t LENGTHMASK = ((1<<%size%)-1);
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (attr_size);
+static const uint32_t LENGTH = (1<<attr_size);
+static const uint32_t LENGTHMASK = ((1<<attr_size)-1);
 int16_t *array;
 uint32_t writepos;]]></code.declaration>
-      <code.init><![CDATA[static int16_t _array[1<<%size%]  __attribute__ ((section (".sdram")));
+      <code.init><![CDATA[static int16_t _array[1<<attr_size]  __attribute__ ((section (".sdram")));
 array = _array;
    int i;
    writepos = 0;

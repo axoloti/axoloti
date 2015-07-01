@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="square" uuid="f46d2160851646b37f7facb5286e68921ddb01bb" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18">
+   <obj.normal id="square" uuid="f46d2160851646b37f7facb5286e68921ddb01bb" sha="64e3fcac73a82e2f89ba9bba33b4829ec2eee3f3">
+      <upgradeSha>2619a1d94a07bf82a1e47e4e34485e9c4916cc18</upgradeSha>
       <sDescription>square wave LFO, boolean output, frequency input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

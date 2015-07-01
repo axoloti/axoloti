@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="save" uuid="70b005c09d6f3178552eeb6d61229d4b3acb4a2a" sha="a722ebfda4ff4eac184af7cba9f84968d501a6bc">
+   <obj.normal id="save" uuid="70b005c09d6f3178552eeb6d61229d4b3acb4a2a" sha="ae643a04d0280e9d406bdc5cd21fb1d07723666d">
+      <upgradeSha>a722ebfda4ff4eac184af7cba9f84968d501a6bc</upgradeSha>
       <sDescription>save table to sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -30,16 +31,16 @@
     UINT bytes_written;
     err = f_open(&FileObject, inlet_filename, FA_WRITE | FA_CREATE_ALWAYS);
     if (err != FR_OK) LogTextMessage("Open failed\n");
-    int rem_sz = sizeof(*%table%.array)*%table%.LENGTH;
+    int rem_sz = sizeof(*attr_table.array)*attr_table.LENGTH;
     int offset = 0;
     while (rem_sz>0) {
       if (rem_sz>sizeof(fbuff)) {
-        memcpy((char *)fbuff,(char *)(&%table%.array[0]) + offset, sizeof(fbuff));
+        memcpy((char *)fbuff,(char *)(&attr_table.array[0]) + offset, sizeof(fbuff));
         err = f_write(&FileObject, fbuff, sizeof(fbuff),&bytes_written);
         rem_sz -= sizeof(fbuff);
         offset += sizeof(fbuff);
       } else {
-        memcpy((char *)fbuff,(char *)(&%table%.array[0]) + offset, rem_sz);
+        memcpy((char *)fbuff,(char *)(&attr_table.array[0]) + offset, rem_sz);
         err = f_write(&FileObject, fbuff, rem_sz, &bytes_written);
         rem_sz = 0;
       }

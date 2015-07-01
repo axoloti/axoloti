@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="keyb mpe" uuid="6b0499f6e73f8b4e3b592d82022955e70d850717" sha="df6476c993ae8899573dbd0c881e717e5eec19ea">
+   <obj.normal id="keyb mpe" uuid="6b0499f6e73f8b4e3b592d82022955e70d850717" sha="7d045bd3ec2368f42f90d2a142e3100fa2cf23c1">
+      <upgradeSha>df6476c993ae8899573dbd0c881e717e5eec19ea</upgradeSha>
       <sDescription>Keyboard input for MIDI polyphonic expression</sDescription>
       <author>Mark Harris</author>
       <license>BSD</license>
@@ -54,24 +55,24 @@ outlet_timbre = _timbre;
 outlet_pitch = _pitch;
 ]]></code.krate>
       <code.midihandler><![CDATA[
-if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
+if ((status == MIDI_NOTE_ON + attr_midichannel) && (data2)) {
   _velo = data2<<20;
   _note = data1-64;
   _gate = 1<<27;
   _gate2 = 0;
   _pitch = (_note << 21) + ((_bend >> 6)* _bendRange );
-} else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||
-          (status == MIDI_NOTE_OFF + %midichannel%)) {
+} else if (((status == MIDI_NOTE_ON + attr_midichannel) && (!data2))||
+          (status == MIDI_NOTE_OFF + attr_midichannel)) {
   if (_note == data1-64) {
     _rvelo = data2<<20;
     _gate = 0;
   }
-} else if (status == %midichannel% + MIDI_CHANNEL_PRESSURE) {
+} else if (status == attr_midichannel + MIDI_CHANNEL_PRESSURE) {
   _pressure = data1<<20;
-} else if (status == %midichannel% + MIDI_PITCH_BEND) {
+} else if (status == attr_midichannel + MIDI_PITCH_BEND) {
   _bend = ((int)((data2<<7)+data1)-0x2000)<<14;
   _pitch = (_note << 21) + ((_bend >> 6)* _bendRange );
-} else if (status == %midichannel% + MIDI_CONTROL_CHANGE) {
+} else if (status == attr_midichannel + MIDI_CONTROL_CHANGE) {
   if (data1 == MIDI_C_TIMBRE) {
     _timbre = ((int)(data2<<7)-0x2000)<<14;
   } else if(data1 == MIDI_C_ALL_NOTES_OFF) {

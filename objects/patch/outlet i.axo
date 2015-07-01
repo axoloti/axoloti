@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="outlet i" uuid="38fc23ffc2bbd6cddbca6dcab1fe7a22d16195c1" sha="765721e48b5b8f0e998ecf5be549bf6ab0ec7e51">
+   <obj.normal id="outlet i" uuid="38fc23ffc2bbd6cddbca6dcab1fe7a22d16195c1" sha="9c18b5ec0ea721bb98852ab326891478ca87a360">
+      <upgradeSha>765721e48b5b8f0e998ecf5be549bf6ab0ec7e51</upgradeSha>
       <sDescription>Integer outlet. The outlet object becomes an outlet connector when this patch is used as an object (subpatch)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

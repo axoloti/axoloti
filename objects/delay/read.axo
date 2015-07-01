@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="read" uuid="456f034f08d78e2c29170c3162428fc05a687aa0" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b">
+   <obj.normal id="read" uuid="456f034f08d78e2c29170c3162428fc05a687aa0" sha="866a460c44a762ac8448bd5b735e7f307cc59536">
+      <upgradeSha>dadafc28db716ea19216eeaa2ad121763c34ec3b</upgradeSha>
       <sDescription>delay read, non-interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -19,12 +20,13 @@
       <attribs>
          <objref name="delayname"/>
       </attribs>
-      <code.krate><![CDATA[   uint32_t delay = %delayname%.writepos - (__USAT(param_time + inlet_timem,27)>>(27-%delayname%.LENGTHPOW)) - BUFSIZE;
+      <code.krate><![CDATA[   uint32_t delay = attr_delayname.writepos - (__USAT(param_time + inlet_timem,27)>>(27-attr_delayname.LENGTHPOW)) - BUFSIZE;
 ]]></code.krate>
-      <code.srate><![CDATA[  outlet_out[buffer_index]= %delayname%.array[(delay++) & %delayname%.LENGTHMASK]<<14;
+      <code.srate><![CDATA[  outlet_out[buffer_index]= attr_delayname.array[(delay++) & attr_delayname.LENGTHMASK]<<14;
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="read" uuid="94f0da4df26bc7333dde41ad4dfa1970f59e057d" sha="9428f1942521d9e80e7ca58ea38e1d417220e94f">
+   <obj.normal id="read" uuid="94f0da4df26bc7333dde41ad4dfa1970f59e057d" sha="e1971b97d4d59c8b5f8a329166eee0820b9c169e">
+      <upgradeSha>9428f1942521d9e80e7ca58ea38e1d417220e94f</upgradeSha>
       <sDescription>delay read, non-interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -44,8 +46,8 @@
       <attribs>
          <objref name="delayname"/>
       </attribs>
-      <code.srate><![CDATA[      uint32_t delay1 = %delayname%.writepos - (__USAT(param_time + inlet_timem[buffer_index],27)>>(27-%delayname%.LENGTHPOW)) - BUFSIZE + buffer_index;
-      outlet_out[buffer_index]= %delayname%.array[delay1 & %delayname%.LENGTHMASK]<<14;
+      <code.srate><![CDATA[      uint32_t delay1 = attr_delayname.writepos - (__USAT(param_time + inlet_timem[buffer_index],27)>>(27-attr_delayname.LENGTHPOW)) - BUFSIZE + buffer_index;
+      outlet_out[buffer_index]= attr_delayname.array[delay1 & attr_delayname.LENGTHMASK]<<14;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

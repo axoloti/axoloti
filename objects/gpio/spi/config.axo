@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="config" uuid="eeffaa8dd5d3ec35f0488e510c5c4d3578a08943" sha="de87118df6aa11e19d10babb34b404522255b5a3">
+   <obj.normal id="config" uuid="eeffaa8dd5d3ec35f0488e510c5c4d3578a08943" sha="62af644b09e7f654b36d66533da8ea5971ddb351">
+      <upgradeSha>de87118df6aa11e19d10babb34b404522255b5a3</upgradeSha>
       <sDescription>Configures a SPI interface. Pin mapping: PA4=NSS PA5=SCK PA6=MISO PA7=MOSI</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -73,7 +74,7 @@ palSetPadMode(GPIOA, 5, PAL_MODE_ALTERNATE(5));// SCK
 palSetPadMode(GPIOA, 6, PAL_MODE_ALTERNATE(5));// MISO
 palSetPadMode(GPIOA, 7, PAL_MODE_ALTERNATE(5));// MOSI
 static const SPIConfig spicfg =
-    {NULL, GPIOA, 4, 0 %clock_polarity% %clock_phase% %baudrate% %format%};
+    {NULL, GPIOA, 4, 0 attr_clock__polarity attr_clock__phase attr_baudrate attr_format};
 spiStart(&SPID1, &spicfg);
 ]]></code.init>
       <code.dispose><![CDATA[spiStop(&SPID1);

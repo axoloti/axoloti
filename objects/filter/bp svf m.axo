@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="bp svf m" uuid="63e999bd76a5b041e80c4c812e965c5795cfed09" sha="561e56d24bf5c702564c7d043fda6d0d3003deec">
+   <obj.normal id="bp svf m" uuid="63e999bd76a5b041e80c4c812e965c5795cfed09" sha="8c36a98695a4866cc6ffd49db0047cefaacbc3be">
+      <upgradeSha>561e56d24bf5c702564c7d043fda6d0d3003deec</upgradeSha>
       <sDescription>Bandpass filter, state-variable type, modulation inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

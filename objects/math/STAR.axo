@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="*" uuid="3023f84b403adea180b15a0683a7a0d6ac5485dd" sha="b031e26920f6cf5c1a53377ee6021573c4e3ac02">
+   <obj.normal id="*" uuid="3023f84b403adea180b15a0683a7a0d6ac5485dd" sha="ec71f518aa0e133062e5a9d4828d3739865c99f">
+      <upgradeSha>b031e26920f6cf5c1a53377ee6021573c4e3ac02</upgradeSha>
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -16,7 +17,8 @@
       <code.krate><![CDATA[outlet_result= ___SMMUL(inlet_a<<3,inlet_b<<2);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="*" uuid="9736e862ef1958cd59d172a284697908be7107d5" sha="2dd344688c5663bfd27e605392f893ca49e4bcb7">
+   <obj.normal id="*" uuid="9736e862ef1958cd59d172a284697908be7107d5" sha="f89229bc45a6c33daef0067e603664ae5e01eb7e">
+      <upgradeSha>2dd344688c5663bfd27e605392f893ca49e4bcb7</upgradeSha>
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -33,7 +35,8 @@
       <code.srate><![CDATA[outlet_result[buffer_index]= ___SMMUL(inlet_a<<3,inlet_b[buffer_index]<<2);
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="*" uuid="8a2b71e914ff0dcdffc0dab826289ab7e8c46c1f" sha="c47ceb7366785e0103cf880ce3450321491949f1">
+   <obj.normal id="*" uuid="8a2b71e914ff0dcdffc0dab826289ab7e8c46c1f" sha="9939419ca78849bb7749e1b8ffee78f572d6e28b">
+      <upgradeSha>c47ceb7366785e0103cf880ce3450321491949f1</upgradeSha>
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -50,7 +53,8 @@
       <code.srate><![CDATA[outlet_result[buffer_index]= ___SMMUL(inlet_a[buffer_index]<<3,inlet_b<<2);
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="*" uuid="1301470e5bf3ed768ac0b43973d8dccb9a80bd61" sha="c491f4fcc25792418020a0d98176129e3beac388">
+   <obj.normal id="*" uuid="1301470e5bf3ed768ac0b43973d8dccb9a80bd61" sha="7e319fe50a328b6a49ddfac92c641e987706dd39">
+      <upgradeSha>c491f4fcc25792418020a0d98176129e3beac388</upgradeSha>
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -67,7 +71,8 @@
       <code.krate><![CDATA[outlet_result= inlet_a*inlet_b;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="*" uuid="eb98bd96e9859d92f5580a201a59ba3b1b186eb8" sha="c31e1791ae8105d1f16792b09c827b16c8ac6b35">
+   <obj.normal id="*" uuid="eb98bd96e9859d92f5580a201a59ba3b1b186eb8" sha="e76e6a0abea93d71a6d2715d4fb0d05f749b105">
+      <upgradeSha>c31e1791ae8105d1f16792b09c827b16c8ac6b35</upgradeSha>
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -84,7 +89,8 @@
       <code.krate><![CDATA[outlet_result= inlet_a*inlet_b;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="*" uuid="c5825af18cde7dab41e7add57ce04996a56b4f56" sha="2cde1e360d5ac386ff90b7726b9bc329b9fe46d2">
+   <obj.normal id="*" uuid="c5825af18cde7dab41e7add57ce04996a56b4f56" sha="a9b400028f50234997d1b2f7a787b5b4b501c27f">
+      <upgradeSha>2cde1e360d5ac386ff90b7726b9bc329b9fe46d2</upgradeSha>
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -101,7 +107,8 @@
       <code.krate><![CDATA[outlet_result= inlet_a*inlet_b;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="*" uuid="99e665766e6a2ab1a4ff642a2d60924ae3745217" sha="d67b6c172dd96232df67e96baf19e3062e880e68">
+   <obj.normal id="*" uuid="99e665766e6a2ab1a4ff642a2d60924ae3745217" sha="99aca4b2faec09b558deff64dd4564b42d9c452f">
+      <upgradeSha>d67b6c172dd96232df67e96baf19e3062e880e68</upgradeSha>
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

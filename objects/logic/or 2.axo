@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="or 2" uuid="1bdd55de143b15175664ce012ff96dbfb35af108" sha="d7f898c6d323d5b2bb8a39859aae4e049141b870">
+   <obj.normal id="or 2" uuid="1bdd55de143b15175664ce012ff96dbfb35af108" sha="6941575503e8a946c74e5388ec4e6a97468ae3c5">
+      <upgradeSha>d7f898c6d323d5b2bb8a39859aae4e049141b870</upgradeSha>
       <sDescription>logic OR with 2 inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

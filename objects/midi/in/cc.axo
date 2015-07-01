@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="cc" uuid="4715e105d9af5f9ae9346d73d56e601bfb4cfd6a" sha="ebe42ea91b565ab7af7a8977642a42a30c77c9c4">
+   <obj.normal id="cc" uuid="4715e105d9af5f9ae9346d73d56e601bfb4cfd6a" sha="394ff9a0feb281bfb1c335bba571a5ea0daa75b9">
+      <upgradeSha>ebe42ea91b565ab7af7a8977642a42a30c77c9c4</upgradeSha>
       <sDescription>Receives Midi Continuous Controller messages</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -17,13 +18,13 @@
       <code.declaration><![CDATA[int32_t ccv;
 int32_t ntrig;
 ]]></code.declaration>
-      <code.init><![CDATA[ccv = %default% << 20;
+      <code.init><![CDATA[ccv = attr_default << 20;
 ]]></code.init>
       <code.krate><![CDATA[outlet_midiCC= ccv;
 outlet_trig = ntrig;
 ntrig = 0;
 ]]></code.krate>
-      <code.midihandler><![CDATA[if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == %cc%)) { ccv = data2<<20; ntrig = 1;}
+      <code.midihandler><![CDATA[if ((status == attr_midichannel + MIDI_CONTROL_CHANGE)&&(data1 == attr_cc)) { ccv = data2<<20; ntrig = 1;}
 ]]></code.midihandler>
    </obj.normal>
 </objdefs>

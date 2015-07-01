@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="quantize" uuid="1e78440164bf309c702dd82f9ed16d8591236a07" sha="4c4a90a911707903fc9fc7215d7c31567a87181e">
+   <obj.normal id="quantize" uuid="1e78440164bf309c702dd82f9ed16d8591236a07" sha="be3b0779d946367be325b4560fe2bffa52c49af9">
+      <upgradeSha>4c4a90a911707903fc9fc7215d7c31567a87181e</upgradeSha>
       <sDescription>quantize to n bits</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,10 +15,11 @@
       <attribs>
          <spinner name="bits" MinValue="1" MaxValue="28" DefaultValue="7"/>
       </attribs>
-      <code.krate><![CDATA[   outlet_b= inlet_a & (~((1<<(28-%bits%))-1));
+      <code.krate><![CDATA[   outlet_b= inlet_a & (~((1<<(28-attr_bits))-1));
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="quantize" uuid="35e19f22b6eb05cca3f9ebb0fad3d4d71e0e596c" sha="3cf3075bda10b7de86084f67a210bdfe4e310125">
+   <obj.normal id="quantize" uuid="35e19f22b6eb05cca3f9ebb0fad3d4d71e0e596c" sha="4692b487234cff9e32a0b2a5bb32cadd88c5dc07">
+      <upgradeSha>3cf3075bda10b7de86084f67a210bdfe4e310125</upgradeSha>
       <sDescription>quantize to n bits</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -32,7 +34,7 @@
       <attribs>
          <spinner name="bits" MinValue="1" MaxValue="28" DefaultValue="7"/>
       </attribs>
-      <code.srate><![CDATA[   outlet_b[buffer_index]= inlet_a[buffer_index] & (~((1<<(28-%bits%))-1));
+      <code.srate><![CDATA[   outlet_b[buffer_index]= inlet_a[buffer_index] & (~((1<<(28-attr_bits))-1));
 ]]></code.srate>
    </obj.normal>
 </objdefs>

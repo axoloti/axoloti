@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="saw r" uuid="5efd65c10cd9405e9c6402a68babfa8c3b2b1236" sha="80d5f932fd3cac3d9abd87ccfe15d99c020d491f">
+   <obj.normal id="saw r" uuid="5efd65c10cd9405e9c6402a68babfa8c3b2b1236" sha="490b236441e3eb2d08fa14da9a933889b6270e54">
+      <upgradeSha>80d5f932fd3cac3d9abd87ccfe15d99c020d491f</upgradeSha>
       <sDescription>saw wave LFO, rising slope, pitch input, phase reset</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

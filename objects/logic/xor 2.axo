@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="xor 2" uuid="b58e88d8a3bbab1f0f7f4cf287ecd8faf6f4ffb3" sha="8a56b7e930ed548aead5faa2625e3f87672f1385">
+   <obj.normal id="xor 2" uuid="b58e88d8a3bbab1f0f7f4cf287ecd8faf6f4ffb3" sha="95db3f381bc92e323edb63e0dc8514fdca5085af">
+      <upgradeSha>8a56b7e930ed548aead5faa2625e3f87672f1385</upgradeSha>
       <sDescription>logic XOR with 2 inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

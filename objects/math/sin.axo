@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sin" uuid="82a98efc53066cabca85eef46ebea56f368b5c14" sha="6c2c51772640a985c60b8e74dd46cdab84f70868">
+   <obj.normal id="sin" uuid="82a98efc53066cabca85eef46ebea56f368b5c14" sha="4986ce9e30872322358d35c32d9cf725b0700558">
+      <upgradeSha>6c2c51772640a985c60b8e74dd46cdab84f70868</upgradeSha>
       <sDescription>sine function, -64..64 phase corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -17,7 +18,8 @@
        outlet_out= (r>>4);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="sin" uuid="dffa93b48d85ff931b7a88822abc410f523d2476" sha="1071012784f2bd65a87a083ab2b7c3d46db76c52">
+   <obj.normal id="sin" uuid="dffa93b48d85ff931b7a88822abc410f523d2476" sha="5df1223b10938152461727ab9e7d1ece0cb47643">
+      <upgradeSha>1071012784f2bd65a87a083ab2b7c3d46db76c52</upgradeSha>
       <sDescription>sine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

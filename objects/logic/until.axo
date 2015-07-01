@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="until" uuid="c2abc784aafed708cefffaf4420ae5e0b6d96dd6" sha="45760196b6dc3199d5df420a8c1632ca405063c1">
+   <obj.normal id="until" uuid="c2abc784aafed708cefffaf4420ae5e0b6d96dd6" sha="bb21761b4e8bdfcad4d1fd5b0293359ed1843efd">
+      <upgradeSha>45760196b6dc3199d5df420a8c1632ca405063c1</upgradeSha>
       <sDescription>rapid trigger pulses until rising edge on stop</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="div 2" uuid="e683e26f8b9276d377d5d90a8fc06afe784e5485" sha="7fee48a2d38604fd5504303cbccef61f687d1593">
+   <obj.normal id="div 2" uuid="e683e26f8b9276d377d5d90a8fc06afe784e5485" sha="2cb2778f41e0d462d7aed59480280459b497b573">
+      <upgradeSha>7fee48a2d38604fd5504303cbccef61f687d1593</upgradeSha>
       <sDescription>divide by 2</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +15,8 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= inlet_in >>1;]]></code.krate>
    </obj.normal>
-   <obj.normal id="div 2" uuid="1803aad75fc867e91da03fe33b5f2db563e1ae7" sha="5df68ad33aa1633cb7cb1724fcd41eee28932582">
+   <obj.normal id="div 2" uuid="1803aad75fc867e91da03fe33b5f2db563e1ae7" sha="ed7fa031748658e8d6dcf8ce3c75d078ff5a6d7d">
+      <upgradeSha>5df68ad33aa1633cb7cb1724fcd41eee28932582</upgradeSha>
       <sDescription>divide by 2</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,7 +31,8 @@
       <attribs/>
       <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index] >>1;]]></code.srate>
    </obj.normal>
-   <obj.normal id="div 2" uuid="88f7f1e8210173a5bd0a2cdf6ec6c2ee601a1e0b" sha="1e6db7aa9b812d557e30df41ef67f7f9a95698dd">
+   <obj.normal id="div 2" uuid="88f7f1e8210173a5bd0a2cdf6ec6c2ee601a1e0b" sha="3049a4e92e789793eb2cfb93476129b6b1ac8ea1">
+      <upgradeSha>1e6db7aa9b812d557e30df41ef67f7f9a95698dd</upgradeSha>
       <sDescription>divide by 2</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

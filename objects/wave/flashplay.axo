@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="flashplay" uuid="e8203994c72dfe935d553045f6224fbcaedc59fa" sha="e97bdec1578cc24d2cd8147a1f004f866c971d16">
+   <obj.normal id="flashplay" uuid="e8203994c72dfe935d553045f6224fbcaedc59fa" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c">
+      <upgradeSha>e97bdec1578cc24d2cd8147a1f004f866c971d16</upgradeSha>
       <sDescription>Single-shot playback of a sample table in flash, without transposition</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -36,16 +37,16 @@
       <code.declaration><![CDATA[uint32_t _pos;
 int ntrig;
 ]]></code.declaration>
-      <code.init><![CDATA[extern int16_t _binary_%sample%_raw_size;
-_pos=(int32_t)&_binary_%sample%_raw_size;
+      <code.init><![CDATA[extern int16_t _binary_attr_sample_raw_size;
+_pos=(int32_t)&_binary_attr_sample_raw_size;
 ]]></code.init>
-      <code.krate><![CDATA[extern int16_t _binary_%sample%_raw_size;
-extern int16_t _binary_%sample%_raw_start;
+      <code.krate><![CDATA[extern int16_t _binary_attr_sample_raw_size;
+extern int16_t _binary_attr_sample_raw_start;
 if ((inlet_trig>0) && !ntrig) {_pos=0;  ntrig=1;}
 if (!(inlet_trig>0)) ntrig=0;
      int32_t i;
-if (_pos<((int)(&_binary_%sample%_raw_size)/2)-BUFSIZE) {
-    for(i=0;i<BUFSIZE;i++) (outlet_out)[i] = (((int16_t *)(&_binary_%sample%_raw_start))[_pos++])<<12;
+if (_pos<((int)(&_binary_attr_sample_raw_size)/2)-BUFSIZE) {
+    for(i=0;i<BUFSIZE;i++) (outlet_out)[i] = (((int16_t *)(&_binary_attr_sample_raw_start))[_pos++])<<12;
 } else {
     for(i=0;i<BUFSIZE;i++) (outlet_out)[i] = 0;
 }

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="ahd" uuid="8d289ec2607d61c6d0059d5fbf55498590602cef" sha="61680899fc217534b8e3a7e3070d23dd72c30cef">
+   <obj.normal id="ahd" uuid="8d289ec2607d61c6d0059d5fbf55498590602cef" sha="9eea4569666b153408655522ff3b75853fcbecb3">
+      <upgradeSha>61680899fc217534b8e3a7e3070d23dd72c30cef</upgradeSha>
       <sDescription>attack hold decay envelope, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

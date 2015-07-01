@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="clock" uuid="5d74bfe486cbc3f79d4408a2dcc2a054d89310dc" sha="2e1ff23ac85034ded776c411284443b01ea9cd80">
+   <obj.normal id="clock" uuid="5d74bfe486cbc3f79d4408a2dcc2a054d89310dc" sha="b1a8f7267317fa583225dc218f285fe306220d1b">
+      <upgradeSha>2e1ff23ac85034ded776c411284443b01ea9cd80</upgradeSha>
       <sDescription>Midi clock master, als outputs Midi clock, start, stop, and continue messages</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -59,17 +60,17 @@ rstp = 0;]]></code.init>
 }
 if (inlet_run && !_active) {
   _active = 1;
-  if (_pos24ppq)     MidiSend1((midi_device_t) %device%, MIDI_START);
-  else     MidiSend1((midi_device_t) %device%, MIDI_CONTINUE);
+  if (_pos24ppq)     MidiSend1((midi_device_t) attr_device, MIDI_START);
+  else     MidiSend1((midi_device_t) attr_device, MIDI_CONTINUE);
 } else if (!inlet_run && _active){
   _active = 0;
-  MidiSend1((midi_device_t) %device%, MIDI_STOP);
+  MidiSend1((midi_device_t) attr_device, MIDI_STOP);
 }if (_active) {
   _posfrac += param_bpm;
   if (_posfrac & 1<<31) {
     _posfrac &= (1<<31)-1;
     _pos24ppq++;
-    MidiSend1((midi_device_t) %device%,MIDI_TIMING_CLOCK);
+    MidiSend1((midi_device_t) attr_device,MIDI_TIMING_CLOCK);
   }
 }
 outlet_pos4ppq = _pos24ppq/6;

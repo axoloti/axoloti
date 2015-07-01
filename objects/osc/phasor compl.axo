@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="phasor compl" uuid="e25188fd100ebf5ca95369bd7f520bbfe51f7e3e" sha="bb3797f6808c1fa0ccf714c27361878a3fd8be29">
+   <obj.normal id="phasor compl" uuid="e25188fd100ebf5ca95369bd7f520bbfe51f7e3e" sha="15eb8142a979333baac42c771ed195ffe60fce05">
+      <upgradeSha>bb3797f6808c1fa0ccf714c27361878a3fd8be29</upgradeSha>
       <sDescription>FM phasor, linear interpolated table, s-rate pitch input, 180 degree output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

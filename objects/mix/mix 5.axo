@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="mix 5" uuid="cf152a5f9789c14cb519997ef1d8f05629578943" sha="630089895ce383ce4e9dd37d32a9768e0a465a8b">
+   <obj.normal id="mix 5" uuid="cf152a5f9789c14cb519997ef1d8f05629578943" sha="e6b382546cd7b7f294651739e617ec7f38ad4935">
+      <upgradeSha>630089895ce383ce4e9dd37d32a9768e0a465a8b</upgradeSha>
       <sDescription>5 input k-rate mixer</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -47,7 +48,8 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mix 5" uuid="e8e838e747c7255f904f91665669bffcf4e1e09c" sha="2c736847c4b108230551b01d12e0c1893a51cb26">
+   <obj.normal id="mix 5" uuid="e8e838e747c7255f904f91665669bffcf4e1e09c" sha="d7c41232148b3021bda9ef420002045cb3def04f">
+      <upgradeSha>2c736847c4b108230551b01d12e0c1893a51cb26</upgradeSha>
       <sDescription>5 input s-rate mixer</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

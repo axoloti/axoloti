@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="button1" uuid="149e4572a3f240e3f45344b818d79483c2478e8e" sha="d7e5e78016948ecaade268473afb9502b7c75239">
+   <obj.normal id="button1" uuid="149e4572a3f240e3f45344b818d79483c2478e8e" sha="babccdcae50bfe8f1e44b4e24c98cdca59cccb22">
+      <upgradeSha>d7e5e78016948ecaade268473afb9502b7c75239</upgradeSha>
       <sDescription>button S2 on axoloti core board</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="int 8" uuid="8cad962d740d840b8638a62bb2ec64e0a7a250ee" sha="69af9c80b214387a1a7210934e1cbb8536964d4d">
+   <obj.normal id="int 8" uuid="8cad962d740d840b8638a62bb2ec64e0a7a250ee" sha="324205396dcda7798ea12d5b6691d6f15e461095">
+      <upgradeSha>69af9c80b214387a1a7210934e1cbb8536964d4d</upgradeSha>
       <sDescription>integer decoder</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

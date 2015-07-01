@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="saw sync" uuid="5e9923954d32548f51356b522cff261a110aae9d" sha="4173669d858d9547874f581b85f4e60313401651">
+   <obj.normal id="saw sync" uuid="5e9923954d32548f51356b522cff261a110aae9d" sha="b5f448b77c335ba8e00a0479319ae6b4d3ee86a">
+      <upgradeSha>4173669d858d9547874f581b85f4e60313401651</upgradeSha>
       <sDescription>Bandwith limited saw wave oscillator with sync input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

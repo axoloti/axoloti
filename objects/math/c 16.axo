@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="c 16" uuid="51530053dc1ff216a8b8ada0becc17e5b590f0cf" sha="a6c98dfb8f1d9304b066e8fbcc42ca3d3544389f">
+   <obj.normal id="c 16" uuid="51530053dc1ff216a8b8ada0becc17e5b590f0cf" sha="4b09c9a78f0ce3f96fa673fe6b7615701586ecf6">
+      <upgradeSha>a6c98dfb8f1d9304b066e8fbcc42ca3d3544389f</upgradeSha>
       <sDescription>constant value: 16</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

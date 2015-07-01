@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="d lin x" uuid="9ff065dea2450f51dbf340ce8bb69e52a4ffac4c" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211">
+   <obj.normal id="d lin x" uuid="9ff065dea2450f51dbf340ce8bb69e52a4ffac4c" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d">
+      <upgradeSha>2fe3360a9f50f985461b9b78ce73c22e8a334211</upgradeSha>
       <sDescription>decay envelope, linear ramp, extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

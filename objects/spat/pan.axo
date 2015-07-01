@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="pan" uuid="990872222ef857b6553103545d0b84834689ab6a" sha="61607561a89b218b9fd29b12920af8063776899a">
+   <obj.normal id="pan" uuid="990872222ef857b6553103545d0b84834689ab6a" sha="381781114e4c431e5460c67784dfd40a12cf3260">
+      <upgradeSha>61607561a89b218b9fd29b12920af8063776899a</upgradeSha>
       <sDescription>stereo balance (panorama)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -20,7 +21,8 @@
       <attribs/>
       <code.krate><![CDATA[outlet_left = ___SMMUL((1<<29)-(param_c<<2),inlet_i1)<<2;outlet_right = ___SMMUL((1<<29)+(param_c<<2),inlet_i1)<<2;]]></code.krate>
    </obj.normal>
-   <obj.normal id="pan" uuid="73d5eeb3609b99620569b6e364f888c6c8f1f87f" sha="ae1048aeefcb0da9fc2ba40a0e6396e222807375">
+   <obj.normal id="pan" uuid="73d5eeb3609b99620569b6e364f888c6c8f1f87f" sha="114b25683474ff6ffc7d6eb782d270273539295b">
+      <upgradeSha>ae1048aeefcb0da9fc2ba40a0e6396e222807375</upgradeSha>
       <sDescription>stereo balance (panorama)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="schmitttrigger" uuid="ada0d2d54b83ccc75bdf01aee01a53253d5ce2e1" sha="b6a051f4b960da5fe758d0b8bb723fa9a427a1b">
+   <obj.normal id="schmitttrigger" uuid="ada0d2d54b83ccc75bdf01aee01a53253d5ce2e1" sha="34faadd26a92ece72c84f8fa01cfe0a363656bf8">
+      <upgradeSha>b6a051f4b960da5fe758d0b8bb723fa9a427a1b</upgradeSha>
       <sDescription>Schmitt trigger: hard clipping with hysteresis. Algorithm: linear interpolated zero-crossing detector and blit synthesis</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

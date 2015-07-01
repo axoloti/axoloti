@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="outlet b" uuid="202a04aa6664354a416e868dc5bab55491f13a71" sha="4f808e69c735aa76a990b5027b834057a146350">
+   <obj.normal id="outlet b" uuid="202a04aa6664354a416e868dc5bab55491f13a71" sha="d53edf73b9c33108cbb6e5487759ac27b809cfcc">
+      <upgradeSha>4f808e69c735aa76a990b5027b834057a146350</upgradeSha>
       <sDescription>Boolean outlet. The outlet object becomes an outlet connector when this patch is used as an object (subpatch)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

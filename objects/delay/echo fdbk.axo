@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="echo fdbk" uuid="da54d8b5d3b1aacfadec5ff9b5758174d9ad9edf" sha="7611c8729f6b16550b0764bc62bc93ccc71235fc">
+   <obj.normal id="echo fdbk" uuid="da54d8b5d3b1aacfadec5ff9b5758174d9ad9edf" sha="96a6db3b3deca106846992895749d662d670b103">
+      <upgradeSha>7611c8729f6b16550b0764bc62bc93ccc71235fc</upgradeSha>
       <sDescription>Audio delay with feedback, fixed delay time</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -17,17 +18,17 @@
       </attribs>
       <code.declaration><![CDATA[uint32_t delaywindex;
 uint32_t delayrindex;
-int16_t delayline[%delaylength%];
+int16_t delayline[attr_delaylength];
 ]]></code.declaration>
       <code.init><![CDATA[   int i;
-   for(i=0;i<%delaylength%;i++) delayline[i] = 0;
+   for(i=0;i<attr_delaylength;i++) delayline[i] = 0;
    delaywindex = 0;
    delayrindex = 1;
 ]]></code.init>
       <code.srate><![CDATA[ int32_t rd = delayline[delayrindex++];
 delayline[delaywindex++] = __SSAT((inlet_in[buffer_index]>>14) + ___SMMUL(rd<<5,inlet_feedback),16);
-if (delayrindex == %delaylength%) delayrindex = 0;
-if (delaywindex == %delaylength%) delaywindex = 0;
+if (delayrindex == attr_delaylength) delayrindex = 0;
+if (delaywindex == attr_delaylength) delaywindex = 0;
 outlet_out[buffer_index] = rd<<14;
 ]]></code.srate>
    </obj.normal>

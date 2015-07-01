@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="mtod" uuid="eb93aa10105346ca7c279ec4cf48e2c8b1bedcbb" sha="800732c561d801c8b0c245ce1c6cd2413cd0ff6">
+   <obj.normal id="mtod" uuid="eb93aa10105346ca7c279ec4cf48e2c8b1bedcbb" sha="a5ddc7f510203544461c0c35a362fa7664708926">
+      <upgradeSha>800732c561d801c8b0c245ce1c6cd2413cd0ff6</upgradeSha>
       <sDescription>Pitch (note index) to period time</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

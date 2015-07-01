@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="dial p" uuid="529785648a55bb58175a4c8c717870d7b71384b3" sha="1f21216639bb798a4ea7902940999a5bcfd0de90">
+   <obj.normal id="dial p" uuid="529785648a55bb58175a4c8c717870d7b71384b3" sha="501c30e07dedf3d701e8d0b33c3c234908c3388e">
+      <upgradeSha>1f21216639bb798a4ea7902940999a5bcfd0de90</upgradeSha>
       <sDescription>positive constant value dial</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="scope 128 b" uuid="bf4d40d96a92a359bcc596273662ce7ac269af29" sha="375509bcb23b2f6a69f9cd82349f406464c8295e">
+   <obj.normal id="scope 128 b" uuid="bf4d40d96a92a359bcc596273662ce7ac269af29" sha="a7ce66703f067983726298da17fabab409dca3dc">
+      <upgradeSha>375509bcb23b2f6a69f9cd82349f406464c8295e</upgradeSha>
       <sDescription>bipolar audio rate signal oscilloscope (time domain), showing 128 consecutive samples</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

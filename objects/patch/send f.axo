@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="send f" uuid="b63e8194c709f86354462cc7a8375a926f303a68" sha="317772b85deca12c39f748c73412e0bf94a9b2e3">
+   <obj.normal id="send f" uuid="b63e8194c709f86354462cc7a8375a926f303a68" sha="4c20b7305cf1f07a7944717373c59b62dfbf8768">
+      <upgradeSha>317772b85deca12c39f748c73412e0bf94a9b2e3</upgradeSha>
       <sDescription>send (to recv object), fractional type</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

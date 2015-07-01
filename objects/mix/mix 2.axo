@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="mix 2" uuid="347a13be84c37161e6ab35a27ab19e7555d0cdc1" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe">
+   <obj.normal id="mix 2" uuid="347a13be84c37161e6ab35a27ab19e7555d0cdc1" sha="8356eb392edeb3251d3de74955ee9c38cb87d1d0">
+      <upgradeSha>90ac1a48634cb998bf3d0387eb5191531d6241fe</upgradeSha>
       <sDescription>2 input k-rate mixer</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,7 +30,8 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mix 2" uuid="136bf88023887283da53fbb7c119dd0f15abf4c1" sha="67c325bf12e5b73ad58df89daf7899831777003c">
+   <obj.normal id="mix 2" uuid="136bf88023887283da53fbb7c119dd0f15abf4c1" sha="b2651c75ac6c78746abd05e1ae8df07c0cef962">
+      <upgradeSha>67c325bf12e5b73ad58df89daf7899831777003c</upgradeSha>
       <sDescription>2 input s-rate mixer</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

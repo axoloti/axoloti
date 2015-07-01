@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="cc any" uuid="87137c8d09bc503aac489ce307daf00626cf1abd" sha="57c54018f54ca520bf43faf662fbf0bab292b48e">
+   <obj.normal id="cc any" uuid="87137c8d09bc503aac489ce307daf00626cf1abd" sha="2ffbc19d6ebcd548c6718faf35db7a24f16095fc">
+      <upgradeSha>57c54018f54ca520bf43faf662fbf0bab292b48e</upgradeSha>
       <sDescription>Midi controller output to any CC number and channel</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -36,7 +37,7 @@
       </attribs>
       <code.declaration><![CDATA[int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {MidiSend3((midi_device_t) %device%, MIDI_CONTROL_CHANGE + ((inlet_chan-1)&0xF),inlet_cc,__USAT(inlet_v>>20,7));  ntrig=1;}
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {MidiSend3((midi_device_t) attr_device, MIDI_CONTROL_CHANGE + ((inlet_chan-1)&0xF),inlet_cc,__USAT(inlet_v>>20,7));  ntrig=1;}
 if (!(inlet_trig>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>

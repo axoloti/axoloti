@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="window" uuid="31e9f6b0e5c8144e13a823c29318299bed4928fb" sha="ff29ab0721db1b1238076400832e919d860fc38f">
+   <obj.normal id="window" uuid="31e9f6b0e5c8144e13a823c29318299bed4928fb" sha="146dadcb92e9f8660cf115db2fd0475b2876f2b5">
+      <upgradeSha>ff29ab0721db1b1238076400832e919d860fc38f</upgradeSha>
       <sDescription>hanning window function, input 0..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -18,7 +19,8 @@
        outlet_win= (r>>4);
    }]]></code.krate>
    </obj.normal>
-   <obj.normal id="window" uuid="81a9901479930c785d9e7495956fd3abdbd53fdd" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d">
+   <obj.normal id="window" uuid="81a9901479930c785d9e7495956fd3abdbd53fdd" sha="1bb02dc83c49fb3421e2c7fff89d26c5dec1000b">
+      <upgradeSha>279fd6991b5a8cf4c66e33feefccb9c9deb02f1d</upgradeSha>
       <sDescription>hanning window function, input 0..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

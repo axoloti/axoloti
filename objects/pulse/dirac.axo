@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="dirac" uuid="f673e7434e1e5915c7e3ffb7732fd9a8762e59a9" sha="8c4dd3566568ebf45704f21b94c45174a4206ea">
+   <obj.normal id="dirac" uuid="f673e7434e1e5915c7e3ffb7732fd9a8762e59a9" sha="fc64dff8c919d5303f01faecac5cba0979f4c059">
+      <upgradeSha>8c4dd3566568ebf45704f21b94c45174a4206ea</upgradeSha>
       <sDescription>generates a single sample impulse (dirac) by triggering</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="smooth" uuid="e38a3e97d6d0bf3da38feb3ac099b3d47916a10a" sha="3a277a80f7590217e14fde92e834ace04d2b75cb">
+   <obj.normal id="smooth" uuid="e38a3e97d6d0bf3da38feb3ac099b3d47916a10a" sha="74c40dd64acc980ba4e6ffc729e07365b00044fa">
+      <upgradeSha>3a277a80f7590217e14fde92e834ace04d2b75cb</upgradeSha>
       <sDescription>exponential smooth</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="reciprocal" uuid="da189c90a23fed9a043d46ed93bcd908ea9b9508" sha="fee3b32001d8cc8788bdd6d14bd4ad5f04187030">
+   <obj.normal id="reciprocal" uuid="da189c90a23fed9a043d46ed93bcd908ea9b9508" sha="477c3c22565d29e68966d939dfff9d3a2c82860f">
+      <upgradeSha>fee3b32001d8cc8788bdd6d14bd4ad5f04187030</upgradeSha>
       <sDescription>reciprocal, y = 64/x</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -19,7 +20,8 @@
         outlet_out = 1<<27;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="reciprocal" uuid="afe762890ac919ee5e058163907a649b229faa1e" sha="d4d6b03818ac9b3fa60fa7449f3414ebc196e238">
+   <obj.normal id="reciprocal" uuid="afe762890ac919ee5e058163907a649b229faa1e" sha="b835c904467e3c3ce12026cedf0d160a4646d497">
+      <upgradeSha>d4d6b03818ac9b3fa60fa7449f3414ebc196e238</upgradeSha>
       <sDescription>reciprocal, y = 64/x</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

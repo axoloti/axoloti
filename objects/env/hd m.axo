@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="hd m" uuid="ce84b6157954cec35d7e14a83e5f02f34f41808d" sha="b4f9f7ecc70fd2cfb5dbf9293ce5e41e21c94bb2">
+   <obj.normal id="hd m" uuid="ce84b6157954cec35d7e14a83e5f02f34f41808d" sha="a6963883843e211e28dadee465f1362374ee0e71">
+      <upgradeSha>b4f9f7ecc70fd2cfb5dbf9293ce5e41e21c94bb2</upgradeSha>
       <sDescription>hold/decay envelope with decay time modulation input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

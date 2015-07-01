@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="rectifier" uuid="c4130ec9b603d282fc9bf45e04434626b853042e" sha="6a81663bcc6a29c922883f499193baff3d14c5d">
+   <obj.normal id="rectifier" uuid="c4130ec9b603d282fc9bf45e04434626b853042e" sha="dd59319d5d9fb8412e8bc1ce69ec96277160cf0c">
+      <upgradeSha>6a81663bcc6a29c922883f499193baff3d14c5d</upgradeSha>
       <sDescription>half-wave rectifier distortion, bandlimited</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

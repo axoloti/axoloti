@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="&gt;c" uuid="335235afe9b2d30cd368eee5f5ea16e5330a8432" sha="aa245f90aec358415dbbc12409c90065cda73d3e">
+   <obj.normal id="&gt;c" uuid="335235afe9b2d30cd368eee5f5ea16e5330a8432" sha="ccb67d0fb40e8b7fa154eb9720c21fa4e1d24836">
+      <upgradeSha>aa245f90aec358415dbbc12409c90065cda73d3e</upgradeSha>
       <sDescription>greater than constant</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

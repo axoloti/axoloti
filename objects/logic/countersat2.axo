@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="countersat2" uuid="175f9e409508bb652d9715fa612415123be67004" sha="e386dfb4004d42015b0b5cec0ee2c2bfeb39e35e">
+   <obj.normal id="countersat2" uuid="175f9e409508bb652d9715fa612415123be67004" sha="b0de9b0d8f1dd62c8a210878afa2d9afa875a4e1">
+      <upgradeSha>e386dfb4004d42015b0b5cec0ee2c2bfeb39e35e</upgradeSha>
       <sDescription>saturating up/down counter</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

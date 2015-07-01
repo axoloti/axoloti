@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="modsource" uuid="b9e04c8b21c25d7865a2e27585c86c297d7cd5e4" sha="2784bc04bfda20ae6e0c18b0130c012543c9ec4c">
+   <obj.normal id="modsource" uuid="b9e04c8b21c25d7865a2e27585c86c297d7cd5e4" sha="7c62ac4dc64da3f882068c7a4a4b5860cba293bf">
+      <upgradeSha>4fb6c58d744d1004e27ec0d71dcd1d558592b3bc</upgradeSha>
       <sDescription>generic modulation source</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +15,7 @@
       <attribs/>
       <code.declaration><![CDATA[int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_%name%][0],NMODULATIONTARGETS,inlet_v);  ntrig=1;}
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name][0],NMODULATIONTARGETS,inlet_v);  ntrig=1;}
 if (!(inlet_trig>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>

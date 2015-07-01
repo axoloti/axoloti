@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="dial b" uuid="64a8817fb41654c117378aea136f23ee3496d0a9" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e">
+   <obj.normal id="dial b" uuid="64a8817fb41654c117378aea136f23ee3496d0a9" sha="5d4fe09e04ac9d02b2f3224e493c9536fe25fa66">
+      <upgradeSha>b12c45ba7611d19c7b97481e73889da65eb2f9e</upgradeSha>
       <sDescription>displays bipolar k-rate signals</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

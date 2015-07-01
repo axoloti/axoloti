@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="keyb mod" uuid="aa7885504201c08eb7894fcc3f0b81531e4e8c78" sha="95d8164caf35fbc234bd43cc4c2536e587bd8d2c">
+   <obj.normal id="keyb mod" uuid="aa7885504201c08eb7894fcc3f0b81531e4e8c78" sha="5e2dc9957f8200909d88e51705ee728033c27964">
+      <upgradeSha>66cf66b781465fa15957a8a3f5f16988bdff894a</upgradeSha>
       <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity modulation source</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -35,21 +36,21 @@ _gate2 = _gate;
 outlet_velocity= _velo<<20;
 outlet_releaseVelocity= _rvelo<<20;
 ]]></code.krate>
-      <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {
+      <code.midihandler><![CDATA[if ((status == MIDI_NOTE_ON + attr_midichannel) && (data2)) {
   _velo = data2;
   _note = data1-64;
   _gate = 1<<27;
   _gate2 = 0;
-  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_%name%_velocity][0],NMODULATIONTARGETS,_velo<<20);
-  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_%name%_note][0],NMODULATIONTARGETS,_note<<20);
-} else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||
-          (status == MIDI_NOTE_OFF + %midichannel%)) {
+  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name_velocity][0],NMODULATIONTARGETS,_velo<<20);
+  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name_note][0],NMODULATIONTARGETS,_note<<20);
+} else if (((status == MIDI_NOTE_ON + attr_midichannel) && (!data2))||
+          (status == MIDI_NOTE_OFF + attr_midichannel)) {
   if (_note == data1-64) {
     _rvelo = data2;
     _gate = 0;
-  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_%name%_releasevelocity][0],NMODULATIONTARGETS,_rvelo<<20);
+  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name_releasevelocity][0],NMODULATIONTARGETS,_rvelo<<20);
   }
-} else if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {
+} else if ((status == attr_midichannel + MIDI_CONTROL_CHANGE)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {
   _gate = 0;
 }
 ]]></code.midihandler>

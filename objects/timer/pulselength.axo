@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="pulselength" uuid="542076cdc3908659e687740768dc4cd9d7675edd" sha="2499426dff17a3fd549c8c6659254da15b6b5f1e">
+   <obj.normal id="pulselength" uuid="542076cdc3908659e687740768dc4cd9d7675edd" sha="86ef23ee0ae7cffc4c8ae0d9e258473d5dc57764">
+      <upgradeSha>2499426dff17a3fd549c8c6659254da15b6b5f1e</upgradeSha>
       <sDescription>Generates a single pulse after a rising edge on trigger input. A new trigger before the pulse finishes at the output, extends the pulse.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

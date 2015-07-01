@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="pwm t8" uuid="7a840c6452fa4f93d9dc09fc0bd031946e1bfc5a" sha="bc5389b0e96a90dcc21d117cbf363659bfe2070e">
+   <obj.normal id="pwm t8" uuid="7a840c6452fa4f93d9dc09fc0bd031946e1bfc5a" sha="ac29ca844307adbd8b725bdd768e825ce2f7710f">
+      <upgradeSha>bc5389b0e96a90dcc21d117cbf363659bfe2070e</upgradeSha>
       <sDescription>pwm output timer 8</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

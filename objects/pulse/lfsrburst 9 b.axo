@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="lfsrburst 9 b" uuid="12fe36d70b9e73531fcd132885079739c65e4871" sha="e6427d685b4b95c2958d8838b2577ecd28ab4b9a">
+   <obj.normal id="lfsrburst 9 b" uuid="12fe36d70b9e73531fcd132885079739c65e4871" sha="9c8c30701b65b3a3d72f10b2455a91185c4d18f7">
+      <upgradeSha>e6427d685b4b95c2958d8838b2577ecd28ab4b9a</upgradeSha>
       <sDescription>lfsr burst, 9bit = 511 samples, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -129,7 +130,7 @@ ntrig = 0;
       <code.srate><![CDATA[if (count>0) {
   count--;
   if (state & 1)  {
-     state = (state >> 1) ^ %polynomial%;
+     state = (state >> 1) ^ attr_polynomial;
      outlet_out[buffer_index] = 1<<27;
   } else {
     state = (state >> 1);

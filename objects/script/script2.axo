@@ -1,6 +1,7 @@
 <objdefs>
-   <obj.normal id="script2" uuid="31cac129a16d45a00f4e9bc16a23b2363e3c8b78" sha="f790404ab422d73d7c5acc2b56f51f461283d3fc">
-      <sDescription>script with 2 inputs and 2 outputs, running in a separate thread, you must define &quot;void init(void){}&quot; and &quot;void loop(void)&quot;</sDescription>
+   <obj.normal id="script2" uuid="31cac129a16d45a00f4e9bc16a23b2363e3c8b78" sha="dca92f82c6dae8f3442cad05dcf132fa09c40a6a">
+      <upgradeSha>f1165d1ec039527cc209d98086f202659bd9d85a</upgradeSha>
+      <sDescription>script with 2 inputs and 2 outputs, running in a separate thread, you must define &quot;void setup(void){}&quot; and &quot;void loop(void)&quot;</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
@@ -18,7 +19,7 @@
       </attribs>
       <code.declaration><![CDATA[int32_t in1,in2;
 int32_t out1,out2;
-%script%
+attr_script
 msg_t ThreadX2(){
   setup();
   while(!chThdShouldTerminate()){
@@ -28,7 +29,7 @@ msg_t ThreadX2(){
   chThdExit((msg_t)0);
 }
 static msg_t ThreadX(void *arg) {
-((%parent% *)arg)->ThreadX2();
+((attr_class *)arg)->ThreadX2();
 }
 WORKING_AREA(waThreadX, 1024);
 Thread *Thd;

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="read interp" uuid="ffe59224a872fe9975f8f615cbbf45177e571947" sha="2dfc3a1a00aeb03244b8ef0259d6c004c06cdbc">
+   <obj.normal id="read interp" uuid="ffe59224a872fe9975f8f615cbbf45177e571947" sha="b5d8a31ff5713762101bdd21bac59b164ed9332b">
+      <upgradeSha>2dfc3a1a00aeb03244b8ef0259d6c004c06cdbc</upgradeSha>
       <sDescription>read from table, linear interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -15,17 +16,18 @@
          <objref name="table"/>
       </attribs>
       <code.krate><![CDATA[   uint32_t asat = __USAT(inlet_a,27);
-    int index = asat>>(27-%table%.LENGTHPOW);
-   int32_t y1 = %table%.array[index]<<%table%.GAIN;
-   int32_t y2 = %table%.array[(index+1)&%table%.LENGTHMASK]<<%table%.GAIN;
-   int frac = (asat - (index<<(27-%table%.LENGTHPOW)))<<(%table%.LENGTHPOW+3);
+    int index = asat>>(27-attr_table.LENGTHPOW);
+   int32_t y1 = attr_table.array[index]<<attr_table.GAIN;
+   int32_t y2 = attr_table.array[(index+1)&attr_table.LENGTHMASK]<<attr_table.GAIN;
+   int frac = (asat - (index<<(27-attr_table.LENGTHPOW)))<<(attr_table.LENGTHPOW+3);
   int32_t rr;
   rr = ___SMMUL(y1,(1<<30)-frac);
   rr = ___SMMLA(y2,frac,rr);
 outlet_o= rr<<2;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="read interp" uuid="460dc7ddd860743fe8cdc067c05b3396fe9bab6e" sha="b0519acd115f068f0851ae0be434a57888454c06">
+   <obj.normal id="read interp" uuid="460dc7ddd860743fe8cdc067c05b3396fe9bab6e" sha="6f1a6f586d524fd08a9a04cd11c717b3c977d03c">
+      <upgradeSha>b0519acd115f068f0851ae0be434a57888454c06</upgradeSha>
       <sDescription>read from table, linear interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -41,10 +43,10 @@ outlet_o= rr<<2;
          <objref name="table"/>
       </attribs>
       <code.srate><![CDATA[   uint32_t asat = __USAT(inlet_a[buffer_index],27);
-    int index = asat>>(27-%table%.LENGTHPOW);
-   int32_t y1 = %table%.array[index]<<%table%.GAIN;
-   int32_t y2 = %table%.array[(index+1)&%table%.LENGTHMASK]<<%table%.GAIN;
-   int frac = (asat - (index<<(27-%table%.LENGTHPOW)))<<(%table%.LENGTHPOW+3);
+    int index = asat>>(27-attr_table.LENGTHPOW);
+   int32_t y1 = attr_table.array[index]<<attr_table.GAIN;
+   int32_t y2 = attr_table.array[(index+1)&attr_table.LENGTHMASK]<<attr_table.GAIN;
+   int frac = (asat - (index<<(27-attr_table.LENGTHPOW)))<<(attr_table.LENGTHPOW+3);
   int32_t rr;
   rr = ___SMMUL(y1,(1<<30)-frac);
   rr = ___SMMLA(y2,frac,rr);

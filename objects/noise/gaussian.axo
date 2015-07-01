@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="gaussian" uuid="dbc9e0e108c0dc6ecb5e12b042bf5226d8755ee1" sha="43d4dec8c6448021780e4d51ddedd98bd944f688">
+   <obj.normal id="gaussian" uuid="dbc9e0e108c0dc6ecb5e12b042bf5226d8755ee1" sha="2cd50726c11efbbf6edc2abbe8a899e31df4cf93">
+      <upgradeSha>43d4dec8c6448021780e4d51ddedd98bd944f688</upgradeSha>
       <sDescription>pseudo gaussian distributed (white) noise. Range -64..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

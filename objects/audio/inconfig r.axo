@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="inconfig r" uuid="4a645bf7146d12605fbbfb9376aeb9962ef7406" sha="aeb1261a9f3855951dea87dd8875ca7f9ec4debe">
+   <obj.normal id="inconfig r" uuid="4a645bf7146d12605fbbfb9376aeb9962ef7406" sha="b10400cca486f39d70db4e3dfa62b078474b61f1">
+      <upgradeSha>aeb1261a9f3855951dea87dd8875ca7f9ec4debe</upgradeSha>
       <sDescription>Audio input configuration, right channel only</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -62,10 +63,10 @@
       <depends>
          <depend>ADAU1361</depend>
       </depends>
-      <code.init><![CDATA[//ADAU1961_WriteRegister(0x400E,(%gain%<<2)+3);
-ADAU1961_WriteRegister(0x400F,(%gain%<<2)+3);
-//ADAU1961_WriteRegister(0x400B,(%boost%<<3)+0);
-ADAU1961_WriteRegister(0x400D,(%boost%<<3)+0);
+      <code.init><![CDATA[//ADAU1961_WriteRegister(0x400E,(attr_gain<<2)+3);
+ADAU1961_WriteRegister(0x400F,(attr_gain<<2)+3);
+//ADAU1961_WriteRegister(0x400B,(attr_boost<<3)+0);
+ADAU1961_WriteRegister(0x400D,(attr_boost<<3)+0);
 ]]></code.init>
    </obj.normal>
 </objdefs>

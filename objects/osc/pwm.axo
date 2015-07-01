@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="pwm" uuid="e646987150c51ec3c8ff598f0ad0577a980ff1d7" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c">
+   <obj.normal id="pwm" uuid="e646987150c51ec3c8ff598f0ad0577a980ff1d7" sha="ae584d01c09e7982535d5b96347cb5e96c9ac265">
+      <upgradeSha>a5f49fd39de0194bff6482e7b17ed3f35174578c</upgradeSha>
       <sDescription>Bandwith limited pulse width modulation oscillator</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

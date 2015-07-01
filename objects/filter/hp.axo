@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="hp" uuid="a32e08c0b9767db2f9cec94492405bbb0ae696a0" sha="2c3219893ab8ef42b46eb323284a077f0ba55d54">
+   <obj.normal id="hp" uuid="a32e08c0b9767db2f9cec94492405bbb0ae696a0" sha="de47923046728f9eb4d6e6cbf26314bf518174fc">
+      <upgradeSha>2c3219893ab8ef42b46eb323284a077f0ba55d54</upgradeSha>
       <sDescription>2-pole resonant band-pass filter (biquad)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

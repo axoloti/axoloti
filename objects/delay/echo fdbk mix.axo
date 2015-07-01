@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="echo fdbk mix" uuid="9b68537c30fd71007bf7063dba8621a384819d8" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee">
+   <obj.normal id="echo fdbk mix" uuid="9b68537c30fd71007bf7063dba8621a384819d8" sha="d89c6cf6ecd25a4bd258457bacf051491b2f1bea">
+      <upgradeSha>779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee</upgradeSha>
       <sDescription>Audio delay with feedback and mix, fixed delay time</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -27,10 +28,10 @@
       </attribs>
       <code.declaration><![CDATA[uint32_t delaywindex;
 uint32_t delayrindex;
-int16_t delayline[%delaylength%];
+int16_t delayline[attr_delaylength];
 ]]></code.declaration>
       <code.init><![CDATA[   int i;
-   for(i=0;i<%delaylength%;i++) delayline[i] = 0;
+   for(i=0;i<attr_delaylength;i++) delayline[i] = 0;
    delaywindex = 0;
    delayrindex = 1;
 ]]></code.init>
@@ -39,8 +40,8 @@ int16_t delayline[%delaylength%];
 ]]></code.krate>
       <code.srate><![CDATA[ int32_t rd = delayline[delayrindex++];
 delayline[delaywindex++] = __SSAT((inlet_in[buffer_index]>>15) + ___SMMUL(rd<<5,_fdbk),16);
-if (delayrindex == %delaylength%) delayrindex = 0;
-if (delaywindex == %delaylength%) delaywindex = 0;
+if (delayrindex == attr_delaylength) delayrindex = 0;
+if (delaywindex == attr_delaylength) delaywindex = 0;
 outlet_out[buffer_index] = (inlet_in[buffer_index]>>1) + (___SMMUL(rd<<16,_mix<<2));
 ]]></code.srate>
    </obj.normal>

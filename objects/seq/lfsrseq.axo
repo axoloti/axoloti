@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="lfsrseq" uuid="20b7e7281d695dffa596e8cabcee3ae7bf44a50e" sha="51f0d210664ba04c15f1c6188877b3dadbfcd16d">
+   <obj.normal id="lfsrseq" uuid="20b7e7281d695dffa596e8cabcee3ae7bf44a50e" sha="384c75bfad73e9300ba3e7fc69aa71bf2fe8b25e">
+      <upgradeSha>51f0d210664ba04c15f1c6188877b3dadbfcd16d</upgradeSha>
       <sDescription>linear feedback shift register cyclic pattern, cycled with trigger input.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -347,7 +348,7 @@
       <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {
   ntrig=1;
   if (state & 1)  {
-     state = (state >> 1) ^ %polynomial%;
+     state = (state >> 1) ^ attr_polynomial;
   } else {
     state = (state >> 1);
   }

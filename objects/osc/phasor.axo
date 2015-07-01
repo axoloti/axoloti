@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="phasor" uuid="12f97e57af8c271352bada47d25bb95a3461e8e4" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52">
+   <obj.normal id="phasor" uuid="12f97e57af8c271352bada47d25bb95a3461e8e4" sha="60e3f3ea8b75d9dbd83583af0f2f725f09f6aba3">
+      <upgradeSha>b5e53b37a76ac5a3605d009e82bcce64821c7e52</upgradeSha>
       <sDescription>phasor with logarithmic pitch plus linear frequency, k-rate pitch input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sine" uuid="fb035616cb85795d26795972f46204de326d393d" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5">
+   <obj.normal id="sine" uuid="fb035616cb85795d26795972f46204de326d393d" sha="85a8980923f6a3d4d93da8dcdde5536a86b273bf">
+      <upgradeSha>57fd153c89df1299ed1ecbe27c961ac52732ab5</upgradeSha>
       <sDescription>FM sine wave oscillator, linear interpolated table, s-rate pitch input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

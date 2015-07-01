@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="note" uuid="5f4c7235d1816faa6ba6bcc127849e8b0960a31f" sha="ddd6201b4f86d0de5de18ebbe51b813c965de9a">
+   <obj.normal id="note" uuid="5f4c7235d1816faa6ba6bcc127849e8b0960a31f" sha="30f60759a7391e48e5c23608906d46ce3c44df8c">
+      <upgradeSha>ddd6201b4f86d0de5de18ebbe51b813c965de9a</upgradeSha>
       <sDescription>Midi note output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -40,9 +41,9 @@ int lastnote;]]></code.declaration>
 ]]></code.init>
       <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {
 lastnote = (64+(inlet_note>>21))&0x7F;
-MidiSend3((midi_device_t) %device%, MIDI_NOTE_ON + (%channel%-1),lastnote,inlet_velo>>20);  ntrig=1;
+MidiSend3((midi_device_t) attr_device, MIDI_NOTE_ON + (attr_channel-1),lastnote,inlet_velo>>20);  ntrig=1;
 }
-if (!(inlet_trig>0) && ntrig) {MidiSend3((midi_device_t) %device%, MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(inlet_velo>>20,7)); ntrig=0;}
+if (!(inlet_trig>0) && ntrig) {MidiSend3((midi_device_t) attr_device, MIDI_NOTE_OFF + (attr_channel-1),lastnote,__USAT(inlet_velo>>20,7)); ntrig=0;}
 ]]></code.krate>
    </obj.normal>
 </objdefs>

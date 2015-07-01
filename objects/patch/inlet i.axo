@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="inlet i" uuid="e6608398bb3f205782041c0a7c224c292477c538" sha="7a8c64d8041725644599af7ed4007b59beb57b1e">
+   <obj.normal id="inlet i" uuid="e6608398bb3f205782041c0a7c224c292477c538" sha="525f64aba3d51dde5253cccedd116ec84bf5d5d1">
+      <upgradeSha>7a8c64d8041725644599af7ed4007b59beb57b1e</upgradeSha>
       <sDescription>Integer inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

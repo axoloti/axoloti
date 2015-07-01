@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="satp" uuid="5a4776bac1a2c7574e17c4e1b2efc7696661a76e" sha="107e97e0797ac54d70617cbd5af301ac85ec58a8">
+   <obj.normal id="satp" uuid="5a4776bac1a2c7574e17c4e1b2efc7696661a76e" sha="18567e6273ff2e8a09e0dc6dcfab1a22c37cdff6">
+      <upgradeSha>107e97e0797ac54d70617cbd5af301ac85ec58a8</upgradeSha>
       <sDescription>saturate to normal positive range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,7 +15,8 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= __USAT(inlet_in,27);]]></code.krate>
    </obj.normal>
-   <obj.normal id="satp" uuid="8f6163291f5062961c73d2b53d9b307c2ade9e56" sha="c3a9f3c72a58d5781087813c2c396865b86a41d4">
+   <obj.normal id="satp" uuid="8f6163291f5062961c73d2b53d9b307c2ade9e56" sha="d4886e0d193c94bcc46437d6193a63c280e8d2b9">
+      <upgradeSha>c3a9f3c72a58d5781087813c2c396865b86a41d4</upgradeSha>
       <sDescription>saturate to normal positive range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

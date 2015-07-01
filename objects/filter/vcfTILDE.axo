@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="vcf~" uuid="9eb8d51376c0e12dbda7fea127b12d572428c95c" sha="1ad81a0b1f6e91cc5d29054446327173f817279d">
+   <obj.normal id="vcf~" uuid="9eb8d51376c0e12dbda7fea127b12d572428c95c" sha="ce562b3e8fa63b239ef031c504e20e1d4fa1e00a">
+      <upgradeSha>1ad81a0b1f6e91cc5d29054446327173f817279d</upgradeSha>
       <sDescription>2-pole resonant low-pass filter (biquad), filter updated at k-rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

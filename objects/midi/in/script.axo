@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="script" uuid="d913bea45b2552557908c0c92423b7fcc467388d" sha="82709d8f2cd722b129cb94767cdc4a23b41a5230">
+   <obj.normal id="script" uuid="d913bea45b2552557908c0c92423b7fcc467388d" sha="3ee8b91484e8ee55e2bc5f205ec797d8a6986231">
+      <upgradeSha>82709d8f2cd722b129cb94767cdc4a23b41a5230</upgradeSha>
       <sDescription>script with 2 outputs, triggered by MIDI input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -20,6 +21,6 @@
       <code.krate><![CDATA[outlet_out1__ = this->out1;
 outlet_out2__ = this->out2;
 ]]></code.krate>
-      <code.midihandler><![CDATA[%script%]]></code.midihandler>
+      <code.midihandler><![CDATA[attr_script]]></code.midihandler>
    </obj.normal>
 </objdefs>

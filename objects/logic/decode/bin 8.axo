@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="bin 8" uuid="5f98761dd7653dfee3fad95a7875b22c3419811d" sha="82fef7cec2f1a4397c10a079e2e9d1bc9b8aea29">
+   <obj.normal id="bin 8" uuid="5f98761dd7653dfee3fad95a7875b22c3419811d" sha="14c4de669a7c18d36691535d2acf6e439a232033">
+      <upgradeSha>82fef7cec2f1a4397c10a079e2e9d1bc9b8aea29</upgradeSha>
       <sDescription>binary decoder</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

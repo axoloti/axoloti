@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="recv f" uuid="b67d72b69b21a3f0f9fa8bc052ecd1ede5666e57" sha="28ed8f2ff47b8badd4560ffb81e81bf0a8762d4d">
+   <obj.normal id="recv f" uuid="b67d72b69b21a3f0f9fa8bc052ecd1ede5666e57" sha="eecf8b377184cf5502953e5e8853e2dc0adfd3f0">
+      <upgradeSha>28ed8f2ff47b8badd4560ffb81e81bf0a8762d4d</upgradeSha>
       <sDescription>receive (from send), fractional type</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,7 +13,7 @@
       <attribs>
          <objref name="sender"/>
       </attribs>
-      <code.krate><![CDATA[outlet_v = %sender%._v;
+      <code.krate><![CDATA[outlet_v = attr_sender._v;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

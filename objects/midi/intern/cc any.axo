@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="cc any" uuid="15afa38b4b2ad8a6bc9464c0a0a56d707e7cab5f" sha="6d8a88faffac1b31cc539f0a29b2d3f5673b43cb">
+   <obj.normal id="cc any" uuid="15afa38b4b2ad8a6bc9464c0a0a56d707e7cab5f" sha="a16c896114d170b0bab3c4a779423ef325a72c5a">
+      <upgradeSha>6d8a88faffac1b31cc539f0a29b2d3f5673b43cb</upgradeSha>
       <sDescription>Midi controller output to any CC number and channel. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

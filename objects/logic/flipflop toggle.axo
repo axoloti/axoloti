@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="flipflop toggle" uuid="dcc2ec544e113c7a4954b7c2adb59c3fc3931ff4" sha="b5b15619d801f585f8077a5ee1ad43613df26b85">
+   <obj.normal id="flipflop toggle" uuid="dcc2ec544e113c7a4954b7c2adb59c3fc3931ff4" sha="3e483f67f78cab4aecc6bc5cf4e105e481839660">
+      <upgradeSha>b5b15619d801f585f8077a5ee1ad43613df26b85</upgradeSha>
       <sDescription>toggle flipflop</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

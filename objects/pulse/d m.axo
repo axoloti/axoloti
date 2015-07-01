@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="d m" uuid="dfe99a0eeed06367e50ab2f83202b6ef7ca94a25" sha="66c6300f16cd95cf2e28fdfc0b6a5f3470e38fe5">
+   <obj.normal id="d m" uuid="dfe99a0eeed06367e50ab2f83202b6ef7ca94a25" sha="1a054e906b39263ed4a561daf75df977b531115">
+      <upgradeSha>66c6300f16cd95cf2e28fdfc0b6a5f3470e38fe5</upgradeSha>
       <sDescription>decay envelope with decay time modulation input, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

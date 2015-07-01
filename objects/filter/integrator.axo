@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="integrator" uuid="d62dbfb682969d1d5c9987930dab9464cf75a4df" sha="fc23b7438fd5bbf4e6d79b546145cab892fa92f">
+   <obj.normal id="integrator" uuid="d62dbfb682969d1d5c9987930dab9464cf75a4df" sha="6535fb81a607b8ddac63cb09ba808e9afa93e070">
+      <upgradeSha>fc23b7438fd5bbf4e6d79b546145cab892fa92f</upgradeSha>
       <sDescription>cumulative sum, saturating to +-64 units</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -21,7 +22,8 @@ acc = __SSAT(acc,28);
 outlet_out = acc;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="integrator" uuid="48d6c98674214482bdc5d5860ace93866e0b8410" sha="258aa5314b5a0fdaf5826e571b324b6047b34757">
+   <obj.normal id="integrator" uuid="48d6c98674214482bdc5d5860ace93866e0b8410" sha="5b533a21ad5974582b179d089f45363f83a2ce7d">
+      <upgradeSha>258aa5314b5a0fdaf5826e571b324b6047b34757</upgradeSha>
       <sDescription>cumulative sum, saturating to +-64 units</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

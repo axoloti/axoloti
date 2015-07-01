@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="samplehold" uuid="87555b39f419a30830d0e00954e0592d5a18874b" sha="332c0a95e3f565a482d970d66b76153dae8d7d92">
+   <obj.normal id="samplehold" uuid="87555b39f419a30830d0e00954e0592d5a18874b" sha="689ed4c57ac833433f51438a8662f35fa84ce2d7">
+      <upgradeSha>332c0a95e3f565a482d970d66b76153dae8d7d92</upgradeSha>
       <sDescription>Pass through when s_h input is less or equal than zero or hold when positive.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -22,7 +23,8 @@
 outlet_out = hold;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="samplehold" uuid="7065204df0f274f72dea5fb76416f0e0e9596d21" sha="37856879cf6c0ba2d84d25bca330b3c3615d474">
+   <obj.normal id="samplehold" uuid="7065204df0f274f72dea5fb76416f0e0e9596d21" sha="c0d5db0de58f85fa80dab9cbdda11612773aef61">
+      <upgradeSha>37856879cf6c0ba2d84d25bca330b3c3615d474</upgradeSha>
       <sDescription>Pass through when s_h input is less or equal than zero or hold when positive.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

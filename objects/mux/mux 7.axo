@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="mux 7" uuid="4f7ee6f63ea020daacea61e14331ff0783bb5dbc" sha="bd4aefe94e119bad8b053eac6f2b41080f1661ef">
+   <obj.normal id="mux 7" uuid="4f7ee6f63ea020daacea61e14331ff0783bb5dbc" sha="bda058d2a6fbbc12f0830d47f2aacfe4c929e9c">
+      <upgradeSha>bd4aefe94e119bad8b053eac6f2b41080f1661ef</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -31,7 +32,8 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 7" uuid="e6d85401ac4d1eda4591af40ab650f433e09de8b" sha="7e29c91f62cef7aaece82f44b32482281e62a7e3">
+   <obj.normal id="mux 7" uuid="e6d85401ac4d1eda4591af40ab650f433e09de8b" sha="a9effc3f23c9044adc8ab7bccc93800d5a2a85b">
+      <upgradeSha>7e29c91f62cef7aaece82f44b32482281e62a7e3</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -63,7 +65,8 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 7" uuid="b40e03f29b58b2ba9e00ec3ec538795d0408c6a1" sha="6f39b94067a962620fe870a132b5c564494e39a8">
+   <obj.normal id="mux 7" uuid="b40e03f29b58b2ba9e00ec3ec538795d0408c6a1" sha="c06ca8e16e3705b2f0aa7fe86e31794b33d5279d">
+      <upgradeSha>6f39b94067a962620fe870a132b5c564494e39a8</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -95,7 +98,8 @@
 }
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="mux 7" uuid="f015e73a0a937fd6b6d982751ae6292e9503326b" sha="56284c9ff917ecfa3e9228d020a19f2cc888b2d8">
+   <obj.normal id="mux 7" uuid="f015e73a0a937fd6b6d982751ae6292e9503326b" sha="cbb02be08ba960470efe9e030ad3f9479865cc91">
+      <upgradeSha>56284c9ff917ecfa3e9228d020a19f2cc888b2d8</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -127,7 +131,8 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 7" uuid="7215f4f5283d6d2aeabff2f057c7ae6875f732b6" sha="8b3bbebde371985d03e1df90f8d9a56c61df50be">
+   <obj.normal id="mux 7" uuid="7215f4f5283d6d2aeabff2f057c7ae6875f732b6" sha="e8c63cf77085225f4072cb1b0b7b2e054dbb0856">
+      <upgradeSha>8b3bbebde371985d03e1df90f8d9a56c61df50be</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

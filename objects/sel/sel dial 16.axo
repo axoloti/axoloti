@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sel dial 16" uuid="2d890012efd4a6835af85770f1d9482dfc781d56" sha="25bf825085bc12f1daaa8653cfac5bd2e47dce9c">
+   <obj.normal id="sel dial 16" uuid="2d890012efd4a6835af85770f1d9482dfc781d56" sha="4a2b76ebc699d628e98aa4128a61a71ef67b5711">
+      <upgradeSha>25bf825085bc12f1daaa8653cfac5bd2e47dce9c</upgradeSha>
       <sDescription>selectable constant</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

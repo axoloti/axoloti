@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="preset" uuid="1e4573383394a8a2f857f0003e3bb1c5f668bc43" sha="b1c731020d252210d059daf6de2f19c56fe2224e">
+   <obj.normal id="preset" uuid="1e4573383394a8a2f857f0003e3bb1c5f668bc43" sha="9c8ff28c68afe4bd71bf0c853e95d51447cd628e">
+      <upgradeSha>b1c731020d252210d059daf6de2f19c56fe2224e</upgradeSha>
       <sDescription>apply preset, preset zero = init, and will reset ALL parameters, not just the presets</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

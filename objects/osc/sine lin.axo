@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sine lin" uuid="3fa88c5b4d07ed9ae578a336939a9a7d508ab81c" sha="aa2d91984c32ce318dfd20c91518d6b34c94e12f">
+   <obj.normal id="sine lin" uuid="3fa88c5b4d07ed9ae578a336939a9a7d508ab81c" sha="ee8c12f590695fc6f9737cf3a36abef513eadb1d">
+      <upgradeSha>aa2d91984c32ce318dfd20c91518d6b34c94e12f</upgradeSha>
       <sDescription>FM sine wave oscillator, linear interpolated sine table, s-rate frequency input, linear frequency input (goes all the way to 0)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

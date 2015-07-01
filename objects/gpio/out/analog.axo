@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="analog" uuid="7c43d00a8345ae7e7aa46c8d463c0fd7b25e646b" sha="a8c40145b5423b0c4df3a4a6e89974969a86009a">
+   <obj.normal id="analog" uuid="7c43d00a8345ae7e7aa46c8d463c0fd7b25e646b" sha="a614f6c67fbe2a69ca8d577f24cf962c1e0abafc">
+      <upgradeSha>a8c40145b5423b0c4df3a4a6e89974969a86009a</upgradeSha>
       <sDescription>low-speed 12 bit digital to analog conversion, not suitable for audio signals, but for control voltages...</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

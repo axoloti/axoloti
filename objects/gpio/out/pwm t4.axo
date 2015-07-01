@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="pwm t4" uuid="94ed8adbbc4b3ae38d0fcac4ea59d905277435bb" sha="c2151e6cb19ea1aa1adeab6b638009fa38d7c2dc">
+   <obj.normal id="pwm t4" uuid="94ed8adbbc4b3ae38d0fcac4ea59d905277435bb" sha="7bdae4ad49ad9975e0d8a3aaadb1017e98acd19f">
+      <upgradeSha>c2151e6cb19ea1aa1adeab6b638009fa38d7c2dc</upgradeSha>
       <sDescription>pwm output timer 4</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

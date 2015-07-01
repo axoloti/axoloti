@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="read" uuid="926edf3b8eafb005036e325ba7bde4daa8ef8e24" sha="c6114a6dfbeaf9a2309546a89fcd85e69ab7eee4">
+   <obj.normal id="read" uuid="926edf3b8eafb005036e325ba7bde4daa8ef8e24" sha="b63bba67d51fdaba4822ef88cb13b748703e946d">
+      <upgradeSha>8847449eb00f524bb9181fc4f1bb7fcfadd160c6</upgradeSha>
       <sDescription>script with 2 inputs and 2 outputs, running in a separate thread, you must define &quot;void init(void){}&quot; and &quot;void loop(void)&quot;</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -33,7 +34,7 @@ int32_t _low_gamma;
 int32_t _high_gamma;
 int32_t _delta;
 int32_t _theta;
-%script%
+attr_script
 msg_t ThreadX2(){
   setup();
   while(!chThdShouldTerminate()){
@@ -43,7 +44,7 @@ msg_t ThreadX2(){
   chThdExit((msg_t)0);
 }
 static msg_t ThreadX(void *arg) {
-((%parent% *)arg)->ThreadX2();
+((attr_class *)arg)->ThreadX2();
 }
 WORKING_AREA(waThreadX, 1024);
 Thread *Thd;

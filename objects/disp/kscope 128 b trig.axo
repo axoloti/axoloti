@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="kscope 128 b trig" uuid="782479bc41b02b46e9d89e318184a7ed7c5738a5" sha="b2b49b9d34257a10eac015d8d4ac99d207cec7bf">
+   <obj.normal id="kscope 128 b trig" uuid="782479bc41b02b46e9d89e318184a7ed7c5738a5" sha="9790c3f55f29ed9e5aa9bcbc12eed9eab282a30f">
+      <upgradeSha>b2b49b9d34257a10eac015d8d4ac99d207cec7bf</upgradeSha>
       <sDescription>bipolar control rate signal oscilloscope (time domain), showing 128 consecutive samples after the signal becomes positive.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

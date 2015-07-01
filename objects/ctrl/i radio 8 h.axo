@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="i radio 8 h" uuid="2cd39edffb04f3d9ddba8978116fc6b9ad8880d2" sha="ea2c1e474ffa7f12f0631acd25dc25c667c62408">
+   <obj.normal id="i radio 8 h" uuid="2cd39edffb04f3d9ddba8978116fc6b9ad8880d2" sha="c5302a92a45baa48dabb19215b21ed605d53ad1a">
+      <upgradeSha>ea2c1e474ffa7f12f0631acd25dc25c667c62408</upgradeSha>
       <sDescription>positive integer control, horizontal radio buttons</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="uniform" uuid="e9ad95c79a86e6adfa676183eb0fd4a2c6b7e060" sha="545caca792c6b8c27225590dd0240ef2d351a645">
+   <obj.normal id="uniform" uuid="e9ad95c79a86e6adfa676183eb0fd4a2c6b7e060" sha="a324ca0ff6a22e562cb7faec2deeb8c1317643b2">
+      <upgradeSha>545caca792c6b8c27225590dd0240ef2d351a645</upgradeSha>
       <sDescription>uniform distributed (white) noise. Range -64..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

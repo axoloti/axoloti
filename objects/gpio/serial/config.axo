@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="config" uuid="e5011161331557d9ac39509afa7470b1e256bbdf" sha="f0df278a5fd5140e32239828049a8e062059f391">
+   <obj.normal id="config" uuid="e5011161331557d9ac39509afa7470b1e256bbdf" sha="a27d9e015883ae3e3e4be7eb9aa7d058fc8e7429">
+      <upgradeSha>f0df278a5fd5140e32239828049a8e062059f391</upgradeSha>
       <sDescription>Configures a serial (uart) interface on pins PA2 (TX) and PA3 (RX), using the SerialDriver API.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -46,7 +47,7 @@
   palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL);// TX
   palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7));// TX
 // 9600 baud
-static const SerialConfig sd2Cfg = {%baudrate%, // baud
+static const SerialConfig sd2Cfg = {attr_baudrate, // baud
     0, 0, 0};
 sdStart(&SD2, &sd2Cfg);
 ]]></code.init>

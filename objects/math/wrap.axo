@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="wrap" uuid="62cbd6435dffcf5e5273d6e510e71e9d48e7174a" sha="e59f5a52c5966bbd4a924a17b6720480cdd99486">
+   <obj.normal id="wrap" uuid="62cbd6435dffcf5e5273d6e510e71e9d48e7174a" sha="be5c91aac048ca39a68bb3ab23d240c883e8872d">
+      <upgradeSha>e59f5a52c5966bbd4a924a17b6720480cdd99486</upgradeSha>
       <sDescription>wrap to 0..64 range after multiplying with 2^bits</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,10 +15,11 @@
       <attribs>
          <spinner name="bits" MinValue="0" MaxValue="27" DefaultValue="7"/>
       </attribs>
-      <code.krate><![CDATA[   outlet_b= (inlet_a<<%bits%) & ((1<<27)-1);
+      <code.krate><![CDATA[   outlet_b= (inlet_a<<attr_bits) & ((1<<27)-1);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="wrap" uuid="96b41a166217798e37e1a77c02d3fe2e726f4ebc" sha="ab95c4e2b122c98a94e2f369315e05c4809b07a8">
+   <obj.normal id="wrap" uuid="96b41a166217798e37e1a77c02d3fe2e726f4ebc" sha="5a8af0fb5ff074891c496d051b0ae525e6faef26">
+      <upgradeSha>ab95c4e2b122c98a94e2f369315e05c4809b07a8</upgradeSha>
       <sDescription>wrap to 0..64 range after multiplying with 2^bits</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -32,7 +34,7 @@
       <attribs>
          <spinner name="bits" MinValue="0" MaxValue="27" DefaultValue="7"/>
       </attribs>
-      <code.srate><![CDATA[   outlet_b[buffer_index]= (inlet_a[buffer_index]<<%bits%) & ((1<<27)-1);
+      <code.srate><![CDATA[   outlet_b[buffer_index]= (inlet_a[buffer_index]<<attr_bits) & ((1<<27)-1);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

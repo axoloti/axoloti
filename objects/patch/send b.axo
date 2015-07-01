@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="send b" uuid="90a612827cdeec4d2fe817079b5d10feb0a5fb86" sha="13852054681571c031b50e78d44e9f6ce21ee01b">
+   <obj.normal id="send b" uuid="90a612827cdeec4d2fe817079b5d10feb0a5fb86" sha="56ca1d78fae6088a4e3a4edf334ade8fe05e159d">
+      <upgradeSha>13852054681571c031b50e78d44e9f6ce21ee01b</upgradeSha>
       <sDescription>send (to recv object), boolean type</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="alloc 8b sdram" uuid="5a336d47e7f0a7c01e03394f88028298ba53ee92" sha="7035dd1400bf99e02eead5e2e96ca5786d7ad08a">
+   <obj.normal id="alloc 8b sdram" uuid="5a336d47e7f0a7c01e03394f88028298ba53ee92" sha="19425d31fcbea7dff44cc10e0e631aa57d1e7326">
+      <upgradeSha>7035dd1400bf99e02eead5e2e96ca5786d7ad08a</upgradeSha>
       <sDescription>allocate table in SDRAM memory, -128..127</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -58,9 +59,9 @@
          </combo>
          <text name="init"/>
       </attribs>
-      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (%size%);
-static const uint32_t LENGTH = (1<<%size%);
-static const uint32_t LENGTHMASK = ((1<<%size%)-1);
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (attr_size);
+static const uint32_t LENGTH = (1<<attr_size);
+static const uint32_t LENGTHMASK = ((1<<attr_size)-1);
 static const uint32_t BITS = 8;
 static const uint32_t GAIN = 20;
 int8_t *array;
@@ -71,6 +72,6 @@ array = _array;
   int i;
   for(i=0;i<LENGTH;i++) array[i]=0;
 }
-%init%]]></code.init>
+attr_init]]></code.init>
    </obj.normal>
 </objdefs>

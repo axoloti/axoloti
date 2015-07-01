@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="bend" uuid="667375ec7c0cf2fb821d610111c76e0e346582da" sha="84fc4df2ea385612e1294f33f4bfffbc8b501534">
+   <obj.normal id="bend" uuid="667375ec7c0cf2fb821d610111c76e0e346582da" sha="282d4ab2e18f8fd47ae4a1f6a5f7b208ad22e1e9">
+      <upgradeSha>84fc4df2ea385612e1294f33f4bfffbc8b501534</upgradeSha>
       <sDescription>Midi pitch bend input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -21,7 +22,7 @@ ntrig = 0;
 outlet_trig = ntrig;
 ntrig = 0;
 ]]></code.krate>
-      <code.midihandler><![CDATA[if (status == MIDI_PITCH_BEND + %midichannel%) {  _bend = ((int)((data2<<7)+data1)-0x2000)<<14;
+      <code.midihandler><![CDATA[if (status == MIDI_PITCH_BEND + attr_midichannel) {  _bend = ((int)((data2<<7)+data1)-0x2000)<<14;
   ntrig = 1;
 }]]></code.midihandler>
    </obj.normal>
