@@ -57,9 +57,6 @@ static systime_t tmo;
 
 #define ADAU1961_I2C_ADDR (0x70>>1)
 
-#define LED1_PORT GPIOG
-#define LED1_PIN 6
-
 void CheckI2CErrors(void) {
   volatile i2cflags_t errors;
   errors = i2cGetErrors(&I2CD3);
@@ -143,8 +140,7 @@ void ADAU1961_WriteRegister(uint16_t RegisterAddr, uint8_t RegisterValue) {
 
   uint8_t rd = ADAU1961_ReadRegister(RegisterAddr);
   if (rd != RegisterValue) {
-//    while(1){}
-    palSetPad(LED1_PORT, LED1_PIN);
+    setErrorFlag(ERROR_CODEC_I2C);
   }
   chThdSleepMilliseconds(1);
 }
@@ -363,13 +359,7 @@ void codec_ADAU1961_i2s_init(uint16_t sampleRate) {
 //configure MCO
   palSetPadMode(GPIOA, 8, PAL_MODE_OUTPUT_PUSHPULL);
   palSetPadMode(GPIOA, 8, PAL_MODE_ALTERNATE(0));
-// led = output
-  palSetPadMode(LED1_PORT, LED1_PIN, PAL_MODE_OUTPUT_PUSHPULL);
-  int i;
-  for (i = 0; i < 10; i++) {
-    palTogglePad(LED1_PORT, LED1_PIN);
-    chThdSleepMilliseconds(100);
-  }
+  chThdSleepMilliseconds(10);
 // release SAI
   palSetPadMode(GPIOE, 3, PAL_MODE_INPUT);
   palSetPadMode(GPIOE, 4, PAL_MODE_INPUT);
@@ -430,10 +420,7 @@ void codec_ADAU1961_i2s_init(uint16_t sampleRate) {
                                (void *)0);
 
   if (b){
-    while(1){
-      chThdSleepMilliseconds(50);
-      palTogglePad(LED1_PORT, LED1_PIN);
-    }
+    setErrorFlag(ERROR_CODEC_I2C);
   }
 
   dmaStreamSetPeripheral(sai_b_dma, &(sai_b->DR));
