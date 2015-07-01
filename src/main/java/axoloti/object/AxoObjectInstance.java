@@ -428,8 +428,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         String c = "";
         if (getType().sLocalData != null) {
             String s = getType().sLocalData;
-//            s = s.replace("%name%", getCInstanceName());
-            s = s.replace("%parent%", getCInstanceName());
+            s = s.replace("attr_parent", getCInstanceName());
             c += s + "\n";
         }
         return c;
@@ -468,17 +467,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         c += GenerateInstanceDataDeclaration2();
         for (AttributeInstance p : attributeInstances) {
             if (p.CValue() != null) {
-                c = c.replace("%" + p.getAttributeName() + "%", p.CValue());
+                c = c.replace(p.GetCName(), p.CValue());
             }
         }
-        for (ParameterInstance p : parameterInstances) {
-//            c = c.replace("%" + p.name + "%", p.variableName("", enableOnParent));
-        }
-        for (DisplayInstance p : displayInstances) {
-//            c = c.replace("%" + p.name + "%", p.valueName(""));
-        }
-//        c = c.replace("%name%", getCInstanceName());
-//        c = c.replace("%class%", classname);
         return c;
     }
 
@@ -514,18 +505,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (getType().sInitCode != null) {
             String s = getType().sInitCode;
             for (AttributeInstance p : attributeInstances) {
-                s = s.replace("%" + p.getAttributeName() + "%", p.CValue());
-            }
-            for (ParameterInstance p : parameterInstances) {
-//                s = s.replace("%" + p.name + "%", p.variableName("", enableOnParent));
-            }
-            for (DisplayInstance p : displayInstances) {
-//                s = s.replace("%" + p.name + "%", p.valueName(""));
+                s = s.replace(p.GetCName(), p.CValue());
             }
             c += s + "\n";
         }
-//        c = c.replace("%class%", classname);
-//        c = c.replace("%name%", getCInstanceName());
         String d = "  public: void Init(" + classname + " * _parent";
         if (!displayInstances.isEmpty()) {
             for (DisplayInstance p : displayInstances) {
@@ -549,7 +532,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (getType().sDisposeCode != null) {
             String s = getType().sDisposeCode;
             for (AttributeInstance p : attributeInstances) {
-                s = s.replace("%" + p.getAttributeName() + "%", p.CValue());
+                s = s.replace(p.GetCName(), p.CValue());
             }
             c += s + "\n";
         }
@@ -561,9 +544,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         String s = getType().sKRateCode;
         if (s != null) {
             for (AttributeInstance p : attributeInstances) {
-                s = s.replace("%" + p.getAttributeName() + "%", p.CValue());
+                s = s.replace(p.GetCName(), p.CValue());
             }
-            s = s.replace("%name%", getCInstanceName());
+            s = s.replace("attr_name", getCInstanceName());
             for (InletInstance i : inletInstances) {
                 Net n = patch.GetNet(i);
 //                s = s.replace("%" + i.GetLabel() + "%", i.GetCName());
@@ -591,11 +574,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             String s = "int buffer_index;\n"
                     + "for(buffer_index=0;buffer_index<BUFSIZE;buffer_index++) {\n" + getType().sSRateCode;
             for (AttributeInstance p : attributeInstances) {
-                if (s.contains("%" + p.getAttributeName() + "%")) {
-                    s = s.replace("%" + p.getAttributeName() + "%", p.CValue());
-                }
+                s = s.replace(p.GetCName(), p.CValue());
             }
-            s = s.replace("%name%", getCInstanceName());
+            s = s.replace("attr_name", getCInstanceName());
             for (InletInstance i : inletInstances) {
                 if (i.GetDataType() instanceof DataTypeBuffer) {
 //                    s = s.replace("%" + i.GetLabel() + "%", i.GetCName() + ((DataTypeBuffer) i.GetDataType()).GetIndex("buffer_index"));
@@ -708,11 +689,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             s += i.GenerateCodeMidiHandler("");
         }
         for (AttributeInstance p : attributeInstances) {
-            if (s.contains("%" + p.getAttributeName() + "%")) {
-                s = s.replace("%" + p.getAttributeName() + "%", p.CValue());
-            }
+            s = s.replace(p.GetCName(), p.CValue());
         }
-//        s = s.replace("%name%", vprefix + getCInstanceName());
         if (s.length() > 0) {
             return "{\n" + s + "}\n";
         } else {

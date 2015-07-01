@@ -408,7 +408,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public void GenerateSHA() {
+    public String GenerateSHA() {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA");
             for (Inlet i : inlets) {
@@ -441,10 +441,11 @@ public class AxoObject extends AxoObjectAbstract {
             if (sMidiCode != null) {
                 md.update(sMidiCode.getBytes());
             }
-            sha = (new BigInteger(1, md.digest())).toString(16);
+            return (new BigInteger(1, md.digest())).toString(16);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            return null;
+        }        
     }
 
     @Override

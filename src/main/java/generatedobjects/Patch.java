@@ -187,8 +187,8 @@ public class Patch extends gentools {
         o.attributes.add(new AxoAttributeInt32("MidiCC", 0, 127, 0));
         o.SetProvidesModulationSource();
         //o.sInstanceData = "PExModulationTargets_t ;\n";
-        o.sMidiCode = "        if ((status == MIDI_CONTROL_CHANGE + %midichannel%)&&(data1 == %MidiCC%)) {\n"
-                + "            PExModulationSourceChange(&PExModulationSources[MODULATOR_%name%],data2<<20);\n"
+        o.sMidiCode = "        if ((status == MIDI_CONTROL_CHANGE + attr_midichannel)&&(data1 == %MidiCC%)) {\n"
+                + "            PExModulationSourceChange(&PExModulationSources[MODULATOR_attr_name],data2<<20);\n"
                 + "        }\n";
         return o;
     }
@@ -203,7 +203,7 @@ public class Patch extends gentools {
 //        o.sInitCode = "int i;\n"
 //                + "for(i=0;i<NMODULATIONTARGETS;i++)\n"
 //                + "   parent2->PExModulationSources[MODULATOR_%name%][i].PEx = 0;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_%name%][0],NMODULATIONTARGETS,%v%);  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name][0],NMODULATIONTARGETS,%v%);  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }

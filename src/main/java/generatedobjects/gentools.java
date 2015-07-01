@@ -17,6 +17,7 @@
  */
 package generatedobjects;
 
+import axoloti.attributedefinition.AxoAttribute;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
@@ -189,7 +190,7 @@ public class gentools {
         if ((o.GetIncludes() != null) && o.GetIncludes().isEmpty()) {
             o.SetIncludes(null);
         }
-        o.GenerateSHA();
+        String upgradeSha = o.GenerateSHA();
         o.GenerateUUID();
         if (o instanceof AxoObject) {
             // remove labels when there's only a single parameter
@@ -201,6 +202,26 @@ public class gentools {
                 }
                 if (oo.sSRateCode != null) {
                     oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                }
+            }
+            for (AxoAttribute p : oo.attributes) {
+                if (oo.sInitCode != null) {
+                    oo.sInitCode = oo.sInitCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                }
+                if (oo.sDisposeCode != null) {
+                    oo.sDisposeCode = oo.sDisposeCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                }
+                if (oo.sLocalData != null) {
+                    oo.sLocalData = oo.sLocalData.replaceAll("%" + p.getName() + "%", p.GetCName());
+                }
+                if (oo.sMidiCode != null) {
+                    oo.sMidiCode = oo.sMidiCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                }
+                if (oo.sKRateCode != null) {
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                }
+                if (oo.sSRateCode != null) {
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
             }
             for (Inlet p : oo.inlets) {
@@ -245,6 +266,28 @@ public class gentools {
                     oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
                 }
             }
+            if (oo.sInitCode != null) {
+                oo.sInitCode = oo.sInitCode.replaceAll("%midichannel%", "attr_midichannel");
+            }
+            if (oo.sKRateCode != null) {
+                oo.sKRateCode = oo.sKRateCode.replaceAll("%midichannel%", "attr_midichannel");
+            }
+            if (oo.sSRateCode != null) {
+                oo.sSRateCode = oo.sSRateCode.replaceAll("%midichannel%", "attr_midichannel");
+            }
+            if (oo.sMidiCode != null) {
+                oo.sMidiCode = oo.sMidiCode.replaceAll("%midichannel%", "attr_midichannel");
+            }
+            if (oo.sDisposeCode != null) {
+                oo.sDisposeCode = oo.sDisposeCode.replaceAll("%midichannel%", "attr_midichannel");
+            }
+                        
+        }
+        
+        String sha = o.GenerateSHA();
+        o.setSHA(sha);
+        if (!upgradeSha.equals(sha)){
+            o.addUpgradeSHA(upgradeSha);
         }
     }
 

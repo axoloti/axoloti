@@ -68,7 +68,7 @@ public class brainwave extends gentools {
                 + "  chThdExit((msg_t)0);\n"
                 + "}\n"
                 + "static msg_t ThreadX(void *arg) {\n"
-                + "((%parent% *)arg)->ThreadX2();\n"
+                + "((attr_class *)arg)->ThreadX2();\n"
                 + "}\n";
         o.sLocalData += "WORKING_AREA(waThreadX, 1024);\n"
                 + "Thread *Thd;\n";

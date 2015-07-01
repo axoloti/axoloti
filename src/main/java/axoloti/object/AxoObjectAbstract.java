@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -27,6 +27,8 @@ import java.util.HashSet;
 import java.util.Set;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Root;
 
 /**
@@ -40,15 +42,19 @@ public class AxoObjectAbstract implements Comparable {
     public String id;
 
     @Attribute(required = false)
-    public String uuid;
-
-    public String shortId;
+    String uuid;
 
     @Attribute(required = false)
     String sha;
 
+    @ElementListUnion({
+        @ElementList(entry = "upgradeSha", type = String.class, inline = true, required = false),})
+    HashSet<String> upgradeSha;
+
     @Element
     public String sDescription;
+
+    public String shortId;
 
     boolean createdFromRelativePath = false;
 
@@ -128,8 +134,8 @@ public class AxoObjectAbstract implements Comparable {
         return uuid;
     }
 
-    public void GenerateSHA() {
-        sha = "sha";
+    public String GenerateSHA() {
+        return "sha";
     }
 
     public HashSet<String> GetIncludes() {
@@ -159,5 +165,20 @@ public class AxoObjectAbstract implements Comparable {
     }
 
     public void GenerateUUID() {
+    }
+
+    public void addUpgradeSHA(String s) {
+        if (upgradeSha == null) {
+            upgradeSha = new HashSet<String>();
+        }
+        upgradeSha.add(s);
+    }
+
+    public void setSHA(String sha) {
+        this.sha = sha;
+    }
+
+    public HashSet<String> getUpgradeSha() {
+        return upgradeSha;
     }
 }

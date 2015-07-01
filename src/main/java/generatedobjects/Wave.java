@@ -177,7 +177,7 @@ public class Wave extends gentools {
         o.sLocalData = "    WORKING_AREA(waThreadSD, 1024);\n"
                 + "   sdReadFilePingpong *stream;\n"
                 + "   int ntrig;\n";
-        o.sInitCode = "static sdReadFilePingpong s[%poly%] __attribute__ ((section (\".rodata\")));\n"
+        o.sInitCode = "static sdReadFilePingpong s[attr_poly] __attribute__ ((section (\".rodata\")));\n"
                 + "stream = &s[parent->polyIndex];\n"
                 + "stream->pingpong = CLOSED;\n"
                 + "stream->doSeek = 0;\n"
