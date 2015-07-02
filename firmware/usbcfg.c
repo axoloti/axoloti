@@ -155,6 +155,27 @@ static const uint8_t vcom_string3[] = {
   '0' + CH_KERNEL_PATCH, 0
 };
 
+static uint8_t descriptor_serial_string[] = {
+  USB_DESC_BYTE(50),                    /* bLength.                         */
+  USB_DESC_BYTE(USB_DESCRIPTOR_STRING), /* bDescriptorType.                 */
+  'x', 0, 'y', 0, 'z', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0
+};
+
+static const USBDescriptor descriptor_serial = {
+   sizeof descriptor_serial_string, descriptor_serial_string,
+};
+
 /*
  * Device Description string.
  */
@@ -229,6 +250,18 @@ static const USBDescriptor vcom_strings[] = {
   {sizeof vcom_string5, vcom_string8}
 };
 
+void inttohex(uint32_t v, unsigned char *p){
+  int nibble;
+  for (nibble = 0;nibble<8;nibble++){
+    unsigned char c = (v>>(28-nibble*4))&0xF;
+    if (c<10) c=c+'0';
+    else c=c+'A'-10;
+    *p = c;
+    p += 2;
+  }
+}
+
+
 /*
  * Handles the GET_DESCRIPTOR callback. All required descriptors must be
  * handled here.
@@ -246,6 +279,12 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
   case USB_DESCRIPTOR_CONFIGURATION:
     return &vcom_configuration_descriptor;
   case USB_DESCRIPTOR_STRING:
+    if (dindex == 3) {
+      inttohex(*((uint32_t*)0x1FFF7A10),&descriptor_serial_string[2]);
+      inttohex(*((uint32_t*)0x1FFF7A14),&descriptor_serial_string[2+16]);
+      inttohex(*((uint32_t*)0x1FFF7A18),&descriptor_serial_string[2+32]);
+      return &descriptor_serial;
+    }
     if (dindex < 9)
       return &vcom_strings[dindex];
   }
@@ -367,6 +406,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
 }
 
 static bool_t sduSpecialRequestsHook(USBDriver *usbp) {
+  (void)usbp;
   return FALSE;
 }
 
