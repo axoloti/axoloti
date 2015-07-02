@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="script" uuid="8a088ece2405f2eaf1ab991b5aad4c4256a90f23" sha="79e5209c6f2120c51495ca49ce1f8ce23dbb829d">
-      <upgradeSha>c4c827c5d41a6b47b5a5b3d181d994afe97ab91b</upgradeSha>
+   <obj.normal id="script" uuid="8a088ece2405f2eaf1ab991b5aad4c4256a90f23" sha="24cae6cc95a2ace0ac855159f67b59a54efe7146">
+      <upgradeSha>f18e1c01ff957d5bd75e66553de6f022598888bb</upgradeSha>
       <sDescription>script with 2 inputs and 2 outputs, running in a separate thread</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -23,7 +23,7 @@ msg_t ThreadX2(){
 attr_script
 }
 static msg_t ThreadX(void *arg) {
-((attr_class *)arg)->ThreadX2();
+((attr_parent *)arg)->ThreadX2();
 }
 WORKING_AREA(waThreadX, 1024);
 Thread *Thd;

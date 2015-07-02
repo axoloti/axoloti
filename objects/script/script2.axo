@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="script2" uuid="31cac129a16d45a00f4e9bc16a23b2363e3c8b78" sha="dca92f82c6dae8f3442cad05dcf132fa09c40a6a">
-      <upgradeSha>f1165d1ec039527cc209d98086f202659bd9d85a</upgradeSha>
+   <obj.normal id="script2" uuid="31cac129a16d45a00f4e9bc16a23b2363e3c8b78" sha="362a4413ceaefbe716480bf8f9c62eb3587fe6c0">
+      <upgradeSha>4ff07e259d2eb13dc0829312e7ab0427616949aa</upgradeSha>
       <sDescription>script with 2 inputs and 2 outputs, running in a separate thread, you must define &quot;void setup(void){}&quot; and &quot;void loop(void)&quot;</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,7 +29,7 @@ msg_t ThreadX2(){
   chThdExit((msg_t)0);
 }
 static msg_t ThreadX(void *arg) {
-((attr_class *)arg)->ThreadX2();
+((attr_parent *)arg)->ThreadX2();
 }
 WORKING_AREA(waThreadX, 1024);
 Thread *Thd;
