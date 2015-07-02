@@ -231,6 +231,11 @@ public class AxoObjects {
                                 ShortID = ShortID.substring(i + 1);
                             }
                             a.shortId = ShortID;
+                            String shaVerify = a.GenerateSHA();
+                            if (!shaVerify.equals(a.getSHA())){
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
+                                        "Incorrect sha hash detected for object: " + fileEntry.getAbsolutePath() + " its implementation does not match its signature.");
+                            }
                             AxoObjectTreeNode s = t.SubNodes.get(ShortID);
                             if (s == null) {
                                 t.Objects.add(a);
