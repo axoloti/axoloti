@@ -62,7 +62,7 @@ __attribute__((noreturn))
 #endif
   uint8_t r[4];
   while (1) {
-    chnReadTimeout(&MDU1, &r, 4, TIME_INFINITE);
+    chnReadTimeout(&MDU1, &r[0], 4, TIME_INFINITE);
     MidiInMsgHandler(MIDI_DEVICE_USB_DEVICE, (( r[0] & 0xF0) >> 4)+ 1, r[1], r[2], r[3]);
   }
 }
@@ -114,7 +114,7 @@ void TransmitDisplayPckt(void) {
 }
 
 void LogTextMessage(const char* format, ...) {
-  if (connected ) {
+  if (usbGetDriverStateI(BDU1.config->usbp) == USB_ACTIVE ) {
     int h = 0x546F7841; // "AxoT"
     chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                             (const unsigned char* )&h, 4);
@@ -128,8 +128,10 @@ void LogTextMessage(const char* format, ...) {
 }
 
 void PExTransmit(void) {
-  int i;
-  if (chOQIsEmptyI(&BDU1.oqueue)) {
+  if (!chOQIsEmptyI(&BDU1.oqueue)) {
+    chThdSleepMilliseconds(1);
+    BDU1.oqueue.q_notify(&BDU1.oqueue);
+  } else {
     if (AckPending) {
       int ack[7];
       ack[0] = 0x416F7841; // "AxoA"
@@ -155,6 +157,7 @@ void PExTransmit(void) {
     }
     TransmitLCDoverUSB();
     if (!patchStatus) {
+      unsigned int i;
       for (i = 0; i < patchMeta.numPEx; i++) {
         if (patchMeta.pPExch[i].signals & 0x01) {
           int v = (patchMeta.pPExch)[i].value;
@@ -338,7 +341,7 @@ void CopyPatchToFlash(void) {
 void PExReceiveByte(unsigned char c) {
   static char header = 0;
   static int state = 0;
-  static int index;
+  static unsigned int index;
   static int value;
   static int position;
   static int offset;

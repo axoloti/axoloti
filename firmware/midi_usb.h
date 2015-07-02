@@ -29,6 +29,8 @@
 #ifndef _MIDI_USB_H_
 #define _MIDI_USB_H_
 
+#include "midi.h"
+
 #if 1 //HAL_USE_MIDI_USB || defined(__DOXYGEN__)
 
 /*===========================================================================*/
@@ -169,6 +171,10 @@ extern "C" {
   bool_t mduRequestsHook(USBDriver *usbp);
   void mduDataTransmitted(USBDriver *usbp, usbep_t ep);
   void mduDataReceived(USBDriver *usbp, usbep_t ep);
+
+  void midi_usb_MidiSend1(uint8_t port, uint8_t b0);
+  void midi_usb_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1);
+  void midi_usb_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
 #ifdef __cplusplus
 }
 #endif
