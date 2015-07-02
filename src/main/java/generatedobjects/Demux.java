@@ -18,14 +18,12 @@
 package generatedobjects;
 
 import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletCharPtr32;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInt32;
 import axoloti.inlets.InletInt32Pos;
 import axoloti.object.AxoObject;
 import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletCharPtr32;
 import axoloti.outlets.OutletFrac32;
 import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInt32;
@@ -45,64 +43,87 @@ public class Demux extends gentools {
         }
     }
 
+    private static final String descriptionDemux2 = "Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.";
+    private static final String descriptionDemuxN = "Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.";
+    private static final String demux2code = "   %o0%= (%s%)?%d0%:%i%;\n"
+            + "   %o1%= (%s%)?%i%:%d1%;\n";
+
     static AxoObject Create_demux2() {
-        AxoObject o = new AxoObject("demux 2", "Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.");
+        AxoObject o = new AxoObject("demux 2", descriptionDemux2);
         o.inlets.add(new InletFrac32("i", "input"));
         o.inlets.add(new InletFrac32("d0", "default 0"));
         o.inlets.add(new InletFrac32("d1", "default 1"));
         o.inlets.add(new InletBool32("s", "select"));
         o.outlets.add(new OutletFrac32("o0", "output 0"));
         o.outlets.add(new OutletFrac32("o1", "output 1"));
-        o.sKRateCode = "   %o0%= (%s%)?%d0%:%i%;\n"
-                + "   %o1%= (%s%)?%i%:%d1%;\n";
+        o.sKRateCode = demux2code;
         o.helpPatch = "demux 2.axh";
         return o;
     }
 
     static AxoObject Create_demux2Tilde() {
-        AxoObject o = new AxoObject("demux 2", "Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.");
+        AxoObject o = new AxoObject("demux 2", descriptionDemux2);
         o.inlets.add(new InletFrac32Buffer("i", "input"));
         o.inlets.add(new InletFrac32Buffer("d0", "default 0"));
         o.inlets.add(new InletFrac32Buffer("d1", "default 1"));
         o.inlets.add(new InletBool32("s", "select"));
         o.outlets.add(new OutletFrac32Buffer("o0", "output 0"));
         o.outlets.add(new OutletFrac32Buffer("o1", "output 1"));
-        o.sSRateCode = "   %o0%= (%s%)?%d0%:%i%;\n"
-                + "   %o1%= (%s%)?%i%:%d1%;\n";
+        o.sSRateCode = demux2code;
         o.helpPatch = "demux 2.axh";
         return o;
     }
 
     static AxoObject Create_demux2I() {
-        AxoObject o = new AxoObject("demux 2", "Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.");
+        AxoObject o = new AxoObject("demux 2", descriptionDemux2);
         o.inlets.add(new InletInt32("i", "input"));
         o.inlets.add(new InletInt32("d0", "default 0"));
         o.inlets.add(new InletInt32("d1", "default 1"));
         o.inlets.add(new InletBool32("s", "select"));
         o.outlets.add(new OutletInt32("o0", "output 0"));
         o.outlets.add(new OutletInt32("o1", "output 1"));
-        o.sKRateCode = "   %o0%= (%s%)?%d0%:%i%;\n"
-                + "   %o1%= (%s%)?%i%:%d1%;\n";
+        o.sKRateCode = demux2code;
         o.helpPatch = "demux 2.axh";
         return o;
     }
 
     static AxoObject Create_demux2b() {
-        AxoObject o = new AxoObject("demux 2", "Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.");
+        AxoObject o = new AxoObject("demux 2", descriptionDemux2);
         o.inlets.add(new InletBool32("i", "input"));
         o.inlets.add(new InletBool32("d0", "default 0"));
         o.inlets.add(new InletBool32("d1", "default 1"));
         o.inlets.add(new InletBool32("s", "select"));
         o.outlets.add(new OutletBool32("o0", "output 0"));
         o.outlets.add(new OutletBool32("o1", "output 1"));
-        o.sKRateCode = "   %o0%= (%s%)?%d0%:%i%;\n"
-                + "   %o1%= (%s%)?%i%:%d1%;\n";
+        o.sKRateCode = demux2code;
         o.helpPatch = "demux 2.axh";
         return o;
     }
 
+    private static String GenerateDemuxCode(int n) {
+        String o;
+        o = "   switch(%s%>0?%s%:0){\n";
+        for (int i = 0; i < n; i++) {
+            o += "      case " + i + ": \n";
+            for (int j = 0; j < n; j++) {
+                if (i == j) {
+                    o += "         %o" + j + "% = %i%;\n";
+                } else {
+                    o += "         %o" + j + "% = %d" + j + "%;\n";
+                }
+            }
+            o += "         break;\n";
+        }
+        o += "      default:\n";
+        for (int j = 0; j < n; j++) {
+            o += "         %o" + j + "% = %d" + j + "%;\n";
+        }
+        o += "}\n";
+        return o;
+    }
+
     static AxoObject Create_demuxn(int n) {
-        AxoObject o = new AxoObject("demux " + n, "Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.");
+        AxoObject o = new AxoObject("demux " + n, descriptionDemuxN);
         o.inlets.add(new InletFrac32("i", "input"));
         for (int i = 0; i < n; i++) {
             o.inlets.add(new InletFrac32("d" + i, "default " + i));
@@ -111,29 +132,13 @@ public class Demux extends gentools {
         for (int i = 0; i < n; i++) {
             o.outlets.add(new OutletFrac32("o" + i, "output " + i));
         }
-        o.sKRateCode = "   switch(%s%>0?%s%:0){\n";
-        for (int i = 0; i < n; i++) {
-            o.sKRateCode += "      case " + i + ": \n";
-            for (int j = 0; j < n; j++) {
-                if (i == j) {
-                    o.sKRateCode += "         %o" + j + "% = %i%;\n";
-                } else {
-                    o.sKRateCode += "         %o" + j + "% = %d"+ j +"%;\n";
-                }
-            }
-            o.sKRateCode += "         break;\n";
-        }
-        o.sKRateCode += "      default:\n";
-        for (int j = 0; j < n; j++) {
-            o.sKRateCode += "         %o" + j + "% = %d"+ j +"%;\n";
-        }
-        o.sKRateCode += "}\n";
+        o.sKRateCode = GenerateDemuxCode(n);
         o.helpPatch = "demux 3.axh";
         return o;
     }
 
     static AxoObject Create_demuxntilde(int n) {
-        AxoObject o = new AxoObject("demux " + n, "Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.");
+        AxoObject o = new AxoObject("demux " + n, descriptionDemuxN);
         o.inlets.add(new InletFrac32Buffer("i", "input"));
         for (int i = 0; i < n; i++) {
             o.inlets.add(new InletFrac32Buffer("d" + i, "default " + i));
@@ -142,29 +147,13 @@ public class Demux extends gentools {
         for (int i = 0; i < n; i++) {
             o.outlets.add(new OutletFrac32Buffer("o" + i, "output " + i));
         }
-        o.sSRateCode = "   switch(%s%>0?%s%:0){\n";
-        for (int i = 0; i < n; i++) {
-            o.sSRateCode += "      case " + i + ": \n";
-            for (int j = 0; j < n; j++) {
-                if (i == j) {
-                    o.sSRateCode += "         %o" + j + "% = %i%;\n";
-                } else {
-                    o.sSRateCode += "         %o" + j + "% = %d"+ j +"%;\n";
-                }
-            }
-            o.sSRateCode += "         break;\n";
-        }
-        o.sSRateCode += "      default:\n";
-        for (int j = 0; j < n; j++) {
-            o.sSRateCode += "         %o" + j + "% = %d"+ j +"%;\n";
-        }
-        o.sSRateCode += "}\n";
+        o.sSRateCode = GenerateDemuxCode(n);
         o.helpPatch = "demux 3.axh";
         return o;
     }
 
     static AxoObject Create_demuxni(int n) {
-        AxoObject o = new AxoObject("demux " + n, "Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.");
+        AxoObject o = new AxoObject("demux " + n, descriptionDemuxN);
         o.inlets.add(new InletInt32("i", "input"));
         for (int i = 0; i < n; i++) {
             o.inlets.add(new InletInt32("d" + i, "default " + i));
@@ -173,29 +162,13 @@ public class Demux extends gentools {
         for (int i = 0; i < n; i++) {
             o.outlets.add(new OutletInt32("o" + i, "output " + i));
         }
-        o.sKRateCode = "   switch(%s%>0?%s%:0){\n";
-        for (int i = 0; i < n; i++) {
-            o.sKRateCode += "      case " + i + ": \n";
-            for (int j = 0; j < n; j++) {
-                if (i == j) {
-                    o.sKRateCode += "         %o" + j + "% = %i%;\n";
-                } else {
-                    o.sKRateCode += "         %o" + j + "% = %d"+ j +"%;\n";
-                }
-            }
-            o.sKRateCode += "         break;\n";
-        }
-        o.sKRateCode += "      default:\n";
-        for (int j = 0; j < n; j++) {
-            o.sKRateCode += "         %o" + j + "% = %d"+ j +"%;\n";
-        }
-        o.sKRateCode += "}\n";
+        o.sKRateCode = GenerateDemuxCode(n);
         o.helpPatch = "demux 3.axh";
         return o;
     }
 
     static AxoObject Create_demuxnb(int n) {
-        AxoObject o = new AxoObject("demux " + n, "Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.");
+        AxoObject o = new AxoObject("demux " + n, descriptionDemuxN);
         o.inlets.add(new InletBool32("i", "input"));
         for (int i = 0; i < n; i++) {
             o.inlets.add(new InletBool32("d" + i, "default " + i));
@@ -204,23 +177,7 @@ public class Demux extends gentools {
         for (int i = 0; i < n; i++) {
             o.outlets.add(new OutletBool32("o" + i, "output " + i));
         }
-        o.sKRateCode = "   switch(%s%>0?%s%:0){\n";
-        for (int i = 0; i < n; i++) {
-            o.sKRateCode += "      case " + i + ": \n";
-            for (int j = 0; j < n; j++) {
-                if (i == j) {
-                    o.sKRateCode += "         %o" + j + "% = %i%;\n";
-                } else {
-                    o.sKRateCode += "         %o" + j + "% = %d"+ j +"%;\n";
-                }
-            }
-            o.sKRateCode += "         break;\n";
-        }
-        o.sKRateCode += "      default:\n";
-        for (int j = 0; j < n; j++) {
-            o.sKRateCode += "         %o" + j + "% = %d"+ j +"%;\n";
-        }
-        o.sKRateCode += "}\n";
+        o.sKRateCode = GenerateDemuxCode(n);
         o.helpPatch = "demux 3.axh";
         return o;
     }
