@@ -1,6 +1,8 @@
 /*
  ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
+ modified by Johannes Taelman
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -158,7 +160,7 @@ static const uint8_t vcom_string3[] = {
 static uint8_t descriptor_serial_string[] = {
   USB_DESC_BYTE(50),                    /* bLength.                         */
   USB_DESC_BYTE(USB_DESCRIPTOR_STRING), /* bDescriptorType.                 */
-  'x', 0, 'y', 0, 'z', 0, '0', 0,
+  '0', 0, '0', 0, '0', 0, '0', 0,
   '0', 0, '0', 0, '0', 0, '0', 0,
   '0', 0, '0', 0, '0', 0, '0', 0,
   '0', 0, '0', 0, '0', 0, '0', 0,
@@ -215,10 +217,9 @@ static const uint8_t vcom_string6[] = {
  * Device Description string.
  */
 static const uint8_t vcom_string7[] = {
-  USB_DESC_BYTE(36),                    /* bLength.                         */
+  USB_DESC_BYTE(20),                    /* bLength.                         */
   USB_DESC_BYTE(USB_DESCRIPTOR_STRING), /* bDescriptorType.                 */
-  'C', 0, 'h', 0, 'i', 0, 'b', 0, 'i', 0, 'O', 0, 'S', 0, '/', 0,
-  'R', 0, 'T', 0, ' ', 0, 'S', 0, 'T', 0, 'R', 0, '7', 0, ' ', 0,
+  'A', 0, 'x', 0, 'D', 0, 'u', 0, 'm', 0, 'm', 0, 'y', 0, '7', 0,
   ' ', 0
 };
 
@@ -227,13 +228,22 @@ static const uint8_t vcom_string7[] = {
  * Device Description string.
  */
 static const uint8_t vcom_string8[] = {
-  USB_DESC_BYTE(36),                    /* bLength.                         */
+  USB_DESC_BYTE(20),                    /* bLength.                         */
   USB_DESC_BYTE(USB_DESCRIPTOR_STRING), /* bDescriptorType.                 */
-  'C', 0, 'h', 0, 'i', 0, 'b', 0, 'i', 0, 'O', 0, 'S', 0, '/', 0,
-  'R', 0, 'T', 0, ' ', 0, 'S', 0, 'T', 0, 'R', 0, '8', 0, ' ', 0,
+  'A', 0, 'x', 0, 'D', 0, 'u', 0, 'm', 0, 'm', 0, 'y', 0, '8', 0,
   ' ', 0
 };
 
+
+/* WCID implementation reference:
+ *  https://github.com/pbatard/libwdi/wiki/WCID-Devices
+ */
+static const uint8_t vcid_string[] = {
+  USB_DESC_BYTE(18),                    /* bLength.                         */
+  USB_DESC_BYTE(USB_DESCRIPTOR_STRING), /* bDescriptorType.                 */
+  'M', 0, 'S', 0, 'F', 0, 'T', 0, '1', 0, '0', 0, '0', 0, /* MSFT100        */
+  20, 0x00 /* vendor code, padding */
+};
 
 /*
  * Strings wrappers array.
@@ -249,6 +259,8 @@ static const USBDescriptor vcom_strings[] = {
   {sizeof vcom_string5, vcom_string7},
   {sizeof vcom_string5, vcom_string8}
 };
+
+static const USBDescriptor vcid_descriptor = {sizeof vcid_string, vcid_string};
 
 void inttohex(uint32_t v, unsigned char *p){
   int nibble;
@@ -287,6 +299,8 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
     }
     if (dindex < 9)
       return &vcom_strings[dindex];
+  case 0xEE:
+    return &vcid_descriptor;
   }
   return NULL;
 }
@@ -316,35 +330,14 @@ static const USBEndpointConfig ep1config = {
   1,
   NULL
 };
-#if 0
+
 /**
  * @brief   IN EP2 state.
  */
 static USBInEndpointState ep2instate;
 
 /**
- * @brief   EP2 initialization structure (IN only).
- */
-static const USBEndpointConfig ep2config = {
-  USB_EP_MODE_TYPE_INTR,
-  NULL,
-  sduInterruptTransmitted,
-  NULL,
-  0x0010,
-  0x0000,
-  &ep2instate,
-  NULL,
-  1,
-  NULL
-};
-#endif
-/**
- * @brief   IN EP3 state.
- */
-static USBInEndpointState ep2instate;
-
-/**
- * @brief   OUT EP3 state.
+ * @brief   OUT EP2 state.
  */
 static USBOutEndpointState ep2outstate;
 
@@ -381,12 +374,6 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
        Note, this callback is invoked from an ISR so I-Class functions
        must be used.*/
     usbInitEndpointI(usbp, USBD1_DATA_REQUEST_EP, &ep1config);
-//    usbInitEndpointI(usbp, USBD1_INTERRUPT_REQUEST_EP, &ep2config);
-
-    /* Resetting the state of the CDC subsystem.*/
-//    sduConfigureHookI(&SDU1);
-
-    /* Bulk IF config */
     usbInitEndpointI(usbp, USBD2_DATA_REQUEST_EP, &ep2config);
 
     /* Resetting the state of the Bulk driver subsystem.*/
@@ -405,8 +392,31 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
   return;
 }
 
-static bool_t sduSpecialRequestsHook(USBDriver *usbp) {
-  (void)usbp;
+static const uint8_t mscompatid[] = {
+0x28, 0x00, 0x00, 0x00,  /* DWORD (LE)  Descriptor length (40 bytes) */
+0x00, 0x01,  /* BCD WORD (LE)   Version ('1.0') */
+0x04, 0x00,  /* WORD (LE)   Compatibility ID Descriptor index (0x0004) */
+0x01,    /* BYTE    Number of sections (1) */
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,    /* 7 BYTES     Reserved */
+0x02,    /* BYTE    Interface Number (Interface #2) */
+0x01,    /* BYTE    Reserved */
+0x57, 0x49, 0x4E, 0x55, 0x53, 0x42, 0x00, 0x00,  /* 8 BYTES (NUL-terminated?) ASCII String    Compatible ID ("WINUSB\0\0") */
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  /* 8 BYTES (NUL-terminated?) ASCII String    Sub-Compatible ID (unused) */
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00  /* 6 BYTES      Reserved */
+};
+
+static bool_t specialRequestsHook(USBDriver *usbp) {
+  if (
+      (usbp->setup[0] == 0xC0) &&
+      (usbp->setup[1] == 0x14) &&
+      (usbp->setup[2] == 0x00) &&
+      (usbp->setup[3] == 0x00) &&
+      (usbp->setup[4] == 0x04)
+    ) {
+    usbSetupTransfer(usbp, (uint8_t *)&mscompatid, usbp->setup[6], NULL);
+    return TRUE;
+  }
+
   return FALSE;
 }
 
@@ -416,7 +426,7 @@ static bool_t sduSpecialRequestsHook(USBDriver *usbp) {
 const USBConfig usbcfg = {
   usb_event,
   get_descriptor,
-  sduSpecialRequestsHook,
+  specialRequestsHook,
   NULL
 };
 
