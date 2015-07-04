@@ -1,96 +1,96 @@
 <patch-1.0>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="80" y="20">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="80" y="20">
       <params>
          <frac32.u.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="interp~" sha="5a9175b8d44d830756d1599a86b4a6a49813a19b" name="interp_1" x="160" y="20">
+   <obj type="conv/interp" sha="5a9175b8d44d830756d1599a86b4a6a49813a19b" name="interp_1" x="160" y="20">
       <params/>
       <attribs/>
    </obj>
-   <obj type="lowpass~" sha="d9e91f7c039fc3e02a23b765dbf6f9c7af2661d1" name="lowpass_1" x="240" y="20">
+   <obj type="lowpass~" sha="1e5ae3f91d3028a83d8e698aa6e8bf8dc8ceefb3" name="lowpass_1" x="240" y="20">
       <params>
-         <frac32.u.map name="freq" value="0.0"/>
+         <frac32.s.map name="freq" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="120" y="120">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="120" y="120">
       <params>
-         <frac32.u.map name="value" value="13.0"/>
+         <frac32.u.map name="value" value="16.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="phasor3q~" sha="f9d6105d36172af17f0c58d4ef163277f375a209" name="phasor3q_1" x="40" y="200">
-      <params>
-         <frac32.s.map name="pitch" value="-26.0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="*" sha="c47ceb7366785e0103cf880ce3450321491949f1" name="*c1" x="200" y="200">
+   <obj type="math/*" sha="c47ceb7366785e0103cf880ce3450321491949f1" name="*c1" x="200" y="200">
       <params/>
       <attribs/>
    </obj>
-   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix11" x="320" y="200">
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix11" x="320" y="200">
       <params>
          <frac32.u.map name="gain1" value="63.5"/>
-         <frac32.u.map name="gain2" value="2.5"/>
+         <frac32.u.map name="gain2" value="4.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="flashwaveread2~~" sha="ee182884ff6601bedd6fe14e6f89cd89864e3b20" name="flashwaveread2__1" x="440" y="220">
+   <obj type="phasor3q~" sha="15eb8142a979333baac42c771ed195ffe60fce05" name="phasor3q_1" x="42" y="210">
+      <params>
+         <frac32.s.map name="pitch" value="-32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="wave/flashread2~~" sha="ee182884ff6601bedd6fe14e6f89cd89864e3b20" name="flashwaveread2__1" x="440" y="220">
       <params/>
       <attribs>
-         <combo attributeName="sample" selection="rockwehrmann"/>
-         <combo attributeName="size" selection="32768"/>
+         <combo attributeName="sample" selection="808hatclose"/>
+         <combo attributeName="size" selection="2048"/>
       </attribs>
    </obj>
-   <obj type="*" sha="c47ceb7366785e0103cf880ce3450321491949f1" name="*c1_" x="200" y="260">
+   <obj type="math/*" sha="c47ceb7366785e0103cf880ce3450321491949f1" name="*c1_" x="200" y="260">
       <params/>
       <attribs/>
    </obj>
-   <obj type="window~" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d" name="window_1" x="320" y="340">
+   <obj type="math/window" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d" name="window_1" x="320" y="340">
       <params/>
       <attribs/>
    </obj>
-   <obj type="*" sha="d67b6c172dd96232df67e96baf19e3062e880e68" name="*1" x="600" y="340">
+   <obj type="math/*" sha="d67b6c172dd96232df67e96baf19e3062e880e68" name="*1" x="600" y="340">
       <params/>
       <attribs/>
    </obj>
-   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix11_" x="320" y="380">
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix11_" x="320" y="380">
       <params>
          <frac32.u.map name="gain1" value="63.5"/>
-         <frac32.u.map name="gain2" value="2.5"/>
+         <frac32.u.map name="gain2" value="5.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="flashwaveread2~~" sha="ee182884ff6601bedd6fe14e6f89cd89864e3b20" name="flashwaveread2__1_" x="440" y="400">
+   <obj type="wave/flashread2~~" sha="ee182884ff6601bedd6fe14e6f89cd89864e3b20" name="flashwaveread2__1_" x="440" y="400">
       <params/>
       <attribs>
-         <combo attributeName="sample" selection="rockwehrmann"/>
-         <combo attributeName="size" selection="32768"/>
+         <combo attributeName="sample" selection="808hatclose"/>
+         <combo attributeName="size" selection="2048"/>
       </attribs>
    </obj>
-   <obj type="*" sha="d67b6c172dd96232df67e96baf19e3062e880e68" name="*1_" x="600" y="400">
+   <obj type="math/*" sha="d67b6c172dd96232df67e96baf19e3062e880e68" name="*1_" x="600" y="400">
       <params/>
       <attribs/>
    </obj>
-   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix21" x="680" y="400">
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix21" x="680" y="400">
       <params>
          <frac32.u.map name="gain1" value="32.0"/>
          <frac32.u.map name="gain2" value="32.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="840" y="400">
+   <obj type="dac~1" sha="63a81542ba731f54cb620e2404adb2dd7b742c1e" name="dac_11" x="840" y="400">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="840" y="460">
+   <obj type="dac~2" sha="dbc48d941904b6914bc54f7b80fcd592eaad4853" name="dac_21" x="840" y="460">
       <params/>
       <attribs/>
    </obj>
-   <obj type="window~" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d" name="window_1_" x="320" y="520">
+   <obj type="math/window" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d" name="window_1_" x="320" y="520">
       <params/>
       <attribs/>
    </obj>
@@ -169,5 +169,14 @@
          <dest name="*1_ b"/>
       </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>346</x>
+      <y>169</y>
+      <width>1150</width>
+      <height>830</height>
+   </windowPos>
 </patch-1.0>
