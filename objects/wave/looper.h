@@ -62,16 +62,16 @@ void stream_open(sdFilePingpongRW *s) {
   volatile FRESULT err;
   int i;
   UINT bytes_written;
-  TransmitTextMessage("rec : opening");
+  LogTextMessage("rec : opening");
   err = f_open(&s->f, &s->filename[0], FA_READ | FA_WRITE | FA_CREATE_ALWAYS);
   if (err != 0)
-    TransmitTextMessage("rec : open fail");
+    LogTextMessage("rec : open fail");
   err = f_lseek(&s->f, PRE_SIZE);
   if (err != 0)
-    TransmitTextMessage("rec : seek1 fail");
+    LogTextMessage("rec : seek1 fail");
   err = f_lseek(&s->f, 0);
   if (err != 0)
-    TransmitTextMessage("rec : seek2 fail");
+    LogTextMessage("rec : seek2 fail");
 
   s->f.cltbl = s->clmt;
   s->clmt[0] = SZ_TBL;
@@ -100,10 +100,10 @@ void stream_close(sdFilePingpongRW *s) {
   chThdTerminate(s->pThreadSD);
   chThdWait(s->pThreadSD);
 
-  TransmitTextMessage("rec : closing");
+  LogTextMessage("rec : closing");
   err = f_close(&s->f);
   if (err != 0)
-    TransmitTextMessage("rec : close fail");
+    LogTextMessage("rec : close fail");
 }
 
 #define __INL __attribute__ ((noinline))

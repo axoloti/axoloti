@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="ramtable32slider16" sha="2227408087d0108a79d19893c9bcca8343f9f004" name="tuning" x="240" y="40">
+   <obj type="table/allocate 32b 16sliders" sha="2227408087d0108a79d19893c9bcca8343f9f004" name="tuning" x="240" y="40">
       <params>
          <frac32.s.mapvsl name="b0" value="0.0"/>
          <frac32.s.mapvsl name="b1" value="0.0"/>
@@ -20,64 +20,66 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="keybzone_lru" sha="d22473f78d43bec724fdf2c7b1ed4565b4f11e0a" name="keybzone_lru1" x="0" y="60">
+   <obj type="keybzone_lru" sha="b5981bfbddee6927781c171abbd63d632fd34ba5" name="keybzone_lru1" x="0" y="60">
       <params/>
       <attribs>
          <spinner attributeName="startNote" value="0"/>
          <spinner attributeName="endNote" value="127"/>
       </attribs>
    </obj>
-   <obj type="envahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="640" y="80">
+   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="640" y="80">
       <params>
          <frac32.u.map name="a" value="10.0"/>
          <frac32.u.map name="d" value="7.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="divremc" sha="a9507fb906b40fc4885ac66c9e4b34b840e8164d" name="divremc1" x="160" y="240">
+   <comment type="patch/comment" sha="comment" uuid="comment" name="^C" x="238" y="196"/>
+   <obj type="math/+c" sha="d0aea6063c88e27c97acf08b33a056fec3e150f1" uuid="13eec32bd8ad57dd0bb18a02566cc0a117d320e3" name="+c_1" x="98" y="238">
+      <params>
+         <frac32.u.map name="c" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/divremc" sha="a9507fb906b40fc4885ac66c9e4b34b840e8164d" name="divremc1" x="154" y="238">
       <params/>
       <attribs>
          <spinner attributeName="denominator" value="12"/>
       </attribs>
    </obj>
-   <obj type="tabread" sha="4a797be637258e9f46e75481b6b3d85ee80f1787" name="tabread1" x="280" y="240">
+   <obj type="tabread" sha="17be286e1755b43c67fa0ca370d63d3d38f8dcd7" name="tabread1" x="266" y="238">
       <params/>
       <attribs>
-         <table attributeName="table" table="tuning"/>
+         <objref attributeName="table" obj="tuning"/>
       </attribs>
    </obj>
-   <obj type="div64" sha="23bcd526229a9199a165fe7a57c62168cb21de0d" name="div641" x="440" y="240">
+   <obj type="math/div 64" sha="23bcd526229a9199a165fe7a57c62168cb21de0d" name="div641" x="440" y="240">
       <params/>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1" x="680" y="300">
+   <obj type="math/+" sha="81c2c147faf13ae4c2d00419326d0b6aec478b27" name="+2" x="520" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="saw~" sha="fac485938f0744316bc8361d4ad33f897cbff287" name="saw_1" x="680" y="300">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="840" y="300">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="840" y="300">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="920" y="300">
+   <obj type="dac~" sha="c27566f972d15f25252f61b5cff014a3edce9706" name="dac_1" x="920" y="300">
       <params/>
       <attribs/>
    </obj>
-   <obj type="displayS" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="680" y="380">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="+" sha="81c2c147faf13ae4c2d00419326d0b6aec478b27" name="+2" x="520" y="240">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="680" y="380">
       <params/>
       <attribs/>
    </obj>
    <nets>
-      <net>
-         <source name="keybzone_lru1 note"/>
-         <dest name="divremc1 a"/>
-         <dest name="+2 in1"/>
-      </net>
       <net>
          <source name="tabread1 o"/>
          <dest name="div641 in"/>
@@ -112,6 +114,24 @@
          <source name="div641 out"/>
          <dest name="+2 in2"/>
       </net>
+      <net>
+         <source name="keybzone_lru1 note"/>
+         <dest name="+2 in1"/>
+         <dest name="+c_1 in"/>
+      </net>
+      <net>
+         <source name="+c_1 out"/>
+         <dest name="divremc1 a"/>
+      </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1230</width>
+      <height>690</height>
+   </windowPos>
 </patch-1.0>

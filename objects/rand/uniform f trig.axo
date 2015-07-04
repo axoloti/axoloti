@@ -1,6 +1,5 @@
 <objdefs>
    <obj.normal id="uniform f trig" uuid="223873125a332e3b8a82795a3eef167993adb086" sha="926c3f305c1c8031d3cad3e29eb688cee124ab2e">
-      <upgradeSha>7c693e3fcb8abe7dc3908628ef0eb911a4a19ce1</upgradeSha>
       <sDescription>uniform distributed (white) noise, triggered generation. Range -64..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

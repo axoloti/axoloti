@@ -1,6 +1,5 @@
 <objdefs>
-   <obj.normal id="uniform f" uuid="8f20d4eee60d56a57c11111c7028f69d6039b658" sha="fd8c80c31a5881963090451824c957ffa2e351b0">
-      <upgradeSha>a5949c689afce5a3097108fd569d13ffda3895f6</upgradeSha>
+   <obj.normal id="uniform f" uuid="8f20d4eee60d56a57c11111c7028f69d6039b658" sha="aefed121f296eb10eaa8ad5f85dbe647718f1044">
       <sDescription>uniform distributed (white) noise, k-rate generation. Range -64..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -11,6 +10,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[outlet_wave= (int32_t)(GenerateRandomNumber())>>4;]]></code.krate>
+      <code.krate><![CDATA[outlet_wave = (int32_t)(GenerateRandomNumber())>>4;]]></code.krate>
    </obj.normal>
 </objdefs>
