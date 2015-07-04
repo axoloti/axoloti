@@ -50,9 +50,9 @@ public class Logic extends gentools {
         WriteAxoObject(catName, Create_xor2());
         WriteAxoObject(catName, Create_or2());
         WriteAxoObject(catName, Create_not());
-        WriteAxoObject(catName, Create_decode_bin8());
-        WriteAxoObject(catName, Create_decode_int4());
-        WriteAxoObject(catName, Create_decode_int8());
+        WriteAxoObject(catName + "/decode", Create_decode_bin8());
+        WriteAxoObject(catName + "/decode", Create_decode_int4());
+        WriteAxoObject(catName + "/decode", Create_decode_int8());
         {
             ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
             c.add(CreateChangeI());
@@ -213,7 +213,7 @@ public class Logic extends gentools {
     }
 
     static AxoObject Create_decode_bin8() {
-        AxoObject o = new AxoObject("decode.bin 8", "binary decoder");
+        AxoObject o = new AxoObject("bin 8", "binary decoder");
         o.inlets.add(new InletInt32("i1", "input 1"));
         o.outlets.add(new OutletBool32("o0", "output 0"));
         o.outlets.add(new OutletBool32("o1", "output 1"));
@@ -237,7 +237,7 @@ public class Logic extends gentools {
     }
 
     static AxoObject Create_decode_int4() {
-        AxoObject o = new AxoObject("decode.int 4", "integer decoder");
+        AxoObject o = new AxoObject("int 4", "integer decoder");
         o.inlets.add(new InletInt32("i1", "input 1"));
         o.outlets.add(new OutletBool32("o0", "output 0"));
         o.outlets.add(new OutletBool32("o1", "output 1"));
@@ -253,7 +253,7 @@ public class Logic extends gentools {
     }
 
     static AxoObject Create_decode_int8() {
-        AxoObject o = new AxoObject("decode.int 8", "integer decoder");
+        AxoObject o = new AxoObject("int 8", "integer decoder");
         o.inlets.add(new InletInt32("i1", "input 1"));
         o.outlets.add(new OutletBool32("o0", "output 0"));
         o.outlets.add(new OutletBool32("o1", "output 1"));

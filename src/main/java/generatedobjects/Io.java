@@ -36,12 +36,12 @@ import static generatedobjects.gentools.WriteAxoObject;
 public class Io extends gentools {
 
     static void GenerateAll() {
-        String catName = "gpio.in";
+        String catName = "gpio/in";
         WriteAxoObject(catName, CreateDigitalRead());
         WriteAxoObject(catName, CreateDigitalReadButton1());
         WriteAxoObject(catName, CreateAnalogRead());
 
-        catName = "gpio.out";
+        catName = "gpio/out";
         WriteAxoObject(catName, CreateDigitalWrite());
         WriteAxoObject(catName, CreateLED1());
         WriteAxoObject(catName, CreateLED2());
@@ -70,11 +70,11 @@ public class Io extends gentools {
         WriteAxoObject(catName, CreateDACTilde());
         WriteAxoObject(catName, CreateDACConfig());
 
-        catName = "gpio.serial";
+        catName = "gpio/serial";
         WriteAxoObject(catName, SerialBegin());
-        catName = "gpio.spi";
+        catName = "gpio/spi";
         WriteAxoObject(catName, SPIBegin());
-        catName = "gpio.i2c";
+        catName = "gpio/i2c";
         WriteAxoObject(catName, I2CBegin());
     }
 

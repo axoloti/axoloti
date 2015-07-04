@@ -44,7 +44,7 @@ import java.util.ArrayList;
 public class Midi extends gentools {
 
     static void GenerateAll() {
-        String catName = "midi.in";
+        String catName = "midi/in";
         WriteAxoObject(catName, Create_ctlin3());
         WriteAxoObject(catName, Create_ctlin_any());
         WriteAxoObject(catName, Create_ctlini_any());
@@ -63,7 +63,7 @@ public class Midi extends gentools {
         WriteAxoObject(catName, Create_clockin());
         WriteAxoObject(catName, Create_pgmin());
 
-        catName = "midi.out";
+        catName = "midi/out";
         WriteAxoObject(catName, Create_noteout());
         WriteAxoObject(catName, Create_ctlout());
         WriteAxoObject(catName, Create_ctloutauto());
@@ -72,7 +72,7 @@ public class Midi extends gentools {
         WriteAxoObject(catName, Create_clockgen());
         WriteAxoObject(catName, Create_queuestate());
 
-        catName = "midi.intern";
+        catName = "midi/intern";
         WriteAxoObject(catName, Create_intern_noteout());
         WriteAxoObject(catName, Create_intern_ctlout());
         WriteAxoObject(catName, Create_intern_ctloutauto());
@@ -80,7 +80,7 @@ public class Midi extends gentools {
         WriteAxoObject(catName, Create_intern_bendout());
         WriteAxoObject(catName, Create_intern_clockgen());
 
-        catName = "midi.mpe";
+        catName = "midi/mpe";
         WriteAxoObject(catName, Create_keyb_mpe());
     }
     /*
