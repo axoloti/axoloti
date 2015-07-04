@@ -117,61 +117,6 @@ public class Osc extends gentools {
         return o;
     }
 
-    /*
-     static AxoObject CreateSawTilde(){
-     AxoObject o = new AxoObject("saw~","Bandwith limited saw wave oscillator");
-     o.outlets.add(new OutletFrac32Buffer("wave","saw wave, anti-aliased"));
-     o.inlets.add(new InletFrac32("frequency","phase increment"));
-     o.sInstanceData = "data_osc_blep fd;\n";
-     o.sInitCode =   "  init_osc_blep(&fd);\n";
-     o.sKRateCode = " f_process_osc_blep_block(&fd,%frequency%,%wave%);\n";        
-     return o;
-     */
-    /*
-     static AxoObject CreateSaw2Tilde() {
-     // the original version, biased above zero...
-     AxoObject o = new AxoObject("saw~", "Bandwith limited saw wave oscillator");
-     o.outlets.add(new OutletFrac32Buffer("wave", "saw wave, anti-aliased"));
-     o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
-     o.params.add(new ParameterFrac32SMapPitch("pitch"));
-     o.sLocalData = "  int32_t osc_p;\n"
-     + "  static const int blepvoices = 4;\n"
-     + "  int16_t *oscp[blepvoices];\n"
-     + "  uint32_t nextvoice;\n";
-     o.sInitCode = "    int j;\n"
-     + "    for(j=0;j<blepvoices;j++)\n"
-     + "      oscp[j] = &blept[BLEPSIZE-1];"
-     + "   nextvoice = 0;";
-     o.sKRateCode = "      int32_t freq;\n"
-     + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
-     + "  int j;\n"
-     + "  int16_t *lastblep = &blept[BLEPSIZE-1];\n"
-     + "  for(j=0;j<BUFSIZE;j++){\n"
-     + "    int i;\n"
-     + "    int p;\n"
-     + "    p = osc_p;\n"
-     + "    osc_p = p+freq;\n"
-     + "    if ((osc_p>0)&&!(p>0)){   // dispatch\n"
-     + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
-     + "      int32_t x = -p/(freq>>6);\n"
-     + "      oscp[nextvoice] = &blept[64-x];\n"
-     + "    }\n"
-     + "    int32_t sum=0;\n"
-     + "    for(i=0;i<blepvoices;i++){ // sample\n"
-     + "      int16_t *t = oscp[i];\n"
-     + "      sum+=*t;\n"
-     + "      t+=64;\n"
-     + "      if (t>=lastblep) t=lastblep;\n"
-     + "      oscp[i]=t;\n"
-     + "    }\n"
-     + "    sum = (16383*blepvoices)-sum;\n"
-     + "    uint32_t g = osc_p;\n"
-     + "    sum=(g>>16) + sum*4;\n"
-     + "    wave[j]=sum<<11;\n"
-     + "  }";
-     return o;
-     }
-     */
     static AxoObject CreateSaw3Tilde() {
         AxoObject o = new AxoObject("saw", "Bandwith limited saw wave oscillator");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, anti-aliased"));

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -142,7 +142,7 @@ public class Delay extends gentools {
     }
 
     static AxoObject CreateDelwriteTilde_SDRAM() {
-        AxoObject o = new AxoObject("write sdram", "delayline definition, read with delay/read");
+        AxoObject o = new AxoObject("write sdram", "delayline definition, read it with \"delay/read\" objects referencing the instance name of this object");
         String mentries[] = {"256 (5.33ms)",
             "512 (10.66ms)",
             "1024 (21.33ms)",

@@ -1232,29 +1232,21 @@ public class Patch {
         SortByPosition();
         AxoObject ao = new AxoObject();
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("inlet")
-                    || o.typeName.equals("patch/inlet f")) {
+            if (o.typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet_i")
-                    || o.typeName.equals("patch/inlet i")) {
+            } else if (o.typeName.equals("patch/inlet i")) {
                 ao.inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet_b")
-                    || o.typeName.equals("patch/inlet b")) {
+            } else if (o.typeName.equals("patch/inlet b")) {
                 ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet~")
-                    || o.typeName.equals("patch/inlet a")) {
+            } else if (o.typeName.equals("patch/inlet a")) {
                 ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet")
-                    || o.typeName.equals("patch/outlet f")) {
+            } else if (o.typeName.equals("patch/outlet f")) {
                 ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet_i")
-                    || o.typeName.equals("patch/outlet i")) {
+            } else if (o.typeName.equals("patch/outlet i")) {
                 ao.outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet_b")
-                    || o.typeName.equals("patch/outlet b")) {
+            } else if (o.typeName.equals("patch/outlet b")) {
                 ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet~")
-                    || o.typeName.equals("patch/outlet a")) {
+            } else if (o.typeName.equals("patch/outlet a")) {
                 ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
@@ -1280,19 +1272,17 @@ public class Patch {
         }
         ao.sKRateCode = "int i; /*...*/\n";
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("inlet") || o.typeName.equals("inlet_i") || o.typeName.equals("inlet_b")
-                    || o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
+            if (o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
                 ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
-            } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
+            } else if (o.typeName.equals("patch/inlet a")) {
                 ao.sKRateCode += "   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = inlet_" + o.getLegalName() + "[i];\n";
             }
         }
         ao.sKRateCode += GenerateDSPCodePlusPlusSub("attr_parent", true);
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("outlet") || o.typeName.equals("outlet_i") || o.typeName.equals("outlet_b")
-                    || o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
+            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = " + o.getCInstanceName() + "_i._outlet;\n";
-            } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
+            } else if (o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "      for(i=0;i<BUFSIZE;i++) outlet_" + o.getLegalName() + "[i] = " + o.getCInstanceName() + "_i._outlet[i];\n";
             }
         }
@@ -1374,21 +1364,21 @@ public class Patch {
         ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
 
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("inlet") || o.typeName.equals("patch/inlet f")) {
+            if (o.typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet_i") || o.typeName.equals("patch/inlet i")) {
+            } else if (o.typeName.equals("patch/inlet i")) {
                 ao.inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet_b") || o.typeName.equals("patch/inlet b")) {
+            } else if (o.typeName.equals("patch/inlet b")) {
                 ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
+            } else if (o.typeName.equals("patch/inlet a")) {
                 ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet") || o.typeName.equals("patch/outlet f")) {
+            } else if (o.typeName.equals("patch/outlet f")) {
                 ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet_i") || o.typeName.equals("patch/outlet i")) {
+            } else if (o.typeName.equals("patch/outlet i")) {
                 ao.outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet_b") || o.typeName.equals("patch/outlet b")) {
+            } else if (o.typeName.equals("patch/outlet b")) {
                 ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
+            } else if (o.typeName.equals("patch/outlet a")) {
                 ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
@@ -1481,10 +1471,9 @@ public class Patch {
                 + "}\n";
         ao.sKRateCode = "";
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("outlet") || o.typeName.equals("outlet_i") || o.typeName.equals("outlet_b")
-                    || o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
+            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = 0;\n";
-            } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
+            } else if (o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
                         + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] = 0;\n"
@@ -1504,45 +1493,17 @@ public class Patch {
         ao.sKRateCode += "getVoices()[vi].dsp();\n";
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("outlet") || o.typeName.equals("patch/outlet f")
-                    || o.typeName.equals("outlet_i") || o.typeName.equals("patch/outlet i")
-                    || o.typeName.equals("outlet_b") || o.typeName.equals("patch/outlet b")) {
+                    || o.typeName.equals("patch/outlet i")
+                    || o.typeName.equals("patch/outlet b")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
-            } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
+            } else if (o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
                         + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
                         + "}\n";
             }
         }
-        ao.sKRateCode += "}\n"; /*
-         for (AxoObjectInstanceAbstract o : objectinstances) {
-         if (o.typeName.equals("outlet")){
-         ao.sKRateCode += "   %" + o.getInstanceName() + "% += v[vi]."+o.getCName()+"_i._outlet;\n";
-         } else if (o.typeName.equals("outlet~")){
-         ao.sKRateCode += "{\n"
-         + "      int j;\n"
-         + "      for(j=0;j<BUFSIZE;j++) %" + o.getInstanceName() + "%[j] += v[vi]."+o.getCName()+"_i._outlet[j];\n"
-         + "}\n";
-         }
-         }*/
-
-        /* non LRU, first free
-         ao.sMidiNoteOnCode = "      int i;  for(i=0;i<attr_poly;i++) {\n"
-         + "      if (!notePlaying[i]) {\n"
-         + "         notePlaying[i] = note;\n"
-         + "         v[i].PatchMidiInNoteOn(channel, note, velocity);\n"
-         + "         break;\n"
-         + "      }\n"
-         + "   }\n";
-         ao.sMidiNoteOffCode = "      int i;  for(i=0;i<attr_poly;i++) {\n"
-         + "      if (notePlaying[i]==note) {\n"
-         + "         notePlaying[i] = 0;\n"
-         + "         v[i].PatchMidiInNoteOff(channel, note, velocity);\n"
-         + "         break;\n"
-         + "      }\n"
-         + "   }\n";        
-         */
-
+        ao.sKRateCode += "}\n";
         ao.sMidiCode = ""
                 + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
                 + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
