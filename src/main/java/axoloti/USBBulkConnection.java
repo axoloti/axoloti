@@ -21,8 +21,10 @@ package axoloti;
  * Replaces the old packet-over-serial protocol with vendor-specific usb bulk
  * transport
  */
+import axoloti.dialogs.USBPortSelectionDlg;
 import axoloti.parameters.ParameterInstance;
 import axoloti.targetprofile.axoloti_core;
+import axoloti.usb.Usb;
 import displays.DisplayInstance;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -58,6 +60,7 @@ public class USBBulkConnection extends Connection {
     private final Context context;
     private DeviceHandle handle;
     private Device device;
+    private String devicePath;
 
     private final short bulkVID = (short) 0x16C0;
     private final short bulkPID = (short) 0x0442;
@@ -154,6 +157,7 @@ public class USBBulkConnection extends Connection {
             }
 
             LibUsb.close(handle);
+            devicePath = null;
             handle = null;
             CpuId0 = 0;
             CpuId1 = 0;
@@ -209,6 +213,7 @@ public class USBBulkConnection extends Connection {
         if (device == null) {
             return false;
         }
+        devicePath = Usb.DeviceToPath(device);
         int result = LibUsb.open(device, handle);
         if (result != LibUsb.SUCCESS) {
             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Unable to open USB device, err" + result);
@@ -332,8 +337,11 @@ public class USBBulkConnection extends Connection {
     }
 
     @Override
-    public void SelectSerialPort() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void SelectPort() {
+        USBPortSelectionDlg spsDlg = new USBPortSelectionDlg(null, true, portName);
+        spsDlg.setVisible(true);
+        portName = spsDlg.getPort();
+        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: " + portName);
     }
 
     class Sync {
@@ -893,5 +901,6 @@ public class USBBulkConnection extends Connection {
     public axoloti_core getTargetProfile() {
         return targetProfile;
     }
+    
 
 }

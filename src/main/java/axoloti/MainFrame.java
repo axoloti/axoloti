@@ -270,7 +270,6 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuItemEnterDFU = new javax.swing.JMenuItem();
         jMenuItemFlashDFU = new javax.swing.JMenuItem();
         jMenuItemRefreshFWID = new javax.swing.JMenuItem();
-        jMenuItemListUSB = new javax.swing.JMenuItem();
         jMenuWindow = new javax.swing.JMenu();
         jMenuHelp = new javax.swing.JMenu();
         jMenuHelpContents = new javax.swing.JMenuItem();
@@ -430,7 +429,7 @@ jMenuBar1.add(jMenuEdit);
 
 jMenuBoard.setText("Board");
 
-jMenuItemSelectCom.setText("Select serial port");
+jMenuItemSelectCom.setText("Select device...");
 jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     public void actionPerformed(java.awt.event.ActionEvent evt) {
         jMenuItemSelectComActionPerformed(evt);
@@ -515,14 +514,6 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     jMenuFirmware.add(jMenuItemRefreshFWID);
 
     jMenuBoard.add(jMenuFirmware);
-
-    jMenuItemListUSB.setText("List USB Devices");
-    jMenuItemListUSB.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemListUSBActionPerformed(evt);
-        }
-    });
-    jMenuBoard.add(jMenuItemListUSB);
 
     jMenuBar1.add(jMenuBoard);
 
@@ -647,7 +638,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuItemFConnectActionPerformed
 
     private void jMenuItemSelectComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectComActionPerformed
-        qcmdprocessor.serialconnection.SelectSerialPort();
+        qcmdprocessor.serialconnection.SelectPort();
     }//GEN-LAST:event_jMenuItemSelectComActionPerformed
 
     private void jMenuQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuQuitActionPerformed
@@ -760,10 +751,6 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompileFirmware());
     }//GEN-LAST:event_jMenuItemFCompileActionPerformed
 
-    private void jMenuItemListUSBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemListUSBActionPerformed
-        Usb.listDevices();
-    }//GEN-LAST:event_jMenuItemListUSBActionPerformed
-
     private void jMenuItemEnterDFUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEnterDFUActionPerformed
         qcmdprocessor.AppendToQueue(new QCmdBringToDFUMode());
     }//GEN-LAST:event_jMenuItemEnterDFUActionPerformed
@@ -857,7 +844,6 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemFDisconnect;
     private javax.swing.JMenuItem jMenuItemFlashDFU;
     private javax.swing.JMenuItem jMenuItemFlashSDR;
-    private javax.swing.JMenuItem jMenuItemListUSB;
     private javax.swing.JMenuItem jMenuItemPanic;
     private javax.swing.JMenuItem jMenuItemPing;
     private javax.swing.JMenuItem jMenuItemPreferences;

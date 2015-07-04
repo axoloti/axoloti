@@ -11,7 +11,7 @@ public abstract class Connection {
     abstract public boolean isConnected();
     abstract public void disconnect();
     abstract public boolean connect();
-    abstract public void SelectSerialPort();
+    abstract public void SelectPort();
     abstract public void TransmitStop();
     abstract public void TransmitStart();
     abstract public void TransmitPing();

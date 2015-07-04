@@ -67,7 +67,7 @@ public class SerialConnection extends Connection {
     }
 
     @Override
-    public void SelectSerialPort() {
+    public void SelectPort() {
         SerialPortSelectionDlg spsDlg = new SerialPortSelectionDlg(null, true, portName);
         spsDlg.setVisible(true);
         portName = spsDlg.getPort();
@@ -139,7 +139,7 @@ public class SerialConnection extends Connection {
         }
         List<String> pl = Arrays.asList(SerialPortList.getPortNames());
         if ((portName == null) || (portName.isEmpty()) || (!pl.contains(portName))) {
-            SelectSerialPort();
+            SelectPort();
             if (portName == null) {
                 return false;
             }
