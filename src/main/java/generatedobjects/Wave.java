@@ -46,12 +46,12 @@ public class Wave extends gentools {
         WriteAxoObject(catName, Create_playWave3Stereo());
         WriteAxoObject(catName, Create_playWave3Mono_fn());
         WriteAxoObject(catName, Create_playWave3Stereo_fn());
-        WriteAxoObject(catName, Create_playWave3Stereo_fn_32());
+//UNRELEASED        WriteAxoObject(catName, Create_playWave3Stereo_fn_32());
         WriteAxoObject(catName, Create_playFlashWave());
         WriteAxoObject(catName, Create_FlashWaveRead2());
         WriteAxoObject(catName, Create_Benchmark());
         //WriteAxoObject(dirname, Create_FlashWaveRead2());
-        WriteAxoObject(catName, Create_recWave2());
+//UNRELEASED         WriteAxoObject(catName, Create_recWave2());
         WriteAxoObject(catName, Create_Looper());
     }
 

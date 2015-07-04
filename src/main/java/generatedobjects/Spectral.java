@@ -90,7 +90,7 @@ public class Spectral extends gentools {
                 + "      }\n"
                 + "}\n"
                 + "static msg_t ThreadX(void *arg) {\n"
-                + "((attr_class *)arg)->ThreadX2();\n"
+                + "((attr_parent *)arg)->ThreadX2();\n"
                 + "}\n";
         o.sLocalData += "WORKING_AREA(waThreadX, 4096);\n"
                 + "Thread *Thd;\n";
@@ -164,7 +164,7 @@ public class Spectral extends gentools {
                 + "      }\n"
                 + "}\n"
                 + "static msg_t ThreadX(void *arg) {\n"
-                + "((attr_class *)arg)->ThreadX2();\n"
+                + "((attr_parent *)arg)->ThreadX2();\n"
                 + "}\n";
         o.sLocalData += "WORKING_AREA(waThreadX, 4096);\n"
                 + "Thread *Thd;\n";
@@ -238,7 +238,7 @@ public class Spectral extends gentools {
                 + "      }\n"
                 + "}\n"
                 + "static msg_t ThreadX(void *arg) {\n"
-                + "((attr_class *)arg)->ThreadX2();\n"
+                + "((attr_parent *)arg)->ThreadX2();\n"
                 + "}\n";
         o.sLocalData += "WORKING_AREA(waThreadX, 16384);\n"
                 + "Thread *Thd;\n";

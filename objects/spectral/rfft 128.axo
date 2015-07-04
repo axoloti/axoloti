@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="rfft 128" uuid="27b4fa628dda621136f74e407ee8761ba76f631c" sha="880bb070540dc79d589e772d8d6934845e1cf0f8">
-      <upgradeSha>2b19583e5fb37dcff1259d91d97ac49f46a8c912</upgradeSha>
+   <obj.normal id="rfft 128" uuid="27b4fa628dda621136f74e407ee8761ba76f631c" sha="1e5ec296644678b7bb811cbba8dfac44e890dcb9">
+      <upgradeSha>38b87d809e1f4ce40fa6651b081e68e82f80d2b2</upgradeSha>
       <sDescription>spectral analyzer display using 128 input points fft</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -66,7 +66,7 @@ msg_t ThreadX2(){
       }
 }
 static msg_t ThreadX(void *arg) {
-((attr_class *)arg)->ThreadX2();
+((attr_parent *)arg)->ThreadX2();
 }
 WORKING_AREA(waThreadX, 4096);
 Thread *Thd;

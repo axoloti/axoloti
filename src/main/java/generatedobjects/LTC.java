@@ -37,8 +37,8 @@ public class LTC extends gentools {
         String catName = "ltc";
         WriteAxoObject(catName, Create_Generator());
         WriteAxoObject(catName, Create_Decoder());
-        WriteAxoObject(catName, Create_FSync());
-        WriteAxoObject(catName, Create_FSyncCoded());
+//UNRELEASED        WriteAxoObject(catName, Create_FSync());        
+//UNRELEASED        WriteAxoObject(catName, Create_FSyncCoded());
     }
 
     static AxoObject Create_Generator() {
