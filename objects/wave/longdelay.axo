@@ -19,8 +19,8 @@
          <table name="fn"/>
       </attribs>
       <includes>
-         <include>chibios/ext/fatfs/src/ff.h</include>
          <include>./looper.h</include>
+         <include>chibios/ext/fatfs/src/ff.h</include>
       </includes>
       <code.declaration><![CDATA[   WORKING_AREA(waThreadSD, 1024);
    sdFilePingpongRW *stream;

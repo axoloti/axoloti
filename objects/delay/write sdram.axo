@@ -1,7 +1,7 @@
 <objdefs>
    <obj.normal id="write sdram" uuid="5ae03f8d7b815edcfc40585d8bbac2ed48460fba" sha="ccc0fca1df0b5969e5e326c1c05d5394d1d2256a">
       <upgradeSha>3b156a92fef726fce69a05c2e670a365457a1728</upgradeSha>
-      <sDescription>delayline definition, read with delay/read</sDescription>
+      <sDescription>delayline definition, read it with &quot;delay/read&quot; objects referencing the instance name of this object</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
