@@ -9,16 +9,15 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="use shift+click on the piano keyboard to hold a note" x="462" y="42"/>
-   <comment type="patch/comment" sha="sha" name="so you can adjust the filters while it is sounding!" x="462" y="56"/>
+   <comment type="patch/comment" sha="comment" name="use shift+click on the piano keyboard to hold a note" x="462" y="42"/>
+   <comment type="patch/comment" sha="comment" name="so you can adjust the filters while it is sounding!" x="462" y="56"/>
    <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="168" y="112">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="oscillator selection:" x="364" y="154"/>
-   <comment type="patch/comment" sha="sha" name="filter selection" x="728" y="168"/>
+   <comment type="patch/comment" sha="comment" name="oscillator selection:" x="364" y="154"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="84" y="182">
       <params>
          <frac32.u.map name="value" value="10.5"/>
@@ -31,22 +30,16 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1_" x="728" y="182">
-      <params>
-         <frac32.u.map name="value" value="0.5"/>
-      </params>
-      <attribs/>
-   </obj>
    <obj type="osc/pwm" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1" x="168" y="196">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="sawtooth" x="448" y="224"/>
-   <comment type="patch/comment" sha="sha" name="square" x="448" y="238"/>
-   <comment type="patch/comment" sha="sha" name="assymetrical square" x="448" y="252"/>
-   <comment type="patch/comment" sha="sha" name="uniform noise" x="448" y="266"/>
+   <comment type="patch/comment" sha="comment" name="sawtooth" x="448" y="224"/>
+   <comment type="patch/comment" sha="comment" name="square" x="448" y="238"/>
+   <comment type="patch/comment" sha="comment" name="assymetrical square" x="448" y="252"/>
+   <comment type="patch/comment" sha="comment" name="uniform noise" x="448" y="266"/>
    <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="168" y="294">
       <params/>
       <attribs/>
@@ -55,7 +48,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="0 : low pass filter" x="602" y="294"/>
+   <comment type="patch/comment" sha="comment" name="0 : low pass filter" x="602" y="294"/>
    <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="490" y="308">
       <params/>
       <attribs/>
@@ -67,8 +60,8 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="adjust pitch and reso of the filters to hear the different possibilities" x="728" y="308"/>
-   <comment type="patch/comment" sha="sha" name="1: high pass filter" x="602" y="448"/>
+   <comment type="patch/comment" sha="comment" name="adjust pitch and reso of the filters to hear the different possibilities" x="728" y="308"/>
+   <comment type="patch/comment" sha="comment" name="1: high pass filter" x="602" y="448"/>
    <obj type="filter/hp" sha="2c3219893ab8ef42b46eb323284a077f0ba55d54" name="hpf_1" x="602" y="462">
       <params>
          <frac32.s.map name="pitch" value="2.0"/>
@@ -76,18 +69,18 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="filter selection:" x="784" y="476"/>
+   <comment type="patch/comment" sha="comment" name="filter selection:" x="784" y="476"/>
    <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_1" x="784" y="504">
       <params>
          <int32.vradio name="value" value="2"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="low pass" x="868" y="546"/>
-   <comment type="patch/comment" sha="sha" name="high pass" x="868" y="560"/>
-   <comment type="patch/comment" sha="sha" name="band pass" x="868" y="574"/>
-   <comment type="patch/comment" sha="sha" name="unfiltered" x="868" y="588"/>
-   <comment type="patch/comment" sha="sha" name="2 : band pass filter" x="602" y="602"/>
+   <comment type="patch/comment" sha="comment" name="low pass" x="868" y="546"/>
+   <comment type="patch/comment" sha="comment" name="high pass" x="868" y="560"/>
+   <comment type="patch/comment" sha="comment" name="band pass" x="868" y="574"/>
+   <comment type="patch/comment" sha="comment" name="unfiltered" x="868" y="588"/>
+   <comment type="patch/comment" sha="comment" name="2 : band pass filter" x="602" y="602"/>
    <obj type="filter/bp" sha="dd559d9587821150be4157ac2ba7e2b4b6de6fae" name="bpf_1" x="602" y="616">
       <params>
          <frac32.s.map name="pitch" value="2.0"/>
@@ -195,4 +188,10 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>391</x>
+      <y>100</y>
+      <width>1276</width>
+      <height>1038</height>
+   </windowPos>
 </patch-1.0>

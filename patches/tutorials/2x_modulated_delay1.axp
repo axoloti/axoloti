@@ -1,24 +1,24 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="demonstration: modulated delay lines for effect processing" x="28" y="14"/>
-   <comment type="patch/comment" sha="sha" name="test signal selection" x="70" y="42"/>
+   <comment type="patch/comment" sha="comment" name="demonstration: modulated delay lines for effect processing" x="28" y="14"/>
+   <comment type="patch/comment" sha="comment" name="test signal selection" x="70" y="42"/>
    <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_2" x="28" y="56">
       <params>
          <int32.vradio name="value" value="1"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="0 - audio sample" x="126" y="98"/>
-   <comment type="patch/comment" sha="sha" name="1 - sine wave" x="126" y="112"/>
-   <comment type="patch/comment" sha="sha" name="write to delayline" x="280" y="112"/>
-   <comment type="patch/comment" sha="sha" name="2 - sawtooth wave" x="126" y="126"/>
-   <comment type="patch/comment" sha="sha" name="3 - noise" x="126" y="140"/>
+   <comment type="patch/comment" sha="comment" name="0 - audio sample" x="126" y="98"/>
+   <comment type="patch/comment" sha="comment" name="1 - sine wave" x="126" y="112"/>
+   <comment type="patch/comment" sha="comment" name="write to delayline" x="280" y="112"/>
+   <comment type="patch/comment" sha="comment" name="2 - sawtooth wave" x="126" y="126"/>
+   <comment type="patch/comment" sha="comment" name="3 - noise" x="126" y="140"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="28" y="154">
       <params>
          <frac32.s.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="test_signal_generator" sha="2af293afd36a93c8daba4e925f9e0e2fc3bb2d76" name="test_signal_generator1" x="112" y="154">
+   <obj type="test_signal_generator" name="test_signal_generator1" x="112" y="154">
       <params/>
       <attribs/>
    </obj>
@@ -46,12 +46,12 @@
    </obj>
    <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_1" x="434" y="322">
       <params>
-         <int32.vradio name="value" value="2"/>
+         <int32.vradio name="value" value="1"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="selection:" x="518" y="322"/>
-   <comment type="patch/comment" sha="sha" name="0 - normal" x="532" y="364"/>
+   <comment type="patch/comment" sha="comment" name="selection:" x="518" y="322"/>
+   <comment type="patch/comment" sha="comment" name="0 - normal" x="532" y="364"/>
    <obj type="osc/phasor" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52" name="phasor3_1" x="28" y="378">
       <params>
          <frac32.s.map name="pitch" value="-21.0"/>
@@ -64,10 +64,10 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="1 - vibrato (sine wave modulated)" x="532" y="378"/>
-   <comment type="patch/comment" sha="sha" name="2 - downwards pitch shifter (rising sawtooth wave modulated)" x="532" y="392"/>
-   <comment type="patch/comment" sha="sha" name="3 - upwards pitch shifter (falling sawtooth wave modulated)" x="532" y="406"/>
-   <comment type="patch/comment" sha="sha" name="2 and 3: notice: clicking due to abrupt slicing!" x="644" y="420"/>
+   <comment type="patch/comment" sha="comment" name="1 - vibrato (sine wave modulated)" x="532" y="378"/>
+   <comment type="patch/comment" sha="comment" name="2 - downwards pitch shifter (rising sawtooth wave modulated)" x="532" y="392"/>
+   <comment type="patch/comment" sha="comment" name="3 - upwards pitch shifter (falling sawtooth wave modulated)" x="532" y="406"/>
+   <comment type="patch/comment" sha="comment" name="2 and 3: notice: clicking due to abrupt slicing!" x="644" y="420"/>
    <obj type="math/-c" sha="3ce2337e3d146554f568711a6b81d3578b0c92e0" name="-c1" x="154" y="462">
       <params>
          <frac32.u.map name="c" value="63.5"/>
@@ -174,4 +174,10 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>304</x>
+      <y>108</y>
+      <width>1066</width>
+      <height>772</height>
+   </windowPos>
 </patch-1.0>
