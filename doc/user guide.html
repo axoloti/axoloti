@@ -4,7 +4,7 @@
 
         <h2>Main window</h2>
         The main window manages the connection with the Axoloti board, and also contains
-        a log of info and error messages.
+        a log of info and error messages.        
 
         <h2>Patch window</h2>
         Double click in an empty document ("patch") to create a new object (or press "n"). 
@@ -99,7 +99,6 @@
                 <li>Shift-up/down arrow keys to increment/decrement by a tenth of a single unit
                 <li>Control-shift-up/down arrow keys to increment/decrement by one hundredth of a single unit
                 <li>Control-up/down arrow keys to increment/decrement by 5 units
-                <li>Mouse-wheel (also in combination with shift and control) does the same as arrow-up and arrow-down
                 <li>Page-up/page down to make coarse adjustments 
                 <li>Home/end to go to minimum/maximum
                 <li>or just start typing a value, followed by enter!
@@ -173,11 +172,6 @@
         Create an empty directory called "obj" in firmware/build. While you're there, also create the directory "lst" in the same place.
         <h3>fatal error: diskio.h: No such file or directory</h3>
         unzip chibios/ext/fatfs-0.9-patched.zip to chibios/ext/fatfs
-        <h3>After firmware update the led flashes three times but can't connect</h3>
-        You probably have a "start.bin" file on sdcard that does not match the firmware version.
-        The solution: unplug Axoloti Core and replug it while holding pushbutton S2 until after the LED flashes three times. This prevents "start.bin" from loading (and crashing). Now it should be able to connect again and overwrite "start.bin" with a new one using the "upload to sdcard as startup" menu.
-        Alternatively, you can remove the sdcard and erase the "start.bin" file with an sdcard reader. 
-        Or remove the sdcard before powering up the Axoloti Core, then insert the card it again, and use the "Upload to sdcard as startup" command.
         <h3>Error: "region `SRAM' overflowed by 14760 bytes"</h3>
         The executable binary code is too big to fit the allocated memory. 
         <h3>Error: "region `CCMSRAM' overflowed by 66780 bytes"</h3>
@@ -187,7 +181,7 @@
         <h3>The delay/read objects have no units</h3>
         The knob-setting on the delay/delread objects is the fraction of the actual full delay length of the corresponding delay/write.
         So if the delay/read is reading from a delayline of 1024 samples,
-        the zero position of the delay/read corresponds with zero samples, and the max position with 1024 samples.
+        the zero position of the delay/read corresponds with zero samples, and the max position with 1024 samples.        
         
         <h2>Limitations</h2>
         <ul>
