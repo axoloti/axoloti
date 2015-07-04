@@ -45,6 +45,8 @@ public class PatchSettings {
     @Element(required = false)
     private String License;
     @Element(required = false)
+    private String Attributions;
+    @Element(required = false)
     private Boolean Saturate;
     PatchSettingsFrame editor;
 
@@ -153,6 +155,14 @@ public class PatchSettings {
 
     public void setLicense(String License) {
         this.License = License;
+    }
+
+    public String getAttributions() {
+        return Attributions;
+    }
+
+    public void setAttributions(String Attributions) {
+        this.Attributions = Attributions;
     }
 
     public Boolean getSaturate() {

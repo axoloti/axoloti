@@ -1297,23 +1297,34 @@ public class Patch {
     }
 
     public AxoObject GenerateAxoObj() {
-        if ((settings.subpatchmode == SubPatchMode.normal) || (settings.subpatchmode == SubPatchMode.no)) {
-            AxoObject ao = GenerateAxoObjNormal();
-            return ao;
+        AxoObject ao;
+        if (settings == null) {
+            ao = GenerateAxoObjNormal();
+        } else {
+            switch (settings.subpatchmode) {
+                case no:
+                case normal:
+                    ao = GenerateAxoObjNormal();
+                    break;
+                case polyphonic:
+                    ao = GenerateAxoObjPoly();
+                    break;
+                case polychannel:
+                    ao = GenerateAxoObjPolyChannel();
+                    break;
+                case polyexpression:
+                    ao = GenerateAxoObjPolyExpression();
+                    break;
+                default:
+                    return null;
+            }
         }
-        if (settings.subpatchmode == SubPatchMode.polyphonic) {
-            AxoObject ao = GenerateAxoObjPoly();
-            return ao;
+        if (settings != null) {
+            ao.sAuthor = settings.getAuthor();
+            ao.sLicense = settings.getLicense();
+            ao.sDescription = notes;
         }
-        if (settings.subpatchmode == SubPatchMode.polychannel) {
-            AxoObject ao = GenerateAxoObjPolyChannel();
-            return ao;
-        }
-        if (settings.subpatchmode == SubPatchMode.polyexpression) {
-            AxoObject ao = GenerateAxoObjPolyExpression();
-            return ao;
-        }
-        return null;
+        return ao;
     }
 
     void ExportAxoObj(File f1) {

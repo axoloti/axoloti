@@ -232,12 +232,12 @@ public class AxoObjects {
                             }
                             a.shortId = ShortID;
                             String uuidVerify = a.GenerateUUID();
-                            if (!uuidVerify.equals(a.getUUID())){
+                            if (!uuidVerify.equals(a.getUUID())) {
                                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
                                         "Incorrect uuid hash detected for object: " + fileEntry.getAbsolutePath() + " , does not match its signature (" + a.getUUID() + "). True signature would be " + uuidVerify);
                             }
                             String shaVerify = a.GenerateSHA();
-                            if (!shaVerify.equals(a.getSHA())){
+                            if (!shaVerify.equals(a.getSHA())) {
                                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
                                         "Incorrect sha hash detected for object: " + fileEntry.getAbsolutePath() + " its implementation does not match its signature.");
                             }
@@ -274,6 +274,22 @@ public class AxoObjects {
                             }
                             ObjectUUIDMap.put(a.getUUID(), a);
                         }
+                    } catch (Exception ex) {
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ex);
+                    }
+                } else if (fileEntry.getName().endsWith(".axp")) {
+                    try {
+                        String oname = fileEntry.getName().substring(0, fileEntry.getName().length() - 4);
+                        String fullname;
+                        if (prefix.isEmpty()) {
+                            fullname = oname;
+                        } else {
+                            fullname = prefix.substring(1) + "/" + oname;
+                        } 
+                        AxoObjectUnloaded a = new AxoObjectUnloaded(fullname, fileEntry);
+                        a.sPath = fileEntry.getAbsolutePath();
+                        t.Objects.add(a);
+                        ObjectList.add(a);
                     } catch (Exception ex) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ex);
                     }

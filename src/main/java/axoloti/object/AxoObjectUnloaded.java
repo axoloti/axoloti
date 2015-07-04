@@ -19,6 +19,7 @@ package axoloti.object;
 
 import axoloti.Patch;
 import java.awt.Point;
+import java.io.File;
 import org.simpleframework.xml.Root;
 
 /**
@@ -26,34 +27,39 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root
-public class AxoObjectComment extends AxoObjectAbstract {
+public class AxoObjectUnloaded extends AxoObjectAbstract {
 
-    public AxoObjectComment() {
+    File f;
+    
+    public AxoObjectUnloaded() {
         super();
     }
 
-    public AxoObjectComment(String id, String sDescription) {
-        super(id, sDescription);
+    public AxoObjectUnloaded(String id, File f) {
+        super(id, "");
+        this.f = f;
     }
 
     @Override
     public AxoObjectInstanceAbstract CreateInstance(Patch patch, String InstanceName1, Point location) {
-        AxoObjectInstanceComment o = new AxoObjectInstanceComment(this, patch, InstanceName1, location);
+        AxoObjectFromPatch oo = new AxoObjectFromPatch(f);
+        oo.id = id;
+        AxoObjectInstance oi = new AxoObjectInstance(oo, patch, InstanceName1, location);
         if (patch != null) {
-            patch.objectinstances.add(o);
+            patch.objectinstances.add(oi);
         }
-        o.PostConstructor();
-        return o;
+        oi.PostConstructor();
+        return oi;
     }
 
     @Override
     public String GenerateSHA() {
-        return "comment";
+        return "unloaded";
     }
 
     @Override
     public String GenerateUUID() {
-        return "comment";
+        return "unloaded";
     }
 
 }
