@@ -136,6 +136,13 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                                 } else {
                                     model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), "not accesseable : " + result});
                                 }
+                            } else if (getOS() == OSDetect.OS.LINUX) {
+                                if (result == LibUsb.ERROR_ACCESS) {
+                                    model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), "insufficient permissions"});
+                                    // log message:  - install udev rules by running axoloti/platform/linux/add_udev_rules.sh"
+                                } else {
+                                    model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), "not accesseable : " + result});
+                                }
                             } else {
                                 model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), "not accesseable : " + result});
                             }
