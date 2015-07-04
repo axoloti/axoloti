@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="./lead" sha="a9ad5584febc08cf7d7cdc106821fb4e57d7b1e5" name="lead_1" x="14" y="14">
+   <obj type="./lead" name="lead_1" x="14" y="14">
       <params>
          <frac32.s.map name="lfo_flt" value="-61.0"/>
          <frac32.s.map name="lfo_pitch" value="1.0"/>
@@ -11,21 +11,21 @@
          <combo attributeName="midichannel" selection="1"/>
       </attribs>
    </obj>
-   <obj type="./hh" sha="f3e39a317880e1f616bc91c3c60747733e6be07b" name="hh_2" x="140" y="14">
+   <obj type="./hh" name="hh_2" x="140" y="14">
       <params/>
       <attribs>
          <combo attributeName="midichannel" selection="4"/>
       </attribs>
    </obj>
-   <obj type="./vacuum_cleaner_pad" sha="b9714083ec0676d2a0c060a24a67f9d964d65f73" name="vacuumcleanerpad" x="252" y="14">
+   <obj type="./vacuum_cleaner_pad" name="vacuumcleanerpad" x="252" y="14">
       <params>
          <frac32.s.map name="osc1" value="-10.0"/>
          <frac32.s.map name="osc1_" value="23.0"/>
          <frac32.u.map name="smooth1" value="0.0"/>
-         <frac32.s.map name="pwm_1" value="16.699999809265137"/>
-         <frac32.u.map name="smooth1_" value="0.0"/>
          <frac32.u.map name="envd1:a" value="0.0"/>
          <frac32.u.map name="envd1:d" value="0.0"/>
+         <frac32.s.map name="pwm_1" value="16.699999809265137"/>
+         <frac32.u.map name="smooth1_" value="0.0"/>
          <frac32.u.map name="envahd1:a" value="0.0"/>
          <frac32.u.map name="envahd1:d" value="0.0"/>
          <frac32.s.map name="pwm_1_" value="-19.510048866271973"/>
@@ -39,6 +39,8 @@
       <attribs>
          <combo attributeName="poly" selection="4"/>
          <combo attributeName="midichannel" selection="3"/>
+         <combo attributeName="mididevice" selection="omni"/>
+         <combo attributeName="midiport" selection="omni"/>
       </attribs>
    </obj>
    <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix_1" x="392" y="14">
@@ -49,7 +51,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="./tremolo" sha="9788eedb9ab88fd2d0b11124fc491d14c9522387" name="tremolo_1" x="490" y="14">
+   <obj type="./tremolo" name="tremolo_1" x="490" y="14">
       <params>
          <frac32.s.map name="speed" value="10.0"/>
          <frac32.u.map name="intesity" value="3.5"/>
@@ -62,7 +64,7 @@
          <frac32.u.map name="feedback" value="20.5"/>
       </params>
       <attribs>
-         <spinner attributeName="delaylength" value="15739"/>
+         <spinner attributeName="delaylength" value="8192"/>
       </attribs>
    </obj>
    <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2" x="182" y="70">
@@ -89,7 +91,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="./bass" sha="1508ffa86fa901546e8362ef66bc1610e1d7e316" name="bass_1" x="392" y="294">
+   <obj type="./bass" name="bass_1" x="392" y="294">
       <params>
          <frac32.u.map name="env:a" value="0.0"/>
          <frac32.u.map name="env:d" value="0.0"/>
@@ -99,7 +101,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="./drummachine" sha="13a6734c309203ca5c5861c8be185e8b462cb090" name="drummachine_1" x="504" y="294">
+   <obj type="./drummachine" name="drummachine_1" x="504" y="294">
       <params>
          <frac32.s.map name="d_1" value="-15.0"/>
          <frac32.s.map name="filter.lowpass~_1" value="-29.0"/>
@@ -126,7 +128,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="chorus2" sha="b0843bcaca2d6012fb8d8c1cfc5597dda5fac981" name="chorus1" x="854" y="294">
+   <obj type="chorus2" name="chorus1" x="854" y="294">
       <params>
          <frac32.u.map name="depth" value="1.5"/>
          <frac32.s.map name="speed" value="-25.0"/>
@@ -261,4 +263,10 @@
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>535</x>
+      <y>266</y>
+      <width>1374</width>
+      <height>828</height>
+   </windowPos>
 </patch-1.0>

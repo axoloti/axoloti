@@ -1,8 +1,8 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="preset 1: intro" x="434" y="14"/>
-   <comment type="patch/comment" sha="sha" name="keyboard splits: 0-50: bassline" x="630" y="14"/>
-   <comment type="patch/comment" sha="sha" name="preset 2: intro speeding up" x="434" y="42"/>
-   <comment type="patch/comment" sha="sha" name="50-63: strings chord" x="714" y="42"/>
+   <comment type="patch/comment" sha="comment" name="preset 1: intro" x="434" y="14"/>
+   <comment type="patch/comment" sha="comment" name="keyboard splits: 0-50: bassline" x="630" y="14"/>
+   <comment type="patch/comment" sha="comment" name="preset 2: intro speeding up" x="434" y="42"/>
+   <comment type="patch/comment" sha="comment" name="50-63: strings chord" x="714" y="42"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp_2" x="56" y="56">
       <params>
          <frac32.s.map name="value" value="0.0">
@@ -30,12 +30,12 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="preset 3: geiger counter" x="434" y="56"/>
-   <comment type="patch/comment" sha="sha" name="63-127: melody" x="714" y="56"/>
-   <comment type="patch/comment" sha="sha" name="preset 4: main" x="434" y="84"/>
-   <comment type="patch/comment" sha="sha" name="modulation wheel: geiger counter FM" x="630" y="98"/>
-   <comment type="patch/comment" sha="sha" name="bassline" x="28" y="182"/>
-   <comment type="patch/comment" sha="sha" name="drums" x="518" y="182"/>
+   <comment type="patch/comment" sha="comment" name="preset 3: geiger counter" x="434" y="56"/>
+   <comment type="patch/comment" sha="comment" name="63-127: melody" x="714" y="56"/>
+   <comment type="patch/comment" sha="comment" name="preset 4: main" x="434" y="84"/>
+   <comment type="patch/comment" sha="comment" name="modulation wheel: geiger counter FM" x="630" y="98"/>
+   <comment type="patch/comment" sha="comment" name="bassline" x="28" y="182"/>
+   <comment type="patch/comment" sha="comment" name="drums" x="518" y="182"/>
    <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_1" x="168" y="224">
       <params>
          <frac32.s.map name="a" value="-32.0"/>
@@ -70,7 +70,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="sel/sel b 16 4t" sha="2550bb1cdd0761d8347dc1fdecd5d8ebd604de50" name="select_bool_16_v2x4_1" x="658" y="224">
+   <obj type="sel/sel b 16 4t" sha="8a0c95038623068cfb5f9228392b1c7f7938c4aa" name="select_bool_16_v2x4_1" x="658" y="224">
       <params>
          <bin16 name="p1" value="2147483647">
             <presets/>
@@ -115,9 +115,9 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd_1" x="952" y="224">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd_1" x="952" y="224">
       <params>
-         <frac32.u.map name="d" value="23.5"/>
+         <frac32.s.map name="d" value="23.5"/>
       </params>
       <attribs/>
    </obj>
@@ -161,9 +161,9 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd_2" x="952" y="294">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd_2" x="952" y="294">
       <params>
-         <frac32.u.map name="d" value="3.0"/>
+         <frac32.s.map name="d" value="3.0"/>
       </params>
       <attribs/>
    </obj>
@@ -182,9 +182,9 @@
          <spinner attributeName="endNote" value="50"/>
       </attribs>
    </obj>
-   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd_3" x="952" y="378">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd_3" x="952" y="378">
       <params>
-         <frac32.u.map name="d" value="38.0"/>
+         <frac32.s.map name="d" value="38.0"/>
       </params>
       <attribs/>
    </obj>
@@ -225,8 +225,8 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="melody" x="28" y="574"/>
-   <comment type="patch/comment" sha="sha" name="strings" x="896" y="602"/>
+   <comment type="patch/comment" sha="comment" name="melody" x="28" y="574"/>
+   <comment type="patch/comment" sha="comment" name="strings" x="896" y="602"/>
    <obj type="midi/in/keyb zone lru" sha="b9b28cf52b3421368e367f3718404222910c57a5" name="keybzone_lru_2" x="28" y="616">
       <params/>
       <attribs>
@@ -262,35 +262,35 @@
       <params/>
       <attribs>
          <text attributeName="script">
-            <sText><![CDATA[if (status == MIDI_NOTE_ON + %midichannel%) {
+            <sText><![CDATA[if (status == MIDI_NOTE_ON + attr_midichannel) {
 	if ((data1 == 57)) { // minor
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1,80);
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1+3,80);
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1+7,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+3,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,80);
 	} else if ((data1 == 53)) { // major
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1,80);
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1+4,80);
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1+7,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+4,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,80);
 	} else if ((data1 == 48)) { // major
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1,80);
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1+4,80);
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1+7,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+4,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,80);
 	} else if ((data1 == 50)) { // minor
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1,80);
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1+3,80);
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1+7,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+3,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,80);
 	} else if ((data1 > 50)&&(data1<59)){ // major
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1,80);
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1+4,80);
-		PatchMidiInHandler(MIDI_NOTE_ON+1,12+data1+7,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+4,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,80);
 	}
 }]]></sText>
          </text>
       </attribs>
    </obj>
-   <obj type="stringvoice" sha="65c0834729cf9c917998c5bf5a197dca925eda0e" name="stringvoice_1" x="994" y="644">
+   <obj type="./keyboard/stringvoice" uuid="7c366f4d0e2cd2b10e4ad7fcf2ad41651bc605c" name="stringvoice_2" x="994" y="644">
       <params>
-         <frac32.s.map name="envf:a" value="-7.0"/>
+         <frac32.s.map name="envf:a" value="0.0"/>
          <frac32.s.map name="envf:d" value="0.0"/>
          <frac32.u.map name="envf:s" value="0.0"/>
          <frac32.s.map name="envf:r" value="0.0"/>
@@ -298,30 +298,17 @@
          <frac32.u.map name="envahd21:d" value="42.0"/>
          <frac32.s.map name="osc2" value="-9.0"/>
          <frac32.u.map name="pwm" value="13.5"/>
-         <frac32.s.map name="vcf3_1:pitch" value="29.0">
-            <presets>
-               <preset index="1">
-                  <f v="-64.0"/>
-               </preset>
-               <preset index="2">
-                  <f v="-64.0"/>
-               </preset>
-               <preset index="3">
-                  <f v="1.0"/>
-               </preset>
-               <preset index="4">
-                  <f v="29.0"/>
-               </preset>
-            </presets>
-         </frac32.s.map>
-         <frac32.u.map name="vcf3_1:reso" value="50.5"/>
+         <frac32.s.map name="vcf3_1:pitch" value="7.0"/>
+         <frac32.u.map name="vcf3_1:reso" value="46.5"/>
       </params>
       <attribs>
-         <combo attributeName="poly" selection="3"/>
-         <combo attributeName="midichannel" selection="2"/>
+         <combo attributeName="poly" selection="4"/>
+         <combo attributeName="midichannel" selection="inherit"/>
+         <combo attributeName="mididevice" selection="omni"/>
+         <combo attributeName="midiport" selection="omni"/>
       </attribs>
    </obj>
-   <obj type="chorus2" sha="251ade07aed51656f172e99173f8500c451e0067" name="chorus2_1" x="1134" y="644">
+   <obj type="chorus2" name="chorus2_1" x="1134" y="644">
       <params>
          <frac32.u.map name="depth" value="2.5"/>
          <frac32.s.map name="speed" value="-47.0"/>
@@ -361,7 +348,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="geiger counter" x="28" y="994"/>
+   <comment type="patch/comment" sha="comment" name="geiger counter" x="28" y="994"/>
    <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_2" x="28" y="1036">
       <params>
          <frac32.s.map name="pitch" value="27.0"/>
@@ -666,10 +653,6 @@
          <dest name="envd_3 trig"/>
       </net>
       <net>
-         <source name="stringvoice_1 outlet_1"/>
-         <dest name="chorus2_1 in"/>
-      </net>
-      <net>
          <source name="chorus2_1 L"/>
          <dest name="dac~_3 left"/>
       </net>
@@ -701,9 +684,19 @@
          <source name="mix3_2 out"/>
          <dest name="dac~_2 right"/>
       </net>
+      <net>
+         <source name="stringvoice_2 outlet_1"/>
+         <dest name="chorus2_1 in"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>398</x>
+      <y>34</y>
+      <width>1822</width>
+      <height>1413</height>
+   </windowPos>
 </patch-1.0>

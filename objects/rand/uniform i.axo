@@ -1,6 +1,5 @@
 <objdefs>
-   <obj.normal id="uniform i" uuid="9b1f945f346af0165ed99b8e19136cdbf744e594" sha="b3aed4cbca3408b0e07a30841470d242fef58b0e">
-      <upgradeSha>c7ef417b1303674030a1d837b38fb010311ca9cf</upgradeSha>
+   <obj.normal id="uniform i" uuid="9b1f945f346af0165ed99b8e19136cdbf744e594" sha="c7045bb3734e4fdb272c379df8d5e3df8c06a0a1">
       <sDescription>uniform distributed (white) noise, k-rate generation. Range 0..(n-1)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -21,9 +20,7 @@
       <code.declaration><![CDATA[int32_t val;
 int ntrig;
 ]]></code.declaration>
-      <code.init><![CDATA[if (%max%)
-   val = (int32_t)(GenerateRandomNumber()% (%max%));
-else val = 0;
+      <code.init><![CDATA[val = 0;
 ntrig = 0;
 ]]></code.init>
       <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {
@@ -33,7 +30,7 @@ ntrig = 0;
       ntrig=1;
    }
    else if (!(inlet_trig>0)) ntrig=0;
-   outlet_v= val;
+   outlet_v = val;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -1,15 +1,15 @@
 <patch-1.0>
-   <obj type="script/script" sha="ba13a90be49d2157146d885c2cdf29e2c36cf457" name="script1" x="14" y="14">
+   <obj type="script/script" sha="24cae6cc95a2ace0ac855159f67b59a54efe7146" name="script1" x="14" y="14">
       <params/>
       <attribs>
          <text attributeName="script">
             <sText><![CDATA[while(!chThdShouldTerminate()){
 	int i;
-	PatchMidiInHandler(MIDI_NOTE_ON,55,80);
-	PatchMidiInHandler(MIDI_NOTE_ON,67,80);
-	PatchMidiInHandler(MIDI_NOTE_ON,70,80);
-	PatchMidiInHandler(MIDI_NOTE_ON,74,80);
-	PatchMidiInHandler(MIDI_NOTE_ON,79,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_ON,55,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_ON,67,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_ON,70,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_ON,74,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_ON,79,80);
 	for(i=0;i<8;i++) {
 		out1 = (i+1)<<21;
 		out2 = (i)<<21;
@@ -19,16 +19,16 @@
 		chThdSleepMilliseconds(500);
 		if (chThdShouldTerminate()) break;
 	}	
-	PatchMidiInHandler(MIDI_NOTE_OFF,55,80);
-	PatchMidiInHandler(MIDI_NOTE_OFF,67,80);
-	PatchMidiInHandler(MIDI_NOTE_OFF,70,80);
-	PatchMidiInHandler(MIDI_NOTE_OFF,74,80);
-	PatchMidiInHandler(MIDI_NOTE_OFF,79,80);
-	PatchMidiInHandler(MIDI_NOTE_ON,50,80);
-	PatchMidiInHandler(MIDI_NOTE_ON,62,80);
-	PatchMidiInHandler(MIDI_NOTE_ON,65,80);
-	PatchMidiInHandler(MIDI_NOTE_ON,69,80);
-	PatchMidiInHandler(MIDI_NOTE_ON,74,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_OFF,55,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_OFF,67,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_OFF,70,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_OFF,74,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_OFF,79,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_ON,50,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_ON,62,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_ON,65,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_ON,69,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_ON,74,80);
 	for(;i<16;i++) {
 		out1 = (i+1)<<21;
 		out2 = (i)<<21;
@@ -38,20 +38,20 @@
 		chThdSleepMilliseconds(500);
 		if (chThdShouldTerminate()) break;
 	}	
-	PatchMidiInHandler(MIDI_NOTE_OFF,50,80);
-	PatchMidiInHandler(MIDI_NOTE_OFF,62,80);
-	PatchMidiInHandler(MIDI_NOTE_OFF,65,80);
-	PatchMidiInHandler(MIDI_NOTE_OFF,69,80);
-	PatchMidiInHandler(MIDI_NOTE_OFF,74,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_OFF,50,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_OFF,62,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_OFF,65,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_OFF,69,80);
+	PatchMidiInHandler((midi_device_t) 0, 0,MIDI_NOTE_OFF,74,80);
 }]]></sText>
          </text>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="the script is the conductor" x="126" y="14"/>
-   <comment type="patch/comment" sha="sha" name="drum 1" x="616" y="28"/>
-   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd1" x="616" y="56">
+   <comment type="patch/comment" sha="comment" name="the script is the conductor" x="126" y="14"/>
+   <comment type="patch/comment" sha="comment" name="drum 1" x="616" y="28"/>
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="616" y="56">
       <params>
-         <frac32.u.map name="d" value="5.5"/>
+         <frac32.s.map name="d" value="5.5"/>
       </params>
       <attribs/>
    </obj>
@@ -75,8 +75,8 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="orchestra" x="14" y="168"/>
-   <obj type="./keyboard/stringvoice" sha="65c0834729cf9c917998c5bf5a197dca925eda0e" name="stringvoice1" x="14" y="196">
+   <comment type="patch/comment" sha="comment" name="orchestra" x="14" y="168"/>
+   <obj type="./keyboard/stringvoice" name="stringvoice1" x="14" y="196">
       <params>
          <frac32.s.map name="envf:a" value="0.0"/>
          <frac32.s.map name="envf:d" value="0.0"/>
@@ -92,9 +92,11 @@
       <attribs>
          <combo attributeName="poly" selection="7"/>
          <combo attributeName="midichannel" selection="0"/>
+         <combo attributeName="mididevice" selection="omni"/>
+         <combo attributeName="midiport" selection="omni"/>
       </attribs>
    </obj>
-   <obj type="chorus2" sha="251ade07aed51656f172e99173f8500c451e0067" name="chorus21" x="154" y="196">
+   <obj type="chorus2" name="chorus21" x="154" y="196">
       <params>
          <frac32.u.map name="depth" value="11.0"/>
          <frac32.s.map name="speed" value="-64.0"/>
@@ -105,14 +107,14 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="drum 2" x="616" y="196"/>
+   <comment type="patch/comment" sha="comment" name="drum 2" x="616" y="196"/>
    <obj type="math/==" sha="3215967e1a000a377c36699ca3bc414a25beaf48" name="inv1" x="616" y="224">
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd2" x="686" y="224">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd2" x="686" y="224">
       <params>
-         <frac32.u.map name="d" value="20.0"/>
+         <frac32.s.map name="d" value="20.0"/>
       </params>
       <attribs/>
    </obj>
@@ -134,7 +136,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="the fweeeeep engine" x="252" y="364"/>
+   <comment type="patch/comment" sha="comment" name="the fweeeeep engine" x="252" y="364"/>
    <obj type="math/==" sha="3215967e1a000a377c36699ca3bc414a25beaf48" name="==1" x="252" y="392">
       <params/>
       <attribs/>
@@ -329,4 +331,10 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>266</x>
+      <y>92</y>
+      <width>1234</width>
+      <height>982</height>
+   </windowPos>
 </patch-1.0>
