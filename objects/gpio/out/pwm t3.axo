@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="pwm t3" uuid="af5f5b8c7ed30e01244cb4fa7c253b25bc59c87d" sha="e948ec33d8547feba2e2a9ca6db331ba1706987e">
+   <obj.normal id="pwm t3" uuid="dded4f8d0eac1e989109aef35757abab7e91ea50" sha="e948ec33d8547feba2e2a9ca6db331ba1706987e">
       <upgradeSha>c6c36bce1738f803a40a11c3e030e5240431b3e9</upgradeSha>
       <sDescription>pwm output timer 3</sDescription>
       <author>Johannes Taelman</author>

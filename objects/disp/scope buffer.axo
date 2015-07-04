@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="scope buffer" uuid="26a420e17ff3362f16d31ba1b32af435430fb360" sha="3e77f9cc197fd28617e5d01fc467644ab9107007">
+   <obj.normal id="scope buffer" uuid="1dbd5d726cb1050408b496f306fc9e0603067c16" sha="3e77f9cc197fd28617e5d01fc467644ab9107007">
       <upgradeSha>a8100388e1218ba50352d7e1743cd1b7f37bacd4</upgradeSha>
       <sDescription>bipolar audio rate signal oscilloscope (time domain), showing 1 sample buffer of 16 samples</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="-" uuid="7b1a594b0208bf62e103fe5f45c29e1ffba0aadb" sha="50b9299d5a370749aa9d6cfdb949bf3191a1f68">
+   <obj.normal id="-" uuid="3280bb759e9fc189e134300e48dda7e903c9a110" sha="50b9299d5a370749aa9d6cfdb949bf3191a1f68">
       <upgradeSha>27008b61438fd41bbc9a021b13c5eaad1cc101b5</upgradeSha>
       <sDescription>subtract</sDescription>
       <author>Johannes Taelman</author>
@@ -16,7 +16,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= inlet_in1-inlet_in2 ;]]></code.krate>
    </obj.normal>
-   <obj.normal id="-" uuid="265c53e320a100fc222ce656c20b1c9b16e7ef23" sha="cfaf2f34ee5b4ef93f3b475b2f0da67a00d2ea1a">
+   <obj.normal id="-" uuid="832edca3a945aa25ae1875d277bdd12d6709031a" sha="cfaf2f34ee5b4ef93f3b475b2f0da67a00d2ea1a">
       <upgradeSha>86190d21676ef888e72ad0ae4fde0d817119f21c</upgradeSha>
       <sDescription>subtract</sDescription>
       <author>Johannes Taelman</author>
@@ -33,7 +33,7 @@
       <attribs/>
       <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in1[buffer_index]-inlet_in2[buffer_index] ;]]></code.srate>
    </obj.normal>
-   <obj.normal id="-" uuid="82bd6aa2b4ff8f41e46b66b7025d4f72c21b612f" sha="554de2692f3e366237f42785f5b0d75ff7823aa3">
+   <obj.normal id="-" uuid="1643d55e6e7ce1c995a5e66db9f54fd969e6c9b7" sha="554de2692f3e366237f42785f5b0d75ff7823aa3">
       <upgradeSha>bfe9c7f97b2e72bd54afeb62ab2c40dbf3a5a82</upgradeSha>
       <sDescription>subtract</sDescription>
       <author>Johannes Taelman</author>

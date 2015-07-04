@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cos" uuid="740743cc81568c4787ad19b398319c321a05aeab" sha="f35ef0fb72b74c5766631ffb48402228769ef4d2">
+   <obj.normal id="cos" uuid="c813904f245103af9eafbc05ed6521f94472aed4" sha="f35ef0fb72b74c5766631ffb48402228769ef4d2">
       <upgradeSha>bba0c20ab32678ed34365aeb6943b53d60b2c7</upgradeSha>
       <sDescription>cosine function, -64..64 phase corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
@@ -18,7 +18,7 @@
        outlet_out= (r>>4);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="cos" uuid="3d681309f6368a58ea6192cbcee98987a82035b0" sha="f4361f0b932565dbfacd93ab635727b0faf43e0c">
+   <obj.normal id="cos" uuid="a2ba1ca8d10b854e06728c088c43409866624fc1" sha="f4361f0b932565dbfacd93ab635727b0faf43e0c">
       <upgradeSha>8e1816a884241ec4b44374c205dbcd18fe0d101e</upgradeSha>
       <sDescription>cosine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>

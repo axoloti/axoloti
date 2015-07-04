@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="line 3 m x" uuid="587c3a70609e91c2b6a4cecbf255eaa825b41ae" sha="3a1ec4a1f9e58c8adadf0438d25fb23f179026cb">
+   <obj.normal id="line 3 m x" uuid="9c34c5aba9e01266ac622e6a312424353c66ea29" sha="3a1ec4a1f9e58c8adadf0438d25fb23f179026cb">
       <upgradeSha>fabbfbd14b2c0ab4597f5dae2f9cce9a6bcd9fdc</upgradeSha>
       <sDescription>Three piecewise linear ramps, extended range, time modulation inputs</sDescription>
       <author>Johannes Taelman</author>

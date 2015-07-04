@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="echo fdbk mix" uuid="9b68537c30fd71007bf7063dba8621a384819d8" sha="d89c6cf6ecd25a4bd258457bacf051491b2f1bea">
+   <obj.normal id="echo fdbk mix" uuid="c009caffa414e2e900592c7507defe6ff15d867a" sha="d89c6cf6ecd25a4bd258457bacf051491b2f1bea">
       <upgradeSha>779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee</upgradeSha>
       <sDescription>Audio delay with feedback and mix, fixed delay time</sDescription>
       <author>Johannes Taelman</author>

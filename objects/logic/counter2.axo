@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="counter2" uuid="bddace08a7825d1686fd164466f13482e5fc265a" sha="520bfefaef89b5ba4deb2a4d79b4236f0b321489">
+   <obj.normal id="counter2" uuid="d9536f238ab92e53ac93d5927c3b43ceef998dc1" sha="520bfefaef89b5ba4deb2a4d79b4236f0b321489">
       <upgradeSha>15f2cb0c8e4088e3a7bd37444354cfabe7d005cf</upgradeSha>
       <sDescription>cyclic up/down counter</sDescription>
       <author>Johannes Taelman</author>

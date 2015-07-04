@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="follower" uuid="34496f934f9086184100cc082ee7af5d7b42deda" sha="2f512222f4b4d2c035c326cd486c1cacc6be5e64">
+   <obj.normal id="follower" uuid="356ce1d18ac6b51704833f94dac5dea823fb8223" sha="2f512222f4b4d2c035c326cd486c1cacc6be5e64">
       <upgradeSha>8074c80ff135ec9b250e19c7a6671f8369b45ae4</upgradeSha>
       <sDescription>envelope follower, linear output</sDescription>
       <author>Johannes Taelman</author>

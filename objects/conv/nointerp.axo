@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="nointerp" uuid="efd21e9d8a0714e0bc8ee5b60bc426486ac8a60c" sha="64f73f89fb7235dad58feab8922e05021b0984ec">
+   <obj.normal id="nointerp" uuid="5e7389d61f8cd8945790bb71f1670b3a0904c15b" sha="64f73f89fb7235dad58feab8922e05021b0984ec">
       <upgradeSha>77d868d4547e0e29a1aa7711f764a6d3957177f9</upgradeSha>
       <sDescription>k- to s-rate without interpolation</sDescription>
       <author>Johannes Taelman</author>

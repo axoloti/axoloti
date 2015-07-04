@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="hd lin" uuid="61ddae0b918f982ca29b9034807ed1b8c825e112" sha="22002e6ccdd9312700cbfeb47428b88269c0aec2">
+   <obj.normal id="hd lin" uuid="6ba71ece5698a363b70bb44bdc53e1118d94dbcb" sha="22002e6ccdd9312700cbfeb47428b88269c0aec2">
       <upgradeSha>c2939a8e03f80347fcceea10afaf9b82abd2a38</upgradeSha>
       <sDescription>hold/decay envelope, linear ramp</sDescription>
       <author>Johannes Taelman</author>

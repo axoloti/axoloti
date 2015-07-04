@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="fdn4" uuid="19d16e8cf9963f06dbff6fc5d668c0695a22e6b5" sha="322488612f181dcbea337b35cd0490b34010af82">
+   <obj.normal id="fdn4" uuid="b7812f987aee4aa5d4db9db316eb993f993259ae" sha="322488612f181dcbea337b35cd0490b34010af82">
       <upgradeSha>13d669964bda5b57297a930109b40a6bc2f548e4</upgradeSha>
       <sDescription>Feedback delay network with 4 delay lines. High quality 32bit.</sDescription>
       <author>Johannes Taelman</author>

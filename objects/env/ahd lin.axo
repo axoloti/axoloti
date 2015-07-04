@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="ahd lin" uuid="bf32488cdec5655579ec46a6681e270792bf396" sha="276c5a5541a1f3ef243c2ed99d46809f8d4d1419">
+   <obj.normal id="ahd lin" uuid="71e73d4adc87a58ceb2bdfb55b11b6e851dbdd62" sha="276c5a5541a1f3ef243c2ed99d46809f8d4d1419">
       <upgradeSha>d5f54db4739e057a5699c6d2275e4c95d1fcbe08</upgradeSha>
       <sDescription>attack/hold/decay envelope, linear ramps</sDescription>
       <author>Johannes Taelman</author>

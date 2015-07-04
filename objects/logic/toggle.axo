@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="toggle" uuid="f7cbf09d06d10763cc739c0dc52e547f5adc63d0" sha="39d9e5e868a7477dbddf20f01d873f5687f42cf8">
+   <obj.normal id="toggle" uuid="f42f0d3aab552c17bc78b9e65f85dc24f977503d" sha="39d9e5e868a7477dbddf20f01d873f5687f42cf8">
       <upgradeSha>6bbdbe388e7a2ccf11a7d72cf71769a3b20cc14f</upgradeSha>
       <sDescription>toggle</sDescription>
       <author>Johannes Taelman</author>

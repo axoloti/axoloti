@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="i" uuid="7e5a6db4ad15fe124d46887290445a2b88299b48" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a">
+   <obj.normal id="i" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a">
       <upgradeSha>f379e2b7efb6169f8e7327be5b09362609656408</upgradeSha>
       <sDescription>positive integer control</sDescription>
       <author>Johannes Taelman</author>

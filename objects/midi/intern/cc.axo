@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc" uuid="c533002b2e0636430214aadfc06a597985afe339" sha="b99352f56e5322d500f59ede0372a198a2999c88">
+   <obj.normal id="cc" uuid="554fe07ecd943d2ffd8f7435cae99550f8da1fde" sha="b99352f56e5322d500f59ede0372a198a2999c88">
       <upgradeSha>261768228d28a14925a7425a85ea22938211555b</upgradeSha>
       <sDescription>Midi controller output. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>

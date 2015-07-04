@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="allpass" uuid="211ef258267c524b01f5d29982033218fd21686c" sha="ed870a0f9721a385b1f3cf15dc73be6a13d283f7">
+   <obj.normal id="allpass" uuid="59cc8e3d8044e145e1eb908baa5a7d3ed2ec5f72" sha="ed870a0f9721a385b1f3cf15dc73be6a13d283f7">
       <upgradeSha>8140941b68c1e90cdb668d6ed237ed2b2ba1a8f6</upgradeSha>
       <sDescription>allpass reverb section</sDescription>
       <author>Johannes Taelman</author>

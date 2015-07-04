@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="to b" uuid="8444fb9c268d656277af5ab4f4ff2de9b9eb9aa8" sha="b045cb41b877b7bf951bee343db05e80b252b6e5">
+   <obj.normal id="to b" uuid="91ff898f0f2bf6e4dc0165515e0be7c2281da18b" sha="b045cb41b877b7bf951bee343db05e80b252b6e5">
       <upgradeSha>205e5c5ed2de35ec586e37ce247ac3b4a9d22cd5</upgradeSha>
       <sDescription>convert to boolean output</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="echo" uuid="1aab04caa9f5719053e63be4294772fd362a235a" sha="d36e882cb943624d3d4fc7c4297f9503e46c04ba">
+   <obj.normal id="echo" uuid="b7e4de60a644f6b30fdee9648ea62f446ecce38d" sha="d36e882cb943624d3d4fc7c4297f9503e46c04ba">
       <upgradeSha>c99f6c1ce7d79693879e0923e21fc0c6ffd1169</upgradeSha>
       <sDescription>Audio delay line, fixed delay time</sDescription>
       <author>Johannes Taelman</author>

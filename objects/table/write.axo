@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="write" uuid="ec330382359aa6cb641baed3a8f03ff3196d5568" sha="30bbf808f0c1fd3a6184ed463839d27797fd43c5">
+   <obj.normal id="write" uuid="ae85c48e960e33bd95ba61cce3832cf2a3a3de26" sha="30bbf808f0c1fd3a6184ed463839d27797fd43c5">
       <upgradeSha>d57515c0f3344ccf04436a1483b381a2b73aeba1</upgradeSha>
       <sDescription>write to table</sDescription>
       <author>Johannes Taelman</author>
@@ -24,7 +24,7 @@
    if (!(inlet_trig>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="write" uuid="3bf845e18052a9d080848563b2128a7103012596" sha="1c91ce8614cadb0dc4b4f00db2d3b18d030df263">
+   <obj.normal id="write" uuid="50b8c8807ba1fc700ed79381c9360a982e0c3fb9" sha="1c91ce8614cadb0dc4b4f00db2d3b18d030df263">
       <upgradeSha>27fd4ced2949a883990a38df165fea0d15e1bc2b</upgradeSha>
       <sDescription>write to table</sDescription>
       <author>Johannes Taelman</author>

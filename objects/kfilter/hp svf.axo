@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="hp svf" uuid="429e5e4a463327c3a14ddb75f9f33ae93d14c9e4" sha="ddabb4d25e6c3506408f8e1859e9f0379603eba3">
+   <obj.normal id="hp svf" uuid="110d1e7b2db9d170a78a303dd7e193dd654fae69" sha="ddabb4d25e6c3506408f8e1859e9f0379603eba3">
       <upgradeSha>58468664011eea81973df1e268b54354c1aebd62</upgradeSha>
       <sDescription>Highpass filter, state-variable type, control rate</sDescription>
       <author>Johannes Taelman</author>

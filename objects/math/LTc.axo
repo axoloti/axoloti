@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="&lt;c" uuid="abb5c33268fd0818d6c3ff7dbc39839a6227d23b" sha="cfbcbe9eb204d0e8edc9d135f13c6fa284ba378d">
+   <obj.normal id="&lt;c" uuid="852c84e7bd967ee4a44cc553fcf6e3fc9d8b92c4" sha="cfbcbe9eb204d0e8edc9d135f13c6fa284ba378d">
       <upgradeSha>355de7092a37338e16e09397154948f860a9160c</upgradeSha>
       <sDescription>less than constant</sDescription>
       <author>Johannes Taelman</author>

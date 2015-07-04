@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="in right" uuid="3b0a062241e1883a2cee0d7b22db870afc9ef4b5" sha="3cc7d51e29050f42f65ef453827d55d79eededec">
+   <obj.normal id="in right" uuid="5f35c9f87b3f291a8120a10db71935bebd186469" sha="3cc7d51e29050f42f65ef453827d55d79eededec">
       <upgradeSha>2e62bc7fd13ee755880acfd02907b99c6960f8f0</upgradeSha>
       <sDescription>Audio input, right channel</sDescription>
       <author>Johannes Taelman</author>

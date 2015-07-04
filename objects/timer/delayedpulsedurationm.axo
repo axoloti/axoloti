@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="delayedpulsedurationm" uuid="b32eb67afcfb33ee4197a181d5a738698ce501d3" sha="60b730950bddb27bed0791babe0bbabbca5889f">
+   <obj.normal id="delayedpulsedurationm" uuid="351678df952a218dae1dd3b68d4756275d572cd0" sha="60b730950bddb27bed0791babe0bbabbca5889f">
       <upgradeSha>f51ba44b498dab230c556bb26e42257c59204228</upgradeSha>
       <sDescription>Generates a single pulse with a duration after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger. The generated pulse is so small you won&apos;t notice it on a display! This version has a modulation input for the delay time.</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="soft" uuid="5b4ad6247667899dbbceb09e1351a8305cf6ea2b" sha="b2b0a5d157cdf416cda1a9c78b03c3e55a1e586b">
+   <obj.normal id="soft" uuid="cafcafb14553874dcff56b97ab767998e788ec01" sha="b2b0a5d157cdf416cda1a9c78b03c3e55a1e586b">
       <upgradeSha>d1abc8d0ff871eec9b76ec2b6de9bfd51f38243a</upgradeSha>
       <sDescription>symetrical soft saturation distortion: y=1.5*x-0.5*x^3 for -1&amp;lt;x&amp;lt;1, y=-1 for x&amp;lt;-1, y=1 for x&amp;gt;1, no oversampling or anti-aliasing</sDescription>
       <author>Johannes Taelman</author>
@@ -19,7 +19,7 @@ int32_t tsq31p3 = ___SMMUL(tsq31,___SMMUL(tsq31,tsq31));
 outlet_out = ts + (ts>>1) - (tsq31p3);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="soft" uuid="4efc17df9ae457737bbe05b0cf6990a6b79e79" sha="72c49906cca82f653980617e3a95718c9888b88d">
+   <obj.normal id="soft" uuid="e680d76a805e4866027cdf654c7efd8b2e54622" sha="72c49906cca82f653980617e3a95718c9888b88d">
       <upgradeSha>4de9b281f2a362671b6dc8606f5d039535893f45</upgradeSha>
       <sDescription>symetrical soft saturation distortion: y=1.5*x-0.5*x^3 for -1&amp;lt;x&amp;lt;1, y=-1 for x&amp;lt;-1, y=1 for x&amp;gt;1, no oversampling or anti-aliasing</sDescription>
       <author>Johannes Taelman</author>

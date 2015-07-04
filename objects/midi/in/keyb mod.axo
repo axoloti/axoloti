@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="keyb mod" uuid="aa7885504201c08eb7894fcc3f0b81531e4e8c78" sha="5e2dc9957f8200909d88e51705ee728033c27964">
+   <obj.normal id="keyb mod" uuid="abcd509d15e7d13d5381203fd2b4d0ac6fe57bb3" sha="5e2dc9957f8200909d88e51705ee728033c27964">
       <upgradeSha>66cf66b781465fa15957a8a3f5f16988bdff894a</upgradeSha>
       <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity modulation source</sDescription>
       <author>Johannes Taelman</author>

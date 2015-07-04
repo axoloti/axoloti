@@ -40,7 +40,7 @@ public class Spectral extends gentools {
 //        WriteAxoObject(catName, CreateAnalyzer24());
 //        WriteAxoObject(catName, CreateAnalyzer24DB());
         WriteAxoObject(catName, CreateAnalyzer24DB2());
-        WriteAxoObject(unstable + catName, CreateVocoder());
+        WriteAxoObject(unstable + "/" + catName, CreateVocoder());
     }
 
     static AxoObject CreateRFFT128() {

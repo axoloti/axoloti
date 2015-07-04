@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="config" uuid="eeffaa8dd5d3ec35f0488e510c5c4d3578a08943" sha="62af644b09e7f654b36d66533da8ea5971ddb351">
+   <obj.normal id="config" uuid="d3e75d8a02e2ccabbbc2af3bc2fcdb8ea65a6133" sha="62af644b09e7f654b36d66533da8ea5971ddb351">
       <upgradeSha>de87118df6aa11e19d10babb34b404522255b5a3</upgradeSha>
       <sDescription>Configures a SPI interface. Pin mapping: PA4=NSS PA5=SCK PA6=MISO PA7=MOSI</sDescription>
       <author>Johannes Taelman</author>

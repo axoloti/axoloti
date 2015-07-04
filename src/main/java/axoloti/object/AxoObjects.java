@@ -231,6 +231,11 @@ public class AxoObjects {
                                 ShortID = ShortID.substring(i + 1);
                             }
                             a.shortId = ShortID;
+                            String uuidVerify = a.GenerateUUID();
+                            if (!uuidVerify.equals(a.getUUID())){
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
+                                        "Incorrect uuid hash detected for object: " + fileEntry.getAbsolutePath() + " , does not match its signature (" + a.getUUID() + "). True signature would be " + uuidVerify);
+                            }
                             String shaVerify = a.GenerateSHA();
                             if (!shaVerify.equals(a.getSHA())){
                                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,

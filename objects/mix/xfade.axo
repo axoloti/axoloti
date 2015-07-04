@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="xfade" uuid="c8f5e2865f0f8ebefed8f77bbcfc062bcabc1990" sha="5f3afbcb5737db365d029496323420815367c522">
+   <obj.normal id="xfade" uuid="bb87360199938d53d1183cdc80947ed0a39e3c9a" sha="5f3afbcb5737db365d029496323420815367c522">
       <upgradeSha>26e6531ae932c0933646b409d957264faeee6fca</upgradeSha>
       <sDescription>crossfade between two inputs</sDescription>
       <author>Johannes Taelman</author>
@@ -22,7 +22,7 @@
    }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="xfade" uuid="49345fca38f5f831006b2ed18467c27dae9e8e88" sha="cef28e7c80ff99f372e17140ba1db8c07ce8d2f5">
+   <obj.normal id="xfade" uuid="cfac82d503dc55fd2e3f90d8d05283610532b8c4" sha="cef28e7c80ff99f372e17140ba1db8c07ce8d2f5">
       <upgradeSha>e301a25211e0b6899b8b54c25e7ac5d9f404eda0</upgradeSha>
       <sDescription>crossfade between two inputs</sDescription>
       <author>Johannes Taelman</author>
@@ -45,7 +45,7 @@
    }
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="xfade~" uuid="5fa6d2245f2d6547ea0fbc994cc4353f25d368f8" sha="bcd063a15ab879dfedea907d97a82df8fe1501f4">
+   <obj.normal id="xfade~" uuid="8d77edf30e3870d3e7de1eacbe59a3b5bcb26322" sha="bcd063a15ab879dfedea907d97a82df8fe1501f4">
       <upgradeSha>7c7bb910e14c9ba3614f189bb924c86ca0a86890</upgradeSha>
       <sDescription>crossfade between two inputs</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc any" uuid="87137c8d09bc503aac489ce307daf00626cf1abd" sha="2ffbc19d6ebcd548c6718faf35db7a24f16095fc">
+   <obj.normal id="cc any" uuid="d49b3be79ccfae03f0630feecafe683b0e9507d4" sha="2ffbc19d6ebcd548c6718faf35db7a24f16095fc">
       <upgradeSha>57c54018f54ca520bf43faf662fbf0bab292b48e</upgradeSha>
       <sDescription>Midi controller output to any CC number and channel</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="gen" uuid="cb6e768eb38832e3dd6541937c03b9f54b502369" sha="8eb92f13e174f63530a4403d1c8cb78cfb53b20">
+   <obj.normal id="gen" uuid="88ecc0fcd7825a6692127e31ee62464e9c5bde5a" sha="8eb92f13e174f63530a4403d1c8cb78cfb53b20">
       <upgradeSha>2faa7905faf62aedd04c2908a0fda56fcff9f4c8</upgradeSha>
       <sDescription>LTC (linear timecode) generator, in sync with the audio sample clock. Does not support drop-frame format. This implementation only works when the system clock is 48kHz or 96kHz, not at 44.1kHz!</sDescription>
       <author>Johannes Taelman</author>

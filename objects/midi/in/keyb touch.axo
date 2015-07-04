@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="keyb touch" uuid="ce7cd0a4fec2df247825493f3b7a2aa5422ed50b" sha="a633ca8af7fd8b648063b5958bb5f25cfb42174">
+   <obj.normal id="keyb touch" uuid="edfcb4cfd5b2064e95f5a7ee644bca56252ec11f" sha="a633ca8af7fd8b648063b5958bb5f25cfb42174">
       <upgradeSha>583b14fe738d269a156ff5842bde32605dcf64bf</upgradeSha>
       <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity. Polyphonic touch output.</sDescription>
       <author>Johannes Taelman</author>

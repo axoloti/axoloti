@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="inlet f" uuid="33d1b98c96182cab156eafac510e7c28d93e6ffd" sha="8e69e1ab7ccd8afaefdc23146c50149809b64955">
+   <obj.normal id="inlet f" uuid="5c585d2dcd9c05631e345ac09626a22a639d7c13" sha="8e69e1ab7ccd8afaefdc23146c50149809b64955">
       <upgradeSha>ec45071db47e99aa672b4e8456c862acb1d95499</upgradeSha>
       <sDescription>Fractional inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)</sDescription>
       <author>Johannes Taelman</author>

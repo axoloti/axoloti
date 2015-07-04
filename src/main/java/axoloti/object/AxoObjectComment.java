@@ -58,4 +58,14 @@ public class AxoObjectComment extends AxoObjectAbstract {
         return o;
     }
 
+    @Override
+    public String GenerateSHA() {
+        return "comment";
+    }
+
+    @Override
+    public String GenerateUUID() {
+        return "comment";
+    }
+
 }

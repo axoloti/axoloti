@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="play" uuid="74aadc64d4f8d1521cdc888e483c0897eead943a" sha="ec8b17d5de4af1298e253b7e94b4c06beba8fd87">
+   <obj.normal id="play" uuid="df6241cc07f6421eafadd3f53750716eb4d38278" sha="ec8b17d5de4af1298e253b7e94b4c06beba8fd87">
       <upgradeSha>661e6425aa2ae595d063d1ece9c7d51be246b601</upgradeSha>
       <sDescription>play audio from table</sDescription>
       <author>Johannes Taelman</author>

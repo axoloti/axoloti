@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="divremc" uuid="97113dde19dea56e92368729d1627f225c00817" sha="e05d21088634f9097b27f6de095eac6704de1457">
+   <obj.normal id="divremc" uuid="fd7d945542e16344358136d7e22cffd5be704260" sha="e05d21088634f9097b27f6de095eac6704de1457">
       <upgradeSha>a9507fb906b40fc4885ac66c9e4b34b840e8164d</upgradeSha>
       <sDescription>divide integer with constant, also outputs remainder (modulo)</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="test_annotations" uuid="a948a0a84a8aa77c88aa25f0d990d0316e093617" sha="f2cb995ddcec5d4ba6868ecba0fd7398d564bd0">
+   <obj.normal id="test_annotations" uuid="c783d0bbe605a13066999e76e32659488fa977f2" sha="f2cb995ddcec5d4ba6868ecba0fd7398d564bd0">
       <sDescription>shows various annotations on inputs and outputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="script" uuid="8a088ece2405f2eaf1ab991b5aad4c4256a90f23" sha="24cae6cc95a2ace0ac855159f67b59a54efe7146">
+   <obj.normal id="script" uuid="db5428f68ac6798b48e7ca4c74c152fc01fe6727" sha="24cae6cc95a2ace0ac855159f67b59a54efe7146">
       <upgradeSha>f18e1c01ff957d5bd75e66553de6f022598888bb</upgradeSha>
       <sDescription>script with 2 inputs and 2 outputs, running in a separate thread</sDescription>
       <author>Johannes Taelman</author>

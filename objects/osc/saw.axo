@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="saw" uuid="18056cc25818f901c281f19e5e2a113211b8c050" sha="fac485938f0744316bc8361d4ad33f897cbff287">
+   <obj.normal id="saw" uuid="672d282db829da944d5580258269aa349c94bb24" sha="fac485938f0744316bc8361d4ad33f897cbff287">
       <upgradeSha>1a5088484533a3633e3eb849de47b478f1599369</upgradeSha>
       <sDescription>Bandwith limited saw wave oscillator</sDescription>
       <author>Johannes Taelman</author>

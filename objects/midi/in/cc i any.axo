@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc i any" uuid="1fe3c8af72f2705bc4387c0fd4f836ad9e8c0f98" sha="c39c26cbc60f4f1fcadd0589b2b8b5685c24d5e">
+   <obj.normal id="cc i any" uuid="a5a8957c081888a8175ecd4630479533958e488b" sha="c39c26cbc60f4f1fcadd0589b2b8b5685c24d5e">
       <upgradeSha>125bd0e830dd1600ee82080af5ca074ec2cd8fce</upgradeSha>
       <sDescription>Receives Midi Continuous Controller messages from any CC number and channel.</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="lfsrburst 9" uuid="66649ab98edddc303ce5b1757fe1d92b407a38eb" sha="e96a9b181b1ca4c8c85e923ca408527688b65305">
+   <obj.normal id="lfsrburst 9" uuid="26d7c18f0fe13c83b9c1956c78ddda71ea30c048" sha="e96a9b181b1ca4c8c85e923ca408527688b65305">
       <upgradeSha>766f24bf1f81976a77de18221774f25931b4cb07</upgradeSha>
       <sDescription>lfsr burst, 9bit = 511 samples, audio rate</sDescription>
       <author>Johannes Taelman</author>

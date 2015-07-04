@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="flashread2~~" uuid="54a5ac8ca88fce621e4a0731489051e2708d4132" sha="582797835561453ad2000195d04d51a5fb2657c0">
+   <obj.normal id="flashread2~~" uuid="66e3578399405c1362cc031712f9d0c3d6a00c71" sha="582797835561453ad2000195d04d51a5fb2657c0">
       <upgradeSha>ee182884ff6601bedd6fe14e6f89cd89864e3b20</upgradeSha>
       <sDescription>linear interpolated flash table read</sDescription>
       <author>Johannes Taelman</author>

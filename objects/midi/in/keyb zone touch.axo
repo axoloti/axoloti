@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="keyb zone touch" uuid="b505f2e8639b4b007bd2fe697a2ffef2f8c85a12" sha="ac58d123bcaa381a2adf6db55d3ec7ed51f51e28">
+   <obj.normal id="keyb zone touch" uuid="b50844801544a4d92e447c983cf5c3acafbbdf17" sha="ac58d123bcaa381a2adf6db55d3ec7ed51f51e28">
       <upgradeSha>a338e85868281e045314a2800ffafe4f12117ad4</upgradeSha>
       <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity, only responding to a range of notes, with polyphonic aftertouch</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="delta" uuid="69950d714a636a8891aa53f0eb8e292c4c594663" sha="7009c3d4ce794ba1c7b59555e790aab766da37a7">
+   <obj.normal id="delta" uuid="58aa97f36fc7af885445a28604363a388a6b25f3" sha="7009c3d4ce794ba1c7b59555e790aab766da37a7">
       <upgradeSha>c1baa08776e10d0bfde6633563f02611494ab6cd</upgradeSha>
       <sDescription>pseudo derivative, difference between previous and current value</sDescription>
       <author>Johannes Taelman</author>
@@ -21,7 +21,7 @@
    _ap = inlet_a;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="delta" uuid="470e367c9df024c57e88865497e066d285f4c44" sha="f419ff3dcb8600f60a4cecbc9161fbae8bb6bf94">
+   <obj.normal id="delta" uuid="db2367936da470c91bc3888b0a6a9f6fbea1863a" sha="f419ff3dcb8600f60a4cecbc9161fbae8bb6bf94">
       <upgradeSha>a0571010403326d85c9c2c55e100910e30e1bbe4</upgradeSha>
       <sDescription>pseudo derivative, difference between previous and current value</sDescription>
       <author>Johannes Taelman</author>
@@ -43,7 +43,7 @@
    _ap = inlet_a[buffer_index];
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="delta" uuid="e1e13fe031ee48f79ec1b29ea083e4ff5f753c48" sha="22a8dcf8a3c102861501da86bca54f9dca3840aa">
+   <obj.normal id="delta" uuid="e4e7e4fbdbc88ac318c5e1d3959ec3c8eab1c1cc" sha="22a8dcf8a3c102861501da86bca54f9dca3840aa">
       <upgradeSha>4eff7b00344b2ded521b17825739badbe9863de9</upgradeSha>
       <sDescription>pseudo derivative, difference between previous and current value</sDescription>
       <author>Johannes Taelman</author>

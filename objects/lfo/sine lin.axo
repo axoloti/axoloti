@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sine lin" uuid="5ad3b6d0656a7407d1f09932117f538850ecf616" sha="5fe7bc53977f839c83da1059f96ff56ed7b89661">
+   <obj.normal id="sine lin" uuid="581c1c0594050528d2ecd11f17e61c2e2b688966" sha="5fe7bc53977f839c83da1059f96ff56ed7b89661">
       <upgradeSha>1f2d05363eb787d5ea0d5c8394761f06256af740</upgradeSha>
       <sDescription>Cheapest sine wave LFO, non-interpolated table</sDescription>
       <author>Johannes Taelman</author>

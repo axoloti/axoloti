@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="inconfig r" uuid="4a645bf7146d12605fbbfb9376aeb9962ef7406" sha="b10400cca486f39d70db4e3dfa62b078474b61f1">
+   <obj.normal id="inconfig r" uuid="8468fe7907553f335959a7f69cbc5a1f7b5d4d1d" sha="b10400cca486f39d70db4e3dfa62b078474b61f1">
       <upgradeSha>aeb1261a9f3855951dea87dd8875ca7f9ec4debe</upgradeSha>
       <sDescription>Audio input configuration, right channel only</sDescription>
       <author>Johannes Taelman</author>

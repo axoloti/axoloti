@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="mux 6" uuid="e54342867d40d28eb091a3bfe46df6a643ac5dc0" sha="138ac377aaeca8beeac6f743eb4fe36c9eb39f08">
+   <obj.normal id="mux 6" uuid="6b8e7012f214cc3b7d78b479f5195259e52019db" sha="138ac377aaeca8beeac6f743eb4fe36c9eb39f08">
       <upgradeSha>88fc4871dff7243f4739fa81f1177d6eda2f3101</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
@@ -30,7 +30,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 6" uuid="b7313a3f381ed9aa5e847f2fbd5198c675a22569" sha="2c3565c39e2262900879e78d451aabc3fae5e5dc">
+   <obj.normal id="mux 6" uuid="b9b8d71bdd1ecf4ee032c22b28f39986b62d98e5" sha="2c3565c39e2262900879e78d451aabc3fae5e5dc">
       <upgradeSha>2f48db275e7e6b82946ed41c1aadcb21f6e6a930</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
@@ -61,7 +61,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 6" uuid="18449fceb9ebd20cc0403bc2bf593dc5e5eafbba" sha="53f11125ad9e1fc9a624b1014033bc67216271a1">
+   <obj.normal id="mux 6" uuid="da5905e44c2d02c81feae305e13fc3a750d88554" sha="53f11125ad9e1fc9a624b1014033bc67216271a1">
       <upgradeSha>b2b6f0d11acf8802992a0a4323f5d0aafa89ed93</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
@@ -92,7 +92,7 @@
 }
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="mux 6" uuid="25fcf29e8b765f821a8982b52a0c8bc36ecbcc3f" sha="900983b187dddfd9de4b64a441199df8683e016d">
+   <obj.normal id="mux 6" uuid="88007f414a953a6e441fa165bb4222ac397d638f" sha="900983b187dddfd9de4b64a441199df8683e016d">
       <upgradeSha>b11f3c83f69df15547d0db26a8eb17d6f90a48f4</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
@@ -123,7 +123,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 6" uuid="9d0798675f4f81b90fd250a0160abc13f824604d" sha="a6121c54ae09f017bddd2f29acd1a0a55d94dd47">
+   <obj.normal id="mux 6" uuid="dd995b39d084e6b9c4f24b117a389b1972cd1100" sha="a6121c54ae09f017bddd2f29acd1a0a55d94dd47">
       <upgradeSha>7da2c7cc7f06a10ed733e6eb0240405617ce4f20</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>

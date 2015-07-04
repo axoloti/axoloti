@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="rectifier full" uuid="fe347be64ab272e7d100e361e32d0c963e97365f" sha="9c0ffac0e17fe7ea4f6eb000ca93f76f67240900">
+   <obj.normal id="rectifier full" uuid="bdd28e370b58801ee42bcae7bcdf8602d6181602" sha="9c0ffac0e17fe7ea4f6eb000ca93f76f67240900">
       <upgradeSha>bbd71c0dc9ca3e65420b55751215c30369dfc68</upgradeSha>
       <sDescription>full-wave rectifier distortion, bandlimited</sDescription>
       <author>Johannes Taelman</author>

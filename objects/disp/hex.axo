@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="hex" uuid="3028eee8d92124dca4d622287477dbc4d0cc7e88" sha="e21d1bcdfadc4f2009b547d002484bede0762978">
+   <obj.normal id="hex" uuid="87617898f70d90033f8add921438bf0d11721fdd" sha="e21d1bcdfadc4f2009b547d002484bede0762978">
       <upgradeSha>3ce96bdfc9c7668d6dbdd8a7430d740e07a3f48e</upgradeSha>
       <sDescription>hexadecimal display (for developers)</sDescription>
       <author>Johannes Taelman</author>
@@ -16,7 +16,7 @@
       <code.krate><![CDATA[disp_v=inlet_in;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="hex" uuid="42f98048834fee9a0acf6a9c25c29f9fdd41291b" sha="ad78cd5cb2a2edbf8c65ba2d6e393f821b3e5535">
+   <obj.normal id="hex" uuid="3ce415f2f0e09f5b3cf10e5d355274847fd063b2" sha="ad78cd5cb2a2edbf8c65ba2d6e393f821b3e5535">
       <upgradeSha>d872fe33dc9fb1838bb5864ed0f7a57d80e63937</upgradeSha>
       <sDescription>hexadecimal display (for developers)</sDescription>
       <author>Johannes Taelman</author>
@@ -33,7 +33,7 @@
       <code.krate><![CDATA[disp_v=inlet_in;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="hex" uuid="b18726231f9df6638041c274061d90fa5f70e67a" sha="4eb02c3ea4d1bc95c46e2e8b0efb67429d154882">
+   <obj.normal id="hex" uuid="acc658f92fe7a363e405a6dbe4a7152b05e4c919" sha="4eb02c3ea4d1bc95c46e2e8b0efb67429d154882">
       <upgradeSha>de6b83af9149f73fe665ab94616327c2c8162d88</upgradeSha>
       <sDescription>hexadecimal display (for developers): char pointer</sDescription>
       <author>Johannes Taelman</author>

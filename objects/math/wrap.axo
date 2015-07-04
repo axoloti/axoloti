@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="wrap" uuid="62cbd6435dffcf5e5273d6e510e71e9d48e7174a" sha="be5c91aac048ca39a68bb3ab23d240c883e8872d">
+   <obj.normal id="wrap" uuid="bb34ebfe0112f3238b3f928bf7ddea465d410bcb" sha="be5c91aac048ca39a68bb3ab23d240c883e8872d">
       <upgradeSha>e59f5a52c5966bbd4a924a17b6720480cdd99486</upgradeSha>
       <sDescription>wrap to 0..64 range after multiplying with 2^bits</sDescription>
       <author>Johannes Taelman</author>
@@ -18,7 +18,7 @@
       <code.krate><![CDATA[   outlet_b= (inlet_a<<attr_bits) & ((1<<27)-1);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="wrap" uuid="96b41a166217798e37e1a77c02d3fe2e726f4ebc" sha="5a8af0fb5ff074891c496d051b0ae525e6faef26">
+   <obj.normal id="wrap" uuid="8746cb26006c3ad0808df435ca66325fef902e14" sha="5a8af0fb5ff074891c496d051b0ae525e6faef26">
       <upgradeSha>ab95c4e2b122c98a94e2f369315e05c4809b07a8</upgradeSha>
       <sDescription>wrap to 0..64 range after multiplying with 2^bits</sDescription>
       <author>Johannes Taelman</author>

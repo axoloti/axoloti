@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sel b 16 2t pulse" uuid="fd6edd00bad1a8e7aba77b56a46f15b03c94df83" sha="59a9699ce5f71cb3d6deaa8ea30243f0c0c3a159">
+   <obj.normal id="sel b 16 2t pulse" uuid="973e7030204ae3f80968263d37625c6672f91cb1" sha="59a9699ce5f71cb3d6deaa8ea30243f0c0c3a159">
       <upgradeSha>6e50b6e258dfb862807d138bbe38bb33b717a088</upgradeSha>
       <sDescription>select one out of 16 booleans, chainable, 2 tracks, pulse output</sDescription>
       <author>Johannes Taelman</author>

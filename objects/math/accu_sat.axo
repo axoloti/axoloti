@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="accu_sat" uuid="439af71937575ddce6534915fe605629992477ba" sha="bf25e2288f21d4dc2a81211051e53c80f3e16f3d">
+   <obj.normal id="accu_sat" uuid="46ecfab2b09288119f5baf04ef65e9a7334abd56" sha="bf25e2288f21d4dc2a81211051e53c80f3e16f3d">
       <upgradeSha>f699babed031a7eae8fe89958c523bc05636eb0a</upgradeSha>
       <sDescription>Saturating accumulator. Adds input to accumulator on trigger. Reset clears the accumulator to zero.</sDescription>
       <author>Johannes Taelman</author>

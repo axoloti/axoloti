@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="inconfig" uuid="c65b98666f5ab537eff99fa4e7546a7c490d5279" sha="7eb314b69477fa9eb4ff1f78cc33085b109e9400">
+   <obj.normal id="inconfig" uuid="6f2f725102e40ae42955f5615c27eb211298a1d" sha="7eb314b69477fa9eb4ff1f78cc33085b109e9400">
       <upgradeSha>c5ee5e230152b248edde544704970b051688aa4f</upgradeSha>
       <sDescription>Audio input configuration</sDescription>
       <author>Johannes Taelman</author>

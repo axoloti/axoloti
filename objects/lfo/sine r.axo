@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sine r" uuid="8a72fbec719338446dd227e33fdaa2f1dc934ed" sha="4af2d04eea5dcaad6ad38c52094a1524e8e5df72">
+   <obj.normal id="sine r" uuid="7ce3388f2e24a82acc178ad468dfd3afa8ea8013" sha="4af2d04eea5dcaad6ad38c52094a1524e8e5df72">
       <upgradeSha>7b6e23eed2c3410327bbbfab9ad452431b5a33aa</upgradeSha>
       <sDescription>sine wave LFO, linear interpolated table, pitch input, reset input</sDescription>
       <author>Johannes Taelman</author>

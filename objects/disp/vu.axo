@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="vu" uuid="43799468356c37fda6e3e3788e3710f63577189f" sha="f800d3ed7fe673260466ec79f308fff29bb2f77c">
+   <obj.normal id="vu" uuid="6899a21ca2efcb3f63aa03ed7f61b5fe5a92e871" sha="f800d3ed7fe673260466ec79f308fff29bb2f77c">
       <upgradeSha>3e0f3adebb3336fad05a3e96926f88c2a603c343</upgradeSha>
       <sDescription>cheap vu meter display</sDescription>
       <author>Johannes Taelman</author>

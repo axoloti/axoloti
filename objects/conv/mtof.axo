@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="mtof" uuid="3e95a13f0a24513a8f8cac5f7c247df5ea3bf556" sha="7300c7db0ecbb359ebca211e25e8548b4e06712e">
+   <obj.normal id="mtof" uuid="ff3acbab734a93d2098a49e1c4c5d1ad10e0e8bf" sha="7300c7db0ecbb359ebca211e25e8548b4e06712e">
       <upgradeSha>a620f86cc7234a9fa26043819d068b779dd852f</upgradeSha>
       <sDescription>Midi note number to frequency, equal tempered tuning, A=440Hz</sDescription>
       <author>Johannes Taelman</author>

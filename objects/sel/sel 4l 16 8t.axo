@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sel 4l 16 8t" uuid="4210c52365a7524b28062c08e3754dc21ce4cc97" sha="2d7f39dc6c71956137425ea03be5c1296ddfdc93">
+   <obj.normal id="sel 4l 16 8t" uuid="13bbb554cf1d8d76074c3308011d2be48120ac06" sha="2d7f39dc6c71956137425ea03be5c1296ddfdc93">
       <upgradeSha>e17cbee37ccb141eed4721839a1c083a35b30aba</upgradeSha>
       <sDescription>select one out of 16 4-levels, 8 tracks, chainable</sDescription>
       <author>Johannes Taelman</author>

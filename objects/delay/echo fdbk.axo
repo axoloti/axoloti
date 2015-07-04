@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="echo fdbk" uuid="da54d8b5d3b1aacfadec5ff9b5758174d9ad9edf" sha="96a6db3b3deca106846992895749d662d670b103">
+   <obj.normal id="echo fdbk" uuid="1f4503fa4cd020010f59ce3ffa860caf0cd850c5" sha="96a6db3b3deca106846992895749d662d670b103">
       <upgradeSha>7611c8729f6b16550b0764bc62bc93ccc71235fc</upgradeSha>
       <sDescription>Audio delay with feedback, fixed delay time</sDescription>
       <author>Johannes Taelman</author>

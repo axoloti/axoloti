@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="read" uuid="62eeddd6cf81c0c250d950bf2b6d7d4cdf25c6c6" sha="17be286e1755b43c67fa0ca370d63d3d38f8dcd7">
+   <obj.normal id="read" uuid="65eb8d0f6a3344638de94c9882999b9af15510d0" sha="17be286e1755b43c67fa0ca370d63d3d38f8dcd7">
       <upgradeSha>60c3903f63efbc54f6a7fc46fba768257603f5f1</upgradeSha>
       <sDescription>read from table, nearest neighbour</sDescription>
       <author>Johannes Taelman</author>
@@ -18,7 +18,7 @@
       <code.krate><![CDATA[   outlet_o= attr_table.array[__USAT(inlet_a,attr_table.LENGTHPOW)]<<attr_table.GAIN;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="read" uuid="67c75f7b854e70eb511251c888e3c7340fa07b12" sha="3a564a2679da8d3b011161732ada1645370520ba">
+   <obj.normal id="read" uuid="1b71321dfa426c1cfed179d8ade93a69da0c5f2d" sha="3a564a2679da8d3b011161732ada1645370520ba">
       <upgradeSha>82c9c4b6ab49cd6326cdc2f95f03e145789c6791</upgradeSha>
       <sDescription>read from table, nearest neighbour</sDescription>
       <author>Johannes Taelman</author>
@@ -37,7 +37,7 @@
       <code.krate><![CDATA[   outlet_o= attr_table.array[__USAT(inlet_a,27)>>(27-attr_table.LENGTHPOW)]<<attr_table.GAIN;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="read" uuid="a228a054e88ca4a08d94439bbeeb947b98e72f7d" sha="454ad6878a4711d6a85510c93dc54d87254fb0b5">
+   <obj.normal id="read" uuid="57c0d2f661ccce53e64e9d4653918bc7a74f311e" sha="454ad6878a4711d6a85510c93dc54d87254fb0b5">
       <upgradeSha>13db20ba539824a51f60bb0ae362e2af0044c354</upgradeSha>
       <sDescription>read from table, nearest neighbour</sDescription>
       <author>Johannes Taelman</author>

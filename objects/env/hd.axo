@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="hd" uuid="ebf529ae3cf30f4a09010b9acc6062c889719e16" sha="9d023dbb5c4d25e5c8a658d08bf6ea6abe8d6916">
+   <obj.normal id="hd" uuid="a33e0f4735e6096e19e09080c788cea9c925fbcf" sha="9d023dbb5c4d25e5c8a658d08bf6ea6abe8d6916">
       <upgradeSha>6f6efeeb3935a7d07a497e7bdade94c8560a8152</upgradeSha>
       <sDescription>hold/decay envelope</sDescription>
       <author>Johannes Taelman</author>

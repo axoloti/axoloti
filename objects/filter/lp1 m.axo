@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="lp1 m" uuid="f95bae69753af57eaaf2741388d68f3f173ff901" sha="2e0efb5c094beab28ba197b8a9d5d871414353bb">
+   <obj.normal id="lp1 m" uuid="cb8f185c8f9411eee367e0013560cf1c1d97daab" sha="2e0efb5c094beab28ba197b8a9d5d871414353bb">
       <upgradeSha>2ae51504002c3a843c801f2e4d21462e82fd11fa</upgradeSha>
       <sDescription>1st order lowpass filter, modulation input</sDescription>
       <author>Johannes Taelman</author>

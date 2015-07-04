@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="demux 2" uuid="d0d5ccedaa1fc0f9cb05f32a0602b252e59b8d1f" sha="a5065becdf26d1804d1f6052782ebd396ca8f76f">
+   <obj.normal id="demux 2" uuid="49737f48bfddf5d3ad9f98e4752b5b8bd5f566ad" sha="a5065becdf26d1804d1f6052782ebd396ca8f76f">
       <upgradeSha>2d40dd15da76b6f8c1b6a813d1c533739354cf58</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.</sDescription>
       <author>Johannes Taelman</author>
@@ -22,7 +22,7 @@
    outlet_o1= (inlet_s)?inlet_i:inlet_d1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 2" uuid="b2025a0b4c6db69e0d0668c97aff354ce6d31a34" sha="aec9c8bc5677ee34b26108f5f98bd54445823051">
+   <obj.normal id="demux 2" uuid="f48c5f63c31c60c077648e2a0886e592e4fa9434" sha="aec9c8bc5677ee34b26108f5f98bd54445823051">
       <upgradeSha>51521ba16c909fd0a9e8900319ff9b45db9f15a5</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.</sDescription>
       <author>Johannes Taelman</author>
@@ -45,7 +45,7 @@
    outlet_o1[buffer_index]= (inlet_s)?inlet_i[buffer_index]:inlet_d1[buffer_index];
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="demux 2" uuid="7814f37f1d21fb25be0d2c8fb824b4290e64c239" sha="20a44035a1a0fc8c8209f12b7507ef1aeec4789f">
+   <obj.normal id="demux 2" uuid="357def86905d97a677c7080b4c9a2a4c0b8cd0fe" sha="20a44035a1a0fc8c8209f12b7507ef1aeec4789f">
       <upgradeSha>3f50a68e59f6c39fc71bf093329b3eccb942980c</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.</sDescription>
       <author>Johannes Taelman</author>
@@ -68,7 +68,7 @@
    outlet_o1= (inlet_s)?inlet_i:inlet_d1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 2" uuid="2790d18c4715455d914d773252fa9b0963d575b0" sha="c50b27790ecf5ebd86af6c4ede6a6b2c9d6ea154">
+   <obj.normal id="demux 2" uuid="28788637ca4264670042a31303a9d6e100646ff0" sha="c50b27790ecf5ebd86af6c4ede6a6b2c9d6ea154">
       <upgradeSha>89626563233c852f6e574337e97a22a06b465d70</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.</sDescription>
       <author>Johannes Taelman</author>

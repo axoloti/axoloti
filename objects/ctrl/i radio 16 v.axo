@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="i radio 16 v" uuid="f28ccdeb5681715f1f318e1f99fdbc1da5ed1cd6" sha="4fda3e23c853181237b442e6c1170e131f1614df">
+   <obj.normal id="i radio 16 v" uuid="c8f0392a979e02457d3a086a0b68fb42c54f4521" sha="4fda3e23c853181237b442e6c1170e131f1614df">
       <upgradeSha>fccad8cf839b28ea701b54768bff9bf7fa55a547</upgradeSha>
       <sDescription>positive integer control, vertical radio buttons</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="read" uuid="926edf3b8eafb005036e325ba7bde4daa8ef8e24" sha="b63bba67d51fdaba4822ef88cb13b748703e946d">
+   <obj.normal id="read" uuid="d09a92cea8a12f1b046368d69b92b47831c11cbf" sha="b63bba67d51fdaba4822ef88cb13b748703e946d">
       <upgradeSha>8847449eb00f524bb9181fc4f1bb7fcfadd160c6</upgradeSha>
       <sDescription>script with 2 inputs and 2 outputs, running in a separate thread, you must define &quot;void init(void){}&quot; and &quot;void loop(void)&quot;</sDescription>
       <author>Johannes Taelman</author>

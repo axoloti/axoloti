@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="lfsr~" uuid="cb9a3fbd6a7865ecfe93f6387eaba07d74f88beb" sha="7d0f33a14e574b5964d6fbf6b2bd05cb18f50183">
+   <obj.normal id="lfsr~" uuid="fa4c47d16828371ead802adf8dd9dfc3a01f032a" sha="7d0f33a14e574b5964d6fbf6b2bd05cb18f50183">
       <upgradeSha>94017314f1e9bdac75f41689a6df3c5a5b90c345</upgradeSha>
       <sDescription>linear feedback shift register cyclic pattern, audio rate</sDescription>
       <author>Johannes Taelman</author>

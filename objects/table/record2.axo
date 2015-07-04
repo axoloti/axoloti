@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="record2" uuid="1a93edd0097c11795ab72bddf6d1e7da47739e6f" sha="c7b0cea0e991b2e6ff99a35a68869d7cf9d68e0">
+   <obj.normal id="record2" uuid="ac9c5a1691f36808ea6fea2dfc68dc0930388ceb" sha="c7b0cea0e991b2e6ff99a35a68869d7cf9d68e0">
       <upgradeSha>a81485c5ad3662cfb26feb163c52775cbd64fe38</upgradeSha>
       <sDescription>record audio into table, starting from position</sDescription>
       <author>Johannes Taelman</author>

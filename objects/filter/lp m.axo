@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="lp m" uuid="2d024a54555230ff07805aad5a2c0e72fc600d3f" sha="a51351cb1aa39f081504c31950f380e6162c484d">
+   <obj.normal id="lp m" uuid="2d89e7ba8c210be9cd549e2dfcd4b39a99dcfbc2" sha="a51351cb1aa39f081504c31950f380e6162c484d">
       <upgradeSha>649887a8ccb34e5928d77426b8db79bed3e57f0f</upgradeSha>
       <sDescription>2-pole resonant low-pass filter (biquad)</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="bend" uuid="667375ec7c0cf2fb821d610111c76e0e346582da" sha="282d4ab2e18f8fd47ae4a1f6a5f7b208ad22e1e9">
+   <obj.normal id="bend" uuid="7bd8cace52a8c26ed61d80f65e238408d5d621f4" sha="282d4ab2e18f8fd47ae4a1f6a5f7b208ad22e1e9">
       <upgradeSha>84fc4df2ea385612e1294f33f4bfffbc8b501534</upgradeSha>
       <sDescription>Midi pitch bend input</sDescription>
       <author>Johannes Taelman</author>

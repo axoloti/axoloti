@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="play2 stereo poly" uuid="5823130623aa737e9032c37b9e9c170777b6011" sha="f3e317ead4d054da2a8ad806211ecfab68f8eecb">
+   <obj.normal id="play2 stereo poly" uuid="157be0deebdd60b2adf92d65695a410109daa35" sha="f3e317ead4d054da2a8ad806211ecfab68f8eecb">
       <upgradeSha>477d9dc2cf997162a0369b4165e06dd0a0aaa47f</upgradeSha>
       <sDescription>streaming playback of a stereo .wav file from sdcard (testing), for polyphonic subpatches</sDescription>
       <author>Johannes Taelman</author>

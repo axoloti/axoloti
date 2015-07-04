@@ -449,7 +449,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public void GenerateUUID() {
+    public String GenerateUUID() {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA");
             md.update(id.getBytes());
@@ -468,9 +468,10 @@ public class AxoObject extends AxoObjectAbstract {
             for (Display i : displays) {
                 i.updateSHA(md);
             }
-            uuid = (new BigInteger(1, md.digest())).toString(16);
+            return  (new BigInteger(1, md.digest())).toString(16);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
     

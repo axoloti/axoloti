@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="pan" uuid="990872222ef857b6553103545d0b84834689ab6a" sha="381781114e4c431e5460c67784dfd40a12cf3260">
+   <obj.normal id="pan" uuid="b19089c36d4fd0ce0932656c36fe5e6c531a7026" sha="381781114e4c431e5460c67784dfd40a12cf3260">
       <upgradeSha>61607561a89b218b9fd29b12920af8063776899a</upgradeSha>
       <sDescription>stereo balance (panorama)</sDescription>
       <author>Johannes Taelman</author>
@@ -21,7 +21,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_left = ___SMMUL((1<<29)-(param_c<<2),inlet_i1)<<2;outlet_right = ___SMMUL((1<<29)+(param_c<<2),inlet_i1)<<2;]]></code.krate>
    </obj.normal>
-   <obj.normal id="pan" uuid="73d5eeb3609b99620569b6e364f888c6c8f1f87f" sha="114b25683474ff6ffc7d6eb782d270273539295b">
+   <obj.normal id="pan" uuid="d2d291b66fd4487ac57ce44ae819db21c5aea43d" sha="114b25683474ff6ffc7d6eb782d270273539295b">
       <upgradeSha>ae1048aeefcb0da9fc2ba40a0e6396e222807375</upgradeSha>
       <sDescription>stereo balance (panorama)</sDescription>
       <author>Johannes Taelman</author>

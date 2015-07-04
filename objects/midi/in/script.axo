@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="script" uuid="d913bea45b2552557908c0c92423b7fcc467388d" sha="3ee8b91484e8ee55e2bc5f205ec797d8a6986231">
+   <obj.normal id="script" uuid="92cbee0cb01566f753d6515bcc16c32f0baa37a3" sha="3ee8b91484e8ee55e2bc5f205ec797d8a6986231">
       <upgradeSha>82709d8f2cd722b129cb94767cdc4a23b41a5230</upgradeSha>
       <sDescription>script with 2 outputs, triggered by MIDI input</sDescription>
       <author>Johannes Taelman</author>

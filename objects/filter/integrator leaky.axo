@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="integrator leaky" uuid="b8909dc4e55bf6da5b55a36f2e4bcf3151f394d9" sha="6f175752955cbcb8563a3d83ceffd64aea4f0ebf">
+   <obj.normal id="integrator leaky" uuid="e5d2944883e8c01d6dbed69f1a30a98f0fe65efc" sha="6f175752955cbcb8563a3d83ceffd64aea4f0ebf">
       <upgradeSha>8128db0b47c0d991b76b67ea069c8e30a0d4119f</upgradeSha>
       <sDescription>cumulative sum, saturating to +-64 units</sDescription>
       <author>Johannes Taelman</author>
@@ -23,7 +23,7 @@ acc = __SSAT(acc,28);
 outlet_out = acc;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="integrator leaky" uuid="c9406761ae00df5584e9583aa3f54d88c065ced1" sha="59974a349d135e48dc1c75dac3dbffbf580fb7de">
+   <obj.normal id="integrator leaky" uuid="2d8a76dcd2fad22a235488593b03f75dab87f122" sha="59974a349d135e48dc1c75dac3dbffbf580fb7de">
       <upgradeSha>d9972ae9996c922bb578344a8b039fed12bb960e</upgradeSha>
       <sDescription>cumulative sum, saturating to +-64 units</sDescription>
       <author>Johannes Taelman</author>

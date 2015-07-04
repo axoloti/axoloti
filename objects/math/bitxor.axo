@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="bitxor" uuid="2d693185b8bf8ec1916c99f9216914f0e6e3c2ff" sha="aeb3c92c93240b47aa45a05e1e6f56aa68e9a218">
+   <obj.normal id="bitxor" uuid="ba6bbe5f2768c2a87efc8bd1ca6c1007c95ab5cc" sha="aeb3c92c93240b47aa45a05e1e6f56aa68e9a218">
       <upgradeSha>9dd3edf53961f5a288c5b8d0399d49aeff4bddfa</upgradeSha>
       <sDescription>bitwise binary and operator</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="keyb" uuid="2833d2faa5111a867e9219bdd11818f5eab6f1f8" sha="d2b06e818348b14523c68fd021077192860093c0">
+   <obj.normal id="keyb" uuid="53b04874696932f38aceaa168bd5d9efb743716d" sha="d2b06e818348b14523c68fd021077192860093c0">
       <upgradeSha>b8deb97637e54be31fcb62e849e4fa406e72256e</upgradeSha>
       <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity</sDescription>
       <author>Johannes Taelman</author>

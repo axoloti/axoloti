@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="hp1 m" uuid="e48153af9806c65640c7ea3c890bbc78337c0a83" sha="723baccb2401e187c6bebec16456c98bd5f83c94">
+   <obj.normal id="hp1 m" uuid="a3169ec0050ed03a7a22d47419e8c92e8b4887e1" sha="723baccb2401e187c6bebec16456c98bd5f83c94">
       <upgradeSha>a1ea0059fc23dd74010a5d1a03eaa9e4368207fc</upgradeSha>
       <sDescription>1st order hipass filter, modulation input</sDescription>
       <author>Johannes Taelman</author>

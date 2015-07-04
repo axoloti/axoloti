@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="vbar" uuid="7c98830bf2f72031397b961ee3ce1e65111bd6d2" sha="8e3815195bc79aa4b83dacd0bab2f7c66cf4190c">
+   <obj.normal id="vbar" uuid="b529b8ea300b5858b0213ec07f522a0c4d84500d" sha="8e3815195bc79aa4b83dacd0bab2f7c66cf4190c">
       <upgradeSha>4a88516a5b0a868df66114691847c587506fa013</upgradeSha>
       <sDescription>displays positive k-rate signals</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="sel i 16" uuid="e70ccb77d3c8051f5730f40a05510f6d1ce6b5ef" sha="e51fb97c19d4aa5138933b9f3e8e1e173b7af049">
+   <obj.normal id="sel i 16" uuid="630930cb677ad1f222ad83b8f84d26a7aa92cafc" sha="e51fb97c19d4aa5138933b9f3e8e1e173b7af049">
       <upgradeSha>5fb1a0c22f384942e77dff629713e2ede0e863ea</upgradeSha>
       <sDescription>select one out of 16 integers, with chain i/o</sDescription>
       <author>Johannes Taelman</author>

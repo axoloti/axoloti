@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="fir16" uuid="ef3bb324970305469ec59bc154006a07652cb49d" sha="51ad08aab7cbfbb0d292c60cef7dd4a433705d6e">
+   <obj.normal id="fir16" uuid="ce68583c5482a28f1bc5c7076f041314bcead7cb" sha="51ad08aab7cbfbb0d292c60cef7dd4a433705d6e">
       <upgradeSha>79dcf6979a6691736ed1c072bf5b09164af32b86</upgradeSha>
       <sDescription>finite impulse response filter, with 16 coefficients</sDescription>
       <author>Johannes Taelman</author>

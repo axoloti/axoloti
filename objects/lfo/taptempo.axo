@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="taptempo" uuid="a40e922671bdbcbe7e0138a4cd620f11e96f5674" sha="e9dd8db69962757a123d584a7213a05c2dc4daf9">
+   <obj.normal id="taptempo" uuid="c3cd3d6e4689d9a8418fb6688b980f022711e2e4" sha="e9dd8db69962757a123d584a7213a05c2dc4daf9">
       <upgradeSha>f8a314659995f772afd971e2e8864168c1b6c2fa</upgradeSha>
       <sDescription>taptempo follower</sDescription>
       <author>Johannes Taelman</author>

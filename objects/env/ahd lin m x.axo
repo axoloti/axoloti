@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="ahd lin m x" uuid="8fb7e1a1186ae56ab3714acd040e7fe05a532edd" sha="3fce5b81c1ce8e44cafd93d6fd09f1bcc8e30fff">
+   <obj.normal id="ahd lin m x" uuid="3ed27a8786e46c14f5cba90c5d6ac56f97e730bb" sha="3fce5b81c1ce8e44cafd93d6fd09f1bcc8e30fff">
       <upgradeSha>62a6c82f56f3c5daa5fb4f269acb3a33cf34992b</upgradeSha>
       <sDescription>attack/hold/decay envelope, linear ramps, modulation inputs, extended range</sDescription>
       <author>Johannes Taelman</author>

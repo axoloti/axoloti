@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="timeri" uuid="5815fc6633bc424a72e0baed5316cf48558430ce" sha="3e090800e36bf3269e257503c297e926491a54b">
+   <obj.normal id="timeri" uuid="11c19ad8fb3f9451d29984ba5dc7ebf8c30cdbfd" sha="3e090800e36bf3269e257503c297e926491a54b">
       <upgradeSha>f6edc4061aa094048a154923ccdb91523d72b489</upgradeSha>
       <sDescription>measures the time interval between a rising edge on the start input and a rising edge on the stop input</sDescription>
       <author>Johannes Taelman</author>

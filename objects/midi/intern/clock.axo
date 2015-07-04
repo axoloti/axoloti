@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="clock" uuid="307f440e222fde9940f2b75336ac59fa7aeb119" sha="e288c8fe1409469b1d92d9309b18db3430e1ecd4">
+   <obj.normal id="clock" uuid="7f6f35e92d2c29e950af2b3af5cebb2e9e3b778c" sha="e288c8fe1409469b1d92d9309b18db3430e1ecd4">
       <upgradeSha>5686480d6bc46933eac28025298c8d288de90db8</upgradeSha>
       <sDescription>Midi clock master, als outputs Midi clock, start, stop, and continue messages. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>

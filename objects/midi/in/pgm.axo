@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="pgm" uuid="3f6253b26f7b0990f164af5b3788e73804e2990d" sha="16dc65111591a1cd78e9d146f6205699e5ce1155">
+   <obj.normal id="pgm" uuid="6165409901fee4a0781b41bac3513f51c2120d67" sha="16dc65111591a1cd78e9d146f6205699e5ce1155">
       <upgradeSha>dc477d6b12f96e244a30d89d02d0274a9e2417aa</upgradeSha>
       <sDescription>Midi program change</sDescription>
       <author>Johannes Taelman</author>

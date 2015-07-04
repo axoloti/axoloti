@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="smooth2" uuid="b06350c0ea6984e21e09213819ed1589169eebf3" sha="b2a079e356255396cb8f70b8fe9628bd6c88592f">
+   <obj.normal id="smooth2" uuid="9ba3ddec912512e6b63211080e89cb25b6d84834" sha="b2a079e356255396cb8f70b8fe9628bd6c88592f">
       <upgradeSha>7a49483fff392fd1c10fb15f40dfc8f92f942192</upgradeSha>
       <sDescription>exponential smooth, separate rise and fall time</sDescription>
       <author>Johannes Taelman</author>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="demux 8" uuid="6b171546f990efdebd459fb224237af042bbc487" sha="5d6ccc855813ab2b1312e725dc8c1b32cff42f90">
+   <obj.normal id="demux 8" uuid="a7c1c9ee4fbbc2ebf3722eeb5c6d8e87033769ac" sha="5d6ccc855813ab2b1312e725dc8c1b32cff42f90">
       <upgradeSha>65df1c0eb9e2386f7a401f92367df5e78119430e</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
@@ -123,7 +123,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 8" uuid="3d7dc19673ff36211b15defc2db31d73fa1b037c" sha="8ba6516ccc05b18159134e9f9d83a91cef0d7522">
+   <obj.normal id="demux 8" uuid="424562e2d235f474eefb20fa34619b76498b7c63" sha="8ba6516ccc05b18159134e9f9d83a91cef0d7522">
       <upgradeSha>c1efdc0536679d49e6ccb27d358ae0abe5b86a4f</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
@@ -247,7 +247,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 8" uuid="b16c035c319399bc86ae03f22f5db18291939c70" sha="8ac0d3761b586cbe44401c18a0d1e78c44955485">
+   <obj.normal id="demux 8" uuid="ccf815a2ecfcefb8df58aac6474488722e9d0a2b" sha="8ac0d3761b586cbe44401c18a0d1e78c44955485">
       <upgradeSha>bf736ae7f17b8d7dc4b4c0e215dc52b73ae9cc75</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
@@ -371,7 +371,7 @@
 }
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="demux 8" uuid="f70952b5b0441549381e911f03fe1cbf46348444" sha="673feeda47fa35b850511cfa3742244c986ea62">
+   <obj.normal id="demux 8" uuid="85fd73bac9eaf2b2be20472a640b10c7135d95aa" sha="673feeda47fa35b850511cfa3742244c986ea62">
       <upgradeSha>9bbf33bb81af61fc85f88e210c040446fb5e6e66</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>

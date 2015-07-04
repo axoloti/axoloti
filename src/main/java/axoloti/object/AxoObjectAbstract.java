@@ -36,7 +36,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "objdef")
-public class AxoObjectAbstract implements Comparable {
+public abstract class AxoObjectAbstract implements Comparable {
 
     @Attribute
     public String id;
@@ -129,14 +129,12 @@ public class AxoObjectAbstract implements Comparable {
 
     public String getUUID() {
         if (uuid == null) {
-            GenerateUUID();
+            uuid = GenerateUUID();
         }
         return uuid;
     }
 
-    public String GenerateSHA() {
-        return "sha";
-    }
+    public abstract String GenerateSHA();
 
     public HashSet<String> GetIncludes() {
         return null;
@@ -164,9 +162,8 @@ public class AxoObjectAbstract implements Comparable {
         return null;
     }
 
-    public void GenerateUUID() {
-    }
-
+    public abstract String GenerateUUID();
+    
     public void addUpgradeSHA(String s) {
         if (upgradeSha == null) {
             upgradeSha = new HashSet<String>();

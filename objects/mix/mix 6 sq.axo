@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="mix 6 sq" uuid="e4b629f67d467371c2a9d2007292e5fee91b8058" sha="94274732ee239f33ae7d8a1f22f351ea1e5d3c4a">
+   <obj.normal id="mix 6 sq" uuid="452ea7ce388793dca80b168a86db090ec6f7eb29" sha="94274732ee239f33ae7d8a1f22f351ea1e5d3c4a">
       <upgradeSha>108d45892ac7bcc645a102ded907a1b13a3ec0da</upgradeSha>
       <sDescription>6 input k-rate mixer, square gain scale</sDescription>
       <author>Johannes Taelman</author>
@@ -53,7 +53,7 @@
 ;   outlet_out=  __SSAT(inlet_bus__in + (accum<<1),28);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mix 6 sq" uuid="1a250bd019ea3e3a6b968ba815b7dbc8d32b3bf4" sha="9731d9aff9bfd4f764a88d5edf5ee65979df18eb">
+   <obj.normal id="mix 6 sq" uuid="8c6347232176ddc5c5feab604fb415c42c6fe6c1" sha="9731d9aff9bfd4f764a88d5edf5ee65979df18eb">
       <upgradeSha>4790395d3d1c462320355135180b45a712323e59</upgradeSha>
       <sDescription>6 input s-rate mixer, square gain scale</sDescription>
       <author>Johannes Taelman</author>

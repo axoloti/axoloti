@@ -54,7 +54,7 @@ import org.simpleframework.xml.core.Persister;
 public class gentools {
 
     static protected Serializer serializer = new Persister();
-    static String unstable = "unstable/";
+    static String unstable = "unstable";
 
     static String ConvertToLegalFilename(String s) {
         s = s.replaceAll("<", "LT");
@@ -114,9 +114,9 @@ public class gentools {
     }
 
     static void PostProcessObject(AxoObjectAbstract o, String prefix) {
+        String relativeID = o.id;
         if (o instanceof AxoObject) {
             // remove labels when there's only a single parameter
-            o.id = prefix + o.id;
             AxoObject oo = (AxoObject) o;
             if ((oo.params != null) && (oo.params.size() == 1)) {
                 oo.params.get(0).noLabel = true;
@@ -190,11 +190,12 @@ public class gentools {
         if ((o.GetIncludes() != null) && o.GetIncludes().isEmpty()) {
             o.SetIncludes(null);
         }
+        o.id = prefix + relativeID; // uuid based on full name
         String upgradeSha = o.GenerateSHA();
-        o.GenerateUUID();
+        o.getUUID();
+        o.id = relativeID;
         if (o instanceof AxoObject) {
             // remove labels when there's only a single parameter
-            o.id = prefix + o.id;
             AxoObject oo = (AxoObject) o;
             for (Parameter p : oo.params) {
                 if (oo.sKRateCode != null) {
@@ -225,24 +226,24 @@ public class gentools {
                 }
             }
             for (Inlet p : oo.inlets) {
-                if (p instanceof InletFrac32Buffer){
+                if (p instanceof InletFrac32Buffer) {
                     if (oo.sKRateCode != null) {
                         oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
                     }
-                    if (oo.sSRateCode != null) {                    
+                    if (oo.sSRateCode != null) {
                         oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName() + "[buffer_index]");
                     }
                 } else {
                     if (oo.sKRateCode != null) {
                         oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
                     }
-                    if (oo.sSRateCode != null) {                    
+                    if (oo.sSRateCode != null) {
                         oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
-                    }                    
+                    }
                 }
             }
             for (Outlet p : oo.outlets) {
-                if (p instanceof OutletFrac32Buffer){
+                if (p instanceof OutletFrac32Buffer) {
                     if (oo.sKRateCode != null) {
                         oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
                     }
@@ -255,7 +256,7 @@ public class gentools {
                     }
                     if (oo.sSRateCode != null) {
                         oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
-                    }                    
+                    }
                 }
             }
             for (displays.Display p : oo.displays) {
@@ -281,12 +282,12 @@ public class gentools {
             if (oo.sDisposeCode != null) {
                 oo.sDisposeCode = oo.sDisposeCode.replaceAll("%midichannel%", "attr_midichannel");
             }
-                        
+
         }
-        
+
         String sha = o.GenerateSHA();
         o.setSHA(sha);
-        if (!upgradeSha.equals(sha)){
+        if (!upgradeSha.equals(sha)) {
             o.addUpgradeSHA(upgradeSha);
         }
     }
@@ -318,7 +319,7 @@ public class gentools {
         a.objs = new ArrayList<AxoObjectAbstract>();
         a.objs.add(o);
         for (AxoObjectAbstract oa : a.objs) {
-            PostProcessObject(oa, "");
+            PostProcessObject(oa, path + "/");
         }
         if (f.exists()) {
             ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
@@ -407,7 +408,7 @@ public class gentools {
             if (i > 0) {
                 oa.id = oa.id.substring(i + 1);
             }
-            PostProcessObject(oa, "");
+            PostProcessObject(oa, path + "/");
         }
 
         if (f.exists()) {

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="square sync" uuid="838374ebad81a1bdb73c96a4bb86aca7e3bfdf1" sha="90bde37a86483539a9b57457b7c124d52d3847fa">
+   <obj.normal id="square sync" uuid="13071cc54258a64ab6104f1dcd7131c733b94bbd" sha="90bde37a86483539a9b57457b7c124d52d3847fa">
       <upgradeSha>9d196dfa9e8b9f0e0b3ebc4162c12d61a696c13d</upgradeSha>
       <sDescription>Bandwith limited square wave oscillator with sync input</sDescription>
       <author>Johannes Taelman</author>

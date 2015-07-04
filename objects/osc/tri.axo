@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="tri" uuid="14181624d4bb765d7a3345f69d99cf0aadeb0103" sha="e7180859b524cdd99af82d684ecc6e9f8080f44">
+   <obj.normal id="tri" uuid="b7510b296fd8f1dad5e317c620b496e1a99c08d6" sha="e7180859b524cdd99af82d684ecc6e9f8080f44">
       <upgradeSha>43d0cd96d88d2373334f871d17d1e5c06f0175bf</upgradeSha>
       <sDescription>Bandwith limited triangle wave oscillator</sDescription>
       <author>Johannes Taelman</author>

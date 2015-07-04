@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="alloc 32b" uuid="64cf60dcb48f6aa83224b06f9a98709d8a79e259" sha="84fa29116c34cf171f438ad40dc5e1e57432cb1d">
+   <obj.normal id="alloc 32b" uuid="ac26551322b24f37c3be0e6481d1193f1fd66bc8" sha="84fa29116c34cf171f438ad40dc5e1e57432cb1d">
       <upgradeSha>2e33213a2f32ef669bc43cf0c21b22f04a8a6e06</upgradeSha>
       <sDescription>allocate 32bit table in RAM memory</sDescription>
       <author>Johannes Taelman</author>

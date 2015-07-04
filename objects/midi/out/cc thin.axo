@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="cc thin" uuid="a7fc8d28cf67b9233cb18be50420c596022b9a76" sha="5bd627809063958f8d7ec5c3c522e066c1166bd7">
+   <obj.normal id="cc thin" uuid="5255b30d60e50223ed41179d8ce935ba9464de75" sha="5bd627809063958f8d7ec5c3c522e066c1166bd7">
       <upgradeSha>373b609343352ca13406a8cfe9ba48eb73cf7a03</upgradeSha>
       <sDescription>Midi controller output, automatic thinning</sDescription>
       <author>Johannes Taelman</author>

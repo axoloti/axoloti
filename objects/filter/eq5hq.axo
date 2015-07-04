@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="eq5hq" uuid="8f5fa0e62a7ba95fdba56f2f3dfa97635affe852" sha="86b9ea70474e26b5c841d42eeec97cb6c67456cc">
+   <obj.normal id="eq5hq" uuid="14171c909e5375c850d830e8fc1065b3d909cd1a" sha="86b9ea70474e26b5c841d42eeec97cb6c67456cc">
       <upgradeSha>e63b0387f974685f68e8c526d3b0f52cf6c91d4a</upgradeSha>
       <sDescription>Five-band equalizer. The transition frequencies are 100, 500, 2000, and 6000 Hz. High quality version. Unstable behavior when changing the low gain live.</sDescription>
       <author>Johannes Taelman</author>
