@@ -1,5 +1,12 @@
 #!/bin/bash
-rm src/ChibiOS_2.6.6.zip
+
+set -e
+
+PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
+
+cd "$PLATFORM_ROOT"
+
+rm src/ChibiOS_2.*.zip
 rm src/dfu-util-0.8.tar.gz
 rm src/libusb-1.0.19.tar.bz2
 rm src/make-3.82.tar.gz
@@ -9,6 +16,7 @@ rm -rv src/libusb-1.0.19
 rm -rv src/make-3.82
 
 rm gcc-arm-none-eabi-4_8-2014q3-20140805-mac.tar.bz2
+rm -rv ../chibios
 
 rm -rv i386/lib/
 rm -rv i386/share/
