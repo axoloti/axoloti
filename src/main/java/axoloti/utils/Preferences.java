@@ -63,7 +63,7 @@ public class Preferences {
             CurrentFileDirectory = "";
         }
         if (ObjectSearchPath == null) {
-            ObjectSearchPath = "objects;patches/subpatch";
+            ObjectSearchPath = "objects";
         }
         if (ComPortName == null) {
             ComPortName = "";
