@@ -311,7 +311,7 @@ public class AxoObjects {
                     } catch (Exception ex) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ex);
                     }
-                } else if (fileEntry.getName().endsWith(".axp")) {
+                } else if (fileEntry.getName().endsWith(".axs")) {
                     try {
                         String oname = fileEntry.getName().substring(0, fileEntry.getName().length() - 4);
                         String fullname;
