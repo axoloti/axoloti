@@ -162,7 +162,7 @@ public class Patch {
     public void PostContructor() {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             o.patch = this;
-            AxoObjectAbstract t = o.getType();
+            AxoObjectAbstract t = o.resolveType();
             if ((t != null) && (t.providesModulationSource())) {
 //                o.patch = this;
                 o.PostConstructor();

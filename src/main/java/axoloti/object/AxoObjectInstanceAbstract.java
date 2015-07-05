@@ -164,6 +164,10 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     }
 
     public AxoObjectAbstract getType() {
+        return type;
+    }
+
+    public AxoObjectAbstract resolveType() {    
         if (type != null) {
             return type;
         }
