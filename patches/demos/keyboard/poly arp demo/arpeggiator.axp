@@ -214,7 +214,7 @@
          <spinner attributeName="channel" value="2"/>
       </attribs>
    </obj>
-   <obj type="chorus2" sha="b0843bcaca2d6012fb8d8c1cfc5597dda5fac981" name="chorus21" x="854" y="308">
+   <obj type="fx/chorus2" sha="b0843bcaca2d6012fb8d8c1cfc5597dda5fac981" name="chorus21" x="854" y="308">
       <params>
          <frac32.u.map name="depth" value="5.0"/>
          <frac32.s.map name="speed" value="-36.0"/>

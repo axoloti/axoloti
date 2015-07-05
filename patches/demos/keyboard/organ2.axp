@@ -3,9 +3,9 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="./organvoice2" sha="b9dd7399dfab3d441578eb2e2bec1e588103777" name="organvoice21" x="98" y="14">
+   <obj type="./organvoice2" uuid="1699a3043f0a61401e72e6f7e734b776fa0be862" name="organvoice21" x="98" y="14">
       <params>
-         <frac32.u.map name="envd1" value="38.0"/>
+         <frac32.s.map name="envd1" value="-41.0"/>
          <frac32.u.map name="excit:gain1" value="0.15999984741210938"/>
          <frac32.u.map name="excit:gain2" value="2.0"/>
          <frac32.u.map name="reso" value="8.0"/>
@@ -24,7 +24,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="chorus2" sha="3389201e65c0bb381a531005c14fd69da7a3e9ef" name="chorus21" x="336" y="14">
+   <obj type="fx/chorus2" sha="3389201e65c0bb381a531005c14fd69da7a3e9ef" name="chorus21" x="336" y="14">
       <params>
          <frac32.u.map name="depth" value="1.5"/>
          <frac32.s.map name="speed" value="-27.0"/>
@@ -61,4 +61,10 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>178</x>
+      <y>159</y>
+      <width>758</width>
+      <height>516</height>
+   </windowPos>
 </patch-1.0>
