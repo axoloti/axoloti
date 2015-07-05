@@ -88,7 +88,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
         super.PostConstructor();
         setOpaque(true);
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        PulseButtonComponent button = new PulseButtonComponent();
+        button = new PulseButtonComponent();
         button.addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
