@@ -18,12 +18,19 @@
 package qcmds;
 
 import axoloti.Connection;
+import axoloti.Patch;
 
 /**
  *
  * @author Johannes Taelman
  */
 public class QCmdStart implements QCmdSerialTask {
+
+    Patch p;
+    
+    public QCmdStart(Patch p) {
+        this.p=p;
+    }
 
     @Override
     public String GetStartMessage() {
@@ -38,6 +45,9 @@ public class QCmdStart implements QCmdSerialTask {
     @Override
     public QCmd Do(Connection connection) {
         connection.ClearSync();
+        
+        connection.setPatch(p);
+        
         connection.TransmitStart();
         if (connection.WaitSync()) {
             return this;
