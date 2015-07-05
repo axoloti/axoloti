@@ -65,7 +65,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
                 || link.startsWith("http://")
                 || link.startsWith("https://")) {
             try {
-                Desktop.getDesktop().browse(new URI("http://community.axoloti.com"));
+                Desktop.getDesktop().browse(new URI(link));
             } catch (IOException ex) {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, null, ex);
             } catch (URISyntaxException ex) {
