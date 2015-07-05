@@ -74,6 +74,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     int dX, dY;
     private boolean Selected = false;
     private boolean Locked = false;
+    private boolean typeWasAmbiguous = false;
     JPanel Titlebar;
     TextFieldComponent InstanceNameTF;
     LabelComponent InstanceLabel;
@@ -167,7 +168,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         return type;
     }
 
-    public AxoObjectAbstract resolveType() {    
+    public AxoObjectAbstract resolveType() {
         if (type != null) {
             return type;
         }
@@ -190,6 +191,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             if (types == null) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name " + typeName + " not found");
             } else { // pick first
+                if (types.size() > 1) {
+                    typeWasAmbiguous = true;
+                }
                 type = types.get(0);
                 if (type instanceof AxoObjectUnloaded) {
                     AxoObjectUnloaded aou = (AxoObjectUnloaded) type;
@@ -221,7 +225,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         Titlebar.setMaximumSize(TitleBarMaximumSize);
         setBorder(BorderFactory.createLineBorder(Color.WHITE));
         setOpaque(true);
-        getType();
+        resolveType();
         setVisible(true);
 //        revalidate();
 
