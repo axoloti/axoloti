@@ -23,7 +23,6 @@ import axoloti.utils.Constants;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -39,6 +38,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -663,16 +663,11 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
         final JFileChooser fc = new JFileChooser(MainFrame.prefs.getCurrentFileDirectory());
-        fc.setFileFilter(new FileFilter() {
+        fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp", "axh","axs"));
+        fc.addChoosableFileFilter(new FileFilter() {
             @Override
             public boolean accept(File file) {
-                if (file.isDirectory()) {
-                    return true;
-                }
                 if (file.getName().endsWith("axp")) {
-                    return true;
-                }
-                if (file.getName().endsWith("axh")) {
                     return true;
                 }
                 return false;
@@ -683,11 +678,42 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                 return "Axoloti Patch";
             }
         });
+        fc.addChoosableFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith("axh")) {
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public String getDescription() {
+                return "Axoloti Help";
+            }
+        });
+        fc.addChoosableFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith("axs")) {
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public String getDescription() {
+                return "Axoloti Subpatch";
+            }
+        });
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File fileToBeSaved = fc.getSelectedFile();
-            if (! (fileToBeSaved.getAbsolutePath().endsWith(".axp") ||
-                    fileToBeSaved.getAbsolutePath().endsWith(".axh"))) {
+            if (! ( fileToBeSaved.getAbsolutePath().endsWith(".axp") ||
+                    fileToBeSaved.getAbsolutePath().endsWith(".axh") ||
+                    fileToBeSaved.getAbsolutePath().endsWith(".axs")
+                    )
+                    ) {
                 fileToBeSaved = new File(fc.getSelectedFile() + ".axp");
             }
             patch.setFileNamePath(fileToBeSaved.getPath());

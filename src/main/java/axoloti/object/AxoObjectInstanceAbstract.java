@@ -90,7 +90,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             String pPath = patch1.getFileNamePath();
             String oPath = type.sPath;
 
-            if (oPath.endsWith(".axp") || oPath.endsWith(".axo")) {
+            if (oPath.endsWith(".axp") || oPath.endsWith(".axo") || oPath.endsWith(".axs") ) {
                 oPath = oPath.substring(0, oPath.length() - 4);
             }
             pPath = pPath.replaceAll("\\\\", "/");
