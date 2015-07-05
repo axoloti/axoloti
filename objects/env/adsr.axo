@@ -4,6 +4,7 @@
       <sDescription>Attack/decay/sustain/release envelope</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>adsr.axh</helpPatch>
       <inlets>
          <bool32.risingfalling name="gate" description="gate"/>
       </inlets>

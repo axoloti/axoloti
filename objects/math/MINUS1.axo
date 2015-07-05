@@ -4,6 +4,7 @@
       <sDescription>subtracts one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="a" description="a"/>
       </inlets>
@@ -20,6 +21,7 @@
       <sDescription>subtracts one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <int32 name="a" description="a"/>
       </inlets>
@@ -36,6 +38,7 @@
       <sDescription>subtracts one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="a" description="a"/>
       </inlets>

@@ -191,9 +191,9 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         JMenu pdemos = new JMenu("demos");
         PopulateExamplesMenu(pdemos, "patches/demos");
         parent.add(pdemos);
-        JMenu ptests = new JMenu("tests");
-        PopulateExamplesMenu(ptests, "patches/tests");
-        parent.add(ptests);
+//        JMenu ptests = new JMenu("tests");
+//        PopulateExamplesMenu(ptests, "patches/tests");
+//        parent.add(ptests);
     }
 
     void PopulateExamplesMenu(JMenu parent, String path) {

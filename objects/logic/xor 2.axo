@@ -4,6 +4,7 @@
       <sDescription>logic XOR with 2 inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
       <inlets>
          <bool32 name="i1" description="input 1"/>
          <bool32 name="i2" description="input 2"/>

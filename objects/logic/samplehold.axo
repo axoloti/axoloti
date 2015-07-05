@@ -4,6 +4,7 @@
       <sDescription>Pass through when s_h input is less or equal than zero or hold when positive.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>samplehold.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="input"/>
          <frac32 name="s_h" description="pass through when less or equal than zero or hold when positive"/>
@@ -28,6 +29,7 @@ outlet_out = hold;
       <sDescription>Pass through when s_h input is less or equal than zero or hold when positive.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>samplehold.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
          <frac32buffer name="s_h" description="pass through when less or equal than zero or hold when positive"/>

@@ -4,6 +4,7 @@
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <frac32 name="i1" description="input 1"/>
          <frac32 name="i2" description="input 2"/>
@@ -23,6 +24,7 @@
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <frac32buffer name="i1" description="input 1"/>
          <frac32buffer name="i2" description="input 2"/>
@@ -42,6 +44,7 @@
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <int32 name="i1" description="input 1"/>
          <int32 name="i2" description="input 2"/>
@@ -61,6 +64,7 @@
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <bool32 name="i1" description="input 1"/>
          <bool32 name="i2" description="input 2"/>
@@ -80,6 +84,7 @@
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <charptr32 name="i1" description="input 1"/>
          <charptr32 name="i2" description="input 2"/>

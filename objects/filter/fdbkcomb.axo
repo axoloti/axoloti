@@ -4,6 +4,7 @@
       <sDescription>feedback comb filter, y(n) = b*x(n)+a*y(n-D)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>fdbkcomb.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="in"/>
       </inlets>

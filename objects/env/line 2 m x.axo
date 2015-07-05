@@ -4,6 +4,7 @@
       <sDescription>two piecewise linear ramps, extended range, time modulation inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>env.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
          <frac32.bipolar name="tAm" description="time A (v0..v1) modulation"/>

@@ -293,7 +293,7 @@ public class gentools {
                    String fcatname = catname.replaceAll("/", "_");
                    File fcat = new File("objects/" + catname + "/" +fcatname + ".axh");
                    if (fcat.exists()) {
-                       oo.helpPatch = catname + ".axh";
+                       oo.helpPatch = fcatname + ".axh";
                    }
                 }
             }

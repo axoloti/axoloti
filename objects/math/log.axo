@@ -4,6 +4,7 @@
       <sDescription>logarithm, y=16+8*log2(x)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32.positive name="a" description="input"/>
       </inlets>
@@ -25,6 +26,7 @@ outlet_result = r1 + r3;
       <sDescription>logarithm, y=16+8*log2(x)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer.positive name="a" description="input"/>
       </inlets>

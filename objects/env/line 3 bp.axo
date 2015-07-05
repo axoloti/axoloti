@@ -4,6 +4,7 @@
       <sDescription>Three piecewise linear ramps, bipolar version</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>env.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>

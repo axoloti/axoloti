@@ -4,6 +4,7 @@
       <sDescription>stereo balance (panorama)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pan.axh</helpPatch>
       <inlets>
          <frac32 name="i1" description="input"/>
       </inlets>
@@ -26,6 +27,7 @@
       <sDescription>stereo balance (panorama)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pan.axh</helpPatch>
       <inlets>
          <frac32buffer name="i1" description="input"/>
       </inlets>

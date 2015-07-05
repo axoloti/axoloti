@@ -4,6 +4,7 @@
       <sDescription>Four-band equalizer. The transition frequencies are 100, 500, 2000, and 6000 Hz. Lower quality version. The low band is ommitted.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
       </inlets>

@@ -4,6 +4,7 @@
       <sDescription>quantize to n bits</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="a" description="a"/>
       </inlets>
@@ -23,6 +24,7 @@
       <sDescription>quantize to n bits</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="a" description="a"/>
       </inlets>

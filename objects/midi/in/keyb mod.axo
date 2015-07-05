@@ -4,6 +4,7 @@
       <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity modulation source</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>midi_in.axh</helpPatch>
       <ModulationSources>
          <string>note</string>
          <string>velocity</string>

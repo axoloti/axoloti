@@ -4,6 +4,7 @@
       <sDescription>saturated multiply by 2</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>
@@ -20,6 +21,7 @@
       <sDescription>saturated multiply by 2</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="in"/>
       </inlets>

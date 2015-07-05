@@ -4,6 +4,7 @@
       <sDescription>negate, negative, y = -x</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>
@@ -20,6 +21,7 @@
       <sDescription>negate, negative, y = -x</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="in"/>
       </inlets>
@@ -36,6 +38,7 @@
       <sDescription>negate, negative, y = -x</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <int32 name="in" description="in"/>
       </inlets>

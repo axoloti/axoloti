@@ -4,6 +4,7 @@
       <sDescription>Left shift. Doubles the value &quot;shift&quot; times, with overflow. If overflow is not desireable, use &quot;muls&quot;.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="a" description="a"/>
       </inlets>
@@ -22,6 +23,7 @@
       <sDescription>Left shift. Doubles the value &quot;shift&quot; times, with overflow. If overflow is not desireable, use &quot;muls&quot;.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="a" description="a"/>
       </inlets>

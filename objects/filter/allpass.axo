@@ -4,6 +4,7 @@
       <sDescription>allpass reverb section</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>allpass.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="in"/>
       </inlets>

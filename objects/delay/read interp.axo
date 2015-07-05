@@ -4,6 +4,7 @@
       <sDescription>delay read, linear interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>delay.axh</helpPatch>
       <inlets>
          <frac32buffer name="timem" description="delay time (fraction of total delayline size)"/>
       </inlets>

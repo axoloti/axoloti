@@ -4,6 +4,7 @@
       <sDescription>s-rate c one-liner</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>script.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="in"/>
       </inlets>

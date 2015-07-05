@@ -4,6 +4,7 @@
       <sDescription>attack hold decay envelope</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>env.axh</helpPatch>
       <inlets>
          <bool32.risingfalling name="gate" description="gate"/>
       </inlets>

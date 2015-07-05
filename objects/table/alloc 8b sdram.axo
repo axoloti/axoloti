@@ -4,6 +4,7 @@
       <sDescription>allocate table in SDRAM memory, -128..127</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets/>
       <outlets/>
       <displays/>

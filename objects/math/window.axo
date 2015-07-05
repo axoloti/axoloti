@@ -4,6 +4,7 @@
       <sDescription>hanning window function, input 0..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32.positive name="phase" description="phase"/>
       </inlets>
@@ -24,6 +25,7 @@
       <sDescription>hanning window function, input 0..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="phase" description="phase"/>
       </inlets>

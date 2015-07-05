@@ -4,6 +4,7 @@
       <sDescription>Midi controller output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>midi_out.axh</helpPatch>
       <inlets>
          <frac32.positive name="v" description="value"/>
          <bool32.rising name="trig" description="trigger"/>

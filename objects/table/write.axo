@@ -4,6 +4,7 @@
       <sDescription>write to table</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets>
          <frac32.positive name="a" description="index in fraction of table size"/>
          <frac32 name="v" description="value"/>
@@ -29,6 +30,7 @@
       <sDescription>write to table</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets>
          <int32.positive name="a" description="index (integer, not fraction)"/>
          <frac32 name="v" description="value"/>

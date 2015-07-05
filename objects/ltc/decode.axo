@@ -4,6 +4,7 @@
       <sDescription>LTC (linear timecode) decoder.  Does not support drop-frame format. This implementation only works when the system clock is 48kHz or 96kHz, not at 44.1kHz!</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>decode.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="ltc input"/>
       </inlets>

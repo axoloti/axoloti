@@ -4,6 +4,7 @@
       <sDescription>decay envelope with decay time modulation input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>env.axh</helpPatch>
       <inlets>
          <frac32 name="dm" description="decay time modulation"/>
          <bool32.rising name="trig" description="trigger"/>

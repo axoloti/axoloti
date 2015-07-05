@@ -4,6 +4,7 @@
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="a" description="input"/>
          <frac32 name="b" description="input"/>
@@ -22,6 +23,7 @@
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="a" description="input"/>
          <frac32buffer name="b" description="input"/>
@@ -40,6 +42,7 @@
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="a" description="input"/>
          <frac32 name="b" description="input"/>
@@ -58,6 +61,7 @@
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="a" description="input"/>
          <int32 name="b" description="input"/>
@@ -76,6 +80,7 @@
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <int32 name="a" description="input"/>
          <frac32 name="b" description="input"/>
@@ -94,6 +99,7 @@
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <int32 name="a" description="input"/>
          <int32 name="b" description="input"/>
@@ -112,6 +118,7 @@
       <sDescription>multiply</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="a" description="input"/>
          <frac32buffer name="b" description="input"/>

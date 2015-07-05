@@ -4,6 +4,7 @@
       <sDescription>toggle</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>

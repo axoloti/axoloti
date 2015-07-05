@@ -4,6 +4,7 @@
       <sDescription>constant from 16 flags</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>ctrl.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32 name="o" description="output"/>

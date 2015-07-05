@@ -4,6 +4,7 @@
       <sDescription>linear feedback shift register cyclic pattern, cycled with trigger input.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>lfsrseq.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
          <bool32.rising name="r" description="reset"/>

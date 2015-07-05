@@ -4,6 +4,7 @@
       <sDescription>streaming playback of a mono .wav file from sdcard (testing)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>wave.axh</helpPatch>
       <inlets>
          <frac32 name="pos" description="position"/>
          <bool32.risingfalling name="trig" description="trigger"/>

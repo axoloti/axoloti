@@ -4,6 +4,7 @@
       <sDescription>Audio delay with feedback and mix, fixed delay time</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>delay.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
          <frac32 name="mixm" description="mix"/>

@@ -4,6 +4,7 @@
       <sDescription>Non-bandwith limited triangle wave oscillator, cheap sound</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
       </inlets>

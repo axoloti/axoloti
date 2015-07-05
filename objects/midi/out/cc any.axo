@@ -4,6 +4,7 @@
       <sDescription>Midi controller output to any CC number and channel</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>midi_out.axh</helpPatch>
       <inlets>
          <frac32.positive name="v" description="value"/>
          <int32.positive name="cc" description="midi Continous Controller number 0-127"/>

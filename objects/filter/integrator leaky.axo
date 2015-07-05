@@ -4,6 +4,7 @@
       <sDescription>cumulative sum, saturating to +-64 units</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="input"/>
       </inlets>
@@ -28,6 +29,7 @@ outlet_out = acc;
       <sDescription>cumulative sum, saturating to +-64 units</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
       </inlets>

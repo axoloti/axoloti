@@ -4,6 +4,7 @@
       <sDescription>linear interpolated flash table read</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>wave.axh</helpPatch>
       <inlets>
          <frac32buffer name="pos" description="position"/>
       </inlets>

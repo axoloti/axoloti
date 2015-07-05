@@ -4,6 +4,7 @@
       <sDescription>channel vocoder v1</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>vocoder 24.axh</helpPatch>
       <inlets>
          <frac32buffer name="car" description="carrier"/>
          <frac32buffer name="mod" description="modulator"/>

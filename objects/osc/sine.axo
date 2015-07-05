@@ -4,6 +4,7 @@
       <sDescription>FM sine wave oscillator, linear interpolated table, s-rate pitch input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation"/>
          <frac32buffer name="fm" description="frequency modulation"/>

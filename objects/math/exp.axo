@@ -4,6 +4,7 @@
       <sDescription>exponent function, y=pow(2,(x/8)-2)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32.positive name="a" description="input"/>
       </inlets>
@@ -25,6 +26,7 @@ else outlet_result = expt[ei]>>(-s);
       <sDescription>exponent function, y=pow(2,(x/8)-2)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer.positive name="a" description="input"/>
       </inlets>

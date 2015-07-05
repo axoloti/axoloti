@@ -4,6 +4,7 @@
       <sDescription>read from table, linear interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets>
          <frac32.positive name="a" description="index in fraction of table size"/>
       </inlets>
@@ -31,6 +32,7 @@ outlet_o= rr<<2;
       <sDescription>read from table, linear interpolated</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets>
          <frac32buffer.positive name="a" description="index in fraction of table size"/>
       </inlets>

@@ -4,6 +4,7 @@
       <sDescription>phasor with linear frequency (goes all the way to 0)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="freqm" description="frequency modulation"/>
          <frac32buffer.bipolar name="pm" description="phase modulation"/>
