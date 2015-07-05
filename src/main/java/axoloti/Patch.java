@@ -123,12 +123,12 @@ public class Patch {
         ClearDirty();
         WriteCode();
         presetUpdatePending = false;
-        GetQCmdProcessor().serialconnection.setPatch(this);
+        GetQCmdProcessor().SetPatch(null);
         GetQCmdProcessor().AppendToQueue(new QCmdStop());
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
         GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
-        GetQCmdProcessor().AppendToQueue(new QCmdStart());
-        GetQCmdProcessor().AppendToQueue(new QCmdLock());
+        GetQCmdProcessor().AppendToQueue(new QCmdStart(this));
+        GetQCmdProcessor().AppendToQueue(new QCmdLock(this));
     }
 
     public void ShowCompileFail() {
@@ -203,9 +203,6 @@ public class Patch {
         }
         PromoteOverloading();
         ShowPreset(0);
-        if (GetQCmdProcessor() != null) {
-            GetQCmdProcessor().SetPatch(this);
-        }
         if (settings == null) {
             settings = new PatchSettings();
         }

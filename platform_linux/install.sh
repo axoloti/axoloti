@@ -103,7 +103,7 @@ then
     make 
     make install
     make clean
-    ldd "${PLATFORM_ROOT}"/bin/dfu-util"
+    ldd "${PLATFORM_ROOT}/bin/dfu-util"
 else
     echo "##### dfu-util already present, skipping... #####"
 fi

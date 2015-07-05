@@ -745,7 +745,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         if (f.canRead()) {
             qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
             qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
-            qcmdprocessor.AppendToQueue(new QCmdStart());
+            qcmdprocessor.AppendToQueue(new QCmdStart(null));
         } else {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can't read flasher, please compile firmware! (file: " + fname + " )");
         }

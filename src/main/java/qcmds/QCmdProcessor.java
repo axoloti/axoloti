@@ -217,7 +217,7 @@ public class QCmdProcessor implements Runnable {
 
     public void SetPatch(Patch patch) {
         if (this.patch != null) {
-            patch.Unlock();
+            this.patch.Unlock();
         }
         this.patch = patch;
     }
