@@ -96,6 +96,24 @@ public class AxoObjects {
                     }
                 }
             }
+            { // try subpatch file
+                ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
+                String fnameP = bfname + ".axs";
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file in patch directory: " + fnameP);
+                File f = new File(fnameP);
+                if (f.isFile()) {
+                    AxoObjectAbstract o = new AxoObjectFromPatch(f);
+                    if (n.startsWith("./") || n.startsWith("../")) {
+                        o.createdFromRelativePath = true;
+                    }
+                    o.sPath = f.getPath();
+                    if (o != null) {
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : " + fnameP);
+                        set.add(o);
+                        return set;
+                    }
+                }
+            }
             { // try patch file
                 ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
                 String fnameP = bfname + ".axp";
@@ -124,17 +142,33 @@ public class AxoObjects {
         if (set.isEmpty()) {
             String spath[] = MainFrame.prefs.getObjectSearchPath();
             for (String s : spath) {
-                String fname = s + "/" + n + ".axp";
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file : " + fname);
-                File f = new File(fname);
-                if (f.isFile()) {
-                    AxoObjectAbstract o = new AxoObjectFromPatch(f);
+                String fsname = s + "/" + n + ".axs";
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file : " + fsname);
+                File fs = new File(fsname);
+                if (fs.isFile()) {
+                    AxoObjectAbstract o = new AxoObjectFromPatch(fs);
 //                    o.createdFromRelativePath = true;
-                    o.sPath = n + ".axp";
                     if (o != null) {
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file succeeded :" + fname);
+                        o.sPath = n + ".axs";
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file succeeded :" + fsname);
                         set.add(o);
                         return set;
+                    }
+                }
+                else {
+                    // Q. do we really need to load axp here, or just axs?
+                    String fpname = s + "/" + n + ".axp";
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file : " + fpname);
+                    File fp = new File(fpname);
+                    if (fp.isFile()) {
+                        AxoObjectAbstract o = new AxoObjectFromPatch(fp);
+    //                    o.createdFromRelativePath = true;
+                        if (o != null) {
+                            o.sPath = n + ".axp";
+                            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file succeeded :" + fpname);
+                            set.add(o);
+                            return set;
+                        }
                     }
                 }
             }
