@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# this removes unnecessary code and archives
+# created by running build.sh,
+# but leaves all the binary dependencies
+# so the whole axoloti folder can be moved to a 
+# different machine that does not have xcode etc installed.
+
 set -e
 
 PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
@@ -16,7 +22,6 @@ rm -rv src/libusb-1.0.19
 rm -rv src/make-3.82
 
 rm gcc-arm-none-eabi-4_8-2014q3-20140805-mac.tar.bz2
-rm -rv ../chibios
 
 rm -rv i386/lib/
 rm -rv i386/share/

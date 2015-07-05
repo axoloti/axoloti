@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Downloads and builds all the required dependencies and toolchain executables
+# Items already present are skipped to save your bandwidth.
+
 set -e
 
 PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
