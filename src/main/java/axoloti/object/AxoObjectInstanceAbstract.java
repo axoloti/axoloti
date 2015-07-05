@@ -69,7 +69,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     @Attribute
     int y;
     public Patch patch;
-    private AxoObjectAbstract type;
+    AxoObjectAbstract type;
     boolean dragging = false;
     int dX, dY;
     private boolean Selected = false;
@@ -172,9 +172,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             if (type != null) {
                 System.out.println("restored from UUID:" + type.id);
                 typeName = type.id;
-            }            
+            }
         }
-        if ((type == null)&&(typeSHA != null)) {
+        if ((type == null) && (typeSHA != null)) {
             type = MainFrame.axoObjects.GetAxoObjectFromSHA(typeSHA);
             if (type != null) {
                 System.out.println("restored from SHA:" + type.id);
@@ -185,9 +185,13 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             ArrayList<AxoObjectAbstract> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, patch.GetCurrentWorkingDirectory());
             if (types == null) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name " + typeName + " not found");
-                //throw new UnsupportedOperationException("Axo object name " + typeName + " not found");
-            } else {
+            } else { // pick first
                 type = types.get(0);
+                if (type instanceof AxoObjectUnloaded) {
+                    AxoObjectUnloaded aou = (AxoObjectUnloaded) type;
+                    type = aou.Load();
+                    return (AxoObject) type;
+                }
                 typeSHA = type.getSHA();
             }
         }

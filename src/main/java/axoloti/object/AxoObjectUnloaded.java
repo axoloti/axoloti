@@ -30,7 +30,7 @@ import org.simpleframework.xml.Root;
 public class AxoObjectUnloaded extends AxoObjectAbstract {
 
     File f;
-    
+
     public AxoObjectUnloaded() {
         super();
     }
@@ -40,11 +40,20 @@ public class AxoObjectUnloaded extends AxoObjectAbstract {
         this.f = f;
     }
 
+    AxoObjectFromPatch loadedObject;
+
+    public AxoObjectFromPatch Load() {
+        if (loadedObject == null) {
+            loadedObject = new AxoObjectFromPatch(f);
+            loadedObject.id = id;
+        }
+        return loadedObject;
+    }
+
     @Override
     public AxoObjectInstanceAbstract CreateInstance(Patch patch, String InstanceName1, Point location) {
-        AxoObjectFromPatch oo = new AxoObjectFromPatch(f);
-        oo.id = id;
-        AxoObjectInstance oi = new AxoObjectInstance(oo, patch, InstanceName1, location);
+        Load();
+        AxoObjectInstance oi = new AxoObjectInstance(loadedObject, patch, InstanceName1, location);
         if (patch != null) {
             patch.objectinstances.add(oi);
         }
