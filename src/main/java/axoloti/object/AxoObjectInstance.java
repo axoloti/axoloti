@@ -174,7 +174,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             public void actionPerformed(ActionEvent ae) {
                 ((PatchGUI) patch).ShowClassSelector(AxoObjectInstance.this.getLocation(), AxoObjectInstance.this);
             }
-        });
+        });                
         popup.add(popm_substitute);
         if (getType().GetHelpPatchFile() != null) {
             MenuItem popm_help = new MenuItem("help");
@@ -186,6 +186,14 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             });
             popup.add(popm_help);
         }
+        MenuItem popm_adapt = new MenuItem("adapt homonym");
+        popm_adapt.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                PromoteToOverloadedObj();
+            }
+        });
+        popup.add(popm_adapt);
 
         /*
          h.add(Box.createHorizontalStrut(3));
@@ -577,33 +585,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 s = s.replace(p.GetCName(), p.CValue());
             }
             s = s.replace("attr_name", getCInstanceName());
-            for (InletInstance i : inletInstances) {
-                if (i.GetDataType() instanceof DataTypeBuffer) {
-//                    s = s.replace("%" + i.GetLabel() + "%", i.GetCName() + ((DataTypeBuffer) i.GetDataType()).GetIndex("buffer_index"));
-                } else {
-//                    s = s.replace("%" + i.GetLabel() + "%", i.GetCName());
-                }
-            }
-            for (OutletInstance i : outletInstances) {
-                if (i.GetDataType() instanceof DataTypeBuffer) {
-//                    s = s.replace("%" + i.GetLabel() + "%", i.GetCName() + ((DataTypeBuffer) i.GetDataType()).GetIndex("buffer_index"));
-                } else {
-//                    s = s.replace("%" + i.GetLabel() + "%", i.GetCName());
-                }
-            }
-            for (ParameterInstance p : parameterInstances) {
-                if (p.isOnParent() && enableOnParent) {
-//                    s = s.replace("%" + p.name + "%", OnParentAccess + p.variableName(vprefix, enableOnParent));
-                } else {
-//                    s = s.replace("%" + p.name + "%", p.variableName(vprefix, enableOnParent));
-                }
-            }
-            for (DisplayInstance p : displayInstances) {
-                s = s.replace("%" + p.name + "%", p.valueName(vprefix));
-            }
-//            for(Parameter p:type.params) {
-//                s=s.replace("%" + p.name + "%", "x_" + InstanceName + "_" + p.name);
-//            }
             s += "\n}\n";
             return s;
         }
