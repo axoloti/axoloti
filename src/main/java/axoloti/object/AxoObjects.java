@@ -232,12 +232,12 @@ public class AxoObjects {
                             }
                             a.shortId = ShortID;
                             String uuidVerify = a.GenerateUUID();
-                            if (!uuidVerify.equals(a.getUUID())) {
+                            if ((uuidVerify != null) && (!uuidVerify.equals(a.getUUID()))) {
                                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
                                         "Incorrect uuid hash detected for object: " + fileEntry.getAbsolutePath() + " , does not match its signature (" + a.getUUID() + "). True signature would be " + uuidVerify);
                             }
                             String shaVerify = a.GenerateSHA();
-                            if (!shaVerify.equals(a.getSHA())) {
+                            if ((shaVerify != null) && (!shaVerify.equals(a.getSHA()))) {
                                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
                                         "Incorrect sha hash detected for object: " + fileEntry.getAbsolutePath() + " its implementation does not match its signature.");
                             }
@@ -249,7 +249,7 @@ public class AxoObjects {
                             }
 
                             ObjectList.add(a);
-                            if (ObjectHashMap.containsKey(a.getSHA())) {
+                            if ((a.getSHA() != null) && (ObjectHashMap.containsKey(a.getSHA()))) {
                                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
                                         "Duplicate SHA! " + fileEntry.getAbsolutePath() + "\nOriginal name: " + ObjectHashMap.get(a.getSHA()).id
                                         + "\nPath: " + ObjectHashMap.get(a.getSHA()).sPath);
@@ -267,7 +267,7 @@ public class AxoObjects {
                                 }
                             }
 
-                            if (ObjectUUIDMap.containsKey(a.getUUID())) {
+                            if ((a.getUUID() != null) && (ObjectUUIDMap.containsKey(a.getUUID()))) {
                                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
                                         "Duplicate UUID! " + fileEntry.getAbsolutePath() + "\nOriginal name: " + ObjectUUIDMap.get(a.getUUID()).id
                                         + "\nPath: " + ObjectUUIDMap.get(a.getUUID()).sPath);
@@ -285,7 +285,7 @@ public class AxoObjects {
                             fullname = oname;
                         } else {
                             fullname = prefix.substring(1) + "/" + oname;
-                        } 
+                        }
                         AxoObjectUnloaded a = new AxoObjectUnloaded(fullname, fileEntry);
                         a.sPath = fileEntry.getAbsolutePath();
                         t.Objects.add(a);

@@ -48,12 +48,12 @@ public class AxoObjectComment extends AxoObjectAbstract {
 
     @Override
     public String GenerateSHA() {
-        return "comment";
+        return null;
     }
 
     @Override
     public String GenerateUUID() {
-        return "comment";
+        return null;
     }
 
 }

@@ -287,7 +287,7 @@ public class gentools {
 
         String sha = o.GenerateSHA();
         o.setSHA(sha);
-        if (!upgradeSha.equals(sha)) {
+        if ((upgradeSha != null) && (!upgradeSha.equals(sha))) {
             o.addUpgradeSHA(upgradeSha);
         }
     }
@@ -300,10 +300,10 @@ public class gentools {
             path = path + "." + fn.substring(0, i);
             fn = fn.substring(i);
         }
-        path = path.replace('\\','/');
-        fn = fn.replace('\\','/');
+        path = path.replace('\\', '/');
+        fn = fn.replace('\\', '/');
 
-        o.id = o.id.replace('\\','/');
+        o.id = o.id.replace('\\', '/');
         i = o.id.lastIndexOf('/');
         if (i > 0) {
             o.id = o.id.substring(i + 1);
@@ -392,8 +392,8 @@ public class gentools {
             path = path + "." + fn.substring(0, i);
             fn = fn.substring(i);
         }
-        path = path.replace('\\','/');
-        fn = fn.replace('\\','/');
+        path = path.replace('\\', '/');
+        fn = fn.replace('\\', '/');
 
         File fd = new File("objects/" + path);
         if (!fd.isDirectory()) {
@@ -403,7 +403,7 @@ public class gentools {
         AxoObjectFile a = new AxoObjectFile();
         a.objs = o;
         for (AxoObjectAbstract oa : a.objs) {
-            oa.id = oa.id.replace('\\','/');
+            oa.id = oa.id.replace('\\', '/');
             i = oa.id.lastIndexOf('/');
             if (i > 0) {
                 oa.id = oa.id.substring(i + 1);

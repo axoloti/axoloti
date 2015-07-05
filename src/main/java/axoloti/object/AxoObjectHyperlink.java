@@ -46,12 +46,12 @@ public class AxoObjectHyperlink extends AxoObjectAbstract {
     
     @Override
     public String GenerateSHA() {
-        return "hyperlink";
+        return null;
     }
 
     @Override
     public String GenerateUUID() {
-        return "hyperlink";
+        return null;
     }
     
 }
