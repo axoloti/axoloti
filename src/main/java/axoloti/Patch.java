@@ -30,6 +30,7 @@ import axoloti.object.AxoObjectFile;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceComment;
+import axoloti.object.AxoObjectInstanceHyperlink;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.object.AxoObjectZombie;
@@ -80,6 +81,7 @@ public class Patch {
         @ElementList(entry = "obj", type = AxoObjectInstance.class, inline = true),
         @ElementList(entry = "patcher", type = AxoObjectInstancePatcher.class, inline = true),
         @ElementList(entry = "comment", type = AxoObjectInstanceComment.class, inline = true),
+        @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true),
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true)})
     ArrayList<AxoObjectInstanceAbstract> objectinstances = new ArrayList<AxoObjectInstanceAbstract>();
     @ElementList(name = "nets")

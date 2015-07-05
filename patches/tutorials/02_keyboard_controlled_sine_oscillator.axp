@@ -3,20 +3,22 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="the oscillator now follows the keyboard note" x="14" y="140"/>
-   <comment type="patch/comment" sha="sha" name="use the keyboard window (window menu) to play!" x="14" y="154"/>
+   <comment type="patch/comment" sha="comment" name="the oscillator now follows the keyboard note" x="14" y="140"/>
+   <comment type="patch/comment" sha="comment" name="use the keyboard window (window menu) to play!" x="14" y="154"/>
    <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="196">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="the oscillator frequency dial adjusts the transposition from normal tuning" x="14" y="322"/>
-   <comment type="patch/comment" sha="sha" name="the indicator does not follow the piano keyboard!" x="14" y="336"/>
+   <comment type="patch/comment" sha="comment" name="the oscillator frequency dial adjusts the transposition from normal tuning" x="14" y="322"/>
+   <comment type="patch/comment" sha="comment" name="the indicator does not follow the piano keyboard!" x="14" y="336"/>
    <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="14" y="378">
       <params/>
       <attribs/>
    </obj>
+   <comment type="patch/comment" sha="comment" uuid="comment" name="Open next tutorial -&gt;" x="112" y="518"/>
+   <hyperlink type="patch/hyperlink" sha="hyperlink" uuid="hyperlink" name="03_gated_keyboard_sine_oscillator.axp" x="238" y="518"/>
    <nets>
       <net>
          <source name="keyb1 note"/>
@@ -32,4 +34,10 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>141</x>
+      <y>0</y>
+      <width>564</width>
+      <height>757</height>
+   </windowPos>
 </patch-1.0>

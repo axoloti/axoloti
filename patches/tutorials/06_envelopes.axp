@@ -1,14 +1,14 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="envelopes for amplitude" x="14" y="14"/>
-   <comment type="patch/comment" sha="sha" name="again: use the keyboard window to play" x="14" y="28"/>
-   <comment type="patch/comment" sha="sha" name="just decay" x="182" y="70"/>
+   <comment type="patch/comment" sha="comment" name="envelopes for amplitude" x="14" y="14"/>
+   <comment type="patch/comment" sha="comment" name="again: use the keyboard window to play" x="14" y="28"/>
+   <comment type="patch/comment" sha="comment" name="just decay" x="182" y="84"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="112">
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd1" x="182" y="112">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="182" y="112">
       <params>
-         <frac32.u.map name="d" value="4.5"/>
+         <frac32.s.map name="d" value="-18.0"/>
       </params>
       <attribs/>
    </obj>
@@ -16,7 +16,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="attack/hold/decay" x="182" y="210"/>
+   <comment type="patch/comment" sha="comment" name="attack/hold/decay" x="182" y="224"/>
    <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="182" y="252">
       <params>
          <frac32.u.map name="a" value="15.5"/>
@@ -28,22 +28,18 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="select enevelope type" x="462" y="266"/>
-   <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_1" x="462" y="294">
+   <comment type="patch/comment" sha="comment" name="select enevelope type" x="462" y="294"/>
+   <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_1" x="462" y="322">
       <params>
          <int32.vradio name="value" value="2"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="0: decay" x="546" y="336"/>
-   <comment type="patch/comment" sha="sha" name="1: attack-hold-decay" x="546" y="350"/>
-   <comment type="patch/comment" sha="sha" name="2: attack-decay-sustain-release" x="546" y="364"/>
-   <comment type="patch/comment" sha="sha" name="attack/decay/sustain/release" x="182" y="392"/>
-   <obj type="inmux3" sha="fc8f2c6ad01932819793f6293cfa98005b2b6261" name="inmux31" x="462" y="392">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr1" x="182" y="434">
+   <comment type="patch/comment" sha="comment" name="0: decay" x="546" y="364"/>
+   <comment type="patch/comment" sha="comment" name="1: attack-hold-decay" x="546" y="378"/>
+   <comment type="patch/comment" sha="comment" name="attack/decay/sustain/release" x="182" y="392"/>
+   <comment type="patch/comment" sha="comment" name="2: attack-decay-sustain-release" x="546" y="392"/>
+   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr1" x="182" y="420">
       <params>
          <frac32.s.map name="a" value="-11.0"/>
          <frac32.s.map name="d" value="9.5"/>
@@ -52,14 +48,18 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1__" x="336" y="434">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1__" x="336" y="420">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="appling the output of an envelope to the loudness of the oscillator with a VCA &quot;Voltage Controlled Amplifier&quot;" x="462" y="616"/>
-   <comment type="patch/comment" sha="sha" name="and an oscillator to test..." x="182" y="630"/>
-   <comment type="patch/comment" sha="sha" name="vca~ interpolates the blue input to audio rate and and then multiplies " x="462" y="630"/>
-   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="182" y="672">
+   <obj type="mux/mux 3" sha="fc8f2c6ad01932819793f6293cfa98005b2b6261" name="inmux31" x="462" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" sha="comment" name="appling the output of an envelope to the loudness of the oscillator with a VCA &quot;Voltage Controlled Amplifier&quot;" x="462" y="616"/>
+   <comment type="patch/comment" sha="comment" name="vca~ interpolates the blue input to audio rate and and then multiplies " x="462" y="630"/>
+   <comment type="patch/comment" sha="comment" name="and an oscillator to test..." x="182" y="644"/>
+   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="182" y="672">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -79,6 +79,8 @@
       <params/>
       <attribs/>
    </obj>
+   <comment type="patch/comment" sha="comment" uuid="comment" name="Open next tutorial -&gt;" x="742" y="798"/>
+   <hyperlink type="patch/hyperlink" sha="hyperlink" uuid="hyperlink" name="07_envelope_pitch.axp" x="868" y="798"/>
    <nets>
       <net>
          <source name="keyb1 gate"/>
@@ -131,4 +133,10 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>141</x>
+      <y>0</y>
+      <width>1052</width>
+      <height>982</height>
+   </windowPos>
 </patch-1.0>

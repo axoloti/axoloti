@@ -28,6 +28,7 @@ import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectComment;
+import axoloti.object.AxoObjectHyperlink;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletFrac32;
@@ -54,6 +55,7 @@ public class Patch extends gentools {
         WriteAxoObject(catName, Create_outlet_tilde());
         WriteAxoObject(catName, CreatePreset());
         WriteAxoObject(catName, Create_comment());
+        WriteAxoObject(catName, Create_hyperlink());
         WriteAxoObject(catName, modsource_cc());
         WriteAxoObject(catName, modsource());
         WriteAxoObject(catName, Create_send());
@@ -213,6 +215,11 @@ public class Patch extends gentools {
         return o;
     }
 
+    static AxoObjectAbstract Create_hyperlink() {
+        AxoObjectHyperlink o = new AxoObjectHyperlink("hyperlink", "hyperlink to a patch or a URL opened in your browser");
+        return o;
+    }    
+    
     static AxoObject CreatePreset() {
         AxoObject o = new AxoObject("preset", "apply preset, preset zero = init, and will reset ALL parameters, not just the presets");
         o.inlets.add(new InletInt32("preset", "preset number"));

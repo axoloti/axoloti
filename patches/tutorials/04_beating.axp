@@ -1,16 +1,16 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="mixing (adding) two sine oscillations of nearby frequencies results in periodic cancelling of their output" x="14" y="14"/>
-   <comment type="patch/comment" sha="sha" name="called &quot;beating&quot;" x="336" y="28"/>
+   <comment type="patch/comment" sha="comment" name="mixing (adding) two sine oscillations of nearby frequencies results in periodic cancelling of their output" x="14" y="14"/>
+   <comment type="patch/comment" sha="comment" name="called &quot;beating&quot;" x="336" y="28"/>
    <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="42">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="musicians listen to beatings and adjust the tuning to slow them down to zero to tune their instruments" x="336" y="42"/>
+   <comment type="patch/comment" sha="comment" name="musicians listen to beatings and adjust the tuning to slow them down to zero to tune their instruments" x="336" y="42"/>
    <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_2" x="14" y="154">
       <params>
-         <frac32.s.map name="pitch" value="-0.057451343536376764"/>
+         <frac32.s.map name="pitch" value="-0.05745124816894531"/>
       </params>
       <attribs/>
    </obj>
@@ -25,11 +25,13 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="shift-drag to make sub-unit adjustments to the frequency dial!" x="14" y="280"/>
+   <comment type="patch/comment" sha="comment" name="shift-drag to make sub-unit adjustments to the frequency dial!" x="14" y="280"/>
    <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig1" x="504" y="322">
       <params/>
       <attribs/>
    </obj>
+   <comment type="patch/comment" sha="comment" uuid="comment" name="Open next tutorial -&gt;" x="490" y="546"/>
+   <hyperlink type="patch/hyperlink" sha="hyperlink" uuid="hyperlink" name="05_oscs.axp" x="616" y="546"/>
    <nets>
       <net>
          <source name="osc_1 wave"/>
@@ -50,4 +52,10 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>273</x>
+      <y>62</y>
+      <width>884</width>
+      <height>739</height>
+   </windowPos>
 </patch-1.0>
