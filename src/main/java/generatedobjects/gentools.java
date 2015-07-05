@@ -290,7 +290,8 @@ public class gentools {
                     oo.helpPatch = fn + ".axh";
                 }
                 else {
-                   File fcat = new File("objects/" + catname + "/" +catname + ".axh");
+                   String fcatname = catname.replaceAll("/", "_");
+                   File fcat = new File("objects/" + catname + "/" +fcatname + ".axh");
                    if (fcat.exists()) {
                        oo.helpPatch = catname + ".axh";
                    }
