@@ -48,7 +48,7 @@ import qcmds.QCmdShowDisconnect;
  */
 public class USBBulkConnection extends Connection {
 
-    Patch patch;
+    private Patch patch;
     boolean disconnectRequested;
     boolean connected;
     Thread transmitterThread;
@@ -88,6 +88,7 @@ public class USBBulkConnection extends Connection {
      }
      */
 
+    @Override
     public void setPatch(Patch patch) {
         this.patch = patch;
     }

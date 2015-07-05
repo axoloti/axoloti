@@ -220,6 +220,5 @@ public class QCmdProcessor implements Runnable {
             patch.Unlock();
         }
         this.patch = patch;
-        serialconnection.setPatch(patch);
     }
 }

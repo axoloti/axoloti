@@ -123,7 +123,7 @@ public class Patch {
         ClearDirty();
         WriteCode();
         presetUpdatePending = false;
-        GetQCmdProcessor().SetPatch(this);
+        GetQCmdProcessor().serialconnection.setPatch(this);
         GetQCmdProcessor().AppendToQueue(new QCmdStop());
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
         GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
