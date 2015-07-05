@@ -43,7 +43,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="initiate a recall" x="40" y="320"/>
+   <comment type="comment" name="initiate a recall" x="40" y="320"/>
    <obj type="cb1m" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_1" x="40" y="340">
       <params>
          <bool32.mom name="b" value="0"/>

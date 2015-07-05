@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.hyperlink id="hyperlink" uuid="hyperlink" sha="hyperlink">
+   <obj.hyperlink id="hyperlink">
       <sDescription>hyperlink to a patch or a URL opened in your browser</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

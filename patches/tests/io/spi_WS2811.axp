@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="Needs USART2 enabled in mcuconfig, this conficts with serial port SD2..." x="14" y="14"/>
-   <comment type="patch/comment" sha="sha" name="output on PA2" x="14" y="28"/>
+   <comment type="patch/comment" name="Needs USART2 enabled in mcuconfig, this conficts with serial port SD2..." x="14" y="14"/>
+   <comment type="patch/comment" name="output on PA2" x="14" y="28"/>
    <obj type="audio/inconfig" sha="c5ee5e230152b248edde544704970b051688aa4f" name="inconfig_1" x="126" y="56">
       <params/>
       <attribs>

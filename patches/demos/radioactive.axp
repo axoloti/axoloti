@@ -1,8 +1,8 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="comment" name="preset 1: intro" x="434" y="14"/>
-   <comment type="patch/comment" sha="comment" name="keyboard splits: 0-50: bassline" x="630" y="14"/>
-   <comment type="patch/comment" sha="comment" name="preset 2: intro speeding up" x="434" y="42"/>
-   <comment type="patch/comment" sha="comment" name="50-63: strings chord" x="714" y="42"/>
+   <comment type="patch/comment" name="preset 1: intro" x="434" y="14"/>
+   <comment type="patch/comment" name="keyboard splits: 0-50: bassline" x="630" y="14"/>
+   <comment type="patch/comment" name="preset 2: intro speeding up" x="434" y="42"/>
+   <comment type="patch/comment" name="50-63: strings chord" x="714" y="42"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp_2" x="56" y="56">
       <params>
          <frac32.s.map name="value" value="0.0">
@@ -30,12 +30,12 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="preset 3: geiger counter" x="434" y="56"/>
-   <comment type="patch/comment" sha="comment" name="63-127: melody" x="714" y="56"/>
-   <comment type="patch/comment" sha="comment" name="preset 4: main" x="434" y="84"/>
-   <comment type="patch/comment" sha="comment" name="modulation wheel: geiger counter FM" x="630" y="98"/>
-   <comment type="patch/comment" sha="comment" name="bassline" x="28" y="182"/>
-   <comment type="patch/comment" sha="comment" name="drums" x="518" y="182"/>
+   <comment type="patch/comment" name="preset 3: geiger counter" x="434" y="56"/>
+   <comment type="patch/comment" name="63-127: melody" x="714" y="56"/>
+   <comment type="patch/comment" name="preset 4: main" x="434" y="84"/>
+   <comment type="patch/comment" name="modulation wheel: geiger counter FM" x="630" y="98"/>
+   <comment type="patch/comment" name="bassline" x="28" y="182"/>
+   <comment type="patch/comment" name="drums" x="518" y="182"/>
    <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_1" x="168" y="224">
       <params>
          <frac32.s.map name="a" value="-32.0"/>
@@ -225,8 +225,8 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="melody" x="28" y="574"/>
-   <comment type="patch/comment" sha="comment" name="strings" x="896" y="602"/>
+   <comment type="patch/comment" name="melody" x="28" y="574"/>
+   <comment type="patch/comment" name="strings" x="896" y="602"/>
    <obj type="midi/in/keyb zone lru" sha="b9b28cf52b3421368e367f3718404222910c57a5" name="keybzone_lru_2" x="28" y="616">
       <params/>
       <attribs>
@@ -348,7 +348,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="geiger counter" x="28" y="994"/>
+   <comment type="patch/comment" name="geiger counter" x="28" y="994"/>
    <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_2" x="28" y="1036">
       <params>
          <frac32.s.map name="pitch" value="27.0"/>

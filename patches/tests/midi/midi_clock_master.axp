@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="todo: BPM dial" x="98" y="28"/>
+   <comment type="patch/comment" name="todo: BPM dial" x="98" y="28"/>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb1_1" x="14" y="56">
       <params>
          <bool32.tgl name="b" value="1"/>
@@ -32,7 +32,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="6 counts per 16th" x="658" y="126"/>
+   <comment type="patch/comment" name="6 counts per 16th" x="658" y="126"/>
    <obj type="math/divremc" sha="a9507fb906b40fc4885ac66c9e4b34b840e8164d" name="divremc_3" x="238" y="182">
       <params/>
       <attribs>
@@ -47,7 +47,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="16 per bar" x="658" y="210"/>
+   <comment type="patch/comment" name="16 per bar" x="658" y="210"/>
    <obj type="disp/i" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="measure" x="392" y="252">
       <params/>
       <attribs/>
@@ -60,7 +60,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="bar number" x="854" y="280"/>
+   <comment type="patch/comment" name="bar number" x="854" y="280"/>
    <nets>
       <net>
          <source name="ibar16_3 chain_out"/>

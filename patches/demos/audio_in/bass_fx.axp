@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="tremolo + stereo chorus effect" x="28" y="14"/>
+   <comment type="patch/comment" name="tremolo + stereo chorus effect" x="28" y="14"/>
    <obj type="math/c 32" sha="5797bce9fc4e770d9c14890b0fa899f126c5bc38" name="c641" x="98" y="42">
       <params/>
       <attribs/>

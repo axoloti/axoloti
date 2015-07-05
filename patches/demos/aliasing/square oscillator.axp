@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="&lt;html&gt;&lt;H2&gt;Comparing a naive non-bandwidth limited square wave oscillator&lt;br&gt;with a better one&lt;/h2&gt;" x="14" y="14"/>
+   <comment type="patch/comment" name="&lt;html&gt;&lt;H2&gt;Comparing a naive non-bandwidth limited square wave oscillator&lt;br&gt;with a better one&lt;/h2&gt;" x="14" y="14"/>
    <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw_1" x="14" y="98">
       <params>
          <frac32.s.map name="pitch" value="-50.0"/>
@@ -24,8 +24,8 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="off = naive implementation" x="434" y="140"/>
-   <comment type="patch/comment" sha="sha" name="on = better implementation" x="434" y="154"/>
+   <comment type="patch/comment" name="off = naive implementation" x="434" y="140"/>
+   <comment type="patch/comment" name="on = better implementation" x="434" y="154"/>
    <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="238" y="182">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>

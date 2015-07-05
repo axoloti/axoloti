@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="comment" name="Demultiplexer" x="14" y="14"/>
+   <comment type="patch/comment" name="Demultiplexer" x="14" y="14"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="input" x="28" y="42">
       <params>
          <frac32.s.map name="value" value="42.0"/>
@@ -46,7 +46,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="other variants:" x="14" y="574"/>
+   <comment type="patch/comment" name="other variants:" x="14" y="574"/>
    <hyperlink type="patch/hyperlink" sha="hyperlink" uuid="hyperlink" name="demux 2.axh" x="112" y="574"/>
    <obj type="demux/demux 3" sha="129c7ffdc1dc207405715ead5330b62739fe0b56" name="demux_2" x="14" y="616">
       <params/>

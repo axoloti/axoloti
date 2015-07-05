@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="time domain table of one period of oscillation" x="14" y="14"/>
-   <comment type="patch/comment" sha="sha" name="slow modulation of pitch: demonstrates audible interpolation artefacts (aliases)" x="266" y="14"/>
+   <comment type="patch/comment" name="time domain table of one period of oscillation" x="14" y="14"/>
+   <comment type="patch/comment" name="slow modulation of pitch: demonstrates audible interpolation artefacts (aliases)" x="266" y="14"/>
    <obj type="table/allocate 32b 16sliders" sha="2227408087d0108a79d19893c9bcca8343f9f004" name="tab" x="14" y="28">
       <params>
          <frac32.s.mapvsl name="b0" value="0.0"/>
@@ -40,7 +40,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="the phasor object generates table indexing at audio frequency" x="266" y="126"/>
+   <comment type="patch/comment" name="the phasor object generates table indexing at audio frequency" x="266" y="126"/>
    <obj type="osc/phasor" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52" name="phasor3_1" x="266" y="140">
       <params>
          <frac32.s.map name="pitch" value="14.0"/>
@@ -59,8 +59,8 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="on = linear interpolation, off = no interpolation" x="630" y="182"/>
-   <comment type="patch/comment" sha="sha" name="you can draw the shape live!" x="14" y="196"/>
+   <comment type="patch/comment" name="on = linear interpolation, off = no interpolation" x="630" y="182"/>
+   <comment type="patch/comment" name="you can draw the shape live!" x="14" y="196"/>
    <obj type="table/read interp" sha="b0519acd115f068f0851ae0be434a57888454c06" name="linear_interpolation" x="378" y="224">
       <params/>
       <attribs>

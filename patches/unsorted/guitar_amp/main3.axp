@@ -26,7 +26,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="tremolo + stereo chorus effect" x="18" y="41"/>
+   <comment type="comment" name="tremolo + stereo chorus effect" x="18" y="41"/>
    <obj type="*" sha="b031e26920f6cf5c1a53377ee6021573c4e3ac02" name="*3" x="160" y="80">
       <params/>
       <attribs/>

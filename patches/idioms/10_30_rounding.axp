@@ -21,9 +21,9 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="truncation" x="240" y="40"/>
-   <comment type="comment" sha="sha" name="rounding" x="240" y="160"/>
-   <comment type="comment" sha="sha" name="use shift-drag to make fine adjustments!" x="0" y="40"/>
+   <comment type="comment" name="truncation" x="240" y="40"/>
+   <comment type="comment" name="rounding" x="240" y="160"/>
+   <comment type="comment" name="use shift-drag to make fine adjustments!" x="0" y="40"/>
    <nets>
       <net>
          <source name="c1 out"/>

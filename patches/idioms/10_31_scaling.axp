@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="comment" sha="sha" name="in this example we scale 0..64 to 1..10, as 127 is out-of-range for fractionals" x="40" y="40"/>
+   <comment type="comment" name="in this example we scale 0..64 to 1..10, as 127 is out-of-range for fractionals" x="40" y="40"/>
    <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="80">
       <params>
          <frac32.u.map name="value" value="29.0"/>
@@ -21,7 +21,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="out =  1 + 9 * (c/64)" x="240" y="240"/>
+   <comment type="comment" name="out =  1 + 9 * (c/64)" x="240" y="240"/>
    <nets>
       <net>
          <source name="mix11 out"/>

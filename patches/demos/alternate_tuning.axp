@@ -34,7 +34,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="^C" x="238" y="196"/>
+   <comment type="patch/comment" name="^C" x="238" y="196"/>
    <obj type="math/+c" sha="d0aea6063c88e27c97acf08b33a056fec3e150f1" uuid="13eec32bd8ad57dd0bb18a02566cc0a117d320e3" name="+c_1" x="98" y="238">
       <params>
          <frac32.u.map name="c" value="4.0"/>

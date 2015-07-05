@@ -24,7 +24,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="automatic preset recall ------------------" x="490" y="56"/>
+   <comment type="patch/comment" name="automatic preset recall ------------------" x="490" y="56"/>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="enable" x="490" y="84">
       <params>
          <bool32.tgl name="b" value="1"/>
@@ -61,14 +61,14 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="pulse" x="210" y="154"/>
-   <comment type="patch/comment" sha="sha" name="gate" x="210" y="168"/>
-   <comment type="patch/comment" sha="sha" name="accent" x="210" y="182"/>
+   <comment type="patch/comment" name="pulse" x="210" y="154"/>
+   <comment type="patch/comment" name="gate" x="210" y="168"/>
+   <comment type="patch/comment" name="accent" x="210" y="182"/>
    <obj type="disp/i" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="i_1" x="658" y="182">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="slide" x="210" y="196"/>
+   <comment type="patch/comment" name="slide" x="210" y="196"/>
    <obj type="math/+" sha="fdc908fd68bce74b7ba3aed17e88e9830021f0a9" name="+_2" x="42" y="210">
       <params/>
       <attribs/>
@@ -82,7 +82,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="bass drum ----------------------------" x="714" y="238"/>
+   <comment type="patch/comment" name="bass drum ----------------------------" x="714" y="238"/>
    <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161_" x="0" y="266">
       <params/>
       <attribs/>
@@ -107,7 +107,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="bd" x="224" y="308"/>
+   <comment type="patch/comment" name="bd" x="224" y="308"/>
    <obj type="sel/sel fp 16" sha="136d3fe6eb37e18d92e4b88db321db2e600aec6e" name="select_f_162" x="0" y="322">
       <params>
          <frac32.u.mapvsl name="b0" value="12.0"/>
@@ -129,8 +129,8 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="hh" x="224" y="322"/>
-   <comment type="patch/comment" sha="sha" name="hh close" x="224" y="336"/>
+   <comment type="patch/comment" name="hh" x="224" y="322"/>
+   <comment type="patch/comment" name="hh close" x="224" y="336"/>
    <obj type="env/d lin m x" sha="a2e1da37932bdfc8056cd08cca74d2ebc6735f40" name="env.envdlinmx_1" x="714" y="350">
       <params>
          <frac32.s.map name="d" value="5.0"/>
@@ -192,7 +192,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="hat ----------------------------" x="714" y="476"/>
+   <comment type="patch/comment" name="hat ----------------------------" x="714" y="476"/>
    <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_1" x="826" y="504">
       <params/>
       <attribs/>
@@ -232,7 +232,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="bass synth----------------------------" x="56" y="588"/>
+   <comment type="patch/comment" name="bass synth----------------------------" x="56" y="588"/>
    <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="envd1" x="56" y="616">
       <params>
          <frac32.s.map name="d" value="7.0"/>

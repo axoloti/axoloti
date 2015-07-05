@@ -9,15 +9,15 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="pitch envelope" x="224" y="84"/>
-   <comment type="patch/comment" sha="comment" name="combine note, envelope and lfo for oscillator pitch" x="336" y="140"/>
+   <comment type="patch/comment" name="pitch envelope" x="224" y="84"/>
+   <comment type="patch/comment" name="combine note, envelope and lfo for oscillator pitch" x="336" y="140"/>
    <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="112" y="168">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="pitch LFO" x="224" y="168"/>
+   <comment type="patch/comment" name="pitch LFO" x="224" y="168"/>
    <obj type="mix/mix 2" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe" name="mix11" x="336" y="168">
       <params>
          <frac32.u.map name="gain1" value="8.5"/>
@@ -25,14 +25,14 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="oscillator" x="476" y="168"/>
+   <comment type="patch/comment" name="oscillator" x="476" y="168"/>
    <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="476" y="182">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="filter with envelope" x="252" y="336"/>
+   <comment type="patch/comment" name="filter with envelope" x="252" y="336"/>
    <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1_" x="14" y="364">
       <params>
          <frac32.u.map name="a" value="29.5"/>
@@ -60,7 +60,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="amplitude envelope" x="126" y="532"/>
+   <comment type="patch/comment" name="amplitude envelope" x="126" y="532"/>
    <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_2" x="378" y="602">
       <params/>
       <attribs/>

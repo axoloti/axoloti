@@ -35,7 +35,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="other variants:" x="14" y="364"/>
+   <comment type="patch/comment" name="other variants:" x="14" y="364"/>
    <obj type="demux/demux 2" sha="51521ba16c909fd0a9e8900319ff9b45db9f15a5" name="demux_2" x="14" y="406">
       <params/>
       <attribs/>

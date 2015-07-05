@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="Shows how a script can modify parameters" x="14" y="14"/>
+   <comment type="patch/comment" name="Shows how a script can modify parameters" x="14" y="14"/>
    <obj type="script/script2" sha="1478c410b77725959c034de4a2456dd1198e9080" name="script2_1" x="14" y="42">
       <params/>
       <attribs>

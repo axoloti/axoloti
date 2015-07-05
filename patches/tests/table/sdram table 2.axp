@@ -17,7 +17,7 @@
          </text>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="&lt;- init script shows how to read a file into memory at patch initialisation" x="154" y="56"/>
+   <comment type="patch/comment" name="&lt;- init script shows how to read a file into memory at patch initialisation" x="154" y="56"/>
    <obj type="string/c" sha="ee2b2048e59a86ec2249107bf0f2989587486d9" name="c_1" x="14" y="112">
       <params/>
       <attribs>

@@ -15,7 +15,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="these pulses are to short too observe directly!" x="280" y="160"/>
+   <comment type="comment" name="these pulses are to short too observe directly!" x="280" y="160"/>
    <obj type="delayedpulse" sha="8d80de76b1990228c3ac6649fcf37ff677bfb6f8" name="delayedpulse1" x="200" y="200">
       <params>
          <frac32.u.map name="delay" value="25.5"/>

@@ -19,7 +19,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="enable or clear to zero" x="80" y="220"/>
+   <comment type="comment" name="enable or clear to zero" x="80" y="220"/>
    <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="400" y="20">
       <params/>
       <attribs/>

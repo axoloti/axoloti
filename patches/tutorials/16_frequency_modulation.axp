@@ -1,12 +1,12 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="frequency modulation, sine wave carrier, sine wave modulator" x="14" y="14"/>
+   <comment type="patch/comment" name="frequency modulation, sine wave carrier, sine wave modulator" x="14" y="14"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="modulator oscillator" x="14" y="168"/>
-   <comment type="patch/comment" sha="sha" name="modulation intensity" x="182" y="168"/>
-   <comment type="patch/comment" sha="sha" name="carrier oscillator" x="336" y="168"/>
+   <comment type="patch/comment" name="modulator oscillator" x="14" y="168"/>
+   <comment type="patch/comment" name="modulation intensity" x="182" y="168"/>
+   <comment type="patch/comment" name="carrier oscillator" x="336" y="168"/>
    <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="182">
       <params>
          <frac32.s.map name="pitch" value="12.0"/>

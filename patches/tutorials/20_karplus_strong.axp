@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="comment" name="play with the piano!" x="14" y="14"/>
+   <comment type="patch/comment" name="play with the piano!" x="14" y="14"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
       <params/>
       <attribs/>
@@ -8,7 +8,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="generates a short burst of noise" x="392" y="56"/>
+   <comment type="patch/comment" name="generates a short burst of noise" x="392" y="56"/>
    <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="294" y="84">
       <params>
          <frac32.s.map name="d" value="-22.0"/>
@@ -19,10 +19,10 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="compute the right delay time from pitch" x="14" y="210"/>
-   <comment type="patch/comment" sha="comment" name="interpolating delayline read" x="322" y="210"/>
-   <comment type="patch/comment" sha="comment" name="99% feedback" x="518" y="210"/>
-   <comment type="patch/comment" sha="comment" name="delayline write" x="630" y="210"/>
+   <comment type="patch/comment" name="compute the right delay time from pitch" x="14" y="210"/>
+   <comment type="patch/comment" name="interpolating delayline read" x="322" y="210"/>
+   <comment type="patch/comment" name="99% feedback" x="518" y="210"/>
+   <comment type="patch/comment" name="delayline write" x="630" y="210"/>
    <obj type="delay/mtod" sha="800732c561d801c8b0c245ce1c6cd2413cd0ff6" name="mtod_1" x="56" y="252">
       <params>
          <frac32.s.map name="pitch" value="8.0"/>
@@ -69,7 +69,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="bug: tuning reference is incorrect" x="56" y="350"/>
+   <comment type="patch/comment" name="bug: tuning reference is incorrect" x="56" y="350"/>
    <nets>
       <net>
          <source name="keyb1 gate"/>

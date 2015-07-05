@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="&lt;html&gt;&lt;H2&gt;Comparing a naive non-bandwidth limited sample-and-hold&lt;br&gt;with a better one&lt;/h2&gt;" x="14" y="14"/>
+   <comment type="patch/comment" name="&lt;html&gt;&lt;H2&gt;Comparing a naive non-bandwidth limited sample-and-hold&lt;br&gt;with a better one&lt;/h2&gt;" x="14" y="14"/>
    <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="sine_3" x="14" y="98">
       <params>
          <frac32.s.map name="pitch" value="-17.0"/>
@@ -46,8 +46,8 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="off = naive implementation" x="588" y="238"/>
-   <comment type="patch/comment" sha="sha" name="on = better implementation" x="588" y="252"/>
+   <comment type="patch/comment" name="off = naive implementation" x="588" y="238"/>
+   <comment type="patch/comment" name="on = better implementation" x="588" y="252"/>
    <obj type="dist/samplehold~" sha="252bae103bd8e122a6fa41a92000c8c6abc39c7b" name="samplehold~_1" x="350" y="280">
       <params/>
       <attribs/>

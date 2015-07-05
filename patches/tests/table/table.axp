@@ -1,10 +1,10 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="8-bit resolution" x="14" y="14"/>
-   <comment type="patch/comment" sha="sha" name="16-bit resolution" x="532" y="14"/>
-   <comment type="patch/comment" sha="sha" name="32-bit resolution" x="1022" y="14"/>
-   <comment type="patch/comment" sha="sha" name="non-interpolated fractional lookup" x="182" y="42"/>
-   <comment type="patch/comment" sha="sha" name="non-interpolated" x="700" y="42"/>
-   <comment type="patch/comment" sha="sha" name="non-interpolated_" x="1176" y="42"/>
+   <comment type="patch/comment" name="8-bit resolution" x="14" y="14"/>
+   <comment type="patch/comment" name="16-bit resolution" x="532" y="14"/>
+   <comment type="patch/comment" name="32-bit resolution" x="1022" y="14"/>
+   <comment type="patch/comment" name="non-interpolated fractional lookup" x="182" y="42"/>
+   <comment type="patch/comment" name="non-interpolated" x="700" y="42"/>
+   <comment type="patch/comment" name="non-interpolated_" x="1176" y="42"/>
    <obj type="table/alloc 8b" sha="16dc5f80ca3889cc98392d3e77ce5ed128140c96" name="t1" x="14" y="70">
       <params/>
       <attribs>
@@ -86,9 +86,9 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="linear interpolated" x="700" y="126"/>
-   <comment type="patch/comment" sha="sha" name="linear interpolated_" x="1176" y="126"/>
-   <comment type="patch/comment" sha="sha" name="input is fraction of table size (positive)" x="182" y="154"/>
+   <comment type="patch/comment" name="linear interpolated" x="700" y="126"/>
+   <comment type="patch/comment" name="linear interpolated_" x="1176" y="126"/>
+   <comment type="patch/comment" name="input is fraction of table size (positive)" x="182" y="154"/>
    <obj type="table/read interp" sha="2dfc3a1a00aeb03244b8ef0259d6c004c06cdbc" name="tabread1___" x="700" y="154">
       <params/>
       <attribs>
@@ -109,8 +109,8 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="so 4 units/step for a 16-element table" x="182" y="168"/>
-   <comment type="patch/comment" sha="sha" name="linear interpolated fractional lookup" x="182" y="182"/>
+   <comment type="patch/comment" name="so 4 units/step for a 16-element table" x="182" y="168"/>
+   <comment type="patch/comment" name="linear interpolated fractional lookup" x="182" y="182"/>
    <obj type="table/read interp" sha="2dfc3a1a00aeb03244b8ef0259d6c004c06cdbc" name="tabread1_" x="182" y="210">
       <params/>
       <attribs>
@@ -121,7 +121,7 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="integer lookup" x="224" y="308"/>
+   <comment type="patch/comment" name="integer lookup" x="224" y="308"/>
    <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="322">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>

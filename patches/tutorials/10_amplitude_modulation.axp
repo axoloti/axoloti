@@ -1,17 +1,17 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="amplitude modulation, sine wave carrier, sine wave modulator, 100% modulation depth" x="14" y="14"/>
+   <comment type="patch/comment" name="amplitude modulation, sine wave carrier, sine wave modulator, 100% modulation depth" x="14" y="14"/>
    <obj type="keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="modulator oscillator" x="56" y="168"/>
+   <comment type="patch/comment" name="modulator oscillator" x="56" y="168"/>
    <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="56" y="182">
       <params>
          <frac32.s.map name="pitch" value="-27.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="carrier oscillator" x="56" y="322"/>
+   <comment type="patch/comment" name="carrier oscillator" x="56" y="322"/>
    <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_2" x="56" y="336">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
@@ -40,7 +40,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="out=0.5+0.5*in" x="182" y="392"/>
+   <comment type="patch/comment" name="out=0.5+0.5*in" x="182" y="392"/>
    <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_1" x="574" y="462">
       <params/>
       <attribs/>

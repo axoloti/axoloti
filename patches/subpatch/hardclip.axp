@@ -1,7 +1,7 @@
 <patch-1.0>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_1" x="182" y="14">
       <params>
-         <frac32.u.map name="value" value="1.7499995231628418"/>
+         <frac32.u.map name="value" onParent="true" value="4.0"/>
       </params>
       <attribs/>
    </obj>
@@ -45,7 +45,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/muls 16" sha="fc43d4b12bedaf555251f39a12909179bdaa71bb" name="muls_2" x="392" y="196">
+   <obj type="math/muls 8" sha="3b876043fb7aa6dff276407826cba102606eb254" name="muls_2" x="392" y="196">
       <params/>
       <attribs/>
    </obj>

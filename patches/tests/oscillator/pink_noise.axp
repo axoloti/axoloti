@@ -15,7 +15,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="maximum value in a buffer" x="280" y="210"/>
+   <comment type="patch/comment" name="maximum value in a buffer" x="280" y="210"/>
    <obj type="math/double" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2" name="double1" x="196" y="252">
       <params/>
       <attribs/>

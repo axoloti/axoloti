@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="test for all analog inputs" x="14" y="14"/>
+   <comment type="patch/comment" name="test for all analog inputs" x="14" y="14"/>
    <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="14" y="42">
       <params/>
       <attribs>
@@ -10,7 +10,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_" x="238" y="42">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead5" x="238" y="42">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA4 (ADC1_IN4)"/>
@@ -20,7 +20,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4__" x="462" y="42">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead9" x="462" y="42">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PB0 (ADC1_IN8)"/>
@@ -30,7 +30,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4______" x="686" y="42">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead13" x="686" y="42">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC2 (ADC1_IN12)"/>
@@ -50,7 +50,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1_" x="238" y="154">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead6" x="238" y="154">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA5 (ADC1_IN5)"/>
@@ -60,7 +60,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4___" x="462" y="154">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead10" x="462" y="154">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PB1 (ADC1_IN9)"/>
@@ -70,7 +70,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_______" x="686" y="154">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead14" x="686" y="154">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC3 (ADC1_IN13)"/>
@@ -90,7 +90,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead2_" x="238" y="280">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead7" x="238" y="280">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA6 (ADC1_IN6)"/>
@@ -100,7 +100,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4____" x="462" y="280">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead11" x="462" y="280">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC0 (ADC1_IN10)"/>
@@ -110,7 +110,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4________" x="686" y="280">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead15" x="686" y="280">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC4 (ADC1_IN14)"/>
@@ -130,7 +130,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead3_" x="238" y="392">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead8" x="238" y="392">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA7 (ADC1_IN7)"/>
@@ -140,7 +140,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_____" x="462" y="392">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead12" x="462" y="392">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC1 (ADC1_IN11)"/>
@@ -150,7 +150,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead4_________" x="686" y="392">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead16" x="686" y="392">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PC5 (ADC1_IN15)"/>
@@ -178,51 +178,51 @@
          <dest name="scopeU4 in"/>
       </net>
       <net>
-         <source name="analogRead4_ out"/>
+         <source name="analogRead5 out"/>
          <dest name="scopeU5 in"/>
       </net>
       <net>
-         <source name="analogRead1_ out"/>
+         <source name="analogRead6 out"/>
          <dest name="scopeU6 in"/>
       </net>
       <net>
-         <source name="analogRead2_ out"/>
+         <source name="analogRead7 out"/>
          <dest name="scopeU7 in"/>
       </net>
       <net>
-         <source name="analogRead3_ out"/>
+         <source name="analogRead8 out"/>
          <dest name="scopeU8 in"/>
       </net>
       <net>
-         <source name="analogRead4__ out"/>
+         <source name="analogRead9 out"/>
          <dest name="scopeU9 in"/>
       </net>
       <net>
-         <source name="analogRead4___ out"/>
+         <source name="analogRead10 out"/>
          <dest name="scopeU10 in"/>
       </net>
       <net>
-         <source name="analogRead4____ out"/>
+         <source name="analogRead11 out"/>
          <dest name="scopeU11 in"/>
       </net>
       <net>
-         <source name="analogRead4_____ out"/>
+         <source name="analogRead12 out"/>
          <dest name="scopeU12 in"/>
       </net>
       <net>
-         <source name="analogRead4______ out"/>
+         <source name="analogRead13 out"/>
          <dest name="scopeU13 in"/>
       </net>
       <net>
-         <source name="analogRead4_______ out"/>
+         <source name="analogRead14 out"/>
          <dest name="scopeU14 in"/>
       </net>
       <net>
-         <source name="analogRead4________ out"/>
+         <source name="analogRead15 out"/>
          <dest name="scopeU15 in"/>
       </net>
       <net>
-         <source name="analogRead4_________ out"/>
+         <source name="analogRead16 out"/>
          <dest name="scopeU16 in"/>
       </net>
    </nets>

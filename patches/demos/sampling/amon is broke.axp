@@ -146,7 +146,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="slice" x="518" y="70"/>
+   <comment type="patch/comment" name="slice" x="518" y="70"/>
    <obj type="rand/uniform i" sha="c7045bb3734e4fdb272c379df8d5e3df8c06a0a1" name="uniform_1" x="434" y="84">
       <params>
          <int32 name="max" value="32"/>
@@ -157,10 +157,10 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="mute" x="784" y="84"/>
-   <comment type="patch/comment" sha="comment" name="var A" x="784" y="98"/>
-   <comment type="patch/comment" sha="comment" name="var B" x="784" y="112"/>
-   <comment type="patch/comment" sha="comment" name="var C" x="784" y="126"/>
+   <comment type="patch/comment" name="mute" x="784" y="84"/>
+   <comment type="patch/comment" name="var A" x="784" y="98"/>
+   <comment type="patch/comment" name="var B" x="784" y="112"/>
+   <comment type="patch/comment" name="var C" x="784" y="126"/>
    <obj type="math/*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e" name="*c_1" x="434" y="140">
       <params>
          <frac32.u.map name="amp" value="40.94999980926514"/>
@@ -177,14 +177,14 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="var D (breaks)" x="784" y="140"/>
-   <comment type="patch/comment" sha="comment" name="var E" x="784" y="154"/>
-   <comment type="patch/comment" sha="comment" name="(re)start" x="168" y="168"/>
-   <comment type="patch/comment" sha="comment" name="var F (bit stutter)" x="784" y="168"/>
-   <comment type="patch/comment" sha="comment" name="stop" x="182" y="182"/>
-   <comment type="patch/comment" sha="comment" name="stutter " x="784" y="182"/>
-   <comment type="patch/comment" sha="comment" name="randomize position" x="112" y="196"/>
-   <comment type="patch/comment" sha="comment" name="stutter speed env" x="126" y="210"/>
+   <comment type="patch/comment" name="var D (breaks)" x="784" y="140"/>
+   <comment type="patch/comment" name="var E" x="784" y="154"/>
+   <comment type="patch/comment" name="(re)start" x="168" y="168"/>
+   <comment type="patch/comment" name="var F (bit stutter)" x="784" y="168"/>
+   <comment type="patch/comment" name="stop" x="182" y="182"/>
+   <comment type="patch/comment" name="stutter " x="784" y="182"/>
+   <comment type="patch/comment" name="randomize position" x="112" y="196"/>
+   <comment type="patch/comment" name="stutter speed env" x="126" y="210"/>
    <obj type="sel/sel b 16" sha="edded2c45c473d9ae251dbd56053120a8b3c57be" name="sel_4" x="224" y="224">
       <params>
          <bin16 name="b16" value="0">
@@ -218,8 +218,8 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="IMPORTANT: needs samples on sdcard!" x="434" y="266"/>
-   <comment type="patch/comment" sha="comment" name="stutter" x="168" y="280"/>
+   <comment type="patch/comment" name="IMPORTANT: needs samples on sdcard!" x="434" y="266"/>
+   <comment type="patch/comment" name="stutter" x="168" y="280"/>
    <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="d_1" x="28" y="294">
       <params>
          <frac32.s.map name="d" value="27.0"/>
@@ -305,7 +305,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="sample credit: VEXST on FreeSound, creative commons" x="434" y="392"/>
+   <comment type="patch/comment" name="sample credit: VEXST on FreeSound, creative commons" x="434" y="392"/>
    <obj type="math/*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e" name="*c_2" x="434" y="420">
       <params>
          <frac32.u.map name="amp" value="63.5"/>
@@ -345,7 +345,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="reverb gate" x="154" y="448"/>
+   <comment type="patch/comment" name="reverb gate" x="154" y="448"/>
    <nets>
       <net>
          <source name="square_1 wave"/>

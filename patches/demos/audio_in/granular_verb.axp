@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="ramtable16" sha="30e6566ebd5bd19afe2c6975adaa19d5b16584d9" name="t" x="180" y="120">
+   <obj type="table/alloc 16b" sha="30e6566ebd5bd19afe2c6975adaa19d5b16584d9" name="t" x="180" y="120">
       <params/>
       <attribs>
          <combo attributeName="size" selection="8192"/>
@@ -8,43 +8,43 @@
          </text>
       </attribs>
    </obj>
-   <obj type="adc~1" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="0" y="220">
+   <obj type="audio/in left" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="0" y="220">
       <params/>
       <attribs/>
    </obj>
-   <obj type="graintablevoice2" sha="1f19375e264d3d3526ec62ac0999379f7897de4b" name="graintablevoice2_1" x="200" y="220">
+   <obj type="graintablevoice2" sha="d2b79fd5112c65f5075494095e8667591baf56dc" name="graintablevoice2_1" x="200" y="220">
       <params>
          <frac32.u.map name="lspread" value="5.5"/>
          <frac32.s.map name="length" value="5.700000286102295"/>
-         <frac32.u.map name="fb" value="1.0"/>
+         <frac32.u.map name="fb" value="0.5"/>
       </params>
       <attribs>
          <combo attributeName="poly" selection="14"/>
       </attribs>
    </obj>
-   <obj type="mix1" sha="f543e080bd2111cba525885443039f346703a594" name="mix1_1" x="340" y="300">
+   <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix1_1" x="340" y="300">
       <params>
-         <frac32.u.map name="gain1" value="7.0"/>
+         <frac32.u.map name="gain1" value="5.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="graintablevoice2" sha="1f19375e264d3d3526ec62ac0999379f7897de4b" name="graintablevoice2_2" x="200" y="420">
+   <obj type="graintablevoice2" sha="d2b79fd5112c65f5075494095e8667591baf56dc" name="graintablevoice2_2" x="200" y="420">
       <params>
          <frac32.u.map name="lspread" value="5.5"/>
          <frac32.s.map name="length" value="5.700000286102295"/>
-         <frac32.u.map name="fb" value="1.0"/>
+         <frac32.u.map name="fb" value="0.5"/>
       </params>
       <attribs>
          <combo attributeName="poly" selection="14"/>
       </attribs>
    </obj>
-   <obj type="mix1" sha="f543e080bd2111cba525885443039f346703a594" name="mix1_2" x="340" y="420">
+   <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix1_2" x="340" y="420">
       <params>
-         <frac32.u.map name="gain1" value="7.0"/>
+         <frac32.u.map name="gain1" value="5.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="480" y="420">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="480" y="420">
       <params/>
       <attribs/>
    </obj>

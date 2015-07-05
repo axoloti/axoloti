@@ -3,14 +3,14 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="noise burst as excitation" x="224" y="42"/>
+   <comment type="patch/comment" name="noise burst as excitation" x="224" y="42"/>
    <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="266" y="84">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="lowpass for softer sound" x="364" y="84"/>
-   <comment type="patch/comment" sha="comment" name="(prevent clipping)" x="490" y="98"/>
-   <comment type="patch/comment" sha="comment" name="resonating &quot;body&quot; composed out of 3 simple resonances" x="602" y="98"/>
+   <comment type="patch/comment" name="lowpass for softer sound" x="364" y="84"/>
+   <comment type="patch/comment" name="(prevent clipping)" x="490" y="98"/>
+   <comment type="patch/comment" name="resonating &quot;body&quot; composed out of 3 simple resonances" x="602" y="98"/>
    <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="168" y="140">
       <params>
          <frac32.s.map name="d" value="22.0"/>
@@ -41,8 +41,8 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="high = short burst" x="168" y="238"/>
-   <comment type="patch/comment" sha="comment" name="low = long burst" x="168" y="252"/>
+   <comment type="patch/comment" name="high = short burst" x="168" y="238"/>
+   <comment type="patch/comment" name="low = long burst" x="168" y="252"/>
    <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2_" x="602" y="280">
       <params>
          <frac32.s.map name="pitch" value="-10.0"/>
@@ -50,7 +50,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="volume" x="882" y="406"/>
+   <comment type="patch/comment" name="volume" x="882" y="406"/>
    <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2__" x="602" y="434">
       <params>
          <frac32.s.map name="pitch" value="6.0"/>

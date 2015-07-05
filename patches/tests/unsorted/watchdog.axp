@@ -19,7 +19,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="Trigger infinite loop: crash!" x="14" y="154"/>
+   <comment type="patch/comment" name="Trigger infinite loop: crash!" x="14" y="154"/>
    <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="i_1" x="14" y="182">
       <params>
          <bool32.mom name="b" value="0"/>
@@ -34,8 +34,8 @@
          <table attributeName="line" table="if (%in%) while(1){}"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="the board should reboot by itself..." x="14" y="294"/>
-   <comment type="patch/comment" sha="sha" name="wait 20 seconds and then press &quot;connect&quot; again. The source of the crash will then be reported in the log." x="14" y="308"/>
+   <comment type="patch/comment" name="the board should reboot by itself..." x="14" y="294"/>
+   <comment type="patch/comment" name="wait 20 seconds and then press &quot;connect&quot; again. The source of the crash will then be reported in the log." x="14" y="308"/>
    <nets>
       <net>
          <source name="saw_1 wave"/>

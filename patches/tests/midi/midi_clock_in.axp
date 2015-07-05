@@ -17,7 +17,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="6 counts per 16th" x="546" y="84"/>
+   <comment type="patch/comment" name="6 counts per 16th" x="546" y="84"/>
    <obj type="math/divremc" sha="a9507fb906b40fc4885ac66c9e4b34b840e8164d" name="divremc_3" x="126" y="154">
       <params/>
       <attribs>
@@ -32,7 +32,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="16 per bar" x="546" y="182"/>
+   <comment type="patch/comment" name="16 per bar" x="546" y="182"/>
    <obj type="disp/i" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="measure" x="294" y="224">
       <params/>
       <attribs/>
@@ -45,7 +45,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="bar number" x="756" y="252"/>
+   <comment type="patch/comment" name="bar number" x="756" y="252"/>
    <nets>
       <net>
          <source name="ibar16_3 chain_out"/>

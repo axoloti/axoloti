@@ -1,17 +1,17 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="demonstration: modulated delay lines, overlap-add" x="28" y="14"/>
+   <comment type="patch/comment" name="demonstration: modulated delay lines, overlap-add" x="28" y="14"/>
    <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_2" x="42" y="112">
       <params>
          <int32.vradio name="value" value="2"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="test signal selection" x="126" y="140"/>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="0 - audio sample" x="126" y="154"/>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="1 - sine wave" x="126" y="168"/>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="2 - sawtooth wave" x="126" y="182"/>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="3 - noise" x="126" y="196"/>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="write to delayline" x="280" y="196"/>
+   <comment type="patch/comment" name="test signal selection" x="126" y="140"/>
+   <comment type="patch/comment" name="0 - audio sample" x="126" y="154"/>
+   <comment type="patch/comment" name="1 - sine wave" x="126" y="168"/>
+   <comment type="patch/comment" name="2 - sawtooth wave" x="126" y="182"/>
+   <comment type="patch/comment" name="3 - noise" x="126" y="196"/>
+   <comment type="patch/comment" name="write to delayline" x="280" y="196"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="40" y="220">
       <params>
          <frac32.s.map name="value" value="17.0"/>
@@ -28,14 +28,14 @@
          <combo attributeName="size" selection="2048 (42.66ms)"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="modulation depth" x="238" y="378"/>
+   <comment type="patch/comment" name="modulation depth" x="238" y="378"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="240" y="400">
       <params>
          <frac32.u.map name="value" value="30.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="modulation speed" x="42" y="476"/>
+   <comment type="patch/comment" name="modulation speed" x="42" y="476"/>
    <obj type="phasor3q~" sha="15eb8142a979333baac42c771ed195ffe60fce05" name="phasor3_1" x="40" y="500">
       <params>
          <frac32.s.map name="pitch" value="-32.0"/>

@@ -1,15 +1,15 @@
 <patch-1.0>
-   <comment type="comment" sha="sha" name="test signal selection" x="80" y="20"/>
-   <comment type="comment" sha="sha" name="0 - audio sample" x="120" y="40"/>
+   <comment type="comment" name="test signal selection" x="80" y="20"/>
+   <comment type="comment" name="0 - audio sample" x="120" y="40"/>
    <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="60">
       <params>
          <frac32.u.map name="value" value="0.5"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="1 - sine wave" x="120" y="60"/>
-   <comment type="comment" sha="sha" name="2 - sawtooth wave" x="120" y="80"/>
-   <comment type="comment" sha="sha" name="3 - noise" x="120" y="100"/>
+   <comment type="comment" name="1 - sine wave" x="120" y="60"/>
+   <comment type="comment" name="2 - sawtooth wave" x="120" y="80"/>
+   <comment type="comment" name="3 - noise" x="120" y="100"/>
    <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="0" y="140">
       <params>
          <frac32.s.map name="value" value="0.0"/>

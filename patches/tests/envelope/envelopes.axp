@@ -149,7 +149,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="envelope follower test" x="14" y="966"/>
+   <comment type="patch/comment" name="envelope follower test" x="14" y="966"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="14" y="1008">
       <params>
          <frac32.u.map name="value" value="29.0"/>

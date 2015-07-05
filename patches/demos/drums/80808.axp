@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="check settings for MIDI channel!" x="42" y="28"/>
+   <comment type="patch/comment" name="check settings for MIDI channel!" x="42" y="28"/>
    <obj type="midi/in/keyb note" sha="5d623ad73ade2280421069a67ee3f30595794c72" name="keybnote1" x="40" y="60">
       <params/>
       <attribs>

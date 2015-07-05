@@ -13,7 +13,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="square root" x="252" y="14"/>
+   <comment type="patch/comment" name="square root" x="252" y="14"/>
    <obj type="math/*" sha="b031e26920f6cf5c1a53377ee6021573c4e3ac02" name="*1" x="98" y="112">
       <params/>
       <attribs/>
@@ -22,7 +22,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="square of square root" x="252" y="112"/>
+   <comment type="patch/comment" name="square of square root" x="252" y="112"/>
    <nets>
       <net>
          <source name="c1 out"/>

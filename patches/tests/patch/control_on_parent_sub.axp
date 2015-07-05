@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="comment" sha="sha" name="normal" x="80" y="40"/>
+   <comment type="comment" name="normal" x="80" y="40"/>
    <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="80" y="60">
       <params>
          <frac32.u.map name="value" value="1.0"/>
@@ -10,7 +10,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="this one : control on parent!" x="80" y="160"/>
+   <comment type="comment" name="this one : control on parent!" x="80" y="160"/>
    <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="80" y="180">
       <params>
          <frac32.u.map name="value" onParent="true" value="2.0"/>
@@ -21,7 +21,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="normal too" x="80" y="300"/>
+   <comment type="comment" name="normal too" x="80" y="300"/>
    <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="80" y="320">
       <params>
          <frac32.u.map name="value" value="3.0"/>
@@ -32,7 +32,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="this one : control on parent again" x="80" y="420"/>
+   <comment type="comment" name="this one : control on parent again" x="80" y="420"/>
    <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="80" y="440">
       <params>
          <frac32.u.map name="value" onParent="true" value="4.0"/>

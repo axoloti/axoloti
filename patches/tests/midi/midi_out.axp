@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="comment" sha="sha" name="assumes a midi cable connects in- and output" x="80" y="20"/>
+   <comment type="comment" name="assumes a midi cable connects in- and output" x="80" y="20"/>
    <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="80" y="60">
       <params>
          <frac32.u.map name="value" value="52.5"/>

@@ -5,7 +5,7 @@
       </params>
       <attribs/>
    </obj>
-   <zombie type="zombie" sha="sha" name="instancename" x="160" y="20"/>
+   <zombie type="zombie" name="instancename" x="160" y="20"/>
    <nets/>
    <settings>
       <subpatchmode>no</subpatchmode>

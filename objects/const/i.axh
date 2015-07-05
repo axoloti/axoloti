@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="compile time integer constant" x="14" y="14"/>
+   <comment type="patch/comment" name="compile time integer constant" x="14" y="14"/>
    <obj type="const/i" sha="72ee72f7e3ae9c767d0592ae6002de57a0354300" name="i_1" x="14" y="42">
       <params/>
       <attribs>

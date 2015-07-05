@@ -1,13 +1,13 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="Shows how to receive MIDI on pin PA3 (3.3V logic)" x="20" y="14"/>
+   <comment type="patch/comment" name="Shows how to receive MIDI on pin PA3 (3.3V logic)" x="20" y="14"/>
    <obj type="gpio/serial/config" sha="f0df278a5fd5140e32239828049a8e062059f391" name="serial.begin_1" x="20" y="42">
       <params/>
       <attribs>
          <combo attributeName="baudrate" selection="31250"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="send some midi on PA2" x="322" y="42"/>
-   <comment type="patch/comment" sha="sha" name="if you connect PA2 to PA3, axoloti will receive MIDI produced in this script..." x="322" y="56"/>
+   <comment type="patch/comment" name="send some midi on PA2" x="322" y="42"/>
+   <comment type="patch/comment" name="if you connect PA2 to PA3, axoloti will receive MIDI produced in this script..." x="322" y="56"/>
    <obj type="script/script2" sha="1478c410b77725959c034de4a2456dd1198e9080" name="script2_2" x="322" y="84">
       <params/>
       <attribs>
@@ -158,8 +158,8 @@ void loop(){
          </text>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="... and animate this dial" x="322" y="182"/>
-   <comment type="patch/comment" sha="sha" name="show any incoming midi continuous controller message" x="20" y="196"/>
+   <comment type="patch/comment" name="... and animate this dial" x="322" y="182"/>
+   <comment type="patch/comment" name="show any incoming midi continuous controller message" x="20" y="196"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c_2" x="322" y="210">
       <params>
          <frac32.u.map name="value" MidiCC="1" value="48.5"/>

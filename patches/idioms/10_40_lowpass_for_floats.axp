@@ -15,7 +15,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="todo: add physical units" x="160" y="160"/>
+   <comment type="comment" name="todo: add physical units" x="160" y="160"/>
    <nets>
       <net>
          <source name="c1 out"/>

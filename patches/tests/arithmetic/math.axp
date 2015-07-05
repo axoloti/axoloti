@@ -1,8 +1,8 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="unary ops, fractional" x="28" y="14"/>
-   <comment type="patch/comment" sha="sha" name="unary ops, integer" x="350" y="14"/>
-   <comment type="patch/comment" sha="sha" name="binary ops, fractional" x="714" y="14"/>
-   <comment type="patch/comment" sha="sha" name="binary ops, integer" x="1036" y="14"/>
+   <comment type="patch/comment" name="unary ops, fractional" x="28" y="14"/>
+   <comment type="patch/comment" name="unary ops, integer" x="350" y="14"/>
+   <comment type="patch/comment" name="binary ops, fractional" x="714" y="14"/>
+   <comment type="patch/comment" name="binary ops, integer" x="1036" y="14"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="c1" x="28" y="56">
       <params>
          <frac32.s.map name="value" value="27.0"/>

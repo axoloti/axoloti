@@ -58,7 +58,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="bass drum ----------------------------" x="672" y="448"/>
+   <comment type="patch/comment" name="bass drum ----------------------------" x="672" y="448"/>
    <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="d_1" x="672" y="476">
       <params>
          <frac32.s.map name="d" value="-13.0"/>
@@ -109,7 +109,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="hat ----------------------------" x="672" y="686"/>
+   <comment type="patch/comment" name="hat ----------------------------" x="672" y="686"/>
    <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_1" x="784" y="714">
       <params/>
       <attribs/>

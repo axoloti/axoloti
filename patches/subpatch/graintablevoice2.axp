@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="comment" sha="sha" name="for use as subpatch" x="19" y="24"/>
-   <comment type="comment" sha="sha" name="parent patch must contain a table named t, size 8192" x="20" y="60"/>
+   <comment type="comment" name="for use as subpatch" x="19" y="24"/>
+   <comment type="comment" name="parent patch must contain a table named t, size 8192" x="20" y="60"/>
    <obj type="randtrig" sha="7c693e3fcb8abe7dc3908628ef0eb911a4a19ce1" name="randtrig_1" x="20" y="100">
       <params/>
       <attribs/>

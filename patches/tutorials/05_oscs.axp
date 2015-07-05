@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="comment" name="different primitive periodic wave oscillators" x="14" y="14"/>
-   <comment type="patch/comment" sha="comment" name="you can use the piano keyboard to play (windows menu-&gt;piano)" x="252" y="14"/>
+   <comment type="patch/comment" name="different primitive periodic wave oscillators" x="14" y="14"/>
+   <comment type="patch/comment" name="you can use the piano keyboard to play (windows menu-&gt;piano)" x="252" y="14"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="56">
       <params/>
       <attribs/>
@@ -11,15 +11,15 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="sine wave" x="294" y="56"/>
+   <comment type="patch/comment" name="sine wave" x="294" y="56"/>
    <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="182" y="182">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="sawtooth wave" x="294" y="182"/>
-   <comment type="patch/comment" sha="comment" name="select the waveform here:" x="476" y="224"/>
+   <comment type="patch/comment" name="sawtooth wave" x="294" y="182"/>
+   <comment type="patch/comment" name="select the waveform here:" x="476" y="224"/>
    <obj type="ctrl/i radio 8 v" sha="a2ed8a60e7db97fda888b7f7c66aa23711070918" uuid="577436e6982cb8ac1f816144195641eeb6846f79" name="i_1" x="476" y="252">
       <params>
          <int32.vradio name="value" value="0"/>
@@ -32,20 +32,20 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="triangle wave" x="294" y="280"/>
-   <comment type="patch/comment" sha="comment" name="0: sine" x="560" y="294"/>
-   <comment type="patch/comment" sha="comment" name="1:saw" x="560" y="308"/>
-   <comment type="patch/comment" sha="comment" name="2: triangle" x="560" y="322"/>
-   <comment type="patch/comment" sha="comment" name="3: square" x="560" y="336"/>
-   <comment type="patch/comment" sha="comment" name="4: assymetrical square" x="560" y="350"/>
+   <comment type="patch/comment" name="triangle wave" x="294" y="280"/>
+   <comment type="patch/comment" name="0: sine" x="560" y="294"/>
+   <comment type="patch/comment" name="1:saw" x="560" y="308"/>
+   <comment type="patch/comment" name="2: triangle" x="560" y="322"/>
+   <comment type="patch/comment" name="3: square" x="560" y="336"/>
+   <comment type="patch/comment" name="4: assymetrical square" x="560" y="350"/>
    <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="182" y="378">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="square wave" x="294" y="378"/>
-   <comment type="patch/comment" sha="comment" name="duty/cycle" x="56" y="462"/>
+   <comment type="patch/comment" name="square wave" x="294" y="378"/>
+   <comment type="patch/comment" name="duty/cycle" x="56" y="462"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="56" y="476">
       <params>
          <frac32.u.map name="value" value="20.0"/>
@@ -58,7 +58,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="assymetrical square wave" x="294" y="476"/>
+   <comment type="patch/comment" name="assymetrical square wave" x="294" y="476"/>
    <obj type="mux/mux 5" sha="7620ad14cded10a5697e13e20c11f0caa62da668" uuid="3e76a5bfd7e6acc8ccb7f01014d3efe9f18e78d6" name="inmux41" x="490" y="476">
       <params/>
       <attribs/>

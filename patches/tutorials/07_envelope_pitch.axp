@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="one envelope for amplitude, another for pitch" x="14" y="14"/>
-   <comment type="patch/comment" sha="sha" name="again: use the keyboard window to play!" x="14" y="28"/>
+   <comment type="patch/comment" name="one envelope for amplitude, another for pitch" x="14" y="14"/>
+   <comment type="patch/comment" name="again: use the keyboard window to play!" x="14" y="28"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="70">
       <params/>
       <attribs/>
@@ -26,7 +26,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="final pitch = keyboard pitch plus enevelope scaled to x (dial position) semitones" x="182" y="350"/>
+   <comment type="patch/comment" name="final pitch = keyboard pitch plus enevelope scaled to x (dial position) semitones" x="182" y="350"/>
    <obj type="mix/mix 1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="182" y="392">
       <params>
          <frac32.u.map name="gain1" value="4.0"/>
@@ -57,7 +57,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="mix output = bus_in + in1 * dial/64" x="182" y="518"/>
+   <comment type="patch/comment" name="mix output = bus_in + in1 * dial/64" x="182" y="518"/>
    <nets>
       <net>
          <source name="keyb1 gate"/>

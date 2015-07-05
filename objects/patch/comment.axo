@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.comment id="comment" uuid="comment" sha="comment">
+   <obj.comment id="comment">
       <sDescription>free text comment</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

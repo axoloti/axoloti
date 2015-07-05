@@ -47,8 +47,8 @@
          </text>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="comment" name="the script is the conductor" x="126" y="14"/>
-   <comment type="patch/comment" sha="comment" name="drum 1" x="616" y="28"/>
+   <comment type="patch/comment" name="the script is the conductor" x="126" y="14"/>
+   <comment type="patch/comment" name="drum 1" x="616" y="28"/>
    <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="616" y="56">
       <params>
          <frac32.s.map name="d" value="5.5"/>
@@ -75,7 +75,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="orchestra" x="14" y="168"/>
+   <comment type="patch/comment" name="orchestra" x="14" y="168"/>
    <obj type="./keyboard/stringvoice" name="stringvoice1" x="14" y="196">
       <params>
          <frac32.s.map name="envf:a" value="0.0"/>
@@ -107,7 +107,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="drum 2" x="616" y="196"/>
+   <comment type="patch/comment" name="drum 2" x="616" y="196"/>
    <obj type="math/==" sha="3215967e1a000a377c36699ca3bc414a25beaf48" name="inv1" x="616" y="224">
       <params/>
       <attribs/>
@@ -136,7 +136,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="the fweeeeep engine" x="252" y="364"/>
+   <comment type="patch/comment" name="the fweeeeep engine" x="252" y="364"/>
    <obj type="math/==" sha="3215967e1a000a377c36699ca3bc414a25beaf48" name="==1" x="252" y="392">
       <params/>
       <attribs/>

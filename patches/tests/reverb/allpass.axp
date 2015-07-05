@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="comment" sha="sha" name="allpass object testbed" x="40" y="20"/>
+   <comment type="comment" name="allpass object testbed" x="40" y="20"/>
    <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="80">
       <params>
          <frac32.u.map name="value" value="0.0"/>

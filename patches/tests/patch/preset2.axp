@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="recall a preset from inside a patch" x="14" y="14"/>
+   <comment type="patch/comment" name="recall a preset from inside a patch" x="14" y="14"/>
    <obj type="ctrl/i radio 8 h" sha="ea2c1e474ffa7f12f0631acd25dc25c667c62408" name="i_1" x="14" y="42">
       <params>
          <int32.hradio name="value" value="3"/>

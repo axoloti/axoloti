@@ -33,8 +33,8 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="gaussian white noise" x="532" y="322"/>
-   <comment type="patch/comment" sha="sha" name="uniform white noise" x="532" y="336"/>
+   <comment type="patch/comment" name="gaussian white noise" x="532" y="322"/>
+   <comment type="patch/comment" name="uniform white noise" x="532" y="336"/>
    <obj type="mux/mux 2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f" name="inmux21" x="448" y="350">
       <params/>
       <attribs/>

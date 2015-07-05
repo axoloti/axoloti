@@ -35,7 +35,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="the inmux objects are useful to selecting one value" x="200" y="240"/>
+   <comment type="comment" name="the inmux objects are useful to selecting one value" x="200" y="240"/>
    <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="80" y="260">
       <params>
          <frac32.u.map name="value" value="10.0"/>

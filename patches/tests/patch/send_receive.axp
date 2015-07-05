@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="fractional" x="28" y="14"/>
+   <comment type="patch/comment" name="fractional" x="28" y="14"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="28" y="42">
       <params>
          <frac32.u.map name="value" value="25.0"/>
@@ -20,7 +20,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="integer" x="28" y="238"/>
+   <comment type="patch/comment" name="integer" x="28" y="238"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1_" x="28" y="266">
       <params>
          <frac32.u.map name="value" value="30.0"/>
@@ -41,7 +41,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="boolean" x="28" y="448"/>
+   <comment type="patch/comment" name="boolean" x="28" y="448"/>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="28" y="476">
       <params>
          <bool32.tgl name="b" value="0"/>

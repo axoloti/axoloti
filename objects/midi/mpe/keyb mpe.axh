@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="Simple voice for a MPE synth. simply load in parent patch, set voices and connect to audio" x="56" y="14"/>
+   <comment type="patch/comment" name="Simple voice for a MPE synth. simply load in parent patch, set voices and connect to audio" x="56" y="14"/>
    <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="546" y="70">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>

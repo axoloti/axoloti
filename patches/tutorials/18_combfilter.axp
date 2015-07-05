@@ -3,15 +3,15 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="noise or saw-wave to test" x="224" y="42"/>
+   <comment type="patch/comment" name="noise or saw-wave to test" x="224" y="42"/>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="224" y="56">
       <params>
          <bool32.tgl name="b" value="1"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="combfilter made with a delayline -----------------------------------------------" x="420" y="56"/>
-   <comment type="patch/comment" sha="comment" name="tune the delaytime!" x="602" y="70"/>
+   <comment type="patch/comment" name="combfilter made with a delayline -----------------------------------------------" x="420" y="56"/>
+   <comment type="patch/comment" name="tune the delaytime!" x="602" y="70"/>
    <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="126" y="112">
       <params/>
       <attribs/>

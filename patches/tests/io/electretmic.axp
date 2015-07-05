@@ -6,7 +6,7 @@
          <combo attributeName="boost" selection="20dB"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="exposes only the register configuration, the jcircuit may need modifications too..." x="14" y="84"/>
+   <comment type="patch/comment" name="exposes only the register configuration, the jcircuit may need modifications too..." x="14" y="84"/>
    <obj type="adcconfigmic" sha="c1646b3d341da67814395a38979e26f6a1618171" name="adcconfigmic1" x="14" y="112">
       <params/>
       <attribs>

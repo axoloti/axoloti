@@ -1,9 +1,9 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="connect PA4 to STB0" x="28" y="14"/>
-   <comment type="patch/comment" sha="sha" name="PA5 to CLK" x="70" y="28"/>
-   <comment type="patch/comment" sha="sha" name="PA6 and PA7 to DIO" x="70" y="42"/>
-   <comment type="patch/comment" sha="sha" name="VDD to VCC" x="70" y="56"/>
-   <comment type="patch/comment" sha="sha" name="GND to GND" x="70" y="70"/>
+   <comment type="patch/comment" name="connect PA4 to STB0" x="28" y="14"/>
+   <comment type="patch/comment" name="PA5 to CLK" x="70" y="28"/>
+   <comment type="patch/comment" name="PA6 and PA7 to DIO" x="70" y="42"/>
+   <comment type="patch/comment" name="VDD to VCC" x="70" y="56"/>
+   <comment type="patch/comment" name="GND to GND" x="70" y="70"/>
    <obj type="gpio/spi/config" sha="8491453740b6fc6b2fcf5de6e9eb65baa370f6e4" name="spi.begin_1" x="28" y="98">
       <params/>
       <attribs>
@@ -122,8 +122,8 @@ void loop(){
          </text>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="the script makes the leds reflect the state of seqg and seqr" x="168" y="196"/>
-   <comment type="patch/comment" sha="sha" name="and the buttons are used to change the state of seqg and seqr too" x="168" y="210"/>
+   <comment type="patch/comment" name="the script makes the leds reflect the state of seqg and seqr" x="168" y="196"/>
+   <comment type="patch/comment" name="and the buttons are used to change the state of seqg and seqr too" x="168" y="210"/>
    <obj type="sel/sel b 16" sha="edded2c45c473d9ae251dbd56053120a8b3c57be" name="seqg" x="28" y="252">
       <params>
          <bin16 name="b16" value="0"/>

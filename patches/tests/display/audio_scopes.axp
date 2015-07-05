@@ -1,18 +1,18 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="different audio rate oscilloscopes" x="14" y="14"/>
+   <comment type="patch/comment" name="different audio rate oscilloscopes" x="14" y="14"/>
    <obj type="disp/scope buffer" sha="a8100388e1218ba50352d7e1743cd1b7f37bacd4" name="scope_1buffer" x="266" y="28">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="shows a single buffer of 16 samples" x="392" y="28"/>
+   <comment type="patch/comment" name="shows a single buffer of 16 samples" x="392" y="28"/>
    <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="42">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="evey pixel column is a single sample" x="392" y="56"/>
-   <comment type="patch/comment" sha="sha" name="sine wave test oscillator" x="14" y="168"/>
+   <comment type="patch/comment" name="evey pixel column is a single sample" x="392" y="56"/>
+   <comment type="patch/comment" name="sine wave test oscillator" x="14" y="168"/>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="HOLD" x="14" y="224">
       <params>
          <bool32.tgl name="b" value="0"/>
@@ -23,9 +23,9 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="shows 128 consecutive samples" x="434" y="238"/>
-   <comment type="patch/comment" sha="sha" name="every pixel column is a single sample" x="434" y="266"/>
-   <comment type="patch/comment" sha="sha" name="freezes the scope image to get a stable view" x="14" y="308"/>
+   <comment type="patch/comment" name="shows 128 consecutive samples" x="434" y="238"/>
+   <comment type="patch/comment" name="every pixel column is a single sample" x="434" y="266"/>
+   <comment type="patch/comment" name="freezes the scope image to get a stable view" x="14" y="308"/>
    <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s_trig" x="266" y="434">
       <params/>
       <attribs/>
@@ -40,15 +40,15 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="shows 128 consecutive samples after the signal goes from negative to positive" x="448" y="448"/>
-   <comment type="patch/comment" sha="sha" name="every pixel column is a single sample too" x="448" y="476"/>
+   <comment type="patch/comment" name="shows 128 consecutive samples after the signal goes from negative to positive" x="448" y="448"/>
+   <comment type="patch/comment" name="every pixel column is a single sample too" x="448" y="476"/>
    <obj type="dac~2" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_21" x="140" y="504">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="so the visible time length is 128samples/48000Hz=2.66milliseconds" x="448" y="504"/>
-   <comment type="patch/comment" sha="sha" name="output volume" x="14" y="588"/>
-   <comment type="patch/comment" sha="sha" name="output" x="140" y="588"/>
+   <comment type="patch/comment" name="so the visible time length is 128samples/48000Hz=2.66milliseconds" x="448" y="504"/>
+   <comment type="patch/comment" name="output volume" x="14" y="588"/>
+   <comment type="patch/comment" name="output" x="140" y="588"/>
    <nets>
       <net>
          <source name="osc_1 wave"/>

@@ -12,8 +12,8 @@
          <combo attributeName="headphones" selection="0dB"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="test tone" x="56" y="126"/>
-   <comment type="patch/comment" sha="sha" name="volume" x="182" y="126"/>
+   <comment type="patch/comment" name="test tone" x="56" y="126"/>
+   <comment type="patch/comment" name="volume" x="182" y="126"/>
    <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="28" y="154">
       <params>
          <frac32.s.map name="pitch" value="-21.0"/>

@@ -19,14 +19,14 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="adjust the amplitude" x="308" y="112"/>
-   <comment type="patch/comment" sha="comment" name="Turn this dial to adjust the frequency" x="28" y="140"/>
-   <comment type="patch/comment" sha="comment" name="Click on the label left of the dial to see different units:" x="28" y="154"/>
-   <comment type="patch/comment" sha="comment" name="left and right audio output" x="476" y="154"/>
-   <comment type="patch/comment" sha="comment" name="- Frequency in Hz" x="28" y="168"/>
-   <comment type="patch/comment" sha="comment" name="- Musical note, octave number, deviation from standard tuning" x="28" y="182"/>
-   <comment type="patch/comment" sha="comment" name="- Ratio (referenced to musical note E4)" x="28" y="196"/>
-   <comment type="patch/comment" sha="comment" name="hold shift to make small adjustments using mouse" x="28" y="238"/>
+   <comment type="patch/comment" name="adjust the amplitude" x="308" y="112"/>
+   <comment type="patch/comment" name="Turn this dial to adjust the frequency" x="28" y="140"/>
+   <comment type="patch/comment" name="Click on the label left of the dial to see different units:" x="28" y="154"/>
+   <comment type="patch/comment" name="left and right audio output" x="476" y="154"/>
+   <comment type="patch/comment" name="- Frequency in Hz" x="28" y="168"/>
+   <comment type="patch/comment" name="- Musical note, octave number, deviation from standard tuning" x="28" y="182"/>
+   <comment type="patch/comment" name="- Ratio (referenced to musical note E4)" x="28" y="196"/>
+   <comment type="patch/comment" name="hold shift to make small adjustments using mouse" x="28" y="238"/>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="FREEZE" x="392" y="238">
       <params>
          <bool32.tgl name="b" value="0"/>
@@ -37,16 +37,16 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" name="time domain plot" x="672" y="238"/>
-   <comment type="patch/comment" sha="comment" name="vertical middle = zero" x="714" y="252"/>
-   <comment type="patch/comment" sha="comment" name="when the dial is focused (click)" x="28" y="266"/>
-   <comment type="patch/comment" sha="comment" name="you can also enter a number followed by enter to accept" x="42" y="280"/>
-   <comment type="patch/comment" sha="comment" name="up = positive value" x="714" y="280"/>
-   <comment type="patch/comment" sha="comment" name="down = negative value" x="714" y="294"/>
-   <comment type="patch/comment" sha="comment" name="left = early, right = late" x="714" y="322"/>
-   <comment type="patch/comment" sha="comment" name="(width = 128 samples = 2.6 milliseconds)" x="714" y="336"/>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="Open next tutorial -&gt;" x="560" y="490"/>
-   <hyperlink type="patch/hyperlink" sha="hyperlink" uuid="hyperlink" name="02_keyboard_controlled_sine_oscillator.axp" x="686" y="490"/>
+   <comment type="patch/comment" name="time domain plot" x="672" y="238"/>
+   <comment type="patch/comment" name="vertical middle = zero" x="714" y="252"/>
+   <comment type="patch/comment" name="when the dial is focused (click)" x="28" y="266"/>
+   <comment type="patch/comment" name="you can also enter a number followed by enter to accept" x="42" y="280"/>
+   <comment type="patch/comment" name="up = positive value" x="714" y="280"/>
+   <comment type="patch/comment" name="down = negative value" x="714" y="294"/>
+   <comment type="patch/comment" name="left = early, right = late" x="714" y="322"/>
+   <comment type="patch/comment" name="(width = 128 samples = 2.6 milliseconds)" x="714" y="336"/>
+   <comment type="patch/comment" name="Open next tutorial -&gt;" x="560" y="490"/>
+   <hyperlink type="patch/hyperlink" name="02_keyboard_controlled_sine_oscillator.axp" x="686" y="490"/>
    <nets>
       <net>
          <source name="level out"/>

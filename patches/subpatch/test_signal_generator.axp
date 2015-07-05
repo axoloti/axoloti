@@ -11,7 +11,7 @@
          <combo attributeName="sample" selection="rockwehrmann"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="test signal selection" x="546" y="98"/>
+   <comment type="patch/comment" name="test signal selection" x="546" y="98"/>
    <obj type="patch/inlet f" sha="ec45071db47e99aa672b4e8456c862acb1d95499" name="pitch" x="14" y="112">
       <params/>
       <attribs/>
@@ -26,10 +26,10 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="0 - audio sample" x="574" y="112"/>
-   <comment type="patch/comment" sha="sha" name="1 - sine wave" x="574" y="126"/>
-   <comment type="patch/comment" sha="sha" name="2 - sawtooth wave" x="574" y="140"/>
-   <comment type="patch/comment" sha="sha" name="3 - noise" x="574" y="154"/>
+   <comment type="patch/comment" name="0 - audio sample" x="574" y="112"/>
+   <comment type="patch/comment" name="1 - sine wave" x="574" y="126"/>
+   <comment type="patch/comment" name="2 - sawtooth wave" x="574" y="140"/>
+   <comment type="patch/comment" name="3 - noise" x="574" y="154"/>
    <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="224" y="238">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
@@ -40,7 +40,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="write to delayline" x="616" y="238"/>
+   <comment type="patch/comment" name="write to delayline" x="616" y="238"/>
    <obj type="patch/outlet a" sha="72226293648dde4dd4739bc1b8bc46a6bf660595" name="outlet_1" x="616" y="280">
       <params/>
       <attribs/>

@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="IMPORTANT: needs samples on sdcard!" x="14" y="14"/>
+   <comment type="patch/comment" name="IMPORTANT: needs samples on sdcard!" x="14" y="14"/>
    <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="14" y="56">
       <params>
          <frac32.s.map name="pitch" value="7.0"/>
@@ -139,7 +139,7 @@
          <table attributeName="fn" table="OH.raw"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="Hey! HH exclusion!" x="420" y="462"/>
+   <comment type="patch/comment" name="Hey! HH exclusion!" x="420" y="462"/>
    <obj type="wave/play3 fn" sha="d16641d81df11511678b4febc91396959176b2fd" name="play3_5" x="532" y="504">
       <params/>
       <attribs>

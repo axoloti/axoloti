@@ -15,9 +15,9 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="off: bandwidth limited saw wave" x="602" y="126"/>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="on: aliased saw wave" x="602" y="140"/>
-   <comment type="patch/comment" sha="comment" uuid="comment" name="the difference should be very clear on high notes on the piano keyboard!" x="644" y="182"/>
+   <comment type="patch/comment" name="off: bandwidth limited saw wave" x="602" y="126"/>
+   <comment type="patch/comment" name="on: aliased saw wave" x="602" y="140"/>
+   <comment type="patch/comment" name="the difference should be very clear on high notes on the piano keyboard!" x="644" y="182"/>
    <obj type="phasor3~" sha="60e3f3ea8b75d9dbd83583af0f2f725f09f6aba3" name="phasor3_1" x="200" y="220">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>

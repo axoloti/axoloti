@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="test reading writing tables from/to sdcard" x="14" y="0"/>
+   <comment type="patch/comment" name="test reading writing tables from/to sdcard" x="14" y="0"/>
    <obj type="table/alloc 16b" sha="30e6566ebd5bd19afe2c6975adaa19d5b16584d9" name="t1" x="14" y="28">
       <params/>
       <attribs>
@@ -9,7 +9,7 @@
          </text>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="record a sine bleep into a table" x="14" y="112"/>
+   <comment type="patch/comment" name="record a sine bleep into a table" x="14" y="112"/>
    <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="14" y="140">
       <params>
          <frac32.s.map name="pitch" value="2.0"/>
@@ -28,7 +28,7 @@
          <objref attributeName="table" obj="t1"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="play the table" x="14" y="266"/>
+   <comment type="patch/comment" name="play the table" x="14" y="266"/>
    <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_2" x="14" y="294">
       <params>
          <bool32.mom name="b" value="0"/>
@@ -45,8 +45,8 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="indexed filename" x="14" y="420"/>
-   <comment type="patch/comment" sha="sha" name="save the table" x="280" y="420"/>
+   <comment type="patch/comment" name="indexed filename" x="14" y="420"/>
+   <comment type="patch/comment" name="save the table" x="280" y="420"/>
    <obj type="ctrl/i radio 8 v" sha="1e72dd4de547d6bc356161613f0080b899628801" name="i_1" x="14" y="448">
       <params>
          <int32.vradio name="value" value="0"/>
@@ -72,7 +72,7 @@
          <objref attributeName="table" obj="t1"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="load the table" x="294" y="546"/>
+   <comment type="patch/comment" name="load the table" x="294" y="546"/>
    <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_4" x="294" y="574">
       <params>
          <bool32.mom name="b" value="0"/>

@@ -35,7 +35,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="comment" sha="sha" name="cfr. figure Figure 10.28 in the book Designing Sound by Andy Farnell" x="40" y="20"/>
+   <comment type="comment" name="cfr. figure Figure 10.28 in the book Designing Sound by Andy Farnell" x="40" y="20"/>
    <nets>
       <net>
          <source name="square1 wave"/>
