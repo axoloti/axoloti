@@ -4,6 +4,7 @@
       <sDescription>Cheap almost pink noise over 7 octaves. Range -64..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pink.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32buffer.bipolar name="out" description="pink noise"/>

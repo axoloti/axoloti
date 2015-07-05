@@ -4,6 +4,7 @@
       <sDescription>square wave LFO, boolean output, frequency input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>lfo.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation"/>
          <bool32.rising name="reset" description="reset phase"/>

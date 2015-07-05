@@ -4,6 +4,7 @@
       <sDescription>allocate 16bit table in RAM memory, -128.00 .. 127.99</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets/>
       <outlets/>
       <displays/>

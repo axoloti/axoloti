@@ -4,6 +4,7 @@
       <sDescription>Generates a pulse with a duration after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger. Extended range.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>timer.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>

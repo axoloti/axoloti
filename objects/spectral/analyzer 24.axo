@@ -4,6 +4,7 @@
       <sDescription>spectral analyzer made out of two 2nd order bandpass filters per band, decibel scale (vertical), steeper filters</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>analyzer 24.axh</helpPatch>
       <rotatedParams>true</rotatedParams>
       <inlets>
          <frac32buffer name="in" description="input"/>

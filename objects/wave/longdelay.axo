@@ -4,6 +4,7 @@
       <sDescription>streaming echo via sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>wave.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
          <frac32 name="delay" description="delay time"/>

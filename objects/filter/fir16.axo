@@ -4,6 +4,7 @@
       <sDescription>finite impulse response filter, with 16 coefficients</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>fir16.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
          <frac32buffer name="coefs" description="input"/>

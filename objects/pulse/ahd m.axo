@@ -4,6 +4,7 @@
       <sDescription>attack hold decay envelope with modulation inputs, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pulse.axh</helpPatch>
       <inlets>
          <frac32 name="am" description="attack time modulation"/>
          <frac32 name="dm" description="decay time modulation"/>

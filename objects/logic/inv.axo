@@ -4,6 +4,7 @@
       <sDescription>invert</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
       <inlets>
          <bool32 name="i" description="input"/>
       </inlets>

@@ -4,6 +4,7 @@
       <sDescription>script with 2 inputs and 2 outputs, running in a separate thread, you must define &quot;void setup(void){}&quot; and &quot;void loop(void)&quot;</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>script.axh</helpPatch>
       <inlets>
          <frac32 name="in1_" description="in1"/>
          <frac32 name="in2_" description="in2"/>

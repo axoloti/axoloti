@@ -4,6 +4,7 @@
       <sDescription>attack hold decay envelope, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pulse.axh</helpPatch>
       <inlets>
          <bool32.risingfalling name="gate" description="gate"/>
       </inlets>

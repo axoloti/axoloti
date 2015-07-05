@@ -4,6 +4,7 @@
       <sDescription>2-pole resonant low-pass filter (biquad)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="filter input"/>
          <frac32 name="pitchm" description="pitch modulation"/>

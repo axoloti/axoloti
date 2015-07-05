@@ -4,6 +4,7 @@
       <sDescription>FM phasor, linear interpolated table, s-rate pitch input, 180 degree output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
       <inlets>
          <frac32 name="pitchm" description="phase increment"/>
          <frac32buffer name="fm" description="phase increment"/>

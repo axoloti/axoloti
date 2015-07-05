@@ -924,7 +924,6 @@ public class Midi extends gentools {
     static AxoObject Create_keyb_mpe() {
         AxoObject o = new AxoObject("keyb mpe", "Keyboard input for MIDI polyphonic expression");
         o.sAuthor = "Mark Harris";
-        o.helpPatch = "keyb mpe.axh";
         o.outlets.add(new OutletFrac32Bipolar("note", "midi note number (-64..63)"));
         o.outlets.add(new OutletBool32("gate", "key pressed, no retrigger legato"));
         o.outlets.add(new OutletBool32("gate2", "key pressed, retrigger on legato"));

@@ -4,6 +4,7 @@
       <sDescription>apply preset, preset zero = init, and will reset ALL parameters, not just the presets</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>preset.axh</helpPatch>
       <inlets>
          <int32 name="preset" description="preset number"/>
          <bool32.rising name="trig" description="trigger"/>

@@ -4,6 +4,7 @@
       <sDescription>envelope follower, linear output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>env.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input wave"/>
       </inlets>

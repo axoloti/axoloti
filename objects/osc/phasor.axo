@@ -4,6 +4,7 @@
       <sDescription>phasor with logarithmic pitch plus linear frequency, k-rate pitch input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>phasor.axh</helpPatch>
       <inlets>
          <frac32 name="pitchm" description="pitch modulation"/>
          <frac32buffer name="fm" description="phase increment"/>

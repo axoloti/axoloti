@@ -4,6 +4,7 @@
       <sDescription>Infinite gain, hard clipping. Algorithm: linear interpolated zero-crossing detector and blit synthesis</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>inf.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="audio input"/>
       </inlets>

@@ -4,6 +4,7 @@
       <sDescription>delayline definition, read it with &quot;delay/read&quot; objects referencing the instance name of this object</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>delay.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="wave input"/>
       </inlets>

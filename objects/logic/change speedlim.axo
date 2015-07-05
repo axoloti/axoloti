@@ -4,6 +4,7 @@
       <sDescription>Generates a trigger pulse when current input value is different from previous value, with a minimum time interval between pulses.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
       <inlets>
          <int32 name="in" description="in"/>
       </inlets>
@@ -41,6 +42,7 @@ pval = 0;
       <sDescription>Generates a trigger pulse when current input value is different from previous value, with a minimum time interval between pulses.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>

@@ -4,6 +4,7 @@
       <sDescription>Copies the input to the output at the rising edge of the trigger input. Keeps the output otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
       <inlets>
          <frac32 name="i" description="input"/>
          <bool32.rising name="trig" description="trigger"/>
@@ -26,6 +27,7 @@ outlet_o= latch;
       <sDescription>Copies the input to the output at the rising edge of the trigger input. Keeps the output otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
       <inlets>
          <int32 name="i" description="input"/>
          <bool32.rising name="trig" description="trigger"/>

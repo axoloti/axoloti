@@ -4,6 +4,7 @@
       <sDescription>round to whole unit with positive bias: 0.49 becomes 0, 0.51 becomes 1, -0.49 becomes 0</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>
@@ -20,6 +21,7 @@
       <sDescription>round to whole unit with positive bias: 0.49 becomes 0, 0.51 becomes 1, -0.49 becomes 0</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="in"/>
       </inlets>

@@ -4,6 +4,7 @@
       <sDescription>hold/decay envelope, linear ramp, modulation input extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>env.axh</helpPatch>
       <inlets>
          <bool32.risingfalling name="trig" description="trigger"/>
          <frac32.bipolar name="dm" description="d modulation"/>

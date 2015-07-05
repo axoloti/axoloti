@@ -3,6 +3,7 @@
       <sDescription>Subpatch object stored in the patch document (IN DEVELOPMENT!)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>patcher.axh</helpPatch>
       <inlets/>
       <outlets/>
       <displays/>

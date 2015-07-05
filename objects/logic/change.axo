@@ -4,6 +4,7 @@
       <sDescription>Generates a trigger pulse when current input value is different from previous value.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>change.axh</helpPatch>
       <inlets>
          <int32 name="in" description="in"/>
       </inlets>
@@ -34,6 +35,7 @@ pval = 0;
       <sDescription>Generates a trigger pulse when current input value is different from previous value.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>change.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>

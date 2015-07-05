@@ -4,6 +4,7 @@
       <sDescription>table in RAM memory, direct from sliders</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <rotatedParams>true</rotatedParams>
       <inlets/>
       <outlets/>

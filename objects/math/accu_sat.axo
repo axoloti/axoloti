@@ -4,6 +4,7 @@
       <sDescription>Saturating accumulator. Adds input to accumulator on trigger. Reset clears the accumulator to zero.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="i" description="input"/>
          <bool32.rising name="trig" description="trigger"/>

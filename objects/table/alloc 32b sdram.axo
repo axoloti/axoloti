@@ -4,6 +4,7 @@
       <sDescription>allocate 32bit table in SDRAM memory</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets/>
       <outlets/>
       <displays/>

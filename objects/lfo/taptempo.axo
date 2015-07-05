@@ -4,6 +4,7 @@
       <sDescription>taptempo follower</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>taptempo.axh</helpPatch>
       <inlets>
          <bool32.rising name="tap" description="tap tap tap"/>
       </inlets>

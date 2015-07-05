@@ -4,6 +4,7 @@
       <sDescription>record audio into table, records from the beginning till the end of the table</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets>
          <frac32buffer name="wave" description="wave"/>
          <bool32.rising name="trig" description="trigger"/>

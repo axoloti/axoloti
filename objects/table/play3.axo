@@ -4,6 +4,7 @@
       <sDescription>play audio from table (non-transposed), starting from position</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets>
          <frac32.positive name="pos" description="start position in table"/>
          <bool32.rising name="start" description="start playback"/>

@@ -113,7 +113,7 @@ public class gentools {
 
     }
 
-    static void PostProcessObject(AxoObjectAbstract o, String prefix) {
+    static void PostProcessObject(AxoObjectAbstract o, String catname, String fn) {
         String relativeID = o.id;
         if (o instanceof AxoObject) {
             // remove labels when there's only a single parameter
@@ -190,7 +190,7 @@ public class gentools {
         if ((o.GetIncludes() != null) && o.GetIncludes().isEmpty()) {
             o.SetIncludes(null);
         }
-        o.id = prefix + relativeID; // uuid based on full name
+        o.id = catname + "/" + relativeID; // uuid based on full name
         String upgradeSha = o.GenerateSHA();
         o.getUUID();
         o.id = relativeID;
@@ -283,6 +283,20 @@ public class gentools {
                 oo.sDisposeCode = oo.sDisposeCode.replaceAll("%midichannel%", "attr_midichannel");
             }
 
+                    
+            if (oo.helpPatch == null) {
+                File f = new File("objects/" + catname + "/" +fn + ".axh");
+                if(f.exists()) {
+                    oo.helpPatch = fn + ".axh";
+                }
+                else {
+                   String fcatname = catname.replaceAll("/", "_");
+                   File fcat = new File("objects/" + catname + "/" +fcatname + ".axh");
+                   if (fcat.exists()) {
+                       oo.helpPatch = fcatname + ".axh";
+                   }
+                }
+            }
         }
 
         String sha = o.GenerateSHA();
@@ -319,7 +333,7 @@ public class gentools {
         a.objs = new ArrayList<AxoObjectAbstract>();
         a.objs.add(o);
         for (AxoObjectAbstract oa : a.objs) {
-            PostProcessObject(oa, path + "/");
+            PostProcessObject(oa, path ,fn);
         }
         if (f.exists()) {
             ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
@@ -408,7 +422,7 @@ public class gentools {
             if (i > 0) {
                 oa.id = oa.id.substring(i + 1);
             }
-            PostProcessObject(oa, path + "/");
+            PostProcessObject(oa, path, fn);
         }
 
         if (f.exists()) {

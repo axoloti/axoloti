@@ -4,6 +4,7 @@
       <sDescription>Receives Midi Continuous Controller messages from any CC number and channel.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>midi_in.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32.positive name="value" description="midi CC value 0..63.5"/>

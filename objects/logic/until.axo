@@ -4,6 +4,7 @@
       <sDescription>rapid trigger pulses until rising edge on stop</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
       <inlets>
          <bool32.rising name="start" description="start"/>
          <bool32.rising name="stop" description="stop"/>

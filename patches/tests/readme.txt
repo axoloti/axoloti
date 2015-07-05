@@ -1,1 +1,0 @@
-just some elementary validation test patches

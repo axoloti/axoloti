@@ -4,6 +4,7 @@
       <sDescription>cosine function, -64..64 phase corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="phase" description="phase"/>
       </inlets>
@@ -23,6 +24,7 @@
       <sDescription>cosine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="phase" description="phase"/>
       </inlets>

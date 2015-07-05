@@ -4,6 +4,7 @@
       <sDescription>spectral analyzer display using 128 input points fft</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>rfft 128.axh</helpPatch>
       <rotatedParams>true</rotatedParams>
       <inlets>
          <frac32buffer name="in" description="input"/>

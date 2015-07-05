@@ -4,6 +4,7 @@
       <sDescription>cyclic up/down counter</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic.axh</helpPatch>
       <inlets>
          <bool32.rising name="inc" description="increment trigger"/>
          <bool32.rising name="dec" description="decrement trigger"/>

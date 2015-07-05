@@ -4,6 +4,7 @@
       <sDescription>Bandpass filter, state-variable type, modulation inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="filter input"/>
          <frac32 name="pitchm" description="pitch modulation input"/>

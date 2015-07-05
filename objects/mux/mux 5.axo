@@ -4,6 +4,7 @@
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <frac32 name="i0" description="input 0"/>
          <frac32 name="i1" description="input 1"/>
@@ -33,6 +34,7 @@
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <int32 name="i0" description="input 0"/>
          <int32 name="i1" description="input 1"/>
@@ -62,6 +64,7 @@
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <frac32buffer name="i0" description="input 0"/>
          <frac32buffer name="i1" description="input 1"/>
@@ -91,6 +94,7 @@
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <bool32 name="i0" description="input 0"/>
          <bool32 name="i1" description="input 1"/>
@@ -120,6 +124,7 @@
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <charptr32 name="i0" description="input 0"/>
          <charptr32 name="i1" description="input 1"/>

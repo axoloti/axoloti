@@ -4,6 +4,7 @@
       <sDescription>Generates a single pulse after a rising edge on trigger input. A new trigger before the pulse finishes at the output, extends the pulse.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pulselength.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>

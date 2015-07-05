@@ -4,6 +4,7 @@
       <sDescription>Single-shot playback of a sample table in flash, without transposition</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>wave.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>

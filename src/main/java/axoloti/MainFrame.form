@@ -31,9 +31,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuOpenActionPerformed"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenuOpenExample">
+            <Menu class="javax.swing.JMenu" name="jMenuLibrary">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Open example"/>
+                <Property name="text" type="java.lang.String" value="Library"/>
               </Properties>
             </Menu>
             <Menu class="axoloti.menus.RecentFileMenu" name="recentFileMenu1">

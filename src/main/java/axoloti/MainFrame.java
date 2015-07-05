@@ -174,7 +174,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             jMenuAutoTest.setVisible(false);
             jMenuItemRefreshFWID.setVisible(false);
         }
-        PopulateExamplesMenu(jMenuOpenExample);
+        PopulateLibraryMenu(jMenuLibrary);
 
         axoObjects = new AxoObjects();
         axoObjects.LoadAxoObjects();
@@ -184,20 +184,21 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         ShowDisconnect();
     }
 
-    void PopulateExamplesMenu(JMenu parent) {
+    void PopulateLibraryMenu(JMenu parent) {
         JMenu ptut = new JMenu("tutorials");
-        PopulateExamplesMenu(ptut, "patches/tutorials");
+        PopulateLibraryMenu(ptut, "patches/tutorials",".axp");
         parent.add(ptut);
         JMenu pdemos = new JMenu("demos");
-        PopulateExamplesMenu(pdemos, "patches/demos");
+        PopulateLibraryMenu(pdemos, "patches/demos",".axp");
         parent.add(pdemos);
-        JMenu ptests = new JMenu("tests");
-        PopulateExamplesMenu(ptests, "patches/tests");
-        parent.add(ptests);
+        JMenu phelps = new JMenu("help");
+        PopulateLibraryMenu(phelps, "objects",".axh");
+        parent.add(phelps);
     }
 
-    void PopulateExamplesMenu(JMenu parent, String path) {
+    void PopulateLibraryMenu(JMenu parent, String path,String ext) {
         File dir = new File(path);
+        final String extension=ext;
         for (File subdir : dir.listFiles(new java.io.FileFilter() {
             @Override
             public boolean accept(File pathname) {
@@ -205,13 +206,15 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             }
         })) {
             JMenu fm = new JMenu(subdir.getName());
-            PopulateExamplesMenu(fm, subdir.getPath());
-            parent.add(fm);
+            PopulateLibraryMenu(fm, subdir.getPath(),extension);
+            if(fm.getItemCount()>0) {
+                parent.add(fm);
+            }
         }
         for (String fn : dir.list(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return (name.endsWith(".axp"));
+                return (name.endsWith(extension));
             }
         })) {
             String fn2 = fn.substring(0, fn.length() - 4);
@@ -247,7 +250,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuFile = new javax.swing.JMenu();
         jMenuNew = new javax.swing.JMenuItem();
         jMenuOpen = new javax.swing.JMenuItem();
-        jMenuOpenExample = new javax.swing.JMenu();
+        jMenuLibrary = new javax.swing.JMenu();
         recentFileMenu1 = new axoloti.menus.RecentFileMenu();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuReloadObjects = new javax.swing.JMenuItem();
@@ -366,8 +369,8 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuFile.add(jMenuOpen);
 
-    jMenuOpenExample.setText("Open example");
-    jMenuFile.add(jMenuOpenExample);
+    jMenuLibrary.setText("Library");
+    jMenuFile.add(jMenuLibrary);
 
     recentFileMenu1.setText("Open recent");
     jMenuFile.add(recentFileMenu1);
@@ -520,13 +523,13 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     jMenuWindow.setText("Window");
     jMenuWindow.addMenuListener(new javax.swing.event.MenuListener() {
-        public void menuCanceled(javax.swing.event.MenuEvent evt) {
+        public void menuSelected(javax.swing.event.MenuEvent evt) {
+            jMenuWindowMenuSelected(evt);
         }
         public void menuDeselected(javax.swing.event.MenuEvent evt) {
             jMenuWindowMenuDeselected(evt);
         }
-        public void menuSelected(javax.swing.event.MenuEvent evt) {
-            jMenuWindowMenuSelected(evt);
+        public void menuCanceled(javax.swing.event.MenuEvent evt) {
         }
     });
     jMenuBar1.add(jMenuWindow);
@@ -834,9 +837,9 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemPreferences;
     private javax.swing.JMenuItem jMenuItemRefreshFWID;
     private javax.swing.JMenuItem jMenuItemSelectCom;
+    private javax.swing.JMenu jMenuLibrary;
     private javax.swing.JMenuItem jMenuNew;
     private javax.swing.JMenuItem jMenuOpen;
-    private javax.swing.JMenu jMenuOpenExample;
     private javax.swing.JMenuItem jMenuQuit;
     private javax.swing.JMenuItem jMenuRegenerateObjects;
     private javax.swing.JMenuItem jMenuReloadObjects;

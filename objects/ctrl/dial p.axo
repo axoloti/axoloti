@@ -4,6 +4,7 @@
       <sDescription>positive constant value dial</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>ctrl.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32.positive name="out" description="output"/>

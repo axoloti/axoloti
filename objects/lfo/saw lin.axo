@@ -4,6 +4,7 @@
       <sDescription>saw wave LFO, rising slope, frequency input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>lfo.axh</helpPatch>
       <inlets>
          <frac32 name="freq" description="frequency"/>
          <bool32.rising name="reset" description="reset phase"/>

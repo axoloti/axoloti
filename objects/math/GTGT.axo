@@ -4,6 +4,7 @@
       <sDescription>attenuates a k-rate signal with &quot;shift&quot; times 6dB</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="a" description="a"/>
       </inlets>
@@ -22,6 +23,7 @@
       <sDescription>attenuates a s-rate signal with &quot;shift&quot; times 6dB</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="a" description="a"/>
       </inlets>

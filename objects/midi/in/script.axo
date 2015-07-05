@@ -4,6 +4,7 @@
       <sDescription>script with 2 outputs, triggered by MIDI input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>script.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32 name="out1_" description="out1"/>

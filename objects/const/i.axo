@@ -4,6 +4,7 @@
       <sDescription>constant</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>i.axh</helpPatch>
       <inlets/>
       <outlets>
          <int32 name="out" description="output"/>

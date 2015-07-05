@@ -4,6 +4,7 @@
       <sDescription>save table to sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets>
          <charptr32 name="filename" description="file name"/>
          <bool32.rising name="trig" description="trigger"/>
