@@ -6,13 +6,13 @@ echo -e "\n\nAxoloti Install script for Linux"
 echo -e "This will install Axoloti"
 echo -e "Use at your own risk\n"
 echo -e "Some packages will be installed with apt-get,"
-echo -e "and all users will be granted permission to acces some USB devices"
+echo -e "and all users will be granted permission to access some USB devices"
 echo -e "For this you'll require sudo rights and need to enter your password...\n"
 echo -e "Press RETURN to continue\nCTRL-C if you are unsure!\n"
 read
 
-echo "apt get install libtool libudev-dev automake autoconf ant"
-sudo apt-get install -y libtool libudev-dev automake autoconf ant
+echo "apt get install -y libtool libudev-dev automake autoconf ant gcc-arm-none-eabi curl"
+sudo apt-get install -y libtool libudev-dev automake autoconf ant gcc-arm-none-eabi curl
 
 PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
 
