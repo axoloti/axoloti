@@ -230,7 +230,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuAbout">
               <Properties>
-                <Property name="text" type="java.lang.String" value="About..."/>
+                <Property name="text" type="java.lang.String" value="About"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuAboutActionPerformed"/>
@@ -238,7 +238,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuCommunity">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Community website"/>
+                <Property name="text" type="java.lang.String" value="Community Website"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuCommunityActionPerformed"/>

@@ -114,24 +114,6 @@ public class AxoObjects {
                     }
                 }
             }
-            { // try patch file
-                ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
-                String fnameP = bfname + ".axp";
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file in patch directory: " + fnameP);
-                File f = new File(fnameP);
-                if (f.isFile()) {
-                    AxoObjectAbstract o = new AxoObjectFromPatch(f);
-                    if (n.startsWith("./") || n.startsWith("../")) {
-                        o.createdFromRelativePath = true;
-                    }
-                    o.sPath = f.getPath();
-                    if (o != null) {
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : " + fnameP);
-                        set.add(o);
-                        return set;
-                    }
-                }
-            }
         }
         ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
         for (AxoObjectAbstract o : ObjectList) {
@@ -153,22 +135,6 @@ public class AxoObjects {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file succeeded :" + fsname);
                         set.add(o);
                         return set;
-                    }
-                }
-                else {
-                    // Q. do we really need to load axp here, or just axs?
-                    String fpname = s + "/" + n + ".axp";
-                    Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file : " + fpname);
-                    File fp = new File(fpname);
-                    if (fp.isFile()) {
-                        AxoObjectAbstract o = new AxoObjectFromPatch(fp);
-    //                    o.createdFromRelativePath = true;
-                        if (o != null) {
-                            o.sPath = n + ".axp";
-                            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file succeeded :" + fpname);
-                            set.add(o);
-                            return set;
-                        }
                     }
                 }
             }

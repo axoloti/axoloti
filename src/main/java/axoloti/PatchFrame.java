@@ -663,8 +663,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
         final JFileChooser fc = new JFileChooser(MainFrame.prefs.getCurrentFileDirectory());
-        fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp", "axh","axs"));
-        fc.addChoosableFileFilter(new FileFilter() {
+        fc.setAcceptAllFileFilterUsed(false);
+        FileFilter axp = new FileFilter() {
             @Override
             public boolean accept(File file) {
                 if (file.getName().endsWith("axp")) {
@@ -677,8 +677,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             public String getDescription() {
                 return "Axoloti Patch";
             }
-        });
-        fc.addChoosableFileFilter(new FileFilter() {
+        };
+        FileFilter axh = new FileFilter() {
             @Override
             public boolean accept(File file) {
                 if (file.getName().endsWith("axh")) {
@@ -691,8 +691,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             public String getDescription() {
                 return "Axoloti Help";
             }
-        });
-        fc.addChoosableFileFilter(new FileFilter() {
+        };
+        FileFilter axs =  new FileFilter() {
             @Override
             public boolean accept(File file) {
                 if (file.getName().endsWith("axs")) {
@@ -705,7 +705,14 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             public String getDescription() {
                 return "Axoloti Subpatch";
             }
-        });
+        };
+        fc.addChoosableFileFilter(axp);
+        fc.addChoosableFileFilter(axs);
+        fc.addChoosableFileFilter(axh);
+        String fn = patch.getFileNamePath();
+        if(fn==null) fn = "untitled";
+        File f = new File(fn);
+        fc.setSelectedFile(f);
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File fileToBeSaved = fc.getSelectedFile();
@@ -714,8 +721,34 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                     fileToBeSaved.getAbsolutePath().endsWith(".axs")
                     )
                     ) {
-                fileToBeSaved = new File(fc.getSelectedFile() + ".axp");
+                
+                String ext= ".axp";
+                if(fc.getFileFilter()==axp) ext = ".axp";
+                else if(fc.getFileFilter()==axs) ext = ".axs";
+                else if(fc.getFileFilter()==axh) ext = ".axh";
+                
+                fileToBeSaved = new File(fc.getSelectedFile() + ext);
             }
+            
+            if (fileToBeSaved.exists()) {
+                Object[] options = {"Yes",
+                    "No"};
+                int n = JOptionPane.showOptionDialog(this,
+                        "File exists, do you want to overwrite ?",
+                        "Axoloti asks:",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                switch (n) {
+                    case JOptionPane.YES_OPTION:
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        return;
+                }
+            }            
+
             patch.setFileNamePath(fileToBeSaved.getPath());
             MainFrame.prefs.setCurrentFileDirectory(fileToBeSaved.getPath());
             patch.save(fileToBeSaved);
