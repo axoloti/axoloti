@@ -128,14 +128,6 @@ public class USBBulkConnection extends Connection {
                 Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Disconnect request");
-            /*
-             try {
-             serialPort.purgePort(jssc.SerialPort.PURGE_RXCLEAR | jssc.SerialPort.PURGE_TXCLEAR);
-             serialPort.closePort();
-             } catch (SerialPortException ex) {
-             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
-             }
-             */
             synchronized (sync) {
                 sync.Acked = 0;
                 sync.notifyAll();

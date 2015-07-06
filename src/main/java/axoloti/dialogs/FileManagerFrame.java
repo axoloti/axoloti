@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
-import jssc.SerialPortException;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdUploadFile;
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -19,18 +19,14 @@ package axoloti.dialogs;
 
 import axoloti.Connection;
 import axoloti.MainFrame;
-import axoloti.SerialConnection;
 import components.PianoComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
 import components.control.DialComponent;
 import java.awt.Dimension;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SpinnerNumberModel;
-import jssc.SerialPortException;
 
 /**
  *

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -18,9 +18,6 @@
 package qcmds;
 
 import axoloti.Connection;
-import jssc.SerialPortException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
