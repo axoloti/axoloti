@@ -4,6 +4,7 @@
       <sDescription>display integer bar</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>disp.axh</helpPatch>
       <inlets>
          <int32.positive name="in" description="input"/>
       </inlets>

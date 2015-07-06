@@ -4,6 +4,7 @@
       <sDescription>bipolar audio rate signal oscilloscope (time domain), showing 1 sample buffer of 16 samples</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>scope.axh</helpPatch>
       <rotatedParams>true</rotatedParams>
       <inlets>
          <frac32buffer.bipolar name="in" description="input"/>

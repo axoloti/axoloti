@@ -4,6 +4,7 @@
       <sDescription>positive control rate signal oscilloscope (time domain), showing 128 consecutive samples after the signal becomes positive.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>kscope.axh</helpPatch>
       <rotatedParams>true</rotatedParams>
       <inlets>
          <frac32.positive name="in" description="input"/>
