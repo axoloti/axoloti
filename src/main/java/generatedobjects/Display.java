@@ -104,6 +104,7 @@ public class Display extends gentools {
          p1.name = "timescale";
          o.params.add(p1);
          */
+        o.helpPatch = "kscope.axh";
         o.sLocalData = "   int32_t data[64];\n"
                 + "   int32_t index;\n"
                 + "   KeyValuePair kvp;\n"
@@ -129,6 +130,7 @@ public class Display extends gentools {
         o.inlets.add(new InletFrac32("in", "input"));
         o.params.add(new ParameterFrac32UMap("timescale"));
 
+        o.helpPatch = "kscope.axh";
         o.sLocalData = "   int32_t data[128];\n"
                 + "   int32_t index;\n"
                 + "   int32_t vmin;\n"
@@ -177,7 +179,8 @@ public class Display extends gentools {
          p1.name = "timescale";
          o.params.add(p1);
          */
-        o.sLocalData = "   int32_t data[64];\n"
+       o.helpPatch = "scope.axh";
+       o.sLocalData = "   int32_t data[64];\n"
                 + "   int32_t index;\n"
                 + "   KeyValuePair kvp;\n"
                 + "const char NAME[] = \"%name%\";\n";
@@ -305,6 +308,7 @@ public class Display extends gentools {
             v.noLabel = true;
             o.displays.add(v);
         }
+        o.helpPatch = "scope.axh";
         o.setRotatedParams(true);
         o.sKRateCode = "if (!%hold%){\n"
                 + "int8_t t[16];\n"
@@ -326,6 +330,7 @@ public class Display extends gentools {
         o.inlets.add(new InletBool32("hold", "hold"));
         o.displays.add(new DisplayFrac8S128VBar("scope"));
         o.setRotatedParams(true);
+        o.helpPatch = "scope.axh";
         o.sLocalData = "int8_t t[" + n + "];\n"
                 + "int index;\n";
         o.sInitCode = "int i;\n"
@@ -351,6 +356,7 @@ public class Display extends gentools {
         o.inlets.add(new InletBool32("hold", "hold"));
         o.displays.add(new DisplayFrac8S128VBar("scope"));
         o.setRotatedParams(true);
+        o.helpPatch = "kscope.axh";
         o.sLocalData = "int8_t t[" + n + "];\n"
                 + "int index;\n";
         o.sInitCode = "int i;\n"
@@ -430,6 +436,7 @@ public class Display extends gentools {
 //            v.noLabel = true;
         //           o.displays.add(v);
         //       }
+        o.helpPatch = "scope.axh";
         o.setRotatedParams(true);
         o.sLocalData = "int8_t t[" + n + "];\n"
                 + "int index;\n"
@@ -475,6 +482,7 @@ public class Display extends gentools {
         o.inlets.add(new InletFrac32Pos("in", "input"));
         o.inlets.add(new InletBool32("hold", "hold"));
         o.displays.add(new DisplayFrac8U128VBar("scope"));
+        o.helpPatch = "kscope.axh";
         o.setRotatedParams(true);
         o.sLocalData = "int8_t t[" + n + "];\n"
                 + "int index;\n";
@@ -505,6 +513,7 @@ public class Display extends gentools {
         //           o.displays.add(v);
         //       }
         o.setRotatedParams(true);
+        o.helpPatch = "kscope.axh";
         o.sLocalData = "int8_t t[" + n + "];\n"
                 + "int index;\n"
                 + "int32_t pval;\n";
@@ -548,6 +557,7 @@ public class Display extends gentools {
 //            v.noLabel = true;
         //           o.displays.add(v);
         //       }
+        o.helpPatch = "kscope.axh";
         o.setRotatedParams(true);
         o.sLocalData = "int8_t t[" + n + "];\n"
                 + "int index;\n"

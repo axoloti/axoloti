@@ -4,6 +4,7 @@
       <sDescription>hexadecimal display (for developers)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>disp.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="input"/>
       </inlets>
@@ -21,6 +22,7 @@
       <sDescription>hexadecimal display (for developers)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>disp.axh</helpPatch>
       <inlets>
          <int32 name="in" description="input"/>
       </inlets>
@@ -38,6 +40,7 @@
       <sDescription>hexadecimal display (for developers): char pointer</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>disp.axh</helpPatch>
       <inlets>
          <charptr32 name="in" description="input"/>
       </inlets>
