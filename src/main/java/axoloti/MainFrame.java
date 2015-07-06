@@ -176,6 +176,11 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         }
         PopulateLibraryMenu(jMenuLibrary);
 
+        JMenu phelps = new JMenu("Library");
+        PopulateLibraryMenu(phelps, "objects",".axh");
+        jMenuHelp.add(phelps);
+
+
         axoObjects = new AxoObjects();
         axoObjects.LoadAxoObjects();
         midiInput = new AxolotiMidiInput();
@@ -191,9 +196,6 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         JMenu pdemos = new JMenu("demos");
         PopulateLibraryMenu(pdemos, "patches/demos",".axp");
         parent.add(pdemos);
-        JMenu phelps = new JMenu("help");
-        PopulateLibraryMenu(phelps, "objects",".axh");
-        parent.add(phelps);
     }
 
     void PopulateLibraryMenu(JMenu parent, String path,String ext) {
@@ -545,7 +547,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuHelp.add(jMenuHelpContents);
 
-    jMenuAbout.setText("About...");
+    jMenuAbout.setText("About");
     jMenuAbout.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuAboutActionPerformed(evt);
@@ -553,7 +555,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuHelp.add(jMenuAbout);
 
-    jMenuCommunity.setText("Community website");
+    jMenuCommunity.setText("Community Website");
     jMenuCommunity.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuCommunityActionPerformed(evt);
@@ -780,6 +782,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     public void OpenPatch() {
         final JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
+        fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp", "axh","axs"));
         fc.addChoosableFileFilter(new FileFilter() {
             @Override
