@@ -137,7 +137,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="flanger" sha="983b53deb603baf7759395a69376f1fd4004675f" name="flanger_1" x="1036" y="756">
+   <obj type="fx/flanger" sha="983b53deb603baf7759395a69376f1fd4004675f" name="flanger_1" x="1036" y="756">
       <params>
          <frac32.u.map name="depth" value="1.0"/>
          <frac32.u.map name="fdbk" value="16.5"/>

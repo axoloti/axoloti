@@ -204,7 +204,7 @@
          <spinner attributeName="d4" value="97"/>
       </attribs>
    </obj>
-   <obj type="flanger" sha="983b53deb603baf7759395a69376f1fd4004675f" name="flanger_1" x="1022" y="448">
+   <obj type="fx/flanger" sha="983b53deb603baf7759395a69376f1fd4004675f" name="flanger_1" x="1022" y="448">
       <params>
          <frac32.u.map name="depth" value="22.0"/>
          <frac32.u.map name="fdbk" value="35.5"/>
