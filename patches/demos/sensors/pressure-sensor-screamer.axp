@@ -1,63 +1,63 @@
 <patch-1.0>
-   <obj type="keybzone_lru" sha="d22473f78d43bec724fdf2c7b1ed4565b4f11e0a" name="keyb1" x="0" y="0">
+   <obj type="keybzone_lru" sha="b5981bfbddee6927781c171abbd63d632fd34ba5" name="keyb1" x="0" y="0">
       <params/>
       <attribs>
          <spinner attributeName="startNote" value="0"/>
          <spinner attributeName="endNote" value="127"/>
       </attribs>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="160" y="20">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="160" y="20">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA0 (ADC1_IN0)"/>
       </attribs>
    </obj>
-   <obj type="&gt;c" sha="aa245f90aec358415dbbc12409c90065cda73d3e" name="&gt;c1" x="320" y="20">
+   <obj type="math/&gt;c" sha="aa245f90aec358415dbbc12409c90065cda73d3e" name="&gt;c1" x="320" y="20">
       <params>
          <frac32.u.map name="c" value="14.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="-c" sha="7e5ae2d57dd806e6c238ad9acbb5efbd70dc7d10" name="-c1" x="440" y="20">
+   <obj type="math/-c" sha="7e5ae2d57dd806e6c238ad9acbb5efbd70dc7d10" name="-c1" x="440" y="20">
       <params>
          <frac32.u.map name="c" value="14.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="satp" sha="107e97e0797ac54d70617cbd5af301ac85ec58a8" name="satp1" x="560" y="20">
+   <obj type="math/satp" sha="107e97e0797ac54d70617cbd5af301ac85ec58a8" name="satp1" x="560" y="20">
       <params/>
       <attribs/>
    </obj>
-   <obj type="muls8" sha="1c3ca25981e9ffc6a3a7f89b528588c32ad352f4" name="muls41" x="640" y="20">
+   <obj type="math/muls 8" sha="1c3ca25981e9ffc6a3a7f89b528588c32ad352f4" name="muls41" x="640" y="20">
       <params/>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="760" y="20">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="760" y="20">
       <params>
          <frac32.u.map name="value" MidiCC="1" value="32.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth1" x="840" y="20">
+   <obj type="math/smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth1" x="840" y="20">
       <params>
          <frac32.u.map name="time" value="58.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="envahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="400" y="120">
+   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="400" y="120">
       <params>
          <frac32.u.map name="a" value="14.5"/>
          <frac32.u.map name="d" value="24.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="560" y="120">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="560" y="120">
       <params>
          <frac32.s.map name="pitch" value="-61.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="mix3" sha="46333aae0436e1e8686389008afe56eee4288a54" name="*c2" x="720" y="120">
+   <obj type="mix/mix 3" sha="46333aae0436e1e8686389008afe56eee4288a54" name="*c2" x="720" y="120">
       <params>
          <frac32.u.map name="gain1" value="4.5"/>
          <frac32.u.map name="gain2" value="8.0"/>
@@ -65,102 +65,102 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc2" x="160" y="180">
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc2" x="160" y="180">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="div32" sha="41545586fbaebf68c4240a279a5619af09b5c1a1" name="div321" x="320" y="200">
+   <obj type="math/div 32" sha="41545586fbaebf68c4240a279a5619af09b5c1a1" name="div321" x="320" y="200">
       <params/>
       <attribs/>
    </obj>
-   <obj type="mix3" sha="46333aae0436e1e8686389008afe56eee4288a54" name="mix11" x="40" y="260">
+   <obj type="mix/mix 3" sha="46333aae0436e1e8686389008afe56eee4288a54" name="mix11" x="40" y="260">
       <params>
          <frac32.u.map name="gain1" value="1.0"/>
-         <frac32.u.map name="gain2" value="0.15000000000000008"/>
+         <frac32.u.map name="gain2" value="0.14999961853027344"/>
          <frac32.u.map name="gain3" value="12.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="fbdd077f925e7d2b61a003ddca711d140c851f5" name="saw_1" x="160" y="280">
+   <obj type="saw~" sha="fac485938f0744316bc8361d4ad33f897cbff287" name="saw_1" x="160" y="280">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="mix2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix21" x="360" y="280">
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix21" x="360" y="280">
       <params>
          <frac32.u.map name="gain1" value="40.0"/>
-         <frac32.u.map name="gain2" value="1.5541166508839743"/>
+         <frac32.u.map name="gain2" value="1.5541162490844727"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="lpfm~" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="lpf_1" x="480" y="280">
+   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="lpf_1" x="480" y="280">
       <params>
          <frac32.s.map name="pitch" value="-14.0"/>
          <frac32.u.map name="reso" MidiCC="7" value="61.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="echo2~" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="1120" y="300">
+   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="1120" y="300">
       <params>
          <frac32.u.map name="mix" value="0.0"/>
          <frac32.u.map name="feedback" value="0.0"/>
       </params>
       <attribs>
-         <int attributeName="delaylength" value="15271"/>
+         <spinner attributeName="delaylength" value="15271"/>
       </attribs>
    </obj>
-   <obj type="infclip~" sha="5b28954e0a3a0a0901e0c58305e9e0e0eceb2cf9" name="infclip_1_" x="640" y="320">
+   <obj type="infclip~" sha="8606d431d169b7fa50fa791b6b8004ea1b74307a" name="infclip_1_" x="640" y="320">
       <params/>
       <attribs/>
    </obj>
-   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="720" y="320">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="720" y="320">
       <params/>
       <attribs/>
    </obj>
-   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="800" y="320">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="800" y="320">
       <params>
          <frac32.u.map name="amp" value="50.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="rand~" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="80" y="440">
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="80" y="440">
       <params/>
       <attribs/>
    </obj>
-   <obj type="lowpass~" sha="a4005d152697b7e91e26b912a207a0e696563062" name="lowpass_1" x="160" y="440">
+   <obj type="lowpass~" sha="1e5ae3f91d3028a83d8e698aa6e8bf8dc8ceefb3" name="lowpass_1" x="160" y="440">
       <params>
-         <frac32.u.map name="freq" value="60.5"/>
+         <frac32.s.map name="freq" value="60.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="div32" sha="5c939ae8539de1dcd5808b75c6bba2de5f593827" name="div161" x="240" y="440">
+   <obj type="math/div 32" sha="5c939ae8539de1dcd5808b75c6bba2de5f593827" name="div161" x="240" y="440">
       <params/>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="1200" y="460">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="1200" y="460">
       <params>
          <frac32.u.map name="value" value="25.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="1280" y="460">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="1280" y="460">
       <params>
          <frac32.u.map name="value" value="2.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="button1" sha="d7e5e78016948ecaade268473afb9502b7c75239" name="button11" x="40" y="520">
+   <obj type="gpio/in/button1" sha="d7e5e78016948ecaade268473afb9502b7c75239" name="button11" x="40" y="520">
       <params/>
       <attribs/>
    </obj>
-   <obj type="chorus" sha="c71cd02f08a884b34185cb9392c7c87adff1aebb" name="chorus1" x="1200" y="580">
+   <obj type="dac~" sha="c27566f972d15f25252f61b5cff014a3edce9706" name="dac_1" x="1360" y="580">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="1360" y="580">
+   <obj type="fx/chorus" uuid="335fba2dfcc5c7b0847aec5c83eddeeb8edca40c" name="obj_1" x="1022" y="588">
       <params/>
       <attribs/>
    </obj>
@@ -226,18 +226,6 @@
          <dest name="lowpass_1 in"/>
       </net>
       <net>
-         <source name="c2 out"/>
-         <dest name="chorus1 speed"/>
-      </net>
-      <net>
-         <source name="c3 out"/>
-         <dest name="chorus1 depth"/>
-      </net>
-      <net>
-         <source name="echo2_1 out"/>
-         <dest name="chorus1 in"/>
-      </net>
-      <net>
          <source name="lowpass_1 out"/>
          <dest name="div161 in"/>
       </net>
@@ -248,14 +236,6 @@
       <net>
          <source name="*c1 out"/>
          <dest name="echo2_1 in"/>
-      </net>
-      <net>
-         <source name="chorus1 L"/>
-         <dest name="dac_1 left"/>
-      </net>
-      <net>
-         <source name="chorus1 R"/>
-         <dest name="dac_1 right"/>
       </net>
       <net>
          <source name="analogRead1 out"/>
@@ -280,14 +260,40 @@
          <source name="muls41 out"/>
          <dest name="vca_1 v"/>
       </net>
+      <net>
+         <source name="c3 out"/>
+         <dest name="obj_1 depth"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="obj_1 speed"/>
+      </net>
+      <net>
+         <source name="obj_1 L"/>
+         <dest name="dac_1 left"/>
+      </net>
+      <net>
+         <source name="obj_1 R"/>
+         <dest name="dac_1 right"/>
+      </net>
+      <net>
+         <source name="echo2_1 out"/>
+         <dest name="obj_1 in"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
-      <MidiChannel>0</MidiChannel>
+      <MidiChannel>1</MidiChannel>
       <NPresets>8</NPresets>
       <NPresetEntries>32</NPresetEntries>
       <NModulationSources>8</NModulationSources>
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>342</x>
+      <y>26</y>
+      <width>1670</width>
+      <height>890</height>
+   </windowPos>
 </patch-1.0>
