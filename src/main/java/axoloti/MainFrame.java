@@ -177,9 +177,8 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         PopulateLibraryMenu(jMenuLibrary);
 
         JMenu phelps = new JMenu("Library");
-        PopulateLibraryMenu(phelps, "objects",".axh");
+        PopulateLibraryMenu(phelps, "objects", ".axh");
         jMenuHelp.add(phelps);
-
 
         axoObjects = new AxoObjects();
         axoObjects.LoadAxoObjects();
@@ -191,16 +190,16 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
     void PopulateLibraryMenu(JMenu parent) {
         JMenu ptut = new JMenu("tutorials");
-        PopulateLibraryMenu(ptut, "patches/tutorials",".axp");
+        PopulateLibraryMenu(ptut, "patches/tutorials", ".axp");
         parent.add(ptut);
         JMenu pdemos = new JMenu("demos");
-        PopulateLibraryMenu(pdemos, "patches/demos",".axp");
+        PopulateLibraryMenu(pdemos, "patches/demos", ".axp");
         parent.add(pdemos);
     }
 
-    void PopulateLibraryMenu(JMenu parent, String path,String ext) {
+    void PopulateLibraryMenu(JMenu parent, String path, String ext) {
         File dir = new File(path);
-        final String extension=ext;
+        final String extension = ext;
         for (File subdir : dir.listFiles(new java.io.FileFilter() {
             @Override
             public boolean accept(File pathname) {
@@ -208,8 +207,8 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             }
         })) {
             JMenu fm = new JMenu(subdir.getName());
-            PopulateLibraryMenu(fm, subdir.getPath(),extension);
-            if(fm.getItemCount()>0) {
+            PopulateLibraryMenu(fm, subdir.getPath(), extension);
+            if (fm.getItemCount() > 0) {
                 parent.add(fm);
             }
         }
@@ -783,11 +782,13 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     public void OpenPatch() {
         final JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
-        fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp", "axh","axs"));
+        fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp", "axh", "axs"));
         fc.addChoosableFileFilter(new FileFilter() {
             @Override
             public boolean accept(File file) {
                 if (file.getName().endsWith("axp")) {
+                    return true;
+                } else if (file.isDirectory()) {
                     return true;
                 }
                 return false;
@@ -803,6 +804,8 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             public boolean accept(File file) {
                 if (file.getName().endsWith("axh")) {
                     return true;
+                } else if (file.isDirectory()) {
+                    return true;
                 }
                 return false;
             }
@@ -816,6 +819,8 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public boolean accept(File file) {
                 if (file.getName().endsWith("axs")) {
+                    return true;
+                } else if (file.isDirectory()) {
                     return true;
                 }
                 return false;
