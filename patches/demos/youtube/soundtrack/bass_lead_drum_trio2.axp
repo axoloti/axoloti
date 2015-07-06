@@ -1,5 +1,7 @@
 <patch-1.0>
-   <obj type="./lead" name="lead_1" x="14" y="14">
+   <comment type="patch/comment" name="Midi Channels:" x="14" y="14"/>
+   <comment type="patch/comment" name="Lead : 1, Pads 3, HH 4, Drum 5" x="14" y="28"/>
+   <obj type="./lead" name="lead_1" x="14" y="84">
       <params>
          <frac32.s.map name="lfo_flt" value="-61.0"/>
          <frac32.s.map name="lfo_pitch" value="1.0"/>
@@ -11,13 +13,13 @@
          <combo attributeName="midichannel" selection="1"/>
       </attribs>
    </obj>
-   <obj type="./hh" name="hh_2" x="140" y="14">
+   <obj type="./hh" name="hh_2" x="140" y="84">
       <params/>
       <attribs>
          <combo attributeName="midichannel" selection="4"/>
       </attribs>
    </obj>
-   <obj type="./vacuum_cleaner_pad" name="vacuumcleanerpad" x="252" y="14">
+   <obj type="./vacuum_cleaner_pad" name="vacuumcleanerpad" x="252" y="84">
       <params>
          <frac32.s.map name="osc1" value="-10.0"/>
          <frac32.s.map name="osc1_" value="23.0"/>
@@ -43,7 +45,7 @@
          <combo attributeName="midiport" selection="omni"/>
       </attribs>
    </obj>
-   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix_1" x="392" y="14">
+   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix_1" x="392" y="84">
       <params>
          <frac32.u.map name="gain1" value="49.5"/>
          <frac32.u.map name="gain2" value="63.5"/>
@@ -51,14 +53,14 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="./tremolo" name="tremolo_1" x="490" y="14">
+   <obj type="./tremolo" name="tremolo_1" x="490" y="84">
       <params>
          <frac32.s.map name="speed" value="10.0"/>
          <frac32.u.map name="intesity" value="3.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="602" y="14">
+   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="602" y="84">
       <params>
          <frac32.u.map name="mix" value="32.0"/>
          <frac32.u.map name="feedback" value="20.5"/>
@@ -67,31 +69,31 @@
          <spinner attributeName="delaylength" value="8192"/>
       </attribs>
    </obj>
-   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2" x="182" y="70">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2" x="182" y="140">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_3" x="392" y="210">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_3" x="392" y="280">
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/follower" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4" name="envahd2" x="644" y="210">
+   <obj type="env/follower" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4" name="envahd2" x="644" y="280">
       <params/>
       <attribs>
          <combo attributeName="time" selection="42.6ms"/>
       </attribs>
    </obj>
-   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c3" x="742" y="210">
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c3" x="742" y="280">
       <params>
          <frac32.u.map name="amp" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_1" x="70" y="252">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_1" x="70" y="322">
       <params/>
       <attribs/>
    </obj>
-   <obj type="./bass" name="bass_1" x="392" y="294">
+   <obj type="./bass" name="bass_1" x="392" y="364">
       <params>
          <frac32.u.map name="env:a" value="0.0"/>
          <frac32.u.map name="env:d" value="0.0"/>
@@ -101,7 +103,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="./drummachine" name="drummachine_1" x="504" y="294">
+   <obj type="./drummachine" name="drummachine_1" x="504" y="364">
       <params>
          <frac32.s.map name="d_1" value="-15.0"/>
          <frac32.s.map name="filter.lowpass~_1" value="-29.0"/>
@@ -114,28 +116,28 @@
          <combo attributeName="midichannel" selection="5"/>
       </attribs>
    </obj>
-   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix_2" x="644" y="294">
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix_2" x="644" y="364">
       <params>
          <frac32.u.map name="gain1" value="19.5"/>
          <frac32.u.map name="gain2" value="16.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcff_1" x="742" y="294">
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcff_1" x="742" y="364">
       <params>
          <frac32.s.map name="pitch" value="36.0"/>
          <frac32.u.map name="reso" value="43.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="fx/chorus2" name="chorus1" x="854" y="294">
+   <obj type="fx/chorus2" name="chorus1" x="854" y="364">
       <params>
          <frac32.u.map name="depth" value="1.5"/>
          <frac32.s.map name="speed" value="-25.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix24" x="966" y="294">
+   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix24" x="966" y="364">
       <params>
          <frac32.u.map name="gain1" value="63.5"/>
          <frac32.u.map name="gain2" value="56.0"/>
@@ -143,7 +145,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix24_" x="1064" y="294">
+   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix24_" x="1064" y="364">
       <params>
          <frac32.u.map name="gain1" value="63.5"/>
          <frac32.u.map name="gain2" value="56.0"/>
@@ -151,23 +153,23 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_5" x="644" y="434">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_5" x="644" y="504">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_6" x="644" y="490">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_6" x="644" y="560">
       <params/>
       <attribs/>
    </obj>
-   <obj type="audio/out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="966" y="490">
+   <obj type="audio/out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="966" y="560">
       <params/>
       <attribs/>
    </obj>
-   <obj type="audio/out right" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_21" x="1064" y="490">
+   <obj type="audio/out right" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_21" x="1064" y="560">
       <params/>
       <attribs/>
    </obj>
-   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_4" x="392" y="518">
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_4" x="392" y="588">
       <params/>
       <attribs/>
    </obj>
@@ -266,7 +268,7 @@
    <windowPos>
       <x>535</x>
       <y>266</y>
-      <width>1374</width>
-      <height>828</height>
+      <width>1598</width>
+      <height>1076</height>
    </windowPos>
 </patch-1.0>

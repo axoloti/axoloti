@@ -37,7 +37,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="194a29f0098564ef42cd1e77bad4c41766f9f308" name="d_1" x="1274" y="70">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="d_1" x="1274" y="70">
       <params>
          <frac32.s.map name="d" value="-20.0"/>
       </params>
@@ -461,11 +461,11 @@
    </obj>
    <obj type="mix/mix 6" sha="3cb483397ed6c25c361f7edaf34ef8c382a71183" name="mix.mix6_1" x="1596" y="798">
       <params>
-         <frac32.u.map name="gain1" value="39.0"/>
-         <frac32.u.map name="gain2" value="18.5"/>
-         <frac32.u.map name="gain3" value="57.0"/>
-         <frac32.u.map name="gain4" value="0.0"/>
-         <frac32.u.map name="gain5" value="63.5"/>
+         <frac32.u.map name="gain1" value="28.5"/>
+         <frac32.u.map name="gain2" value="15.5"/>
+         <frac32.u.map name="gain3" value="17.0"/>
+         <frac32.u.map name="gain4" value="12.0"/>
+         <frac32.u.map name="gain5" value="62.5"/>
          <frac32.u.map name="gain6" value="0.0"/>
       </params>
       <attribs/>
@@ -476,17 +476,10 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="compressor1" sha="6731e4baa15e69ecfe57924363bb22be444c2316" name="compressor1_1" x="1736" y="826">
+   <obj type="math/*c" sha="873316bd002ec2f43be6778fe52b7351107881a7" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="abs_1" x="1778" y="952">
       <params>
-         <frac32.u.map name="comp_1:tresh" value="2.5"/>
-         <frac32.u.map name="comp_1:ratio" value="41.5"/>
-         <frac32.u.map name="smooth2_1:risetime" value="49.0"/>
-         <frac32.u.map name="smooth2_1:falltime" value="49.0"/>
+         <frac32.u.map name="amp" value="26.0"/>
       </params>
-      <attribs/>
-   </obj>
-   <obj type="math/muls 4" sha="bec77f5586c3b03aae932590902e4c98a554e0c9" name="muls_1" x="1890" y="854">
-      <params/>
       <attribs/>
    </obj>
    <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="audio.out.stereo_1" x="1920" y="960">
@@ -665,7 +658,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="sel/sel b 32 8t" sha="29ecb165d714c907a5a725a4f06950ba20f25cd" name="sel.b.32.x8_2" x="576" y="1596">
+   <obj type="sel/sel b 32 8t" sha="8b125083eeb8a55e87f375ebcd0eaa4c9036caf0" name="sel.b.32.x8_2" x="576" y="1596">
       <params>
          <bin32 name="p1" value="8208"/>
          <bin32 name="p2" value="-2011168512"/>
@@ -766,10 +759,6 @@
       <net>
          <source name="env.decay.m_1 env"/>
          <dest name="gain.vca~_1 v"/>
-      </net>
-      <net>
-         <source name="mix.mix6_1 out"/>
-         <dest name="compressor1_1 in"/>
       </net>
       <net>
          <source name="noise.uniform_1 wave"/>
@@ -1210,15 +1199,6 @@
          <dest name="logic.and2_1 i1"/>
       </net>
       <net>
-         <source name="compressor1_1 out"/>
-         <dest name="muls_1 in"/>
-      </net>
-      <net>
-         <source name="muls_1 out"/>
-         <dest name="audio.out.stereo_1 left"/>
-         <dest name="audio.out.stereo_1 right"/>
-      </net>
-      <net>
          <source name="sine_1 wave"/>
          <dest name="*c_1 in"/>
       </net>
@@ -1234,9 +1214,24 @@
          <source name="vcf3~_1 out"/>
          <dest name="mix_1 in1"/>
       </net>
+      <net>
+         <source name="abs_1 out"/>
+         <dest name="audio.out.stereo_1 left"/>
+         <dest name="audio.out.stereo_1 right"/>
+      </net>
+      <net>
+         <source name="mix.mix6_1 out"/>
+         <dest name="abs_1 in"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>347</x>
+      <y>72</y>
+      <width>1850</width>
+      <height>1109</height>
+   </windowPos>
 </patch-1.0>
