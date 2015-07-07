@@ -49,43 +49,40 @@ public class Env extends gentools {
         catName = "env";
         WriteAxoObject(catName, Create_envd_new());
         // need to clean up the envelopes...
-/* 
-         catName = "env_old";
-        */
-         WriteAxoObject(catName, Create_envadsr());
-         WriteAxoObject(catName, Create_envad());
-         WriteAxoObject(catName, Create_envd_new());
-         WriteAxoObject(catName, Create_envd2());
-         WriteAxoObject(catName, Create_envhd());
-         WriteAxoObject(catName, Create_envhd2());
-         WriteAxoObject(catName, Create_envahd());
-         WriteAxoObject(catName, Create_envahd2());
-         WriteAxoObject(catName, CreateEnvFollower());
+        WriteAxoObject(catName, Create_envadsr());
+        WriteAxoObject(catName, Create_envad());
+        WriteAxoObject(catName, Create_envd_new());
+        WriteAxoObject(catName, Create_envd2());
+        WriteAxoObject(catName, Create_envhd());
+        WriteAxoObject(catName, Create_envhd2());
+        WriteAxoObject(catName, Create_envahd());
+        WriteAxoObject(catName, Create_envahd2());
+        WriteAxoObject(catName, CreateEnvFollower());
 
-         WriteAxoObject(catName, Create_envdlin());
-         WriteAxoObject(catName, Create_envhdlin());
-         WriteAxoObject(catName, Create_envahdlin());
+        WriteAxoObject(catName, Create_envdlin());
+        WriteAxoObject(catName, Create_envhdlin());
+        WriteAxoObject(catName, Create_envahdlin());
 
-         WriteAxoObject(catName, Create_envdlinx());
-         WriteAxoObject(catName, Create_envhdlinx());
-         WriteAxoObject(catName, Create_envahdlinx());
+        WriteAxoObject(catName, Create_envdlinx());
+        WriteAxoObject(catName, Create_envhdlinx());
+        WriteAxoObject(catName, Create_envahdlinx());
 
-         WriteAxoObject(catName, Create_envdlinmx());
-         WriteAxoObject(catName, Create_envhdlinmx());
-         WriteAxoObject(catName, Create_envahdlinmx());
+        WriteAxoObject(catName, Create_envdlinmx());
+        WriteAxoObject(catName, Create_envhdlinmx());
+        WriteAxoObject(catName, Create_envahdlinmx());
 
-         WriteAxoObject(catName, Create_line2());
-         WriteAxoObject(catName, Create_line3());
+        WriteAxoObject(catName, Create_line2());
+        WriteAxoObject(catName, Create_line3());
 
-         WriteAxoObject(catName, Create_line2x());
-         WriteAxoObject(catName, Create_line3x());
+        WriteAxoObject(catName, Create_line2x());
+        WriteAxoObject(catName, Create_line3x());
 
-         WriteAxoObject(catName, Create_line2mx());
-         WriteAxoObject(catName, Create_line3mx());
+        WriteAxoObject(catName, Create_line2mx());
+        WriteAxoObject(catName, Create_line3mx());
 
-         WriteAxoObject(catName, Create_line2bp());
-         WriteAxoObject(catName, Create_line3bp());
-         
+        WriteAxoObject(catName, Create_line2bp());
+        WriteAxoObject(catName, Create_line3bp());
+
     }
 
     static AxoObject Create_envd_new() {
@@ -230,35 +227,34 @@ public class Env extends gentools {
     }
 
     static AxoObject Create_envad() {
-        AxoObject o = new AxoObject("ad", "Attack/decay envelope");
+        AxoObject o = new AxoObject("ad", "Attack/decay envelope, linear attack, exponential decay");
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
-        o.params.add(new ParameterFrac32SMapKLineTimeExp2("a"));
+        o.params.add(new ParameterFrac32SMapKLineTimeExp("a"));
         o.params.add(new ParameterFrac32SMapKDTimeExp("d"));
         o.sLocalData = "int8_t stage;\n"
                 + "int ntrig;\n"
                 + "int32_t val;\n";
-        o.sInitCode = "stage = 0;\n"
-                + "ntrig = 0;\n"
+        o.sInitCode = "ntrig = 0;\n"
                 + "val = 0;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {\n"
-                + "   stage = 1;\n"
+        o.sKRateCode = "if ((inlet_trig>0) && !ntrig) {\n"
                 + "   ntrig = 1;\n"
-                + "}\n"
-                + "if (!(%trig%>0) && ntrig) {\n"
-                + "   stage = 0;\n"
-                + "   ntrig=0;\n"
+                + "   stage = 1;\n"
+                + "} else if (!(inlet_trig>0)) {\n"
+                + "   ntrig = 0;\n"
                 + "}\n"
                 + "if (stage == 0){\n"
-                + "   val = ___SMMUL(val,%d%)<<1;\n"
+                + "   val = ___SMMUL(val,param_d)<<1;\n"
                 + "} else {\n"
-                + "   val = val + %a%;\n"
+                + "   int32_t t;\n"
+                + "   MTOF(-param_a,t);\n"
+                + "   val = val + (t>>3);\n"
                 + "   if (val<0) {\n"
                 + "      val =0x7FFFFFFF;\n"
                 + "      stage = 0;\n"
                 + "   }\n"
-                + "}"
-                + "%env% = val>>4;";
+                + "}\n"
+                + "outlet_env = val>>4;\n";
         return o;
     }
 
