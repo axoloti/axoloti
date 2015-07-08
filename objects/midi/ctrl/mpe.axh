@@ -12,7 +12,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="midi/mpe/keyb mpe" sha="df6476c993ae8899573dbd0c881e717e5eec19ea" name="keyb_1" x="42" y="98">
+   <obj type="midi/ctrl/mpe" sha="df6476c993ae8899573dbd0c881e717e5eec19ea" name="keyb_1" x="42" y="98">
       <params/>
       <attribs/>
    </obj>

@@ -1,10 +1,10 @@
 <objdefs>
-   <obj.normal id="keyb mpe" uuid="45d78b591e6da32980a53d55f3c393954f96b58d" sha="7d045bd3ec2368f42f90d2a142e3100fa2cf23c1">
+   <obj.normal id="mpe" uuid="94323477e6476a10b9332922e5dfcd2705641af1" sha="7d045bd3ec2368f42f90d2a142e3100fa2cf23c1">
       <upgradeSha>df6476c993ae8899573dbd0c881e717e5eec19ea</upgradeSha>
-      <sDescription>Keyboard input for MIDI polyphonic expression</sDescription>
+      <sDescription>Controller input for MIDI Polyphonic Rxpression</sDescription>
       <author>Mark Harris</author>
       <license>BSD</license>
-      <helpPatch>keyb mpe.axh</helpPatch>
+      <helpPatch>mpe.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32.bipolar name="note" description="midi note number (-64..63)"/>
