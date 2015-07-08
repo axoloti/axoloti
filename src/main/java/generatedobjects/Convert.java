@@ -19,14 +19,17 @@ package generatedobjects;
 
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletFrac32;
+import axoloti.inlets.InletFrac32Bipolar;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletFrac32;
+import axoloti.outlets.OutletFrac32Bipolar;
 import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInt32;
+import axoloti.parameters.ParameterBin12;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**
@@ -45,6 +48,7 @@ public class Convert extends gentools {
         WriteAxoObject(catName, toFrac32());
         WriteAxoObject(catName, toBool32());
         WriteAxoObject(catName, toInt32());
+        WriteAxoObject(catName, CreateNoteQuantizer());
 
     }
 
@@ -133,4 +137,60 @@ public class Convert extends gentools {
         o.sKRateCode = "   %o%= %i%;\n";
         return o;
     }
+    
+        static AxoObject CreateNoteQuantizer() {
+        AxoObject o = new AxoObject("note quantizer", "quantize note input to a scale");
+        o.inlets.add(new InletFrac32Bipolar("note", "note number (-64..63)"));
+        o.inlets.add(new InletInt32("tonic", "tonic note number (0-11)"));
+        o.inlets.add(new InletInt32("offset", "note input offset (0-128)"));
+        o.outlets.add(new OutletFrac32Bipolar("note", "note number (-64..63)"));
+        o.params.add(new ParameterBin12("b12"));
+        o.sAuthor = "Mark Harris";
+        o.sLocalData = 
+"    int32_t _scaleVal;\n" +
+"    int8_t  _scale[12];\n" +
+"    int8_t  _nscale;\n" +
+"    int32_t  _note;\n" +
+"    int32_t  _tonic;\n" +
+"    int32_t  _offset;\n" +
+"    int32_t  _out;";
+        
+        o.sInitCode = 
+"   _note = 0;\n" +
+"    _scaleVal = 0;\n" +
+"    _nscale = 0;\n" +
+"    _tonic = 0;\n" +
+"    _offset = 0;\n" +
+"    for(int i=0;i<12;i++) {\n" +
+"        _scale[i] = 0;\n" +
+"    }";
+        
+        o.sKRateCode = 
+"    if (_scaleVal != param_b12) {\n" +
+"        // calculate new scale parameters as they changed\n" +
+"        // optimize for evaluation\n" +
+"        int x=0;\n" +
+"        for(int i=0;i<12;i++) {\n" +
+"            if(param_b12 & (1 << i)) {\n" +
+"                _scale[x++] = i;\n" +
+"            }\n" +
+"        }\n" +
+"        _nscale = x;\n" +
+"    }\n" +
+"    if (_note != inlet_note || _offset != inlet_offset || _scaleVal != param_b12\n" +
+"        || _tonic != inlet_tonic) {\n" +
+"        _note = inlet_note;\n" +
+"        _tonic = inlet_tonic;\n" +
+"        _offset = inlet_offset;\n" +
+"        _scaleVal = param_b12;\n" +
+"        int mn = (inlet_note  >> 21) + 64 - _offset;\n" +
+"        int8_t oct = mn / _nscale;\n" +
+"        int8_t n = mn  % _nscale;\n" +
+"        _out = ((oct * 12 + _scale[n] + _tonic )  - 64 ) << 21;\n" +
+"    }\n" +
+"    outlet_note = _out;\n";
+        return o;
+    }
+    
+    
 }

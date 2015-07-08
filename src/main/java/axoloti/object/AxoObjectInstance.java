@@ -70,6 +70,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         @ElementList(entry = "int32.hradio", type = ParameterInstanceInt32HRadio.class, inline = true, required = false),
         @ElementList(entry = "int32.vradio", type = ParameterInstanceInt32VRadio.class, inline = true, required = false),
         @ElementList(entry = "int2x16", type = ParameterInstance4LevelX16.class, inline = true, required = false),
+        @ElementList(entry = "bin12", type = ParameterInstanceBin12.class, inline = true, required = false),
         @ElementList(entry = "bin16", type = ParameterInstanceBin16.class, inline = true, required = false),
         @ElementList(entry = "bin32", type = ParameterInstanceBin32.class, inline = true, required = false),
         @ElementList(entry = "bool32.tgl", type = ParameterInstanceBin1.class, inline = true, required = false),

@@ -1,0 +1,58 @@
+<patch-1.0>
+   <obj type="ctrl/dial b" sha="b26f881dfa1451f0269e068eb6b3d824b43b41d3" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_2" x="28" y="42">
+      <params>
+         <frac32.s.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/note quantizer" sha="771f0b7a6d236751b17296c84be13b14b23cf4d2" uuid="250b756241853185b0296cc743d283658abbd7b6" name="note_1" x="196" y="84">
+      <params>
+         <bin12 name="b12" value="2741"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" sha="5d4fe09e04ac9d02b2f3224e493c9536fe25fa66" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_1" x="406" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/i" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_1" x="56" y="126">
+      <params>
+         <int32 name="value" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/i" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_2" x="56" y="210">
+      <params>
+         <int32 name="value" value="60"/>
+      </params>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="dial_2 out"/>
+         <dest name="note_1 note"/>
+      </net>
+      <net>
+         <source name="note_1 note"/>
+         <dest name="dial_1 in"/>
+      </net>
+      <net>
+         <source name="i_1 out"/>
+         <dest name="note_1 tonic"/>
+      </net>
+      <net>
+         <source name="i_2 out"/>
+         <dest name="note_1 offset"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>845</x>
+      <y>478</y>
+      <width>1164</width>
+      <height>511</height>
+   </windowPos>
+</patch-1.0>

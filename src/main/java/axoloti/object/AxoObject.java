@@ -58,6 +58,7 @@ import axoloti.outlets.OutletInt32Pos;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.Parameter4LevelX16;
 import axoloti.parameters.ParameterBin1;
+import axoloti.parameters.ParameterBin12;
 import axoloti.parameters.ParameterBin16;
 import axoloti.parameters.ParameterBin1Momentary;
 import axoloti.parameters.ParameterBin32;
@@ -211,6 +212,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = "int32.hradio", type = ParameterInt32HRadio.class, inline = true, required = false),
         @ElementList(entry = "int32.vradio", type = ParameterInt32VRadio.class, inline = true, required = false),
         @ElementList(entry = "int2x16", type = Parameter4LevelX16.class, inline = true, required = false),
+        @ElementList(entry = "bin12", type = ParameterBin12.class, inline = true, required = false),
         @ElementList(entry = "bin16", type = ParameterBin16.class, inline = true, required = false),
         @ElementList(entry = "bin32", type = ParameterBin32.class, inline = true, required = false),
         @ElementList(entry = "bool32.tgl", type = ParameterBin1.class, inline = true, required = false),
