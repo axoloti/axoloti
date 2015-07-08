@@ -1,0 +1,41 @@
+== Reporting issues/bugs
+
+Refer to http://community.axoloti.com/t/reporting-issues-bugs/21
+
+== Contributing code
+
+Please contact me to discuss your planned efforts in order to avoid wasted or 
+overlapping efforts.
+
+If the ownership rules (below) are an issue, please contribute to the separate 
+"contrib" repository I will set up soon.
+
+== Legal Details
+
+=== Ownership Authority ( copyright )
+
+Copyright Holder:: Johannes Taelman
+
+This project's current policy requires it to maintain a single copyright
+holder.  All contributions to the project must be assigned to this copyright
+holder.  This decision was made primarily to simplify legal issues surrounding
+licensing and to enable unhindered use for all developers wishing to utilize 
+Axoloti.
+
+=== Contributor Statement
+
+People who contribute non-trivial patches or have been granted commit access
+to the Axoloti source repository agree to the following statement:
+
+I, __(contributor's name)__ agree to the following statements concerning my
+contributions to the "Axoloti" project:
+
+* These contributions are my own work and that I have full ownership authority
+  over them.
+* I am unaware of any patent or patent application that would prevent free use
+  of my contribution.
+* I unconditionally assign my copyright for these contributions to Johannes 
+Taelman.
+
+Full legal name and address:
+(your name and address here)
