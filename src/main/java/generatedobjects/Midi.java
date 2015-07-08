@@ -80,8 +80,8 @@ public class Midi extends gentools {
         WriteAxoObject(catName, Create_intern_bendout());
         WriteAxoObject(catName, Create_intern_clockgen());
 
-        catName = "midi/mpe";
-        WriteAxoObject(catName, Create_keyb_mpe());
+        catName = "midi/ctrl";
+        WriteAxoObject(catName, Create_mpe());
     }
     /*
      static AxoObject Create_ctlin() {
@@ -921,8 +921,8 @@ public class Midi extends gentools {
         return o;
     }
 
-    static AxoObject Create_keyb_mpe() {
-        AxoObject o = new AxoObject("keyb mpe", "Keyboard input for MIDI polyphonic expression");
+    static AxoObject Create_mpe() {
+        AxoObject o = new AxoObject("mpe", "Controller input for MIDI Polyphonic Rxpression");
         o.sAuthor = "Mark Harris";
         o.outlets.add(new OutletFrac32Bipolar("note", "midi note number (-64..63)"));
         o.outlets.add(new OutletBool32("gate", "key pressed, no retrigger legato"));
