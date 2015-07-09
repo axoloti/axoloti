@@ -173,7 +173,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             public void actionPerformed(ActionEvent ae) {
                 ((PatchGUI) patch).ShowClassSelector(AxoObjectInstance.this.getLocation(), AxoObjectInstance.this);
             }
-        });                
+        });
         popup.add(popm_substitute);
         if (getType().GetHelpPatchFile() != null) {
             MenuItem popm_help = new MenuItem("help");
@@ -498,7 +498,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             } else {
                 c += p.GenerateCodeInit("parent->", "");
             }
- //           if ((p.isOnParent() && !enableOnParent)) {
+            //           if ((p.isOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
             //String parentparametername = classname.substring(8);
             //c += "// classname : " + classname + " : " + parentparametername + "\n";
@@ -671,6 +671,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         for (AttributeInstance p : attributeInstances) {
             s = s.replace(p.GetCName(), p.CValue());
         }
+        s = s.replace("attr_name", getCInstanceName());
         if (s.length() > 0) {
             return "{\n" + s + "}\n";
         } else {
