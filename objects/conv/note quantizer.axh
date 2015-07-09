@@ -1,39 +1,132 @@
 <patch-1.0>
-   <obj type="ctrl/dial b" sha="b26f881dfa1451f0269e068eb6b3d824b43b41d3" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_2" x="28" y="42">
+   <comment type="patch/comment" name="quantizing notes" x="14" y="14"/>
+   <comment type="patch/comment" name="show note number" x="924" y="70"/>
+   <obj type="disp/note" sha="47a060e4a7fa766d1de9cf03c8aa236d79be3440" uuid="ce3190ad98b73b468f22221f555b01feee03226a" name="dial_1" x="924" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="lfo/square" sha="64e3fcac73a82e2f89ba9bba33b4829ec2eee3f3" uuid="fb76624a81ec92d244b83f94dedcd4c07935d848" name="square_1" x="14" y="112">
       <params>
-         <frac32.s.map name="value" value="0.0"/>
+         <frac32.s.map name="pitch" value="9.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="conv/note quantizer" sha="771f0b7a6d236751b17296c84be13b14b23cf4d2" uuid="250b756241853185b0296cc743d283658abbd7b6" name="note_1" x="196" y="84">
+   <comment type="patch/comment" name="play scale" x="224" y="126"/>
+   <obj type="logic/counter" sha="519c79f42a7c84352830b08e68696ecbf5d0bd52" uuid="7a141ba82230e54e5f5cd12da5dbe5a74ba854a5" name="counter_1" x="224" y="140">
+      <params>
+         <int32 name="maximum" value="28"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/i radio 4 v" sha="37aa6f17297981ccdf9a037eecf728e7c0ff0ae4" uuid="b610704137c90b0e43464440b84bfb4fb7d2bb30" name="toggle_1" x="490" y="140">
+      <params>
+         <int32.vradio name="value" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mux/mux 4" sha="fbbb8923dd965c395c14947cd0aac1464a19b456" uuid="bd572dad58644793774a69385f376bda2e1fd9be" name="mux_1" x="616" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" name="set which notes are part of scale" x="756" y="154"/>
+   <obj type="conv/note quantizer" sha="771f0b7a6d236751b17296c84be13b14b23cf4d2" uuid="250b756241853185b0296cc743d283658abbd7b6" name="note_1" x="756" y="168">
       <params>
          <bin12 name="b12" value="2741"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/dial b" sha="5d4fe09e04ac9d02b2f3224e493c9536fe25fa66" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_1" x="406" y="84">
-      <params/>
-      <attribs/>
-   </obj>
-   <obj type="ctrl/i" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_1" x="56" y="126">
+   <obj type="osc/saw" sha="fac485938f0744316bc8361d4ad33f897cbff287" uuid="672d282db829da944d5580258269aa349c94bb24" name="sine_1" x="1050" y="168">
       <params>
-         <int32 name="value" value="1"/>
+         <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="ctrl/i" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_2" x="56" y="210">
+   <obj type="filter/lp1 m" sha="2e0efb5c094beab28ba197b8a9d5d871414353bb" uuid="cb8f185c8f9411eee367e0013560cf1c1d97daab" name="lp_1" x="1204" y="168">
       <params>
-         <int32 name="value" value="60"/>
+         <frac32.u.map name="freq" value="36.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="9f05a910184d5ba1a2b974c295057d10160c4a10" uuid="a9f2dcd18043e2f47364e45cb8814f63c2a37c0d" name="vca_1" x="1288" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="c27566f972d15f25252f61b5cff014a3edce9706" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_1" x="1386" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="lfo/sine" sha="5c339d3aff31b4eab40d9ba60ce6c2b50461694e" uuid="e5c438cbae67386987340784098b7d8904e0ca21" name="saw_1" x="966" y="252">
+      <params>
+         <frac32.s.map name="pitch" value="33.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="60143a29e35f452025e9edaa2dec6e660ecb9c6e" uuid="7d5ef61c3bcd571ee6bbd8437ef3612125dfb225" name="*c_1" x="1064" y="252">
+      <params>
+         <frac32.u.map name="amp" value="47.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" name="play sequence" x="224" y="266"/>
+   <obj type="env/ad" sha="27b3ed2c63d43d64a78d406f20737f83110a3df7" uuid="255cb0cd67470c7498f9c33b820facd26aa629ce" name="ad_1" x="1204" y="266">
+      <params>
+         <frac32.s.map name="a" value="-58.0"/>
+         <frac32.s.map name="d" value="-17.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="logic/counter" sha="519c79f42a7c84352830b08e68696ecbf5d0bd52" uuid="7a141ba82230e54e5f5cd12da5dbe5a74ba854a5" name="counter_2" x="140" y="280">
+      <params>
+         <int32 name="maximum" value="16"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="sel/sel fb 16" sha="6f50fda64d42de1ad6530b4a833a42c03c18e444" uuid="f4aa3eb141915b6fc722e576dde344a226a022ac" name="sel_1" x="224" y="280">
+      <params>
+         <frac32.s.mapvsl name="b0" value="18.0"/>
+         <frac32.s.mapvsl name="b1" value="0.0"/>
+         <frac32.s.mapvsl name="b2" value="14.0"/>
+         <frac32.s.mapvsl name="b3" value="-4.0"/>
+         <frac32.s.mapvsl name="b4" value="9.0"/>
+         <frac32.s.mapvsl name="b5" value="-6.0"/>
+         <frac32.s.mapvsl name="b6" value="8.0"/>
+         <frac32.s.mapvsl name="b7" value="16.0"/>
+         <frac32.s.mapvsl name="b8" value="-7.0"/>
+         <frac32.s.mapvsl name="b9" value="5.0"/>
+         <frac32.s.mapvsl name="b10" value="-6.0"/>
+         <frac32.s.mapvsl name="b11" value="-7.0"/>
+         <frac32.s.mapvsl name="b12" value="-7.0"/>
+         <frac32.s.mapvsl name="b13" value="-9.0"/>
+         <frac32.s.mapvsl name="b14" value="7.0"/>
+         <frac32.s.mapvsl name="b15" value="15.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" name="set tonic of the scale" x="658" y="280"/>
+   <obj type="ctrl/i" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_1" x="658" y="294">
+      <params>
+         <int32 name="value" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" name="adjust offset to bring notes into range, and also set where scale starts" x="658" y="364"/>
+   <obj type="ctrl/i" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_2" x="658" y="378">
+      <params>
+         <int32 name="value" value="36"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" name="play random" x="224" y="504"/>
+   <obj type="rand/uniform i" sha="c7045bb3734e4fdb272c379df8d5e3df8c06a0a1" uuid="9b1f945f346af0165ed99b8e19136cdbf744e594" name="uniform_1" x="224" y="518">
+      <params>
+         <int32 name="max" value="28"/>
       </params>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source name="dial_2 out"/>
-         <dest name="note_1 note"/>
-      </net>
-      <net>
          <source name="note_1 note"/>
+         <dest name="sine_1 pitchm"/>
          <dest name="dial_1 in"/>
       </net>
       <net>
@@ -44,15 +137,75 @@
          <source name="i_2 out"/>
          <dest name="note_1 offset"/>
       </net>
+      <net>
+         <source name="ad_1 env"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="out_1 left"/>
+         <dest name="out_1 right"/>
+      </net>
+      <net>
+         <source name="square_1 wave"/>
+         <dest name="counter_1 trig"/>
+         <dest name="ad_1 trig"/>
+         <dest name="counter_2 trig"/>
+         <dest name="uniform_1 trig"/>
+      </net>
+      <net>
+         <source name="counter_2 o"/>
+         <dest name="sel_1 in"/>
+      </net>
+      <net>
+         <source name="mux_1 o"/>
+         <dest name="note_1 note"/>
+      </net>
+      <net>
+         <source name="sel_1 o"/>
+         <dest name="mux_1 i1"/>
+      </net>
+      <net>
+         <source name="uniform_1 v"/>
+         <dest name="mux_1 i2"/>
+      </net>
+      <net>
+         <source name="counter_1 o"/>
+         <dest name="mux_1 i0"/>
+      </net>
+      <net>
+         <source name="toggle_1 out"/>
+         <dest name="mux_1 s"/>
+      </net>
+      <net>
+         <source name="sine_1 wave"/>
+         <dest name="lp_1 in"/>
+      </net>
+      <net>
+         <source name="lp_1 out"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="lp_1 freqm"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
-   <notes><![CDATA[]]></notes>
+   <notes><![CDATA[note quantizer, takes note input and quantizes to the scale supplied, specified by marking which notes are on in the scale.
+
+because the scales will have less than the chromatic scales, the number of notes will be larger than the 127 midi notes allows, so we use an offset to select where we want the range to start. The offset also allows us to 'tune' which note we want the scale to start on.
+
+note: in this example the counter goes from note zero, so its quite high without an offset.]]></notes>
    <windowPos>
-      <x>845</x>
-      <y>478</y>
-      <width>1164</width>
-      <height>511</height>
+      <x>439</x>
+      <y>297</y>
+      <width>1519</width>
+      <height>871</height>
    </windowPos>
 </patch-1.0>

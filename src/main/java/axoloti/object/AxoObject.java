@@ -103,6 +103,7 @@ import displays.DisplayInt32Bar16;
 import displays.DisplayInt32Bar32;
 import displays.DisplayInt32HexLabel;
 import displays.DisplayInt32Label;
+import displays.DisplayNoteLabel;
 import displays.DisplayVScale;
 import java.awt.Point;
 import java.io.File;
@@ -183,7 +184,8 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = "int32.bar32", type = DisplayInt32Bar32.class, inline = true, required = false),
         @ElementList(entry = "vscale", type = DisplayVScale.class, inline = true, required = false),
         @ElementList(entry = "int8array128.vbar", type = DisplayFrac8S128VBar.class, inline = true, required = false),
-        @ElementList(entry = "uint8array128.vbar", type = DisplayFrac8U128VBar.class, inline = true, required = false)
+        @ElementList(entry = "uint8array128.vbar", type = DisplayFrac8U128VBar.class, inline = true, required = false),
+        @ElementList(entry = "note.label", type = DisplayNoteLabel.class, inline = true, required = false)
     })
     public ArrayList<Display> displays; // readouts
     @Path("params")

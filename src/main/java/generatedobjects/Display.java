@@ -44,6 +44,7 @@ import displays.DisplayInt32Bar16;
 import displays.DisplayInt32Bar32;
 import displays.DisplayInt32HexLabel;
 import displays.DisplayInt32Label;
+import displays.DisplayNoteLabel;
 import static generatedobjects.gentools.WriteAxoObject;
 import java.util.ArrayList;
 
@@ -82,6 +83,7 @@ public class Display extends gentools {
         WriteAxoObject(catName, CreateDisplayIBar64());
         WriteAxoObject(catName, CreateDisplayVU());
         WriteAxoObject(catName, CreateDisplayBool32());
+        WriteAxoObject(catName, CreateDisplayNote());
 
         {
             ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
@@ -651,6 +653,15 @@ public class Display extends gentools {
         return o;
     }
 
+    static AxoObject CreateDisplayNote() {
+        AxoObject o = new AxoObject("note", "display note");
+        o.sAuthor = "Mark Harris";
+        o.inlets.add(new InletFrac32Bipolar("in", "input"));
+        o.displays.add(new DisplayNoteLabel("v"));
+        o.sKRateCode = "%v%=%in%;\n";
+        return o;
+    }
+    
     static AxoObject CreateDisplayVU() {
         AxoObject o = new AxoObject("vu", "cheap vu meter display");
         o.inlets.add(new InletFrac32Buffer("in", "input"));

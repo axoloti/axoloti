@@ -41,7 +41,6 @@ import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
-import axoloti.utils.CharEscape;
 import axoloti.utils.Constants;
 import displays.DisplayInstance;
 import java.awt.Dimension;
@@ -100,6 +99,8 @@ public class Patch {
     public int presetNo = 0;
     boolean locked = false;
     private boolean dirty = false;
+    @Element(required = false)
+    private String helpPatch;
 
     public boolean presetUpdatePending = false;
 
@@ -1322,6 +1323,7 @@ public class Patch {
             ao.sAuthor = settings.getAuthor();
             ao.sLicense = settings.getLicense();
             ao.sDescription = notes;
+            ao.helpPatch = helpPatch;
         }
         return ao;
     }

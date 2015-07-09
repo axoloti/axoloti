@@ -1,0 +1,20 @@
+<objdefs>
+   <obj.normal id="note" uuid="ce3190ad98b73b468f22221f555b01feee03226a" sha="47a060e4a7fa766d1de9cf03c8aa236d79be3440">
+      <upgradeSha>41a8cef3d196863f7e9602a70eab672c9ff66f42</upgradeSha>
+      <sDescription>display note</sDescription>
+      <author>Mark Harris</author>
+      <license>BSD</license>
+      <helpPatch>note.axh</helpPatch>
+      <inlets>
+         <frac32.bipolar name="in" description="input"/>
+      </inlets>
+      <outlets/>
+      <displays>
+         <note.label name="v" noLabel="true"/>
+      </displays>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[disp_v=inlet_in;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

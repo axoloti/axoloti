@@ -159,4 +159,5 @@
       <MidiChannel>0</MidiChannel>
    </settings>
    <notes><![CDATA[]]></notes>
+   <helpPatch>chorus3.axh</helpPatch>
 </patch-1.0>
