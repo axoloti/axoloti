@@ -669,6 +669,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             public boolean accept(File file) {
                 if (file.getName().endsWith("axp")) {
                     return true;
+                } else if (file.isDirectory()) {
+                    return true;
                 }
                 return false;
             }
@@ -683,6 +685,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             public boolean accept(File file) {
                 if (file.getName().endsWith("axh")) {
                     return true;
+                } else if (file.isDirectory()) {
+                    return true;
                 }
                 return false;
             }
@@ -696,6 +700,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public boolean accept(File file) {
                 if (file.getName().endsWith("axs")) {
+                    return true;
+                } else if (file.isDirectory()) {
                     return true;
                 }
                 return false;
