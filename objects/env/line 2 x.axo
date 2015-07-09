@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="line 2 x" uuid="53ffb4c72fc878b069eb6fe6726d9eedc4686bd7" sha="2a504bac5bed019ec6ac518bf3d68f71f3a18a3c">
-      <upgradeSha>d58bd7c538d431fb06df28b2092391351aac3da4</upgradeSha>
+   <obj.normal id="line 2 x" uuid="53ffb4c72fc878b069eb6fe6726d9eedc4686bd7" sha="6a5c0fadc91698df478472303e09ee43f5419b65">
+      <upgradeSha>8a885cba62278febe2aed48273e9c80687747de1</upgradeSha>
       <sDescription>two piecewise linear ramps, extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -42,7 +42,7 @@ int32_t phase1;
 int32_t ntrig;
 ]]></code.declaration>
       <code.init><![CDATA[phase1 = 0;
-val = %v2%;
+val = 0;
 ntrig = 0;
 ]]></code.init>
       <code.krate><![CDATA[if ((inlet_trig > 0) && (!ntrig)) {
