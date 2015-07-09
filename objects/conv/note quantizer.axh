@@ -1,7 +1,7 @@
 <patch-1.0>
    <comment type="patch/comment" name="quantizing notes" x="14" y="14"/>
    <comment type="patch/comment" name="show note number" x="924" y="70"/>
-   <obj type="disp/dial b" sha="5d4fe09e04ac9d02b2f3224e493c9536fe25fa66" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" name="dial_1" x="924" y="84">
+   <obj type="disp/note" sha="47a060e4a7fa766d1de9cf03c8aa236d79be3440" uuid="ce3190ad98b73b468f22221f555b01feee03226a" name="dial_1" x="924" y="84">
       <params/>
       <attribs/>
    </obj>
@@ -126,8 +126,8 @@
    <nets>
       <net>
          <source name="note_1 note"/>
-         <dest name="dial_1 in"/>
          <dest name="sine_1 pitchm"/>
+         <dest name="dial_1 in"/>
       </net>
       <net>
          <source name="i_1 out"/>
@@ -203,8 +203,8 @@ because the scales will have less than the chromatic scales, the number of notes
 
 note: in this example the counter goes from note zero, so its quite high without an offset.]]></notes>
    <windowPos>
-      <x>433</x>
-      <y>303</y>
+      <x>439</x>
+      <y>297</y>
       <width>1519</width>
       <height>871</height>
    </windowPos>
