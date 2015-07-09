@@ -483,7 +483,7 @@ public class Env extends gentools {
                 + "int32_t phase1;\n"
                 + "int32_t ntrig;\n";
         o.sInitCode = "phase1 = 0;\n"
-                + "val = %v2%;\n"
+                + "val = 0;\n"
                 + "ntrig = 0;\n";
         o.sKRateCode = "if ((%trig% > 0) && (!ntrig)) {\n"
                 + "  time1 = 0;\n"
@@ -531,7 +531,7 @@ public class Env extends gentools {
                 + "int32_t phase1;\n"
                 + "int32_t ntrig;\n";
         o.sInitCode = "phase1 = 0;\n"
-                + "val = %v2%;\n"
+                + "val = 0;\n"
                 + "ntrig = 0;\n";
         o.sKRateCode = "if ((%trig% > 0) && (!ntrig)) {\n"
                 + "  time1 = 0;\n"
@@ -585,7 +585,7 @@ public class Env extends gentools {
                 + "int32_t phase1;\n"
                 + "int32_t ntrig;\n";
         o.sInitCode = "phase1 = 0;\n"
-                + "val = %v2%;\n"
+                + "val = 0;\n"
                 + "ntrig = 0;\n";
         o.sKRateCode = "if ((%trig% > 0) && (!ntrig)) {\n"
                 + "  time1 = 0;\n"
@@ -641,7 +641,7 @@ public class Env extends gentools {
                 + "int32_t phase1;\n"
                 + "int32_t ntrig;\n";
         o.sInitCode = "phase1 = 0;\n"
-                + "val = %v3%;\n"
+                + "val = 0;\n"
                 + "ntrig = 0;\n";
         o.sKRateCode = "if ((%trig% > 0) && (!ntrig)) {\n"
                 + "  time1 = 0;\n"
@@ -701,7 +701,7 @@ public class Env extends gentools {
                 + "int32_t phase1;\n"
                 + "int32_t ntrig;\n";
         o.sInitCode = "phase1 = 0;\n"
-                + "val = %v3%;\n"
+                + "val = 0;\n"
                 + "ntrig = 0;\n";
         o.sKRateCode = "if ((%trig% > 0) && (!ntrig)) {\n"
                 + "  time1 = 0;\n"
@@ -770,7 +770,7 @@ public class Env extends gentools {
                 + "int32_t phase1;\n"
                 + "int32_t ntrig;\n";
         o.sInitCode = "phase1 = 0;\n"
-                + "val = %v3%;\n"
+                + "val = 0;\n"
                 + "ntrig = 0;\n";
         o.sKRateCode = "if ((%trig% > 0) && (!ntrig)) {\n"
                 + "  time1 = 0;\n"
@@ -837,7 +837,7 @@ public class Env extends gentools {
                 + "int32_t phase1;\n"
                 + "int32_t ntrig;\n";
         o.sInitCode = "phase1 = 0;\n"
-                + "val = %v2%;\n"
+                + "val = 0;\n"
                 + "ntrig = 0;\n";
         o.sKRateCode = "if ((%trig% > 0) && (!ntrig)) {\n"
                 + "  time1 = 0;\n"
@@ -887,7 +887,7 @@ public class Env extends gentools {
                 + "int32_t phase1;\n"
                 + "int32_t ntrig;\n";
         o.sInitCode = "phase1 = 0;\n"
-                + "val = %v3%;\n"
+                + "val = 0;\n"
                 + "ntrig = 0;\n";
         o.sKRateCode = "if ((%trig% > 0) && (!ntrig)) {\n"
                 + "  time1 = 0;\n"
