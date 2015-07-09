@@ -75,4 +75,5 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <helpPatch>wah1.axh</helpPatch>
 </patch-1.0>

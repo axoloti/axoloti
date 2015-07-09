@@ -123,4 +123,5 @@
       <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
+   <helpPatch>flanger1.axh</helpPatch>
 </patch-1.0>
