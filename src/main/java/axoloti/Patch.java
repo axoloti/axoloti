@@ -332,27 +332,24 @@ public class Patch {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: already connected");
                 return null;
             } else if ((n1 != null) && (n2 == null)) {
-                disconnect(il);
-                Net n = new Net(this);
-                nets.add(n);
-                n.connectInlet(il);
-                n.connectOutlet(ol);
+                n1.connectOutlet(ol);
                 SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: replace inlet with new net");
-                return n;
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: outlet added");
+                return n1;
             } else if ((n1 == null) && (n2 != null)) {
                 n2.connectInlet(il);
                 SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: add additional outlet");
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: inlet added");
                 return n2;
             } else if ((n1 != null) && (n2 != null)) {
-                // inlet already has connect, and outlet has another
-                // replace 
-                disconnect(il);
-                n2.connectInlet(il);
-                SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: replace inlet with existing net");
-                return n2;
+                for (InletInstance i : n2.dest) {
+                    n1.connectInlet(i);
+                }
+                for (OutletInstance i : n2.source) {
+                    n1.connectOutlet(i);
+                }
+                delete(n2);
+                return n1;
             }
         } else {
             Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't add connection: locked");
@@ -361,12 +358,109 @@ public class Patch {
     }
 
     public Net AddConnection(OutletInstance il, OutletInstance ol) {
-        Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: cannot connect outlet to outlet");
+        if (!IsLocked()) {
+            if (il == ol) {
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: same outlet");
+                return null;
+            }
+            if (il.axoObj.patch != this) {
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: different patch");
+                return null;
+            }
+            if (ol.axoObj.patch != this) {
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: different patch");
+                return null;
+            }
+            Net n1, n2;
+            n1 = GetNet(il);
+            n2 = GetNet(ol);
+            if ((n1 == null) && (n2 == null)) {
+                Net n = new Net(this);
+                nets.add(n);
+                n.connectOutlet(il);
+                n.connectOutlet(ol);
+                SetDirty();
+                System.out.println("rp");
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: new net added");
+                return n;
+            } else if (n1 == n2) {
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: already connected");
+            } else if ((n1 != null) && (n2 == null)) {
+                n1.connectOutlet(ol);
+                SetDirty();
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: outlet added");
+                return n1;
+            } else if ((n1 == null) && (n2 != null)) {
+                n2.connectOutlet(il);
+                SetDirty();
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: outlet added");
+                return n2;
+            } else if ((n1 != null) && (n2 != null)) {
+                for (InletInstance i : n2.dest) {
+                    n1.connectInlet(i);
+                }
+                for (OutletInstance i : n2.source) {
+                    n1.connectOutlet(i);
+                }
+                delete(n2);
+                return n1;
+            }
+        } else {
+            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't add connection: locked!");
+        }
         return null;
     }
 
     public Net AddConnection(InletInstance il, InletInstance ol) {
-        Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: cannot connect inlet to inlet");
+        if (!IsLocked()) {
+            if (il == ol) {
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: same inlet");
+                return null;
+            }
+            if (il.axoObj.patch != this) {
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: different patch");
+                return null;
+            }
+            if (ol.axoObj.patch != this) {
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: different patch");
+                return null;
+            }
+            Net n1, n2;
+            n1 = GetNet(il);
+            n2 = GetNet(ol);
+            if ((n1 == null) && (n2 == null)) {
+                Net n = new Net(this);
+                nets.add(n);
+                n.connectInlet(il);
+                n.connectInlet(ol);
+                SetDirty();
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: new net added");
+                return n;
+            } else if (n1 == n2) {
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: already connected");
+            } else if ((n1 != null) && (n2 == null)) {
+                n1.connectInlet(ol);
+                SetDirty();
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: inlet added");
+                return n1;
+            } else if ((n1 == null) && (n2 != null)) {
+                n2.connectInlet(il);
+                SetDirty();
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: inlet added");
+                return n2;
+            } else if ((n1 != null) && (n2 != null)) {
+                for (InletInstance i : n2.dest) {
+                    n1.connectInlet(i);
+                }
+                for (OutletInstance i : n2.source) {
+                    n1.connectOutlet(i);
+                }
+                delete(n2);
+                return n1;
+            }
+        } else {
+            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't add connection: locked!");
+        }
         return null;
     }
 
