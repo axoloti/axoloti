@@ -37,6 +37,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -90,7 +92,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             String pPath = patch1.getFileNamePath();
             String oPath = type.sPath;
 
-            if (oPath.endsWith(".axp") || oPath.endsWith(".axo") || oPath.endsWith(".axs") ) {
+            if (oPath.endsWith(".axp") || oPath.endsWith(".axo") || oPath.endsWith(".axs")) {
                 oPath = oPath.substring(0, oPath.length() - 4);
             }
             pPath = pPath.replaceAll("\\\\", "/");
@@ -246,7 +248,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                         }
                     }
                     if (me.getClickCount() == 2) {
-                        ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceAbstract.this.getLocation(), AxoObjectInstanceAbstract.this,null);
+                        ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceAbstract.this.getLocation(), AxoObjectInstanceAbstract.this, null);
                     }
                 }
             }
@@ -398,6 +400,25 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             public void focusGained(FocusEvent e) {
             }
         });
+        InstanceNameTF.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent ke) {
+            }
+
+            public void keyReleased(KeyEvent ke) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent ke) {
+                if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String s = InstanceNameTF.getText();
+                    setInstanceName(s);
+                    getParent().remove(InstanceNameTF);
+                    patch.repaint();
+                }
+            }
+        });
+
         getParent().add(InstanceNameTF, 0);
         InstanceNameTF.setLocation(getLocation().x, getLocation().y + InstanceLabel.getLocation().y);
         InstanceNameTF.setSize(getWidth(), 15);
