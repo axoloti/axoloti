@@ -194,6 +194,13 @@
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
                 <Component class="javax.swing.JTextPane" name="jTextPane1">
+                  <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
+                    <Property name="focusCycleRoot" type="boolean" value="false"/>
+                    <Property name="focusTraversalKeysEnabled" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
+                    <Property name="requestFocusEnabled" type="boolean" value="false"/>
+                  </Properties>
                 </Component>
               </SubComponents>
             </Container>
@@ -203,6 +210,8 @@
                   <Color blue="99" green="99" red="99" type="rgb"/>
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
+                <Property name="focusTraversalKeysEnabled" type="boolean" value="false"/>
+                <Property name="focusable" type="boolean" value="false"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">

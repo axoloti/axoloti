@@ -89,8 +89,15 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    Accept();
-                    e.consume();
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree1.getLastSelectedPathComponent();
+                    if (node != null) {
+                        if (node.isLeaf()) {
+                            Accept();
+                            e.consume();
+                        } else {
+                            jTree1.expandPath(jTree1.getLeadSelectionPath());
+                        }
+                    }
                 } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     Cancel();
                     e.consume();
@@ -230,7 +237,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     int patchLocX;
     int patchLocY;
 
-    void Launch(Point patchLoc, AxoObjectInstanceAbstract o) {
+    void Launch(Point patchLoc, AxoObjectInstanceAbstract o,String searchString) {
         accepted = false;
         patchLocX = patchLoc.x;
         patchLocY = patchLoc.y;
@@ -248,6 +255,10 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             }
             jTextFieldObjName.setText(o.typeName);
         }
+        else if (searchString != null) {
+            Search(searchString);
+            jTextFieldObjName.setText(searchString);
+        }    
         jTextFieldObjName.grabFocus();
         jTextFieldObjName.setSelectionStart(0);
         jTextFieldObjName.setSelectionEnd(jTextFieldObjName.getText().length());
@@ -487,12 +498,20 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane4.setMinimumSize(new java.awt.Dimension(6, 63));
+
+        jTextPane1.setEditable(false);
+        jTextPane1.setFocusCycleRoot(false);
+        jTextPane1.setFocusTraversalKeysEnabled(false);
+        jTextPane1.setFocusable(false);
+        jTextPane1.setRequestFocusEnabled(false);
         jScrollPane4.setViewportView(jTextPane1);
 
         jSplitPane2.setTopComponent(jScrollPane4);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
         jPanel1.setEnabled(false);
+        jPanel1.setFocusTraversalKeysEnabled(false);
+        jPanel1.setFocusable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
