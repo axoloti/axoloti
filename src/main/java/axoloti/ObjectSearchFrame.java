@@ -51,7 +51,8 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form ObjectSearchFrame
-     * @param p parent 
+     *
+     * @param p parent
      */
     public ObjectSearchFrame(PatchGUI p) {
         initComponents();
@@ -237,7 +238,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     int patchLocX;
     int patchLocY;
 
-    void Launch(Point patchLoc, AxoObjectInstanceAbstract o,String searchString) {
+    void Launch(Point patchLoc, AxoObjectInstanceAbstract o, String searchString) {
         accepted = false;
         patchLocX = patchLoc.x;
         patchLocY = patchLoc.y;
@@ -254,11 +255,10 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 ExpandJTreeToEl(oa);
             }
             jTextFieldObjName.setText(o.typeName);
-        }
-        else if (searchString != null) {
+        } else if (searchString != null) {
             Search(searchString);
             jTextFieldObjName.setText(searchString);
-        }    
+        }
         jTextFieldObjName.grabFocus();
         jTextFieldObjName.setSelectionStart(0);
         jTextFieldObjName.setSelectionEnd(jTextFieldObjName.getText().length());
@@ -350,7 +350,14 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 }
             }
             for (AxoObjectAbstract o : MainFrame.axoObjects.ObjectList) {
-                if (o.id.contains(s) | o.sDescription.contains(s)) {
+                if (o.id.contains(s)) {
+                    if (!listData.contains(o)) {
+                        listData.add(o);
+                    }
+                }
+            }
+            for (AxoObjectAbstract o : MainFrame.axoObjects.ObjectList) {
+                if (o.sDescription.contains(s)) {
                     if (!listData.contains(o)) {
                         listData.add(o);
                     }
