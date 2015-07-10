@@ -39,8 +39,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -67,17 +65,22 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
-
-
 /**
  *
  * @author Johannes Taelman
  */
 @Root(name = "patch-1.0")
 public class PatchGUI extends Patch {
+
+    // shortcut patch names
     final static String patchComment = "patch/comment";
     final static String patchInlet = "patch/inlet";
     final static String patchOutlet = "patch/outlet";
+    final static String patchAudio = "audio/";
+    final static String patchAudioOut = "audio/out stereo";
+    final static String patchMidi = "midi";
+    final static String patchMidiKey = "midi/in/keyb";
+    final static String patchDisplay = "disp/";
 
     JLayeredPane Layers = new JLayeredPane();
     JPanel ObjectLayer = new JPanel();
@@ -260,7 +263,7 @@ public class PatchGUI extends Patch {
                     Point p = Layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        ShowClassSelector(p, null,null);
+                        ShowClassSelector(p, null, null);
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && (!ke.isControlDown()) && (!ke.isMetaDown()))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && (ke.isControlDown()))) {
@@ -268,16 +271,42 @@ public class PatchGUI extends Patch {
                     ao.addInstanceNameEditor();
                     ke.consume();
                 } else if ((ke.getKeyCode() == KeyEvent.VK_I) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
-                        Point p = Layers.getMousePosition();
+                    Point p = Layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        ShowClassSelector(p, null,patchInlet);
+                        ShowClassSelector(p, null, patchInlet);
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_O) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
-                        Point p = Layers.getMousePosition();
+                    Point p = Layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        ShowClassSelector(p, null,patchOutlet);
+                        ShowClassSelector(p, null, patchOutlet);
+                    }
+                } else if ((ke.getKeyCode() == KeyEvent.VK_D) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                    Point p = Layers.getMousePosition();
+                    ke.consume();
+                    if (p != null) {
+                        ShowClassSelector(p, null, patchDisplay);
+                    }
+                } else if ((ke.getKeyCode() == KeyEvent.VK_M) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                    Point p = Layers.getMousePosition();
+                    ke.consume();
+                    if (p != null) {
+                        if (ke.isShiftDown()) {
+                            ShowClassSelector(p, null, patchMidiKey);
+                        } else {
+                            ShowClassSelector(p, null, patchMidi);
+                        }
+                    }
+                } else if ((ke.getKeyCode() == KeyEvent.VK_A) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                    Point p = Layers.getMousePosition();
+                    ke.consume();
+                    if (p != null) {
+                        if (ke.isShiftDown()) {
+                            ShowClassSelector(p, null, patchAudioOut);
+                        } else {
+                            ShowClassSelector(p, null, patchAudio);
+                        }
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
                     deleteSelectedAxoObjInstances();
@@ -310,7 +339,7 @@ public class PatchGUI extends Patch {
                         o.SetSelected(false);
                     }
                     if (me.getClickCount() == 2) {
-                        ShowClassSelector(me.getPoint(), null,null);
+                        ShowClassSelector(me.getPoint(), null, null);
                         me.consume();
                     } else {
                         me.consume();
@@ -595,7 +624,7 @@ public class PatchGUI extends Patch {
         if (osf == null) {
             osf = new ObjectSearchFrame(this);
         }
-        osf.Launch(p, o,searchString);
+        osf.Launch(p, o, searchString);
     }
 
     void SelectAll() {
@@ -851,23 +880,27 @@ public class PatchGUI extends Patch {
     void SetDSPLoad(int pct) {
         patchframe.ShowDSPLoad(pct);
     }
-    
+
     Dimension GetInitialSize() {
         int mx = 100; // min size
         int my = 100;
         for (AxoObjectInstanceAbstract i : objectinstances) {
-            
-            Dimension s=i.getPreferredSize();
+
+            Dimension s = i.getPreferredSize();
 
             int ox = i.getX() + (int) s.getWidth();
             int oy = i.getY() + (int) s.getHeight();
 
-            if (ox > mx) mx = ox;
-            if (oy > my) my = oy;
+            if (ox > mx) {
+                mx = ox;
+            }
+            if (oy > my) {
+                my = oy;
+            }
         }
         // adding more, as getPreferredSize is not returning true dimension of 
         // object
-        return new Dimension(mx+300,my+300);
+        return new Dimension(mx + 300, my + 300);
     }
 
     @Override
