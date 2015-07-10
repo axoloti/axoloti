@@ -566,56 +566,6 @@ public class Io extends gentools {
                 + "ADAU1961_WriteRegister(0x4024,(%headphones%<<2)+3);\n";
         return o;
     }
-    /*
-
-     static AxoObject CreateADCTilde1() {
-     AxoObject o = new AxoObject("adc~1", "Audio input, left channel (or mono)");
-     o.displays.add(new DisplayFrac32VU("vu"));
-     o.outlets.add(new OutletFrac32Buffer("wave", "Left channel"));
-     o.sKRateCode = "int j;\n"
-     + "for(j=0;j<BUFSIZE;j++){\n"
-     + "   %wave%[j] = inbuf[j*2]<<12;\n"
-     + "}\n"
-     + "%vu%=%wave%[0];\n";
-     return o;
-     }
-
-     static AxoObject CreateADCTilde2() {
-     AxoObject o = new AxoObject("adc~2", "Audio input, right channel");
-     o.displays.add(new DisplayFrac32VU("vu"));
-     o.outlets.add(new OutletFrac32Buffer("wave", "Right channel"));
-     o.sKRateCode = "int j;\n"
-     + "for(j=0;j<BUFSIZE;j++){\n"
-     + "   %wave%[j] = inbuf[j*2+1]<<12;\n"
-     + "}\n"
-     + "%vu%=%wave%[0];\n";
-     return o;
-     }
-
-     static AxoObject CreateDACTilde1() {
-     AxoObject o = new AxoObject("dac~1", "Audio output, left channel (or mono)");
-     o.inlets.add(new InletFrac32Buffer("wave", "Left channel"));
-     o.displays.add(new DisplayFrac32VU("vu"));
-     o.sKRateCode = "int j;\n"
-     + "for(j=0;j<BUFSIZE;j++){\n"
-     + "   outbuf[j*2] = __SSAT(%wave%[j],28)>>12;\n"
-     + "}\n"
-     + "%vu%=%wave%[0];\n";
-     return o;
-     }
-
-     static AxoObject CreateDACTilde2() {
-     AxoObject o = new AxoObject("dac~2", "Audio output, right channel");
-     o.inlets.add(new InletFrac32Buffer("wave", "Right channel"));
-     o.displays.add(new DisplayFrac32VU("vu"));
-     o.sKRateCode = "int j;\n"
-     + "for(j=0;j<BUFSIZE;j++){\n"
-     + "   outbuf[j*2+1] = __SSAT(%wave%[j],28)>>12;\n"
-     + "}\n"
-     + "%vu%=%wave%[0];\n";
-     return o;
-     }
-     */
 
     static AxoObject SerialBegin() {
         AxoObject o = new AxoObject("config", "Configures a serial (uart) interface on pins PA2 (TX) and PA3 (RX), using the SerialDriver API.");
