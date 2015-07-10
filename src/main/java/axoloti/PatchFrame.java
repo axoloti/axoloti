@@ -105,6 +105,7 @@ public class PatchFrame extends javax.swing.JFrame {
         }
         jMenuPreset.setVisible(false);
         jMenuItemAdjScroll.setVisible(false);
+        patch.Layers.requestFocus();
 
         //        jScrollPane1.setAutoscrolls(true);
         /*
@@ -431,7 +432,8 @@ jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuEdit.add(jMenuItemSelectAll);
 
-    jMenuItemAddObj.setText("Add Object...");
+    jMenuItemAddObj.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, 0));
+    jMenuItemAddObj.setText("New Object...");
     jMenuItemAddObj.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuItemAddObjActionPerformed(evt);
@@ -598,13 +600,13 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     jMenuWindow.setMnemonic('W');
     jMenuWindow.setText("Window");
     jMenuWindow.addMenuListener(new javax.swing.event.MenuListener() {
-        public void menuCanceled(javax.swing.event.MenuEvent evt) {
+        public void menuSelected(javax.swing.event.MenuEvent evt) {
+            jMenuWindowMenuSelected(evt);
         }
         public void menuDeselected(javax.swing.event.MenuEvent evt) {
             jMenuWindowMenuDeselected(evt);
         }
-        public void menuSelected(javax.swing.event.MenuEvent evt) {
-            jMenuWindowMenuSelected(evt);
+        public void menuCanceled(javax.swing.event.MenuEvent evt) {
         }
     });
     jMenuBar1.add(jMenuWindow);
@@ -911,7 +913,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItemAddObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddObjActionPerformed
-        patch.ShowClassSelector(new Point(20, 20), null);
+        patch.ShowClassSelector(new Point(20, 20), null,null);
     }//GEN-LAST:event_jMenuItemAddObjActionPerformed
 
     private void jMenuCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCloseActionPerformed

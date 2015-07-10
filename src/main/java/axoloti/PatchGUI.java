@@ -67,12 +67,17 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
+
+
 /**
  *
  * @author Johannes Taelman
  */
 @Root(name = "patch-1.0")
 public class PatchGUI extends Patch {
+    final static String patchComment = "patch/comment";
+    final static String patchInlet = "patch/inlet";
+    final static String patchOutlet = "patch/outlet";
 
     JLayeredPane Layers = new JLayeredPane();
     JPanel ObjectLayer = new JPanel();
@@ -253,15 +258,27 @@ public class PatchGUI extends Patch {
                         || ((ke.getKeyCode() == KeyEvent.VK_N) && (!ke.isControlDown()) && (!ke.isMetaDown()))
                         || ((ke.getKeyCode() == KeyEvent.VK_1) && (ke.isControlDown()))) {
                     Point p = Layers.getMousePosition();
+                    ke.consume();
                     if (p != null) {
-                        ke.consume();
-                        ShowClassSelector(p, null);
+                        ShowClassSelector(p, null,null);
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && (!ke.isControlDown()) && (!ke.isMetaDown()))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && (ke.isControlDown()))) {
-                    AxoObjectInstanceAbstract ao = AddObjectInstance(MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/comment", null).get(0), Layers.getMousePosition());
+                    AxoObjectInstanceAbstract ao = AddObjectInstance(MainFrame.mainframe.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
                     ao.addInstanceNameEditor();
                     ke.consume();
+                } else if ((ke.getKeyCode() == KeyEvent.VK_I) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                        Point p = Layers.getMousePosition();
+                    ke.consume();
+                    if (p != null) {
+                        ShowClassSelector(p, null,patchInlet);
+                    }
+                } else if ((ke.getKeyCode() == KeyEvent.VK_O) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                        Point p = Layers.getMousePosition();
+                    ke.consume();
+                    if (p != null) {
+                        ShowClassSelector(p, null,patchOutlet);
+                    }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
                     deleteSelectedAxoObjInstances();
                     ke.consume();
@@ -293,7 +310,7 @@ public class PatchGUI extends Patch {
                         o.SetSelected(false);
                     }
                     if (me.getClickCount() == 2) {
-                        ShowClassSelector(me.getPoint(), null);
+                        ShowClassSelector(me.getPoint(), null,null);
                         me.consume();
                     } else {
                         me.consume();
@@ -571,14 +588,14 @@ public class PatchGUI extends Patch {
     }
     public ObjectSearchFrame osf;
 
-    public void ShowClassSelector(Point p, AxoObjectInstanceAbstract o) {
+    public void ShowClassSelector(Point p, AxoObjectInstanceAbstract o, String searchString) {
         if (IsLocked()) {
             return;
         }
         if (osf == null) {
             osf = new ObjectSearchFrame(this);
         }
-        osf.Launch(p, o);
+        osf.Launch(p, o,searchString);
     }
 
     void SelectAll() {
