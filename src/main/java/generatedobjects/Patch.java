@@ -17,8 +17,8 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeInt32;
 import axoloti.attributedefinition.AxoAttributeObjRef;
+import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletBool32Rising;
@@ -186,11 +186,10 @@ public class Patch extends gentools {
 
     static AxoObject modsource_cc() {
         AxoObject o = new AxoObject("modsource_cc", "midi cc modulation source");
-        o.attributes.add(new AxoAttributeInt32("MidiCC", 0, 127, 0));
+        o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
         o.SetProvidesModulationSource();
-        //o.sInstanceData = "PExModulationTargets_t ;\n";
-        o.sMidiCode = "        if ((status == MIDI_CONTROL_CHANGE + attr_midichannel)&&(data1 == %MidiCC%)) {\n"
-                + "            PExModulationSourceChange(&PExModulationSources[MODULATOR_attr_name],data2<<20);\n"
+        o.sMidiCode = "        if ((status == MIDI_CONTROL_CHANGE + attr_midichannel)&&(data1 == %cc%)) {\n"
+                + "            PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name][0],NMODULATIONTARGETS,data2<<20);\n"
                 + "        }\n";
         return o;
     }
