@@ -41,11 +41,8 @@
 #include "midi_usb.h"
 #include "watchdog.h"
 
-/* Virtual serial port over USB.*/
-//SerialUSBDriver SDU1;
 
-//#define SDU1 BDU1
-#define DEBUG_SERIAL 1
+//#define DEBUG_SERIAL 1
 
 void BootLoaderInit(void);
 
