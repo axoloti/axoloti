@@ -58,7 +58,7 @@ public class PatchFrame extends javax.swing.JFrame {
      * Creates new form PatchFrame
      */
     PatchGUI patch;
-
+    
     public PatchFrame(PatchGUI patch, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
@@ -70,22 +70,22 @@ public class PatchFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(patch.Layers);
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.ygrid / 2);
         jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.xgrid / 2);
-
+        
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuEdit.add(menuItem);
-
+        
         menuItem = new JMenuItem(new DefaultEditorKit.CopyAction());
         menuItem.setText("Copy");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuEdit.add(menuItem);
-
+        
         menuItem = new JMenuItem(new DefaultEditorKit.PasteAction());
         menuItem.setText("Paste");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuEdit.add(menuItem);
-
+        
         UpdateConnectStatus();
         if (patch.getWindowPos() != null) {
             setBounds(patch.getWindowPos());
@@ -93,7 +93,7 @@ public class PatchFrame extends javax.swing.JFrame {
             Dimension d = patch.GetInitialSize();
             setSize(d);
         }
-
+        
         if (!MainFrame.prefs.getExpertMode()) {
             jSeparator3.setVisible(false);
             jMenuItemLock.setVisible(false);
@@ -117,7 +117,7 @@ public class PatchFrame extends javax.swing.JFrame {
          patch.invalidate();*/
     }
     QCmdProcessor qcmdprocessor;
-
+    
     public void UpdateConnectStatus() {
         if (qcmdprocessor.serialconnection.isConnected()) {
             ShowConnect();
@@ -125,7 +125,7 @@ public class PatchFrame extends javax.swing.JFrame {
             ShowDisconnect();
         }
     }
-
+    
     public void SetLive(boolean b) {
         if (b) {
             jCheckBoxLive.setSelected(true);
@@ -139,7 +139,7 @@ public class PatchFrame extends javax.swing.JFrame {
             jCheckBoxMenuItemLive.setEnabled(true);
         }
     }
-
+    
     public void ShowDisconnect() {
         if (patch.IsLocked()) {
             patch.Unlock();
@@ -149,7 +149,7 @@ public class PatchFrame extends javax.swing.JFrame {
         jCheckBoxMenuItemLive.setEnabled(false);
         jCheckBoxMenuItemLive.setSelected(false);
     }
-
+    
     public void ShowConnect() {
         patch.Unlock();
         jCheckBoxLive.setSelected(false);
@@ -157,25 +157,25 @@ public class PatchFrame extends javax.swing.JFrame {
         jCheckBoxMenuItemLive.setSelected(false);
         jCheckBoxMenuItemLive.setEnabled(true);
     }
-
+    
     public void ShowCompileFail() {
         jCheckBoxLive.setSelected(false);
         jCheckBoxLive.setEnabled(true);
     }
-
+    
     public void SetProgressValue(int i) {
         jProgressBar1.setValue(i);
     }
-
+    
     public void SetProgressMessage(String s) {
         jLabel2.setText(s);
     }
-
+    
     public void Close() {
         patch.GetMainFrame().patches.remove(patch);
         dispose();
     }
-
+    
     public boolean AskClose() {
         if (patch.isDirty()) {
             Object[] options = {"Save",
@@ -640,8 +640,11 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     private void jCheckBoxLiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxLiveActionPerformed
         if (jCheckBoxLive.isSelected()) {
-            jCheckBoxLive.setEnabled(false);
-            patch.GoLive();
+            if (GoLive()) {
+                jCheckBoxLive.setEnabled(false);
+            } else {
+                jCheckBoxLive.setSelected(false);
+            }
         } else {
             qcmdprocessor.AppendToQueue(new QCmdStop());
             patch.Unlock();
@@ -676,7 +679,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                 }
                 return false;
             }
-
+            
             @Override
             public String getDescription() {
                 return "Axoloti Patch";
@@ -692,13 +695,13 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                 }
                 return false;
             }
-
+            
             @Override
             public String getDescription() {
                 return "Axoloti Help";
             }
         };
-        FileFilter axs =  new FileFilter() {
+        FileFilter axs = new FileFilter() {
             @Override
             public boolean accept(File file) {
                 if (file.getName().endsWith("axs")) {
@@ -708,7 +711,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                 }
                 return false;
             }
-
+            
             @Override
             public String getDescription() {
                 return "Axoloti Subpatch";
@@ -718,22 +721,26 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         fc.addChoosableFileFilter(axs);
         fc.addChoosableFileFilter(axh);
         String fn = patch.getFileNamePath();
-        if(fn==null) fn = "untitled";
+        if (fn == null) {
+            fn = "untitled";
+        }
         File f = new File(fn);
         fc.setSelectedFile(f);
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File fileToBeSaved = fc.getSelectedFile();
-            if (! ( fileToBeSaved.getAbsolutePath().endsWith(".axp") ||
-                    fileToBeSaved.getAbsolutePath().endsWith(".axh") ||
-                    fileToBeSaved.getAbsolutePath().endsWith(".axs")
-                    )
-                    ) {
+            if (!(fileToBeSaved.getAbsolutePath().endsWith(".axp")
+                    || fileToBeSaved.getAbsolutePath().endsWith(".axh")
+                    || fileToBeSaved.getAbsolutePath().endsWith(".axs"))) {
                 
-                String ext= ".axp";
-                if(fc.getFileFilter()==axp) ext = ".axp";
-                else if(fc.getFileFilter()==axs) ext = ".axs";
-                else if(fc.getFileFilter()==axh) ext = ".axh";
+                String ext = ".axp";
+                if (fc.getFileFilter() == axp) {
+                    ext = ".axp";
+                } else if (fc.getFileFilter() == axs) {
+                    ext = ".axs";
+                } else if (fc.getFileFilter() == axh) {
+                    ext = ".axh";
+                }
                 
                 fileToBeSaved = new File(fc.getSelectedFile() + ext);
             }
@@ -755,8 +762,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                     case JOptionPane.NO_OPTION:
                         return;
                 }
-            }            
-
+            }
+            
             patch.setFileNamePath(fileToBeSaved.getPath());
             MainFrame.prefs.setCurrentFileDirectory(fileToBeSaved.getPath());
             patch.save(fileToBeSaved);
@@ -862,8 +869,12 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     private void jCheckBoxMenuItemLiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemLiveActionPerformed
         if (jCheckBoxMenuItemLive.isSelected()) {
-            jCheckBoxMenuItemLive.setEnabled(false);
-            patch.GoLive();
+            if (GoLive()) {
+                jCheckBoxMenuItemLive.setEnabled(false);
+            } else {
+                jCheckBoxMenuItemLive.setSelected(false);
+                
+            }
         } else {
             qcmdprocessor.AppendToQueue(new QCmdStop());
             patch.Unlock();
@@ -913,12 +924,37 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItemAddObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddObjActionPerformed
-        patch.ShowClassSelector(new Point(20, 20), null,null);
+        patch.ShowClassSelector(new Point(20, 20), null, null);
     }//GEN-LAST:event_jMenuItemAddObjActionPerformed
 
     private void jMenuCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCloseActionPerformed
         AskClose();
     }//GEN-LAST:event_jMenuCloseActionPerformed
+    
+    private boolean GoLive() {
+        
+        if (patch.getFileNamePath().endsWith(".axs")) {
+            Object[] options = {"Yes",
+                "No"};
+            
+            int n = JOptionPane.showOptionDialog(this,
+                    "This is a subpatch intended to be used by a main patch and possibly has no output. \nDo you still want to take it live?",
+                    "Axoloti asks:",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+            switch (n) {
+                case JOptionPane.NO_OPTION:
+                    return false;
+                case JOptionPane.YES_OPTION:
+                    ; // fall thru
+            }
+        }
+        patch.GoLive();
+        return true;
+    }
 
     /* write to sdcard...
      */
