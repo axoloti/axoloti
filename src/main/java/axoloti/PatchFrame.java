@@ -105,6 +105,7 @@ public class PatchFrame extends javax.swing.JFrame {
         }
         jMenuPreset.setVisible(false);
         jMenuItemAdjScroll.setVisible(false);
+        patch.Layers.requestFocus();
 
         //        jScrollPane1.setAutoscrolls(true);
         /*
