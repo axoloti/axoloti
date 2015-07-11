@@ -194,13 +194,13 @@ public class InletInstance extends JPanel {
                             n1.setSelected(false);
                             n1.repaint();
                         }
-//                    } else if ((il = axoObj.patch.getInletByReference(s)) != null) {
-//                        Net n1 = axoObj.patch.AddConnection(InletInstance.this, il);
-//                        axoObj.patch.PromoteOverloading();
-//                        if (n1 != null) {
-//                            n1.setSelected(false);
-//                            n1.repaint();
-//                        }
+                    } else if ((il = axoObj.patch.getInletByReference(s)) != null) {
+                        Net n1 = axoObj.patch.AddConnection(InletInstance.this, il);
+                        axoObj.patch.PromoteOverloading();
+                        if (n1 != null) {
+                            n1.setSelected(false);
+                            n1.repaint();
+                        }
                     } else {
                         System.out.println("spilled on inlet: " + s);
                     }

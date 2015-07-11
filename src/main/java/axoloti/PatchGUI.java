@@ -573,12 +573,12 @@ public class PatchGUI extends Patch {
                         nets.add(n);
                         NetLayer.add(n);
                     } else if (connectedInlet != null) {
-//                        for (InletInstance o : n.dest) {
-//                            InletInstance o2 = getInletByReference(o.name);
-//                            if ((o2 != null) && (o2 != connectedInlet)) {
-//                                AddConnection(connectedInlet, o2);
-//                            }
-//                        }
+                        for (InletInstance o : n.dest) {
+                            InletInstance o2 = getInletByReference(o.name);
+                            if ((o2 != null) && (o2 != connectedInlet)) {
+                                AddConnection(connectedInlet, o2);
+                            }
+                        }
                         for (OutletInstance o : n.source) {
                             OutletInstance o2 = getOutletByReference(o.name);
                             if (o2 != null) {
@@ -766,6 +766,14 @@ public class PatchGUI extends Patch {
         return n;
     }
 
+    @Override
+    public Net AddConnection(InletInstance il, InletInstance ol) {
+        Net n = super.AddConnection(il, ol);
+        if (n != null) {
+            NetLayer.add(n);
+        }
+        return n;
+    }
 
 
     @Override
