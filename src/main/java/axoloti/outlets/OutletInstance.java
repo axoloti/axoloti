@@ -25,7 +25,6 @@ import axoloti.datatypes.DataType;
 import axoloti.inlets.InletInstance;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.utils.CharEscape;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
 import java.awt.Component;
@@ -214,14 +213,15 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
                     String s = (String) t.getTransferData(DataFlavor.stringFlavor);
                     OutletInstance ol;
                     InletInstance il;
-                    if ((ol = axoObj.patch.getOutletByReference(s)) != null) {
-                        Net n = axoObj.patch.AddConnection(OutletInstance.this, ol);
-                        axoObj.patch.PromoteOverloading();
-                        if (n != null) {
-                            n.setSelected(false);
-                            n.repaint();
-                        }
-                    } else if ((il = axoObj.patch.getInletByReference(s)) != null) {
+//                    if ((ol = axoObj.patch.getOutletByReference(s)) != null) {
+//                        Net n = axoObj.patch.AddConnection(OutletInstance.this, ol);
+//                        axoObj.patch.PromoteOverloading();
+//                        if (n != null) {
+//                            n.setSelected(false);
+//                            n.repaint();
+//                        }
+//                    } else 
+                    if ((il = axoObj.patch.getInletByReference(s)) != null) {
                         Net n = axoObj.patch.AddConnection(il, OutletInstance.this);
                         axoObj.patch.PromoteOverloading();
                         if (n != null) {

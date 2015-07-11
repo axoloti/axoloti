@@ -24,7 +24,6 @@ import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.outlets.OutletInstance;
-import axoloti.utils.CharEscape;
 import components.JackInputComponent;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
@@ -195,13 +194,13 @@ public class InletInstance extends JPanel {
                             n1.setSelected(false);
                             n1.repaint();
                         }
-                    } else if ((il = axoObj.patch.getInletByReference(s)) != null) {
-                        Net n1 = axoObj.patch.AddConnection(InletInstance.this, il);
-                        axoObj.patch.PromoteOverloading();
-                        if (n1 != null) {
-                            n1.setSelected(false);
-                            n1.repaint();
-                        }
+//                    } else if ((il = axoObj.patch.getInletByReference(s)) != null) {
+//                        Net n1 = axoObj.patch.AddConnection(InletInstance.this, il);
+//                        axoObj.patch.PromoteOverloading();
+//                        if (n1 != null) {
+//                            n1.setSelected(false);
+//                            n1.repaint();
+//                        }
                     } else {
                         System.out.println("spilled on inlet: " + s);
                     }
