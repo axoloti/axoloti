@@ -360,16 +360,6 @@ public class Patch {
         return null;
     }
 
-    public Net AddConnection(OutletInstance il, OutletInstance ol) {
-        Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: cannot connect outlet to outlet");
-        return null;
-    }
-
-    public Net AddConnection(InletInstance il, InletInstance ol) {
-        Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: cannot connect inlet to inlet");
-        return null;
-    }
-
     public Net disconnect(OutletInstance oi) {
         if (!IsLocked()) {
             Net n = GetNet(oi);
@@ -1964,13 +1954,26 @@ public class Patch {
         for (OutletInstance ol : newObj.GetOutletInstances()) {
             OutletInstance ol1 = outlets.get(ol.GetLabel());
             if (ol1 != null) {
-                AddConnection(ol, ol1);
+                Net n1 = GetNet(ol1);
+                if (n1 != null && n1.dest != null) {
+                    ArrayList<InletInstance> dests = new ArrayList<InletInstance>(n1.dest);
+                    for (InletInstance i : dests) {
+                        AddConnection(i, ol);
+                    }
+                }
             }
         }
+
         for (InletInstance il : newObj.GetInletInstances()) {
             InletInstance il1 = inlets.get(il.GetLabel());
             if (il1 != null) {
-                AddConnection(il, il1);
+                Net n1 = GetNet(il1);
+                if (n1 != null && n1.source != null) {
+                    ArrayList<OutletInstance> srcs = new ArrayList<OutletInstance>(n1.source);
+                    for (OutletInstance o : srcs) {
+                        AddConnection(il, o);
+                    }
+                }
             }
         }
 
