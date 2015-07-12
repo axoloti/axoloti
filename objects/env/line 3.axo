@@ -1,7 +1,7 @@
 <objdefs>
-   <obj.normal id="line 3" uuid="91fd338d66f6e672dd7a999a6e69054cffab4380" sha="2bfdf6a31fafdb4e049cacb0b27750089839fd8f">
-      <upgradeSha>1de9a766a1827f8f4e1a081260d882514f5f4f70</upgradeSha>
-      <sDescription>Three piecewise linear ramps</sDescription>
+   <obj.normal id="line 3" uuid="2ef3c9b4af30c9e78e4e0ecaba15e172aaba9398" sha="a79a080b6a30e999acb3fafb398ba930a5e7f435">
+      <upgradeSha>8ced4c2fc64a1447d0b6cf0fe39e9eef560a3935</upgradeSha>
+      <sDescription>Three piecewise linear ramps, extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>env.axh</helpPatch>
@@ -18,26 +18,26 @@
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
          </frac32.u.map>
-         <frac32.u.map.klineartime.reverse name="tA">
-            <MinValue v="0.0"/>
+         <frac32.s.map.klineartime.exp name="tA">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         </frac32.s.map.klineartime.exp>
          <frac32.u.map name="v1">
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
          </frac32.u.map>
-         <frac32.u.map.klineartime.reverse name="tB">
-            <MinValue v="0.0"/>
+         <frac32.s.map.klineartime.exp name="tB">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         </frac32.s.map.klineartime.exp>
          <frac32.u.map name="v2">
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
          </frac32.u.map>
-         <frac32.u.map.klineartime.reverse name="tC">
-            <MinValue v="0.0"/>
+         <frac32.s.map.klineartime.exp name="tC">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         </frac32.s.map.klineartime.exp>
          <frac32.u.map name="v3">
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
@@ -60,7 +60,9 @@ ntrig = 0;
   ntrig = 1;
 }
 else if (phase1 == 1) {
-  time1 += param_tA>>3;
+  int32_t t;
+  MTOF(-param_tA,t);
+  time1 += t>>2;
   if (time1>=0)
      val = param_v0 + (___SMMUL(param_v1-param_v0,time1)<<1);
   else {
@@ -70,7 +72,9 @@ else if (phase1 == 1) {
   }
 }
 else if (phase1 == 2) {
-  time1 += param_tB>>3;
+  int32_t t;
+  MTOF(-param_tB,t);
+  time1 += t>>2;
   if (time1>=0)
      val = param_v1 + (___SMMUL(param_v2-param_v1,time1)<<1);
   else {
@@ -80,7 +84,9 @@ else if (phase1 == 2) {
   }
 }
 else if (phase1 == 3) {
-  time1 += param_tC>>3;
+  int32_t t;
+  MTOF(-param_tC,t);
+  time1 += t>>2;
   if (time1>=0)
      val = param_v2 + (___SMMUL(param_v3-param_v2,time1)<<1);
   else {

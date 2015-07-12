@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="ahd lin" uuid="71e73d4adc87a58ceb2bdfb55b11b6e851dbdd62" sha="276c5a5541a1f3ef243c2ed99d46809f8d4d1419">
-      <upgradeSha>d5f54db4739e057a5699c6d2275e4c95d1fcbe08</upgradeSha>
+   <obj.normal id="ahd lin" uuid="4ed5fd29254747e71db6d1d4caa20a89a41740f0" sha="de09ade5b46ad7c4bbe57ce1bb266f7b77fc2078">
+      <upgradeSha>9bf8f884cf19cf1fea714e116e83fda6d6148adc</upgradeSha>
       <sDescription>attack/hold/decay envelope, linear ramps</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -13,14 +13,14 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.klineartime.reverse name="a">
-            <MinValue v="0.0"/>
+         <frac32.s.map.klineartime.exp name="a">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
-         <frac32.u.map.klineartime.reverse name="d">
-            <MinValue v="0.0"/>
+         </frac32.s.map.klineartime.exp>
+         <frac32.s.map.klineartime.exp name="d">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         </frac32.s.map.klineartime.exp>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;
@@ -28,10 +28,14 @@
       <code.init><![CDATA[val = 0;
 ]]></code.init>
       <code.krate><![CDATA[if (inlet_trig > 0) {
-  val += param_a >> 7;
+  int32_t t;
+  MTOF(-param_a,t);
+  val += t>>6;
 }
 else {
-  val -= param_d >> 7;
+  int32_t t;
+  MTOF(-param_d,t);
+  val -= t>>6;
 }
 val = __USAT(val,27);
 outlet_env = val;

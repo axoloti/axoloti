@@ -1,12 +1,15 @@
 <objdefs>
-   <obj.normal id="line 3 x" uuid="7a2121565c0cdbc0f6dd9f108a7e8e95d6780fc7" sha="a79a080b6a30e999acb3fafb398ba930a5e7f435">
-      <upgradeSha>8ced4c2fc64a1447d0b6cf0fe39e9eef560a3935</upgradeSha>
-      <sDescription>Three piecewise linear ramps, extended range</sDescription>
+   <obj.normal id="line 3 m" uuid="9c2bd49e2c19863d892a537eaac8062bcaf70373" sha="6c2dc3bbc900e7c72a85e78b3daec3353ce8e66d">
+      <upgradeSha>282125be0a946f9dfec83d863848f5fbaa503993</upgradeSha>
+      <sDescription>Three piecewise linear ramps, time modulation inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>env.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
+         <frac32.bipolar name="tAm" description="time A (v0..v1) modulation"/>
+         <frac32.bipolar name="tBm" description="time B (v1..v2) modulation"/>
+         <frac32.bipolar name="tCm" description="time C (v2..v3) modulation"/>
       </inlets>
       <outlets>
          <frac32.positive name="out" description="output"/>
@@ -61,7 +64,8 @@ ntrig = 0;
 }
 else if (phase1 == 1) {
   int32_t t;
-  MTOF(-param_tA,t);
+  int32_t tA2 = param_tA + inlet_tAm;
+  MTOF(-tA2,t);
   time1 += t>>2;
   if (time1>=0)
      val = param_v0 + (___SMMUL(param_v1-param_v0,time1)<<1);
@@ -73,7 +77,8 @@ else if (phase1 == 1) {
 }
 else if (phase1 == 2) {
   int32_t t;
-  MTOF(-param_tB,t);
+  int32_t tB2 = param_tB + inlet_tBm;
+  MTOF(-tB2,t);
   time1 += t>>2;
   if (time1>=0)
      val = param_v1 + (___SMMUL(param_v2-param_v1,time1)<<1);
@@ -85,7 +90,8 @@ else if (phase1 == 2) {
 }
 else if (phase1 == 3) {
   int32_t t;
-  MTOF(-param_tC,t);
+  int32_t tC2 = param_tC + inlet_tCm;
+  MTOF(-tC2,t);
   time1 += t>>2;
   if (time1>=0)
      val = param_v2 + (___SMMUL(param_v3-param_v2,time1)<<1);

@@ -1,7 +1,7 @@
 <objdefs>
-   <obj.normal id="line 2" uuid="83f63e283434c9c39783eec2803d7b23686eef1a" sha="181c70a45c193ad4ab94029b5b0492931a0e94d4">
-      <upgradeSha>3b6aa52fc22ac01aed9b1e35bad5d5e40e45f9b</upgradeSha>
-      <sDescription>two piecewise linear ramps</sDescription>
+   <obj.normal id="line 2" uuid="f15256ae9947573c1f29d58e9c453b0ea8a271f1" sha="6a5c0fadc91698df478472303e09ee43f5419b65">
+      <upgradeSha>8a885cba62278febe2aed48273e9c80687747de1</upgradeSha>
+      <sDescription>two piecewise linear ramps, extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>env.axh</helpPatch>
@@ -18,18 +18,18 @@
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
          </frac32.u.map>
-         <frac32.u.map.klineartime.reverse name="tA">
-            <MinValue v="0.0"/>
+         <frac32.s.map.klineartime.exp name="tA">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         </frac32.s.map.klineartime.exp>
          <frac32.u.map name="v1">
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
          </frac32.u.map>
-         <frac32.u.map.klineartime.reverse name="tB">
-            <MinValue v="0.0"/>
+         <frac32.s.map.klineartime.exp name="tB">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         </frac32.s.map.klineartime.exp>
          <frac32.u.map name="v2">
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
@@ -52,7 +52,9 @@ ntrig = 0;
   ntrig = 1;
 }
 else if (phase1 == 1) {
-  time1 += param_tA>>3;
+  int32_t t;
+  MTOF(-param_tA,t);
+  time1 += t>>2;
   if (time1>=0)
      val = param_v0 + (___SMMUL(param_v1-param_v0,time1)<<1);
   else {
@@ -62,7 +64,9 @@ else if (phase1 == 1) {
   }
 }
 else if (phase1 == 2) {
-  time1 += param_tB>>3;
+  int32_t t;
+  MTOF(-param_tB,t);
+  time1 += t>>2;
   if (time1>=0)
      val = param_v1 + (___SMMUL(param_v2-param_v1,time1)<<1);
   else {

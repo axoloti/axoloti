@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="d lin" uuid="8dd1f794e13bdd5e7e6cffe8127a792da6f01627" sha="eae583ab4654c103da58db4d179ed0c41f792b43">
-      <upgradeSha>5d5a9191bf2a36f4c56e1fec066883e51b204946</upgradeSha>
+   <obj.normal id="d lin" uuid="d08b90b24fc6d8b4c927be9938c74871e5f8ba51" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d">
+      <upgradeSha>2fe3360a9f50f985461b9b78ce73c22e8a334211</upgradeSha>
       <sDescription>decay envelope, linear ramp</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -13,10 +13,10 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.klineartime.reverse name="d" noLabel="true">
-            <MinValue v="0.0"/>
+         <frac32.s.map.klineartime.exp name="d" noLabel="true">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         </frac32.s.map.klineartime.exp>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;
@@ -32,7 +32,9 @@ ntrig = 0;
 else {
   if (!(inlet_trig > 0))
     ntrig = 0;
-  val -= param_d >> 7;
+  int32_t t;
+  MTOF(-param_d,t);
+  val -= t>>6;
   if (val < 0)
     val = 0;
 }

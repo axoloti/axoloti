@@ -1,7 +1,7 @@
 <objdefs>
-   <obj.normal id="d lin m x" uuid="98e97de237587a748e4225d2118b87ea122ccd5d" sha="2bdacc7664868e60481a13644a9785475ac0be7e">
+   <obj.normal id="d lin m" uuid="4b3d3642bf931c1d20cbcbaa3b9d538e7cd861fa" sha="2bdacc7664868e60481a13644a9785475ac0be7e">
       <upgradeSha>a2e1da37932bdfc8056cd08cca74d2ebc6735f40</upgradeSha>
-      <sDescription>decay envelope, linear ramp, modulation input, extended range</sDescription>
+      <sDescription>decay envelope, linear ramp, modulation input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>env.axh</helpPatch>
