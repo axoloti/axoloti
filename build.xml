@@ -7,7 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="Axoloti" default="default" basedir=".">
+<project name="Axoloti" default="default" basedir="." 
+ xmlns:fx="javafx:com.sun.javafx.tools.ant">
     <description>Builds, tests, and runs the project Axoloti.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
@@ -70,6 +71,11 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="-pre-init">
+        <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
+                uri="javafx:com.sun.javafx.tools.ant"
+                classpath=".:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/lib/ant-javafx.jar"/>    
+    </target>
     
   <property name="built_by"  value="${user.name}"/>
 
@@ -109,5 +115,66 @@
       </fileset>
     </jar>
   </target>
+
+  <target name="-post-jar">
+	<antcall target="bundle"/>
+  </target>
+
+  <target name="bundle" if="build.bundle">
+	<echoproperties/>
+	<echo>${java.home}</echo>
+	<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
+			uri="javafx:com.sun.javafx.tools.ant"
+			classpath=".:${java.home}/lib/ant-javafx.jar"/>    
+	<fx:resources id="appRes">
+		 <fx:fileset dir="dist">
+         	<include name="axoloti-app.jar"/>
+		 </fx:fileset>
+		 <fx:fileset dir="lib">
+			 <include name="simple-xml-2.7.1.jar"/>
+			 <include name="usb4java-1.2.0/lib/usb4java-1.2.0.jar"/>
+			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-arm.jar"/>
+			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-x86.jar"/>
+			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-x86_64.jar"/>
+			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86.jar"/>
+			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86_64.jar"/>
+			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86.jar"/>
+			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
+		 </fx:fileset>
+	</fx:resources>
+
+	<fx:jar destfile="dist/axoloti-app.jar">
+		<!-- Details about application -->
+		<fx:application name="Axoloti" mainClass="axoloti.Axoloti"/>
+	 
+		<!-- Define what auxilary resources are needed -->
+		<fx:resources refid="appRes"/>
+				
+		<!-- What to include into result jar file?
+			 Everything in the build tree -->
+		<fileset dir="build/classes"/>
+	 
+		<!-- Customize jar manifest (optional) -->
+		<manifest>
+			<attribute name="Implementation-Vendor" value="Axoloti"/>
+			<attribute name="Implementation-Version" value="1.0"/>
+			<attribute name="Main-Class" value="axoloti.Axoloti"/>
+			<attribute name="Built-By" value="${built_by}"/>
+			<attribute name="Created-By" value="${built_by}"/>
+			<attribute name="Built-Date" value="${TODAY}"/>
+			<attribute name="SplashScreen-Image" value="resources/splash.png"/>
+		</manifest>
+	</fx:jar> 
+    <fx:deploy nativeBundles="all" width="100" height="100" outdir="build/" outfile="AxolotiApp">
+            <fx:info title="Axoloti" 
+					vendor="axoloti" 
+					description="Axoloti application">
+				<fx:icon href="src/main/java/resources/axoloti_icon.icns"/>
+			</fx:info>
+            <fx:application mainClass="axoloti.Axoloti"/>
+			<fx:resources refid="appRes"/>
+    </fx:deploy>
+  </target>
+
       
 </project>
