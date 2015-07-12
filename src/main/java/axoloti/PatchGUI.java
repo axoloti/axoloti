@@ -470,6 +470,20 @@ public class PatchGUI extends Patch {
             PatchGUI p = serializer.read(PatchGUI.class, v);
             HashMap<String, String> dict = new HashMap<String, String>();
             for (AxoObjectInstanceAbstract o : p.objectinstances) {
+                AxoObjectAbstract obj = o.resolveType();
+                Modulator[] m = obj.getModulators();
+                if (m != null) {
+                    if (Modulators == null) {
+                        Modulators = new ArrayList<Modulator>();
+                    }
+                    for (Modulator mm : m) {
+                        mm.objinst = o;
+                        Modulators.add(mm);
+                    }
+                }
+
+            }
+            for (AxoObjectInstanceAbstract o : p.objectinstances) {
                 String original_name = o.getInstanceName();
                 String new_name = original_name;
                 String ss[] = new_name.split("_");
@@ -504,6 +518,7 @@ public class PatchGUI extends Patch {
                 while (getObjectAtLocation(o.getX(), o.getY()) != null) {
                     o.setLocation(o.getX() + Constants.xgrid, o.getY() + Constants.ygrid);
                 }
+
                 o.patch = this;
                 objectinstances.add(o);
                 ObjectLayer.add(o, 0);
@@ -774,7 +789,6 @@ public class PatchGUI extends Patch {
         }
         return n;
     }
-
 
     @Override
     public Net disconnect(InletInstance ii) {

@@ -20,6 +20,7 @@ package axoloti;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.parameters.ParameterInstance;
+import axoloti.parameters.ParameterInstanceFrac32;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 
@@ -53,7 +54,7 @@ public class Modulation {
         return value;
     }
 
-    public void PostConstructor(ParameterInstance p) {
+    public void PostConstructor(ParameterInstanceFrac32 p) {
         System.out.println("Modulation postconstructor");
         destination = p;
         source = p.axoObj.patch.GetObjectInstance(sourceName);
@@ -87,5 +88,5 @@ public class Modulation {
         }
     }
     public AxoObjectInstanceAbstract source;
-    public ParameterInstance destination;
+    public ParameterInstanceFrac32 destination;
 }

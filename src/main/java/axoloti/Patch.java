@@ -41,6 +41,7 @@ import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
+import axoloti.parameters.ParameterInstanceFrac32;
 import axoloti.utils.Constants;
 import displays.DisplayInstance;
 import java.awt.Dimension;
@@ -470,6 +471,16 @@ public class Patch {
         }
         for (OutletInstance oi : o.GetOutletInstances()) {
             disconnect(oi);
+        }
+        int i;
+        for (i = Modulators.size() - 1; i >= 0; i--) {
+            Modulator m1 = Modulators.get(i);
+            if (m1.objinst == o) {
+                Modulators.remove(m1);
+                for (Modulation mt : m1.Modulations) {
+                    mt.destination.removeModulation(mt);
+                }
+            }
         }
         SetDirty();
         repaint();
