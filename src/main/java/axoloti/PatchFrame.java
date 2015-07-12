@@ -432,7 +432,6 @@ jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuEdit.add(jMenuItemSelectAll);
 
-    jMenuItemAddObj.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, 0));
     jMenuItemAddObj.setText("New Object...");
     jMenuItemAddObj.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
