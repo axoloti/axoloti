@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="keyb mod" uuid="abcd509d15e7d13d5381203fd2b4d0ac6fe57bb3" sha="5e2dc9957f8200909d88e51705ee728033c27964">
-      <upgradeSha>66cf66b781465fa15957a8a3f5f16988bdff894a</upgradeSha>
+   <obj.normal id="keyb mod" uuid="abcd509d15e7d13d5381203fd2b4d0ac6fe57bb3" sha="f260e12fe47ac77a26f84d35423e8661908d3040">
+      <upgradeSha>28ee8d4a4d892435f85a18a03ef8ce40bcaad48e</upgradeSha>
       <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity modulation source</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -43,7 +43,7 @@ outlet_releaseVelocity= _rvelo<<20;
   _gate = 1<<27;
   _gate2 = 0;
   PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name_velocity][0],NMODULATIONTARGETS,_velo<<20);
-  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name_note][0],NMODULATIONTARGETS,_note<<20);
+  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name_note][0],NMODULATIONTARGETS,_note<<21);
 } else if (((status == MIDI_NOTE_ON + attr_midichannel) && (!data2))||
           (status == MIDI_NOTE_OFF + attr_midichannel)) {
   if (_note == data1-64) {
