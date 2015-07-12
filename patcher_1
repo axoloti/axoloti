@@ -1,0 +1,17 @@
+<patch-1.0>
+   <obj type="patch/inlet a" sha="6e9f836aee61272c540eb3e0603b3de0be3ec644" uuid="b577fe41e0a6bc7b5502ce33cb8a3129e2e28ee5" name="inlet_1" x="210" y="126">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets/>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>400</width>
+      <height>400</height>
+   </windowPos>
+</patch-1.0>
