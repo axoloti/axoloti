@@ -68,10 +68,10 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         }
         for (Component cmp : getComponents()) {
             cmp.doLayout();
-            cmp.repaint();
         }
         doLayout();
-        repaint();
+        invalidate();
+        validate();
     }
 
     public void edit() {

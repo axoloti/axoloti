@@ -125,7 +125,7 @@
 	<echo>${java.home}</echo>
 	<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
 			uri="javafx:com.sun.javafx.tools.ant"
-			classpath=".:${java.home}/lib/ant-javafx.jar"/>    
+			classpath=".:${java.home}/../lib/ant-javafx.jar"/>    
 	<fx:resources id="appRes">
 		 <fx:fileset dir="dist">
          	<include name="axoloti-app.jar"/>
@@ -140,6 +140,18 @@
 			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86_64.jar"/>
 			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86.jar"/>
 			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
+		 </fx:fileset>
+		 <fx:fileset dir=".">
+			 <include name="patch/**/*"/>
+			 <include name="patches/**/*"/>
+			 <include name="objects/**/*"/>
+			 <include name="firmware/**/*"/>
+			 <include name="*.txt"/>
+<!--
+			 <include name="chibios/**/*"/>
+			 <include name="CMSIS/**/*"/>
+			 <include name="platform*/**/*"/>
+-->
 		 </fx:fileset>
 	</fx:resources>
 
