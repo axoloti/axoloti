@@ -494,7 +494,13 @@ public class Patch {
         Modulator m = null;
         for (Modulator m1 : Modulators) {
             if (m1.objinst == n.source) {
-                m = m1;
+                if ((m1.name == null) || (m1.name.isEmpty())) {
+                    m = m1;
+                    break;
+                } else if (m1.name.equals(n.modName)) {
+                    m = m1;
+                    break;
+                }
             }
         }
         if (m == null) {
