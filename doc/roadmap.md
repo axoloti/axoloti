@@ -1,10 +1,11 @@
 ## Roadmap
 
 * doubleclick on param to reset to default value
-* disconnect wires by "dragging out": cursor change
-* USB host for HID (in progress)
+* disconnect wires by "dragging out": DnD cursor change
+* USB host for HID
 * move some non-essential functionality out of firmware into objects (gpio pwm, filters,...)
 * Store patch xml along binary executable on SDCard, so patches stored on sdcard can load into the patcher
+* preferences in flash memory: device name, input/output gain
 * Patch librarian: compile a directory of patches on PC, dump the binaries on target SDcard
 * DSP: automatically insert saturation if range can exceed, avoid inserting saturation when there is no need. Split frac32 into frac32 saturated and frac32 unsaturated types
 * DSP: reduce (right shift on output) (left shift on input)
@@ -20,7 +21,7 @@
 * cable datatype for MIDI queues?
 * easier rescaling and controller mapping of control values
 * Popup menus to select object variants
-* object editor: layout, editor with syntax coloring...
+* object editor: layout, code editor with syntax coloring, show function prototypes...
 * presentation mode?
 * SDCardreader mode (usb storage class)
 * installers for OSX, Windows, Ubuntu, file extension associations...

@@ -88,8 +88,8 @@
 
         <br>
         <b>
-            Currently presets, midi mapping, and modulation can be adjusted in live 
-            mode, but those changes are only reflected until after engaging live mode again.
+            Currently midi mapping, and modulation can be adjusted in live 
+            mode, but those changes are only in effect until after engaging live mode again.
         </b>
 
         <h2>Keyboard shortcuts</h2>
@@ -110,11 +110,11 @@
         <h2>Subpatching</h2>
         To maintain clean patches, it is useful to define an object from a patch. 
         To do this:<ul>
-            <li>Create a "child" patch, use inlet, inlet~, outlet, and outlet~ objects to create connections in the resulting object.
+            <li>Create a "child" patch, use inlet, and outlet objects to create connections in the resulting object.
             <li>Save this patch.
             <li>Create a new "mother" patch
             <li>Save this patch to the same directory as the "child" patch
-            <li>you can use the "child" patch as an object, by entering the patch filename in the object selector (without .axp extension), prefixed by "./". 
+            <li>you can use the "child" patch as an object, by entering the patch filename in the object selector (without .axs extension), prefixed by "./". 
         </ul>
         If you want to modify this object, and propagate the changes:
         <ul><li>select "edit object definition" in the object popup menu
@@ -159,7 +159,7 @@
 
         <h3>Connections</h3>
         <ul>
-            <li>The 3.5mm (1/8") mini-jack is a headphone output. Use only for headphones. To connect other equipment, use the 6.25mm connector! This is because the headphone jack is electrically biased at 1.65V. 
+            <li>The 3.5mm (1/8") mini-jack is a headphone output. Use only for headphones. To connect other equipment, use the 6.35mm connector! This is because the headphone jack is electrically biased at 1.65V. 
             <li>The 6.35mm (1/4") jacks are audio in- and output (labeled on the backside of the circuit board).
             <li>The 5 pole DIN connectors are MIDI in- and output (labeled on the backside of the circuit board).
             <li>micro-sd-card (should be FAT formatted)
