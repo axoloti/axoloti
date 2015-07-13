@@ -741,7 +741,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuItemFlashDFUActionPerformed
 
     private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDRActionPerformed
-        String fname = Constants.firmwaredir + "/flasher/flasher_build/flasher.bin";
+        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
         File f = new File(fname);
         if (f.canRead()) {
             qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
