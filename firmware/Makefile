@@ -58,6 +58,8 @@ endif
 PROJECT = axoloti
 
 # Imported source files and paths
+axoloti_runtime ?= ..
+axoloti_release ?= ..
 CHIBIOS = ${axoloti_runtime}/chibios
 FIRMWARE = ${axoloti_release}/firmware
 
