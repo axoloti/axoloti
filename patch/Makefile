@@ -13,6 +13,9 @@ LD=arm-none-eabi-gcc
 CP=arm-none-eabi-objcopy
 DMP=arm-none-eabi-objdump
 
+axoloti_runtime ?= ..
+axoloti_release ?= ..
+axoloti_build ?= .
 CHIBIOS = ${axoloti_runtime}/chibios
 CMSIS = ${axoloti_runtime}/CMSIS
 BDIR = ${axoloti_build}
