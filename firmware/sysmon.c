@@ -29,17 +29,17 @@
 #include "sdcard.h"
 
 bool repeat = FALSE;
+bool isEnabled = TRUE;
 uint32_t pattern = BLINK_BOOT;
 uint16_t v50_min;
 uint16_t v50_max;
 bool sdcsw_prev = FALSE;
 
-
 volatile uint8_t pattern_index;
 static WORKING_AREA(waThreadSysmon, 256);
 
 __attribute__((noreturn))
-     static msg_t ThreadSysmon(void *arg) {
+      static msg_t ThreadSysmon(void *arg) {
   (void)arg;
 #if CH_USE_REGISTRY
   chRegSetThreadName("sysmon");
@@ -55,23 +55,24 @@ __attribute__((noreturn))
       repeat = FALSE;
     }
 #endif
+    if (isEnabled) {
 #ifdef LED1_PORT
-    palWritePad(LED1_PORT, LED1_PIN, (pattern >> pi) & 1);
+      palWritePad(LED1_PORT, LED1_PIN, (pattern >> pi) & 1);
 #endif
-    pi++;
+      pi++;
 #ifdef LED2_PORT
-    palWritePad(LED2_PORT, LED2_PIN, (pattern >> pi) & 1);
+      palWritePad(LED2_PORT, LED2_PIN, (pattern >> pi) & 1);
 #endif
-    pi++;
-    if (pi > 31) {
-      if (!repeat) {
-        pattern = BLINK_OK;
+      pi++;
+      if (pi > 31) {
+        if (!repeat) {
+          pattern = BLINK_OK;
+        }
+        pattern_index = 0;
       }
-      pattern_index = 0;
+      else
+        pattern_index = pi;
     }
-    else
-      pattern_index = pi;
-
 // v50 monitor
     int v = (ADC3->DR);
     if (v > v50_max)
@@ -83,14 +84,15 @@ __attribute__((noreturn))
 // sdcard switch monitor
 #ifdef SDCSW_PIN
     bool sdcsw = palReadPad(SDCSW_PORT, SDCSW_PIN);
-    if (sdcsw && !sdcsw_prev){
+    if (sdcsw && !sdcsw_prev) {
 //      LogTextMessage("sdcard ejected");
       StopPatch();
       sdcard_unmount();
-    } else if (!sdcsw && sdcsw_prev){
+    }
+    else if (!sdcsw && sdcsw_prev) {
 //      LogTextMessage("sdcard inserted");
       sdcard_attemptMountIfUnmounted();
-      if (!fs_ready){
+      if (!fs_ready) {
         pattern_index = 0;
         pattern = BLINK_OVERLOAD;
       }
@@ -125,9 +127,19 @@ void sysmon_init(void) {
   v50_max = 0;
   v50_min = 0xFFFFFFFF;
 
+  isEnabled = true;
+
   chThdCreateStatic(waThreadSysmon, sizeof(waThreadSysmon), NORMALPRIO,
                     ThreadSysmon, NULL);
 
+}
+
+void sysmon_disable_blinker(void) {
+  isEnabled = false;
+}
+
+void sysmon_enable_blinker(void) {
+  isEnabled = true;
 }
 
 void sysmon_blink_pattern(uint32_t pat) {

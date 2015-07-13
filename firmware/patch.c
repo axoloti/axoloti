@@ -24,6 +24,7 @@
 #include "midi.h"
 #include "watchdog.h"
 #include "pconnection.h"
+#include "sysmon.h"
 
 patchMeta_t patchMeta;
 
@@ -110,6 +111,7 @@ void StopPatch(void) {
     (patchMeta.fptr_patch_dispose)();
   UIGoSafe();
   InitPatch0();
+  sysmon_enable_blinker();
 }
 
 void StartPatch(void) {
