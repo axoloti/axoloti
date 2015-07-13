@@ -2,7 +2,8 @@
 rootdir="$(cd $(dirname $0); pwd -P)"
 export axoloti_release=${axoloti_release:="$rootdir"}
 export axoloti_runtime=${axoloti_runtime:="$rootdir"}
-export axoloti_build=${axoloti_build:="$rootdir/patch"}
+export axoloti_firmware=${axoloti_firmware:="$axoloti_release/firmware"}
+export axoloti_home=${axoloti_home:="$rootdir"}
 
 cd $rootdir
 

@@ -1763,7 +1763,7 @@ public class Patch {
         String c = GenerateCode3();
 
         try {
-            String buildDir=System.getProperty(Axoloti.BUILD_DIR);
+            String buildDir=System.getProperty(Axoloti.HOME_DIR)+"/build";
             FileOutputStream f = new FileOutputStream(buildDir+"/xpatch.cpp");
             f.write(c.getBytes());
             f.close();

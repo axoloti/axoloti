@@ -19,6 +19,7 @@ package qcmds;
 
 import axoloti.MainFrame;
 import axoloti.utils.OSDetect;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,11 +40,9 @@ public class QCmdCompileFirmware extends QCmdShellTask {
         return "Done compiling firmware";
     }
     
-    //FIXME: we should be using the build dir here, not the release area
     @Override
-    public String BuildDir() {
-//        return System.getProperty(axoloti.Axoloti.BUILD_DIR);
-        return System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
+    public File GetWorkingDir() {
+        return new File(System.getProperty(axoloti.Axoloti.FIRMWARE_DIR));
     }
     
     @Override

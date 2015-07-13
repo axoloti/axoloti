@@ -60,8 +60,11 @@ PROJECT = axoloti
 # Imported source files and paths
 axoloti_runtime ?= ..
 axoloti_release ?= ..
+axoloti_home ?= ..
+axoloti_firmware ?= ../firmware
+
 CHIBIOS = ${axoloti_runtime}/chibios
-FIRMWARE = ${axoloti_release}/firmware
+FIRMWARE = ${axoloti_firmware}
 
 include board.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk

@@ -70,8 +70,8 @@ public abstract class QCmdShellTask implements QCmd {
         return System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
     }
 
-    public String BuildDir() {
-        return System.getProperty(axoloti.Axoloti.BUILD_DIR);
+    public String HomeDir() {
+        return System.getProperty(axoloti.Axoloti.HOME_DIR);
     }
             
     public String ReleaseDir() {
@@ -85,7 +85,7 @@ public abstract class QCmdShellTask implements QCmd {
             list.add((v + "=" + env.get(v)));
         }
         list.add((axoloti.Axoloti.RUNTIME_DIR + "=" + RuntimeDir()));
-        list.add((axoloti.Axoloti.BUILD_DIR + "=" + BuildDir()));
+        list.add((axoloti.Axoloti.HOME_DIR + "=" + HomeDir()));
         list.add((axoloti.Axoloti.RELEASE_DIR + "=" + ReleaseDir()));
 
         String vars[] = new String[list.size()];
@@ -94,7 +94,7 @@ public abstract class QCmdShellTask implements QCmd {
     }
 
     public File GetWorkingDir() {
-        return new File(BuildDir());
+        return new File(HomeDir()+"/build");
     }
 
     public QCmd Do(QCmdProcessor shellProcessor) {
