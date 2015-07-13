@@ -15,7 +15,7 @@
    </obj>
    <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c2" x="182" y="182">
       <params>
-         <frac32.u.map name="amp" value="30.5"/>
+         <frac32.u.map name="amp" value="25.0"/>
       </params>
       <attribs/>
    </obj>
@@ -43,6 +43,8 @@
       <params/>
       <attribs/>
    </obj>
+   <comment type="patch/comment" name="What is called &quot;FM&quot; in ads and magazines is really PM : Phase Modulation" x="126" y="308"/>
+   <comment type="patch/comment" name="Phase modulation preserves the fundamental frequency, while FM does not, making it more well behaving" x="126" y="322"/>
    <nets>
       <net>
          <source name="keyb1 note"/>
@@ -68,7 +70,7 @@
       </net>
       <net>
          <source name="*c2 out"/>
-         <dest name="osc_2 fm"/>
+         <dest name="osc_2 pm"/>
       </net>
       <net>
          <source name="vca_1 o"/>
@@ -81,4 +83,10 @@
       <MidiChannel>1</MidiChannel>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>256</x>
+      <y>156</y>
+      <width>1010</width>
+      <height>604</height>
+   </windowPos>
 </patch-1.0>
