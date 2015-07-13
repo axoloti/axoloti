@@ -22,6 +22,9 @@ import axoloti.utils.OSDetect;
 import axoloti.utils.Preferences;
 import java.awt.EventQueue;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 /**
@@ -42,6 +45,12 @@ public class Axoloti {
             if (ev == null) {
                 ev = def;
             }
+        }
+        File f = new File(ev);
+        if (f.exists()) try {
+            ev = f.getCanonicalPath();
+        } catch (IOException ex) {
+            Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.setProperty(var, ev);
     }
@@ -66,14 +75,20 @@ public class Axoloti {
     public static void main(String[] args) {
         try {
             String curDir = System.getProperty("user.dir");
+            File jarFile=new File(Axoloti.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            String jarDir = jarFile.getParentFile().getCanonicalPath();
             String defaultHome = curDir;
+            String defaultRuntime = curDir;
+            String defaultRelease = curDir;
             if (OSDetect.getOS() == OSDetect.OS.WIN) {
                 // not sure which versions of windows this is valid for, good for 8!
                 defaultHome = System.getenv("HOMEPATH") + File.separator + "Documents";
+                defaultRuntime = System.getenv("ProgramFiles") + File.separator + "axoloti_runtime";
             } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-                defaultHome = System.getenv("HOME") + File.separator +"Documents/axoloti";
+                defaultHome = System.getenv("HOME") + "/Documents/axoloti";
+                defaultRuntime =  "/Applications/axoloti_runtime";
             } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-                defaultHome = System.getenv("HOME") + File.separator +"axoloti";
+                defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
             }
 
             BuildEnv(HOME_DIR, defaultHome);
@@ -90,11 +105,11 @@ public class Axoloti {
                 System.exit(-1);
             }
 
-            BuildEnv(RELEASE_DIR, curDir);
+            BuildEnv(RELEASE_DIR, defaultRelease);
             if (!TestDir(RELEASE_DIR)) {
                 System.exit(-1);
             }
-            BuildEnv(RUNTIME_DIR, curDir);
+            BuildEnv(RUNTIME_DIR, defaultRuntime);
             if (!TestDir(RUNTIME_DIR)) {
                 System.exit(-1);
             }
@@ -108,9 +123,10 @@ public class Axoloti {
 
             System.out.println("Axoloti Driectories:\n"
                     + "Current = " + curDir + "\n"
+                    + "Jar = " + jarDir + "\n"
                     + "Release = " + System.getProperty(RELEASE_DIR) + "\n"
                     + "Runtime = " + System.getProperty(RUNTIME_DIR) + "\n"
-                    + "Firware = " + System.getProperty(FIRMWARE_DIR) + "\n"
+                    + "Firmware = " + System.getProperty(FIRMWARE_DIR) + "\n"
                     + "AxolotiHome = " + System.getProperty(HOME_DIR)
             );
 

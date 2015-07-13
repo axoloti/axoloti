@@ -24,7 +24,6 @@ import axoloti.dialogs.KeyboardFrame;
 import axoloti.dialogs.PreferencesFrame;
 import axoloti.object.AxoObjects;
 import axoloti.usb.Usb;
-import axoloti.utils.Constants;
 import axoloti.utils.FirmwareID;
 import axoloti.utils.Preferences;
 import generatedobjects.GeneratedObjects;
@@ -174,6 +173,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             jMenuAutoTest.setVisible(false);
             jMenuItemRefreshFWID.setVisible(false);
         }
+        jMenuAutoTest.setVisible(false); // no longer relevant - remove?
         PopulateLibraryMenu(jMenuLibrary);
 
         JMenu phelps = new JMenu("Library");
@@ -282,6 +282,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuItemEnterDFU = new javax.swing.JMenuItem();
         jMenuItemFlashDFU = new javax.swing.JMenuItem();
         jMenuItemRefreshFWID = new javax.swing.JMenuItem();
+        jMenuItemFlashDefault = new javax.swing.JMenuItem();
         jMenuWindow = new javax.swing.JMenu();
         jMenuHelp = new javax.swing.JMenu();
         jMenuHelpContents = new javax.swing.JMenuItem();
@@ -524,6 +525,14 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     });
     jMenuFirmware.add(jMenuItemRefreshFWID);
+
+    jMenuItemFlashDefault.setText("Flash with default");
+    jMenuItemFlashDefault.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItemFlashDefaultActionPerformed(evt);
+        }
+    });
+    jMenuFirmware.add(jMenuItemFlashDefault);
 
     jMenuBoard.add(jMenuFirmware);
 
@@ -777,6 +786,18 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     }//GEN-LAST:event_jMenuCommunityActionPerformed
 
+    private void jMenuItemFlashDefaultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashDefaultActionPerformed
+        String fname = System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/flasher/flasher_build/flasher.bin";
+        File f = new File(fname);
+        if (f.canRead()) {
+            qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
+            qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
+            qcmdprocessor.AppendToQueue(new QCmdStart(null));
+        } else {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can't read flasher, please compile firmware! (file: " + fname + " )");
+        }
+    }//GEN-LAST:event_jMenuItemFlashDefaultActionPerformed
+
     public void NewPatch() {
         PatchGUI patch1 = new PatchGUI();
         PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
@@ -889,6 +910,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemFConnect;
     private javax.swing.JMenuItem jMenuItemFDisconnect;
     private javax.swing.JMenuItem jMenuItemFlashDFU;
+    private javax.swing.JMenuItem jMenuItemFlashDefault;
     private javax.swing.JMenuItem jMenuItemFlashSDR;
     private javax.swing.JMenuItem jMenuItemPanic;
     private javax.swing.JMenuItem jMenuItemPing;
