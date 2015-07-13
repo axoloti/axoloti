@@ -1,0 +1,23 @@
+Copyright Statement
+
+Axoloti is Copyright (C) 2013-2015 Johannes Taelman
+Except where otherwise stated.
+
+Copyright Assignment
+
+If you plan to contribute code to the Axoloti project then there is a requirement you should be aware of: contributing code for inclusion in the Axoloti main line requires assigning the copyrights on the contributed code to me (Johannes Taelman).
+This may sound a bit strange but is pretty standard for this kind of projects, there are several reasons for this requirement:
+
+Axoloti could also become a commercial product and it would not be possible for me to re-license the code without ownership. Note that the commercial product is not a different or better product, just the same GPL product made available, on request, under a different license.
+The code will always be available to you under the current licensing terms.
+It will be easier for the project adopters to have a single ownership point in case of licensing issues (both GPL or commercial).
+Losing the ownership on the code could preclude me the opportunity to make this project a full time job.
+I definitely don't want to have to sort out copyright related issues in the future so better be clear than sorry.
+
+Notes about Copyright Assignment
+
+Contributions are welcome even without such copyright assignment, the difference is that the contributed code would not be merged into the main line, it will still made available as contributed code with the contributor(s) copyright notice intact.
+Submissions of code with copyright notice should only happen through email, please do not commit code with copyright notices directly on the repository.
+When submitting code please state clearly your intention to keep the copyright on your work by adding your own copyright notice within the source code and by clearly mentioning your intentions in the message.
+Code contributed without copyright notice will be considered donated.
+If in doubt with licensing or copyright issues please don't hesitate to contact me in order to sort out any problem you may have.

@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="mux 7" sha="bd4aefe94e119bad8b053eac6f2b41080f1661ef">
+   <obj.normal id="mux 7" uuid="febfc24cbf66d56e8dbabce8793813f53ec4f763" sha="bda058d2a6fbbc12f0830d47f2aacfe4c929e9c">
+      <upgradeSha>bd4aefe94e119bad8b053eac6f2b41080f1661ef</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <frac32 name="i0" description="input 0"/>
          <frac32 name="i1" description="input 1"/>
@@ -11,7 +13,7 @@
          <frac32 name="i4" description="input 4"/>
          <frac32 name="i5" description="input 5"/>
          <frac32 name="i6" description="input 6"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <frac32 name="o" description="output"/>
@@ -19,22 +21,24 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      case 4: %o%= %i4%;break;
-      case 5: %o%= %i5%;break;
-      case 6: %o%= %i6%;break;
-      default: %o%= %i6%;break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
+      case 0: outlet_o= inlet_i0;break;
+      case 1: outlet_o= inlet_i1;break;
+      case 2: outlet_o= inlet_i2;break;
+      case 3: outlet_o= inlet_i3;break;
+      case 4: outlet_o= inlet_i4;break;
+      case 5: outlet_o= inlet_i5;break;
+      case 6: outlet_o= inlet_i6;break;
+      default: outlet_o= inlet_i6;break;
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 7" sha="7e29c91f62cef7aaece82f44b32482281e62a7e3">
+   <obj.normal id="mux 7" uuid="acffd8c464bff1c18d4083c854668d443d656b41" sha="a9effc3f23c9044adc8ab7bccc93800d5a2a85b">
+      <upgradeSha>7e29c91f62cef7aaece82f44b32482281e62a7e3</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <int32 name="i0" description="input 0"/>
          <int32 name="i1" description="input 1"/>
@@ -43,7 +47,7 @@
          <int32 name="i4" description="input 4"/>
          <int32 name="i5" description="input 5"/>
          <int32 name="i6" description="input 6"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <int32 name="o" description="output"/>
@@ -51,22 +55,24 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      case 4: %o%= %i4%;break;
-      case 5: %o%= %i5%;break;
-      case 6: %o%= %i6%;break;
-      default: %o%= %i6%;break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
+      case 0: outlet_o= inlet_i0;break;
+      case 1: outlet_o= inlet_i1;break;
+      case 2: outlet_o= inlet_i2;break;
+      case 3: outlet_o= inlet_i3;break;
+      case 4: outlet_o= inlet_i4;break;
+      case 5: outlet_o= inlet_i5;break;
+      case 6: outlet_o= inlet_i6;break;
+      default: outlet_o= inlet_i6;break;
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 7" sha="6f39b94067a962620fe870a132b5c564494e39a8">
+   <obj.normal id="mux 7" uuid="4a310a57847f704b4c6bbfb8c54dc2145a7dc2b7" sha="c06ca8e16e3705b2f0aa7fe86e31794b33d5279d">
+      <upgradeSha>6f39b94067a962620fe870a132b5c564494e39a8</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <frac32buffer name="i0" description="input 0"/>
          <frac32buffer name="i1" description="input 1"/>
@@ -75,7 +81,7 @@
          <frac32buffer name="i4" description="input 4"/>
          <frac32buffer name="i5" description="input 5"/>
          <frac32buffer name="i6" description="input 6"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <frac32buffer name="o" description="output"/>
@@ -83,22 +89,24 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   switch(%s%>0?%s%:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      case 4: %o%= %i4%;break;
-      case 5: %o%= %i5%;break;
-      case 6: %o%= %i6%;break;
-      default: %o%= %i6%;break;
+      <code.srate><![CDATA[   switch(inlet_s>0?inlet_s:0){
+      case 0: outlet_o[buffer_index]= inlet_i0[buffer_index];break;
+      case 1: outlet_o[buffer_index]= inlet_i1[buffer_index];break;
+      case 2: outlet_o[buffer_index]= inlet_i2[buffer_index];break;
+      case 3: outlet_o[buffer_index]= inlet_i3[buffer_index];break;
+      case 4: outlet_o[buffer_index]= inlet_i4[buffer_index];break;
+      case 5: outlet_o[buffer_index]= inlet_i5[buffer_index];break;
+      case 6: outlet_o[buffer_index]= inlet_i6[buffer_index];break;
+      default: outlet_o[buffer_index]= inlet_i6[buffer_index];break;
 }
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="mux 7" sha="56284c9ff917ecfa3e9228d020a19f2cc888b2d8">
+   <obj.normal id="mux 7" uuid="38ce55c5de22fe0d7732229261b79d64472effa" sha="cbb02be08ba960470efe9e030ad3f9479865cc91">
+      <upgradeSha>56284c9ff917ecfa3e9228d020a19f2cc888b2d8</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <bool32 name="i0" description="input 0"/>
          <bool32 name="i1" description="input 1"/>
@@ -107,7 +115,7 @@
          <bool32 name="i4" description="input 4"/>
          <bool32 name="i5" description="input 5"/>
          <bool32 name="i6" description="input 6"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <bool32 name="o" description="output"/>
@@ -115,22 +123,24 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      case 4: %o%= %i4%;break;
-      case 5: %o%= %i5%;break;
-      case 6: %o%= %i6%;break;
-      default: %o%= %i6%;break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
+      case 0: outlet_o= inlet_i0;break;
+      case 1: outlet_o= inlet_i1;break;
+      case 2: outlet_o= inlet_i2;break;
+      case 3: outlet_o= inlet_i3;break;
+      case 4: outlet_o= inlet_i4;break;
+      case 5: outlet_o= inlet_i5;break;
+      case 6: outlet_o= inlet_i6;break;
+      default: outlet_o= inlet_i6;break;
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 7" sha="8b3bbebde371985d03e1df90f8d9a56c61df50be">
+   <obj.normal id="mux 7" uuid="437edd44b6f670b0bb414eb26e6d9e4ff4792ff7" sha="e8c63cf77085225f4072cb1b0b7b2e054dbb0856">
+      <upgradeSha>8b3bbebde371985d03e1df90f8d9a56c61df50be</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <charptr32 name="i0" description="input 0"/>
          <charptr32 name="i1" description="input 1"/>
@@ -139,7 +149,7 @@
          <charptr32 name="i4" description="input 4"/>
          <charptr32 name="i5" description="input 5"/>
          <charptr32 name="i6" description="input 6"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="s" description="select"/>
+         <int32.positive name="s" description="select"/>
       </inlets>
       <outlets>
          <charptr32 name="o" description="output"/>
@@ -147,15 +157,15 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0){
-      case 0: %o%= %i0%;break;
-      case 1: %o%= %i1%;break;
-      case 2: %o%= %i2%;break;
-      case 3: %o%= %i3%;break;
-      case 4: %o%= %i4%;break;
-      case 5: %o%= %i5%;break;
-      case 6: %o%= %i6%;break;
-      default: %o%= %i6%;break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0){
+      case 0: outlet_o= inlet_i0;break;
+      case 1: outlet_o= inlet_i1;break;
+      case 2: outlet_o= inlet_i2;break;
+      case 3: outlet_o= inlet_i3;break;
+      case 4: outlet_o= inlet_i4;break;
+      case 5: outlet_o= inlet_i5;break;
+      case 6: outlet_o= inlet_i6;break;
+      default: outlet_o= inlet_i6;break;
 }
 ]]></code.krate>
    </obj.normal>

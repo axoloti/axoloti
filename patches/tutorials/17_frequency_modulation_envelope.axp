@@ -1,13 +1,13 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="frequency modulation, sine wave carrier, sine wave modulator" x="14" y="14"/>
-   <comment type="patch/comment" sha="sha" name="evelope to control modulation depth" x="182" y="42"/>
+   <comment type="patch/comment" name="frequency modulation, sine wave carrier, sine wave modulator" x="14" y="14"/>
+   <comment type="patch/comment" name="evelope to control modulation depth" x="182" y="42"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="56">
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd1" x="182" y="56">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="182" y="56">
       <params>
-         <frac32.u.map name="d" value="29.5"/>
+         <frac32.s.map name="d" value="29.5"/>
       </params>
       <attribs/>
    </obj>
@@ -17,9 +17,9 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="modulator oscillator" x="14" y="182"/>
-   <comment type="patch/comment" sha="sha" name="modulation intensity" x="182" y="182"/>
-   <comment type="patch/comment" sha="sha" name="carrier oscillator" x="336" y="182"/>
+   <comment type="patch/comment" name="modulator oscillator" x="14" y="182"/>
+   <comment type="patch/comment" name="modulation intensity" x="182" y="182"/>
+   <comment type="patch/comment" name="carrier oscillator" x="336" y="182"/>
    <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="196">
       <params>
          <frac32.s.map name="pitch" value="12.0"/>
@@ -46,7 +46,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="616" y="196">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="686" y="196">
       <params/>
       <attribs/>
    </obj>
@@ -101,4 +101,10 @@
       <MidiChannel>1</MidiChannel>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>720</x>
+      <y>217</y>
+      <width>926</width>
+      <height>618</height>
+   </windowPos>
 </patch-1.0>

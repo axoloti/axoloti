@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="allpass" sha="8140941b68c1e90cdb668d6ed237ed2b2ba1a8f6">
+   <obj.normal id="allpass" uuid="59cc8e3d8044e145e1eb908baa5a7d3ed2ec5f72" sha="ed870a0f9721a385b1f3cf15dc73be6a13d283f7">
+      <upgradeSha>8140941b68c1e90cdb668d6ed237ed2b2ba1a8f6</upgradeSha>
       <sDescription>allpass reverb section</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>allpass.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="in"/>
       </inlets>
@@ -19,22 +21,22 @@
       <attribs>
          <spinner name="delay" MinValue="1" MaxValue="10000" DefaultValue="1000"/>
       </attribs>
-      <code.declaration><![CDATA[int16_t d[%delay%];
+      <code.declaration><![CDATA[int16_t d[attr_delay];
 int dpos;
 ]]></code.declaration>
       <code.init><![CDATA[int i;
-for (i=0;i<%delay%;i++)
+for (i=0;i<attr_delay;i++)
    d[i] = 0;
 dpos = 0;
 ]]></code.init>
-      <code.krate><![CDATA[int32_t g2 = %g%<<4;
+      <code.krate><![CDATA[int32_t g2 = param_g<<4;
 int32_t g2c = ((1<<31)-1)-g2;
 ]]></code.krate>
       <code.srate><![CDATA[int32_t dout =  d[dpos]<<16;
-int32_t din = ___SMMLA(g2,dout,%in%>>1);
+int32_t din = ___SMMLA(g2,dout,inlet_in[buffer_index]>>1);
 d[dpos++]=din>>15;
-%out% = ___SMMLS(g2,din<<1,dout>>1)<<1;
-if (dpos == %delay%) dpos = 0;
+outlet_out[buffer_index] = ___SMMLS(g2,din<<1,dout>>1)<<1;
+if (dpos == attr_delay) dpos = 0;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

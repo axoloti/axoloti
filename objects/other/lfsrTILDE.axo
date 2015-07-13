@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="lfsr~" sha="94017314f1e9bdac75f41689a6df3c5a5b90c345">
+   <obj.normal id="lfsr~" uuid="fa4c47d16828371ead802adf8dd9dfc3a01f032a" sha="7d0f33a14e574b5964d6fbf6b2bd05cb18f50183">
+      <upgradeSha>94017314f1e9bdac75f41689a6df3c5a5b90c345</upgradeSha>
       <sDescription>linear feedback shift register cyclic pattern, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -334,11 +335,11 @@
       <code.init><![CDATA[state = 1;
 ]]></code.init>
       <code.srate><![CDATA[  if (state & 1)  {
-     state = (state >> 1) ^ %polynomial%;
-     %out% = 1<<27;
+     state = (state >> 1) ^ attr_polynomial;
+     outlet_out[buffer_index] = 1<<27;
   } else {
     state = (state >> 1);
-     %out% = -1<<27;
+     outlet_out[buffer_index] = -1<<27;
   }
 ]]></code.srate>
    </obj.normal>

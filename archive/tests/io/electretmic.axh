@@ -1,0 +1,108 @@
+<patch-1.0>
+   <obj type="adcconfig" sha="c5ee5e230152b248edde544704970b051688aa4f" name="adcconfig1" x="14" y="14">
+      <params/>
+      <attribs>
+         <combo attributeName="gain" selection="24dB"/>
+         <combo attributeName="boost" selection="20dB"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" name="exposes only the register configuration, the jcircuit may need modifications too..." x="14" y="84"/>
+   <obj type="adcconfigmic" sha="c1646b3d341da67814395a38979e26f6a1618171" name="adcconfigmic1" x="14" y="112">
+      <params/>
+      <attribs>
+         <combo attributeName="bias" selection="AVDD x0.90"/>
+         <combo attributeName="mperf" selection="High"/>
+      </attribs>
+   </obj>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1_" x="182" y="112">
+      <params>
+         <frac32.s.map name="pitch" value="-16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dacconfig" sha="2aa0e0cba0ec5538ada88b36303a2632fc2a8b1a" name="dacconfig1" x="14" y="182">
+      <params/>
+      <attribs>
+         <combo attributeName="headphones" selection="-6dB"/>
+      </attribs>
+   </obj>
+   <obj type="adc~" sha="2215b2e513239e306346ea02ae2ee6746d6d62a5" name="adc_1" x="56" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="env~" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4" name="env_1" x="140" y="266">
+      <params/>
+      <attribs>
+         <combo attributeName="time" selection="21.2ms"/>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="252" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1_" x="336" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix31" x="462" y="266">
+      <params>
+         <frac32.u.map name="gain1" value="0.0"/>
+         <frac32.u.map name="gain2" value="63.0"/>
+         <frac32.u.map name="gain3" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="658" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="env~" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4" name="env_1_" x="140" y="322">
+      <params/>
+      <attribs>
+         <combo attributeName="time" selection="21.2ms"/>
+      </attribs>
+   </obj>
+   <obj type="disp/vbar" sha="4a88516a5b0a868df66114691847c587506fa013" name="displayUvbar1" x="252" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/vbar" sha="4a88516a5b0a868df66114691847c587506fa013" name="displayUvbar1_" x="336" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="adc_1 left"/>
+         <dest name="env_1 in"/>
+         <dest name="mix31 in2"/>
+      </net>
+      <net>
+         <source name="adc_1 right"/>
+         <dest name="env_1_ in"/>
+         <dest name="mix31 in3"/>
+      </net>
+      <net>
+         <source name="env_1_ amp"/>
+         <dest name="displayUvbar1_ in"/>
+         <dest name="displayU1_ in"/>
+      </net>
+      <net>
+         <source name="env_1 amp"/>
+         <dest name="displayUvbar1 in"/>
+         <dest name="displayU1 in"/>
+      </net>
+      <net>
+         <source name="osc_1_ wave"/>
+         <dest name="mix31 in1"/>
+      </net>
+      <net>
+         <source name="mix31 out"/>
+         <dest name="dac_1 left"/>
+         <dest name="dac_1 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

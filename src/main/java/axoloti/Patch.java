@@ -30,6 +30,7 @@ import axoloti.object.AxoObjectFile;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceComment;
+import axoloti.object.AxoObjectInstanceHyperlink;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.object.AxoObjectZombie;
@@ -40,10 +41,12 @@ import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
+import axoloti.parameters.ParameterInstanceFrac32;
 import axoloti.utils.Constants;
 import displays.DisplayInstance;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -78,6 +81,7 @@ public class Patch {
         @ElementList(entry = "obj", type = AxoObjectInstance.class, inline = true),
         @ElementList(entry = "patcher", type = AxoObjectInstancePatcher.class, inline = true),
         @ElementList(entry = "comment", type = AxoObjectInstanceComment.class, inline = true),
+        @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true),
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true)})
     ArrayList<AxoObjectInstanceAbstract> objectinstances = new ArrayList<AxoObjectInstanceAbstract>();
     @ElementList(name = "nets")
@@ -86,6 +90,8 @@ public class Patch {
     PatchSettings settings;
     @Element(required = false, data = true)
     String notes = "";
+    @Element(required = false)
+    Rectangle windowPos;
     private String FileNamePath;
     PatchFrame patchframe;
     ArrayList<ParameterInstance> ParameterInstances = new ArrayList<ParameterInstance>();
@@ -94,6 +100,8 @@ public class Patch {
     public int presetNo = 0;
     boolean locked = false;
     private boolean dirty = false;
+    @Element(required = false)
+    private String helpPatch;
 
     public boolean presetUpdatePending = false;
 
@@ -114,14 +122,15 @@ public class Patch {
 
     void GoLive() {
         ShowPreset(0);
+        ClearDirty();
         WriteCode();
         presetUpdatePending = false;
-        GetQCmdProcessor().SetPatch(this);
+        GetQCmdProcessor().SetPatch(null);
         GetQCmdProcessor().AppendToQueue(new QCmdStop());
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
         GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
-        GetQCmdProcessor().AppendToQueue(new QCmdStart());
-        GetQCmdProcessor().AppendToQueue(new QCmdLock());
+        GetQCmdProcessor().AppendToQueue(new QCmdStart(this));
+        GetQCmdProcessor().AppendToQueue(new QCmdLock(this));
     }
 
     public void ShowCompileFail() {
@@ -155,7 +164,7 @@ public class Patch {
     public void PostContructor() {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             o.patch = this;
-            AxoObjectAbstract t = o.getType();
+            AxoObjectAbstract t = o.resolveType();
             if ((t != null) && (t.providesModulationSource())) {
 //                o.patch = this;
                 o.PostConstructor();
@@ -196,12 +205,10 @@ public class Patch {
         }
         PromoteOverloading();
         ShowPreset(0);
-        if (GetQCmdProcessor() != null) {
-            GetQCmdProcessor().SetPatch(this);
-        }
         if (settings == null) {
             settings = new PatchSettings();
         }
+        ClearDirty();
     }
 
     public ArrayList<ParameterInstance> getParameterInstances() {
@@ -217,8 +224,22 @@ public class Patch {
         return null;
     }
 
+    public void ClearDirty() {
+        dirty = false;
+    }
+
     public void SetDirty() {
         dirty = true;
+    }
+
+    @Deprecated
+    public void SetDirty(boolean f) {
+        // use Set and ClearDirty
+        if (f) {
+            SetDirty();
+        } else {
+            ClearDirty();
+        }
     }
 
     public boolean isDirty() {
@@ -312,81 +333,36 @@ public class Patch {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: already connected");
                 return null;
             } else if ((n1 != null) && (n2 == null)) {
-                n1.connectOutlet(ol);
-                SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: outlet added");
-                return n1;
+                if (n1.source.size() == 0) {
+                    Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: adding outlet to inlet net");
+                    n1.connectOutlet(ol);
+                    return n1;
+                } else {
+                    disconnect(il);
+                    Net n = new Net(this);
+                    nets.add(n);
+                    n.connectInlet(il);
+                    n.connectOutlet(ol);
+                    SetDirty();
+                    Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: replace inlet with new net");
+                    return n;
+                }
             } else if ((n1 == null) && (n2 != null)) {
                 n2.connectInlet(il);
                 SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: inlet added");
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: add additional outlet");
                 return n2;
             } else if ((n1 != null) && (n2 != null)) {
-                for (InletInstance i : n2.dest) {
-                    n1.connectInlet(i);
-                }
-                for (OutletInstance i : n2.source) {
-                    n1.connectOutlet(i);
-                }
-                delete(n2);
-                return n1;
+                // inlet already has connect, and outlet has another
+                // replace 
+                disconnect(il);
+                n2.connectInlet(il);
+                SetDirty();
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: replace inlet with existing net");
+                return n2;
             }
         } else {
             Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't add connection: locked");
-        }
-        return null;
-    }
-
-    public Net AddConnection(OutletInstance il, OutletInstance ol) {
-        if (!IsLocked()) {
-            if (il == ol) {
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: same outlet");
-                return null;
-            }
-            if (il.axoObj.patch != this) {
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: different patch");
-                return null;
-            }
-            if (ol.axoObj.patch != this) {
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: different patch");
-                return null;
-            }
-            Net n1, n2;
-            n1 = GetNet(il);
-            n2 = GetNet(ol);
-            if ((n1 == null) && (n2 == null)) {
-                Net n = new Net(this);
-                nets.add(n);
-                n.connectOutlet(il);
-                n.connectOutlet(ol);
-                SetDirty();
-                System.out.println("rp");
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: new net added");
-                return n;
-            } else if (n1 == n2) {
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: already connected");
-            } else if ((n1 != null) && (n2 == null)) {
-                n1.connectOutlet(ol);
-                SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: outlet added");
-                return n1;
-            } else if ((n1 == null) && (n2 != null)) {
-                n2.connectOutlet(il);
-                SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: outlet added");
-                return n2;
-            } else if ((n1 != null) && (n2 != null)) {
-                for (InletInstance i : n2.dest) {
-                    n1.connectInlet(i);
-                }
-                for (OutletInstance i : n2.source) {
-                    n1.connectOutlet(i);
-                }
-                delete(n2);
-                return n1;
-            }
-        } else {
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't add connection: locked!");
         }
         return null;
     }
@@ -429,17 +405,11 @@ public class Patch {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: inlet added");
                 return n2;
             } else if ((n1 != null) && (n2 != null)) {
-                for (InletInstance i : n2.dest) {
-                    n1.connectInlet(i);
-                }
-                for (OutletInstance i : n2.source) {
-                    n1.connectOutlet(i);
-                }
-                delete(n2);
-                return n1;
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: both inlets included in net");
+                return null;
             }
         } else {
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't add connection: locked!");
+            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't add connection: locked!");
         }
         return null;
     }
@@ -502,6 +472,16 @@ public class Patch {
         for (OutletInstance oi : o.GetOutletInstances()) {
             disconnect(oi);
         }
+        int i;
+        for (i = Modulators.size() - 1; i >= 0; i--) {
+            Modulator m1 = Modulators.get(i);
+            if (m1.objinst == o) {
+                Modulators.remove(m1);
+                for (Modulation mt : m1.Modulations) {
+                    mt.destination.removeModulation(mt);
+                }
+            }
+        }
         SetDirty();
         repaint();
         objectinstances.remove(o);
@@ -514,7 +494,13 @@ public class Patch {
         Modulator m = null;
         for (Modulator m1 : Modulators) {
             if (m1.objinst == n.source) {
-                m = m1;
+                if ((m1.name == null) || (m1.name.isEmpty())) {
+                    m = m1;
+                    break;
+                } else if (m1.name.equals(n.modName)) {
+                    m = m1;
+                    break;
+                }
             }
         }
         if (m == null) {
@@ -728,13 +714,13 @@ public class Patch {
     /* the c++ code generator */
     String GeneratePexchAndDisplayCode() {
         String c = "";
-        c += "    static const int NPEXCH = " + +ParameterInstances.size() + ";\n";
+        c += "    static const uint32_t NPEXCH = " + +ParameterInstances.size() + ";\n";
         c += "    ParameterExchange_t PExch[NPEXCH];\n";
-        c += "    int displayVector[" + (displayDataLength + 3) + "];\n";
-        c += "    static const int NPRESETS = " + settings.GetNPresets() + ";\n";
-        c += "    static const int NPRESET_ENTRIES = " + settings.GetNPresetEntries() + ";\n";
-        c += "    static const int NMODULATIONSOURCES = " + settings.GetNModulationSources() + ";\n";
-        c += "    static const int NMODULATIONTARGETS = " + settings.GetNModulationTargetsPerSource() + ";\n";
+        c += "    int32_t displayVector[" + (displayDataLength + 3) + "];\n";
+        c += "    static const uint32_t NPRESETS = " + settings.GetNPresets() + ";\n";
+        c += "    static const uint32_t NPRESET_ENTRIES = " + settings.GetNPresetEntries() + ";\n";
+        c += "    static const uint32_t NMODULATIONSOURCES = " + settings.GetNModulationSources() + ";\n";
+        c += "    static const uint32_t NMODULATIONTARGETS = " + settings.GetNModulationTargetsPerSource() + ";\n";
         c += "    PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS];\n";
         /*
          c += "    void PExParameterChange(int index, int32_t value, int32_t mask) {\n"
@@ -794,7 +780,7 @@ public class Patch {
     String GenerateStructCodePlusPlusSub(String classname, boolean enableOnParent) {
         String c = "";
         c += GeneratePexchAndDisplayCode();
-        c += GenerateObjectCode(classname, enableOnParent, "parent2->");
+        c += GenerateObjectCode(classname, enableOnParent, "parent->");
         return c;
     }
 
@@ -871,15 +857,17 @@ public class Patch {
     String GenerateObjInitCodePlusPlusSub(String className, String parentReference) {
         String c = "";
         for (AxoObjectInstanceAbstract o : objectinstances) {
-//            if (o.hasStruct()) {
-//                c += "   " + o.GenerateInitFunctionName() + "( &data->" + o.getInstanceName() + ");\n";
-//            } else {
-//                c += "   " + o.GenerateInitFunctionName() + "();\n";
             String s = o.getCInstanceName();
             if (!s.isEmpty()) {
-                c += "   " + o.getCInstanceName() + "_i.Init(" + parentReference + ");\n";
+                c += "   " + o.getCInstanceName() + "_i.Init(" + parentReference;
+                for (DisplayInstance i : o.GetDisplayInstances()) {
+                    if (i.display.getLength() > 0) {
+                        c += ", ";
+                        c += i.valueName("");
+                    }
+                }
+                c += " );\n";
             }
-            //            }
         }
         return c;
     }
@@ -895,8 +883,7 @@ public class Patch {
         c += "      PExch[j].modvalue = p[j];\n";
         c += "      PExch[j].signals = 0;\n";
         c += "      PExch[j].pfunction = 0;\n";
-        c += "      PExch[j].finalvalue = p[j];\n"; /*TBC*/
-
+//        c += "      PExch[j].finalvalue = p[j];\n"; /*TBC*/
         c += "   }\n";
         c += "   for(i=0;i<NMODULATIONSOURCES;i++) {\n"
                 + "	 for(j=0;j<NMODULATIONTARGETS;j++) {\n"
@@ -915,6 +902,14 @@ public class Patch {
         c += "void Init() {\n";
         c += GenerateParamInitCodePlusPlusSub("", "this");
         c += GenerateObjInitCodePlusPlusSub("", "this");
+        c += "      int k;\n"
+                + "      for (k = 0; k < NPEXCH; k++) {\n"
+                + "        if (PExch[k].pfunction){\n"
+                + "          (PExch[k].pfunction)(&PExch[k]);\n"
+                + "        } else {\n"
+                + "          PExch[k].finalvalue = PExch[k].value;\n"
+                + "        }\n"
+                + "      }\n";
         c += "}\n\n";
         return c;
     }
@@ -942,7 +937,7 @@ public class Patch {
         return c;
     }
 
-    String GenerateDSPCodePlusPlusSub(String ClassName) {
+    String GenerateDSPCodePlusPlusSub(String ClassName, boolean enableOnParent) {
         String c = "";
         c += "//--------- <nets> -----------//\n";
         for (Net n : nets) {
@@ -975,13 +970,15 @@ public class Patch {
                 Net n = GetNet(i);
                 if ((n != null) && (n.isValidNet())) {
                     if (i.GetDataType().equals(n.GetDataType())) {
-                        if (n.NeedsLatch()) {
+                        if (n.NeedsLatch() && 
+                                (objectinstances.indexOf(n.source.get(0).axoObj)>= objectinstances.indexOf(o))) {
                             c += n.CName() + "Latch";
                         } else {
                             c += n.CName();
                         }
                     } else {
-                        if (n.NeedsLatch()) {
+                        if (n.NeedsLatch() && 
+                                (objectinstances.indexOf(n.source.get(0).axoObj)>= objectinstances.indexOf(o))) {
                             c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName() + "Latch");
                         } else {
                             c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName());
@@ -1011,6 +1008,24 @@ public class Patch {
                     }
                 }
                 needsComma = true;
+            }
+            for (ParameterInstance i : o.getParameterInstances()) {
+                if (i.parameter.PropagateToChild == null) {
+                    if (needsComma) {
+                        c += ", ";
+                    }
+                    c += i.variableName("", false);
+                    needsComma = true;
+                }
+            }
+            for (DisplayInstance i : o.GetDisplayInstances()) {
+                if (i.display.getLength() > 0) {
+                    if (needsComma) {
+                        c += ", ";
+                    }
+                    c += i.valueName("");
+                    needsComma = true;
+                }
             }
             c += ");\n";
 //            c += "// --------" + o.getInstanceName() + "---------\n";
@@ -1042,14 +1057,14 @@ public class Patch {
         return c;
     }
 
-    String GenerateDSPCodePlusPlus(String ClassName) {
+    String GenerateDSPCodePlusPlus(String ClassName, boolean enableOnParent) {
         String c;
         c = "/* krate */\n";
         c += "void dsp (void) {\n";
         c += "  int i;\n";
         c += "  for(i=0;i<BUFSIZE;i++) AudioOutputLeft[i]=0;\n";
         c += "  for(i=0;i<BUFSIZE;i++) AudioOutputRight[i]=0;\n";
-        c += GenerateDSPCodePlusPlusSub(ClassName);
+        c += GenerateDSPCodePlusPlusSub(ClassName, enableOnParent);
         c += "}\n\n";
         return c;
     }
@@ -1111,6 +1126,7 @@ public class Patch {
                 + "  patchMeta.pPExch = &root.PExch[0];\n"
                 + "  patchMeta.pDisplayVector = &root.displayVector[0];\n"
                 + "  patchMeta.numPEx = " + ParameterInstances.size() + ";\n"
+                + "  patchMeta.patchID = " + GetIID() + ";\n"
                 + "  root.Init();\n"
                 + "  patchMeta.fptr_applyPreset = ApplyPreset;\n"
                 + "  patchMeta.fptr_patch_dispose = PatchDispose;\n"
@@ -1120,7 +1136,19 @@ public class Patch {
         return c;
     }
 
+    int IID = -1; // iid identifies the patch
+
+    int GetIID() {
+        return IID;
+    }
+
+    void CreateIID() {
+        java.util.Random r = new java.util.Random();
+        IID = r.nextInt();
+    }
+
     String GenerateCode3() {
+        CreateIID();
         SortByPosition();
         String c = "extern \"C\" { \n"
                 + "#include \"../" + Constants.firmwaredir + "/patch.h\"\n"
@@ -1147,18 +1175,23 @@ public class Patch {
         c += "     int32buffer AudioOutputLeft;\n";
         c += "     int32buffer AudioOutputRight;\n";
 
+        c += "static void PropagateToSub(ParameterExchange_t *origin) {\n"
+                + "      ParameterExchange_t *pex = (ParameterExchange_t *)origin->finalvalue;\n"
+                + "      PExParameterChange(pex,origin->modvalue,0xFFFFFFEE);\n"
+                + "}\n";
+
         c += GenerateStructCodePlusPlus("rootc", false, "rootc")
                 + GenerateParamInitCode3("rootc")
                 + GeneratePresetCode3("rootc")
                 + GenerateInitCodePlusPlus("rootc")
                 + GenerateDisposeCodePlusPlus("rootc")
-                + GenerateDSPCodePlusPlus("rootc")
+                + GenerateDSPCodePlusPlus("rootc", false)
                 + GenerateMidiCodePlusPlus("rootc")
                 + GeneratePatchCodePlusPlus("rootc");
         if (settings == null) {
-            c = c.replace("%midichannel%", "0");
+            c = c.replace("attr_midichannel", "0");
         } else {
-            c = c.replace("%midichannel%", Integer.toString(settings.GetMidiChannel() - 1));
+            c = c.replace("attr_midichannel", Integer.toString(settings.GetMidiChannel() - 1));
         }
         return c;
     }
@@ -1167,29 +1200,21 @@ public class Patch {
         SortByPosition();
         AxoObject ao = new AxoObject();
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("inlet")
-                    || o.typeName.equals("patch/inlet f")) {
+            if (o.typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet_i")
-                    || o.typeName.equals("patch/inlet i")) {
+            } else if (o.typeName.equals("patch/inlet i")) {
                 ao.inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet_b")
-                    || o.typeName.equals("patch/inlet b")) {
+            } else if (o.typeName.equals("patch/inlet b")) {
                 ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet~")
-                    || o.typeName.equals("patch/inlet a")) {
+            } else if (o.typeName.equals("patch/inlet a")) {
                 ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet")
-                    || o.typeName.equals("patch/outlet f")) {
+            } else if (o.typeName.equals("patch/outlet f")) {
                 ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet_i")
-                    || o.typeName.equals("patch/outlet i")) {
+            } else if (o.typeName.equals("patch/outlet i")) {
                 ao.outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet_b")
-                    || o.typeName.equals("patch/outlet b")) {
+            } else if (o.typeName.equals("patch/outlet b")) {
                 ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet~")
-                    || o.typeName.equals("patch/outlet a")) {
+            } else if (o.typeName.equals("patch/outlet a")) {
                 ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
@@ -1200,12 +1225,12 @@ public class Patch {
         }
         /* object structures */
 //         ao.sCName = fnNoExtension;
-        ao.sLocalData = GenerateStructCodePlusPlusSub("%parent%", true);
+        ao.sLocalData = GenerateStructCodePlusPlusSub("attr_parent", true);
         ao.sLocalData += GenerateParamInitCode3("");
         ao.sLocalData += GeneratePresetCode3("");
-        ao.sInitCode = GenerateParamInitCodePlusPlusSub("%parent%", "this");
-        ao.sInitCode += GenerateObjInitCodePlusPlusSub("%parent%", "this");
-        ao.sDisposeCode = GenerateDisposeCodePlusPlusSub("%parent%");
+        ao.sInitCode = GenerateParamInitCodePlusPlusSub("attr_parent", "this");
+        ao.sInitCode += GenerateObjInitCodePlusPlusSub("attr_parent", "this");
+        ao.sDisposeCode = GenerateDisposeCodePlusPlusSub("attr_parent");
         ao.includes = getIncludes();
         ao.depends = getDepends();
         if ((notes != null) && (!notes.isEmpty())) {
@@ -1215,26 +1240,24 @@ public class Patch {
         }
         ao.sKRateCode = "int i; /*...*/\n";
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("inlet") || o.typeName.equals("inlet_i") || o.typeName.equals("inlet_b")
-                    || o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
-                ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = %" + o.getInstanceName() + "%;\n";
-            } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
-                ao.sKRateCode += "   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = %" + o.getInstanceName() + "%[i];\n";
+            if (o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
+                ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
+            } else if (o.typeName.equals("patch/inlet a")) {
+                ao.sKRateCode += "   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = inlet_" + o.getLegalName() + "[i];\n";
             }
         }
-        ao.sKRateCode += GenerateDSPCodePlusPlusSub("%parent%");
+        ao.sKRateCode += GenerateDSPCodePlusPlusSub("attr_parent", true);
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("outlet") || o.typeName.equals("outlet_i") || o.typeName.equals("outlet_b")
-                    || o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   %" + o.getInstanceName() + "% = " + o.getCInstanceName() + "_i._outlet;\n";
-            } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
-                ao.sKRateCode += "      for(i=0;i<BUFSIZE;i++) %" + o.getInstanceName() + "%[i] = " + o.getCInstanceName() + "_i._outlet[i];\n";
+            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
+                ao.sKRateCode += "   outlet_" + o.getLegalName() + " = " + o.getCInstanceName() + "_i._outlet;\n";
+            } else if (o.typeName.equals("patch/outlet a")) {
+                ao.sKRateCode += "      for(i=0;i<BUFSIZE;i++) outlet_" + o.getLegalName() + "[i] = " + o.getCInstanceName() + "_i._outlet[i];\n";
             }
         }
 
         ao.sMidiCode = GenerateMidiInCodePlusPlus();
         if ((settings != null) && (settings.GetMidiChannelSelector())) {
-            String cch[] = {"%midichannel%", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+            String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
             ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
         }
@@ -1242,23 +1265,35 @@ public class Patch {
     }
 
     public AxoObject GenerateAxoObj() {
-        if ((settings.subpatchmode == SubPatchMode.normal) || (settings.subpatchmode == SubPatchMode.no)) {
-            AxoObject ao = GenerateAxoObjNormal();
-            return ao;
+        AxoObject ao;
+        if (settings == null) {
+            ao = GenerateAxoObjNormal();
+        } else {
+            switch (settings.subpatchmode) {
+                case no:
+                case normal:
+                    ao = GenerateAxoObjNormal();
+                    break;
+                case polyphonic:
+                    ao = GenerateAxoObjPoly();
+                    break;
+                case polychannel:
+                    ao = GenerateAxoObjPolyChannel();
+                    break;
+                case polyexpression:
+                    ao = GenerateAxoObjPolyExpression();
+                    break;
+                default:
+                    return null;
+            }
         }
-        if (settings.subpatchmode == SubPatchMode.polyphonic) {
-            AxoObject ao = GenerateAxoObjPoly();
-            return ao;
+        if (settings != null) {
+            ao.sAuthor = settings.getAuthor();
+            ao.sLicense = settings.getLicense();
+            ao.sDescription = notes;
+            ao.helpPatch = helpPatch;
         }
-        if (settings.subpatchmode == SubPatchMode.polychannel) {
-            AxoObject ao = GenerateAxoObjPolyChannel();
-            return ao;
-        }
-        if (settings.subpatchmode == SubPatchMode.polyexpression) {
-            AxoObject ao = GenerateAxoObjPolyExpression();
-            return ao;
-        }
-        return null;
+        return ao;
     }
 
     void ExportAxoObj(File f1) {
@@ -1295,35 +1330,35 @@ public class Patch {
         String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         ao.attributes.add(new AxoAttributeComboBox("poly", centries, centries));
         if ((settings != null) && (settings.GetMidiChannelSelector())) {
-            String cch[] = {"%midichannel%", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+            String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
             ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
         }
 
         // use a cut down list of those currently supported
-        String cdev[] = {"0", "1", "3", "15"};
-        String udev[] = {"omni", "din", "usb host", "internal"};
+        String cdev[] = {"0", "1", "2", "3", "15"};
+        String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
         ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
         String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
 
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("inlet") || o.typeName.equals("patch/inlet f")) {
+            if (o.typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet_i") || o.typeName.equals("patch/inlet i")) {
+            } else if (o.typeName.equals("patch/inlet i")) {
                 ao.inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet_b") || o.typeName.equals("patch/inlet b")) {
+            } else if (o.typeName.equals("patch/inlet b")) {
                 ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
+            } else if (o.typeName.equals("patch/inlet a")) {
                 ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet") || o.typeName.equals("patch/outlet f")) {
+            } else if (o.typeName.equals("patch/outlet f")) {
                 ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet_i") || o.typeName.equals("patch/outlet i")) {
+            } else if (o.typeName.equals("patch/outlet i")) {
                 ao.outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet_b") || o.typeName.equals("patch/outlet b")) {
+            } else if (o.typeName.equals("patch/outlet b")) {
                 ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
+            } else if (o.typeName.equals("patch/outlet a")) {
                 ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
@@ -1335,13 +1370,20 @@ public class Patch {
 
         ao.sLocalData = GenerateParamInitCode3("");
         ao.sLocalData += GeneratePexchAndDisplayCode();
+        ao.sLocalData += "/* parameter instance indices */\n";
+        int k = 0;
+        for (ParameterInstance p : ParameterInstances) {
+            ao.sLocalData += "static const int PARAM_INDEX_" + p.axoObj.getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
+            k++;
+        }
+
         ao.sLocalData += GeneratePresetCode3("");
         ao.sLocalData += "class voice {\n";
         ao.sLocalData += "   public:\n";
         ao.sLocalData += "   int polyIndex;\n";
         ao.sLocalData += GeneratePexchAndDisplayCode();
-        ao.sLocalData += GenerateObjectCode("voice", true, "parent2->common->");
-        ao.sLocalData += "%parent% *common;\n";
+        ao.sLocalData += GenerateObjectCode("voice", true, "parent->common->");
+        ao.sLocalData += "attr_parent *common;\n";
         ao.sLocalData += "void Init(voice *parent) {\n";
         ao.sLocalData += "        int i;\n"
                 + "        for(i=0;i<NPEXCH;i++){\n"
@@ -1350,40 +1392,39 @@ public class Patch {
         ao.sLocalData += GenerateObjInitCodePlusPlusSub("voice", "parent");
         ao.sLocalData += "}\n\n";
         ao.sLocalData += "void dsp(void) {\n int i;\n";
-        ao.sLocalData += GenerateDSPCodePlusPlusSub("");
+        ao.sLocalData += GenerateDSPCodePlusPlusSub("", true);
         ao.sLocalData += "}\n";
         ao.sLocalData += "void dispose(void) {\n int i;\n";
         ao.sLocalData += GenerateDisposeCodePlusPlusSub("");
         ao.sLocalData += "}\n";
-        ao.sLocalData += GenerateMidiCodePlusPlus("%parent%");
+        ao.sLocalData += GenerateMidiCodePlusPlus("attr_parent");
         ao.sLocalData += "};\n";
         ao.sLocalData += "static voice * getVoices(void){\n"
-                + "     static voice v[%poly%];\n"
+                + "     static voice v[attr_poly];\n"
                 + "    return v;\n"
                 + "}\n";
 
         ao.sLocalData += "static void PropagateToVoices(ParameterExchange_t *origin) {\n"
                 + "      ParameterExchange_t *pex = (ParameterExchange_t *)origin->finalvalue;\n"
                 + "      int vi;\n"
-                + "      for (vi = 0; vi < %poly%; vi++) {\n"
+                + "      for (vi = 0; vi < attr_poly; vi++) {\n"
                 + "        PExParameterChange(pex,origin->modvalue,0xFFFFFFEE);\n"
-                //                + "        pex += sizeof(voice); // dirty trick...\n"
                 + "          pex = (ParameterExchange_t *)((int)pex + sizeof(voice)); // dirty trick...\n"
                 + "      }"
                 + "}\n";
 
-        ao.sLocalData += "int8_t notePlaying[%poly%];\n";
-        ao.sLocalData += "int32_t voicePriority[%poly%];\n";
+        ao.sLocalData += "int8_t notePlaying[attr_poly];\n";
+        ao.sLocalData += "int32_t voicePriority[attr_poly];\n";
         ao.sLocalData += "int32_t priority;\n";
         ao.sLocalData += "int32_t sustain;\n";
-        ao.sLocalData += "int8_t pressed[%poly%];\n";
+        ao.sLocalData += "int8_t pressed[attr_poly];\n";
         ao.sInitCode = GenerateParamInitCodePlusPlusSub("", "parent");
         ao.sInitCode += "int k;\n"
                 + "   for(k=0;k<NPEXCH;k++){\n"
                 + "      PExch[k].pfunction = PropagateToVoices;\n"
                 + "      PExch[k].finalvalue = (int32_t) (&(getVoices()[0].PExch[k]));\n"
                 + "   }\n";
-        ao.sInitCode += "int vi; for(vi=0;vi<%poly%;vi++) {\n"
+        ao.sInitCode += "int vi; for(vi=0;vi<attr_poly;vi++) {\n"
                 + "   voice *v = &getVoices()[vi];\n"
                 + "   v->polyIndex = vi;\n"
                 + "   v->common = this;\n"
@@ -1401,85 +1442,56 @@ public class Patch {
                 + "        } else {\n"
                 + "          PExch[k].finalvalue = PExch[k].value;\n"
                 + "        }\n"
-                + "      }"
+                + "      }\n"
                 + "priority=0;\n"
                 + "sustain=0;\n";
-        ao.sDisposeCode = "int vi; for(vi=0;vi<%poly%;vi++) {\n"
+        ao.sDisposeCode = "int vi; for(vi=0;vi<attr_poly;vi++) {\n"
                 + "  voice *v = &getVoices()[vi];\n"
                 + "  v->dispose();\n"
                 + "}\n";
         ao.sKRateCode = "";
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("outlet") || o.typeName.equals("outlet_i") || o.typeName.equals("outlet_b")
-                    || o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   %" + o.getInstanceName() + "% = 0;\n";
-            } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
+            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
+                ao.sKRateCode += "   outlet_" + o.getLegalName() + " = 0;\n";
+            } else if (o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
-                        + "      for(j=0;j<BUFSIZE;j++) %" + o.getInstanceName() + "%[j] = 0;\n"
+                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] = 0;\n"
                         + "}\n";
             }
         }
-        ao.sKRateCode += "int vi; for(vi=0;vi<%poly%;vi++) {";
+        ao.sKRateCode += "int vi; for(vi=0;vi<attr_poly;vi++) {";
 
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("inlet") || o.typeName.equals("inlet_i") || o.typeName.equals("inlet_b")
                     || o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
-                ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = %" + o.getInstanceName() + "%;\n";
+                ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
             } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
-                ao.sKRateCode += "{int j; for(j=0;j<BUFSIZE;j++) getVoices()[vi]." + o.getCInstanceName() + "_i._inlet[j] = %" + o.getInstanceName() + "%[j];}\n";
+                ao.sKRateCode += "{int j; for(j=0;j<BUFSIZE;j++) getVoices()[vi]." + o.getCInstanceName() + "_i._inlet[j] = inlet_" + o.getLegalName() + "[j];}\n";
             }
         }
         ao.sKRateCode += "getVoices()[vi].dsp();\n";
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("outlet") || o.typeName.equals("patch/outlet f")
-                    || o.typeName.equals("outlet_i") || o.typeName.equals("patch/outlet i")
-                    || o.typeName.equals("outlet_b") || o.typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   %" + o.getInstanceName() + "% += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
-            } else if (o.typeName.equals("outlet~") || o.typeName.equals("patch/outlet a")) {
+                    || o.typeName.equals("patch/outlet i")
+                    || o.typeName.equals("patch/outlet b")) {
+                ao.sKRateCode += "   outlet_" + o.getLegalName() + " += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
+            } else if (o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
-                        + "      for(j=0;j<BUFSIZE;j++) %" + o.getInstanceName() + "%[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
+                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
                         + "}\n";
             }
         }
-        ao.sKRateCode += "}\n"; /*
-         for (AxoObjectInstanceAbstract o : objectinstances) {
-         if (o.typeName.equals("outlet")){
-         ao.sKRateCode += "   %" + o.getInstanceName() + "% += v[vi]."+o.getCName()+"_i._outlet;\n";
-         } else if (o.typeName.equals("outlet~")){
-         ao.sKRateCode += "{\n"
-         + "      int j;\n"
-         + "      for(j=0;j<BUFSIZE;j++) %" + o.getInstanceName() + "%[j] += v[vi]."+o.getCName()+"_i._outlet[j];\n"
-         + "}\n";
-         }
-         }*/
-
-        /* non LRU, first free
-         ao.sMidiNoteOnCode = "      int i;  for(i=0;i<%poly%;i++) {\n"
-         + "      if (!notePlaying[i]) {\n"
-         + "         notePlaying[i] = note;\n"
-         + "         v[i].PatchMidiInNoteOn(channel, note, velocity);\n"
-         + "         break;\n"
-         + "      }\n"
-         + "   }\n";
-         ao.sMidiNoteOffCode = "      int i;  for(i=0;i<%poly%;i++) {\n"
-         + "      if (notePlaying[i]==note) {\n"
-         + "         notePlaying[i] = 0;\n"
-         + "         v[i].PatchMidiInNoteOff(channel, note, velocity);\n"
-         + "         break;\n"
-         + "      }\n"
-         + "   }\n";        
-         */
-
+        ao.sKRateCode += "}\n";
         ao.sMidiCode = ""
-                + "if ( %mididevice% > 0 && dev > 0 && %mididevice% != dev) return;\n"
-                + "if ( %midiport% > 0 && port > 0 && %midiport% != port) return;\n"
-                + "if ((status == MIDI_NOTE_ON + %midichannel%) && (data2)) {\n"
+                + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
+                + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
+                + "if ((status == MIDI_NOTE_ON + attr_midichannel) && (data2)) {\n"
                 + "  int min = 1<<30;\n"
                 + "  int mini = 0;\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++){\n"
+                + "  for(i=0;i<attr_poly;i++){\n"
                 + "    if (voicePriority[i] < min){\n"
                 + "      min = voicePriority[i];\n"
                 + "      mini = i;\n"
@@ -1489,10 +1501,10 @@ public class Patch {
                 + "  notePlaying[mini] = data1;\n"
                 + "  pressed[mini] = 1;\n"
                 + "  getVoices()[mini].MidiInHandler(dev, port, status, data1, data2);\n"
-                + "} else if (((status == MIDI_NOTE_ON + %midichannel%) && (!data2))||\n"
-                + "          (status == MIDI_NOTE_OFF + %midichannel%)) {\n"
+                + "} else if (((status == MIDI_NOTE_ON + attr_midichannel) && (!data2))||\n"
+                + "          (status == MIDI_NOTE_OFF + attr_midichannel)) {\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++){\n"
+                + "  for(i=0;i<attr_poly;i++){\n"
                 + "    if (notePlaying[i] == data1){\n"
                 + "      voicePriority[i] = priority++;\n"
                 + "      pressed[i] = 0;\n"
@@ -1500,23 +1512,23 @@ public class Patch {
                 + "        getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
                 + "      }\n"
                 + "  }\n"
-                + "} else if (status == %midichannel% + MIDI_CONTROL_CHANGE) {\n"
+                + "} else if (status == attr_midichannel + MIDI_CONTROL_CHANGE) {\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++) getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
+                + "  for(i=0;i<attr_poly;i++) getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
                 + "  if (data1 == 64) {\n"
                 + "    if (data2>0) {\n"
                 + "      sustain = 1;\n"
                 + "    } else if (sustain == 1) {\n"
                 + "      sustain = 0;\n"
-                + "      for(i=0;i<%poly%;i++){\n"
+                + "      for(i=0;i<attr_poly;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
+                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0);\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {"
-                + "  int i;   for(i=0;i<%poly%;i++) getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
+                + "  int i;   for(i=0;i<attr_poly;i++) getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
                 + "}\n";
         return ao;
     }
@@ -1526,22 +1538,22 @@ public class Patch {
     AxoObject GenerateAxoObjPolyChannel() {
         AxoObject o = GenerateAxoObjPoly();
         o.sLocalData
-                += "int8_t voiceChannel[%poly%];\n";
+                += "int8_t voiceChannel[attr_poly];\n";
         o.sInitCode
                 += "int vc;\n"
-                + "for (vc=0;vc<%poly%;vc++) {\n"
+                + "for (vc=0;vc<attr_poly;vc++) {\n"
                 + "   voiceChannel[vc]=0xFF;\n"
                 + "}\n";
         o.sMidiCode = ""
-                + "if ( %mididevice% > 0 && dev > 0 && %mididevice% != dev) return;\n"
-                + "if ( %midiport% > 0 && port > 0 && %midiport% != port) return;\n"
+                + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
+                + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
                 + "int msg = (status & 0xF0);\n"
                 + "int channel = (status & 0x0F);\n"
                 + "if ((msg == MIDI_NOTE_ON) && (data2)) {\n"
                 + "  int min = 1<<30;\n"
                 + "  int mini = 0;\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++){\n"
+                + "  for(i=0;i<attr_poly;i++){\n"
                 + "    if (voicePriority[i] < min){\n"
                 + "      min = voicePriority[i];\n"
                 + "      mini = i;\n"
@@ -1555,20 +1567,20 @@ public class Patch {
                 + "} else if (((msg == MIDI_NOTE_ON) && (!data2))||\n"
                 + "            (msg == MIDI_NOTE_OFF)) {\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++){\n"
+                + "  for(i=0;i<attr_poly;i++){\n"
                 + "    if (notePlaying[i] == data1){\n"
                 + "      voicePriority[i] = priority++;\n"
                 + "      voiceChannel[i] = 0xFF;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "         getVoices()[i].MidiInHandler(dev, port, msg + %midichannel%, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(dev, port, msg + attr_midichannel, data1, data2);\n"
                 + "      }\n"
                 + "  }\n"
                 + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++) {\n"
+                + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, data1, data2);\n"
+                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "  if (data1 == 64) {\n"
@@ -1576,25 +1588,25 @@ public class Patch {
                 + "      sustain = 1;\n"
                 + "    } else if (sustain == 1) {\n"
                 + "      sustain = 0;\n"
-                + "      for(i=0;i<%poly%;i++){\n"
+                + "      for(i=0;i<attr_poly;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
+                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0);\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else if (msg == MIDI_PITCH_BEND) {\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++){\n"
+                + "  for(i=0;i<attr_poly;i++){\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_PITCH_BEND + %midichannel%, data1, data2);\n"
+                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_PITCH_BEND + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++) {\n"
+                + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "         getVoices()[i].MidiInHandler(dev, port,msg + %midichannel%, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(dev, port,msg + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "}\n";
@@ -1607,7 +1619,7 @@ public class Patch {
     AxoObject GenerateAxoObjPolyExpression() {
         AxoObject o = GenerateAxoObjPoly();
         o.sLocalData
-                += "int8_t voiceChannel[%poly%];\n"
+                += "int8_t voiceChannel[attr_poly];\n"
                 + "int8_t pitchbendRange;\n"
                 + "int8_t lowChannel;\n"
                 + "int8_t highChannel;\n"
@@ -1615,27 +1627,27 @@ public class Patch {
                 + "int8_t lastRPN_MSB;\n";
         o.sInitCode
                 += "int vc;\n"
-                + "for (vc=0;vc<%poly%;vc++) {\n"
+                + "for (vc=0;vc<attr_poly;vc++) {\n"
                 + "   voiceChannel[vc]=0xFF;\n"
                 + "}\n"
-                + "lowChannel = %midichannel% + 1;\n"
-                + "highChannel = %midichannel% + ( 15 - %midichannel%);\n"
+                + "lowChannel = attr_midichannel + 1;\n"
+                + "highChannel = attr_midichannel + ( 15 - attr_midichannel);\n"
                 + "pitchbendRange = 48;\n"
                 + "lastRPN_LSB=0xFF;\n"
                 + "lastRPN_MSB=0xFF;\n";
         o.sMidiCode = ""
-                + "if ( %mididevice% > 0 && dev > 0 && %mididevice% != dev) return;\n"
-                + "if ( %midiport% > 0 && port > 0 && %midiport% != port) return;\n"
+                + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
+                + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
                 + "int msg = (status & 0xF0);\n"
                 + "int channel = (status & 0x0F);\n"
                 + "if ((msg == MIDI_NOTE_ON) && (data2)) {\n"
-                + "  if (channel == %midichannel% \n"
+                + "  if (channel == attr_midichannel \n"
                 + "   || channel < lowChannel || channel > highChannel)\n"
                 + "    return;\n"
                 + "  int min = 1<<30;\n"
                 + "  int mini = 0;\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++){\n"
+                + "  for(i=0;i<attr_poly;i++){\n"
                 + "    if (voicePriority[i] < min){\n"
                 + "      min = voicePriority[i];\n"
                 + "      mini = i;\n"
@@ -1648,23 +1660,23 @@ public class Patch {
                 + "  getVoices()[mini].MidiInHandler(dev, port, status & 0xF0, data1, data2);\n"
                 + "} else if (((msg == MIDI_NOTE_ON) && (!data2))||\n"
                 + "            (msg == MIDI_NOTE_OFF)) {\n"
-                + "  if (channel == %midichannel%\n "
+                + "  if (channel == attr_midichannel\n "
                 + "   || channel < lowChannel || channel > highChannel)\n"
                 + "    return;\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++){\n"
+                + "  for(i=0;i<attr_poly;i++){\n"
                 + "    if (notePlaying[i] == data1 && voiceChannel[i] == channel){\n"
                 + "      voicePriority[i] = priority++;\n"
                 + "      voiceChannel[i] = 0xFF;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "         getVoices()[i].MidiInHandler(dev, port, msg + %midichannel%, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(dev, port, msg + attr_midichannel, data1, data2);\n"
                 + "      }\n"
                 + "  }\n"
                 + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
                 + "  if (data1 == MIDI_C_POLY) {\n" // MPE enable mode
                 + "     if (data2 > 0) {\n "
-                + "       if (channel == %midichannel%) {\n"
+                + "       if (channel == attr_midichannel) {\n"
                 + "         if (channel != 15) {\n" // e.g ch 1 (g), we use 2-N notes
                 + "           lowChannel = channel + 1;\n"
                 + "           highChannel = lowChannel + data2 - 1;\n"
@@ -1672,10 +1684,10 @@ public class Patch {
                 + "           highChannel = channel - 1;\n"
                 + "           lowChannel = highChannel + 1 - data2;\n"
                 + "         }\n"
-                + "         for(int i=0;i<%poly%;i++) {\n"
-                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 100, lastRPN_LSB);\n"
-                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 101, lastRPN_MSB);\n"
-                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 6, pitchbendRange);\n"
+                + "         for(int i=0;i<attr_poly;i++) {\n"
+                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 100, lastRPN_LSB);\n"
+                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 101, lastRPN_MSB);\n"
+                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 6, pitchbendRange);\n"
                 + "         }\n" //for
                 + "      }\n" //if mainchannel
                 + "    } else {\n" // enable/disable
@@ -1683,13 +1695,13 @@ public class Patch {
                 + "      highChannel = 0;\n"
                 + "    }\n"
                 + "  }\n"// cc127
-                + "  if (channel != %midichannel%\n"
+                + "  if (channel != attr_midichannel\n"
                 + "    && (channel < lowChannel || channel > highChannel))\n"
                 + "    return;\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++) {\n"
-                + "    if (voiceChannel[i] == channel || channel == %midichannel%) {\n"
-                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, data1, data2);\n"
+                + "  for(i=0;i<attr_poly;i++) {\n"
+                + "    if (voiceChannel[i] == channel || channel == attr_midichannel) {\n"
+                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "  if (data1 == MIDI_C_RPN_MSB || data1 == MIDI_C_RPN_LSB || data1 == MIDI_C_DATA_ENTRY) {\n"
@@ -1698,12 +1710,12 @@ public class Patch {
                 + "         case MIDI_C_RPN_MSB: lastRPN_MSB = data2; break;\n"
                 + "         case MIDI_C_DATA_ENTRY: {\n"
                 + "             if (lastRPN_LSB == 0 && lastRPN_MSB == 0) {\n"
-                + "               for(i=0;i<%poly%;i++) {\n"
+                + "               for(i=0;i<attr_poly;i++) {\n"
                 + "                 if (voiceChannel[i] != channel) {\n" // because already sent above
                 + "                   pitchbendRange = data2;\n"
-                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 100, lastRPN_LSB);\n"
-                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 101, lastRPN_MSB);\n"
-                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + %midichannel%, 6, pitchbendRange);\n"
+                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 100, lastRPN_LSB);\n"
+                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 101, lastRPN_MSB);\n"
+                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 6, pitchbendRange);\n"
                 + "                 }\n" // if
                 + "               }\n" //for
                 + "             }\n" // if lsb/msb=0
@@ -1716,31 +1728,31 @@ public class Patch {
                 + "      sustain = 1;\n"
                 + "    } else if (sustain == 1) {\n"
                 + "      sustain = 0;\n"
-                + "      for(i=0;i<%poly%;i++){\n"
+                + "      for(i=0;i<attr_poly;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + %midichannel%, notePlaying[i], 0);\n"
+                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0);\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n" //sus=1
                 + "  }\n" //cc64
                 + "} else if (msg == MIDI_PITCH_BEND) {\n"
-                + "  if (channel != %midichannel%\n"
+                + "  if (channel != attr_midichannel\n"
                 + "    && (channel < lowChannel || channel > highChannel))\n"
                 + "    return;\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++) {\n"
-                + "    if (voiceChannel[i] == channel || channel == %midichannel%) {\n"
-                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_PITCH_BEND + %midichannel%, data1, data2);\n"
+                + "  for(i=0;i<attr_poly;i++) {\n"
+                + "    if (voiceChannel[i] == channel || channel == attr_midichannel) {\n"
+                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_PITCH_BEND + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {" // end pb, other midi
-                + "  if (channel != %midichannel%\n"
+                + "  if (channel != attr_midichannel\n"
                 + "    && (channel < lowChannel || channel > highChannel))\n"
                 + "    return;\n"
                 + "  int i;\n"
-                + "  for(i=0;i<%poly%;i++) {\n"
-                + "    if (voiceChannel[i] == channel || channel == %midichannel%) {\n"
-                + "         getVoices()[i].MidiInHandler(dev, port, msg + %midichannel%, data1, data2);\n"
+                + "  for(i=0;i<attr_poly;i++) {\n"
+                + "    if (voiceChannel[i] == channel || channel == attr_midichannel) {\n"
+                + "         getVoices()[i].MidiInHandler(dev, port, msg + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "}\n"; // other midi
@@ -1749,16 +1761,16 @@ public class Patch {
 
     void WriteCode() {
         String c = GenerateCode3();
-        //cdlg.SetCode(c);
 
         try {
-            FileOutputStream f = new FileOutputStream("patch/xpatch.cpp");
+            String buildDir=System.getProperty(Axoloti.HOME_DIR)+"/build";
+            FileOutputStream f = new FileOutputStream(buildDir+"/xpatch.cpp");
             f.write(c.getBytes());
             f.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, ex.toString());
         } catch (IOException ex) {
-            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, ex.toString());
         }
         Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Generate code complete");
     }
@@ -2015,13 +2027,26 @@ public class Patch {
         for (OutletInstance ol : newObj.GetOutletInstances()) {
             OutletInstance ol1 = outlets.get(ol.GetLabel());
             if (ol1 != null) {
-                AddConnection(ol, ol1);
+                Net n1 = GetNet(ol1);
+                if (n1 != null && n1.dest != null) {
+                    ArrayList<InletInstance> dests = new ArrayList<InletInstance>(n1.dest);
+                    for (InletInstance i : dests) {
+                        AddConnection(i, ol);
+                    }
+                }
             }
         }
+
         for (InletInstance il : newObj.GetInletInstances()) {
             InletInstance il1 = inlets.get(il.GetLabel());
             if (il1 != null) {
-                AddConnection(il, il1);
+                Net n1 = GetNet(il1);
+                if (n1 != null && n1.source != null) {
+                    ArrayList<OutletInstance> srcs = new ArrayList<OutletInstance>(n1.source);
+                    for (OutletInstance o : srcs) {
+                        AddConnection(il, o);
+                    }
+                }
             }
         }
 
@@ -2101,5 +2126,9 @@ public class Patch {
             return null;
         }
         return FileNamePath.substring(0, i);
+    }
+
+    public Rectangle getWindowPos() {
+        return windowPos;
     }
 }

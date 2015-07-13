@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="unipolar2bipolar" sha="1036bdea372166d396fc75329ed1d057bd4af3fb">
+   <obj.normal id="unipolar2bipolar" uuid="efc8ee28c508740c5edf7995eaaa07a6d6818e5e" sha="5f55b7ee58828996387d37c5431384eb14c9dd16">
+      <upgradeSha>1036bdea372166d396fc75329ed1d057bd4af3fb</upgradeSha>
       <sDescription>unipolar to bipolar</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,10 +13,11 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%i%-(1<<26))<<1;
+      <code.krate><![CDATA[   outlet_o= (inlet_i-(1<<26))<<1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="unipolar2bipolar" sha="8525be5d55df51043f07b379c6d326988e993946">
+   <obj.normal id="unipolar2bipolar" uuid="3345c38145a8120f27f13de7d1507d9aa22862ae" sha="36966e38c913683578091a9c39d09c87005d8d7c">
+      <upgradeSha>8525be5d55df51043f07b379c6d326988e993946</upgradeSha>
       <sDescription>unipolar to bipolar</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -28,7 +30,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   %o%= (%i%-(1<<26))<<1;
+      <code.srate><![CDATA[   outlet_o[buffer_index]= (inlet_i[buffer_index]-(1<<26))<<1;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

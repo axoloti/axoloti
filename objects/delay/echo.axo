@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="echo" sha="c99f6c1ce7d79693879e0923e21fc0c6ffd1169">
+   <obj.normal id="echo" uuid="b7e4de60a644f6b30fdee9648ea62f446ecce38d" sha="d36e882cb943624d3d4fc7c4297f9503e46c04ba">
+      <upgradeSha>c99f6c1ce7d79693879e0923e21fc0c6ffd1169</upgradeSha>
       <sDescription>Audio delay line, fixed delay time</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>echo.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
       </inlets>
@@ -16,17 +18,17 @@
       </attribs>
       <code.declaration><![CDATA[uint32_t delaywindex;
 uint32_t delayrindex;
-int16_t delayline[%delaylength%];
+int16_t delayline[attr_delaylength];
 ]]></code.declaration>
       <code.init><![CDATA[   int i;
-   for(i=0;i<%delaylength%;i++) delayline[i] = 0;
+   for(i=0;i<attr_delaylength;i++) delayline[i] = 0;
    delaywindex = 0;
    delayrindex = 1;
 ]]></code.init>
       <code.srate><![CDATA[ int32_t rd = delayline[delayrindex++];
-delayline[delaywindex++] = __SSAT(%in%>>14,16);
-if (delayrindex == %delaylength%) delayrindex = 0;
-if (delaywindex == %delaylength%) delaywindex = 0;
-%out% = rd<<14;]]></code.srate>
+delayline[delaywindex++] = __SSAT(inlet_in[buffer_index]>>14,16);
+if (delayrindex == attr_delaylength) delayrindex = 0;
+if (delaywindex == attr_delaylength) delaywindex = 0;
+outlet_out[buffer_index] = rd<<14;]]></code.srate>
    </obj.normal>
 </objdefs>

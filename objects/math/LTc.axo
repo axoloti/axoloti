@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="&lt;c" sha="355de7092a37338e16e09397154948f860a9160c">
+   <obj.normal id="&lt;c" uuid="852c84e7bd967ee4a44cc553fcf6e3fc9d8b92c4" sha="cfbcbe9eb204d0e8edc9d135f13c6fa284ba378d">
+      <upgradeSha>355de7092a37338e16e09397154948f860a9160c</upgradeSha>
       <sDescription>less than constant</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>
@@ -17,6 +19,6 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in%< %c%;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in< param_c;]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -1,0 +1,144 @@
+<patch-1.0>
+   <comment type="patch/comment" name="connect PA4 to STB0" x="28" y="14"/>
+   <comment type="patch/comment" name="PA5 to CLK" x="70" y="28"/>
+   <comment type="patch/comment" name="PA6 and PA7 to DIO" x="70" y="42"/>
+   <comment type="patch/comment" name="VDD to VCC" x="70" y="56"/>
+   <comment type="patch/comment" name="GND to GND" x="70" y="70"/>
+   <obj type="gpio/spi/config" sha="8491453740b6fc6b2fcf5de6e9eb65baa370f6e4" name="spi.begin_1" x="28" y="98">
+      <params/>
+      <attribs>
+         <combo attributeName="clock_polarity" selection="0 when idle"/>
+         <combo attributeName="clock_phase" selection="first clock transition is the first data capture edge"/>
+         <combo attributeName="baudrate" selection="FPCLK/128"/>
+         <combo attributeName="format" selection="LSB first"/>
+      </attribs>
+   </obj>
+   <obj type="script/script2" sha="1478c410b77725959c034de4a2456dd1198e9080" name="script2_1" x="168" y="98">
+      <params/>
+      <attribs>
+         <text attributeName="script">
+            <sText><![CDATA[uint8_t *txbuf;
+uint8_t *rxbuf;
+
+// inspired by http://mjoldfield.github.io/pi-tm1638/tm1638_8h.html
+// however functionality is reduced to a single tm1638
+// not bitbanging but using the SPI port
+// The Chibios driver does not seem to work in BIDIR mode, so MISO and MOSI should be connected together.
+
+
+void tm1638_send_command(uint8_t x){
+	SPID1.spi->CR1 |= SPI_CR1_BIDIOE;
+	spiSelect(&SPID1);
+	txbuf[0] = x;
+	spiSend(&SPID1,1,&txbuf[0]);
+	spiUnselect(&SPID1);
+}
+
+void tm1638_send_data(uint8_t addr, uint8_t data){
+	SPID1.spi->CR1 |= SPI_CR1_BIDIOE;
+	tm1638_send_command(0x44);
+	txbuf[0] = addr|0xc0;
+	txbuf[1] = data;
+	spiSelect(&SPID1);
+	spiSend(&SPID1,2,txbuf);
+	spiUnselect(&SPID1);
+}
+
+void tm1638_set_led(uint8_t led, uint8_t cols){
+	tm1638_send_data((led << 1) + 1, cols);
+}
+
+uint8_t tm1638_read_buttons(void){
+	txbuf[0] = 0x42;
+	txbuf[1] = 0;
+	txbuf[2] = 0;
+	txbuf[3] = 0;
+	txbuf[4] = 0;
+	txbuf[5] = 0;
+	txbuf[6] = 0;
+	txbuf[7] = 0;
+	spiSelect(&SPID1);
+	spiSend(&SPID1,1,&txbuf[0]);
+	palSetPadMode(GPIOA, 7, PAL_MODE_INPUT); // MOSI -> tristate
+	spiReceive(&SPID1,4,&rxbuf[0]);
+	spiUnselect(&SPID1);
+	palSetPadMode(GPIOA, 7, PAL_MODE_ALTERNATE(5)); // MOSI -> output
+	uint8_t out = 0;
+	out += rxbuf[0]&0x01?1:0;
+	out += rxbuf[1]&0x01?2:0;
+	out += rxbuf[2]&0x01?4:0;
+	out += rxbuf[3]&0x01?8:0;
+	out += rxbuf[0]&0x10?16:0;
+	out += rxbuf[1]&0x10?32:0;
+	out += rxbuf[2]&0x10?64:0;
+	out += rxbuf[3]&0x10?128:0;
+	return out;
+}
+
+char i;
+uint8_t buttons_prev; 
+uint8_t state8g; 
+uint8_t state8r; 
+
+void setup(){
+	// allocate buffers suitable for DMA transfert!
+	static uint8_t _txbuf[8] __attribute__ ((section (".sram2")));
+	static uint8_t _rxbuf[8] __attribute__ ((section (".sram2")));
+	txbuf = _txbuf;
+	rxbuf = _rxbuf;
+	tm1638_send_command(0x8F);
+	i = 0;
+	buttons_prev = 0;
+	state8g = 0;
+	state8r = 0;
+}
+
+void update_leds(){
+	uint8_t g = state8g;
+	uint8_t r = state8r;
+	int j;
+	for(j=0;j<8;j++){
+		tm1638_set_led(j, (g&1) + 2 * (r&1));
+		g=g>>1;
+		r=r>>1;
+	}
+}
+
+void loop(){
+	chThdSleepMilliseconds(1);
+	uint8_t buttons = tm1638_read_buttons();
+	state8g = parent->PExch[PARAM_INDEX_seqg_b16].value;
+    	state8r = parent->PExch[PARAM_INDEX_seqr_b16].value;
+	uint8_t buttons_pressed = buttons & ~buttons_prev;
+	if (buttons_pressed) {
+		state8g = state8g ^ buttons_pressed;
+		state8r = state8r ^ (state8g & buttons_pressed);
+		PExParameterChange(&parent->PExch[PARAM_INDEX_seqg_b16],state8g,0xFFFD);
+		PExParameterChange(&parent->PExch[PARAM_INDEX_seqr_b16],state8r,0xFFFD);
+	}
+	update_leds();
+	buttons_prev = buttons;
+}]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" name="the script makes the leds reflect the state of seqg and seqr" x="168" y="196"/>
+   <comment type="patch/comment" name="and the buttons are used to change the state of seqg and seqr too" x="168" y="210"/>
+   <obj type="sel/sel b 16" sha="edded2c45c473d9ae251dbd56053120a8b3c57be" name="seqg" x="28" y="252">
+      <params>
+         <bin16 name="b16" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="sel/sel b 16" sha="edded2c45c473d9ae251dbd56053120a8b3c57be" name="seqr" x="28" y="336">
+      <params>
+         <bin16 name="b16" value="51"/>
+      </params>
+      <attribs/>
+   </obj>
+   <nets/>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

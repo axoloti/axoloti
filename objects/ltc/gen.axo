@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="gen" sha="2faa7905faf62aedd04c2908a0fda56fcff9f4c8">
+   <obj.normal id="gen" uuid="88ecc0fcd7825a6692127e31ee62464e9c5bde5a" sha="8eb92f13e174f63530a4403d1c8cb78cfb53b20">
+      <upgradeSha>2faa7905faf62aedd04c2908a0fda56fcff9f4c8</upgradeSha>
       <sDescription>LTC (linear timecode) generator, in sync with the audio sample clock. Does not support drop-frame format. This implementation only works when the system clock is 48kHz or 96kHz, not at 44.1kHz!</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>gen.axh</helpPatch>
       <inlets/>
       <outlets>
          <int32 name="h" description="hours"/>
@@ -35,7 +37,7 @@ int32_t bo; // bit output
 
 void inc(){
    f++;
-   if (f == %fps%) {
+   if (f == attr_fps) {
       f = 0;
       s++;
       if (s == 60){
@@ -220,14 +222,14 @@ b = 0;
 ss = 0;
 bo = 1<<26;
 ]]></code.init>
-      <code.krate><![CDATA[%h% = h;
-%m% = m;
-%s% = s;
-%f% = f;
+      <code.krate><![CDATA[outlet_h = h;
+outlet_m = m;
+outlet_s = s;
+outlet_f = f;
 ]]></code.krate>
-      <code.srate><![CDATA[%out% = bo;
+      <code.srate><![CDATA[outlet_out[buffer_index] = bo;
 ss++;
-if (ss==((SAMPLERATE/160)/%fps%)) {
+if (ss==((SAMPLERATE/160)/attr_fps)) {
    ss=0;
    getbit();
 }

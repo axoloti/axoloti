@@ -45,7 +45,7 @@ public class Distortion extends gentools {
         WriteAxoObject(catName, new AxoObject[]{Create_Slew(), Create_SlewTilde()});
         WriteAxoObject(catName, Create_Rectify());
         WriteAxoObject(catName, Create_Rectify_full());
-        WriteAxoObject(catName, Create_Rectify_lab());
+//UNRELEASED        WriteAxoObject(catName, Create_Rectify_lab());
 
     }
 

@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# removes all the source files and the executables
+
 rm -rv i386/
 rm -rv x86_64/
 rm -rv bin/

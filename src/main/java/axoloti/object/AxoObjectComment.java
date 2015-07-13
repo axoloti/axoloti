@@ -18,8 +18,6 @@
 package axoloti.object;
 
 import axoloti.Patch;
-import axoloti.inlets.Inlet;
-import axoloti.outlets.Outlet;
 import java.awt.Point;
 import org.simpleframework.xml.Root;
 
@@ -39,16 +37,6 @@ public class AxoObjectComment extends AxoObjectAbstract {
     }
 
     @Override
-    Inlet GetInlet(String n) {
-        return null;
-    }
-
-    @Override
-    Outlet GetOutlet(String n) {
-        return null;
-    }
-
-    @Override
     public AxoObjectInstanceAbstract CreateInstance(Patch patch, String InstanceName1, Point location) {
         AxoObjectInstanceComment o = new AxoObjectInstanceComment(this, patch, InstanceName1, location);
         if (patch != null) {
@@ -56,6 +44,16 @@ public class AxoObjectComment extends AxoObjectAbstract {
         }
         o.PostConstructor();
         return o;
+    }
+
+    @Override
+    public String GenerateSHA() {
+        return null;
+    }
+
+    @Override
+    public String GenerateUUID() {
+        return null;
     }
 
 }

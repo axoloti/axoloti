@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="square" sha="24c5025966e821443cc8e104039bc46f72de3607">
+   <obj.normal id="square" uuid="9932e3efadb76662665654f9b58bf12c00923f27" sha="a85e027441336ce2f7f54ea5cdfaedfacb47018e">
+      <upgradeSha>24c5025966e821443cc8e104039bc46f72de3607</upgradeSha>
       <sDescription>Bandwith limited square wave oscillator</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
       </inlets>
@@ -26,7 +28,7 @@
     for(j=0;j<blepvoices;j++)
       oscp[j] = &blept[BLEPSIZE-1];   nextvoice = 0;]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
   int j;
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
@@ -48,7 +50,7 @@
       oscp[i]=t;
     }
     sum -= ((((nextvoice+1)&1)<<1)-1)<<13;
-    %wave%[j]=sum<<13;
+    outlet_wave[j]=sum<<13;
   }]]></code.krate>
    </obj.normal>
 </objdefs>

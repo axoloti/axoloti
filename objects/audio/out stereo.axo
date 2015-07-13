@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="out stereo" sha="b933bb91801a126126313c11f773158b5ca2face">
+   <obj.normal id="out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" sha="c27566f972d15f25252f61b5cff014a3edce9706">
+      <upgradeSha>b933bb91801a126126313c11f773158b5ca2face</upgradeSha>
       <sDescription>Audio output, stereo</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -16,11 +17,11 @@
       <attribs/>
       <code.krate><![CDATA[int j;
 for(j=0;j<BUFSIZE;j++){
-   AudioOutputLeft[j] += __SSAT(%left%[j],28);
-   AudioOutputRight[j] += __SSAT(%right%[j],28);
+   AudioOutputLeft[j] += __SSAT(inlet_left[j],28);
+   AudioOutputRight[j] += __SSAT(inlet_right[j],28);
 }
-%vuLeft%=%left%[0];
-%vuRight%=%right%[0];
+disp_vuLeft=inlet_left[0];
+disp_vuRight=inlet_right[0];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

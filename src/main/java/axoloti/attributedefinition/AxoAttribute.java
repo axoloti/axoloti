@@ -23,6 +23,7 @@ package axoloti.attributedefinition;
  */
 import axoloti.attribute.AttributeInstance;
 import axoloti.object.AxoObjectInstance;
+import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Attribute;
 
@@ -86,5 +87,9 @@ public abstract class AxoAttribute {
 
     public void updateSHA(MessageDigest md) {
         md.update(name.getBytes());
+    }
+    
+    public String GetCName(){
+        return "attr_" + CharEscape.CharEscape(name);
     }
 }

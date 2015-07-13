@@ -50,7 +50,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "axoloti_board.h"
-
+#include "sysmon.h"
 /**
  * @brief  Configures the FMC and GPIOs to interface with the SDRAM memory.
  *         This function must be called before any read/write operation
@@ -108,7 +108,6 @@ void SDRAM_Init(void) {
 
 void configSDRAM(void) {
   SDRAM_Init();
-  palSetPadMode(LED1_PORT, LED1_PIN, PAL_MODE_OUTPUT_PUSHPULL);
 
 #if 0
   int qsource[16];
@@ -120,12 +119,10 @@ void configSDRAM(void) {
   }
 //  a small test...
   SDRAM_WriteBuffer(&qsource[0], 0, 16);
-  palClearPad(LED1_PORT, LED1_PIN);
   for (i = 0; i < 16; i++) {
     qdest[i] = 0;
   }
   SDRAM_ReadBuffer(&qdest[0], 0, 16);
-  palSetPad(LED1_PORT, LED1_PIN);
 #endif
 }
 
@@ -152,21 +149,16 @@ void memTest(void) {
       ((volatile uint32_t *)base)[i] = x;
     }
     // read/verify
-    palSetPad(LED1_PORT, LED1_PIN);
     x = iter;
     for (i = 0; i < memSize / 4; i++) {
       x = (a * x) + c;
       if (((volatile uint32_t *)base)[i] != x) {
+        setErrorFlag(ERROR_SDRAM);
         while (1) {
-          //fail
-          palSetPad(LED1_PORT, LED1_PIN);
           chThdSleepMilliseconds(100);
-          palClearPad(LED1_PORT, LED1_PIN);
-          chThdSleepMilliseconds(200);
         }
       }
     }
-    palClearPad(LED1_PORT, LED1_PIN);
   }
   // scattered byte write at linear congruential generator addresses
   // 300 ms execution time for one iteration: 3.3M scattered read+write per second
@@ -179,21 +171,16 @@ void memTest(void) {
       ((volatile uint8_t *)base)[x & (memSize - 1)] = (uint8_t)i;
     }
     // read/verify
-    palSetPad(LED1_PORT, LED1_PIN);
     x = iter;
     for (i = 0; i < 1024 * 1024; i++) {
       x = (a * x) + c;
       if (((volatile uint8_t *)base)[x & (memSize - 1)] != (uint8_t)i) {
+        setErrorFlag(ERROR_SDRAM);
         while (1) {
-          //fail
-          palSetPad(LED1_PORT, LED1_PIN);
           chThdSleepMilliseconds(100);
-          palClearPad(LED1_PORT, LED1_PIN);
-          chThdSleepMilliseconds(200);
         }
       }
     }
-    palClearPad(LED1_PORT, LED1_PIN);
   }
 }
 
@@ -260,7 +247,7 @@ void SDRAM_InitSequence(void) {
   /* Program the external memory mode register */
   tmpr = (uint32_t)SDRAM_MODEREG_BURST_LENGTH_2 |
   SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL |
-  SDRAM_MODEREG_CAS_LATENCY_3 |
+  SDRAM_MODEREG_CAS_LATENCY_2 |
   SDRAM_MODEREG_OPERATING_MODE_STANDARD |
   SDRAM_MODEREG_WRITEBURST_MODE_SINGLE;
 

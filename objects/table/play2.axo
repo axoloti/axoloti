@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="play2" sha="98247b4a866cd88ae46eeb0743bbb1a9fff17514">
+   <obj.normal id="play2" uuid="8d62e5c7fdb46d078783b972924905b56a8824d9" sha="88d887b7b3460755fdfb86dec1521b0004b30a2e">
+      <upgradeSha>98247b4a866cd88ae46eeb0743bbb1a9fff17514</upgradeSha>
       <sDescription>play audio from table (non-transposed), starting from position</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets>
          <frac32.positive name="pos" description="start position in table"/>
          <bool32.risingfalling name="en" description="enable"/>
@@ -20,17 +22,17 @@
 ]]></code.declaration>
       <code.init><![CDATA[pos = -1;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((%en%>0) && !ntrig) {
+      <code.krate><![CDATA[   if ((inlet_en>0) && !ntrig) {
       ntrig=1;
-      uint32_t asat = __USAT(%pos%,27);
-      pos = asat>>(27-%table%.LENGTHPOW);
+      uint32_t asat = __USAT(inlet_pos,27);
+      pos = asat>>(27-attr_table.LENGTHPOW);
    }
-   else if (!(%en%>0)) ntrig=0;
+   else if (!(inlet_en>0)) ntrig=0;
      int32_t i;
 ]]></code.krate>
-      <code.srate><![CDATA[   if (%en%>0) {
-       if (pos< %table%.LENGTH)
-              %wave% = %table%.array[pos++]<<%table%.GAIN;
-   } else %wave% = 0;]]></code.srate>
+      <code.srate><![CDATA[   if (inlet_en>0) {
+       if (pos< attr_table.LENGTH)
+              outlet_wave[buffer_index] = attr_table.array[pos++]<<attr_table.GAIN;
+   } else outlet_wave[buffer_index] = 0;]]></code.srate>
    </obj.normal>
 </objdefs>

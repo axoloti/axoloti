@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="hp" sha="2c3219893ab8ef42b46eb323284a077f0ba55d54">
+   <obj.normal id="hp" uuid="7829b56456e975f1d89bda2ad1c7ad678080a73b" sha="de47923046728f9eb4d6e6cbf26314bf518174fc">
+      <upgradeSha>2c3219893ab8ef42b46eb323284a077f0ba55d54</upgradeSha>
       <sDescription>2-pole resonant band-pass filter (biquad)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="filter input"/>
       </inlets>
@@ -26,9 +28,9 @@
       <code.init><![CDATA[biquad_clearstate(&bs);
 ]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOF(%pitch%,freq);
-      biquad_hp_coefs(&bc,freq,INT_MAX - (__USAT(%reso%,27)<<4));
-      biquad_dsp(&bs,&bc,%in%,%out%);
+      MTOF(param_pitch,freq);
+      biquad_hp_coefs(&bc,freq,INT_MAX - (__USAT(param_reso,27)<<4));
+      biquad_dsp(&bs,&bc,inlet_in,outlet_out);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

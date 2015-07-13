@@ -40,7 +40,7 @@ public class Spectral extends gentools {
 //        WriteAxoObject(catName, CreateAnalyzer24());
 //        WriteAxoObject(catName, CreateAnalyzer24DB());
         WriteAxoObject(catName, CreateAnalyzer24DB2());
-        WriteAxoObject(unstable + catName, CreateVocoder());
+        WriteAxoObject(unstable + "/" + catName, CreateVocoder());
     }
 
     static AxoObject CreateRFFT128() {
@@ -90,7 +90,7 @@ public class Spectral extends gentools {
                 + "      }\n"
                 + "}\n"
                 + "static msg_t ThreadX(void *arg) {\n"
-                + "((%parent% *)arg)->ThreadX2();\n"
+                + "((attr_parent *)arg)->ThreadX2();\n"
                 + "}\n";
         o.sLocalData += "WORKING_AREA(waThreadX, 4096);\n"
                 + "Thread *Thd;\n";
@@ -164,7 +164,7 @@ public class Spectral extends gentools {
                 + "      }\n"
                 + "}\n"
                 + "static msg_t ThreadX(void *arg) {\n"
-                + "((%parent% *)arg)->ThreadX2();\n"
+                + "((attr_parent *)arg)->ThreadX2();\n"
                 + "}\n";
         o.sLocalData += "WORKING_AREA(waThreadX, 4096);\n"
                 + "Thread *Thd;\n";
@@ -238,7 +238,7 @@ public class Spectral extends gentools {
                 + "      }\n"
                 + "}\n"
                 + "static msg_t ThreadX(void *arg) {\n"
-                + "((%parent% *)arg)->ThreadX2();\n"
+                + "((attr_parent *)arg)->ThreadX2();\n"
                 + "}\n";
         o.sLocalData += "WORKING_AREA(waThreadX, 16384);\n"
                 + "Thread *Thd;\n";

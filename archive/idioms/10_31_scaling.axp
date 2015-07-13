@@ -1,0 +1,40 @@
+<patch-1.0>
+   <comment type="comment" name="in this example we scale 0..64 to 1..10, as 127 is out-of-range for fractionals" x="40" y="40"/>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="80">
+      <params>
+         <frac32.u.map name="value" value="29.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c64" sha="69b493f3d94607d38df5ab951d27622bec162349" name="c11" x="200" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix2" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe" name="mix11" x="240" y="80">
+      <params>
+         <frac32.u.map name="gain1" value="1.0"/>
+         <frac32.u.map name="gain2" value="9.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="400" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" name="out =  1 + 9 * (c/64)" x="240" y="240"/>
+   <nets>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="displayU1 in"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="mix11 in2"/>
+      </net>
+      <net>
+         <source name="c11 o"/>
+         <dest name="mix11 in1"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

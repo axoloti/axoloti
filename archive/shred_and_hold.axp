@@ -1,0 +1,243 @@
+<patch-1.0>
+   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="714" y="0">
+      <params>
+         <frac32.s.map name="pitch" value="51.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 2 g" sha="6305d27c723353f0d434c0ab30735c5dd11b7670" name="mix_1" x="504" y="42">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_1" x="630" y="42">
+      <params>
+         <frac32.u.map name="value" MidiCC="2" value="16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="env/follower" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4" name="follower_1" x="154" y="56">
+      <params/>
+      <attribs>
+         <combo attributeName="time" selection="42.6ms"/>
+      </attribs>
+   </obj>
+   <obj type="math/-c" sha="7e5ae2d57dd806e6c238ad9acbb5efbd70dc7d10" name="-c_1" x="224" y="56">
+      <params>
+         <frac32.u.map name="c" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/satp" sha="107e97e0797ac54d70617cbd5af301ac85ec58a8" name="satp_1" x="280" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/muls 16" sha="b3262af19b11c88dc899f8ba309bd5470446118e" name="muls_1" x="350" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/inv" sha="7b02dcb8eae6c8e1f4f1f9f532ad6cd7f0d9a69" name="inv_1" x="448" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="table/alloc 32b" sha="c9cc4c02436509b149863fb2d27ff1f3cfc3bcee" name="t" x="28" y="70">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="8192"/>
+         <text attributeName="init">
+            <sText><![CDATA[]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="patch/modsource" sha="fdb6777505be0746768fb7e222fb1389c1e96554" name="m" x="714" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="dial_2" x="812" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="audio/in left" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="28" y="196">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/hp1" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass~_2" x="98" y="196">
+      <params>
+         <frac32.u.map name="freq" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/eq4" sha="518b736fd39d7b359aad0043072946b6141c773b" name="eq4_1" x="154" y="196">
+      <params>
+         <int32 name="lowmid" value="5"/>
+         <int32 name="mid" value="2"/>
+         <int32 name="highmid" value="6"/>
+         <int32 name="high" value="6"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/hp1" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass~_1" x="252" y="196">
+      <params>
+         <frac32.u.map name="freq" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="graintablevoice2" sha="d2b79fd5112c65f5075494095e8667591baf56dc" name="graintablevoice2_1" x="308" y="196">
+      <params>
+         <frac32.u.map name="lspread" value="5.5"/>
+         <frac32.s.map name="length" value="1.700000286102295"/>
+         <frac32.u.map name="fb" value="2.0">
+            <modulators>
+               <modulation sourceName="modsource_1" value="-11.0"/>
+               <modulation sourceName="m" modName="" value="-10.0"/>
+            </modulators>
+         </frac32.u.map>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="12"/>
+      </attribs>
+   </obj>
+   <obj type="math/muls 8" sha="3b876043fb7aa6dff276407826cba102606eb254" name="muls2_1" x="406" y="238">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dist/soft" sha="4de9b281f2a362671b6dc8606f5d039535893f45" name="soft_1" x="476" y="238">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_1" x="560" y="238">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="graintablevoice2" sha="d2b79fd5112c65f5075494095e8667591baf56dc" name="graintablevoice2_2" x="308" y="378">
+      <params>
+         <frac32.u.map name="lspread" value="5.5"/>
+         <frac32.s.map name="length" value="0.7000002861022949"/>
+         <frac32.u.map name="fb" value="2.0">
+            <modulators>
+               <modulation sourceName="modsource_1" value="-11.0"/>
+               <modulation sourceName="m" modName="" value="-10.0"/>
+            </modulators>
+         </frac32.u.map>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="12"/>
+      </attribs>
+   </obj>
+   <obj type="math/muls 8" sha="3b876043fb7aa6dff276407826cba102606eb254" name="muls2_2" x="406" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dist/soft" sha="4de9b281f2a362671b6dc8606f5d039535893f45" name="soft_2" x="476" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix2_2" x="560" y="378">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="644" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="hipass~_1 out"/>
+         <dest name="mix2_1 in1"/>
+         <dest name="mix2_2 in1"/>
+      </net>
+      <net>
+         <source name="mix2_2 out"/>
+         <dest name="dac~_1 right"/>
+      </net>
+      <net>
+         <source name="graintablevoice2_2 outlet~_1"/>
+         <dest name="muls2_2 in"/>
+      </net>
+      <net>
+         <source name="graintablevoice2_1 outlet~_1"/>
+         <dest name="muls2_1 in"/>
+      </net>
+      <net>
+         <source name="mix2_1 out"/>
+         <dest name="dac~_1 left"/>
+      </net>
+      <net>
+         <source name="adc~1_1 wave"/>
+         <dest name="hipass~_2 in"/>
+         <dest name="follower_1 in"/>
+      </net>
+      <net>
+         <source name="hipass~_2 out"/>
+         <dest name="eq4_1 in"/>
+         <dest name="graintablevoice2_1 inlet~_1"/>
+         <dest name="graintablevoice2_2 inlet~_1"/>
+      </net>
+      <net>
+         <source name="eq4_1 out"/>
+         <dest name="hipass~_1 in"/>
+      </net>
+      <net>
+         <source name="muls2_1 out"/>
+         <dest name="soft_1 in"/>
+      </net>
+      <net>
+         <source name="square_1 wave"/>
+         <dest name="m trig"/>
+      </net>
+      <net>
+         <source name="muls_1 out"/>
+         <dest name="inv_1 in"/>
+         <dest name="mix_1 in2"/>
+      </net>
+      <net>
+         <source name="inv_1 out"/>
+         <dest name="mix_1 in1"/>
+      </net>
+      <net>
+         <source name="dial_1 out"/>
+         <dest name="mix_1 bus_in"/>
+      </net>
+      <net>
+         <source name="mix_1 out"/>
+         <dest name="m v"/>
+         <dest name="dial_2 in"/>
+      </net>
+      <net>
+         <source name="follower_1 amp"/>
+         <dest name="-c_1 in"/>
+      </net>
+      <net>
+         <source name="-c_1 out"/>
+         <dest name="satp_1 in"/>
+      </net>
+      <net>
+         <source name="satp_1 out"/>
+         <dest name="muls_1 in"/>
+      </net>
+      <net>
+         <source name="soft_1 out"/>
+         <dest name="mix2_1 in2"/>
+      </net>
+      <net>
+         <source name="muls2_2 out"/>
+         <dest name="soft_2 in"/>
+      </net>
+      <net>
+         <source name="soft_2 out"/>
+         <dest name="mix2_2 in2"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

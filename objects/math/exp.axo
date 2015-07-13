@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="exp" sha="fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1">
+   <obj.normal id="exp" uuid="3f0e6db61bc98c04b42a940e7a93abbf8a178317" sha="2ac6f1fe7b85cbd855f836a65df6a49bcd2c0f62">
+      <upgradeSha>fd0236204a7539a4e9edbe4bf6ec9c17044d1bb1</upgradeSha>
       <sDescription>exponent function, y=pow(2,(x/8)-2)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32.positive name="a" description="input"/>
       </inlets>
@@ -12,17 +14,19 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[int8_t s = (%a%>>24)+4;
-uint8_t ei = %a%>>16;
+      <code.krate><![CDATA[int8_t s = (inlet_a>>24)+4;
+uint8_t ei = inlet_a>>16;
 if (s>=0)
-     %result% = expt[ei]<<s;
-else %result% = expt[ei]>>(-s);
+     outlet_result = expt[ei]<<s;
+else outlet_result = expt[ei]>>(-s);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="exp" sha="5643db429ae8ad03e3d2e4b1fa362999d16aeb32">
+   <obj.normal id="exp" uuid="e1823a9cb09047a52fa9ff06f72142c07e1a3800" sha="77a55611b6399c72564d75c8ac93a5afa6d09965">
+      <upgradeSha>5643db429ae8ad03e3d2e4b1fa362999d16aeb32</upgradeSha>
       <sDescription>exponent function, y=pow(2,(x/8)-2)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer.positive name="a" description="input"/>
       </inlets>
@@ -32,11 +36,11 @@ else %result% = expt[ei]>>(-s);
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[int8_t s = (%a%>>24)+4;
-uint8_t ei = %a%>>16;
+      <code.srate><![CDATA[int8_t s = (inlet_a[buffer_index]>>24)+4;
+uint8_t ei = inlet_a[buffer_index]>>16;
 if (s>=0)
-     %result% = expt[ei]<<s;
-else %result% = expt[ei]>>(-s);
+     outlet_result[buffer_index] = expt[ei]<<s;
+else outlet_result[buffer_index] = expt[ei]>>(-s);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

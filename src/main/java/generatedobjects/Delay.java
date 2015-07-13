@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -142,7 +142,7 @@ public class Delay extends gentools {
     }
 
     static AxoObject CreateDelwriteTilde_SDRAM() {
-        AxoObject o = new AxoObject("write sdram", "delayline definition, read with delay/read");
+        AxoObject o = new AxoObject("write sdram", "delayline definition, read it with \"delay/read\" objects referencing the instance name of this object");
         String mentries[] = {"256 (5.33ms)",
             "512 (10.66ms)",
             "1024 (21.33ms)",
@@ -154,9 +154,10 @@ public class Delay extends gentools {
             "65536 (1.36s)",
             "131072 (2.37s)",
             "262144 (5.46s)",
-            "524288 (10.09s)"
-        };
-        String centries[] = {"8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
+            "524288 (10.9s)",
+            "1048576 (21.8s)",
+            "2097152 (43.7s)",};
+        String centries[] = {"8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"};
         o.attributes.add(new AxoAttributeComboBox("size", mentries, centries));
         o.inlets.add(new InletFrac32Buffer("in", "wave input"));
         o.sLocalData = "static const uint32_t LENGTHPOW = (%size%);\n"

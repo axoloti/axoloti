@@ -43,8 +43,14 @@ public class AxoObjects {
     public AxoObjectTreeNode ObjectTree;
     public ArrayList<AxoObjectAbstract> ObjectList;
     HashMap<String, AxoObjectAbstract> ObjectHashMap;
+    HashMap<String, AxoObjectAbstract> ObjectUpgradeHashMap;
+    HashMap<String, AxoObjectAbstract> ObjectUUIDMap;
 
     TransitionManager transitionmgr;
+
+    public AxoObjectAbstract GetAxoObjectFromUUID(String n) {
+        return ObjectUUIDMap.get(n);
+    }
 
     public AxoObjectAbstract GetAxoObjectFromSHA(String n) {
         AxoObjectAbstract ao = transitionmgr.GetObjectFromSha(n);
@@ -52,7 +58,11 @@ public class AxoObjects {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "upgraded object by SHA : " + ao.id);
             return ao;
         }
-        return ObjectHashMap.get(n);
+        AxoObjectAbstract r = ObjectHashMap.get(n);
+        if (r == null) {
+            r = ObjectUpgradeHashMap.get(n);
+        }
+        return r;
     }
 
     public ArrayList<AxoObjectAbstract> GetAxoObjectFromName(String n, String cwd) {
@@ -86,14 +96,17 @@ public class AxoObjects {
                     }
                 }
             }
-            { // try patch file
+            { // try subpatch file
                 ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
-                String fnameP = bfname + ".axp";
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file in patch directory: " + fnameP);
+                String fnameP = bfname + ".axs";
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file in patch directory: " + fnameP);
                 File f = new File(fnameP);
                 if (f.isFile()) {
                     AxoObjectAbstract o = new AxoObjectFromPatch(f);
-                    o.createdFromRelativePath = true;
+                    if (n.startsWith("./") || n.startsWith("../")) {
+                        o.createdFromRelativePath = true;
+                    }
+                    o.sPath = f.getPath();
                     if (o != null) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : " + fnameP);
                         set.add(o);
@@ -111,13 +124,15 @@ public class AxoObjects {
         if (set.isEmpty()) {
             String spath[] = MainFrame.prefs.getObjectSearchPath();
             for (String s : spath) {
-                String fname = s + "/" + n + ".axp";
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file : " + fname);
-                File f = new File(fname);
-                if (f.isFile()) {
-                    AxoObjectAbstract o = new AxoObjectFromPatch(f);
+                String fsname = s + "/" + n + ".axs";
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file : " + fsname);
+                File fs = new File(fsname);
+                if (fs.isFile()) {
+                    AxoObjectAbstract o = new AxoObjectFromPatch(fs);
+//                    o.createdFromRelativePath = true;
                     if (o != null) {
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from patch file succeeded :" + fname);
+                        o.sPath = n + ".axs";
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file succeeded :" + fsname);
                         set.add(o);
                         return set;
                     }
@@ -140,6 +155,8 @@ public class AxoObjects {
         ObjectTree = new AxoObjectTreeNode("/");
         ObjectList = new ArrayList<AxoObjectAbstract>();
         ObjectHashMap = new HashMap<String, AxoObjectAbstract>();
+        ObjectUpgradeHashMap = new HashMap<String, AxoObjectAbstract>();
+        ObjectUUIDMap = new HashMap<String, AxoObjectAbstract>();
     }
 
     public AxoObjectTreeNode LoadAxoObjectsFromFolder(File folder, String prefix) {
@@ -188,8 +205,7 @@ public class AxoObjects {
             if (fileEntry.isDirectory()) {
                 String dirname = fileEntry.getName();
                 AxoObjectTreeNode s = LoadAxoObjectsFromFolder(fileEntry, prefix + "/" + dirname);
-                if(s.Objects.size()>0 || s.SubNodes.size()>0)
-                {
+                if (s.Objects.size() > 0 || s.SubNodes.size() > 0) {
                     t.SubNodes.put(dirname, s);
                     for (AxoObjectAbstract o : t.Objects) {
                         int i = o.id.lastIndexOf('/');
@@ -215,6 +231,16 @@ public class AxoObjects {
                                 ShortID = ShortID.substring(i + 1);
                             }
                             a.shortId = ShortID;
+                            String uuidVerify = a.GenerateUUID();
+                            if ((uuidVerify != null) && (!uuidVerify.equals(a.getUUID()))) {
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
+                                        "Incorrect uuid hash detected for object: " + fileEntry.getAbsolutePath() + " , does not match its signature (" + a.getUUID() + "). True signature would be " + uuidVerify);
+                            }
+                            String shaVerify = a.GenerateSHA();
+                            if ((shaVerify != null) && (!shaVerify.equals(a.getSHA()))) {
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
+                                        "Incorrect sha hash detected for object: " + fileEntry.getAbsolutePath() + " its implementation does not match its signature.");
+                            }
                             AxoObjectTreeNode s = t.SubNodes.get(ShortID);
                             if (s == null) {
                                 t.Objects.add(a);
@@ -223,13 +249,47 @@ public class AxoObjects {
                             }
 
                             ObjectList.add(a);
-                            if (ObjectHashMap.containsKey(a.getSHA())) {
+                            if ((a.getSHA() != null) && (ObjectHashMap.containsKey(a.getSHA()))) {
                                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
                                         "Duplicate SHA! " + fileEntry.getAbsolutePath() + "\nOriginal name: " + ObjectHashMap.get(a.getSHA()).id
                                         + "\nPath: " + ObjectHashMap.get(a.getSHA()).sPath);
                             }
                             ObjectHashMap.put(a.getSHA(), a);
+
+                            if (a.upgradeSha != null) {
+                                for (String usha : a.upgradeSha) {
+                                    if (ObjectUpgradeHashMap.containsKey(usha)) {
+                                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
+                                                "Duplicate upgrade SHA! " + fileEntry.getAbsolutePath() + "\nOriginal name: " + ObjectUpgradeHashMap.get(usha).id
+                                                + "\nPath: " + ObjectUpgradeHashMap.get(usha).sPath);
+                                    }
+                                    ObjectUpgradeHashMap.put(usha, a);
+                                }
+                            }
+
+                            if ((a.getUUID() != null) && (ObjectUUIDMap.containsKey(a.getUUID()))) {
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
+                                        "Duplicate UUID! " + fileEntry.getAbsolutePath() + "\nOriginal name: " + ObjectUUIDMap.get(a.getUUID()).id
+                                        + "\nPath: " + ObjectUUIDMap.get(a.getUUID()).sPath);
+                            }
+                            ObjectUUIDMap.put(a.getUUID(), a);
                         }
+                    } catch (Exception ex) {
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ex);
+                    }
+                } else if (fileEntry.getName().endsWith(".axs")) {
+                    try {
+                        String oname = fileEntry.getName().substring(0, fileEntry.getName().length() - 4);
+                        String fullname;
+                        if (prefix.isEmpty()) {
+                            fullname = oname;
+                        } else {
+                            fullname = prefix.substring(1) + "/" + oname;
+                        }
+                        AxoObjectUnloaded a = new AxoObjectUnloaded(fullname, fileEntry);
+                        a.sPath = fileEntry.getAbsolutePath();
+                        t.Objects.add(a);
+                        ObjectList.add(a);
                     } catch (Exception ex) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ex);
                     }
@@ -243,8 +303,7 @@ public class AxoObjects {
         File folder = new File(path);
         if (folder.isDirectory()) {
             AxoObjectTreeNode t = LoadAxoObjectsFromFolder(folder, "");
-            if(t.Objects.size()>0 || t.SubNodes.size()>0)
-            {
+            if (t.Objects.size() > 0 || t.SubNodes.size() > 0) {
                 ObjectTree.SubNodes.put(folder.getName(), t);
             }
         }
@@ -259,6 +318,8 @@ public class AxoObjects {
                 ObjectTree = new AxoObjectTreeNode("/");
                 ObjectList = new ArrayList<AxoObjectAbstract>();
                 ObjectHashMap = new HashMap<String, AxoObjectAbstract>();
+                ObjectUpgradeHashMap = new HashMap<String, AxoObjectAbstract>();
+                ObjectUUIDMap = new HashMap<String, AxoObjectAbstract>();
                 String spath[] = MainFrame.prefs.getObjectSearchPath();
                 if (spath != null) {
                     for (String path : spath) {

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="mix 5 sq" sha="2c70dd09cb9eadcac2b5edfab7cc9dfd8463bee">
+   <obj.normal id="mix 5 sq" uuid="b4963f5b0520685267381865a779b609f9f3369a" sha="d066e6357e0918298fa4a4a989178594eec475f6">
+      <upgradeSha>2c70dd09cb9eadcac2b5edfab7cc9dfd8463bee</upgradeSha>
       <sDescription>5 input k-rate mixer, square gain scale</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -38,15 +39,16 @@
          </frac32.u.map.squaregain>
       </params>
       <attribs/>
-      <code.krate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
-   accum = ___SMMLA(%in2%,%gain2%,accum);
-;   accum = ___SMMLA(%in3%,%gain3%,accum);
-;   accum = ___SMMLA(%in4%,%gain4%,accum);
-;   accum = ___SMMLA(%in5%,%gain5%,accum);
-;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+      <code.krate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
+   accum = ___SMMLA(inlet_in2,param_gain2,accum);
+;   accum = ___SMMLA(inlet_in3,param_gain3,accum);
+;   accum = ___SMMLA(inlet_in4,param_gain4,accum);
+;   accum = ___SMMLA(inlet_in5,param_gain5,accum);
+;   outlet_out=  __SSAT(inlet_bus__in + (accum<<1),28);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mix 5 sq" sha="21fe44985ad7c35f8d1c6de0a14762636e5c313e">
+   <obj.normal id="mix 5 sq" uuid="af3306d05140be12b80a6d9fbfa164456e98eb48" sha="4aa68a6581e3dc7669eb9f03bb82fa01548dd7b">
+      <upgradeSha>21fe44985ad7c35f8d1c6de0a14762636e5c313e</upgradeSha>
       <sDescription>5 input s-rate mixer, square gain scale</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -85,12 +87,12 @@
          </frac32.u.map.squaregain>
       </params>
       <attribs/>
-      <code.srate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
-   accum = ___SMMLA(%in2%,%gain2%,accum);
-;   accum = ___SMMLA(%in3%,%gain3%,accum);
-;   accum = ___SMMLA(%in4%,%gain4%,accum);
-;   accum = ___SMMLA(%in5%,%gain5%,accum);
-;   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+      <code.srate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1[buffer_index],param_gain1);
+   accum = ___SMMLA(inlet_in2[buffer_index],param_gain2,accum);
+;   accum = ___SMMLA(inlet_in3[buffer_index],param_gain3,accum);
+;   accum = ___SMMLA(inlet_in4[buffer_index],param_gain4,accum);
+;   accum = ___SMMLA(inlet_in5[buffer_index],param_gain5,accum);
+;   outlet_out[buffer_index]=  __SSAT(inlet_bus__in[buffer_index] + (accum<<1),28);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

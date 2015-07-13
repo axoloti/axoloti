@@ -80,6 +80,7 @@ public class AxoObjectFromPatch extends AxoObject {
         sLocalData = o.sLocalData;
         sMidiCode = o.sMidiCode;
         sSRateCode = o.sSRateCode;
+        helpPatch = o.helpPatch;
         if (instances != null) {
             ArrayList<AxoObjectInstance> i2 = new ArrayList<AxoObjectInstance>(instances);
             for (AxoObjectInstance i : i2) {
@@ -107,6 +108,7 @@ public class AxoObjectFromPatch extends AxoObject {
             pg.setFileNamePath(id);
             pg.PostContructor();
         }
+        pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);
     }
 

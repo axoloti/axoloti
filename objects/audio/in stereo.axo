@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="in stereo" sha="2215b2e513239e306346ea02ae2ee6746d6d62a5">
+   <obj.normal id="in stereo" uuid="99848ad6d90a8e615e83b2e619cfc806f28e7281" sha="1acaaf87659f6c9d0833a6def4dbd5d0c3edca4d">
+      <upgradeSha>2215b2e513239e306346ea02ae2ee6746d6d62a5</upgradeSha>
       <sDescription>Audio input, stereo</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -16,11 +17,11 @@
       <attribs/>
       <code.krate><![CDATA[int j;
 for(j=0;j<BUFSIZE;j++){
-   %left%[j] = AudioInputLeft[j];
-   %right%[j] = AudioInputRight[j];
+   outlet_left[j] = AudioInputLeft[j];
+   outlet_right[j] = AudioInputRight[j];
 }
-%vuLeft%=%left%[0];
-%vuRight%=%right%[0];
+disp_vuLeft=outlet_left[0];
+disp_vuRight=outlet_right[0];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="lowpass" sha="590df048ba2f7ab209a2bd1e88e49c2aae1051e0">
+   <obj.normal id="lowpass" uuid="4f0d68b39b6f6b1c1d371b028d84391d14062d68" sha="82548cf1d1dcb44d5a65e22da994a09026443c25">
+      <upgradeSha>590df048ba2f7ab209a2bd1e88e49c2aae1051e0</upgradeSha>
       <sDescription>1st order lowpass filter, control rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -22,9 +23,9 @@
       <code.init><![CDATA[val = 0;
 ]]></code.init>
       <code.krate><![CDATA[int32_t f;
-   MTOF(%freq%,f);
-   val = ___SMMLA((%in%-val)<<1,f,val);
-   %out%= val;
+   MTOF(param_freq,f);
+   val = ___SMMLA((inlet_in-val)<<1,f,val);
+   outlet_out= val;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

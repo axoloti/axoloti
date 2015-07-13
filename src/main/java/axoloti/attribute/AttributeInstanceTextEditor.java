@@ -68,6 +68,7 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString {
                     editor = new TextEditor(sRef);
                     editor.setTitle(axoObj.getInstanceName() + "/" + attr.getName());
                 }
+                editor.setState(java.awt.Frame.NORMAL);
                 editor.setVisible(true);
 
             }

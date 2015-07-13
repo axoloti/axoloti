@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="send f" sha="317772b85deca12c39f748c73412e0bf94a9b2e3">
+   <obj.normal id="send f" uuid="8a7799ea1c3b8582991e669a4f70e2f663841f2d" sha="4c20b7305cf1f07a7944717373c59b62dfbf8768">
+      <upgradeSha>317772b85deca12c39f748c73412e0bf94a9b2e3</upgradeSha>
       <sDescription>send (to recv object), fractional type</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,7 +13,7 @@
       <attribs/>
       <code.declaration><![CDATA[int32_t _v;
 ]]></code.declaration>
-      <code.krate><![CDATA[  _v = %v%;
+      <code.krate><![CDATA[  _v = inlet_v;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

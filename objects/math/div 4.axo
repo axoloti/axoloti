@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="div 4" sha="1b9659261cffe6011ae0ea5a26a8c2029d53828d">
+   <obj.normal id="div 4" uuid="507955275561b256e540f7205386d31545a2828f" sha="96a7c0765a638d8fc2cda60dcb59896abb613995">
+      <upgradeSha>1b9659261cffe6011ae0ea5a26a8c2029d53828d</upgradeSha>
       <sDescription>divide by 4</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>
@@ -12,12 +14,14 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in%>>2;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in>>2;]]></code.krate>
    </obj.normal>
-   <obj.normal id="div 4" sha="24e4544f0f846eb56ca3b8d30b635a5eb50caa29">
+   <obj.normal id="div 4" uuid="e4729bdd1e800715be3fe5312bc36a037d0fb3a9" sha="e3e4f58eae2014e1b0f9e9382ebe1381ebbef386">
+      <upgradeSha>24e4544f0f846eb56ca3b8d30b635a5eb50caa29</upgradeSha>
       <sDescription>divide by 4</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="in"/>
       </inlets>
@@ -27,12 +31,14 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%out%= %in%>>2;]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index]>>2;]]></code.srate>
    </obj.normal>
-   <obj.normal id="div 4" sha="66117583fe543e5fdfef8d076e9ce720c72fb3d9">
+   <obj.normal id="div 4" uuid="141db88b6bfd19a0f34b0f61de171bb8ae64ad19" sha="1a7401068ea21535d3f248a34d710a7cc9ddfc2b">
+      <upgradeSha>66117583fe543e5fdfef8d076e9ce720c72fb3d9</upgradeSha>
       <sDescription>divide by 4</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <int32 name="in" description="in"/>
       </inlets>
@@ -42,6 +48,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= %in%>>2;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= inlet_in>>2;]]></code.krate>
    </obj.normal>
 </objdefs>

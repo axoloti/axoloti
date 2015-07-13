@@ -51,7 +51,7 @@ public class Stochastics extends gentools {
     static AxoObject CreateRand() {
         AxoObject o = new AxoObject("uniform f", "uniform distributed (white) noise, k-rate generation. Range -64..64");
         o.outlets.add(new OutletFrac32("wave", "white noise"));
-        o.sKRateCode = "%wave%= (int32_t)(GenerateRandomNumber())>>4;";
+        o.sKRateCode = "outlet_wave = (int32_t)(GenerateRandomNumber())>>4;";
         return o;
     }
 
@@ -63,9 +63,9 @@ public class Stochastics extends gentools {
                 + "int ntrig;\n";
         o.sInitCode = "val = (int32_t)(GenerateRandomNumber())>>4;\n"
                 + "ntrig = 0;\n";
-        o.sKRateCode = "   if ((%trig%>0) && !ntrig) { val = (int32_t)(GenerateRandomNumber())>>4; ntrig=1;}\n"
-                + "   else if (!(%trig%>0)) ntrig=0;\n"
-                + "   %rand%= val;\n";
+        o.sKRateCode = "   if ((inlet_trig>0) && !ntrig) { val = (int32_t)(GenerateRandomNumber())>>4; ntrig=1;}\n"
+                + "   else if (!(inlet_trig>0)) ntrig=0;\n"
+                + "   outlet_rand= val;\n";
         return o;
     }
 
@@ -76,18 +76,17 @@ public class Stochastics extends gentools {
         o.outlets.add(new OutletInt32("v", "random value"));
         o.sLocalData = "int32_t val;\n"
                 + "int ntrig;\n";
-        o.sInitCode = "if (%max%)\n"
-                + "   val = (int32_t)(GenerateRandomNumber()% (%max%));\n"
-                + "else val = 0;\n"
+        o.sInitCode = "" 
+                + "val = 0;\n"
                 + "ntrig = 0;\n";
-        o.sKRateCode = "   if ((%trig%>0) && !ntrig) {\n"
-                + "      if (%max%) \n"
-                + "         val = (int32_t)(GenerateRandomNumber()% (%max%));\n"
+        o.sKRateCode = "   if ((inlet_trig>0) && !ntrig) {\n"
+                + "      if (param_max) \n"
+                + "         val = (int32_t)(GenerateRandomNumber()% (param_max));\n"
                 + "      else val = 0;\n"
                 + "      ntrig=1;\n"
                 + "   }\n"
-                + "   else if (!(%trig%>0)) ntrig=0;\n"
-                + "   %v%= val;\n";
+                + "   else if (!(inlet_trig>0)) ntrig=0;\n"
+                + "   outlet_v = val;\n";
         return o;
     }
 
@@ -95,7 +94,7 @@ public class Stochastics extends gentools {
         AxoObject o = new AxoObject("poisson1~", "Poisson noise generator 1");
         o.outlets.add(new OutletFrac32Buffer("wave", "poisson noise"));
         o.sSRateCode = "{ int32_t x->tmp = GenerateRandomNumber();\n"
-                + "%wave%= ((!(tmp&0x7F000000))+ (!(tmp&0x007F0000)) + (!(tmp&0x00007F00)) + (!(tmp&0x0000007F)))<<25;}\n";
+                + "outlet_wave = ((!(tmp&0x7F000000))+ (!(tmp&0x007F0000)) + (!(tmp&0x00007F00)) + (!(tmp&0x0000007F)))<<25;}\n";
         return o;
     }
 
@@ -103,7 +102,7 @@ public class Stochastics extends gentools {
         AxoObject o = new AxoObject("poisson2~", "Poisson noise generator 2");
         o.outlets.add(new OutletFrac32Buffer("wave", "poisson noise"));
         o.sSRateCode = "{ int32_t x->tmp = GenerateRandomNumber();\n"
-                + "%wave%= ((!(tmp&0xFF000000))+ (!(tmp&0x00FF0000)) + (!(tmp&0x0000FF00)) + (!(tmp&0x000000FF)))<<25;}\n";
+                + "outlet_wave = ((!(tmp&0xFF000000))+ (!(tmp&0x00FF0000)) + (!(tmp&0x0000FF00)) + (!(tmp&0x000000FF)))<<25;}\n";
         return o;
     }
 
@@ -111,7 +110,7 @@ public class Stochastics extends gentools {
         AxoObject o = new AxoObject("poisson3~", "Poisson noise generator 3");
         o.outlets.add(new OutletFrac32Buffer("wave", "poisson noise"));
         o.sSRateCode = "{ int32_t x->tmp = GenerateRandomNumber();\n"
-                + "%wave%= ((!(tmp&0x0001FF))+ (!(tmp&0x03FE00)) + (!(tmp&0x7FC0000)))<<25;}\n";
+                + "outlet_wave = ((!(tmp&0x0001FF))+ (!(tmp&0x03FE00)) + (!(tmp&0x7FC0000)))<<25;}\n";
         return o;
     }
 
@@ -119,7 +118,7 @@ public class Stochastics extends gentools {
         AxoObject o = new AxoObject("poisson4~", "Poisson noise generator 4");
         o.outlets.add(new OutletFrac32Buffer("wave", "poisson noise"));
         o.sSRateCode = "{ int32_t x->tmp = GenerateRandomNumber();\n"
-                + "%wave%= ((!(tmp&0x000003FF))+ (!(tmp&0x000FFC00)) + (!(tmp&0x3FF00000)))<<25;}\n";
+                + "outlet_wave= ((!(tmp&0x000003FF))+ (!(tmp&0x000FFC00)) + (!(tmp&0x3FF00000)))<<25;}\n";
         return o;
     }
 
@@ -127,7 +126,7 @@ public class Stochastics extends gentools {
         AxoObject o = new AxoObject("poisson1", "Poisson noise generator 1");
         o.outlets.add(new OutletFrac32("wave", "poisson noise"));
         o.sKRateCode = "{ int32_t x->tmp = GenerateRandomNumber();\n"
-                + "%wave%= ((!(tmp&0x7F000000))+ (!(tmp&0x007F0000)) + (!(tmp&0x00007F00)) + (!(tmp&0x0000007F)))<<25;}\n";
+                + "outlet_wave= ((!(tmp&0x7F000000))+ (!(tmp&0x007F0000)) + (!(tmp&0x00007F00)) + (!(tmp&0x0000007F)))<<25;}\n";
         return o;
     }
 
@@ -135,7 +134,7 @@ public class Stochastics extends gentools {
         AxoObject o = new AxoObject("poisson2", "Poisson noise generator 2");
         o.outlets.add(new OutletFrac32("wave", "poisson noise"));
         o.sKRateCode = "{ int32_t x->tmp = GenerateRandomNumber();\n"
-                + "%wave%= ((!(tmp&0xFF000000))+ (!(tmp&0x00FF0000)) + (!(tmp&0x0000FF00)) + (!(tmp&0x000000FF)))<<25;}\n";
+                + "outlet_wave= ((!(tmp&0xFF000000))+ (!(tmp&0x00FF0000)) + (!(tmp&0x0000FF00)) + (!(tmp&0x000000FF)))<<25;}\n";
         return o;
     }
 
@@ -143,7 +142,7 @@ public class Stochastics extends gentools {
         AxoObject o = new AxoObject("poisson3", "Poisson noise generator 3");
         o.outlets.add(new OutletFrac32("wave", "poisson noise"));
         o.sKRateCode = "{ int32_t x->tmp = GenerateRandomNumber();\n"
-                + "%wave%= ((!(tmp&0x0001FF))+ (!(tmp&0x03FE00)) + (!(tmp&0x7FC0000)))<<25;}\n";
+                + "outlet_wave= ((!(tmp&0x0001FF))+ (!(tmp&0x03FE00)) + (!(tmp&0x7FC0000)))<<25;}\n";
         return o;
     }
 
@@ -151,7 +150,7 @@ public class Stochastics extends gentools {
         AxoObject o = new AxoObject("poisson4", "Poisson noise generator 4");
         o.outlets.add(new OutletFrac32("wave", "poisson noise"));
         o.sKRateCode = "{ int32_t x->tmp = GenerateRandomNumber();\n"
-                + "%wave%= ((!(tmp&0x000003FF))+ (!(tmp&0x000FFC00)) + (!(tmp&0x3FF00000)))<<25;}\n";
+                + "outlet_wave= ((!(tmp&0x000003FF))+ (!(tmp&0x000FFC00)) + (!(tmp&0x3FF00000)))<<25;}\n";
         return o;
     }
 }

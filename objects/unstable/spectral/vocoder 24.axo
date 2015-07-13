@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="vocoder 24" sha="6d9336d0af616451a51bbcc4675a9fce48d495e1">
+   <obj.normal id="vocoder 24" uuid="f6036f4a243310a03f6ca3dccc9c6bdda7c430ee" sha="b9c18fe342027a105c441c5a201e52c6f702df29">
+      <upgradeSha>6d9336d0af616451a51bbcc4675a9fce48d495e1</upgradeSha>
       <sDescription>channel vocoder v1</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>vocoder 24.axh</helpPatch>
       <inlets>
          <frac32buffer name="car" description="carrier"/>
          <frac32buffer name="mod" description="modulator"/>
@@ -36,17 +38,17 @@ int i;
 for(i=0;i<BUFSIZE;i++) o[i]=0;
 for(i=0;i<20;i++){
 int32buffer t;
-biquad_dsp(&bsmod[i],&bc[i],%mod%,t);
+biquad_dsp(&bsmod[i],&bc[i],inlet_mod,t);
 long int accu = 0;
 int j;
 for(j=0;j<BUFSIZE;j++) accu += (t[j]>0?t[j]:-t[j]);
 val[i] -= val[i]>>6;
 val[i] += accu>>6;
-biquad_dsp(&bscar[i],&bc[i],%car%,t);
+biquad_dsp(&bscar[i],&bc[i],inlet_car,t);
 for(j=0;j<BUFSIZE;j++) o[j] += ___SMMUL(t[j],val[i]);
 }
 int j;
- for(j=0;j<BUFSIZE;j++) %out%[j] = o[j];
+ for(j=0;j<BUFSIZE;j++) outlet_out[j] = o[j];
 ]]></code.krate>
    </obj.normal>
 </objdefs>

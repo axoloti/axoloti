@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -47,7 +47,7 @@ public class AxoObjectTreeNode implements Comparable {
 
     @Override
     public int compareTo(Object t) {
-        String tn = ((AxoObject) t).id;
+        String tn = ((AxoObjectAbstract) t).id;
         if (id.startsWith(tn)) {
             return -1;
         }

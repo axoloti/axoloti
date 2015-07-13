@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="button1" sha="d7e5e78016948ecaade268473afb9502b7c75239">
-      <sDescription>button S2 on axoloti core board</sDescription>
+   <obj.normal id="button1" uuid="2f4fbacf3969a3a1ff9d23899566430051cb01f" sha="9f82aa3e60711d7f7aaaef5c74234df79ae925c2">
+      <upgradeSha>137e217036b363e8a4073692e20a93bc175b584c</upgradeSha>
+      <sDescription>button S1 on axoloti core board</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>button1.axh</helpPatch>
       <inlets/>
       <outlets>
          <bool32 name="out" description="button state"/>
@@ -10,7 +12,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.init><![CDATA[   palSetPadMode(GPIOB,2,PAL_MODE_INPUT_PULLDOWN);]]></code.init>
-      <code.krate><![CDATA[%out%= palReadPad(GPIOB,2);]]></code.krate>
+      <code.krate><![CDATA[outlet_out= palReadPad(SW1_PORT,SW1_PIN);]]></code.krate>
    </obj.normal>
 </objdefs>

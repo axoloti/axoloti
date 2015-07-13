@@ -1,0 +1,57 @@
+<patch-1.0>
+   <comment type="comment" name="test signal selection" x="80" y="20"/>
+   <comment type="comment" name="0 - audio sample" x="120" y="40"/>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="60">
+      <params>
+         <frac32.u.map name="value" value="0.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="comment" name="1 - sine wave" x="120" y="60"/>
+   <comment type="comment" name="2 - sawtooth wave" x="120" y="80"/>
+   <comment type="comment" name="3 - noise" x="120" y="100"/>
+   <obj type="cbp" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="0" y="140">
+      <params>
+         <frac32.s.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="test_signal_generator" sha="17e86f0a9dd72a7fdddd4522adadf8e9c97609fa" name="test_signal_generator1" x="120" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="240" y="140">
+      <params>
+         <frac32.u.map name="amp" value="5.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dac~1" sha="b7702ee1ec29da553bd05cf7a7c87cf9faa5f8ca" name="dac_11" x="360" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~2" sha="9e9ab12369cc73f00506e97dbe03796ef2489d64" name="dac_21" x="360" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="test_signal_generator1 selection"/>
+      </net>
+      <net>
+         <source name="cbp1 out"/>
+         <dest name="test_signal_generator1 pitch"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="dac_11 wave"/>
+         <dest name="dac_21 wave"/>
+      </net>
+      <net>
+         <source name="test_signal_generator1 outlet_1"/>
+         <dest name="*c1 in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

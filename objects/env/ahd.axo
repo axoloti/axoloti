@@ -1,33 +1,34 @@
 <objdefs>
-   <obj.normal id="ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4">
+   <obj.normal id="ahd" uuid="2139369d6de2ba5ddf76e602d1d25df653ca9eed" sha="c4000e3e6417d9d57283d66476b83f22f975ff09">
       <sDescription>attack hold decay envelope</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>env.axh</helpPatch>
       <inlets>
          <bool32.risingfalling name="gate" description="gate"/>
       </inlets>
       <outlets>
-         <frac32.positive name="env" description="envelope output" SumBuffer="false"/>
+         <frac32.positive name="env" description="envelope output"/>
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.kdecaytime name="a">
-            <MinValue v="0.0"/>
+         <frac32.s.map class="axoloti.parameters.ParameterFrac32SMapKDTimeExp" name="a">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.kdecaytime>
-         <frac32.u.map.kdecaytime name="d">
-            <MinValue v="0.0"/>
+         </frac32.s.map>
+         <frac32.s.map class="axoloti.parameters.ParameterFrac32SMapKDTimeExp" name="d">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.kdecaytime>
+         </frac32.s.map>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;
 ]]></code.declaration>
       <code.init><![CDATA[   val = 0;
 ]]></code.init>
-      <code.krate><![CDATA[   if (%gate%>0) val = ___SMMLA((1<<27)-val,(1<<26)-(%a%>>1),val);
-   else val = ___SMMLA(val, (-1<<26)+(%d%>>1),val);
-   %env%= val;
+      <code.krate><![CDATA[   if (inlet_gate>0) val = (1<<27) - (___SMMUL((1<<27)-val, param_a)<<1);
+   else val = ___SMMUL(val, param_d)<<1;
+   outlet_env= val;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

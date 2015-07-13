@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="sin" sha="6c2c51772640a985c60b8e74dd46cdab84f70868">
+   <obj.normal id="sin" uuid="1964a1eea162423ab0d4ad3526e1940bcd3a43cf" sha="4986ce9e30872322358d35c32d9cf725b0700558">
+      <upgradeSha>6c2c51772640a985c60b8e74dd46cdab84f70868</upgradeSha>
       <sDescription>sine function, -64..64 phase corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="phase" description="phase"/>
       </inlets>
@@ -13,14 +15,16 @@
       <params/>
       <attribs/>
       <code.krate><![CDATA[       int32_t r;
-       SINE2TINTERP(%phase%<<4,r)
-       %out%= (r>>4);
+       SINE2TINTERP(inlet_phase<<4,r)
+       outlet_out= (r>>4);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="sin" sha="1071012784f2bd65a87a083ab2b7c3d46db76c52">
+   <obj.normal id="sin" uuid="3fd3c55bdecb474393c99b2a5b01e9bed143eca7" sha="5df1223b10938152461727ab9e7d1ece0cb47643">
+      <upgradeSha>1071012784f2bd65a87a083ab2b7c3d46db76c52</upgradeSha>
       <sDescription>sine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="phase" description="phase"/>
       </inlets>
@@ -31,8 +35,8 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[       int32_t r;
-       SINE2TINTERP(%phase%<<4,r)
-       %out%= (r>>4);
+       SINE2TINTERP(inlet_phase[buffer_index]<<4,r)
+       outlet_out[buffer_index]= (r>>4);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

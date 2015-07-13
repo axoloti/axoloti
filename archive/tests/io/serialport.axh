@@ -1,0 +1,77 @@
+<patch-1.0>
+   <comment type="patch/comment" name="demonstrates the use of hardware serial I/O. Connect PA2 to PA3 to create a loopback test." x="14" y="14"/>
+   <obj type="gpio/serial/config" sha="f0df278a5fd5140e32239828049a8e062059f391" name="serial.begin_1" x="14" y="42">
+      <params/>
+      <attribs>
+         <combo attributeName="baudrate" selection="9600"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c_1" x="14" y="98">
+      <params>
+         <frac32.u.map name="value" value="33.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="script/script" sha="ba13a90be49d2157146d885c2cdf29e2c36cf457" name="script_1" x="98" y="98">
+      <params/>
+      <attribs>
+         <text attributeName="script">
+            <sText><![CDATA[// demo serial transmission and reception using SD2 (USART2)
+
+while(!chThdShouldTerminate()){
+	// send byte, value from in1
+	sdPut(&SD2, in1>>21); 
+
+	// read all pending bytes, value to out1
+	while(!sdGetWouldBlock(&SD2)){
+		out1 = sdGet(&SD2)<<21;
+	}
+	chThdSleepMilliseconds(3);
+}]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU_1" x="238" y="98">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="14" y="196">
+      <params>
+         <frac32.s.map name="pitch" value="-11.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c_1" x="140" y="196">
+      <params>
+         <frac32.u.map name="amp" value="4.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="252" y="196">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c_1 out"/>
+         <dest name="script_1 in1_"/>
+      </net>
+      <net>
+         <source name="script_1 out1_"/>
+         <dest name="displayU_1 in"/>
+      </net>
+      <net>
+         <source name="osc~_1 wave"/>
+         <dest name="*c_1 in"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="dac~_1 left"/>
+         <dest name="dac~_1 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

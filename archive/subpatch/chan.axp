@@ -1,0 +1,150 @@
+<patch-1.0>
+   <obj type="randtrig" name="randtrig1" x="80" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth1" x="680" y="100">
+      <params>
+         <frac32.u.map name="time" value="63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="*" name="mul" x="840" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="inlet" name="inlet1" x="40" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="outlet" name="outlet1" x="920" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="rand" name="rand1" x="40" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix2" name="mix11" x="400" y="100">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+         <frac32.u.map name="gain2" value="62.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" name="smooth2" x="80" y="120">
+      <params>
+         <frac32.u.map name="time" value="18.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="+c" name="comp" x="760" y="100">
+      <params>
+         <frac32.u.map name="c" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="satp" name="satp1" x="600" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="&lt;&lt;" name="MUL16" x="160" y="120">
+      <params/>
+      <attribs>
+         <spinner attributeName="shift" value="4"/>
+      </attribs>
+   </obj>
+   <obj type="randtrig" name="randtrig1_" x="80" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="inmux2" name="inmux21" x="240" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="recv" name="recv1" x="200" y="0">
+      <params/>
+      <attribs>
+         <table attributeName="sender" table="parent-&gt;instanceena"/>
+      </attribs>
+   </obj>
+   <obj type="latch" name="latch1" x="400" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*" name="m" x="520" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="comp out"/>
+         <dest name="mul b"/>
+      </net>
+      <net>
+         <source name="smooth1 out"/>
+         <dest name="mul a"/>
+         <dest name="comp in"/>
+      </net>
+      <net>
+         <source name="mul result"/>
+         <dest name="outlet1 outlet"/>
+      </net>
+      <net>
+         <source name="satp1 out"/>
+         <dest name="smooth1 in"/>
+      </net>
+      <net>
+         <source name="inlet1 inlet"/>
+         <dest name="randtrig1 trig"/>
+         <dest name="randtrig1_ trig"/>
+         <dest name="latch1 trig"/>
+      </net>
+      <net>
+         <source name="randtrig1 rand"/>
+         <dest name="mix11 bus_in"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="rand1 wave"/>
+         <dest name="smooth2 in"/>
+      </net>
+      <net>
+         <source name="smooth2 out"/>
+         <dest name="MUL16 a"/>
+      </net>
+      <net>
+         <source name="randtrig1_ rand"/>
+         <dest name="inmux21 s"/>
+      </net>
+      <net>
+         <source name="MUL16 result"/>
+         <dest name="inmux21 i1"/>
+      </net>
+      <net>
+         <source name="inmux21 o"/>
+         <dest name="mix11 in2"/>
+      </net>
+      <net>
+         <source name="recv1 v"/>
+         <dest name="latch1 i"/>
+      </net>
+      <net>
+         <source name="latch1 o"/>
+         <dest name="m a"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="m b"/>
+      </net>
+      <net>
+         <source name="m result"/>
+         <dest name="satp1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>normal</subpatchmode>
+      <MidiChannel>0</MidiChannel>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

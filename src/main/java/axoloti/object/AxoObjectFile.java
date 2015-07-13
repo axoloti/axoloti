@@ -31,7 +31,9 @@ public class AxoObjectFile {
 
     @ElementListUnion({
         @ElementList(entry = "obj.normal", type = AxoObject.class, inline = true, required = false),
-        @ElementList(entry = "obj.comment", type = AxoObjectComment.class, inline = true, required = false)})
+        @ElementList(entry = "obj.comment", type = AxoObjectComment.class, inline = true, required = false),
+        @ElementList(entry = "obj.hyperlink", type = AxoObjectHyperlink.class, inline = true, required = false)
+    })
     public ArrayList<AxoObjectAbstract> objs;
 
     public AxoObjectFile() {

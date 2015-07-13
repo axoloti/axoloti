@@ -73,7 +73,7 @@ public class Filter extends gentools {
         WriteAxoObject(catName, Create_hpfsvf_tilde());
         WriteAxoObject(catName, Create_bpfsvf_tilde());
 
-        WriteAxoObject(catName, Create_lpfsvf_drive());
+//UNRELEASED        WriteAxoObject(catName, Create_lpfsvf_drive());
 
         WriteAxoObject(catName, Create_bp_svf_m());
 
@@ -456,23 +456,23 @@ public class Filter extends gentools {
                 + "  arm_biquad_casd_df1_inst_q31 S5;\n"
                 + "static const int NUMSTAGES=2;\n";
         o.sInitCode = "  arm_biquad_cas_df1_32x64_init_q31(&S1, NUMSTAGES,\n"
-                + "            (q31_t *) &eq5coefs[190*0 + 10*(%low% + 9)],\n"
+                + "            (q31_t *) &eq5coefs[190*0 + 10*9],\n"
                 + "            &biquadStateBand1Q31[0], 2);\n"
                 + "\n"
                 + "  arm_biquad_cas_df1_32x64_init_q31(&S2, NUMSTAGES,\n"
-                + "            (q31_t *) &eq5coefs[190*1 + 10*(%lowmid% + 9)],\n"
+                + "            (q31_t *) &eq5coefs[190*1 + 10*9],\n"
                 + "            &biquadStateBand2Q31[0], 2);\n"
                 + "\n"
                 + "  arm_biquad_cascade_df1_init_q31(&S3, NUMSTAGES,\n"
-                + "          (q31_t *) &eq5coefs[190*2 + 10*(%mid% + 9)],\n"
+                + "          (q31_t *) &eq5coefs[190*2 + 10*9],\n"
                 + "          &biquadStateBand3Q31[0], 2);\n"
                 + "\n"
                 + "  arm_biquad_cascade_df1_init_q31(&S4, NUMSTAGES,\n"
-                + "          (q31_t *) &eq5coefs[190*3 + 10*(%highmid% + 9)],\n"
+                + "          (q31_t *) &eq5coefs[190*3 + 10*9],\n"
                 + "          &biquadStateBand4Q31[0], 2);\n"
                 + "\n"
                 + "  arm_biquad_cascade_df1_init_q31(&S5, NUMSTAGES,\n"
-                + "          (q31_t *) &eq5coefs[190*4 + 10*(%high% + 9)],\n"
+                + "          (q31_t *) &eq5coefs[190*4 + 10*9],\n"
                 + "          &biquadStateBand5Q31[0], 2);\n";
         o.sKRateCode = "S1.pCoeffs = (q31_t*)&eq5coefs[190*0 + 10*(%low% + 9)];\n"
                 + "S2.pCoeffs = (q31_t*)&eq5coefs[190*1 + 10*(%lowmid% + 9)];\n"
@@ -508,19 +508,19 @@ public class Filter extends gentools {
                 + "  arm_biquad_casd_df1_inst_q31 S5;\n"
                 + "static const int NUMSTAGES=2;\n";
         o.sInitCode = "  arm_biquad_cascade_df1_init_q31(&S2, NUMSTAGES,\n"
-                + "            (q31_t *) &eq5coefs[190*1 + 10*(%lowmid% + 9)],\n"
+                + "            (q31_t *) &eq5coefs[190*1 + 10*9],\n"
                 + "            &biquadStateBand2Q31[0], 2);\n"
                 + "\n"
                 + "  arm_biquad_cascade_df1_init_q31(&S3, NUMSTAGES,\n"
-                + "          (q31_t *) &eq5coefs[190*2 + 10*(%mid% + 9)],\n"
+                + "          (q31_t *) &eq5coefs[190*2 + 10*9],\n"
                 + "          &biquadStateBand3Q31[0], 2);\n"
                 + "\n"
                 + "  arm_biquad_cascade_df1_init_q31(&S4, NUMSTAGES,\n"
-                + "          (q31_t *) &eq5coefs[190*3 + 10*(%highmid% + 9)],\n"
+                + "          (q31_t *) &eq5coefs[190*3 + 10*9)],\n"
                 + "          &biquadStateBand4Q31[0], 2);\n"
                 + "\n"
                 + "  arm_biquad_cascade_df1_init_q31(&S5, NUMSTAGES,\n"
-                + "          (q31_t *) &eq5coefs[190*4 + 10*(%high% + 9)],\n"
+                + "          (q31_t *) &eq5coefs[190*4 + 10*9)],\n"
                 + "          &biquadStateBand5Q31[0], 2);\n";
         o.sKRateCode = "S2.pCoeffs = (q31_t*)&eq5coefs[190*1 + 10*(%lowmid% + 9)];\n"
                 + "S3.pCoeffs = (q31_t*)&eq5coefs[190*2 + 10*(%mid% + 9)];\n"

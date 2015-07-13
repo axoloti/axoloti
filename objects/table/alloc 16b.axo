@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="alloc 16b" sha="29b2085e28f8f45954e2be8a0ff80c909188ac7a">
+   <obj.normal id="alloc 16b" uuid="597fcaac36aa638ba120b0fbdcadcde4ad405a7e" sha="6ac0a3b006de0d628016702b7ba7f008f6763ca5">
+      <upgradeSha>29b2085e28f8f45954e2be8a0ff80c909188ac7a</upgradeSha>
       <sDescription>allocate 16bit table in RAM memory, -128.00 .. 127.99</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets/>
       <outlets/>
       <displays/>
@@ -46,9 +48,9 @@
          </combo>
          <text name="init"/>
       </attribs>
-      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (%size%);
-static const uint32_t LENGTH = (1<<%size%);
-static const uint32_t LENGTHMASK = ((1<<%size%)-1);
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (attr_size);
+static const uint32_t LENGTH = (1<<attr_size);
+static const uint32_t LENGTHMASK = ((1<<attr_size)-1);
 static const uint32_t BITS = 16;
 static const uint32_t GAIN = 12;
 int16_t array[LENGTH];
@@ -57,6 +59,6 @@ int16_t array[LENGTH];
   int i;
   for(i=0;i<LENGTH;i++) array[i]=0;
 }
-%init%]]></code.init>
+attr_init]]></code.init>
    </obj.normal>
 </objdefs>

@@ -58,4 +58,14 @@ public class AxoObjectZombie extends AxoObjectAbstract {
         return o;
     }
 
+    @Override
+    public String GenerateSHA() {
+        return "zombie";
+    }
+
+    @Override
+    public String GenerateUUID() {
+        return "zombie";
+    }
+
 }

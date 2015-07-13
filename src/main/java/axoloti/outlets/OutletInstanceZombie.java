@@ -49,4 +49,9 @@ public class OutletInstanceZombie extends OutletInstance {
         return new axoloti.datatypes.DTZombie();
     }
 
+    @Override
+    public String GetLabel() {
+        return name;
+    }
+
 }

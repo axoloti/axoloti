@@ -90,9 +90,14 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
         }
     }
 
+    public String GetCName() {
+        return parameter.GetCName();
+    }
+
     public void CopyValueFrom(ParameterInstance p) {
-        if (p.onParent != null)
+        if (p.onParent != null) {
             setOnParent(p.onParent);
+        }
         SetMidiCC(p.MidiCC);
     }
 
@@ -147,7 +152,12 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
         getControlComponent().addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
-                handleAdjustment();
+                boolean changed = handleAdjustment();
+                if (axoObj != null && changed) {
+                    if (axoObj.getPatch() != null) {
+                        axoObj.getPatch().SetDirty();
+                    }
+                }
             }
         });
         updateV();
@@ -245,7 +255,13 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
 
     public abstract Value<dt> getValue();
 
-    public abstract void setValue(Value<dt> value);
+    public void setValue(Value<dt> value) {
+        if (axoObj != null) {
+            if (axoObj.getPatch() != null) {
+                axoObj.getPatch().SetDirty();
+            }
+        }
+    }
 
     public void SetValueRaw(int v) {
         getValue().setRaw(v);
@@ -261,8 +277,8 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
     }
 
     public String indexName() {
-        //return "PEX_" + axoObj.GetCInstanceName()  + "_" + parameter.name;
-        return ("" + index);
+        return "PARAM_INDEX_" + axoObj.getLegalName() + "_" + getLegalName();
+//        return ("" + index);
     }
 
     public String getLegalName() {
@@ -293,7 +309,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
         if ((onParent != null) && (onParent) && (enableOnParent)) {
             return "%" + ControlOnParentName() + "%";
         } else {
-            return "parent2->" + PExName(vprefix) + ".finalvalue";
+            return PExName(vprefix) + ".finalvalue";
         }
     }
 
@@ -334,8 +350,8 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
 
     String GenerateMidiCCCodeSub(String vprefix, String value) {
         if (MidiCC != null) {
-            return "        if ((status == %midichannel% + MIDI_CONTROL_CHANGE)&&(data1 == " + MidiCC + ")) {\n"
-                    + "            PExParameterChange(&parent2->" + PExName(vprefix) + "," + value + ", 0xFFFD);\n"
+            return "        if ((status == attr_midichannel + MIDI_CONTROL_CHANGE)&&(data1 == " + MidiCC + ")) {\n"
+                    + "            PExParameterChange(&parent->" + PExName(vprefix) + "," + value + ", 0xFFFD);\n"
                     + "        }\n";
         } else {
             return "";
@@ -346,6 +362,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
         Parameter pcopy = parameter.getClone();
         pcopy.name = ControlOnParentName();
         pcopy.noLabel = null;
+        pcopy.PropagateToChild = axoObj.getLegalName() + "_" + getLegalName();
         return pcopy;
     }
 
@@ -358,7 +375,9 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
     }
 
     public void setOnParent(Boolean b) {
-        if (b == null) return;
+        if (b == null) {
+            return;
+        }
         if (isOnParent() == b) {
             return;
         }
@@ -426,7 +445,7 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
 
     abstract public ACtrlComponent getControlComponent();
 
-    abstract public void handleAdjustment();
+    abstract public boolean handleAdjustment();
 
     void SetMidiCC(Integer cc) {
         if ((cc != null) && (cc >= 0)) {

@@ -17,12 +17,11 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
+import axoloti.Connection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import jssc.SerialPortException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,12 +55,12 @@ public class QCmdUploadFile implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
+    public QCmd Do(Connection connection) {
+        connection.ClearSync();
         try {
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading: " + f.getAbsolutePath());
             int tlength = (int) f.length();
-            serialConnection.TransmitCreateFile(filename, tlength);
+            connection.TransmitCreateFile(filename, tlength);
             FileInputStream inputStream = new FileInputStream(f);
             int MaxBlockSize = 32768;
             int remLength = tlength;
@@ -80,7 +79,7 @@ public class QCmdUploadFile implements QCmdSerialTask {
                 if (nRead != l) {
                     Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
                 }
-                serialConnection.TransmitAppendFile(buffer);
+                connection.TransmitAppendFile(buffer);
                 int newpct = (100 * (tlength - remLength) / tlength);
                 if (newpct != pct) {
                     Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading : " + newpct + "%");
@@ -89,14 +88,12 @@ public class QCmdUploadFile implements QCmdSerialTask {
             } while (remLength > 0);
 
             inputStream.close();
-            serialConnection.TransmitCloseFile();
+            connection.TransmitCloseFile();
             return this;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
         } catch (IOException ex) {
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "IOException", ex);
-        } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "SerialPortException", ex);
         }
         return new QCmdDisconnect();
     }

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="inlet a" sha="2944bdbaeb2a8a42d5a97163275d052f75668a86">
+   <obj.normal id="inlet a" uuid="b577fe41e0a6bc7b5502ce33cb8a3129e2e28ee5" sha="6e9f836aee61272c540eb3e0603b3de0be3ec644">
+      <upgradeSha>2944bdbaeb2a8a42d5a97163275d052f75668a86</upgradeSha>
       <sDescription>Fractional buffer (audio) inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,6 +13,6 @@
       <attribs/>
       <code.declaration><![CDATA[int32buffer _inlet;
 ]]></code.declaration>
-      <code.srate><![CDATA[   %inlet% = _inlet[buffer_index];]]></code.srate>
+      <code.srate><![CDATA[   outlet_inlet[buffer_index] = _inlet[buffer_index];]]></code.srate>
    </obj.normal>
 </objdefs>

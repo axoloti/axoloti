@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sel 4l 16 8t" sha="e17cbee37ccb141eed4721839a1c083a35b30aba">
+   <obj.normal id="sel 4l 16 8t" uuid="13bbb554cf1d8d76074c3308011d2be48120ac06" sha="2d7f39dc6c71956137425ea03be5c1296ddfdc93">
+      <upgradeSha>e17cbee37ccb141eed4721839a1c083a35b30aba</upgradeSha>
       <sDescription>select one out of 16 4-levels, 8 tracks, chainable</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -37,26 +38,26 @@
          <int2x16 name="t8"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {
-   %o1%=(%t1%>>(%in%*2))&3;
-   %o2%=(%t2%>>(%in%*2))&3;
-   %o3%=(%t3%>>(%in%*2))&3;
-   %o4%=(%t4%>>(%in%*2))&3;
-   %o5%=(%t5%>>(%in%*2))&3;
-   %o6%=(%t6%>>(%in%*2))&3;
-   %o7%=(%t7%>>(%in%*2))&3;
-   %o8%=(%t8%>>(%in%*2))&3;
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<16)) {
+   outlet_o1=(param_t1>>(inlet_in*2))&3;
+   outlet_o2=(param_t2>>(inlet_in*2))&3;
+   outlet_o3=(param_t3>>(inlet_in*2))&3;
+   outlet_o4=(param_t4>>(inlet_in*2))&3;
+   outlet_o5=(param_t5>>(inlet_in*2))&3;
+   outlet_o6=(param_t6>>(inlet_in*2))&3;
+   outlet_o7=(param_t7>>(inlet_in*2))&3;
+   outlet_o8=(param_t8>>(inlet_in*2))&3;
 }else {
-   %o1% = %def1%;
-   %o2% = %def2%;
-   %o3% = %def3%;
-   %o4% = %def4%;
-   %o5% = %def5%;
-   %o6% = %def6%;
-   %o7% = %def7%;
-   %o8% = %def8%;
+   outlet_o1 = inlet_def1;
+   outlet_o2 = inlet_def2;
+   outlet_o3 = inlet_def3;
+   outlet_o4 = inlet_def4;
+   outlet_o5 = inlet_def5;
+   outlet_o6 = inlet_def6;
+   outlet_o7 = inlet_def7;
+   outlet_o8 = inlet_def8;
 }
-%chain% = %in%-16;
+outlet_chain = inlet_in-16;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

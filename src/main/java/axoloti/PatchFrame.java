@@ -38,6 +38,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -57,7 +58,7 @@ public class PatchFrame extends javax.swing.JFrame {
      * Creates new form PatchFrame
      */
     PatchGUI patch;
-
+    
     public PatchFrame(PatchGUI patch, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
@@ -69,25 +70,30 @@ public class PatchFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(patch.Layers);
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.ygrid / 2);
         jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.xgrid / 2);
-
+        
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuEdit.add(menuItem);
-
+        
         menuItem = new JMenuItem(new DefaultEditorKit.CopyAction());
         menuItem.setText("Copy");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuEdit.add(menuItem);
-
+        
         menuItem = new JMenuItem(new DefaultEditorKit.PasteAction());
         menuItem.setText("Paste");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuEdit.add(menuItem);
-
+        
         UpdateConnectStatus();
-        setExtendedState(MAXIMIZED_BOTH);
-
+        if (patch.getWindowPos() != null) {
+            setBounds(patch.getWindowPos());
+        } else {
+            Dimension d = patch.GetInitialSize();
+            setSize(d);
+        }
+        
         if (!MainFrame.prefs.getExpertMode()) {
             jSeparator3.setVisible(false);
             jMenuItemLock.setVisible(false);
@@ -99,6 +105,7 @@ public class PatchFrame extends javax.swing.JFrame {
         }
         jMenuPreset.setVisible(false);
         jMenuItemAdjScroll.setVisible(false);
+        patch.Layers.requestFocus();
 
         //        jScrollPane1.setAutoscrolls(true);
         /*
@@ -110,7 +117,7 @@ public class PatchFrame extends javax.swing.JFrame {
          patch.invalidate();*/
     }
     QCmdProcessor qcmdprocessor;
-
+    
     public void UpdateConnectStatus() {
         if (qcmdprocessor.serialconnection.isConnected()) {
             ShowConnect();
@@ -118,7 +125,7 @@ public class PatchFrame extends javax.swing.JFrame {
             ShowDisconnect();
         }
     }
-
+    
     public void SetLive(boolean b) {
         if (b) {
             jCheckBoxLive.setSelected(true);
@@ -132,7 +139,7 @@ public class PatchFrame extends javax.swing.JFrame {
             jCheckBoxMenuItemLive.setEnabled(true);
         }
     }
-
+    
     public void ShowDisconnect() {
         if (patch.IsLocked()) {
             patch.Unlock();
@@ -142,7 +149,7 @@ public class PatchFrame extends javax.swing.JFrame {
         jCheckBoxMenuItemLive.setEnabled(false);
         jCheckBoxMenuItemLive.setSelected(false);
     }
-
+    
     public void ShowConnect() {
         patch.Unlock();
         jCheckBoxLive.setSelected(false);
@@ -150,25 +157,25 @@ public class PatchFrame extends javax.swing.JFrame {
         jCheckBoxMenuItemLive.setSelected(false);
         jCheckBoxMenuItemLive.setEnabled(true);
     }
-
+    
     public void ShowCompileFail() {
         jCheckBoxLive.setSelected(false);
         jCheckBoxLive.setEnabled(true);
     }
-
+    
     public void SetProgressValue(int i) {
         jProgressBar1.setValue(i);
     }
-
+    
     public void SetProgressMessage(String s) {
         jLabel2.setText(s);
     }
-
+    
     public void Close() {
         patch.GetMainFrame().patches.remove(patch);
         dispose();
     }
-
+    
     public boolean AskClose() {
         if (patch.isDirty()) {
             Object[] options = {"Save",
@@ -212,15 +219,15 @@ public class PatchFrame extends javax.swing.JFrame {
 
         jToolbarPanel = new javax.swing.JPanel();
         jCheckBoxLive = new javax.swing.JCheckBox();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
         jLabel1 = new javax.swing.JLabel();
         jProgressBarDSPLoad = new javax.swing.JProgressBar();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(32767, 0));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
+        jScrollPane1 = new javax.swing.JScrollPane();
         jStatusPanel = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuNew = new javax.swing.JMenuItem();
@@ -268,14 +275,18 @@ public class PatchFrame extends javax.swing.JFrame {
                 formWindowClosing(evt);
             }
         });
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-        jToolbarPanel.setAlignmentX(0.0F);
-        jToolbarPanel.setMinimumSize(new java.awt.Dimension(100, 39));
+        jToolbarPanel.setAlignmentX(1.0F);
+        jToolbarPanel.setAlignmentY(0.0F);
+        jToolbarPanel.setMaximumSize(new java.awt.Dimension(32767, 0));
+        jToolbarPanel.setPreferredSize(new java.awt.Dimension(212, 49));
         jToolbarPanel.setLayout(new javax.swing.BoxLayout(jToolbarPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         jCheckBoxLive.setText("Live");
         jCheckBoxLive.setEnabled(false);
         jCheckBoxLive.setFocusable(false);
+        jCheckBoxLive.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jCheckBoxLive.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jCheckBoxLive.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jCheckBoxLive.addActionListener(new java.awt.event.ActionListener() {
@@ -284,18 +295,31 @@ public class PatchFrame extends javax.swing.JFrame {
             }
         });
         jToolbarPanel.add(jCheckBoxLive);
+
+        filler2.setAlignmentX(0.0F);
         jToolbarPanel.add(filler2);
 
         jLabel1.setText("DSP load ");
         jToolbarPanel.add(jLabel1);
 
         jProgressBarDSPLoad.setToolTipText("");
+        jProgressBarDSPLoad.setAlignmentX(0.0F);
         jProgressBarDSPLoad.setMaximumSize(new java.awt.Dimension(100, 16));
+        jProgressBarDSPLoad.setMinimumSize(new java.awt.Dimension(60, 16));
         jProgressBarDSPLoad.setName(""); // NOI18N
         jProgressBarDSPLoad.setPreferredSize(new java.awt.Dimension(100, 16));
         jProgressBarDSPLoad.setStringPainted(true);
         jToolbarPanel.add(jProgressBarDSPLoad);
+
+        filler3.setAlignmentX(0.0F);
         jToolbarPanel.add(filler3);
+
+        getContentPane().add(jToolbarPanel);
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setAutoscrolls(true);
+        getContentPane().add(jScrollPane1);
 
         jStatusPanel.setMaximumSize(new java.awt.Dimension(605, 16));
         jStatusPanel.setLayout(new javax.swing.BoxLayout(jStatusPanel, javax.swing.BoxLayout.LINE_AXIS));
@@ -312,8 +336,7 @@ public class PatchFrame extends javax.swing.JFrame {
         jLabel2.setPreferredSize(new java.awt.Dimension(250, 14));
         jStatusPanel.add(jLabel2);
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        getContentPane().add(jStatusPanel);
 
         jMenuFile.setMnemonic('F');
         jMenuFile.setText("File");
@@ -409,7 +432,7 @@ jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuEdit.add(jMenuItemSelectAll);
 
-    jMenuItemAddObj.setText("Add Object...");
+    jMenuItemAddObj.setText("New Object...");
     jMenuItemAddObj.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuItemAddObjActionPerformed(evt);
@@ -576,13 +599,13 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     jMenuWindow.setMnemonic('W');
     jMenuWindow.setText("Window");
     jMenuWindow.addMenuListener(new javax.swing.event.MenuListener() {
-        public void menuCanceled(javax.swing.event.MenuEvent evt) {
+        public void menuSelected(javax.swing.event.MenuEvent evt) {
+            jMenuWindowMenuSelected(evt);
         }
         public void menuDeselected(javax.swing.event.MenuEvent evt) {
             jMenuWindowMenuDeselected(evt);
         }
-        public void menuSelected(javax.swing.event.MenuEvent evt) {
-            jMenuWindowMenuSelected(evt);
+        public void menuCanceled(javax.swing.event.MenuEvent evt) {
         }
     });
     jMenuBar1.add(jMenuWindow);
@@ -611,35 +634,16 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     setJMenuBar(jMenuBar1);
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-    getContentPane().setLayout(layout);
-    layout.setHorizontalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(jToolbarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-        .addComponent(jScrollPane1)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jStatusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
-    );
-    layout.setVerticalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addComponent(jToolbarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
-            .addGap(24, 24, 24))
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 465, Short.MAX_VALUE)
-                .addComponent(jStatusPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-    );
-
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBoxLiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxLiveActionPerformed
         if (jCheckBoxLive.isSelected()) {
-            jCheckBoxLive.setEnabled(false);
-            patch.GoLive();
+            if (GoLive()) {
+                jCheckBoxLive.setEnabled(false);
+            } else {
+                jCheckBoxLive.setSelected(false);
+            }
         } else {
             qcmdprocessor.AppendToQueue(new QCmdStop());
             patch.Unlock();
@@ -663,29 +667,102 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
         final JFileChooser fc = new JFileChooser(MainFrame.prefs.getCurrentFileDirectory());
-        fc.setFileFilter(new FileFilter() {
+        fc.setAcceptAllFileFilterUsed(false);
+        FileFilter axp = new FileFilter() {
             @Override
             public boolean accept(File file) {
-                if (file.isDirectory()) {
-                    return true;
-                }
                 if (file.getName().endsWith("axp")) {
+                    return true;
+                } else if (file.isDirectory()) {
                     return true;
                 }
                 return false;
             }
-
+            
             @Override
             public String getDescription() {
                 return "Axoloti Patch";
             }
-        });
+        };
+        FileFilter axh = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith("axh")) {
+                    return true;
+                } else if (file.isDirectory()) {
+                    return true;
+                }
+                return false;
+            }
+            
+            @Override
+            public String getDescription() {
+                return "Axoloti Help";
+            }
+        };
+        FileFilter axs = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                if (file.getName().endsWith("axs")) {
+                    return true;
+                } else if (file.isDirectory()) {
+                    return true;
+                }
+                return false;
+            }
+            
+            @Override
+            public String getDescription() {
+                return "Axoloti Subpatch";
+            }
+        };
+        fc.addChoosableFileFilter(axp);
+        fc.addChoosableFileFilter(axs);
+        fc.addChoosableFileFilter(axh);
+        String fn = patch.getFileNamePath();
+        if (fn == null) {
+            fn = "untitled";
+        }
+        File f = new File(fn);
+        fc.setSelectedFile(f);
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File fileToBeSaved = fc.getSelectedFile();
-            if (!fileToBeSaved.getAbsolutePath().endsWith(".axp")) {
-                fileToBeSaved = new File(fc.getSelectedFile() + ".axp");
+            if (!(fileToBeSaved.getAbsolutePath().endsWith(".axp")
+                    || fileToBeSaved.getAbsolutePath().endsWith(".axh")
+                    || fileToBeSaved.getAbsolutePath().endsWith(".axs"))) {
+                
+                String ext = ".axp";
+                if (fc.getFileFilter() == axp) {
+                    ext = ".axp";
+                } else if (fc.getFileFilter() == axs) {
+                    ext = ".axs";
+                } else if (fc.getFileFilter() == axh) {
+                    ext = ".axh";
+                }
+                
+                fileToBeSaved = new File(fc.getSelectedFile() + ext);
             }
+            
+            if (fileToBeSaved.exists()) {
+                Object[] options = {"Yes",
+                    "No"};
+                int n = JOptionPane.showOptionDialog(this,
+                        "File exists, do you want to overwrite ?",
+                        "Axoloti asks:",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                switch (n) {
+                    case JOptionPane.YES_OPTION:
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        return;
+                }
+            }
+            
             patch.setFileNamePath(fileToBeSaved.getPath());
             MainFrame.prefs.setCurrentFileDirectory(fileToBeSaved.getPath());
             patch.save(fileToBeSaved);
@@ -714,10 +791,11 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuCompileCodeActionPerformed
 
     private void jMenuUploadCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUploadCodeActionPerformed
+        patch.GetQCmdProcessor().SetPatch(null);
         patch.GetQCmdProcessor().AppendToQueue(new QCmdStop());
         patch.GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
-        patch.GetQCmdProcessor().AppendToQueue(new QCmdStart());
-        patch.GetQCmdProcessor().AppendToQueue(new QCmdLock());
+        patch.GetQCmdProcessor().AppendToQueue(new QCmdStart(patch));
+        patch.GetQCmdProcessor().AppendToQueue(new QCmdLock(patch));
     }//GEN-LAST:event_jMenuUploadCodeActionPerformed
 
     private void jMenuItemLockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLockActionPerformed
@@ -790,8 +868,12 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     private void jCheckBoxMenuItemLiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemLiveActionPerformed
         if (jCheckBoxMenuItemLive.isSelected()) {
-            jCheckBoxMenuItemLive.setEnabled(false);
-            patch.GoLive();
+            if (GoLive()) {
+                jCheckBoxMenuItemLive.setEnabled(false);
+            } else {
+                jCheckBoxMenuItemLive.setSelected(false);
+                
+            }
         } else {
             qcmdprocessor.AppendToQueue(new QCmdStop());
             patch.Unlock();
@@ -841,12 +923,37 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItemAddObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddObjActionPerformed
-        patch.ShowClassSelector(new Point(20, 20), null);
+        patch.ShowClassSelector(new Point(20, 20), null, null);
     }//GEN-LAST:event_jMenuItemAddObjActionPerformed
 
     private void jMenuCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCloseActionPerformed
         AskClose();
     }//GEN-LAST:event_jMenuCloseActionPerformed
+    
+    private boolean GoLive() {
+        
+        if (patch.getFileNamePath().endsWith(".axs")) {
+            Object[] options = {"Yes",
+                "No"};
+            
+            int n = JOptionPane.showOptionDialog(this,
+                    "This is a subpatch intended to be used by a main patch and possibly has no output. \nDo you still want to take it live?",
+                    "Axoloti asks:",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+            switch (n) {
+                case JOptionPane.NO_OPTION:
+                    return false;
+                case JOptionPane.YES_OPTION:
+                    ; // fall thru
+            }
+        }
+        patch.GoLive();
+        return true;
+    }
 
     /* write to sdcard...
      */

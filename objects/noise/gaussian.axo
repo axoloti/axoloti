@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="gaussian" sha="43d4dec8c6448021780e4d51ddedd98bd944f688">
+   <obj.normal id="gaussian" uuid="a0f2cae6eafbfa58e1f1cb28e369824c54486f79" sha="2cd50726c11efbbf6edc2abbe8a899e31df4cf93">
+      <upgradeSha>43d4dec8c6448021780e4d51ddedd98bd944f688</upgradeSha>
       <sDescription>pseudo gaussian distributed (white) noise. Range -64..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>gaussian.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32buffer.bipolar name="wave" description="white noise"/>
@@ -26,6 +28,6 @@ int32_t n=0;
 for(i=0;i<8;i++){
    seeds[i] = (seeds[i] * 196314165) + 907633515;   n += ((int32_t)(seeds[i]))>>7;
 }
-%wave%= n;]]></code.srate>
+outlet_wave[buffer_index]= n;]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sel b 16 4t pulse" sha="901be8450f8d553f4c6bfa2150f29dd2ebbfb89f">
+   <obj.normal id="sel b 16 4t pulse" uuid="888c8955ae75a9e7e3ed641fa9084d6b52e9fee9" sha="1eea2929191589a94e2faf49a37a52b267508cd2">
+      <upgradeSha>901be8450f8d553f4c6bfa2150f29dd2ebbfb89f</upgradeSha>
       <sDescription>select one out of 16 booleans, chainable, 4 tracks, pulse output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,19 +30,19 @@
 ]]></code.declaration>
       <code.init><![CDATA[in_prev = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {
-   %o1%=(%in%!=in_prev)&&(%p1%&(1<<%in%));
-   %o2%=(%in%!=in_prev)&&(%p2%&(1<<%in%));
-   %o3%=(%in%!=in_prev)&&(%p3%&(1<<%in%));
-   %o4%=(%in%!=in_prev)&&(%p4%&(1<<%in%));
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<16)) {
+   outlet_o1=(inlet_in!=in_prev)&&(param_p1&(1<<inlet_in));
+   outlet_o2=(inlet_in!=in_prev)&&(param_p2&(1<<inlet_in));
+   outlet_o3=(inlet_in!=in_prev)&&(param_p3&(1<<inlet_in));
+   outlet_o4=(inlet_in!=in_prev)&&(param_p4&(1<<inlet_in));
 } else {
-   %o1% = %def1%;
-   %o2% = %def2%;
-   %o3% = %def3%;
-   %o4% = %def4%;
+   outlet_o1 = inlet_def1;
+   outlet_o2 = inlet_def2;
+   outlet_o3 = inlet_def3;
+   outlet_o4 = inlet_def4;
 }
-%chain% = %in%-16;
-in_prev = %in%;
+outlet_chain = inlet_in-16;
+in_prev = inlet_in;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

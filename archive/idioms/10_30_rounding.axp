@@ -1,0 +1,43 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="0" y="80">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="toInt" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt1" x="240" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1" x="360" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="round" sha="3944e69389a11054c6d2a9beca3dd2d704aa5355" name="round1" x="240" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1_" x="360" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" name="truncation" x="240" y="40"/>
+   <comment type="comment" name="rounding" x="240" y="160"/>
+   <comment type="comment" name="use shift-drag to make fine adjustments!" x="0" y="40"/>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="toInt1 i"/>
+         <dest name="round1 in"/>
+      </net>
+      <net>
+         <source name="toInt1 o"/>
+         <dest name="dispI1 in"/>
+      </net>
+      <net>
+         <source name="round1 out"/>
+         <dest name="dispI1_ in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

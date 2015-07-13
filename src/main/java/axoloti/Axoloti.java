@@ -18,7 +18,13 @@
 package axoloti;
 
 import axoloti.dialogs.AboutFrame;
+import axoloti.utils.OSDetect;
+import axoloti.utils.Preferences;
 import java.awt.EventQueue;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 /**
@@ -27,11 +33,103 @@ import javax.swing.UIManager;
  */
 public class Axoloti {
 
+    public final static String RUNTIME_DIR = "axoloti_runtime";
+    public final static String HOME_DIR = "axoloti_home";
+    public final static String RELEASE_DIR = "axoloti_release";
+    public final static String FIRMWARE_DIR = "axoloti_firmware";
+
+    static void BuildEnv(String var, String def) {
+        String ev = System.getProperty(var);
+        if (ev == null) {
+            ev = System.getenv(var);
+            if (ev == null) {
+                ev = def;
+            }
+        }
+        File f = new File(ev);
+        if (f.exists()) try {
+            ev = f.getCanonicalPath();
+        } catch (IOException ex) {
+            Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.setProperty(var, ev);
+    }
+
+    static boolean TestDir(String var) {
+        String ev = System.getProperty(var);
+        File f = new File(var);
+        if (f.exists()) {
+            System.err.println(var + " Directory does not exist " + ev);
+            return false;
+        }
+        if (f.isDirectory()) {
+            System.err.println(var + " should be a valid directory " + ev);
+            return false;
+        }
+        return true;
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         try {
+            String curDir = System.getProperty("user.dir");
+            File jarFile=new File(Axoloti.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            String jarDir = jarFile.getParentFile().getCanonicalPath();
+            String defaultHome = curDir;
+            String defaultRuntime = curDir;
+            String defaultRelease = curDir;
+            if (OSDetect.getOS() == OSDetect.OS.WIN) {
+                // not sure which versions of windows this is valid for, good for 8!
+                defaultHome = System.getenv("HOMEPATH") + File.separator + "Documents";
+                defaultRuntime = System.getenv("ProgramFiles") + File.separator + "axoloti_runtime";
+            } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
+                defaultHome = System.getenv("HOME") + "/Documents/axoloti";
+                defaultRuntime =  "/Applications/axoloti_runtime";
+            } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
+                defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
+            }
+
+            BuildEnv(HOME_DIR, defaultHome);
+            File homedir = new File(System.getProperty(HOME_DIR));
+            if (!homedir.exists()) {
+                homedir.mkdir();
+            }
+
+            File buildir = new File(System.getProperty(HOME_DIR) + File.separator + "build");
+            if (!buildir.exists()) {
+                buildir.mkdir();
+            }
+            if (!TestDir(HOME_DIR)) {
+                System.exit(-1);
+            }
+
+            BuildEnv(RELEASE_DIR, defaultRelease);
+            if (!TestDir(RELEASE_DIR)) {
+                System.exit(-1);
+            }
+            BuildEnv(RUNTIME_DIR, defaultRuntime);
+            if (!TestDir(RUNTIME_DIR)) {
+                System.exit(-1);
+            }
+
+            BuildEnv(FIRMWARE_DIR, System.getProperty(RELEASE_DIR) + File.separator + "firmware");
+            if (!TestDir(FIRMWARE_DIR)) {
+                System.exit(-1);
+            }
+
+            Preferences prefs = Preferences.LoadPreferences();
+
+            System.out.println("Axoloti Driectories:\n"
+                    + "Current = " + curDir + "\n"
+                    + "Jar = " + jarDir + "\n"
+                    + "Release = " + System.getProperty(RELEASE_DIR) + "\n"
+                    + "Runtime = " + System.getProperty(RUNTIME_DIR) + "\n"
+                    + "Firmware = " + System.getProperty(FIRMWARE_DIR) + "\n"
+                    + "AxolotiHome = " + System.getProperty(HOME_DIR)
+            );
+
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             if (System.getProperty("os.name").contains("OS X")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true");

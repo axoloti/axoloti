@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sel i 32" sha="a1e35c357b6ecf6a37b148ca71c2d38031c8e586">
+   <obj.normal id="sel i 32" uuid="da57265c05946784a6b60f7879b838d6bb4b099" sha="e059c6e9028c6f037360f5c22d8195ab9e10e415">
+      <upgradeSha>a1e35c357b6ecf6a37b148ca71c2d38031c8e586</upgradeSha>
       <sDescription>select one out of 32 integers, with chain i/o</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -144,42 +145,42 @@
          </int32.mini>
       </params>
       <attribs/>
-      <code.krate><![CDATA[switch(%in%){
-case 0: %o% = %i0%; break;
-case 1: %o% = %i1%; break;
-case 2: %o% = %i2%; break;
-case 3: %o% = %i3%; break;
-case 4: %o% = %i4%; break;
-case 5: %o% = %i5%; break;
-case 6: %o% = %i6%; break;
-case 7: %o% = %i7%; break;
-case 8: %o% = %i8%; break;
-case 9: %o% = %i9%; break;
-case 10: %o% = %i10%; break;
-case 11: %o% = %i11%; break;
-case 12: %o% = %i12%; break;
-case 13: %o% = %i13%; break;
-case 14: %o% = %i14%; break;
-case 15: %o% = %i15%; break;
-case 16: %o% = %i16%; break;
-case 17: %o% = %i17%; break;
-case 18: %o% = %i18%; break;
-case 19: %o% = %i19%; break;
-case 20: %o% = %i20%; break;
-case 21: %o% = %i21%; break;
-case 22: %o% = %i22%; break;
-case 23: %o% = %i23%; break;
-case 24: %o% = %i24%; break;
-case 25: %o% = %i25%; break;
-case 26: %o% = %i26%; break;
-case 27: %o% = %i27%; break;
-case 28: %o% = %i28%; break;
-case 29: %o% = %i29%; break;
-case 30: %o% = %i30%; break;
-case 31: %o% = %i31%; break;
-default: %o% = %def%;
+      <code.krate><![CDATA[switch(inlet_in){
+case 0: outlet_o = param_i0; break;
+case 1: outlet_o = param_i1; break;
+case 2: outlet_o = param_i2; break;
+case 3: outlet_o = param_i3; break;
+case 4: outlet_o = param_i4; break;
+case 5: outlet_o = param_i5; break;
+case 6: outlet_o = param_i6; break;
+case 7: outlet_o = param_i7; break;
+case 8: outlet_o = param_i8; break;
+case 9: outlet_o = param_i9; break;
+case 10: outlet_o = param_i10; break;
+case 11: outlet_o = param_i11; break;
+case 12: outlet_o = param_i12; break;
+case 13: outlet_o = param_i13; break;
+case 14: outlet_o = param_i14; break;
+case 15: outlet_o = param_i15; break;
+case 16: outlet_o = param_i16; break;
+case 17: outlet_o = param_i17; break;
+case 18: outlet_o = param_i18; break;
+case 19: outlet_o = param_i19; break;
+case 20: outlet_o = param_i20; break;
+case 21: outlet_o = param_i21; break;
+case 22: outlet_o = param_i22; break;
+case 23: outlet_o = param_i23; break;
+case 24: outlet_o = param_i24; break;
+case 25: outlet_o = param_i25; break;
+case 26: outlet_o = param_i26; break;
+case 27: outlet_o = param_i27; break;
+case 28: outlet_o = param_i28; break;
+case 29: outlet_o = param_i29; break;
+case 30: outlet_o = param_i30; break;
+case 31: outlet_o = param_i31; break;
+default: outlet_o = inlet_def;
 }
-%chain% = %in%-32;
+outlet_chain = inlet_in-32;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

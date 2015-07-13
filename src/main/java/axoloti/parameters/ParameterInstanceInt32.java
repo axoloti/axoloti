@@ -100,7 +100,7 @@ public abstract class ParameterInstanceInt32 extends ParameterInstance<Int32> {
     }
 
     @Override
-    public void handleAdjustment() {
+    public boolean handleAdjustment() {
         Preset p = GetPreset(presetEditActive);
         if (p != null) {
             p.value = new ValueInt32((int) getControlComponent().getValue());
@@ -110,7 +110,11 @@ public abstract class ParameterInstanceInt32 extends ParameterInstance<Int32> {
                 needsTransmit = true;
                 UpdateUnit();
             }
+            else {
+                return false;
+            }
         }
+        return true;
     }
 
 }

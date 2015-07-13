@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="d" sha="e047de4d97e15e991286b65f7265528616d6b4e8">
+   <obj.normal id="d" uuid="a54f36d89d061702997ac09fd10a20a64154ed46" sha="35daeaac31b54e597721054577a915e4560d6548">
+      <upgradeSha>e047de4d97e15e991286b65f7265528616d6b4e8</upgradeSha>
       <sDescription>decay envelope, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pulse.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
@@ -23,11 +25,11 @@ int ntrig;
       <code.init><![CDATA[val = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) { val =1<<27; ntrig=1;}
-   else { if (!(%trig%>0)) ntrig=0; }
+      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) { val =1<<27; ntrig=1;}
+   else { if (!(inlet_trig>0)) ntrig=0; }
 ]]></code.krate>
-      <code.srate><![CDATA[   %env% = val;
-val -= ___SMMUL(val, %d%>>1);
+      <code.srate><![CDATA[   outlet_env[buffer_index] = val;
+val -= ___SMMUL(val, param_d>>1);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

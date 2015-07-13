@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="play with the piano!" x="14" y="14"/>
-   <obj type="keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
+   <comment type="patch/comment" name="play with the piano!" x="14" y="14"/>
+   <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
       <params/>
       <attribs/>
    </obj>
@@ -8,10 +8,10 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="generates a short burst of noise" x="392" y="56"/>
-   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd1" x="294" y="84">
+   <comment type="patch/comment" name="generates a short burst of noise" x="392" y="56"/>
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="294" y="84">
       <params>
-         <frac32.u.map name="d" value="63.5"/>
+         <frac32.s.map name="d" value="-22.0"/>
       </params>
       <attribs/>
    </obj>
@@ -19,10 +19,10 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="compute the right delay time from pitch" x="14" y="210"/>
-   <comment type="patch/comment" sha="sha" name="interpolating delayline read" x="322" y="210"/>
-   <comment type="patch/comment" sha="sha" name="99% feedback" x="518" y="210"/>
-   <comment type="patch/comment" sha="sha" name="delayline write" x="630" y="210"/>
+   <comment type="patch/comment" name="compute the right delay time from pitch" x="14" y="210"/>
+   <comment type="patch/comment" name="interpolating delayline read" x="322" y="210"/>
+   <comment type="patch/comment" name="99% feedback" x="518" y="210"/>
+   <comment type="patch/comment" name="delayline write" x="630" y="210"/>
    <obj type="delay/mtod" sha="800732c561d801c8b0c245ce1c6cd2413cd0ff6" name="mtod_1" x="56" y="252">
       <params>
          <frac32.s.map name="pitch" value="8.0"/>
@@ -39,7 +39,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delread2~~" sha="22a07dcbe5007bc4095bed25946486e7c98caf23" name="delread2__1" x="322" y="252">
+   <obj type="delay/read interp" sha="22a07dcbe5007bc4095bed25946486e7c98caf23" name="delread2__1" x="322" y="252">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -65,11 +65,11 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="714" y="336">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="770" y="336">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="bug: tuning reference is incorrect" x="56" y="350"/>
+   <comment type="patch/comment" name="bug: tuning reference is incorrect" x="56" y="350"/>
    <nets>
       <net>
          <source name="keyb1 gate"/>
@@ -122,4 +122,10 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1024</width>
+      <height>660</height>
+   </windowPos>
 </patch-1.0>

@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="decode" sha="b75498b96464589a34f8644aceb296a5f682bb33">
+   <obj.normal id="decode" uuid="5640630558a19951f40cc6b661edf3e625eacdcf" sha="e3faf113674cc9595deb6981f7d9eeb0832d09fc">
+      <upgradeSha>b75498b96464589a34f8644aceb296a5f682bb33</upgradeSha>
       <sDescription>LTC (linear timecode) decoder.  Does not support drop-frame format. This implementation only works when the system clock is 48kHz or 96kHz, not at 44.1kHz!</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>decode.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="ltc input"/>
       </inlets>
@@ -50,17 +52,17 @@ f=0;
 b=-1;
 ss=0;
 bo=0;
-sexp =(SAMPLERATE/160)/%fps%;
+sexp =(SAMPLERATE/160)/attr_fps;
 subsample = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%h% = h;
-%m% = m;
-%s% = s;
-%f% = f;
-%smp% = subsample;
-%sync%=0;
+      <code.krate><![CDATA[outlet_h = h;
+outlet_m = m;
+outlet_s = s;
+outlet_f = f;
+outlet_smp = subsample;
+outlet_sync=0;
 ]]></code.krate>
-      <code.srate><![CDATA[int32_t i1 = %in%>>2;
+      <code.srate><![CDATA[int32_t i1 = inlet_in[buffer_index]>>2;
 int transition = ((psample>0)!=(i1>0));
 
 if (b == -1) {
@@ -88,7 +90,7 @@ if (b == -1) {
 				}
 				subsample = ((_i0<<6)/(_i0-_i1)) + 64*buffer_index;
                              if (f == 0) {
-                                 %sync% = 1;
+                                 outlet_sync = 1;
                              }
 			}
 		}

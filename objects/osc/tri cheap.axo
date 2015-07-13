@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="tri cheap" sha="ac4f3ba94a25676dda2257e2e9377643c6125d8c">
+   <obj.normal id="tri cheap" uuid="1511ebc6ee27264749db27eba80ad7ac325abd93" sha="e25c6034924dfab911b444ddd2e175f00152b50f">
+      <upgradeSha>ac4f3ba94a25676dda2257e2e9377643c6125d8c</upgradeSha>
       <sDescription>Non-bandwith limited triangle wave oscillator, cheap sound</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
       </inlets>
@@ -22,14 +24,14 @@
       <code.init><![CDATA[    osc_p=0;
 ]]></code.init>
       <code.krate><![CDATA[  uint32_t freq;
-  MTOFEXTENDED(%pitch% + %pitchm%,freq);
+  MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
   int j;
   for(j=0;j<BUFSIZE;j++){
     osc_p+=freq;
     if (osc_p>0){
-       %wave%[j] = ((1<<30)-(osc_p))>>4;
+       outlet_wave[j] = ((1<<30)-(osc_p))>>4;
     } else {
-       %wave%[j] = (osc_p+(1<<30))>>4;
+       outlet_wave[j] = (osc_p+(1<<30))>>4;
     }
 }
 ]]></code.krate>

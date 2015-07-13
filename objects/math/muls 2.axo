@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="muls 2" sha="66864ec326f7bc31d57563047135e75259b46642">
+   <obj.normal id="muls 2" uuid="e6a3d49dd255fdecb3dca9c7fa75b9a95ecfd7fd" sha="80cfb27beb277f1fc97006ab68f5129daeb7448a">
+      <upgradeSha>66864ec326f7bc31d57563047135e75259b46642</upgradeSha>
       <sDescription>saturated multiply by 2</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>
@@ -12,12 +14,14 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= __SSAT(%in%,27)<<1;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= __SSAT(inlet_in,27)<<1;]]></code.krate>
    </obj.normal>
-   <obj.normal id="muls 2" sha="17100b9369a00a2265f0f754ff1c0ec87f9c6690">
+   <obj.normal id="muls 2" uuid="c3083089dc169cd87133000659a02789dec5a151" sha="46bd012dd3ed2b3d357eb549728f1b434e14dba6">
+      <upgradeSha>17100b9369a00a2265f0f754ff1c0ec87f9c6690</upgradeSha>
       <sDescription>saturated multiply by 2</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="in"/>
       </inlets>
@@ -27,6 +31,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%out%= __SSAT(%in%,27)<<1;]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= __SSAT(inlet_in[buffer_index],27)<<1;]]></code.srate>
    </obj.normal>
 </objdefs>

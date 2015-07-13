@@ -1,0 +1,402 @@
+<patch-1.0>
+   <comment type="patch/comment" name="Needs USART2 enabled in mcuconfig, this conficts with serial port SD2..." x="14" y="14"/>
+   <comment type="patch/comment" name="output on PA2" x="14" y="28"/>
+   <obj type="audio/inconfig" sha="c5ee5e230152b248edde544704970b051688aa4f" name="inconfig_1" x="126" y="56">
+      <params/>
+      <attribs>
+         <combo attributeName="gain" selection="0dB"/>
+         <combo attributeName="boost" selection="0dB"/>
+      </attribs>
+   </obj>
+   <obj type="audio/in stereo" sha="2215b2e513239e306346ea02ae2ee6746d6d62a5" name="in_1" x="0" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_3" x="126" y="168">
+      <params>
+         <frac32.s.map name="pitch" value="1.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="env/follower" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4" name="follower_3" x="224" y="168">
+      <params/>
+      <attribs>
+         <combo attributeName="time" selection="21.2ms"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="dial_1" x="896" y="168">
+      <params>
+         <frac32.s.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_2" x="378" y="252">
+      <params>
+         <frac32.u.map name="value" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="saw_1" x="896" y="252">
+      <params>
+         <frac32.s.map name="pitch" value="-33.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/satp" sha="107e97e0797ac54d70617cbd5af301ac85ec58a8" name="satp_1" x="1022" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 256" sha="d38dcba9fc7e97e1a69ac902a2cc595e87eca024" name="div_1" x="448" y="294">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 256" sha="d38dcba9fc7e97e1a69ac902a2cc595e87eca024" name="div_2" x="532" y="294">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 8" sha="c1d4128b46f598ed9a0e7f9959073815c3ccd4d3" name="div_3" x="616" y="294">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/bp m" sha="a25093c84aee366b25d3c47fde6d67f5ef8a814e" name="hp_2" x="126" y="308">
+      <params>
+         <frac32.s.map name="pitch" value="4.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="env/follower" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4" name="follower_2" x="224" y="308">
+      <params/>
+      <attribs>
+         <combo attributeName="time" selection="5.3ms"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_3" x="378" y="336">
+      <params>
+         <frac32.u.map name="value" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/+" sha="81c2c147faf13ae4c2d00419326d0b6aec478b27" name="+_1" x="910" y="364">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 256" sha="d38dcba9fc7e97e1a69ac902a2cc595e87eca024" name="div_4" x="448" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 256" sha="d38dcba9fc7e97e1a69ac902a2cc595e87eca024" name="div_5" x="518" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 8" sha="c1d4128b46f598ed9a0e7f9959073815c3ccd4d3" name="div_6" x="588" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/muls 128" sha="2e54ec12f21fa0ab199d79fbf6b4ae0df86cea64" name="muls_1" x="644" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/muls 2" sha="66864ec326f7bc31d57563047135e75259b46642" name="muls_4" x="728" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="dial_4" x="378" y="420">
+      <params>
+         <frac32.u.map name="value" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_1" x="126" y="448">
+      <params>
+         <frac32.s.map name="pitch" value="47.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="env/follower" sha="8074c80ff135ec9b250e19c7a6671f8369b45ae4" name="follower_1" x="224" y="448">
+      <params/>
+      <attribs>
+         <combo attributeName="time" selection="5.3ms"/>
+      </attribs>
+   </obj>
+   <obj type="math/+" sha="81c2c147faf13ae4c2d00419326d0b6aec478b27" name="+_2" x="910" y="448">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 256" sha="d38dcba9fc7e97e1a69ac902a2cc595e87eca024" name="div_7" x="448" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 256" sha="d38dcba9fc7e97e1a69ac902a2cc595e87eca024" name="div_8" x="518" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 8" sha="c1d4128b46f598ed9a0e7f9959073815c3ccd4d3" name="div_9" x="588" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/muls 128" sha="2e54ec12f21fa0ab199d79fbf6b4ae0df86cea64" name="muls_2" x="644" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/muls 128" sha="2e54ec12f21fa0ab199d79fbf6b4ae0df86cea64" name="muls_3" x="728" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/muls 4" sha="a8753c6d47c9c5bf9066fd09779fa04b6d5f192" name="muls_5" x="812" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="script/script2" sha="f790404ab422d73d7c5acc2b56f51f461283d3fc" name="script2_1" x="882" y="532">
+      <params/>
+      <attribs>
+         <text attributeName="script">
+            <sText><![CDATA[uint8_t *txbuf;
+uint8_t *rxbuf;
+
+#define nLeds 10
+#define nBytes (nLeds*8)
+
+void WS2811_send(void){
+
+	uartStopSend(&UARTD2);
+//	UARTD2.usart->CR1 |= 1; // send break
+//		UARTD2.usart->CR1 |= 8; // tx enable
+	uartStartSend (&UARTD2,nBytes,&txbuf[0]);
+	// critical timing...
+	palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7)); // TX
+}
+
+char i;
+
+void setup(){
+	// allocate buffers suitable for DMA transfert!
+
+	static uint8_t _txbuf[nBytes] __attribute__ ((section (".sram2")));
+	txbuf = _txbuf;
+
+	int i;
+	for(i=0;i<nBytes;i++){
+		txbuf[i]=0;
+	}
+
+  palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL);// TX
+  palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7));// TX
+
+static UARTConfig uart2Cfg = {
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  2100000,
+  0,
+  0,
+  0
+};
+//	UARTConfig uart2Cfg = {2000000, // baud
+//	    0, 0, 0};
+	uartStart (&UARTD2, &uart2Cfg);
+
+	i = 0;
+}
+
+// source/credit: 
+// http://wp.josh.com/2014/09/03/inside-neouart-tricking-a-serial-port-into-being-a-signal-generator/
+//
+// Encode a 24 bit value into 8 bytes where each byte has the format...
+// 0b?0?10?10
+// Where each ? is a bit from the orginal 24 bit value.
+// This wonky format is designed to generate correct NeoPixel
+// signals when sent out a serial port and surrounded with stop and start bits.
+ 
+void encodebits( uint32_t x , uint8_t *b )  { 
+
+    int bits=24;
+ 
+    while (bits) {
+ 
+        // Process 3 bits of the input into 1 byte on the output
+        //
+        // Note that we processes the input by shifting up and checking the high bit (#23)
+        // This is becuase NeoPixels actually take thier data in MSB first order
+        // while serial ports send in LSB first order
+ 
+        unsigned char t=0b00010010;     // initialize with all the known 1's
+ 
+        if (x & (1<<23)  ) {
+            t |= 0b00000100;
+        }
+ 
+        x <<= 1 ;
+        bits--;
+ 
+        if (x & (1<<23) ) {
+            t |= 0b00100000;
+        }
+ 
+        x <<= 1 ;
+        bits--;
+ 
+        if (x & (1<<23) ) {
+            t |= 0b10000000;
+        }
+ 
+        x <<= 1 ;
+        bits--;
+ 
+        *b = t;
+ 
+        b++;
+    } 
+}
+
+
+void loop(){
+	chThdSleepMilliseconds(2);
+        palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL);// TX
+	palClearPad(GPIOA, 2);
+//		UARTD2.usart->CR1 |= 1; // send break
+//		UARTD2.usart->CR1 &= ~8; // tx disable 
+//		UARTD2.usart->CR1 |= 1; // send break
+
+//	SD2.usart->DR = 0; // send idle
+//	SD2.usart->CR1 &= ~8; // send idle
+//	SD2.usart->CR1 |= 8; // send idle
+
+	chThdSleepMilliseconds(2);
+	i += 1;
+
+	
+//	encodebits(0x7E7E7E, txbuf);
+	int v = in1;//(in1<<16) + (in2<<8) + i;
+	int j;
+	for(j=0;j<nLeds;j++)
+		encodebits(v, txbuf+(8*j));	
+
+	WS2811_send();
+}]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="disp/hex" sha="3ce96bdfc9c7668d6dbdd8a7430d740e07a3f48e" name="hex_1" x="994" y="532">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="dial_5" x="1008" y="756">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="dial_1 out"/>
+         <dest name="saw_1 pitchm"/>
+      </net>
+      <net>
+         <source name="div_1 out"/>
+         <dest name="div_2 in"/>
+      </net>
+      <net>
+         <source name="div_2 out"/>
+         <dest name="div_3 in"/>
+      </net>
+      <net>
+         <source name="div_4 out"/>
+         <dest name="div_5 in"/>
+      </net>
+      <net>
+         <source name="div_3 out"/>
+         <dest name="+_1 in1"/>
+      </net>
+      <net>
+         <source name="div_5 out"/>
+         <dest name="div_6 in"/>
+      </net>
+      <net>
+         <source name="div_6 out"/>
+         <dest name="muls_1 in"/>
+      </net>
+      <net>
+         <source name="div_7 out"/>
+         <dest name="div_8 in"/>
+      </net>
+      <net>
+         <source name="div_8 out"/>
+         <dest name="div_9 in"/>
+      </net>
+      <net>
+         <source name="+_1 out"/>
+         <dest name="+_2 in1"/>
+      </net>
+      <net>
+         <source name="+_2 out"/>
+         <dest name="script2_1 in1_"/>
+         <dest name="hex_1 in"/>
+      </net>
+      <net>
+         <source name="muls_1 out"/>
+         <dest name="muls_4 in"/>
+      </net>
+      <net>
+         <source name="muls_4 out"/>
+         <dest name="+_1 in2"/>
+      </net>
+      <net>
+         <source name="div_9 out"/>
+         <dest name="muls_2 in"/>
+      </net>
+      <net>
+         <source name="muls_2 out"/>
+         <dest name="muls_3 in"/>
+      </net>
+      <net>
+         <source name="muls_3 out"/>
+         <dest name="muls_5 in"/>
+      </net>
+      <net>
+         <source name="muls_5 out"/>
+         <dest name="+_2 in2"/>
+      </net>
+      <net>
+         <source name="saw_1 wave"/>
+         <dest name="satp_1 in"/>
+      </net>
+      <net>
+         <source name="follower_1 amp"/>
+         <dest name="dial_5 in"/>
+         <dest name="div_7 in"/>
+      </net>
+      <net>
+         <source name="in_1 left"/>
+         <dest name="hp_1 in"/>
+         <dest name="hp_2 in"/>
+         <dest name="hp_3 in"/>
+      </net>
+      <net>
+         <source name="hp_1 out"/>
+         <dest name="follower_1 in"/>
+      </net>
+      <net>
+         <source name="hp_2 out"/>
+         <dest name="follower_2 in"/>
+      </net>
+      <net>
+         <source name="follower_2 amp"/>
+         <dest name="div_4 in"/>
+      </net>
+      <net>
+         <source name="hp_3 out"/>
+         <dest name="follower_3 in"/>
+      </net>
+      <net>
+         <source name="follower_3 amp"/>
+         <dest name="div_1 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

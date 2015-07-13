@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="-1" sha="8c73607cd554d831a8e1cf35b9357f89eadee0c8">
+   <obj.normal id="-1" uuid="3a11118f9ec860dc3255288b28becbeab2701920" sha="92f59be132d0ea384ad3b5c24cdbaf0ab6157a6e">
+      <upgradeSha>8c73607cd554d831a8e1cf35b9357f89eadee0c8</upgradeSha>
       <sDescription>subtracts one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="a" description="a"/>
       </inlets>
@@ -12,12 +14,14 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%result%= %a%-(1<<21);]]></code.krate>
+      <code.krate><![CDATA[outlet_result= inlet_a-(1<<21);]]></code.krate>
    </obj.normal>
-   <obj.normal id="-1" sha="348845f992e2b55fcb1530bb50f20aa1796b3b77">
+   <obj.normal id="-1" uuid="5fd46bab471bb6509ae83de702dea72933683a98" sha="88adb7a3d71999935940bb439df8ac9e05354a06">
+      <upgradeSha>348845f992e2b55fcb1530bb50f20aa1796b3b77</upgradeSha>
       <sDescription>subtracts one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <int32 name="a" description="a"/>
       </inlets>
@@ -27,12 +31,14 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%result%= %a%-1;]]></code.krate>
+      <code.krate><![CDATA[outlet_result= inlet_a-1;]]></code.krate>
    </obj.normal>
-   <obj.normal id="-1" sha="865bc959b6c58808058326cd97c849581add4863">
+   <obj.normal id="-1" uuid="e869edae3ba60b8ca33929e8a0a2b70a86074e11" sha="f18b61b2cf5cc2170014acc20629852a91daa37c">
+      <upgradeSha>865bc959b6c58808058326cd97c849581add4863</upgradeSha>
       <sDescription>subtracts one unit</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="a" description="a"/>
       </inlets>
@@ -42,6 +48,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%result%= %a%-(1<<21);]]></code.krate>
+      <code.krate><![CDATA[outlet_result= inlet_a-(1<<21);]]></code.krate>
    </obj.normal>
 </objdefs>

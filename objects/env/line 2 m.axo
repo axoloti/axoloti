@@ -1,0 +1,86 @@
+<objdefs>
+   <obj.normal id="line 2 m" uuid="675da03777dc2c090e258438fc61a982a2d4b0e8" sha="39a0a0d168b26e262854ade1bd6bd56e4b9aeb44">
+      <upgradeSha>4253e43975899d28833bac75e9d9bda7a79733f5</upgradeSha>
+      <sDescription>two piecewise linear ramps, extended range, time modulation inputs</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>env.axh</helpPatch>
+      <inlets>
+         <bool32.rising name="trig" description="trigger"/>
+         <frac32.bipolar name="tAm" description="time A (v0..v1) modulation"/>
+         <frac32.bipolar name="tBm" description="time B (v1..v2) modulation"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="out" description="output"/>
+         <int32.positive name="phase" description="phase index"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="v0">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.s.map.klineartime.exp name="tA">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.klineartime.exp>
+         <frac32.u.map name="v1">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+         <frac32.s.map.klineartime.exp name="tB">
+            <MinValue v="-64.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.s.map.klineartime.exp>
+         <frac32.u.map name="v2">
+            <MinValue v="0.0"/>
+            <MaxValue v="63.5"/>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+int32_t time1;
+int32_t phase1;
+int32_t ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[phase1 = 0;
+val = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((inlet_trig > 0) && (!ntrig)) {
+  time1 = 0;
+  phase1 = 1;
+  val = param_v0;
+  ntrig = 1;
+}
+else if (phase1 == 1) {
+  int32_t t;
+  int32_t tA2 = param_tA + inlet_tAm;
+  MTOF(-tA2,t);
+  time1 += t>>2;
+  if (time1>=0)
+     val = param_v0 + (___SMMUL(param_v1-param_v0,time1)<<1);
+  else {
+    phase1 = 2;
+    val = param_v1;
+    time1 = 0;
+  }
+}
+else if (phase1 == 2) {
+  int32_t t;
+  int32_t tB2 = param_tB + inlet_tBm;
+  MTOF(-tB2,t);
+  time1 += t>>2;
+  if (time1>=0)
+     val = param_v1 + (___SMMUL(param_v2-param_v1,time1)<<1);
+  else {
+    phase1 = 0;
+    val = param_v2;
+  }
+}
+if (!(inlet_trig > 0)) ntrig = 0;
+outlet_out = val;
+outlet_phase = phase1;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

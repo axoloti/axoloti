@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sel b 16 pulse" sha="1cf670bf70a03bd809b4e6a7cedffcf2298f833b">
+   <obj.normal id="sel b 16 pulse" uuid="b52a026dd735305ac8ddf499e366883006aa2acf" sha="45e8caabeb8ef96796bb2633cb2d164cc41509f2">
+      <upgradeSha>1cf670bf70a03bd809b4e6a7cedffcf2298f833b</upgradeSha>
       <sDescription>select one out of 16 booleans, chainable. Pulse output.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -20,10 +21,10 @@
 ]]></code.declaration>
       <code.init><![CDATA[in_prev = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16))   %o%=(in_prev!=%in%)&&(%b16%&(1<<%in%));
-else %o% = %def%;
-%chain% = %in%-16;
-in_prev = %in%;
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<16))   outlet_o=(in_prev!=inlet_in)&&(param_b16&(1<<inlet_in));
+else outlet_o = inlet_def;
+outlet_chain = inlet_in-16;
+in_prev = inlet_in;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

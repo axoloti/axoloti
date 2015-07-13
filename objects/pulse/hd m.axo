@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="hd m" sha="c11c0e57918d0fba8546f18cee57d398ca8cbd90">
+   <obj.normal id="hd m" uuid="52440c5f785b0c2b06092d83e628c4875cec7c28" sha="7933a17cd14650a1aa07e6b9d0accb26a413a73f">
+      <upgradeSha>c11c0e57918d0fba8546f18cee57d398ca8cbd90</upgradeSha>
       <sDescription>hold/decay envelope with decay time modulation input, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pulse.axh</helpPatch>
       <inlets>
          <frac32 name="dm" description="decay time modulation"/>
          <bool32.risingfalling name="trig" description="trigger"/>
@@ -22,9 +24,9 @@
 ]]></code.declaration>
       <code.init><![CDATA[   val = 0;
 ]]></code.init>
-      <code.srate><![CDATA[   if (%trig%>0) val =1<<27;
-   else val -= ___SMMUL(val, (%d%+%dm%)>>1);
-   %env% = val;
+      <code.srate><![CDATA[   if (inlet_trig>0) val =1<<27;
+   else val -= ___SMMUL(val, (param_d+inlet_dm)>>1);
+   outlet_env[buffer_index] = val;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

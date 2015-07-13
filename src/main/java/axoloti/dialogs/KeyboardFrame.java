@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,19 +17,16 @@
  */
 package axoloti.dialogs;
 
+import axoloti.Connection;
 import axoloti.MainFrame;
-import axoloti.SerialConnection;
 import components.PianoComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
 import components.control.DialComponent;
 import java.awt.Dimension;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SpinnerNumberModel;
-import jssc.SerialPortException;
 
 /**
  *
@@ -50,25 +47,17 @@ public class KeyboardFrame extends javax.swing.JFrame {
         piano = new PianoComponent() {
             @Override
             public void KeyDown(int key) {
-                SerialConnection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
+                Connection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
                 if ((connection != null) && connection.isConnected()) {
-                    try {
-                        connection.SendMidi(0x90 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, jSliderVelocity.getValue());
-                    } catch (SerialPortException ex) {
-                        Logger.getLogger(KeyboardFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    connection.SendMidi(0x90 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, jSliderVelocity.getValue());
                 }
             }
 
             @Override
             public void KeyUp(int key) {
-                SerialConnection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
+                Connection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
                 if ((connection != null) && connection.isConnected()) {
-                    try {
-                        connection.SendMidi(0x80 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, 80);
-                    } catch (SerialPortException ex) {
-                        Logger.getLogger(KeyboardFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    connection.SendMidi(0x80 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, 80);
                 }
             }
 
@@ -80,17 +69,13 @@ public class KeyboardFrame extends javax.swing.JFrame {
         piano.setMaximumSize(d);
         piano.setVisible(true);
         jPanelKeyb.add(piano);
-        pbenddial = new DialComponent(0.0, -64, 63, 1);
+        pbenddial = new DialComponent(0.0, -64, 64, 1);
         pbenddial.addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
-                SerialConnection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
+                Connection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
                 if ((connection != null) && connection.isConnected()) {
-                    try {
-                        connection.SendMidi(0xE0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
-                    } catch (SerialPortException ex) {
-                        Logger.getLogger(KeyboardFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    connection.SendMidi(0xE0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
                 }
             }
         });
@@ -178,13 +163,9 @@ public class KeyboardFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAllNotesOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAllNotesOffActionPerformed
-        SerialConnection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
+        Connection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
         if ((connection != null) && connection.isConnected()) {
-            try {
-                connection.SendMidi(0xB0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0x7B, 80);
-            } catch (SerialPortException ex) {
-                Logger.getLogger(KeyboardFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            connection.SendMidi(0xB0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0x7B, 80);
         }
     }//GEN-LAST:event_jButtonAllNotesOffActionPerformed
 

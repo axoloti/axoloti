@@ -80,6 +80,7 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
 
     @Override
     public void setValue(Value<Frac32> value) {
+        super.setValue(value);
         this.value.setDouble(value.getDouble());
         updateV();
     }
@@ -92,38 +93,71 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
     }
 
     public void updateModulation(int index, double amount) {
-        // existing modulation
-        if (modulators == null) {
-            modulators = new ArrayList<Modulation>();
-        }
-
-        Modulator modulator = axoObj.patch.Modulators.get(index);
-        Modulation n = null;
-        for (Modulation m : modulators) {
-            if (m.source == modulator.objinst) {
-                if ((modulator.name == null) || (modulator.name.isEmpty())) {
-                    n = m;
-                } else {
-                    if (modulator.name.equals(m.modName)) {
+        //System.out.println("updatemodulation1:" + index);
+        if (amount != 0.0) {
+            // existing modulation
+            if (modulators == null) {
+                modulators = new ArrayList<Modulation>();
+            }
+            Modulator modulator = axoObj.patch.Modulators.get(index);
+            //System.out.println("updatemodulation2:" + modulator.name);
+            Modulation n = null;
+            for (Modulation m : modulators) {
+                if (m.source == modulator.objinst) {
+                    if ((modulator.name == null) || (modulator.name.isEmpty())) {
                         n = m;
+                        break;
+                    } else {
+                        if (modulator.name.equals(m.modName)) {
+                            n = m;
+                            break;
+                        }
                     }
                 }
             }
+            if (n == null) {
+                n = new Modulation();
+                //System.out.println("updatemodulation3:" + n.sourceName);
+                modulators.add(n);
+            }
+            n.source = modulator.objinst;
+            n.sourceName = modulator.objinst.getInstanceName();
+            n.modName = modulator.name;
+            n.getValue().setDouble(amount);
+            n.destination = this;
+            axoObj.patch.updateModulation(n);
+        } else {
+            // remove modulation target if exists
+            Modulator modulator = axoObj.patch.Modulators.get(index);
+            if (modulator == null) {
+                return;
+            }
+            for (int i = 0; i < modulator.Modulations.size(); i++) {
+                Modulation n = modulator.Modulations.get(index);
+                if (n.destination == this) {
+                    modulator.Modulations.remove(n);
+                }
+            }
+            for (int i = 0; i < modulators.size(); i++) {
+                Modulation n = modulators.get(i);
+                if (n.destination == this) {
+                    modulators.remove(n);
+                }
+                axoObj.patch.updateModulation(n);
+            }
+            if (modulators.isEmpty()) {
+                modulators = null;
+            }
         }
-        if (n == null) {
-            n = new Modulation();
-            modulators.add(n);
-        }
-        n.source = modulator.objinst;
-        n.sourceName = modulator.objinst.getInstanceName();
-        n.modName = modulator.name;
-        n.getValue().setDouble(amount);
-        n.destination = this;
-        axoObj.patch.updateModulation(n);
+        axoObj.patch.SetDirty();
     }
 
     public ArrayList<Modulation> getModulators() {
         return modulators;
+    }
+
+    public void removeModulation(Modulation m) {
+        modulators.remove(m);
     }
 
     @Override
@@ -146,7 +180,7 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
     }
 
     @Override
-    public void handleAdjustment() {
+    public boolean handleAdjustment() {
         Preset p = GetPreset(presetEditActive);
         if (p != null) {
             p.value = new ValueFrac32(getControlComponent().getValue());
@@ -155,7 +189,11 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
                 value.setDouble(getControlComponent().getValue());
                 needsTransmit = true;
                 UpdateUnit();
+            } else {
+                return false;
             }
+
         }
+        return true;
     }
 }

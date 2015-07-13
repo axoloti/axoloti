@@ -1,0 +1,19 @@
+<patch-1.0>
+   <comment type="patch/comment" name="Generates a address fault. Hard crash!" x="14" y="14"/>
+   <obj type="script/oneliner_k" sha="215ebed562f5105b7cff0ec13065e31a257ab1ee" name="oneliner_k_1" x="14" y="42">
+      <params>
+         <frac32.s.map name="c" value="0.0"/>
+      </params>
+      <attribs>
+         <table attributeName="line" table="%out%=*(volatile int *)0x3000000;"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" name="connection will be lost" x="14" y="154"/>
+   <comment type="patch/comment" name="if all is well, the board does a full reset, and then you can connect again and get the crash report!" x="14" y="168"/>
+   <comment type="patch/comment" name="this generates a bus fault. " x="29" y="199"/>
+   <nets/>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

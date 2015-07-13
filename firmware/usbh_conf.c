@@ -32,8 +32,8 @@
 HCD_HandleTypeDef hHCD;
 
 #define HOST_POWERSW_CLK_ENABLE()          __GPIOC_CLK_ENABLE()
-#define HOST_POWERSW_PORT                  GPIOC
-#define HOST_POWERSW_VBUS                  GPIO_PIN_0
+#define HOST_POWERSW_PORT                  GPIOD
+#define HOST_POWERSW_VBUS                  GPIO_PIN_7
 
 /* JT */
 #include "core_cm4.h"
@@ -105,7 +105,6 @@ void HAL_HCD_MspInit(HCD_HandleTypeDef *hHCD) {
     GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-
     HAL_GPIO_Init(HOST_POWERSW_PORT, &GPIO_InitStruct);
 
     /* Enable USB FS Clocks */
@@ -141,6 +140,15 @@ void HAL_HCD_MspInit(HCD_HandleTypeDef *hHCD) {
     GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
     GPIO_InitStruct.Alternate = GPIO_AF12_OTG_HS_FS;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+
+    /* Configure Power Switch Vbus Pin */
+    GPIO_InitStruct.Pin = HOST_POWERSW_VBUS;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(HOST_POWERSW_PORT, &GPIO_InitStruct);
+    HAL_GPIO_WritePin(HOST_POWERSW_PORT, HOST_POWERSW_VBUS, GPIO_PIN_RESET);
 
     /* Enable USB FS Clocks */
     __USB_OTG_HS_CLK_ENABLE();

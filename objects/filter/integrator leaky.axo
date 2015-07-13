@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="integrator leaky" sha="8128db0b47c0d991b76b67ea069c8e30a0d4119f">
+   <obj.normal id="integrator leaky" uuid="e5d2944883e8c01d6dbed69f1a30a98f0fe65efc" sha="6f175752955cbcb8563a3d83ceffd64aea4f0ebf">
+      <upgradeSha>8128db0b47c0d991b76b67ea069c8e30a0d4119f</upgradeSha>
       <sDescription>cumulative sum, saturating to +-64 units</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="input"/>
       </inlets>
@@ -16,16 +18,18 @@
 ]]></code.declaration>
       <code.init><![CDATA[acc = 0;
 ]]></code.init>
-      <code.krate><![CDATA[acc += %in%;
+      <code.krate><![CDATA[acc += inlet_in;
 acc -= acc>>14;
 acc = __SSAT(acc,28);
-%out% = acc;
+outlet_out = acc;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="integrator leaky" sha="d9972ae9996c922bb578344a8b039fed12bb960e">
+   <obj.normal id="integrator leaky" uuid="2d8a76dcd2fad22a235488593b03f75dab87f122" sha="59974a349d135e48dc1c75dac3dbffbf580fb7de">
+      <upgradeSha>d9972ae9996c922bb578344a8b039fed12bb960e</upgradeSha>
       <sDescription>cumulative sum, saturating to +-64 units</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
       </inlets>
@@ -39,10 +43,10 @@ acc = __SSAT(acc,28);
 ]]></code.declaration>
       <code.init><![CDATA[acc = 0;
 ]]></code.init>
-      <code.srate><![CDATA[acc += %in%;
+      <code.srate><![CDATA[acc += inlet_in[buffer_index];
 acc -= acc>>14;
 acc = __SSAT(acc,28);
-%out% = acc;
+outlet_out[buffer_index] = acc;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

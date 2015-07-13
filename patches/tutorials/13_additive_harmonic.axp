@@ -3,7 +3,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="use window-&gt;piano to play!" x="182" y="14"/>
+   <comment type="patch/comment" name="use window-&gt;piano to play!" x="182" y="14"/>
    <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="182" y="70">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
@@ -80,12 +80,12 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="output" x="784" y="420"/>
-   <comment type="patch/comment" sha="sha" name="three oscillators tuned to different transpositions" x="182" y="476"/>
-   <comment type="patch/comment" sha="sha" name="three decay envelopes with diferent decay times" x="294" y="490"/>
-   <comment type="patch/comment" sha="sha" name="mix the three sources" x="616" y="490"/>
-   <comment type="patch/comment" sha="sha" name="multiply envelope with oscillation" x="420" y="504"/>
-   <comment type="patch/comment" sha="sha" name="watch the envelopes here" x="504" y="518"/>
+   <comment type="patch/comment" name="output" x="784" y="420"/>
+   <comment type="patch/comment" name="three oscillators tuned to different transpositions" x="182" y="476"/>
+   <comment type="patch/comment" name="three decay envelopes with diferent decay times" x="294" y="490"/>
+   <comment type="patch/comment" name="mix the three sources" x="616" y="490"/>
+   <comment type="patch/comment" name="multiply envelope with oscillation" x="420" y="504"/>
+   <comment type="patch/comment" name="watch the envelopes here" x="504" y="518"/>
    <nets>
       <net>
          <source name="mix31 out"/>

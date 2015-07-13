@@ -39,8 +39,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -73,6 +71,16 @@ import org.simpleframework.xml.core.Persister;
  */
 @Root(name = "patch-1.0")
 public class PatchGUI extends Patch {
+
+    // shortcut patch names
+    final static String patchComment = "patch/comment";
+    final static String patchInlet = "patch/inlet";
+    final static String patchOutlet = "patch/outlet";
+    final static String patchAudio = "audio/";
+    final static String patchAudioOut = "audio/out stereo";
+    final static String patchMidi = "midi";
+    final static String patchMidiKey = "midi/in/keyb";
+    final static String patchDisplay = "disp/";
 
     JLayeredPane Layers = new JLayeredPane();
     JPanel ObjectLayer = new JPanel();
@@ -253,15 +261,53 @@ public class PatchGUI extends Patch {
                         || ((ke.getKeyCode() == KeyEvent.VK_N) && (!ke.isControlDown()) && (!ke.isMetaDown()))
                         || ((ke.getKeyCode() == KeyEvent.VK_1) && (ke.isControlDown()))) {
                     Point p = Layers.getMousePosition();
+                    ke.consume();
                     if (p != null) {
-                        ke.consume();
-                        ShowClassSelector(p, null);
+                        ShowClassSelector(p, null, null);
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && (!ke.isControlDown()) && (!ke.isMetaDown()))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && (ke.isControlDown()))) {
-                    AxoObjectInstanceAbstract ao = AddObjectInstance(MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/comment", null).get(0), Layers.getMousePosition());
+                    AxoObjectInstanceAbstract ao = AddObjectInstance(MainFrame.mainframe.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
                     ao.addInstanceNameEditor();
                     ke.consume();
+                } else if ((ke.getKeyCode() == KeyEvent.VK_I) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                    Point p = Layers.getMousePosition();
+                    ke.consume();
+                    if (p != null) {
+                        ShowClassSelector(p, null, patchInlet);
+                    }
+                } else if ((ke.getKeyCode() == KeyEvent.VK_O) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                    Point p = Layers.getMousePosition();
+                    ke.consume();
+                    if (p != null) {
+                        ShowClassSelector(p, null, patchOutlet);
+                    }
+                } else if ((ke.getKeyCode() == KeyEvent.VK_D) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                    Point p = Layers.getMousePosition();
+                    ke.consume();
+                    if (p != null) {
+                        ShowClassSelector(p, null, patchDisplay);
+                    }
+                } else if ((ke.getKeyCode() == KeyEvent.VK_M) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                    Point p = Layers.getMousePosition();
+                    ke.consume();
+                    if (p != null) {
+                        if (ke.isShiftDown()) {
+                            ShowClassSelector(p, null, patchMidiKey);
+                        } else {
+                            ShowClassSelector(p, null, patchMidi);
+                        }
+                    }
+                } else if ((ke.getKeyCode() == KeyEvent.VK_A) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                    Point p = Layers.getMousePosition();
+                    ke.consume();
+                    if (p != null) {
+                        if (ke.isShiftDown()) {
+                            ShowClassSelector(p, null, patchAudioOut);
+                        } else {
+                            ShowClassSelector(p, null, patchAudio);
+                        }
+                    }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
                     deleteSelectedAxoObjInstances();
                     ke.consume();
@@ -293,7 +339,7 @@ public class PatchGUI extends Patch {
                         o.SetSelected(false);
                     }
                     if (me.getClickCount() == 2) {
-                        ShowClassSelector(me.getPoint(), null);
+                        ShowClassSelector(me.getPoint(), null, null);
                         me.consume();
                     } else {
                         me.consume();
@@ -424,6 +470,20 @@ public class PatchGUI extends Patch {
             PatchGUI p = serializer.read(PatchGUI.class, v);
             HashMap<String, String> dict = new HashMap<String, String>();
             for (AxoObjectInstanceAbstract o : p.objectinstances) {
+                AxoObjectAbstract obj = o.resolveType();
+                Modulator[] m = obj.getModulators();
+                if (m != null) {
+                    if (Modulators == null) {
+                        Modulators = new ArrayList<Modulator>();
+                    }
+                    for (Modulator mm : m) {
+                        mm.objinst = o;
+                        Modulators.add(mm);
+                    }
+                }
+
+            }
+            for (AxoObjectInstanceAbstract o : p.objectinstances) {
                 String original_name = o.getInstanceName();
                 String new_name = original_name;
                 String ss[] = new_name.split("_");
@@ -458,6 +518,7 @@ public class PatchGUI extends Patch {
                 while (getObjectAtLocation(o.getX(), o.getY()) != null) {
                     o.setLocation(o.getX() + Constants.xgrid, o.getY() + Constants.ygrid);
                 }
+
                 o.patch = this;
                 objectinstances.add(o);
                 ObjectLayer.add(o, 0);
@@ -474,7 +535,7 @@ public class PatchGUI extends Patch {
                         int sepIndex = o.name.lastIndexOf(' ');
                         String objname = o.name.substring(0, sepIndex);
                         String outletname = o.name.substring(sepIndex + 1);
-                        if ((objname.length() > 1) && (outletname.length() > 1)) {
+                        if ((objname.length() > 0) && (outletname.length() > 0)) {
                             String on2 = dict.get(objname);
                             if (on2 != null) {
 //                                o.name = on2 + " " + r[1];
@@ -500,7 +561,7 @@ public class PatchGUI extends Patch {
                         int sepIndex = o.name.lastIndexOf(' ');
                         String objname = o.name.substring(0, sepIndex);
                         String inletname = o.name.substring(sepIndex + 1);
-                        if ((objname.length() > 1) && (inletname.length() > 1)) {
+                        if ((objname.length() > 0) && (inletname.length() > 0)) {
                             String on2 = dict.get(objname);
                             if (on2 != null) {
                                 InletInstance i = new InletInstance();
@@ -546,12 +607,12 @@ public class PatchGUI extends Patch {
                                 AddConnection(o2, connectedOutlet);
                             }
                         }
-                        for (OutletInstance o : n.source) {
-                            OutletInstance o2 = getOutletByReference(o.name);
-                            if ((o2 != null) && (o2 != connectedOutlet)) {
-                                AddConnection(connectedOutlet, o2);
-                            }
-                        }
+//                        for (OutletInstance o : n.source) {
+//                            OutletInstance o2 = getOutletByReference(o.name);
+//                            if ((o2 != null) && (o2 != connectedOutlet)) {
+//                                AddConnection(connectedOutlet, o2);
+//                            }
+//                        }
                     }
                 }
             }
@@ -571,14 +632,14 @@ public class PatchGUI extends Patch {
     }
     public ObjectSearchFrame osf;
 
-    public void ShowClassSelector(Point p, AxoObjectInstanceAbstract o) {
+    public void ShowClassSelector(Point p, AxoObjectInstanceAbstract o, String searchString) {
         if (IsLocked()) {
             return;
         }
         if (osf == null) {
             osf = new ObjectSearchFrame(this);
         }
-        osf.Launch(p, o);
+        osf.Launch(p, o, searchString);
     }
 
     void SelectAll() {
@@ -721,15 +782,6 @@ public class PatchGUI extends Patch {
     }
 
     @Override
-    public Net AddConnection(OutletInstance il, OutletInstance ol) {
-        Net n = super.AddConnection(il, ol);
-        if (n != null) {
-            NetLayer.add(n);
-        }
-        return n;
-    }
-
-    @Override
     public Net AddConnection(InletInstance il, InletInstance ol) {
         Net n = super.AddConnection(il, ol);
         if (n != null) {
@@ -835,6 +887,28 @@ public class PatchGUI extends Patch {
         patchframe.ShowDSPLoad(pct);
     }
 
+    Dimension GetInitialSize() {
+        int mx = 100; // min size
+        int my = 100;
+        for (AxoObjectInstanceAbstract i : objectinstances) {
+
+            Dimension s = i.getPreferredSize();
+
+            int ox = i.getX() + (int) s.getWidth();
+            int oy = i.getY() + (int) s.getHeight();
+
+            if (ox > mx) {
+                mx = ox;
+            }
+            if (oy > my) {
+                my = oy;
+            }
+        }
+        // adding more, as getPreferredSize is not returning true dimension of 
+        // object
+        return new Dimension(mx + 300, my + 300);
+    }
+
     @Override
     public void AdjustSize() {
         Dimension s = GetSize();
@@ -854,6 +928,7 @@ public class PatchGUI extends Patch {
         if (NotesFrame != null) {
             this.notes = NotesFrame.GetText();
         }
+        windowPos = patchframe.getBounds();
     }
 
     @Override

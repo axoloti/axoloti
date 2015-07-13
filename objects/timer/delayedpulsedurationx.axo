@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="delayedpulsedurationx" sha="55f69bc6153344c6d5bed526ec91502b83708ce3">
+   <obj.normal id="delayedpulsedurationx" uuid="5b82159b483503bc6b92372fa00f2d79d1386d58" sha="f81268ce9740f86a527d428d7b37694aeea563cd">
+      <upgradeSha>55f69bc6153344c6d5bed526ec91502b83708ce3</upgradeSha>
       <sDescription>Generates a pulse with a duration after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger. Extended range.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>timer.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
@@ -27,30 +29,30 @@ int ntrig;
       <code.init><![CDATA[val = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%trig% > 0) && !ntrig) {
+      <code.krate><![CDATA[if ((inlet_trig > 0) && !ntrig) {
   val = 1 << 30;
   ntrig = 1;
-  %pulse% = 0;
+  outlet_pulse = 0;
 }
 else {
-  if (!(%trig% > 0))
+  if (!(inlet_trig > 0))
     ntrig = 0;
   if (val>0) {
     int32_t t;
-    MTOF(-%delay%,t);
+    MTOF(-param_delay,t);
      val -= t>>3;
      if (val<=0) {
-         %pulse% = 1;
+         outlet_pulse = 1;
          val = -1 << 30;
-     } else %pulse% = 0;
+     } else outlet_pulse = 0;
   } else if (val<0) {
     int32_t t;
-    MTOF(-%pulselength%,t);
+    MTOF(-param_pulselength,t);
      val += t>>3;
-     if (val>=0) {         %pulse% = 0;
+     if (val>=0) {         outlet_pulse = 0;
          val = 0;
-     } else %pulse% = 1;
-  } else %pulse% = 0;
+     } else outlet_pulse = 1;
+  } else outlet_pulse = 0;
 }
 ]]></code.krate>
    </obj.normal>

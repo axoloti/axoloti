@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="saw cheap" sha="5a224bbe01167b6ed8c613d4262f1825a712c753">
+   <obj.normal id="saw cheap" uuid="f8e324de21e5d345c67ab18dc7dcb985e29efb2a" sha="a7bb5ab7317376ba56e031b91f0d031a392654f8">
+      <upgradeSha>5a224bbe01167b6ed8c613d4262f1825a712c753</upgradeSha>
       <sDescription>Non-bandwith limited saw wave oscillator, cheap sound</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
       </inlets>
@@ -22,11 +24,11 @@
       <code.init><![CDATA[    osc_p=0;
 ]]></code.init>
       <code.krate><![CDATA[  uint32_t freq;
-  MTOFEXTENDED(%pitch% + %pitchm%,freq);
+  MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
   int j;
   for(j=0;j<BUFSIZE;j++){
     osc_p+=freq;
-    %wave%[j] = (osc_p)>>5;
+    outlet_wave[j] = (osc_p)>>5;
   }
 ]]></code.krate>
    </obj.normal>

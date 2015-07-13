@@ -1,5 +1,18 @@
 #!/bin/bash
-rm src/ChibiOS_2.6.6.zip
+
+# this removes unnecessary code and archives
+# created by running build.sh,
+# but leaves all the binary dependencies
+# so the whole axoloti folder can be moved to a 
+# different machine that does not have xcode etc installed.
+
+set -e
+
+PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
+
+cd "$PLATFORM_ROOT"
+
+rm src/ChibiOS_2.*.zip
 rm src/dfu-util-0.8.tar.gz
 rm src/libusb-1.0.19.tar.bz2
 rm src/make-3.82.tar.gz

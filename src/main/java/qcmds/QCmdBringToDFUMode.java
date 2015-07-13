@@ -17,10 +17,7 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jssc.SerialPortException;
+import axoloti.Connection;
 
 /**
  *
@@ -39,13 +36,8 @@ public class QCmdBringToDFUMode implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        try {
-            serialConnection.BringToDFU();
-            return this;
-        } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdBringToDFUMode.class.getName()).log(Level.SEVERE, null, ex);
-            return new QCmdDisconnect();
-        }
+    public QCmd Do(Connection connection) {
+        connection.BringToDFU();
+        return this;
     }
 }

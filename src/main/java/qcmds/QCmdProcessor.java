@@ -17,9 +17,10 @@
  */
 package qcmds;
 
+import axoloti.Connection;
 import axoloti.MainFrame;
 import axoloti.Patch;
-import axoloti.SerialConnection;
+import axoloti.USBBulkConnection;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -34,7 +35,7 @@ public class QCmdProcessor implements Runnable {
 
     BlockingQueue<QCmd> queue;
     private BlockingQueue<QCmd> queueResponse;
-    public SerialConnection serialconnection;
+    public Connection serialconnection;
     private Patch patch;
     MainFrame mainframe;
     PeriodicPinger pinger;
@@ -79,7 +80,7 @@ public class QCmdProcessor implements Runnable {
     public QCmdProcessor() {
         queue = new ArrayBlockingQueue<QCmd>(10);
         queueResponse = new ArrayBlockingQueue<QCmd>(10);
-        serialconnection = new SerialConnection(null, queueResponse);
+        serialconnection = new USBBulkConnection(null, queueResponse);
         pinger = new PeriodicPinger();
         pingerThread = new Thread(pinger);
         dialTransmitter = new PeriodicDialTransmitter();
@@ -98,11 +99,11 @@ public class QCmdProcessor implements Runnable {
         queue.clear();
         queueResponse.clear();
     }
-    
+
     public void Panic() {
         queue.clear();
 //        shellprocessor.Panic();
-        serialconnection.Panic();
+//        serialconnection.Panic();
     }
 
     private void publish(final QCmd cmd) {
@@ -206,6 +207,9 @@ public class QCmdProcessor implements Runnable {
     }
 
     public void println(final String s) {
+        if ((s == null) || s.isEmpty()) {
+            return;
+        }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -216,9 +220,8 @@ public class QCmdProcessor implements Runnable {
 
     public void SetPatch(Patch patch) {
         if (this.patch != null) {
-            patch.Unlock();
+            this.patch.Unlock();
         }
         this.patch = patch;
-        serialconnection.setPatch(patch);
     }
 }

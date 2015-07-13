@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="different primitive periodic wave oscillators" x="14" y="14"/>
-   <comment type="patch/comment" sha="sha" name="you can use the piano keyboard to play (windows menu-&gt;piano)" x="252" y="14"/>
+   <comment type="patch/comment" name="different primitive periodic wave oscillators" x="14" y="14"/>
+   <comment type="patch/comment" name="you can use the piano keyboard to play (windows menu-&gt;piano)" x="252" y="14"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="56">
       <params/>
       <attribs/>
@@ -11,67 +11,75 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="sine wave" x="294" y="56"/>
-   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="182" y="182">
+   <comment type="patch/comment" name="sine wave" x="294" y="56"/>
+   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="182" y="182">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="sawtooth wave" x="294" y="182"/>
-   <comment type="patch/comment" sha="sha" name="select the waveform here:" x="476" y="224"/>
-   <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_1" x="476" y="252">
+   <comment type="patch/comment" name="sawtooth wave" x="294" y="182"/>
+   <comment type="patch/comment" name="select the waveform here:" x="476" y="224"/>
+   <obj type="ctrl/i radio 8 v" sha="a2ed8a60e7db97fda888b7f7c66aa23711070918" uuid="577436e6982cb8ac1f816144195641eeb6846f79" name="i_1" x="476" y="252">
       <params>
          <int32.vradio name="value" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="square~" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="182" y="280">
+   <obj type="osc/tri" sha="e7180859b524cdd99af82d684ecc6e9f8080f44" uuid="b7510b296fd8f1dad5e317c620b496e1a99c08d6" name="tri_1" x="182" y="280">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="square wave" x="294" y="280"/>
-   <comment type="patch/comment" sha="sha" name="0: sine" x="560" y="294"/>
-   <comment type="patch/comment" sha="sha" name="1:saw" x="560" y="308"/>
-   <comment type="patch/comment" sha="sha" name="2: square" x="560" y="322"/>
-   <comment type="patch/comment" sha="sha" name="3: assymetrical square" x="560" y="336"/>
-   <comment type="patch/comment" sha="sha" name="duty/cycle" x="56" y="364"/>
-   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="56" y="378">
+   <comment type="patch/comment" name="triangle wave" x="294" y="280"/>
+   <comment type="patch/comment" name="0: sine" x="560" y="294"/>
+   <comment type="patch/comment" name="1:saw" x="560" y="308"/>
+   <comment type="patch/comment" name="2: triangle" x="560" y="322"/>
+   <comment type="patch/comment" name="3: square" x="560" y="336"/>
+   <comment type="patch/comment" name="4: assymetrical square" x="560" y="350"/>
+   <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="182" y="378">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" name="square wave" x="294" y="378"/>
+   <comment type="patch/comment" name="duty/cycle" x="56" y="462"/>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="56" y="476">
       <params>
          <frac32.u.map name="value" value="20.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="pwm~" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1" x="182" y="378">
+   <obj type="osc/pwm" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1" x="182" y="476">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="assymetrical square wave" x="294" y="378"/>
-   <obj type="mux/mux 4" sha="4145bfd8751449238db95f24fb1cd2a69972d026" name="inmux41" x="490" y="378">
+   <comment type="patch/comment" name="assymetrical square wave" x="294" y="476"/>
+   <obj type="mux/mux 5" sha="7620ad14cded10a5697e13e20c11f0caa62da668" uuid="3e76a5bfd7e6acc8ccb7f01014d3efe9f18e78d6" name="inmux41" x="490" y="476">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="714" y="378">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="714" y="476">
       <params>
          <frac32.u.map name="amp" value="14.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="770" y="378">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="812" y="476">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="574" y="490">
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="574" y="588">
       <params>
          <bool32.tgl name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s1" x="644" y="490">
+   <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_128s1" x="644" y="588">
       <params/>
       <attribs/>
    </obj>
@@ -82,6 +90,7 @@
          <dest name="saw_1 pitchm"/>
          <dest name="square_1 pitchm"/>
          <dest name="pwm_1 pitchm"/>
+         <dest name="tri_1 pitchm"/>
       </net>
       <net>
          <source name="c1 out"/>
@@ -93,11 +102,11 @@
       </net>
       <net>
          <source name="square_1 wave"/>
-         <dest name="inmux41 i2"/>
+         <dest name="inmux41 i3"/>
       </net>
       <net>
          <source name="pwm_1 wave"/>
-         <dest name="inmux41 i3"/>
+         <dest name="inmux41 i4"/>
       </net>
       <net>
          <source name="inmux41 o"/>
@@ -121,9 +130,19 @@
          <source name="i_1 out"/>
          <dest name="inmux41 s"/>
       </net>
+      <net>
+         <source name="tri_1 wave"/>
+         <dest name="inmux41 i2"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>141</x>
+      <y>0</y>
+      <width>1080</width>
+      <height>928</height>
+   </windowPos>
 </patch-1.0>

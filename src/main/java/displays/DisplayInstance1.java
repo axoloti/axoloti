@@ -32,13 +32,13 @@ public abstract class DisplayInstance1 extends DisplayInstance {
 
     @Override
     public String GenerateCodeInit(String vprefix) {
-        String s = "    " + valueName(vprefix) + " = 0;\n";
+        String s = GetCName() + " = 0;\n";
         return s;
     }
 
     @Override
     public String valueName(String vprefix) {
-        return "parent2->displayVector[" + offset + "]";
+        return "displayVector[" + offset + "]";
     }
 
     public abstract Value getValueRef();

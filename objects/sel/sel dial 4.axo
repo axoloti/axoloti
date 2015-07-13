@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sel dial 4" sha="849fa0f07de4d3c6ffcc3e384a10568aaf8ad7c2">
+   <obj.normal id="sel dial 4" uuid="2bf0aa0779d8476013c6151d55fa9452b204d852" sha="7b1dd698ae4ee24b56779ec6463575f325706bc0">
+      <upgradeSha>849fa0f07de4d3c6ffcc3e384a10568aaf8ad7c2</upgradeSha>
       <sDescription>selectable constant. Output is v0 if s&lt;1. v1 if s&lt;2. v2 if s&lt;3. v3 if more.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -29,11 +30,11 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.krate><![CDATA[   switch(%s%>0?%s%:0) {
-      case 0: %o%= %v0%; break;
-      case 1: %o%= %v1%; break;
-      case 2: %o%= %v2%; break;
-      case 3: default: %o%= %v3%; break;
+      <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0) {
+      case 0: outlet_o= param_v0; break;
+      case 1: outlet_o= param_v1; break;
+      case 2: outlet_o= param_v2; break;
+      case 3: default: outlet_o= param_v3; break;
    }
 ]]></code.krate>
    </obj.normal>

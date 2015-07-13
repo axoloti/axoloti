@@ -17,6 +17,7 @@
  */
 package displays;
 
+import axoloti.datatypes. Int32;
 import java.security.MessageDigest;
 
 /**
@@ -43,4 +44,8 @@ public class DisplayFrac4ByteVBar extends Display {
         md.update("frac32.4bytevbar".getBytes());
     }
 
+    @Override
+    public  Int32 getDatatype() {
+        return  Int32.d;
+    }
 }

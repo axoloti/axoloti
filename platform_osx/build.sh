@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Downloads and builds all the required dependencies and toolchain executables
+# Items already present are skipped to save your bandwidth.
+
 set -e
 
 PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
@@ -24,12 +27,12 @@ fi
 if [ ! -d "${PLATFORM_ROOT}/../chibios" ]; 
 then
     cd "${PLATFORM_ROOT}/src"
-    ARDIR=ChibiOS_2.6.6
+    ARDIR=ChibiOS_2.6.8
     ARCHIVE=${ARDIR}.zip
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
-        curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.6/$ARCHIVE > $ARCHIVE
+        curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.8/$ARCHIVE > $ARCHIVE
     else
         echo "${ARCHIVE} already downloaded"
     fi
@@ -45,17 +48,17 @@ fi
 
 if [ ! -f "$PLATFORM_ROOT/bin/arm-none-eabi-gcc" ]; 
 then
-    ARCHIVE=gcc-arm-none-eabi-4_8-2014q3-20140805-mac.tar.bz2
+    ARCHIVE=gcc-arm-none-eabi-4_9-2015q2-20150609-mac.tar.bz2
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
-        curl -L https://launchpad.net/gcc-arm-embedded/4.8/4.8-2014-q3-update/+download/$ARCHIVE > $ARCHIVE
+        curl -L https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q2-update/+download/$ARCHIVE > $ARCHIVE
     else
         echo "${ARCHIVE} already downloaded"
     fi
     tar xfvj ${ARCHIVE}
-    cp -r gcc-arm-none-eabi-4_8-2014q3/* .
-    rm -rv gcc-arm-none-eabi-4_8-2014q3
+    cp -r gcc-arm-none-eabi-4_9-2015q2/* .
+    rm -rv gcc-arm-none-eabi-4_9-2015q2
 else
     echo "bin/arm-none-eabi-gcc already present, skipping..."
 fi
@@ -167,5 +170,9 @@ cp -v "${PLATFORM_ROOT}/lib/"*.dylib "${PLATFORM_ROOT}/bin/"
 file "${PLATFORM_ROOT}/bin/make"
 file "${PLATFORM_ROOT}/bin/dfu-util"
 file "${PLATFORM_ROOT}/bin/libusb-1.0.0.dylib"
+
+echo "##### building GUI... #####"
+cd "${PLATFORM_ROOT}"/..
+ant
 
 echo "DONE!"

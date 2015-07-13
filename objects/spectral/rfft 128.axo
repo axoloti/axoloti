@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="rfft 128" sha="2199e7d35382f21db955b42319cf8130b165f5f">
+   <obj.normal id="rfft 128" uuid="27b4fa628dda621136f74e407ee8761ba76f631c" sha="1e5ec296644678b7bb811cbba8dfac44e890dcb9">
+      <upgradeSha>38b87d809e1f4ce40fa6651b081e68e82f80d2b2</upgradeSha>
       <sDescription>spectral analyzer display using 128 input points fft</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>rfft 128.axh</helpPatch>
       <rotatedParams>true</rotatedParams>
       <inlets>
          <frac32buffer name="in" description="input"/>
@@ -65,7 +67,7 @@ msg_t ThreadX2(){
       }
 }
 static msg_t ThreadX(void *arg) {
-((%parent% *)arg)->ThreadX2();
+((attr_parent *)arg)->ThreadX2();
 }
 WORKING_AREA(waThreadX, 4096);
 Thread *Thd;
@@ -82,26 +84,26 @@ state = 0;
       <code.krate><![CDATA[if (state<128){
    int i;
    for(i=0;i<16;i++)
-      inbuf[state++] = %in%[i];
+      inbuf[state++] = inlet_in[i];
 }
 else if (state == 129){
    state = 0;
-if (!%hold%){    %v0%=outbuf[0];
-    %v1%=outbuf[1];
-    %v2%=outbuf[2];
-    %v3%=outbuf[3];
-    %v4%=outbuf[4];
-    %v5%=outbuf[5];
-    %v6%=outbuf[6];
-    %v7%=outbuf[7];
-    %v8%=outbuf[8];
-    %v9%=outbuf[9];
-    %v10%=outbuf[10];
-    %v11%=outbuf[11];
-    %v12%=outbuf[12];
-    %v13%=outbuf[13];
-    %v14%=outbuf[14];
-    %v15%=outbuf[15];
+if (!inlet_hold){    disp_v0=outbuf[0];
+    disp_v1=outbuf[1];
+    disp_v2=outbuf[2];
+    disp_v3=outbuf[3];
+    disp_v4=outbuf[4];
+    disp_v5=outbuf[5];
+    disp_v6=outbuf[6];
+    disp_v7=outbuf[7];
+    disp_v8=outbuf[8];
+    disp_v9=outbuf[9];
+    disp_v10=outbuf[10];
+    disp_v11=outbuf[11];
+    disp_v12=outbuf[12];
+    disp_v13=outbuf[13];
+    disp_v14=outbuf[14];
+    disp_v15=outbuf[15];
 }
 }
 ]]></code.krate>

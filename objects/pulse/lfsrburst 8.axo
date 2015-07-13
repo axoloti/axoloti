@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="lfsrburst 8" sha="15dc098dc7464595e42a982a7c86798389557f18">
+   <obj.normal id="lfsrburst 8" uuid="d2ac5ea30b4c0caeaddfe92ce3134f1055875b15" sha="99cc60aac1629b83d1da245d1fb1a62ab3af1d8e">
+      <upgradeSha>15dc098dc7464595e42a982a7c86798389557f18</upgradeSha>
       <sDescription>lfsr burst, 8bit = 255 samples, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pulse.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
@@ -59,19 +61,19 @@ int32_t ntrig;
 count = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((%trig%>0) && !ntrig) { state = 1; count=255; ntrig=1;}
-   else { if (!(%trig%>0)) ntrig=0;}
+      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) { state = 1; count=255; ntrig=1;}
+   else { if (!(inlet_trig>0)) ntrig=0;}
 ]]></code.krate>
       <code.srate><![CDATA[if (count>0) {
   count--;
   if (state & 1)  {
-     state = (state >> 1) ^ %polynomial%;
-     %out% = 1<<27;
+     state = (state >> 1) ^ attr_polynomial;
+     outlet_out[buffer_index] = 1<<27;
   } else {
     state = (state >> 1);
-     %out% = 0;
+     outlet_out[buffer_index] = 0;
   }
-} else %out% = 0;
+} else outlet_out[buffer_index] = 0;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

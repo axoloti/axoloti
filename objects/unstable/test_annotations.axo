@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="test_annotations" sha="f2cb995ddcec5d4ba6868ecba0fd7398d564bd0">
+   <obj.normal id="test_annotations" uuid="c783d0bbe605a13066999e76e32659488fa977f2" sha="f2cb995ddcec5d4ba6868ecba0fd7398d564bd0">
       <sDescription>shows various annotations on inputs and outputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,8 +12,8 @@
          <bool32.rising name="bool_r" description="bool rising"/>
          <bool32.risingfalling name="bool_rf" description="bool rising/falling"/>
          <int32 name="int" description="integer"/>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="int_pos" description="positive integer"/>
-         <int32 class="axoloti.inlets.InletInt32Bipolar" name="int_bip" description="bipolar integer"/>
+         <int32.positive name="int_pos" description="positive integer"/>
+         <int32.bipolar name="int_bip" description="bipolar integer"/>
       </inlets>
       <outlets>
          <frac32.positive name="o_pos" description="positive fractional"/>

@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="comp" sha="32cf18b5f858588a4bec8b21d3f519e2a9689471">
+   <obj.normal id="comp" uuid="2d62720d6a597c586936be74ebb1e1c449772636" sha="cda5bd26e9fc97319943991cca7cf2da17496790">
+      <upgradeSha>32cf18b5f858588a4bec8b21d3f519e2a9689471</upgradeSha>
       <sDescription>Dynamic range compressor. Gain calculation only. Envelope follower, attatck, decay and VCA are not included.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>comp.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>
@@ -37,16 +39,16 @@ int32_t frac_exp(int32_t a) {
 	else return expt[ei]>>(-s);
 }
 ]]></code.declaration>
-      <code.krate><![CDATA[int32_t inlog = frac_log(%in%);
-int32_t treshlog = frac_log(%tresh%);
+      <code.krate><![CDATA[int32_t inlog = frac_log(inlet_in);
+int32_t treshlog = frac_log(param_tresh);
 int32_t over = inlog-treshlog;
 int32_t gain;
 if (over<0){
 	gain = 0x80000;
 } else {
-	gain = frac_exp(-___SMMUL(over,%ratio%)<<5);
+	gain = frac_exp(-___SMMUL(over,param_ratio)<<5);
 }
-%out% = gain<<8;//___SMMUL(%in%,gain);
+outlet_out = gain<<8;//___SMMUL(inlet_in,gain);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

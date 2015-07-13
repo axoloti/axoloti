@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="cos" sha="bba0c20ab32678ed34365aeb6943b53d60b2c7">
+   <obj.normal id="cos" uuid="c813904f245103af9eafbc05ed6521f94472aed4" sha="f35ef0fb72b74c5766631ffb48402228769ef4d2">
+      <upgradeSha>bba0c20ab32678ed34365aeb6943b53d60b2c7</upgradeSha>
       <sDescription>cosine function, -64..64 phase corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="phase" description="phase"/>
       </inlets>
@@ -13,14 +15,16 @@
       <params/>
       <attribs/>
       <code.krate><![CDATA[       int32_t r;
-       SINE2TINTERP((%phase%<<4)+(1<<30),r)
-       %out%= (r>>4);
+       SINE2TINTERP((inlet_phase<<4)+(1<<30),r)
+       outlet_out= (r>>4);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="cos" sha="8e1816a884241ec4b44374c205dbcd18fe0d101e">
+   <obj.normal id="cos" uuid="a2ba1ca8d10b854e06728c088c43409866624fc1" sha="f4361f0b932565dbfacd93ab635727b0faf43e0c">
+      <upgradeSha>8e1816a884241ec4b44374c205dbcd18fe0d101e</upgradeSha>
       <sDescription>cosine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="phase" description="phase"/>
       </inlets>
@@ -31,8 +35,8 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[       int32_t r;
-       SINE2TINTERP((%phase%<<4)+(1<<30),r)
-       %out%= (r>>4);
+       SINE2TINTERP((inlet_phase[buffer_index]<<4)+(1<<30),r)
+       outlet_out[buffer_index]= (r>>4);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

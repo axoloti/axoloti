@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="&lt;html&gt;&lt;H2&gt;Comparing a naive full wave rectifier&lt;br&gt;with a better one&lt;/h2&gt;" x="14" y="14"/>
+   <comment type="patch/comment" name="&lt;html&gt;&lt;H2&gt;Comparing a naive full wave rectifier&lt;br&gt;with a better one&lt;/h2&gt;" x="14" y="14"/>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="toggle_1" x="504" y="84">
       <params>
          <bool32.tgl name="b" value="0"/>
@@ -32,8 +32,8 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="off = naive implementation" x="588" y="98"/>
-   <comment type="patch/comment" sha="sha" name="on = better implementation" x="588" y="112"/>
+   <comment type="patch/comment" name="off = naive implementation" x="588" y="98"/>
+   <comment type="patch/comment" name="on = better implementation" x="588" y="112"/>
    <obj type="dist/rectifier full" sha="bbd71c0dc9ca3e65420b55751215c30369dfc68" name="rectifier_1" x="350" y="140">
       <params/>
       <attribs/>

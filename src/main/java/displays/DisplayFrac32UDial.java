@@ -17,6 +17,7 @@
  */
 package displays;
 
+import axoloti.datatypes. Int32;
 import java.security.MessageDigest;
 
 /**
@@ -42,4 +43,9 @@ public class DisplayFrac32UDial extends Display {
         super.updateSHA(md);
         md.update("frac32.u.dial".getBytes());
     }
+    
+    @Override
+    public  Int32 getDatatype() {
+        return  Int32.d;
+    }    
 }

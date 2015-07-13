@@ -1,0 +1,259 @@
+<patch-1.0>
+   <obj type="knobs" sha="22c4a17a80497231a5b6ee0ba797f6971f6c994f" name="knobs1" x="520" y="0">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c1" x="640" y="0">
+      <params>
+         <frac32.u.map name="amp" value="21.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="comment" name="tremolo + stereo chorus effect" x="18" y="21"/>
+   <obj type="*" sha="b031e26920f6cf5c1a53377ee6021573c4e3ac02" name="*3" x="160" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c32" sha="5797bce9fc4e770d9c14890b0fa899f126c5bc38" name="c641" x="80" y="80">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="scopeS" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="scopeS1" x="840" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="0" y="120">
+      <params>
+         <frac32.s.map name="pitch" value="1.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="160" y="120">
+      <params>
+         <frac32.u.map name="gain1" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="440" y="120">
+      <params>
+         <frac32.u.map name="value" value="18.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="520" y="120">
+      <params>
+         <frac32.u.map name="value" value="5.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="interp~" sha="5a9175b8d44d830756d1599a86b4a6a49813a19b" name="interp_1" x="640" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="adc~1" sha="76cc7b8fc059b573ece27b3319e73b4136159cff" name="adc_11" x="0" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="280" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="chorus" sha="c71cd02f08a884b34185cb9392c7c87adff1aebb" name="chorus1" x="440" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*" sha="d67b6c172dd96232df67e96baf19e3062e880e68" name="*1" x="640" y="200">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="muls16" sha="fc43d4b12bedaf555251f39a12909179bdaa71bb" name="muls161" x="760" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*" sha="d67b6c172dd96232df67e96baf19e3062e880e68" name="*2" x="640" y="260">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="muls16" sha="fc43d4b12bedaf555251f39a12909179bdaa71bb" name="muls161_" x="760" y="280">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="880" y="300">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="280" y="320">
+      <params>
+         <frac32.s.map name="pitch" value="16.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="infclip~" sha="5b28954e0a3a0a0901e0c58305e9e0e0eceb2cf9" name="infclip_1" x="440" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1_" x="520" y="320">
+      <params>
+         <frac32.s.map name="pitch" value="26.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="inmux2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f" name="inmux21" x="680" y="320">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="unipolar2bipolar" sha="1036bdea372166d396fc75329ed1d057bd4af3fb" name="unipolar2bipolar1" x="0" y="380">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c2" x="120" y="380">
+      <params>
+         <frac32.u.map name="amp" value="22.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="digitalRead" sha="ba19c07c1187a5920be1049cfb56e9518a722c82" name="digitalRead1" x="440" y="520">
+      <params/>
+      <attribs>
+         <combo attributeName="pad" selection="PC0"/>
+         <combo attributeName="mode" selection="pullup"/>
+      </attribs>
+   </obj>
+   <obj type="toggle" sha="6bbdbe388e7a2ccf11a7d72cf71769a3b20cc14f" name="toggle1" x="560" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="led1" sha="228b11846ff6a3209ecf90ced1ec59fe0a35bbe9" name="led11" x="640" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="chorus1 speed"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="chorus1 depth"/>
+      </net>
+      <net>
+         <source name="mix11 out"/>
+         <dest name="vca_1 v"/>
+      </net>
+      <net>
+         <source name="c641 o"/>
+         <dest name="mix11 bus_in"/>
+      </net>
+      <net>
+         <source name="chorus1 L"/>
+         <dest name="*1 b"/>
+      </net>
+      <net>
+         <source name="chorus1 R"/>
+         <dest name="*2 b"/>
+      </net>
+      <net>
+         <source name="interp_1 o"/>
+         <dest name="*1 a"/>
+         <dest name="*2 a"/>
+      </net>
+      <net>
+         <source name="knobs1 pedal"/>
+         <dest name="unipolar2bipolar1 i"/>
+      </net>
+      <net>
+         <source name="knobs1 knob1"/>
+         <dest name="*c1 in"/>
+      </net>
+      <net>
+         <source name="*c1 out"/>
+         <dest name="osc1 pitchm"/>
+      </net>
+      <net>
+         <source name="knobs1 knob3"/>
+         <dest name="vcf3_1 resom"/>
+         <dest name="vcf3_1_ resom"/>
+      </net>
+      <net>
+         <source name="osc1 wave"/>
+         <dest name="*3 b"/>
+      </net>
+      <net>
+         <source name="knobs1 knob2"/>
+         <dest name="*3 a"/>
+      </net>
+      <net>
+         <source name="*3 result"/>
+         <dest name="mix11 in1"/>
+      </net>
+      <net>
+         <source name="unipolar2bipolar1 o"/>
+         <dest name="*c2 in"/>
+      </net>
+      <net>
+         <source name="*c2 out"/>
+         <dest name="vcf3_1 pitchm"/>
+         <dest name="vcf3_1_ pitchm"/>
+      </net>
+      <net>
+         <source name="vcf3_1 out"/>
+         <dest name="infclip_1 in"/>
+         <dest name="inmux21 i1"/>
+      </net>
+      <net>
+         <source name="vca_1 o"/>
+         <dest name="chorus1 in"/>
+      </net>
+      <net>
+         <source name="adc_11 wave"/>
+         <dest name="vcf3_1 in"/>
+      </net>
+      <net>
+         <source name="inmux21 o"/>
+         <dest name="vca_1 a"/>
+      </net>
+      <net>
+         <source name="digitalRead1 out"/>
+         <dest name="toggle1 trig"/>
+      </net>
+      <net>
+         <source name="toggle1 o"/>
+         <dest name="inmux21 s"/>
+         <dest name="led11 in"/>
+      </net>
+      <net>
+         <source name="infclip_1 out"/>
+         <dest name="vcf3_1_ in"/>
+      </net>
+      <net>
+         <source name="vcf3_1_ out"/>
+         <dest name="inmux21 i2"/>
+      </net>
+      <net>
+         <source name="knobs1 knob4"/>
+         <dest name="interp_1 i"/>
+      </net>
+      <net>
+         <source name="*1 result"/>
+         <dest name="muls161 in"/>
+      </net>
+      <net>
+         <source name="*2 result"/>
+         <dest name="muls161_ in"/>
+      </net>
+      <net>
+         <source name="muls161 out"/>
+         <dest name="dac_1 left"/>
+      </net>
+      <net>
+         <source name="muls161_ out"/>
+         <dest name="dac_1 right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

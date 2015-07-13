@@ -1,0 +1,281 @@
+<patch-1.0>
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="button_1" x="336" y="0">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="14" y="28">
+      <params>
+         <frac32.s.map name="pitch" value="28.09999990463257"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="chart_2" x="336" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/kscope 128 b" sha="187931f6934dab0686ca4d2b338cd8688db4f3e6" name="kscope_1" x="434" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="lfo/taptempo" sha="8bb401d9aeeb03766410f8e632d1f825c8330aca" name="taptempo_1" x="252" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="chart_1" x="336" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="midi/in/cc any" sha="201486c62456f4efcc982c8ed99e2392fc23d9da" name="dial_1" x="14" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="dial_2" x="112" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/kscope 128 b" sha="187931f6934dab0686ca4d2b338cd8688db4f3e6" name="kscope_2" x="434" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="conv/bipolar2unipolar" sha="b80b299df9cb5523b1c4c0c7fe09941a1c682112" name="bipolar2unipolar_1" x="672" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/div 4" sha="1b9659261cffe6011ae0ea5a26a8c2029d53828d" name="div_1" x="798" y="252">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/hex" sha="3ce96bdfc9c7668d6dbdd8a7430d740e07a3f48e" name="hex_1" x="280" y="308">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="sel/sel b 16 2t" sha="934b413defca02c2387665f0805ad10625ce0be0" name="sel_1" x="672" y="322">
+      <params>
+         <bin16 name="p1" value="256"/>
+         <bin16 name="p2" value="1"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" name="bass drum ----------------------------" x="672" y="448"/>
+   <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="d_1" x="672" y="476">
+      <params>
+         <frac32.s.map name="d" value="-13.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_2" x="784" y="476">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/abs" sha="d9aef12fddc085a0a8a7a9868f1c845c538a9209" name="arithmetic.abs_1" x="882" y="476">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/lp1" sha="91e2ecaa66340906540043ea41ac3987ce0aef17" name="filter.lowpass~_1" x="966" y="476">
+      <params>
+         <frac32.s.map name="freq" value="-11.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="env/d lin m x" sha="a2e1da37932bdfc8056cd08cca74d2ebc6735f40" name="env.envdlinmx_1" x="672" y="560">
+      <params>
+         <frac32.s.map name="d" value="-20.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="arithmetic.*c_2" x="770" y="560">
+      <params>
+         <frac32.u.map name="amp" value="32.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc.sine_1" x="868" y="560">
+      <params>
+         <frac32.s.map name="pitch" value="-33.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*" sha="d67b6c172dd96232df67e96baf19e3062e880e68" name="arithmetic.*_1" x="966" y="560">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*" sha="c47ceb7366785e0103cf880ce3450321491949f1" name="arithmetic.*_2" x="966" y="630">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_1" x="1036" y="630">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" name="hat ----------------------------" x="672" y="686"/>
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_1" x="784" y="714">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e" name="*c_1" x="672" y="756">
+      <params>
+         <frac32.u.map name="amp" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="env/d m" sha="50cab575d33b76fbf6279e2c0fa381124d3f1032" name="env.decay.m_1" x="770" y="756">
+      <params>
+         <frac32.u.map name="d" value="52.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="gain.vca~_1" x="868" y="756">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="filter/bp svf" sha="64eb414253ad09d2d8c5945dc48b8e1d2ac5b321" name="filter.bpfsvf~_1" x="938" y="756">
+      <params>
+         <frac32.s.map name="pitch" value="41.0"/>
+         <frac32.u.map name="reso" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="fx/flanger" sha="983b53deb603baf7759395a69376f1fd4004675f" name="flanger_1" x="1036" y="756">
+      <params>
+         <frac32.u.map name="depth" value="1.0"/>
+         <frac32.u.map name="fdbk" value="16.5"/>
+         <frac32.s.map name="speed" value="-46.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/vu" sha="3e0f3adebb3336fad05a3e96926f88c2a603c343" name="vu_2" x="1134" y="756">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 2" sha="67c325bf12e5b73ad58df89daf7899831777003c" name="mix_1" x="602" y="868">
+      <params>
+         <frac32.u.map name="gain1" value="45.0"/>
+         <frac32.u.map name="gain2" value="25.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="686" y="868">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="square_1 wave"/>
+         <dest name="chart_2 in"/>
+         <dest name="kscope_1 in"/>
+      </net>
+      <net>
+         <source name="taptempo_1 int1"/>
+         <dest name="hex_1 in"/>
+      </net>
+      <net>
+         <source name="taptempo_1 phasor"/>
+         <dest name="chart_1 in"/>
+         <dest name="kscope_2 in"/>
+         <dest name="bipolar2unipolar_1 i"/>
+      </net>
+      <net>
+         <source name="button_1 o"/>
+         <dest name="kscope_1 hold"/>
+         <dest name="kscope_2 hold"/>
+      </net>
+      <net>
+         <source name="dial_1 value"/>
+         <dest name="dial_2 in"/>
+      </net>
+      <net>
+         <source name="dial_1 trig"/>
+         <dest name="taptempo_1 tap"/>
+      </net>
+      <net>
+         <source name="noise.uniform_2 wave"/>
+         <dest name="arithmetic.abs_1 in"/>
+      </net>
+      <net>
+         <source name="arithmetic.*c_2 out"/>
+         <dest name="osc.sine_1 pitchm"/>
+      </net>
+      <net>
+         <source name="arithmetic.abs_1 out"/>
+         <dest name="filter.lowpass~_1 in"/>
+      </net>
+      <net>
+         <source name="sel_1 o1"/>
+         <dest name="d_1 trig"/>
+         <dest name="env.envdlinmx_1 trig"/>
+      </net>
+      <net>
+         <source name="d_1 env"/>
+         <dest name="arithmetic.*c_2 in"/>
+      </net>
+      <net>
+         <source name="arithmetic.*_2 result"/>
+         <dest name="vu_1 in"/>
+         <dest name="mix_1 in1"/>
+      </net>
+      <net>
+         <source name="*c_1 out"/>
+         <dest name="env.decay.m_1 dm"/>
+      </net>
+      <net>
+         <source name="filter.bpfsvf~_1 out"/>
+         <dest name="flanger_1 in"/>
+      </net>
+      <net>
+         <source name="flanger_1 out"/>
+         <dest name="vu_2 in"/>
+         <dest name="mix_1 in2"/>
+      </net>
+      <net>
+         <source name="filter.lowpass~_1 out"/>
+         <dest name="arithmetic.*_1 a"/>
+      </net>
+      <net>
+         <source name="osc.sine_1 wave"/>
+         <dest name="arithmetic.*_1 b"/>
+      </net>
+      <net>
+         <source name="arithmetic.*_1 result"/>
+         <dest name="arithmetic.*_2 a"/>
+      </net>
+      <net>
+         <source name="env.envdlinmx_1 env"/>
+         <dest name="arithmetic.*_2 b"/>
+      </net>
+      <net>
+         <source name="bipolar2unipolar_1 o"/>
+         <dest name="div_1 in"/>
+      </net>
+      <net>
+         <source name="div_1 out"/>
+         <dest name="sel_1 in"/>
+      </net>
+      <net>
+         <source name="sel_1 o2"/>
+         <dest name="env.decay.m_1 trig"/>
+      </net>
+      <net>
+         <source name="mix_1 out"/>
+         <dest name="out_1 left"/>
+         <dest name="out_1 right"/>
+      </net>
+      <net>
+         <source name="gain.vca~_1 o"/>
+         <dest name="filter.bpfsvf~_1 in"/>
+      </net>
+      <net>
+         <source name="env.decay.m_1 env"/>
+         <dest name="gain.vca~_1 v"/>
+      </net>
+      <net>
+         <source name="noise.uniform_1 wave"/>
+         <dest name="gain.vca~_1 a"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sel b 16 2t" sha="934b413defca02c2387665f0805ad10625ce0be0">
+   <obj.normal id="sel b 16 2t" uuid="e6fd779f9932504fbd82e89685752e5254f80a7e" sha="8e37d7dc4d193739280112614f307c01ffc64701">
+      <upgradeSha>934b413defca02c2387665f0805ad10625ce0be0</upgradeSha>
       <sDescription>select one out of 16 booleans, chainable, 2 tracks</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -19,14 +20,14 @@
          <bin16 name="p2" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<16)) {
-   %o1%=%p1%&(1<<%in%);
-   %o2%=%p2%&(1<<%in%);
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<16)) {
+   outlet_o1=param_p1&(1<<inlet_in);
+   outlet_o2=param_p2&(1<<inlet_in);
 } else {
-   %o1% = %def1%;
-   %o2% = %def2%;
+   outlet_o1 = inlet_def1;
+   outlet_o2 = inlet_def2;
 }
-%chain% = %in%-16;
+outlet_chain = inlet_in-16;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

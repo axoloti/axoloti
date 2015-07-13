@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39">
+   <obj.normal id="scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" sha="1d8e04cf76c1be799824f4065917f788e705b029">
+      <upgradeSha>91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39</upgradeSha>
       <sDescription>bipolar audio rate signal oscilloscope (time domain), showing 128 consecutive samples after the signal becomes positive.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>scope.axh</helpPatch>
       <rotatedParams>true</rotatedParams>
       <inlets>
          <frac32buffer.bipolar name="in" description="input"/>
@@ -26,7 +28,7 @@ pval = 0;
       <code.krate><![CDATA[int i;
 if (index<0) {
    for(i=0;i<16;i++){
-      int32_t val = (%in%[i])>(1<<19);
+      int32_t val = (inlet_in[i])>(1<<19);
       if (val&&(!pval)){
          index=0; break;
       }
@@ -34,7 +36,7 @@ if (index<0) {
    }
    if (index == 0){
       for(;i<16;i++){
-         t[index++]=(uint8_t)(%in%[i]>>21);
+         t[index++]=(uint8_t)(inlet_in[i]>>21);
       }
    }
 } else {    for(i=0;i<16;i++){
@@ -42,12 +44,12 @@ if (index<0) {
          index=-1;
          break;
       }
-      t[index++]=(uint8_t)(%in%[i]>>21);
+      t[index++]=(uint8_t)(inlet_in[i]>>21);
    }
-   if ((index==-1)&&(!%hold%)){
+   if ((index==-1)&&(!inlet_hold)){
      for(i=0;i<128;i++)
-       %scope%[i]=t[i];
-     pval = (%in%[BUFSIZE-1])>(1<<19);
+       disp_scope[i]=t[i];
+     pval = (inlet_in[BUFSIZE-1])>(1<<19);
    }
 }
 ]]></code.krate>

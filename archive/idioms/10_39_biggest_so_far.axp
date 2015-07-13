@@ -1,0 +1,47 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="20">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="max" sha="20afa00d9bda41229b9b117cd43cb6fc44a7c9d" name="max1" x="240" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="160" y="140">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="inmux2" sha="804f2e81d6fe3e310497e5cfa0fec8560435c2ac" name="inmux21" x="240" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" name="enable or clear to zero" x="80" y="220"/>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="400" y="20">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="max1 in1"/>
+      </net>
+      <net>
+         <source name="max1 out"/>
+         <dest name="inmux21 i2"/>
+         <dest name="displayU1 in"/>
+      </net>
+      <net>
+         <source name="inmux21 o"/>
+         <dest name="max1 in2"/>
+      </net>
+      <net>
+         <source name="cb11 o"/>
+         <dest name="inmux21 s"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

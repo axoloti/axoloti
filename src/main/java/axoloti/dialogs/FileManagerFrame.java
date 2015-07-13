@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.table.DefaultTableModel;
-import jssc.SerialPortException;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdUploadFile;
 
@@ -161,12 +160,8 @@ public class FileManagerFrame extends javax.swing.JFrame {
     void RequestRefresh() {
         QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
         if (processor.serialconnection != null) {
-            try {
-                processor.serialconnection.TransmitStop();
-                processor.serialconnection.TransmitGetFileList();
-            } catch (SerialPortException ex) {
-                Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            processor.serialconnection.TransmitStop();
+            processor.serialconnection.TransmitGetFileList();
         }
     }
 

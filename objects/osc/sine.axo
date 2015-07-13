@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5">
+   <obj.normal id="sine" uuid="556d54977a43597bf97427ca6c13e3d446859933" sha="85a8980923f6a3d4d93da8dcdde5536a86b273bf">
+      <upgradeSha>57fd153c89df1299ed1ecbe27c961ac52732ab5</upgradeSha>
       <sDescription>FM sine wave oscillator, linear interpolated table, s-rate pitch input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation"/>
          <frac32buffer name="fm" description="frequency modulation"/>
@@ -22,13 +24,13 @@
       <code.declaration><![CDATA[uint32_t Phase;]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
       <code.krate><![CDATA[   int32_t freq;
-   MTOFEXTENDED(%pitch% + %pitchm%,freq);
+   MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
 ]]></code.krate>
-      <code.srate><![CDATA[Phase += freq + %fm%;
+      <code.srate><![CDATA[Phase += freq + inlet_fm[buffer_index];
 int32_t r;
-int32_t p2 = Phase + (%pm%<<4);
+int32_t p2 = Phase + (inlet_pm[buffer_index]<<4);
 SINE2TINTERP(p2,r)
-%wave%= (r>>4);
+outlet_wave[buffer_index]= (r>>4);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

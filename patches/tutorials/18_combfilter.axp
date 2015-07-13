@@ -3,16 +3,16 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="noise or saw-wave to test" x="224" y="42"/>
+   <comment type="patch/comment" name="noise or saw-wave to test" x="224" y="42"/>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="224" y="56">
       <params>
          <bool32.tgl name="b" value="1"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="combfilter made with a delayline -----------------------------------------------" x="420" y="56"/>
-   <comment type="patch/comment" sha="sha" name="tune the delaytime!" x="546" y="70"/>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="98" y="112">
+   <comment type="patch/comment" name="combfilter made with a delayline -----------------------------------------------" x="420" y="56"/>
+   <comment type="patch/comment" name="tune the delaytime!" x="602" y="70"/>
+   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="126" y="112">
       <params/>
       <attribs/>
    </obj>
@@ -50,7 +50,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="924" y="238">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="966" y="238">
       <params/>
       <attribs/>
    </obj>
@@ -94,4 +94,10 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>71</x>
+      <y>28</y>
+      <width>1234</width>
+      <height>548</height>
+   </windowPos>
 </patch-1.0>

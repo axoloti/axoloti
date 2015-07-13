@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e">
+   <obj.normal id="dial b" uuid="9ffed04e6a3052d9001eda83bae7024cb6d17037" sha="5d4fe09e04ac9d02b2f3224e493c9536fe25fa66">
+      <upgradeSha>b12c45ba7611d19c7b97481e73889da65eb2f9e</upgradeSha>
       <sDescription>displays bipolar k-rate signals</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>disp.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="in" description="input"/>
       </inlets>
@@ -12,7 +14,7 @@
       </displays>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%v%=%in%;
+      <code.krate><![CDATA[disp_v=inlet_in;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

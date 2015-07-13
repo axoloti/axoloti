@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -40,6 +40,8 @@ import axoloti.inlets.InletFrac32BufferBipolar;
 import axoloti.inlets.InletFrac32BufferPos;
 import axoloti.inlets.InletFrac32Pos;
 import axoloti.inlets.InletInt32;
+import axoloti.inlets.InletInt32Bipolar;
+import axoloti.inlets.InletInt32Pos;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletBool32Pulse;
@@ -56,6 +58,7 @@ import axoloti.outlets.OutletInt32Pos;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.Parameter4LevelX16;
 import axoloti.parameters.ParameterBin1;
+import axoloti.parameters.ParameterBin12;
 import axoloti.parameters.ParameterBin16;
 import axoloti.parameters.ParameterBin1Momentary;
 import axoloti.parameters.ParameterBin32;
@@ -100,6 +103,7 @@ import displays.DisplayInt32Bar16;
 import displays.DisplayInt32Bar32;
 import displays.DisplayInt32HexLabel;
 import displays.DisplayInt32Label;
+import displays.DisplayNoteLabel;
 import displays.DisplayVScale;
 import java.awt.Point;
 import java.io.File;
@@ -121,9 +125,11 @@ import org.simpleframework.xml.*;
 public class AxoObject extends AxoObjectAbstract {
 
     @Element(required = false)
+    public String helpPatch;
+    @Element(required = false)
     private Boolean providesModulationSource;
     @Element(required = false)
-    Boolean rotatedParams;
+    private Boolean rotatedParams;
     @ElementList(required = false)
     public ArrayList<String> ModulationSources;
     @Path("inlets")
@@ -136,6 +142,8 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = "frac32.bipolar", type = InletFrac32Bipolar.class, inline = true, required = false),
         @ElementList(entry = "charptr32", type = InletCharPtr32.class, inline = true, required = false),
         @ElementList(entry = "int32", type = InletInt32.class, inline = true, required = false),
+        @ElementList(entry = "int32.positive", type = InletInt32Pos.class, inline = true, required = false),
+        @ElementList(entry = "int32.bipolar", type = InletInt32Bipolar.class, inline = true, required = false),
         @ElementList(entry = "frac32buffer", type = InletFrac32Buffer.class, inline = true, required = false),
         @ElementList(entry = "frac32buffer.positive", type = InletFrac32BufferPos.class, inline = true, required = false),
         @ElementList(entry = "frac32buffer.bipolar", type = InletFrac32BufferBipolar.class, inline = true, required = false)
@@ -176,7 +184,8 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = "int32.bar32", type = DisplayInt32Bar32.class, inline = true, required = false),
         @ElementList(entry = "vscale", type = DisplayVScale.class, inline = true, required = false),
         @ElementList(entry = "int8array128.vbar", type = DisplayFrac8S128VBar.class, inline = true, required = false),
-        @ElementList(entry = "uint8array128.vbar", type = DisplayFrac8U128VBar.class, inline = true, required = false)
+        @ElementList(entry = "uint8array128.vbar", type = DisplayFrac8U128VBar.class, inline = true, required = false),
+        @ElementList(entry = "note.label", type = DisplayNoteLabel.class, inline = true, required = false)
     })
     public ArrayList<Display> displays; // readouts
     @Path("params")
@@ -205,6 +214,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = "int32.hradio", type = ParameterInt32HRadio.class, inline = true, required = false),
         @ElementList(entry = "int32.vradio", type = ParameterInt32VRadio.class, inline = true, required = false),
         @ElementList(entry = "int2x16", type = Parameter4LevelX16.class, inline = true, required = false),
+        @ElementList(entry = "bin12", type = ParameterBin12.class, inline = true, required = false),
         @ElementList(entry = "bin16", type = ParameterBin16.class, inline = true, required = false),
         @ElementList(entry = "bin32", type = ParameterBin32.class, inline = true, required = false),
         @ElementList(entry = "bool32.tgl", type = ParameterBin1.class, inline = true, required = false),
@@ -287,6 +297,7 @@ public class AxoObject extends AxoObjectAbstract {
         if (editor == null) {
             editor = new AxoObjectEditor(this);
         }
+        editor.setState(java.awt.Frame.NORMAL);
         editor.setVisible(true);
     }
 
@@ -401,7 +412,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public void GenerateSHA() {
+    public String GenerateSHA() {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA");
             for (Inlet i : inlets) {
@@ -434,12 +445,41 @@ public class AxoObject extends AxoObjectAbstract {
             if (sMidiCode != null) {
                 md.update(sMidiCode.getBytes());
             }
-            sha = (new BigInteger(1, md.digest())).toString(16);
+            return (new BigInteger(1, md.digest())).toString(16);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            return null;
+        }        
     }
 
+    @Override
+    public String GenerateUUID() {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA");
+            md.update(id.getBytes());
+            for (Inlet i : inlets) {
+                i.updateSHA(md);
+            }
+            for (Outlet i : outlets) {
+                i.updateSHA(md);
+            }
+            for (Parameter i : params) {
+                i.updateSHA(md);
+            }
+            for (AxoAttribute i : attributes) {
+                i.updateSHA(md);
+            }
+            for (Display i : displays) {
+                i.updateSHA(md);
+            }
+            return  (new BigInteger(1, md.digest())).toString(16);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    
     public Boolean getRotatedParams() {
         if (rotatedParams == null) {
             return false;
@@ -527,4 +567,19 @@ public class AxoObject extends AxoObjectAbstract {
     public Set<String> GetDepends() {
         return depends;
     }
+
+    public File GetHelpPatchFile() {
+        if (helpPatch == null) {
+            return null;
+        }
+        File o = new File(sPath);
+        String p = o.getParent() + File.separator + helpPatch;
+        File f = new File(p);
+        if (f.isFile() && f.canRead()) {
+            return f;
+        } else {
+            return null;
+        }
+    }
+
 }

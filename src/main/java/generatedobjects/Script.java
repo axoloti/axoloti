@@ -73,7 +73,7 @@ public class Script extends gentools {
                 + "%script%\n"
                 + "}\n"
                 + "static msg_t ThreadX(void *arg) {\n"
-                + "((%parent% *)arg)->ThreadX2();\n"
+                + "((attr_parent *)arg)->ThreadX2();\n"
                 + "}\n";
         o.sLocalData += "WORKING_AREA(waThreadX, 1024);\n"
                 + "Thread *Thd;\n";
@@ -90,7 +90,7 @@ public class Script extends gentools {
     }
 
     static AxoObject Create_Script2() {
-        AxoObject o = new AxoObject("script2", "script with 2 inputs and 2 outputs, running in a separate thread, you must define \"void init(void){}\" and \"void loop(void)\"");
+        AxoObject o = new AxoObject("script2", "script with 2 inputs and 2 outputs, running in a separate thread, you must define \"void setup(void){}\" and \"void loop(void)\"");
         o.inlets.add(new InletFrac32("in1_", "in1"));
         o.inlets.add(new InletFrac32("in2_", "in2"));
         o.outlets.add(new OutletFrac32("out1_", "out1"));
@@ -108,7 +108,7 @@ public class Script extends gentools {
                 + "  chThdExit((msg_t)0);\n"
                 + "}\n"
                 + "static msg_t ThreadX(void *arg) {\n"
-                + "((%parent% *)arg)->ThreadX2();\n"
+                + "((attr_parent *)arg)->ThreadX2();\n"
                 + "}\n";
         o.sLocalData += "WORKING_AREA(waThreadX, 1024);\n"
                 + "Thread *Thd;\n";

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,10 +17,7 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
-import jssc.SerialPortException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import axoloti.Connection;
 
 /**
  *
@@ -64,14 +61,9 @@ public class QCmdVirtualButton implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
-        try {
-            serialConnection.TransmitVirtualButton(b_or, b_and, enc1, enc2, enc3, enc4);
-            return this;
-        } catch (SerialPortException ex) {
-            Logger.getLogger(QCmdPing.class.getName()).log(Level.SEVERE, null, ex);
-            return new QCmdDisconnect();
-        }
+    public QCmd Do(Connection connection) {
+        connection.ClearSync();
+        connection.TransmitVirtualButton(b_or, b_and, enc1, enc2, enc3, enc4);
+        return this;
     }
 }

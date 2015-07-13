@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="log" sha="2ac778d455e2eb36c57c9f79ac05066bc9d67bdd">
+   <obj.normal id="log" uuid="8145e73067e1e41ccdd725e99c4ca1361760c6ea" sha="7be06ab206ee92c136039b1ae6a21f480341b4db">
+      <upgradeSha>2ac778d455e2eb36c57c9f79ac05066bc9d67bdd</upgradeSha>
       <sDescription>logarithm, y=16+8*log2(x)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32.positive name="a" description="input"/>
       </inlets>
@@ -13,16 +15,18 @@
       <params/>
       <attribs/>
       <code.krate><![CDATA[Float_t f;
-f.f = %a%;
+f.f = inlet_a;
 int32_t r1 = ((f.parts.exponent&0x7F)-18) << 24;
 int32_t r3 = logt[f.parts.mantissa>>15]<<10;
-%result% = r1 + r3;
+outlet_result = r1 + r3;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="log" sha="ff1f4aeb54fc1d404d0bb1720dc013b79eaf36e8">
+   <obj.normal id="log" uuid="ebe62c08ed2525941ea286c487bf1e4dce616a85" sha="f7ace4d6ac37f46b2d4a63e72182c8ea370e6fac">
+      <upgradeSha>ff1f4aeb54fc1d404d0bb1720dc013b79eaf36e8</upgradeSha>
       <sDescription>logarithm, y=16+8*log2(x)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer.positive name="a" description="input"/>
       </inlets>
@@ -33,10 +37,10 @@ int32_t r3 = logt[f.parts.mantissa>>15]<<10;
       <params/>
       <attribs/>
       <code.srate><![CDATA[Float_t f;
-f.f = %a%;
+f.f = inlet_a[buffer_index];
 int32_t r1 = ((f.parts.exponent&0x7F)-18) << 24;
 int32_t r3 = logt[f.parts.mantissa>>15]<<10;
-%result% = r1 + r3;
+outlet_result[buffer_index] = r1 + r3;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

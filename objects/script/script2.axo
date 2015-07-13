@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="script2" sha="f790404ab422d73d7c5acc2b56f51f461283d3fc">
-      <sDescription>script with 2 inputs and 2 outputs, running in a separate thread, you must define &quot;void init(void){}&quot; and &quot;void loop(void)&quot;</sDescription>
+   <obj.normal id="script2" uuid="d39e743cf47c9221f4e99c133430148cf74c68c5" sha="362a4413ceaefbe716480bf8f9c62eb3587fe6c0">
+      <upgradeSha>4ff07e259d2eb13dc0829312e7ab0427616949aa</upgradeSha>
+      <sDescription>script with 2 inputs and 2 outputs, running in a separate thread, you must define &quot;void setup(void){}&quot; and &quot;void loop(void)&quot;</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>script.axh</helpPatch>
       <inlets>
          <frac32 name="in1_" description="in1"/>
          <frac32 name="in2_" description="in2"/>
@@ -18,7 +20,7 @@
       </attribs>
       <code.declaration><![CDATA[int32_t in1,in2;
 int32_t out1,out2;
-%script%
+attr_script
 msg_t ThreadX2(){
   setup();
   while(!chThdShouldTerminate()){
@@ -28,7 +30,7 @@ msg_t ThreadX2(){
   chThdExit((msg_t)0);
 }
 static msg_t ThreadX(void *arg) {
-((%parent% *)arg)->ThreadX2();
+((attr_parent *)arg)->ThreadX2();
 }
 WORKING_AREA(waThreadX, 1024);
 Thread *Thd;
@@ -40,10 +42,10 @@ Thread *Thd;
       <code.dispose><![CDATA[chThdTerminate(Thd);
 chThdWait(Thd);
 ]]></code.dispose>
-      <code.krate><![CDATA[%out1_% = this->out1;
-%out2_% = this->out2;
-this->in1 = %in1_%;
-this->in2 = %in2_%;
+      <code.krate><![CDATA[outlet_out1__ = this->out1;
+outlet_out2__ = this->out2;
+this->in1 = inlet_in1__;
+this->in2 = inlet_in2__;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

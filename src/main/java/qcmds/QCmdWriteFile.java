@@ -17,12 +17,12 @@
  */
 package qcmds;
 
-import axoloti.SerialConnection;
+import axoloti.Axoloti;
+import axoloti.Connection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import jssc.SerialPortException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,11 +54,12 @@ public class QCmdWriteFile implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(SerialConnection serialConnection) {
-        serialConnection.ClearSync();
+    public QCmd Do(Connection Connection) {
+        Connection.ClearSync();
         try {
             Thread.sleep(100);
-            File f = new File("patch/xpatch.bin");
+            String buildDir=System.getProperty(Axoloti.HOME_DIR)+"/build";;
+            File f = new File(buildDir + "/xpatch.bin");
             Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: " + f.getAbsolutePath());
             byte[] buffer = new byte[(int) f.length()];
             FileInputStream inputStream = new FileInputStream(f);
@@ -70,7 +71,7 @@ public class QCmdWriteFile implements QCmdSerialTask {
             data[1] = 'x';
             data[2] = 'o';
             data[3] = 'w';
-            int tvalue = 0x20010000; // not CCM : 
+            int tvalue = Connection.getTargetProfile().getPatchAddr();
             data[4] = (byte) tvalue;
             data[5] = (byte) (tvalue >> 8);
             data[6] = (byte) (tvalue >> 16);
@@ -98,11 +99,11 @@ public class QCmdWriteFile implements QCmdSerialTask {
                 filename[i] = 0;
             }
             Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "filename on SD: " + new String(filename));
-            serialConnection.ClearSync();
-            serialConnection.writeBytes(data);
-            serialConnection.writeBytes(filename);
-            serialConnection.writeBytes(buffer);
-            if (serialConnection.WaitSync()) {
+            Connection.ClearSync();
+            Connection.writeBytes(data);
+            Connection.writeBytes(filename);
+            Connection.writeBytes(buffer);
+            if (Connection.WaitSync()) {
                 return this;
             } else {
                 return new QCmdDisconnect();
@@ -112,8 +113,6 @@ public class QCmdWriteFile implements QCmdSerialTask {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SerialPortException ex) {
             Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new QCmdDisconnect();

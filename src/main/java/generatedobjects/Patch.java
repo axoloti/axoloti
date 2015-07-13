@@ -17,8 +17,8 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeInt32;
 import axoloti.attributedefinition.AxoAttributeObjRef;
+import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletBool32Rising;
@@ -28,6 +28,7 @@ import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectComment;
+import axoloti.object.AxoObjectHyperlink;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletFrac32;
@@ -54,6 +55,7 @@ public class Patch extends gentools {
         WriteAxoObject(catName, Create_outlet_tilde());
         WriteAxoObject(catName, CreatePreset());
         WriteAxoObject(catName, Create_comment());
+        WriteAxoObject(catName, Create_hyperlink());
         WriteAxoObject(catName, modsource_cc());
         WriteAxoObject(catName, modsource());
         WriteAxoObject(catName, Create_send());
@@ -184,11 +186,10 @@ public class Patch extends gentools {
 
     static AxoObject modsource_cc() {
         AxoObject o = new AxoObject("modsource_cc", "midi cc modulation source");
-        o.attributes.add(new AxoAttributeInt32("MidiCC", 0, 127, 0));
+        o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
         o.SetProvidesModulationSource();
-        //o.sInstanceData = "PExModulationTargets_t ;\n";
-        o.sMidiCode = "        if ((status == MIDI_CONTROL_CHANGE + %midichannel%)&&(data1 == %MidiCC%)) {\n"
-                + "            PExModulationSourceChange(&PExModulationSources[MODULATOR_%name%],data2<<20);\n"
+        o.sMidiCode = "        if ((status == MIDI_CONTROL_CHANGE + attr_midichannel)&&(data1 == %cc%)) {\n"
+                + "            PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name][0],NMODULATIONTARGETS,data2<<20);\n"
                 + "        }\n";
         return o;
     }
@@ -203,7 +204,7 @@ public class Patch extends gentools {
 //        o.sInitCode = "int i;\n"
 //                + "for(i=0;i<NMODULATIONTARGETS;i++)\n"
 //                + "   parent2->PExModulationSources[MODULATOR_%name%][i].PEx = 0;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PExModulationSourceChange(&parent2->PExModulationSources[MODULATOR_%name%][0],NMODULATIONTARGETS,%v%);  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name][0],NMODULATIONTARGETS,%v%);  ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -213,13 +214,18 @@ public class Patch extends gentools {
         return o;
     }
 
+    static AxoObjectAbstract Create_hyperlink() {
+        AxoObjectHyperlink o = new AxoObjectHyperlink("hyperlink", "hyperlink to a patch or a URL opened in your browser");
+        return o;
+    }    
+    
     static AxoObject CreatePreset() {
         AxoObject o = new AxoObject("preset", "apply preset, preset zero = init, and will reset ALL parameters, not just the presets");
         o.inlets.add(new InletInt32("preset", "preset number"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
         o.sInitCode = "ntrig = 0;\n";
-        o.sKRateCode = "   if ((%trig%>0) && !ntrig) {parent2->ApplyPreset(%preset%) ; ntrig=1;}\n"
+        o.sKRateCode = "   if ((%trig%>0) && !ntrig) {parent->ApplyPreset(%preset%) ; ntrig=1;}\n"
                 + "   else if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
@@ -238,14 +244,14 @@ public class Patch extends gentools {
     static AxoObject CreateInitMsg() {
         AxoObject o = new AxoObject("initmsg", "prints a message on patch init");
         o.attributes.add(new AxoAttributeTablename("message"));
-        o.sInitCode = "TransmitTextMessage(\"%message%\");\n";
+        o.sInitCode = "LogTextMessage(\"%message%\");\n";
         return o;
     }
 
     static AxoObject CreatePolyIndex() {
         AxoObject o = new AxoObject("polyindex", "Outputs the voice index number from 0 to n-1. Only works in a polyphonic sub-patch!");
         o.outlets.add(new OutletInt32Pos("index", "index from 0 to n-1"));
-        o.sKRateCode = "%index% = parent2->polyIndex;\n";
+        o.sKRateCode = "%index% = parent->polyIndex;\n";
         return o;
     }
 

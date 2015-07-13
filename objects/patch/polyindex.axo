@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="polyindex" sha="d4abd919262b0b2a913b0aeb4ddf2dd44a6e39af">
+   <obj.normal id="polyindex" uuid="edc730b5393c31d703572e0c0c88aaced643bd6" sha="499a6acc6df4a405a04b6ad8df8e7ab489ee5234">
+      <upgradeSha>9deec2552865f0258f501f9e572496353680f3df</upgradeSha>
       <sDescription>Outputs the voice index number from 0 to n-1. Only works in a polyphonic sub-patch!</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -10,7 +11,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%index% = parent2->polyIndex;
+      <code.krate><![CDATA[outlet_index = parent->polyIndex;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

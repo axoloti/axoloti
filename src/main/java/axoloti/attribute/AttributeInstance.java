@@ -19,6 +19,7 @@ package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
+import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -64,4 +65,8 @@ public abstract class AttributeInstance extends JPanel {
     public abstract String CValue();
 
     public abstract void CopyValueFrom(AttributeInstance a1);
+        
+    public String GetCName(){
+        return "attr_" + CharEscape(attributeName);
+    }
 }

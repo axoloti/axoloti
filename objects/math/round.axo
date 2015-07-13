@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="round" sha="3944e69389a11054c6d2a9beca3dd2d704aa5355">
+   <obj.normal id="round" uuid="d0382003e049112e1746390d691d052ae1294db" sha="ae71b04402abdbfa393ec69fcfae93d0c9330c5f">
+      <upgradeSha>3944e69389a11054c6d2a9beca3dd2d704aa5355</upgradeSha>
       <sDescription>round to whole unit with positive bias: 0.49 becomes 0, 0.51 becomes 1, -0.49 becomes 0</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>
@@ -12,12 +14,14 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%out%= (%in% + 0x100000)&0xFFE00000;]]></code.krate>
+      <code.krate><![CDATA[outlet_out= (inlet_in + 0x100000)&0xFFE00000;]]></code.krate>
    </obj.normal>
-   <obj.normal id="round" sha="fa2cb42646190db3c2b61b5b136b7d7815d92981">
+   <obj.normal id="round" uuid="b887de1c0450c5d34d42befb5a2fa7c9011f894d" sha="4ed9e0fdb844c68fa2e93199f9a566007f583d4b">
+      <upgradeSha>fa2cb42646190db3c2b61b5b136b7d7815d92981</upgradeSha>
       <sDescription>round to whole unit with positive bias: 0.49 becomes 0, 0.51 becomes 1, -0.49 becomes 0</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="in"/>
       </inlets>
@@ -27,6 +31,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[%out%= (%in% + 0x100000)&0xFFE00000;]]></code.srate>
+      <code.srate><![CDATA[outlet_out[buffer_index]= (inlet_in[buffer_index] + 0x100000)&0xFFE00000;]]></code.srate>
    </obj.normal>
 </objdefs>

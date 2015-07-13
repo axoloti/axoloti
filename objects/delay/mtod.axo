@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="mtod" sha="800732c561d801c8b0c245ce1c6cd2413cd0ff6">
+   <obj.normal id="mtod" uuid="968d0c6522ebf121f66d437147e97ef879b6657a" sha="a5ddc7f510203544461c0c35a362fa7664708926">
+      <upgradeSha>800732c561d801c8b0c245ce1c6cd2413cd0ff6</upgradeSha>
       <sDescription>Pitch (note index) to period time</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>delay.axh</helpPatch>
       <inlets>
          <frac32 name="pitchm" description="phase increment"/>
       </inlets>
@@ -18,8 +20,8 @@
       </params>
       <attribs/>
       <code.krate><![CDATA[   int32_t freq;
-   MTOF(0-%pitch% - %pitchm%,freq);
-   %delay% = freq;
+   MTOF(0-param_pitch - inlet_pitchm,freq);
+   outlet_delay = freq;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

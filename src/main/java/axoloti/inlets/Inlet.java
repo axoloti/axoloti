@@ -19,6 +19,7 @@ package axoloti.inlets;
 
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
+import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Attribute;
 
@@ -39,6 +40,10 @@ public abstract class Inlet {
     public Inlet(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public String GetCName() {
+        return "inlet_" + CharEscape.CharEscape(name);
     }
 
     public abstract DataType getDatatype();

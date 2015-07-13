@@ -17,11 +17,19 @@
  */
 package qcmds;
 
+import axoloti.Patch;
+
 /**
  *
  * @author Johannes Taelman
  */
 public class QCmdLock implements QCmdGUITask {
+
+    Patch p;
+
+    public QCmdLock(Patch p) {
+        this.p = p;
+    }
 
     @Override
     public String GetStartMessage() {
@@ -35,6 +43,7 @@ public class QCmdLock implements QCmdGUITask {
 
     @Override
     public void DoGUI(QCmdProcessor processor) {
-        processor.getPatch().Lock();
+        processor.SetPatch(p);
+        p.Lock();
     }
 }

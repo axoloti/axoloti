@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="alloc 32b sdram" sha="4487420212d1a826e25aa61cd5abdc0238ea3207">
+   <obj.normal id="alloc 32b sdram" uuid="1a4546b7b52747ea765093ac97444601c44721e8" sha="e3795b93aca7568798d8dc37dff1dad002ba684">
+      <upgradeSha>4487420212d1a826e25aa61cd5abdc0238ea3207</upgradeSha>
       <sDescription>allocate 32bit table in SDRAM memory</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
       <inlets/>
       <outlets/>
       <displays/>
@@ -58,9 +60,9 @@
          </combo>
          <text name="init"/>
       </attribs>
-      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = %size%;
-static const uint32_t LENGTH = 1<<%size%;
-static const uint32_t LENGTHMASK = (1<<%size%)-1;
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = attr_size;
+static const uint32_t LENGTH = 1<<attr_size;
+static const uint32_t LENGTHMASK = (1<<attr_size)-1;
 static const uint32_t BITS = 32;
 static const uint32_t GAIN = 0;
 int32_t *array;
@@ -71,6 +73,6 @@ array = _array;
   int i;
   for(i=0;i<LENGTH;i++) array[i]=0;
 }
-%init%]]></code.init>
+attr_init]]></code.init>
    </obj.normal>
 </objdefs>

@@ -17,6 +17,7 @@
  */
 package displays;
 
+import axoloti.datatypes. Int32;
 import java.security.MessageDigest;
 
 /**
@@ -48,4 +49,10 @@ public class DisplayVScale extends Display {
     public int getLength() {
         return 0;
     }
+    
+    @Override
+    public  Int32 getDatatype() {
+        return  Int32.d;
+    }    
+    
 }

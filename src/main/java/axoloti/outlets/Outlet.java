@@ -19,6 +19,7 @@ package axoloti.outlets;
 
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
+import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Attribute;
 
@@ -47,6 +48,10 @@ public class Outlet {
         this.description = description;
     }
 
+    public String GetCName() {
+        return "outlet_" + CharEscape.CharEscape(name);
+    }   
+    
     SignalMetaData GetSignalMetaData() {
         return SignalMetaData.none;
     }

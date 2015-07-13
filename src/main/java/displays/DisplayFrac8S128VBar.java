@@ -17,6 +17,7 @@
  */
 package displays;
 
+import axoloti.datatypes.Int8Ptr;
 import java.security.MessageDigest;
 
 /**
@@ -42,4 +43,9 @@ public class DisplayFrac8S128VBar extends Display {
         super.updateSHA(md);
         md.update("frac8.s.128.vbar".getBytes());
     }
+
+    @Override
+    public Int8Ptr getDatatype() {
+        return Int8Ptr.d;
+    }    
 }

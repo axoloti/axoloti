@@ -18,9 +18,12 @@
 package qcmds;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,7 +53,11 @@ public abstract class QCmdShellTask implements QCmd {
             try {
                 line = br.readLine();
                 while (line != null) {
-                    Logger.getLogger(QCmdCompilePatch.class.getName()).info(line);
+                    if (line.contains("error")) {
+                        Logger.getLogger(QCmdCompilePatch.class.getName()).severe(line);
+                    } else {
+                        Logger.getLogger(QCmdCompilePatch.class.getName()).info(line);
+                    }
                     line = br.readLine();
                 }
             } catch (IOException ex) {
@@ -59,11 +66,42 @@ public abstract class QCmdShellTask implements QCmd {
         }
     }
 
+    public String RuntimeDir() {
+        return System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
+    }
+
+    public String HomeDir() {
+        return System.getProperty(axoloti.Axoloti.HOME_DIR);
+    }
+            
+    public String ReleaseDir() {
+        return System.getProperty(axoloti.Axoloti.RELEASE_DIR);
+    }
+
+    public String[] GetEnv() {
+        ArrayList<String> list = new ArrayList<String>();
+        Map<String, String> env = System.getenv();
+        for (String v : env.keySet()) {
+            list.add((v + "=" + env.get(v)));
+        }
+        list.add((axoloti.Axoloti.RUNTIME_DIR + "=" + RuntimeDir()));
+        list.add((axoloti.Axoloti.HOME_DIR + "=" + HomeDir()));
+        list.add((axoloti.Axoloti.RELEASE_DIR + "=" + ReleaseDir()));
+
+        String vars[] = new String[list.size()];
+        list.toArray(vars);
+        return vars;
+    }
+
+    public File GetWorkingDir() {
+        return new File(HomeDir()+"/build");
+    }
+
     public QCmd Do(QCmdProcessor shellProcessor) {
         Runtime runtime = Runtime.getRuntime();
         try {
             Process p1;
-            p1 = runtime.exec(GetExec());
+            p1 = runtime.exec(GetExec(), GetEnv(), GetWorkingDir());
 
             Thread thd_out = new Thread(new StreamHandlerThread(shellProcessor, p1.getInputStream()));
             thd_out.start();

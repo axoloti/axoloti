@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="vcf2~" sha="b4d001f23c4d5ee213486b3db5bf68619f5e1664">
+   <obj.normal id="vcf2~" uuid="5a96008080c67f5356fe6d227e372bdcfef841dc" sha="186f72bb8ec8ef5d0a94e50f72b6e188947262a0">
+      <upgradeSha>b4d001f23c4d5ee213486b3db5bf68619f5e1664</upgradeSha>
       <sDescription>2-pole resonant low-pass filter (biquad), filter updated at k-rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="filter input"/>
          <frac32 name="pitchm" description="pitch modulation"/>
@@ -25,8 +27,8 @@
 ]]></code.init>
       <code.krate><![CDATA[  {
       int32_t freq;
-      MTOF(%pitch% + %pitchm%,freq);
-      f_filter_biquad_A(&fd,%in%,%out%,freq,INT_MAX - (__USAT(%resonance%,27)<<4));
+      MTOF(param_pitch + inlet_pitchm,freq);
+      f_filter_biquad_A(&fd,inlet_in,outlet_out,freq,INT_MAX - (__USAT(inlet_resonance,27)<<4));
    }
 ]]></code.krate>
    </obj.normal>

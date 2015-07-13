@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="clock" sha="13586a64672deab674298a2d8c8ad917b055c653">
+   <obj.normal id="clock" uuid="f1aa3a79d6de9bd6d38dc64c9d4bb5c9de4f4198" sha="1637298ca1893391b89d9c016c7ae76d752acf72">
+      <upgradeSha>13586a64672deab674298a2d8c8ad917b055c653</upgradeSha>
       <sDescription>Midi clock slave</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>midi_in.axh</helpPatch>
       <inlets/>
       <outlets>
          <bool32 name="active" description="Song is playing"/>
@@ -20,9 +22,9 @@ int32_t _pos_shadow;
 _pos = 0;
 _pos_shadow = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%active% = _active;
-%pos4ppq% = _pos/6;
-%pos24ppq% = _pos;
+      <code.krate><![CDATA[outlet_active = _active;
+outlet_pos4ppq = _pos/6;
+outlet_pos24ppq = _pos;
 ]]></code.krate>
       <code.midihandler><![CDATA[if (status == MIDI_TIMING_CLOCK) {
   _active = 1;

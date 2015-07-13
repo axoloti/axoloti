@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="samplehold~" sha="252bae103bd8e122a6fa41a92000c8c6abc39c7b">
+   <obj.normal id="samplehold~" uuid="6933f9725e8ce729efa0919e4612f45540ff7975" sha="44e27e8d4d1043ee5b7787b774903b749adc2fb8">
+      <upgradeSha>252bae103bd8e122a6fa41a92000c8c6abc39c7b</upgradeSha>
       <sDescription>high quality audio rate sample and hold using blit synthesis (bandwidth limited)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -33,18 +34,18 @@
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
     int i;
-    int i1 = %trig%[j]>>2;
+    int i1 = inlet_trig[j]>>2;
     if ((i1>0)&&!(i0>0)){   // dispatch
       nextvoice = (nextvoice+1)&(blepvoices-1);
       int32_t x = (i1<<6)/(i1-i0);
       oscp[nextvoice] = &blept[x];
-      int32_t val = (((64-x)*(%in%[j]>>2)) + (x*(in0>>2)))>>6;
+      int32_t val = (((64-x)*(inlet_in[j]>>2)) + (x*(in0>>2)))>>6;
       vgain[nextvoice] = (acc-val)<<2;
       acc = val;
     }
     int32_t sum=0;
     i0 = i1;
-    in0 = %in%[j];
+    in0 = inlet_in[j];
     for(i=0;i<blepvoices;i++){ // sample
       int16_t *t = oscp[i];
       sum =___SMMLA((16384-(*t))<<16,vgain[i],sum);
@@ -54,7 +55,7 @@
       }
       oscp[i]=t;
     }
-    %out%[j]=(sum+acc)<<1;
+    outlet_out[j]=(sum+acc)<<1;
   }]]></code.krate>
    </obj.normal>
 </objdefs>

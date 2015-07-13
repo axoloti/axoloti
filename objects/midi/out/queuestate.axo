@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="queuestate" sha="285ac1c9764f8f7b721aa750f5bd63f63e2578d5">
+   <obj.normal id="queuestate" uuid="5edd3da4dc80f7f5953c48fd63d9334dcfb72978" sha="693ab9660d3a13997f7881c1b75dee440c08cf76">
+      <upgradeSha>285ac1c9764f8f7b721aa750f5bd63f63e2578d5</upgradeSha>
       <sDescription>Gets the number of pending bytes in the midi output queue. Useful to prevent midi data flooding. Zero at rest.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>midi_out.axh</helpPatch>
       <inlets/>
       <outlets>
          <int32 name="length" description="number of pending bytes in queue"/>
@@ -23,7 +25,7 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.krate><![CDATA[%length% = MidiGetOutputBufferPending((midi_device_t) %device%);
+      <code.krate><![CDATA[outlet_length = MidiGetOutputBufferPending((midi_device_t) attr_device);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

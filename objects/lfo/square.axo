@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18">
+   <obj.normal id="square" uuid="fb76624a81ec92d244b83f94dedcd4c07935d848" sha="64e3fcac73a82e2f89ba9bba33b4829ec2eee3f3">
+      <upgradeSha>2619a1d94a07bf82a1e47e4e34485e9c4916cc18</upgradeSha>
       <sDescription>square wave LFO, boolean output, frequency input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>lfo.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation"/>
          <bool32.rising name="reset" description="reset phase"/>
@@ -25,16 +27,16 @@ uint32_t r;
    r = 1;
 ]]></code.init>
       <code.krate><![CDATA[   {
-      if (%reset% && r) {
+      if (inlet_reset && r) {
          Phase = 0;
          r = 0;
       } else {
-         if (!%reset%) r = 1;
+         if (!inlet_reset) r = 1;
          int32_t freq;
-         MTOFEXTENDED(%pitch% + %pitchm%,freq);
+         MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
          Phase += freq>>2;
       }
-      %wave%= (Phase>0)?1:0;
+      outlet_wave= (Phase>0)?1:0;
    }]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="square sync" sha="9d196dfa9e8b9f0e0b3ebc4162c12d61a696c13d">
+   <obj.normal id="square sync" uuid="13071cc54258a64ab6104f1dcd7131c733b94bbd" sha="90bde37a86483539a9b57457b7c124d52d3847fa">
+      <upgradeSha>9d196dfa9e8b9f0e0b3ebc4162c12d61a696c13d</upgradeSha>
       <sDescription>Bandwith limited square wave oscillator with sync input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>square sync.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
          <frac32buffer name="sync" description="sync input, resets oscillaotr phase on rising zero-crossing"/>
@@ -31,7 +33,7 @@
    i0 = 0;
 ]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
   int j;
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
@@ -40,7 +42,7 @@
     p = osc_p;
     osc_p = p+(freq<<1);
     int32_t sum=0;
-    int i1 = %sync%[j]>>2;
+    int i1 = inlet_sync[j]>>2;
     if ((i1>0)&&!(i0>0)){   // phase reset
       int32_t x = 64-((-i0<<6)/(i1-i0));
       osc_p = x * (freq>>6);
@@ -62,7 +64,7 @@
       oscp[i]=t;
     }
     sum -= ((((nextvoice+1)&1)<<1)-1)<<13;
-    %wave%[j]=sum<<13;
+    outlet_wave[j]=sum<<13;
   }]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -14,22 +14,25 @@
         </ul>
         If the object name does not start with "./" or "../"
         <ul>
-            <li>When opening a document, or pasting from the clipboard, the "SHA" 
+            <li>When opening a document, or pasting from the clipboard, the "UUID" 
                 hash stored in the document will be matched against objects 
-                pre-loaded from the path. The "SHA hash" of an object is unique
-                to the functional implementation of the object.
-                The pre-loaded object may have a different name, or changed 
+                pre-loaded from the path. The "UUID hash" of an object is unique
+                to the name, and inlets, outlets, parameters, attributes (name+type) of the object.
+                The loaded object may have a different name, or changed 
                 documentation, but since the functional implementation is the same, 
                 it is probably an update of naming or documentation of the object. 
-            <li>Objects in the search path
-            <li>Patches in the search path
+            <li>If no UUID match was found, the "SHA" will be matched against objects 
+                pre-loaded from the path. The "SHA hash" of an object is unique
+                to the functional implementation of the object.
+            <li>Objects in the search path by name
+            <li>Patches in the search path by name
         </ul>
         <h3>Memory map</h3>
         After startup, SRAM1 is remapped to 0x00000000. This boosts the performance when executing from SRAM1.
         <ul><li>0x20000000-0x20001FFF : vector table
             <li>0x20000200-0x2000BFFF : firmware reserved memory
-            <li>0x20010000-0x2001BFFF : patch memory (preferred area for execution)
-            <li>0x20010001 : patch init function entry point
+            <li>0x20011000-0x2001BFFF : patch memory (preferred area for execution)
+            <li>0x20011001 : patch init function entry point
             <li>0x10000000-0x1000DFFF : patch memory (CCM RAM, can't execute)
             <li>0x1000F000-0x1000FFFF : firmware reserved memory
             </ul>
@@ -39,7 +42,8 @@
             <li>Parameter data preparation in PEX callback function.
             <li>Biquad filter coefficient computation can be improved a lot!
             <li>The biquad filter itself also has room for improvement
-            <li>eliminating redundant fractional number rightshift+leftshift (needs extra inlet/outlet metadata)
+            <li>making better use of subtypes: an int32pos outlet connected to an int32pos inlet does not require checking for negative values of the 2nd object.
+            <li>eliminating redundant fractional number rightshift+leftshift (needs extra inlet/outlet metadata)                
         </ul>
 		</body>
 		</html>

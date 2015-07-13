@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="timeri" sha="f6edc4061aa094048a154923ccdb91523d72b489">
+   <obj.normal id="timeri" uuid="11c19ad8fb3f9451d29984ba5dc7ebf8c30cdbfd" sha="3e090800e36bf3269e257503c297e926491a54b">
+      <upgradeSha>f6edc4061aa094048a154923ccdb91523d72b489</upgradeSha>
       <sDescription>measures the time interval between a rising edge on the start input and a rising edge on the stop input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>timeri.axh</helpPatch>
       <inlets>
          <bool32.rising name="start" description="start trigger"/>
          <bool32.rising name="stop" description="stop trigger"/>
@@ -23,19 +25,19 @@ trigstop = 0;
 tlatch = 0;
 tc = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%start% > 0) && !trigstart) {
+      <code.krate><![CDATA[if ((inlet_start > 0) && !trigstart) {
   tc = 0;
   trigstart = 1;
-} else if (!(%start% > 0)) {
+} else if (!(inlet_start > 0)) {
     trigstart = 0;
 }
-if ((%stop% > 0) && !trigstop) {
+if ((inlet_stop > 0) && !trigstop) {
   tlatch = tc;
   trigstop = 1;
-} else if (!(%stop% > 0)) {
+} else if (!(inlet_stop > 0)) {
     trigstop = 0;
 }
-%t% = tlatch;
+outlet_t = tlatch;
 tc++;
 ]]></code.krate>
    </obj.normal>

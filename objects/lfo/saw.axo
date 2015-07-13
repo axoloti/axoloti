@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3">
+   <obj.normal id="saw" uuid="1dab096f1834d92fc669402f21dc15e951d977fe" sha="510d077f286569c82ec986345e0096b8597af1ff">
+      <upgradeSha>44413381d696d82ab57e28ec39239114e5e61ba3</upgradeSha>
       <sDescription>saw wave LFO, rising slope, pitch input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>lfo.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation"/>
          <bool32.rising name="reset" description="reset phase"/>
@@ -25,16 +27,16 @@ uint32_t r;
    r = 1;
 ]]></code.init>
       <code.krate><![CDATA[   {
-      if (%reset% && r) {
+      if (inlet_reset && r) {
          Phase = 0;
          r = 0;
       } else {
-         if (!%reset%) r = 1;
+         if (!inlet_reset) r = 1;
          int32_t freq;
-         MTOFEXTENDED(%pitch% + %pitchm%,freq);
+         MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
          Phase += freq>>2;
       }
-      %wave%= (Phase>>5);
+      outlet_wave= (Phase>>5);
    }]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="bin 8" sha="82fef7cec2f1a4397c10a079e2e9d1bc9b8aea29">
+   <obj.normal id="bin 8" uuid="dfc0a6e9d7e817cec64fd01f6972f64d897863a4" sha="14c4de669a7c18d36691535d2acf6e439a232033">
+      <upgradeSha>82fef7cec2f1a4397c10a079e2e9d1bc9b8aea29</upgradeSha>
       <sDescription>binary decoder</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic_decode.axh</helpPatch>
       <inlets>
          <int32 name="i1" description="input 1"/>
       </inlets>
@@ -20,15 +22,15 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%o0% = (%i1% & 0x01)?1:0;
-%o1% = (%i1% & 0x02)?1:0;
-%o2% = (%i1% & 0x04)?1:0;
-%o3% = (%i1% & 0x08)?1:0;
-%o4% = (%i1% & 0x10)?1:0;
-%o5% = (%i1% & 0x20)?1:0;
-%o6% = (%i1% & 0x40)?1:0;
-%o7% = (%i1% & 0x80)?1:0;
-%chain% = (%i1% >> 8);
+      <code.krate><![CDATA[outlet_o0 = (inlet_i1 & 0x01)?1:0;
+outlet_o1 = (inlet_i1 & 0x02)?1:0;
+outlet_o2 = (inlet_i1 & 0x04)?1:0;
+outlet_o3 = (inlet_i1 & 0x08)?1:0;
+outlet_o4 = (inlet_i1 & 0x10)?1:0;
+outlet_o5 = (inlet_i1 & 0x20)?1:0;
+outlet_o6 = (inlet_i1 & 0x40)?1:0;
+outlet_o7 = (inlet_i1 & 0x80)?1:0;
+outlet_chain = (inlet_i1 >> 8);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

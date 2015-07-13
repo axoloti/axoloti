@@ -30,6 +30,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
+@Deprecated
 public class TransitionManager {
 
     Transitions transitions;
@@ -87,11 +88,7 @@ public class TransitionManager {
         if (str == null) {
             return null;
         }
-        for (AxoObjectAbstract o : MainFrame.axoObjects.ObjectList) {
-            if ((o.getSHA()).equals(str.NewSha)) {
-                return o;
-            }
-        }
-        return null;
+        AxoObjectAbstract r = MainFrame.axoObjects.GetAxoObjectFromSHA(str.NewSha);
+        return r;
     }
 }

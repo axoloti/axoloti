@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="sel b 32 4t" sha="8a8b37a4f207b99d5f78e3a2d60ffe2708b9e2ca">
+   <obj.normal id="sel b 32 4t" uuid="56ba44d742713854f2a121da812c0262826d3279" sha="25f104e965d6fcbe642816fcb58606f294c092ec">
+      <upgradeSha>8a8b37a4f207b99d5f78e3a2d60ffe2708b9e2ca</upgradeSha>
       <sDescription>select one out of 32 booleans, chainable, 4 tracks</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -25,17 +26,17 @@
          <bin32 name="p4" noLabel="true"/>
       </params>
       <attribs/>
-      <code.krate><![CDATA[if ((%in%>=0)&&(%in%<32)) {   %o1%=%p1%&(1<<%in%);
-   %o2%=%p2%&(1<<%in%);
-   %o3%=%p3%&(1<<%in%);
-   %o4%=%p4%&(1<<%in%);
+      <code.krate><![CDATA[if ((inlet_in>=0)&&(inlet_in<32)) {   outlet_o1=param_p1&(1<<inlet_in);
+   outlet_o2=param_p2&(1<<inlet_in);
+   outlet_o3=param_p3&(1<<inlet_in);
+   outlet_o4=param_p4&(1<<inlet_in);
 } else {
-   %o1% = %def1%;
-   %o2% = %def2%;
-   %o3% = %def3%;
-   %o4% = %def4%;
+   outlet_o1 = inlet_def1;
+   outlet_o2 = inlet_def2;
+   outlet_o3 = inlet_def3;
+   outlet_o4 = inlet_def4;
 }
-%chain% = %in%-32;
+outlet_chain = inlet_in-32;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

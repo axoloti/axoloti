@@ -17,7 +17,7 @@
  */
 package axoloti.usb;
 
-import axoloti.utils.OSDetect;
+import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.usb4java.*;
@@ -28,9 +28,12 @@ import org.usb4java.*;
  */
 public class Usb {
 
-    static final short VID_STM = 0x0483;
-    static final short PID_STM_DFU = (short) 0xDF11;
-    static final short PID_STM_CDC = (short) 0x5740;
+    static final public short VID_STM = (short) 0x0483;
+    static final public short PID_STM_DFU = (short) 0xDF11;
+    static final public short PID_STM_CDC = (short) 0x5740;
+    static final public short PID_STM_STLINK = (short) 0x3748;
+    static final public short VID_AXOLOTI = (short) 0x16C0;
+    static final public short PID_AXOLOTI = (short) 0x0442;
 
     public Usb() {
     }
@@ -45,6 +48,16 @@ public class Usb {
                 throw new LibUsbException("Unable to initialize libusb.", result);
             }
         }
+    }
+
+    public static String DeviceToPath(Device device) {
+        ByteBuffer path = ByteBuffer.allocateDirect(10);
+        int n = LibUsb.getPortNumbers(device, path);
+        String paths = "";
+        for (int i = 0; i < n; i++) {
+            paths += ":" + path.get(i);
+        }
+        return paths;
     }
 
     public static void listDevices() {
@@ -79,7 +92,25 @@ public class Usb {
                                 Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  driver ok");
                                 LibUsb.close(handle);
                             }
+                        } else if (descriptor.idProduct() == PID_STM_STLINK) {
+                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* STM STLink");
+                            hasOne = true;
+                        } else {
+                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* other STM device:\n" + descriptor.dump());
+                            hasOne = true;
                         }
+                    } else if (descriptor.idVendor() == VID_AXOLOTI && descriptor.idProduct() == PID_AXOLOTI) {
+                        hasOne = true;
+                        DeviceHandle handle = new DeviceHandle();
+                        result = LibUsb.open(device, handle);
+                        if (result < 0) {
+                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* Axoloti USB device, but can't get access : "
+                                    + LibUsb.strError(result));
+                        } else {
+                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* Axoloti USB device, serial #" + LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber()));
+                            LibUsb.close(handle);
+                        }
+                        Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  location: " + DeviceToPath(device));
                     }
                 } else {
                     throw new LibUsbException("Unable to read device descriptor", result);
@@ -121,6 +152,7 @@ public class Usb {
                         switch (axoloti.utils.OSDetect.getOS()) {
                             case WIN:
                                 Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Please install the \"STM32 Bootloader WinUSB\" driver.");
+                                Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Launch Zadig (http://zadig.akeo.ie/) , open the configuration from platform_win\\zadig_conf_dfu.cfg and press \"install driver\"");
                                 break;
                             case LINUX:
                                 Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Probably need to add a udev rule.");

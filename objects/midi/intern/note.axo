@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="note" sha="8e06133dfab6e95b6290397e24947240b292f007">
+   <obj.normal id="note" uuid="8181e221d6ee6b2c63e7dbdbf20f69de43c232bf" sha="d022c88689d1ebc6f934ed82ffe8a9ca70a69159">
+      <upgradeSha>8e06133dfab6e95b6290397e24947240b292f007</upgradeSha>
       <sDescription>Midi note output. Sends to midi/in/* objects only.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -18,11 +19,11 @@
 int lastnote;]]></code.declaration>
       <code.init><![CDATA[ntrig=0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%trig%>0) && !ntrig) {
-lastnote = (64+(%note%>>21))&0x7F;
-PatchMidiInHandler(MIDI_DEVICE_INTERNAL,0,MIDI_NOTE_ON + (%channel%-1),lastnote,%velo%>>20);  ntrig=1;
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {
+lastnote = (64+(inlet_note>>21))&0x7F;
+PatchMidiInHandler(MIDI_DEVICE_INTERNAL,0,MIDI_NOTE_ON + (attr_channel-1),lastnote,inlet_velo>>20);  ntrig=1;
 }
-if (!(%trig%>0) && ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_OFF + (%channel%-1),lastnote,__USAT(%velo%>>20,7)); ntrig=0;}
+if (!(inlet_trig>0) && ntrig) {PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_OFF + (attr_channel-1),lastnote,__USAT(inlet_velo>>20,7)); ntrig=0;}
 ]]></code.krate>
    </obj.normal>
 </objdefs>

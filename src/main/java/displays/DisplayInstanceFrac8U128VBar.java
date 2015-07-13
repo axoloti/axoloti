@@ -45,13 +45,13 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance {
     public String GenerateCodeInit(String vprefix) {
         String s = "   int _i;\n"
                 + "   for(_i=0;_i<" + n + ";_i++)\n"
-                + "   " + valueName(vprefix) + "[_i] = 0;\n";
+                + "   " + GetCName()+ "[_i] = 0;\n";
         return s;
     }
 
     @Override
     public String valueName(String vprefix) {
-        return "((uint8_t *)&parent2->displayVector[" + offset + "])";
+        return "(int8_t *)(&displayVector[" + offset + "])";
     }
 
     byte dst[] = new byte[n];

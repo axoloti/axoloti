@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="saw sync" sha="4173669d858d9547874f581b85f4e60313401651">
+   <obj.normal id="saw sync" uuid="dd6b25fccf38b8b79f60879b472791f12959ddf4" sha="b5f448b77c335ba8e00a0479319ae6b4d3ee86a">
+      <upgradeSha>4173669d858d9547874f581b85f4e60313401651</upgradeSha>
       <sDescription>Bandwith limited saw wave oscillator with sync input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>saw sync.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
          <frac32buffer name="sync" description="sync input, resets oscillaotr phase on rising zero-crossing"/>
@@ -30,7 +32,7 @@
       oscp[j] = &blept[BLEPSIZE-1];   nextvoice = 0;  i0 = 0;
 ]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
   int j;
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
@@ -38,7 +40,7 @@
     int p;
     p = osc_p;
     osc_p = p+freq;
-    int i1 = %sync%[j]>>2;
+    int i1 = inlet_sync[j]>>2;
     if ((i1>0)&&!(i0>0)){   // phase reset
       nextvoice = (nextvoice+1)&(blepvoices-1);
       int32_t x = 64-((-i0<<6)/(i1-i0));
@@ -62,7 +64,7 @@
     }
     //sum = -sum;
     uint32_t g = osc_p;
-    %wave%[j]=(g>>5)+sum-(1<<26);
+    outlet_wave[j]=(g>>5)+sum-(1<<26);
   }]]></code.krate>
    </obj.normal>
 </objdefs>

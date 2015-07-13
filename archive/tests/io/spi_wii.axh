@@ -1,0 +1,128 @@
+<patch-1.0>
+   <comment type="patch/comment" name="Interface for the wii-mote camera (SPI version)" x="20" y="14"/>
+   <obj type="gpio/spi/config" sha="8491453740b6fc6b2fcf5de6e9eb65baa370f6e4" name="spi.begin_1" x="20" y="42">
+      <params/>
+      <attribs>
+         <combo attributeName="clock_polarity" selection="0 when idle"/>
+         <combo attributeName="clock_phase" selection="first clock transition is the first data capture edge"/>
+         <combo attributeName="baudrate" selection="FPCLK/64"/>
+         <combo attributeName="format" selection="LSB first"/>
+      </attribs>
+   </obj>
+   <comment type="patch/comment" name="PA5 = SCK" x="180" y="42"/>
+   <comment type="patch/comment" name="PA6 = MISO" x="180" y="56"/>
+   <comment type="patch/comment" name="PA7 = MOSI" x="180" y="70"/>
+   <comment type="patch/comment" name="PA4 = NSS" x="180" y="84"/>
+   <obj type="script/script2" sha="1478c410b77725959c034de4a2456dd1198e9080" name="script2_1" x="20" y="154">
+      <params/>
+      <attribs>
+         <text attributeName="script">
+            <sText><![CDATA[uint8_t *txbuf;
+uint8_t *rxbuf;
+
+void setup(void) {
+	// need DMA-able memory for SPI
+	static uint8_t _txbuf[32] __attribute__ ((section (".sram2")));
+	static uint8_t _rxbuf[32] __attribute__ ((section (".sram2")));
+	txbuf = _txbuf;
+	rxbuf = _rxbuf;
+	
+	txbuf[0] = 0x00;
+	txbuf[1] = 0x30;
+	txbuf[2] = 0x01;
+	spiSelect(&SPID1);
+	spiSend(&SPID1,3,txbuf);
+	spiUnselect(&SPID1);
+	chThdSleepMilliseconds(2);
+
+	txbuf[0] = 0x00;
+	txbuf[1] = 0x19;
+	txbuf[2] = 0x00;
+	spiSelect(&SPID1);
+	spiSend(&SPID1,3,txbuf);
+	spiUnselect(&SPID1);
+	chThdSleepMilliseconds(3);
+
+	txbuf[0] = 0x00;
+	txbuf[1] = 0x30;
+	txbuf[2] = 0x08;
+	spiSelect(&SPID1);
+	spiSend(&SPID1,3,txbuf);
+	spiUnselect(&SPID1);
+	chThdSleepMilliseconds(1);
+
+	txbuf[0] = 0x01;
+	txbuf[1] = 0x90;
+	txbuf[2] = 0x00;
+	txbuf[3] = 0x41;
+	spiSelect(&SPID1);
+	spiSend(&SPID1,4,txbuf);
+	spiUnselect(&SPID1);
+	chThdSleepMilliseconds(1);
+
+	txbuf[0] = 0x01;
+	txbuf[1] = 0x1A;
+	txbuf[2] = 0x40;
+	txbuf[3] = 0x00;
+	spiSelect(&SPID1);
+	spiSend(&SPID1,4,txbuf);
+	spiUnselect(&SPID1);
+	chThdSleepMilliseconds(1);
+
+	txbuf[0] = 0x00;
+	txbuf[1] = 0x33;
+	txbuf[2] = 0x33;
+	spiSelect(&SPID1);
+	spiSend(&SPID1,3,txbuf);
+	spiUnselect(&SPID1);
+	chThdSleepMilliseconds(1);
+}
+
+void loop(void){
+	txbuf[0] = 0x81;
+	txbuf[1] = 0x37;
+	spiSelect(&SPID1);
+	spiSend(&SPID1,2,txbuf);
+	spiReceive(&SPID1,18,&rxbuf[0]);
+	spiUnselect(&SPID1);
+	out1 = (rxbuf[0] + ((rxbuf[2] & 0x30) >> 4 << 8))<< 17;
+	out2 = (rxbuf[1] + (rxbuf[2] >> 6 << 8)) << 17;
+	//size = bytes[2] & 0x0f
+	chThdSleepMilliseconds(1);
+}]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="disp/hex" sha="3ce96bdfc9c7668d6dbdd8a7430d740e07a3f48e" name="disphex_1" x="168" y="154">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="308" y="154">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/hex" sha="3ce96bdfc9c7668d6dbdd8a7430d740e07a3f48e" name="disphex_2" x="168" y="210">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_2" x="308" y="266">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="script2_1 out1_"/>
+         <dest name="disphex_1 in"/>
+         <dest name="scopeU_1 in"/>
+      </net>
+      <net>
+         <source name="script2_1 out2_"/>
+         <dest name="disphex_2 in"/>
+         <dest name="scopeU_2 in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

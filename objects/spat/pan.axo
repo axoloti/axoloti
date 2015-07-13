@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="pan" sha="61607561a89b218b9fd29b12920af8063776899a">
+   <obj.normal id="pan" uuid="b19089c36d4fd0ce0932656c36fe5e6c531a7026" sha="381781114e4c431e5460c67784dfd40a12cf3260">
+      <upgradeSha>61607561a89b218b9fd29b12920af8063776899a</upgradeSha>
       <sDescription>stereo balance (panorama)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pan.axh</helpPatch>
       <inlets>
          <frac32 name="i1" description="input"/>
       </inlets>
@@ -18,12 +20,14 @@
          </frac32.s.map.ratio>
       </params>
       <attribs/>
-      <code.krate><![CDATA[%left% = ___SMMUL((1<<29)-(%c%<<2),%i1%)<<2;%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;]]></code.krate>
+      <code.krate><![CDATA[outlet_left = ___SMMUL((1<<29)-(param_c<<2),inlet_i1)<<2;outlet_right = ___SMMUL((1<<29)+(param_c<<2),inlet_i1)<<2;]]></code.krate>
    </obj.normal>
-   <obj.normal id="pan" sha="ae1048aeefcb0da9fc2ba40a0e6396e222807375">
+   <obj.normal id="pan" uuid="d2d291b66fd4487ac57ce44ae819db21c5aea43d" sha="114b25683474ff6ffc7d6eb782d270273539295b">
+      <upgradeSha>ae1048aeefcb0da9fc2ba40a0e6396e222807375</upgradeSha>
       <sDescription>stereo balance (panorama)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>pan.axh</helpPatch>
       <inlets>
          <frac32buffer name="i1" description="input"/>
       </inlets>
@@ -39,6 +43,6 @@
          </frac32.s.map.ratio>
       </params>
       <attribs/>
-      <code.srate><![CDATA[%left% = ___SMMUL((1<<29)-(%c%<<2),%i1%)<<2;%right% = ___SMMUL((1<<29)+(%c%<<2),%i1%)<<2;]]></code.srate>
+      <code.srate><![CDATA[outlet_left[buffer_index] = ___SMMUL((1<<29)-(param_c<<2),inlet_i1[buffer_index])<<2;outlet_right[buffer_index] = ___SMMUL((1<<29)+(param_c<<2),inlet_i1[buffer_index])<<2;]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -39,7 +39,7 @@ public abstract class ParameterInstanceFrac32S extends ParameterInstanceFrac32 {
 
     @Override
     double getMax() {
-        return 63.0;
+        return 64.0;
     }
 
     @Override

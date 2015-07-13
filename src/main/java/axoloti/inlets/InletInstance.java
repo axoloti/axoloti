@@ -24,7 +24,6 @@ import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.outlets.OutletInstance;
-import axoloti.utils.CharEscape;
 import components.JackInputComponent;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
@@ -76,7 +75,7 @@ public class InletInstance extends JPanel {
     NetDragging drag_net;
 
     public String GetCName() {
-        return "inlet_" + CharEscape.CharEscape(inlet.name);
+        return inlet.GetCName();
     }
 
     class DragGestureListImp implements DragGestureListener {

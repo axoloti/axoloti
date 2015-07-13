@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="inf" sha="3b7380de881bb6eafc05c60b35ae2351855d6c09">
+   <obj.normal id="inf" uuid="d12af924890d417179e6fdbcf71cb1ec3ba31f67" sha="8606d431d169b7fa50fa791b6b8004ea1b74307a">
+      <upgradeSha>3b7380de881bb6eafc05c60b35ae2351855d6c09</upgradeSha>
       <sDescription>Infinite gain, hard clipping. Algorithm: linear interpolated zero-crossing detector and blit synthesis</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>inf.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="audio input"/>
       </inlets>
@@ -27,7 +29,7 @@
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
     int i;
-    int i1 = %in%[j]>>2;
+    int i1 = inlet_in[j]>>2;
     int32_t sum=0;
     if ((i1>0)&&!(i0>0)){   // dispatch
       nextvoice = (nextvoice+1)&(blepvoices-1);
@@ -47,7 +49,7 @@
       oscp[i]=t;
     }
     sum -= ((((nextvoice+1)&1)<<1)-1)<<13;
-    %out%[j]=sum<<13;
+    outlet_out[j]=sum<<13;
   }]]></code.krate>
    </obj.normal>
 </objdefs>

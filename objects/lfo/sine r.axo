@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="sine r" sha="7b6e23eed2c3410327bbbfab9ad452431b5a33aa">
+   <obj.normal id="sine r" uuid="7ce3388f2e24a82acc178ad468dfd3afa8ea8013" sha="4af2d04eea5dcaad6ad38c52094a1524e8e5df72">
+      <upgradeSha>7b6e23eed2c3410327bbbfab9ad452431b5a33aa</upgradeSha>
       <sDescription>sine wave LFO, linear interpolated table, pitch input, reset input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>lfo.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitchm" description="pitch modulation"/>
          <bool32.rising name="reset" description="reset phase"/>
@@ -22,17 +24,17 @@
       <code.declaration><![CDATA[uint32_t Phase;uint32_t r;
 ]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
-      <code.krate><![CDATA[      if (%reset% && r) {
-         Phase = %phase% << 4;
+      <code.krate><![CDATA[      if (inlet_reset && r) {
+         Phase = inlet_phase << 4;
          r = 0;
       } else {
-         if (!%reset%) r = 1;
+         if (!inlet_reset) r = 1;
      }   {      int32_t freq;
-      MTOFEXTENDED(%pitch% + %pitchm%,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
       Phase += freq>>2;
       int32_t r;
       SINE2TINTERP(Phase,r)
-      %wave%= (r>>4);
+      outlet_wave= (r>>4);
    }]]></code.krate>
    </obj.normal>
 </objdefs>

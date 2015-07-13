@@ -1,10 +1,12 @@
 <objdefs>
-   <obj.normal id="ibar 32" sha="ead6df8e4b78ecbd27266d7289e314f6d7bc119f">
+   <obj.normal id="ibar 32" uuid="8ec034ef194146b746e2c4c1ec30350f4157d51a" sha="8c8e9ddc57cfac53c815ab10ff03897cb4c3df44">
+      <upgradeSha>ead6df8e4b78ecbd27266d7289e314f6d7bc119f</upgradeSha>
       <sDescription>display integer bar</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>disp.axh</helpPatch>
       <inlets>
-         <int32 class="axoloti.inlets.InletInt32Pos" name="in" description="input"/>
+         <int32.positive name="in" description="input"/>
       </inlets>
       <outlets>
          <int32.positive name="chain_out" description="chain output"/>
@@ -14,8 +16,8 @@
       </displays>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%v%=%in%;
-%chain_out% = %in%-32;
+      <code.krate><![CDATA[disp_v=inlet_in;
+outlet_chain__out = inlet_in-32;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

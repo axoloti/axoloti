@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -20,12 +20,13 @@
 
 #include "ch.h"
 
-extern void sdcardInit(void);
-extern void SDLoadPatch(char *fname);
-void sdAttemptMountIfUnmounted(void);
+void sdcard_init(void);
+void sdcard_loadPatch(char *fname);
+void sdcard_attemptMountIfUnmounted(void);
+void sdcard_unmount(void);
 
-extern void cmd_sdiotest(BaseSequentialStream *chp, int argc, char *argv[]);
-extern void cmd_tree(BaseSequentialStream *chp, int argc, char *argv[]);
+void cmd_sdiotest(BaseSequentialStream *chp, int argc, char *argv[]);
+void cmd_tree(BaseSequentialStream *chp, int argc, char *argv[]);
 
 //extern FATFS SDC_FS;
 extern bool_t fs_ready;

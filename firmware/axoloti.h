@@ -29,6 +29,7 @@
 #include "ui.h"
 #include "midi.h"
 #include "sdcard.h"
+#include "sysmon.h"
 
 void axoloti_init(void);
 
@@ -38,5 +39,4 @@ extern void ADAU1961_I2CStart();
 extern void ADAU1961_I2CStop();
 void LogTextMessage(const char* format, ...);
 
-extern SerialUSBDriver SDU1;
 #endif

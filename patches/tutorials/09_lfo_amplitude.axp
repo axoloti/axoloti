@@ -1,10 +1,10 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="One low frequency oscillator to modulate the amplitude of an oscillator" x="28" y="14"/>
+   <comment type="patch/comment" name="One low frequency oscillator to modulate the amplitude of an oscillator" x="28" y="14"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="28" y="56">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="again, use the piano keyboard to play!" x="182" y="56"/>
+   <comment type="patch/comment" name="again, use the piano keyboard to play!" x="182" y="56"/>
    <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd_1" x="560" y="84">
       <params>
          <frac32.u.map name="a" value="26.0"/>
@@ -12,12 +12,12 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="c32 = half range of a fractional" x="392" y="140"/>
+   <comment type="patch/comment" name="c32 = half range of a fractional" x="392" y="140"/>
    <obj type="math/c 32" sha="5797bce9fc4e770d9c14890b0fa899f126c5bc38" name="c321" x="392" y="154">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="this is the LFO" x="182" y="168"/>
+   <comment type="patch/comment" name="this is the LFO" x="182" y="168"/>
    <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="182" y="196">
       <params>
          <frac32.s.map name="pitch" value="1.0"/>
@@ -38,7 +38,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="lfo intensity" x="406" y="294"/>
+   <comment type="patch/comment" name="lfo intensity" x="406" y="294"/>
    <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="140" y="364">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>

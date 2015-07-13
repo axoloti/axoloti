@@ -42,7 +42,7 @@ struct KeyValuePair *KvpsDisplay;
 struct KeyValuePair *ObjectKvpRoot;
 #define MAXOBJECTS 256
 struct KeyValuePair *ObjectKvps[MAXOBJECTS];
-#define MAXTMPMENUITEMS 16
+#define MAXTMPMENUITEMS 15
 KeyValuePair_s TmpMenuKvps[MAXTMPMENUITEMS];
 KeyValuePair_s ADCkvps[3];
 
@@ -297,7 +297,7 @@ void EnterMenuLoadFile(void) {
   char str[20] = "0:";
   strcat(str, F->keyname);
 
-  SDLoadPatch(str);
+  sdcard_loadPatch(str);
 }
 
 void EnterMenuLoad(void) {
@@ -398,7 +398,7 @@ static msg_t ThreadUI(void *arg) {
     UIPollButtons2();
     UIUpdateLCD();
 #endif
-    chThdSleepMilliseconds(10);
+    chThdSleepMilliseconds(2);
   }
   return (msg_t)0;
 }

@@ -1,0 +1,60 @@
+<patch-1.0>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="40" y="60">
+      <params>
+         <frac32.s.map name="pitch" value="-16.3468095399979"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter1" x="240" y="60">
+      <params>
+         <int32 name="maximum" value="9"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1" x="400" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="divremc" sha="a9507fb906b40fc4885ac66c9e4b34b840e8164d" name="divremc1" x="400" y="140">
+      <params/>
+      <attribs>
+         <spinner attributeName="denominator" value="3"/>
+      </attribs>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1_" x="560" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="divremc" sha="a9507fb906b40fc4885ac66c9e4b34b840e8164d" name="divremc1_" x="400" y="240">
+      <params/>
+      <attribs>
+         <spinner attributeName="denominator" value="4"/>
+      </attribs>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1__" x="560" y="240">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" name="cfr. figure Figure 10.28 in the book Designing Sound by Andy Farnell" x="40" y="20"/>
+   <nets>
+      <net>
+         <source name="square1 wave"/>
+         <dest name="counter1 trig"/>
+      </net>
+      <net>
+         <source name="counter1 o"/>
+         <dest name="dispI1 in"/>
+         <dest name="divremc1 a"/>
+         <dest name="divremc1_ a"/>
+      </net>
+      <net>
+         <source name="divremc1 rem"/>
+         <dest name="dispI1_ in"/>
+      </net>
+      <net>
+         <source name="divremc1_ rem"/>
+         <dest name="dispI1__ in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

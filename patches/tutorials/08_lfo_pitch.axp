@@ -1,12 +1,12 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="One low frequency oscillator to modulate the pitch of an oscillator" x="14" y="14"/>
+   <comment type="patch/comment" name="One low frequency oscillator to modulate the pitch of an oscillator" x="14" y="14"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="again, use the piano keyboard to play!" x="182" y="42"/>
-   <comment type="patch/comment" sha="sha" name="this is the LFO &quot;Low Frequency Oscillator&quot;" x="14" y="168"/>
-   <comment type="patch/comment" sha="sha" name="scaling the intensity of the lfo to +-x semitones" x="238" y="168"/>
+   <comment type="patch/comment" name="again, use the piano keyboard to play!" x="182" y="42"/>
+   <comment type="patch/comment" name="this is the LFO &quot;Low Frequency Oscillator&quot;" x="14" y="168"/>
+   <comment type="patch/comment" name="scaling the intensity of the lfo to +-x semitones" x="238" y="168"/>
    <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="210">
       <params>
          <frac32.s.map name="pitch" value="-4.0"/>

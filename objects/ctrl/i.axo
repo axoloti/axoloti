@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="i" sha="f379e2b7efb6169f8e7327be5b09362609656408">
+   <obj.normal id="i" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a">
+      <upgradeSha>f379e2b7efb6169f8e7327be5b09362609656408</upgradeSha>
       <sDescription>positive integer control</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>ctrl.axh</helpPatch>
       <inlets/>
       <outlets>
          <int32.positive name="out" description="output"/>
@@ -15,7 +17,7 @@
          </int32>
       </params>
       <attribs/>
-      <code.krate><![CDATA[%out%= %value%;
+      <code.krate><![CDATA[outlet_out= param_value;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

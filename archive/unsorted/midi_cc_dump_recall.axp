@@ -1,0 +1,199 @@
+<patch-1.0>
+   <obj type="ramtable8" sha="16dc5f80ca3889cc98392d3e77ce5ed128140c96" name="value" x="40" y="20">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="128"/>
+         <text attributeName="init">
+            <sText><![CDATA[]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="ramtable8" sha="16dc5f80ca3889cc98392d3e77ce5ed128140c96" name="used" x="140" y="20">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="128"/>
+         <text attributeName="init">
+            <sText><![CDATA[]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="ctlin_any" sha="2fc001475dfa43bb0bcd0b21f2bfed92adb317e9" name="ctlin_any_1" x="40" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="tabwrite" sha="6c540bc6aaf58e7aab3db05909e12a2793437182" name="tabwrite_1" x="180" y="120">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="value"/>
+      </attribs>
+   </obj>
+   <obj type="c1" sha="ea3f53ea316f208a3ff2da087adce60e5e319c91" name="c1_1" x="340" y="120">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="tabwrite" sha="6c540bc6aaf58e7aab3db05909e12a2793437182" name="tabwrite_2" x="380" y="120">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="used"/>
+      </attribs>
+   </obj>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="280" y="240">
+      <params>
+         <frac32.s.map name="pitch" value="63.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="comment" name="initiate a recall" x="40" y="320"/>
+   <obj type="cb1m" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="cb1m_1" x="40" y="340">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="flipflop" sha="628e0943cc67719faff47fcfe4c3caf52958287e" name="flipflop_1" x="120" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="inmux2" sha="138891901c8849485b260a487f3b0fc188f6bae2" name="inmux2_1" x="200" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="toInt" sha="248c17c1d1ebcc84ad89a0291737026dc8c0343d" name="toInt_1" x="280" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="latch" sha="6b75d9b8a5bb2dff725df2beb52d112d68a61e7a" name="latch_1" x="340" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="+1" sha="4fe729a7a54d99c1d63a2bdb85652b2031c32726" name="+1_1" x="420" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="change" sha="2473451a71c0ec362331c67ef644bc59197a247d" name="change_1" x="520" y="340">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="tabread" sha="60c3903f63efbc54f6a7fc46fba768257603f5f1" name="tabread_1" x="600" y="340">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="value"/>
+      </attribs>
+   </obj>
+   <obj type="tabread" sha="60c3903f63efbc54f6a7fc46fba768257603f5f1" name="tabread_2" x="600" y="400">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="used"/>
+      </attribs>
+   </obj>
+   <obj type="and2" sha="1938611ef1b57af3c7b1965081b17bf8e194d9a6" name="and2_1" x="720" y="400">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctlout_any" sha="b59ebc4c1e3ff9b67f72c4b46d071251fc7bd89c" name="ctlout_any_1" x="840" y="400">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c64" sha="69b493f3d94607d38df5ab951d27622bec162349" name="c64_1" x="280" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="double" sha="147c4e9ea8ef434bd2a959cddc03995ae3e2d314" name="double_1" x="320" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="&gt;" sha="2ca219d058543958cc56c30fee1066860b90e0ed" name="&gt;_1" x="380" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI_1" x="520" y="440">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="ctlin_any_1 value"/>
+         <dest name="tabwrite_1 v"/>
+         <dest name="tabwrite_2 v"/>
+      </net>
+      <net>
+         <source name="ctlin_any_1 cc"/>
+         <dest name="tabwrite_1 a"/>
+         <dest name="tabwrite_2 a"/>
+      </net>
+      <net>
+         <source name="ctlin_any_1 trig"/>
+         <dest name="tabwrite_1 trig"/>
+      </net>
+      <net>
+         <source name="c1_1 o"/>
+         <dest name="tabwrite_2 trig"/>
+      </net>
+      <net>
+         <source name="latch_1 o"/>
+         <dest name="+1_1 a"/>
+      </net>
+      <net>
+         <source name="+1_1 result"/>
+         <dest name="&gt;_1 in1"/>
+         <dest name="change_1 in"/>
+         <dest name="tabread_1 a"/>
+         <dest name="tabread_2 a"/>
+         <dest name="ctlout_any_1 cc"/>
+         <dest name="inmux2_1 i2"/>
+         <dest name="dispI_1 in"/>
+      </net>
+      <net>
+         <source name="square_1 wave"/>
+         <dest name="latch_1 trig"/>
+      </net>
+      <net>
+         <source name="c64_1 o"/>
+         <dest name="double_1 in"/>
+      </net>
+      <net>
+         <source name="double_1 out"/>
+         <dest name="&gt;_1 in2"/>
+      </net>
+      <net>
+         <source name="cb1m_1 o"/>
+         <dest name="flipflop_1 set"/>
+      </net>
+      <net>
+         <source name="flipflop_1 o"/>
+         <dest name="inmux2_1 s"/>
+      </net>
+      <net>
+         <source name="&gt;_1 out"/>
+         <dest name="flipflop_1 reset"/>
+      </net>
+      <net>
+         <source name="change_1 trig"/>
+         <dest name="and2_1 i1"/>
+      </net>
+      <net>
+         <source name="tabread_2 o"/>
+         <dest name="and2_1 i2"/>
+      </net>
+      <net>
+         <source name="tabread_1 o"/>
+         <dest name="ctlout_any_1 v"/>
+      </net>
+      <net>
+         <source name="and2_1 o"/>
+         <dest name="ctlout_any_1 trig"/>
+      </net>
+      <net>
+         <source name="toInt_1 o"/>
+         <dest name="latch_1 i"/>
+      </net>
+      <net>
+         <source name="inmux2_1 o"/>
+         <dest name="toInt_1 i"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

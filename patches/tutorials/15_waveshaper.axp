@@ -1,10 +1,10 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="waveshaper: time domain tranfert function" x="42" y="14"/>
-   <comment type="patch/comment" sha="sha" name="adds harmonics to the spectrum" x="84" y="28"/>
-   <comment type="patch/comment" sha="sha" name="(but also aliases!)" x="126" y="42"/>
-   <comment type="patch/comment" sha="sha" name="arctan-like function = &quot;soft saturation&quot;" x="42" y="84"/>
-   <comment type="patch/comment" sha="sha" name="hard clipping: gritty distortion" x="294" y="84"/>
-   <comment type="patch/comment" sha="sha" name="asymetric: generates even harmonics" x="532" y="84"/>
+   <comment type="patch/comment" name="waveshaper: time domain tranfert function" x="42" y="14"/>
+   <comment type="patch/comment" name="adds harmonics to the spectrum" x="84" y="28"/>
+   <comment type="patch/comment" name="(but also aliases!)" x="126" y="42"/>
+   <comment type="patch/comment" name="arctan-like function = &quot;soft saturation&quot;" x="42" y="84"/>
+   <comment type="patch/comment" name="hard clipping: gritty distortion" x="294" y="84"/>
+   <comment type="patch/comment" name="asymetric: generates even harmonics" x="532" y="84"/>
    <obj type="table/allocate 32b 16sliders" sha="2227408087d0108a79d19893c9bcca8343f9f004" name="softsat" x="42" y="112">
       <params>
          <frac32.s.mapvsl name="b0" value="-64.0"/>
@@ -68,24 +68,24 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="test signal selection" x="42" y="308"/>
+   <comment type="patch/comment" name="test signal selection" x="42" y="308"/>
    <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_1" x="0" y="322">
       <params>
          <int32.vradio name="value" value="1"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="0 - audio sample" x="98" y="322"/>
-   <comment type="patch/comment" sha="sha" name="1 - sine wave" x="98" y="336"/>
-   <comment type="patch/comment" sha="sha" name="2 - sawtooth wave" x="98" y="350"/>
-   <comment type="patch/comment" sha="sha" name="3 - noise" x="98" y="364"/>
+   <comment type="patch/comment" name="0 - audio sample" x="98" y="322"/>
+   <comment type="patch/comment" name="1 - sine wave" x="98" y="336"/>
+   <comment type="patch/comment" name="2 - sawtooth wave" x="98" y="350"/>
+   <comment type="patch/comment" name="3 - noise" x="98" y="364"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="14" y="434">
       <params>
          <frac32.s.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="test_signal_generator" sha="2af293afd36a93c8daba4e925f9e0e2fc3bb2d76" name="test_signal_generator1" x="126" y="434">
+   <obj type="test_signal_generator" name="test_signal_generator1" x="126" y="434">
       <params/>
       <attribs/>
    </obj>
@@ -105,16 +105,16 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" sha="sha" name="0:original" x="714" y="490"/>
+   <comment type="patch/comment" name="0:original" x="714" y="490"/>
    <obj type="table/read interp" sha="b0519acd115f068f0851ae0be434a57888454c06" name="tabread21_" x="420" y="504">
       <params/>
       <attribs>
          <objref attributeName="table" obj="hardsat"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" sha="sha" name="1:softsat" x="714" y="504"/>
-   <comment type="patch/comment" sha="sha" name="2:hardsat" x="714" y="518"/>
-   <comment type="patch/comment" sha="sha" name="3: asymmetric" x="714" y="532"/>
+   <comment type="patch/comment" name="1:softsat" x="714" y="504"/>
+   <comment type="patch/comment" name="2:hardsat" x="714" y="518"/>
+   <comment type="patch/comment" name="3: asymmetric" x="714" y="532"/>
    <obj type="table/read interp" sha="b0519acd115f068f0851ae0be434a57888454c06" name="tabread21__" x="420" y="574">
       <params/>
       <attribs>
@@ -131,7 +131,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_11" x="770" y="574">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_11" x="840" y="574">
       <params/>
       <attribs/>
    </obj>
@@ -185,4 +185,10 @@
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1080</width>
+      <height>884</height>
+   </windowPos>
 </patch-1.0>

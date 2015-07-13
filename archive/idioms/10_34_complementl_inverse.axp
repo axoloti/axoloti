@@ -1,0 +1,44 @@
+<patch-1.0>
+   <comment type="comment" name="complement : y = 64 - x" x="40" y="60"/>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="100">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="inv" sha="7b02dcb8eae6c8e1f4f1f9f532ad6cd7f0d9a69" name="inv1" x="160" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="+" sha="81c2c147faf13ae4c2d00419326d0b6aec478b27" name="+c1" x="240" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayS1" x="400" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="c64" sha="69b493f3d94607d38df5ab951d27622bec162349" name="c641" x="200" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="inv1 in"/>
+      </net>
+      <net>
+         <source name="+c1 out"/>
+         <dest name="displayS1 in"/>
+      </net>
+      <net>
+         <source name="inv1 out"/>
+         <dest name="+c1 in1"/>
+      </net>
+      <net>
+         <source name="c641 o"/>
+         <dest name="+c1 in2"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

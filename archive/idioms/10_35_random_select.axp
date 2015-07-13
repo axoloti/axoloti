@@ -1,0 +1,120 @@
+<patch-1.0>
+   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="40" y="40">
+      <params>
+         <frac32.s.map name="pitch" value="-16.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="randtrigi" sha="23641b880e3d60cb2e41e6ce78ffd8b2afd3ed8b" name="randtrigi1" x="240" y="40">
+      <params>
+         <int32 name="max" value="4"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="decode_int" sha="69af9c80b214387a1a7210934e1cbb8536964d4d" name="decode_int1" x="360" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1" x="520" y="40">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1_" x="520" y="100">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispI" sha="f181c855026fdce66f3c38cd8c5438343d6f0869" name="dispI1" x="280" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1__" x="520" y="160">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="dispb" sha="dbe010de4c0550687a72792c4584e4c4964751a6" name="dispb1___" x="520" y="220">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" name="the inmux objects are useful to selecting one value" x="200" y="240"/>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="80" y="260">
+      <params>
+         <frac32.u.map name="value" value="10.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="80" y="340">
+      <params>
+         <frac32.u.map name="value" value="31.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="80" y="420">
+      <params>
+         <frac32.u.map name="value" value="51.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="80" y="500">
+      <params>
+         <frac32.u.map name="value" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="inmux4" sha="9d022cee360f678571f1b1f0523f50c7b22d7539" name="inmux41" x="360" y="500">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="480" y="500">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source name="square1 wave"/>
+         <dest name="randtrigi1 trig"/>
+      </net>
+      <net>
+         <source name="randtrigi1 v"/>
+         <dest name="decode_int1 i1"/>
+         <dest name="dispI1 in"/>
+         <dest name="inmux41 s"/>
+      </net>
+      <net>
+         <source name="decode_int1 o0"/>
+         <dest name="dispb1 in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o1"/>
+         <dest name="dispb1_ in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o2"/>
+         <dest name="dispb1__ in"/>
+      </net>
+      <net>
+         <source name="decode_int1 o3"/>
+         <dest name="dispb1___ in"/>
+      </net>
+      <net>
+         <source name="c1 out"/>
+         <dest name="inmux41 i0"/>
+      </net>
+      <net>
+         <source name="c2 out"/>
+         <dest name="inmux41 i1"/>
+      </net>
+      <net>
+         <source name="c3 out"/>
+         <dest name="inmux41 i2"/>
+      </net>
+      <net>
+         <source name="c4 out"/>
+         <dest name="inmux41 i3"/>
+      </net>
+      <net>
+         <source name="inmux41 o"/>
+         <dest name="displayU1 in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>

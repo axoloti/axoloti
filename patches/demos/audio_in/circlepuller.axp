@@ -13,7 +13,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="patch/modsource" sha="fdb6777505be0746768fb7e222fb1389c1e96554" name="amp" x="308" y="28">
+   <obj type="patch/modsource" sha="7c62ac4dc64da3f882068c7a4a4b5860cba293bf" name="amp" x="308" y="28">
       <params/>
       <attribs/>
    </obj>
@@ -27,12 +27,10 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="compressor1" sha="9f76c732bed341ac4e3552c980b9c8882754fa49" name="compressor1_1" x="616" y="42">
+   <obj type="dyn/comp" sha="cda5bd26e9fc97319943991cca7cf2da17496790" uuid="2d62720d6a597c586936be74ebb1e1c449772636" name="comp_1" x="630" y="42">
       <params>
-         <frac32.u.map name="comp_1:tresh" value="1.049999713897705"/>
-         <frac32.u.map name="comp_1:ratio" value="28.299999713897705"/>
-         <frac32.u.map name="smooth2_1:risetime" value="0.0"/>
-         <frac32.u.map name="smooth2_1:falltime" value="1.5"/>
+         <frac32.u.map name="tresh" value="49.0"/>
+         <frac32.u.map name="ratio" value="3.0"/>
       </params>
       <attribs/>
    </obj>
@@ -154,10 +152,10 @@
    <nets>
       <net>
          <source name="in_1 wave"/>
-         <dest name="compressor1_1 in"/>
          <dest name="*c_2 in"/>
          <dest name="soft_1 in"/>
          <dest name="follower_1 in"/>
+         <dest name="comp_1 in"/>
       </net>
       <net>
          <source name="fdn4_1 out1"/>
@@ -166,12 +164,6 @@
       <net>
          <source name="mix_2 out"/>
          <dest name="out_1 left"/>
-      </net>
-      <net>
-         <source name="compressor1_1 cv"/>
-         <dest name="vca_1 v"/>
-         <dest name="chart_1 in"/>
-         <dest name="vca_2 v"/>
       </net>
       <net>
          <source name="mix_1 out"/>
@@ -255,9 +247,21 @@
          <source name="muls_3 out"/>
          <dest name="amp v"/>
       </net>
+      <net>
+         <source name="comp_1 out"/>
+         <dest name="chart_1 in"/>
+         <dest name="vca_2 v"/>
+         <dest name="vca_1 v"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1374</width>
+      <height>800</height>
+   </windowPos>
 </patch-1.0>

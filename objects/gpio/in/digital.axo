@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="digital" sha="ba19c07c1187a5920be1049cfb56e9518a722c82">
+   <obj.normal id="digital" uuid="f59f139e8da912742832dc541157f20f30b7ac1b" sha="90fc95d938b6230073e230ead488ad0c23936425">
+      <upgradeSha>ba19c07c1187a5920be1049cfb56e9518a722c82</upgradeSha>
       <sDescription>Reads a digital input pin. 3.3V logic maximum!</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -69,7 +70,7 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.init><![CDATA[   palSetPadMode(%pad%,%mode%);]]></code.init>
-      <code.krate><![CDATA[%out%= palReadPad(%pad%)<<27;]]></code.krate>
+      <code.init><![CDATA[   palSetPadMode(attr_pad,attr_mode);]]></code.init>
+      <code.krate><![CDATA[outlet_out= palReadPad(attr_pad)<<27;]]></code.krate>
    </obj.normal>
 </objdefs>

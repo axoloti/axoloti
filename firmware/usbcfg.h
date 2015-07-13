@@ -17,8 +17,26 @@
 #ifndef _USBCFG_H_
 #define _USBCFG_H_
 
+#include "bulk_usb.h"
+#include "midi_usb.h"
+
+
+/*
+ * Endpoints to be used for USBD1.
+ */
+#define USBD1_DATA_REQUEST_EP           1
+#define USBD1_DATA_AVAILABLE_EP         1
+#define USBD2_DATA_REQUEST_EP           2
+#define USBD2_DATA_AVAILABLE_EP         2
+
+
+extern MidiUSBDriver MDU1;
+extern BulkUSBDriver BDU1;
+
 extern const USBConfig usbcfg;
-extern SerialUSBConfig serusbcfg;
+extern const MidiUSBConfig midiusbcfg;
+extern const BulkUSBConfig bulkusbcfg;
+
 
 #endif  /* _USBCFG_H_ */
 

@@ -1,7 +1,13 @@
 #!/bin/sh
 set -e
 platformdir="$(dirname $(readlink -f $0))"
-cd ${platformdir}/../firmware
+
+export axoloti_release=${axoloti_release:="$platformdir/.."}
+export axoloti_runtime=${axoloti_runtime:="$platformdir/.."}
+export axoloti_firmware=${axoloti_firmware:="$axoloti_release/firmware"}
+export axoloti_home=${axoloti_home:="$rootdir"}
+
+cd ${axoloti_firmware}
 if [ ! -d "build" ]; 
 then
     mkdir "build"
@@ -16,7 +22,7 @@ then
 fi
 echo "Compiling firmware..."
 make
-cd ${platformdir}/../firmware/flasher
+cd ${axoloti_firmware}/flasher
 if [ ! -d "flasher_build" ]; 
 then
     mkdir "flasher_build"

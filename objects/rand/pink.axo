@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="pink" sha="8adc4b3e5aae39c856d02171f3d0b04aeec9625e">
+   <obj.normal id="pink" uuid="d51c4125e968e7c5fb2d54b71478ac2a3d73e935" sha="6e284ae52fd0822fb45b544ca219c8742f207b52">
+      <upgradeSha>8adc4b3e5aae39c856d02171f3d0b04aeec9625e</upgradeSha>
       <sDescription>Cheap almost pink noise over 7 octaves. Range -64..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -41,7 +42,7 @@ if (o==-1){
    sum += obuf[o];
 }
 seed = (seed * 196314165) + 907633515;
-%out% = sum + (((int32_t)seed)>>7);
+outlet_out = sum + (((int32_t)seed)>>7);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

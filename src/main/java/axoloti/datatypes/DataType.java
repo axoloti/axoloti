@@ -38,4 +38,6 @@ public interface DataType {
     abstract Color GetColor();
 
     abstract String GenerateCopyCode(String dest, String source);
+ 
+    abstract boolean isPointer();
 }

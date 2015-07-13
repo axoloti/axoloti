@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="write" sha="c573b27a5ebc2efb2d1e8ec173ff4793a2acbae2">
+   <obj.normal id="write" uuid="bd73958e3830021807ee97a8cff4500a72a5710d" sha="75c89209af7b4f021e7712f87afff1bc8e7ad7ba">
+      <upgradeSha>c573b27a5ebc2efb2d1e8ec173ff4793a2acbae2</upgradeSha>
       <sDescription>delayline definition, read with delread~</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>delay.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="wave input"/>
       </inlets>
@@ -33,17 +35,17 @@
             </CEntries>
          </combo>
       </attribs>
-      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (%size%);
-static const uint32_t LENGTH = (1<<%size%);
-static const uint32_t LENGTHMASK = ((1<<%size%)-1);
-int16_t array[1<<%size%];
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (attr_size);
+static const uint32_t LENGTH = (1<<attr_size);
+static const uint32_t LENGTHMASK = ((1<<attr_size)-1);
+int16_t array[1<<attr_size];
 uint32_t writepos;]]></code.declaration>
       <code.init><![CDATA[   int i;
    writepos = 0;
    for(i=0;i<LENGTH;i++) array[i] = 0;
 ]]></code.init>
       <code.srate><![CDATA[  writepos = (writepos + 1)&LENGTHMASK;
-   array[writepos] = __SSAT(%in%>>14,16);
+   array[writepos] = __SSAT(inlet_in[buffer_index]>>14,16);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

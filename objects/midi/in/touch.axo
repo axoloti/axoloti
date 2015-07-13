@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="touch" sha="cb01f331517bc8be44bcf77add271dab64bb90df">
+   <obj.normal id="touch" uuid="7e3a4d718388f6d5213accadf5a80121a7c35cc9" sha="19f5c78f0104c14d673160c3fee210c96ce3b62a">
+      <upgradeSha>cb01f331517bc8be44bcf77add271dab64bb90df</upgradeSha>
       <sDescription>Midi channel pressure input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>midi_in.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32.positive name="o" description="channel pressure, 0..64"/>
@@ -17,11 +19,11 @@ int32_t ntrig;
       <code.init><![CDATA[_press = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%o% = _press;
-%trig% = ntrig;
+      <code.krate><![CDATA[outlet_o = _press;
+outlet_trig = ntrig;
 ntrig = 0;
 ]]></code.krate>
-      <code.midihandler><![CDATA[if (status == MIDI_CHANNEL_PRESSURE + %midichannel%) {  _press = (data1)<<20;
+      <code.midihandler><![CDATA[if (status == MIDI_CHANNEL_PRESSURE + attr_midichannel) {  _press = (data1)<<20;
   ntrig = 1;
 }]]></code.midihandler>
    </obj.normal>

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="mix 1 g" sha="ec225c4c1654f63bb20bd68f6a91cfb1dce2cc3a">
+   <obj.normal id="mix 1 g" uuid="2065eeca525a4691f1bc08a7dc5468871de651b7" sha="8da53cae124061a6d56c67fe1f11b0656428c0af">
+      <upgradeSha>ec225c4c1654f63bb20bd68f6a91cfb1dce2cc3a</upgradeSha>
       <sDescription>1 input k-rate mixer, shows gain units</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -18,11 +19,12 @@
          </frac32.u.map.gain>
       </params>
       <attribs/>
-      <code.krate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
-   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+      <code.krate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
+   outlet_out=  __SSAT(inlet_bus__in + (accum<<1),28);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mix 1 g" sha="9837ebd6f7c0b2b3853ea475d91c943144e2273b">
+   <obj.normal id="mix 1 g" uuid="e6982841c1bf323ee2062a4b6cc2737adafbd668" sha="e733e12d69da5e518bea20ed13e247f91979c2b7">
+      <upgradeSha>9837ebd6f7c0b2b3853ea475d91c943144e2273b</upgradeSha>
       <sDescription>1 input s-rate mixer, shows gain units</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -41,8 +43,8 @@
          </frac32.u.map.gain>
       </params>
       <attribs/>
-      <code.srate><![CDATA[   int32_t accum = ___SMMUL(%in1%,%gain1%);
-   %out%=  __SSAT(%bus_in% + (accum<<1),28);
+      <code.srate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1[buffer_index],param_gain1);
+   outlet_out[buffer_index]=  __SSAT(inlet_bus__in[buffer_index] + (accum<<1),28);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

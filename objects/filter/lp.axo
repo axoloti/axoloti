@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="lp" sha="219ae48267404fac1e204a0ae6f3f1363e789297">
+   <obj.normal id="lp" uuid="1427779cf086ab83c8b03eeeac69c2a97759c651" sha="f08f8ceddfd25d03290d4164aa7884cd7257e242">
+      <upgradeSha>219ae48267404fac1e204a0ae6f3f1363e789297</upgradeSha>
       <sDescription>2-pole resonant low-pass filter (biquad)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="filter input"/>
       </inlets>
@@ -26,9 +28,9 @@
       <code.init><![CDATA[biquad_clearstate(&bs);
 ]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOF(%pitch%,freq);
-      biquad_lp_coefs(&bc,freq,INT_MAX - (__USAT(%reso%,27)<<4));
-      biquad_dsp(&bs,&bc,%in%,%out%);
+      MTOF(param_pitch,freq);
+      biquad_lp_coefs(&bc,freq,INT_MAX - (__USAT(param_reso,27)<<4));
+      biquad_dsp(&bs,&bc,inlet_in,outlet_out);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

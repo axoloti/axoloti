@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="rectifier" sha="6a81663bcc6a29c922883f499193baff3d14c5d">
+   <obj.normal id="rectifier" uuid="a994d72e4491dedd2655b7a06a4a3f38fcca68d2" sha="dd59319d5d9fb8412e8bc1ce69ec96277160cf0c">
+      <upgradeSha>6a81663bcc6a29c922883f499193baff3d14c5d</upgradeSha>
       <sDescription>half-wave rectifier distortion, bandlimited</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -35,7 +36,7 @@
   const int16_t *lastblep = &blt[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
     int i;
-    int in0 = %in%[j]>>2;
+    int in0 = inlet_in[j]>>2;
     int32_t sum = 0;
     if ((in0>0)&&(in1<0)){   // dispatch
 	// rising
@@ -61,7 +62,7 @@
       if (t>=lastblep) t=lastblep;
       oscp[i]=t;
     }
-    %out%[j]=sum<<2;
+    outlet_out[j]=sum<<2;
   }
 ]]></code.krate>
    </obj.normal>

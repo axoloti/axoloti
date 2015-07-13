@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="cc any" sha="201486c62456f4efcc982c8ed99e2392fc23d9da">
+   <obj.normal id="cc any" uuid="eca13eae3f7625f3ca80cadd19a90de033698aa" sha="88e6864841adb4e9427b1f7eea602d08d2721db5">
+      <upgradeSha>201486c62456f4efcc982c8ed99e2392fc23d9da</upgradeSha>
       <sDescription>Receives Midi Continuous Controller messages from any CC number and channel.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>midi_in.axh</helpPatch>
       <inlets/>
       <outlets>
          <frac32.positive name="value" description="midi CC value 0..63.5"/>
@@ -23,10 +25,10 @@ _channel = 1;
 _value = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[%value%= _value;
-%cc% = _cc;
-%channel% = _channel;
-%trig% = ntrig;
+      <code.krate><![CDATA[outlet_value= _value;
+outlet_cc = _cc;
+outlet_channel = _channel;
+outlet_trig = ntrig;
 ntrig = 0;
 ]]></code.krate>
       <code.midihandler><![CDATA[if ((status&0xF0) == MIDI_CONTROL_CHANGE) {

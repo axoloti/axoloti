@@ -76,19 +76,19 @@ static __INL msg_t ThreadSD(void *arg) {
         busy = 1;
       }
       else if (s->pingpong == OPENREC) {
-        TransmitTextMessage("rec : opening");
+        LogTextMessage("rec : opening");
         err = f_open(&s->f, &s->filename[0], FA_WRITE | FA_CREATE_ALWAYS);
-        if (err!=0) TransmitTextMessage("rec : open fail");
+        if (err!=0) LogTextMessage("rec : open fail");
         err = f_lseek(&s->f, PRE_SIZE);
-        if (err!=0) TransmitTextMessage("rec : seek1 fail");
+        if (err!=0) LogTextMessage("rec : seek1 fail");
         err = f_lseek(&s->f, 0);
-        if (err!=0) TransmitTextMessage("rec : seek2 fail");
+        if (err!=0) LogTextMessage("rec : seek2 fail");
         s->offset = 0;
         chSysDisable();
         if (s->pingpong != CLOSING)
           s->pingpong = RECB;
         chSysEnable();
-        TransmitTextMessage("rec : open ok");
+        LogTextMessage("rec : open ok");
         busy = 1;
       }
       if (s->pingpong == CLOSING) {
@@ -101,7 +101,7 @@ static __INL msg_t ThreadSD(void *arg) {
         s->pingpong = CLOSED;
         err = f_truncate(&s->f);
         err = f_close(&s->f);
-        TransmitTextMessage("closerec");
+        LogTextMessage("closerec");
         busy = 1;
       }
       else if (s->doSeek && (s->pingpong != CLOSED)) {
@@ -188,7 +188,7 @@ static __INL msg_t ThreadSD(void *arg) {
   if (s->pingpong != CLOSED) {
     err = f_close(&s->f);
   }
-//  TransmitTextMessage("streamer thread : terminated");
+//  LogTextMessage("streamer thread : terminated");
 
 
   return (msg_t)0;

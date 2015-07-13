@@ -31,9 +31,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuOpenActionPerformed"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenuOpenExample">
+            <Menu class="javax.swing.JMenu" name="jMenuLibrary">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Open example"/>
+                <Property name="text" type="java.lang.String" value="Library"/>
               </Properties>
             </Menu>
             <Menu class="axoloti.menus.RecentFileMenu" name="recentFileMenu1">
@@ -114,7 +114,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSelectCom">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Select serial port"/>
+                <Property name="text" type="java.lang.String" value="Select device..."/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemSelectComActionPerformed"/>
@@ -199,16 +199,16 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRefreshFWIDActionPerformed"/>
                   </Events>
                 </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashDefault">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Flash with default"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFlashDefaultActionPerformed"/>
+                  </Events>
+                </MenuItem>
               </SubComponents>
             </Menu>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemListUSB">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="List USB Devices"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemListUSBActionPerformed"/>
-              </Events>
-            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuWindow">
@@ -238,10 +238,18 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuAbout">
               <Properties>
-                <Property name="text" type="java.lang.String" value="About..."/>
+                <Property name="text" type="java.lang.String" value="About"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuAboutActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuCommunity">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Community Website"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuCommunityActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>

@@ -85,7 +85,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString {
     @Override
     public String CValue() {
         String o = objName;
-        String o2 = "parent2->";
+        String o2 = "parent->";
         if ((axoObj.patch.getSettings().subpatchmode == SubPatchMode.polyphonic)
                 || (axoObj.patch.getSettings().subpatchmode == SubPatchMode.polychannel)
                 || (axoObj.patch.getSettings().subpatchmode == SubPatchMode.polyexpression) 
@@ -93,7 +93,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString {
             o2 = o2 + "common->";
         }
         while ((o.length() > 3) && (o.substring(0, 3).equals("../"))) {
-            o2 = o2 + "parent2->";
+            o2 = o2 + "parent->";
             o = o.substring(3);
         }
         o2 = o2 + "instance" + CharEscape.CharEscape(o) + "_i";

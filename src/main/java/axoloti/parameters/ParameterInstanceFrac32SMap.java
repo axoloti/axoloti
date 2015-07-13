@@ -42,7 +42,7 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap {
 
     @Override
     double getMax() {
-        return 63.0;
+        return 64.0;
     }
 
     @Override
@@ -82,9 +82,9 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap {
                     continue;
                 }
                 int modulation_index = mod.Modulations.indexOf(m);
-                s += "  parent2->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].PEx = &" + PExName(vprefix) + ";\n";
-                s += "  parent2->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].amount = " + m.getValue().getRaw() + ";\n";
-                s += "  parent2->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].prod = 0;\n";
+                s += "  parent->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].PEx = &" + PExName(vprefix) + ";\n";
+                s += "  parent->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].amount = " + m.getValue().getRaw() + ";\n";
+                s += "  parent->PExModulationSources[" + mod.getCName() + "][" + modulation_index + "].prod = 0;\n";
             }
         }
         return s;
@@ -92,6 +92,6 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap {
 
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, "(data2-64)<<21");
+        return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
     }
 }

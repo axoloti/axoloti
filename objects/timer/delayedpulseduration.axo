@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="delayedpulseduration" sha="1d15da5cfdebb5ff85c4f5b6f10a220ac63b551c">
+   <obj.normal id="delayedpulseduration" uuid="ee2a4160c03a63ccc2072941b72cf2b1dc2f09f7" sha="bee9a8cd54bbabc10f13b44aad51b51fcc5aa167">
+      <upgradeSha>1d15da5cfdebb5ff85c4f5b6f10a220ac63b551c</upgradeSha>
       <sDescription>Generates a pulse with a duration after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>timer.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
@@ -27,26 +29,26 @@ int ntrig;
       <code.init><![CDATA[val = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%trig% > 0) && !ntrig) {
+      <code.krate><![CDATA[if ((inlet_trig > 0) && !ntrig) {
   val = 1 << 30;
   ntrig = 1;
-  %pulse% = 0;
+  outlet_pulse = 0;
 }
 else {
-  if (!(%trig% > 0))
+  if (!(inlet_trig > 0))
     ntrig = 0;
   if (val>0) {
-     val -= %delay% >> 4;
+     val -= param_delay >> 4;
      if (val<=0) {
-         %pulse% = 1;
+         outlet_pulse = 1;
          val = -1 << 30;
-     } else %pulse% = 0;
+     } else outlet_pulse = 0;
   } else if (val<0) {
-     val += %pulselength% >> 4;
-     if (val>=0) {         %pulse% = 0;
+     val += param_pulselength >> 4;
+     if (val>=0) {         outlet_pulse = 0;
          val = 0;
-     } else %pulse% = 1;
-  } else %pulse% = 0;
+     } else outlet_pulse = 1;
+  } else outlet_pulse = 0;
 }
 ]]></code.krate>
    </obj.normal>

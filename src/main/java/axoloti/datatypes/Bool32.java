@@ -90,4 +90,9 @@ public class Bool32 implements DataType {
         int hash = 7;
         return hash;
     }
+
+    @Override
+    public boolean isPointer() {
+        return false;
+    }
 }

@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="bufferindex" sha="63d69b410a3dd33249815b5b2a3138b579149f8c">
+   <obj.normal id="bufferindex" uuid="cd2ee6af5aef97137d4314bcdf79be8ad32bac10" sha="70fa19affff2672e08fc0fac6498ecb1194e6132">
+      <upgradeSha>63d69b410a3dd33249815b5b2a3138b579149f8c</upgradeSha>
       <sDescription>outputs a constant buffer containing [0,4,8,12,...].</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,7 +13,7 @@
       <attribs/>
       <code.krate><![CDATA[int i;
 for(i=0;i<BUFSIZE;i++)
-  %out%[i] = i<<23;
+  outlet_out[i] = i<<23;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

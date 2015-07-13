@@ -21,6 +21,7 @@
 #include "midi.h"
 #include "serial_midi.h"
 #include "usbh_midi_core.h"
+#include "midi_usb.h"
 #include "patch.h"
 
 
@@ -36,6 +37,10 @@ void MidiSend1(midi_device_t dev, uint8_t   port, uint8_t b0) {
         }
         case MIDI_DEVICE_INTERNAL: {
             MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, 0, 0);
+            break;
+        }
+        case MIDI_DEVICE_USB_DEVICE: {
+            midi_usb_MidiSend1(port, b0);
             break;
         }
         default: {
@@ -58,6 +63,10 @@ void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1) {
             MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, b1, 0);
             break;
         }
+        case MIDI_DEVICE_USB_DEVICE: {
+            midi_usb_MidiSend2(port, b0, b1);
+            break;
+        }
         default: {
             // nop
         }
@@ -76,6 +85,10 @@ void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t 
         }
         case MIDI_DEVICE_INTERNAL: {
             MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, b1, b2);
+            break;
+        }
+        case MIDI_DEVICE_USB_DEVICE: {
+            midi_usb_MidiSend3(port, b0, b1, b2);
             break;
         }
         default: {

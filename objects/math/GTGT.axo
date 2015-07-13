@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="&gt;&gt;" sha="cb8ad22bdd2b29d57d63c4540cf5fe2c9b4ce21d">
+   <obj.normal id="&gt;&gt;" uuid="d883beaf50b7aae4803ed9941e8f123e87e1e3aa" sha="79ac9605aac7bf23c0eba17a4a6d8b179ea37f34">
+      <upgradeSha>cb8ad22bdd2b29d57d63c4540cf5fe2c9b4ce21d</upgradeSha>
       <sDescription>attenuates a k-rate signal with &quot;shift&quot; times 6dB</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32 name="a" description="a"/>
       </inlets>
@@ -14,12 +16,14 @@
       <attribs>
          <spinner name="shift" MinValue="0" MaxValue="31" DefaultValue="1"/>
       </attribs>
-      <code.krate><![CDATA[%result%= %a% >> %shift%;]]></code.krate>
+      <code.krate><![CDATA[outlet_result= inlet_a >> attr_shift;]]></code.krate>
    </obj.normal>
-   <obj.normal id="&gt;&gt;" sha="d41e14ea0466939c31478842f4b0d0401cbd7bf5">
+   <obj.normal id="&gt;&gt;" uuid="5d748ad90476b3ecc3970cde6622af97cf3cf4ac" sha="db4badac4cbcbd9b5bc000995cbf3b2de71e6856">
+      <upgradeSha>d41e14ea0466939c31478842f4b0d0401cbd7bf5</upgradeSha>
       <sDescription>attenuates a s-rate signal with &quot;shift&quot; times 6dB</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>math.axh</helpPatch>
       <inlets>
          <frac32buffer name="a" description="a"/>
       </inlets>
@@ -31,6 +35,6 @@
       <attribs>
          <spinner name="shift" MinValue="0" MaxValue="31" DefaultValue="1"/>
       </attribs>
-      <code.srate><![CDATA[%result%= %a% >> %shift%;]]></code.srate>
+      <code.srate><![CDATA[outlet_result[buffer_index]= inlet_a[buffer_index] >> attr_shift;]]></code.srate>
    </obj.normal>
 </objdefs>

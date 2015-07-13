@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="change" sha="2473451a71c0ec362331c67ef644bc59197a247d">
+   <obj.normal id="change" uuid="96e39ae624c3f3c952cec4a95e1986ee0104f718" sha="837ce58b607d311bf1cf34a4ace8f7c43c5699c9">
+      <upgradeSha>2473451a71c0ec362331c67ef644bc59197a247d</upgradeSha>
       <sDescription>Generates a trigger pulse when current input value is different from previous value.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>change.axh</helpPatch>
       <inlets>
          <int32 name="in" description="in"/>
       </inlets>
@@ -18,20 +20,22 @@
       <code.init><![CDATA[ptrig = 0;
 pval = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((pval != %in%)&(!ptrig)) { 
-  %trig% = 1;
-  pval = %in%;
+      <code.krate><![CDATA[if ((pval != inlet_in)&(!ptrig)) { 
+  outlet_trig = 1;
+  pval = inlet_in;
   ptrig = 1;
 } else {
   ptrig = 0;
-  %trig% = 0;
+  outlet_trig = 0;
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="change" sha="f80233f48404b59940f740ca338756232392f909">
+   <obj.normal id="change" uuid="42071f8cb4cfe1f35956c0bd5a313a57e049bec4" sha="31f9f39b8a82231a3534fbcf7b4dd65416f283e">
+      <upgradeSha>f80233f48404b59940f740ca338756232392f909</upgradeSha>
       <sDescription>Generates a trigger pulse when current input value is different from previous value.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>change.axh</helpPatch>
       <inlets>
          <frac32 name="in" description="in"/>
       </inlets>
@@ -47,13 +51,13 @@ pval = 0;
       <code.init><![CDATA[ptrig = 0;
 pval = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((pval != %in%)&(!ptrig)) { 
-  %trig% = 1;
-  pval = %in%;
+      <code.krate><![CDATA[if ((pval != inlet_in)&(!ptrig)) { 
+  outlet_trig = 1;
+  pval = inlet_in;
   ptrig = 1;
 } else {
   ptrig = 0;
-  %trig% = 0;
+  outlet_trig = 0;
 }
 ]]></code.krate>
    </obj.normal>

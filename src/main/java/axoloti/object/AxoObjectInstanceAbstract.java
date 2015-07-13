@@ -37,6 +37,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -60,6 +62,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public String typeName;
     @Attribute(name = "sha", required = false)
     public String typeSHA;
+    @Attribute(name = "uuid", required = false)
+    public String typeUUID;
     @Attribute(name = "name")
     private String InstanceName;
     @Attribute
@@ -67,11 +71,12 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     @Attribute
     int y;
     public Patch patch;
-    private AxoObjectAbstract type;
+    AxoObjectAbstract type;
     boolean dragging = false;
     int dX, dY;
     private boolean Selected = false;
     private boolean Locked = false;
+    private boolean typeWasAmbiguous = false;
     JPanel Titlebar;
     TextFieldComponent InstanceNameTF;
     LabelComponent InstanceLabel;
@@ -86,7 +91,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         if (type.createdFromRelativePath && (patch1 != null)) {
             String pPath = patch1.getFileNamePath();
             String oPath = type.sPath;
-            if (oPath.endsWith(".axp") || oPath.endsWith(".axo")) {
+
+            if (oPath.endsWith(".axp") || oPath.endsWith(".axo") || oPath.endsWith(".axs")) {
                 oPath = oPath.substring(0, oPath.length() - 4);
             }
             pPath = pPath.replaceAll("\\\\", "/");
@@ -118,6 +124,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         }
 
         typeSHA = type.getSHA();
+        typeUUID = type.getUUID();
         this.InstanceName = InstanceName1;
         this.x = location.x;
         this.y = location.y;
@@ -160,10 +167,21 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     }
 
     public AxoObjectAbstract getType() {
+        return type;
+    }
+
+    public AxoObjectAbstract resolveType() {
         if (type != null) {
             return type;
         }
-        if (typeSHA != null) {
+        if (typeUUID != null) {
+            type = MainFrame.axoObjects.GetAxoObjectFromUUID(typeUUID);
+            if (type != null) {
+                System.out.println("restored from UUID:" + type.id);
+                typeName = type.id;
+            }
+        }
+        if ((type == null) && (typeSHA != null)) {
             type = MainFrame.axoObjects.GetAxoObjectFromSHA(typeSHA);
             if (type != null) {
                 System.out.println("restored from SHA:" + type.id);
@@ -174,9 +192,16 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             ArrayList<AxoObjectAbstract> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, patch.GetCurrentWorkingDirectory());
             if (types == null) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name " + typeName + " not found");
-                //throw new UnsupportedOperationException("Axo object name " + typeName + " not found");
-            } else {
+            } else { // pick first
+                if (types.size() > 1) {
+                    typeWasAmbiguous = true;
+                }
                 type = types.get(0);
+                if (type instanceof AxoObjectUnloaded) {
+                    AxoObjectUnloaded aou = (AxoObjectUnloaded) type;
+                    type = aou.Load();
+                    return (AxoObject) type;
+                }
                 typeSHA = type.getSHA();
             }
         }
@@ -202,7 +227,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         Titlebar.setMaximumSize(TitleBarMaximumSize);
         setBorder(BorderFactory.createLineBorder(Color.WHITE));
         setOpaque(true);
-        getType();
+        resolveType();
         setVisible(true);
 //        revalidate();
 
@@ -223,7 +248,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                         }
                     }
                     if (me.getClickCount() == 2) {
-                        ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceAbstract.this.getLocation(), AxoObjectInstanceAbstract.this);
+                        ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceAbstract.this.getLocation(), AxoObjectInstanceAbstract.this, null);
                     }
                 }
             }
@@ -375,6 +400,25 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             public void focusGained(FocusEvent e) {
             }
         });
+        InstanceNameTF.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent ke) {
+            }
+
+            public void keyReleased(KeyEvent ke) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent ke) {
+                if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String s = InstanceNameTF.getText();
+                    setInstanceName(s);
+                    getParent().remove(InstanceNameTF);
+                    patch.repaint();
+                }
+            }
+        });
+
         getParent().add(InstanceNameTF, 0);
         InstanceNameTF.setLocation(getLocation().x, getLocation().y + InstanceLabel.getLocation().y);
         InstanceNameTF.setSize(getWidth(), 15);

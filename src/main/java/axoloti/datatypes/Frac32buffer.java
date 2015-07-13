@@ -97,4 +97,9 @@ public class Frac32buffer extends DataTypeBuffer {
         int hash = 3;
         return hash;
     }
+    
+    @Override
+    public boolean isPointer() {
+        return false;
+    }    
 }

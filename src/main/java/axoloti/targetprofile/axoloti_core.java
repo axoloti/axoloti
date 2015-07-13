@@ -25,7 +25,7 @@ public class axoloti_core {
 
     public int getPatchAddr() {
         // SRAM1 - must match with ramlink.ld
-        return 0x20010000;
+        return 0x20011000;
     }
 
     public int getSDRAMAddr() {

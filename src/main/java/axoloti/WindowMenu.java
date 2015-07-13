@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -36,6 +36,7 @@ public class WindowMenu {
         public void actionPerformed(ActionEvent e) {
             JFrame frame = ((WindowMenuItem) e.getSource()).getFrame();
             frame.setVisible(true);
+            frame.setState(java.awt.Frame.NORMAL);
             frame.toFront();
         }
     }

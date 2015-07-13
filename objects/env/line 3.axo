@@ -1,14 +1,16 @@
 <objdefs>
-   <obj.normal id="line 3" sha="e6cbf938b711e442cc85489d0dcc7fdfd8ea3584">
-      <sDescription>Three piecewise linear ramps</sDescription>
+   <obj.normal id="line 3" uuid="2ef3c9b4af30c9e78e4e0ecaba15e172aaba9398" sha="a79a080b6a30e999acb3fafb398ba930a5e7f435">
+      <upgradeSha>8ced4c2fc64a1447d0b6cf0fe39e9eef560a3935</upgradeSha>
+      <sDescription>Three piecewise linear ramps, extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>env.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
       <outlets>
-         <frac32.positive name="out" description="output" SumBuffer="false"/>
-         <int32.positive name="phase" description="phase index" SumBuffer="false"/>
+         <frac32.positive name="out" description="output"/>
+         <int32.positive name="phase" description="phase index"/>
       </outlets>
       <displays/>
       <params>
@@ -16,26 +18,26 @@
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
          </frac32.u.map>
-         <frac32.u.map.klineartime.reverse name="tA">
-            <MinValue v="0.0"/>
+         <frac32.s.map.klineartime.exp name="tA">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         </frac32.s.map.klineartime.exp>
          <frac32.u.map name="v1">
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
          </frac32.u.map>
-         <frac32.u.map.klineartime.reverse name="tB">
-            <MinValue v="0.0"/>
+         <frac32.s.map.klineartime.exp name="tB">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         </frac32.s.map.klineartime.exp>
          <frac32.u.map name="v2">
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
          </frac32.u.map>
-         <frac32.u.map.klineartime.reverse name="tC">
-            <MinValue v="0.0"/>
+         <frac32.s.map.klineartime.exp name="tC">
+            <MinValue v="-64.0"/>
             <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         </frac32.s.map.klineartime.exp>
          <frac32.u.map name="v3">
             <MinValue v="0.0"/>
             <MaxValue v="63.5"/>
@@ -48,47 +50,53 @@ int32_t phase1;
 int32_t ntrig;
 ]]></code.declaration>
       <code.init><![CDATA[phase1 = 0;
-val = %v3%;
+val = 0;
 ntrig = 0;
 ]]></code.init>
-      <code.krate><![CDATA[if ((%trig% > 0) && (!ntrig)) {
+      <code.krate><![CDATA[if ((inlet_trig > 0) && (!ntrig)) {
   time1 = 0;
   phase1 = 1;
-  val = %v0%;
+  val = param_v0;
   ntrig = 1;
 }
 else if (phase1 == 1) {
-  time1 += %tA%>>3;
+  int32_t t;
+  MTOF(-param_tA,t);
+  time1 += t>>2;
   if (time1>=0)
-     val = %v0% + (___SMMUL(%v1%-%v0%,time1)<<1);
+     val = param_v0 + (___SMMUL(param_v1-param_v0,time1)<<1);
   else {
     phase1 = 2;
-    val = %v1%;
+    val = param_v1;
     time1 = 0;
   }
 }
 else if (phase1 == 2) {
-  time1 += %tB%>>3;
+  int32_t t;
+  MTOF(-param_tB,t);
+  time1 += t>>2;
   if (time1>=0)
-     val = %v1% + (___SMMUL(%v2%-%v1%,time1)<<1);
+     val = param_v1 + (___SMMUL(param_v2-param_v1,time1)<<1);
   else {
     phase1 = 3;
-    val = %v2%;
+    val = param_v2;
     time1 = 0;
   }
 }
 else if (phase1 == 3) {
-  time1 += %tC%>>3;
+  int32_t t;
+  MTOF(-param_tC,t);
+  time1 += t>>2;
   if (time1>=0)
-     val = %v2% + (___SMMUL(%v3%-%v2%,time1)<<1);
+     val = param_v2 + (___SMMUL(param_v3-param_v2,time1)<<1);
   else {
     phase1 = 0;
-    val = %v3%;
+    val = param_v3;
   }
 }
-if (!(%trig% > 0)) ntrig = 0;
-%out% = val;
-%phase% = phase1;
+if (!(inlet_trig > 0)) ntrig = 0;
+outlet_out = val;
+outlet_phase = phase1;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

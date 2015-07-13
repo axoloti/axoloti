@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="mux 2" sha="804f2e81d6fe3e310497e5cfa0fec8560435c2ac">
+   <obj.normal id="mux 2" uuid="3bcb8a666381ed18b8962eda50b1aa679136f618" sha="73ba55fbf61b80b78dd5cb4f0c4bd5cbbdd54ea0">
+      <upgradeSha>804f2e81d6fe3e310497e5cfa0fec8560435c2ac</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <frac32 name="i1" description="input 1"/>
          <frac32 name="i2" description="input 2"/>
@@ -14,13 +16,15 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+      <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f">
+   <obj.normal id="mux 2" uuid="539c246f4c360ac476e128cfbfa84348fb7f7e73" sha="c965b032036555f94eb2ffbf16f83c1f90f3671c">
+      <upgradeSha>c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <frac32buffer name="i1" description="input 1"/>
          <frac32buffer name="i2" description="input 2"/>
@@ -32,13 +36,15 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+      <code.srate><![CDATA[   outlet_o[buffer_index]= (inlet_s)?inlet_i2[buffer_index]:inlet_i1[buffer_index];
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="mux 2" sha="138891901c8849485b260a487f3b0fc188f6bae2">
+   <obj.normal id="mux 2" uuid="16f90f81694766b0bc8187bfcba5a021e5701d81" sha="28ceb9074fe632debd6b911fe5db57bd34f85878">
+      <upgradeSha>138891901c8849485b260a487f3b0fc188f6bae2</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <int32 name="i1" description="input 1"/>
          <int32 name="i2" description="input 2"/>
@@ -50,13 +56,15 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+      <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 2" sha="b27da86e6781ea0d7128a77aafd60d04e253d3b3">
+   <obj.normal id="mux 2" uuid="e1c92bc92f4d191bfadf0efeae4503b458a4e440" sha="39c64f8958b4334d9767864dde93394de4ba4fe3">
+      <upgradeSha>b27da86e6781ea0d7128a77aafd60d04e253d3b3</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <bool32 name="i1" description="input 1"/>
          <bool32 name="i2" description="input 2"/>
@@ -68,13 +76,15 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+      <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 2" sha="6a168ec6f8365e1284be6c580b0ba4ad56703576">
+   <obj.normal id="mux 2" uuid="777491e645978e331fcbab6610f52c1aaa5ade0e" sha="674eff5dbf0928c9f3ccfbf7ea1433148c7c5130">
+      <upgradeSha>6a168ec6f8365e1284be6c580b0ba4ad56703576</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>mux.axh</helpPatch>
       <inlets>
          <charptr32 name="i1" description="input 1"/>
          <charptr32 name="i2" description="input 2"/>
@@ -86,7 +96,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[   %o%= (%s%)?%i2%:%i1%;
+      <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

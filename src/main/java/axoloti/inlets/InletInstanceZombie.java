@@ -48,4 +48,9 @@ public class InletInstanceZombie extends InletInstance {
     public DataType GetDataType() {
         return new axoloti.datatypes.DTZombie();
     }
+
+    @Override
+    public String GetLabel() {
+        return name;
+    }
 }

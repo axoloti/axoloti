@@ -1,8 +1,10 @@
 <objdefs>
-   <obj.normal id="int 4" sha="d5bb0d5249b11cc197099106f178b6872495db0f">
+   <obj.normal id="int 4" uuid="a9b111f292909123d27b4cda86d43c5fb9f9f17c" sha="168bcaed9aec4c0edc210f3eaba68a6adf84c103">
+      <upgradeSha>d5bb0d5249b11cc197099106f178b6872495db0f</upgradeSha>
       <sDescription>integer decoder</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>logic_decode.axh</helpPatch>
       <inlets>
          <int32 name="i1" description="input 1"/>
       </inlets>
@@ -16,11 +18,11 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[%o0% = (%i1% == 0)?1:0;
-%o1% = (%i1% == 1)?1:0;
-%o2% = (%i1% == 2)?1:0;
-%o3% = (%i1% == 3)?1:0;
-%chain% = (%i1% - 4);
+      <code.krate><![CDATA[outlet_o0 = (inlet_i1 == 0)?1:0;
+outlet_o1 = (inlet_i1 == 1)?1:0;
+outlet_o2 = (inlet_i1 == 2)?1:0;
+outlet_o3 = (inlet_i1 == 3)?1:0;
+outlet_chain = (inlet_i1 - 4);
 ]]></code.krate>
    </obj.normal>
 </objdefs>

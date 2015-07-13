@@ -1,0 +1,30 @@
+<patch-1.0>
+   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="40" y="60">
+      <params>
+         <frac32.u.map name="value" value="63.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="smooth" sha="3a277a80f7590217e14fde92e834ace04d2b75cb" name="smooth1" x="160" y="60">
+      <params>
+         <frac32.u.map name="time" value="55.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="displayU" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="360" y="60">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="comment" name="todo: add physical units" x="160" y="160"/>
+   <nets>
+      <net>
+         <source name="c1 out"/>
+         <dest name="smooth1 in"/>
+      </net>
+      <net>
+         <source name="smooth1 out"/>
+         <dest name="displayU1 in"/>
+      </net>
+   </nets>
+   <notes><![CDATA[]]></notes>
+</patch-1.0>
