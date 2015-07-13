@@ -13,9 +13,9 @@ case "$unamestr" in
 	Darwin)
 		platform='mac'
 		rootdir="$(cd $(dirname $0); pwd -P)"
-		#export axoloti_release="$rootdir"
-		#export axoloti_runtime=${axoloti_runtime:="$rootdir"}
-		#export axoloti_build=${axoloti_build:="$rootdir/patch"}
+		export axoloti_release="$rootdir"
+		export axoloti_runtime=${axoloti_runtime:="$rootdir"}
+		export axoloti_build=${axoloti_build:="$rootdir/patch"}
 	;;
         *)
                 echo "unknown OS : $unamestr, aborting..."
