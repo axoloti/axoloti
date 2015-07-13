@@ -17,6 +17,7 @@
  */
 package axoloti;
 
+import axoloti.dialogs.AboutFrame;
 import java.awt.EventQueue;
 import java.io.File;
 import javax.swing.UIManager;
