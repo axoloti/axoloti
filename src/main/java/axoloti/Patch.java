@@ -970,13 +970,15 @@ public class Patch {
                 Net n = GetNet(i);
                 if ((n != null) && (n.isValidNet())) {
                     if (i.GetDataType().equals(n.GetDataType())) {
-                        if (n.NeedsLatch()) {
+                        if (n.NeedsLatch() && 
+                                (objectinstances.indexOf(n.source.get(0).axoObj)>= objectinstances.indexOf(o))) {
                             c += n.CName() + "Latch";
                         } else {
                             c += n.CName();
                         }
                     } else {
-                        if (n.NeedsLatch()) {
+                        if (n.NeedsLatch() && 
+                                (objectinstances.indexOf(n.source.get(0).axoObj)>= objectinstances.indexOf(o))) {
                             c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName() + "Latch");
                         } else {
                             c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName());
