@@ -40,15 +40,22 @@ public class QCmdFlashDFU extends QCmdShellTask {
             return "Flashing firmware failed!";
         }
     }
-
+    
+    //FIXME: we should be using the build dir here, not the release area
+    @Override
+    public String BuildDir() {
+//        return System.getProperty(axoloti.Axoloti.BUILD_DIR);
+        return System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
+    }
+    
     @Override
     String GetExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return "platform_win/upload_fw_dfu.bat";
+            return RuntimeDir() + "/platform_win/upload_fw_dfu.bat";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            return "/bin/sh platform_osx/upload_fw_dfu.sh";
+            return "/bin/sh "+ RuntimeDir() + "/platform_osx/upload_fw_dfu.sh";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            return "/bin/sh platform_linux/upload_fw_dfu.sh";
+            return "/bin/sh "+ RuntimeDir() + "/platform_linux/upload_fw_dfu.sh";
         } else {
             Logger.getLogger(QCmdFlashDFU.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;

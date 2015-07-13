@@ -1761,7 +1761,8 @@ public class Patch {
         String c = GenerateCode3();
 
         try {
-            FileOutputStream f = new FileOutputStream("patch/xpatch.cpp");
+            String buildDir=System.getProperty(Axoloti.BUILD_DIR);
+            FileOutputStream f = new FileOutputStream(buildDir+"/xpatch.cpp");
             f.write(c.getBytes());
             f.close();
         } catch (FileNotFoundException ex) {

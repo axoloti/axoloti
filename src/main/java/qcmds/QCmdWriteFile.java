@@ -17,6 +17,7 @@
  */
 package qcmds;
 
+import axoloti.Axoloti;
 import axoloti.Connection;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,7 +58,8 @@ public class QCmdWriteFile implements QCmdSerialTask {
         Connection.ClearSync();
         try {
             Thread.sleep(100);
-            File f = new File("patch/xpatch.bin");
+            String buildDir = System.getProperty(Axoloti.BUILD_DIR);
+            File f = new File(buildDir + "/xpatch.bin");
             Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: " + f.getAbsolutePath());
             byte[] buffer = new byte[(int) f.length()];
             FileInputStream inputStream = new FileInputStream(f);

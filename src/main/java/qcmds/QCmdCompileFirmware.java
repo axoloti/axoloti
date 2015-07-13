@@ -38,15 +38,22 @@ public class QCmdCompileFirmware extends QCmdShellTask {
         MainFrame.mainframe.updateLinkFirmwareID();
         return "Done compiling firmware";
     }
-
+    
+    //FIXME: we should be using the build dir here, not the release area
+    @Override
+    public String BuildDir() {
+//        return System.getProperty(axoloti.Axoloti.BUILD_DIR);
+        return System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
+    }
+    
     @Override
     String GetExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return "platform_win/compile_firmware.bat";
+            return RuntimeDir()+"/platform_win/compile_firmware.bat";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            return "/bin/sh platform_osx/compile_firmware.sh";
+            return "/bin/sh " + RuntimeDir() + "/platform_osx/compile_firmware.sh";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            return "/bin/sh platform_linux/compile_firmware.sh";
+            return "/bin/sh " + RuntimeDir() + "/platform_linux/compile_firmware.sh";
         } else {
             Logger.getLogger(QCmdCompileFirmware.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;
