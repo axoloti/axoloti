@@ -125,15 +125,6 @@
 		<mkdir dir="build/runtime"/>
 		<mkdir dir="build/runtime/macosx" />
 		<mkdir dir="build/runtime/tmp/axoloti_runtime" />
-		<exec dir="." executable="cp">
-			<arg line="-R CMSIS build/runtime/tmp/axoloti_runtime"/>
-		</exec>
-		<exec dir="." executable="cp">
-			<arg line="-R chibios build/runtime/tmp/axoloti_runtime"/>
-		</exec>
-		<exec dir="." executable="cp">
-			<arg line="-R patch build/runtime/tmp/axoloti_runtime"/>
-		</exec>
 
 		<!--Mac -->
 		<exec dir="." executable="cp" os="Mac OS X">
@@ -177,10 +168,12 @@
 			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
 		 </fx:fileset>
 		 <fx:fileset dir=".">
-			 <include name="patch/**/*"/>
 			 <include name="patches/**/*"/>
 			 <include name="objects/**/*"/>
 			 <include name="firmware/**/*"/>
+			 <include name="chibios/**/*"/>
+			 <include name="CMSIS/**/*"/>
+			 <include name="patch/**/*"/>
 			 <include name="*.txt"/>
 		 </fx:fileset>
 	</fx:resources>

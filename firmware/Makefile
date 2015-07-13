@@ -63,7 +63,7 @@ axoloti_release ?= ..
 axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
 
-CHIBIOS = ${axoloti_runtime}/chibios
+CHIBIOS = ${axoloti_release}/chibios
 FIRMWARE = ${axoloti_firmware}
 
 include board.mk
@@ -83,7 +83,7 @@ FATFSSRC = ${CHIBIOS}/os/various/fatfs_bindings/fatfs_diskio.c \
 
 FATFSINC = ${CHIBIOS}/ext/fatfs/src
 
-CMSIS = ${axoloti_runtime}/CMSIS/
+CMSIS = ${axoloti_release}/CMSIS/
 
 
 # Define linker script file here

@@ -17,8 +17,8 @@ axoloti_runtime ?= ..
 axoloti_release ?= ..
 axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
-CHIBIOS = ${axoloti_runtime}/chibios
-CMSIS = ${axoloti_runtime}/CMSIS
+CHIBIOS = ${axoloti_release}/chibios
+CMSIS = ${axoloti_release}/CMSIS
 BDIR = ${axoloti_home}/build
 
 
