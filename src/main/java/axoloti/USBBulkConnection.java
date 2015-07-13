@@ -22,6 +22,7 @@ package axoloti;
  * transport
  */
 import axoloti.dialogs.USBPortSelectionDlg;
+import static axoloti.dialogs.USBPortSelectionDlg.ErrorString;
 import axoloti.parameters.ParameterInstance;
 import axoloti.targetprofile.axoloti_core;
 import axoloti.usb.Usb;
@@ -55,7 +56,7 @@ public class USBBulkConnection extends Connection {
     Thread receiverThread;
     BlockingQueue<QCmdSerialTask> queueSerialTask;
     private BlockingQueue<QCmd> queueResponse;
-    String portName;
+    String cpuid;
     private final axoloti_core targetProfile = new axoloti_core();
     private final Context context;
     private DeviceHandle handle;
@@ -158,7 +159,7 @@ public class USBBulkConnection extends Connection {
         }
     }
 
-    public Device getDevice() {
+    public DeviceHandle OpenDeviceHandle() {
         // Read the USB device list
         DeviceList list = new DeviceList();
         int result = LibUsb.getDeviceList(context, list);
@@ -176,14 +177,46 @@ public class USBBulkConnection extends Connection {
                 }
                 if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
                     Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "USB device found");
-                    return device;
+                    DeviceHandle handle = new DeviceHandle();
+                    result = LibUsb.open(device, handle);
+                    if (result < 0) {
+                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, ErrorString(result));
+                    } else {
+                        String serial = LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber());
+                        if (cpuid != null) {
+                            if (serial.equals(cpuid)) {
+                                return handle;
+                            }
+                        } else {
+                            return handle;
+                        }
+                        LibUsb.close(handle);
+                    }
+                }
+            }
+            // or else pick the first one
+            for (Device device : list) {
+                DeviceDescriptor descriptor = new DeviceDescriptor();
+                result = LibUsb.getDeviceDescriptor(device, descriptor);
+                if (result != LibUsb.SUCCESS) {
+                    throw new LibUsbException("Unable to read device descriptor", result);
+                }
+                if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "USB device found");
+                    DeviceHandle handle = new DeviceHandle();
+                    result = LibUsb.open(device, handle);
+                    if (result < 0) {
+                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, ErrorString(result));
+                    } else {
+                        return handle;
+                    }
                 }
             }
         } finally {
             // Ensure the allocated device list is freed
             //LibUsb.freeDeviceList(list, true);
         }
-        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "No USB device found with matching PID/VID");
+        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "No available USB device found with matching PID/VID");
         // Device not found
         return null;
     }
@@ -197,45 +230,18 @@ public class USBBulkConnection extends Connection {
             sync.notifyAll();
         }
         GoIdleState();
-        if (portName == null) {
-            portName = MainFrame.prefs.getComPortName();
+        if (cpuid == null) {
+            cpuid = MainFrame.prefs.getComPortName();
         }
 
-        handle = new DeviceHandle();
-        device = getDevice();
-        if (device == null) {
+        handle = OpenDeviceHandle();
+        if (handle == null) {
             return false;
         }
-        devicePath = Usb.DeviceToPath(device);
-        int result = LibUsb.open(device, handle);
-        if (result != LibUsb.SUCCESS) {
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Unable to open USB device, err" + result);
-            return false;
-        }
-
+        //devicePath = Usb.DeviceToPath(device);
         {
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Initiating connect to " + portName);
-            /*
-             serialPort.addEventListener(new SerialPortEventListener() {
-             @Override
-             public void serialEvent(SerialPortEvent spe) {
-             if (spe.isRXCHAR()) {
-             try {
-             byte[] r = serialPort.readBytes();
-             if (r != null) {
-             for (byte b : r) {
-             processByte(b);
-             }
-             }
-             } catch (SerialPortException ex) {
-             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
-             }
 
-             }
-             }
-             });*/
-
-            result = LibUsb.claimInterface(handle, interfaceNumber);
+            int result = LibUsb.claimInterface(handle, interfaceNumber);
             if (result != LibUsb.SUCCESS) {
                 throw new LibUsbException("Unable to claim interface", result);
             }
@@ -331,10 +337,10 @@ public class USBBulkConnection extends Connection {
 
     @Override
     public void SelectPort() {
-        USBPortSelectionDlg spsDlg = new USBPortSelectionDlg(null, true, portName);
+        USBPortSelectionDlg spsDlg = new USBPortSelectionDlg(null, true, cpuid);
         spsDlg.setVisible(true);
-        portName = spsDlg.getPort();
-        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: " + portName);
+        cpuid = spsDlg.getCPUID();
+        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: " + cpuid);
     }
 
     class Sync {
@@ -894,6 +900,5 @@ public class USBBulkConnection extends Connection {
     public axoloti_core getTargetProfile() {
         return targetProfile;
     }
-    
 
 }

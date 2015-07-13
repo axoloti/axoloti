@@ -17,18 +17,13 @@
  */
 package axoloti.dialogs;
 
-import axoloti.usb.Usb;
 import static axoloti.usb.Usb.DeviceToPath;
 import static axoloti.usb.Usb.PID_AXOLOTI;
-import static axoloti.usb.Usb.PID_STM_CDC;
 import static axoloti.usb.Usb.PID_STM_DFU;
-import static axoloti.usb.Usb.PID_STM_STLINK;
 import static axoloti.usb.Usb.VID_AXOLOTI;
 import static axoloti.usb.Usb.VID_STM;
 import axoloti.utils.OSDetect;
 import static axoloti.utils.OSDetect.getOS;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -45,22 +40,25 @@ import org.usb4java.LibUsbException;
  */
 public class USBPortSelectionDlg extends javax.swing.JDialog {
 
-    private String port;
-    private final String defPortName;
+    private String cpuid;
+    private final String defCPUID;
+
+    private final String sDFUBootloader = "STM DFU Bootloader";
+    private final String sAxolotiCore = "Axoloti Core";
 
     /**
-     * Creates new form SerialPortSelectionDlg
+     * Creates new form USBPortSelectionDlg
      *
      * @param parent parent frame
      * @param modal is modal
-     * @param defPortName default port name
+     * @param defCPUID default port name
      */
-    public USBPortSelectionDlg(java.awt.Frame parent, boolean modal, String defPortName) {
+    public USBPortSelectionDlg(java.awt.Frame parent, boolean modal, String defCPUID) {
         super(parent, modal);
         initComponents();
-        System.out.println("default port: " + defPortName);
-        this.defPortName = defPortName;
-        port = defPortName;
+        System.out.println("default cpuid: " + defCPUID);
+        this.defCPUID = defCPUID;
+        cpuid = defCPUID;
         Populate();
         getRootPane().setDefaultButton(jButtonOK);
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -69,12 +67,43 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                 DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                 int r = jTable1.getSelectedRow();
                 if (r >= 0) {
-
+                    String devName = (String) model.getValueAt(r, 0);
+                    if (devName.equals(sAxolotiCore)) {
+                        jButtonOK.setEnabled(true);
+                        cpuid = (String) model.getValueAt(r, 2);
+                    } else {
+                        jButtonOK.setEnabled(false);
+                    }
                 } else {
-                    port = null;
+                    cpuid = null;
                 }
             }
         });
+    }
+
+    public static String ErrorString(int result) {
+        if (result < 0) {
+            if (getOS() == OSDetect.OS.WIN) {
+                if (result == LibUsb.ERROR_NOT_FOUND) {
+                    return "not accesseable : driver not installed";
+                } else if (result == LibUsb.ERROR_ACCESS) {
+                    return "not accesseable : busy?";
+                } else {
+                    return "not accesseable : " + result;
+                }
+            } else if (getOS() == OSDetect.OS.LINUX) {
+                if (result == LibUsb.ERROR_ACCESS) {
+                    return "insufficient permissions";
+                    // log message:  - install udev rules by running axoloti/platform/linux/add_udev_rules.sh"
+                } else {
+                    return "not accesseable : " + result;
+                }
+            } else {
+                return "not accesseable : " + result;
+            }
+        } else {
+            return null;
+        }
     }
 
     final void Populate() {
@@ -99,61 +128,39 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                             if (result < 0) {
                                 if (getOS() == OSDetect.OS.WIN) {
                                     if (result == LibUsb.ERROR_NOT_SUPPORTED) {
-                                        model.addRow(new String[]{"STM DFU Bootloader", DeviceToPath(device), "not accesseable : wrong driver installed"});
+                                        model.addRow(new String[]{sDFUBootloader, DeviceToPath(device), "not accesseable : wrong driver installed"});
                                     } else if (result == LibUsb.ERROR_ACCESS) {
-                                        model.addRow(new String[]{"STM DFU Bootloader", DeviceToPath(device), "not accesseable : busy?"});
+                                        model.addRow(new String[]{sDFUBootloader, DeviceToPath(device), "not accesseable : busy?"});
                                     } else {
-                                        model.addRow(new String[]{"STM DFU Bootloader", DeviceToPath(device), "not accesseable : " + result});
+                                        model.addRow(new String[]{sDFUBootloader, DeviceToPath(device), "not accesseable : " + result});
                                     }
                                 } else {
-                                    model.addRow(new String[]{"STM DFU Bootloader", DeviceToPath(device), "not accesseable : " + result});
+                                    model.addRow(new String[]{sDFUBootloader, DeviceToPath(device), "not accesseable : " + result});
                                 }
                             } else {
-                                String serial = LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber());
-                                model.addRow(new String[]{"STM DFU Bootloader", DeviceToPath(device), "driver OK, CPU ID undeterminate"});
+                                model.addRow(new String[]{sDFUBootloader, DeviceToPath(device), "driver OK, CPU ID indeterminate"});
                                 LibUsb.close(handle);
                             }
-                        } else if (descriptor.idProduct() == PID_STM_STLINK) {
-                            /*
-                             Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* STM STLink");
-                             hasOne = true;
-                             */
-                        } else {
-                            /*
-                             Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* other STM device:\n" + descriptor.dump());
-                             hasOne = true;
-                             */
                         }
                     } else if (descriptor.idVendor() == VID_AXOLOTI && descriptor.idProduct() == PID_AXOLOTI) {
                         DeviceHandle handle = new DeviceHandle();
                         result = LibUsb.open(device, handle);
                         if (result < 0) {
-                            if (getOS() == OSDetect.OS.WIN) {
-                                if (result == LibUsb.ERROR_NOT_FOUND) {
-                                    model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), "not accesseable : driver not installed"});
-                                } else if (result == LibUsb.ERROR_ACCESS) {
-                                    model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), "not accesseable : busy?"});
-                                } else {
-                                    model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), "not accesseable : " + result});
-                                }
-                            } else if (getOS() == OSDetect.OS.LINUX) {
-                                if (result == LibUsb.ERROR_ACCESS) {
-                                    model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), "insufficient permissions"});
-                                    // log message:  - install udev rules by running axoloti/platform/linux/add_udev_rules.sh"
-                                } else {
-                                    model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), "not accesseable : " + result});
-                                }
-                            } else {
-                                model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), "not accesseable : " + result});
-                            }
+                            model.addRow(new String[]{sAxolotiCore, DeviceToPath(device), ErrorString(result)});
                         } else {
                             String serial = LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber());
-                            model.addRow(new String[]{"Axoloti Core", DeviceToPath(device), serial});
+                            model.addRow(new String[]{sAxolotiCore, DeviceToPath(device), serial});
                             LibUsb.close(handle);
                         }
                     }
                 } else {
                     throw new LibUsbException("Unable to read device descriptor", result);
+                }
+            }
+            for (int r = 0; r < model.getRowCount(); r++) {
+                String id = (String) model.getValueAt(r, 2);
+                if (id.equals(this.defCPUID)) {
+                    jTable1.setRowSelectionInterval(r, r);
                 }
             }
         } finally {
@@ -162,8 +169,8 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
         }
     }
 
-    public String getPort() {
-        return port;
+    public String getCPUID() {
+        return cpuid;
     }
 
     /**
@@ -276,7 +283,7 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
 
     private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        port = (String) model.getValueAt(0, 1);
+        cpuid = (String) model.getValueAt(0, 2);
         setVisible(false);
     }//GEN-LAST:event_jButtonOKActionPerformed
 

@@ -39,6 +39,7 @@ public class Preferences {
     String CurrentFileDirectory;
     @Element
     String ObjectSearchPath;
+    @Deprecated
     @Element(required = false)
     String ComPortName;
     @Element(required = false)
@@ -64,9 +65,6 @@ public class Preferences {
         }
         if (ObjectSearchPath == null) {
             ObjectSearchPath = "objects";
-        }
-        if (ComPortName == null) {
-            ComPortName = "";
         }
         if (PollInterval == null) {
             PollInterval = 50;
@@ -162,15 +160,13 @@ public class Preferences {
         ClearDirty();
     }
 
+    @Deprecated
     public String getComPortName() {
         return ComPortName;
     }
 
+    @Deprecated
     public void setComPortName(String ComPortName) {
-        if (this.ComPortName.equals(ComPortName))
-            return;
-        this.ComPortName = ComPortName;
-        SetDirty();
     }
 
     public Boolean getMouseDialAngular() {
@@ -178,8 +174,9 @@ public class Preferences {
     }
 
     public void setMouseDialAngular(boolean MouseDialAngular) {
-        if (this.MouseDialAngular == MouseDialAngular)
+        if (this.MouseDialAngular == MouseDialAngular) {
             return;
+        }
         this.MouseDialAngular = MouseDialAngular;
         SetDirty();
     }
@@ -191,7 +188,6 @@ public class Preferences {
     public ArrayList<String> getRecentFiles() {
         return recentFiles;
     }
-   
 
     public void addRecentFile(String filename) {
         for (String r : recentFiles) {
@@ -211,7 +207,7 @@ public class Preferences {
     }
 
     public void setMidiInputDevice(String MidiInputDevice) {
-        if(this.MidiInputDevice.equals(MidiInputDevice)) {
+        if (this.MidiInputDevice.equals(MidiInputDevice)) {
             return;
         }
         this.MidiInputDevice = MidiInputDevice;
