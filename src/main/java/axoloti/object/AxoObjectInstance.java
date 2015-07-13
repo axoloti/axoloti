@@ -167,7 +167,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             }
         });
         popup.add(popm_editInstanceName);
-        MenuItem popm_substitute = new MenuItem("substitute");
+        MenuItem popm_substitute = new MenuItem("replace");
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -185,14 +185,16 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             });
             popup.add(popm_help);
         }
-        MenuItem popm_adapt = new MenuItem("adapt homonym");
-        popm_adapt.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                PromoteToOverloadedObj();
-            }
-        });
-        popup.add(popm_adapt);
+        if (MainFrame.prefs.getExpertMode()) {
+            MenuItem popm_adapt = new MenuItem("adapt homonym");
+            popm_adapt.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    PromoteToOverloadedObj();
+                }
+            });
+            popup.add(popm_adapt);
+        }
 
         /*
          h.add(Box.createHorizontalStrut(3));
