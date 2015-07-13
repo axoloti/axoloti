@@ -29,8 +29,9 @@ import javax.swing.UIManager;
 public class Axoloti {
 
     public final static String RUNTIME_DIR = "axoloti_runtime";
-    public final static String BUILD_DIR = "axoloti_build";
+    public final static String HOME_DIR = "axoloti_home";
     public final static String RELEASE_DIR = "axoloti_release";
+    public final static String FIRMWARE_DIR = "axoloti_firmware";
 
     static void BuildEnv(String var, String def) {
         String ev = System.getProperty(var);
@@ -73,16 +74,32 @@ public class Axoloti {
             if (!TestDir(RUNTIME_DIR)) {
                 System.exit(-1);
             }
-            BuildEnv(BUILD_DIR, curDir + File.separator + "patch");
-            if (!TestDir(BUILD_DIR)) {
+
+            BuildEnv(FIRMWARE_DIR, System.getProperty(RELEASE_DIR) + File.separator + "firmware");
+            if (!TestDir(FIRMWARE_DIR)) {
                 System.exit(-1);
             }
 
-            System.out.println("Axoloti Dirs:\n"
-                    + "CurrentDir = " + curDir + "\n"
-                    + "ReleaseDir = " + System.getProperty(RELEASE_DIR) + "\n"
-                    + "RuntimeDir = " + System.getProperty(RUNTIME_DIR) + "\n"
-                    + "BuildDir = " + System.getProperty(BUILD_DIR)
+            BuildEnv(HOME_DIR, curDir);
+            File homedir = new File(System.getProperty(HOME_DIR));
+            if (!homedir.exists()) {
+                homedir.mkdir();
+            }
+            File buildir = new File(System.getProperty(HOME_DIR) + File.separator + "build");
+            if (!buildir.exists()) {
+                buildir.mkdir();
+            }
+
+            if (!TestDir(HOME_DIR)) {
+                System.exit(-1);
+            }
+
+            System.out.println("Axoloti Driectories:\n"
+                    + "Current = " + curDir + "\n"
+                    + "Release = " + System.getProperty(RELEASE_DIR) + "\n"
+                    + "Runtime = " + System.getProperty(RUNTIME_DIR) + "\n"
+                    + "Firware = " + System.getProperty(FIRMWARE_DIR) + "\n"
+                    + "AxolotiHome = " + System.getProperty(HOME_DIR)
             );
 
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

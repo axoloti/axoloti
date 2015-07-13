@@ -58,7 +58,7 @@ public class QCmdWriteFile implements QCmdSerialTask {
         Connection.ClearSync();
         try {
             Thread.sleep(100);
-            String buildDir = System.getProperty(Axoloti.BUILD_DIR);
+            String buildDir=System.getProperty(Axoloti.HOME_DIR)+"/build";;
             File f = new File(buildDir + "/xpatch.bin");
             Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: " + f.getAbsolutePath());
             byte[] buffer = new byte[(int) f.length()];

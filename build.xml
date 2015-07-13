@@ -118,6 +118,41 @@
 
   <target name="-post-jar">
 	<antcall target="bundle"/>
+	<antcall target="runtime"/>
+  </target>
+
+  <target name="runtime" if="build.runtime">
+		<mkdir dir="build/runtime"/>
+		<mkdir dir="build/runtime/macosx" />
+		<mkdir dir="build/runtime/macosx/axoloti_runtime" />
+		<exec dir="." executable="cp">
+			<arg line="-R CMSIS build/runtime/tmp/axoloti_runtime"/>
+		</exec>
+		<exec dir="." executable="cp">
+			<arg line="-R chibios build/runtime/macosx/axoloti_runtime"/>
+		</exec>
+		<exec dir="." executable="cp">
+			<arg line="-R patch build/runtime/macosx/axoloti_runtime"/>
+		</exec>
+
+		<!--Mac -->
+		<exec dir="." executable="cp" os="Mac OS X">
+			<arg line="-R platform_osx build/runtime/tmp/axoloti_runtime"/>
+		</exec>
+		<exec dir="." executable="hdiutil" os="Mac OS X">
+			<arg line="create -megabytes 400 build/runtime/macosx/axoloti_runtime.dmg -volname 'Axoloti Runtime'  -srcfolder build/runtime/tmp" />
+		</exec>
+		<!--Linux -->
+		<exec dir="." executable="cp" os="Linux">
+			<arg line="-R platform_linux build/runtime/tmp/axoloti_runtime"/>
+		</exec>
+		<mkdir dir="build/runtime/linux"/>
+		<exec dir="build/runtime/tmp" executable="tar" os="Linux">
+			<arg value="-cvf"/>
+			<arg value="../linux/axoloti_runtime.zip"/>
+			<arg value="."/>
+		</exec>
+		<!--Windows -->
   </target>
 
   <target name="bundle" if="build.bundle">
@@ -147,11 +182,6 @@
 			 <include name="objects/**/*"/>
 			 <include name="firmware/**/*"/>
 			 <include name="*.txt"/>
-<!--
-			 <include name="chibios/**/*"/>
-			 <include name="CMSIS/**/*"/>
-			 <include name="platform*/**/*"/>
--->
 		 </fx:fileset>
 	</fx:resources>
 

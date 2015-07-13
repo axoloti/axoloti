@@ -57,7 +57,7 @@ public class QCmdUploadPatch implements QCmdSerialTask {
         connection.ClearSync();
         try {
             if (f == null) {
-                String buildDir = System.getProperty(Axoloti.BUILD_DIR);
+                String buildDir=System.getProperty(Axoloti.HOME_DIR)+"/build";
                 f = new File(buildDir + "/xpatch.bin");
             }
             Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: " + f.getAbsolutePath());

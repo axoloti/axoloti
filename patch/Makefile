@@ -15,10 +15,11 @@ DMP=arm-none-eabi-objdump
 
 axoloti_runtime ?= ..
 axoloti_release ?= ..
-axoloti_build ?= .
+axoloti_home ?= ..
+axoloti_firmware ?= ../firmware
 CHIBIOS = ${axoloti_runtime}/chibios
 CMSIS = ${axoloti_runtime}/CMSIS
-BDIR = ${axoloti_build}
+BDIR = ${axoloti_home}/build
 
 
 include $(CHIBIOS)/boards/ST_STM32F4_DISCOVERY/board.mk
@@ -31,7 +32,7 @@ include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 INCDIR = $(CMSIS)/Include \
 		 $(PORTINC) $(KERNINC) $(TESTINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(FATFSINC) \
-         ${axoloti_release}/firmware
+         ${axoloti_firmware}
          
 # Paths
 IINCDIR   = $(patsubst %,-I%,$(INCDIR) $(DINCDIR) $(UINCDIR))

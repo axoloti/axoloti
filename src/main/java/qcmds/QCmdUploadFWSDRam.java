@@ -58,10 +58,7 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
         connection.ClearSync();
         try {
             if (f == null) {
-                //String buildDir = System.getProperty(Axoloti.BUILD_DIR);
-                
-                //FIXME: this should be in a build directory outside the package
-                String buildDir = System.getProperty(Axoloti.RUNTIME_DIR) + "/firmware/build";
+                String buildDir = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build";
                 f = new File(buildDir+"/axoloti.bin");
             }
             Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware file path: " + f.getAbsolutePath());
