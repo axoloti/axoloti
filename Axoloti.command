@@ -1,8 +1,9 @@
 #!/bin/bash
 rootdir="$(cd $(dirname $0); pwd -P)"
-export axoloti_release="$rootdir"
+export axoloti_release=${axoloti_release:="$rootdir"}
 export axoloti_runtime=${axoloti_runtime:="$rootdir"}
 export axoloti_build=${axoloti_build:="$rootdir/patch"}
+
 cd $rootdir
 
 which java >/dev/null || echo "Java not found in path, please install Java..." 
