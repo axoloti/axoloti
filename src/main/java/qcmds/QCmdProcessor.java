@@ -99,7 +99,7 @@ public class QCmdProcessor implements Runnable {
         queue.clear();
         queueResponse.clear();
     }
-    
+
     public void Panic() {
         queue.clear();
 //        shellprocessor.Panic();
@@ -207,6 +207,9 @@ public class QCmdProcessor implements Runnable {
     }
 
     public void println(final String s) {
+        if ((s == null) || s.isEmpty()) {
+            return;
+        }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

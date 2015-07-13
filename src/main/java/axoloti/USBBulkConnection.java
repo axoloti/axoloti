@@ -249,7 +249,7 @@ public class USBBulkConnection extends Connection {
             GoIdleState();
             TransmitPing();
             TransmitPing();
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "creating rx and tx thread...");
+            //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "creating rx and tx thread...");
             transmitterThread = new Thread(new Transmitter());
             transmitterThread.setName("Transmitter");
             transmitterThread.start();
@@ -521,7 +521,7 @@ public class USBBulkConnection extends Connection {
                     }
                 }
             }
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receiver: thread stopped");
+            //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receiver: thread stopped");
             MainFrame.mainframe.qcmdprocessor.Abort();
             MainFrame.mainframe.qcmdprocessor.AppendToQueue(new QCmdShowDisconnect());
         }
@@ -539,7 +539,7 @@ public class USBBulkConnection extends Connection {
                     Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "transmitter: thread stopped");
+            //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "transmitter: thread stopped");
             MainFrame.mainframe.qcmdprocessor.Abort();
             MainFrame.mainframe.qcmdprocessor.AppendToQueue(new QCmdShowDisconnect());
         }

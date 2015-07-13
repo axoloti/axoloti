@@ -53,8 +53,12 @@ public class QCmdPing implements QCmdSerialTask {
         if (connection.WaitSync() || (noCauseDisconnect)) {
             return this;
         } else {
-            Logger.getLogger(QCmdPing.class.getName()).log(Level.SEVERE, "Ping: WaitSync Timeout, disconnecting now");
-            return new QCmdDisconnect();
+            if (connection.isConnected()) {
+                Logger.getLogger(QCmdPing.class.getName()).log(Level.SEVERE, "Ping: WaitSync Timeout, disconnecting now");
+                return new QCmdDisconnect();
+            } else {
+                return null;
+            }
         }
     }
 }
