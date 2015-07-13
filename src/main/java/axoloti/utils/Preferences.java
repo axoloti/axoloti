@@ -52,7 +52,12 @@ public class Preferences {
     ArrayList<String> recentFiles = new ArrayList<String>();
     @Element(required = false)
     String MidiInputDevice;
-
+    
+    @Element(required = false)
+    String RuntimeDir;
+    @Element(required = false)
+    String FirmwareDir;
+    
     boolean isDirty = false;
 
     final int nRecentFiles = 8;
@@ -130,21 +135,41 @@ public class Preferences {
     }
 
     static String GetPrefsFileLoc() {
-        return ".preferences.xml";
+        return System.getProperty(axoloti.Axoloti.HOME_DIR)+File.separator+".preferences.xml";
     }
+    
+    private static Preferences singleton;
 
     public static Preferences LoadPreferences() {
-        File p = new File(Preferences.GetPrefsFileLoc());
-        if (p.exists()) {
-            try {
-                Serializer serializer = new Persister();
-                Preferences prefs = serializer.read(Preferences.class, p);
-                return prefs;
-            } catch (Exception ex) {
-                Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
+        if (singleton == null) {
+            File p = new File(Preferences.GetPrefsFileLoc());
+            if (p.exists()) {
+                try {
+                    Serializer serializer = new Persister();
+                    Preferences prefs = serializer.read(Preferences.class, p);
+                    singleton = prefs;
+                    if (prefs.RuntimeDir == null ) {
+                        prefs.RuntimeDir = System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
+                        prefs.SetDirty();
+                    } else {
+                        System.setProperty(axoloti.Axoloti.RUNTIME_DIR, prefs.RuntimeDir);
+                    }
+                    if (prefs.FirmwareDir == null ) {
+                        prefs.FirmwareDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
+                        prefs.SetDirty();
+                    } else {
+                        System.setProperty(axoloti.Axoloti.FIRMWARE_DIR, prefs.FirmwareDir);
+                    }
+
+                } catch (Exception ex) {
+                    Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else {
+                singleton = new Preferences();
             }
         }
-        return new Preferences();
+        return singleton;
     }
 
     public void SavePrefs() {
@@ -213,5 +238,15 @@ public class Preferences {
         this.MidiInputDevice = MidiInputDevice;
         MainFrame.mainframe.initMidiInput(this.MidiInputDevice);
         SetDirty();
+    }
+
+    public void SetFirmwareDir(String dir) {
+        FirmwareDir = dir;
+        System.setProperty(axoloti.Axoloti.FIRMWARE_DIR, dir);
+    }
+
+    public void SetRuntimeDir(String dir) {
+        RuntimeDir = dir;
+        System.setProperty(axoloti.Axoloti.FIRMWARE_DIR, dir);
     }
 }

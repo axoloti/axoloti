@@ -18,6 +18,8 @@
 package axoloti;
 
 import axoloti.dialogs.AboutFrame;
+import axoloti.utils.OSDetect;
+import axoloti.utils.Preferences;
 import java.awt.EventQueue;
 import java.io.File;
 import javax.swing.UIManager;
@@ -63,8 +65,30 @@ public class Axoloti {
      */
     public static void main(String[] args) {
         try {
-            // setup environment
             String curDir = System.getProperty("user.dir");
+            String defaultHome = curDir;
+            if (OSDetect.getOS() == OSDetect.OS.WIN) {
+                // not sure which versions of windows this is valid for, good for 8!
+                defaultHome = System.getenv("HOMEPATH") + File.separator + "Documents";
+            } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
+                defaultHome = System.getenv("HOME") + File.separator +"Documents/axoloti";
+            } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
+                defaultHome = System.getenv("HOME") + File.separator +"axoloti";
+            }
+
+            BuildEnv(HOME_DIR, defaultHome);
+            File homedir = new File(System.getProperty(HOME_DIR));
+            if (!homedir.exists()) {
+                homedir.mkdir();
+            }
+
+            File buildir = new File(System.getProperty(HOME_DIR) + File.separator + "build");
+            if (!buildir.exists()) {
+                buildir.mkdir();
+            }
+            if (!TestDir(HOME_DIR)) {
+                System.exit(-1);
+            }
 
             BuildEnv(RELEASE_DIR, curDir);
             if (!TestDir(RELEASE_DIR)) {
@@ -80,19 +104,7 @@ public class Axoloti {
                 System.exit(-1);
             }
 
-            BuildEnv(HOME_DIR, curDir);
-            File homedir = new File(System.getProperty(HOME_DIR));
-            if (!homedir.exists()) {
-                homedir.mkdir();
-            }
-            File buildir = new File(System.getProperty(HOME_DIR) + File.separator + "build");
-            if (!buildir.exists()) {
-                buildir.mkdir();
-            }
-
-            if (!TestDir(HOME_DIR)) {
-                System.exit(-1);
-            }
+            Preferences prefs = Preferences.LoadPreferences();
 
             System.out.println("Axoloti Driectories:\n"
                     + "Current = " + curDir + "\n"
