@@ -13,8 +13,10 @@ LD=arm-none-eabi-gcc
 CP=arm-none-eabi-objcopy
 DMP=arm-none-eabi-objdump
 
-CHIBIOS = ../chibios
-CMSIS = ../CMSIS
+CHIBIOS = ${axoloti_runtime}/chibios
+CMSIS = ${axoloti_runtime}/CMSIS
+BDIR = ${axoloti_build}
+
 
 include $(CHIBIOS)/boards/ST_STM32F4_DISCOVERY/board.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
@@ -26,7 +28,7 @@ include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 INCDIR = $(CMSIS)/Include \
 		 $(PORTINC) $(KERNINC) $(TESTINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(FATFSINC) \
-         ../firmware
+         ${axoloti_release}/firmware
          
 # Paths
 IINCDIR   = $(patsubst %,-I%,$(INCDIR) $(DINCDIR) $(UINCDIR))
@@ -35,17 +37,17 @@ LLIBDIR   = $(patsubst %,-L%,$(DLIBDIR) $(ULIBDIR))
 
 all:
 	@echo "RM"
-	rm -f xpatch.o xpatch.elf xpatch.bin xpatch.d xpatch.map xpatch.lst
+	rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
 	@echo "APP"
-	$(CPP) $(CCFLAGS11) $(IINCDIR) -MD -MP -c xpatch.cpp -o xpatch.o
+	$(CPP) $(CCFLAGS11) $(IINCDIR) -MD -MP -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o
 	@echo LINK
-	$(LD) $(LDFLAGS) xpatch.o -Wl,-Map=xpatch.map,--cref,--just-symbols=../firmware/build/axoloti.elf -o xpatch.elf
+	$(LD) $(LDFLAGS) ${BDIR}/xpatch.o -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${axoloti_release}/firmware/build/axoloti.elf -o ${BDIR}/xpatch.elf
 	@echo BIN
 #	$(CP) -O binary -j .text  -j .init_array -j .rodata -j .rodata\* xpatch.elf xpatch.bin
 #   -j .text.startup -j .text.memcpy  
-	$(CP) -O binary xpatch.elf xpatch.bin
+	$(CP) -O binary ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin
 #	@echo SDCARD
 #	CP xpatch.bin T:\xpatch.bin
 clean:
-	rm -f xpatch.o xpatch.elf xpatch.bin xpatch.d xpatch.map xpatch.lst
+	rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
 

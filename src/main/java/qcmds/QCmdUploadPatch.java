@@ -17,6 +17,7 @@
  */
 package qcmds;
 
+import axoloti.Axoloti;
 import axoloti.Connection;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,7 +57,8 @@ public class QCmdUploadPatch implements QCmdSerialTask {
         connection.ClearSync();
         try {
             if (f == null) {
-                f = new File("patch/xpatch.bin");
+                String buildDir = System.getProperty(Axoloti.BUILD_DIR);
+                f = new File(buildDir + "/xpatch.bin");
             }
             Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: " + f.getAbsolutePath());
             int tlength = (int) f.length();

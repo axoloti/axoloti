@@ -58,7 +58,8 @@ endif
 PROJECT = axoloti
 
 # Imported source files and paths
-CHIBIOS = ../chibios
+CHIBIOS = ${axoloti_runtime}/chibios
+FIRMWARE = ${axoloti_release}/firmware
 
 include board.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
@@ -77,7 +78,7 @@ FATFSSRC = ${CHIBIOS}/os/various/fatfs_bindings/fatfs_diskio.c \
 
 FATFSINC = ${CHIBIOS}/ext/fatfs/src
 
-CMSIS = ../CMSIS/
+CMSIS = ${axoloti_runtime}/CMSIS/
 
 
 # Define linker script file here
@@ -95,24 +96,24 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/chprintf.c \
        $(CHIBIOS)/os/various/memstreams.c \
-       axoloti_control.c \
-       codec.c \
-       axoloti.c \
-       axoloti_filters.c \
-       axoloti_math.c \
-       axoloti_oscs.c \
-       axoloti_board.c \
-       midi.c \
-       ui.c \
-       glcdfont.c \
-       usbcfg.c \
-       sdcard.c \
-       pconnection.c \
-       parameters.c \
-       main.c \
-       patch.c \
-       flash.c \
-       virtual_control.c \
+       ${FIRMWARE}/axoloti_control.c \
+       ${FIRMWARE}/codec.c \
+       ${FIRMWARE}/axoloti.c \
+       ${FIRMWARE}/axoloti_filters.c \
+       ${FIRMWARE}/axoloti_math.c \
+       ${FIRMWARE}/axoloti_oscs.c \
+       ${FIRMWARE}/axoloti_board.c \
+       ${FIRMWARE}/midi.c \
+       ${FIRMWARE}/ui.c \
+       ${FIRMWARE}/glcdfont.c \
+       ${FIRMWARE}/usbcfg.c \
+       ${FIRMWARE}/sdcard.c \
+       ${FIRMWARE}/pconnection.c \
+       ${FIRMWARE}/parameters.c \
+       ${FIRMWARE}/main.c \
+       ${FIRMWARE}/patch.c \
+       ${FIRMWARE}/flash.c \
+       ${FIRMWARE}/virtual_control.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_q31.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_q31.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_dct4_q31.c \
@@ -143,27 +144,27 @@ CSRC = $(PORTSRC) \
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_iir_lattice_init_q31.c\
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_iir_lattice_q31.c\
        ${CMSIS}/DSP_Lib/Source/CommonTables/arm_common_tables.c \
-       STM32_USB_Host_Library/Core/Src/usbh_core.c \
-       STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c \
-       STM32_USB_Host_Library/Core/Src/usbh_ioreq.c \
-       STM32_USB_Host_Library/Core/Src/usbh_pipes.c \
-       STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c \
-       STM32_USB_Host_Library/Class/HID/Src/usbh_hid_keybd.c \
-       STM32_USB_Host_Library/Class/HID/Src/usbh_hid_mouse.c \
-       STM32_USB_Host_Library/Class/HID/Src/usbh_hid_parser.c \
-       STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c \
-       STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
-       STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
-       STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_hcd.c \
-       usbh_midi_core.c \
-       usbh_conf.c \
-       serial_midi.c \
-       bulk_usb.c \
-       midi_usb.c \
-       crc32.c \
-       exceptions.c \
-       watchdog.c \
-       sysmon.c 
+       ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_core.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ioreq.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_pipes.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_keybd.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_mouse.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_parser.c \
+       ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c \
+       ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
+       ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
+       ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_hcd.c \
+       ${FIRMWARE}/usbh_midi_core.c \
+       ${FIRMWARE}/usbh_conf.c \
+       ${FIRMWARE}/serial_midi.c \
+       ${FIRMWARE}/bulk_usb.c \
+       ${FIRMWARE}/midi_usb.c \
+       ${FIRMWARE}/crc32.c \
+       ${FIRMWARE}/exceptions.c \
+       ${FIRMWARE}/watchdog.c \
+       ${FIRMWARE}/sysmon.c 
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -192,14 +193,14 @@ TCPPSRC =
 # List ASM source files here
 ASMSRC = $(PORTASM)
 
-INCDIR = ../CMSIS/Include \
+INCDIR = ${CMSIS}/Include \
 		 $(PORTINC) $(KERNINC) $(TESTINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) \
          $(FATFSINC) \
          $(CHIBIOS)/os/various \
-         STM32_USB_Host_Library/Core/Inc \
-         STM32_USB_Host_Library/Class/HID/Inc \
-         STM32F4xx_HAL_Driver/Inc
+         ${FIRMWARE}/STM32_USB_Host_Library/Core/Inc \
+         ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Inc \
+         ${FIRMWARE}/STM32F4xx_HAL_Driver/Inc
 
 #
 # Project, sources and paths
@@ -284,13 +285,13 @@ ULIBDIR = .
 
 # List all user libraries here
 ULIBS = -lm \
-	samples/808bd.o \
-	samples/808hatclose.o \
-	samples/808hatopen.o \
-	samples/808hitom.o \
-	samples/808midtom.o \
-	samples/808lotom.o \
-	samples/808snare.o 
+	${FIRMWARE}/samples/808bd.o \
+	${FIRMWARE}/samples/808hatclose.o \
+	${FIRMWARE}/samples/808hatopen.o \
+	${FIRMWARE}/samples/808hitom.o \
+	${FIRMWARE}/samples/808midtom.o \
+	${FIRMWARE}/samples/808lotom.o \
+	${FIRMWARE}/samples/808snare.o 
 
 #
 # End of user defines

@@ -17,6 +17,7 @@
  */
 package qcmds;
 
+import axoloti.Axoloti;
 import axoloti.Connection;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,7 +58,11 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
         connection.ClearSync();
         try {
             if (f == null) {
-                f = new File("firmware/build/axoloti.bin");
+                //String buildDir = System.getProperty(Axoloti.BUILD_DIR);
+                
+                //FIXME: this should be in a build directory outside the package
+                String buildDir = System.getProperty(Axoloti.RUNTIME_DIR) + "/firmware/build";
+                f = new File(buildDir+"/axoloti.bin");
             }
             Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware file path: " + f.getAbsolutePath());
             int tlength = (int) f.length();

@@ -19,6 +19,7 @@ package axoloti;
 
 import axoloti.dialogs.AboutFrame;
 import java.awt.EventQueue;
+import java.io.File;
 import javax.swing.UIManager;
 
 /**
@@ -27,11 +28,63 @@ import javax.swing.UIManager;
  */
 public class Axoloti {
 
+    public final static String RUNTIME_DIR = "axoloti_runtime";
+    public final static String BUILD_DIR = "axoloti_build";
+    public final static String RELEASE_DIR = "axoloti_release";
+
+    static void BuildEnv(String var, String def) {
+        String ev = System.getProperty(var);
+        if (ev == null) {
+            ev = System.getenv(var);
+            if (ev == null) {
+                ev = def;
+            }
+        }
+        System.setProperty(var, ev);
+    }
+
+    static boolean TestDir(String var) {
+        String ev = System.getProperty(var);
+        File f = new File(var);
+        if (f.exists()) {
+            System.err.println(var + " Directory does not exist " + ev);
+            return false;
+        }
+        if (f.isDirectory()) {
+            System.err.println(var + " should be a valid directory " + ev);
+            return false;
+        }
+        return true;
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         try {
+            // setup environment
+            String curDir = System.getProperty("user.dir");
+
+            BuildEnv(RELEASE_DIR, curDir);
+            if (!TestDir(RELEASE_DIR)) {
+                System.exit(-1);
+            }
+            BuildEnv(RUNTIME_DIR, curDir);
+            if (!TestDir(RUNTIME_DIR)) {
+                System.exit(-1);
+            }
+            BuildEnv(BUILD_DIR, curDir + File.separator + "patch");
+            if (!TestDir(BUILD_DIR)) {
+                System.exit(-1);
+            }
+
+            System.out.println("Axoloti Dirs:\n"
+                    + "CurrentDir = " + curDir + "\n"
+                    + "ReleaseDir = " + System.getProperty(RELEASE_DIR) + "\n"
+                    + "RuntimeDir = " + System.getProperty(RUNTIME_DIR) + "\n"
+                    + "BuildDir = " + System.getProperty(BUILD_DIR)
+            );
+
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             if (System.getProperty("os.name").contains("OS X")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true");
