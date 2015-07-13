@@ -69,7 +69,7 @@ public class KeyboardFrame extends javax.swing.JFrame {
         piano.setMaximumSize(d);
         piano.setVisible(true);
         jPanelKeyb.add(piano);
-        pbenddial = new DialComponent(0.0, -64, 63, 1);
+        pbenddial = new DialComponent(0.0, -64, 64, 1);
         pbenddial.addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {

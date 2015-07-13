@@ -42,7 +42,7 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap {
 
     @Override
     double getMax() {
-        return 63.0;
+        return 64.0;
     }
 
     @Override
@@ -92,6 +92,6 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap {
 
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, "(data2-64)<<21");
+        return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
     }
 }

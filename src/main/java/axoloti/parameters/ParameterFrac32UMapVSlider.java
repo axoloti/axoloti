@@ -33,13 +33,13 @@ public class ParameterFrac32UMapVSlider extends ParameterFrac32 {
 
     public ParameterFrac32UMapVSlider() {
         MinValue = new ValueFrac32(0);
-        MaxValue = new ValueFrac32(63.5);
+        MaxValue = new ValueFrac32(64);
     }
 
     public ParameterFrac32UMapVSlider(String name) {
         super(name);
         MinValue = new ValueFrac32(0);
-        MaxValue = new ValueFrac32(63.5);
+        MaxValue = new ValueFrac32(64);
     }
 
     @Override

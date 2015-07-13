@@ -34,13 +34,13 @@ public class ParameterFrac32SMap extends ParameterFrac32 {
 
     public ParameterFrac32SMap() {
         MinValue = new ValueFrac32(-64);
-        MaxValue = new ValueFrac32(63.5);
+        MaxValue = new ValueFrac32(64);
     }
 
     public ParameterFrac32SMap(String name) {
         super(name);
         MinValue = new ValueFrac32(-64);
-        MaxValue = new ValueFrac32(63.5);
+        MaxValue = new ValueFrac32(64);
     }
 
     @Override

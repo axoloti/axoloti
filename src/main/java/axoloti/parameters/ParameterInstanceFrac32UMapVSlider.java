@@ -80,7 +80,7 @@ public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U
 
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, "val<<20");
+        return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?data2<<20:0x07FFFFFF");
     }
 
     /*
@@ -111,7 +111,7 @@ public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U
 
     @Override
     public VSliderComponent CreateControl() {
-        return new VSliderComponent(0.0, 0.0, 63.5, 0.5);
+        return new VSliderComponent(0.0, 0.0, 64, 0.5);
     }
 
     @Override
