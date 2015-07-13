@@ -186,6 +186,13 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         initMidiInput(prefs.getMidiInputDevice());
 
         ShowDisconnect();
+
+        boolean success = qcmdprocessor.serialconnection.connect();
+        if (!success) {
+            ShowDisconnect();
+        } else {
+            qcmdprocessor.AppendToQueue(new QCmdStop());
+        }
     }
 
     void PopulateLibraryMenu(JMenu parent) {
