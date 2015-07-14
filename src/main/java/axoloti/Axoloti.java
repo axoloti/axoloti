@@ -111,6 +111,7 @@ public class Axoloti {
                 defaultHome = System.getenv("HOME") + "/Documents/axoloti";
                 defaultRuntime =  "/Applications/axoloti_runtime";
             } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
+                defaultHome = System.getenv("HOME") + "/axoloti";
                 defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
             }
 
