@@ -71,9 +71,9 @@ public class PresetPanel extends javax.swing.JPanel {
         jToggleButtonE8 = new javax.swing.JToggleButton();
 
         setAlignmentX(0.0F);
-        setMaximumSize(new java.awt.Dimension(350, 40));
-        setMinimumSize(new java.awt.Dimension(350, 40));
-        setPreferredSize(new java.awt.Dimension(350, 40));
+        setMaximumSize(new java.awt.Dimension(400, 40));
+        setMinimumSize(new java.awt.Dimension(400, 40));
+        setPreferredSize(new java.awt.Dimension(400, 40));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel3.setText("Preset");
@@ -188,7 +188,6 @@ public class PresetPanel extends javax.swing.JPanel {
         jPanel2.add(jButtonR8);
 
         jToggleButtonEI.setText("i");
-        jToggleButtonEI.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jToggleButtonEI.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonEIActionPerformed(evt);
@@ -197,7 +196,6 @@ public class PresetPanel extends javax.swing.JPanel {
         jPanel2.add(jToggleButtonEI);
 
         jToggleButtonE1.setText("1");
-        jToggleButtonE1.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jToggleButtonE1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonE1ActionPerformed(evt);
@@ -206,7 +204,6 @@ public class PresetPanel extends javax.swing.JPanel {
         jPanel2.add(jToggleButtonE1);
 
         jToggleButtonE2.setText("2");
-        jToggleButtonE2.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jToggleButtonE2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonE2ActionPerformed(evt);
@@ -215,7 +212,6 @@ public class PresetPanel extends javax.swing.JPanel {
         jPanel2.add(jToggleButtonE2);
 
         jToggleButtonE3.setText("3");
-        jToggleButtonE3.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jToggleButtonE3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonE3ActionPerformed(evt);
@@ -224,7 +220,6 @@ public class PresetPanel extends javax.swing.JPanel {
         jPanel2.add(jToggleButtonE3);
 
         jToggleButtonE4.setText("4");
-        jToggleButtonE4.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jToggleButtonE4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonE4ActionPerformed(evt);
@@ -233,7 +228,6 @@ public class PresetPanel extends javax.swing.JPanel {
         jPanel2.add(jToggleButtonE4);
 
         jToggleButtonE5.setText("5");
-        jToggleButtonE5.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jToggleButtonE5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonE5ActionPerformed(evt);
@@ -242,7 +236,6 @@ public class PresetPanel extends javax.swing.JPanel {
         jPanel2.add(jToggleButtonE5);
 
         jToggleButtonE6.setText("6");
-        jToggleButtonE6.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jToggleButtonE6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonE6ActionPerformed(evt);
@@ -251,7 +244,6 @@ public class PresetPanel extends javax.swing.JPanel {
         jPanel2.add(jToggleButtonE6);
 
         jToggleButtonE7.setText("7");
-        jToggleButtonE7.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jToggleButtonE7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonE7ActionPerformed(evt);
@@ -260,7 +252,6 @@ public class PresetPanel extends javax.swing.JPanel {
         jPanel2.add(jToggleButtonE7);
 
         jToggleButtonE8.setText("8");
-        jToggleButtonE8.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jToggleButtonE8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonE8ActionPerformed(evt);
