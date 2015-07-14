@@ -2,6 +2,14 @@
 call %~sdp0\path.bat
 call %~sdp0\test_env.bat
 
+cd %axoloti_firmware%
+echo "Compiling firmware..."
+make
+cd flasher
+echo "Compiling firmware flasher..."
+make
+
+
 cd %FIRMWAREDIR%
 if not exist ".dep\" mkdir .dep
 if not exist "build\" mkdir build

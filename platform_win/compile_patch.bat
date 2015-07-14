@@ -1,4 +1,4 @@
 @ECHO OFF
 CALL %~sdp0\path.bat
-cd %~sdp0\..\patch
+cd %axoloti_release%\patch
 make
