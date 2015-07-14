@@ -50,6 +50,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
@@ -173,13 +174,12 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             jMenuAutoTest.setVisible(false);
             jMenuItemRefreshFWID.setVisible(false);
         }
-        
+
         jMenuItemEnterDFU.setVisible(Axoloti.isDeveloper());
         jMenuItemFlashSDR.setVisible(Axoloti.isDeveloper());
         jMenuItemFCompile.setVisible(Axoloti.isDeveloper());
         jDevSeparator.setVisible(Axoloti.isDeveloper());
-        
-              
+
         jMenuAutoTest.setVisible(false); // no longer relevant - remove?
         PopulateLibraryMenu(jMenuLibrary);
 
@@ -237,6 +237,17 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             fm.setActionCommand("open:" + path + File.separator + fn);
             fm.addActionListener(this);
             parent.add(fm);
+        }
+    }
+
+    void flashUsingSDRam(String fname_flasher) {
+        File f = new File(fname_flasher);
+        if (f.canRead()) {
+            qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
+            qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
+            qcmdprocessor.AppendToQueue(new QCmdStart(null));
+        } else {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can't read flasher, please compile firmware! (file: " + fname_flasher + " )");
         }
     }
 
@@ -768,14 +779,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDRActionPerformed
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
-        File f = new File(fname);
-        if (f.canRead()) {
-            qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
-            qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
-            qcmdprocessor.AppendToQueue(new QCmdStart(null));
-        } else {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can't read flasher, please compile firmware! (file: " + fname + " )");
-        }
+        flashUsingSDRam(fname);
     }//GEN-LAST:event_jMenuItemFlashSDRActionPerformed
 
     private void jMenuItemFCompileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFCompileActionPerformed
@@ -798,14 +802,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     private void jMenuItemFlashDefaultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashDefaultActionPerformed
         String fname = System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/flasher/flasher_build/flasher.bin";
-        File f = new File(fname);
-        if (f.canRead()) {
-            qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
-            qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
-            qcmdprocessor.AppendToQueue(new QCmdStart(null));
-        } else {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can't read flasher, please compile firmware! (file: " + fname + " )");
-        }
+        flashUsingSDRam(fname);
     }//GEN-LAST:event_jMenuItemFlashDefaultActionPerformed
 
     public void NewPatch() {
@@ -1021,6 +1018,25 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             Logger.getLogger(AxoObjects.class.getName()).severe("Firmware CRC mismatch! Please flash the firmware first! "
                     + "Target firmware CRC = " + firmwareId + " <> " + this.LinkFirmwareID);
             LinkFirmwareID = firmwareId;
+
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    interactiveFirmwareUpdate();
+                }
+            });
+        }
+    }
+
+    public void interactiveFirmwareUpdate() {
+        int s = JOptionPane.showConfirmDialog(this,
+                "Firmware CRC mismatch detected!\n"
+                + "Do you want to update the firmware?\n"
+                + "This process will cause a disconnect, flashing leds, do not interrupt until ready...",
+                "Firmware update...",
+                JOptionPane.YES_NO_OPTION);
+        if (s == 0) {
+            flashUsingSDRam(System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/flasher/flasher_build/flasher.bin");
         }
     }
 
