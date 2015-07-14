@@ -173,6 +173,13 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             jMenuAutoTest.setVisible(false);
             jMenuItemRefreshFWID.setVisible(false);
         }
+        
+        jMenuItemEnterDFU.setVisible(Axoloti.isDeveloper());
+        jMenuItemFlashSDR.setVisible(Axoloti.isDeveloper());
+        jMenuItemFCompile.setVisible(Axoloti.isDeveloper());
+        jDevSeparator.setVisible(Axoloti.isDeveloper());
+        
+              
         jMenuAutoTest.setVisible(false); // no longer relevant - remove?
         PopulateLibraryMenu(jMenuLibrary);
 
@@ -277,12 +284,13 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuItemPing = new javax.swing.JMenuItem();
         jMenuItemPanic = new javax.swing.JMenuItem();
         jMenuFirmware = new javax.swing.JMenu();
-        jMenuItemFCompile = new javax.swing.JMenuItem();
-        jMenuItemFlashSDR = new javax.swing.JMenuItem();
-        jMenuItemEnterDFU = new javax.swing.JMenuItem();
+        jMenuItemFlashDefault = new javax.swing.JMenuItem();
         jMenuItemFlashDFU = new javax.swing.JMenuItem();
         jMenuItemRefreshFWID = new javax.swing.JMenuItem();
-        jMenuItemFlashDefault = new javax.swing.JMenuItem();
+        jDevSeparator = new javax.swing.JPopupMenu.Separator();
+        jMenuItemFCompile = new javax.swing.JMenuItem();
+        jMenuItemEnterDFU = new javax.swing.JMenuItem();
+        jMenuItemFlashSDR = new javax.swing.JMenuItem();
         jMenuWindow = new javax.swing.JMenu();
         jMenuHelp = new javax.swing.JMenu();
         jMenuHelpContents = new javax.swing.JMenuItem();
@@ -402,6 +410,7 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
     jMenuFile.add(jMenuRegenerateObjects);
 
     jMenuAutoTest.setText("Automated test");
+    jMenuAutoTest.setEnabled(false);
     jMenuAutoTest.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuAutoTestActionPerformed(evt);
@@ -486,31 +495,15 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     jMenuFirmware.setText("Firmware");
 
-    jMenuItemFCompile.setText("Compile");
-    jMenuItemFCompile.addActionListener(new java.awt.event.ActionListener() {
+    jMenuItemFlashDefault.setText("Flash");
+    jMenuItemFlashDefault.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemFCompileActionPerformed(evt);
+            jMenuItemFlashDefaultActionPerformed(evt);
         }
     });
-    jMenuFirmware.add(jMenuItemFCompile);
+    jMenuFirmware.add(jMenuItemFlashDefault);
 
-    jMenuItemFlashSDR.setText("Flash (using sdram)");
-    jMenuItemFlashSDR.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemFlashSDRActionPerformed(evt);
-        }
-    });
-    jMenuFirmware.add(jMenuItemFlashSDR);
-
-    jMenuItemEnterDFU.setText("Enter DFU");
-    jMenuItemEnterDFU.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemEnterDFUActionPerformed(evt);
-        }
-    });
-    jMenuFirmware.add(jMenuItemEnterDFU);
-
-    jMenuItemFlashDFU.setText("Flash (using DFU)");
+    jMenuItemFlashDFU.setText("Flash (Rescue)");
     jMenuItemFlashDFU.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuItemFlashDFUActionPerformed(evt);
@@ -525,14 +518,31 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     });
     jMenuFirmware.add(jMenuItemRefreshFWID);
+    jMenuFirmware.add(jDevSeparator);
 
-    jMenuItemFlashDefault.setText("Flash with default");
-    jMenuItemFlashDefault.addActionListener(new java.awt.event.ActionListener() {
+    jMenuItemFCompile.setText("Compile");
+    jMenuItemFCompile.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemFlashDefaultActionPerformed(evt);
+            jMenuItemFCompileActionPerformed(evt);
         }
     });
-    jMenuFirmware.add(jMenuItemFlashDefault);
+    jMenuFirmware.add(jMenuItemFCompile);
+
+    jMenuItemEnterDFU.setText("Enter Rescue mode");
+    jMenuItemEnterDFU.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItemEnterDFUActionPerformed(evt);
+        }
+    });
+    jMenuFirmware.add(jMenuItemEnterDFU);
+
+    jMenuItemFlashSDR.setText("Flash (User)");
+    jMenuItemFlashSDR.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItemFlashSDRActionPerformed(evt);
+        }
+    });
+    jMenuFirmware.add(jMenuItemFlashSDR);
 
     jMenuBoard.add(jMenuFirmware);
 
@@ -890,6 +900,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButtonClear;
     private javax.swing.JCheckBox jCheckBoxConnect;
+    private javax.swing.JPopupMenu.Separator jDevSeparator;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelCPUID;
     private javax.swing.JLabel jLabelFirmwareID;
@@ -960,12 +971,13 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             }
         }
         jCheckBoxConnect.setSelected(connect);
-        jMenuItemEnterDFU.setEnabled(connect);
-        jMenuItemFlashSDR.setEnabled(connect);
         jMenuItemFDisconnect.setEnabled(connect);
 
         jMenuItemFConnect.setEnabled(!connect);
         jMenuItemSelectCom.setEnabled(!connect);
+
+        jMenuItemEnterDFU.setEnabled(connect);
+        jMenuItemFlashSDR.setEnabled(connect);
 
         if (!connect) {
             setCpuID(null);
@@ -1006,7 +1018,8 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
         TargetFirmwareID = firmwareId;
         if (!firmwareId.equals(this.LinkFirmwareID)) {
-            Logger.getLogger(AxoObjects.class.getName()).severe("Firmware CRC mismatch! Please flash the firmware first! Target firmware CRC = " + firmwareId);
+            Logger.getLogger(AxoObjects.class.getName()).severe("Firmware CRC mismatch! Please flash the firmware first! "
+                    + "Target firmware CRC = " + firmwareId + " <> " + this.LinkFirmwareID);
             LinkFirmwareID = firmwareId;
         }
     }

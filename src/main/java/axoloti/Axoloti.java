@@ -69,6 +69,29 @@ public class Axoloti {
         return true;
     }
 
+    // cache this, as it linked to checks on the UI/menu
+    private static String   cacheFWDir = null; 
+    private static boolean  cacheDeveloper = false; 
+    static boolean isDeveloper() {
+        String fwEnv = System.getProperty(FIRMWARE_DIR);
+        if (cacheFWDir!=null && fwEnv.equals(cacheFWDir)) {
+            return cacheDeveloper;
+        }
+        cacheFWDir = fwEnv;
+        cacheDeveloper = false;
+        String dirRelease = System.getProperty(RELEASE_DIR);
+        String fwRelease = dirRelease + "/firmware";
+        if (!fwRelease.equals(cacheFWDir)) {
+            cacheDeveloper = true;
+        } else {
+            File f = new File(dirRelease + File.separator +".git");
+            if (f.exists()) {
+                cacheDeveloper = true;
+            }
+        }
+        return cacheDeveloper;
+    }
+
     /**
      * @param args the command line arguments
      */

@@ -62,6 +62,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuAutoTest">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Automated test"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuAutoTestActionPerformed"/>
@@ -159,33 +160,17 @@
                 <Property name="text" type="java.lang.String" value="Firmware"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFCompile">
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashDefault">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Compile"/>
+                    <Property name="text" type="java.lang.String" value="Flash"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFCompileActionPerformed"/>
-                  </Events>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashSDR">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Flash (using sdram)"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFlashSDRActionPerformed"/>
-                  </Events>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemEnterDFU">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Enter DFU"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemEnterDFUActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFlashDefaultActionPerformed"/>
                   </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashDFU">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Flash (using DFU)"/>
+                    <Property name="text" type="java.lang.String" value="Flash (Rescue)"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFlashDFUActionPerformed"/>
@@ -199,12 +184,30 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRefreshFWIDActionPerformed"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashDefault">
+                <MenuItem class="javax.swing.JPopupMenu$Separator" name="jDevSeparator">
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFCompile">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Flash with default"/>
+                    <Property name="text" type="java.lang.String" value="Compile"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFlashDefaultActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFCompileActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemEnterDFU">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Enter Rescue mode"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemEnterDFUActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashSDR">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Flash (User)"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFlashSDRActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>
