@@ -69,13 +69,7 @@
     the compile target as the regular run target does. Again, for a list of available 
     properties which you can use, check the target you are overriding in the
     nbproject/build-impl.xml file. 
-
     -->
-    <target name="-pre-init">
-        <taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
-                uri="javafx:com.sun.javafx.tools.ant"
-                classpath=".:/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home/lib/ant-javafx.jar"/>    
-    </target>
     
   <property name="built_by"  value="${user.name}"/>
 
@@ -140,21 +134,20 @@
 		<mkdir dir="build/runtime/linux"/>
 		<exec dir="build/runtime/tmp" executable="tar" os="Linux">
 			<arg value="-cvf"/>
-			<arg value="../linux/axoloti_runtime.zip"/>
+			<arg value="../linux/axoloti_runtime.tar"/>
 			<arg value="."/>
 		</exec>
 		<!--Windows -->
   </target>
 
   <target name="bundle" if="build.bundle">
-	<echoproperties/>
 	<echo>${java.home}</echo>
 	<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
 			uri="javafx:com.sun.javafx.tools.ant"
 			classpath=".:${java.home}/../lib/ant-javafx.jar"/>    
 	<fx:resources id="appRes">
 		 <fx:fileset dir="dist">
-         	<include name="axoloti-app.jar"/>
+         		<include name="axoloti-app.jar"/>
 		 </fx:fileset>
 		 <fx:fileset dir="lib">
 			 <include name="simple-xml-2.7.1.jar"/>
@@ -200,15 +193,30 @@
 			<attribute name="SplashScreen-Image" value="resources/splash.png"/>
 		</manifest>
 	</fx:jar> 
-    <fx:deploy nativeBundles="all" width="100" height="100" outdir="build/" outfile="AxolotiApp">
+
+    	<fx:deploy os="Linux" nativeBundles="deb" width="100" height="100" outdir="build/" outfile="AxolotiApp">
             <fx:info title="Axoloti" 
-					vendor="axoloti" 
-					description="Axoloti application">
-				<fx:icon href="src/main/java/resources/axoloti_icon.icns"/>
-			</fx:info>
+		     vendor="axoloti" 
+		     description="Axoloti application"
+		     license="GPL"
+		     copyright="Axoloti.com" >
+		<fx:icon href="src/main/java/resources/axoloti_icon.png"/>
+	      </fx:info>
             <fx:application mainClass="axoloti.Axoloti"/>
-			<fx:resources refid="appRes"/>
-    </fx:deploy>
+	    <fx:resources refid="appRes"/>
+    	</fx:deploy>
+
+    	<fx:deploy os="Mac OS X" nativeBundles="dmg" width="100" height="100" outdir="build/" outfile="AxolotiApp">
+            <fx:info title="Axoloti" 
+		     vendor="axoloti" 
+		     description="Axoloti application"
+		     license="GPL"
+		     copyright="Axoloti.com" >
+		<fx:icon href="src/main/java/resources/axoloti_icon.icns"/>
+	      </fx:info>
+            <fx:application mainClass="axoloti.Axoloti"/>
+	    <fx:resources refid="appRes"/>
+    	</fx:deploy>
   </target>
 
       
