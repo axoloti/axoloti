@@ -108,6 +108,9 @@ else
     echo "##### dfu-util already present, skipping... #####"
 fi
 
+
+sudo apt-get install openjdk-7-jdk
+
 echo "##### building GUI... #####"
 cd "${PLATFORM_ROOT}"/..
 ant
