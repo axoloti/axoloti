@@ -22,9 +22,11 @@ public abstract class Connection {
     abstract public void TransmitCreateFile(String filename, int size);
     abstract public void TransmitAppendFile(byte[] buffer);
     abstract public void TransmitCloseFile();
+    abstract public void TransmitMemoryRead(int addr, int length);
     abstract public void SendUpdatedPreset(byte[] b);
     abstract public void SendMidi(int m0, int m1, int m2);
     abstract public boolean AppendToQueue(QCmdSerialTask cmd);
+    abstract public void TransmitGetFWVersion();
     abstract public void BringToDFU();
     abstract public void ClearSync();
     abstract public void TransmitCopyToFlash();

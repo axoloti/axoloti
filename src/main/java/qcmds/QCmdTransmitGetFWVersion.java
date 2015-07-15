@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -23,29 +23,21 @@ import axoloti.Connection;
  *
  * @author Johannes Taelman
  */
-public class QCmdStop implements QCmdSerialTask {
+public class QCmdTransmitGetFWVersion implements QCmdSerialTask {
 
-    public QCmdStop() {
-    }
-    
     @Override
     public String GetStartMessage() {
-        return "";//Start stopping patch";
+        return "";
     }
 
     @Override
     public String GetDoneMessage() {
-        return "";//Done stopping patch";
+        return "";
     }
 
     @Override
     public QCmd Do(Connection connection) {
-        connection.ClearSync();
-        connection.TransmitStop();
-        if (connection.WaitSync()) {
-            return this;
-        } else {
-            return new QCmdDisconnect();
-        }
+        connection.TransmitGetFWVersion();
+        return this;
     }
 }

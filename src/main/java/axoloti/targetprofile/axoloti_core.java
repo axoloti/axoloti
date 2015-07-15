@@ -17,6 +17,8 @@
  */
 package axoloti.targetprofile;
 
+import java.nio.ByteBuffer;
+
 /**
  *
  * @author Johannes Taelman
@@ -35,4 +37,45 @@ public class axoloti_core {
     public int getSDRAMSize() {
         return 8 * 1024 * 1024;
     }
+
+    public int getOTP0Addr() {
+        return 0x1FFF7800;
+    }
+
+    public int getOTP0Length() {
+        return 32;
+    }
+
+    public int getOTP1Addr() {
+        return 0x1FFF7820;
+    }
+
+    public int getOTP1Length() {
+        return 32;
+    }
+
+    public int getCPUIDAddr() {
+        return 0x1FFF7A10;
+    }
+
+    public int getCPUIDLength() {
+        return 12;
+    }
+
+    ByteBuffer OTP0Data;
+    ByteBuffer OTP1Data;
+    ByteBuffer CPUIDData;
+
+    public void setOTP0Data(ByteBuffer b) {
+        OTP0Data = b;
+    }
+
+    public void setOTP1Data(ByteBuffer b) {
+        OTP1Data = b;
+    }
+
+    public void setCPUIDData(ByteBuffer b) {
+        CPUIDData = b;
+    }
+
 }

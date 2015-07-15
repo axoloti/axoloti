@@ -39,9 +39,13 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import org.usb4java.*;
 import qcmds.QCmd;
+import qcmds.QCmdLock;
+import qcmds.QCmdMemRead;
+import qcmds.QCmdProcessor;
 import qcmds.QCmdSerialTask;
 import qcmds.QCmdSerialTaskNull;
 import qcmds.QCmdShowDisconnect;
+import qcmds.QCmdTransmitGetFWVersion;
 
 /**
  *
@@ -264,8 +268,27 @@ public class USBBulkConnection extends Connection {
             }
 
             connected = true;
+            ClearSync();
+            TransmitPing();
+            WaitSync();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "connected");
             MainFrame.mainframe.ShowConnect();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            QCmdProcessor qcmdp = MainFrame.mainframe.getQcmdprocessor();
+            qcmdp.AppendToQueue(new QCmdTransmitGetFWVersion());
+            qcmdp.AppendToQueue(new QCmdMemRead(targetProfile.getCPUIDAddr(), targetProfile.getCPUIDLength()));
+            qcmdp.AppendToQueue(new QCmdMemRead(targetProfile.getOTP0Addr(), targetProfile.getOTP0Length()));
+            qcmdp.AppendToQueue(new QCmdMemRead(targetProfile.getOTP1Addr(), targetProfile.getOTP1Length()));
+
             return true;
 
         }
@@ -303,6 +326,16 @@ public class USBBulkConnection extends Connection {
         data[1] = 'x';
         data[2] = 'o';
         data[3] = 'D';
+        writeBytes(data);
+    }
+
+    @Override
+    public void TransmitGetFWVersion() {
+        byte[] data = new byte[4];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'V';
         writeBytes(data);
     }
 
@@ -500,6 +533,26 @@ public class USBBulkConnection extends Connection {
         WaitSync();
     }
 
+    @Override
+    public void TransmitMemoryRead(int addr, int length) {
+        byte[] data = new byte[12];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'r';
+        data[4] = (byte) addr;
+        data[5] = (byte) (addr >> 8);
+        data[6] = (byte) (addr >> 16);
+        data[7] = (byte) (addr >> 24);
+        data[8] = (byte) length;
+        data[9] = (byte) (length >> 8);
+        data[10] = (byte) (length >> 16);
+        data[11] = (byte) (length >> 24);
+        ClearSync();
+        writeBytes(data);
+        WaitSync();
+    }
+
     class Receiver implements Runnable {
 
         @Override
@@ -534,7 +587,10 @@ public class USBBulkConnection extends Connection {
             while (!disconnectRequested) {
                 try {
                     QCmdSerialTask cmd = queueSerialTask.take();
-                    queueResponse.add(cmd.Do(USBBulkConnection.this));
+                    QCmd response = cmd.Do(USBBulkConnection.this);
+                    if (response != null) {
+                        queueResponse.add(response);
+                    }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -561,10 +617,7 @@ public class USBBulkConnection extends Connection {
             this.CpuId2 = CpuId2;
             MainFrame.mainframe.setCpuID(String.format("%08X%08X%08X", CpuId0, CpuId1, CpuId2));
         }
-        if (FirmwareId != this.FirmwareId) {
-            this.FirmwareId = FirmwareId;
-            MainFrame.mainframe.setFirmwareID((String.format("%08X", FirmwareId)));
-        }
+        MainFrame.mainframe.setFirmwareID((String.format("%08X", FirmwareId)));
         IID = PatchID;
         if (patch != null) {
             patch.SetDSPLoad(DSPLoad);
@@ -623,7 +676,9 @@ public class USBBulkConnection extends Connection {
         displayPckt, // object display readback
         textPckt, // text message to display in log
         sdinfo, // sdcard info
-        fileinfo // file listing entry
+        fileinfo, // file listing entry
+        memread, // one-time programmable bytes
+        fwversion
     };
     /*
      Protocol documentation:
@@ -639,6 +694,10 @@ public class USBBulkConnection extends Connection {
     ByteBuffer lcdRcvBuffer = ByteBuffer.allocate(256);
     ByteBuffer sdinfoRcvBuffer = ByteBuffer.allocate(12);
     ByteBuffer fileinfoRcvBuffer = ByteBuffer.allocate(256);
+    ByteBuffer memReadBuffer = ByteBuffer.allocate(16 * 4);
+    int memReadAddr;
+    int memReadLength;
+    byte[] fwversion = new byte[4];
 
     void storeDataByte(int c) {
         switch (dataIndex & 0x3) {
@@ -781,6 +840,15 @@ public class USBBulkConnection extends Connection {
                                 dataIndex = 0;
                                 dataLength = 4;
                                 break;
+                            case 'r':
+                                state = ReceiverState.memread;
+                                memReadBuffer.clear();
+                                dataIndex = 0;
+                                break;
+                            case 'V':
+                                state = ReceiverState.fwversion;
+                                dataIndex = 0;
+                                break;
                             default:
                                 GoIdleState();
                                 break;
@@ -890,6 +958,88 @@ public class USBBulkConnection extends Connection {
                     GoIdleState();
                 }
                 break;
+            case memread:
+                switch (dataIndex) {
+                    case 0:
+                        memReadAddr = (cc & 0xFF);
+                        break;
+                    case 1:
+                        memReadAddr += (cc & 0xFF) << 8;
+                        break;
+                    case 2:
+                        memReadAddr += (cc & 0xFF) << 16;
+                        break;
+                    case 3:
+                        memReadAddr += (cc & 0xFF) << 24;
+                        break;
+                    case 4:
+                        memReadLength = (cc & 0xFF);
+                        break;
+                    case 5:
+                        memReadLength += (cc & 0xFF) << 8;
+                        break;
+                    case 6:
+                        memReadLength += (cc & 0xFF) << 16;
+                        break;
+                    case 7:
+                        memReadLength += (cc & 0xFF) << 24;
+                        break;
+                    case 8:
+                        memReadBuffer = ByteBuffer.allocate(memReadLength);
+                        memReadBuffer.rewind();
+                    default:
+                        memReadBuffer.put(cc);
+                        if (dataIndex == memReadLength + 7) {
+                            memReadBuffer.rewind();
+                            memReadBuffer.order(ByteOrder.LITTLE_ENDIAN);
+                            System.out.println("memread offset 0x" + Integer.toHexString(memReadAddr));
+                            int i = 0;
+                            while (memReadBuffer.hasRemaining()) {
+                                System.out.print(" " + String.format("%02X", memReadBuffer.get()));
+                                i++;
+                                //if ((i % 4) == 0) {
+                                //    System.out.print(" ");
+                                //}
+                                if ((i % 40) == 0) {
+                                    System.out.println();
+                                }
+                            }
+                            if (memReadAddr == targetProfile.getCPUIDAddr()) {
+                                targetProfile.setCPUIDData(memReadBuffer);
+                            } else if (memReadAddr == targetProfile.getOTP0Addr()) {
+                                targetProfile.setOTP0Data(memReadBuffer);
+                            } else if (memReadAddr == targetProfile.getOTP1Addr()) {
+                                targetProfile.setOTP1Data(memReadBuffer);
+                            }
+                            System.out.println();
+                            GoIdleState();
+                        }
+                }
+                dataIndex++;
+                break;
+
+            case fwversion:
+                switch (dataIndex) {
+                    case 0:
+                        fwversion[0] = cc;
+                        break;
+                    case 1:
+                        fwversion[1] = cc;
+                        break;
+                    case 2:
+                        fwversion[2] = cc;
+                        break;
+                    case 3:
+                        fwversion[3] = cc;
+                        Logger.getLogger(USBBulkConnection.class.getName()).info(
+                                String.format("Firmware version: %d.%d.%d.%d",
+                                        fwversion[0], fwversion[1], fwversion[2], fwversion[3]));
+                        GoIdleState();
+                        break;
+                }
+                dataIndex++;
+                break;
+
             default:
                 GoIdleState();
                 break;

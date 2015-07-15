@@ -1006,25 +1006,25 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         //TargetFirmwareID = LinkFirmwareID;
         jLabelFirmwareID.setText("Firmware ID = " + LinkFirmwareID);
         Logger.getLogger(MainFrame.class.getName()).info("Link to firmware CRC " + LinkFirmwareID);
+        WarnedAboutFWCRCMismatch = false;
     }
 
-//    boolean isFirmwareUpgrading = false;
+    public boolean WarnedAboutFWCRCMismatch = false;
+
     void setFirmwareID(String firmwareId) {
-        if (firmwareId.equals(TargetFirmwareID)) {
-            return;
-        }
         TargetFirmwareID = firmwareId;
         if (!firmwareId.equals(this.LinkFirmwareID)) {
-            Logger.getLogger(AxoObjects.class.getName()).severe("Firmware CRC mismatch! Please flash the firmware first! "
-                    + "Target firmware CRC = " + firmwareId + " <> " + this.LinkFirmwareID);
-            LinkFirmwareID = firmwareId;
-
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    interactiveFirmwareUpdate();
-                }
-            });
+            if (!WarnedAboutFWCRCMismatch) {
+                Logger.getLogger(AxoObjects.class.getName()).severe("Firmware CRC mismatch! Please flash the firmware first! "
+                        + "Target firmware CRC = " + firmwareId + " <> source CRC" + this.LinkFirmwareID);
+                WarnedAboutFWCRCMismatch = true;
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        interactiveFirmwareUpdate();
+                    }
+                });
+            }
         }
     }
 
