@@ -76,6 +76,9 @@
   <!-- run the ant timestamp task -->
   <tstamp/>
 
+  <target name="-post-init">
+	<antcall target="create.build.version"/>
+  </target>
   <!-- Overrides -do-jar-->
   <target name="-do-jar">
 
@@ -86,6 +89,7 @@
         <attribute name="Built-By" value="${built_by}"/>
         <attribute name="Created-By" value="${built_by}"/>
         <attribute name="Built-Date" value="${TODAY}"/>
+        <attribute name="Implementation-Version" value="${build.version}"/>
         <attribute name="SplashScreen-Image" value="resources/splash.png"/>
       </manifest>
 
@@ -177,7 +181,7 @@
 
 	<fx:jar destfile="dist/axoloti-app.jar">
 		<!-- Details about application -->
-		<fx:application name="Axoloti" mainClass="axoloti.Axoloti"/>
+		<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="${build.version}"/>
 	 
 		<!-- Define what auxilary resources are needed -->
 		<fx:resources refid="appRes"/>
@@ -189,7 +193,7 @@
 		<!-- Customize jar manifest (optional) -->
 		<manifest>
 			<attribute name="Implementation-Vendor" value="Axoloti"/>
-			<attribute name="Implementation-Version" value="1.0"/>
+			<attribute name="Implementation-Version" value="${build.version}"/>
 			<attribute name="Main-Class" value="axoloti.Axoloti"/>
 			<attribute name="Built-By" value="${built_by}"/>
 			<attribute name="Created-By" value="${built_by}"/>
@@ -210,7 +214,7 @@
 	    <fx:resources refid="appRes"/>
     	</fx:deploy>
 
-    	<fx:deploy os="Mac OS X" nativeBundles="dmg" width="100" height="100" outdir="build/" outfile="AxolotiApp">
+    	<fx:deploy os="Mac OS X" nativeBundles="dmg" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version}">
             <fx:info title="Axoloti" 
 		     vendor="axoloti" 
 		     description="Axoloti application"
@@ -222,7 +226,7 @@
 	    <fx:resources refid="appRes"/>
     	</fx:deploy>
 
-    	<fx:deploy os="Windows" nativeBundles="msi" width="100" height="100" outdir="build/" outfile="AxolotiApp">
+    	<fx:deploy os="Windows" nativeBundles="msi" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version}">
             <fx:info title="Axoloti" 
 		     vendor="axoloti" 
 		     description="Axoloti application"
@@ -235,6 +239,16 @@
     	</fx:deploy>
 
   </target>
+
+	<target name="create.build.version">
+		<exec executable="git" outputproperty="build.version">
+			<arg line = "describe --long --tags --dirty --always" />
+		</exec>
+		<echo output="src/main/java/axoloti/Version.java" >package axoloti;</echo>
+		<echo output="src/main/java/axoloti/Version.java" append="true">public class Version {</echo>
+		<echo output="src/main/java/axoloti/Version.java" append="true">public final static String AXOLOTI_VERSION ="${build.version}";</echo>
+		<echo output="src/main/java/axoloti/Version.java" append="true">};</echo>
+	</target>
 
       
 </project>
