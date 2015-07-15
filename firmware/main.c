@@ -107,7 +107,7 @@ int main(void) {
   chprintf((BaseSequentialStream * )&SD2,"Hello world!\r\n");
 #endif
 
-//  exception_init();
+  exception_init();
 
   InitPatch0();
 
