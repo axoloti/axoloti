@@ -29,6 +29,9 @@ patch/xpatch.map
 hs_err_*.log
 axoloti_osx.zip
 
+#Version file
+src/main/java/axoloti/Version.java
+
 #################
 ## Eagle
 #################
