@@ -41,18 +41,16 @@
 #include "midi_usb.h"
 #include "watchdog.h"
 
-
 //#define DEBUG_SERIAL 1
 
 void BootLoaderInit(void);
 
 uint32_t fwid;
 
-
 static WORKING_AREA(waThreadUSBDMidi, 256);
 
 __attribute__((noreturn))
-  static msg_t ThreadUSBDMidi(void *arg) {
+    static msg_t ThreadUSBDMidi(void *arg) {
   (void)arg;
 #if CH_USE_REGISTRY
   chRegSetThreadName("usbdmidi");
@@ -60,7 +58,8 @@ __attribute__((noreturn))
   uint8_t r[4];
   while (1) {
     chnReadTimeout(&MDU1, &r[0], 4, TIME_INFINITE);
-    MidiInMsgHandler(MIDI_DEVICE_USB_DEVICE, (( r[0] & 0xF0) >> 4)+ 1, r[1], r[2], r[3]);
+    MidiInMsgHandler(MIDI_DEVICE_USB_DEVICE, ((r[0] & 0xF0) >> 4) + 1, r[1],
+                     r[2], r[3]);
   }
 }
 
@@ -88,8 +87,8 @@ void InitPConnection(void) {
   usbStart(midiusbcfg.usbp, &usbcfg);
   usbConnectBus(midiusbcfg.usbp);
 
-  chThdCreateStatic(waThreadUSBDMidi, sizeof(waThreadUSBDMidi), NORMALPRIO, ThreadUSBDMidi,
-                    NULL);
+  chThdCreateStatic(waThreadUSBDMidi, sizeof(waThreadUSBDMidi), NORMALPRIO,
+                    ThreadUSBDMidi, NULL);
 }
 
 int AckPending = 0;
@@ -111,14 +110,14 @@ void TransmitDisplayPckt(void) {
 }
 
 void LogTextMessage(const char* format, ...) {
-  if (usbGetDriverStateI(BDU1.config->usbp) == USB_ACTIVE ) {
+  if (usbGetDriverStateI(BDU1.config->usbp) == USB_ACTIVE) {
     int h = 0x546F7841; // "AxoT"
     chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                             (const unsigned char* )&h, 4);
 
     va_list ap;
     va_start(ap, format);
-    chvprintf((BaseSequentialStream * )&BDU1, format, ap);
+    chvprintf((BaseSequentialStream *)&BDU1, format, ap);
     va_end(ap);
     chSequentialStreamPut((BaseSequentialStream * )&BDU1, 0);
   }
@@ -128,7 +127,8 @@ void PExTransmit(void) {
   if (!chOQIsEmptyI(&BDU1.oqueue)) {
     chThdSleepMilliseconds(1);
     BDU1.oqueue.q_notify(&BDU1.oqueue);
-  } else {
+  }
+  else {
     if (AckPending) {
       int ack[7];
       ack[0] = 0x416F7841; // "AxoA"
@@ -258,13 +258,15 @@ void ReadDirectoryListing(void) {
  *
  * "AxoP" (int value, int16 index) -> parameter set
  * "AxoR" (int length, data) -> preset data set
- * "AxoW" (int length, int addr, char[length] data) -> data write
+ * "AxoW" (int length, int addr, char[length] data) -> generic memory write
  * "Axow" (int length, int offset, char[12] filename, char[length] data) -> data write to sdcard
+ * "Axor" (int offset, int length) -> generic memory read
  * "AxoS" -> start patch
  * "Axos" -> stop patch
  * "AxoT" (char number) -> apply preset
  * "AxoM" (char char char) -> 3 byte midi message
  * "AxoD" go to DFU mode
+ * "AxoV" reply FW version number (4 bytes)
  * "AxoF" copy patch code to flash (assumes patch is stopped)
  * "Axod" read directory listing
  * "AxoC (int length) (char[] filename)" create and open file on sdcard
@@ -334,6 +336,19 @@ void CopyPatchToFlash(void) {
   AckPending = 1;
 }
 
+void ReplyFWVersion(void) {
+  uint8_t reply[8];
+  reply[0] = 'A';
+  reply[1] = 'x';
+  reply[2] = 'o';
+  reply[3] = 'V';
+  reply[4] = FWVERSION1; // major
+  reply[5] = FWVERSION2; // minor
+  reply[6] = FWVERSION3;
+  reply[7] = FWVERSION4;
+  chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
+                          (const unsigned char* )(&reply[0]), 8);
+}
 
 void PExReceiveByte(unsigned char c) {
   static char header = 0;
@@ -393,6 +408,9 @@ void PExReceiveByte(unsigned char c) {
       else if (c == 'A') { // append data to sdcard file
         state = 4;
       }
+      else if (c == 'r') { // generic read
+        state = 4;
+      }
       else if (c == 'S') { // stop patch
         state = 0;
         header = 0;
@@ -421,6 +439,12 @@ void PExReceiveByte(unsigned char c) {
         state = 0;
         header = 0;
         StartPatch();
+        AckPending = 1;
+      }
+      else if (c == 'V') { // FW version number
+        state = 0;
+        header = 0;
+        ReplyFWVersion();
         AckPending = 1;
       }
       else if (c == 'p') { // ping
@@ -690,7 +714,7 @@ void PExReceiveByte(unsigned char c) {
     case 7:
       value += c << 24;
       length = value;
-      position = 0x20010000;
+      position = PATCHMAINLOC;
       state++;
       break;
     default:
@@ -703,7 +727,7 @@ void PExReceiveByte(unsigned char c) {
           header = 0;
           state = 0;
           int bytes_written;
-          err = f_write(&pFile, (char *)0x20010000, length,
+          err = f_write(&pFile, (char *)PATCHMAINLOC, length,
                         (void *)&bytes_written);
           if (err != FR_OK) {
             LogTextMessage("File write failed");
@@ -811,12 +835,62 @@ void PExReceiveByte(unsigned char c) {
       }
     }
   }
+  else if (header == 'r') { // generic read
+    switch (state) {
+    case 4:
+      offset = c;
+      state++;
+      break;
+    case 5:
+      offset += c << 8;
+      state++;
+      break;
+    case 6:
+      offset += c << 16;
+      state++;
+      break;
+    case 7:
+      offset += c << 24;
+      state++;
+      break;
+    case 8:
+      value = c;
+      state++;
+      break;
+    case 9:
+      value += c << 8;
+      state++;
+      break;
+    case 10:
+      value += c << 16;
+      state++;
+      break;
+    case 11:
+      value += c << 24;
+
+      uint32_t read_repy_header[3];
+      ((char*)read_repy_header)[0] = 'A';
+      ((char*)read_repy_header)[1] = 'x';
+      ((char*)read_repy_header)[2] = 'o';
+      ((char*)read_repy_header)[3] = 'r';
+      read_repy_header[1] = offset;
+      read_repy_header[2] = value;
+      chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
+                              (const unsigned char* )(&read_repy_header[0]), 3 * 4);
+      chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
+                              (const unsigned char* )(offset), value);
+
+      AckPending = true;
+      header = 0;
+      state = 0;
+      break;
+    }
+  }
   else {
     header = 0;
     state = 0;
   }
 }
-
 
 void PExReceive(void) {
   if (!AckPending) {
@@ -828,11 +902,11 @@ void PExReceive(void) {
 }
 
 /*
-void USBDMidiPoll(void) {
-  uint8_t r[4];
-  while (chnReadTimeout(&MDU1, &r, 4, TIME_IMMEDIATE)) {
-    MidiInMsgHandler(MIDI_DEVICE_USB_DEVICE, (( r[0] & 0xF0) >> 4)+ 1, r[1], r[2], r[3]);
-  }
-}
-*/
+ void USBDMidiPoll(void) {
+ uint8_t r[4];
+ while (chnReadTimeout(&MDU1, &r, 4, TIME_IMMEDIATE)) {
+ MidiInMsgHandler(MIDI_DEVICE_USB_DEVICE, (( r[0] & 0xF0) >> 4)+ 1, r[1], r[2], r[3]);
+ }
+ }
+ */
 
