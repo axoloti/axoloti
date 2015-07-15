@@ -138,6 +138,10 @@
 			<arg value="."/>
 		</exec>
 		<!--Windows -->
+		<mkdir dir="build/runtime/tmp_win/axoloti_runtime"/>
+		<exec dir="." executable="cp" os="Windows">
+			<arg line="-R platform_win build/runtime/tmp_win/axoloti_runtime"/>
+		</exec>
   </target>
 
   <target name="bundle" if="build.bundle">
@@ -217,6 +221,19 @@
             <fx:application mainClass="axoloti.Axoloti"/>
 	    <fx:resources refid="appRes"/>
     	</fx:deploy>
+
+    	<fx:deploy os="Windows" nativeBundles="msi" width="100" height="100" outdir="build/" outfile="AxolotiApp">
+            <fx:info title="Axoloti" 
+		     vendor="axoloti" 
+		     description="Axoloti application"
+		     license="GPL"
+		     copyright="Axoloti.com" >
+		<fx:icon href="src/main/java/resources/axoloti_icon.png"/>
+	      </fx:info>
+            <fx:application mainClass="axoloti.Axoloti"/>
+	    <fx:resources refid="appRes"/>
+    	</fx:deploy>
+
   </target>
 
       
