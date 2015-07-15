@@ -10,6 +10,6 @@ if not defined axoloti_firmware (
    set axoloti_firmware=%axoloti_release%\firmware
 )
 if not defined axoloti_home (
-   set axoloti_home=%axoloti_release%\firmware
+   set axoloti_home=%platformdir%..
 )
 set PATH=%platformdir%\bin
