@@ -91,14 +91,18 @@ void refresh_LCD(void) {
 
 void DispayAbortErr(int err) {
   DBGPRINTCHAR('0' + err);
+#if AXOLOTICONTROL
   LCD_drawStringN(0, 5, "error code:", 128);
   LCD_drawNumber3D(0, 6, (int)err);
   refresh_LCD();
+#endif
+// blink red slowly, green off
+  palWritePad(LED1_PORT, LED1_PIN, 0);
   int i = 10;
   while (i--) {
-    palWritePad(LED1_PORT, LED1_PIN, 1);
+    palWritePad(LED2_PORT, LED2_PIN, 1);
     chThdSleepMilliseconds(1000);
-    palWritePad(LED1_PORT, LED1_PIN, 0);
+    palWritePad(LED2_PORT, LED2_PIN, 0);
     chThdSleepMilliseconds(1000);
   }
   NVIC_SystemReset();
@@ -116,8 +120,19 @@ int main(void) {
 
 //  HAL_DeInit();
 //  HAL_Init();
+
   watchdog_feed();
   halInit();
+
+  // float usb inputs, hope the host notices detach...
+  palSetPadMode(GPIOA, 11, PAL_MODE_INPUT); palSetPadMode(GPIOA, 12, PAL_MODE_INPUT);
+  // setup LEDs
+  palSetPadMode(LED1_PORT,LED1_PIN,PAL_MODE_OUTPUT_PUSHPULL);
+  palSetPad(LED1_PORT,LED1_PIN);
+#ifdef LED2_PIN
+  palSetPadMode(LED2_PORT,LED2_PIN,PAL_MODE_OUTPUT_PUSHPULL);
+#endif
+
   chSysInit();
   watchdog_feed();
   configSDRAM();
@@ -135,7 +150,7 @@ int main(void) {
   DBGPRINTCHAR('a');
 
   uint32_t pbuf[16];
-  SDRAM_ReadBuffer(&pbuf[0],0+0x050000,16);
+  SDRAM_ReadBuffer(&pbuf[0], 0 + 0x050000, 16);
   DBGPRINTCHAR('x');
 
   watchdog_feed();
@@ -174,22 +189,20 @@ int main(void) {
 
   DBGPRINTCHAR('e');
 
-
   // unlock sequence
   FLASH->KEYR = 0x45670123;
   FLASH->KEYR = 0xCDEF89AB;
 
   uint32_t i;
 
-
-  for(i=0;i<12;i++) {
+  for (i = 0; i < 12; i++) {
     flash_Erase_sector(i);
-    LCD_drawStringN(0,3,"Erased sector",128);
-    LCD_drawNumber3D(80,3,i);
+    LCD_drawStringN(0, 3, "Erased sector", 128);
+    LCD_drawNumber3D(80, 3, i);
     refresh_LCD();
-    palWritePad(LED1_PORT,LED1_PIN,1);
+    palWritePad(LED2_PORT,LED2_PIN,1);
     chThdSleepMilliseconds(100);
-    palWritePad(LED1_PORT,LED1_PIN,0);
+    palWritePad(LED2_PORT,LED2_PIN,0);
     DBGPRINTCHAR('f');
     DBGPRINTHEX(i);
   }
@@ -211,27 +224,25 @@ int main(void) {
 
   DBGPRINTCHAR('i');
 
-
   int destptr = FLASH_BASE_ADDR; // flash base adress
   uint32_t *srcptr = (uint32_t *)(SDRAM_BANK_ADDR + 0x010); // sdram base adress + header offset
 
-  for(i=0;i<(flength+3)/4;i++){
+  for (i = 0; i < (flength + 3) / 4; i++) {
     uint32_t d = *srcptr;
-    flash_ProgramWord(destptr,d);
-    if ((FLASH->SR != 0)&&(FLASH->SR != 1)){
+    flash_ProgramWord(destptr, d);
+    if ((FLASH->SR != 0) && (FLASH->SR != 1)) {
       DBGPRINTCHAR('z');
       DBGPRINTHEX(FLASH->SR);
     }
 //    DBGPRINTHEX(f);
-    if ((i&0xFFF) == 0){
-      palWritePad(LED1_PORT,LED1_PIN,1);
-      chThdSleepMilliseconds(100);
-      palWritePad(LED1_PORT,LED1_PIN,0);
+    if ((i & 0xFFF) == 0) {
+      palWritePad(LED2_PORT,LED2_PIN,1);
+      chThdSleepMilliseconds(100); palWritePad(LED2_PORT,LED2_PIN,0);
       DBGPRINTCHAR('j');
       DBGPRINTHEX(destptr);
       DBGPRINTHEX(*(srcptr));
     }
-    destptr+=4;
+    destptr += 4;
     srcptr++;
   }
 
