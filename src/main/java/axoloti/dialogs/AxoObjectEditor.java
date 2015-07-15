@@ -66,6 +66,9 @@ public class AxoObjectEditor extends JFrame {
         for (Parameter i : obj.params) {
             ((DefaultTableModel) jTableParams.getModel()).addRow(new Object[]{ i.name, i.getDatatype()==null? i.getClass().getSimpleName(): i.getDatatype().CType()});
         }
+        for (AxoAttribute i : obj.attributes) {
+            ((DefaultTableModel) jTableAttribs.getModel()).addRow(new Object[]{ i.getName(), i.getClass().getSimpleName()});
+        }
         for (Display i : obj.displays) {
             ((DefaultTableModel) jTableAttribs.getModel()).addRow(new Object[]{ i.name,i.getDatatype()==null? i.getClass().getSimpleName(): i.getDatatype().CType()});
         }
@@ -243,7 +246,9 @@ public class AxoObjectEditor extends JFrame {
         jLabel10.setText("Description:");
 
         jTextDesc.setColumns(20);
+        jTextDesc.setLineWrap(true);
         jTextDesc.setRows(5);
+        jTextDesc.setWrapStyleWord(true);
         jScrollPane13.setViewportView(jTextDesc);
 
         javax.swing.GroupLayout jPanelOverviewLayout = new javax.swing.GroupLayout(jPanelOverview);
