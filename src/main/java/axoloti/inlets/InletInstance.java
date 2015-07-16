@@ -65,8 +65,14 @@ import org.simpleframework.xml.*;
 @Root(name = "dest")
 public class InletInstance extends JPanel {
 
-    @Attribute
-    public String name;
+    @Attribute(required = false)
+    @Deprecated
+    String name;
+    @Attribute(name = "obj", required = false)
+    public String objname;
+    @Attribute(name = "inlet", required = false)
+    public String inletname;
+
     private final Inlet inlet;
     public AxoObjectInstanceAbstract axoObj;
     JLabel lbl;
@@ -76,6 +82,29 @@ public class InletInstance extends JPanel {
 
     public String GetCName() {
         return inlet.GetCName();
+    }
+
+    @Deprecated
+    public String getName() {
+        return name;
+    }
+
+    public String getObjname() {
+        if (objname != null) {
+            return objname;
+        } else {
+            int sepIndex = name.lastIndexOf(' ');
+            return name.substring(0, sepIndex);
+        }
+    }
+
+    public String getInletname() {
+        if (inletname != null) {
+            return inletname;
+        } else {
+            int sepIndex = name.lastIndexOf(' ');
+            return name.substring(sepIndex + 1);
+        }
     }
 
     class DragGestureListImp implements DragGestureListener {
@@ -128,7 +157,7 @@ public class InletInstance extends JPanel {
     }
 
     public String dragString() {
-        return axoObj.getInstanceName() + " " + inlet.name;
+        return axoObj.getInstanceName() + "::" + inlet.name;
     }
 
     public InletInstance() {
@@ -185,21 +214,24 @@ public class InletInstance extends JPanel {
                         return;
                     }
                     String s = (String) t.getTransferData(DataFlavor.stringFlavor);
-                    OutletInstance ol;
-                    InletInstance il;
-                    if ((ol = axoObj.patch.getOutletByReference(s)) != null) {
-                        Net n1 = axoObj.patch.AddConnection(InletInstance.this, ol);
-                        axoObj.patch.PromoteOverloading();
-                        if (n1 != null) {
-                            n1.setSelected(false);
-                            n1.repaint();
-                        }
-                    } else if ((il = axoObj.patch.getInletByReference(s)) != null) {
-                        Net n1 = axoObj.patch.AddConnection(InletInstance.this, il);
-                        axoObj.patch.PromoteOverloading();
-                        if (n1 != null) {
-                            n1.setSelected(false);
-                            n1.repaint();
+                    String ss[] = s.split("::");
+                    if (ss.length == 2) {
+                        OutletInstance ol;
+                        InletInstance il;
+                        if ((ol = axoObj.patch.getOutletByReference(ss[0], ss[1])) != null) {
+                            Net n1 = axoObj.patch.AddConnection(InletInstance.this, ol);
+                            axoObj.patch.PromoteOverloading();
+                            if (n1 != null) {
+                                n1.setSelected(false);
+                                n1.repaint();
+                            }
+                        } else if ((il = axoObj.patch.getInletByReference(ss[0], ss[1])) != null) {
+                            Net n1 = axoObj.patch.AddConnection(InletInstance.this, il);
+                            axoObj.patch.PromoteOverloading();
+                            if (n1 != null) {
+                                n1.setSelected(false);
+                                n1.repaint();
+                            }
                         }
                     } else {
                         System.out.println("spilled on inlet: " + s);
@@ -258,6 +290,9 @@ public class InletInstance extends JPanel {
 
     public void RefreshName() {
         name = axoObj.getInstanceName() + " " + inlet.name;
+        objname = axoObj.getInstanceName();
+        inletname = inlet.name;
+        name = null;
     }
 
     public Point getJackLocInCanvas() {

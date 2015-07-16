@@ -970,15 +970,15 @@ public class Patch {
                 Net n = GetNet(i);
                 if ((n != null) && (n.isValidNet())) {
                     if (i.GetDataType().equals(n.GetDataType())) {
-                        if (n.NeedsLatch() && 
-                                (objectinstances.indexOf(n.source.get(0).axoObj)>= objectinstances.indexOf(o))) {
+                        if (n.NeedsLatch()
+                                && (objectinstances.indexOf(n.source.get(0).axoObj) >= objectinstances.indexOf(o))) {
                             c += n.CName() + "Latch";
                         } else {
                             c += n.CName();
                         }
                     } else {
-                        if (n.NeedsLatch() && 
-                                (objectinstances.indexOf(n.source.get(0).axoObj)>= objectinstances.indexOf(o))) {
+                        if (n.NeedsLatch()
+                                && (objectinstances.indexOf(n.source.get(0).axoObj) >= objectinstances.indexOf(o))) {
                             c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName() + "Latch");
                         } else {
                             c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName());
@@ -1763,8 +1763,8 @@ public class Patch {
         String c = GenerateCode3();
 
         try {
-            String buildDir=System.getProperty(Axoloti.HOME_DIR)+"/build";
-            FileOutputStream f = new FileOutputStream(buildDir+"/xpatch.cpp");
+            String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
+            FileOutputStream f = new FileOutputStream(buildDir + "/xpatch.cpp");
             f.write(c.getBytes());
             f.close();
         } catch (FileNotFoundException ex) {
@@ -2093,28 +2093,32 @@ public class Patch {
         }
     }
 
-    public InletInstance getInletByReference(String s) {
-        String r[] = s.split(" ");
-        if (r.length != 2) {
+    public InletInstance getInletByReference(String objname, String inletname) {
+        if (objname == null) {
             return null;
         }
-        AxoObjectInstanceAbstract o = GetObjectInstance(r[0]);
+        if (inletname == null) {
+            return null;
+        }
+        AxoObjectInstanceAbstract o = GetObjectInstance(objname);
         if (o == null) {
             return null;
         }
-        return o.GetInletInstance(r[1]);
+        return o.GetInletInstance(inletname);
     }
 
-    public OutletInstance getOutletByReference(String s) {
-        String r[] = s.split(" ");
-        if (r.length != 2) {
+    public OutletInstance getOutletByReference(String objname, String outletname) {
+        if (objname == null) {
             return null;
         }
-        AxoObjectInstanceAbstract o = GetObjectInstance(r[0]);
+        if (outletname == null) {
+            return null;
+        }
+        AxoObjectInstanceAbstract o = GetObjectInstance(objname);
         if (o == null) {
             return null;
         }
-        return o.GetOutletInstance(r[1]);
+        return o.GetOutletInstance(outletname);
     }
 
     public String GetCurrentWorkingDirectory() {

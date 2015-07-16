@@ -65,8 +65,14 @@ import org.simpleframework.xml.*;
 @Root(name = "source")
 public class OutletInstance extends JPanel implements Comparable<OutletInstance> {
 
-    @Attribute
-    public String name;
+    @Deprecated
+    @Attribute(required = false)
+    String name;
+    @Attribute(name = "obj", required = false)
+    public String objname;
+    @Attribute(name = "outlet", required = false)
+    public String outletname;
+
     private final Outlet outlet;
     public AxoObjectInstanceAbstract axoObj;
     OutletInstancePopupMenu popup = new OutletInstancePopupMenu(this);
@@ -77,6 +83,24 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
     @Override
     public int compareTo(OutletInstance t) {
         return axoObj.compareTo(t.axoObj);
+    }
+
+    public String getObjname() {
+        if (objname != null) {
+            return objname;
+        } else {
+            int sepIndex = name.lastIndexOf(' ');
+            return name.substring(0, sepIndex);
+        }
+    }
+
+    public String getOutletname() {
+        if (outletname != null) {
+            return outletname;
+        } else {
+            int sepIndex = name.lastIndexOf(' ');
+            return name.substring(sepIndex + 1);
+        }
     }
 
     class DragGestureListImp implements DragGestureListener {
@@ -134,7 +158,7 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
     }
 
     public String dragString() {
-        return axoObj.getInstanceName() + " " + outlet.name;
+        return axoObj.getInstanceName() + "::" + outlet.name;
     }
 
     public OutletInstance() {
@@ -151,6 +175,9 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
 
     public void RefreshName() {
         name = axoObj.getInstanceName() + " " + outlet.name;
+        objname = axoObj.getInstanceName();
+        outletname = outlet.name;
+        name = null;
     }
 
     public DataType GetDataType() {
@@ -211,8 +238,10 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
                         return;
                     }
                     String s = (String) t.getTransferData(DataFlavor.stringFlavor);
-                    OutletInstance ol;
-                    InletInstance il;
+                    String ss[] = s.split("::");
+                    if (ss.length == 2) {
+                        OutletInstance ol;
+                        InletInstance il;
 //                    if ((ol = axoObj.patch.getOutletByReference(s)) != null) {
 //                        Net n = axoObj.patch.AddConnection(OutletInstance.this, ol);
 //                        axoObj.patch.PromoteOverloading();
@@ -221,12 +250,13 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
 //                            n.repaint();
 //                        }
 //                    } else 
-                    if ((il = axoObj.patch.getInletByReference(s)) != null) {
-                        Net n = axoObj.patch.AddConnection(il, OutletInstance.this);
-                        axoObj.patch.PromoteOverloading();
-                        if (n != null) {
-                            n.setSelected(false);
-                            n.repaint();
+                        if ((il = axoObj.patch.getInletByReference(ss[0], ss[1])) != null) {
+                            Net n = axoObj.patch.AddConnection(il, OutletInstance.this);
+                            axoObj.patch.PromoteOverloading();
+                            if (n != null) {
+                                n.setSelected(false);
+                                n.repaint();
+                            }
                         }
                     } else {
                         System.out.println("spilled on inlet: " + s);
