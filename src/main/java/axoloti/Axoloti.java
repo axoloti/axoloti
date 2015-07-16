@@ -145,7 +145,7 @@ public class Axoloti {
 
             Preferences prefs = Preferences.LoadPreferences();
 
-            System.out.println("Axoloti Driectories:\n"
+            System.out.println("Axoloti Directories:\n"
                     + "Current = " + curDir + "\n"
                     + "Jar = " + jarDir + "\n"
                     + "Release = " + System.getProperty(RELEASE_DIR) + "\n"
