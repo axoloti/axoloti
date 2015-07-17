@@ -516,11 +516,11 @@ public class Filter extends gentools {
                 + "          &biquadStateBand3Q31[0], 2);\n"
                 + "\n"
                 + "  arm_biquad_cascade_df1_init_q31(&S4, NUMSTAGES,\n"
-                + "          (q31_t *) &eq5coefs[190*3 + 10*9)],\n"
+                + "          (q31_t *) &eq5coefs[190*3 + 10*9],\n"
                 + "          &biquadStateBand4Q31[0], 2);\n"
                 + "\n"
                 + "  arm_biquad_cascade_df1_init_q31(&S5, NUMSTAGES,\n"
-                + "          (q31_t *) &eq5coefs[190*4 + 10*9)],\n"
+                + "          (q31_t *) &eq5coefs[190*4 + 10*9],\n"
                 + "          &biquadStateBand5Q31[0], 2);\n";
         o.sKRateCode = "S2.pCoeffs = (q31_t*)&eq5coefs[190*1 + 10*(%lowmid% + 9)];\n"
                 + "S3.pCoeffs = (q31_t*)&eq5coefs[190*2 + 10*(%mid% + 9)];\n"
