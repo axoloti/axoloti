@@ -11,14 +11,15 @@ echo -e "For this you'll require sudo rights and need to enter your password...\
 echo -e "Press RETURN to continue\nCTRL-C if you are unsure!\n"
 read
 
+
 echo "apt get install -y libtool libudev-dev automake autoconf ant gcc-arm-none-eabi curl"
 sudo apt-get install -y libtool libudev-dev automake autoconf ant gcc-arm-none-eabi curl
 
 PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
 
-./add_udev_rules.sh
-
 cd "$PLATFORM_ROOT"
+
+./add_udev_rules.sh
 
 if [ ! -d "${PLATFORM_ROOT}/bin" ]; 
 then
