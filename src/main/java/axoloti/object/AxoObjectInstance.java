@@ -171,7 +171,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                ((PatchGUI) patch).ShowClassSelector(AxoObjectInstance.this.getLocation(), AxoObjectInstance.this,null);
+                ((PatchGUI) patch).ShowClassSelector(AxoObjectInstance.this.getLocation(), AxoObjectInstance.this, null);
             }
         });
         popup.add(popm_substitute);
@@ -220,11 +220,35 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mousePressed(MouseEvent me) {
+                if (me.isPopupTrigger()) {
+                } else if (!IsLocked()) {
+                    dX = me.getXOnScreen() - getX();
+                    dY = me.getYOnScreen() - getY();
+                    dragging = true;
+                    if (IsSelected()) {
+                        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
+                            if (o.IsSelected()) {
+                                o.dX = me.getXOnScreen() - o.getX();
+                                o.dY = me.getYOnScreen() - o.getY();
+                                o.dragging = true;
+                            }
+                        }
+                    }
+                }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (dragging) {
+                    dragging = false;
+                    if (patch != null) {
+                        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
+                            o.dragging = false;
+                        }
+                        patch.AdjustSize();
+                    }
+                }
             }
 
             @Override
@@ -235,6 +259,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             public void mouseExited(MouseEvent e) {
             }
         });
+        InstanceLabel.addMouseMotionListener(mml);
         add(InstanceLabel);
 
         JPanel p_iolets = new JPanel();

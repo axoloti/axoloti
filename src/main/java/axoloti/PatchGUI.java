@@ -489,36 +489,38 @@ public class PatchGUI extends Patch {
             }
             for (AxoObjectInstanceAbstract o : p.objectinstances) {
                 String original_name = o.getInstanceName();
-                String new_name = original_name;
-                String ss[] = new_name.split("_");
-                boolean hasNumeralSuffix = false;
-                try {
-                    if ((ss.length > 1) && (Integer.toString(Integer.parseInt(ss[ss.length - 1]))).equals(ss[ss.length - 1])) {
-                        hasNumeralSuffix = true;
+                if (original_name != null) {
+                    String new_name = original_name;
+                    String ss[] = new_name.split("_");
+                    boolean hasNumeralSuffix = false;
+                    try {
+                        if ((ss.length > 1) && (Integer.toString(Integer.parseInt(ss[ss.length - 1]))).equals(ss[ss.length - 1])) {
+                            hasNumeralSuffix = true;
+                        }
+                    } catch (NumberFormatException e) {
                     }
-                } catch (NumberFormatException e) {
+                    if (hasNumeralSuffix) {
+                        int n = Integer.parseInt(ss[ss.length - 1]) + 1;
+                        String bs = original_name.substring(0, original_name.length() - ss[ss.length - 1].length());
+                        while (GetObjectInstance(new_name) != null) {
+                            new_name = bs + n++;
+                        }
+                        while (dict.containsKey(new_name)) {
+                            new_name = bs + n++;
+                        }
+                    } else {
+                        while (GetObjectInstance(new_name) != null) {
+                            new_name = new_name + "_";
+                        }
+                        while (dict.containsKey(new_name)) {
+                            new_name = new_name + "_";
+                        }
+                    }
+                    if (!new_name.equals(original_name)) {
+                        o.setInstanceName(new_name);
+                    }
+                    dict.put(original_name, new_name);
                 }
-                if (hasNumeralSuffix) {
-                    int n = Integer.parseInt(ss[ss.length - 1]) + 1;
-                    String bs = original_name.substring(0, original_name.length() - ss[ss.length - 1].length());
-                    while (GetObjectInstance(new_name) != null) {
-                        new_name = bs + n++;
-                    }
-                    while (dict.containsKey(new_name)) {
-                        new_name = bs + n++;
-                    }
-                } else {
-                    while (GetObjectInstance(new_name) != null) {
-                        new_name = new_name + "_";
-                    }
-                    while (dict.containsKey(new_name)) {
-                        new_name = new_name + "_";
-                    }
-                }
-                if (!new_name.equals(original_name)) {
-                    o.setInstanceName(new_name);
-                }
-                dict.put(original_name, new_name);
                 while (getObjectAtLocation(o.getX(), o.getY()) != null) {
                     o.setLocation(o.getX() + Constants.xgrid, o.getY() + Constants.ygrid);
                 }
