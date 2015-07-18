@@ -3,7 +3,6 @@
       <sDescription>quantize note input to a scale</sDescription>
       <author>Mark Harris</author>
       <license>BSD</license>
-      <helpPatch>note quantizer.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="note" description="note number (-64..63)"/>
          <int32 name="tonic" description="tonic note number (0-11)"/>

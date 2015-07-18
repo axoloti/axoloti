@@ -20,27 +20,27 @@
       <params>
          <frac32.u.map name="gain1">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.u.map name="gain2">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.u.map name="gain3">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.u.map name="gain4">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.u.map name="gain5">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.u.map name="gain6">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
       </params>
       <attribs/>
@@ -75,27 +75,27 @@
       <params>
          <frac32.u.map name="gain1">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.u.map name="gain2">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.u.map name="gain3">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.u.map name="gain4">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.u.map name="gain5">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.u.map name="gain6">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
       </params>
       <attribs/>

@@ -15,7 +15,7 @@
       <params>
          <frac32.s.map.ratio name="g" noLabel="true">
             <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.s.map.ratio>
       </params>
       <attribs>

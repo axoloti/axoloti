@@ -15,19 +15,19 @@
       <params>
          <frac32.s.map.klineartime.exp2 name="a">
             <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.s.map.klineartime.exp2>
          <frac32.s.map class="axoloti.parameters.ParameterFrac32SMapKDTimeExp" name="d">
             <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.s.map>
          <frac32.u.map name="s">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.s.map class="axoloti.parameters.ParameterFrac32SMapKDTimeExp" name="r">
             <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.s.map>
       </params>
       <attribs/>

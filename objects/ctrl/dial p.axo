@@ -13,7 +13,7 @@
       <params>
          <frac32.u.map name="value" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
       </params>
       <attribs/>
