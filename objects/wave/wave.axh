@@ -1,12 +1,12 @@
 <patch-1.0>
-   <comment type="patch/comment" sha="sha" name="DOES NOT WORK YET" x="14" y="14"/>
+   <comment type="patch/comment" x="14" y="14" text="DOES NOT WORK YET"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="98" y="70">
       <params>
          <frac32.u.map name="value" value="4.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="stringi" sha="4c1c90721e5f530e9fbdcfa373edaffe908e605b" name="stringi1" x="210" y="70">
+   <obj type="string/indexed" sha="4c1c90721e5f530e9fbdcfa373edaffe908e605b" name="stringi1" x="210" y="70">
       <params/>
       <attribs>
          <table attributeName="prefix" table="txx"/>
@@ -43,7 +43,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="recwave" sha="bdd8bbc33127ba950db6ace64f72f194e749d41" name="recwave1" x="532" y="182">
+   <obj type="unstable/wave/record" sha="bdd8bbc33127ba950db6ace64f72f194e749d41" name="recwave1" x="532" y="182">
       <params/>
       <attribs/>
    </obj>
@@ -53,60 +53,66 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="playwave2" sha="7370e75d2cd86cc1588277da82a2ddbe1643c3fb" name="playwave21" x="378" y="322">
+   <obj type="wave/play" sha="e3de36b8d0f8cce60996ae9130adc960c34e9324" uuid="2e6265136dbaaf4d885a669520546de2e3306819" name="play_1" x="392" y="322">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~1" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="532" y="322">
+   <obj type="audio/out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="532" y="322">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~2" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_11_" x="532" y="378">
+   <obj type="audio/out right" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_11_" x="532" y="378">
       <params/>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="mix11 in1"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="mix11" inlet="in1"/>
       </net>
       <net>
-         <source name="mix11 out"/>
-         <dest name="osc_1 pitchm"/>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="osc_1" inlet="pitchm"/>
       </net>
       <net>
-         <source name="play o"/>
-         <dest name="playwave21 trig"/>
+         <source obj="play" outlet="o"/>
+         <dest obj="play_1" inlet="start"/>
       </net>
       <net>
-         <source name="stringi1 out"/>
-         <dest name="playwave21 filename"/>
-         <dest name="recwave1 filename"/>
+         <source obj="stringi1" outlet="out"/>
+         <dest obj="recwave1" inlet="filename"/>
+         <dest obj="play_1" inlet="filename"/>
       </net>
       <net>
-         <source name="playwave21 o"/>
-         <dest name="dac_11 wave"/>
-         <dest name="dac_11_ wave"/>
+         <source obj="cb11_" outlet="o"/>
+         <dest obj="recwave1" inlet="trig"/>
       </net>
       <net>
-         <source name="cb11_ o"/>
-         <dest name="recwave1 trig"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="stringi1" inlet="index"/>
       </net>
       <net>
-         <source name="c1 out"/>
-         <dest name="stringi1 index"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="mix11_" inlet="in1"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="mix11_ in1"/>
+         <source obj="mix11_" outlet="out"/>
+         <dest obj="recwave1" inlet="in"/>
       </net>
       <net>
-         <source name="mix11_ out"/>
-         <dest name="recwave1 in"/>
+         <source obj="play_1" outlet="out"/>
+         <dest obj="dac_11" inlet="wave"/>
+         <dest obj="dac_11_" inlet="wave"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>496</x>
+      <y>192</y>
+      <width>842</width>
+      <height>688</height>
+   </windowPos>
 </patch-1.0>

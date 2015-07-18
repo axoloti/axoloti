@@ -20,7 +20,6 @@ package generatedobjects;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletBool32RisingFalling;
 import axoloti.inlets.InletCharPtr32;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
@@ -488,7 +487,7 @@ public class Wave extends gentools {
 
 
     static AxoObject Create_FlashWaveRead() {
-        AxoObject o = new AxoObject("flashread~", "linear interpolated flash table read");
+        AxoObject o = new AxoObject("flashread interp", "linear interpolated flash table read");
         o.inlets.add(new InletFrac32Buffer("pos", "position"));
         o.outlets.add(new OutletFrac32Buffer("o", "output"));
         {

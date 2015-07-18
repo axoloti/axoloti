@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="patch/comment" name="quantizing notes" x="14" y="14"/>
-   <comment type="patch/comment" name="show note number" x="924" y="70"/>
+   <comment type="patch/comment" x="14" y="14" text="quantizing notes"/>
+   <comment type="patch/comment" x="924" y="70" text="show note number"/>
    <obj type="disp/note" sha="47a060e4a7fa766d1de9cf03c8aa236d79be3440" uuid="ce3190ad98b73b468f22221f555b01feee03226a" name="dial_1" x="924" y="84">
       <params/>
       <attribs/>
@@ -11,7 +11,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="play scale" x="224" y="126"/>
+   <comment type="patch/comment" x="224" y="126" text="play scale"/>
    <obj type="logic/counter" sha="519c79f42a7c84352830b08e68696ecbf5d0bd52" uuid="7a141ba82230e54e5f5cd12da5dbe5a74ba854a5" name="counter_1" x="224" y="140">
       <params>
          <int32 name="maximum" value="28"/>
@@ -28,10 +28,10 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="set which notes are part of scale" x="756" y="154"/>
-   <obj type="conv/note quantizer" sha="771f0b7a6d236751b17296c84be13b14b23cf4d2" uuid="250b756241853185b0296cc743d283658abbd7b6" name="note_1" x="756" y="168">
+   <comment type="patch/comment" x="756" y="154" text="set which notes are part of scale"/>
+   <obj type="harmony/note quantizer" sha="2eb19f6d2e7223f7ae71dee8e7a8c8566ba307a4" uuid="e7fa2bf0ef5cdfa2f36a9af9e3c218d0989fef49" name="note_2" x="756" y="168">
       <params>
-         <bin12 name="b12" value="2741"/>
+         <bin12 name="b12" value="0"/>
       </params>
       <attribs/>
    </obj>
@@ -67,7 +67,7 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="play sequence" x="224" y="266"/>
+   <comment type="patch/comment" x="224" y="266" text="play sequence"/>
    <obj type="env/ad" sha="27b3ed2c63d43d64a78d406f20737f83110a3df7" uuid="255cb0cd67470c7498f9c33b820facd26aa629ce" name="ad_1" x="1204" y="266">
       <params>
          <frac32.s.map name="a" value="-58.0"/>
@@ -102,21 +102,21 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="set tonic of the scale" x="658" y="280"/>
+   <comment type="patch/comment" x="658" y="280" text="set tonic of the scale"/>
    <obj type="ctrl/i" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_1" x="658" y="294">
       <params>
          <int32 name="value" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="adjust offset to bring notes into range, and also set where scale starts" x="658" y="364"/>
+   <comment type="patch/comment" x="658" y="364" text="adjust offset to bring notes into range, and also set where scale starts"/>
    <obj type="ctrl/i" sha="b26fac2d686e81abd981a2cb0d2dd3ea2dfba53a" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_2" x="658" y="378">
       <params>
          <int32 name="value" value="36"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="play random" x="224" y="504"/>
+   <comment type="patch/comment" x="224" y="504" text="play random"/>
    <obj type="rand/uniform i" sha="c7045bb3734e4fdb272c379df8d5e3df8c06a0a1" uuid="9b1f945f346af0165ed99b8e19136cdbf744e594" name="uniform_1" x="224" y="518">
       <params>
          <int32 name="max" value="28"/>
@@ -125,73 +125,73 @@
    </obj>
    <nets>
       <net>
-         <source name="note_1 note"/>
-         <dest name="sine_1 pitchm"/>
-         <dest name="dial_1 in"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="note_2" inlet="tonic"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="note_1 tonic"/>
+         <source obj="i_2" outlet="out"/>
+         <dest obj="note_2" inlet="offset"/>
       </net>
       <net>
-         <source name="i_2 out"/>
-         <dest name="note_1 offset"/>
+         <source obj="ad_1" outlet="env"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="ad_1 env"/>
-         <dest name="vca_1 v"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="out_1" inlet="left"/>
+         <dest obj="out_1" inlet="right"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="out_1 left"/>
-         <dest name="out_1 right"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="counter_1" inlet="trig"/>
+         <dest obj="ad_1" inlet="trig"/>
+         <dest obj="counter_2" inlet="trig"/>
+         <dest obj="uniform_1" inlet="trig"/>
       </net>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="counter_1 trig"/>
-         <dest name="ad_1 trig"/>
-         <dest name="counter_2 trig"/>
-         <dest name="uniform_1 trig"/>
+         <source obj="counter_2" outlet="o"/>
+         <dest obj="sel_1" inlet="in"/>
       </net>
       <net>
-         <source name="counter_2 o"/>
-         <dest name="sel_1 in"/>
+         <source obj="mux_1" outlet="o"/>
+         <dest obj="note_2" inlet="note"/>
       </net>
       <net>
-         <source name="mux_1 o"/>
-         <dest name="note_1 note"/>
+         <source obj="sel_1" outlet="o"/>
+         <dest obj="mux_1" inlet="i1"/>
       </net>
       <net>
-         <source name="sel_1 o"/>
-         <dest name="mux_1 i1"/>
+         <source obj="uniform_1" outlet="v"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
       <net>
-         <source name="uniform_1 v"/>
-         <dest name="mux_1 i2"/>
+         <source obj="counter_1" outlet="o"/>
+         <dest obj="mux_1" inlet="i0"/>
       </net>
       <net>
-         <source name="counter_1 o"/>
-         <dest name="mux_1 i0"/>
+         <source obj="toggle_1" outlet="out"/>
+         <dest obj="mux_1" inlet="s"/>
       </net>
       <net>
-         <source name="toggle_1 out"/>
-         <dest name="mux_1 s"/>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="lp_1" inlet="in"/>
       </net>
       <net>
-         <source name="sine_1 wave"/>
-         <dest name="lp_1 in"/>
+         <source obj="lp_1" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="lp_1 out"/>
-         <dest name="vca_1 a"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="*c_1" inlet="in"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="*c_1 in"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="lp_1" inlet="freqm"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="lp_1 freqm"/>
+         <source obj="note_2" outlet="note"/>
+         <dest obj="sine_1" inlet="pitchm"/>
+         <dest obj="dial_1" inlet="in"/>
       </net>
    </nets>
    <settings>
