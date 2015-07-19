@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="delayedpulsedurationm" uuid="351678df952a218dae1dd3b68d4756275d572cd0" sha="60b730950bddb27bed0791babe0bbabbca5889f">
-      <upgradeSha>f51ba44b498dab230c556bb26e42257c59204228</upgradeSha>
+   <obj.normal id="delayedpulsedurationm" uuid="2d504f42544009f35bf5ac1383401d2441600cb" sha="6448141ebf2374761083db16f34d189dec0b9678">
+      <upgradeSha>cd15942735c29fb1003d30d3504d775a885c5664</upgradeSha>
       <sDescription>Generates a single pulse with a duration after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger. The generated pulse is so small you won&apos;t notice it on a display! This version has a modulation input for the delay time.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -15,14 +15,14 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.klineartime.reverse name="delay">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
-         <frac32.u.map.klineartime.reverse name="pulselength">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         <frac32.s.map.klineartime.exp name="delay">
+            <MinValue v="-64.0"/>
+            <MaxValue v="64.0"/>
+         </frac32.s.map.klineartime.exp>
+         <frac32.s.map.klineartime.exp name="pulselength">
+            <MinValue v="-64.0"/>
+            <MaxValue v="64.0"/>
+         </frac32.s.map.klineartime.exp>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;
@@ -40,13 +40,17 @@ else {
   if (!(inlet_trig > 0))
     ntrig = 0;
   if (val>0) {
-     val -= (param_delay + inlet_delaym) >> 4;
+    int32_t t;
+    MTOF(-param_delay-inlet_delaym,t);
+     val -= t>>3;
      if (val<=0) {
          outlet_pulse = 1;
          val = -1 << 30;
      } else outlet_pulse = 0;
   } else if (val<0) {
-     val += (param_pulselength + inlet_pulselengthm) >> 4;
+    int32_t t;
+    MTOF(-param_pulselength-inlet_pulselengthm,t);
+     val += t>>3;
      if (val>=0) {         outlet_pulse = 0;
          val = 0;
      } else outlet_pulse = 1;

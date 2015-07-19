@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="play3 fn stereo" uuid="cdba34cceda4f364d1a646fce00ec839abacc9f2" sha="874bd2e9190a9d31cbf9936f18315f9b38fd724a">
+   <obj.normal id="play fn stereo" uuid="b8acd66995d2fb45b86955af8cd5f7371b4864de" sha="874bd2e9190a9d31cbf9936f18315f9b38fd724a">
       <upgradeSha>3062fead90473330bfb2670aab03b18a18f2426a</upgradeSha>
       <sDescription>streaming playback of a stereo .wav file from sdcard (testing)</sDescription>
       <author>Johannes Taelman</author>

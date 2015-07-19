@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="pulselengthmx" uuid="3c578bdbc4e60ca7593ca655bace7ba5f7aba9a8" sha="952cae3107ff4e5006e989dac5022a4cd687eae9">
+   <obj.normal id="pulselengthm" uuid="ed16f080ac6164471fb2690543951616995cbca3" sha="952cae3107ff4e5006e989dac5022a4cd687eae9">
       <upgradeSha>5d90a67235df290cb66eace59a15336edcb9bb32</upgradeSha>
       <sDescription>Generates a single pulse after after a rising edge on trigger input. A new trigger before the pulse ends at the output, will extend the pulse. This version has a modulation input for the delay time. Extended range.</sDescription>
       <author>Johannes Taelman</author>
@@ -16,7 +16,7 @@
       <params>
          <frac32.s.map.klineartime.exp name="delay" noLabel="true">
             <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.s.map.klineartime.exp>
       </params>
       <attribs/>

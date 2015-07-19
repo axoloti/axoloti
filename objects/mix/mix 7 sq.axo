@@ -21,31 +21,31 @@
       <params>
          <frac32.u.map.squaregain name="gain1">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain2">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain3">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain4">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain5">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain6">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain7">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
       </params>
       <attribs/>
@@ -81,31 +81,31 @@
       <params>
          <frac32.u.map.squaregain name="gain1">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain2">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain3">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain4">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain5">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain6">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
          <frac32.u.map.squaregain name="gain7">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.squaregain>
       </params>
       <attribs/>

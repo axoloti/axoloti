@@ -1,7 +1,7 @@
 <objdefs>
-   <obj.normal id="delayedpulseduration" uuid="ee2a4160c03a63ccc2072941b72cf2b1dc2f09f7" sha="bee9a8cd54bbabc10f13b44aad51b51fcc5aa167">
-      <upgradeSha>1d15da5cfdebb5ff85c4f5b6f10a220ac63b551c</upgradeSha>
-      <sDescription>Generates a pulse with a duration after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger.</sDescription>
+   <obj.normal id="delayedpulseduration" uuid="3b7bf0a7b7f89fad06a734667f48de051deb5c78" sha="f81268ce9740f86a527d428d7b37694aeea563cd">
+      <upgradeSha>55f69bc6153344c6d5bed526ec91502b83708ce3</upgradeSha>
+      <sDescription>Generates a pulse with a duration after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger. Extended range.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>timer.axh</helpPatch>
@@ -13,14 +13,14 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.klineartime.reverse name="delay">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
-         <frac32.u.map.klineartime.reverse name="pulselength">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.klineartime.reverse>
+         <frac32.s.map.klineartime.exp name="delay">
+            <MinValue v="-64.0"/>
+            <MaxValue v="64.0"/>
+         </frac32.s.map.klineartime.exp>
+         <frac32.s.map.klineartime.exp name="pulselength">
+            <MinValue v="-64.0"/>
+            <MaxValue v="64.0"/>
+         </frac32.s.map.klineartime.exp>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;
@@ -38,13 +38,17 @@ else {
   if (!(inlet_trig > 0))
     ntrig = 0;
   if (val>0) {
-     val -= param_delay >> 4;
+    int32_t t;
+    MTOF(-param_delay,t);
+     val -= t>>3;
      if (val<=0) {
          outlet_pulse = 1;
          val = -1 << 30;
      } else outlet_pulse = 0;
   } else if (val<0) {
-     val += param_pulselength >> 4;
+    int32_t t;
+    MTOF(-param_pulselength,t);
+     val += t>>3;
      if (val>=0) {         outlet_pulse = 0;
          val = 0;
      } else outlet_pulse = 1;

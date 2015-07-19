@@ -16,23 +16,23 @@
       <params>
          <frac32.u.map name="v0">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.s.map.klineartime.exp name="tA">
             <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.s.map.klineartime.exp>
          <frac32.u.map name="v1">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
          <frac32.s.map.klineartime.exp name="tB">
             <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.s.map.klineartime.exp>
          <frac32.u.map name="v2">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map>
       </params>
       <attribs/>

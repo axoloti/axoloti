@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="note quantizer" uuid="250b756241853185b0296cc743d283658abbd7b6" sha="2eb19f6d2e7223f7ae71dee8e7a8c8566ba307a4">
+   <obj.normal id="note quantizer" uuid="e7fa2bf0ef5cdfa2f36a9af9e3c218d0989fef49" sha="2eb19f6d2e7223f7ae71dee8e7a8c8566ba307a4">
       <sDescription>quantize note input to a scale</sDescription>
       <author>Mark Harris</author>
       <license>BSD</license>

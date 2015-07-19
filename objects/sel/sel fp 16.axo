@@ -17,67 +17,67 @@
       <params>
          <frac32.u.mapvsl name="b0" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b1" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b2" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b3" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b4" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b5" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b6" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b7" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b8" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b9" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b10" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b11" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b12" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b13" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b14" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
          <frac32.u.mapvsl name="b15" noLabel="true">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.mapvsl>
       </params>
       <attribs/>

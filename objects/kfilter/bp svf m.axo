@@ -16,11 +16,11 @@
       <params>
          <frac32.s.map.kpitch name="pitch">
             <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.s.map.kpitch>
          <frac32.u.map.filterq name="reso">
             <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
+            <MaxValue v="64.0"/>
          </frac32.u.map.filterq>
       </params>
       <attribs/>
