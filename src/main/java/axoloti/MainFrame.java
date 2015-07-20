@@ -733,6 +733,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 final boolean stopOnTestFail = false;    
     
     private void jMenuAutoTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAutoTestActionPerformed
+ //       runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR)+"/patches/demos/keyboard/eclectric_piano.axp"));
         if(!runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/patches")) && stopOnTestFail ) return;
         if(!runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/objects")) && stopOnTestFail ) return;
     }//GEN-LAST:event_jMenuAutoTestActionPerformed
@@ -775,9 +776,9 @@ final boolean stopOnTestFail = false;
             boolean status = true;
             PatchGUI patch1 = serializer.read(PatchGUI.class, f);
             PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
+            patch1.setFileNamePath(f.getPath());
             patch1.PostContructor();
             pf.UpdateConnectStatus();
-            patch1.setFileNamePath(f.getPath());
             patches.add(patch1);
             patch1.WriteCode();
             qcmdprocessor.WaitQueueFinished();
