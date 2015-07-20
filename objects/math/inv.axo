@@ -16,7 +16,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= -inlet_in;]]></code.krate>
    </obj.normal>
-   <obj.normal id="inv" uuid="7f4c6cf4dcf79f9b0aa81c2eaf540405875714a3" sha="90e1b0853e3ee72031d07c91973312621579e93b">
+   <obj.normal id="inv" uuid="7f4c6cf4dcf79f9b0aa81c2eaf540405875714a3" sha="3e213fdc5d4220476cf173e433160725802df77f">
       <upgradeSha>dd3d98b9ec6f2b9231cb1d00d0f9667152537120</upgradeSha>
       <sDescription>negate, negative, y = -x</sDescription>
       <author>Johannes Taelman</author>
@@ -31,7 +31,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[outlet_out[buffer_index]= -inlet_in[buffer_index];]]></code.srate>
+      <code.srate><![CDATA[outlet_out= -inlet_in;]]></code.srate>
    </obj.normal>
    <obj.normal id="inv" uuid="4236d8dd952427e2aec6e830a48fddfba98dd4ad" sha="9c93d7ac9017aba5e34ebd21891755787dc44faa">
       <upgradeSha>b6663af37c308ec4958da4ae0caf98567f135536</upgradeSha>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="hp1" uuid="d9277a48ec26e6f11be9d4bd6dc383a6057addba" sha="756046b15fd52ec21abafc8f9d74c04e4fa0a216">
+   <obj.normal id="hp1" uuid="d9277a48ec26e6f11be9d4bd6dc383a6057addba" sha="f9059d53a5af0890dc1a1268b5679aa335731857">
       <upgradeSha>77d00a776a68c62ae84817f1fbdd50fd8102dc54</upgradeSha>
       <sDescription>1st order hipass filter</sDescription>
       <author>Johannes Taelman</author>
@@ -26,8 +26,8 @@
       <code.krate><![CDATA[int32_t f;
    MTOF(param_freq,f);
 ]]></code.krate>
-      <code.srate><![CDATA[   val = ___SMMLA((inlet_in[buffer_index]-val)<<1,f,val);
-   outlet_out[buffer_index]= inlet_in[buffer_index]-val;
+      <code.srate><![CDATA[   val = ___SMMLA((inlet_in-val)<<1,f,val);
+   outlet_out= inlet_in-val;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

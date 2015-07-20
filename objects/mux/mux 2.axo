@@ -19,7 +19,7 @@
       <code.krate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 2" uuid="539c246f4c360ac476e128cfbfa84348fb7f7e73" sha="c965b032036555f94eb2ffbf16f83c1f90f3671c">
+   <obj.normal id="mux 2" uuid="539c246f4c360ac476e128cfbfa84348fb7f7e73" sha="10c5b6d774e8c972b6bb863dad23e83034e0990f">
       <upgradeSha>c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s is false, i2 otherwise.</sDescription>
       <author>Johannes Taelman</author>
@@ -36,7 +36,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   outlet_o[buffer_index]= (inlet_s)?inlet_i2[buffer_index]:inlet_i1[buffer_index];
+      <code.srate><![CDATA[   outlet_o= (inlet_s)?inlet_i2:inlet_i1;
 ]]></code.srate>
    </obj.normal>
    <obj.normal id="mux 2" uuid="16f90f81694766b0bc8187bfcba5a021e5701d81" sha="28ceb9074fe632debd6b911fe5db57bd34f85878">

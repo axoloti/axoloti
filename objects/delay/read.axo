@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="read" uuid="739f69bf3dae8db57f1412d0d15cb37bbae3f4c" sha="866a460c44a762ac8448bd5b735e7f307cc59536">
+   <obj.normal id="read" uuid="739f69bf3dae8db57f1412d0d15cb37bbae3f4c" sha="fc0384b781e1025715ad700b860602e4f5a9762f">
       <upgradeSha>dadafc28db716ea19216eeaa2ad121763c34ec3b</upgradeSha>
       <sDescription>delay read, non-interpolated</sDescription>
       <author>Johannes Taelman</author>
@@ -23,10 +23,10 @@
       </attribs>
       <code.krate><![CDATA[   uint32_t delay = attr_delayname.writepos - (__USAT(param_time + inlet_timem,27)>>(27-attr_delayname.LENGTHPOW)) - BUFSIZE;
 ]]></code.krate>
-      <code.srate><![CDATA[  outlet_out[buffer_index]= attr_delayname.array[(delay++) & attr_delayname.LENGTHMASK]<<14;
+      <code.srate><![CDATA[  outlet_out= attr_delayname.array[(delay++) & attr_delayname.LENGTHMASK]<<14;
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="read" uuid="6ff00c3a0c758d1098a7e52865b6f446b6308a89" sha="e1971b97d4d59c8b5f8a329166eee0820b9c169e">
+   <obj.normal id="read" uuid="6ff00c3a0c758d1098a7e52865b6f446b6308a89" sha="46a3afc478a14dd6c9edd722fec93aed59cf73a5">
       <upgradeSha>9428f1942521d9e80e7ca58ea38e1d417220e94f</upgradeSha>
       <sDescription>delay read, non-interpolated</sDescription>
       <author>Johannes Taelman</author>
@@ -48,8 +48,8 @@
       <attribs>
          <objref name="delayname"/>
       </attribs>
-      <code.srate><![CDATA[      uint32_t delay1 = attr_delayname.writepos - (__USAT(param_time + inlet_timem[buffer_index],27)>>(27-attr_delayname.LENGTHPOW)) - BUFSIZE + buffer_index;
-      outlet_out[buffer_index]= attr_delayname.array[delay1 & attr_delayname.LENGTHMASK]<<14;
+      <code.srate><![CDATA[      uint32_t delay1 = attr_delayname.writepos - (__USAT(param_time + inlet_timem,27)>>(27-attr_delayname.LENGTHPOW)) - BUFSIZE + buffer_index;
+      outlet_out= attr_delayname.array[delay1 & attr_delayname.LENGTHMASK]<<14;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

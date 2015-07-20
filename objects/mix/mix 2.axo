@@ -30,7 +30,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mix 2" uuid="30c04239c88e09d3fa5c333b784ecf54f1b0e268" sha="b2651c75ac6c78746abd05e1ae8df07c0cef962">
+   <obj.normal id="mix 2" uuid="30c04239c88e09d3fa5c333b784ecf54f1b0e268" sha="f5582f4fce1b25a668f1f5dead41cccf09e4e7be">
       <upgradeSha>67c325bf12e5b73ad58df89daf7899831777003c</upgradeSha>
       <sDescription>2 input s-rate mixer</sDescription>
       <author>Johannes Taelman</author>
@@ -55,9 +55,9 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.srate><![CDATA[{   int32_t accum = ___SMMUL(inlet_in1[buffer_index],param_gain1);
-   accum = ___SMMLA(inlet_in2[buffer_index],param_gain2,accum);
-;   outlet_out[buffer_index]=  __SSAT(inlet_bus__in[buffer_index] + (accum<<5),28);
+      <code.srate><![CDATA[{   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
+   accum = ___SMMLA(inlet_in2,param_gain2,accum);
+;   outlet_out=  __SSAT(inlet_bus__in + (accum<<5),28);
 }
 ]]></code.srate>
    </obj.normal>

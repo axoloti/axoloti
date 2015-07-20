@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="lfsrburst 4 b" uuid="aed0e9a813f0c66a375101d9ed129597c152a4b6" sha="7e446ddb6b0df43227c2491c92fab6ae2eefb832">
+   <obj.normal id="lfsrburst 4 b" uuid="aed0e9a813f0c66a375101d9ed129597c152a4b6" sha="3b9a1981686239d4f37a7ea69116444499126bb8">
       <upgradeSha>90fdfe1f1fddf1a1dbed31d35b4069057fc5f3c7</upgradeSha>
       <sDescription>lfsr burst, 4bit = 15 samples, audio rate</sDescription>
       <author>Johannes Taelman</author>
@@ -40,12 +40,12 @@ ntrig = 0;
   count--;
   if (state & 1)  {
      state = (state >> 1) ^ attr_polynomial;
-     outlet_out[buffer_index] = 1<<27;
+     outlet_out = 1<<27;
   } else {
     state = (state >> 1);
-     outlet_out[buffer_index] = -1<<27;
+     outlet_out = -1<<27;
   }
-} else outlet_out[buffer_index] = 0;
+} else outlet_out = 0;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

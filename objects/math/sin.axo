@@ -19,7 +19,7 @@
        outlet_out= (r>>4);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="sin" uuid="3fd3c55bdecb474393c99b2a5b01e9bed143eca7" sha="5df1223b10938152461727ab9e7d1ece0cb47643">
+   <obj.normal id="sin" uuid="3fd3c55bdecb474393c99b2a5b01e9bed143eca7" sha="113e9f85bd45995a459e1dde6cc7e564e0689adf">
       <upgradeSha>1071012784f2bd65a87a083ab2b7c3d46db76c52</upgradeSha>
       <sDescription>sine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
@@ -35,8 +35,8 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[       int32_t r;
-       SINE2TINTERP(inlet_phase[buffer_index]<<4,r)
-       outlet_out[buffer_index]= (r>>4);
+       SINE2TINTERP(inlet_phase<<4,r)
+       outlet_out= (r>>4);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

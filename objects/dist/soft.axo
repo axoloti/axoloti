@@ -20,7 +20,7 @@ int32_t tsq31p3 = ___SMMUL(tsq31,___SMMUL(tsq31,tsq31));
 outlet_out = ts + (ts>>1) - (tsq31p3);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="soft" uuid="e680d76a805e4866027cdf654c7efd8b2e54622" sha="72c49906cca82f653980617e3a95718c9888b88d">
+   <obj.normal id="soft" uuid="e680d76a805e4866027cdf654c7efd8b2e54622" sha="74960c930c4b6a5c630156778f889d4de48dbdbf">
       <upgradeSha>4de9b281f2a362671b6dc8606f5d039535893f45</upgradeSha>
       <sDescription>symetrical soft saturation distortion: y=1.5*x-0.5*x^3 for -1&amp;lt;x&amp;lt;1, y=-1 for x&amp;lt;-1, y=1 for x&amp;gt;1, no oversampling or anti-aliasing</sDescription>
       <author>Johannes Taelman</author>
@@ -35,10 +35,10 @@ outlet_out = ts + (ts>>1) - (tsq31p3);
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[int32_t ts = __SSAT(inlet_in[buffer_index],28);
+      <code.srate><![CDATA[int32_t ts = __SSAT(inlet_in,28);
 int32_t tsq31 = ts<<3;
 int32_t tsq31p3 = ___SMMUL(tsq31,___SMMUL(tsq31,tsq31));
-outlet_out[buffer_index] = ts + (ts>>1) - (tsq31p3);
+outlet_out = ts + (ts>>1) - (tsq31p3);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

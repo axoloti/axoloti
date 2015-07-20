@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="record2" uuid="ac9c5a1691f36808ea6fea2dfc68dc0930388ceb" sha="c7b0cea0e991b2e6ff99a35a68869d7cf9d68e0">
+   <obj.normal id="record2" uuid="ac9c5a1691f36808ea6fea2dfc68dc0930388ceb" sha="4c783b75e4b7c2c2ac54ef12562c697b0873b096">
       <upgradeSha>a81485c5ad3662cfb26feb163c52775cbd64fe38</upgradeSha>
       <sDescription>record audio into table, starting from position</sDescription>
       <author>Johannes Taelman</author>
@@ -30,7 +30,7 @@
 ]]></code.krate>
       <code.srate><![CDATA[   if (inlet_en>0) {
        if (pos< attr_table.LENGTH)
-              attr_table.array[pos++] = __SSAT(inlet_wave[buffer_index],28)>>attr_table.GAIN;
+              attr_table.array[pos++] = __SSAT(inlet_wave,28)>>attr_table.GAIN;
    }]]></code.srate>
    </obj.normal>
 </objdefs>

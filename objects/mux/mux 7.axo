@@ -67,7 +67,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mux 7" uuid="4a310a57847f704b4c6bbfb8c54dc2145a7dc2b7" sha="c06ca8e16e3705b2f0aa7fe86e31794b33d5279d">
+   <obj.normal id="mux 7" uuid="4a310a57847f704b4c6bbfb8c54dc2145a7dc2b7" sha="f93d1399c3328c9e896721ca0dc9626e6395629c">
       <upgradeSha>6f39b94067a962620fe870a132b5c564494e39a8</upgradeSha>
       <sDescription>input multiplexer. Output is i1 when s &lt; 1, i[i] when....</sDescription>
       <author>Johannes Taelman</author>
@@ -90,14 +90,14 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[   switch(inlet_s>0?inlet_s:0){
-      case 0: outlet_o[buffer_index]= inlet_i0[buffer_index];break;
-      case 1: outlet_o[buffer_index]= inlet_i1[buffer_index];break;
-      case 2: outlet_o[buffer_index]= inlet_i2[buffer_index];break;
-      case 3: outlet_o[buffer_index]= inlet_i3[buffer_index];break;
-      case 4: outlet_o[buffer_index]= inlet_i4[buffer_index];break;
-      case 5: outlet_o[buffer_index]= inlet_i5[buffer_index];break;
-      case 6: outlet_o[buffer_index]= inlet_i6[buffer_index];break;
-      default: outlet_o[buffer_index]= inlet_i6[buffer_index];break;
+      case 0: outlet_o= inlet_i0;break;
+      case 1: outlet_o= inlet_i1;break;
+      case 2: outlet_o= inlet_i2;break;
+      case 3: outlet_o= inlet_i3;break;
+      case 4: outlet_o= inlet_i4;break;
+      case 5: outlet_o= inlet_i5;break;
+      case 6: outlet_o= inlet_i6;break;
+      default: outlet_o= inlet_i6;break;
 }
 ]]></code.srate>
    </obj.normal>

@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="play3" uuid="494a61ce56700b8d7e1f86f2458f10823eb06021" sha="fdf53f449d90532d1b1e96244d9df18168c2ec9a">
+   <obj.normal id="play3" uuid="494a61ce56700b8d7e1f86f2458f10823eb06021" sha="55ce618e6483a8cca2c69265cde12d1cc133b317">
       <upgradeSha>c255a57ea694b21f7393baddcd7d9001e9e3d6b0</upgradeSha>
       <sDescription>play audio from table (non-transposed), starting from position</sDescription>
       <author>Johannes Taelman</author>
@@ -42,9 +42,9 @@ pstop = 1;
 ]]></code.krate>
       <code.srate><![CDATA[   if (!pstop) {
        if (pos< attr_table.LENGTH)
-              outlet_wave[buffer_index] = attr_table.array[pos++]<<attr_table.GAIN;
-	else outlet_wave[buffer_index] = 0;
-   } else outlet_wave[buffer_index] = 0;
+              outlet_wave = attr_table.array[pos++]<<attr_table.GAIN;
+	else outlet_wave = 0;
+   } else outlet_wave = 0;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

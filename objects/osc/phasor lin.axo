@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="phasor lin" uuid="f9eb69f5d00523da75656b6d1e2aecf4b561d30" sha="46996f05207456588e89650f99034522aca5658c">
+   <obj.normal id="phasor lin" uuid="f9eb69f5d00523da75656b6d1e2aecf4b561d30" sha="8a81411d8270ddba89198d030cf63a7562b5034">
       <upgradeSha>85a94c8b1e1234a16675b4fcec831564681774c1</upgradeSha>
       <sDescription>phasor with linear frequency (goes all the way to 0)</sDescription>
       <author>Johannes Taelman</author>
@@ -24,8 +24,8 @@
       <code.init><![CDATA[Phase = 0;]]></code.init>
       <code.srate><![CDATA[Phase += (param_freq + inlet_freqm)<<4;
 int32_t r;
-int32_t p2 = Phase + (inlet_pm[buffer_index]<<4);
-outlet_phasor[buffer_index]= (p2>>4);
+int32_t p2 = Phase + (inlet_pm<<4);
+outlet_phasor= (p2>>4);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

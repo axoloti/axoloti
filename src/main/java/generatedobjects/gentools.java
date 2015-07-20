@@ -226,37 +226,19 @@ public class gentools {
                 }
             }
             for (Inlet p : oo.inlets) {
-                if (p instanceof InletFrac32Buffer) {
-                    if (oo.sKRateCode != null) {
-                        oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
-                    }
-                    if (oo.sSRateCode != null) {
-                        oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName() + "[buffer_index]");
-                    }
-                } else {
-                    if (oo.sKRateCode != null) {
-                        oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
-                    }
-                    if (oo.sSRateCode != null) {
-                        oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
-                    }
+                if (oo.sKRateCode != null) {
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                }
+                if (oo.sSRateCode != null) {
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
                 }
             }
             for (Outlet p : oo.outlets) {
-                if (p instanceof OutletFrac32Buffer) {
-                    if (oo.sKRateCode != null) {
-                        oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
-                    }
-                    if (oo.sSRateCode != null) {
-                        oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName() + "[buffer_index]");
-                    }
-                } else {
-                    if (oo.sKRateCode != null) {
-                        oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
-                    }
-                    if (oo.sSRateCode != null) {
-                        oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
-                    }
+                if (oo.sKRateCode != null) {
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                }
+                if (oo.sSRateCode != null) {
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
                 }
             }
             for (displays.Display p : oo.displays) {
@@ -283,18 +265,16 @@ public class gentools {
                 oo.sDisposeCode = oo.sDisposeCode.replaceAll("%midichannel%", "attr_midichannel");
             }
 
-                    
             if (oo.helpPatch == null) {
-                File f = new File("objects/" + catname + "/" +fn + ".axh");
-                if(f.exists()) {
+                File f = new File("objects/" + catname + "/" + fn + ".axh");
+                if (f.exists()) {
                     oo.helpPatch = fn + ".axh";
-                }
-                else {
-                   String fcatname = catname.replaceAll("/", "_");
-                   File fcat = new File("objects/" + catname + "/" +fcatname + ".axh");
-                   if (fcat.exists()) {
-                       oo.helpPatch = fcatname + ".axh";
-                   }
+                } else {
+                    String fcatname = catname.replaceAll("/", "_");
+                    File fcat = new File("objects/" + catname + "/" + fcatname + ".axh");
+                    if (fcat.exists()) {
+                        oo.helpPatch = fcatname + ".axh";
+                    }
                 }
             }
         }
@@ -333,7 +313,7 @@ public class gentools {
         a.objs = new ArrayList<AxoObjectAbstract>();
         a.objs.add(o);
         for (AxoObjectAbstract oa : a.objs) {
-            PostProcessObject(oa, path ,fn);
+            PostProcessObject(oa, path, fn);
         }
         if (f.exists()) {
             ByteArrayOutputStream os = new ByteArrayOutputStream(2048);

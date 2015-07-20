@@ -24,7 +24,7 @@ acc = __SSAT(acc,28);
 outlet_out = acc;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="integrator leaky" uuid="2d8a76dcd2fad22a235488593b03f75dab87f122" sha="59974a349d135e48dc1c75dac3dbffbf580fb7de">
+   <obj.normal id="integrator leaky" uuid="2d8a76dcd2fad22a235488593b03f75dab87f122" sha="2fee6087257ef29cef0879a3ceaf9ca6b43ba0f8">
       <upgradeSha>d9972ae9996c922bb578344a8b039fed12bb960e</upgradeSha>
       <sDescription>cumulative sum, saturating to +-64 units</sDescription>
       <author>Johannes Taelman</author>
@@ -43,10 +43,10 @@ outlet_out = acc;
 ]]></code.declaration>
       <code.init><![CDATA[acc = 0;
 ]]></code.init>
-      <code.srate><![CDATA[acc += inlet_in[buffer_index];
+      <code.srate><![CDATA[acc += inlet_in;
 acc -= acc>>14;
 acc = __SSAT(acc,28);
-outlet_out[buffer_index] = acc;
+outlet_out = acc;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

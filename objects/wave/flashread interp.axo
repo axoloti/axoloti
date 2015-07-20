@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="flashread interp" uuid="3bee14d4674a0d360d134757716120ffc29310a4" sha="582797835561453ad2000195d04d51a5fb2657c0">
+   <obj.normal id="flashread interp" uuid="3bee14d4674a0d360d134757716120ffc29310a4" sha="5bf8648b0d5a5df01bb9d8aeb6f62cb164d7a6eb">
       <upgradeSha>ee182884ff6601bedd6fe14e6f89cd89864e3b20</upgradeSha>
       <sDescription>linear interpolated flash table read</sDescription>
       <author>Johannes Taelman</author>
@@ -82,7 +82,7 @@ static const uint32_t BITS = 16;
 static const uint32_t GAIN = 12;
 ]]></code.declaration>
       <code.srate><![CDATA[extern int16_t _binary_attr_sample_raw_start;
-   uint32_t asat = __USAT(inlet_pos[buffer_index],27);
+   uint32_t asat = __USAT(inlet_pos,27);
     int index = asat>>(27-LENGTHPOW);
    int32_t y1 = (((int16_t *)(&_binary_attr_sample_raw_start))[index])<<GAIN;
    int32_t y2 = (((int16_t *)(&_binary_attr_sample_raw_start))[index+1])<<GAIN;
@@ -90,7 +90,7 @@ static const uint32_t GAIN = 12;
   int32_t rr;
   rr = ___SMMUL(y1,(1<<30)-frac);
   rr = ___SMMLA(y2,frac,rr);
-outlet_o[buffer_index]= rr<<2;
+outlet_o= rr<<2;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

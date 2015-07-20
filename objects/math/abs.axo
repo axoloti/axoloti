@@ -16,7 +16,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= inlet_in>0?inlet_in:-inlet_in;]]></code.krate>
    </obj.normal>
-   <obj.normal id="abs" uuid="f4078fd9b2dff40d4f1551b79900c9ab360c99" sha="51a0493a1acb1a1eab0bd0c0bd9fb5a2f73666ba">
+   <obj.normal id="abs" uuid="f4078fd9b2dff40d4f1551b79900c9ab360c99" sha="1223183c9ab3f24c07bc9d9ded8e512632830a96">
       <upgradeSha>d9aef12fddc085a0a8a7a9868f1c845c538a9209</upgradeSha>
       <sDescription>absolute value</sDescription>
       <author>Johannes Taelman</author>
@@ -31,7 +31,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index]>0?inlet_in[buffer_index]:-inlet_in[buffer_index];]]></code.srate>
+      <code.srate><![CDATA[outlet_out= inlet_in>0?inlet_in:-inlet_in;]]></code.srate>
    </obj.normal>
    <obj.normal id="abs" uuid="748c6651f72874591dba4e5a11f853c944d5dfb" sha="b452d44fd3a25333c39255808ce68e6cc9ec0438">
       <upgradeSha>c35ca1940c32617a5fff7d876c1dbec0a1bbf4b0</upgradeSha>

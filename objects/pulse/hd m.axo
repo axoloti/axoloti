@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="hd m" uuid="52440c5f785b0c2b06092d83e628c4875cec7c28" sha="7933a17cd14650a1aa07e6b9d0accb26a413a73f">
+   <obj.normal id="hd m" uuid="52440c5f785b0c2b06092d83e628c4875cec7c28" sha="3429928066b1ac711d617b6861d2eee6225d64bf">
       <upgradeSha>c11c0e57918d0fba8546f18cee57d398ca8cbd90</upgradeSha>
       <sDescription>hold/decay envelope with decay time modulation input, audio rate</sDescription>
       <author>Johannes Taelman</author>
@@ -26,7 +26,7 @@
 ]]></code.init>
       <code.srate><![CDATA[   if (inlet_trig>0) val =1<<27;
    else val -= ___SMMUL(val, (param_d+inlet_dm)>>1);
-   outlet_env[buffer_index] = val;
+   outlet_env = val;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

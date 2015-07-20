@@ -23,7 +23,7 @@ acc = __SSAT(acc,28);
 outlet_out = acc;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="integrator" uuid="ac0c34004d5f65a96cd8cfc488296ed923b7beac" sha="5b533a21ad5974582b179d089f45363f83a2ce7d">
+   <obj.normal id="integrator" uuid="ac0c34004d5f65a96cd8cfc488296ed923b7beac" sha="a02824571a17109fc739054a69ec599ecdfa052f">
       <upgradeSha>258aa5314b5a0fdaf5826e571b324b6047b34757</upgradeSha>
       <sDescription>cumulative sum, saturating to +-64 units</sDescription>
       <author>Johannes Taelman</author>
@@ -42,9 +42,9 @@ outlet_out = acc;
 ]]></code.declaration>
       <code.init><![CDATA[acc = 0;
 ]]></code.init>
-      <code.srate><![CDATA[acc += inlet_in[buffer_index];
+      <code.srate><![CDATA[acc += inlet_in;
 acc = __SSAT(acc,28);
-outlet_out[buffer_index] = acc;
+outlet_out = acc;
 ]]></code.srate>
    </obj.normal>
 </objdefs>
