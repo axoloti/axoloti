@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="patch/polyindex" sha="d4abd919262b0b2a913b0aeb4ddf2dd44a6e39af" name="polyindex1" x="14" y="20">
+   <obj type="patch/polyindex" sha="499a6acc6df4a405a04b6ad8df8e7ab489ee5234" name="polyindex1" x="14" y="20">
       <params/>
       <attribs/>
    </obj>
@@ -7,11 +7,11 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="100">
+   <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="100">
       <params/>
       <attribs/>
    </obj>
-   <obj type="patch/modsource" sha="45ebafea67ca2fe0720654bb75664ba8a032a332" name="velo" x="182" y="100">
+   <obj type="patch/modsource" sha="7c62ac4dc64da3f882068c7a4a4b5860cba293bf" name="velo" x="182" y="100">
       <params/>
       <attribs/>
    </obj>
@@ -23,7 +23,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="mod_by_velo" x="14" y="280">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="mod_by_velod" x="14" y="280">
       <params>
          <frac32.u.map name="value" value="0.0">
             <modulators>
@@ -49,28 +49,28 @@
    </obj>
    <nets>
       <net>
-         <source name="polyindex1 index"/>
-         <dest name="polyIndexSum outlet"/>
+         <source obj="polyindex1" outlet="index"/>
+         <dest obj="polyIndexSum" inlet="outlet"/>
       </net>
       <net>
-         <source name="c11 o"/>
-         <dest name="oneSum outlet"/>
+         <source obj="c11" outlet="o"/>
+         <dest obj="oneSum" inlet="outlet"/>
       </net>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="velo trig"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="velo" inlet="trig"/>
       </net>
       <net>
-         <source name="keyb1 velocity"/>
-         <dest name="velo v"/>
+         <source obj="keyb1" outlet="velocity"/>
+         <dest obj="velo" inlet="v"/>
       </net>
       <net>
-         <source name="on_parent out"/>
-         <dest name="c_on_parent outlet"/>
+         <source obj="on_parent" outlet="out"/>
+         <dest obj="c_on_parent" inlet="outlet"/>
       </net>
       <net>
-         <source name="mod_by_velo out"/>
-         <dest name="mod_by_velo outlet"/>
+         <source obj="mod_by_velod" outlet="out"/>
+         <dest obj="mod_by_velo" inlet="outlet"/>
       </net>
    </nets>
    <settings>
@@ -81,4 +81,10 @@
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>1300</x>
+      <y>460</y>
+      <width>492</width>
+      <height>690</height>
+   </windowPos>
 </patch-1.0>
