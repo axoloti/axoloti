@@ -1,24 +1,24 @@
 <patch-1.0>
-   <comment type="patch/comment" name="demonstration: modulated delay lines, overlap-add" x="28" y="14"/>
+   <comment type="patch/comment" x="28" y="14" text="demonstration: modulated delay lines, overlap-add"/>
    <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_2" x="42" y="112">
       <params>
          <int32.vradio name="value" value="2"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="test signal selection" x="126" y="140"/>
-   <comment type="patch/comment" name="0 - audio sample" x="126" y="154"/>
-   <comment type="patch/comment" name="1 - sine wave" x="126" y="168"/>
-   <comment type="patch/comment" name="2 - sawtooth wave" x="126" y="182"/>
-   <comment type="patch/comment" name="3 - noise" x="126" y="196"/>
-   <comment type="patch/comment" name="write to delayline" x="280" y="196"/>
+   <comment type="patch/comment" x="126" y="140" text="test signal selection"/>
+   <comment type="patch/comment" x="126" y="154" text="0 - audio sample"/>
+   <comment type="patch/comment" x="126" y="168" text="1 - sine wave"/>
+   <comment type="patch/comment" x="126" y="182" text="2 - sawtooth wave"/>
+   <comment type="patch/comment" x="126" y="196" text="3 - noise"/>
+   <comment type="patch/comment" x="280" y="196" text="write to delayline"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp1" x="40" y="220">
       <params>
          <frac32.s.map name="value" value="17.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="test_signal_generator" name="test_signal_generator1" x="120" y="220">
+   <obj type="./test_signal_generator" uuid="90e6588a37ceae199ca7ccc9e02922e72b9c6fff" name="test_signal_generator1" x="120" y="220">
       <params/>
       <attribs/>
    </obj>
@@ -28,15 +28,15 @@
          <combo attributeName="size" selection="2048 (42.66ms)"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" name="modulation depth" x="238" y="378"/>
+   <comment type="patch/comment" x="238" y="378" text="modulation depth"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="240" y="400">
       <params>
          <frac32.u.map name="value" value="30.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="modulation speed" x="42" y="476"/>
-   <obj type="phasor3q~" sha="15eb8142a979333baac42c771ed195ffe60fce05" name="phasor3_1" x="40" y="500">
+   <comment type="patch/comment" x="42" y="476" text="modulation speed"/>
+   <obj type="phasor3q~" sha="bb083644af50d7543fc2c79e9f18d3278d964f81" name="phasor3_1" x="40" y="500">
       <params>
          <frac32.s.map name="pitch" value="-32.0"/>
       </params>
@@ -46,7 +46,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delread2~~" sha="bb013b06aba7d6ab94f5e30a9058ad9bce2d8db4" name="delread2__1" x="400" y="500">
+   <obj type="delread2~~" sha="4efaa70ea148be5933dc728d11821eadf89fe0b8" name="delread2__1" x="400" y="500">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -66,7 +66,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delread2~~" sha="bb013b06aba7d6ab94f5e30a9058ad9bce2d8db4" name="delread2__1_" x="400" y="640">
+   <obj type="delread2~~" sha="4efaa70ea148be5933dc728d11821eadf89fe0b8" name="delread2__1_" x="400" y="640">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -85,11 +85,11 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~1" sha="63a81542ba731f54cb620e2404adb2dd7b742c1e" name="dac_11" x="812" y="644">
+   <obj type="audio/out left" sha="63a81542ba731f54cb620e2404adb2dd7b742c1e" name="dac_11" x="812" y="644">
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~2" sha="dbc48d941904b6914bc54f7b80fcd592eaad4853" name="dac_21" x="812" y="700">
+   <obj type="audio/out right" sha="dbc48d941904b6914bc54f7b80fcd592eaad4853" name="dac_21" x="812" y="700">
       <params/>
       <attribs/>
    </obj>
@@ -99,68 +99,68 @@
    </obj>
    <nets>
       <net>
-         <source name="cbp1 out"/>
-         <dest name="test_signal_generator1 pitch"/>
+         <source obj="cbp1" outlet="out"/>
+         <dest obj="test_signal_generator1" inlet="pitch"/>
       </net>
       <net>
-         <source name="test_signal_generator1 outlet_1"/>
-         <dest name="d1 in"/>
+         <source obj="phasor3_1" outlet="phasor0"/>
+         <dest obj="window_1" inlet="phase"/>
+         <dest obj="*c1" inlet="a"/>
       </net>
       <net>
-         <source name="phasor3_1 phasor0"/>
-         <dest name="window_1 phase"/>
-         <dest name="*c1 a"/>
+         <source obj="window_1" outlet="win"/>
+         <dest obj="*1" inlet="b"/>
       </net>
       <net>
-         <source name="window_1 win"/>
-         <dest name="*1 b"/>
+         <source obj="delread2__1" outlet="out"/>
+         <dest obj="*1" inlet="a"/>
       </net>
       <net>
-         <source name="delread2__1 out"/>
-         <dest name="*1 a"/>
+         <source obj="mix21" outlet="out"/>
+         <dest obj="dac_11" inlet="wave"/>
+         <dest obj="dac_21" inlet="wave"/>
       </net>
       <net>
-         <source name="mix21 out"/>
-         <dest name="dac_11 wave"/>
-         <dest name="dac_21 wave"/>
+         <source obj="phasor3_1" outlet="phasor180"/>
+         <dest obj="*c1_" inlet="a"/>
+         <dest obj="window_1_" inlet="phase"/>
       </net>
       <net>
-         <source name="phasor3_1 phasor180"/>
-         <dest name="*c1_ a"/>
-         <dest name="window_1_ phase"/>
+         <source obj="*c1" outlet="result"/>
+         <dest obj="delread2__1" inlet="timem"/>
       </net>
       <net>
-         <source name="*c1 result"/>
-         <dest name="delread2__1 timem"/>
+         <source obj="*c1_" outlet="result"/>
+         <dest obj="delread2__1_" inlet="timem"/>
       </net>
       <net>
-         <source name="*c1_ result"/>
-         <dest name="delread2__1_ timem"/>
+         <source obj="delread2__1_" outlet="out"/>
+         <dest obj="*1_" inlet="a"/>
       </net>
       <net>
-         <source name="delread2__1_ out"/>
-         <dest name="*1_ a"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="*c1" inlet="b"/>
+         <dest obj="*c1_" inlet="b"/>
       </net>
       <net>
-         <source name="c1 out"/>
-         <dest name="*c1 b"/>
-         <dest name="*c1_ b"/>
+         <source obj="*1" outlet="result"/>
+         <dest obj="mix21" inlet="in1"/>
       </net>
       <net>
-         <source name="*1 result"/>
-         <dest name="mix21 in1"/>
+         <source obj="*1_" outlet="result"/>
+         <dest obj="mix21" inlet="in2"/>
       </net>
       <net>
-         <source name="*1_ result"/>
-         <dest name="mix21 in2"/>
+         <source obj="window_1_" outlet="win"/>
+         <dest obj="*1_" inlet="b"/>
       </net>
       <net>
-         <source name="window_1_ win"/>
-         <dest name="*1_ b"/>
+         <source obj="i_2" outlet="out"/>
+         <dest obj="test_signal_generator1" inlet="selection"/>
       </net>
       <net>
-         <source name="i_2 out"/>
-         <dest name="test_signal_generator1 selection"/>
+         <source obj="test_signal_generator1" outlet="outlet_1"/>
+         <dest obj="d1" inlet="in"/>
       </net>
    </nets>
    <settings>
