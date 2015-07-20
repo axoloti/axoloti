@@ -204,10 +204,10 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
     void PopulateLibraryMenu(JMenu parent) {
         JMenu ptut = new JMenu("tutorials");
-        PopulateLibraryMenu(ptut, "patches/tutorials", ".axp");
+        PopulateLibraryMenu(ptut, System.getProperty(Axoloti.RELEASE_DIR) + "/patches/tutorials", ".axp");
         parent.add(ptut);
         JMenu pdemos = new JMenu("demos");
-        PopulateLibraryMenu(pdemos, "patches/demos", ".axp");
+        PopulateLibraryMenu(pdemos, System.getProperty(Axoloti.RELEASE_DIR) + "/patches/demos", ".axp");
         parent.add(pdemos);
     }
 
