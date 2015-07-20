@@ -1,11 +1,4 @@
 <patch-1.0>
-   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="on" x="308" y="14">
-      <params>
-         <bool32.tgl name="b" onParent="true" value="0"/>
-      </params>
-      <attribs/>
-   </obj>
-   <obj type="patch/inlet a" sha="2944bdbaeb2a8a42d5a97163275d052f75668a86" name="inL" x="28" y="28">
       <params/>
       <attribs/>
    </obj>
