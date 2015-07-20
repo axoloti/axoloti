@@ -1466,7 +1466,7 @@
     <NameTransition>
         <OldName>xfade~</OldName>
         <new>
-            <NewName>mix/xfade/NewName>
+            <NewName>mix/xfade</NewName>
         </new>
     </NameTransition>
     <NameTransition>
