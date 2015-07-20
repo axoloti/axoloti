@@ -56,7 +56,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="stomps/chorus3" uuid="80c33a61c90dbb366f7dc8ff423d838ab4346dee" name="obj_4" x="560" y="224">
+   <obj type="stomps/chorus1" uuid="308d235b433d167a0251a5a7ae02cb683bb5f1a1" name="obj_4" x="560" y="224">
       <params>
          <bool32.tgl name="on" value="1"/>
          <frac32.u.map name="depth" value="7.0"/>
@@ -95,14 +95,6 @@
          <dest obj="obj_5" inlet="a"/>
       </net>
       <net>
-         <source obj="obj_4" outlet="L"/>
-         <dest obj="obj_6" inlet="inL"/>
-      </net>
-      <net>
-         <source obj="obj_4" outlet="R"/>
-         <dest obj="obj_6" inlet="inR"/>
-      </net>
-      <net>
          <source obj="obj_6" outlet="outL"/>
          <dest obj="out_1" inlet="left"/>
       </net>
@@ -121,6 +113,14 @@
       <net>
          <source obj="delay" outlet="out"/>
          <dest obj="obj_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="obj_4" outlet="L"/>
+         <dest obj="obj_6" inlet="inL"/>
+      </net>
+      <net>
+         <source obj="obj_4" outlet="R"/>
+         <dest obj="obj_6" inlet="inR"/>
       </net>
    </nets>
    <settings>
