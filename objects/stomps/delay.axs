@@ -29,45 +29,53 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="wave/longdelay" sha="8660dbb4d820f8208ceb44c7101ba7760fb50d1d" name="longdelay_1" x="196" y="196">
-      <params/>
-      <attribs>
-         <table attributeName="fn" table="test.raw"/>
-      </attribs>
-   </obj>
    <obj type="patch/outlet a" sha="72226293648dde4dd4739bc1b8bc46a6bf660595" name="out" x="378" y="196">
       <params/>
       <attribs/>
    </obj>
+   <obj type="delay/write sdram" sha="aa55d7ae111ced1fafde9a6f6386d746292dc8d1" uuid="5ae03f8d7b815edcfc40585d8bbac2ed48460fba" name="d1" x="154" y="210">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="131072 (2.37s)"/>
+      </attribs>
+   </obj>
+   <obj type="delay/read" sha="fc0384b781e1025715ad700b860602e4f5a9762f" uuid="739f69bf3dae8db57f1412d0d15cb37bbae3f4c" name="read_1" x="154" y="266">
+      <params>
+         <frac32.u.map name="time" value="0.0"/>
+      </params>
+      <attribs>
+         <objref attributeName="delayname" obj="d1"/>
+      </attribs>
+   </obj>
    <nets>
       <net>
-         <source name="time out"/>
-         <dest name="longdelay_1 delay"/>
+         <source obj="time" outlet="out"/>
+         <dest obj="read_1" inlet="timem"/>
       </net>
       <net>
-         <source name="longdelay_1 out"/>
-         <dest name="xfade_1 i2"/>
+         <source obj="xfade_1" outlet="o"/>
+         <dest obj="out" inlet="outlet"/>
+         <dest obj="d1" inlet="in"/>
       </net>
       <net>
-         <source name="xfade_1 o"/>
-         <dest name="longdelay_1 in"/>
-         <dest name="out outlet"/>
+         <source obj="in" outlet="inlet"/>
+         <dest obj="xfade_1" inlet="i1"/>
       </net>
       <net>
-         <source name="in inlet"/>
-         <dest name="xfade_1 i1"/>
+         <source obj="on" outlet="o"/>
+         <dest obj="mux_1" inlet="s"/>
       </net>
       <net>
-         <source name="on o"/>
-         <dest name="mux_1 s"/>
+         <source obj="mux_1" outlet="o"/>
+         <dest obj="xfade_1" inlet="c"/>
       </net>
       <net>
-         <source name="mux_1 o"/>
-         <dest name="xfade_1 c"/>
+         <source obj="fdbk" outlet="out"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
       <net>
-         <source name="fdbk out"/>
-         <dest name="mux_1 i2"/>
+         <source obj="read_1" outlet="out"/>
+         <dest obj="xfade_1" inlet="i2"/>
       </net>
    </nets>
    <settings>
@@ -77,7 +85,12 @@
       <NPresetEntries>8</NPresetEntries>
       <NModulationSources>4</NModulationSources>
       <NModulationTargetsPerSource>4</NModulationTargetsPerSource>
-      <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>310</x>
+      <y>300</y>
+      <width>688</width>
+      <height>506</height>
+   </windowPos>
 </patch-1.0>

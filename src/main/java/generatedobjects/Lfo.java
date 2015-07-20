@@ -44,7 +44,7 @@ public class Lfo extends gentools {
         WriteAxoObject(catName, CreateSaw3());
         WriteAxoObject(catName, CreateSawDown());
         WriteAxoObject(catName, CreateSawDown2());
-        WriteAxoObject(catName, CreateTaptempo());
+        //WriteAxoObject(catName, CreateTaptempo());
     }
 
     static AxoObject CreateSineLFO() {
@@ -252,6 +252,7 @@ public class Lfo extends gentools {
         return o;
     }
 
+    //broken
     static AxoObject CreateTaptempo() {
         AxoObject o = new AxoObject("taptempo", "taptempo follower");
         o.inlets.add(new InletBool32Rising("tap", "tap tap tap"));
