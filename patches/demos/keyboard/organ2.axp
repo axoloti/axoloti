@@ -24,7 +24,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="fx/chorus2" sha="3389201e65c0bb381a531005c14fd69da7a3e9ef" name="chorus21" x="336" y="14">
+   <obj type="fx/chorus" sha="3389201e65c0bb381a531005c14fd69da7a3e9ef" name="chorus21" x="336" y="14">
       <params>
          <frac32.u.map name="depth" value="1.5"/>
          <frac32.s.map name="speed" value="-27.0"/>

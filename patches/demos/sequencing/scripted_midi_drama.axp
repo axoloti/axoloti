@@ -96,7 +96,7 @@
          <combo attributeName="midiport" selection="omni"/>
       </attribs>
    </obj>
-   <obj type="fx/chorus2" name="chorus21" x="196" y="196">
+   <obj type="fx/chorus" name="chorus21" x="196" y="196">
       <params>
          <frac32.u.map name="depth" value="11.0"/>
          <frac32.s.map name="speed" value="-64.0"/>
