@@ -44,7 +44,7 @@
       <attribs/>
    </obj>
    <zombie type="tapedelay" uuid="zombie" name="tapedelay" x="448" y="224"/>
-   <obj type="stomps/chorus3" uuid="80c33a61c90dbb366f7dc8ff423d838ab4346dee" name="obj_4" x="532" y="224">
+   <obj type="stomps/chorus1" uuid="80c33a61c90dbb366f7dc8ff423d838ab4346dee" name="obj_4" x="532" y="224">
       <params>
          <bool32.tgl name="on" value="0"/>
          <frac32.u.map name="depth" value="7.0"/>

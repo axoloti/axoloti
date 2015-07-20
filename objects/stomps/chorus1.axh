@@ -3,11 +3,11 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="stomps/chorus3" uuid="80c33a61c90dbb366f7dc8ff423d838ab4346dee" name="obj_1" x="350" y="70">
+   <obj type="stomps/chorus1" uuid="308d235b433d167a0251a5a7ae02cb683bb5f1a1" name="obj_1" x="350" y="70">
       <params>
-         <bool32.tgl name="on" value="1"/>
-         <frac32.u.map name="depth" value="14.0"/>
-         <frac32.s.map name="speed" value="1.0"/>
+         <bool32.tgl name="on" value="0"/>
+         <frac32.u.map name="depth" value="7.0"/>
+         <frac32.s.map name="speed" value="-41.0"/>
       </params>
       <attribs/>
    </obj>
@@ -29,21 +29,21 @@
    </obj>
    <nets>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="obj_1 in"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="obj_1" inlet="in"/>
       </net>
       <net>
-         <source name="dial_1 out"/>
-         <dest name="note_1 in"/>
-         <dest name="saw_1 pitchm"/>
+         <source obj="dial_1" outlet="out"/>
+         <dest obj="note_1" inlet="in"/>
+         <dest obj="saw_1" inlet="pitchm"/>
       </net>
       <net>
-         <source name="obj_1 L"/>
-         <dest name="out_1 left"/>
+         <source obj="obj_1" outlet="L"/>
+         <dest obj="out_1" inlet="left"/>
       </net>
       <net>
-         <source name="obj_1 R"/>
-         <dest name="out_1 right"/>
+         <source obj="obj_1" outlet="R"/>
+         <dest obj="out_1" inlet="right"/>
       </net>
    </nets>
    <settings>
