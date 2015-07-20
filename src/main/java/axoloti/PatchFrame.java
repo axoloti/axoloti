@@ -351,7 +351,7 @@ jMenuSave.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuFile.add(jMenuSave);
 
-    jMenuSaveAs.setText("Save as...");
+    jMenuSaveAs.setText("Save As...");
     jMenuSaveAs.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuSaveAsActionPerformed(evt);
@@ -359,7 +359,7 @@ jMenuSave.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuFile.add(jMenuSaveAs);
 
-    jMenuSaveClip.setText("Save to clipboard");
+    jMenuSaveClip.setText("Save To Clipboard");
     jMenuSaveClip.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuSaveClipActionPerformed(evt);
@@ -394,7 +394,7 @@ jMenuQuit.addActionListener(new java.awt.event.ActionListener() {
 
     jMenuItemSelectAll.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A,
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-jMenuItemSelectAll.setText("Select all");
+jMenuItemSelectAll.setText("Select All");
 jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener() {
     public void actionPerformed(java.awt.event.ActionEvent evt) {
         jMenuItemSelectAllActionPerformed(evt);
@@ -441,7 +441,7 @@ jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuView.add(jCheckBoxMenuItemCordsInBackground);
 
-    jMenuItemAdjScroll.setText("Adjust scroll");
+    jMenuItemAdjScroll.setText("Adjust Scroll");
     jMenuItemAdjScroll.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuItemAdjScrollActionPerformed(evt);
@@ -569,13 +569,13 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     jMenuWindow.setMnemonic('W');
     jMenuWindow.setText("Window");
     jMenuWindow.addMenuListener(new javax.swing.event.MenuListener() {
-        public void menuCanceled(javax.swing.event.MenuEvent evt) {
+        public void menuSelected(javax.swing.event.MenuEvent evt) {
+            jMenuWindowMenuSelected(evt);
         }
         public void menuDeselected(javax.swing.event.MenuEvent evt) {
             jMenuWindowMenuDeselected(evt);
         }
-        public void menuSelected(javax.swing.event.MenuEvent evt) {
-            jMenuWindowMenuSelected(evt);
+        public void menuCanceled(javax.swing.event.MenuEvent evt) {
         }
     });
     jMenuBar1.add(jMenuWindow);

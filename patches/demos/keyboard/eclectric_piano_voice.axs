@@ -24,14 +24,14 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="434" y="56">
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="434" y="56">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
          <frac32.u.map name="reso" value="62.94999980926514"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin m x" sha="a2e1da37932bdfc8056cd08cca74d2ebc6735f40" name="envdlinmx1" x="126" y="84">
+   <obj type="env/d lin m" sha="a2e1da37932bdfc8056cd08cca74d2ebc6735f40" name="envdlinmx1" x="126" y="84">
       <params>
          <frac32.s.map name="d" value="-64.0"/>
       </params>
@@ -59,14 +59,14 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="f1" x="434" y="196">
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="f1" x="434" y="196">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="0.0"/>
          <frac32.u.map name="reso" value="62.9399995803833"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="f2" x="434" y="336">
+   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="f2" x="434" y="336">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="12.0"/>
          <frac32.u.map name="reso" value="62.924999713897705"/>
@@ -87,81 +87,81 @@
    </obj>
    <nets>
       <net>
-         <source name="keyb1 gate2"/>
-         <dest name="envdlinmx1 trig"/>
-         <dest name="q in1"/>
+         <source obj="keyb1" outlet="gate2"/>
+         <dest obj="envdlinmx1" inlet="trig"/>
+         <dest obj="q" inlet="in1"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="vcf3_1 in"/>
-         <dest name="f1 in"/>
-         <dest name="f2 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="vcf3_1" inlet="in"/>
+         <dest obj="f1" inlet="in"/>
+         <dest obj="f2" inlet="in"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="vcf3_1 pitchm"/>
-         <dest name="f1 pitchm"/>
-         <dest name="f2 pitchm"/>
-         <dest name="satp1 in"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="vcf3_1" inlet="pitchm"/>
+         <dest obj="f1" inlet="pitchm"/>
+         <dest obj="f2" inlet="pitchm"/>
+         <dest obj="satp1" inlet="in"/>
       </net>
       <net>
-         <source name="q out"/>
-         <dest name="vcf3_1 resom"/>
-         <dest name="f1 resom"/>
-         <dest name="f2 resom"/>
+         <source obj="q" outlet="out"/>
+         <dest obj="vcf3_1" inlet="resom"/>
+         <dest obj="f1" inlet="resom"/>
+         <dest obj="f2" inlet="resom"/>
       </net>
       <net>
-         <source name="vcf3_1 out"/>
-         <dest name="mix21 in1"/>
+         <source obj="vcf3_1" outlet="out"/>
+         <dest obj="mix21" inlet="in1"/>
       </net>
       <net>
-         <source name="f1 out"/>
-         <dest name="mix21 in2"/>
+         <source obj="f1" outlet="out"/>
+         <dest obj="mix21" inlet="in2"/>
       </net>
       <net>
-         <source name="f2 out"/>
-         <dest name="mix21 in3"/>
+         <source obj="f2" outlet="out"/>
+         <dest obj="mix21" inlet="in3"/>
       </net>
       <net>
-         <source name="mix21 out"/>
-         <dest name="dac_1 outlet"/>
+         <source obj="mix21" outlet="out"/>
+         <dest obj="dac_1" inlet="outlet"/>
       </net>
       <net>
-         <source name="keyb1 velocity"/>
-         <dest name="velo in"/>
-         <dest name="div1281 in"/>
+         <source obj="keyb1" outlet="velocity"/>
+         <dest obj="velo" inlet="in"/>
+         <dest obj="div1281" inlet="in"/>
       </net>
       <net>
-         <source name="lfsr_1 out"/>
-         <dest name="bipolar2unipolar1 i"/>
+         <source obj="lfsr_1" outlet="out"/>
+         <dest obj="bipolar2unipolar1" inlet="i"/>
       </net>
       <net>
-         <source name="velo out"/>
-         <dest name="envdlinmx1 dm"/>
+         <source obj="velo" outlet="out"/>
+         <dest obj="envdlinmx1" inlet="dm"/>
       </net>
       <net>
-         <source name="envdlinmx1 env"/>
-         <dest name="*1 a"/>
+         <source obj="envdlinmx1" outlet="env"/>
+         <dest obj="*1" inlet="a"/>
       </net>
       <net>
-         <source name="*1 result"/>
-         <dest name="vca_1 v"/>
+         <source obj="*1" outlet="result"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="div1281 out"/>
-         <dest name="*1 b"/>
+         <source obj="div1281" outlet="out"/>
+         <dest obj="*1" inlet="b"/>
       </net>
       <net>
-         <source name="bipolar2unipolar1 o"/>
-         <dest name="vca_1 a"/>
+         <source obj="bipolar2unipolar1" outlet="o"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="satp1 out"/>
-         <dest name="inv1 in"/>
+         <source obj="satp1" outlet="out"/>
+         <dest obj="inv1" inlet="in"/>
       </net>
       <net>
-         <source name="inv1 out"/>
-         <dest name="q in2"/>
+         <source obj="inv1" outlet="out"/>
+         <dest obj="q" inlet="in2"/>
       </net>
    </nets>
    <settings>
@@ -172,4 +172,10 @@
       <NModulationTargetsPerSource>1</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>312</x>
+      <y>212</y>
+      <width>1010</width>
+      <height>646</height>
+   </windowPos>
 </patch-1.0>

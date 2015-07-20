@@ -66,6 +66,10 @@ public abstract class QCmdShellTask implements QCmd {
         }
     }
 
+    public boolean success() {
+        return success;
+    }
+    
     public String RuntimeDir() {
         return System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
     }
