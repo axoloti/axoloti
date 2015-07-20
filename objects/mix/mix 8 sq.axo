@@ -20,38 +20,14 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.squaregain name="gain1">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain2">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain3">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain4">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain5">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain6">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain7">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain8">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
+         <frac32.u.map.squaregain name="gain1"/>
+         <frac32.u.map.squaregain name="gain2"/>
+         <frac32.u.map.squaregain name="gain3"/>
+         <frac32.u.map.squaregain name="gain4"/>
+         <frac32.u.map.squaregain name="gain5"/>
+         <frac32.u.map.squaregain name="gain6"/>
+         <frac32.u.map.squaregain name="gain7"/>
+         <frac32.u.map.squaregain name="gain8"/>
       </params>
       <attribs/>
       <code.krate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
@@ -86,38 +62,14 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.squaregain name="gain1">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain2">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain3">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain4">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain5">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain6">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain7">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
-         <frac32.u.map.squaregain name="gain8">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.squaregain>
+         <frac32.u.map.squaregain name="gain1"/>
+         <frac32.u.map.squaregain name="gain2"/>
+         <frac32.u.map.squaregain name="gain3"/>
+         <frac32.u.map.squaregain name="gain4"/>
+         <frac32.u.map.squaregain name="gain5"/>
+         <frac32.u.map.squaregain name="gain6"/>
+         <frac32.u.map.squaregain name="gain7"/>
+         <frac32.u.map.squaregain name="gain8"/>
       </params>
       <attribs/>
       <code.srate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1,param_gain1);

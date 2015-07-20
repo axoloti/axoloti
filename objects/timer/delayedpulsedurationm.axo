@@ -15,14 +15,8 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.klineartime.exp name="delay">
-            <MinValue v="-64.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.s.map.klineartime.exp>
-         <frac32.s.map.klineartime.exp name="pulselength">
-            <MinValue v="-64.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.s.map.klineartime.exp>
+         <frac32.s.map.klineartime.exp name="delay"/>
+         <frac32.s.map.klineartime.exp name="pulselength"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;

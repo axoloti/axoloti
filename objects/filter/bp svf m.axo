@@ -15,14 +15,8 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.pitch name="pitch">
-            <MinValue v="-64.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.s.map.pitch>
-         <frac32.u.map.filterq name="reso">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.filterq>
+         <frac32.s.map.pitch name="pitch"/>
+         <frac32.u.map.filterq name="reso"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t low;

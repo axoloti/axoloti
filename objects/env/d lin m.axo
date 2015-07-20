@@ -14,10 +14,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.klineartime.exp name="d" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.s.map.klineartime.exp>
+         <frac32.s.map.klineartime.exp name="d" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;

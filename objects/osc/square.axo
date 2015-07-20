@@ -13,10 +13,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.pitch name="pitch" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.s.map.pitch>
+         <frac32.s.map.pitch name="pitch" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[  int32_t osc_p;

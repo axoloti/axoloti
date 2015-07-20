@@ -13,14 +13,8 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="tresh">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map>
-         <frac32.u.map name="ratio">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map>
+         <frac32.u.map name="tresh"/>
+         <frac32.u.map name="ratio"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t frac_log(int32_t a) {

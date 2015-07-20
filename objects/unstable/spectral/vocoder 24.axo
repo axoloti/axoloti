@@ -14,10 +14,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="reso" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map>
+         <frac32.u.map name="reso" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[biquad_state bsmod[20];

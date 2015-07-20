@@ -19,10 +19,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="g" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map>
+         <frac32.u.map name="g" noLabel="true"/>
       </params>
       <attribs>
          <spinner name="d1" MinValue="2" MaxValue="4096" DefaultValue="128"/>

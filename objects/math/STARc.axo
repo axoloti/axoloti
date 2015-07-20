@@ -13,10 +13,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.gain name="amp" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.gain>
+         <frac32.u.map.gain name="amp" noLabel="true"/>
       </params>
       <attribs/>
       <code.krate><![CDATA[outlet_out= ___SMMUL(param_amp,inlet_in)<<1;
@@ -36,10 +33,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.gain name="amp" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map.gain>
+         <frac32.u.map.gain name="amp" noLabel="true"/>
       </params>
       <attribs/>
       <code.srate><![CDATA[outlet_out= ___SMMUL(param_amp,inlet_in)<<1;

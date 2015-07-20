@@ -13,14 +13,8 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="a">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map>
-         <frac32.u.map name="d">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map>
+         <frac32.u.map name="a"/>
+         <frac32.u.map name="d"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;

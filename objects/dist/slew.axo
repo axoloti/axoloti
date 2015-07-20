@@ -13,10 +13,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="slew" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map>
+         <frac32.u.map name="slew" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t acc;
@@ -52,10 +49,7 @@ outlet_out = acc;
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="slew" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="64.0"/>
-         </frac32.u.map>
+         <frac32.u.map name="slew" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t acc;
