@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="phasor compl" uuid="bdd623d618e38f2f40bc68b36346239756548637" sha="15eb8142a979333baac42c771ed195ffe60fce05">
+   <obj.normal id="phasor compl" uuid="bdd623d618e38f2f40bc68b36346239756548637" sha="bb083644af50d7543fc2c79e9f18d3278d964f81">
       <upgradeSha>bb3797f6808c1fa0ccf714c27361878a3fd8be29</upgradeSha>
       <sDescription>FM phasor, linear interpolated table, s-rate pitch input, 180 degree output</sDescription>
       <author>Johannes Taelman</author>
@@ -26,9 +26,9 @@
       <code.krate><![CDATA[   uint32_t freq;
    MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
 ]]></code.krate>
-      <code.srate><![CDATA[Phase += (freq>>0) + inlet_fm[buffer_index];
-   outlet_phasor0[buffer_index] = Phase>>5;
-   outlet_phasor180[buffer_index] = (Phase+(1<<31))>>5;
+      <code.srate><![CDATA[Phase += (freq>>0) + inlet_fm;
+   outlet_phasor0 = Phase>>5;
+   outlet_phasor180 = (Phase+(1<<31))>>5;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

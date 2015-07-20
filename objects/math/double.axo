@@ -16,7 +16,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= inlet_in<<1;]]></code.krate>
    </obj.normal>
-   <obj.normal id="double" uuid="3b7c0f3e2d95da4ec849103bfaba6c1cee7b8661" sha="beed69d543d331888f251ccdd10309cfbb0e41d0">
+   <obj.normal id="double" uuid="3b7c0f3e2d95da4ec849103bfaba6c1cee7b8661" sha="5be1b19a72bc5f18f910f2b076d6519c5da7322f">
       <upgradeSha>8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2</upgradeSha>
       <sDescription>multiply by two</sDescription>
       <author>Johannes Taelman</author>
@@ -31,7 +31,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index]<<1;]]></code.srate>
+      <code.srate><![CDATA[outlet_out= inlet_in<<1;]]></code.srate>
    </obj.normal>
    <obj.normal id="double" uuid="9b803b1ee8f9231e52acf3795a787ce56ab54d0c" sha="9ffa737534a6dc887e6ac0b0316ec9bf759fe636">
       <upgradeSha>147c4e9ea8ef434bd2a959cddc03995ae3e2d314</upgradeSha>

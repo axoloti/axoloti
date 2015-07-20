@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="phasor" uuid="db03c099c44cbefe218b88b702004bcfd6ba87d6" sha="60e3f3ea8b75d9dbd83583af0f2f725f09f6aba3">
+   <obj.normal id="phasor" uuid="db03c099c44cbefe218b88b702004bcfd6ba87d6" sha="9f6e5c01bd813c7eef16a17cd9f82f881d5f5219">
       <upgradeSha>b5e53b37a76ac5a3605d009e82bcce64821c7e52</upgradeSha>
       <sDescription>phasor with logarithmic pitch plus linear frequency, k-rate pitch input</sDescription>
       <author>Johannes Taelman</author>
@@ -25,8 +25,8 @@
       <code.krate><![CDATA[   uint32_t freq;
    MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
 ]]></code.krate>
-      <code.srate><![CDATA[Phase += (freq>>0) + inlet_fm[buffer_index];
-   outlet_phasor[buffer_index] = Phase>>5;
+      <code.srate><![CDATA[Phase += (freq>>0) + inlet_fm;
+   outlet_phasor = Phase>>5;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

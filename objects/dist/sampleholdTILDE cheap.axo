@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="samplehold~ cheap" uuid="dcfaef226ae39211ccf68b26ed2ebb779448954d" sha="92fe0210fc39b1900f332eaa30f9cd9bfaf4036c">
+   <obj.normal id="samplehold~ cheap" uuid="dcfaef226ae39211ccf68b26ed2ebb779448954d" sha="c7ecc4278c6bc629cee90f5180967a74ff211b4e">
       <upgradeSha>2cee48716f298f310de868cdc8ca00d4a2f34205</upgradeSha>
       <sDescription>low-quality audio rate sample and hold using blit synthesis (not bandwidth limited)</sDescription>
       <author>Johannes Taelman</author>
@@ -20,11 +20,11 @@
       <code.init><![CDATA[  in0 = 0;
   hold = 0;
 ]]></code.init>
-      <code.srate><![CDATA[  if ((inlet_trig[buffer_index]>0)&&!(in0>0)){
-    hold = inlet_in[buffer_index]>>1;
+      <code.srate><![CDATA[  if ((inlet_trig>0)&&!(in0>0)){
+    hold = inlet_in>>1;
   }
-  in0 = inlet_trig[buffer_index];
-  outlet_out[buffer_index] = hold;
+  in0 = inlet_trig;
+  outlet_out = hold;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

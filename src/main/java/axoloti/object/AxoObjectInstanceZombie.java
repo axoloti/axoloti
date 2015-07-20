@@ -76,11 +76,11 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
         Titlebar.add(idlbl);
 
         Titlebar.setToolTipText("<html>" + "Unresolved object!");
-        MenuItem popm_substitute = new MenuItem("substitute");
+        MenuItem popm_substitute = new MenuItem("replace");
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceZombie.this.getLocation(), null, null);
+                ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceZombie.this.getLocation(), AxoObjectInstanceZombie.this, null);
             }
         });
         popup.add(popm_substitute);

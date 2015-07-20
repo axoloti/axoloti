@@ -207,7 +207,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 7" uuid="4b555ad0fe48f729ac851533ea177e13d7d4d021" sha="dd7c07612d5b8428c3355aec65b52b962ca5dc8">
+   <obj.normal id="demux 7" uuid="4b555ad0fe48f729ac851533ea177e13d7d4d021" sha="2589c3073fc927407a073b0d3342fc07e3173d6c">
       <upgradeSha>bca535eb0fb9936fa90891a9fd98b10498d39761</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
@@ -238,76 +238,76 @@
       <attribs/>
       <code.srate><![CDATA[   switch(inlet_s>0?inlet_s:0){
       case 0: 
-         outlet_o0[buffer_index] = inlet_i[buffer_index];
-         outlet_o1[buffer_index] = inlet_d1[buffer_index];
-         outlet_o2[buffer_index] = inlet_d2[buffer_index];
-         outlet_o3[buffer_index] = inlet_d3[buffer_index];
-         outlet_o4[buffer_index] = inlet_d4[buffer_index];
-         outlet_o5[buffer_index] = inlet_d5[buffer_index];
-         outlet_o6[buffer_index] = inlet_d6[buffer_index];
+         outlet_o0 = inlet_i;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 1: 
-         outlet_o0[buffer_index] = inlet_d0[buffer_index];
-         outlet_o1[buffer_index] = inlet_i[buffer_index];
-         outlet_o2[buffer_index] = inlet_d2[buffer_index];
-         outlet_o3[buffer_index] = inlet_d3[buffer_index];
-         outlet_o4[buffer_index] = inlet_d4[buffer_index];
-         outlet_o5[buffer_index] = inlet_d5[buffer_index];
-         outlet_o6[buffer_index] = inlet_d6[buffer_index];
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_i;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 2: 
-         outlet_o0[buffer_index] = inlet_d0[buffer_index];
-         outlet_o1[buffer_index] = inlet_d1[buffer_index];
-         outlet_o2[buffer_index] = inlet_i[buffer_index];
-         outlet_o3[buffer_index] = inlet_d3[buffer_index];
-         outlet_o4[buffer_index] = inlet_d4[buffer_index];
-         outlet_o5[buffer_index] = inlet_d5[buffer_index];
-         outlet_o6[buffer_index] = inlet_d6[buffer_index];
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_i;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 3: 
-         outlet_o0[buffer_index] = inlet_d0[buffer_index];
-         outlet_o1[buffer_index] = inlet_d1[buffer_index];
-         outlet_o2[buffer_index] = inlet_d2[buffer_index];
-         outlet_o3[buffer_index] = inlet_i[buffer_index];
-         outlet_o4[buffer_index] = inlet_d4[buffer_index];
-         outlet_o5[buffer_index] = inlet_d5[buffer_index];
-         outlet_o6[buffer_index] = inlet_d6[buffer_index];
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_i;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 4: 
-         outlet_o0[buffer_index] = inlet_d0[buffer_index];
-         outlet_o1[buffer_index] = inlet_d1[buffer_index];
-         outlet_o2[buffer_index] = inlet_d2[buffer_index];
-         outlet_o3[buffer_index] = inlet_d3[buffer_index];
-         outlet_o4[buffer_index] = inlet_i[buffer_index];
-         outlet_o5[buffer_index] = inlet_d5[buffer_index];
-         outlet_o6[buffer_index] = inlet_d6[buffer_index];
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_i;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
          break;
       case 5: 
-         outlet_o0[buffer_index] = inlet_d0[buffer_index];
-         outlet_o1[buffer_index] = inlet_d1[buffer_index];
-         outlet_o2[buffer_index] = inlet_d2[buffer_index];
-         outlet_o3[buffer_index] = inlet_d3[buffer_index];
-         outlet_o4[buffer_index] = inlet_d4[buffer_index];
-         outlet_o5[buffer_index] = inlet_i[buffer_index];
-         outlet_o6[buffer_index] = inlet_d6[buffer_index];
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_i;
+         outlet_o6 = inlet_d6;
          break;
       case 6: 
-         outlet_o0[buffer_index] = inlet_d0[buffer_index];
-         outlet_o1[buffer_index] = inlet_d1[buffer_index];
-         outlet_o2[buffer_index] = inlet_d2[buffer_index];
-         outlet_o3[buffer_index] = inlet_d3[buffer_index];
-         outlet_o4[buffer_index] = inlet_d4[buffer_index];
-         outlet_o5[buffer_index] = inlet_d5[buffer_index];
-         outlet_o6[buffer_index] = inlet_i[buffer_index];
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_i;
          break;
       default:
-         outlet_o0[buffer_index] = inlet_d0[buffer_index];
-         outlet_o1[buffer_index] = inlet_d1[buffer_index];
-         outlet_o2[buffer_index] = inlet_d2[buffer_index];
-         outlet_o3[buffer_index] = inlet_d3[buffer_index];
-         outlet_o4[buffer_index] = inlet_d4[buffer_index];
-         outlet_o5[buffer_index] = inlet_d5[buffer_index];
-         outlet_o6[buffer_index] = inlet_d6[buffer_index];
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
+         outlet_o3 = inlet_d3;
+         outlet_o4 = inlet_d4;
+         outlet_o5 = inlet_d5;
+         outlet_o6 = inlet_d6;
 }
 ]]></code.srate>
    </obj.normal>

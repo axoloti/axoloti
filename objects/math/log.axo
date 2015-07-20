@@ -21,7 +21,7 @@ int32_t r3 = logt[f.parts.mantissa>>15]<<10;
 outlet_result = r1 + r3;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="log" uuid="ebe62c08ed2525941ea286c487bf1e4dce616a85" sha="f7ace4d6ac37f46b2d4a63e72182c8ea370e6fac">
+   <obj.normal id="log" uuid="ebe62c08ed2525941ea286c487bf1e4dce616a85" sha="6404feb28feed27f9851ed6ce39fb552347db9ee">
       <upgradeSha>ff1f4aeb54fc1d404d0bb1720dc013b79eaf36e8</upgradeSha>
       <sDescription>logarithm, y=16+8*log2(x)</sDescription>
       <author>Johannes Taelman</author>
@@ -37,10 +37,10 @@ outlet_result = r1 + r3;
       <params/>
       <attribs/>
       <code.srate><![CDATA[Float_t f;
-f.f = inlet_a[buffer_index];
+f.f = inlet_a;
 int32_t r1 = ((f.parts.exponent&0x7F)-18) << 24;
 int32_t r3 = logt[f.parts.mantissa>>15]<<10;
-outlet_result[buffer_index] = r1 + r3;
+outlet_result = r1 + r3;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

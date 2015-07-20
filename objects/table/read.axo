@@ -39,7 +39,7 @@
       <code.krate><![CDATA[   outlet_o= attr_table.array[__USAT(inlet_a,27)>>(27-attr_table.LENGTHPOW)]<<attr_table.GAIN;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="read" uuid="57c0d2f661ccce53e64e9d4653918bc7a74f311e" sha="454ad6878a4711d6a85510c93dc54d87254fb0b5">
+   <obj.normal id="read" uuid="57c0d2f661ccce53e64e9d4653918bc7a74f311e" sha="199bcd287eed68c6a3f0320157807a61338d36ca">
       <upgradeSha>13db20ba539824a51f60bb0ae362e2af0044c354</upgradeSha>
       <sDescription>read from table, nearest neighbour</sDescription>
       <author>Johannes Taelman</author>
@@ -56,7 +56,7 @@
       <attribs>
          <objref name="table"/>
       </attribs>
-      <code.srate><![CDATA[   outlet_o[buffer_index]= attr_table.array[__USAT(inlet_a[buffer_index],27)>>(27-attr_table.LENGTHPOW)]<<attr_table.GAIN;
+      <code.srate><![CDATA[   outlet_o= attr_table.array[__USAT(inlet_a,27)>>(27-attr_table.LENGTHPOW)]<<attr_table.GAIN;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

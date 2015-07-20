@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="nointerp" uuid="5e7389d61f8cd8945790bb71f1670b3a0904c15b" sha="64f73f89fb7235dad58feab8922e05021b0984ec">
+   <obj.normal id="nointerp" uuid="5e7389d61f8cd8945790bb71f1670b3a0904c15b" sha="d3e64ba4ae64ec6c8f1b8fa2a0fc470cbec11b4b">
       <upgradeSha>77d868d4547e0e29a1aa7711f764a6d3957177f9</upgradeSha>
       <sDescription>k- to s-rate without interpolation</sDescription>
       <author>Johannes Taelman</author>
@@ -13,7 +13,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   outlet_o[buffer_index] = inlet_i;
+      <code.srate><![CDATA[   outlet_o = inlet_i;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

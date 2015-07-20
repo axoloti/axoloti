@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="write sdram" uuid="5ae03f8d7b815edcfc40585d8bbac2ed48460fba" sha="ccc0fca1df0b5969e5e326c1c05d5394d1d2256a">
+   <obj.normal id="write sdram" uuid="5ae03f8d7b815edcfc40585d8bbac2ed48460fba" sha="aa55d7ae111ced1fafde9a6f6386d746292dc8d1">
       <upgradeSha>3b156a92fef726fce69a05c2e670a365457a1728</upgradeSha>
       <sDescription>delayline definition, read it with &quot;delay/read&quot; objects referencing the instance name of this object</sDescription>
       <author>Johannes Taelman</author>
@@ -59,7 +59,7 @@ array = _array;
    for(i=0;i<LENGTH;i++) array[i] = 0;
 ]]></code.init>
       <code.srate><![CDATA[  writepos = (writepos + 1)&LENGTHMASK;
-   array[writepos] = __SSAT(inlet_in[buffer_index]>>14,16);
+   array[writepos] = __SSAT(inlet_in>>14,16);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

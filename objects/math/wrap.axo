@@ -19,7 +19,7 @@
       <code.krate><![CDATA[   outlet_b= (inlet_a<<attr_bits) & ((1<<27)-1);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="wrap" uuid="8746cb26006c3ad0808df435ca66325fef902e14" sha="5a8af0fb5ff074891c496d051b0ae525e6faef26">
+   <obj.normal id="wrap" uuid="8746cb26006c3ad0808df435ca66325fef902e14" sha="a1a66efb8d49141da262a023a93fb55971cd3307">
       <upgradeSha>ab95c4e2b122c98a94e2f369315e05c4809b07a8</upgradeSha>
       <sDescription>wrap to 0..64 range after multiplying with 2^bits</sDescription>
       <author>Johannes Taelman</author>
@@ -36,7 +36,7 @@
       <attribs>
          <spinner name="bits" MinValue="0" MaxValue="27" DefaultValue="7"/>
       </attribs>
-      <code.srate><![CDATA[   outlet_b[buffer_index]= (inlet_a[buffer_index]<<attr_bits) & ((1<<27)-1);
+      <code.srate><![CDATA[   outlet_b= (inlet_a<<attr_bits) & ((1<<27)-1);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -19,7 +19,7 @@
        outlet_out= (r>>4);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="cos" uuid="a2ba1ca8d10b854e06728c088c43409866624fc1" sha="f4361f0b932565dbfacd93ab635727b0faf43e0c">
+   <obj.normal id="cos" uuid="a2ba1ca8d10b854e06728c088c43409866624fc1" sha="73d1b04d6b3a787548b0b35a4ed3f2c309c80500">
       <upgradeSha>8e1816a884241ec4b44374c205dbcd18fe0d101e</upgradeSha>
       <sDescription>cosine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
@@ -35,8 +35,8 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[       int32_t r;
-       SINE2TINTERP((inlet_phase[buffer_index]<<4)+(1<<30),r)
-       outlet_out[buffer_index]= (r>>4);
+       SINE2TINTERP((inlet_phase<<4)+(1<<30),r)
+       outlet_out= (r>>4);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

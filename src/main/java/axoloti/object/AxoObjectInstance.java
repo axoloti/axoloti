@@ -24,6 +24,7 @@ import axoloti.PatchGUI;
 import axoloti.attribute.*;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.datatypes.DataType;
+import axoloti.datatypes.Frac32buffer;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
 import axoloti.outlets.Outlet;
@@ -462,7 +463,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         String c = "";
         if (getType().sLocalData != null) {
             String s = getType().sLocalData;
-            s = s.replace("attr_parent", getCInstanceName());
+            s = s.replaceAll("attr_parent", getCInstanceName());
             c += s + "\n";
         }
         return c;
@@ -501,7 +502,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         c += GenerateInstanceDataDeclaration2();
         for (AttributeInstance p : attributeInstances) {
             if (p.CValue() != null) {
-                c = c.replace(p.GetCName(), p.CValue());
+                c = c.replaceAll(p.GetCName(), p.CValue());
             }
         }
         return c;
@@ -566,7 +567,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (getType().sDisposeCode != null) {
             String s = getType().sDisposeCode;
             for (AttributeInstance p : attributeInstances) {
-                s = s.replace(p.GetCName(), p.CValue());
+                s = s.replaceAll(p.GetCName(), p.CValue());
             }
             c += s + "\n";
         }
@@ -578,7 +579,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         String s = getType().sKRateCode;
         if (s != null) {
             for (AttributeInstance p : attributeInstances) {
-                s = s.replace(p.GetCName(), p.CValue());
+                s = s.replaceAll(p.GetCName(), p.CValue());
             }
             s = s.replace("attr_name", getCInstanceName());
             for (InletInstance i : inletInstances) {
@@ -606,12 +607,25 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public String GenerateSRateCodePlusPlus(String vprefix, boolean enableOnParent, String OnParentAccess) {
         if (getType().sSRateCode != null) {
             String s = "int buffer_index;\n"
-                    + "for(buffer_index=0;buffer_index<BUFSIZE;buffer_index++) {\n" + getType().sSRateCode;
+                    + "for(buffer_index=0;buffer_index<BUFSIZE;buffer_index++) {\n"
+                    + getType().sSRateCode
+                    + "\n}\n";
+
             for (AttributeInstance p : attributeInstances) {
-                s = s.replace(p.GetCName(), p.CValue());
+                s = s.replaceAll(p.GetCName(), p.CValue());
             }
+            for (InletInstance i : inletInstances) {
+                if (i.GetDataType() instanceof Frac32buffer) {
+                    s = s.replaceAll(i.GetCName(), i.GetCName() + "[buffer_index]");
+                }
+            }
+            for (OutletInstance i : outletInstances) {
+                if (i.GetDataType() instanceof Frac32buffer) {
+                    s = s.replaceAll(i.GetCName(), i.GetCName() + "[buffer_index]");
+                }
+            }
+
             s = s.replace("attr_name", getCInstanceName());
-            s += "\n}\n";
             return s;
         }
         return "";
@@ -696,7 +710,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             s += i.GenerateCodeMidiHandler("");
         }
         for (AttributeInstance p : attributeInstances) {
-            s = s.replace(p.GetCName(), p.CValue());
+            s = s.replaceAll(p.GetCName(), p.CValue());
         }
         s = s.replace("attr_name", getCInstanceName());
         if (s.length() > 0) {

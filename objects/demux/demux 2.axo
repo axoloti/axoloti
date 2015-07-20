@@ -22,7 +22,7 @@
    outlet_o1= (inlet_s)?inlet_i:inlet_d1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 2" uuid="f48c5f63c31c60c077648e2a0886e592e4fa9434" sha="aec9c8bc5677ee34b26108f5f98bd54445823051">
+   <obj.normal id="demux 2" uuid="f48c5f63c31c60c077648e2a0886e592e4fa9434" sha="31f846b7eaf1a57b5edcb94d67ceadda73b38d2b">
       <upgradeSha>51521ba16c909fd0a9e8900319ff9b45db9f15a5</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet o0 when s is false, to outlet o1 when s is true.</sDescription>
       <author>Johannes Taelman</author>
@@ -41,8 +41,8 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   outlet_o0[buffer_index]= (inlet_s)?inlet_d0[buffer_index]:inlet_i[buffer_index];
-   outlet_o1[buffer_index]= (inlet_s)?inlet_i[buffer_index]:inlet_d1[buffer_index];
+      <code.srate><![CDATA[   outlet_o0= (inlet_s)?inlet_d0:inlet_i;
+   outlet_o1= (inlet_s)?inlet_i:inlet_d1;
 ]]></code.srate>
    </obj.normal>
    <obj.normal id="demux 2" uuid="357def86905d97a677c7080b4c9a2a4c0b8cd0fe" sha="20a44035a1a0fc8c8209f12b7507ef1aeec4789f">

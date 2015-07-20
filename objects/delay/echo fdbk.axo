@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="echo fdbk" uuid="1f4503fa4cd020010f59ce3ffa860caf0cd850c5" sha="96a6db3b3deca106846992895749d662d670b103">
+   <obj.normal id="echo fdbk" uuid="1f4503fa4cd020010f59ce3ffa860caf0cd850c5" sha="f9b74c23e8d4ae4405f9e079da1ee902f6c728be">
       <upgradeSha>7611c8729f6b16550b0764bc62bc93ccc71235fc</upgradeSha>
       <sDescription>Audio delay with feedback, fixed delay time</sDescription>
       <author>Johannes Taelman</author>
@@ -27,10 +27,10 @@ int16_t delayline[attr_delaylength];
    delayrindex = 1;
 ]]></code.init>
       <code.srate><![CDATA[ int32_t rd = delayline[delayrindex++];
-delayline[delaywindex++] = __SSAT((inlet_in[buffer_index]>>14) + ___SMMUL(rd<<5,inlet_feedback),16);
+delayline[delaywindex++] = __SSAT((inlet_in>>14) + ___SMMUL(rd<<5,inlet_feedback),16);
 if (delayrindex == attr_delaylength) delayrindex = 0;
 if (delaywindex == attr_delaylength) delaywindex = 0;
-outlet_out[buffer_index] = rd<<14;
+outlet_out = rd<<14;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

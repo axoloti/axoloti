@@ -21,7 +21,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= inlet_in+ param_c;]]></code.krate>
    </obj.normal>
-   <obj.normal id="+c" uuid="8a7195df16f4695260af58e8072c656181925b4d" sha="1bbd10302ab7558ba20b33b56c2a219f8af88de8">
+   <obj.normal id="+c" uuid="8a7195df16f4695260af58e8072c656181925b4d" sha="f19b3c5f68040d780d0d778288eae0022b8f5954">
       <upgradeSha>dd36bdfc156063826c3897754f7ef30fd2895c89</upgradeSha>
       <sDescription>add constant</sDescription>
       <author>Johannes Taelman</author>
@@ -41,6 +41,6 @@
          </frac32.u.map>
       </params>
       <attribs/>
-      <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index]+ param_c;]]></code.srate>
+      <code.srate><![CDATA[outlet_out= inlet_in+ param_c;]]></code.srate>
    </obj.normal>
 </objdefs>

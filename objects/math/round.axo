@@ -16,7 +16,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= (inlet_in + 0x100000)&0xFFE00000;]]></code.krate>
    </obj.normal>
-   <obj.normal id="round" uuid="b887de1c0450c5d34d42befb5a2fa7c9011f894d" sha="4ed9e0fdb844c68fa2e93199f9a566007f583d4b">
+   <obj.normal id="round" uuid="b887de1c0450c5d34d42befb5a2fa7c9011f894d" sha="eb2dd0e14dd135c93bee6bd6f2a6db641ed0a79d">
       <upgradeSha>fa2cb42646190db3c2b61b5b136b7d7815d92981</upgradeSha>
       <sDescription>round to whole unit with positive bias: 0.49 becomes 0, 0.51 becomes 1, -0.49 becomes 0</sDescription>
       <author>Johannes Taelman</author>
@@ -31,6 +31,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[outlet_out[buffer_index]= (inlet_in[buffer_index] + 0x100000)&0xFFE00000;]]></code.srate>
+      <code.srate><![CDATA[outlet_out= (inlet_in + 0x100000)&0xFFE00000;]]></code.srate>
    </obj.normal>
 </objdefs>
