@@ -25,11 +25,11 @@
    </obj>
    <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="336" y="84">
       <params>
-         <frac32.u.map name="mix" value="46.0"/>
-         <frac32.u.map name="feedback" value="29.0"/>
+         <frac32.u.map name="mix" value="30.0"/>
+         <frac32.u.map name="feedback" value="41.5"/>
       </params>
       <attribs>
-         <spinner attributeName="delaylength" value="8440"/>
+         <spinner attributeName="delaylength" value="4192"/>
       </attribs>
    </obj>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="252" y="266">
@@ -58,42 +58,48 @@
    </obj>
    <nets>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="mix11 in1"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="mix11" inlet="in1"/>
       </net>
       <net>
-         <source name="mix11 out"/>
-         <dest name="osc_1 pitchm"/>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="osc_1" inlet="pitchm"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="echo2_1 in"/>
-         <dest name="echo0_1 in"/>
-         <dest name="echo1_1 in"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="echo2_1" inlet="in"/>
+         <dest obj="echo0_1" inlet="in"/>
+         <dest obj="echo1_1" inlet="in"/>
       </net>
       <net>
-         <source name="echo0_1 out"/>
-         <dest name="mix31 in1"/>
+         <source obj="echo0_1" outlet="out"/>
+         <dest obj="mix31" inlet="in1"/>
       </net>
       <net>
-         <source name="echo2_1 out"/>
-         <dest name="mix31 in2"/>
+         <source obj="echo2_1" outlet="out"/>
+         <dest obj="mix31" inlet="in2"/>
       </net>
       <net>
-         <source name="echo1_1 out"/>
-         <dest name="mix31 in3"/>
+         <source obj="echo1_1" outlet="out"/>
+         <dest obj="mix31" inlet="in3"/>
       </net>
       <net>
-         <source name="mix31 out"/>
-         <dest name="dac_11 wave"/>
+         <source obj="mix31" outlet="out"/>
+         <dest obj="dac_11" inlet="wave"/>
       </net>
       <net>
-         <source name="c1 out"/>
-         <dest name="echo1_1 feedback"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="echo1_1" inlet="feedback"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>210</x>
+      <y>80</y>
+      <width>884</width>
+      <height>576</height>
+   </windowPos>
 </patch-1.0>
