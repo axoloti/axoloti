@@ -50,6 +50,7 @@ public class Env extends gentools {
         WriteAxoObject(catName, Create_envadsr());
         WriteAxoObject(catName, Create_envad());
         WriteAxoObject(catName, Create_envd_new());
+        WriteAxoObject(catName, Create_envd_m_new());
 
         WriteAxoObject(catName, Create_envhd());
         WriteAxoObject(catName, Create_envahd());
@@ -83,6 +84,29 @@ public class Env extends gentools {
         o.sKRateCode = "   if ((%trig%>0) && !ntrig) { val =1<<27; ntrig=1;}\n"
                 + "   else { if (!(%trig%>0)) ntrig=0; val = ___SMMUL(val, %d%)<<1;}\n"
                 + "   %env% = val;\n";
+        return o;
+    }
+
+    static AxoObject Create_envd_m_new() {
+        AxoObject o = new AxoObject("d m", "decay envelope with modulation input");
+        o.inlets.add(new InletBool32Rising("trig", "trigger"));
+        o.inlets.add(new InletFrac32("dm", "decay time modulation"));
+        o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
+        o.params.add(new ParameterFrac32SMapKLineTimeExp("d"));
+        o.sLocalData = "int32_t val;\n"
+                + "int ntrig;\n";
+        o.sInitCode = "val = 0;\n"
+                + "ntrig = 0;\n";
+        o.sKRateCode = "   if ((inlet_trig>0) && !ntrig) { val =1<<27; ntrig=1;}\n"
+                + "   else { \n"
+                + "      if (!(inlet_trig>0)) ntrig=0; \n"
+                + "      int32_t in = - inlet_dm - param_d;\n"
+                + "      int32_t c;\n"
+                + "      MTOFEXTENDED(in, c);\n"
+                + "      c = 0x7FFFFFFF - (c >> 2);\n"
+                + "      val = ___SMMUL(val, c)<<1;\n"
+                + "   }\n"
+                + "   outlet_env = val;\n";
         return o;
     }
 
