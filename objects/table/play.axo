@@ -1,12 +1,14 @@
 <objdefs>
-   <obj.normal id="play" uuid="df6241cc07f6421eafadd3f53750716eb4d38278" sha="ec8b17d5de4af1298e253b7e94b4c06beba8fd87">
-      <upgradeSha>661e6425aa2ae595d063d1ece9c7d51be246b601</upgradeSha>
-      <sDescription>play audio from table</sDescription>
+   <obj.normal id="play" uuid="53c499b6f6fbdcc25b48906393123ca10030ed45" sha="55ce618e6483a8cca2c69265cde12d1cc133b317">
+      <upgradeSha>c255a57ea694b21f7393baddcd7d9001e9e3d6b0</upgradeSha>
+      <sDescription>play audio from table (non-transposed), starting from position</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>table.axh</helpPatch>
       <inlets>
-         <bool32.rising name="trig" description="trigger"/>
+         <frac32.positive name="pos" description="start position in table"/>
+         <bool32.rising name="start" description="start playback"/>
+         <bool32.rising name="stop" description="stop playback"/>
       </inlets>
       <outlets>
          <frac32buffer name="wave" description="wave"/>
@@ -16,24 +18,33 @@
       <attribs>
          <objref name="table"/>
       </attribs>
-      <code.declaration><![CDATA[   int ntrig;
+      <code.declaration><![CDATA[   int pstart;
+   int pstop;
    int pos;
 ]]></code.declaration>
-      <code.init><![CDATA[pos = -1;
-ntrig = 0;
+      <code.init><![CDATA[pos = 0;
+pstart = 0;
+pstop = 1;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {
-      ntrig=1;
-      pos = 0;
+      <code.krate><![CDATA[   if ((inlet_start>0) && !pstart) {
+      pstart = 1;
+      pstop = 0;
+      uint32_t asat = __USAT(inlet_pos,27);
+      pos = asat>>(27-attr_table.LENGTHPOW);
+   } else if (!(inlet_start>0)) {
+      pstart = 0;
    }
-   else if (!(inlet_trig>0)) ntrig=0;
-   int32_t i;
-   if ((pos>=0)&&((pos+BUFSIZE)< attr_table.LENGTH))
-       for(i=0;i<BUFSIZE;i++){
-           outlet_wave[i]= attr_table.array[pos++]<<attr_table.GAIN;
-       }
-   else {       pos = -1;
-       for(i=0;i<BUFSIZE;i++) outlet_wave[i]= 0;
-   }]]></code.krate>
+  if ((inlet_stop>0) && !pstop) {
+      pstop = 1;
+      pstart = 0;
+   } 
+
+]]></code.krate>
+      <code.srate><![CDATA[   if (!pstop) {
+       if (pos< attr_table.LENGTH)
+              outlet_wave = attr_table.array[pos++]<<attr_table.GAIN;
+	else outlet_wave = 0;
+   } else outlet_wave = 0;
+]]></code.srate>
    </obj.normal>
 </objdefs>
