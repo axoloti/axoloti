@@ -614,7 +614,7 @@
     <NameTransition>
         <OldName>lfsr~</OldName>
         <new>
-            <NewName>other/lfsr~</NewName>
+            <NewName>other/lfsr</NewName>
         </new>
     </NameTransition>
     <NameTransition>
