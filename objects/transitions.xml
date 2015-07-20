@@ -1160,7 +1160,7 @@
     <NameTransition>
         <OldName>samplehold~</OldName>
         <new>
-            <NewName>dist/samplehold~</NewName>
+            <NewName>dist/samplehold</NewName>
         </new>
     </NameTransition>
     <NameTransition>
@@ -1352,7 +1352,7 @@
     <NameTransition>
         <OldName>tabrecord2~</OldName>
         <new>
-            <NewName>table/record2</NewName>
+            <NewName>table/record</NewName>
         </new>
     </NameTransition>
     <NameTransition>
@@ -1466,7 +1466,7 @@
     <NameTransition>
         <OldName>xfade~</OldName>
         <new>
-            <NewName>mix/xfade~</NewName>
+            <NewName>mix/xfade/NewName>
         </new>
     </NameTransition>
     <NameTransition>
@@ -1964,7 +1964,7 @@
     <NameTransition>
         <OldName>vcf3~</OldName>
         <new>
-            <NewName>filter/vcf3~</NewName>
+            <NewName>filter/vcf3</NewName>
         </new>
     </NameTransition>
     <NameTransition>
