@@ -1,4 +1,11 @@
 <patch-1.0>
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="on" x="308" y="14">
+      <params>
+         <bool32.tgl name="b" onParent="true" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="patch/inlet a" sha="2944bdbaeb2a8a42d5a97163275d052f75668a86" name="inL" x="28" y="24">
       <params/>
       <attribs/>
    </obj>
@@ -95,71 +102,71 @@
    </obj>
    <nets>
       <net>
-         <source name="inL inlet"/>
-         <dest name="+_1 in1"/>
-         <dest name="+_2 in1"/>
+         <source obj="inL" outlet="inlet"/>
+         <dest obj="+_1" inlet="in1"/>
+         <dest obj="+_2" inlet="in1"/>
       </net>
       <net>
-         <source name="inR inlet"/>
-         <dest name="+_1 in2"/>
-         <dest name="+_3 in2"/>
+         <source obj="inR" outlet="inlet"/>
+         <dest obj="+_1" inlet="in2"/>
+         <dest obj="+_3" inlet="in2"/>
       </net>
       <net>
-         <source name="+_1 out"/>
-         <dest name="div_1 in"/>
+         <source obj="+_1" outlet="out"/>
+         <dest obj="div_1" inlet="in"/>
       </net>
       <net>
-         <source name="amt out"/>
-         <dest name="d1 in"/>
-         <dest name="mix_1 bus_in"/>
+         <source obj="amt" outlet="out"/>
+         <dest obj="d1" inlet="in"/>
+         <dest obj="mix_1" inlet="bus_in"/>
       </net>
       <net>
-         <source name="read_1 out"/>
-         <dest name="mix_1 in1"/>
+         <source obj="read_1" outlet="out"/>
+         <dest obj="mix_1" inlet="in1"/>
       </net>
       <net>
-         <source name="read_3 out"/>
-         <dest name="mix_1 in3"/>
+         <source obj="read_3" outlet="out"/>
+         <dest obj="mix_1" inlet="in3"/>
       </net>
       <net>
-         <source name="read_2 out"/>
-         <dest name="inv_1 in"/>
+         <source obj="read_2" outlet="out"/>
+         <dest obj="inv_1" inlet="in"/>
       </net>
       <net>
-         <source name="inv_1 out"/>
-         <dest name="mix_1 in2"/>
+         <source obj="inv_1" outlet="out"/>
+         <dest obj="mix_1" inlet="in2"/>
       </net>
       <net>
-         <source name="mix_1 out"/>
-         <dest name="decay in1"/>
+         <source obj="mix_1" outlet="out"/>
+         <dest obj="decay" inlet="in1"/>
       </net>
       <net>
-         <source name="decay out4"/>
-         <dest name="+_2 in2"/>
+         <source obj="decay" outlet="out4"/>
+         <dest obj="+_2" inlet="in2"/>
       </net>
       <net>
-         <source name="decay out3"/>
-         <dest name="+_3 in1"/>
+         <source obj="decay" outlet="out3"/>
+         <dest obj="+_3" inlet="in1"/>
       </net>
       <net>
-         <source name="div_1 out"/>
-         <dest name="mux_1 i2"/>
+         <source obj="div_1" outlet="out"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
       <net>
-         <source name="mux_1 o"/>
-         <dest name="amt in"/>
+         <source obj="mux_1" outlet="o"/>
+         <dest obj="amt" inlet="in"/>
       </net>
       <net>
-         <source name="on o"/>
-         <dest name="mux_1 s"/>
+         <source obj="on" outlet="o"/>
+         <dest obj="mux_1" inlet="s"/>
       </net>
       <net>
-         <source name="+_2 out"/>
-         <dest name="outL outlet"/>
+         <source obj="+_2" outlet="out"/>
+         <dest obj="outL" inlet="outlet"/>
       </net>
       <net>
-         <source name="+_3 out"/>
-         <dest name="outR outlet"/>
+         <source obj="+_3" outlet="out"/>
+         <dest obj="outR" inlet="outlet"/>
       </net>
    </nets>
    <settings>
@@ -169,7 +176,12 @@
       <NPresetEntries>4</NPresetEntries>
       <NModulationSources>1</NModulationSources>
       <NModulationTargetsPerSource>4</NModulationTargetsPerSource>
-      <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>141</x>
+      <y>0</y>
+      <width>1122</width>
+      <height>814</height>
+   </windowPos>
 </patch-1.0>
