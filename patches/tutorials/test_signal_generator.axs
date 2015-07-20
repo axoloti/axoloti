@@ -53,7 +53,7 @@
       </net>
       <net>
          <source obj="pink_1" outlet="out"/>
-         <dest obj="mux_1" inlet="i2"/>
+         <dest obj="mux_1" inlet="i3"/>
       </net>
       <net>
          <source obj="selection" outlet="inlet"/>
@@ -62,6 +62,10 @@
       <net>
          <source obj="mux_1" outlet="o"/>
          <dest obj="outlet_1" inlet="outlet"/>
+      </net>
+      <net>
+         <source obj="phasor_1" outlet="phasor"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
    </nets>
    <settings>
