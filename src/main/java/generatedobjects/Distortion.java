@@ -220,7 +220,7 @@ public class Distortion extends gentools {
          = 0.75
          */
 
-        AxoObject o = new AxoObject("samplehold~", "high quality audio rate sample and hold using blit synthesis (bandwidth limited)");
+        AxoObject o = new AxoObject("samplehold", "high quality audio rate sample and hold using blit synthesis (bandwidth limited)");
         o.inlets.add(new InletFrac32Buffer("in", "level input"));
         o.inlets.add(new InletFrac32Buffer("trig", "trigger input, triggers on rising zero-crossing"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
@@ -273,7 +273,7 @@ public class Distortion extends gentools {
     }
 
     static AxoObject Create_SampleHold_Cheap() {
-        AxoObject o = new AxoObject("samplehold~ cheap", "low-quality audio rate sample and hold using blit synthesis (not bandwidth limited)");
+        AxoObject o = new AxoObject("samplehold cheap", "low-quality audio rate sample and hold using blit synthesis (not bandwidth limited)");
         o.inlets.add(new InletFrac32Buffer("in", "level input"));
         o.inlets.add(new InletFrac32Buffer("trig", "trigger input, triggers on rising zero-crossing"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));

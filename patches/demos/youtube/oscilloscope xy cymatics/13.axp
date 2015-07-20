@@ -634,7 +634,7 @@ for(i=0;i<LENGTH;i++)
          <spinner attributeName="bits" value="8"/>
       </attribs>
    </obj>
-   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade~_1" x="392" y="546">
+   <obj type="mix/xfade" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade~_1" x="392" y="546">
       <params/>
       <attribs/>
    </obj>
@@ -1745,8 +1745,8 @@ for(i=0;i<LENGTH;i++)
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>227</x>
-      <y>131</y>
+      <x>313</x>
+      <y>84</y>
       <width>1990</width>
       <height>1262</height>
    </windowPos>

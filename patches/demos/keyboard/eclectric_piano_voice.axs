@@ -37,7 +37,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="other/lfsr~" sha="94017314f1e9bdac75f41689a6df3c5a5b90c345" name="lfsr_1" x="0" y="98">
+   <obj type="other/lfsr" sha="94017314f1e9bdac75f41689a6df3c5a5b90c345" name="lfsr_1" x="0" y="98">
       <params/>
       <attribs>
          <combo attributeName="polynomial" selection="0x286"/>

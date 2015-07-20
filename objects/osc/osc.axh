@@ -106,7 +106,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="other/lfsr~" sha="94017314f1e9bdac75f41689a6df3c5a5b90c345" name="lfsr_1" x="182" y="630">
+   <obj type="other/lfsr" sha="5b69e1e003f094e9de581db989b926f8b0b05a72" uuid="72bd4b15e8b3317764d706b44de52bcc6ee4abb9" name="lfsr_1" x="182" y="630">
       <params/>
       <attribs>
          <combo attributeName="polynomial" selection="0x2CB"/>
@@ -114,88 +114,94 @@
    </obj>
    <nets>
       <net>
-         <source name="*c1 out"/>
-         <dest name="dac_11 wave"/>
-         <dest name="dac_21 wave"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="dac_11" inlet="wave"/>
+         <dest obj="dac_21" inlet="wave"/>
       </net>
       <net>
-         <source name="inmux41 o"/>
-         <dest name="*c2 in"/>
-         <dest name="scope_1 in"/>
+         <source obj="inmux41" outlet="o"/>
+         <dest obj="*c2" inlet="in"/>
+         <dest obj="scope_1" inlet="in"/>
       </net>
       <net>
-         <source name="osc2_1 wave"/>
-         <dest name="inmux41 i0"/>
+         <source obj="osc2_1" outlet="wave"/>
+         <dest obj="inmux41" inlet="i0"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="inmux41 i1"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="inmux41" inlet="i1"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="saw_1 pitchm"/>
-         <dest name="pwm_1 pitchm"/>
-         <dest name="square_1 pitchm"/>
-         <dest name="osc2_1 pitchm"/>
-         <dest name="phasor3_1 pitchm"/>
-         <dest name="phasor3q_1 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="saw_1" inlet="pitchm"/>
+         <dest obj="pwm_1" inlet="pitchm"/>
+         <dest obj="square_1" inlet="pitchm"/>
+         <dest obj="osc2_1" inlet="pitchm"/>
+         <dest obj="phasor3_1" inlet="pitchm"/>
+         <dest obj="phasor3q_1" inlet="pitchm"/>
       </net>
       <net>
-         <source name="c2 out"/>
-         <dest name="pwm_1 pwm"/>
+         <source obj="c2" outlet="out"/>
+         <dest obj="pwm_1" inlet="pwm"/>
       </net>
       <net>
-         <source name="pwm_1 wave"/>
-         <dest name="inmux41 i3"/>
+         <source obj="pwm_1" outlet="wave"/>
+         <dest obj="inmux41" inlet="i3"/>
       </net>
       <net>
-         <source name="*c2 out"/>
-         <dest name="vcf3_1 in"/>
-         <dest name="inmux21 i1"/>
+         <source obj="*c2" outlet="out"/>
+         <dest obj="vcf3_1" inlet="in"/>
+         <dest obj="inmux21" inlet="i1"/>
       </net>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="inmux41 i2"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="inmux41" inlet="i2"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="inmux41 i6"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="inmux41" inlet="i6"/>
       </net>
       <net>
-         <source name="lfsr_1 out"/>
-         <dest name="inmux41 i7"/>
+         <source obj="phasor3q_1" outlet="phasor0"/>
+         <dest obj="inmux41" inlet="i5"/>
       </net>
       <net>
-         <source name="phasor3q_1 phasor0"/>
-         <dest name="inmux41 i5"/>
+         <source obj="phasor3_1" outlet="phasor"/>
+         <dest obj="inmux41" inlet="i4"/>
       </net>
       <net>
-         <source name="phasor3_1 phasor"/>
-         <dest name="inmux41 i4"/>
+         <source obj="vcf3_1" outlet="out"/>
+         <dest obj="inmux21" inlet="i2"/>
       </net>
       <net>
-         <source name="vcf3_1 out"/>
-         <dest name="inmux21 i2"/>
+         <source obj="inmux21" outlet="o"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="inmux21 o"/>
-         <dest name="*c1 in"/>
+         <source obj="cb12" outlet="o"/>
+         <dest obj="inmux21" inlet="s"/>
       </net>
       <net>
-         <source name="cb12 o"/>
-         <dest name="inmux21 s"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="inmux41" inlet="s"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="inmux41 s"/>
+         <source obj="cb11" outlet="o"/>
+         <dest obj="scope_1" inlet="hold"/>
       </net>
       <net>
-         <source name="cb11 o"/>
-         <dest name="scope_1 hold"/>
+         <source obj="lfsr_1" outlet="out"/>
+         <dest obj="inmux41" inlet="i7"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1206</width>
+      <height>940</height>
+   </windowPos>
 </patch-1.0>

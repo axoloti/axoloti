@@ -200,7 +200,7 @@ public class Mixer extends gentools {
     }
 
     static AxoObject Create_xfadeTilde() {
-        AxoObject o = new AxoObject("xfade~", "crossfade between two inputs");
+        AxoObject o = new AxoObject("xfade", "crossfade between two inputs");
         o.inlets.add(new InletFrac32Buffer("i1", "input"));
         o.inlets.add(new InletFrac32Buffer("i2", "input"));
         o.inlets.add(new InletFrac32Pos("c", "control"));

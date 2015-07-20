@@ -83,7 +83,7 @@ public class Osc extends gentools {
     static AxoObject CreateSRateSineOsc4() {
         AxoObject o = new AxoObject("sine", "FM sine wave oscillator, linear interpolated table, s-rate pitch input");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "sine wave"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation"));
+        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch    modulation"));
         o.inlets.add(new InletFrac32Buffer("fm", "frequency modulation"));
         o.inlets.add(new InletFrac32Buffer("pm", "phase modulation"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -873,7 +873,7 @@ public class Osc extends gentools {
     }
 
     static AxoObject Create_lfsr() {
-        AxoObject o = new AxoObject("lfsr~", "linear feedback shift register cyclic pattern, audio rate");
+        AxoObject o = new AxoObject("lfsr", "linear feedback shift register cyclic pattern, audio rate");
         o.outlets.add(new OutletFrac32BufferBipolar("out", "lfs pattern"));
         String mentries[] = {"0x9", "0xC", "0x12",
             "0x14",
