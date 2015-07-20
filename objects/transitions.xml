@@ -1,5 +1,23 @@
 <transitions>
     <NameTransition>
+        <OldName>filter/vcf~</OldName>
+        <new>
+            <NewName>filter/vcf</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>filter/vcf2~</OldName>
+        <new>
+            <NewName>filter/vcf2</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>filter/vcf3~</OldName>
+        <new>
+            <NewName>filter/vcf3</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
         <OldName>delread2~~</OldName>
         <new>
             <NewName>delay/read interp</NewName>

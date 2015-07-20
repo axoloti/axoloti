@@ -16,14 +16,14 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="env" x="378" y="70">
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="env" x="378" y="70">
       <params>
-         <frac32.u.map name="a" onParent="true" value="0.0"/>
-         <frac32.u.map name="d" onParent="true" value="0.0"/>
+         <frac32.s.map name="a" onParent="true" value="0.0"/>
+         <frac32.s.map name="d" onParent="true" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="rand/uniform f" sha="a5949c689afce5a3097108fd569d13ffda3895f6" name="rand_1" x="490" y="70">
+   <obj type="rand/uniform f" sha="aefed121f296eb10eaa8ad5f85dbe647718f1044" name="rand_1" x="490" y="70">
       <params/>
       <attribs/>
    </obj>
@@ -67,7 +67,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf" x="504" y="252">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf" x="504" y="252">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-30.0"/>
          <frac32.u.map name="reso" onParent="true" value="13.0"/>
@@ -80,69 +80,75 @@
    </obj>
    <nets>
       <net>
-         <source name="keybzone_lru2 note"/>
-         <dest name="osc_1 pitchm"/>
-         <dest name="osc_1_ pitchm"/>
+         <source obj="keybzone_lru2" outlet="note"/>
+         <dest obj="osc_1" inlet="pitchm"/>
+         <dest obj="osc_1_" inlet="pitchm"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="mix12 in1"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="mix12" inlet="in1"/>
       </net>
       <net>
-         <source name="mix12 out"/>
-         <dest name="vca_2 a"/>
+         <source obj="mix12" outlet="out"/>
+         <dest obj="vca_2" inlet="a"/>
       </net>
       <net>
-         <source name="keybzone_lru2 gate"/>
-         <dest name="env gate"/>
+         <source obj="keybzone_lru2" outlet="gate"/>
+         <dest obj="env" inlet="gate"/>
       </net>
       <net>
-         <source name="vca_2 o"/>
-         <dest name="vcf in"/>
+         <source obj="vca_2" outlet="o"/>
+         <dest obj="vcf" inlet="in"/>
       </net>
       <net>
-         <source name="osc_1_ wave"/>
-         <dest name="mix12 in2"/>
+         <source obj="osc_1_" outlet="wave"/>
+         <dest obj="mix12" inlet="in2"/>
       </net>
       <net>
-         <source name="env env"/>
-         <dest name="mix23 b"/>
+         <source obj="env" outlet="env"/>
+         <dest obj="mix23" inlet="b"/>
       </net>
       <net>
-         <source name="mix23 result"/>
-         <dest name="vca_2 v"/>
+         <source obj="mix23" outlet="result"/>
+         <dest obj="vca_2" inlet="v"/>
       </net>
       <net>
-         <source name="keybzone_lru2 velocity"/>
-         <dest name="smooth21 in"/>
+         <source obj="keybzone_lru2" outlet="velocity"/>
+         <dest obj="smooth21" inlet="in"/>
       </net>
       <net>
-         <source name="smooth21 out"/>
-         <dest name="ftrack in"/>
+         <source obj="smooth21" outlet="out"/>
+         <dest obj="ftrack" inlet="in"/>
       </net>
       <net>
-         <source name="ftrack out"/>
-         <dest name="vcf pitchm"/>
+         <source obj="ftrack" outlet="out"/>
+         <dest obj="vcf" inlet="pitchm"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="mix13 in1"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="mix13" inlet="in1"/>
       </net>
       <net>
-         <source name="mix13 out"/>
-         <dest name="mix23 a"/>
+         <source obj="mix13" outlet="out"/>
+         <dest obj="mix23" inlet="a"/>
       </net>
       <net>
-         <source name="vcf out"/>
-         <dest name="outlet_1 outlet"/>
+         <source obj="vcf" outlet="out"/>
+         <dest obj="outlet_1" inlet="outlet"/>
       </net>
       <net>
-         <source name="mod inlet"/>
-         <dest name="mix13 bus_in"/>
+         <source obj="mod" outlet="inlet"/>
+         <dest obj="mix13" inlet="bus_in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>968</width>
+      <height>562</height>
+   </windowPos>
 </patch-1.0>

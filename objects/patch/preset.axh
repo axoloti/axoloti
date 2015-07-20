@@ -1,15 +1,15 @@
 <patch-1.0>
-   <obj type="c" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c_1" x="40" y="20">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c_1" x="40" y="20">
       <params>
          <frac32.u.map name="value" value="27.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="160" y="20">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="160" y="20">
       <params/>
       <attribs/>
    </obj>
-   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="183" y="179">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="183" y="179">
       <params>
          <frac32.s.map name="pitch" value="21.0">
             <presets>
@@ -25,7 +25,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="40" y="180">
+   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="40" y="180">
       <params>
          <frac32.s.map name="pitch" value="-29.0">
             <presets>
@@ -40,26 +40,32 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~1" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac1_1" x="320" y="180">
+   <obj type="audio/out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac1_1" x="320" y="180">
       <params/>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source name="c_1 out"/>
-         <dest name="scopeU_1 in"/>
+         <source obj="c_1" outlet="out"/>
+         <dest obj="scopeU_1" inlet="in"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="vcf3_1 in"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="vcf3_1" inlet="in"/>
       </net>
       <net>
-         <source name="vcf3_1 out"/>
-         <dest name="dac1_1 wave"/>
+         <source obj="vcf3_1" outlet="out"/>
+         <dest obj="dac1_1" inlet="wave"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>630</width>
+      <height>490</height>
+   </windowPos>
 </patch-1.0>

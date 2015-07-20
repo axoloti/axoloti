@@ -87,7 +87,7 @@ public class Filter extends gentools {
     }
 
     static AxoObject CreateVCF() {
-        AxoObject o = new AxoObject("vcf~", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
+        AxoObject o = new AxoObject("vcf", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("frequency", "cutoff frequency"));
         o.inlets.add(new InletFrac32("resonance", "filter resonance"));
@@ -100,7 +100,7 @@ public class Filter extends gentools {
     }
 
     static AxoObject CreateVCF2() {
-        AxoObject o = new AxoObject("vcf2~", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
+        AxoObject o = new AxoObject("vcf2", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("pitchm", "pitch modulation"));
         o.inlets.add(new InletFrac32("resonance", "filter resonance"));
@@ -117,7 +117,7 @@ public class Filter extends gentools {
     }
 
     static AxoObject CreateVCF3() {
-        AxoObject o = new AxoObject("vcf3~", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
+        AxoObject o = new AxoObject("vcf3", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("pitchm", "pitch modulation"));
         o.inlets.add(new InletFrac32("resom", "filter resonance"));
