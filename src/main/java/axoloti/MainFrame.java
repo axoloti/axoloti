@@ -184,7 +184,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         PopulateLibraryMenu(jMenuLibrary);
 
         JMenu phelps = new JMenu("Library");
-        PopulateLibraryMenu(phelps, "objects", ".axh");
+        PopulateLibraryMenu(phelps, System.getProperty(Axoloti.RELEASE_DIR) + "/objects", ".axh");
         jMenuHelp.add(phelps);
 
         axoObjects = new AxoObjects();
