@@ -130,7 +130,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="fx/chorus2" name="chorus1" x="854" y="364">
+   <obj type="fx/chorus" name="chorus1" x="854" y="364">
       <params>
          <frac32.u.map name="depth" value="1.5"/>
          <frac32.s.map name="speed" value="-25.0"/>

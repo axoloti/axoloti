@@ -117,7 +117,7 @@
          <int attributeName="delaylength" value="15271"/>
       </attribs>
    </obj>
-   <obj type="fx/chorus2" sha="251ade07aed51656f172e99173f8500c451e0067" name="chorus1" x="980" y="280">
+   <obj type="fx/chorus" sha="251ade07aed51656f172e99173f8500c451e0067" name="chorus1" x="980" y="280">
       <params>
          <frac32.u.map name="depth" value="9.5"/>
          <frac32.s.map name="speed" value="-60.0"/>
