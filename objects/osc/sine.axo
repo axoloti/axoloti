@@ -6,7 +6,7 @@
       <license>BSD</license>
       <helpPatch>osc.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="pitchm" description="pitch modulation"/>
+         <frac32.bipolar name="pitchm" description="pitch    modulation"/>
          <frac32buffer name="fm" description="frequency modulation"/>
          <frac32buffer name="pm" description="phase modulation"/>
       </inlets>

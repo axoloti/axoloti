@@ -74,7 +74,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="532" y="700">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="532" y="700">
       <params>
          <frac32.s.map name="pitch" value="1.0"/>
          <frac32.u.map name="reso" value="63.5"/>
@@ -107,85 +107,91 @@
    </obj>
    <nets>
       <net>
-         <source name="mix11 out"/>
-         <dest name="lpf_1 in"/>
-         <dest name="hpf_1 in"/>
-         <dest name="bpf_1 in"/>
-         <dest name="hipass_1 in"/>
-         <dest name="lowpass_1 in"/>
-         <dest name="vcf3_1 in"/>
-         <dest name="inmux61 i0"/>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="lpf_1" inlet="in"/>
+         <dest obj="hpf_1" inlet="in"/>
+         <dest obj="bpf_1" inlet="in"/>
+         <dest obj="hipass_1" inlet="in"/>
+         <dest obj="lowpass_1" inlet="in"/>
+         <dest obj="vcf3_1" inlet="in"/>
+         <dest obj="inmux61" inlet="i0"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="square_1 pitchm"/>
-         <dest name="osc_1 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="square_1" inlet="pitchm"/>
+         <dest obj="osc_1" inlet="pitchm"/>
       </net>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="inmux21 i1"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="inmux21" inlet="i1"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="inmux21 i2"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="inmux21" inlet="i2"/>
       </net>
       <net>
-         <source name="inmux61 o"/>
-         <dest name="scope_128s1 in"/>
-         <dest name="*c1 in"/>
+         <source obj="inmux61" outlet="o"/>
+         <dest obj="scope_128s1" inlet="in"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="inmux21 o"/>
-         <dest name="mix11 in1"/>
+         <source obj="inmux21" outlet="o"/>
+         <dest obj="mix11" inlet="in1"/>
       </net>
       <net>
-         <source name="vcf3_1 out"/>
-         <dest name="inmux61 i6"/>
+         <source obj="vcf3_1" outlet="out"/>
+         <dest obj="inmux61" inlet="i6"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="inmux21 i0"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="inmux21" inlet="i0"/>
       </net>
       <net>
-         <source name="cb11 o"/>
-         <dest name="scope_128s1 hold"/>
+         <source obj="cb11" outlet="o"/>
+         <dest obj="scope_128s1" inlet="hold"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="inmux61 s"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="inmux61" inlet="s"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="dac_11 left"/>
-         <dest name="dac_11 right"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="dac_11" inlet="left"/>
+         <dest obj="dac_11" inlet="right"/>
       </net>
       <net>
-         <source name="i_2 out"/>
-         <dest name="inmux21 s"/>
+         <source obj="i_2" outlet="out"/>
+         <dest obj="inmux21" inlet="s"/>
       </net>
       <net>
-         <source name="lowpass_1 out"/>
-         <dest name="inmux61 i5"/>
+         <source obj="lowpass_1" outlet="out"/>
+         <dest obj="inmux61" inlet="i5"/>
       </net>
       <net>
-         <source name="hipass_1 out"/>
-         <dest name="inmux61 i4"/>
+         <source obj="hipass_1" outlet="out"/>
+         <dest obj="inmux61" inlet="i4"/>
       </net>
       <net>
-         <source name="bpf_1 out"/>
-         <dest name="inmux61 i3"/>
+         <source obj="bpf_1" outlet="out"/>
+         <dest obj="inmux61" inlet="i3"/>
       </net>
       <net>
-         <source name="hpf_1 out"/>
-         <dest name="inmux61 i2"/>
+         <source obj="hpf_1" outlet="out"/>
+         <dest obj="inmux61" inlet="i2"/>
       </net>
       <net>
-         <source name="lpf_1 out"/>
-         <dest name="inmux61 i1"/>
+         <source obj="lpf_1" outlet="out"/>
+         <dest obj="inmux61" inlet="i1"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1206</width>
+      <height>1122</height>
+   </windowPos>
 </patch-1.0>

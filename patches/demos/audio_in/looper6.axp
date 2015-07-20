@@ -48,7 +48,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_1" x="224" y="84">
+   <obj type="mix/xfade" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_1" x="224" y="84">
       <params/>
       <attribs/>
    </obj>
@@ -92,7 +92,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_2" x="224" y="266">
+   <obj type="mix/xfade" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_2" x="224" y="266">
       <params/>
       <attribs/>
    </obj>
@@ -136,7 +136,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_3" x="224" y="448">
+   <obj type="mix/xfade" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_3" x="224" y="448">
       <params/>
       <attribs/>
    </obj>
@@ -180,7 +180,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_4" x="224" y="630">
+   <obj type="mix/xfade" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_4" x="224" y="630">
       <params/>
       <attribs/>
    </obj>
@@ -224,7 +224,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_5" x="224" y="812">
+   <obj type="mix/xfade" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_5" x="224" y="812">
       <params/>
       <attribs/>
    </obj>
@@ -268,7 +268,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_6" x="224" y="994">
+   <obj type="mix/xfade" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_6" x="224" y="994">
       <params/>
       <attribs/>
    </obj>
@@ -340,213 +340,219 @@
    </obj>
    <nets>
       <net>
-         <source name="read_1 out"/>
-         <dest name="xfade_1 i2"/>
-         <dest name="hp_1 in"/>
+         <source obj="read_1" outlet="out"/>
+         <dest obj="xfade_1" inlet="i2"/>
+         <dest obj="hp_1" inlet="in"/>
       </net>
       <net>
-         <source name="xfade_1 o"/>
-         <dest name="d1 in"/>
+         <source obj="xfade_1" outlet="o"/>
+         <dest obj="d1" inlet="in"/>
       </net>
       <net>
-         <source name="chorus2_1 L"/>
-         <dest name="out_1 left"/>
+         <source obj="chorus2_1" outlet="L"/>
+         <dest obj="out_1" inlet="left"/>
       </net>
       <net>
-         <source name="dial_1 out"/>
-         <dest name="+1_1 in"/>
+         <source obj="dial_1" outlet="out"/>
+         <dest obj="+1_1" inlet="in"/>
       </net>
       <net>
-         <source name="+1_1 out"/>
-         <dest name="xfade_1 c"/>
+         <source obj="+1_1" outlet="out"/>
+         <dest obj="xfade_1" inlet="c"/>
       </net>
       <net>
-         <source name="read_2 out"/>
-         <dest name="xfade_2 i2"/>
-         <dest name="hp_3 in"/>
+         <source obj="read_2" outlet="out"/>
+         <dest obj="xfade_2" inlet="i2"/>
+         <dest obj="hp_3" inlet="in"/>
       </net>
       <net>
-         <source name="xfade_2 o"/>
-         <dest name="d2 in"/>
+         <source obj="xfade_2" outlet="o"/>
+         <dest obj="d2" inlet="in"/>
       </net>
       <net>
-         <source name="dial_2 out"/>
-         <dest name="+1_2 in"/>
+         <source obj="dial_2" outlet="out"/>
+         <dest obj="+1_2" inlet="in"/>
       </net>
       <net>
-         <source name="+1_2 out"/>
-         <dest name="xfade_2 c"/>
+         <source obj="+1_2" outlet="out"/>
+         <dest obj="xfade_2" inlet="c"/>
       </net>
       <net>
-         <source name="read_3 out"/>
-         <dest name="xfade_3 i2"/>
-         <dest name="hp_5 in"/>
+         <source obj="read_3" outlet="out"/>
+         <dest obj="xfade_3" inlet="i2"/>
+         <dest obj="hp_5" inlet="in"/>
       </net>
       <net>
-         <source name="xfade_3 o"/>
-         <dest name="d3 in"/>
+         <source obj="xfade_3" outlet="o"/>
+         <dest obj="d3" inlet="in"/>
       </net>
       <net>
-         <source name="dial_3 out"/>
-         <dest name="+1_3 in"/>
+         <source obj="dial_3" outlet="out"/>
+         <dest obj="+1_3" inlet="in"/>
       </net>
       <net>
-         <source name="+1_3 out"/>
-         <dest name="xfade_3 c"/>
+         <source obj="+1_3" outlet="out"/>
+         <dest obj="xfade_3" inlet="c"/>
       </net>
       <net>
-         <source name="read_4 out"/>
-         <dest name="xfade_4 i2"/>
-         <dest name="hp_7 in"/>
+         <source obj="read_4" outlet="out"/>
+         <dest obj="xfade_4" inlet="i2"/>
+         <dest obj="hp_7" inlet="in"/>
       </net>
       <net>
-         <source name="xfade_4 o"/>
-         <dest name="d4 in"/>
+         <source obj="xfade_4" outlet="o"/>
+         <dest obj="d4" inlet="in"/>
       </net>
       <net>
-         <source name="dial_4 out"/>
-         <dest name="+1_4 in"/>
+         <source obj="dial_4" outlet="out"/>
+         <dest obj="+1_4" inlet="in"/>
       </net>
       <net>
-         <source name="+1_4 out"/>
-         <dest name="xfade_4 c"/>
+         <source obj="+1_4" outlet="out"/>
+         <dest obj="xfade_4" inlet="c"/>
       </net>
       <net>
-         <source name="dial_5 out"/>
-         <dest name="smooth_1 in"/>
+         <source obj="dial_5" outlet="out"/>
+         <dest obj="smooth_1" inlet="in"/>
       </net>
       <net>
-         <source name="hp_1 out"/>
-         <dest name="hp_2 in"/>
+         <source obj="hp_1" outlet="out"/>
+         <dest obj="hp_2" inlet="in"/>
       </net>
       <net>
-         <source name="hp_2 out"/>
-         <dest name="mix_1 in1"/>
+         <source obj="hp_2" outlet="out"/>
+         <dest obj="mix_1" inlet="in1"/>
       </net>
       <net>
-         <source name="hp_3 out"/>
-         <dest name="hp_4 in"/>
+         <source obj="hp_3" outlet="out"/>
+         <dest obj="hp_4" inlet="in"/>
       </net>
       <net>
-         <source name="hp_4 out"/>
-         <dest name="mix_1 in2"/>
+         <source obj="hp_4" outlet="out"/>
+         <dest obj="mix_1" inlet="in2"/>
       </net>
       <net>
-         <source name="hp_5 out"/>
-         <dest name="hp_6 in"/>
+         <source obj="hp_5" outlet="out"/>
+         <dest obj="hp_6" inlet="in"/>
       </net>
       <net>
-         <source name="hp_6 out"/>
-         <dest name="mix_1 in3"/>
+         <source obj="hp_6" outlet="out"/>
+         <dest obj="mix_1" inlet="in3"/>
       </net>
       <net>
-         <source name="hp_7 out"/>
-         <dest name="hp_8 in"/>
+         <source obj="hp_7" outlet="out"/>
+         <dest obj="hp_8" inlet="in"/>
       </net>
       <net>
-         <source name="hp_8 out"/>
-         <dest name="mix_1 in4"/>
+         <source obj="hp_8" outlet="out"/>
+         <dest obj="mix_1" inlet="in4"/>
       </net>
       <net>
-         <source name="mix_1 out"/>
-         <dest name="*c_1 in"/>
+         <source obj="mix_1" outlet="out"/>
+         <dest obj="*c_1" inlet="in"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="muls_1 in"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="muls_1" inlet="in"/>
       </net>
       <net>
-         <source name="muls_1 out"/>
-         <dest name="mix_2 in1"/>
+         <source obj="muls_1" outlet="out"/>
+         <dest obj="mix_2" inlet="in1"/>
       </net>
       <net>
-         <source name="mix_3 out"/>
-         <dest name="xfade_5 i1"/>
-         <dest name="xfade_6 i1"/>
-         <dest name="xfade_1 i1"/>
-         <dest name="xfade_2 i1"/>
-         <dest name="xfade_3 i1"/>
-         <dest name="xfade_4 i1"/>
-         <dest name="mix_2 bus_in"/>
+         <source obj="mix_3" outlet="out"/>
+         <dest obj="xfade_5" inlet="i1"/>
+         <dest obj="xfade_6" inlet="i1"/>
+         <dest obj="xfade_1" inlet="i1"/>
+         <dest obj="xfade_2" inlet="i1"/>
+         <dest obj="xfade_3" inlet="i1"/>
+         <dest obj="xfade_4" inlet="i1"/>
+         <dest obj="mix_2" inlet="bus_in"/>
       </net>
       <net>
-         <source name="read_5 out"/>
-         <dest name="xfade_5 i2"/>
-         <dest name="hp_9 in"/>
+         <source obj="read_5" outlet="out"/>
+         <dest obj="xfade_5" inlet="i2"/>
+         <dest obj="hp_9" inlet="in"/>
       </net>
       <net>
-         <source name="xfade_5 o"/>
-         <dest name="d5 in"/>
+         <source obj="xfade_5" outlet="o"/>
+         <dest obj="d5" inlet="in"/>
       </net>
       <net>
-         <source name="dial_6 out"/>
-         <dest name="+1_5 in"/>
+         <source obj="dial_6" outlet="out"/>
+         <dest obj="+1_5" inlet="in"/>
       </net>
       <net>
-         <source name="+1_5 out"/>
-         <dest name="xfade_5 c"/>
+         <source obj="+1_5" outlet="out"/>
+         <dest obj="xfade_5" inlet="c"/>
       </net>
       <net>
-         <source name="read_6 out"/>
-         <dest name="xfade_6 i2"/>
-         <dest name="hp_11 in"/>
+         <source obj="read_6" outlet="out"/>
+         <dest obj="xfade_6" inlet="i2"/>
+         <dest obj="hp_11" inlet="in"/>
       </net>
       <net>
-         <source name="xfade_6 o"/>
-         <dest name="d6 in"/>
+         <source obj="xfade_6" outlet="o"/>
+         <dest obj="d6" inlet="in"/>
       </net>
       <net>
-         <source name="dial_7 out"/>
-         <dest name="+1_6 in"/>
+         <source obj="dial_7" outlet="out"/>
+         <dest obj="+1_6" inlet="in"/>
       </net>
       <net>
-         <source name="+1_6 out"/>
-         <dest name="xfade_6 c"/>
+         <source obj="+1_6" outlet="out"/>
+         <dest obj="xfade_6" inlet="c"/>
       </net>
       <net>
-         <source name="smooth_1 out"/>
-         <dest name="read_5 timem"/>
-         <dest name="read_6 timem"/>
-         <dest name="read_1 timem"/>
-         <dest name="read_2 timem"/>
-         <dest name="read_3 timem"/>
-         <dest name="read_4 timem"/>
+         <source obj="smooth_1" outlet="out"/>
+         <dest obj="read_5" inlet="timem"/>
+         <dest obj="read_6" inlet="timem"/>
+         <dest obj="read_1" inlet="timem"/>
+         <dest obj="read_2" inlet="timem"/>
+         <dest obj="read_3" inlet="timem"/>
+         <dest obj="read_4" inlet="timem"/>
       </net>
       <net>
-         <source name="hp_9 out"/>
-         <dest name="hp_10 in"/>
+         <source obj="hp_9" outlet="out"/>
+         <dest obj="hp_10" inlet="in"/>
       </net>
       <net>
-         <source name="hp_11 out"/>
-         <dest name="hp_12 in"/>
+         <source obj="hp_11" outlet="out"/>
+         <dest obj="hp_12" inlet="in"/>
       </net>
       <net>
-         <source name="hp_10 out"/>
-         <dest name="mix_1 in5"/>
+         <source obj="hp_10" outlet="out"/>
+         <dest obj="mix_1" inlet="in5"/>
       </net>
       <net>
-         <source name="hp_12 out"/>
-         <dest name="mix_1 in6"/>
+         <source obj="hp_12" outlet="out"/>
+         <dest obj="mix_1" inlet="in6"/>
       </net>
       <net>
-         <source name="mix_2 out"/>
-         <dest name="chorus2_1 in"/>
+         <source obj="mix_2" outlet="out"/>
+         <dest obj="chorus2_1" inlet="in"/>
       </net>
       <net>
-         <source name="chorus2_1 R"/>
-         <dest name="out_1 right"/>
+         <source obj="chorus2_1" outlet="R"/>
+         <dest obj="out_1" inlet="right"/>
       </net>
       <net>
-         <source name="in_1 left"/>
-         <dest name="mix_3 in1"/>
+         <source obj="in_1" outlet="left"/>
+         <dest obj="mix_3" inlet="in1"/>
       </net>
       <net>
-         <source name="in_1 right"/>
-         <dest name="mix_3 in2"/>
+         <source obj="in_1" outlet="right"/>
+         <dest obj="mix_3" inlet="in2"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1584</width>
+      <height>1304</height>
+   </windowPos>
 </patch-1.0>

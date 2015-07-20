@@ -208,7 +208,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="476" y="434">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="476" y="434">
       <params>
          <frac32.s.map name="pitch" MidiCC="110" value="24.0">
             <presets>
@@ -331,7 +331,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_2" x="490" y="854">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_2" x="490" y="854">
       <params>
          <frac32.s.map name="pitch" MidiCC="111" value="12.0">
             <presets>

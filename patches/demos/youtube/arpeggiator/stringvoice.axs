@@ -107,7 +107,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="448" y="574">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="448" y="574">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="7.0"/>
          <frac32.u.map name="reso" onParent="true" value="46.5"/>
@@ -130,107 +130,107 @@
    </obj>
    <nets>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="enva gate"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="enva" inlet="gate"/>
       </net>
       <net>
-         <source name="pnoise out"/>
-         <dest name="osc_2 pitchm"/>
-         <dest name="mix11 bus_in"/>
-         <dest name="mix22 in2"/>
+         <source obj="pnoise" outlet="out"/>
+         <dest obj="osc_2" inlet="pitchm"/>
+         <dest obj="mix11" inlet="bus_in"/>
+         <dest obj="mix22" inlet="in2"/>
       </net>
       <net>
-         <source name="keyb1 velocity"/>
-         <dest name="*c3 b"/>
+         <source obj="keyb1" outlet="velocity"/>
+         <dest obj="*c3" inlet="b"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="div321 in"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="div321" inlet="in"/>
       </net>
       <net>
-         <source name="div321 out"/>
-         <dest name="mix11 in1"/>
+         <source obj="div321" outlet="out"/>
+         <dest obj="mix11" inlet="in1"/>
       </net>
       <net>
-         <source name="mix11 out"/>
-         <dest name="osc_3 pitchm"/>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="osc_3" inlet="pitchm"/>
       </net>
       <net>
-         <source name="pwm out"/>
-         <dest name="osc_2 pwm"/>
+         <source obj="pwm" outlet="out"/>
+         <dest obj="osc_2" inlet="pwm"/>
       </net>
       <net>
-         <source name="lfo wave"/>
-         <dest name="pwm in1"/>
+         <source obj="lfo" outlet="wave"/>
+         <dest obj="pwm" inlet="in1"/>
       </net>
       <net>
-         <source name="c321 o"/>
-         <dest name="pwm bus_in"/>
+         <source obj="c321" outlet="o"/>
+         <dest obj="pwm" inlet="bus_in"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="pnoise bus_in"/>
-         <dest name="osc_1 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="pnoise" inlet="bus_in"/>
+         <dest obj="osc_1" inlet="pitchm"/>
       </net>
       <net>
-         <source name="div322 out"/>
-         <dest name="pnoise in1"/>
+         <source obj="div322" outlet="out"/>
+         <dest obj="pnoise" inlet="in1"/>
       </net>
       <net>
-         <source name="mix21 out"/>
-         <dest name="vcf3_1 in"/>
+         <source obj="mix21" outlet="out"/>
+         <dest obj="vcf3_1" inlet="in"/>
       </net>
       <net>
-         <source name="mix22 out"/>
-         <dest name="vcf3_1 pitchm"/>
+         <source obj="mix22" outlet="out"/>
+         <dest obj="vcf3_1" inlet="pitchm"/>
       </net>
       <net>
-         <source name="*c3 result"/>
-         <dest name="mix22 in1"/>
+         <source obj="*c3" outlet="result"/>
+         <dest obj="mix22" inlet="in1"/>
       </net>
       <net>
-         <source name="pnoise2_1 out"/>
-         <dest name="div322 in"/>
+         <source obj="pnoise2_1" outlet="out"/>
+         <dest obj="div322" inlet="in"/>
       </net>
       <net>
-         <source name="keyb1 gate2"/>
-         <dest name="envf gate"/>
+         <source obj="keyb1" outlet="gate2"/>
+         <dest obj="envf" inlet="gate"/>
       </net>
       <net>
-         <source name="envf env"/>
-         <dest name="*c3 a"/>
+         <source obj="envf" outlet="env"/>
+         <dest obj="*c3" inlet="a"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="sub in1"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="sub" inlet="in1"/>
       </net>
       <net>
-         <source name="vcf3_1 out"/>
-         <dest name="sub bus_in"/>
+         <source obj="vcf3_1" outlet="out"/>
+         <dest obj="sub" inlet="bus_in"/>
       </net>
       <net>
-         <source name="sub out"/>
-         <dest name="vca_1 a"/>
+         <source obj="sub" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="osc_2 wave"/>
-         <dest name="mix21 in1"/>
+         <source obj="osc_2" outlet="wave"/>
+         <dest obj="mix21" inlet="in1"/>
       </net>
       <net>
-         <source name="osc_3 wave"/>
-         <dest name="mix21 in2"/>
+         <source obj="osc_3" outlet="wave"/>
+         <dest obj="mix21" inlet="in2"/>
       </net>
       <net>
-         <source name="enva env"/>
-         <dest name="div_1 in"/>
+         <source obj="enva" outlet="env"/>
+         <dest obj="div_1" inlet="in"/>
       </net>
       <net>
-         <source name="div_1 out"/>
-         <dest name="vca_1 v"/>
+         <source obj="div_1" outlet="out"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="out outlet"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
    </nets>
    <settings>
@@ -243,4 +243,10 @@
       <NModulationTargetsPerSource>4</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1038</width>
+      <height>884</height>
+   </windowPos>
 </patch-1.0>

@@ -24,7 +24,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="434" y="56">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="434" y="56">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
          <frac32.u.map name="reso" value="62.94999980926514"/>
@@ -37,7 +37,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="other/lfsr~" sha="94017314f1e9bdac75f41689a6df3c5a5b90c345" name="lfsr_1" x="0" y="98">
+   <obj type="other/lfsr" sha="94017314f1e9bdac75f41689a6df3c5a5b90c345" name="lfsr_1" x="0" y="98">
       <params/>
       <attribs>
          <combo attributeName="polynomial" selection="0x286"/>
@@ -59,14 +59,14 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="f1" x="434" y="196">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="f1" x="434" y="196">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="0.0"/>
          <frac32.u.map name="reso" value="62.9399995803833"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="f2" x="434" y="336">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="f2" x="434" y="336">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="12.0"/>
          <frac32.u.map name="reso" value="62.924999713897705"/>

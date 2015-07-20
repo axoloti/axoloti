@@ -46,7 +46,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="476" y="266">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="476" y="266">
       <params>
          <frac32.s.map name="pitch" value="17.0"/>
          <frac32.u.map name="reso" value="59.5"/>
@@ -63,46 +63,52 @@
    </obj>
    <nets>
       <net>
-         <source name="keybzone_lru_1 note"/>
-         <dest name="saw~_1 pitchm"/>
+         <source obj="keybzone_lru_1" outlet="note"/>
+         <dest obj="saw~_1" inlet="pitchm"/>
       </net>
       <net>
-         <source name="adsr_1 env"/>
-         <dest name="vca~_1 v"/>
+         <source obj="adsr_1" outlet="env"/>
+         <dest obj="vca~_1" inlet="v"/>
       </net>
       <net>
-         <source name="vca~_1 o"/>
-         <dest name="dac~_1 left"/>
-         <dest name="dac~_1 right"/>
+         <source obj="vca~_1" outlet="o"/>
+         <dest obj="dac~_1" inlet="left"/>
+         <dest obj="dac~_1" inlet="right"/>
       </net>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="adsr_1 gate"/>
-         <dest name="adsr_2 gate"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="adsr_1" inlet="gate"/>
+         <dest obj="adsr_2" inlet="gate"/>
       </net>
       <net>
-         <source name="adsr_2 env"/>
-         <dest name="*c_1 in"/>
+         <source obj="adsr_2" outlet="env"/>
+         <dest obj="*c_1" inlet="in"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="vcf3~_1 pitchm"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="vcf3~_1" inlet="pitchm"/>
       </net>
       <net>
-         <source name="vcf3~_1 out"/>
-         <dest name="vca~_1 a"/>
+         <source obj="vcf3~_1" outlet="out"/>
+         <dest obj="vca~_1" inlet="a"/>
       </net>
       <net>
-         <source name="saw~_1 wave"/>
-         <dest name="div4_1 in"/>
+         <source obj="saw~_1" outlet="wave"/>
+         <dest obj="div4_1" inlet="in"/>
       </net>
       <net>
-         <source name="div4_1 out"/>
-         <dest name="vcf3~_1 in"/>
+         <source obj="div4_1" outlet="out"/>
+         <dest obj="vcf3~_1" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>982</width>
+      <height>590</height>
+   </windowPos>
 </patch-1.0>

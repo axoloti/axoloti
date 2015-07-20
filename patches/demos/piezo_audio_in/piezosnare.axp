@@ -1,58 +1,58 @@
 <patch-1.0>
-   <obj type="adcconfig" sha="d92ed17e442cc5e55023cecf2afe63c9655d4100" name="adcconfig1" x="0" y="20">
+   <obj type="adcconfig" sha="7eb314b69477fa9eb4ff1f78cc33085b109e9400" name="adcconfig1" x="0" y="20">
       <params/>
       <attribs>
          <combo attributeName="gain" selection="15dB"/>
          <combo attributeName="boost" selection="20dB"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="280" y="20">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU1" x="280" y="20">
       <params/>
       <attribs/>
    </obj>
-   <obj type="pnoise~" sha="5c70e43f5400259659295a36f22e50d041888396" name="pnoise_1" x="520" y="120">
+   <obj type="pnoise~" sha="73a919bf86dac4805c4300760b5052e1ec2453c6" name="pnoise_1" x="520" y="120">
       <params/>
       <attribs/>
    </obj>
-   <obj type="adc~" sha="d06f05c014ef7465413aff8535200d7289046b70" name="adc_1" x="0" y="160">
+   <obj type="adc~" sha="1acaaf87659f6c9d0833a6def4dbd5d0c3edca4d" name="adc_1" x="0" y="160">
       <params/>
       <attribs/>
    </obj>
-   <obj type="env~" sha="89a4920773d16aa1bfbc03f810fc23fe69f927a9" name="env_1" x="80" y="160">
+   <obj type="env~" sha="2f512222f4b4d2c035c326cd486c1cacc6be5e64" name="env_1" x="80" y="160">
       <params/>
       <attribs>
          <combo attributeName="time" selection="10.6ms"/>
       </attribs>
    </obj>
-   <obj type="smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth1" x="280" y="160">
+   <obj type="math/smooth2" sha="7a49483fff392fd1c10fb15f40dfc8f92f942192" name="smooth1" x="280" y="160">
       <params>
          <frac32.u.map name="risetime" value="0.0"/>
          <frac32.u.map name="falltime" value="6.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c1" x="400" y="160">
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c1" x="400" y="160">
       <params>
          <frac32.u.map name="amp" value="59.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="vca~" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="520" y="160">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="520" y="160">
       <params/>
       <attribs/>
    </obj>
-   <obj type="vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="640" y="160">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="640" y="160">
       <params>
          <frac32.s.map name="pitch" value="63.0"/>
          <frac32.u.map name="reso" value="39.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="d23fda5805e2a852b6009ed15fdd6efe4eb055ca" name="dac_1" x="800" y="160">
+   <obj type="dac~" sha="c27566f972d15f25252f61b5cff014a3edce9706" name="dac_1" x="800" y="160">
       <params/>
       <attribs/>
    </obj>
-   <obj type="*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c2" x="400" y="240">
+   <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c2" x="400" y="240">
       <params>
          <frac32.u.map name="amp" value="0.0"/>
       </params>
@@ -60,43 +60,49 @@
    </obj>
    <nets>
       <net>
-         <source name="adc_1 left"/>
-         <dest name="env_1 in"/>
+         <source obj="adc_1" outlet="left"/>
+         <dest obj="env_1" inlet="in"/>
       </net>
       <net>
-         <source name="smooth1 out"/>
-         <dest name="*c1 in"/>
-         <dest name="*c2 in"/>
-         <dest name="scopeU1 in"/>
+         <source obj="smooth1" outlet="out"/>
+         <dest obj="*c1" inlet="in"/>
+         <dest obj="*c2" inlet="in"/>
+         <dest obj="scopeU1" inlet="in"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="vca_1 v"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="pnoise_1 out"/>
-         <dest name="vca_1 a"/>
+         <source obj="pnoise_1" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="vcf3_1 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="vcf3_1" inlet="in"/>
       </net>
       <net>
-         <source name="vcf3_1 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
+         <source obj="vcf3_1" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="*c2 out"/>
-         <dest name="vcf3_1 pitchm"/>
+         <source obj="*c2" outlet="out"/>
+         <dest obj="vcf3_1" inlet="pitchm"/>
       </net>
       <net>
-         <source name="env_1 amp"/>
-         <dest name="smooth1 in"/>
+         <source obj="env_1" outlet="amp"/>
+         <dest obj="smooth1" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1110</width>
+      <height>550</height>
+   </windowPos>
 </patch-1.0>

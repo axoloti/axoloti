@@ -3,14 +3,14 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="noise burst as excitation" x="224" y="42"/>
+   <comment type="patch/comment" x="224" y="42" text="noise burst as excitation"/>
    <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="266" y="84">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="lowpass for softer sound" x="364" y="84"/>
-   <comment type="patch/comment" name="(prevent clipping)" x="490" y="98"/>
-   <comment type="patch/comment" name="resonating &quot;body&quot; composed out of 3 simple resonances" x="602" y="98"/>
+   <comment type="patch/comment" x="364" y="84" text="lowpass for softer sound"/>
+   <comment type="patch/comment" x="490" y="98" text="(prevent clipping)"/>
+   <comment type="patch/comment" x="602" y="98" text="resonating &quot;body&quot; composed out of 3 simple resonances"/>
    <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="168" y="140">
       <params>
          <frac32.s.map name="d" value="22.0"/>
@@ -34,24 +34,24 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2" x="602" y="140">
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2" x="602" y="140">
       <params>
          <frac32.s.map name="pitch" value="34.0"/>
          <frac32.u.map name="reso" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="high = short burst" x="168" y="238"/>
-   <comment type="patch/comment" name="low = long burst" x="168" y="252"/>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2_" x="602" y="280">
+   <comment type="patch/comment" x="168" y="238" text="high = short burst"/>
+   <comment type="patch/comment" x="168" y="252" text="low = long burst"/>
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2_" x="602" y="280">
       <params>
          <frac32.s.map name="pitch" value="-10.0"/>
          <frac32.u.map name="reso" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="volume" x="882" y="406"/>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2__" x="602" y="434">
+   <comment type="patch/comment" x="882" y="406" text="volume"/>
+   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_2__" x="602" y="434">
       <params>
          <frac32.s.map name="pitch" value="6.0"/>
          <frac32.u.map name="reso" value="63.5"/>
@@ -82,57 +82,57 @@
    </obj>
    <nets>
       <net>
-         <source name="envd1 env"/>
-         <dest name="vca_1 v"/>
+         <source obj="envd1" outlet="env"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="vca_1 a"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="envd1 trig"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="envd1" inlet="trig"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="lpf_1 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="lpf_1" inlet="in"/>
       </net>
       <net>
-         <source name="*c1_ out"/>
-         <dest name="lpf_2 in"/>
-         <dest name="lpf_2_ in"/>
-         <dest name="lpf_2__ in"/>
+         <source obj="*c1_" outlet="out"/>
+         <dest obj="lpf_2" inlet="in"/>
+         <dest obj="lpf_2_" inlet="in"/>
+         <dest obj="lpf_2__" inlet="in"/>
       </net>
       <net>
-         <source name="lpf_2 out"/>
-         <dest name="mix31 in1"/>
+         <source obj="lpf_2" outlet="out"/>
+         <dest obj="mix31" inlet="in1"/>
       </net>
       <net>
-         <source name="lpf_2_ out"/>
-         <dest name="mix31 in2"/>
+         <source obj="lpf_2_" outlet="out"/>
+         <dest obj="mix31" inlet="in2"/>
       </net>
       <net>
-         <source name="lpf_2__ out"/>
-         <dest name="mix31 in3"/>
+         <source obj="lpf_2__" outlet="out"/>
+         <dest obj="mix31" inlet="in3"/>
       </net>
       <net>
-         <source name="mix31 out"/>
-         <dest name="*c1 in"/>
+         <source obj="mix31" outlet="out"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="dac_11 wave"/>
-         <dest name="dac_21 wave"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="dac_11" inlet="wave"/>
+         <dest obj="dac_21" inlet="wave"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="lpf_2 pitchm"/>
-         <dest name="lpf_2_ pitchm"/>
-         <dest name="lpf_2__ pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="lpf_2" inlet="pitchm"/>
+         <dest obj="lpf_2_" inlet="pitchm"/>
+         <dest obj="lpf_2__" inlet="pitchm"/>
       </net>
       <net>
-         <source name="lpf_1 out"/>
-         <dest name="*c1_ in"/>
+         <source obj="lpf_1" outlet="out"/>
+         <dest obj="*c1_" inlet="in"/>
       </net>
    </nets>
    <settings>
