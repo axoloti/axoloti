@@ -56,7 +56,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuSaveAs">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Save as..."/>
+                <Property name="text" type="java.lang.String" value="Save As..."/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuSaveAsActionPerformed"/>
@@ -64,7 +64,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuSaveClip">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Save to clipboard"/>
+                <Property name="text" type="java.lang.String" value="Save To Clipboard"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuSaveClipActionPerformed"/>
@@ -107,7 +107,7 @@
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_A,&#xa;    Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Select all"/>
+                <Property name="text" type="java.lang.String" value="Select All"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemSelectAllActionPerformed"/>
@@ -159,7 +159,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemAdjScroll">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Adjust scroll"/>
+                <Property name="text" type="java.lang.String" value="Adjust Scroll"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemAdjScrollActionPerformed"/>

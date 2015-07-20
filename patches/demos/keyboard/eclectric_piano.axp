@@ -9,7 +9,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="./eclectric_piano_voice" sha="9732af343e64f405a47ff12e5a24e8a5591c70f2" name="eclectric_piano_voice2" x="14" y="98">
+   <obj type="./eclectric_piano_voice" name="eclectric_piano_voice2" x="14" y="98">
       <params>
          <frac32.u.map name="q:gain1" value="0.9849996566772461"/>
          <frac32.u.map name="q:gain2" value="0.0"/>
@@ -21,6 +21,8 @@
       </params>
       <attribs>
          <combo attributeName="poly" selection="12"/>
+         <combo attributeName="mididevice" selection="omni"/>
+         <combo attributeName="midiport" selection="omni"/>
       </attribs>
    </obj>
    <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix11" x="154" y="98">
@@ -49,37 +51,43 @@
    </obj>
    <nets>
       <net>
-         <source name="hipass_1 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
+         <source obj="hipass_1" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="interp_1 i"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="interp_1" inlet="i"/>
       </net>
       <net>
-         <source name="interp_1 o"/>
-         <dest name="mix11 in1"/>
+         <source obj="interp_1" outlet="o"/>
+         <dest obj="mix11" inlet="in1"/>
       </net>
       <net>
-         <source name="sat1 out"/>
-         <dest name="hipass_1 in"/>
+         <source obj="sat1" outlet="out"/>
+         <dest obj="hipass_1" inlet="in"/>
       </net>
       <net>
-         <source name="mix11 out"/>
-         <dest name="muls41 in"/>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="muls41" inlet="in"/>
       </net>
       <net>
-         <source name="muls41 out"/>
-         <dest name="sat1 in"/>
+         <source obj="muls41" outlet="out"/>
+         <dest obj="sat1" inlet="in"/>
       </net>
       <net>
-         <source name="eclectric_piano_voice2 dac_1"/>
-         <dest name="mix11 bus_in"/>
+         <source obj="eclectric_piano_voice2" outlet="dac_1"/>
+         <dest obj="mix11" inlet="bus_in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>909</x>
+      <y>495</y>
+      <width>966</width>
+      <height>383</height>
+   </windowPos>
 </patch-1.0>

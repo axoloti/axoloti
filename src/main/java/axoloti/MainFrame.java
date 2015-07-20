@@ -60,7 +60,9 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+import qcmds.QCmd;
 import qcmds.QCmdBringToDFUMode;
+import qcmds.QCmdCompilePatch;
 import qcmds.QCmdPing;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStart;
@@ -180,7 +182,6 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
         jMenuItemFCompile.setVisible(Axoloti.isDeveloper());
         jDevSeparator.setVisible(Axoloti.isDeveloper());
 
-        jMenuAutoTest.setVisible(false); // no longer relevant - remove?
         PopulateLibraryMenu(jMenuLibrary);
 
         JMenu phelps = new JMenu("Library");
@@ -400,7 +401,7 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
     jMenuLibrary.setText("Library");
     jMenuFile.add(jMenuLibrary);
 
-    recentFileMenu1.setText("Open recent");
+    recentFileMenu1.setText("Open Recent");
     jMenuFile.add(recentFileMenu1);
     jMenuFile.add(jSeparator2);
 
@@ -420,8 +421,7 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuFile.add(jMenuRegenerateObjects);
 
-    jMenuAutoTest.setText("Automated test");
-    jMenuAutoTest.setEnabled(false);
+    jMenuAutoTest.setText("Test Compilation");
     jMenuAutoTest.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuAutoTestActionPerformed(evt);
@@ -462,7 +462,7 @@ jMenuBar1.add(jMenuEdit);
 
 jMenuBoard.setText("Board");
 
-jMenuItemSelectCom.setText("Select device...");
+jMenuItemSelectCom.setText("Select Device...");
 jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     public void actionPerformed(java.awt.event.ActionEvent evt) {
         jMenuItemSelectComActionPerformed(evt);
@@ -522,7 +522,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuFirmware.add(jMenuItemFlashDFU);
 
-    jMenuItemRefreshFWID.setText("Refresh firmware ID");
+    jMenuItemRefreshFWID.setText("Refresh Firmware ID");
     jMenuItemRefreshFWID.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
             jMenuItemRefreshFWIDActionPerformed(evt);
@@ -727,37 +727,76 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         jMenuReloadObjectsActionPerformed(evt);
     }//GEN-LAST:event_jMenuRegenerateObjectsActionPerformed
 
+
+// usually we run all tests, as many may fail for same reason and you want
+// a list of all affected files, but if you want to stop on first failure, flip this flag
+final boolean stopOnTestFail = false;    
+    
     private void jMenuAutoTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAutoTestActionPerformed
-        File testPatchDir = new File("patches/tests");
-        for (File f : testPatchDir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                String extension = name.substring(name.length() - 4);
-                return (extension.equals(".axp"));
-            }
-        })) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "loading " + f.getName());
-            Serializer serializer = new Persister();
-            try {
-                PatchGUI patch1 = serializer.read(PatchGUI.class, f);
-                PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
-                patch1.PostContructor();
-                pf.UpdateConnectStatus();
-                patch1.setFileNamePath(f.getPath());
-                pf.setVisible(true);
-                patches.add(patch1);
-                patch1.WriteCode();
-                qcmdprocessor.WaitQueueFinished();
-                Thread.sleep(500);
-                patch1.Compile();
-                qcmdprocessor.WaitQueueFinished();
-                pf.Close();
-                Thread.sleep(2500);
-            } catch (Exception ex) {
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        if(!runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/patches")) && stopOnTestFail ) return;
+        if(!runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/objects")) && stopOnTestFail ) return;
     }//GEN-LAST:event_jMenuAutoTestActionPerformed
+
+    private boolean runTestDir(File f) {
+        if (!f.exists()) {
+            return true;
+        }
+        if (f.isDirectory()) {
+            File[] files = f.listFiles(new FilenameFilter(){
+                @Override
+                public boolean accept(File f, String name) {
+                    File t = new File ( f + File.separator + name);
+                    if (t.isDirectory()) {
+                        return true;
+                    }
+
+                    if (name.length() < 4) {
+                        return false;
+                    }
+                    String extension = name.substring(name.length() - 4);
+                    boolean b = (extension.equals(".axh") || extension.equals(".axp"));
+                    return b;
+                }
+            });
+            for (File s : files ) {
+                if(! runTestDir(s)  && stopOnTestFail) 
+                    return false;
+            }
+            return true;
+        }
+        
+        return runTestCompile(f);
+    }
+
+    private boolean runTestCompile(File f) {
+        Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "testing " + f.getPath());
+        Serializer serializer = new Persister();
+        try {
+            boolean status = true;
+            PatchGUI patch1 = serializer.read(PatchGUI.class, f);
+            PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
+            patch1.PostContructor();
+            pf.UpdateConnectStatus();
+            patch1.setFileNamePath(f.getPath());
+            patches.add(patch1);
+            patch1.WriteCode();
+            qcmdprocessor.WaitQueueFinished();
+            Thread.sleep(500);
+            QCmdCompilePatch cp = new QCmdCompilePatch(patch1);
+            patch1.GetQCmdProcessor().AppendToQueue(cp);
+            qcmdprocessor.WaitQueueFinished();
+            pf.Close();
+            Thread.sleep(2500);
+            status = cp.success();
+            if (status == false) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "COMPILE FAILED: " + f.getPath());
+            }
+            return status;
+        } catch (Exception ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "COMPILE FAILED: " + f.getPath(),ex);
+            return false;
+        }
+    }
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         Quit();

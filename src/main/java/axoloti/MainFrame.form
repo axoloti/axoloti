@@ -38,7 +38,7 @@
             </Menu>
             <Menu class="axoloti.menus.RecentFileMenu" name="recentFileMenu1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Open recent"/>
+                <Property name="text" type="java.lang.String" value="Open Recent"/>
               </Properties>
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
@@ -61,8 +61,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuAutoTest">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Automated test"/>
-                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="text" type="java.lang.String" value="Test Compilation"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuAutoTestActionPerformed"/>
@@ -115,7 +114,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSelectCom">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Select device..."/>
+                <Property name="text" type="java.lang.String" value="Select Device..."/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemSelectComActionPerformed"/>
@@ -178,7 +177,7 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemRefreshFWID">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Refresh firmware ID"/>
+                    <Property name="text" type="java.lang.String" value="Refresh Firmware ID"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRefreshFWIDActionPerformed"/>
