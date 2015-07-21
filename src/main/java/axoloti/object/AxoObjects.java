@@ -334,7 +334,7 @@ public class AxoObjects {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "finished loading objects");
             }
         };
-        Thread LoaderThread = new Thread(objloader);
+        LoaderThread = new Thread(objloader);
         LoaderThread.start();
     }
 }

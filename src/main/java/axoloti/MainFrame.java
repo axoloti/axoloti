@@ -60,7 +60,6 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import qcmds.QCmd;
 import qcmds.QCmdBringToDFUMode;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdPing;
@@ -90,11 +89,14 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
     Thread qcmdprocessorThread;
     static public Cursor transparentCursor;
     AxolotiMidiInput midiInput;
+    private final String[] args;
 
     /**
      * Creates new form MainFrame
+     * @param args command line arguments
      */
-    public MainFrame() {
+    public MainFrame(String args[]) {
+        this.args = args;
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
@@ -730,14 +732,29 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
 // usually we run all tests, as many may fail for same reason and you want
 // a list of all affected files, but if you want to stop on first failure, flip this flag
-final boolean stopOnTestFail = false;    
+    public static boolean stopOnTestFail = false;    
     
     private void jMenuAutoTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAutoTestActionPerformed
- //       runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR)+"/patches/demos/keyboard/eclectric_piano.axp"));
-        if(!runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/patches")) && stopOnTestFail ) return;
-        if(!runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/objects")) && stopOnTestFail ) return;
+        runAllTests();
     }//GEN-LAST:event_jMenuAutoTestActionPerformed
 
+    public boolean runAllTests() {
+        boolean r1 = runPatchTests();
+        if(!r1 && stopOnTestFail) return r1;
+        boolean r2 = runObjectTests();
+        if(!r2 && stopOnTestFail) return r2;
+        return r1 && r2;
+    }
+    public boolean runPatchTests() {
+        return runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/patches"));
+    }
+    public boolean runObjectTests() {
+        return runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/objects"));
+    }
+    public boolean runFileTest(String patchName) {
+        return runTestDir(new File(patchName));
+    }
+    
     private boolean runTestDir(File f) {
         if (!f.exists()) {
             return true;
