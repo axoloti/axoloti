@@ -60,7 +60,6 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import qcmds.QCmd;
 import qcmds.QCmdBringToDFUMode;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdPing;
@@ -90,11 +89,14 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
     Thread qcmdprocessorThread;
     static public Cursor transparentCursor;
     AxolotiMidiInput midiInput;
+    private final String[] args;
 
     /**
      * Creates new form MainFrame
+     * @param args command line arguments
      */
-    public MainFrame() {
+    public MainFrame(String args[]) {
+        this.args = args;
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
@@ -733,11 +735,15 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 final boolean stopOnTestFail = false;    
     
     private void jMenuAutoTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAutoTestActionPerformed
+        runTests();
+    }//GEN-LAST:event_jMenuAutoTestActionPerformed
+
+    public void runTests() {
  //       runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR)+"/patches/demos/keyboard/eclectric_piano.axp"));
         if(!runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/patches")) && stopOnTestFail ) return;
         if(!runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/objects")) && stopOnTestFail ) return;
-    }//GEN-LAST:event_jMenuAutoTestActionPerformed
-
+    }
+    
     private boolean runTestDir(File f) {
         if (!f.exists()) {
             return true;

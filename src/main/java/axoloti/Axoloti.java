@@ -18,14 +18,18 @@
 package axoloti;
 
 import axoloti.dialogs.AboutFrame;
+import axoloti.object.AxoObjects;
 import axoloti.utils.OSDetect;
 import axoloti.utils.Preferences;
 import java.awt.EventQueue;
+import java.awt.SplashScreen;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -47,10 +51,12 @@ public class Axoloti {
             }
         }
         File f = new File(ev);
-        if (f.exists()) try {
-            ev = f.getCanonicalPath();
-        } catch (IOException ex) {
-            Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
+        if (f.exists()) {
+            try {
+                ev = f.getCanonicalPath();
+            } catch (IOException ex) {
+                Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         System.setProperty(var, ev);
     }
@@ -70,11 +76,12 @@ public class Axoloti {
     }
 
     // cache this, as it linked to checks on the UI/menu
-    private static String   cacheFWDir = null; 
-    private static boolean  cacheDeveloper = false; 
+    private static String cacheFWDir = null;
+    private static boolean cacheDeveloper = false;
+
     static boolean isDeveloper() {
         String fwEnv = System.getProperty(FIRMWARE_DIR);
-        if (cacheFWDir!=null && fwEnv.equals(cacheFWDir)) {
+        if (cacheFWDir != null && fwEnv.equals(cacheFWDir)) {
             return cacheDeveloper;
         }
         cacheFWDir = fwEnv;
@@ -84,7 +91,7 @@ public class Axoloti {
         if (!fwRelease.equals(cacheFWDir)) {
             cacheDeveloper = true;
         } else {
-            File f = new File(dirRelease + File.separator +".git");
+            File f = new File(dirRelease + File.separator + ".git");
             if (f.exists()) {
                 cacheDeveloper = true;
             }
@@ -95,10 +102,10 @@ public class Axoloti {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
             String curDir = System.getProperty("user.dir");
-            File jarFile=new File(Axoloti.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            File jarFile = new File(Axoloti.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             String jarDir = jarFile.getParentFile().getCanonicalPath();
             String defaultHome = curDir;
             String defaultRuntime = curDir;
@@ -109,7 +116,7 @@ public class Axoloti {
                 defaultRuntime = System.getenv("ProgramFiles") + File.separator + "axoloti_runtime";
             } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
                 defaultHome = System.getenv("HOME") + "/Documents/axoloti";
-                defaultRuntime =  "/Applications/axoloti_runtime";
+                defaultRuntime = "/Applications/axoloti_runtime";
             } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
                 defaultHome = System.getenv("HOME") + "/axoloti";
                 defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
@@ -158,21 +165,61 @@ public class Axoloti {
             if (System.getProperty("os.name").contains("OS X")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true");
             }
-        } catch (Exception e) {
+        } catch (URISyntaxException e) {
+            throw new Error(e);
+        } catch (IOException e) {
+            throw new Error(e);
+        } catch (ClassNotFoundException e) {
+            throw new Error(e);
+        } catch (InstantiationException e) {
+            throw new Error(e);
+        } catch (IllegalAccessException e) {
+            throw new Error(e);
+        } catch (UnsupportedLookAndFeelException e) {
             throw new Error(e);
         }
         System.setProperty("line.separator", "\n");
 
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    MainFrame frame = new MainFrame();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        boolean cmdLineOnly = false;
+        boolean cmdRunTest = false;
+        for (String arg : args) {
+            if (arg.equalsIgnoreCase("-runtests")) {
+                cmdLineOnly = true;
+                cmdRunTest = true;
+            } else if (arg.equalsIgnoreCase("-help")) {
+                System.out.println("Axoloti [-runtests]");
             }
-        });
+        }
+
+        if (cmdLineOnly) {
+            MainFrame frame = new MainFrame(args);
+            AxoObjects objs= new AxoObjects();
+            objs.LoadAxoObjects();
+            if(SplashScreen.getSplashScreen()!=null) {
+                SplashScreen.getSplashScreen().close();
+            }
+            try {
+                objs.LoaderThread.join();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            System.out.println("Axoloti initialised");
+            if (cmdRunTest) {
+                frame.runTests();
+            }
+        } else {
+            EventQueue.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        MainFrame frame = new MainFrame(args);
+                        frame.setVisible(true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 }

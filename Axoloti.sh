@@ -28,10 +28,12 @@ if [ -f $rootdir/dist/Axoloti.jar ]
 then
     case "$platform" in
         mac)
-                java -Xdock:name=Axoloti -jar $rootdir/dist/Axoloti.jar 2>&1 | tee $axoloti_home/axoloti.log
+                echo java -Xdock:name=Axoloti -jar $rootdir/dist/Axoloti.jar $* 
+                java -Xdock:name=Axoloti -jar $rootdir/dist/Axoloti.jar $* 2>&1 | tee $axoloti_home/axoloti.log
         ;;
         linux)
-                java -jar $rootdir/dist/Axoloti.jar 2>&1 | tee $axoloti_home/axoloti.log
+                echo java -jar $rootdir/dist/Axoloti.jar $* 
+                java -jar $rootdir/dist/Axoloti.jar $* 2>&1 | tee $axoloti_home/axoloti.log
         ;;
     esac
 else
