@@ -732,16 +732,27 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
 // usually we run all tests, as many may fail for same reason and you want
 // a list of all affected files, but if you want to stop on first failure, flip this flag
-final boolean stopOnTestFail = false;    
+    public static boolean stopOnTestFail = false;    
     
     private void jMenuAutoTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAutoTestActionPerformed
-        runTests();
+        runAllTests();
     }//GEN-LAST:event_jMenuAutoTestActionPerformed
 
-    public void runTests() {
- //       runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR)+"/patches/demos/keyboard/eclectric_piano.axp"));
-        if(!runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/patches")) && stopOnTestFail ) return;
-        if(!runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/objects")) && stopOnTestFail ) return;
+    public boolean runAllTests() {
+        boolean r1 = runPatchTests();
+        if(!r1 && stopOnTestFail) return r1;
+        boolean r2 = runObjectTests();
+        if(!r2 && stopOnTestFail) return r2;
+        return r1 && r2;
+    }
+    public boolean runPatchTests() {
+        return runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/patches"));
+    }
+    public boolean runObjectTests() {
+        return runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/objects"));
+    }
+    public boolean runFileTest(String patchName) {
+        return runTestDir(new File(patchName));
     }
     
     private boolean runTestDir(File f) {

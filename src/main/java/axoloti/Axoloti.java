@@ -181,32 +181,75 @@ public class Axoloti {
         System.setProperty("line.separator", "\n");
 
         boolean cmdLineOnly = false;
-        boolean cmdRunTest = false;
-        for (String arg : args) {
-            if (arg.equalsIgnoreCase("-runtests")) {
+        boolean cmdRunAllTest = false;
+        boolean cmdRunPatchTest = false;
+        boolean cmdRunObjectTest = false;
+        boolean cmdRunFileTest = false;
+        String testFile = null;
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+            if (arg.equalsIgnoreCase("-exitOnFirstFail")) {
+                MainFrame.stopOnTestFail = true;
+            }
+
+            // exclusive options
+            if (arg.equalsIgnoreCase("-runAllTests")) {
                 cmdLineOnly = true;
-                cmdRunTest = true;
+                cmdRunAllTest = true;
+            } else if (arg.equalsIgnoreCase("-runPatchTests")) {
+                cmdLineOnly = true;
+                cmdRunPatchTest = true;
+            } else if (arg.equalsIgnoreCase("-runObjTests")) {
+                cmdLineOnly = true;
+                cmdRunObjectTest = true;
+            } else if (arg.equalsIgnoreCase("-runTest")) {
+                cmdLineOnly = true;
+                cmdRunFileTest = true;
+                if (i + 1 < args.length) {
+                    testFile = args[i + 1];
+                } else {
+                    System.err.println("-runTest patchname/directory : missing file/dir");
+                    System.exit(-1);
+                }
             } else if (arg.equalsIgnoreCase("-help")) {
-                System.out.println("Axoloti [-runtests]");
+                System.out.println("Axoloti "
+                        + " [-runAllTests|-runPatchTests|-runObjTests] "
+                        + " [-runtTest patchfile|dir]"
+                        + " [-exitOnFirstRail");
+                System.exit(0);
             }
         }
 
         if (cmdLineOnly) {
-            MainFrame frame = new MainFrame(args);
-            AxoObjects objs= new AxoObjects();
-            objs.LoadAxoObjects();
-            if(SplashScreen.getSplashScreen()!=null) {
-                SplashScreen.getSplashScreen().close();
-            }
             try {
-                objs.LoaderThread.join();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                MainFrame frame = new MainFrame(args);
+                AxoObjects objs = new AxoObjects();
+                objs.LoadAxoObjects();
+                if (SplashScreen.getSplashScreen() != null) {
+                    SplashScreen.getSplashScreen().close();
+                }
+                try {
+                    objs.LoaderThread.join();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-            System.out.println("Axoloti initialised");
-            if (cmdRunTest) {
-                frame.runTests();
+                System.out.println("Axoloti cmd line initialised");
+                int exitCode = 0;
+                if (cmdRunAllTest) {
+                    exitCode = frame.runAllTests() ? 0 : -1;
+                } else if (cmdRunPatchTest) {
+                    exitCode = frame.runPatchTests() ? 0 : -1;
+                } else if (cmdRunObjectTest) {
+                    exitCode = frame.runObjectTests() ? 0 : -1;
+                } else if (cmdRunFileTest) {
+                    exitCode = frame.runFileTest(testFile) ? 0 : -1;
+                }
+                System.out.println("Axoloti cmd line complete");
+                System.exit(exitCode);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.exit(-2);
             }
         } else {
             EventQueue.invokeLater(new Runnable() {
