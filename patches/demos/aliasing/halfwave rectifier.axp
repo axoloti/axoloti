@@ -6,7 +6,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw_1" x="14" y="98">
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" name="saw_1" x="14" y="98">
       <params>
          <frac32.s.map name="pitch" value="-53.0"/>
       </params>
@@ -18,7 +18,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="sine_1" x="238" y="98">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="sine_1" x="238" y="98">
       <params>
          <frac32.s.map name="pitch" value="22.0"/>
       </params>
@@ -77,7 +77,7 @@
       </net>
       <net>
          <source obj="*c_1" outlet="out"/>
-         <dest obj="sine_1" inlet="pitchm"/>
+         <dest obj="sine_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="rectifier_1" outlet="out"/>

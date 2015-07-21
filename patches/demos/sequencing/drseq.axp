@@ -5,13 +5,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw r" sha="80d5f932fd3cac3d9abd87ccfe15d99c020d491f" name="lfo.saw_1" x="84" y="12">
+   <obj type="lfo/saw r" sha="171625d93cb16f133af571772179cbcefbae546d" name="lfo.saw_1" x="84" y="12">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine r" sha="7b6e23eed2c3410327bbbfab9ad452431b5a33aa" name="lfo.sine.r_1" x="192" y="12">
+   <obj type="lfo/sine r" sha="793d67bc0866975a78623ac43c35750ba3cae412" name="lfo.sine.r_1" x="192" y="12">
       <params>
          <frac32.s.map name="pitch" value="36.0"/>
       </params>
@@ -73,7 +73,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_2" x="1380" y="72">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="noise.uniform_2" x="1380" y="72">
       <params/>
       <attribs/>
    </obj>
@@ -81,7 +81,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp1" sha="91e2ecaa66340906540043ea41ac3987ce0aef17" name="filter.lowpass~_1" x="1560" y="72">
+   <obj type="filter/lp1" sha="290a234e2f83eb072198d0158bcd5da02a3606c3" name="filter.lowpass~_1" x="1560" y="72">
       <params>
          <frac32.s.map name="freq" value="-29.0"/>
       </params>
@@ -103,7 +103,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d lin m" sha="a2e1da37932bdfc8056cd08cca74d2ebc6735f40" name="env.envdlinmx_1" x="1272" y="156">
+   <obj type="env/d lin m" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" name="env.envdlinmx_1" x="1272" y="156">
       <params>
          <frac32.s.map name="d" value="-16.0"/>
       </params>
@@ -115,7 +115,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc.sine_1" x="1452" y="156">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc.sine_1" x="1452" y="156">
       <params>
          <frac32.s.map name="pitch" value="-30.0"/>
       </params>
@@ -192,7 +192,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_1" x="1284" y="264">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="noise.uniform_1" x="1284" y="264">
       <params/>
       <attribs/>
    </obj>
@@ -206,7 +206,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d m" sha="a33954fdc3709e5d83968cba77284d0c4826e8c3" name="env.decay.m_1" x="1272" y="312">
+   <obj type="env/d m" sha="3f6e6c6081782177f0dc9dfe9e50a99b54fe41f6" name="env.decay.m_1" x="1272" y="312">
       <params>
          <frac32.s.map name="d" value="1.5"/>
       </params>
@@ -216,14 +216,14 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/bp svf" sha="64eb414253ad09d2d8c5945dc48b8e1d2ac5b321" name="filter.bpfsvf~_1" x="1440" y="312">
+   <obj type="filter/bp svf" sha="ba4ac02f48ae93c7ecc9fac9b0e212cac7c21539" name="filter.bpfsvf~_1" x="1440" y="312">
       <params>
          <frac32.s.map name="pitch" value="58.0"/>
          <frac32.u.map name="reso" value="23.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="sine_1" x="1666" y="322">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="sine_1" x="1666" y="322">
       <params>
          <frac32.s.map name="pitch" value="-61.0"/>
       </params>
@@ -261,7 +261,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_3" x="1284" y="432">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="noise.uniform_3" x="1284" y="432">
       <params/>
       <attribs/>
    </obj>
@@ -298,7 +298,7 @@
          <spinner attributeName="d4" value="897"/>
       </attribs>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="1666" y="476">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_1" x="1666" y="476">
       <params>
          <frac32.s.map name="pitch" value="40.0"/>
          <frac32.u.map name="reso" value="58.0"/>
@@ -311,7 +311,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d m" sha="a33954fdc3709e5d83968cba77284d0c4826e8c3" name="env.decay.m_2" x="1272" y="480">
+   <obj type="env/d m" sha="3f6e6c6081782177f0dc9dfe9e50a99b54fe41f6" name="env.decay.m_2" x="1272" y="480">
       <params>
          <frac32.s.map name="d" value="16.0"/>
       </params>
@@ -321,7 +321,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/bp svf" sha="64eb414253ad09d2d8c5945dc48b8e1d2ac5b321" name="filter.bpfsvf~_2" x="1440" y="480">
+   <obj type="filter/bp svf" sha="ba4ac02f48ae93c7ecc9fac9b0e212cac7c21539" name="filter.bpfsvf~_2" x="1440" y="480">
       <params>
          <frac32.s.map name="pitch" value="22.0"/>
          <frac32.u.map name="reso" value="11.0"/>
@@ -332,7 +332,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/saw r" sha="80d5f932fd3cac3d9abd87ccfe15d99c020d491f" name="saw_1" x="192" y="540">
+   <obj type="lfo/saw r" sha="171625d93cb16f133af571772179cbcefbae546d" name="saw_1" x="192" y="540">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -375,7 +375,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="env.adsr_1" x="1080" y="636">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="env.adsr_1" x="1080" y="636">
       <params>
          <frac32.s.map name="a" value="-59.0"/>
          <frac32.s.map name="d" value="24.0"/>
@@ -384,7 +384,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="env.adsr_2" x="1176" y="636">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="env.adsr_2" x="1176" y="636">
       <params>
          <frac32.s.map name="a" value="-36.0"/>
          <frac32.s.map name="d" value="2.0"/>
@@ -399,7 +399,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc.sine_3" x="1356" y="636">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc.sine_3" x="1356" y="636">
       <params>
          <frac32.s.map name="pitch" value="-8.12999963760376"/>
       </params>
@@ -415,7 +415,7 @@
          <objref attributeName="table" obj="p"/>
       </attribs>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc.sine_2" x="1272" y="756">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc.sine_2" x="1272" y="756">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
       </params>
@@ -532,7 +532,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="env.adsr_3" x="972" y="1176">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="env.adsr_3" x="972" y="1176">
       <params>
          <frac32.s.map name="a" value="-48.0"/>
          <frac32.s.map name="d" value="-32.0"/>
@@ -557,7 +557,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="lfo.sine_1" x="1236" y="1368">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="lfo.sine_1" x="1236" y="1368">
       <params>
          <frac32.s.map name="pitch" value="2.0"/>
       </params>
@@ -569,13 +569,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="osc.saw_1" x="600" y="1380">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="osc.saw_1" x="600" y="1380">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="filter.vcf3~_2" x="696" y="1380">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="filter.vcf3~_2" x="696" y="1380">
       <params>
          <frac32.s.map name="pitch" value="10.0"/>
          <frac32.u.map name="reso" value="37.0"/>
@@ -598,7 +598,7 @@
          <combo attributeName="polynomial" selection="0x9"/>
       </attribs>
    </obj>
-   <obj type="filter/hp svf" sha="5e42bb7fe0e7430bbe43945c7a76b131d71d2f7" name="filter.lpfsvf~_1" x="1236" y="1452">
+   <obj type="filter/hp svf" sha="b713b3afdc5ee2c3aaca6ac1b8e343c555c40952" name="filter.lpfsvf~_1" x="1236" y="1452">
       <params>
          <frac32.s.map name="pitch" value="-5.0"/>
          <frac32.u.map name="reso" value="50.0"/>
@@ -679,7 +679,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="filter.vcf3~_1" x="1392" y="1632">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="filter.vcf3~_1" x="1392" y="1632">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="63.5"/>
@@ -696,7 +696,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/hp1" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="filter.hipass~_1" x="1620" y="1632">
+   <obj type="filter/hp1" sha="f9059d53a5af0890dc1a1268b5679aa335731857" name="filter.hipass~_1" x="1620" y="1632">
       <params>
          <frac32.u.map name="freq" value="43.0"/>
       </params>
@@ -766,8 +766,8 @@
       </net>
       <net>
          <source obj="ctrl.f.b_1" outlet="out"/>
-         <dest obj="lfo.saw_1" inlet="pitchm"/>
-         <dest obj="lfo.sine.r_1" inlet="pitchm"/>
+         <dest obj="lfo.saw_1" inlet="pitch"/>
+         <dest obj="lfo.sine.r_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="math.inv_1" outlet="out"/>
@@ -802,7 +802,7 @@
       </net>
       <net>
          <source obj="arithmetic.*c_2" outlet="out"/>
-         <dest obj="osc.sine_1" inlet="pitchm"/>
+         <dest obj="osc.sine_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="arithmetic.abs_1" outlet="out"/>
@@ -886,7 +886,7 @@
       </net>
       <net>
          <source obj="logic.latch_1" outlet="o"/>
-         <dest obj="filter.vcf3~_1" inlet="pitchm"/>
+         <dest obj="filter.vcf3~_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="osc.saw_1" outlet="wave"/>
@@ -898,7 +898,7 @@
       </net>
       <net>
          <source obj="table.read_1" outlet="o"/>
-         <dest obj="osc.saw_1" inlet="pitchm"/>
+         <dest obj="osc.saw_1" inlet="pitch"/>
          <dest obj="math.+_1" inlet="in2"/>
       </net>
       <net>
@@ -979,7 +979,7 @@
       </net>
       <net>
          <source obj="logic.latch_2" outlet="o"/>
-         <dest obj="env.envdlinmx_1" inlet="dm"/>
+         <dest obj="env.envdlinmx_1" inlet="d"/>
       </net>
       <net>
          <source obj="math.selectc4_3" outlet="o"/>
@@ -991,7 +991,7 @@
       </net>
       <net>
          <source obj="logic.latch_3" outlet="o"/>
-         <dest obj="env.decay.m_1" inlet="dm"/>
+         <dest obj="env.decay.m_1" inlet="d"/>
       </net>
       <net>
          <source obj="math.selectc4_4" outlet="o"/>
@@ -999,7 +999,7 @@
       </net>
       <net>
          <source obj="logic.latch_4" outlet="o"/>
-         <dest obj="env.decay.m_2" inlet="dm"/>
+         <dest obj="env.decay.m_2" inlet="d"/>
       </net>
       <net>
          <source obj="bass" outlet="o"/>
@@ -1053,7 +1053,7 @@
       </net>
       <net>
          <source obj="gain.vca~_6" outlet="o"/>
-         <dest obj="osc.sine_2" inlet="pm"/>
+         <dest obj="osc.sine_2" inlet="phase"/>
       </net>
       <net>
          <source obj="bassnote" outlet="o"/>
@@ -1061,8 +1061,8 @@
       </net>
       <net>
          <source obj="math.glide_1" outlet="out"/>
-         <dest obj="osc.sine_2" inlet="pitchm"/>
-         <dest obj="osc.sine_3" inlet="pitchm"/>
+         <dest obj="osc.sine_2" inlet="pitch"/>
+         <dest obj="osc.sine_3" inlet="pitch"/>
       </net>
       <net>
          <source obj="math.selectc4_5" outlet="o"/>
@@ -1095,7 +1095,7 @@
       </net>
       <net>
          <source obj="math.*c_2" outlet="out"/>
-         <dest obj="filter.vcf3~_2" inlet="pitchm"/>
+         <dest obj="filter.vcf3~_2" inlet="pitch"/>
       </net>
       <net>
          <source obj="pulse.lfsrburst8~_1" outlet="out"/>
@@ -1204,7 +1204,7 @@
       </net>
       <net>
          <source obj="*c_1" outlet="out"/>
-         <dest obj="vcf3~_1" inlet="pitchm"/>
+         <dest obj="vcf3~_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="fdn4_1" outlet="out1"/>

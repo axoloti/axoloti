@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="adcconfig" sha="7eb314b69477fa9eb4ff1f78cc33085b109e9400" name="adcconfig1" x="0" y="20">
+   <obj type="audio/inconfig" sha="7eb314b69477fa9eb4ff1f78cc33085b109e9400" name="adcconfig1" x="0" y="20">
       <params/>
       <attribs>
          <combo attributeName="gain" selection="15dB"/>
@@ -10,15 +10,15 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="pnoise~" sha="73a919bf86dac4805c4300760b5052e1ec2453c6" name="pnoise_1" x="520" y="120">
+   <obj type="noise/pink" sha="73a919bf86dac4805c4300760b5052e1ec2453c6" name="pnoise_1" x="520" y="120">
       <params/>
       <attribs/>
    </obj>
-   <obj type="adc~" sha="1acaaf87659f6c9d0833a6def4dbd5d0c3edca4d" name="adc_1" x="0" y="160">
+   <obj type="audio/in stereo" sha="1acaaf87659f6c9d0833a6def4dbd5d0c3edca4d" name="adc_1" x="0" y="160">
       <params/>
       <attribs/>
    </obj>
-   <obj type="env~" sha="2f512222f4b4d2c035c326cd486c1cacc6be5e64" name="env_1" x="80" y="160">
+   <obj type="env/follower" sha="2f512222f4b4d2c035c326cd486c1cacc6be5e64" name="env_1" x="80" y="160">
       <params/>
       <attribs>
          <combo attributeName="time" selection="10.6ms"/>
@@ -41,14 +41,14 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="640" y="160">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3_1" x="640" y="160">
       <params>
          <frac32.s.map name="pitch" value="63.0"/>
          <frac32.u.map name="reso" value="39.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="c27566f972d15f25252f61b5cff014a3edce9706" name="dac_1" x="800" y="160">
+   <obj type="audio/out stereo" sha="c27566f972d15f25252f61b5cff014a3edce9706" name="dac_1" x="800" y="160">
       <params/>
       <attribs/>
    </obj>
@@ -88,7 +88,7 @@
       </net>
       <net>
          <source obj="*c2" outlet="out"/>
-         <dest obj="vcf3_1" inlet="pitchm"/>
+         <dest obj="vcf3_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="env_1" outlet="amp"/>

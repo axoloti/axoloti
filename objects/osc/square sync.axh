@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_2" x="14" y="14">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc_2" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -11,13 +11,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="210" y="14">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_1" x="210" y="14">
       <params>
          <frac32.s.map name="pitch" value="-10.599999904632568"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_1" x="14" y="140">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc_1" x="14" y="140">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -29,7 +29,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="squaresync~" sha="9d196dfa9e8b9f0e0b3ebc4162c12d61a696c13d" name="squaresync~_1" x="210" y="140">
+   <obj type="squaresync~" sha="589b6f1d673b7fd79f9156a008d3939499d098dd" name="squaresync~_1" x="210" y="140">
       <params>
          <frac32.s.map name="pitch" value="5.507214069366455"/>
       </params>
@@ -57,42 +57,48 @@
    </obj>
    <nets>
       <net>
-         <source name="osc~_1 wave"/>
-         <dest name="squaresync~_1 sync"/>
+         <source obj="osc~_1" outlet="wave"/>
+         <dest obj="squaresync~_1" inlet="sync"/>
       </net>
       <net>
-         <source name="squaresync~_1 wave"/>
-         <dest name="*c_1 in"/>
-         <dest name="scope_128s_v2_1 in"/>
+         <source obj="squaresync~_1" outlet="wave"/>
+         <dest obj="*c_1" inlet="in"/>
+         <dest obj="scope_128s_v2_1" inlet="in"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="dac~_1 left"/>
-         <dest name="dac~_1 right"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="dac~_1" inlet="left"/>
+         <dest obj="dac~_1" inlet="right"/>
       </net>
       <net>
-         <source name="cb1m_1 o"/>
-         <dest name="scope_128s_v2_1 hold"/>
+         <source obj="cb1m_1" outlet="o"/>
+         <dest obj="scope_128s_v2_1" inlet="hold"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="*c_2 in"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="*c_2" inlet="in"/>
       </net>
       <net>
-         <source name="*c_2 out"/>
-         <dest name="squaresync~_1 pitchm"/>
+         <source obj="*c_2" outlet="out"/>
+         <dest obj="squaresync~_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="osc_2 wave"/>
-         <dest name="*c_3 in"/>
+         <source obj="osc_2" outlet="wave"/>
+         <dest obj="*c_3" inlet="in"/>
       </net>
       <net>
-         <source name="*c_3 out"/>
-         <dest name="osc~_1 pitchm"/>
+         <source obj="*c_3" outlet="out"/>
+         <dest obj="osc~_1" inlet="pitch"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>730</width>
+      <height>562</height>
+   </windowPos>
 </patch-1.0>

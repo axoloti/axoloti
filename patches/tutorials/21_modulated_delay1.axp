@@ -28,7 +28,7 @@
          <combo attributeName="size" selection="2048 (42.66ms)"/>
       </attribs>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="28" y="266">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="28" y="266">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
@@ -52,7 +52,7 @@
    </obj>
    <comment type="patch/comment" x="518" y="322" text="selection:"/>
    <comment type="patch/comment" x="532" y="364" text="0 - normal"/>
-   <obj type="osc/phasor" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52" name="phasor3_1" x="28" y="378">
+   <obj type="osc/phasor" sha="343e0dfbaa48c69032d959ee1e7398e45000e0bf" name="phasor3_1" x="28" y="378">
       <params>
          <frac32.s.map name="pitch" value="-21.0"/>
       </params>
@@ -88,7 +88,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/read interp" sha="22a07dcbe5007bc4095bed25946486e7c98caf23" name="delread2__1" x="518" y="462">
+   <obj type="delay/read interp" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread2__1" x="518" y="462">
       <params>
          <frac32.u.map name="time" value="2.0"/>
       </params>
@@ -117,7 +117,7 @@
       </net>
       <net>
          <source obj="inmux31" outlet="o"/>
-         <dest obj="delread2__1" inlet="timem"/>
+         <dest obj="delread2__1" inlet="time"/>
       </net>
       <net>
          <source obj="phasor3_1" outlet="phasor"/>

@@ -23,10 +23,10 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd_1" x="364" y="154">
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd_1" x="364" y="154">
       <params>
-         <frac32.u.map name="a" value="0.0"/>
-         <frac32.u.map name="d" value="54.0"/>
+         <frac32.s.map name="a" value="0.0"/>
+         <frac32.s.map name="d" value="54.0"/>
       </params>
       <attribs/>
    </obj>
@@ -36,7 +36,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_2" x="14" y="266">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_2" x="14" y="266">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -48,7 +48,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw sync" sha="4173669d858d9547874f581b85f4e60313401651" name="sawsync~_1" x="238" y="266">
+   <obj type="osc/saw sync" sha="4e614d245ac924f3f8f7ea02b2a4ba9e84769849" name="sawsync~_1" x="238" y="266">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -58,7 +58,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/hp1" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass~_1" x="406" y="266">
+   <obj type="filter/hp1" sha="f9059d53a5af0890dc1a1268b5679aa335731857" name="hipass~_1" x="406" y="266">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
@@ -70,57 +70,63 @@
    </obj>
    <nets>
       <net>
-         <source name="hipass~_1 out"/>
-         <dest name="dac~_1 left"/>
-         <dest name="dac~_1 right"/>
+         <source obj="hipass~_1" outlet="out"/>
+         <dest obj="dac~_1" inlet="left"/>
+         <dest obj="dac~_1" inlet="right"/>
       </net>
       <net>
-         <source name="sawsync~_1 wave"/>
-         <dest name="vca~_1 a"/>
+         <source obj="sawsync~_1" outlet="wave"/>
+         <dest obj="vca~_1" inlet="a"/>
       </net>
       <net>
-         <source name="vca~_1 o"/>
-         <dest name="hipass~_1 in"/>
+         <source obj="vca~_1" outlet="o"/>
+         <dest obj="hipass~_1" inlet="in"/>
       </net>
       <net>
-         <source name="keybzone_lru_1 note"/>
-         <dest name="osc~_2 pitchm"/>
+         <source obj="keybzone_lru_1" outlet="note"/>
+         <dest obj="osc~_2" inlet="pitch"/>
       </net>
       <net>
-         <source name="envahd_1 env"/>
-         <dest name="*c_1 in"/>
+         <source obj="envahd_1" outlet="env"/>
+         <dest obj="*c_1" inlet="in"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="vca~_1 v"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="vca~_1" inlet="v"/>
       </net>
       <net>
-         <source name="mix2_1 out"/>
-         <dest name="sawsync~_1 sync"/>
+         <source obj="mix2_1" outlet="out"/>
+         <dest obj="sawsync~_1" inlet="sync"/>
       </net>
       <net>
-         <source name="keybzone_lru_2 gate"/>
-         <dest name="envahd_1 gate"/>
+         <source obj="keybzone_lru_2" outlet="gate"/>
+         <dest obj="envahd_1" inlet="gate"/>
       </net>
       <net>
-         <source name="keybzone_lru_2 note"/>
-         <dest name="mix1_1 bus_in"/>
+         <source obj="keybzone_lru_2" outlet="note"/>
+         <dest obj="mix1_1" inlet="bus_in"/>
       </net>
       <net>
-         <source name="mix1_1 out"/>
-         <dest name="sawsync~_1 pitchm"/>
+         <source obj="mix1_1" outlet="out"/>
+         <dest obj="sawsync~_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="pnoise_1 out"/>
-         <dest name="mix1_1 in1"/>
+         <source obj="pnoise_1" outlet="out"/>
+         <dest obj="mix1_1" inlet="in1"/>
       </net>
       <net>
-         <source name="osc~_2 wave"/>
-         <dest name="mix2_1 in"/>
+         <source obj="osc~_2" outlet="wave"/>
+         <dest obj="mix2_1" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>800</width>
+      <height>576</height>
+   </windowPos>
 </patch-1.0>

@@ -7,7 +7,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="56">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="14" y="56">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-8.0"/>
       </params>
@@ -19,7 +19,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1_" x="238" y="56">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1_" x="238" y="56">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="56.5"/>
       </params>
@@ -48,10 +48,10 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envd1" x="224" y="196">
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envd1" x="224" y="196">
       <params>
-         <frac32.u.map name="a" onParent="true" value="0.0"/>
-         <frac32.u.map name="d" onParent="true" value="11.0"/>
+         <frac32.s.map name="a" onParent="true" value="0.0"/>
+         <frac32.s.map name="d" onParent="true" value="11.0"/>
       </params>
       <attribs/>
    </obj>
@@ -62,7 +62,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/pwm" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1" x="434" y="196">
+   <obj type="osc/pwm" sha="4f216b9a125822434f813198e9be4da0b5e8b042" name="pwm_1" x="434" y="196">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-12.185123443603516"/>
       </params>
@@ -81,20 +81,20 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="546" y="280">
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd1" x="546" y="280">
       <params>
-         <frac32.u.map name="a" onParent="true" value="0.0"/>
-         <frac32.u.map name="d" onParent="true" value="45.0"/>
+         <frac32.s.map name="a" onParent="true" value="0.0"/>
+         <frac32.s.map name="d" onParent="true" value="45.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/pwm" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1_" x="434" y="294">
+   <obj type="osc/pwm" sha="4f216b9a125822434f813198e9be4da0b5e8b042" name="pwm_1_" x="434" y="294">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-0.01004934310913086"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/pwm" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1__" x="434" y="406">
+   <obj type="osc/pwm" sha="4f216b9a125822434f813198e9be4da0b5e8b042" name="pwm_1__" x="434" y="406">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-23.93801259994507"/>
       </params>
@@ -109,7 +109,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="lpf_1" x="644" y="420">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="lpf_1" x="644" y="420">
       <params>
          <frac32.s.map name="pitch" MidiCC="1" value="20.0"/>
          <frac32.u.map name="reso" onParent="true" value="19.0"/>
@@ -126,97 +126,97 @@
    </obj>
    <nets>
       <net>
-         <source name="keyb_1 note"/>
-         <dest name="smooth1 in"/>
-         <dest name="mix21 in1"/>
+         <source obj="keyb_1" outlet="note"/>
+         <dest obj="smooth1" inlet="in"/>
+         <dest obj="mix21" inlet="in1"/>
       </net>
       <net>
-         <source name="mix12 out"/>
-         <dest name="pwm_1 pitchm"/>
-         <dest name="pwm_1_ pitchm"/>
-         <dest name="pwm_1__ pitchm"/>
+         <source obj="mix12" outlet="out"/>
+         <dest obj="pwm_1" inlet="pitch"/>
+         <dest obj="pwm_1_" inlet="pitch"/>
+         <dest obj="pwm_1__" inlet="pitch"/>
       </net>
       <net>
-         <source name="pwm_1 wave"/>
-         <dest name="mix31 in1"/>
+         <source obj="pwm_1" outlet="wave"/>
+         <dest obj="mix31" inlet="in1"/>
       </net>
       <net>
-         <source name="pwm_1_ wave"/>
-         <dest name="mix31 in2"/>
+         <source obj="pwm_1_" outlet="wave"/>
+         <dest obj="mix31" inlet="in2"/>
       </net>
       <net>
-         <source name="pwm_1__ wave"/>
-         <dest name="mix31 in3"/>
+         <source obj="pwm_1__" outlet="wave"/>
+         <dest obj="mix31" inlet="in3"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="mix11 in1"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="mix11" inlet="in1"/>
       </net>
       <net>
-         <source name="c321 o"/>
-         <dest name="mix11 bus_in"/>
+         <source obj="c321" outlet="o"/>
+         <dest obj="mix11" inlet="bus_in"/>
       </net>
       <net>
-         <source name="mix11 out"/>
-         <dest name="pwm_1_ pwm"/>
-         <dest name="pwm_1__ pwm"/>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="pwm_1_" inlet="pw"/>
+         <dest obj="pwm_1__" inlet="pw"/>
       </net>
       <net>
-         <source name="smooth1 out"/>
-         <dest name="mix12 bus_in"/>
+         <source obj="smooth1" outlet="out"/>
+         <dest obj="mix12" inlet="bus_in"/>
       </net>
       <net>
-         <source name="keyb_1 gate"/>
-         <dest name="envahd1 gate"/>
-         <dest name="envd1 gate"/>
+         <source obj="keyb_1" outlet="gate"/>
+         <dest obj="envahd1" inlet="gate"/>
+         <dest obj="envd1" inlet="gate"/>
       </net>
       <net>
-         <source name="envahd1 env"/>
-         <dest name="vca_1 v"/>
+         <source obj="envahd1" outlet="env"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="c321_ o"/>
-         <dest name="mix11_ bus_in"/>
+         <source obj="c321_" outlet="o"/>
+         <dest obj="mix11_" inlet="bus_in"/>
       </net>
       <net>
-         <source name="osc1_ wave"/>
-         <dest name="mix11_ in1"/>
+         <source obj="osc1_" outlet="wave"/>
+         <dest obj="mix11_" inlet="in1"/>
       </net>
       <net>
-         <source name="mix11_ out"/>
-         <dest name="pwm_1 pwm"/>
+         <source obj="mix11_" outlet="out"/>
+         <dest obj="pwm_1" inlet="pw"/>
       </net>
       <net>
-         <source name="envd1 env"/>
-         <dest name="mix12 in1"/>
+         <source obj="envd1" outlet="env"/>
+         <dest obj="mix12" inlet="in1"/>
       </net>
       <net>
-         <source name="mix31 out"/>
-         <dest name="lpf_1 in"/>
+         <source obj="mix31" outlet="out"/>
+         <dest obj="lpf_1" inlet="in"/>
       </net>
       <net>
-         <source name="lpf_1 out"/>
-         <dest name="vca_1 a"/>
+         <source obj="lpf_1" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="bendin1 bend"/>
-         <dest name="mix12 in2"/>
+         <source obj="bendin1" outlet="bend"/>
+         <dest obj="mix12" inlet="in2"/>
       </net>
       <net>
-         <source name="mix21 out"/>
-         <dest name="smooth1_ in"/>
+         <source obj="mix21" outlet="out"/>
+         <dest obj="smooth1_" inlet="in"/>
       </net>
       <net>
-         <source name="smooth1_ out"/>
-         <dest name="lpf_1 pitchm"/>
+         <source obj="smooth1_" outlet="out"/>
+         <dest obj="lpf_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="keyb_1 velocity"/>
-         <dest name="mix21 in2"/>
+         <source obj="keyb_1" outlet="velocity"/>
+         <dest obj="mix21" inlet="in2"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="outlet_1 outlet"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="outlet_1" inlet="outlet"/>
       </net>
    </nets>
    <settings>
@@ -229,4 +229,10 @@
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1136</width>
+      <height>730</height>
+   </windowPos>
 </patch-1.0>

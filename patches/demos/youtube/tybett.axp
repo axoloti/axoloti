@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_3" x="0" y="0">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_3" x="0" y="0">
       <params>
          <frac32.s.map name="pitch" value="-4.0"/>
       </params>
@@ -31,7 +31,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="uniform_1" x="588" y="112">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="uniform_1" x="588" y="112">
       <params/>
       <attribs/>
    </obj>
@@ -62,13 +62,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="adsr_1" x="588" y="168">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="adsr_1" x="588" y="168">
       <params>
          <frac32.s.map name="d" value="-64.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="adsr_4" x="686" y="168">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="adsr_4" x="686" y="168">
       <params>
          <frac32.s.map name="d" value="-36.0"/>
       </params>
@@ -78,7 +78,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d lin" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="d_1" x="854" y="168">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="d_1" x="854" y="168">
       <params>
          <frac32.s.map name="d" value="42.0"/>
       </params>
@@ -101,7 +101,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="742" y="252">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_1" x="742" y="252">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="62.0"/>
@@ -168,7 +168,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="adsr_2" x="588" y="448">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="adsr_2" x="588" y="448">
       <params>
          <frac32.s.map name="d" value="-36.0"/>
       </params>
@@ -178,7 +178,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_2" x="742" y="448">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_2" x="742" y="448">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="57.5"/>
@@ -253,7 +253,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="adsr_3" x="588" y="630">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="adsr_3" x="588" y="630">
       <params>
          <frac32.s.map name="d" value="-1.0"/>
       </params>
@@ -263,7 +263,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_3" x="742" y="630">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_3" x="742" y="630">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
          <frac32.u.map name="reso" value="61.0"/>
@@ -343,7 +343,7 @@
       </net>
       <net>
          <source obj="sel_4" outlet="o"/>
-         <dest obj="vcf3~_2" inlet="pitchm"/>
+         <dest obj="vcf3~_2" inlet="pitch"/>
       </net>
       <net>
          <source obj="sel_3" outlet="o"/>
@@ -368,7 +368,7 @@
       </net>
       <net>
          <source obj="sel_6" outlet="o"/>
-         <dest obj="vcf3~_3" inlet="pitchm"/>
+         <dest obj="vcf3~_3" inlet="pitch"/>
       </net>
       <net>
          <source obj="sel_5" outlet="o"/>
@@ -426,7 +426,7 @@
       </net>
       <net>
          <source obj="mix_4" outlet="out"/>
-         <dest obj="vcf3~_1" inlet="pitchm"/>
+         <dest obj="vcf3~_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="adsr_1" outlet="env"/>
@@ -462,8 +462,8 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>0</x>
-      <y>23</y>
+      <x>121</x>
+      <y>53</y>
       <width>1430</width>
       <height>940</height>
    </windowPos>

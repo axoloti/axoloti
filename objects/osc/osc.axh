@@ -3,19 +3,19 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc2_1" x="182" y="14">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc2_1" x="182" y="14">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="182" y="126">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="182" y="126">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="182" y="210">
+   <obj type="osc/square" sha="7cccf8a95bf312ecc084f11f532cf5fda00b8c58" name="square_1" x="182" y="210">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -33,7 +33,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/pwm" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1" x="182" y="294">
+   <obj type="osc/pwm" sha="4f216b9a125822434f813198e9be4da0b5e8b042" name="pwm_1" x="182" y="294">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -45,7 +45,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/phasor" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52" name="phasor3_1" x="182" y="392">
+   <obj type="osc/phasor" sha="343e0dfbaa48c69032d959ee1e7398e45000e0bf" name="phasor3_1" x="182" y="392">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -61,7 +61,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/lp" sha="219ae48267404fac1e204a0ae6f3f1363e789297" name="vcf3_1" x="574" y="420">
+   <obj type="filter/lp" sha="f08f8ceddfd25d03290d4164aa7884cd7257e242" name="vcf3_1" x="574" y="420">
       <params>
          <frac32.s.map name="pitch" value="36.0"/>
          <frac32.u.map name="reso" value="35.0"/>
@@ -86,13 +86,13 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/phasor compl" sha="bb3797f6808c1fa0ccf714c27361878a3fd8be29" name="phasor3q_1" x="182" y="490">
+   <obj type="osc/phasor compl" sha="c95d1332c224aad738fb4504cb00706af8221028" name="phasor3q_1" x="182" y="490">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="182" y="588">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="182" y="588">
       <params/>
       <attribs/>
    </obj>
@@ -133,16 +133,16 @@
       </net>
       <net>
          <source obj="keyb1" outlet="note"/>
-         <dest obj="saw_1" inlet="pitchm"/>
-         <dest obj="pwm_1" inlet="pitchm"/>
-         <dest obj="square_1" inlet="pitchm"/>
-         <dest obj="osc2_1" inlet="pitchm"/>
-         <dest obj="phasor3_1" inlet="pitchm"/>
-         <dest obj="phasor3q_1" inlet="pitchm"/>
+         <dest obj="saw_1" inlet="pitch"/>
+         <dest obj="pwm_1" inlet="pitch"/>
+         <dest obj="square_1" inlet="pitch"/>
+         <dest obj="osc2_1" inlet="pitch"/>
+         <dest obj="phasor3_1" inlet="pitch"/>
+         <dest obj="phasor3q_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="c2" outlet="out"/>
-         <dest obj="pwm_1" inlet="pwm"/>
+         <dest obj="pwm_1" inlet="pw"/>
       </net>
       <net>
          <source obj="pwm_1" outlet="wave"/>

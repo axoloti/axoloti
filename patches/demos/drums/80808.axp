@@ -1,12 +1,12 @@
 <patch-1.0>
-   <comment type="patch/comment" name="check settings for MIDI channel!" x="42" y="28"/>
+   <comment type="patch/comment" x="42" y="28" text="check settings for MIDI channel!"/>
    <obj type="midi/in/keyb note" sha="5d623ad73ade2280421069a67ee3f30595794c72" name="keybnote1" x="40" y="60">
       <params/>
       <attribs>
          <spinner attributeName="note" value="60"/>
       </attribs>
    </obj>
-   <obj type="flashwaveplay~" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1" x="180" y="60">
+   <obj type="wave/flashplay" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1" x="180" y="60">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808bd"/>
@@ -22,7 +22,7 @@
          <spinner attributeName="note" value="62"/>
       </attribs>
    </obj>
-   <obj type="flashwaveplay~" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1_" x="180" y="160">
+   <obj type="wave/flashplay" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1_" x="180" y="160">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808snare"/>
@@ -38,7 +38,7 @@
          <spinner attributeName="note" value="64"/>
       </attribs>
    </obj>
-   <obj type="flashwaveplay~" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1__" x="180" y="260">
+   <obj type="wave/flashplay" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1__" x="180" y="260">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808hatclose"/>
@@ -54,7 +54,7 @@
          <spinner attributeName="note" value="65"/>
       </attribs>
    </obj>
-   <obj type="flashwaveplay~" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1___" x="180" y="360">
+   <obj type="wave/flashplay" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1___" x="180" y="360">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808hatopen"/>
@@ -70,7 +70,7 @@
          <spinner attributeName="note" value="67"/>
       </attribs>
    </obj>
-   <obj type="flashwaveplay~" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1____" x="180" y="460">
+   <obj type="wave/flashplay" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1____" x="180" y="460">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808hitom"/>
@@ -86,7 +86,7 @@
          <spinner attributeName="note" value="69"/>
       </attribs>
    </obj>
-   <obj type="flashwaveplay~" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1_____" x="180" y="560">
+   <obj type="wave/flashplay" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1_____" x="180" y="560">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808midtom"/>
@@ -102,7 +102,7 @@
          <spinner attributeName="note" value="71"/>
       </attribs>
    </obj>
-   <obj type="flashwaveplay~" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1______" x="180" y="660">
+   <obj type="wave/flashplay" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1______" x="180" y="660">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808lotom"/>
@@ -130,121 +130,121 @@
    </obj>
    <nets>
       <net>
-         <source name="keybnote1 gate"/>
-         <dest name="flashwaveplay_1 trig"/>
+         <source obj="keybnote1" outlet="gate"/>
+         <dest obj="flashwaveplay_1" inlet="trig"/>
       </net>
       <net>
-         <source name="keybnote1 velocity"/>
-         <dest name="vca_1 v"/>
+         <source obj="keybnote1" outlet="velocity"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="flashwaveplay_1 out"/>
-         <dest name="vca_1 a"/>
+         <source obj="flashwaveplay_1" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="keybnote1_ gate"/>
-         <dest name="flashwaveplay_1_ trig"/>
+         <source obj="keybnote1_" outlet="gate"/>
+         <dest obj="flashwaveplay_1_" inlet="trig"/>
       </net>
       <net>
-         <source name="keybnote1_ velocity"/>
-         <dest name="vca_1_ v"/>
+         <source obj="keybnote1_" outlet="velocity"/>
+         <dest obj="vca_1_" inlet="v"/>
       </net>
       <net>
-         <source name="flashwaveplay_1_ out"/>
-         <dest name="vca_1_ a"/>
+         <source obj="flashwaveplay_1_" outlet="out"/>
+         <dest obj="vca_1_" inlet="a"/>
       </net>
       <net>
-         <source name="keybnote1__ gate"/>
-         <dest name="flashwaveplay_1__ trig"/>
+         <source obj="keybnote1__" outlet="gate"/>
+         <dest obj="flashwaveplay_1__" inlet="trig"/>
       </net>
       <net>
-         <source name="keybnote1__ velocity"/>
-         <dest name="vca_1__ v"/>
+         <source obj="keybnote1__" outlet="velocity"/>
+         <dest obj="vca_1__" inlet="v"/>
       </net>
       <net>
-         <source name="flashwaveplay_1__ out"/>
-         <dest name="vca_1__ a"/>
+         <source obj="flashwaveplay_1__" outlet="out"/>
+         <dest obj="vca_1__" inlet="a"/>
       </net>
       <net>
-         <source name="keybnote1___ gate"/>
-         <dest name="flashwaveplay_1___ trig"/>
+         <source obj="keybnote1___" outlet="gate"/>
+         <dest obj="flashwaveplay_1___" inlet="trig"/>
       </net>
       <net>
-         <source name="keybnote1___ velocity"/>
-         <dest name="vca_1___ v"/>
+         <source obj="keybnote1___" outlet="velocity"/>
+         <dest obj="vca_1___" inlet="v"/>
       </net>
       <net>
-         <source name="flashwaveplay_1___ out"/>
-         <dest name="vca_1___ a"/>
+         <source obj="flashwaveplay_1___" outlet="out"/>
+         <dest obj="vca_1___" inlet="a"/>
       </net>
       <net>
-         <source name="keybnote1____ gate"/>
-         <dest name="flashwaveplay_1____ trig"/>
+         <source obj="keybnote1____" outlet="gate"/>
+         <dest obj="flashwaveplay_1____" inlet="trig"/>
       </net>
       <net>
-         <source name="keybnote1____ velocity"/>
-         <dest name="vca_1____ v"/>
+         <source obj="keybnote1____" outlet="velocity"/>
+         <dest obj="vca_1____" inlet="v"/>
       </net>
       <net>
-         <source name="flashwaveplay_1____ out"/>
-         <dest name="vca_1____ a"/>
+         <source obj="flashwaveplay_1____" outlet="out"/>
+         <dest obj="vca_1____" inlet="a"/>
       </net>
       <net>
-         <source name="keybnote1_____ gate"/>
-         <dest name="flashwaveplay_1_____ trig"/>
+         <source obj="keybnote1_____" outlet="gate"/>
+         <dest obj="flashwaveplay_1_____" inlet="trig"/>
       </net>
       <net>
-         <source name="keybnote1_____ velocity"/>
-         <dest name="vca_1_____ v"/>
+         <source obj="keybnote1_____" outlet="velocity"/>
+         <dest obj="vca_1_____" inlet="v"/>
       </net>
       <net>
-         <source name="flashwaveplay_1_____ out"/>
-         <dest name="vca_1_____ a"/>
+         <source obj="flashwaveplay_1_____" outlet="out"/>
+         <dest obj="vca_1_____" inlet="a"/>
       </net>
       <net>
-         <source name="keybnote1______ gate"/>
-         <dest name="flashwaveplay_1______ trig"/>
+         <source obj="keybnote1______" outlet="gate"/>
+         <dest obj="flashwaveplay_1______" inlet="trig"/>
       </net>
       <net>
-         <source name="keybnote1______ velocity"/>
-         <dest name="vca_1______ v"/>
+         <source obj="keybnote1______" outlet="velocity"/>
+         <dest obj="vca_1______" inlet="v"/>
       </net>
       <net>
-         <source name="flashwaveplay_1______ out"/>
-         <dest name="vca_1______ a"/>
+         <source obj="flashwaveplay_1______" outlet="out"/>
+         <dest obj="vca_1______" inlet="a"/>
       </net>
       <net>
-         <source name="mix71 out"/>
-         <dest name="dac_1______ left"/>
-         <dest name="dac_1______ right"/>
+         <source obj="mix71" outlet="out"/>
+         <dest obj="dac_1______" inlet="left"/>
+         <dest obj="dac_1______" inlet="right"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="mix71 in1"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="mix71" inlet="in1"/>
       </net>
       <net>
-         <source name="vca_1_ o"/>
-         <dest name="mix71 in2"/>
+         <source obj="vca_1_" outlet="o"/>
+         <dest obj="mix71" inlet="in2"/>
       </net>
       <net>
-         <source name="vca_1__ o"/>
-         <dest name="mix71 in3"/>
+         <source obj="vca_1__" outlet="o"/>
+         <dest obj="mix71" inlet="in3"/>
       </net>
       <net>
-         <source name="vca_1___ o"/>
-         <dest name="mix71 in4"/>
+         <source obj="vca_1___" outlet="o"/>
+         <dest obj="mix71" inlet="in4"/>
       </net>
       <net>
-         <source name="vca_1____ o"/>
-         <dest name="mix71 in5"/>
+         <source obj="vca_1____" outlet="o"/>
+         <dest obj="mix71" inlet="in5"/>
       </net>
       <net>
-         <source name="vca_1_____ o"/>
-         <dest name="mix71 in6"/>
+         <source obj="vca_1_____" outlet="o"/>
+         <dest obj="mix71" inlet="in6"/>
       </net>
       <net>
-         <source name="vca_1______ o"/>
-         <dest name="mix71 in7"/>
+         <source obj="vca_1______" outlet="o"/>
+         <dest obj="mix71" inlet="in7"/>
       </net>
    </nets>
    <settings>

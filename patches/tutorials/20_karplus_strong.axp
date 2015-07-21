@@ -1,14 +1,14 @@
 <patch-1.0>
-   <comment type="patch/comment" name="play with the piano!" x="14" y="14"/>
+   <comment type="patch/comment" x="14" y="14" text="play with the piano!"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
       <params/>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="294" y="42">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="294" y="42">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="generates a short burst of noise" x="392" y="56"/>
+   <comment type="patch/comment" x="392" y="56" text="generates a short burst of noise"/>
    <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="294" y="84">
       <params>
          <frac32.s.map name="d" value="-22.0"/>
@@ -19,11 +19,11 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="compute the right delay time from pitch" x="14" y="210"/>
-   <comment type="patch/comment" name="interpolating delayline read" x="322" y="210"/>
-   <comment type="patch/comment" name="99% feedback" x="518" y="210"/>
-   <comment type="patch/comment" name="delayline write" x="630" y="210"/>
-   <obj type="delay/mtod" sha="800732c561d801c8b0c245ce1c6cd2413cd0ff6" name="mtod_1" x="56" y="252">
+   <comment type="patch/comment" x="14" y="210" text="compute the right delay time from pitch"/>
+   <comment type="patch/comment" x="322" y="210" text="interpolating delayline read"/>
+   <comment type="patch/comment" x="518" y="210" text="99% feedback"/>
+   <comment type="patch/comment" x="630" y="210" text="delayline write"/>
+   <obj type="delay/mtod" sha="60139378b4e43b414539a7911c172765f979796" name="mtod_1" x="56" y="252">
       <params>
          <frac32.s.map name="pitch" value="8.0"/>
       </params>
@@ -39,7 +39,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/read interp" sha="22a07dcbe5007bc4095bed25946486e7c98caf23" name="delread2__1" x="322" y="252">
+   <obj type="delay/read interp" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread2__1" x="322" y="252">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -69,53 +69,53 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="bug: tuning reference is incorrect" x="56" y="350"/>
+   <comment type="patch/comment" x="56" y="350" text="bug: tuning reference is incorrect"/>
    <nets>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="envd1 trig"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="envd1" inlet="trig"/>
       </net>
       <net>
-         <source name="envd1 env"/>
-         <dest name="vca_1 v"/>
+         <source obj="envd1" outlet="env"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="vca_1 a"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="mix11 bus_in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="mix11" inlet="bus_in"/>
       </net>
       <net>
-         <source name="mix11 out"/>
-         <dest name="d1 in"/>
-         <dest name="*c_1 in"/>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="d1" inlet="in"/>
+         <dest obj="*c_1" inlet="in"/>
       </net>
       <net>
-         <source name="interp_1 o"/>
-         <dest name="delread2__1 timem"/>
+         <source obj="interp_1" outlet="o"/>
+         <dest obj="delread2__1" inlet="time"/>
       </net>
       <net>
-         <source name="-c1 out"/>
-         <dest name="interp_1 i"/>
+         <source obj="-c1" outlet="out"/>
+         <dest obj="interp_1" inlet="i"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="mtod_1 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="mtod_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="mtod_1 delay"/>
-         <dest name="-c1 in"/>
+         <source obj="mtod_1" outlet="delay"/>
+         <dest obj="-c1" inlet="in"/>
       </net>
       <net>
-         <source name="delread2__1 out"/>
-         <dest name="mix11 in1"/>
+         <source obj="delread2__1" outlet="out"/>
+         <dest obj="mix11" inlet="in1"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="out_1 left"/>
-         <dest name="out_1 right"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="out_1" inlet="left"/>
+         <dest obj="out_1" inlet="right"/>
       </net>
    </nets>
    <settings>

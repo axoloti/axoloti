@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="0">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="14" y="0">
       <params>
          <frac32.s.map name="pitch" value="-6.0"/>
       </params>
@@ -39,7 +39,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/hp1" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass_1" x="406" y="98">
+   <obj type="filter/hp1" sha="f9059d53a5af0890dc1a1268b5679aa335731857" name="hipass_1" x="406" y="98">
       <params>
          <frac32.u.map name="freq" value="4.5"/>
       </params>

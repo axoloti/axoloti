@@ -1,13 +1,13 @@
 <patch-1.0>
-   <comment type="patch/comment" name="execution order = reading order : left to right, top to bottom" x="126" y="28"/>
+   <comment type="patch/comment" x="126" y="28" text="execution order = reading order : left to right, top to bottom"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="one" x="120" y="60">
       <params>
          <frac32.u.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="always zero" x="700" y="154"/>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="two" x="40" y="160">
+   <comment type="patch/comment" x="700" y="154" text="always zero"/>
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="two" x="40" y="160">
       <params>
          <frac32.s.map name="pitch" value="48.0"/>
       </params>
@@ -33,40 +33,40 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="difference!" x="700" y="336"/>
+   <comment type="patch/comment" x="700" y="336" text="difference!"/>
    <obj type="disp/chart b" sha="b9b02744d6b88f8f435bf781a4fceb74eff28373" name="eight" x="600" y="340">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="upward link (from object seven to object six)  introduces a latch!" x="280" y="448"/>
+   <comment type="patch/comment" x="280" y="448" text="upward link (from object seven to object six)  introduces a latch!"/>
    <nets>
       <net>
-         <source name="one out"/>
-         <dest name="three in2"/>
-         <dest name="seven in2"/>
+         <source obj="one" outlet="out"/>
+         <dest obj="three" inlet="in2"/>
+         <dest obj="seven" inlet="in2"/>
       </net>
       <net>
-         <source name="three out"/>
-         <dest name="four in1"/>
+         <source obj="three" outlet="out"/>
+         <dest obj="four" inlet="in1"/>
       </net>
       <net>
-         <source name="two wave"/>
-         <dest name="three in1"/>
-         <dest name="four in2"/>
-         <dest name="six in1"/>
-         <dest name="seven in1"/>
+         <source obj="two" outlet="wave"/>
+         <dest obj="three" inlet="in1"/>
+         <dest obj="four" inlet="in2"/>
+         <dest obj="six" inlet="in1"/>
+         <dest obj="seven" inlet="in1"/>
       </net>
       <net>
-         <source name="four out"/>
-         <dest name="five in"/>
+         <source obj="four" outlet="out"/>
+         <dest obj="five" inlet="in"/>
       </net>
       <net>
-         <source name="seven out"/>
-         <dest name="six in2"/>
+         <source obj="seven" outlet="out"/>
+         <dest obj="six" inlet="in2"/>
       </net>
       <net>
-         <source name="six out"/>
-         <dest name="eight in"/>
+         <source obj="six" outlet="out"/>
+         <dest obj="eight" inlet="in"/>
       </net>
    </nets>
    <settings>

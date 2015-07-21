@@ -1,7 +1,7 @@
 <patch-1.0>
-   <comment type="patch/comment" name="envelopes for amplitude" x="14" y="14"/>
-   <comment type="patch/comment" name="again: use the keyboard window to play" x="14" y="28"/>
-   <comment type="patch/comment" name="just decay" x="182" y="84"/>
+   <comment type="patch/comment" x="14" y="14" text="envelopes for amplitude"/>
+   <comment type="patch/comment" x="14" y="28" text="again: use the keyboard window to play"/>
+   <comment type="patch/comment" x="182" y="84" text="just decay"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="112">
       <params/>
       <attribs/>
@@ -16,11 +16,11 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="attack/hold/decay" x="182" y="224"/>
-   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="182" y="252">
+   <comment type="patch/comment" x="182" y="224" text="attack/hold/decay"/>
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd1" x="182" y="252">
       <params>
-         <frac32.u.map name="a" value="15.5"/>
-         <frac32.u.map name="d" value="57.5"/>
+         <frac32.s.map name="a" value="15.5"/>
+         <frac32.s.map name="d" value="57.5"/>
       </params>
       <attribs/>
    </obj>
@@ -28,18 +28,18 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="select enevelope type" x="462" y="294"/>
+   <comment type="patch/comment" x="462" y="294" text="select enevelope type"/>
    <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_1" x="462" y="322">
       <params>
          <int32.vradio name="value" value="2"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="0: decay" x="546" y="364"/>
-   <comment type="patch/comment" name="1: attack-hold-decay" x="546" y="378"/>
-   <comment type="patch/comment" name="attack/decay/sustain/release" x="182" y="392"/>
-   <comment type="patch/comment" name="2: attack-decay-sustain-release" x="546" y="392"/>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr1" x="182" y="420">
+   <comment type="patch/comment" x="546" y="364" text="0: decay"/>
+   <comment type="patch/comment" x="546" y="378" text="1: attack-hold-decay"/>
+   <comment type="patch/comment" x="182" y="392" text="attack/decay/sustain/release"/>
+   <comment type="patch/comment" x="546" y="392" text="2: attack-decay-sustain-release"/>
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="adsr1" x="182" y="420">
       <params>
          <frac32.s.map name="a" value="-11.0"/>
          <frac32.s.map name="d" value="9.5"/>
@@ -56,10 +56,10 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="appling the output of an envelope to the loudness of the oscillator with a VCA &quot;Voltage Controlled Amplifier&quot;" x="462" y="616"/>
-   <comment type="patch/comment" name="vca~ interpolates the blue input to audio rate and and then multiplies " x="462" y="630"/>
-   <comment type="patch/comment" name="and an oscillator to test..." x="182" y="644"/>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="182" y="672">
+   <comment type="patch/comment" x="462" y="616" text="appling the output of an envelope to the loudness of the oscillator with a VCA &quot;Voltage Controlled Amplifier&quot;"/>
+   <comment type="patch/comment" x="462" y="630" text="vca~ interpolates the blue input to audio rate and and then multiplies "/>
+   <comment type="patch/comment" x="182" y="644" text="and an oscillator to test..."/>
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="182" y="672">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -79,54 +79,54 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="Open next tutorial -&gt;" x="742" y="798"/>
+   <comment type="patch/comment" x="742" y="798" text="Open next tutorial -&gt;"/>
    <hyperlink type="patch/hyperlink" name="07_envelope_pitch.axp" x="868" y="798"/>
    <nets>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="envd1 trig"/>
-         <dest name="envahd1 gate"/>
-         <dest name="adsr1 gate"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="envd1" inlet="trig"/>
+         <dest obj="envahd1" inlet="gate"/>
+         <dest obj="adsr1" inlet="gate"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="saw_1 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="saw_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="envd1 env"/>
-         <dest name="inmux31 i0"/>
-         <dest name="scopeU1 in"/>
+         <source obj="envd1" outlet="env"/>
+         <dest obj="inmux31" inlet="i0"/>
+         <dest obj="scopeU1" inlet="in"/>
       </net>
       <net>
-         <source name="envahd1 env"/>
-         <dest name="inmux31 i1"/>
-         <dest name="scopeU1_ in"/>
+         <source obj="envahd1" outlet="env"/>
+         <dest obj="inmux31" inlet="i1"/>
+         <dest obj="scopeU1_" inlet="in"/>
       </net>
       <net>
-         <source name="adsr1 env"/>
-         <dest name="inmux31 i2"/>
-         <dest name="scopeU1__ in"/>
+         <source obj="adsr1" outlet="env"/>
+         <dest obj="inmux31" inlet="i2"/>
+         <dest obj="scopeU1__" inlet="in"/>
       </net>
       <net>
-         <source name="inmux31 o"/>
-         <dest name="vca_1 v"/>
+         <source obj="inmux31" outlet="o"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="*c1 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="vca_1 a"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="inmux31 s"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="inmux31" inlet="s"/>
       </net>
    </nets>
    <settings>
@@ -135,7 +135,7 @@
    <notes><![CDATA[]]></notes>
    <windowPos>
       <x>141</x>
-      <y>0</y>
+      <y>23</y>
       <width>1052</width>
       <height>982</height>
    </windowPos>

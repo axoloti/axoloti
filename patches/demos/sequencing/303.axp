@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="0" y="0">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square1" x="0" y="0">
       <params>
          <frac32.s.map name="pitch" value="1.0"/>
       </params>
@@ -25,7 +25,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="sel/sel b 16 4t" sha="2550bb1cdd0761d8347dc1fdecd5d8ebd604de50" name="select_bool_16_v2x41" x="266" y="56">
+   <obj type="sel/sel b 16 4t" sha="8a0c95038623068cfb5f9228392b1c7f7938c4aa" name="select_bool_16_v2x41" x="266" y="56">
       <params>
          <bin16 name="p1" value="43690"/>
          <bin16 name="p2" value="22391"/>
@@ -55,9 +55,9 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="gate" x="210" y="168"/>
-   <comment type="patch/comment" name="accent" x="210" y="182"/>
-   <comment type="patch/comment" name="slide" x="210" y="196"/>
+   <comment type="patch/comment" x="210" y="168" text="gate"/>
+   <comment type="patch/comment" x="210" y="182" text="accent"/>
+   <comment type="patch/comment" x="210" y="196" text="slide"/>
    <obj type="sel/sel fp 16" sha="136d3fe6eb37e18d92e4b88db321db2e600aec6e" name="select_f_161" x="266" y="210">
       <params>
          <frac32.u.mapvsl name="b0" value="0.0"/>
@@ -89,13 +89,13 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="envd1" x="70" y="490">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="70" y="490">
       <params>
          <frac32.s.map name="d" value="-3.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd lin x" sha="9bf8f884cf19cf1fea714e116e83fda6d6148adc" name="envahdlinx1" x="168" y="490">
+   <obj type="env/ahd lin" sha="de09ade5b46ad7c4bbe57ce1bb266f7b77fc2078" uuid="4ed5fd29254747e71db6d1d4caa20a89a41740f0" name="envahdlinx1" x="168" y="490">
       <params>
          <frac32.s.map name="a" value="-44.0"/>
          <frac32.s.map name="d" value="20.0"/>
@@ -109,7 +109,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd lin x" sha="9bf8f884cf19cf1fea714e116e83fda6d6148adc" name="envahdlinx1_" x="490" y="490">
+   <obj type="env/ahd lin" sha="de09ade5b46ad7c4bbe57ce1bb266f7b77fc2078" uuid="4ed5fd29254747e71db6d1d4caa20a89a41740f0" name="envahdlinx1_" x="490" y="490">
       <params>
          <frac32.s.map name="a" value="-35.0"/>
          <frac32.s.map name="d" value="-9.0"/>
@@ -127,7 +127,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="42" y="630">
+   <obj type="osc/square" sha="7cccf8a95bf312ecc084f11f532cf5fda00b8c58" name="square_1" x="42" y="630">
       <params>
          <frac32.s.map name="pitch" value="-41.0"/>
       </params>
@@ -144,7 +144,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="lpfm_1" x="364" y="644">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="lpfm_1" x="364" y="644">
       <params>
          <frac32.s.map name="pitch" value="29.0"/>
          <frac32.u.map name="reso" value="58.0"/>
@@ -165,13 +165,13 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1" x="672" y="644">
+   <obj type="math/*c" sha="a73a2cafcf92eb4b6524655dcee98a569d5ddc28" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c1" x="672" y="644">
       <params>
          <frac32.u.map name="amp" value="9.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo_1" x="826" y="644">
+   <obj type="delay/echo fdbk mix" sha="6bc1204ca59cfb6fe995e01f4a68be52ca63cd0" name="echo_1" x="826" y="644">
       <params>
          <frac32.u.map name="mix" value="22.0"/>
          <frac32.u.map name="feedback" value="9.0"/>
@@ -184,7 +184,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="square_2" x="42" y="714">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="square_2" x="42" y="714">
       <params>
          <frac32.s.map name="pitch" value="-41.0"/>
       </params>
@@ -200,129 +200,135 @@
    </obj>
    <nets>
       <net>
-         <source name="square1 wave"/>
-         <dest name="counter1 trig"/>
+         <source obj="square1" outlet="wave"/>
+         <dest obj="counter1" inlet="trig"/>
       </net>
       <net>
-         <source name="counter1 o"/>
-         <dest name="ibar161 in"/>
-         <dest name="select_bool_16_v2x41 in"/>
-         <dest name="select_f_161 in"/>
+         <source obj="counter1" outlet="o"/>
+         <dest obj="ibar161" inlet="in"/>
+         <dest obj="select_bool_16_v2x41" inlet="in"/>
+         <dest obj="select_f_161" inlet="in"/>
       </net>
       <net>
-         <source name="envahdlinx1_ env"/>
-         <dest name="mix21 in1"/>
+         <source obj="select_f_161" outlet="o"/>
+         <dest obj="smooth1" inlet="in"/>
+         <dest obj="inmux21" inlet="i1"/>
       </net>
       <net>
-         <source name="select_f_161 o"/>
-         <dest name="smooth1 in"/>
-         <dest name="inmux21 i1"/>
+         <source obj="inmux21" outlet="o"/>
+         <dest obj="mix21" inlet="in2"/>
+         <dest obj="square_2" inlet="pitch"/>
+         <dest obj="+_1" inlet="in2"/>
       </net>
       <net>
-         <source name="inmux21 o"/>
-         <dest name="mix21 in2"/>
-         <dest name="square_2 pitchm"/>
-         <dest name="+_1 in2"/>
+         <source obj="smooth1" outlet="out"/>
+         <dest obj="inmux21" inlet="i2"/>
       </net>
       <net>
-         <source name="smooth1 out"/>
-         <dest name="inmux21 i2"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="lpfm_1" inlet="in"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="lpfm_1 in"/>
+         <source obj="mix21" outlet="out"/>
+         <dest obj="lpfm_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="mix21 out"/>
-         <dest name="lpfm_1 pitchm"/>
+         <source obj="echo_1" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
+         <dest obj="kscope_2" inlet="in"/>
       </net>
       <net>
-         <source name="echo_1 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
-         <dest name="kscope_2 in"/>
+         <source obj="mix22" outlet="out"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="mix22 out"/>
-         <dest name="vca_1 v"/>
+         <source obj="select_bool_16_v2x41" outlet="o2"/>
+         <dest obj="envahdlinx1" inlet="trig"/>
       </net>
       <net>
-         <source name="select_bool_16_v2x41 o2"/>
-         <dest name="envahdlinx1 trig"/>
+         <source obj="select_bool_16_v2x41" outlet="o1"/>
+         <dest obj="envd1" inlet="trig"/>
       </net>
       <net>
-         <source name="select_bool_16_v2x41 o1"/>
-         <dest name="envd1 trig"/>
+         <source obj="envd1" outlet="env"/>
+         <dest obj="mix22" inlet="in1"/>
       </net>
       <net>
-         <source name="envd1 env"/>
-         <dest name="mix22 in1"/>
+         <source obj="select_bool_16_v2x41" outlet="o3"/>
+         <dest obj="envahdlinx1_" inlet="trig"/>
       </net>
       <net>
-         <source name="envahdlinx1 env"/>
-         <dest name="mix22 in2"/>
+         <source obj="select_bool_16_v2x41" outlet="o4"/>
+         <dest obj="inmux21" inlet="s"/>
       </net>
       <net>
-         <source name="select_bool_16_v2x41 o3"/>
-         <dest name="envahdlinx1_ trig"/>
+         <source obj="softsat1" outlet="out"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="select_bool_16_v2x41 o4"/>
-         <dest name="inmux21 s"/>
+         <source obj="muls21" outlet="out"/>
+         <dest obj="softsat1" inlet="in"/>
       </net>
       <net>
-         <source name="softsat1 out"/>
-         <dest name="*c1 in"/>
+         <source obj="lpfm_1" outlet="out"/>
+         <dest obj="+c1" inlet="in"/>
+         <dest obj="kscope_1" inlet="in"/>
       </net>
       <net>
-         <source name="muls21 out"/>
-         <dest name="softsat1 in"/>
+         <source obj="+c1" outlet="out"/>
+         <dest obj="muls21" inlet="in"/>
       </net>
       <net>
-         <source name="lpfm_1 out"/>
-         <dest name="+c1 in"/>
-         <dest name="kscope_1 in"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="mix_1" inlet="in1"/>
       </net>
       <net>
-         <source name="+c1 out"/>
-         <dest name="muls21 in"/>
+         <source obj="mix_1" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="mix_1 in1"/>
+         <source obj="square_2" outlet="wave"/>
+         <dest obj="mix_1" inlet="in2"/>
       </net>
       <net>
-         <source name="mix_1 out"/>
-         <dest name="vca_1 a"/>
+         <source obj="counter1" outlet="c"/>
+         <dest obj="counter1_" inlet="trig"/>
       </net>
       <net>
-         <source name="square_2 wave"/>
-         <dest name="mix_1 in2"/>
+         <source obj="counter1_" outlet="o"/>
+         <dest obj="select_f_162" inlet="in"/>
+         <dest obj="ibar161_" inlet="in"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="echo_1 in"/>
+         <source obj="select_f_162" outlet="o"/>
+         <dest obj="+_1" inlet="in1"/>
       </net>
       <net>
-         <source name="counter1 c"/>
-         <dest name="counter1_ trig"/>
+         <source obj="+_1" outlet="out"/>
+         <dest obj="square_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="counter1_ o"/>
-         <dest name="select_f_162 in"/>
-         <dest name="ibar161_ in"/>
+         <source obj="envahdlinx1_" outlet="env"/>
+         <dest obj="mix21" inlet="in1"/>
       </net>
       <net>
-         <source name="select_f_162 o"/>
-         <dest name="+_1 in1"/>
+         <source obj="envahdlinx1" outlet="env"/>
+         <dest obj="mix22" inlet="in2"/>
       </net>
       <net>
-         <source name="+_1 out"/>
-         <dest name="square_1 pitchm"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="echo_1" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>790</x>
+      <y>289</y>
+      <width>1304</width>
+      <height>1108</height>
+   </windowPos>
 </patch-1.0>

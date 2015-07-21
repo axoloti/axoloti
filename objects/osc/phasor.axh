@@ -1,56 +1,65 @@
 <patch-1.0>
-   <obj type="cb1" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="80" y="0">
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="80" y="0">
       <params>
          <bool32.tgl name="b" value="1"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="phasor3q~" sha="f9d6105d36172af17f0c58d4ef163277f375a209" name="phasor3_1" x="40" y="60">
+   <obj type="phasor3q~" sha="c95d1332c224aad738fb4504cb00706af8221028" name="phasor3_1" x="40" y="60">
       <params>
          <frac32.s.map name="pitch" value="31.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="scope_128s" sha="f5f9c73202e6df9170a172e578ff7e58ad266d76" name="scope_128s_trig1" x="240" y="60">
+   <obj type="scope_128s" sha="a7ce66703f067983726298da17fabab409dca3dc" name="scope_128s_trig1" x="240" y="60">
       <params/>
       <attribs/>
    </obj>
-   <obj type="window~" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d" name="window_1" x="400" y="60">
+   <obj type="math/window" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d" name="window_1" x="400" y="60">
       <params/>
       <attribs/>
    </obj>
-   <obj type="scope_128s" sha="f5f9c73202e6df9170a172e578ff7e58ad266d76" name="scope_128s_trig1__" x="520" y="60">
+   <obj type="scope_128s" sha="a7ce66703f067983726298da17fabab409dca3dc" name="scope_128s_trig1__" x="520" y="60">
       <params/>
       <attribs/>
    </obj>
-   <obj type="scope_128s" sha="f5f9c73202e6df9170a172e578ff7e58ad266d76" name="scope_128s_trig1_" x="240" y="240">
+   <obj type="scope_128s" sha="a7ce66703f067983726298da17fabab409dca3dc" name="scope_128s_trig1_" x="240" y="240">
       <params/>
       <attribs/>
    </obj>
-   <obj type="window~" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d" name="window_2" x="600" y="420">
+   <obj type="math/window" sha="279fd6991b5a8cf4c66e33feefccb9c9deb02f1d" name="window_2" x="600" y="420">
       <params/>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source name="phasor3_1 phasor0"/>
-         <dest name="scope_128s_trig1 in"/>
-         <dest name="window_1 phase"/>
+         <source obj="phasor3_1" outlet="phasor0"/>
+         <dest obj="scope_128s_trig1" inlet="in"/>
+         <dest obj="window_1" inlet="phase"/>
       </net>
       <net>
-         <source name="phasor3_1 phasor180"/>
-         <dest name="scope_128s_trig1_ in"/>
+         <source obj="phasor3_1" outlet="phasor180"/>
+         <dest obj="scope_128s_trig1_" inlet="in"/>
       </net>
       <net>
-         <source name="cb11 o"/>
-         <dest name="scope_128s_trig1 hold"/>
-         <dest name="scope_128s_trig1_ hold"/>
-         <dest name="scope_128s_trig1__ hold"/>
+         <source obj="cb11" outlet="o"/>
+         <dest obj="scope_128s_trig1" inlet="hold"/>
+         <dest obj="scope_128s_trig1_" inlet="hold"/>
+         <dest obj="scope_128s_trig1__" inlet="hold"/>
       </net>
       <net>
-         <source name="window_1 win"/>
-         <dest name="scope_128s_trig1__ in"/>
+         <source obj="window_1" outlet="win"/>
+         <dest obj="scope_128s_trig1__" inlet="in"/>
       </net>
    </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>910</width>
+      <height>730</height>
+   </windowPos>
 </patch-1.0>

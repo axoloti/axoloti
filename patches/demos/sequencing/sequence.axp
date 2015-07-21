@@ -1,11 +1,11 @@
 <patch-1.0>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="metronome" x="14" y="14">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="metronome" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="7.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="308" y="28">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="308" y="28">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
       </params>
@@ -30,7 +30,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d m" sha="a33954fdc3709e5d83968cba77284d0c4826e8c3" name="envd2_1" x="392" y="112">
+   <obj type="env/d m" sha="3f6e6c6081782177f0dc9dfe9e50a99b54fe41f6" name="envd2_1" x="392" y="112">
       <params>
          <frac32.s.map name="d" value="24.0"/>
       </params>
@@ -44,7 +44,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="686" y="112">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3_1" x="686" y="112">
       <params>
          <frac32.s.map name="pitch" value="-11.0"/>
          <frac32.u.map name="reso" value="63.5"/>
@@ -100,7 +100,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="938" y="336">
+   <obj type="delay/echo fdbk mix" sha="6bc1204ca59cfb6fe995e01f4a68be52ca63cd0" name="echo2_1" x="938" y="336">
       <params>
          <frac32.u.map name="mix" value="63.5"/>
          <frac32.u.map name="feedback" value="19.5"/>
@@ -121,7 +121,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_2" x="574" y="378">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_2" x="574" y="378">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
       </params>
@@ -158,7 +158,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1_" x="574" y="476">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1_" x="574" y="476">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
       </params>
@@ -189,7 +189,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d m" sha="a33954fdc3709e5d83968cba77284d0c4826e8c3" name="envd2_1_" x="392" y="602">
+   <obj type="env/d m" sha="3f6e6c6081782177f0dc9dfe9e50a99b54fe41f6" name="envd2_1_" x="392" y="602">
       <params>
          <frac32.s.map name="d" value="7.5"/>
       </params>
@@ -199,7 +199,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1_" x="560" y="602">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3_1_" x="560" y="602">
       <params>
          <frac32.s.map name="pitch" value="21.0"/>
          <frac32.u.map name="reso" value="62.5"/>
@@ -334,7 +334,7 @@
       </net>
       <net>
          <source obj="accents" outlet="o"/>
-         <dest obj="envd2_1" inlet="dm"/>
+         <dest obj="envd2_1" inlet="d"/>
       </net>
       <net>
          <source obj="accent" outlet="o"/>
@@ -359,7 +359,7 @@
       </net>
       <net>
          <source obj="smooth2_1" outlet="out"/>
-         <dest obj="vcf3_1" inlet="pitchm"/>
+         <dest obj="vcf3_1" inlet="pitch"/>
          <dest obj="scopeU_1" inlet="in"/>
       </net>
       <net>
@@ -376,7 +376,7 @@
       </net>
       <net>
          <source obj="accents_" outlet="o"/>
-         <dest obj="envd2_1_" inlet="dm"/>
+         <dest obj="envd2_1_" inlet="d"/>
       </net>
       <net>
          <source obj="envd2_1_" outlet="env"/>
@@ -388,7 +388,7 @@
       </net>
       <net>
          <source obj="smooth2_1_" outlet="out"/>
-         <dest obj="vcf3_1_" inlet="pitchm"/>
+         <dest obj="vcf3_1_" inlet="pitch"/>
          <dest obj="scopeU_1_" inlet="in"/>
       </net>
       <net>
@@ -409,7 +409,7 @@
       </net>
       <net>
          <source obj="smooth2_2" outlet="out"/>
-         <dest obj="saw_1_" inlet="pitchm"/>
+         <dest obj="saw_1_" inlet="pitch"/>
          <dest obj="scopeU_3" inlet="in"/>
          <dest obj="mix1_1" inlet="bus_in"/>
       </net>
@@ -447,7 +447,7 @@
       </net>
       <net>
          <source obj="mix1_1" outlet="out"/>
-         <dest obj="saw_2" inlet="pitchm"/>
+         <dest obj="saw_2" inlet="pitch"/>
       </net>
       <net>
          <source obj="c_1" outlet="out"/>
@@ -502,8 +502,8 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>0</x>
-      <y>23</y>
+      <x>512</x>
+      <y>131</y>
       <width>1374</width>
       <height>1290</height>
    </windowPos>

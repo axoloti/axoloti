@@ -118,7 +118,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="728" y="308">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="728" y="308">
       <params/>
       <attribs/>
    </obj>
@@ -147,7 +147,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw21" x="392" y="392">
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" name="saw21" x="392" y="392">
       <params>
          <frac32.s.map name="pitch" value="-52.389999866485596"/>
       </params>
@@ -178,7 +178,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw down" sha="374413e8279bb79209e158715ff652782fda082a" name="osc1" x="392" y="490">
+   <obj type="lfo/saw down" sha="2a84a3f10fa95e49f9b9cff209cbe7f6b5e1f9ea" name="osc1" x="392" y="490">
       <params>
          <frac32.s.map name="pitch" value="-16.399999141693115"/>
       </params>
@@ -192,7 +192,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc0_1" x="616" y="490">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc0_1" x="616" y="490">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
       </params>
@@ -208,7 +208,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc2" x="392" y="602">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc2" x="392" y="602">
       <params>
          <frac32.s.map name="pitch" value="8.619999885559082"/>
       </params>
@@ -247,7 +247,7 @@
       </net>
       <net>
          <source obj="select_f_161" outlet="o"/>
-         <dest obj="osc1" inlet="pitchm"/>
+         <dest obj="osc1" inlet="pitch"/>
       </net>
       <net>
          <source obj="saw21" outlet="wave"/>
@@ -259,7 +259,7 @@
       </net>
       <net>
          <source obj="mix11" outlet="out"/>
-         <dest obj="osc0_1" inlet="pitchm"/>
+         <dest obj="osc0_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="osc0_1" outlet="wave"/>
@@ -279,7 +279,7 @@
       </net>
       <net>
          <source obj="c1" outlet="out"/>
-         <dest obj="saw21" inlet="pitchm"/>
+         <dest obj="saw21" inlet="pitch"/>
       </net>
       <net>
          <source obj="change1" outlet="trig"/>

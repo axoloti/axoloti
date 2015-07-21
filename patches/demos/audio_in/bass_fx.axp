@@ -1,10 +1,10 @@
 <patch-1.0>
-   <comment type="patch/comment" name="tremolo + stereo chorus effect" x="28" y="14"/>
+   <comment type="patch/comment" x="28" y="14" text="tremolo + stereo chorus effect"/>
    <obj type="math/c 32" sha="5797bce9fc4e770d9c14890b0fa899f126c5bc38" name="c641" x="98" y="42">
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="84">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="14" y="84">
       <params>
          <frac32.s.map name="pitch" value="1.0"/>
       </params>
@@ -16,7 +16,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="adc~1" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc_11" x="14" y="168">
+   <obj type="audio/in left" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc_11" x="14" y="168">
       <params/>
       <attribs/>
    </obj>
@@ -31,42 +31,48 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="546" y="168">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="546" y="168">
       <params/>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source name="chorus1 L"/>
-         <dest name="dac_1 left"/>
+         <source obj="chorus1" outlet="L"/>
+         <dest obj="dac_1" inlet="left"/>
       </net>
       <net>
-         <source name="chorus1 R"/>
-         <dest name="dac_1 right"/>
+         <source obj="chorus1" outlet="R"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="adc_11 wave"/>
-         <dest name="vca_1 a"/>
+         <source obj="adc_11" outlet="wave"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="mix11 out"/>
-         <dest name="vca_1 v"/>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="chorus1 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="chorus1" inlet="in"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="mix11 in1"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="mix11" inlet="in1"/>
       </net>
       <net>
-         <source name="c641 o"/>
-         <dest name="mix11 bus_in"/>
+         <source obj="c641" outlet="o"/>
+         <dest obj="mix11" inlet="bus_in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>856</width>
+      <height>478</height>
+   </windowPos>
 </patch-1.0>
