@@ -75,13 +75,13 @@ public class Net extends JPanel {
             String outletname = i.getOutletname();
             AxoObjectInstanceAbstract o = patch.GetObjectInstance(objname);
             if (o == null) {
-                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net source obj : " + i.getObjname() + "::" + i.getOutletname());
+                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net source obj : {0}::{1}", new Object[]{i.getObjname(), i.getOutletname()});
                 patch.nets.remove(this);
                 return;
             }
             OutletInstance r = o.GetOutletInstance(outletname);
             if (r == null) {
-                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net source outlet : " + i.getObjname() + "::" + i.getOutletname());
+                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net source outlet : {0}::{1}", new Object[]{i.getObjname(), i.getOutletname()});
                 patch.nets.remove(this);
                 return;
             }
@@ -93,13 +93,13 @@ public class Net extends JPanel {
             String inletname = i.getInletname();
             AxoObjectInstanceAbstract o = patch.GetObjectInstance(objname);
             if (o == null) {
-                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net dest obj :" + i.getObjname() + "::" + i.getInletname());
+                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net dest obj :{0}::{1}", new Object[]{i.getObjname(), i.getInletname()});
                 patch.nets.remove(this);
                 return;
             }
             InletInstance r = o.GetInletInstance(inletname);
             if (r == null) {
-                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net dest inlet :" + i.getObjname() + "::" + i.getInletname());
+                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net dest inlet :{0}::{1}", new Object[]{i.getObjname(), i.getInletname()});
                 patch.nets.remove(this);
                 return;
             }
@@ -240,14 +240,16 @@ public class Net extends JPanel {
             g2.setColor(c);
             DrawWire(g2, p0.x, p0.y, p1.x, p1.y);
 //  Indicate latched connections
-            if (false) {
-                int j = patch.objectinstances.indexOf(i.axoObj);
-                if (j <= lastSource) {
-                    int x = (p0.x + p1.x) / 2;
-                    int y = (int) (0.5f * (p0.y + p1.y) + Math.abs(p1.y - p0.y) * 0.3f + Math.abs(p1.x - p0.x) * 0.05f);
-                    g2.fillOval(x - 5, y - 5, 10, 10);
-                }
-            }
+//<editor-fold defaultstate="collapsed" desc="unused">
+//            if (false) {
+//                int j = patch.objectinstances.indexOf(i.axoObj);
+//                if (j <= lastSource) {
+//                    int x = (p0.x + p1.x) / 2;
+//                    int y = (int) (0.5f * (p0.y + p1.y) + Math.abs(p1.y - p0.y) * 0.3f + Math.abs(p1.x - p0.x) * 0.05f);
+//                    g2.fillOval(x - 5, y - 5, 10, 10);
+//                }
+//            }
+//</editor-fold>
         }
     }
 
@@ -278,11 +280,7 @@ public class Net extends JPanel {
             for (OutletInstance i : o.GetOutletInstances()) {
                 if (source.contains(i)) {
                     // o is first objectinstance connected to this net
-                    if (oi == i) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return oi == i;
                 }
             }
         }

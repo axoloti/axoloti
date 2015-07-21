@@ -220,6 +220,7 @@ public class Axoloti {
             }
         }
 
+        Synonyms.instance(); // prime it
         if (cmdLineOnly) {
             try {
                 MainFrame frame = new MainFrame(args);

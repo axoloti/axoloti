@@ -21,6 +21,7 @@ import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.Patch;
 import axoloti.PatchGUI;
+import axoloti.Synonyms;
 import axoloti.attribute.*;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.datatypes.DataType;
@@ -341,7 +342,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             for (ParameterInstance pi : parameterInstances) {
                 if (pi.axoObj == null) {
                     parameterInstances.remove(pi);
-                    Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved parameter " + getInstanceName() + ":" + pi.name);
+                    Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved parameter {0}:{1}", new Object[]{getInstanceName(), pi.name});
                     cont = true;
                     break;
                 }
@@ -352,7 +353,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             for (AttributeInstance pi : attributeInstances) {
                 if (pi.axoObj == null) {
                     attributeInstances.remove(pi);
-                    Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved attribute " + getInstanceName() + ":" + pi.getAttributeName());
+                    Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved attribute {0}:{1}", new Object[]{getInstanceName(), pi.getAttributeName()});
                     cont = true;
                     break;
                 }
@@ -409,6 +410,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             if (n.equals(o.GetLabel())) {
                 return o;
             }
+            else {
+                String s = Synonyms.instance().inlet(n);
+                if(o.GetLabel().equals(s)) {
+                    return o;
+                }
+            }
         }
         return null;
     }
@@ -418,6 +425,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         for (OutletInstance o : outletInstances) {
             if (n.equals(o.GetLabel())) {
                 return o;
+            }
+            else {
+                String s = Synonyms.instance().outlet(n);
+                if(o.GetLabel().equals(s)) {
+                    return o;
+                }
             }
         }
         return null;
@@ -477,10 +490,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (getType().sLocalData == null) {
             return false;
         }
-        if (getType().sLocalData.length() == 0) {
-            return false;
-        }
-        return true;
+        return getType().sLocalData.length() != 0;
     }
 
     @Override
@@ -488,10 +498,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (getType().sInitCode == null) {
             return false;
         }
-        if (getType().sInitCode.length() == 0) {
-            return false;
-        }
-        return true;
+        return getType().sInitCode.length() != 0;
     }
 
     public String GenerateInstanceCodePlusPlus(String classname, boolean enableOnParent) {
@@ -735,11 +742,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public boolean providesModulationSource() {
-        AxoObject type = getType();
-        if (type == null) {
+        AxoObject atype = getType();
+        if (atype == null) {
             return false;
         } else {
-            return type.providesModulationSource();
+            return atype.providesModulationSource();
         }
     }
 
@@ -754,12 +761,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             return;
         }
         String id = typeName;
-        ArrayList<AxoObjectAbstract> candidates = MainFrame.mainframe.axoObjects.GetAxoObjectFromName(id, patch.GetCurrentWorkingDirectory());
+        ArrayList<AxoObjectAbstract> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, patch.GetCurrentWorkingDirectory());
         if (candidates == null) {
             return;
         }
         if (candidates.isEmpty()) {
-            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "could not resolve any candidates" + id);
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "could not resolve any candidates{0}", id);
         }
         if (candidates.size() == 1) {
             return;

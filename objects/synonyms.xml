@@ -1,0 +1,8 @@
+<synonyms>
+   <inlets>
+      <inlet a="pitchm" b="pitch"/>
+   </inlets>
+   <outlets>
+      <outlet a="out" b="o"/>
+   </outlets>
+</synonyms>
