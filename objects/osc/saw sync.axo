@@ -1,13 +1,14 @@
 <objdefs>
-   <obj.normal id="saw sync" uuid="dd6b25fccf38b8b79f60879b472791f12959ddf4" sha="b5f448b77c335ba8e00a0479319ae6b4d3ee86a">
-      <upgradeSha>4173669d858d9547874f581b85f4e60313401651</upgradeSha>
-      <sDescription>Bandwith limited saw wave oscillator with sync input</sDescription>
+   <obj.normal id="saw sync" uuid="c55144faace5cfeddae3b63b3fa345483866d90" sha="4e614d245ac924f3f8f7ea02b2a4ba9e84769849">
+      <upgradeSha>4ccc6b8a5eeb022e0d159de12928faeef6efbe5</upgradeSha>
+      <sDescription>Saw wave oscillator
+Bandwith limited</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>saw sync.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
-         <frac32buffer name="sync" description="sync input, resets oscillaotr phase on rising zero-crossing"/>
+         <frac32.bipolar name="pitch" description="pitch"/>
+         <frac32buffer name="sync" description="sync, resets oscillator phase on rising zero-crossing"/>
       </inlets>
       <outlets>
          <frac32buffer.bipolar name="wave" description="saw wave, anti-aliased"/>
@@ -29,7 +30,7 @@
       oscp[j] = &blept[BLEPSIZE-1];   nextvoice = 0;  i0 = 0;
 ]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitch,freq);
   int j;
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){

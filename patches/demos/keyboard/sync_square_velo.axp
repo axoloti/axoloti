@@ -6,9 +6,9 @@
          <spinner attributeName="endNote" value="127"/>
       </attribs>
    </obj>
-   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd_1" x="196" y="14">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd_1" x="196" y="14">
       <params>
-         <frac32.u.map name="d" value="2.5"/>
+         <frac32.s.map name="d" value="2.5"/>
       </params>
       <attribs/>
    </obj>
@@ -16,10 +16,10 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd_1" x="560" y="112">
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd_1" x="560" y="112">
       <params>
-         <frac32.u.map name="a" value="0.0"/>
-         <frac32.u.map name="d" value="54.0"/>
+         <frac32.s.map name="a" value="0.0"/>
+         <frac32.s.map name="d" value="54.0"/>
       </params>
       <attribs/>
    </obj>
@@ -29,13 +29,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="210" y="252">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_1" x="210" y="252">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/square sync" sha="9d196dfa9e8b9f0e0b3ebc4162c12d61a696c13d" name="squaresync~_1" x="420" y="252">
+   <obj type="osc/square sync" sha="589b6f1d673b7fd79f9156a008d3939499d098dd" name="squaresync~_1" x="420" y="252">
       <params>
          <frac32.s.map name="pitch" value="7.0"/>
       </params>
@@ -57,51 +57,51 @@
    </obj>
    <nets>
       <net>
-         <source name="keybzone_lru_1 gate2"/>
-         <dest name="envd_1 trig"/>
-         <dest name="envahd_1 gate"/>
+         <source obj="keybzone_lru_1" outlet="gate2"/>
+         <dest obj="envd_1" inlet="trig"/>
+         <dest obj="envahd_1" inlet="gate"/>
       </net>
       <net>
-         <source name="envd_1 env"/>
-         <dest name="*_1 a"/>
+         <source obj="envd_1" outlet="env"/>
+         <dest obj="*_1" inlet="a"/>
       </net>
       <net>
-         <source name="keybzone_lru_1 velocity"/>
-         <dest name="*_1 b"/>
+         <source obj="keybzone_lru_1" outlet="velocity"/>
+         <dest obj="*_1" inlet="b"/>
       </net>
       <net>
-         <source name="keybzone_lru_1 note"/>
-         <dest name="mix1_1 bus_in"/>
-         <dest name="osc~_1 pitchm"/>
+         <source obj="keybzone_lru_1" outlet="note"/>
+         <dest obj="mix1_1" inlet="bus_in"/>
+         <dest obj="osc~_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="*_1 result"/>
-         <dest name="mix1_1 in1"/>
+         <source obj="*_1" outlet="result"/>
+         <dest obj="mix1_1" inlet="in1"/>
       </net>
       <net>
-         <source name="mix1_1 out"/>
-         <dest name="squaresync~_1 pitchm"/>
+         <source obj="mix1_1" outlet="out"/>
+         <dest obj="squaresync~_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="osc~_1 wave"/>
-         <dest name="squaresync~_1 sync"/>
+         <source obj="osc~_1" outlet="wave"/>
+         <dest obj="squaresync~_1" inlet="sync"/>
       </net>
       <net>
-         <source name="squaresync~_1 wave"/>
-         <dest name="vca~_1 a"/>
+         <source obj="squaresync~_1" outlet="wave"/>
+         <dest obj="vca~_1" inlet="a"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="dac~_1 left"/>
-         <dest name="dac~_1 right"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="dac~_1" inlet="left"/>
+         <dest obj="dac~_1" inlet="right"/>
       </net>
       <net>
-         <source name="envahd_1 env"/>
-         <dest name="vca~_1 v"/>
+         <source obj="envahd_1" outlet="env"/>
+         <dest obj="vca~_1" inlet="v"/>
       </net>
       <net>
-         <source name="vca~_1 o"/>
-         <dest name="*c_1 in"/>
+         <source obj="vca~_1" outlet="o"/>
+         <dest obj="*c_1" inlet="in"/>
       </net>
    </nets>
    <settings>
@@ -112,4 +112,10 @@
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1164</width>
+      <height>576</height>
+   </windowPos>
 </patch-1.0>

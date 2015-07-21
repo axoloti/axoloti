@@ -1,6 +1,6 @@
 <patch-1.0>
    <comment type="patch/comment" x="14" y="14" text="IMPORTANT: needs samples on sdcard!"/>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="14" y="56">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_1" x="14" y="56">
       <params>
          <frac32.s.map name="pitch" value="7.0"/>
       </params>

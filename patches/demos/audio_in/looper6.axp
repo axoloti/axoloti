@@ -58,7 +58,7 @@
          <combo attributeName="size" selection="131072 (2.37s)"/>
       </attribs>
    </obj>
-   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_1" x="420" y="84">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="read_1" x="420" y="84">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -66,14 +66,14 @@
          <objref attributeName="delayname" obj="d1"/>
       </attribs>
    </obj>
-   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_1" x="574" y="84">
+   <obj type="filter/hp m" sha="c3a6ffa90d2d2057bfbd666463b169384503d2eb" name="hp_1" x="574" y="84">
       <params>
          <frac32.s.map name="pitch" MidiCC="53" value="-57.0"/>
          <frac32.u.map name="reso" MidiCC="35" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_2" x="672" y="84">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="hp_2" x="672" y="84">
       <params>
          <frac32.s.map name="pitch" MidiCC="39" value="63.0"/>
          <frac32.u.map name="reso" value="0.0"/>
@@ -102,7 +102,7 @@
          <combo attributeName="size" selection="131072 (2.37s)"/>
       </attribs>
    </obj>
-   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_2" x="420" y="266">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="read_2" x="420" y="266">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -110,14 +110,14 @@
          <objref attributeName="delayname" obj="d2"/>
       </attribs>
    </obj>
-   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_3" x="574" y="266">
+   <obj type="filter/hp m" sha="c3a6ffa90d2d2057bfbd666463b169384503d2eb" name="hp_3" x="574" y="266">
       <params>
          <frac32.s.map name="pitch" MidiCC="54" value="-40.0"/>
          <frac32.u.map name="reso" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_4" x="672" y="266">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="hp_4" x="672" y="266">
       <params>
          <frac32.s.map name="pitch" MidiCC="40" value="63.0"/>
          <frac32.u.map name="reso" value="0.0"/>
@@ -146,7 +146,7 @@
          <combo attributeName="size" selection="131072 (2.37s)"/>
       </attribs>
    </obj>
-   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_3" x="420" y="448">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="read_3" x="420" y="448">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -154,14 +154,14 @@
          <objref attributeName="delayname" obj="d3"/>
       </attribs>
    </obj>
-   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_5" x="574" y="448">
+   <obj type="filter/hp m" sha="c3a6ffa90d2d2057bfbd666463b169384503d2eb" name="hp_5" x="574" y="448">
       <params>
          <frac32.s.map name="pitch" MidiCC="55" value="-37.0"/>
          <frac32.u.map name="reso" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_6" x="672" y="448">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="hp_6" x="672" y="448">
       <params>
          <frac32.s.map name="pitch" MidiCC="41" value="63.0"/>
          <frac32.u.map name="reso" value="0.0"/>
@@ -190,7 +190,7 @@
          <combo attributeName="size" selection="131072 (2.37s)"/>
       </attribs>
    </obj>
-   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_4" x="420" y="630">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="read_4" x="420" y="630">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -198,14 +198,14 @@
          <objref attributeName="delayname" obj="d4"/>
       </attribs>
    </obj>
-   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_7" x="574" y="630">
+   <obj type="filter/hp m" sha="c3a6ffa90d2d2057bfbd666463b169384503d2eb" name="hp_7" x="574" y="630">
       <params>
          <frac32.s.map name="pitch" MidiCC="56" value="-37.0"/>
          <frac32.u.map name="reso" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_8" x="672" y="630">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="hp_8" x="672" y="630">
       <params>
          <frac32.s.map name="pitch" MidiCC="42" value="63.0"/>
          <frac32.u.map name="reso" value="0.0"/>
@@ -234,7 +234,7 @@
          <combo attributeName="size" selection="131072 (2.37s)"/>
       </attribs>
    </obj>
-   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_5" x="420" y="812">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="read_5" x="420" y="812">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -242,14 +242,14 @@
          <objref attributeName="delayname" obj="d5"/>
       </attribs>
    </obj>
-   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_9" x="574" y="812">
+   <obj type="filter/hp m" sha="c3a6ffa90d2d2057bfbd666463b169384503d2eb" name="hp_9" x="574" y="812">
       <params>
          <frac32.s.map name="pitch" MidiCC="57" value="-64.0"/>
          <frac32.u.map name="reso" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_10" x="672" y="812">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="hp_10" x="672" y="812">
       <params>
          <frac32.s.map name="pitch" MidiCC="43" value="63.0"/>
          <frac32.u.map name="reso" value="0.0"/>
@@ -278,7 +278,7 @@
          <combo attributeName="size" selection="131072 (2.37s)"/>
       </attribs>
    </obj>
-   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_6" x="420" y="994">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="read_6" x="420" y="994">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -286,14 +286,14 @@
          <objref attributeName="delayname" obj="d6"/>
       </attribs>
    </obj>
-   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="hp_11" x="574" y="994">
+   <obj type="filter/hp m" sha="c3a6ffa90d2d2057bfbd666463b169384503d2eb" name="hp_11" x="574" y="994">
       <params>
          <frac32.s.map name="pitch" MidiCC="58" value="-64.0"/>
          <frac32.u.map name="reso" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="hp_12" x="672" y="994">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="hp_12" x="672" y="994">
       <params>
          <frac32.s.map name="pitch" MidiCC="44" value="63.0"/>
          <frac32.u.map name="reso" value="0.0"/>
@@ -505,12 +505,12 @@
       </net>
       <net>
          <source obj="smooth_1" outlet="out"/>
-         <dest obj="read_5" inlet="timem"/>
-         <dest obj="read_6" inlet="timem"/>
-         <dest obj="read_1" inlet="timem"/>
-         <dest obj="read_2" inlet="timem"/>
-         <dest obj="read_3" inlet="timem"/>
-         <dest obj="read_4" inlet="timem"/>
+         <dest obj="read_5" inlet="time"/>
+         <dest obj="read_6" inlet="time"/>
+         <dest obj="read_1" inlet="time"/>
+         <dest obj="read_2" inlet="time"/>
+         <dest obj="read_3" inlet="time"/>
+         <dest obj="read_4" inlet="time"/>
       </net>
       <net>
          <source obj="hp_9" outlet="out"/>

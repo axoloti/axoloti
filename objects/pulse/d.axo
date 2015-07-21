@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="d" uuid="a54f36d89d061702997ac09fd10a20a64154ed46" sha="46a0d97746b9f9b086966bfa40e061a1b4995a9f">
-      <upgradeSha>e047de4d97e15e991286b65f7265528616d6b4e8</upgradeSha>
+      <upgradeSha>362c7ac0ed7b28ad3b9343c06b8caa3a449fff4e</upgradeSha>
       <sDescription>decay envelope, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -60,7 +60,7 @@ public class QCmdUploadPatch implements QCmdSerialTask {
                 String buildDir=System.getProperty(Axoloti.HOME_DIR)+"/build";
                 f = new File(buildDir + "/xpatch.bin");
             }
-            Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: " + f.getAbsolutePath());
+            Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath());
             int tlength = (int) f.length();
             FileInputStream inputStream = new FileInputStream(f);
             int offset = 0;
@@ -77,7 +77,7 @@ public class QCmdUploadPatch implements QCmdSerialTask {
                 byte[] buffer = new byte[l];
                 int nRead = inputStream.read(buffer, 0, l);
                 if (nRead != l) {
-                    Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
+                    Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
                 }
                 connection.UploadFragment(buffer, connection.getTargetProfile().getPatchAddr() + offset);
                 offset += nRead;

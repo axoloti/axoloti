@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="patch/comment" name="&lt;html&gt;&lt;H2&gt;Comparing a naive non-bandwidth limited square wave oscillator&lt;br&gt;with a better one&lt;/h2&gt;" x="14" y="14"/>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw_1" x="14" y="98">
+   <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;H2&gt;Comparing a naive non-bandwidth limited square wave oscillator&lt;br&gt;with a better one&lt;/h2&gt;"/>
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" name="saw_1" x="14" y="98">
       <params>
          <frac32.s.map name="pitch" value="-50.0"/>
       </params>
@@ -12,7 +12,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/square cheap" sha="b731d44f3315c325bec1144b15dee815ffb7507e" name="square_2" x="238" y="98">
+   <obj type="osc/square cheap" sha="2224fbc587d65d1d595611fb2b32037ed894d990" name="square_2" x="238" y="98">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -24,9 +24,9 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="off = naive implementation" x="434" y="140"/>
-   <comment type="patch/comment" name="on = better implementation" x="434" y="154"/>
-   <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="238" y="182">
+   <comment type="patch/comment" x="434" y="140" text="off = naive implementation"/>
+   <comment type="patch/comment" x="434" y="154" text="on = better implementation"/>
+   <obj type="osc/square" sha="7cccf8a95bf312ecc084f11f532cf5fda00b8c58" name="square_1" x="238" y="182">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -52,39 +52,45 @@
    </obj>
    <nets>
       <net>
-         <source name="mux_1 o"/>
-         <dest name="*c_1 in"/>
-         <dest name="scope_1 in"/>
+         <source obj="mux_1" outlet="o"/>
+         <dest obj="*c_1" inlet="in"/>
+         <dest obj="scope_1" inlet="in"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="out_1 left"/>
-         <dest name="out_1 right"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="out_1" inlet="left"/>
+         <dest obj="out_1" inlet="right"/>
       </net>
       <net>
-         <source name="toggle_1 o"/>
-         <dest name="mux_1 s"/>
+         <source obj="toggle_1" outlet="o"/>
+         <dest obj="mux_1" inlet="s"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="*c_2 in"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="*c_2" inlet="in"/>
       </net>
       <net>
-         <source name="*c_2 out"/>
-         <dest name="square_1 pitchm"/>
-         <dest name="square_2 pitchm"/>
+         <source obj="*c_2" outlet="out"/>
+         <dest obj="square_1" inlet="pitch"/>
+         <dest obj="square_2" inlet="pitch"/>
       </net>
       <net>
-         <source name="square_2 wave"/>
-         <dest name="mux_1 i1"/>
+         <source obj="square_2" outlet="wave"/>
+         <dest obj="mux_1" inlet="i1"/>
       </net>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="mux_1 i2"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>828</width>
+      <height>590</height>
+   </windowPos>
 </patch-1.0>

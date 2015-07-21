@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="bp svf" uuid="c053574885bbad6f3434527ab085f38db16dedcd" sha="6095a74abb51f1ca3a48497bcb96c066cc0c4e01">
-      <upgradeSha>b80016b87000b850c9852a3ba7c286aa412db18a</upgradeSha>
+      <upgradeSha>a929d7135f600d5ec6fda658947c1029e66cc0ab</upgradeSha>
       <sDescription>Bandpass filter, state-variable type, control rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

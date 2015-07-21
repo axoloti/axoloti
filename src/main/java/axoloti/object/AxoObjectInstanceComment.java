@@ -162,6 +162,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
             public void keyTyped(KeyEvent ke) {
             }
 
+            @Override
             public void keyReleased(KeyEvent ke) {
             }
 

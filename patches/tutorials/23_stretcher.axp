@@ -9,7 +9,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp1" sha="1e5ae3f91d3028a83d8e698aa6e8bf8dc8ceefb3" name="lowpass_1" x="240" y="20">
+   <obj type="filter/lp1" sha="290a234e2f83eb072198d0158bcd5da02a3606c3" name="lowpass_1" x="240" y="20">
       <params>
          <frac32.s.map name="freq" value="0.0"/>
       </params>
@@ -32,7 +32,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/phasor compl" sha="15eb8142a979333baac42c771ed195ffe60fce05" name="phasor3q_1" x="42" y="210">
+   <obj type="osc/phasor compl" sha="c95d1332c224aad738fb4504cb00706af8221028" name="phasor3q_1" x="42" y="210">
       <params>
          <frac32.s.map name="pitch" value="-32.0"/>
       </params>

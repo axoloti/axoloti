@@ -24,7 +24,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="238" y="56">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_1" x="238" y="56">
       <params>
          <frac32.s.map name="pitch" value="-16.0"/>
       </params>
@@ -36,7 +36,7 @@
    <comment type="patch/comment" x="630" y="98" text="modulation wheel: geiger counter FM"/>
    <comment type="patch/comment" x="28" y="182" text="bassline"/>
    <comment type="patch/comment" x="518" y="182" text="drums"/>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_1" x="168" y="224">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="adsr_1" x="168" y="224">
       <params>
          <frac32.s.map name="a" value="-32.0"/>
          <frac32.s.map name="d" value="-5.0"/>
@@ -45,7 +45,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_2" x="280" y="224">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="adsr_2" x="280" y="224">
       <params>
          <frac32.s.map name="a" value="-64.0"/>
          <frac32.s.map name="d" value="-21.0"/>
@@ -127,7 +127,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_3" x="1120" y="224">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_3" x="1120" y="224">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
@@ -198,7 +198,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw~_1" x="280" y="434">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw~_1" x="280" y="434">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
       </params>
@@ -208,7 +208,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="476" y="434">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_1" x="476" y="434">
       <params>
          <frac32.s.map name="pitch" MidiCC="110" value="24.0">
             <presets>
@@ -234,7 +234,7 @@
          <spinner attributeName="endNote" value="127"/>
       </attribs>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_3" x="196" y="616">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="adsr_3" x="196" y="616">
       <params>
          <frac32.s.map name="a" value="-32.0"/>
          <frac32.s.map name="d" value="10.0"/>
@@ -243,7 +243,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_4" x="294" y="616">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="adsr_4" x="294" y="616">
       <params>
          <frac32.s.map name="a" value="-25.0"/>
          <frac32.s.map name="d" value="-9.0"/>
@@ -325,13 +325,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw~_2" x="294" y="854">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw~_2" x="294" y="854">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_2" x="490" y="854">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_2" x="490" y="854">
       <params>
          <frac32.s.map name="pitch" MidiCC="111" value="12.0">
             <presets>
@@ -349,7 +349,7 @@
       <attribs/>
    </obj>
    <comment type="patch/comment" x="28" y="994" text="geiger counter"/>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_2" x="28" y="1036">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_2" x="28" y="1036">
       <params>
          <frac32.s.map name="pitch" value="27.0"/>
       </params>
@@ -361,7 +361,7 @@
          <combo attributeName="polynomial" selection="0x198"/>
       </attribs>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_5" x="252" y="1036">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="adsr_5" x="252" y="1036">
       <params>
          <frac32.s.map name="a" value="-64.0"/>
          <frac32.s.map name="d" value="3.0"/>
@@ -431,7 +431,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="350" y="1134">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_1" x="350" y="1134">
       <params>
          <frac32.s.map name="pitch" value="-7.0"/>
       </params>
@@ -443,7 +443,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_2" x="518" y="1134">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_2" x="518" y="1134">
       <params>
          <frac32.s.map name="pitch" value="24.0"/>
       </params>
@@ -476,7 +476,7 @@
       </net>
       <net>
          <source obj="*c_1" outlet="out"/>
-         <dest obj="vcf3~_1" inlet="pitchm"/>
+         <dest obj="vcf3~_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="vcf3~_1" outlet="out"/>
@@ -492,7 +492,7 @@
       </net>
       <net>
          <source obj="mix1_1" outlet="out"/>
-         <dest obj="saw~_1" inlet="pitchm"/>
+         <dest obj="saw~_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="keybzone_lru_1" outlet="note"/>
@@ -514,7 +514,7 @@
       </net>
       <net>
          <source obj="*c_2" outlet="out"/>
-         <dest obj="vcf3~_2" inlet="pitchm"/>
+         <dest obj="vcf3~_2" inlet="pitch"/>
       </net>
       <net>
          <source obj="vcf3~_2" outlet="out"/>
@@ -522,7 +522,7 @@
       </net>
       <net>
          <source obj="mix1_2" outlet="out"/>
-         <dest obj="saw~_2" inlet="pitchm"/>
+         <dest obj="saw~_2" inlet="pitch"/>
       </net>
       <net>
          <source obj="keybzone_lru_2" outlet="note"/>
@@ -550,7 +550,7 @@
       </net>
       <net>
          <source obj="*c_3" outlet="out"/>
-         <dest obj="osc~_2" inlet="pm"/>
+         <dest obj="osc~_2" inlet="phase"/>
       </net>
       <net>
          <source obj="osc~_2" outlet="wave"/>
@@ -589,7 +589,7 @@
       </net>
       <net>
          <source obj="*c_4" outlet="out"/>
-         <dest obj="osc~_3" inlet="pitchm"/>
+         <dest obj="osc~_3" inlet="pitch"/>
       </net>
       <net>
          <source obj="osc~_3" outlet="wave"/>
@@ -666,7 +666,7 @@
       </net>
       <net>
          <source obj="smooth_1" outlet="out"/>
-         <dest obj="osc~_2" inlet="pitchm"/>
+         <dest obj="osc~_2" inlet="pitch"/>
       </net>
       <net>
          <source obj="saw~_2" outlet="wave"/>
@@ -678,7 +678,7 @@
       </net>
       <net>
          <source obj="smooth_2" outlet="out"/>
-         <dest obj="square_1" inlet="pitchm"/>
+         <dest obj="square_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="mix3_2" outlet="out"/>

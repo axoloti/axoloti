@@ -1,12 +1,12 @@
 <objdefs>
-   <obj.normal id="tri" uuid="b7510b296fd8f1dad5e317c620b496e1a99c08d6" sha="e7180859b524cdd99af82d684ecc6e9f8080f44">
-      <upgradeSha>43d0cd96d88d2373334f871d17d1e5c06f0175bf</upgradeSha>
-      <sDescription>Bandwith limited triangle wave oscillator</sDescription>
+   <obj.normal id="tri" uuid="905879afa8256b0ca207557d656949e476ca6f16" sha="e7066d3dcd0e52be1613be8b5ccc96acee0ed064">
+      <sDescription>triangle oscillator
+Bandwith limited</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>osc.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
+         <frac32.bipolar name="pitch" description="pitch"/>
       </inlets>
       <outlets>
          <frac32buffer.bipolar name="wave" description="triangle wave, anti-aliased"/>
@@ -33,7 +33,7 @@
    nextvoice = 0;
 ]]></code.init>
       <code.krate><![CDATA[  uint32_t freq;
-  MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
+  MTOFEXTENDED(param_pitch + inlet_pitch,freq);
   int j;
   const int16_t *lastblep = &blt[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){

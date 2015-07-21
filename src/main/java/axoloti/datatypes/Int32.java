@@ -35,10 +35,7 @@ public class Int32 implements DataType {
         if (Frac32.d.equals(dest)) {
             return true;
         }
-        if (Bool32.d.equals(dest)) {
-            return true;
-        }
-        return false;
+        return Bool32.d.equals(dest);
     }
 
     @Override

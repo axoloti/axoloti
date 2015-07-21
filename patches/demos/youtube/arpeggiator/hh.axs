@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_1" x="98" y="14">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="noise.uniform_1" x="98" y="14">
       <params/>
       <attribs/>
    </obj>
@@ -7,7 +7,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="env" x="98" y="56">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="env" x="98" y="56">
       <params>
          <frac32.s.map name="d" onParent="true" value="13.0"/>
       </params>
@@ -17,7 +17,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/bp svf" sha="64eb414253ad09d2d8c5945dc48b8e1d2ac5b321" name="bpf" x="266" y="56">
+   <obj type="filter/bp svf" sha="ba4ac02f48ae93c7ecc9fac9b0e212cac7c21539" name="bpf" x="266" y="56">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="41.0"/>
          <frac32.u.map name="reso" onParent="true" value="0.0"/>
@@ -30,28 +30,34 @@
    </obj>
    <nets>
       <net>
-         <source name="env env"/>
-         <dest name="gain.vca~_1 v"/>
+         <source obj="env" outlet="env"/>
+         <dest obj="gain.vca~_1" inlet="v"/>
       </net>
       <net>
-         <source name="noise.uniform_1 wave"/>
-         <dest name="gain.vca~_1 a"/>
+         <source obj="noise.uniform_1" outlet="wave"/>
+         <dest obj="gain.vca~_1" inlet="a"/>
       </net>
       <net>
-         <source name="gain.vca~_1 o"/>
-         <dest name="bpf in"/>
+         <source obj="gain.vca~_1" outlet="o"/>
+         <dest obj="bpf" inlet="in"/>
       </net>
       <net>
-         <source name="trig inlet"/>
-         <dest name="env trig"/>
+         <source obj="trig" outlet="inlet"/>
+         <dest obj="env" inlet="trig"/>
       </net>
       <net>
-         <source name="bpf out"/>
-         <dest name="out outlet"/>
+         <source obj="bpf" outlet="out"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>674</width>
+      <height>400</height>
+   </windowPos>
 </patch-1.0>

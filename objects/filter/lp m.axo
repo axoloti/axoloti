@@ -1,14 +1,14 @@
 <objdefs>
-   <obj.normal id="lp m" uuid="2d89e7ba8c210be9cd549e2dfcd4b39a99dcfbc2" sha="a51351cb1aa39f081504c31950f380e6162c484d">
-      <upgradeSha>649887a8ccb34e5928d77426b8db79bed3e57f0f</upgradeSha>
+   <obj.normal id="lp m" uuid="1aa1bc51da479ed92429af700591f9d7b9f45f22" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4">
+      <upgradeSha>bf26b3c85a16647f9daeca7a77b84722d9edd000</upgradeSha>
       <sDescription>2-pole resonant low-pass filter (biquad)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="filter input"/>
-         <frac32 name="pitchm" description="pitch modulation"/>
-         <frac32 name="resom" description="filter resonance"/>
+         <frac32 name="pitch" description="pitch"/>
+         <frac32 name="reso" description="filter resonance"/>
       </inlets>
       <outlets>
          <frac32buffer name="out" description="filter output"/>
@@ -24,8 +24,8 @@
       <code.init><![CDATA[biquad_clearstate(&bs);
 ]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOF(param_pitch + inlet_pitchm,freq);
-      biquad_lp_coefs(&bc,freq,INT_MAX - (__USAT(inlet_resom + param_reso,27)<<4));
+      MTOF(param_pitch + inlet_pitch,freq);
+      biquad_lp_coefs(&bc,freq,INT_MAX - (__USAT(inlet_reso + param_reso,27)<<4));
       biquad_dsp(&bs,&bc,inlet_in,outlet_out);
 ]]></code.krate>
    </obj.normal>

@@ -1,13 +1,13 @@
 <patch-1.0>
-   <comment type="patch/comment" name="frequency modulation, sine wave carrier, sine wave modulator" x="14" y="14"/>
+   <comment type="patch/comment" x="14" y="14" text="frequency modulation, sine wave carrier, sine wave modulator"/>
    <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="modulator oscillator" x="14" y="168"/>
-   <comment type="patch/comment" name="modulation intensity" x="182" y="168"/>
-   <comment type="patch/comment" name="carrier oscillator" x="336" y="168"/>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="182">
+   <comment type="patch/comment" x="14" y="168" text="modulator oscillator"/>
+   <comment type="patch/comment" x="182" y="168" text="modulation intensity"/>
+   <comment type="patch/comment" x="336" y="168" text="carrier oscillator"/>
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="14" y="182">
       <params>
          <frac32.s.map name="pitch" value="12.0"/>
       </params>
@@ -19,7 +19,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_2" x="336" y="182">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_2" x="336" y="182">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -43,39 +43,39 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="What is called &quot;FM&quot; in ads and magazines is really PM : Phase Modulation" x="126" y="308"/>
-   <comment type="patch/comment" name="Phase modulation preserves the fundamental frequency, while FM does not, making it more well behaving" x="126" y="322"/>
+   <comment type="patch/comment" x="126" y="308" text="What is called &quot;FM&quot; in ads and magazines is really PM : Phase Modulation"/>
+   <comment type="patch/comment" x="126" y="322" text="Phase modulation preserves the fundamental frequency, while FM does not, making it more well behaving"/>
    <nets>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="osc_1 pitchm"/>
-         <dest name="osc_2 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="osc_1" inlet="pitch"/>
+         <dest obj="osc_2" inlet="pitch"/>
       </net>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="vca_1 v"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="osc_2 wave"/>
-         <dest name="vca_1 a"/>
+         <source obj="osc_2" outlet="wave"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="*c2 in"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="*c2" inlet="in"/>
       </net>
       <net>
-         <source name="*c2 out"/>
-         <dest name="osc_2 pm"/>
+         <source obj="*c2" outlet="out"/>
+         <dest obj="osc_2" inlet="phase"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="*c1 in"/>
-         <dest name="kscope_1 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="*c1" inlet="in"/>
+         <dest obj="kscope_1" inlet="in"/>
       </net>
    </nets>
    <settings>

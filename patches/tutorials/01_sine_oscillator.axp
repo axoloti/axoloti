@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="28" y="14">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="28" y="14">
       <params>
          <frac32.s.map name="pitch" value="1.0"/>
       </params>
@@ -19,14 +19,14 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="adjust the amplitude" x="308" y="112"/>
-   <comment type="patch/comment" name="Turn this dial to adjust the frequency" x="28" y="140"/>
-   <comment type="patch/comment" name="Click on the label left of the dial to see different units:" x="28" y="154"/>
-   <comment type="patch/comment" name="left and right audio output" x="476" y="154"/>
-   <comment type="patch/comment" name="- Frequency in Hz" x="28" y="168"/>
-   <comment type="patch/comment" name="- Musical note, octave number, deviation from standard tuning" x="28" y="182"/>
-   <comment type="patch/comment" name="- Ratio (referenced to musical note E4)" x="28" y="196"/>
-   <comment type="patch/comment" name="hold shift to make small adjustments using mouse" x="28" y="238"/>
+   <comment type="patch/comment" x="308" y="112" text="adjust the amplitude"/>
+   <comment type="patch/comment" x="28" y="140" text="Turn this dial to adjust the frequency"/>
+   <comment type="patch/comment" x="28" y="154" text="Click on the label left of the dial to see different units:"/>
+   <comment type="patch/comment" x="476" y="154" text="left and right audio output"/>
+   <comment type="patch/comment" x="28" y="168" text="- Frequency in Hz"/>
+   <comment type="patch/comment" x="28" y="182" text="- Musical note, octave number, deviation from standard tuning"/>
+   <comment type="patch/comment" x="28" y="196" text="- Ratio (referenced to musical note E4)"/>
+   <comment type="patch/comment" x="28" y="238" text="hold shift to make small adjustments using mouse"/>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="FREEZE" x="392" y="238">
       <params>
          <bool32.tgl name="b" value="0"/>
@@ -37,30 +37,30 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="time domain plot" x="672" y="238"/>
-   <comment type="patch/comment" name="vertical middle = zero" x="714" y="252"/>
-   <comment type="patch/comment" name="when the dial is focused (click)" x="28" y="266"/>
-   <comment type="patch/comment" name="you can also enter a number followed by enter to accept" x="42" y="280"/>
-   <comment type="patch/comment" name="up = positive value" x="714" y="280"/>
-   <comment type="patch/comment" name="down = negative value" x="714" y="294"/>
-   <comment type="patch/comment" name="left = early, right = late" x="714" y="322"/>
-   <comment type="patch/comment" name="(width = 128 samples = 2.6 milliseconds)" x="714" y="336"/>
-   <comment type="patch/comment" name="Open next tutorial -&gt;" x="560" y="490"/>
+   <comment type="patch/comment" x="672" y="238" text="time domain plot"/>
+   <comment type="patch/comment" x="714" y="252" text="vertical middle = zero"/>
+   <comment type="patch/comment" x="28" y="266" text="when the dial is focused (click)"/>
+   <comment type="patch/comment" x="42" y="280" text="you can also enter a number followed by enter to accept"/>
+   <comment type="patch/comment" x="714" y="280" text="up = positive value"/>
+   <comment type="patch/comment" x="714" y="294" text="down = negative value"/>
+   <comment type="patch/comment" x="714" y="322" text="left = early, right = late"/>
+   <comment type="patch/comment" x="714" y="336" text="(width = 128 samples = 2.6 milliseconds)"/>
+   <comment type="patch/comment" x="560" y="490" text="Open next tutorial -&gt;"/>
    <hyperlink type="patch/hyperlink" name="02_keyboard_controlled_sine_oscillator.axp" x="686" y="490"/>
    <nets>
       <net>
-         <source name="level out"/>
-         <dest name="dac_11 wave"/>
-         <dest name="dac_21 wave"/>
-         <dest name="scope_128s_trig1 in"/>
+         <source obj="level" outlet="out"/>
+         <dest obj="dac_11" inlet="wave"/>
+         <dest obj="dac_21" inlet="wave"/>
+         <dest obj="scope_128s_trig1" inlet="in"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="level in"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="level" inlet="in"/>
       </net>
       <net>
-         <source name="FREEZE o"/>
-         <dest name="scope_128s_trig1 hold"/>
+         <source obj="FREEZE" outlet="o"/>
+         <dest obj="scope_128s_trig1" inlet="hold"/>
       </net>
    </nets>
    <settings>

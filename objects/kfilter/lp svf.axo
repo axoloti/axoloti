@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="lp svf" uuid="784a54ca63c8b47d4d16a810f4a62337f45827e1" sha="b4102fc40d4c85653c0600df514deada6e4bb1ce">
-      <upgradeSha>f50e0a01ae550b9d12ffcc054fdbbc9206eaa3fe</upgradeSha>
+      <upgradeSha>1551ff37ea9f8668c1f0f9dbfc130ba5d091cd98</upgradeSha>
       <sDescription>Low pass filter, state-variable type, control rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

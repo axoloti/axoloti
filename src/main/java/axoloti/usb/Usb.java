@@ -86,8 +86,7 @@ public class Usb {
                             DeviceHandle handle = new DeviceHandle();
                             result = LibUsb.open(device, handle);
                             if (result < 0) {
-                                Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  but can't get access : "
-                                        + LibUsb.strError(result));
+                                Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  but can''t get access : {0}", LibUsb.strError(result));
                             } else {
                                 Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  driver ok");
                                 LibUsb.close(handle);
@@ -96,7 +95,7 @@ public class Usb {
                             Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* STM STLink");
                             hasOne = true;
                         } else {
-                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* other STM device:\n" + descriptor.dump());
+                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* other STM device:\n{0}", descriptor.dump());
                             hasOne = true;
                         }
                     } else if (descriptor.idVendor() == VID_AXOLOTI && descriptor.idProduct() == PID_AXOLOTI) {
@@ -104,13 +103,12 @@ public class Usb {
                         DeviceHandle handle = new DeviceHandle();
                         result = LibUsb.open(device, handle);
                         if (result < 0) {
-                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* Axoloti USB device, but can't get access : "
-                                    + LibUsb.strError(result));
+                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* Axoloti USB device, but can''t get access : {0}", LibUsb.strError(result));
                         } else {
-                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* Axoloti USB device, serial #" + LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber()));
+                            Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* Axoloti USB device, serial #{0}", LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber()));
                             LibUsb.close(handle);
                         }
-                        Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  location: " + DeviceToPath(device));
+                        Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  location: {0}", DeviceToPath(device));
                     }
                 } else {
                     throw new LibUsbException("Unable to read device descriptor", result);
@@ -147,8 +145,7 @@ public class Usb {
                     DeviceHandle handle = new DeviceHandle();
                     result = LibUsb.open(device, handle);
                     if (result < 0) {
-                        Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "DFU device found, but can't get access : "
-                                + LibUsb.strError(result));
+                        Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "DFU device found, but can''t get access : {0}", LibUsb.strError(result));
                         switch (axoloti.utils.OSDetect.getOS()) {
                             case WIN:
                                 Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Please install the \"STM32 Bootloader WinUSB\" driver.");

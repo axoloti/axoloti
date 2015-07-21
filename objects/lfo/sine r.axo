@@ -1,12 +1,12 @@
 <objdefs>
-   <obj.normal id="sine r" uuid="7ce3388f2e24a82acc178ad468dfd3afa8ea8013" sha="4af2d04eea5dcaad6ad38c52094a1524e8e5df72">
-      <upgradeSha>7b6e23eed2c3410327bbbfab9ad452431b5a33aa</upgradeSha>
+   <obj.normal id="sine r" uuid="725d481acbefa181fa5d92f414d317c86b77b789" sha="793d67bc0866975a78623ac43c35750ba3cae412">
+      <upgradeSha>f52ae908711c17c53701af3afece70c47e706f83</upgradeSha>
       <sDescription>sine wave LFO, linear interpolated table, pitch input, reset input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>lfo.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="pitchm" description="pitch modulation"/>
+         <frac32.bipolar name="pitch" description="pitch"/>
          <bool32.rising name="reset" description="reset phase"/>
          <frac32.bipolar name="phase" description="phase for reset"/>
       </inlets>
@@ -27,7 +27,7 @@
       } else {
          if (!inlet_reset) r = 1;
      }   {      int32_t freq;
-      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitch,freq);
       Phase += freq>>2;
       int32_t r;
       SINE2TINTERP(Phase,r)

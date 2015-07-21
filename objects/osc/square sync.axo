@@ -1,13 +1,15 @@
 <objdefs>
-   <obj.normal id="square sync" uuid="13071cc54258a64ab6104f1dcd7131c733b94bbd" sha="90bde37a86483539a9b57457b7c124d52d3847fa">
-      <upgradeSha>9d196dfa9e8b9f0e0b3ebc4162c12d61a696c13d</upgradeSha>
-      <sDescription>Bandwith limited square wave oscillator with sync input</sDescription>
+   <obj.normal id="square sync" uuid="8c4efe949c87c913d572a4303b8c63e097dac37e" sha="589b6f1d673b7fd79f9156a008d3939499d098dd">
+      <upgradeSha>e9abdc8054b093adb2e84089b50cee0d5d7609</upgradeSha>
+      <sDescription>square wave oscillator
+Bandwith limited with sync input.
+Sync resets oscillator phase on rising zero-crossing</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>square sync.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
-         <frac32buffer name="sync" description="sync input, resets oscillaotr phase on rising zero-crossing"/>
+         <frac32.bipolar name="pitch" description="pitch"/>
+         <frac32buffer name="sync" description="sync, resets phase on rising zero-crossing"/>
       </inlets>
       <outlets>
          <frac32buffer.bipolar name="wave" description="square wave, anti-aliased"/>
@@ -30,7 +32,7 @@
    i0 = 0;
 ]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitch,freq);
   int j;
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){

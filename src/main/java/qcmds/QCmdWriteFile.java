@@ -60,11 +60,11 @@ public class QCmdWriteFile implements QCmdSerialTask {
             Thread.sleep(100);
             String buildDir=System.getProperty(Axoloti.HOME_DIR)+"/build";;
             File f = new File(buildDir + "/xpatch.bin");
-            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: " + f.getAbsolutePath());
+            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath());
             byte[] buffer = new byte[(int) f.length()];
             FileInputStream inputStream = new FileInputStream(f);
             int nRead = inputStream.read(buffer);
-            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "file size: " + nRead);
+            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "file size: {0}", nRead);
             inputStream.close();
             byte[] data = new byte[12];
             data[0] = 'A';
@@ -98,7 +98,7 @@ public class QCmdWriteFile implements QCmdSerialTask {
             for (; i < 8; i++) {
                 filename[i] = 0;
             }
-            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "filename on SD: " + new String(filename));
+            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "filename on SD: {0}", new String(filename));
             Connection.ClearSync();
             Connection.writeBytes(data);
             Connection.writeBytes(filename);

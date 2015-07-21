@@ -32,8 +32,8 @@ import qcmds.QCmdShellTask;
  */
 public class ShellProcessor extends SwingWorker<Integer, String> {
 
-    private BlockingQueue<QCmdShellTask> queueShellTasks;
-    private BlockingQueue<QCmd> queueResponse;
+    private final BlockingQueue<QCmdShellTask> queueShellTasks;
+    private final BlockingQueue<QCmd> queueResponse;
 
     public ShellProcessor(BlockingQueue<QCmd> queueResponse) {
         super();

@@ -152,7 +152,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         if (patch != null) {
             AxoObjectInstanceAbstract o1 = patch.GetObjectInstance(InstanceName);
             if ((o1 != null) && (o1 != this)) {
-                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name " + InstanceName + " already exists!");
+                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} already exists!", InstanceName);
                 doLayout();
                 repaint();
                 return;
@@ -193,7 +193,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         if (type == null) {
             ArrayList<AxoObjectAbstract> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, patch.GetCurrentWorkingDirectory());
             if (types == null) {
-                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name " + typeName + " not found");
+                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} not found", typeName);
             } else { // pick first
                 if (types.size() > 1) {
                     typeWasAmbiguous = true;
@@ -407,6 +407,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             public void keyTyped(KeyEvent ke) {
             }
 
+            @Override
             public void keyReleased(KeyEvent ke) {
             }
 

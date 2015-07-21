@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="40" y="20">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square1" x="40" y="20">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -34,7 +34,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="select_bool_16_v2x4" sha="8a0c95038623068cfb5f9228392b1c7f7938c4aa" name="select_bool_16_v2x41" x="280" y="80">
+   <obj type="sel/sel b 16 4t" sha="8a0c95038623068cfb5f9228392b1c7f7938c4aa" name="select_bool_16_v2x41" x="280" y="80">
       <params>
          <bin16 name="p1" value="4369"/>
          <bin16 name="p2" value="33348"/>
@@ -47,7 +47,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="select_bool_16_v2x4" sha="8a0c95038623068cfb5f9228392b1c7f7938c4aa" name="select_bool_16_v2x21" x="280" y="240">
+   <obj type="sel/sel b 16 4t" sha="8a0c95038623068cfb5f9228392b1c7f7938c4aa" name="select_bool_16_v2x21" x="280" y="240">
       <params>
          <bin16 name="p1" value="17544"/>
          <bin16 name="p2" value="42052"/>
@@ -76,7 +76,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env~" sha="2f512222f4b4d2c035c326cd486c1cacc6be5e64" name="env_1" x="560" y="400">
+   <obj type="env/follower" sha="2f512222f4b4d2c035c326cd486c1cacc6be5e64" name="env_1" x="560" y="400">
       <params/>
       <attribs>
          <combo attributeName="time" selection="21.2ms"/>
@@ -100,7 +100,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="flashwaveplay~" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1" x="80" y="460">
+   <obj type="wave/flashplay" sha="8778a4f763b06a146c0c1c74337ea16dadd2312c" name="flashwaveplay_1" x="80" y="460">
       <params/>
       <attribs>
          <combo attributeName="sample" selection="808bd"/>
@@ -123,7 +123,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="envahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd1" x="120" y="540">
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd1" x="120" y="540">
       <params>
          <frac32.s.map name="a" value="0.0"/>
          <frac32.s.map name="d" value="49.0"/>
@@ -152,7 +152,7 @@
          <combo attributeName="polynomial" selection="0x9"/>
       </attribs>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1_" x="40" y="740">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1_" x="40" y="740">
       <params>
          <frac32.s.map name="pitch" value="-27.899999618530273"/>
       </params>
@@ -162,7 +162,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="320" y="740">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="320" y="740">
       <params>
          <frac32.s.map name="pitch" value="-28.0"/>
       </params>
@@ -189,17 +189,17 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="c27566f972d15f25252f61b5cff014a3edce9706" name="dac_1" x="1000" y="800">
+   <obj type="audio/out stereo" sha="c27566f972d15f25252f61b5cff014a3edce9706" name="dac_1" x="1000" y="800">
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d lin m" sha="2bdacc7664868e60481a13644a9785475ac0be7e" uuid="4b3d3642bf931c1d20cbcbaa3b9d538e7cd861fa" name="envahd2" x="160" y="820">
+   <obj type="env/d lin m" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" uuid="4b3d3642bf931c1d20cbcbaa3b9d538e7cd861fa" name="envahd2" x="160" y="820">
       <params>
          <frac32.s.map name="d" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="pnoise~" sha="73a919bf86dac4805c4300760b5052e1ec2453c6" name="pnoise_1" x="80" y="920">
+   <obj type="noise/pink" sha="73a919bf86dac4805c4300760b5052e1ec2453c6" name="pnoise_1" x="80" y="920">
       <params/>
       <attribs/>
    </obj>
@@ -207,7 +207,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/hp" sha="2c3219893ab8ef42b46eb323284a077f0ba55d54" name="bpf_1" x="360" y="920">
+   <obj type="filter/hp" sha="de47923046728f9eb4d6e6cbf26314bf518174fc" name="bpf_1" x="360" y="920">
       <params>
          <frac32.s.map name="pitch" value="42.0"/>
          <frac32.u.map name="reso" value="32.5"/>
@@ -282,8 +282,8 @@
       </net>
       <net>
          <source obj="+1" outlet="out"/>
-         <dest obj="osc_1_" inlet="pitchm"/>
-         <dest obj="osc_1" inlet="pitchm"/>
+         <dest obj="osc_1_" inlet="pitch"/>
+         <dest obj="osc_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="envahd1" outlet="env"/>
@@ -357,7 +357,7 @@
       </net>
       <net>
          <source obj="*c4" outlet="out"/>
-         <dest obj="envahd2" inlet="dm"/>
+         <dest obj="envahd2" inlet="d"/>
       </net>
       <net>
          <source obj="mix31" outlet="out"/>
@@ -373,7 +373,7 @@
       </net>
       <net>
          <source obj="vca_2" outlet="o"/>
-         <dest obj="osc_1" inlet="pm"/>
+         <dest obj="osc_1" inlet="phase"/>
       </net>
       <net>
          <source obj="envdlinx1" outlet="env"/>
@@ -393,8 +393,8 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>0</x>
-      <y>23</y>
+      <x>797</x>
+      <y>80</y>
       <width>1310</width>
       <height>1230</height>
    </windowPos>

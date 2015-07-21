@@ -1,13 +1,13 @@
 <objdefs>
-   <obj.normal id="hp1 m" uuid="a3169ec0050ed03a7a22d47419e8c92e8b4887e1" sha="15fa5316d29c19959cfa4c194afb7664ca3a7cc2">
-      <upgradeSha>a1ea0059fc23dd74010a5d1a03eaa9e4368207fc</upgradeSha>
+   <obj.normal id="hp1 m" uuid="db72e08c265817674e56af3855bfca7a58b65e87" sha="e0464a8aafc95768d0c80ce491ab1cec581d1aa1">
+      <upgradeSha>43ff6734579e9d608df39051aa691bba3762a303</upgradeSha>
       <sDescription>1st order hipass filter, modulation input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
-         <frac32 name="freqm" description="freq modulation"/>
+         <frac32 name="freq" description="cutoff frequency"/>
       </inlets>
       <outlets>
          <frac32buffer name="out" description="output"/>
@@ -22,7 +22,7 @@
       <code.init><![CDATA[val = 0;
 ]]></code.init>
       <code.krate><![CDATA[int32_t f;
-   MTOF(param_freq+inlet_freqm,f);
+   MTOF(param_freq+inlet_freq,f);
 ]]></code.krate>
       <code.srate><![CDATA[   val = ___SMMLA((inlet_in-val)<<1,f,val);
    outlet_out= inlet_in-val;

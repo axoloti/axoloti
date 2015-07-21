@@ -447,9 +447,9 @@ public class AxolotiRemoteControl extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelNav;
     private javax.swing.JPanel jPanelRight;
     // End of variables declaration//GEN-END:variables
-    private BufferedImage bImage = new BufferedImage(128, 64, BufferedImage.TYPE_BYTE_BINARY);
-    private BufferedImage bImageScaled = new BufferedImage(256, 128, BufferedImage.TYPE_BYTE_BINARY);
-    private Graphics2D g2d = (Graphics2D) bImageScaled.createGraphics();
+    private final BufferedImage bImage = new BufferedImage(128, 64, BufferedImage.TYPE_BYTE_BINARY);
+    private final BufferedImage bImageScaled = new BufferedImage(256, 128, BufferedImage.TYPE_BYTE_BINARY);
+    private final Graphics2D g2d = (Graphics2D) bImageScaled.createGraphics();
 
     public void updateRow(int LCDPacketRow, ByteBuffer lcdRcvBuffer) {
         if (LCDPacketRow < 8) {

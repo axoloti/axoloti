@@ -3,21 +3,21 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="168" y="28">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="168" y="28">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="use shift+click on the piano keyboard to hold a note" x="462" y="42"/>
-   <comment type="patch/comment" name="so you can adjust the filters while it is sounding!" x="462" y="56"/>
-   <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="square_1" x="168" y="112">
+   <comment type="patch/comment" x="462" y="42" text="use shift+click on the piano keyboard to hold a note"/>
+   <comment type="patch/comment" x="462" y="56" text="so you can adjust the filters while it is sounding!"/>
+   <obj type="osc/square" sha="7cccf8a95bf312ecc084f11f532cf5fda00b8c58" name="square_1" x="168" y="112">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="oscillator selection:" x="364" y="154"/>
+   <comment type="patch/comment" x="364" y="154" text="oscillator selection:"/>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="84" y="182">
       <params>
          <frac32.u.map name="value" value="10.5"/>
@@ -30,17 +30,17 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/pwm" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="pwm_1" x="168" y="196">
+   <obj type="osc/pwm" sha="4f216b9a125822434f813198e9be4da0b5e8b042" name="pwm_1" x="168" y="196">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="sawtooth" x="448" y="224"/>
-   <comment type="patch/comment" name="square" x="448" y="238"/>
-   <comment type="patch/comment" name="assymetrical square" x="448" y="252"/>
-   <comment type="patch/comment" name="uniform noise" x="448" y="266"/>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="168" y="294">
+   <comment type="patch/comment" x="448" y="224" text="sawtooth"/>
+   <comment type="patch/comment" x="448" y="238" text="square"/>
+   <comment type="patch/comment" x="448" y="252" text="assymetrical square"/>
+   <comment type="patch/comment" x="448" y="266" text="uniform noise"/>
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="168" y="294">
       <params/>
       <attribs/>
    </obj>
@@ -48,40 +48,40 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="0 : low pass filter" x="602" y="294"/>
+   <comment type="patch/comment" x="602" y="294" text="0 : low pass filter"/>
    <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="490" y="308">
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp" sha="219ae48267404fac1e204a0ae6f3f1363e789297" name="lpf_1" x="602" y="308">
+   <obj type="filter/lp" sha="f08f8ceddfd25d03290d4164aa7884cd7257e242" name="lpf_1" x="602" y="308">
       <params>
          <frac32.s.map name="pitch" value="2.0"/>
          <frac32.u.map name="reso" value="32.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="adjust pitch and reso of the filters to hear the different possibilities" x="728" y="308"/>
-   <comment type="patch/comment" name="1: high pass filter" x="602" y="448"/>
-   <obj type="filter/hp" sha="2c3219893ab8ef42b46eb323284a077f0ba55d54" name="hpf_1" x="602" y="462">
+   <comment type="patch/comment" x="728" y="308" text="adjust pitch and reso of the filters to hear the different possibilities"/>
+   <comment type="patch/comment" x="602" y="448" text="1: high pass filter"/>
+   <obj type="filter/hp" sha="de47923046728f9eb4d6e6cbf26314bf518174fc" name="hpf_1" x="602" y="462">
       <params>
          <frac32.s.map name="pitch" value="2.0"/>
          <frac32.u.map name="reso" value="32.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="filter selection:" x="784" y="476"/>
+   <comment type="patch/comment" x="784" y="476" text="filter selection:"/>
    <obj type="ctrl/i radio 4 v" sha="d755521996a6bf57298aeed6198f271783137da1" name="i_1" x="784" y="504">
       <params>
          <int32.vradio name="value" value="2"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="low pass" x="868" y="546"/>
-   <comment type="patch/comment" name="high pass" x="868" y="560"/>
-   <comment type="patch/comment" name="band pass" x="868" y="574"/>
-   <comment type="patch/comment" name="unfiltered" x="868" y="588"/>
-   <comment type="patch/comment" name="2 : band pass filter" x="602" y="602"/>
-   <obj type="filter/bp" sha="dd559d9587821150be4157ac2ba7e2b4b6de6fae" name="bpf_1" x="602" y="616">
+   <comment type="patch/comment" x="868" y="546" text="low pass"/>
+   <comment type="patch/comment" x="868" y="560" text="high pass"/>
+   <comment type="patch/comment" x="868" y="574" text="band pass"/>
+   <comment type="patch/comment" x="868" y="588" text="unfiltered"/>
+   <comment type="patch/comment" x="602" y="602" text="2 : band pass filter"/>
+   <obj type="filter/bp" sha="a6603952b2f01aca99afaee3fbd8ea0953d82f07" name="bpf_1" x="602" y="616">
       <params>
          <frac32.s.map name="pitch" value="2.0"/>
          <frac32.u.map name="reso" value="32.0"/>
@@ -112,76 +112,76 @@
    </obj>
    <nets>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="inmux31 i0"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="inmux31" inlet="i0"/>
       </net>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="inmux31 i1"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="inmux31" inlet="i1"/>
       </net>
       <net>
-         <source name="pwm_1 wave"/>
-         <dest name="inmux31 i2"/>
+         <source obj="pwm_1" outlet="wave"/>
+         <dest obj="inmux31" inlet="i2"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="saw_1 pitchm"/>
-         <dest name="square_1 pitchm"/>
-         <dest name="pwm_1 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="saw_1" inlet="pitch"/>
+         <dest obj="square_1" inlet="pitch"/>
+         <dest obj="pwm_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="c2 out"/>
-         <dest name="pwm_1 pwm"/>
+         <source obj="c2" outlet="out"/>
+         <dest obj="pwm_1" inlet="pw"/>
       </net>
       <net>
-         <source name="inmux31 o"/>
-         <dest name="vca_1 a"/>
+         <source obj="inmux31" outlet="o"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="vca_1 v"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="lpf_1 in"/>
-         <dest name="hpf_1 in"/>
-         <dest name="bpf_1 in"/>
-         <dest name="inmux31_ i3"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="lpf_1" inlet="in"/>
+         <dest obj="hpf_1" inlet="in"/>
+         <dest obj="bpf_1" inlet="in"/>
+         <dest obj="inmux31_" inlet="i3"/>
       </net>
       <net>
-         <source name="inmux31_ o"/>
-         <dest name="scope_128s_trig_v2_1 in"/>
-         <dest name="analyzer_1 in"/>
-         <dest name="*c1 in"/>
+         <source obj="inmux31_" outlet="o"/>
+         <dest obj="scope_128s_trig_v2_1" inlet="in"/>
+         <dest obj="analyzer_1" inlet="in"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="inmux31 i3"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="inmux31" inlet="i3"/>
       </net>
       <net>
-         <source name="lpf_1 out"/>
-         <dest name="inmux31_ i0"/>
+         <source obj="lpf_1" outlet="out"/>
+         <dest obj="inmux31_" inlet="i0"/>
       </net>
       <net>
-         <source name="bpf_1 out"/>
-         <dest name="inmux31_ i2"/>
+         <source obj="bpf_1" outlet="out"/>
+         <dest obj="inmux31_" inlet="i2"/>
       </net>
       <net>
-         <source name="hpf_1 out"/>
-         <dest name="inmux31_ i1"/>
+         <source obj="hpf_1" outlet="out"/>
+         <dest obj="inmux31_" inlet="i1"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="inmux31_ s"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="inmux31_" inlet="s"/>
       </net>
       <net>
-         <source name="i_2 out"/>
-         <dest name="inmux31 s"/>
+         <source obj="i_2" outlet="out"/>
+         <dest obj="inmux31" inlet="s"/>
       </net>
    </nets>
    <settings>

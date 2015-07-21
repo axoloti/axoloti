@@ -1,5 +1,29 @@
 <transitions>
     <NameTransition>
+        <OldName>square</OldName>
+        <new>
+            <NewName>osc/square</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>env/d lin m x</OldName>
+        <new>
+            <NewName>env/d lin m</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>env/ahd lin m x</OldName>
+        <new>
+            <NewName>env/ahd lin m</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>env/ahd lin x</OldName>
+        <new>
+            <NewName>env/ahd lin</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
         <OldName>filter/vcf~</OldName>
         <new>
             <NewName>filter/vcf</NewName>

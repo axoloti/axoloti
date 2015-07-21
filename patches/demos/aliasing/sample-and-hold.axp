@@ -1,6 +1,6 @@
 <patch-1.0>
    <comment type="patch/comment" x="14" y="14" text="&lt;html&gt;&lt;H2&gt;Comparing a naive non-bandwidth limited sample-and-hold&lt;br&gt;with a better one&lt;/h2&gt;"/>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="sine_3" x="14" y="98">
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" name="sine_3" x="14" y="98">
       <params>
          <frac32.s.map name="pitch" value="-17.0"/>
       </params>
@@ -12,13 +12,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="sine_1" x="210" y="98">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="sine_1" x="210" y="98">
       <params>
          <frac32.s.map name="pitch" value="32.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="sine_4" x="14" y="224">
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" name="sine_4" x="14" y="224">
       <params>
          <frac32.s.map name="pitch" value="-12.100000381469727"/>
       </params>
@@ -30,7 +30,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="sine_2" x="210" y="224">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="sine_2" x="210" y="224">
       <params>
          <frac32.s.map name="pitch" value="34.0"/>
       </params>
@@ -103,7 +103,7 @@
       </net>
       <net>
          <source obj="*c_2" outlet="out"/>
-         <dest obj="sine_1" inlet="pitchm"/>
+         <dest obj="sine_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="sine_4" outlet="wave"/>
@@ -111,7 +111,7 @@
       </net>
       <net>
          <source obj="*c_3" outlet="out"/>
-         <dest obj="sine_2" inlet="pitchm"/>
+         <dest obj="sine_2" inlet="pitch"/>
       </net>
       <net>
          <source obj="toggle_1" outlet="o"/>

@@ -67,13 +67,13 @@ public class Impulses extends gentools {
         o.sKRateCode = "   if ((%trig%>0) && !ntrig) { val =1<<27; ntrig=1;}\n"
                 + "   else { if (!(%trig%>0)) ntrig=0; }\n";
         o.sSRateCode = "   %env% = val;\n"
-                + "val -= ___SMMUL(val, %d%>>1);\n";
+                + "val -= ___SMMUL(val, param_d>>1);\n";
         return o;
     }
 
     static AxoObject Create_envd2() {
         AxoObject o = new AxoObject("d m", "decay envelope with decay time modulation input, audio rate");
-        o.inlets.add(new InletFrac32("dm", "decay time modulation"));
+        o.inlets.add(new InletFrac32("d", "decay time"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("env", "envelope output"));
         o.params.add(new ParameterFrac32UMap("d"));
@@ -84,7 +84,7 @@ public class Impulses extends gentools {
         o.sKRateCode = "   if ((%trig%>0) && !ntrig) { val =1<<27; ntrig=1;}\n"
                 + "   else { if (!(%trig%>0)) ntrig=0;}\n";
         o.sSRateCode = "   %env% = val;\n"
-                + "val -= ___SMMUL(val, (%d%+%dm%)>>1);\n";
+                + "val -= ___SMMUL(val, (param_d+inlet_d)>>1);\n";
         return o;
     }
 
@@ -96,21 +96,21 @@ public class Impulses extends gentools {
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "val = 0;\n";
         o.sSRateCode = "   if (%trig%>0) val =1<<27;\n"
-                + "   else val -= ___SMMUL(val, %d%>>1);\n"
+                + "   else val -= ___SMMUL(val, param_d>>1);\n"
                 + "   %env% = val;\n";
         return o;
     }
 
     static AxoObject Create_envhd2() {
         AxoObject o = new AxoObject("hd m", "hold/decay envelope with decay time modulation input, audio rate");
-        o.inlets.add(new InletFrac32("dm", "decay time modulation"));
+        o.inlets.add(new InletFrac32("d", "decay time"));
         o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("env", "envelope output"));
         o.params.add(new ParameterFrac32UMap("d"));
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "   val = 0;\n";
         o.sSRateCode = "   if (%trig%>0) val =1<<27;\n"
-                + "   else val -= ___SMMUL(val, (%d%+%dm%)>>1);\n"
+                + "   else val -= ___SMMUL(val, (param_d+inlet_d)>>1);\n"
                 + "   %env% = val;\n";
         return o;
     }
@@ -123,24 +123,24 @@ public class Impulses extends gentools {
         o.params.add(new ParameterFrac32UMap("d"));
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "   val = 0;\n";
-        o.sSRateCode = "   if (%gate%>0) val = ___SMMLA((1<<27)-val,(1<<26)-(%a%>>1),val);\n"
-                + "   else val = ___SMMLA(val, (-1<<26)+(%d%>>1),val);\n"
+        o.sSRateCode = "   if (%gate%>0) val = ___SMMLA((1<<27)-val,(1<<26)-(param_a>>1),val);\n"
+                + "   else val = ___SMMLA(val, (-1<<26)+(param_d>>1),val);\n"
                 + "   %env%= val;\n";
         return o;
     }
 
     static AxoObject Create_envahd2() {
         AxoObject o = new AxoObject("ahd m", "attack hold decay envelope with modulation inputs, audio rate");
-        o.inlets.add(new InletFrac32("am", "attack time modulation"));
-        o.inlets.add(new InletFrac32("dm", "decay time modulation"));
+        o.inlets.add(new InletFrac32("a", "attack time"));
+        o.inlets.add(new InletFrac32("d", "decay time"));
         o.inlets.add(new InletBool32RisingFalling("gate", "gate"));
         o.outlets.add(new OutletFrac32BufferPos("env", "envelope output"));
         o.params.add(new ParameterFrac32UMap("a"));
         o.params.add(new ParameterFrac32UMap("d"));
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "   val = 0;\n";
-        o.sSRateCode = "   if (%gate%>0) val = ___SMMLA((1<<27)-val,(1<<26)-(%a%>>1)-(%am%>>1),val);\n"
-                + "   else val = ___SMMLA(val,(-1<<26)+(%d%>>1)+(%dm%>>1),val);\n"
+        o.sSRateCode = "   if (%gate%>0) val = ___SMMLA((1<<27)-val,(1<<26)-(param_a>>1)-(inlet_a>>1),val);\n"
+                + "   else val = ___SMMLA(val,(-1<<26)+(param_d>>1)+(inlet_d>>1),val);\n"
                 + "   %env%= val;\n";
         return o;
     }

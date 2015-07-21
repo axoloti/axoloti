@@ -74,7 +74,7 @@ public class AssignMidiCCComponent extends JComponent {
 
     void doPopup() {
         JPopupMenu sub1 = new JPopupMenu();
-        new AssignMidiCCMenuItems(param, sub1);
+        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(param, sub1);
         sub1.show(this, 0, getHeight() - 1);
     }
 

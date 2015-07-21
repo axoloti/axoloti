@@ -35,7 +35,7 @@ for(i=0;i<LENGTH;i++)
          </text>
       </attribs>
    </obj>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="osc1_" x="490" y="14">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="osc1_" x="490" y="14">
       <params>
          <frac32.s.map name="pitch" value="9.0"/>
       </params>
@@ -229,7 +229,7 @@ for(i=0;i<LENGTH;i++)
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="910" y="308">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_1" x="910" y="308">
       <params>
          <frac32.s.map name="pitch" value="-22.0"/>
       </params>
@@ -303,7 +303,7 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/phasor lin" sha="85a94c8b1e1234a16675b4fcec831564681774c1" name="saw_7" x="70" y="392">
+   <obj type="osc/phasor lin" sha="873b68569160056c2e8af2698180935eb8de0268" name="saw_7" x="70" y="392">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
@@ -534,7 +534,7 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/phasor lin" sha="85a94c8b1e1234a16675b4fcec831564681774c1" name="saw_4" x="1288" y="504">
+   <obj type="osc/phasor lin" sha="873b68569160056c2e8af2698180935eb8de0268" name="saw_4" x="1288" y="504">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
@@ -573,7 +573,7 @@ for(i=0;i<LENGTH;i++)
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw_1" x="1498" y="504">
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" name="saw_1" x="1498" y="504">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
@@ -709,7 +709,7 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/phasor lin" sha="85a94c8b1e1234a16675b4fcec831564681774c1" name="saw_5" x="1288" y="602">
+   <obj type="osc/phasor lin" sha="873b68569160056c2e8af2698180935eb8de0268" name="saw_5" x="1288" y="602">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
@@ -748,7 +748,7 @@ for(i=0;i<LENGTH;i++)
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw_2" x="1498" y="602">
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" name="saw_2" x="1498" y="602">
       <params>
          <frac32.s.map name="pitch" value="-60.0"/>
       </params>
@@ -829,7 +829,7 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/phasor lin" sha="85a94c8b1e1234a16675b4fcec831564681774c1" name="saw_6" x="1288" y="700">
+   <obj type="osc/phasor lin" sha="873b68569160056c2e8af2698180935eb8de0268" name="saw_6" x="1288" y="700">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
@@ -868,7 +868,7 @@ for(i=0;i<LENGTH;i++)
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw_3" x="1498" y="700">
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" name="saw_3" x="1498" y="700">
       <params>
          <frac32.s.map name="pitch" value="-57.19999980926514"/>
       </params>
@@ -910,7 +910,7 @@ for(i=0;i<LENGTH;i++)
       </params>
       <attribs/>
    </obj>
-   <obj type="timer/pulselengthm" sha="5d90a67235df290cb66eace59a15336edcb9bb32" name="pulselengthm_1" x="1260" y="840">
+   <obj type="timer/pulselengthm" sha="64ec08e76cf714563d1f08e0e755dd6736adf154" name="pulselengthm_1" x="1260" y="840">
       <params>
          <frac32.s.map name="delay" value="-64.0"/>
       </params>
@@ -920,11 +920,11 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="uniform_1" x="1456" y="854">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="uniform_1" x="1456" y="854">
       <params/>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="uniform_2" x="1540" y="854">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="uniform_2" x="1540" y="854">
       <params/>
       <attribs/>
    </obj>
@@ -1371,15 +1371,15 @@ for(i=0;i<LENGTH;i++)
       </net>
       <net>
          <source obj="soft_1" outlet="result"/>
-         <dest obj="saw_4" inlet="freqm"/>
+         <dest obj="saw_4" inlet="freq"/>
       </net>
       <net>
          <source obj="soft_2" outlet="result"/>
-         <dest obj="saw_5" inlet="freqm"/>
+         <dest obj="saw_5" inlet="freq"/>
       </net>
       <net>
          <source obj="soft_3" outlet="result"/>
-         <dest obj="saw_6" inlet="freqm"/>
+         <dest obj="saw_6" inlet="freq"/>
       </net>
       <net>
          <source obj="nointerp_1" outlet="o"/>
@@ -1437,7 +1437,7 @@ for(i=0;i<LENGTH;i++)
       </net>
       <net>
          <source obj="soft_4" outlet="result"/>
-         <dest obj="saw_7" inlet="freqm"/>
+         <dest obj="saw_7" inlet="freq"/>
       </net>
       <net>
          <source obj="saw_7" outlet="phasor"/>

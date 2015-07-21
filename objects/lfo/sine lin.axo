@@ -1,12 +1,12 @@
 <objdefs>
-   <obj.normal id="sine lin" uuid="581c1c0594050528d2ecd11f17e61c2e2b688966" sha="5fe7bc53977f839c83da1059f96ff56ed7b89661">
-      <upgradeSha>1f2d05363eb787d5ea0d5c8394761f06256af740</upgradeSha>
+   <obj.normal id="sine lin" uuid="96a3731e796f472decaad48e9acbca9546b8140b" sha="b1fb3a256dda91eaf0d60201af75dad0e2c6d8c5">
+      <upgradeSha>955aadb2b7e572ed6b989a717771bbfc15f9932d</upgradeSha>
       <sDescription>Cheapest sine wave LFO, non-interpolated table</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>lfo.axh</helpPatch>
       <inlets>
-         <frac32 name="frequency" description="phase increment"/>
+         <frac32 name="freq" description="phase increment"/>
       </inlets>
       <outlets>
          <frac32.bipolar name="out" description="sine wave LFO, cheap and bad quality"/>
@@ -16,7 +16,7 @@
       <attribs/>
       <code.declaration><![CDATA[uint32_t Phase;]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
-      <code.krate><![CDATA[Phase += inlet_frequency;
+      <code.krate><![CDATA[Phase += inlet_freq;
 outlet_out= sinet[Phase>>22]<<12;]]></code.krate>
    </obj.normal>
 </objdefs>

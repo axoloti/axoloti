@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="d" uuid="190ae648e41832b41adbedb465317c18a010aefe" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411">
-      <upgradeSha>61669c0e3c33c6cb64ed388d75b8e756d064e5a4</upgradeSha>
+      <upgradeSha>97cdffe5955bbcc941e3ab903bc58d2823414076</upgradeSha>
       <sDescription>decay envelope</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

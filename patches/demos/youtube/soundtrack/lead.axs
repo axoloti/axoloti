@@ -35,7 +35,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd lin m x" sha="62a6c82f56f3c5daa5fb4f269acb3a33cf34992b" name="envahd1" x="462" y="28">
+   <obj type="env/ahd lin m x" sha="1bff4be3aeae590d80327085f5f7c771667d8938" name="envahd1" x="462" y="28">
       <params>
          <frac32.s.map name="a" value="10.0"/>
          <frac32.s.map name="d" value="17.0"/>
@@ -52,7 +52,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="lfo_flt" x="644" y="112">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="lfo_flt" x="644" y="112">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-61.0"/>
       </params>
@@ -65,7 +65,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="lfo_pitch" x="280" y="168">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="lfo_pitch" x="280" y="168">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="1.0"/>
       </params>
@@ -81,13 +81,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="364" y="252">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="364" y="252">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="lpf_1" x="476" y="252">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="lpf_1" x="476" y="252">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-11.0"/>
          <frac32.u.map name="reso" onParent="true" MidiCC="11" value="60.0"/>
@@ -108,85 +108,85 @@
    </obj>
    <nets>
       <net>
-         <source name="keybzone_lru1 note"/>
-         <dest name="smooth1 in"/>
+         <source obj="keybzone_lru1" outlet="note"/>
+         <dest obj="smooth1" inlet="in"/>
       </net>
       <net>
-         <source name="lpf_1 out"/>
-         <dest name="infclip_1_ in"/>
+         <source obj="lpf_1" outlet="out"/>
+         <dest obj="infclip_1_" inlet="in"/>
       </net>
       <net>
-         <source name="envahd1 env"/>
-         <dest name="vca_1 v"/>
-         <dest name="*c2_ in2"/>
+         <source obj="envahd1" outlet="env"/>
+         <dest obj="vca_1" inlet="v"/>
+         <dest obj="*c2_" inlet="in2"/>
       </net>
       <net>
-         <source name="infclip_1_ out"/>
-         <dest name="vca_1 a"/>
+         <source obj="infclip_1_" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="*c2_ out"/>
-         <dest name="lpf_1 pitchm"/>
+         <source obj="*c2_" outlet="out"/>
+         <dest obj="lpf_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="lfo_flt wave"/>
-         <dest name="*c2_ in1"/>
+         <source obj="lfo_flt" outlet="wave"/>
+         <dest obj="*c2_" inlet="in1"/>
       </net>
       <net>
-         <source name="lfo_pitch_amt out"/>
-         <dest name="saw_1 pitchm"/>
+         <source obj="lfo_pitch_amt" outlet="out"/>
+         <dest obj="saw_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="smooth1 out"/>
-         <dest name="lfo_pitch_amt bus_in"/>
+         <source obj="smooth1" outlet="out"/>
+         <dest obj="lfo_pitch_amt" inlet="bus_in"/>
       </net>
       <net>
-         <source name="lfo_pitch wave"/>
-         <dest name="div321 in"/>
+         <source obj="lfo_pitch" outlet="wave"/>
+         <dest obj="div321" inlet="in"/>
       </net>
       <net>
-         <source name="div321 out"/>
-         <dest name="lfo_pitch_amt in1"/>
+         <source obj="div321" outlet="out"/>
+         <dest obj="lfo_pitch_amt" inlet="in1"/>
       </net>
       <net>
-         <source name="c1 out"/>
-         <dest name="smooth1_ in"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="smooth1_" inlet="in"/>
       </net>
       <net>
-         <source name="smooth1_ out"/>
-         <dest name="*c2_ bus_in"/>
+         <source obj="smooth1_" outlet="out"/>
+         <dest obj="*c2_" inlet="bus_in"/>
       </net>
       <net>
-         <source name="keybzone_lru1 gate"/>
-         <dest name="envahd1 trig"/>
+         <source obj="keybzone_lru1" outlet="gate"/>
+         <dest obj="envahd1" inlet="trig"/>
       </net>
       <net>
-         <source name="keybzone_lru1 velocity"/>
-         <dest name="inv1 in"/>
+         <source obj="keybzone_lru1" outlet="velocity"/>
+         <dest obj="inv1" inlet="in"/>
       </net>
       <net>
-         <source name="inv1 out"/>
-         <dest name="*c3_ in"/>
+         <source obj="inv1" outlet="out"/>
+         <dest obj="*c3_" inlet="in"/>
       </net>
       <net>
-         <source name="*c3_ out"/>
-         <dest name="envahd1 am"/>
+         <source obj="*c3_" outlet="out"/>
+         <dest obj="envahd1" inlet="a"/>
       </net>
       <net>
-         <source name="*c3__ out"/>
-         <dest name="inv1_ in"/>
+         <source obj="*c3__" outlet="out"/>
+         <dest obj="inv1_" inlet="in"/>
       </net>
       <net>
-         <source name="inv1_ out"/>
-         <dest name="envahd1 dm"/>
+         <source obj="inv1_" outlet="out"/>
+         <dest obj="envahd1" inlet="d"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="lpf_1 in"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="lpf_1" inlet="in"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="out outlet"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
    </nets>
    <settings>
@@ -197,7 +197,12 @@
       <NPresetEntries>4</NPresetEntries>
       <NModulationSources>4</NModulationSources>
       <NModulationTargetsPerSource>4</NModulationTargetsPerSource>
-      <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1234</width>
+      <height>632</height>
+   </windowPos>
 </patch-1.0>

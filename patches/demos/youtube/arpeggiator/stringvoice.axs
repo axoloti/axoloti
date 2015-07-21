@@ -17,7 +17,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="envf" x="378" y="168">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="envf" x="378" y="168">
       <params>
          <frac32.s.map name="a" onParent="true" value="0.0"/>
          <frac32.s.map name="d" onParent="true" value="0.0"/>
@@ -30,13 +30,13 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="168" y="238">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="168" y="238">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="lfo" x="14" y="266">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="lfo" x="14" y="266">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-9.0"/>
       </params>
@@ -52,7 +52,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/pwm" sha="a5f49fd39de0194bff6482e7b17ed3f35174578c" name="osc_2" x="168" y="350">
+   <obj type="osc/pwm" sha="4f216b9a125822434f813198e9be4da0b5e8b042" name="osc_2" x="168" y="350">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -65,7 +65,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="enva" x="630" y="378">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="enva" x="630" y="378">
       <params>
          <frac32.s.map name="a" onParent="true" value="0.0"/>
          <frac32.s.map name="d" onParent="true" value="0.0"/>
@@ -78,7 +78,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="448">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="14" y="448">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -94,7 +94,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="osc_3" x="266" y="448">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="osc_3" x="266" y="448">
       <params>
          <frac32.s.map name="pitch" value="-12.020000457763672"/>
       </params>
@@ -107,7 +107,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="448" y="574">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3_1" x="448" y="574">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="7.0"/>
          <frac32.u.map name="reso" onParent="true" value="46.5"/>
@@ -135,7 +135,7 @@
       </net>
       <net>
          <source obj="pnoise" outlet="out"/>
-         <dest obj="osc_2" inlet="pitchm"/>
+         <dest obj="osc_2" inlet="pitch"/>
          <dest obj="mix11" inlet="bus_in"/>
          <dest obj="mix22" inlet="in2"/>
       </net>
@@ -153,11 +153,11 @@
       </net>
       <net>
          <source obj="mix11" outlet="out"/>
-         <dest obj="osc_3" inlet="pitchm"/>
+         <dest obj="osc_3" inlet="pitch"/>
       </net>
       <net>
          <source obj="pwm" outlet="out"/>
-         <dest obj="osc_2" inlet="pwm"/>
+         <dest obj="osc_2" inlet="pw"/>
       </net>
       <net>
          <source obj="lfo" outlet="wave"/>
@@ -170,7 +170,7 @@
       <net>
          <source obj="keyb1" outlet="note"/>
          <dest obj="pnoise" inlet="bus_in"/>
-         <dest obj="osc_1" inlet="pitchm"/>
+         <dest obj="osc_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="div322" outlet="out"/>
@@ -182,7 +182,7 @@
       </net>
       <net>
          <source obj="mix22" outlet="out"/>
-         <dest obj="vcf3_1" inlet="pitchm"/>
+         <dest obj="vcf3_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="*c3" outlet="result"/>

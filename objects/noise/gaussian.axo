@@ -1,7 +1,7 @@
 <objdefs>
    <obj.normal id="gaussian" uuid="a0f2cae6eafbfa58e1f1cb28e369824c54486f79" sha="34a80904716df7e3875cee2c3056be75dc47aa9a">
-      <upgradeSha>43d4dec8c6448021780e4d51ddedd98bd944f688</upgradeSha>
-      <sDescription>pseudo gaussian distributed (white) noise. Range -64..64</sDescription>
+      <sDescription>pseudo gaussian distributed (white) noise
+Range -64..64</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>gaussian.axh</helpPatch>

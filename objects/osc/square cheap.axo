@@ -1,12 +1,12 @@
 <objdefs>
-   <obj.normal id="square cheap" uuid="81a6c6f0ba21493c7572ecf4f8dd181252679854" sha="a6a2f80eda686d06c1b94c0e38c5d079cc30e057">
-      <upgradeSha>b731d44f3315c325bec1144b15dee815ffb7507e</upgradeSha>
-      <sDescription>Non-bandwith limited square wave oscillator, cheap sound</sDescription>
+   <obj.normal id="square cheap" uuid="58dc60ffca7e6c5029f12ec68787945c669b7a8f" sha="2224fbc587d65d1d595611fb2b32037ed894d990">
+      <sDescription>square wave oscillator
+Non-bandwith limited, cheap sound</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>osc.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
+         <frac32.bipolar name="pitch" description="pitch"/>
       </inlets>
       <outlets>
          <frac32buffer.bipolar name="wave" description="square wave, non-anti-aliased"/>
@@ -21,7 +21,7 @@
       <code.init><![CDATA[    osc_p=0;
 ]]></code.init>
       <code.krate><![CDATA[  uint32_t freq;
-  MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
+  MTOFEXTENDED(param_pitch + inlet_pitch,freq);
   int j;
   for(j=0;j<BUFSIZE;j++){
     osc_p+=freq;

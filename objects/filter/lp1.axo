@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="lp1" uuid="1b1fd7085e44d2b7b80b59b8d68796b909c1b2cc" sha="290a234e2f83eb072198d0158bcd5da02a3606c3">
-      <upgradeSha>91e2ecaa66340906540043ea41ac3987ce0aef17</upgradeSha>
+      <upgradeSha>22334a57e1416f40229c460f7dc5248bd5261c0b</upgradeSha>
       <sDescription>1st order lowpass filter</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

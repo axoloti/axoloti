@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="line 2" uuid="f15256ae9947573c1f29d58e9c453b0ea8a271f1" sha="6a5c0fadc91698df478472303e09ee43f5419b65">
-      <upgradeSha>8a885cba62278febe2aed48273e9c80687747de1</upgradeSha>
+      <upgradeSha>2ecb804cfdf8d1762fabb42800b2d0c3ca49dfbd</upgradeSha>
       <sDescription>two piecewise linear ramps, extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,13 +1,13 @@
 <objdefs>
-   <obj.normal id="pulselengthm" uuid="ed16f080ac6164471fb2690543951616995cbca3" sha="952cae3107ff4e5006e989dac5022a4cd687eae9">
-      <upgradeSha>5d90a67235df290cb66eace59a15336edcb9bb32</upgradeSha>
+   <obj.normal id="pulselengthm" uuid="62560cedc7cebe84778bc1bb4fc6c2122074a4ab" sha="64ec08e76cf714563d1f08e0e755dd6736adf154">
+      <upgradeSha>c6f3188b159e5c251be17c404a4d3586a43c2a86</upgradeSha>
       <sDescription>Generates a single pulse after after a rising edge on trigger input. A new trigger before the pulse ends at the output, will extend the pulse. This version has a modulation input for the delay time. Extended range.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>timer.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
-         <frac32.bipolar name="delaym" description="delay modulation"/>
+         <frac32.bipolar name="delay" description="delay"/>
       </inlets>
       <outlets>
          <bool32 name="pulse" description="pulse output"/>
@@ -33,7 +33,7 @@ else {
     ntrig = 0;
   if (val>0) {
     int32_t t;
-    MTOF(-param_delay-inlet_delaym,t);
+    MTOF(-param_delay-inlet_delay,t);
      val -= t>>3;
      if (val<=0) outlet_pulse = 0;
      else outlet_pulse = 1;

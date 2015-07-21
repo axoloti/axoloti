@@ -17,7 +17,6 @@
  */
 package axoloti;
 
-import axoloti.dialogs.AboutFrame;
 import axoloti.object.AxoObjects;
 import axoloti.utils.OSDetect;
 import axoloti.utils.Preferences;
@@ -220,6 +219,7 @@ public class Axoloti {
             }
         }
 
+        Synonyms.instance(); // prime it
         if (cmdLineOnly) {
             try {
                 MainFrame frame = new MainFrame(args);

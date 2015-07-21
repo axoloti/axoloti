@@ -39,7 +39,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc2" x="920" y="20">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc2" x="920" y="20">
       <params>
          <frac32.s.map name="pitch" value="-2.0"/>
       </params>
@@ -59,17 +59,17 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/square" sha="a85e027441336ce2f7f54ea5cdfaedfacb47018e" name="square_1" x="320" y="120">
+   <obj type="osc/square" sha="7cccf8a95bf312ecc084f11f532cf5fda00b8c58" name="square_1" x="320" y="120">
       <params>
          <frac32.s.map name="pitch" value="12.031843185424805"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_2" x="520" y="160">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_2" x="520" y="160">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="fac485938f0744316bc8361d4ad33f897cbff287" name="square_1_" x="320" y="200">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="square_1_" x="320" y="200">
       <params>
          <frac32.s.map name="pitch" value="-0.024456501007080078"/>
       </params>
@@ -87,7 +87,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1" x="1080" y="200">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3_1" x="1080" y="200">
       <params>
          <frac32.s.map name="pitch" MidiCC="1" value="31.0"/>
          <frac32.u.map name="reso" value="51.0"/>
@@ -98,7 +98,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_2" x="760" y="380">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc_2" x="760" y="380">
       <params>
          <frac32.s.map name="pitch" value="15.0"/>
       </params>
@@ -114,7 +114,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="1080" y="380">
+   <obj type="delay/echo fdbk mix" sha="6bc1204ca59cfb6fe995e01f4a68be52ca63cd0" name="echo2_1" x="1080" y="380">
       <params>
          <frac32.u.map name="mix" value="63.5"/>
          <frac32.u.map name="feedback" value="15.0"/>
@@ -142,7 +142,7 @@
          <spinner attributeName="endNote" value="50"/>
       </attribs>
    </obj>
-   <obj type="osc/saw" sha="fac485938f0744316bc8361d4ad33f897cbff287" name="osc_1" x="160" y="500">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="osc_1" x="160" y="500">
       <params>
          <frac32.s.map name="pitch" value="0.006841182708740234"/>
       </params>
@@ -169,7 +169,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="fac485938f0744316bc8361d4ad33f897cbff287" name="osc_1_" x="160" y="580">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="osc_1_" x="160" y="580">
       <params>
          <frac32.s.map name="pitch" value="-12.14772891998291"/>
       </params>
@@ -208,7 +208,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1_" x="640" y="720">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3_1_" x="640" y="720">
       <params>
          <frac32.s.map name="pitch" value="5.0"/>
          <frac32.u.map name="reso" value="60.5"/>
@@ -216,7 +216,10 @@
       <attribs/>
    </obj>
    <obj type="fx/chorus" uuid="335fba2dfcc5c7b0847aec5c83eddeeb8edca40c" name="chorus1" x="960" y="740">
-      <params/>
+      <params>
+         <frac32.u.map name="depth" value="0.0"/>
+         <frac32.s.map name="speed" value="-64.0"/>
+      </params>
       <attribs/>
    </obj>
    <obj type="env/follower" sha="2f512222f4b4d2c035c326cd486c1cacc6be5e64" name="envahd2" x="880" y="860">
@@ -231,7 +234,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc3" x="0" y="880">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc3" x="0" y="880">
       <params>
          <frac32.s.map name="pitch" value="-3.0"/>
       </params>
@@ -262,7 +265,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3_1__" x="880" y="920">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3_1__" x="880" y="920">
       <params>
          <frac32.s.map name="pitch" value="15.0"/>
          <frac32.u.map name="reso" value="51.5"/>
@@ -317,8 +320,8 @@
       </net>
       <net>
          <source obj="mix21" outlet="out"/>
-         <dest obj="square_1" inlet="pitchm"/>
-         <dest obj="square_1_" inlet="pitchm"/>
+         <dest obj="square_1" inlet="pitch"/>
+         <dest obj="square_1_" inlet="pitch"/>
       </net>
       <net>
          <source obj="keybzone_lru1" outlet="gate"/>
@@ -331,7 +334,7 @@
       </net>
       <net>
          <source obj="mix11" outlet="out"/>
-         <dest obj="vcf3_1" inlet="pitchm"/>
+         <dest obj="vcf3_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="smooth1_" outlet="out"/>
@@ -352,8 +355,8 @@
       </net>
       <net>
          <source obj="keybzone_lru2" outlet="note"/>
-         <dest obj="osc_1" inlet="pitchm"/>
-         <dest obj="osc_1_" inlet="pitchm"/>
+         <dest obj="osc_1" inlet="pitch"/>
+         <dest obj="osc_1_" inlet="pitch"/>
       </net>
       <net>
          <source obj="osc_1" outlet="wave"/>
@@ -417,14 +420,6 @@
          <dest obj="chorus1" inlet="in"/>
       </net>
       <net>
-         <source obj="c1" outlet="out"/>
-         <dest obj="chorus1" inlet="speed"/>
-      </net>
-      <net>
-         <source obj="c2" outlet="out"/>
-         <dest obj="chorus1" inlet="depth"/>
-      </net>
-      <net>
          <source obj="keybzone_lru2" outlet="velocity"/>
          <dest obj="smooth21" inlet="in"/>
       </net>
@@ -434,7 +429,7 @@
       </net>
       <net>
          <source obj="*c2" outlet="out"/>
-         <dest obj="vcf3_1_" inlet="pitchm"/>
+         <dest obj="vcf3_1_" inlet="pitch"/>
       </net>
       <net>
          <source obj="rand_1" outlet="wave"/>
@@ -498,7 +493,7 @@
       </net>
       <net>
          <source obj="*c3" outlet="out"/>
-         <dest obj="vcf3_1__" inlet="pitchm"/>
+         <dest obj="vcf3_1__" inlet="pitch"/>
       </net>
       <net>
          <source obj="square_1" outlet="wave"/>

@@ -16,7 +16,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="timer/delayedpulseduration" sha="55f69bc6153344c6d5bed526ec91502b83708ce3" name="delayedpulseduration_1" x="294" y="140">
+   <obj type="timer/delayedpulseduration" sha="f81268ce9740f86a527d428d7b37694aeea563cd" name="delayedpulseduration_1" x="294" y="140">
       <params>
          <frac32.s.map name="delay" value="-64.0"/>
          <frac32.s.map name="pulselength" value="63.0"/>
@@ -36,7 +36,7 @@
          <table attributeName="suffix" table=".wav"/>
       </attribs>
    </obj>
-   <obj type="envahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd1" x="300" y="260">
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd1" x="300" y="260">
       <params>
          <frac32.s.map name="a" value="8.0"/>
          <frac32.s.map name="d" onParent="true" value="44.0"/>

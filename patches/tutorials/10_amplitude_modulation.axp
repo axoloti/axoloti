@@ -1,18 +1,18 @@
 <patch-1.0>
-   <comment type="patch/comment" name="amplitude modulation, sine wave carrier, sine wave modulator, 100% modulation depth" x="14" y="14"/>
-   <obj type="keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
+   <comment type="patch/comment" x="14" y="14" text="amplitude modulation, sine wave carrier, sine wave modulator, 100% modulation depth"/>
+   <obj type="midi/in/keyb" sha="b8deb97637e54be31fcb62e849e4fa406e72256e" name="keyb1" x="14" y="42">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="modulator oscillator" x="56" y="168"/>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="56" y="182">
+   <comment type="patch/comment" x="56" y="168" text="modulator oscillator"/>
+   <obj type="osc~" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="56" y="182">
       <params>
          <frac32.s.map name="pitch" value="-27.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="carrier oscillator" x="56" y="322"/>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_2" x="56" y="336">
+   <comment type="patch/comment" x="56" y="322" text="carrier oscillator"/>
+   <obj type="osc~" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_2" x="56" y="336">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -36,50 +36,50 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="588" y="336">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="588" y="336">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="out=0.5+0.5*in" x="182" y="392"/>
+   <comment type="patch/comment" x="182" y="392" text="out=0.5+0.5*in"/>
    <obj type="disp/scope 128 b trig" sha="91c015bbaaedb3ccbea0d5e0f78dbee6588e0a39" name="scope_1" x="574" y="462">
       <params/>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source name="osc_2 wave"/>
-         <dest name="bipolar2unipolar1 i"/>
+         <source obj="osc_2" outlet="wave"/>
+         <dest obj="bipolar2unipolar1" inlet="i"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="*1 a"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="*1" inlet="a"/>
       </net>
       <net>
-         <source name="bipolar2unipolar1 o"/>
-         <dest name="*1 b"/>
+         <source obj="bipolar2unipolar1" outlet="o"/>
+         <dest obj="*1" inlet="b"/>
       </net>
       <net>
-         <source name="*1 result"/>
-         <dest name="vca_1 a"/>
+         <source obj="*1" outlet="result"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="osc_1 pitchm"/>
-         <dest name="osc_2 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="osc_1" inlet="pitch"/>
+         <dest obj="osc_2" inlet="pitch"/>
       </net>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="vca_1 v"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="*c1 in"/>
-         <dest name="scope_1 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="*c1" inlet="in"/>
+         <dest obj="scope_1" inlet="in"/>
       </net>
    </nets>
    <settings>
@@ -87,4 +87,10 @@
       <MidiChannel>1</MidiChannel>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>898</width>
+      <height>772</height>
+   </windowPos>
 </patch-1.0>

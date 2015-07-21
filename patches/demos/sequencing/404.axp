@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="14" y="14">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_1" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="-1.0"/>
       </params>
@@ -109,7 +109,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw2_1" x="126" y="420">
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" name="saw2_1" x="126" y="420">
       <params>
          <frac32.s.map name="pitch" value="-63.0"/>
       </params>
@@ -128,7 +128,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw~_1" x="56" y="560">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw~_1" x="56" y="560">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
       </params>
@@ -138,7 +138,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="210" y="560">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_1" x="210" y="560">
       <params>
          <frac32.s.map name="pitch" value="-15.0"/>
          <frac32.u.map name="reso" value="60.0"/>
@@ -159,7 +159,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2~_1" x="476" y="560">
+   <obj type="delay/echo fdbk mix" sha="6bc1204ca59cfb6fe995e01f4a68be52ca63cd0" name="echo2~_1" x="476" y="560">
       <params>
          <frac32.u.map name="mix" value="42.0"/>
          <frac32.u.map name="feedback" value="28.5"/>
@@ -195,7 +195,7 @@
       </net>
       <net>
          <source obj="mix2_3" outlet="out"/>
-         <dest obj="vcf3~_1" inlet="pitchm"/>
+         <dest obj="vcf3~_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="vca~_2" outlet="o"/>
@@ -221,7 +221,7 @@
       </net>
       <net>
          <source obj="smooth_1" outlet="out"/>
-         <dest obj="saw~_1" inlet="pitchm"/>
+         <dest obj="saw~_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="select_bool_16_v2x4_1" outlet="o2"/>
@@ -307,8 +307,8 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>0</x>
-      <y>23</y>
+      <x>367</x>
+      <y>179</y>
       <width>1206</width>
       <height>870</height>
    </windowPos>
