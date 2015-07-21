@@ -2,6 +2,7 @@
 ## Axoloti
 #################
 
+*.log
 firmware/build/*
 firmware/flasher/flasher_build/*
 firmware/.dep/*
