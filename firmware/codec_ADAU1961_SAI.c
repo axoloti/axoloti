@@ -49,7 +49,7 @@ void codec_ADAU1961_hw_reset(void) {
 /* SDA : PB11
  * SCL : PB10
  */
-static const I2CConfig i2cfg2 = {OPMODE_I2C, 400000, FAST_DUTY_CYCLE_2, };
+static const I2CConfig i2cfg2 = {OPMODE_I2C, 100000, STD_DUTY_CYCLE, };
 
 static uint8_t i2crxbuf[8];
 static uint8_t i2ctxbuf[8];
@@ -60,6 +60,9 @@ static systime_t tmo;
 void CheckI2CErrors(void) {
   volatile i2cflags_t errors;
   errors = i2cGetErrors(&I2CD3);
+  if (errors != 0){
+    setErrorFlag(ERROR_CODEC_I2C);
+  }
   (void)errors;
 }
 
@@ -88,6 +91,11 @@ uint8_t ADAU1961_ReadRegister(uint16_t RegisterAddr) {
   ADAU1961_I2CStart();
   i2cAcquireBus(&I2CD3);
   status = i2cMasterTransmitTimeout(&I2CD3, ADAU1961_I2C_ADDR, i2ctxbuf, 2,
+                                    i2crxbuf, 0, tmo);
+  if (status != RDY_OK) {
+    CheckI2CErrors();
+  }
+  status = i2cMasterReceiveTimeout(&I2CD3, ADAU1961_I2C_ADDR,
                                     i2crxbuf, 1, tmo);
   if (status != RDY_OK) {
     CheckI2CErrors();
@@ -138,9 +146,11 @@ void ADAU1961_WriteRegister(uint16_t RegisterAddr, uint8_t RegisterValue) {
   ADAU1961_I2CStop();
   chThdSleepMilliseconds(1);
 
-  uint8_t rd = ADAU1961_ReadRegister(RegisterAddr);
+  static uint8_t rd;
+  rd = ADAU1961_ReadRegister(RegisterAddr);
   if (rd != RegisterValue) {
-    setErrorFlag(ERROR_CODEC_I2C);
+//    setErrorFlag(ERROR_CODEC_I2C);
+  } else {
   }
   chThdSleepMilliseconds(1);
 }
@@ -340,12 +350,6 @@ static void dma_sai_a_interrupt(void* dat, uint32_t flags) {
     computebufI(rbuf, buf2);
   }
   dmaStreamClearInterrupt(sai_a_dma);
-}
-
-static void dma_sai_b_interrupt(void* dat, uint32_t flags) {
-  (void)dat;
-  (void)flags;
-  dmaStreamClearInterrupt(sai_b_dma);
 }
 
 volatile SAI_Block_TypeDef *sai_a;

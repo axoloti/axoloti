@@ -93,6 +93,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
 
     /**
      * Creates new form MainFrame
+     *
      * @param args command line arguments
      */
     public MainFrame(String args[]) {
@@ -247,6 +248,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
     }
 
     void flashUsingSDRam(String fname_flasher) {
+        updateLinkFirmwareID();
         File f = new File(fname_flasher);
         if (f.canRead()) {
             qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
@@ -732,41 +734,47 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         jMenuReloadObjectsActionPerformed(evt);
     }//GEN-LAST:event_jMenuRegenerateObjectsActionPerformed
 
-
 // usually we run all tests, as many may fail for same reason and you want
 // a list of all affected files, but if you want to stop on first failure, flip this flag
-    public static boolean stopOnTestFail = false;    
-    
+    public static boolean stopOnTestFail = false;
+
     private void jMenuAutoTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAutoTestActionPerformed
         runAllTests();
     }//GEN-LAST:event_jMenuAutoTestActionPerformed
 
     public boolean runAllTests() {
         boolean r1 = runPatchTests();
-        if(!r1 && stopOnTestFail) return r1;
+        if (!r1 && stopOnTestFail) {
+            return r1;
+        }
         boolean r2 = runObjectTests();
-        if(!r2 && stopOnTestFail) return r2;
+        if (!r2 && stopOnTestFail) {
+            return r2;
+        }
         return r1 && r2;
     }
+
     public boolean runPatchTests() {
         return runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/patches"));
     }
+
     public boolean runObjectTests() {
         return runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/objects"));
     }
+
     public boolean runFileTest(String patchName) {
         return runTestDir(new File(patchName));
     }
-    
+
     private boolean runTestDir(File f) {
         if (!f.exists()) {
             return true;
         }
         if (f.isDirectory()) {
-            File[] files = f.listFiles(new FilenameFilter(){
+            File[] files = f.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File f, String name) {
-                    File t = new File ( f + File.separator + name);
+                    File t = new File(f + File.separator + name);
                     if (t.isDirectory()) {
                         return true;
                     }
@@ -779,13 +787,14 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
                     return b;
                 }
             });
-            for (File s : files ) {
-                if(! runTestDir(s)  && stopOnTestFail) 
+            for (File s : files) {
+                if (!runTestDir(s) && stopOnTestFail) {
                     return false;
+                }
             }
             return true;
         }
-        
+
         return runTestCompile(f);
     }
 
@@ -814,7 +823,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             }
             return status;
         } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "COMPILE FAILED: " + f.getPath(),ex);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "COMPILE FAILED: " + f.getPath(), ex);
             return false;
         }
     }
@@ -829,6 +838,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     private void jMenuItemFlashDFUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashDFUActionPerformed
         if (Usb.isDFUDeviceAvailable()) {
+            updateLinkFirmwareID();
             qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
             qcmdprocessor.AppendToQueue(new qcmds.QCmdDisconnect());
             qcmdprocessor.AppendToQueue(new qcmds.QCmdFlashDFU());
@@ -1092,7 +1102,11 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         int s = JOptionPane.showConfirmDialog(this,
                 "Firmware CRC mismatch detected!\n"
                 + "Do you want to update the firmware?\n"
-                + "This process will cause a disconnect, flashing leds, do not interrupt until ready...",
+                + "This process will cause a disconnect, "
+                + "the leds will blink for a minute, "
+                + "do not interrupt until the leds "
+                + "stop blinking.\n"
+                + "When the leds stop blinking, you can connect again.",
                 "Firmware update...",
                 JOptionPane.YES_NO_OPTION);
         if (s == 0) {
