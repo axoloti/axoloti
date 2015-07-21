@@ -545,7 +545,7 @@ public class PatchGUI extends Patch {
 //                                o.name = on2 + " " + r[1];
                                 OutletInstance i = new OutletInstance();
                                 i.outletname = outletname;
-                                i.objname = objname;
+                                i.objname = on2;
                                 source2.add(i);
                             } else if (restoreConnectionsToExternalOutlets) {
                                 AxoObjectInstanceAbstract obj = GetObjectInstance(objname);
@@ -570,7 +570,7 @@ public class PatchGUI extends Patch {
                             if (on2 != null) {
                                 InletInstance i = new InletInstance();
                                 i.inletname = inletname;
-                                i.objname = objname;
+                                i.objname = on2;
                                 dest2.add(i);
                             } else {/*
                                  AxoObjectInstanceAbstract obj = GetObjectInstance(r[0]);
