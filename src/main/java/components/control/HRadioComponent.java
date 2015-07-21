@@ -34,7 +34,7 @@ import java.awt.event.MouseEvent;
 public class HRadioComponent extends ACtrlComponent {
 
     private double value;
-    private int n;
+    private final int n;
     private final int bsize = 12;
 
     public HRadioComponent(int value, int n) {
@@ -110,6 +110,7 @@ public class HRadioComponent extends ACtrlComponent {
                 return;
             }
         }
+        
         switch (ke.getKeyChar()) {
             case '0':
             case '1':
@@ -126,7 +127,6 @@ public class HRadioComponent extends ACtrlComponent {
                     setValue(i);
                 }
                 ke.consume();
-                return;
         }
     }
 

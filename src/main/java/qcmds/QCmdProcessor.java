@@ -34,7 +34,7 @@ import javax.swing.SwingUtilities;
 public class QCmdProcessor implements Runnable {
 
     BlockingQueue<QCmd> queue;
-    private BlockingQueue<QCmd> queueResponse;
+    private final BlockingQueue<QCmd> queueResponse;
     public Connection serialconnection;
     private Patch patch;
     MainFrame mainframe;

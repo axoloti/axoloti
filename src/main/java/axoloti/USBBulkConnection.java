@@ -25,7 +25,6 @@ import axoloti.dialogs.USBPortSelectionDlg;
 import static axoloti.dialogs.USBPortSelectionDlg.ErrorString;
 import axoloti.parameters.ParameterInstance;
 import axoloti.targetprofile.axoloti_core;
-import axoloti.usb.Usb;
 import displays.DisplayInstance;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -39,7 +38,6 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import org.usb4java.*;
 import qcmds.QCmd;
-import qcmds.QCmdLock;
 import qcmds.QCmdMemRead;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdSerialTask;
@@ -59,7 +57,7 @@ public class USBBulkConnection extends Connection {
     Thread transmitterThread;
     Thread receiverThread;
     BlockingQueue<QCmdSerialTask> queueSerialTask;
-    private BlockingQueue<QCmd> queueResponse;
+    private final BlockingQueue<QCmd> queueResponse;
     String cpuid;
     private final axoloti_core targetProfile = new axoloti_core();
     private final Context context;
@@ -173,46 +171,46 @@ public class USBBulkConnection extends Connection {
 
         try {
             // Iterate over all devices and scan for the right one
-            for (Device device : list) {
+            for (Device d : list) {
                 DeviceDescriptor descriptor = new DeviceDescriptor();
-                result = LibUsb.getDeviceDescriptor(device, descriptor);
+                result = LibUsb.getDeviceDescriptor(d, descriptor);
                 if (result != LibUsb.SUCCESS) {
                     throw new LibUsbException("Unable to read device descriptor", result);
                 }
                 if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
                     Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "USB device found");
-                    DeviceHandle handle = new DeviceHandle();
-                    result = LibUsb.open(device, handle);
+                    DeviceHandle h = new DeviceHandle();
+                    result = LibUsb.open(d, h);
                     if (result < 0) {
                         Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, ErrorString(result));
                     } else {
-                        String serial = LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber());
+                        String serial = LibUsb.getStringDescriptor(h, descriptor.iSerialNumber());
                         if (cpuid != null) {
                             if (serial.equals(cpuid)) {
-                                return handle;
+                                return h;
                             }
                         } else {
-                            return handle;
+                            return h;
                         }
-                        LibUsb.close(handle);
+                        LibUsb.close(h);
                     }
                 }
             }
             // or else pick the first one
-            for (Device device : list) {
+            for (Device d : list) {
                 DeviceDescriptor descriptor = new DeviceDescriptor();
-                result = LibUsb.getDeviceDescriptor(device, descriptor);
+                result = LibUsb.getDeviceDescriptor(d, descriptor);
                 if (result != LibUsb.SUCCESS) {
                     throw new LibUsbException("Unable to read device descriptor", result);
                 }
                 if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
                     Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "USB device found");
-                    DeviceHandle handle = new DeviceHandle();
-                    result = LibUsb.open(device, handle);
+                    DeviceHandle h = new DeviceHandle();
+                    result = LibUsb.open(d, h);
                     if (result < 0) {
                         Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, ErrorString(result));
                     } else {
-                        return handle;
+                        return h;
                     }
                 }
             }
@@ -303,7 +301,7 @@ public class USBBulkConnection extends Connection {
         IntBuffer transfered = IntBuffer.allocate(1);
         int result = LibUsb.bulkTransfer(handle, (byte) 0x02, buffer, transfered, 1000);
         if (result != LibUsb.SUCCESS) {
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Control transfer failed: " + result);
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Control transfer failed: {0}", result);
         }
         //System.out.println(transfered.get() + " bytes sent");
     }
@@ -373,7 +371,7 @@ public class USBBulkConnection extends Connection {
         USBPortSelectionDlg spsDlg = new USBPortSelectionDlg(null, true, cpuid);
         spsDlg.setVisible(true);
         cpuid = spsDlg.getCPUID();
-        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: " + cpuid);
+        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: {0}", cpuid);
     }
 
     class Sync {
@@ -397,11 +395,7 @@ public class USBBulkConnection extends Connection {
             } catch (InterruptedException ex) {
                 //              Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, "Sync wait interrupted");
             }
-            if (sync.Acked == 1) {
-                return true;
-            } else {
-                return false;
-            }
+            return sync.Acked == 1;
         }
     }
     private final byte[] startPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('s')};
@@ -456,7 +450,7 @@ public class USBBulkConnection extends Connection {
         writeBytes(data);
         writeBytes(buffer);
         WaitSync();
-        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "block uploaded @ 0x" + Integer.toHexString(offset) + " length " + buffer.length);
+        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "block uploaded @ 0x{0} length {1}", new Object[]{Integer.toHexString(offset), buffer.length});
     }
 
     @Override
@@ -631,7 +625,7 @@ public class USBBulkConnection extends Connection {
                     void run() {
                 if (patch == null) {
                     Logger.getLogger(USBBulkConnection.class
-                            .getName()).log(Level.INFO, "Rx paramchange patch null" + index + " " + value);
+                            .getName()).log(Level.INFO, "Rx paramchange patch null{0} {1}", new Object[]{index, value});
 
                     return;
                 }
@@ -641,7 +635,7 @@ public class USBBulkConnection extends Connection {
                 }
                 if (index >= patch.ParameterInstances.size()) {
                     Logger.getLogger(USBBulkConnection.class
-                            .getName()).log(Level.INFO, "Rx paramchange index out of range" + index + " " + value);
+                            .getName()).log(Level.INFO, "Rx paramchange index out of range{0} {1}", new Object[]{index, value});
 
                     return;
                 }
@@ -649,13 +643,13 @@ public class USBBulkConnection extends Connection {
 
                 if (pi == null) {
                     Logger.getLogger(USBBulkConnection.class
-                            .getName()).log(Level.INFO, "Rx paramchange parameterInstance null" + index + " " + value);
+                            .getName()).log(Level.INFO, "Rx paramchange parameterInstance null{0} {1}", new Object[]{index, value});
                     return;
                 }
 
                 if (patch.GetIID() != IID) {
                     Logger.getLogger(USBBulkConnection.class
-                            .getName()).log(Level.INFO, "Rx paramchange IID mismatch" + index + " " + value);
+                            .getName()).log(Level.INFO, "Rx paramchange IID mismatch{0} {1}", new Object[]{index, value});
                     return;
                 }
 
@@ -721,7 +715,7 @@ public class USBBulkConnection extends Connection {
 
     void DisplayPackHeader(int i1, int i2) {
         if (i2 > 1024) {
-            Logger.getLogger(USBBulkConnection.class.getName()).fine("Lots of data coming! " + Integer.toHexString(i1) + " / " + Integer.toHexString(i2));
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.FINE, "Lots of data coming! {0} / {1}", new Object[]{Integer.toHexString(i1), Integer.toHexString(i2)});
         } else {
 //            Logger.getLogger(SerialConnection.class.getName()).info("OK! " + Integer.toHexString(i1) + " / " + Integer.toHexString(i2));
         }
@@ -921,7 +915,7 @@ public class USBBulkConnection extends Connection {
                     //textRcvBuffer.append((char) cc);
                     textRcvBuffer.limit(textRcvBuffer.position());
                     textRcvBuffer.rewind();
-                    Logger.getLogger(USBBulkConnection.class.getName()).info("Axoloti says: " + textRcvBuffer.toString());
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Axoloti says: {0}", textRcvBuffer.toString());
                     GoIdleState();
                 }
                 break;

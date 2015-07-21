@@ -19,7 +19,6 @@ package axoloti;
 
 import axoloti.datatypes.ValueFrac32;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceFrac32;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;

@@ -33,11 +33,11 @@ public class ScopeComponent extends ADispComponent {
 
     private final int length = 64;
     private final int vsize = 64;
-    private int[] value = new int[length];
-    private int[] xvalue = new int[length];
+    private final int[] value = new int[length];
+    private final int[] xvalue = new int[length];
     private int index = 0;
-    private double max;
-    private double min;
+    private final double max;
+    private final double min;
 
     public ScopeComponent(double min, double max) {
         this.max = max;

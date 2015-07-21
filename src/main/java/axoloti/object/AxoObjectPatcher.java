@@ -45,7 +45,7 @@ public class AxoObjectPatcher extends AxoObject {
                 || (sMidiNoteOnCode != null)
                 || (sMidiPBendCode != null)
                 || (sMidiResetControllersCode != null)) {
-            Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object " + InstanceName1 + " uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!");
+            Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object {0} uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!", InstanceName1);
         }
 
         AxoObjectInstance o = new AxoObjectInstancePatcher(this, patch, InstanceName1, location);

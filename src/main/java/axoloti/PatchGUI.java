@@ -267,7 +267,7 @@ public class PatchGUI extends Patch {
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && (!ke.isControlDown()) && (!ke.isMetaDown()))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && (ke.isControlDown()))) {
-                    AxoObjectInstanceAbstract ao = AddObjectInstance(MainFrame.mainframe.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
+                    AxoObjectInstanceAbstract ao = AddObjectInstance(MainFrame.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
                     ao.addInstanceNameEditor();
                     ke.consume();
                 } else if ((ke.getKeyCode() == KeyEvent.VK_I) && (!ke.isControlDown()) && (!ke.isMetaDown())) {

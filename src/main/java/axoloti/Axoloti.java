@@ -17,7 +17,6 @@
  */
 package axoloti;
 
-import axoloti.dialogs.AboutFrame;
 import axoloti.object.AxoObjects;
 import axoloti.utils.OSDetect;
 import axoloti.utils.Preferences;

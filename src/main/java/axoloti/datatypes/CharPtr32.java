@@ -32,10 +32,7 @@ public class CharPtr32 implements DataType {
         if (equals(dest)) {
             return true;
         }
-        if (Int32.d.equals(dest)) {
-            return true;
-        }
-        return false;
+        return Int32.d.equals(dest);
     }
 
     @Override

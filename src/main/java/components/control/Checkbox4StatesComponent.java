@@ -34,7 +34,7 @@ import java.awt.event.MouseEvent;
 public class Checkbox4StatesComponent extends ACtrlComponent {
 
     private double value;
-    private int n;
+    private final int n;
     private final int bsize = 12;
     private int selIndex = -1;
 
@@ -146,27 +146,28 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
                 return;
             }
         }
+        
         switch (ke.getKeyChar()) {
             case '0':
                 SetFieldValue(selIndex, 0);
                 ke.consume();
-                return;
+                break;
             case '1':
                 SetFieldValue(selIndex, 1);
                 ke.consume();
-                return;
+                break;
             case '2':
                 SetFieldValue(selIndex, 2);
                 ke.consume();
-                return;
+                break;
             case '3':
                 SetFieldValue(selIndex, 3);
                 ke.consume();
-                return;
+                break;
             case ' ':
                 SetFieldValue(selIndex, (GetFieldValue(selIndex) + 1) & 3);
                 ke.consume();
-                return;
+                break;
         }
     }
 

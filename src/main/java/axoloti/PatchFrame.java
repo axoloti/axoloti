@@ -117,7 +117,7 @@ public class PatchFrame extends javax.swing.JFrame {
     }
     QCmdProcessor qcmdprocessor;
 
-    public void UpdateConnectStatus() {
+    public final void UpdateConnectStatus() {
         if (qcmdprocessor.serialconnection.isConnected()) {
             ShowConnect();
         } else {
@@ -858,7 +858,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         if (lastSeparatorIndex > 0) {
             FileNameNoPath = FileNameNoPath.substring(lastSeparatorIndex + 1);
         }
-        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "target filename:" + FileNameNoPath);
+        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "target filename:{0}", FileNameNoPath);
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patch));
         qcmdprocessor.AppendToQueue(new qcmds.QCmdWriteFile("0:" + FileNameNoPath));
@@ -867,7 +867,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private void jMenuItemUploadSDStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDStartActionPerformed
         patch.WriteCode();
         String FileNameNoPath = "start.bin";
-        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "target filename:" + FileNameNoPath);
+        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "target filename:{0}", FileNameNoPath);
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patch));
         qcmdprocessor.AppendToQueue(new qcmds.QCmdWriteFile("0:" + FileNameNoPath));
