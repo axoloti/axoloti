@@ -1,13 +1,13 @@
 <objdefs>
-   <obj.normal id="lp1 m" uuid="cb8f185c8f9411eee367e0013560cf1c1d97daab" sha="ac78392e923186c73e763251b4d0b9ccac36ee66">
-      <upgradeSha>2ae51504002c3a843c801f2e4d21462e82fd11fa</upgradeSha>
+   <obj.normal id="lp1 m" uuid="18b561d14f9175f5380e6a1d9d55ca41e0e61974" sha="558b927362bc73faa12a3da14347042a7ebf0504">
+      <upgradeSha>673f606b3047e012f4b16b025a83ebbe7529e18d</upgradeSha>
       <sDescription>1st order lowpass filter, modulation input</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
-         <frac32 name="freqm" description="freq modulation"/>
+         <frac32 name="freq" description="cutoff frequency"/>
       </inlets>
       <outlets>
          <frac32buffer name="out" description="output"/>
@@ -22,7 +22,7 @@
       <code.init><![CDATA[val = 0;
 ]]></code.init>
       <code.krate><![CDATA[int32_t f;
-   MTOF(param_freq+inlet_freqm,f);
+   MTOF(param_freq+inlet_freq,f);
 ]]></code.krate>
       <code.srate><![CDATA[   val = ___SMMLA((inlet_in-val)<<1,f,val);
    outlet_out= val;

@@ -1,14 +1,14 @@
 <objdefs>
-   <obj.normal id="vcf3" uuid="5b57dcb58a368c554a3defa881d15f6202189db8" sha="e6e7a65f55355251a36be0d155ff559ef641ad46">
-      <upgradeSha>a4c7bb4270fc01be85be81c8f212636b9c54eaea</upgradeSha>
+   <obj.normal id="vcf3" uuid="92455c652cd098cbb682a5497baa18abbf2ef865" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837">
+      <upgradeSha>ced9d9125e78e99a0399436836e98906ebc0172</upgradeSha>
       <sDescription>2-pole resonant low-pass filter (biquad), filter updated at k-rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="filter input"/>
-         <frac32 name="pitchm" description="pitch modulation"/>
-         <frac32 name="resom" description="filter resonance"/>
+         <frac32 name="pitch" description="pitch"/>
+         <frac32 name="reso" description="filter resonance"/>
       </inlets>
       <outlets>
          <frac32buffer name="out" description="filter output"/>
@@ -25,8 +25,8 @@
 ]]></code.init>
       <code.krate><![CDATA[  {
       int32_t freq;
-      MTOF(param_pitch + inlet_pitchm,freq);
-      f_filter_biquad_A(&fd,inlet_in,outlet_out,freq,INT_MAX - (__USAT(inlet_resom + param_reso,27)<<4));
+      MTOF(param_pitch + inlet_pitch,freq);
+      f_filter_biquad_A(&fd,inlet_in,outlet_out,freq,INT_MAX - (__USAT(inlet_reso + param_reso,27)<<4));
    }
 ]]></code.krate>
    </obj.normal>

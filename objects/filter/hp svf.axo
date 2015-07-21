@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="hp svf" uuid="35b1fb7e1688ccb36f73860218d8be8698c20901" sha="b713b3afdc5ee2c3aaca6ac1b8e343c555c40952">
-      <upgradeSha>5e42bb7fe0e7430bbe43945c7a76b131d71d2f7</upgradeSha>
+      <upgradeSha>e0caa6b0e380fb67b67dec526f8742b4e7aa8cfc</upgradeSha>
       <sDescription>Highpass filter, state-variable type</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

@@ -1,13 +1,13 @@
 <objdefs>
-   <obj.normal id="hd lin m" uuid="6183f1b92c957d133e0941ebee52e681644c1f46" sha="df06aadbeb4550dafe89ad7e1e7bae28d78b28c8">
-      <upgradeSha>dcb298f520e0bbab4d2ae0cbc4cffe086feab1fa</upgradeSha>
+   <obj.normal id="hd lin m" uuid="d587c40eeaf1152b109e2316cbaa9f7ada7b2edf" sha="d4ef515cd9641d74a3558cb63ddc0c56e0543223">
+      <upgradeSha>4518aabf2edca5950eba760513413ea0a7047d2d</upgradeSha>
       <sDescription>hold/decay envelope, linear ramp, modulation input extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>env.axh</helpPatch>
       <inlets>
          <bool32.risingfalling name="trig" description="trigger"/>
-         <frac32.bipolar name="dm" description="d modulation"/>
+         <frac32.bipolar name="d" description="decay time"/>
       </inlets>
       <outlets>
          <frac32.positive name="env" description="envelope output"/>
@@ -26,7 +26,7 @@
 }
 else {
   int32_t t;
-  int32_t dt = param_d + inlet_dm;
+  int32_t dt = param_d + inlet_d;
   MTOF(-dt,t);
   val -= t>>6;
   if (val < 0)

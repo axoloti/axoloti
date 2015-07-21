@@ -90,28 +90,28 @@ public class Filter extends gentools {
         AxoObject o = new AxoObject("vcf", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("frequency", "cutoff frequency"));
-        o.inlets.add(new InletFrac32("resonance", "filter resonance"));
+        o.inlets.add(new InletFrac32("reso", "filter resonance"));
         o.outlets.add(new OutletFrac32Buffer("out", "filter output"));
 
         o.sLocalData = "data_filter_biquad_A fd;\n";
         o.sInitCode = "  init_filter_biquad_A(&fd);\n";
-        o.sKRateCode = " f_filter_biquad_A(&fd,%in%,%out%,%frequency%,INT_MAX - (__USAT(%resonance%,27)<<4));\n";
+        o.sKRateCode = " f_filter_biquad_A(&fd,%in%,%out%,%frequency%,INT_MAX - (__USAT(inlet_reso,27)<<4));\n";
         return o;
     }
 
     static AxoObject CreateVCF2() {
         AxoObject o = new AxoObject("vcf2", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
-        o.inlets.add(new InletFrac32("pitchm", "pitch modulation"));
-        o.inlets.add(new InletFrac32("resonance", "filter resonance"));
+        o.inlets.add(new InletFrac32("pitch", "pitch"));
+        o.inlets.add(new InletFrac32("reso", "filter resonance"));
         o.params.add(new ParameterFrac32SMap("pitch"));
         o.outlets.add(new OutletFrac32Buffer("out", "filter output"));
         o.sLocalData = "data_filter_biquad_A fd;\n";
         o.sInitCode = "  init_filter_biquad_A(&fd);\n";
         o.sKRateCode = "  {\n"
                 + "      int32_t freq;\n"
-                + "      MTOF(%pitch% + %pitchm%,freq);\n"
-                + "      f_filter_biquad_A(&fd,%in%,%out%,freq,INT_MAX - (__USAT(%resonance%,27)<<4));\n"
+                + "      MTOF(param_pitch + inlet_pitch,freq);\n"
+                + "      f_filter_biquad_A(&fd,%in%,%out%,freq,INT_MAX - (__USAT(inlet_reso,27)<<4));\n"
                 + "   }\n";
         return o;
     }
@@ -119,8 +119,8 @@ public class Filter extends gentools {
     static AxoObject CreateVCF3() {
         AxoObject o = new AxoObject("vcf3", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
-        o.inlets.add(new InletFrac32("pitchm", "pitch modulation"));
-        o.inlets.add(new InletFrac32("resom", "filter resonance"));
+        o.inlets.add(new InletFrac32("pitch", "pitch"));
+        o.inlets.add(new InletFrac32("reso", "filter resonance"));
         o.params.add(new ParameterFrac32SMap("pitch"));
         o.params.add(new ParameterFrac32UMapFilterQ("reso"));
         o.outlets.add(new OutletFrac32Buffer("out", "filter output"));
@@ -128,8 +128,8 @@ public class Filter extends gentools {
         o.sInitCode = "  init_filter_biquad_A(&fd);\n";
         o.sKRateCode = "  {\n"
                 + "      int32_t freq;\n"
-                + "      MTOF(%pitch% + %pitchm%,freq);\n"
-                + "      f_filter_biquad_A(&fd,%in%,%out%,freq,INT_MAX - (__USAT(%resom% + %reso%,27)<<4));\n"
+                + "      MTOF(param_pitch + inlet_pitch,freq);\n"
+                + "      f_filter_biquad_A(&fd,%in%,%out%,freq,INT_MAX - (__USAT(inlet_reso + param_reso,27)<<4));\n"
                 + "   }\n";
         return o;
     }
@@ -144,8 +144,8 @@ public class Filter extends gentools {
                 + "biquad_coefficients bc;\n";
         o.sInitCode = "biquad_clearstate(&bs);\n";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOF(%pitch%,freq);\n"
-                + "      biquad_lp_coefs(&bc,freq,INT_MAX - (__USAT(%reso%,27)<<4));\n"
+                + "      MTOF(param_pitch,freq);\n"
+                + "      biquad_lp_coefs(&bc,freq,INT_MAX - (__USAT(param_reso,27)<<4));\n"
                 + "      biquad_dsp(&bs,&bc,%in%,%out%);\n";
         return o;
     }
@@ -153,8 +153,8 @@ public class Filter extends gentools {
     static AxoObject CreateLPFM() {
         AxoObject o = new AxoObject("lp m", "2-pole resonant low-pass filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
-        o.inlets.add(new InletFrac32("pitchm", "pitch modulation"));
-        o.inlets.add(new InletFrac32("resom", "filter resonance"));
+        o.inlets.add(new InletFrac32("pitch", "pitch"));
+        o.inlets.add(new InletFrac32("reso", "filter resonance"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.params.add(new ParameterFrac32UMapFilterQ("reso"));
         o.outlets.add(new OutletFrac32Buffer("out", "filter output"));
@@ -162,8 +162,8 @@ public class Filter extends gentools {
                 + "biquad_coefficients bc;\n";
         o.sInitCode = "biquad_clearstate(&bs);\n";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOF(%pitch% + %pitchm%,freq);\n"
-                + "      biquad_lp_coefs(&bc,freq,INT_MAX - (__USAT(%resom% + %reso%,27)<<4));\n"
+                + "      MTOF(param_pitch + inlet_pitch,freq);\n"
+                + "      biquad_lp_coefs(&bc,freq,INT_MAX - (__USAT(inlet_reso + param_reso,27)<<4));\n"
                 + "      biquad_dsp(&bs,&bc,%in%,%out%);\n";
         return o;
     }
@@ -178,8 +178,8 @@ public class Filter extends gentools {
                 + "biquad_coefficients bc;\n";
         o.sInitCode = "biquad_clearstate(&bs);\n";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOF(%pitch%,freq);\n"
-                + "      biquad_bp_coefs(&bc,freq,INT_MAX - (__USAT(%reso%,27)<<4));\n"
+                + "      MTOF(param_pitch,freq);\n"
+                + "      biquad_bp_coefs(&bc,freq,INT_MAX - (__USAT(param_reso,27)<<4));\n"
                 + "      biquad_dsp(&bs,&bc,%in%,%out%);\n";
         return o;
     }
@@ -187,8 +187,8 @@ public class Filter extends gentools {
     static AxoObject CreateBPFM() {
         AxoObject o = new AxoObject("bp m", "2-pole resonant band-pass filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
-        o.inlets.add(new InletFrac32("pitchm", "pitch modulation"));
-        o.inlets.add(new InletFrac32("resom", "filter resonance"));
+        o.inlets.add(new InletFrac32("pitch", "pitch"));
+        o.inlets.add(new InletFrac32("reso", "filter resonance"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.params.add(new ParameterFrac32UMapFilterQ("reso"));
         o.outlets.add(new OutletFrac32Buffer("out", "filter output"));
@@ -196,8 +196,8 @@ public class Filter extends gentools {
                 + "biquad_coefficients bc;\n";
         o.sInitCode = "biquad_clearstate(&bs);\n";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOF(%pitch% + %pitchm%,freq);\n"
-                + "      biquad_bp_coefs(&bc,freq,INT_MAX - (__USAT(%resom% + %reso%,27)<<4));\n"
+                + "      MTOF(param_pitch + inlet_pitch,freq);\n"
+                + "      biquad_bp_coefs(&bc,freq,INT_MAX - (__USAT(inlet_reso + param_reso,27)<<4));\n"
                 + "      biquad_dsp(&bs,&bc,%in%,%out%);\n";
         return o;
     }
@@ -212,8 +212,8 @@ public class Filter extends gentools {
                 + "biquad_coefficients bc;\n";
         o.sInitCode = "biquad_clearstate(&bs);\n";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOF(%pitch%,freq);\n"
-                + "      biquad_hp_coefs(&bc,freq,INT_MAX - (__USAT(%reso%,27)<<4));\n"
+                + "      MTOF(param_pitch,freq);\n"
+                + "      biquad_hp_coefs(&bc,freq,INT_MAX - (__USAT(param_reso,27)<<4));\n"
                 + "      biquad_dsp(&bs,&bc,%in%,%out%);\n";
         return o;
     }
@@ -221,8 +221,8 @@ public class Filter extends gentools {
     static AxoObject CreateHPFM() {
         AxoObject o = new AxoObject("hp m", "2-pole resonant high-pass filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
-        o.inlets.add(new InletFrac32("pitchm", "pitch modulation"));
-        o.inlets.add(new InletFrac32("resom", "filter resonance"));
+        o.inlets.add(new InletFrac32("pitch", "pitch"));
+        o.inlets.add(new InletFrac32("reso", "filter resonance"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.params.add(new ParameterFrac32UMapFilterQ("reso"));
         o.outlets.add(new OutletFrac32Buffer("out", "filter output"));
@@ -230,8 +230,8 @@ public class Filter extends gentools {
                 + "biquad_coefficients bc;\n";
         o.sInitCode = "biquad_clearstate(&bs);\n";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOF(%pitch% + %pitchm%,freq);\n"
-                + "      biquad_hp_coefs(&bc,freq,INT_MAX - (__USAT(%resom% + %reso%,27)<<4));\n"
+                + "      MTOF(param_pitch + inlet_pitch,freq);\n"
+                + "      biquad_hp_coefs(&bc,freq,INT_MAX - (__USAT(inlet_reso + param_reso,27)<<4));\n"
                 + "      biquad_dsp(&bs,&bc,%in%,%out%);\n";
         return o;
     }
@@ -264,7 +264,7 @@ public class Filter extends gentools {
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "val = 0;\n";
         o.sKRateCode = "int32_t f;\n"
-                + "   MTOF(%freq%,f);\n";
+                + "   MTOF(param_freq,f);\n";
         o.sSRateCode = "   val = ___SMMLA((%in%-val)<<1,f,val);\n"
                 + "   %out%= val;\n";
         return o;
@@ -278,7 +278,7 @@ public class Filter extends gentools {
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "val = 0;\n";
         o.sKRateCode = "int32_t f;\n"
-                + "   MTOF(%freq%,f);\n"
+                + "   MTOF(param_freq,f);\n"
                 + "   val = ___SMMLA((%in%-val)<<1,f,val);\n"
                 + "   %out%= val;\n";
         return o;
@@ -292,7 +292,7 @@ public class Filter extends gentools {
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "val = 0;\n";
         o.sKRateCode = "int32_t f;\n"
-                + "   MTOF(%freq%,f);\n";
+                + "   MTOF(param_freq,f);\n";
         o.sSRateCode = "   val = ___SMMLA((%in%-val)<<1,f,val);\n"
                 + "   %out%= %in%-val;\n";
         return o;
@@ -301,13 +301,13 @@ public class Filter extends gentools {
     static AxoObject Create_lowpassMTilde() {
         AxoObject o = new AxoObject("lp1 m", "1st order lowpass filter, modulation input");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
-        o.inlets.add(new InletFrac32("freqm", "freq modulation"));
+        o.inlets.add(new InletFrac32("freq", "cutoff frequency"));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
         o.params.add(new ParameterFrac32UMap("freq"));
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "val = 0;\n";
         o.sKRateCode = "int32_t f;\n"
-                + "   MTOF(%freq%+%freqm%,f);\n";
+                + "   MTOF(param_freq+inlet_freq,f);\n";
         o.sSRateCode = "   val = ___SMMLA((%in%-val)<<1,f,val);\n"
                 + "   %out%= val;\n";
         return o;
@@ -316,13 +316,13 @@ public class Filter extends gentools {
     static AxoObject Create_hipassMTilde() {
         AxoObject o = new AxoObject("hp1 m", "1st order hipass filter, modulation input");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
-        o.inlets.add(new InletFrac32("freqm", "freq modulation"));
+        o.inlets.add(new InletFrac32("freq", "cutoff frequency"));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
         o.params.add(new ParameterFrac32UMap("freq"));
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "val = 0;\n";
         o.sKRateCode = "int32_t f;\n"
-                + "   MTOF(%freq%+%freqm%,f);\n";
+                + "   MTOF(param_freq+inlet_freq,f);\n";
         o.sSRateCode = "   val = ___SMMLA((%in%-val)<<1,f,val);\n"
                 + "   %out%= %in%-val;\n";
         return o;
@@ -544,11 +544,11 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (%reso%<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(%pitch%,alpha);\n"
+                + "MTOFEXTENDED(param_pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n";
         o.sSRateCode = "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
@@ -584,11 +584,11 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (%reso%<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(%pitch%,alpha);\n"
+                + "MTOFEXTENDED(param_pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n";
         o.sSRateCode = "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
@@ -610,11 +610,11 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (%reso%<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(%pitch%,alpha);\n"
+                + "MTOFEXTENDED(param_pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n";
         o.sSRateCode = "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
@@ -629,8 +629,8 @@ public class Filter extends gentools {
     static AxoObject Create_bp_svf_m() {
         AxoObject o = new AxoObject("bp svf m", "Bandpass filter, state-variable type, modulation inputs");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
-        o.inlets.add(new InletFrac32("pitchm", "pitch modulation input"));
-        o.inlets.add(new InletFrac32("resom", "resonance modulation input"));
+        o.inlets.add(new InletFrac32("pitch", "pitch"));
+        o.inlets.add(new InletFrac32("reso", "resonance"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.params.add(new ParameterFrac32UMapFilterQ("reso"));
         o.outlets.add(new OutletFrac32Buffer("out", "filter output"));
@@ -638,11 +638,11 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (__USAT(%resom% + %reso%,27)<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (__USAT(inlet_reso + param_reso,27)<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(%pitch% + %pitchm%,alpha);\n"
+                + "MTOFEXTENDED(param_pitch + inlet_pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n";
         o.sSRateCode = "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
@@ -664,11 +664,11 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (%reso%<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(%pitch%,alpha);\n"
+                + "MTOFEXTENDED(param_pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n";
         o.sSRateCode = "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
@@ -714,11 +714,11 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (%reso%<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(%pitch%,alpha);\n"
+                + "MTOFEXTENDED(param_pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n"
                 + "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
@@ -741,11 +741,11 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (%reso%<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(%pitch%,alpha);\n"
+                + "MTOFEXTENDED(param_pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n";
         o.sSRateCode = "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
@@ -767,11 +767,11 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (%reso%<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(%pitch%,alpha);\n"
+                + "MTOFEXTENDED(param_pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n"
                 + "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
@@ -793,11 +793,11 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (%reso%<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(%pitch%,alpha);\n"
+                + "MTOFEXTENDED(param_pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n"
                 + "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
@@ -812,8 +812,8 @@ public class Filter extends gentools {
     static AxoObject Create_k_bpfsvf_m() {
         AxoObject o = new AxoObject("bp svf m", "Bandpass filter, state-variable type, control rate");
         o.inlets.add(new InletFrac32("in", "filter input"));
-        o.inlets.add(new InletFrac32("pitchm", "pitch modulation input"));
-        o.inlets.add(new InletFrac32("resom", "resonance modulation input"));
+        o.inlets.add(new InletFrac32("pitch", "pitch input"));
+        o.inlets.add(new InletFrac32("reso", "resonance input"));
         o.params.add(new ParameterFrac32SMapKPitch("pitch"));
         o.params.add(new ParameterFrac32UMapFilterQ("reso"));
         o.outlets.add(new OutletFrac32("out", "filter output"));
@@ -821,11 +821,11 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (__USAT(%resom% + %reso%,27)<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (__USAT(inlet_reso + param_reso,27)<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(%pitch% + %pitchm%,alpha);\n"
+                + "MTOFEXTENDED(param_pitch + inlet_pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n"
                 + "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"

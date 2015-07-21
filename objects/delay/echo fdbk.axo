@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="echo fdbk" uuid="1f4503fa4cd020010f59ce3ffa860caf0cd850c5" sha="f9b74c23e8d4ae4405f9e079da1ee902f6c728be">
-      <upgradeSha>7611c8729f6b16550b0764bc62bc93ccc71235fc</upgradeSha>
+      <upgradeSha>34f0f4688b9fa02573cd614eca7161c8957b3e7d</upgradeSha>
       <sDescription>Audio delay with feedback, fixed delay time</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

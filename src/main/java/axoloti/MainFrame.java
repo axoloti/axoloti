@@ -131,10 +131,13 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
                 } else {
                     try {
                         if (lr.getLevel() == Level.SEVERE) {
-                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(), lr.getMessage() + "\n", styleSevere);
+                            
+                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(), 
+                                    java.text.MessageFormat.format(lr.getMessage(), lr.getParameters()) + "\n", styleSevere);
                             MainFrame.this.toFront();
                         } else {
-                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(), lr.getMessage() + "\n", styleFine);
+                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(), 
+                                    java.text.MessageFormat.format(lr.getMessage(), lr.getParameters())  + "\n", styleFine);
                         }
                     } catch (BadLocationException ex) {
                         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -250,7 +253,7 @@ public class MainFrame extends javax.swing.JFrame implements ActionListener {
             qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
             qcmdprocessor.AppendToQueue(new QCmdStart(null));
         } else {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can't read flasher, please compile firmware! (file: " + fname_flasher + " )");
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read flasher, please compile firmware! (file: {0} )", fname_flasher);
         }
     }
 
@@ -787,10 +790,10 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }
 
     private boolean runTestCompile(File f) {
-        Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "testing " + f.getPath());
+        Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "testing {0}", f.getPath());
         Serializer serializer = new Persister();
         try {
-            boolean status = true;
+            boolean status;
             PatchGUI patch1 = serializer.read(PatchGUI.class, f);
             PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
             patch1.setFileNamePath(f.getPath());
@@ -807,7 +810,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             Thread.sleep(2500);
             status = cp.success();
             if (status == false) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "COMPILE FAILED: " + f.getPath());
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "COMPILE FAILED: {0}", f.getPath());
             }
             return status;
         } catch (Exception ex) {

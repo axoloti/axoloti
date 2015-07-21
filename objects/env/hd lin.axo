@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="hd lin" uuid="e1c644820f5dbd1703204707d0b83ffee094f72c" sha="bfa4e9d4d666127337aa1fca31f604535788ab1e">
-      <upgradeSha>585422d25dcc5441ac2a9eb81474d018f7e883de</upgradeSha>
+      <upgradeSha>2059541029f18a30714185bd60838f97be73ce98</upgradeSha>
       <sDescription>hold/decay envelope, linear ramp, extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>

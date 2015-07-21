@@ -1,14 +1,14 @@
 <objdefs>
-   <obj.normal id="bp svf m" uuid="51991c00ad80db475ad425470af9d991923e7615" sha="9417f1ac8a09ccb7c2be01f97adf64170622aacd">
-      <upgradeSha>561e56d24bf5c702564c7d043fda6d0d3003deec</upgradeSha>
+   <obj.normal id="bp svf m" uuid="90abfee2793172fc193ec82288a454727134cb31" sha="24097930d951f375e0839b70f065d71a782d8b23">
+      <upgradeSha>619529e19b5881a3c95c2e403a75bd4718fcee87</upgradeSha>
       <sDescription>Bandpass filter, state-variable type, modulation inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>filter.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="filter input"/>
-         <frac32 name="pitchm" description="pitch modulation input"/>
-         <frac32 name="resom" description="resonance modulation input"/>
+         <frac32 name="pitch" description="pitch"/>
+         <frac32 name="reso" description="resonance"/>
       </inlets>
       <outlets>
          <frac32buffer name="out" description="filter output"/>
@@ -25,11 +25,11 @@ int32_t band;
       <code.init><![CDATA[low = 0;
 band = 0;
 ]]></code.init>
-      <code.krate><![CDATA[int32_t damp = (0x80<<24) - (__USAT(inlet_resom + param_reso,27)<<4);
+      <code.krate><![CDATA[int32_t damp = (0x80<<24) - (__USAT(inlet_reso + param_reso,27)<<4);
 damp = ___SMMUL(damp,damp);
 int32_t alpha;
 int32_t freq;
-MTOFEXTENDED(param_pitch + inlet_pitchm,alpha);
+MTOFEXTENDED(param_pitch + inlet_pitch,alpha);
 SINE2TINTERP(alpha,freq);
 ]]></code.krate>
       <code.srate><![CDATA[int32_t in1 = inlet_in;

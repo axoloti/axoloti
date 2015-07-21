@@ -62,7 +62,7 @@ public class Timer extends gentools {
                 + "    ntrig = 0;\n"
                 + "  if (val>0) {\n"
                 + "    int32_t t;\n"
-                + "    MTOF(-%delay%,t);\n"
+                + "    MTOF(-param_delay,t);\n"
                 + "     val -= t>>3;\n"
                 + "     if (val<=0) %pulse% = 1;\n"
                 + "     else %pulse% = 0;\n"
@@ -74,7 +74,7 @@ public class Timer extends gentools {
     static AxoObject DelayedPulseM() {
         AxoObject o = new AxoObject("delayedpulsem", "Generates a single pulse after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger. The generated pulse is so small you won't notice it on a display! This version has a modulation input for the delay time. Extended range.");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
-        o.inlets.add(new InletFrac32Bipolar("delaym", "delay modulation"));
+        o.inlets.add(new InletFrac32Bipolar("delay", "delay modulation"));
         o.outlets.add(new OutletBool32Pulse("pulse", "pulse output"));
         o.params.add(new ParameterFrac32SMapKLineTimeExp("delay"));
         o.sLocalData = "int32_t val;\n"
@@ -91,7 +91,7 @@ public class Timer extends gentools {
                 + "    ntrig = 0;\n"
                 + "  if (val>0) {\n"
                 + "    int32_t t;\n"
-                + "    MTOF(-%delay%-%delaym%,t);\n"
+                + "    MTOF(-param_delay-inlet_delay,t);\n"
                 + "     val -= t>>3;\n"
                 + "     if (val<=0) %pulse% = 1;\n"
                 + "     else %pulse% = 0;\n"
@@ -121,7 +121,7 @@ public class Timer extends gentools {
                 + "    ntrig = 0;\n"
                 + "  if (val>0) {\n"
                 + "    int32_t t;\n"
-                + "    MTOF(-%delay%,t);\n"
+                + "    MTOF(-param_delay,t);\n"
                 + "     val -= t>>3;\n"
                 + "     if (val<=0) {\n"
                 + "         %pulse% = 1;\n"
@@ -129,7 +129,7 @@ public class Timer extends gentools {
                 + "     } else %pulse% = 0;\n"
                 + "  } else if (val<0) {\n"
                 + "    int32_t t;\n"
-                + "    MTOF(-%pulselength%,t);\n"
+                + "    MTOF(-param_pulselength,t);\n"
                 + "     val += t>>3;\n"
                 + "     if (val>=0) {"
                 + "         %pulse% = 0;\n"
@@ -143,8 +143,8 @@ public class Timer extends gentools {
     static AxoObject DelayedPulseDurationM() {
         AxoObject o = new AxoObject("delayedpulsedurationm", "Generates a single pulse with a duration after a delay after a rising edge on trigger input. A new trigger before the pulse arrives at the output, will cancel the previous trigger. The generated pulse is so small you won't notice it on a display! This version has a modulation input for the delay time.");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
-        o.inlets.add(new InletFrac32Bipolar("delaym", "delay time modulation"));
-        o.inlets.add(new InletFrac32Bipolar("pulselengthm", "pulse length modulation"));
+        o.inlets.add(new InletFrac32Bipolar("delay", "delay time modulation"));
+        o.inlets.add(new InletFrac32Bipolar("pulselength", "pulse length modulation"));
         o.outlets.add(new OutletBool32("pulse", "pulse output"));
         o.params.add(new ParameterFrac32SMapKLineTimeExp("delay"));
         o.params.add(new ParameterFrac32SMapKLineTimeExp("pulselength"));
@@ -162,7 +162,7 @@ public class Timer extends gentools {
                 + "    ntrig = 0;\n"
                 + "  if (val>0) {\n"
                 + "    int32_t t;\n"
-                + "    MTOF(-%delay%-%delaym%,t);\n"
+                + "    MTOF(-param_delay-inlet_delay,t);\n"
                 + "     val -= t>>3;\n"
                 + "     if (val<=0) {\n"
                 + "         %pulse% = 1;\n"
@@ -170,7 +170,7 @@ public class Timer extends gentools {
                 + "     } else %pulse% = 0;\n"
                 + "  } else if (val<0) {\n"
                 + "    int32_t t;\n"
-                + "    MTOF(-%pulselength%-%pulselengthm%,t);\n"
+                + "    MTOF(-param_pulselength-inlet_pulselength,t);\n"
                 + "     val += t>>3;\n"
                 + "     if (val>=0) {"
                 + "         %pulse% = 0;\n"
@@ -201,7 +201,7 @@ public class Timer extends gentools {
                 + "    ntrig = 0;\n"
                 + "  if (val>0) {\n"
                 + "    int32_t t;\n"
-                + "    MTOF(-%delay%,t);\n"
+                + "    MTOF(-param_delay,t);\n"
                 + "     val -= t>>3;\n"
                 + "     if (val<=0) %pulse% = 1;\n"
                 + "     else %pulse% = 0;\n"
@@ -229,7 +229,7 @@ public class Timer extends gentools {
                 + "    ntrig = 0;\n"
                 + "  if (val>0) {\n"
                 + "    int32_t t;\n"
-                + "    MTOF(-%delay%,t);\n"
+                + "    MTOF(-param_delay,t);\n"
                 + "     val -= t>>3;\n"
                 + "     if (val<=0) %pulse% = 0;\n"
                 + "     else %pulse% = 1;\n"
@@ -242,7 +242,7 @@ public class Timer extends gentools {
     static AxoObject PulseLengthM() {
         AxoObject o = new AxoObject("pulselengthm", "Generates a single pulse after after a rising edge on trigger input. A new trigger before the pulse ends at the output, will extend the pulse. This version has a modulation input for the delay time. Extended range.");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
-        o.inlets.add(new InletFrac32Bipolar("delaym", "delay modulation"));
+        o.inlets.add(new InletFrac32Bipolar("delay", "delay"));
         o.outlets.add(new OutletBool32("pulse", "pulse output"));
         o.params.add(new ParameterFrac32SMapKLineTimeExp("delay"));
         o.sLocalData = "int32_t val;\n"
@@ -259,7 +259,7 @@ public class Timer extends gentools {
                 + "    ntrig = 0;\n"
                 + "  if (val>0) {\n"
                 + "    int32_t t;\n"
-                + "    MTOF(-%delay%-%delaym%,t);\n"
+                + "    MTOF(-param_delay-inlet_delay,t);\n"
                 + "     val -= t>>3;\n"
                 + "     if (val<=0) %pulse% = 0;\n"
                 + "     else %pulse% = 1;\n"

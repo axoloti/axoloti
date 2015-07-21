@@ -1,15 +1,15 @@
 <objdefs>
-   <obj.normal id="line 3 m" uuid="9c2bd49e2c19863d892a537eaac8062bcaf70373" sha="6c2dc3bbc900e7c72a85e78b3daec3353ce8e66d">
-      <upgradeSha>282125be0a946f9dfec83d863848f5fbaa503993</upgradeSha>
+   <obj.normal id="line 3 m" uuid="a4929113bc19cdcdea2396f011111f245461b69f" sha="6e1757b1ea9e738073481f4cdacb0e953c99a91c">
+      <upgradeSha>6a4e518a13b33c7851c48cd4cfae1476080d0b65</upgradeSha>
       <sDescription>Three piecewise linear ramps, time modulation inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>env.axh</helpPatch>
       <inlets>
          <bool32.rising name="trig" description="trigger"/>
-         <frac32.bipolar name="tAm" description="time A (v0..v1) modulation"/>
-         <frac32.bipolar name="tBm" description="time B (v1..v2) modulation"/>
-         <frac32.bipolar name="tCm" description="time C (v2..v3) modulation"/>
+         <frac32.bipolar name="tA" description="time A (v0..v1)"/>
+         <frac32.bipolar name="tB" description="time B (v1..v2)"/>
+         <frac32.bipolar name="tC" description="time C (v2..v3)"/>
       </inlets>
       <outlets>
          <frac32.positive name="out" description="output"/>
@@ -43,7 +43,7 @@ ntrig = 0;
 }
 else if (phase1 == 1) {
   int32_t t;
-  int32_t tA2 = param_tA + inlet_tAm;
+  int32_t tA2 = param_tA + inlet_tA;
   MTOF(-tA2,t);
   time1 += t>>2;
   if (time1>=0)
@@ -56,7 +56,7 @@ else if (phase1 == 1) {
 }
 else if (phase1 == 2) {
   int32_t t;
-  int32_t tB2 = param_tB + inlet_tBm;
+  int32_t tB2 = param_tB + inlet_tB;
   MTOF(-tB2,t);
   time1 += t>>2;
   if (time1>=0)
@@ -69,7 +69,7 @@ else if (phase1 == 2) {
 }
 else if (phase1 == 3) {
   int32_t t;
-  int32_t tC2 = param_tC + inlet_tCm;
+  int32_t tC2 = param_tC + inlet_tC;
   MTOF(-tC2,t);
   time1 += t>>2;
   if (time1>=0)

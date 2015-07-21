@@ -1,14 +1,14 @@
 <objdefs>
-   <obj.normal id="echo fdbk mix" uuid="c009caffa414e2e900592c7507defe6ff15d867a" sha="c4af55639028a605ad569ddc9fbe8a1e742d3f89">
-      <upgradeSha>779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee</upgradeSha>
+   <obj.normal id="echo fdbk mix" uuid="15716b14ebe691010ccfd54af72ea23232a843c6" sha="6bc1204ca59cfb6fe995e01f4a68be52ca63cd0">
+      <upgradeSha>aec374119278da41c51ebfa3b4d9760e20da4be8</upgradeSha>
       <sDescription>Audio delay with feedback and mix, fixed delay time</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>delay.axh</helpPatch>
       <inlets>
          <frac32buffer name="in" description="input"/>
-         <frac32 name="mixm" description="mix"/>
-         <frac32 name="feedbackm" description="feedback"/>
+         <frac32 name="mix" description="mix"/>
+         <frac32 name="feedback" description="feedback"/>
       </inlets>
       <outlets>
          <frac32buffer name="out" description="output"/>
@@ -30,8 +30,8 @@ int16_t delayline[attr_delaylength];
    delaywindex = 0;
    delayrindex = 1;
 ]]></code.init>
-      <code.krate><![CDATA[  int32_t _mix = param_mix + inlet_mixm;
-   int32_t _fdbk = param_feedback + inlet_feedbackm;
+      <code.krate><![CDATA[  int32_t _mix = param_mix + inlet_mix;
+   int32_t _fdbk = param_feedback + inlet_feedback;
 ]]></code.krate>
       <code.srate><![CDATA[ int32_t rd = delayline[delayrindex++];
 delayline[delaywindex++] = __SSAT((inlet_in>>15) + ___SMMUL(rd<<5,_fdbk),16);
