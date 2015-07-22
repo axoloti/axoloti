@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="square" sha="7cccf8a95bf312ecc084f11f532cf5fda00b8c58" name="square_1" x="40" y="40">
+   <obj type="osc/square" sha="7cccf8a95bf312ecc084f11f532cf5fda00b8c58" name="square_1" x="40" y="40">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
@@ -17,7 +17,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="select_bool_16_v2x4" sha="8a0c95038623068cfb5f9228392b1c7f7938c4aa" name="select_bool_16_v2x4_1" x="380" y="40">
+   <obj type="sel/sel b 16 4t" sha="8a0c95038623068cfb5f9228392b1c7f7938c4aa" name="select_bool_16_v2x4_1" x="380" y="40">
       <params>
          <bin16 name="p1" value="40654"/>
          <bin16 name="p2" value="50532"/>

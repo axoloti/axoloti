@@ -3,7 +3,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="envd1" x="112" y="14">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="112" y="14">
       <params>
          <frac32.s.map name="d" onParent="true" value="-48.0"/>
       </params>
@@ -30,21 +30,21 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/bp svf m" sha="561e56d24bf5c702564c7d043fda6d0d3003deec" name="lpfm_1" x="448" y="154">
+   <obj type="filter/bp svf m" sha="24097930d951f375e0839b70f065d71a782d8b23" name="lpfm_1" x="448" y="154">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="55.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/bp svf m" sha="561e56d24bf5c702564c7d043fda6d0d3003deec" name="lpfm_1_" x="448" y="294">
+   <obj type="filter/bp svf m" sha="24097930d951f375e0839b70f065d71a782d8b23" name="lpfm_1_" x="448" y="294">
       <params>
          <frac32.s.map name="pitch" value="12.0"/>
          <frac32.u.map name="reso" value="55.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/bp svf m" sha="561e56d24bf5c702564c7d043fda6d0d3003deec" name="lpfm_1__" x="448" y="434">
+   <obj type="filter/bp svf m" sha="24097930d951f375e0839b70f065d71a782d8b23" name="lpfm_1__" x="448" y="434">
       <params>
          <frac32.s.map name="pitch" value="19.03000020980835"/>
          <frac32.u.map name="reso" value="55.0"/>
@@ -65,56 +65,56 @@
    </obj>
    <nets>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="lpfm_1 pitchm"/>
-         <dest name="lpfm_1_ pitchm"/>
-         <dest name="lpfm_1__ pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="lpfm_1" inlet="pitch"/>
+         <dest obj="lpfm_1_" inlet="pitch"/>
+         <dest obj="lpfm_1__" inlet="pitch"/>
       </net>
       <net>
-         <source name="lpfm_1 out"/>
-         <dest name="mix31 in1"/>
+         <source obj="lpfm_1" outlet="out"/>
+         <dest obj="mix31" inlet="in1"/>
       </net>
       <net>
-         <source name="lpfm_1_ out"/>
-         <dest name="mix31 in2"/>
+         <source obj="lpfm_1_" outlet="out"/>
+         <dest obj="mix31" inlet="in2"/>
       </net>
       <net>
-         <source name="lpfm_1__ out"/>
-         <dest name="mix31 in3"/>
+         <source obj="lpfm_1__" outlet="out"/>
+         <dest obj="mix31" inlet="in3"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="lpfm_1 in"/>
-         <dest name="lpfm_1_ in"/>
-         <dest name="lpfm_1__ in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="lpfm_1" inlet="in"/>
+         <dest obj="lpfm_1_" inlet="in"/>
+         <dest obj="lpfm_1__" inlet="in"/>
       </net>
       <net>
-         <source name="keyb1 gate2"/>
-         <dest name="envd1 trig"/>
-         <dest name="excit in1"/>
-         <dest name="reso in"/>
+         <source obj="keyb1" outlet="gate2"/>
+         <dest obj="envd1" inlet="trig"/>
+         <dest obj="excit" inlet="in1"/>
+         <dest obj="reso" inlet="in"/>
       </net>
       <net>
-         <source name="reso out"/>
-         <dest name="lpfm_1 resom"/>
-         <dest name="lpfm_1_ resom"/>
-         <dest name="lpfm_1__ resom"/>
+         <source obj="reso" outlet="out"/>
+         <dest obj="lpfm_1" inlet="reso"/>
+         <dest obj="lpfm_1_" inlet="reso"/>
+         <dest obj="lpfm_1__" inlet="reso"/>
       </net>
       <net>
-         <source name="envd1 env"/>
-         <dest name="excit in2"/>
+         <source obj="envd1" outlet="env"/>
+         <dest obj="excit" inlet="in2"/>
       </net>
       <net>
-         <source name="excit out"/>
-         <dest name="vca_1 v"/>
+         <source obj="excit" outlet="out"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="mix31 out"/>
-         <dest name="o outlet"/>
+         <source obj="mix31" outlet="out"/>
+         <dest obj="o" inlet="outlet"/>
       </net>
       <net>
-         <source name="exci inlet"/>
-         <dest name="vca_1 a"/>
+         <source obj="exci" outlet="inlet"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
    </nets>
    <settings>
@@ -125,7 +125,6 @@
       <NPresetEntries>4</NPresetEntries>
       <NModulationSources>2</NModulationSources>
       <NModulationTargetsPerSource>2</NModulationTargetsPerSource>
-      <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>

@@ -23,7 +23,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin m x" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" name="d2" x="112" y="98">
+   <obj type="env/d lin m" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" name="d2" x="112" y="98">
       <params>
          <frac32.s.map name="d" onParent="true" value="-12.0"/>
       </params>
