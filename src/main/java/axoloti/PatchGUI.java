@@ -937,10 +937,11 @@ public class PatchGUI extends Patch {
     }
 
     @Override
-    void save(File f) {
-        super.save(f);
+    boolean save(File f) {
+        boolean b = super.save(f);
         if (ObjEditor != null) {
             ObjEditor.UpdateObject();
         }
+        return b;
     }
 }

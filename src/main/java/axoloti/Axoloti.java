@@ -41,6 +41,38 @@ public class Axoloti {
     public final static String RELEASE_DIR = "axoloti_release";
     public final static String FIRMWARE_DIR = "axoloti_firmware";
 
+    
+        /**
+     * @param args the command line arguments
+     */
+    public static void main(final String[] args) {
+        try {
+            initProperties();
+            
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            if (System.getProperty("os.name").contains("OS X")) {
+                System.setProperty("apple.laf.useScreenMenuBar", "true");
+            }
+        } catch (URISyntaxException e) {
+            throw new Error(e);
+        } catch (IOException e) {
+            throw new Error(e);
+        } catch (ClassNotFoundException e) {
+            throw new Error(e);
+        } catch (InstantiationException e) {
+            throw new Error(e);
+        } catch (IllegalAccessException e) {
+            throw new Error(e);
+        } catch (UnsupportedLookAndFeelException e) {
+            throw new Error(e);
+        }
+        System.setProperty("line.separator", "\n");
+        
+        Synonyms.instance(); // prime it
+        handleCommandLine(args);
+   }
+    
+    
     static void BuildEnv(String var, String def) {
         String ev = System.getProperty(var);
         if (ev == null) {
@@ -98,11 +130,7 @@ public class Axoloti {
         return cacheDeveloper;
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(final String[] args) {
-        try {
+    private static void initProperties() throws URISyntaxException, IOException  {
             String curDir = System.getProperty("user.dir");
             File jarFile = new File(Axoloti.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             String jarDir = jarFile.getParentFile().getCanonicalPath();
@@ -159,36 +187,23 @@ public class Axoloti {
                     + "Firmware = " + System.getProperty(FIRMWARE_DIR) + "\n"
                     + "AxolotiHome = " + System.getProperty(HOME_DIR)
             );
+ 
+    }
+    
 
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            if (System.getProperty("os.name").contains("OS X")) {
-                System.setProperty("apple.laf.useScreenMenuBar", "true");
-            }
-        } catch (URISyntaxException e) {
-            throw new Error(e);
-        } catch (IOException e) {
-            throw new Error(e);
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        } catch (InstantiationException e) {
-            throw new Error(e);
-        } catch (IllegalAccessException e) {
-            throw new Error(e);
-        } catch (UnsupportedLookAndFeelException e) {
-            throw new Error(e);
-        }
-        System.setProperty("line.separator", "\n");
 
+    private static void handleCommandLine(final String args[]) {
         boolean cmdLineOnly = false;
         boolean cmdRunAllTest = false;
         boolean cmdRunPatchTest = false;
         boolean cmdRunObjectTest = false;
         boolean cmdRunFileTest = false;
-        String testFile = null;
+        boolean cmdRunUpgrade = false;
+        String cmdFile = null;
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if (arg.equalsIgnoreCase("-exitOnFirstFail")) {
-                MainFrame.stopOnTestFail = true;
+                MainFrame.stopOnFirstFail = true;
             }
 
             // exclusive options
@@ -205,21 +220,30 @@ public class Axoloti {
                 cmdLineOnly = true;
                 cmdRunFileTest = true;
                 if (i + 1 < args.length) {
-                    testFile = args[i + 1];
+                    cmdFile = args[i + 1];
                 } else {
                     System.err.println("-runTest patchname/directory : missing file/dir");
+                    System.exit(-1);
+                }
+            } else if (arg.equalsIgnoreCase("-runUpgrade")) {
+                cmdLineOnly = true;
+                cmdRunUpgrade = true;
+                if (i + 1 < args.length) {
+                    cmdFile = args[i + 1];
+                } else {
+                    System.err.println("-runUpgrade patchname/directory : missing file/dir");
                     System.exit(-1);
                 }
             } else if (arg.equalsIgnoreCase("-help")) {
                 System.out.println("Axoloti "
                         + " [-runAllTests|-runPatchTests|-runObjTests] "
-                        + " [-runtTest patchfile|dir]"
-                        + " [-exitOnFirstRail");
+                        + " [-runTest patchfile|dir]"
+                        + " [-runUpgrade patchfile|dir]"
+                        + " [-exitOnFirstFail");
                 System.exit(0);
             }
         }
 
-        Synonyms.instance(); // prime it
         if (cmdLineOnly) {
             try {
                 MainFrame frame = new MainFrame(args);
@@ -243,7 +267,9 @@ public class Axoloti {
                 } else if (cmdRunObjectTest) {
                     exitCode = frame.runObjectTests() ? 0 : -1;
                 } else if (cmdRunFileTest) {
-                    exitCode = frame.runFileTest(testFile) ? 0 : -1;
+                    exitCode = frame.runFileTest(cmdFile) ? 0 : -1;
+                } else if (cmdRunUpgrade) {
+                    exitCode = frame.runFileUpgrade(cmdFile) ? 0 : -1;
                 }
                 System.out.println("Axoloti cmd line complete");
                 System.exit(exitCode);
@@ -263,6 +289,5 @@ public class Axoloti {
                     }
                 }
             });
-        }
-    }
+        }}
 }

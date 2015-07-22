@@ -73,7 +73,7 @@ import qcmds.QCmdUploadPatch;
  *
  * @author Johannes Taelman
  */
-public class MainFrame extends javax.swing.JFrame implements ActionListener {
+public final class MainFrame extends javax.swing.JFrame implements ActionListener {
 
     static public Preferences prefs = Preferences.LoadPreferences();
     static public AxoObjects axoObjects;
@@ -736,7 +736,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
 // usually we run all tests, as many may fail for same reason and you want
 // a list of all affected files, but if you want to stop on first failure, flip this flag
-    public static boolean stopOnTestFail = false;
+    public static boolean stopOnFirstFail = false;
 
     private void jMenuAutoTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAutoTestActionPerformed
         runAllTests();
@@ -744,11 +744,11 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     public boolean runAllTests() {
         boolean r1 = runPatchTests();
-        if (!r1 && stopOnTestFail) {
+        if (!r1 && stopOnFirstFail) {
             return r1;
         }
         boolean r2 = runObjectTests();
-        if (!r2 && stopOnTestFail) {
+        if (!r2 && stopOnFirstFail) {
             return r2;
         }
         return r1 && r2;
@@ -788,7 +788,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
                 }
             });
             for (File s : files) {
-                if (!runTestDir(s) && stopOnTestFail) {
+                if (!runTestDir(s) && stopOnFirstFail) {
                     return false;
                 }
             }
@@ -827,6 +827,65 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             return false;
         }
     }
+    
+    public boolean runFileUpgrade(String patchName) {
+        return runUpgradeDir(new File(patchName));
+    }
+    
+    private boolean runUpgradeDir(File f) {
+        if (!f.exists()) {
+            return true;
+        }
+        if (f.isDirectory()) {
+            File[] files = f.listFiles(new FilenameFilter() {
+                @Override
+                public boolean accept(File f, String name) {
+                    File t = new File(f + File.separator + name);
+                    if (t.isDirectory()) {
+                        return true;
+                    }
+
+                    if (name.length() < 4) {
+                        return false;
+                    }
+                    String extension = name.substring(name.length() - 4);
+                    boolean b = (extension.equals(".axh") || extension.equals(".axp") || extension.equals(".axp") );
+                    return b;
+                }
+            });
+            for (File s : files) {
+                if (!runUpgradeDir(s) && stopOnFirstFail) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return runUpgradeFile(f);
+    }
+
+      private boolean runUpgradeFile(File f) {
+        Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "upgrading {0}", f.getPath());
+        Serializer serializer = new Persister();
+        try {
+            boolean status;
+            PatchGUI patch1 = serializer.read(PatchGUI.class, f);
+            PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
+            patch1.setFileNamePath(f.getPath());
+            patch1.PostContructor();
+            pf.UpdateConnectStatus();
+            patches.add(patch1);
+            status = patch1.save(f);
+            if (status == false) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "UPGRADING FAILED: {0}", f.getPath());
+            }
+            return status;
+        } catch (Exception ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "UPGRADING FAILED: " + f.getPath(), ex);
+            return false;
+        }
+    }
+    
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         Quit();
