@@ -123,7 +123,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw~_1" x="480" y="440">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw~_1" x="480" y="440">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
       </params>
@@ -139,7 +139,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="adsr_1" x="420" y="540">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="adsr_1" x="420" y="540">
       <params>
          <frac32.s.map name="a" value="-30.0"/>
          <frac32.s.map name="d" value="0.0"/>
@@ -152,7 +152,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="620" y="540">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_1" x="620" y="540">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
          <frac32.u.map name="reso" value="63.0"/>
@@ -173,7 +173,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2~_1" x="900" y="540">
+   <obj type="delay/echo fdbk mix" sha="6bc1204ca59cfb6fe995e01f4a68be52ca63cd0" name="echo2~_1" x="900" y="540">
       <params>
          <frac32.u.map name="mix" value="37.0"/>
          <frac32.u.map name="feedback" value="34.5"/>
@@ -294,7 +294,7 @@
       </net>
       <net>
          <source obj="mix1_1" outlet="out"/>
-         <dest obj="vcf3~_1" inlet="pitchm"/>
+         <dest obj="vcf3~_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="inv_2" outlet="o"/>
@@ -307,7 +307,7 @@
       </net>
       <net>
          <source obj="*c_2" outlet="out"/>
-         <dest obj="saw~_1" inlet="pitchm"/>
+         <dest obj="saw~_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="satp_1" outlet="out"/>

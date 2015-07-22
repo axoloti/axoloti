@@ -131,7 +131,7 @@
    </obj>
    <comment type="patch/comment" x="224" y="322" text="hh"/>
    <comment type="patch/comment" x="224" y="336" text="hh close"/>
-   <obj type="env/d lin m x" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" name="env.envdlinmx_1" x="714" y="350">
+   <obj type="env/d lin m" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" name="env.envdlinmx_1" x="714" y="350">
       <params>
          <frac32.s.map name="d" value="5.0"/>
       </params>
@@ -239,7 +239,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd lin x" sha="de09ade5b46ad7c4bbe57ce1bb266f7b77fc2078" name="envahdlinx1" x="154" y="616">
+   <obj type="env/ahd lin" sha="de09ade5b46ad7c4bbe57ce1bb266f7b77fc2078" name="envahdlinx1" x="154" y="616">
       <params>
          <frac32.s.map name="a" value="-44.0"/>
          <frac32.s.map name="d" value="7.0"/>
@@ -257,7 +257,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/ahd lin x" sha="de09ade5b46ad7c4bbe57ce1bb266f7b77fc2078" name="envahdlinx1_" x="476" y="616">
+   <obj type="env/ahd lin" sha="de09ade5b46ad7c4bbe57ce1bb266f7b77fc2078" name="envahdlinx1_" x="476" y="616">
       <params>
          <frac32.s.map name="a" value="-25.0"/>
          <frac32.s.map name="d" value="6.0"/>

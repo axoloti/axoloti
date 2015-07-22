@@ -83,7 +83,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="160" y="280">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="160" y="280">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -130,7 +130,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lowpass~" sha="290a234e2f83eb072198d0158bcd5da02a3606c3" name="lowpass_1" x="160" y="440">
+   <obj type="filter/lp1" sha="290a234e2f83eb072198d0158bcd5da02a3606c3" name="lowpass_1" x="160" y="440">
       <params>
          <frac32.s.map name="freq" value="60.5"/>
       </params>

@@ -36,7 +36,7 @@
       <attribs/>
    </obj>
    <comment type="patch/comment" x="42" y="476" text="modulation speed"/>
-   <obj type="phasor3q~" sha="c95d1332c224aad738fb4504cb00706af8221028" name="phasor3_1" x="40" y="500">
+   <obj type="osc/phasor compl" sha="c95d1332c224aad738fb4504cb00706af8221028" name="phasor3_1" x="40" y="500">
       <params>
          <frac32.s.map name="pitch" value="-32.0"/>
       </params>
@@ -46,7 +46,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delread2~~" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread2__1" x="400" y="500">
+   <obj type="delay/read interp" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread2__1" x="400" y="500">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -66,7 +66,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delread2~~" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread2__1_" x="400" y="640">
+   <obj type="delay/read interp" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread2__1_" x="400" y="640">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
