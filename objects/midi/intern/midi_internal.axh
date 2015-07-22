@@ -17,7 +17,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="midi/intern/note" sha="601f57c317af33226524f5c49537789f8d7967eb" name="note_1" x="252" y="14">
+   <obj type="midi/intern/note" sha="d022c88689d1ebc6f934ed82ffe8a9ca70a69159" name="note_1" x="252" y="14">
       <params/>
       <attribs>
          <spinner attributeName="channel" value="1"/>
@@ -41,32 +41,38 @@
    </obj>
    <nets>
       <net>
-         <source name="toggle_1 o"/>
-         <dest name="note_1 trig"/>
+         <source obj="toggle_1" outlet="o"/>
+         <dest obj="note_1" inlet="trig"/>
       </net>
       <net>
-         <source name="in_1 out"/>
-         <dest name="note_1 note"/>
+         <source obj="in_1" outlet="out"/>
+         <dest obj="note_1" inlet="note"/>
       </net>
       <net>
-         <source name="dial_1 out"/>
-         <dest name="note_1 velo"/>
+         <source obj="dial_1" outlet="out"/>
+         <dest obj="note_1" inlet="velo"/>
       </net>
       <net>
-         <source name="keyb_1 note"/>
-         <dest name="dial_2 in"/>
+         <source obj="keyb_1" outlet="note"/>
+         <dest obj="dial_2" inlet="in"/>
       </net>
       <net>
-         <source name="keyb_1 gate"/>
-         <dest name="bool_1 in"/>
+         <source obj="keyb_1" outlet="gate"/>
+         <dest obj="bool_1" inlet="in"/>
       </net>
       <net>
-         <source name="keyb_1 velocity"/>
-         <dest name="dial_3 in"/>
+         <source obj="keyb_1" outlet="velocity"/>
+         <dest obj="dial_3" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>1066</width>
+      <height>400</height>
+   </windowPos>
 </patch-1.0>

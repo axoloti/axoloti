@@ -19,8 +19,8 @@
          </obj>
          <nets>
             <net>
-               <source name="inlet_1 inlet"/>
-               <dest name="outlet_1 outlet"/>
+               <source obj="inlet_1" outlet="inlet"/>
+               <dest obj="outlet_1" inlet="outlet"/>
             </net>
          </nets>
          <settings>
@@ -35,16 +35,22 @@
    </obj>
    <nets>
       <net>
-         <source name="dial_1 out"/>
-         <dest name="patcher_1 inlet_1"/>
+         <source obj="dial_1" outlet="out"/>
+         <dest obj="patcher_1" inlet="inlet_1"/>
       </net>
       <net>
-         <source name="patcher_1 outlet_1"/>
-         <dest name="dial_2 in"/>
+         <source obj="patcher_1" outlet="outlet_1"/>
+         <dest obj="dial_2" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>534</width>
+      <height>408</height>
+   </windowPos>
 </patch-1.0>

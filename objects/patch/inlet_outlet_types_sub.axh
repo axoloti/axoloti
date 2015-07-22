@@ -33,20 +33,20 @@
    </obj>
    <nets>
       <net>
-         <source name="inlet_frac inlet"/>
-         <dest name="outlet_frac outlet"/>
+         <source obj="inlet_frac" outlet="inlet"/>
+         <dest obj="outlet_frac" inlet="outlet"/>
       </net>
       <net>
-         <source name="inlet_bool inlet"/>
-         <dest name="outlet_bool outlet"/>
+         <source obj="inlet_bool" outlet="inlet"/>
+         <dest obj="outlet_bool" inlet="outlet"/>
       </net>
       <net>
-         <source name="inlet_int inlet"/>
-         <dest name="outlet_int outlet"/>
+         <source obj="inlet_int" outlet="inlet"/>
+         <dest obj="outlet_int" inlet="outlet"/>
       </net>
       <net>
-         <source name="inlet_buffer inlet"/>
-         <dest name="outlet_buffer outlet"/>
+         <source obj="inlet_buffer" outlet="inlet"/>
+         <dest obj="outlet_buffer" inlet="outlet"/>
       </net>
    </nets>
    <settings>
@@ -57,4 +57,10 @@
       <NModulationTargetsPerSource>0</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>492</width>
+      <height>492</height>
+   </windowPos>
 </patch-1.0>

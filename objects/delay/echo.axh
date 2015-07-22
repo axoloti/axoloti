@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="14">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="-39.0"/>
       </params>
@@ -11,7 +11,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="224" y="14">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="224" y="14">
       <params>
          <frac32.s.map name="pitch" value="3.0"/>
       </params>
@@ -23,7 +23,7 @@
          <spinner attributeName="delaylength" value="8615"/>
       </attribs>
    </obj>
-   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="336" y="84">
+   <obj type="delay/echo fdbk mix" sha="6bc1204ca59cfb6fe995e01f4a68be52ca63cd0" name="echo2_1" x="336" y="84">
       <params>
          <frac32.u.map name="mix" value="30.0"/>
          <frac32.u.map name="feedback" value="41.5"/>
@@ -38,7 +38,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="delay/echo fdbk" sha="7611c8729f6b16550b0764bc62bc93ccc71235fc" name="echo1_1" x="336" y="266">
+   <obj type="delay/echo fdbk" sha="f9b74c23e8d4ae4405f9e079da1ee902f6c728be" name="echo1_1" x="336" y="266">
       <params/>
       <attribs>
          <spinner attributeName="delaylength" value="8440"/>
@@ -63,7 +63,7 @@
       </net>
       <net>
          <source obj="mix11" outlet="out"/>
-         <dest obj="osc_1" inlet="pitchm"/>
+         <dest obj="osc_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="osc_1" outlet="wave"/>

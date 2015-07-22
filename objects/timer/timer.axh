@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="40" y="20">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square1" x="40" y="20">
       <params>
          <frac32.s.map name="pitch" value="-16.0"/>
       </params>
@@ -32,7 +32,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="timer/delayedpulsem" sha="c8a61563f865209350a4eacb97130551859524ca" uuid="9498c3c65586092b7f382ad2c7187d5afa210469" name="delayedpulsem_1" x="210" y="266">
+   <obj type="timer/delayedpulsem" sha="3a010b635ad33a92164cf6f2403759c044504568" uuid="9498c3c65586092b7f382ad2c7187d5afa210469" name="delayedpulsem_1" x="210" y="266">
       <params>
          <frac32.s.map name="delay" value="0.0"/>
       </params>
@@ -65,7 +65,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="timer/delayedpulsedurationm" sha="6448141ebf2374761083db16f34d189dec0b9678" uuid="2d504f42544009f35bf5ac1383401d2441600cb" name="delayedpulsedurationm_1" x="210" y="518">
+   <obj type="timer/delayedpulsedurationm" sha="c0d209f81de819cf2c5b3960c41199851dbcff38" uuid="2d504f42544009f35bf5ac1383401d2441600cb" name="delayedpulsedurationm_1" x="210" y="518">
       <params>
          <frac32.s.map name="delay" value="0.0"/>
          <frac32.s.map name="pulselength" value="0.0"/>
@@ -97,7 +97,7 @@
       </net>
       <net>
          <source obj="cbp2" outlet="out"/>
-         <dest obj="delayedpulsedurationm_1" inlet="pulselengthm"/>
+         <dest obj="delayedpulsedurationm_1" inlet="pulselength"/>
       </net>
       <net>
          <source obj="delayedpulse_1" outlet="pulse"/>
@@ -121,8 +121,8 @@
       </net>
       <net>
          <source obj="cbp1" outlet="out"/>
-         <dest obj="delayedpulsem_1" inlet="delaym"/>
-         <dest obj="delayedpulsedurationm_1" inlet="delaym"/>
+         <dest obj="delayedpulsem_1" inlet="delay"/>
+         <dest obj="delayedpulsedurationm_1" inlet="delay"/>
       </net>
       <net>
          <source obj="delayedpulsedurationm_1" outlet="pulse"/>

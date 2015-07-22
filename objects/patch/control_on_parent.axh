@@ -3,7 +3,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="./control_on_parent_sub" sha="847a89adf2f395cec9bb1b977d804eb8d6ce9fa7" name="obj_1" x="42" y="42">
+   <obj type="./control_on_parent_sub" name="obj_1" x="42" y="42">
       <params>
          <frac32.u.map name="c2" value="2.0"/>
          <frac32.u.map name="c4" value="4.0"/>
@@ -24,20 +24,20 @@
    </obj>
    <nets>
       <net>
-         <source name="obj_1 one"/>
-         <dest name="displayS1 in"/>
+         <source obj="obj_1" outlet="one"/>
+         <dest obj="displayS1" inlet="in"/>
       </net>
       <net>
-         <source name="obj_1 two"/>
-         <dest name="displayS2 in"/>
+         <source obj="obj_1" outlet="two"/>
+         <dest obj="displayS2" inlet="in"/>
       </net>
       <net>
-         <source name="obj_1 three"/>
-         <dest name="displayS3 in"/>
+         <source obj="obj_1" outlet="three"/>
+         <dest obj="displayS3" inlet="in"/>
       </net>
       <net>
-         <source name="obj_1 four"/>
-         <dest name="displayS4 in"/>
+         <source obj="obj_1" outlet="four"/>
+         <dest obj="displayS4" inlet="in"/>
       </net>
    </nets>
    <settings>
@@ -49,4 +49,10 @@
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>550</width>
+      <height>590</height>
+   </windowPos>
 </patch-1.0>

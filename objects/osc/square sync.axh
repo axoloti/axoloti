@@ -29,7 +29,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="squaresync~" sha="589b6f1d673b7fd79f9156a008d3939499d098dd" name="squaresync~_1" x="210" y="140">
+   <obj type="osc/square sync" sha="589b6f1d673b7fd79f9156a008d3939499d098dd" name="squaresync~_1" x="210" y="140">
       <params>
          <frac32.s.map name="pitch" value="5.507214069366455"/>
       </params>

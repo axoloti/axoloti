@@ -17,12 +17,12 @@
    </obj>
    <nets>
       <net>
-         <source name="button1_1 out"/>
-         <dest name="bool_1 in"/>
+         <source obj="button1_1" outlet="out"/>
+         <dest obj="bool_1" inlet="in"/>
       </net>
       <net>
-         <source name="button2_1 out"/>
-         <dest name="bool_2 in"/>
+         <source obj="button2_1" outlet="out"/>
+         <dest obj="bool_2" inlet="in"/>
       </net>
    </nets>
    <settings>

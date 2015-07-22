@@ -21,7 +21,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="speed" x="14" y="154">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="speed" x="14" y="154">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-56.0"/>
       </params>
@@ -39,7 +39,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/read interp" sha="22a07dcbe5007bc4095bed25946486e7c98caf23" name="delread21" x="364" y="154">
+   <obj type="delay/read interp" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread21" x="364" y="154">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -84,7 +84,7 @@
       </net>
       <net>
          <source obj="interp_1" outlet="o"/>
-         <dest obj="delread21" inlet="timem"/>
+         <dest obj="delread21" inlet="time"/>
       </net>
       <net>
          <source obj="in" outlet="inlet"/>

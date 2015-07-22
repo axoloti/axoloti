@@ -23,24 +23,30 @@
    </obj>
    <nets>
       <net>
-         <source name="a inlet"/>
-         <dest name="mux_1 i1"/>
+         <source obj="a" outlet="inlet"/>
+         <dest obj="mux_1" inlet="i1"/>
       </net>
       <net>
-         <source name="b inlet"/>
-         <dest name="mux_1 i2"/>
+         <source obj="b" outlet="inlet"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
       <net>
-         <source name="mux_1 o"/>
-         <dest name="out outlet"/>
+         <source obj="mux_1" outlet="o"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
       <net>
-         <source name="a/b o"/>
-         <dest name="mux_1 s"/>
+         <source obj="a/b" outlet="o"/>
+         <dest obj="mux_1" inlet="s"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>548</width>
+      <height>400</height>
+   </windowPos>
 </patch-1.0>

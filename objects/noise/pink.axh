@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="pnoise~" sha="60f2be0f8974717ae4480e80f70bfae0bb3f01d5" name="pnoise_1" x="28" y="14">
+   <obj type="noise/pink" sha="60f2be0f8974717ae4480e80f70bfae0bb3f01d5" name="pnoise_1" x="28" y="14">
       <params/>
       <attribs/>
    </obj>
@@ -15,7 +15,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="maximum value in a buffer" x="280" y="210"/>
+   <comment type="patch/comment" x="280" y="210" text="maximum value in a buffer"/>
    <obj type="math/double" sha="8ae62ebf8fc6eb923ddf3cd42bfa750dd1d7f1b2" name="double1" x="196" y="252">
       <params/>
       <attribs/>
@@ -32,27 +32,33 @@
    </obj>
    <nets>
       <net>
-         <source name="pnoise_1 out"/>
-         <dest name="analyzer24db21 in"/>
-         <dest name="max1 in1"/>
-         <dest name="scope_128s1 in"/>
+         <source obj="pnoise_1" outlet="out"/>
+         <dest obj="analyzer24db21" inlet="in"/>
+         <dest obj="max1" inlet="in1"/>
+         <dest obj="scope_128s1" inlet="in"/>
       </net>
       <net>
-         <source name="max1 out"/>
-         <dest name="double1 in"/>
+         <source obj="max1" outlet="out"/>
+         <dest obj="double1" inlet="in"/>
       </net>
       <net>
-         <source name="double1 out"/>
-         <dest name="*c1 in"/>
+         <source obj="double1" outlet="out"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="max1 in2"/>
-         <dest name="scope_1buffer1 in"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="max1" inlet="in2"/>
+         <dest obj="scope_1buffer1" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>716</width>
+      <height>576</height>
+   </windowPos>
 </patch-1.0>

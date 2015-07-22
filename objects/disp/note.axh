@@ -11,8 +11,8 @@
    </obj>
    <nets>
       <net>
-         <source name="dial_1 out"/>
-         <dest name="note_1 in"/>
+         <source obj="dial_1" outlet="out"/>
+         <dest obj="note_1" inlet="in"/>
       </net>
    </nets>
    <settings>

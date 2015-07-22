@@ -21,7 +21,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="fac485938f0744316bc8361d4ad33f897cbff287" uuid="672d282db829da944d5580258269aa349c94bb24" name="saw_1" x="154" y="98">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" uuid="672d282db829da944d5580258269aa349c94bb24" name="saw_1" x="154" y="98">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -40,7 +40,7 @@
       <net>
          <source obj="dial_1" outlet="out"/>
          <dest obj="note_1" inlet="in"/>
-         <dest obj="saw_1" inlet="pitchm"/>
+         <dest obj="saw_1" inlet="pitch"/>
       </net>
    </nets>
    <settings>

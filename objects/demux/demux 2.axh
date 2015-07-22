@@ -35,7 +35,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="other variants:" x="14" y="364"/>
+   <comment type="patch/comment" x="14" y="364" text="other variants:"/>
    <obj type="demux/demux 2" sha="51521ba16c909fd0a9e8900319ff9b45db9f15a5" name="demux_2" x="14" y="406">
       <params/>
       <attribs/>
@@ -50,28 +50,28 @@
    </obj>
    <nets>
       <net>
-         <source name="input out"/>
-         <dest name="demux_1 i"/>
+         <source obj="input" outlet="out"/>
+         <dest obj="demux_1" inlet="i"/>
       </net>
       <net>
-         <source name="toggle_1 o"/>
-         <dest name="demux_1 s"/>
+         <source obj="toggle_1" outlet="o"/>
+         <dest obj="demux_1" inlet="s"/>
       </net>
       <net>
-         <source name="demux_1 o0"/>
-         <dest name="output0 in"/>
+         <source obj="demux_1" outlet="o0"/>
+         <dest obj="output0" inlet="in"/>
       </net>
       <net>
-         <source name="demux_1 o1"/>
-         <dest name="output1 in"/>
+         <source obj="demux_1" outlet="o1"/>
+         <dest obj="output1" inlet="in"/>
       </net>
       <net>
-         <source name="default0 out"/>
-         <dest name="demux_1 d0"/>
+         <source obj="default0" outlet="out"/>
+         <dest obj="demux_1" inlet="d0"/>
       </net>
       <net>
-         <source name="default1 out"/>
-         <dest name="demux_1 d1"/>
+         <source obj="default1" outlet="out"/>
+         <dest obj="demux_1" inlet="d1"/>
       </net>
    </nets>
    <settings>

@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" name="Demultiplexer" x="14" y="14"/>
+   <comment type="patch/comment" x="14" y="14" text="Demultiplexer"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="input" x="28" y="42">
       <params>
          <frac32.s.map name="value" value="42.0"/>
@@ -46,8 +46,8 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="other variants:" x="14" y="574"/>
-   <hyperlink type="patch/hyperlink" sha="hyperlink" uuid="hyperlink" name="demux 2.axh" x="112" y="574"/>
+   <comment type="patch/comment" x="14" y="574" text="other variants:"/>
+   <hyperlink type="patch/hyperlink" uuid="hyperlink" name="demux 2.axh" x="112" y="574"/>
    <obj type="demux/demux 3" sha="129c7ffdc1dc207405715ead5330b62739fe0b56" name="demux_2" x="14" y="616">
       <params/>
       <attribs/>
@@ -62,36 +62,36 @@
    </obj>
    <nets>
       <net>
-         <source name="input out"/>
-         <dest name="demux_1 i"/>
+         <source obj="input" outlet="out"/>
+         <dest obj="demux_1" inlet="i"/>
       </net>
       <net>
-         <source name="demux_1 o0"/>
-         <dest name="out 0 in"/>
+         <source obj="demux_1" outlet="o0"/>
+         <dest obj="out 0" inlet="in"/>
       </net>
       <net>
-         <source name="demux_1 o1"/>
-         <dest name="out 1 in"/>
+         <source obj="demux_1" outlet="o1"/>
+         <dest obj="out 1" inlet="in"/>
       </net>
       <net>
-         <source name="default0 out"/>
-         <dest name="demux_1 d0"/>
+         <source obj="default0" outlet="out"/>
+         <dest obj="demux_1" inlet="d0"/>
       </net>
       <net>
-         <source name="default1 out"/>
-         <dest name="demux_1 d1"/>
+         <source obj="default1" outlet="out"/>
+         <dest obj="demux_1" inlet="d1"/>
       </net>
       <net>
-         <source name="select out"/>
-         <dest name="demux_1 s"/>
+         <source obj="select" outlet="out"/>
+         <dest obj="demux_1" inlet="s"/>
       </net>
       <net>
-         <source name="demux_1 o2"/>
-         <dest name="out 2 in"/>
+         <source obj="demux_1" outlet="o2"/>
+         <dest obj="out 2" inlet="in"/>
       </net>
       <net>
-         <source name="default2 out"/>
-         <dest name="demux_1 d2"/>
+         <source obj="default2" outlet="out"/>
+         <dest obj="demux_1" inlet="d2"/>
       </net>
    </nets>
    <settings>

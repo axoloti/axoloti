@@ -25,7 +25,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="flt" x="154" y="126">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="flt" x="154" y="126">
       <params>
          <frac32.s.map name="pitch" value="-13.0"/>
          <frac32.u.map name="reso" onParent="true" value="58.5"/>
@@ -47,7 +47,7 @@
       </net>
       <net>
          <source obj="smooth_1" outlet="out"/>
-         <dest obj="flt" inlet="pitchm"/>
+         <dest obj="flt" inlet="pitch"/>
       </net>
       <net>
          <source obj="rectifier_2" outlet="out"/>

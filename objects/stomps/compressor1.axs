@@ -9,7 +9,7 @@
          <combo attributeName="time" selection="5.3ms"/>
       </attribs>
    </obj>
-   <obj type="dyn/comp" sha="c8cc4a0549bb80df85534096de4eac1df8874dc" name="comp_1" x="196" y="140">
+   <obj type="dyn/comp" sha="cda5bd26e9fc97319943991cca7cf2da17496790" name="comp_1" x="196" y="140">
       <params>
          <frac32.u.map name="tresh" onParent="true" value="1.5"/>
          <frac32.u.map name="ratio" onParent="true" value="63.5"/>
@@ -37,30 +37,36 @@
    </obj>
    <nets>
       <net>
-         <source name="in inlet"/>
-         <dest name="follower_1 in"/>
-         <dest name="vca_1 a"/>
+         <source obj="in" outlet="inlet"/>
+         <dest obj="follower_1" inlet="in"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="follower_1 amp"/>
-         <dest name="comp_1 in"/>
+         <source obj="follower_1" outlet="amp"/>
+         <dest obj="comp_1" inlet="in"/>
       </net>
       <net>
-         <source name="comp_1 out"/>
-         <dest name="smooth2_1 in"/>
+         <source obj="comp_1" outlet="out"/>
+         <dest obj="smooth2_1" inlet="in"/>
       </net>
       <net>
-         <source name="smooth2_1 out"/>
-         <dest name="vca_1 v"/>
-         <dest name="cv outlet"/>
+         <source obj="smooth2_1" outlet="out"/>
+         <dest obj="vca_1" inlet="v"/>
+         <dest obj="cv" inlet="outlet"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="out outlet"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>800</width>
+      <height>590</height>
+   </windowPos>
 </patch-1.0>

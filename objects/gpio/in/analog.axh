@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" name="test for all analog inputs" x="14" y="14"/>
+   <comment type="patch/comment" x="14" y="14" text="test for all analog inputs"/>
    <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead1" x="14" y="42">
       <params/>
       <attribs>
@@ -162,72 +162,78 @@
    </obj>
    <nets>
       <net>
-         <source name="analogRead1 out"/>
-         <dest name="scopeU1 in"/>
+         <source obj="analogRead1" outlet="out"/>
+         <dest obj="scopeU1" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead2 out"/>
-         <dest name="scopeU2 in"/>
+         <source obj="analogRead2" outlet="out"/>
+         <dest obj="scopeU2" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead3 out"/>
-         <dest name="scopeU3 in"/>
+         <source obj="analogRead3" outlet="out"/>
+         <dest obj="scopeU3" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead4 out"/>
-         <dest name="scopeU4 in"/>
+         <source obj="analogRead4" outlet="out"/>
+         <dest obj="scopeU4" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead5 out"/>
-         <dest name="scopeU5 in"/>
+         <source obj="analogRead5" outlet="out"/>
+         <dest obj="scopeU5" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead6 out"/>
-         <dest name="scopeU6 in"/>
+         <source obj="analogRead6" outlet="out"/>
+         <dest obj="scopeU6" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead7 out"/>
-         <dest name="scopeU7 in"/>
+         <source obj="analogRead7" outlet="out"/>
+         <dest obj="scopeU7" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead8 out"/>
-         <dest name="scopeU8 in"/>
+         <source obj="analogRead8" outlet="out"/>
+         <dest obj="scopeU8" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead9 out"/>
-         <dest name="scopeU9 in"/>
+         <source obj="analogRead9" outlet="out"/>
+         <dest obj="scopeU9" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead10 out"/>
-         <dest name="scopeU10 in"/>
+         <source obj="analogRead10" outlet="out"/>
+         <dest obj="scopeU10" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead11 out"/>
-         <dest name="scopeU11 in"/>
+         <source obj="analogRead11" outlet="out"/>
+         <dest obj="scopeU11" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead12 out"/>
-         <dest name="scopeU12 in"/>
+         <source obj="analogRead12" outlet="out"/>
+         <dest obj="scopeU12" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead13 out"/>
-         <dest name="scopeU13 in"/>
+         <source obj="analogRead13" outlet="out"/>
+         <dest obj="scopeU13" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead14 out"/>
-         <dest name="scopeU14 in"/>
+         <source obj="analogRead14" outlet="out"/>
+         <dest obj="scopeU14" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead15 out"/>
-         <dest name="scopeU15 in"/>
+         <source obj="analogRead15" outlet="out"/>
+         <dest obj="scopeU15" inlet="in"/>
       </net>
       <net>
-         <source name="analogRead16 out"/>
-         <dest name="scopeU16 in"/>
+         <source obj="analogRead16" outlet="out"/>
+         <dest obj="scopeU16" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>1136</width>
+      <height>702</height>
+   </windowPos>
 </patch-1.0>

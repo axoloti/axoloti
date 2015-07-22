@@ -37,7 +37,7 @@
          <combo attributeName="size" selection="2048 (42.66ms)"/>
       </attribs>
    </obj>
-   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_1" x="140" y="224">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="read_1" x="140" y="224">
       <params>
          <frac32.u.map name="time" value="14.0"/>
       </params>
@@ -45,7 +45,7 @@
          <objref attributeName="delayname" obj="d1"/>
       </attribs>
    </obj>
-   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_2" x="140" y="322">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="read_2" x="140" y="322">
       <params>
          <frac32.u.map name="time" value="21.5"/>
       </params>
@@ -57,7 +57,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="read_3" x="140" y="420">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="read_3" x="140" y="420">
       <params>
          <frac32.u.map name="time" value="31.5"/>
       </params>

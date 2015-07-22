@@ -25,7 +25,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_1" x="196" y="112">
+   <obj type="mix/xfade" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="xfade_1" x="196" y="112">
       <params/>
       <attribs/>
    </obj>
@@ -39,7 +39,7 @@
          <combo attributeName="size" selection="131072 (2.37s)"/>
       </attribs>
    </obj>
-   <obj type="delay/read" sha="fc0384b781e1025715ad700b860602e4f5a9762f" uuid="739f69bf3dae8db57f1412d0d15cb37bbae3f4c" name="read_1" x="154" y="266">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" uuid="739f69bf3dae8db57f1412d0d15cb37bbae3f4c" name="read_1" x="154" y="266">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -50,7 +50,7 @@
    <nets>
       <net>
          <source obj="time" outlet="out"/>
-         <dest obj="read_1" inlet="timem"/>
+         <dest obj="read_1" inlet="time"/>
       </net>
       <net>
          <source obj="xfade_1" outlet="o"/>
