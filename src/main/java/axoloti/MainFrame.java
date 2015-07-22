@@ -849,7 +849,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
                         return false;
                     }
                     String extension = name.substring(name.length() - 4);
-                    boolean b = (extension.equals(".axh") || extension.equals(".axp") || extension.equals(".axp") );
+                    boolean b = (extension.equals(".axh") || extension.equals(".axp") || extension.equals(".axs") );
                     return b;
                 }
             });
