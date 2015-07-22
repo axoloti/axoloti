@@ -5,7 +5,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc~" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="28" y="80">
+   <obj type="osc~" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="28" y="80">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -19,15 +19,15 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="rfft128" sha="2199e7d35382f21db955b42319cf8130b165f5f" name="rfft1281" x="420" y="80">
+   <obj type="rfft128" sha="1e5ec296644678b7bb811cbba8dfac44e890dcb9" name="rfft1281" x="420" y="80">
       <params/>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="28" y="200">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="28" y="200">
       <params/>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="28" y="280">
+   <obj type="saw~" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="28" y="280">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -35,28 +35,34 @@
    </obj>
    <nets>
       <net>
-         <source name="cb11 o"/>
-         <dest name="rfft1281 hold"/>
+         <source obj="cb11" outlet="o"/>
+         <dest obj="rfft1281" inlet="hold"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="mix21 in1"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="mix21" inlet="in1"/>
       </net>
       <net>
-         <source name="mix21 out"/>
-         <dest name="rfft1281 in"/>
+         <source obj="mix21" outlet="out"/>
+         <dest obj="rfft1281" inlet="in"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="mix21 in2"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="mix21" inlet="in2"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="mix21 in3"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="mix21" inlet="in3"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>730</width>
+      <height>590</height>
+   </windowPos>
 </patch-1.0>

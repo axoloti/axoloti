@@ -121,116 +121,122 @@
    </obj>
    <nets>
       <net>
-         <source name="decode_bin1 o0"/>
-         <dest name="dispb0 in"/>
+         <source obj="decode_bin1" outlet="o0"/>
+         <dest obj="dispb0" inlet="in"/>
       </net>
       <net>
-         <source name="decode_bin1 o1"/>
-         <dest name="dispb1 in"/>
+         <source obj="decode_bin1" outlet="o1"/>
+         <dest obj="dispb1" inlet="in"/>
       </net>
       <net>
-         <source name="decode_bin1 o2"/>
-         <dest name="dispb2 in"/>
+         <source obj="decode_bin1" outlet="o2"/>
+         <dest obj="dispb2" inlet="in"/>
       </net>
       <net>
-         <source name="decode_bin1 o3"/>
-         <dest name="dispb3 in"/>
+         <source obj="decode_bin1" outlet="o3"/>
+         <dest obj="dispb3" inlet="in"/>
       </net>
       <net>
-         <source name="decode_bin1 o4"/>
-         <dest name="dispb4 in"/>
+         <source obj="decode_bin1" outlet="o4"/>
+         <dest obj="dispb4" inlet="in"/>
       </net>
       <net>
-         <source name="decode_bin1 o5"/>
-         <dest name="dispb5 in"/>
+         <source obj="decode_bin1" outlet="o5"/>
+         <dest obj="dispb5" inlet="in"/>
       </net>
       <net>
-         <source name="decode_bin1 o6"/>
-         <dest name="dispb6 in"/>
+         <source obj="decode_bin1" outlet="o6"/>
+         <dest obj="dispb6" inlet="in"/>
       </net>
       <net>
-         <source name="decode_bin1 o7"/>
-         <dest name="dispb7 in"/>
+         <source obj="decode_bin1" outlet="o7"/>
+         <dest obj="dispb7" inlet="in"/>
       </net>
       <net>
-         <source name="int8 o0"/>
-         <dest name="b0 in"/>
+         <source obj="int8" outlet="o0"/>
+         <dest obj="b0" inlet="in"/>
       </net>
       <net>
-         <source name="int8 o1"/>
-         <dest name="b1 in"/>
+         <source obj="int8" outlet="o1"/>
+         <dest obj="b1" inlet="in"/>
       </net>
       <net>
-         <source name="int8 o2"/>
-         <dest name="b2 in"/>
+         <source obj="int8" outlet="o2"/>
+         <dest obj="b2" inlet="in"/>
       </net>
       <net>
-         <source name="int8 o3"/>
-         <dest name="b3 in"/>
+         <source obj="int8" outlet="o3"/>
+         <dest obj="b3" inlet="in"/>
       </net>
       <net>
-         <source name="int8 o4"/>
-         <dest name="b4 in"/>
+         <source obj="int8" outlet="o4"/>
+         <dest obj="b4" inlet="in"/>
       </net>
       <net>
-         <source name="int8 o5"/>
-         <dest name="b5 in"/>
+         <source obj="int8" outlet="o5"/>
+         <dest obj="b5" inlet="in"/>
       </net>
       <net>
-         <source name="int8 o6"/>
-         <dest name="b6 in"/>
+         <source obj="int8" outlet="o6"/>
+         <dest obj="b6" inlet="in"/>
       </net>
       <net>
-         <source name="int8 o7"/>
-         <dest name="b7 in"/>
+         <source obj="int8" outlet="o7"/>
+         <dest obj="b7" inlet="in"/>
       </net>
       <net>
-         <source name="int8 chain"/>
-         <dest name="int8_2 i1"/>
+         <source obj="int8" outlet="chain"/>
+         <dest obj="int8_2" inlet="i1"/>
       </net>
       <net>
-         <source name="int8_2 o0"/>
-         <dest name="b00 in"/>
+         <source obj="int8_2" outlet="o0"/>
+         <dest obj="b00" inlet="in"/>
       </net>
       <net>
-         <source name="int8_2 o1"/>
-         <dest name="b01 in"/>
+         <source obj="int8_2" outlet="o1"/>
+         <dest obj="b01" inlet="in"/>
       </net>
       <net>
-         <source name="int8_2 o2"/>
-         <dest name="b02 in"/>
+         <source obj="int8_2" outlet="o2"/>
+         <dest obj="b02" inlet="in"/>
       </net>
       <net>
-         <source name="int8_2 o3"/>
-         <dest name="b03 in"/>
+         <source obj="int8_2" outlet="o3"/>
+         <dest obj="b03" inlet="in"/>
       </net>
       <net>
-         <source name="int8_2 o4"/>
-         <dest name="b04 in"/>
+         <source obj="int8_2" outlet="o4"/>
+         <dest obj="b04" inlet="in"/>
       </net>
       <net>
-         <source name="int8_2 o5"/>
-         <dest name="b05 in"/>
+         <source obj="int8_2" outlet="o5"/>
+         <dest obj="b05" inlet="in"/>
       </net>
       <net>
-         <source name="int8_2 o6"/>
-         <dest name="b06 in"/>
+         <source obj="int8_2" outlet="o6"/>
+         <dest obj="b06" inlet="in"/>
       </net>
       <net>
-         <source name="int8_2 o7"/>
-         <dest name="b07 in"/>
+         <source obj="int8_2" outlet="o7"/>
+         <dest obj="b07" inlet="in"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="decode_bin1 i1"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="decode_bin1" inlet="i1"/>
       </net>
       <net>
-         <source name="i_2 out"/>
-         <dest name="int8 i1"/>
+         <source obj="i_2" outlet="out"/>
+         <dest obj="int8" inlet="i1"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>1010</width>
+      <height>646</height>
+   </windowPos>
 </patch-1.0>

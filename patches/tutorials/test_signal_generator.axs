@@ -9,7 +9,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="6267db73cb0c0ed25ffb8bf02cc3eb322f039ef5" uuid="556d54977a43597bf97427ca6c13e3d446859933" name="sine_1" x="182" y="98">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" uuid="556d54977a43597bf97427ca6c13e3d446859933" name="sine_1" x="182" y="98">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -23,7 +23,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/phasor" sha="9f6e5c01bd813c7eef16a17cd9f82f881d5f5219" uuid="db03c099c44cbefe218b88b702004bcfd6ba87d6" name="phasor_1" x="182" y="210">
+   <obj type="osc/phasor" sha="343e0dfbaa48c69032d959ee1e7398e45000e0bf" uuid="db03c099c44cbefe218b88b702004bcfd6ba87d6" name="phasor_1" x="182" y="210">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -40,8 +40,8 @@
    <nets>
       <net>
          <source obj="pitch" outlet="inlet"/>
-         <dest obj="phasor_1" inlet="pitchm"/>
-         <dest obj="sine_1" inlet="pitchm"/>
+         <dest obj="phasor_1" inlet="pitch"/>
+         <dest obj="sine_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="play_1" outlet="out"/>

@@ -10,7 +10,7 @@
          <spinner attributeName="endNote" value="50"/>
       </attribs>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="osc_1" x="168" y="70">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="osc_1" x="168" y="70">
       <params>
          <frac32.s.map name="pitch" value="-11.99315881729126"/>
       </params>
@@ -37,7 +37,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="osc_1_" x="168" y="154">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="osc_1_" x="168" y="154">
       <params>
          <frac32.s.map name="pitch" value="-12.14772891998291"/>
       </params>
@@ -67,7 +67,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf" x="504" y="252">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf" x="504" y="252">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-30.0"/>
          <frac32.u.map name="reso" onParent="true" value="13.0"/>
@@ -81,8 +81,8 @@
    <nets>
       <net>
          <source obj="keybzone_lru2" outlet="note"/>
-         <dest obj="osc_1" inlet="pitchm"/>
-         <dest obj="osc_1_" inlet="pitchm"/>
+         <dest obj="osc_1" inlet="pitch"/>
+         <dest obj="osc_1_" inlet="pitch"/>
       </net>
       <net>
          <source obj="osc_1" outlet="wave"/>
@@ -122,7 +122,7 @@
       </net>
       <net>
          <source obj="ftrack" outlet="out"/>
-         <dest obj="vcf" inlet="pitchm"/>
+         <dest obj="vcf" inlet="pitch"/>
       </net>
       <net>
          <source obj="rand_1" outlet="wave"/>

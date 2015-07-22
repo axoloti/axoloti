@@ -1,9 +1,9 @@
 <patch-1.0>
-   <obj type="adc~1" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc_11" x="28" y="14">
+   <obj type="audio/in left" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc_11" x="28" y="14">
       <params/>
       <attribs/>
    </obj>
-   <obj type="hipass~" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass_1" x="98" y="14">
+   <obj type="hipass~" sha="f9059d53a5af0890dc1a1268b5679aa335731857" name="hipass_1" x="98" y="14">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
@@ -15,7 +15,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="56" y="98">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="56" y="98">
       <params>
          <frac32.s.map name="pitch" value="43.0"/>
       </params>
@@ -31,7 +31,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="infclip~" sha="3b7380de881bb6eafc05c60b35ae2351855d6c09" name="infclip_1" x="434" y="182">
+   <obj type="dist/inf" sha="3b7380de881bb6eafc05c60b35ae2351855d6c09" name="infclip_1" x="434" y="182">
       <params/>
       <attribs/>
    </obj>
@@ -41,61 +41,67 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="616" y="182">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="616" y="182">
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1_" x="56" y="210">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1_" x="56" y="210">
       <params>
          <frac32.s.map name="pitch" value="11.995412826538086"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="56" y="322">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="56" y="322">
       <params/>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source name="*c1 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="infclip_1 out"/>
-         <dest name="*c1 in"/>
+         <source obj="infclip_1" outlet="out"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="mix21 out"/>
-         <dest name="infclip_1 in"/>
+         <source obj="mix21" outlet="out"/>
+         <dest obj="infclip_1" inlet="in"/>
       </net>
       <net>
-         <source name="hipass_1 out"/>
-         <dest name="c2 in"/>
+         <source obj="hipass_1" outlet="out"/>
+         <dest obj="c2" inlet="in"/>
       </net>
       <net>
-         <source name="adc_11 wave"/>
-         <dest name="hipass_1 in"/>
+         <source obj="adc_11" outlet="wave"/>
+         <dest obj="hipass_1" inlet="in"/>
       </net>
       <net>
-         <source name="c2 out"/>
-         <dest name="mix21 in1"/>
+         <source obj="c2" outlet="out"/>
+         <dest obj="mix21" inlet="in1"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="mix21 in2"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="mix21" inlet="in2"/>
       </net>
       <net>
-         <source name="osc_1_ wave"/>
-         <dest name="mix21 in3"/>
+         <source obj="osc_1_" outlet="wave"/>
+         <dest obj="mix21" inlet="in3"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="mix21 in4"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="mix21" inlet="in4"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>926</width>
+      <height>632</height>
+   </windowPos>
 </patch-1.0>

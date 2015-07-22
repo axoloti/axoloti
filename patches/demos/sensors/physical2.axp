@@ -1,23 +1,23 @@
 <patch-1.0>
-   <obj type="square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="40" y="40">
+   <obj type="osc/square" sha="7cccf8a95bf312ecc084f11f532cf5fda00b8c58" name="square_1" x="40" y="40">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter_1" x="140" y="40">
+   <obj type="logic/counter" sha="77a4b4804913310c0ec3fcc53592eed1cd9af148" name="counter_1" x="140" y="40">
       <params>
          <int32 name="maximum" value="16"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="i" sha="f379e2b7efb6169f8e7327be5b09362609656408" name="i_1" x="220" y="40">
+   <obj type="ctrl/i" sha="f379e2b7efb6169f8e7327be5b09362609656408" name="i_1" x="220" y="40">
       <params>
          <int32 name="value" value="4"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="select_bool_16_v2x4" sha="2550bb1cdd0761d8347dc1fdecd5d8ebd604de50" name="select_bool_16_v2x4_1" x="380" y="40">
+   <obj type="sel/sel b 16 4t" sha="8a0c95038623068cfb5f9228392b1c7f7938c4aa" name="select_bool_16_v2x4_1" x="380" y="40">
       <params>
          <bin16 name="p1" value="40654"/>
          <bin16 name="p2" value="50532"/>
@@ -26,65 +26,71 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="pwmout_t3" sha="c6c36bce1738f803a40a11c3e030e5240431b3e9" name="pwmout_t3_1" x="580" y="40">
+   <obj type="gpio/out/pwm t3" sha="c6c36bce1738f803a40a11c3e030e5240431b3e9" name="pwmout_t3_1" x="580" y="40">
       <params/>
       <attribs/>
    </obj>
-   <obj type="*" sha="2cde1e360d5ac386ff90b7726b9bc329b9fe46d2" name="*_1" x="220" y="100">
+   <obj type="math/*" sha="2cde1e360d5ac386ff90b7726b9bc329b9fe46d2" name="*_1" x="220" y="100">
       <params/>
       <attribs/>
    </obj>
-   <obj type="pwmout_t4_servo" sha="f32eef1b7cb40ea3149442457b990414f3456e8d" name="pwmout_t4_servo_1" x="280" y="100">
+   <obj type="gpio/out/pwm t4 servo" sha="f32eef1b7cb40ea3149442457b990414f3456e8d" name="pwmout_t4_servo_1" x="280" y="100">
       <params/>
       <attribs/>
    </obj>
-   <obj type="analogRead" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead_1" x="40" y="220">
+   <obj type="gpio/in/analog" sha="7d96dca616c6a2c27e7cc6f57bd170d8ded36e1e" name="analogRead_1" x="40" y="220">
       <params/>
       <attribs>
          <combo attributeName="channel" selection="PA2 (ADC1_IN2)"/>
       </attribs>
    </obj>
-   <obj type="scopeU" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="180" y="220">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="scopeU_1" x="180" y="220">
       <params/>
       <attribs/>
    </obj>
    <nets>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="counter_1 trig"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="counter_1" inlet="trig"/>
       </net>
       <net>
-         <source name="counter_1 o"/>
-         <dest name="select_bool_16_v2x4_1 in"/>
-         <dest name="*_1 b"/>
+         <source obj="counter_1" outlet="o"/>
+         <dest obj="select_bool_16_v2x4_1" inlet="in"/>
+         <dest obj="*_1" inlet="b"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="*_1 a"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="*_1" inlet="a"/>
       </net>
       <net>
-         <source name="*_1 result"/>
-         <dest name="pwmout_t4_servo_1 pb9"/>
+         <source obj="*_1" outlet="result"/>
+         <dest obj="pwmout_t4_servo_1" inlet="pb9"/>
       </net>
       <net>
-         <source name="select_bool_16_v2x4_1 o1"/>
-         <dest name="pwmout_t3_1 pa6"/>
+         <source obj="select_bool_16_v2x4_1" outlet="o1"/>
+         <dest obj="pwmout_t3_1" inlet="pa6"/>
       </net>
       <net>
-         <source name="select_bool_16_v2x4_1 o2"/>
-         <dest name="pwmout_t3_1 pa7"/>
+         <source obj="select_bool_16_v2x4_1" outlet="o2"/>
+         <dest obj="pwmout_t3_1" inlet="pa7"/>
       </net>
       <net>
-         <source name="select_bool_16_v2x4_1 o3"/>
-         <dest name="pwmout_t3_1 pb0"/>
+         <source obj="select_bool_16_v2x4_1" outlet="o3"/>
+         <dest obj="pwmout_t3_1" inlet="pb0"/>
       </net>
       <net>
-         <source name="analogRead_1 out"/>
-         <dest name="scopeU_1 in"/>
+         <source obj="analogRead_1" outlet="out"/>
+         <dest obj="scopeU_1" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>890</width>
+      <height>530</height>
+   </windowPos>
 </patch-1.0>

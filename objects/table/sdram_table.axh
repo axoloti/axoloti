@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/saw down" sha="374413e8279bb79209e158715ff652782fda082a" name="saw_2" x="14" y="14">
+   <obj type="lfo/saw down" sha="2a84a3f10fa95e49f9b9cff209cbe7f6b5e1f9ea" name="saw_2" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
@@ -32,7 +32,7 @@
          <objref attributeName="table" obj="t1"/>
       </attribs>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="14" y="126">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="14" y="126">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -50,7 +50,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="14" y="252">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_1" x="14" y="252">
       <params>
          <frac32.s.map name="pitch" value="-19.0"/>
       </params>
@@ -85,7 +85,7 @@
       </net>
       <net>
          <source obj="*c_1" outlet="out"/>
-         <dest obj="saw_1" inlet="pitchm"/>
+         <dest obj="saw_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="saw_1" outlet="wave"/>

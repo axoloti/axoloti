@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="lfo" x="180" y="20">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="lfo" x="180" y="20">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-3.0"/>
       </params>
@@ -25,7 +25,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="enva" x="400" y="120">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="enva" x="400" y="120">
       <params>
          <frac32.s.map name="a" onParent="true" value="-26.0"/>
          <frac32.s.map name="d" onParent="true" value="11.0"/>
@@ -34,7 +34,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/adsr" sha="49cacd3004d35eb333d8c9004945061c0ce24b01" name="envf" x="520" y="120">
+   <obj type="env/adsr" sha="2c4b16047d03b574d8a72b651f130895749eb670" name="envf" x="520" y="120">
       <params>
          <frac32.s.map name="a" onParent="true" value="0.0"/>
          <frac32.s.map name="d" onParent="true" value="0.0"/>
@@ -59,7 +59,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="80" y="320">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_1" x="80" y="320">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
       </params>
@@ -75,7 +75,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="500" y="320">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_1" x="500" y="320">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="17.0"/>
          <frac32.u.map name="reso" onParent="true" value="61.0"/>
@@ -86,7 +86,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw~_1" x="80" y="440">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw~_1" x="80" y="440">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -95,8 +95,8 @@
    <nets>
       <net>
          <source obj="bendrange" outlet="out"/>
-         <dest obj="osc~_1" inlet="pitchm"/>
-         <dest obj="saw~_1" inlet="pitchm"/>
+         <dest obj="osc~_1" inlet="pitch"/>
+         <dest obj="saw~_1" inlet="pitch"/>
          <dest obj="ftrack" inlet="in1"/>
       </net>
       <net>
@@ -138,7 +138,7 @@
       </net>
       <net>
          <source obj="lfof" outlet="out"/>
-         <dest obj="vcf3~_1" inlet="pitchm"/>
+         <dest obj="vcf3~_1" inlet="pitch"/>
       </net>
       <net>
          <source obj="keyb_1" outlet="note"/>

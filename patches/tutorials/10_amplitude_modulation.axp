@@ -5,14 +5,14 @@
       <attribs/>
    </obj>
    <comment type="patch/comment" x="56" y="168" text="modulator oscillator"/>
-   <obj type="osc~" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="56" y="182">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="56" y="182">
       <params>
          <frac32.s.map name="pitch" value="-27.0"/>
       </params>
       <attribs/>
    </obj>
    <comment type="patch/comment" x="56" y="322" text="carrier oscillator"/>
-   <obj type="osc~" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_2" x="56" y="336">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_2" x="56" y="336">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>

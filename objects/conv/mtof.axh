@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" name="mtof = midi note to frequency" x="14" y="14"/>
+   <comment type="patch/comment" x="14" y="14" text="mtof = midi note to frequency"/>
    <obj type="ctrl/dial p" sha="501c30e07dedf3d701e8d0b33c3c234908c3388e" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_1" x="14" y="70">
       <params>
          <frac32.u.map name="value" value="13.0"/>
@@ -10,38 +10,38 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine lin" sha="ee8c12f590695fc6f9737cf3a36abef513eadb1d" uuid="76e1fbd4ec919604532ce3cdb304c74aa6fe7c74" name="sine_1" x="266" y="70">
+   <obj type="osc/sine lin" sha="3a57035097adb60c79dfabdb4e3a3bd5d47791a1" uuid="76e1fbd4ec919604532ce3cdb304c74aa6fe7c74" name="sine_1" x="266" y="70">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="&quot;lin&quot; suffix in oscillators means they have a linear frequency input mapping" x="378" y="70"/>
+   <comment type="patch/comment" x="378" y="70" text="&quot;lin&quot; suffix in oscillators means they have a linear frequency input mapping"/>
    <obj type="ctrl/dial p" sha="501c30e07dedf3d701e8d0b33c3c234908c3388e" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_2" x="14" y="182">
       <params>
          <frac32.u.map name="value" value="13.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="85a8980923f6a3d4d93da8dcdde5536a86b273bf" uuid="556d54977a43597bf97427ca6c13e3d446859933" name="sine_2" x="266" y="182">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" uuid="556d54977a43597bf97427ca6c13e3d446859933" name="sine_2" x="266" y="182">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="normal oscillators have mtof build-in" x="378" y="190"/>
+   <comment type="patch/comment" x="378" y="190" text="normal oscillators have mtof build-in"/>
    <nets>
       <net>
-         <source name="mtof_1 frequency"/>
-         <dest name="sine_1 freqm"/>
+         <source obj="mtof_1" outlet="frequency"/>
+         <dest obj="sine_1" inlet="freq"/>
       </net>
       <net>
-         <source name="dial_1 out"/>
-         <dest name="mtof_1 pitch"/>
+         <source obj="dial_1" outlet="out"/>
+         <dest obj="mtof_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="dial_2 out"/>
-         <dest name="sine_2 pitchm"/>
+         <source obj="dial_2" outlet="out"/>
+         <dest obj="sine_2" inlet="pitch"/>
       </net>
    </nets>
    <settings>

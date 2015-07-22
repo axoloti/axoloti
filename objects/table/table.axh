@@ -1,11 +1,11 @@
 <patch-1.0>
-   <comment type="patch/comment" name="8-bit resolution" x="14" y="14"/>
-   <comment type="patch/comment" name="16-bit resolution" x="532" y="14"/>
-   <comment type="patch/comment" name="32-bit resolution" x="1022" y="14"/>
-   <comment type="patch/comment" name="non-interpolated fractional lookup" x="182" y="42"/>
-   <comment type="patch/comment" name="non-interpolated" x="700" y="42"/>
-   <comment type="patch/comment" name="non-interpolated_" x="1176" y="42"/>
-   <obj type="table/alloc 8b" sha="16dc5f80ca3889cc98392d3e77ce5ed128140c96" name="t1" x="14" y="70">
+   <comment type="patch/comment" x="14" y="14" text="8-bit resolution"/>
+   <comment type="patch/comment" x="532" y="14" text="16-bit resolution"/>
+   <comment type="patch/comment" x="1022" y="14" text="32-bit resolution"/>
+   <comment type="patch/comment" x="182" y="42" text="non-interpolated fractional lookup"/>
+   <comment type="patch/comment" x="700" y="42" text="non-interpolated"/>
+   <comment type="patch/comment" x="1176" y="42" text="non-interpolated_"/>
+   <obj type="table/alloc 8b" sha="2e6356e1ee24feede71a195192041fd1542b5331" name="t1" x="14" y="70">
       <params/>
       <attribs>
          <combo attributeName="size" selection="16"/>
@@ -32,7 +32,7 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <obj type="table/alloc 16b" sha="30e6566ebd5bd19afe2c6975adaa19d5b16584d9" name="t2" x="532" y="70">
+   <obj type="table/alloc 16b" sha="6ac0a3b006de0d628016702b7ba7f008f6763ca5" name="t2" x="532" y="70">
       <params/>
       <attribs>
          <combo attributeName="size" selection="16"/>
@@ -59,7 +59,7 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <obj type="table/alloc 32b" sha="c9cc4c02436509b149863fb2d27ff1f3cfc3bcee" name="t3" x="1022" y="70">
+   <obj type="table/alloc 32b" sha="84fa29116c34cf171f438ad40dc5e1e57432cb1d" name="t3" x="1022" y="70">
       <params/>
       <attribs>
          <combo attributeName="size" selection="16"/>
@@ -86,9 +86,9 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="linear interpolated" x="700" y="126"/>
-   <comment type="patch/comment" name="linear interpolated_" x="1176" y="126"/>
-   <comment type="patch/comment" name="input is fraction of table size (positive)" x="182" y="154"/>
+   <comment type="patch/comment" x="700" y="126" text="linear interpolated"/>
+   <comment type="patch/comment" x="1176" y="126" text="linear interpolated_"/>
+   <comment type="patch/comment" x="182" y="154" text="input is fraction of table size (positive)"/>
    <obj type="table/read interp" sha="2dfc3a1a00aeb03244b8ef0259d6c004c06cdbc" name="tabread1___" x="700" y="154">
       <params/>
       <attribs>
@@ -109,8 +109,8 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="so 4 units/step for a 16-element table" x="182" y="168"/>
-   <comment type="patch/comment" name="linear interpolated fractional lookup" x="182" y="182"/>
+   <comment type="patch/comment" x="182" y="168" text="so 4 units/step for a 16-element table"/>
+   <comment type="patch/comment" x="182" y="182" text="linear interpolated fractional lookup"/>
    <obj type="table/read interp" sha="2dfc3a1a00aeb03244b8ef0259d6c004c06cdbc" name="tabread1_" x="182" y="210">
       <params/>
       <attribs>
@@ -121,8 +121,8 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="integer lookup" x="224" y="308"/>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="322">
+   <comment type="patch/comment" x="224" y="308" text="integer lookup"/>
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="14" y="322">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -148,7 +148,7 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/phasor" sha="b5e53b37a76ac5a3605d009e82bcce64821c7e52" name="phasor3_1" x="14" y="490">
+   <obj type="osc/phasor" sha="343e0dfbaa48c69032d959ee1e7398e45000e0bf" name="phasor3_1" x="14" y="490">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -190,80 +190,86 @@ for(i=0;i<LENGTH;i++)
    </obj>
    <nets>
       <net>
-         <source name="c1 out"/>
-         <dest name="tabread1_ a"/>
-         <dest name="tabread1 a"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="tabread1_" inlet="a"/>
+         <dest obj="tabread1" inlet="a"/>
       </net>
       <net>
-         <source name="tabread1 o"/>
-         <dest name="displayS1 in"/>
+         <source obj="tabread1" outlet="o"/>
+         <dest obj="displayS1" inlet="in"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="counter1 trig"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="counter1" inlet="trig"/>
       </net>
       <net>
-         <source name="counter1 o"/>
-         <dest name="tabread2 a"/>
-         <dest name="ibar161 in"/>
+         <source obj="counter1" outlet="o"/>
+         <dest obj="tabread2" inlet="a"/>
+         <dest obj="ibar161" inlet="in"/>
       </net>
       <net>
-         <source name="tabread2 o"/>
-         <dest name="displayS1_ in"/>
+         <source obj="tabread2" outlet="o"/>
+         <dest obj="displayS1_" inlet="in"/>
       </net>
       <net>
-         <source name="phasor3_1 phasor"/>
-         <dest name="tabread3 a"/>
+         <source obj="phasor3_1" outlet="phasor"/>
+         <dest obj="tabread3" inlet="a"/>
       </net>
       <net>
-         <source name="tabread1_ o"/>
-         <dest name="displayS1__ in"/>
+         <source obj="tabread1_" outlet="o"/>
+         <dest obj="displayS1__" inlet="in"/>
       </net>
       <net>
-         <source name="tabread3 o"/>
-         <dest name="volume in"/>
+         <source obj="tabread3" outlet="o"/>
+         <dest obj="volume" inlet="in"/>
       </net>
       <net>
-         <source name="volume out"/>
-         <dest name="dac_11 wave"/>
+         <source obj="volume" outlet="out"/>
+         <dest obj="dac_11" inlet="wave"/>
       </net>
       <net>
-         <source name="c1_ out"/>
-         <dest name="tabread1___ a"/>
-         <dest name="tabread1__ a"/>
+         <source obj="c1_" outlet="out"/>
+         <dest obj="tabread1___" inlet="a"/>
+         <dest obj="tabread1__" inlet="a"/>
       </net>
       <net>
-         <source name="tabread1__ o"/>
-         <dest name="displayS1___ in"/>
+         <source obj="tabread1__" outlet="o"/>
+         <dest obj="displayS1___" inlet="in"/>
       </net>
       <net>
-         <source name="tabread1___ o"/>
-         <dest name="displayS1____ in"/>
+         <source obj="tabread1___" outlet="o"/>
+         <dest obj="displayS1____" inlet="in"/>
       </net>
       <net>
-         <source name="c1__ out"/>
-         <dest name="tabread1_____ a"/>
-         <dest name="tabread1____ a"/>
+         <source obj="c1__" outlet="out"/>
+         <dest obj="tabread1_____" inlet="a"/>
+         <dest obj="tabread1____" inlet="a"/>
       </net>
       <net>
-         <source name="tabread1____ o"/>
-         <dest name="displayS1_____ in"/>
+         <source obj="tabread1____" outlet="o"/>
+         <dest obj="displayS1_____" inlet="in"/>
       </net>
       <net>
-         <source name="tabread1_____ o"/>
-         <dest name="displayS1______ in"/>
+         <source obj="tabread1_____" outlet="o"/>
+         <dest obj="displayS1______" inlet="in"/>
       </net>
       <net>
-         <source name="cb1m_1 o"/>
-         <dest name="tabwrite_1 trig"/>
+         <source obj="cb1m_1" outlet="o"/>
+         <dest obj="tabwrite_1" inlet="trig"/>
       </net>
       <net>
-         <source name="cbp_1 out"/>
-         <dest name="tabwrite_1 v"/>
+         <source obj="cbp_1" outlet="out"/>
+         <dest obj="tabwrite_1" inlet="v"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[note fdf ]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>1640</width>
+      <height>1024</height>
+   </windowPos>
 </patch-1.0>

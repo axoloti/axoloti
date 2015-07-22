@@ -13,7 +13,7 @@
          <combo attributeName="time" selection="5.3ms"/>
       </attribs>
    </obj>
-   <obj type="dyn/comp" sha="c8cc4a0549bb80df85534096de4eac1df8874dc" name="comp_1" x="252" y="112">
+   <obj type="dyn/comp" sha="cda5bd26e9fc97319943991cca7cf2da17496790" name="comp_1" x="252" y="112">
       <params>
          <frac32.u.map name="tresh" value="1.5"/>
          <frac32.u.map name="ratio" value="63.5"/>
@@ -55,41 +55,47 @@
    </obj>
    <nets>
       <net>
-         <source name="in_1 left"/>
-         <dest name="follower_1 in"/>
-         <dest name="vca_1 a"/>
+         <source obj="in_1" outlet="left"/>
+         <dest obj="follower_1" inlet="in"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="follower_1 amp"/>
-         <dest name="comp_1 in"/>
-         <dest name="chart_3 in"/>
+         <source obj="follower_1" outlet="amp"/>
+         <dest obj="comp_1" inlet="in"/>
+         <dest obj="chart_3" inlet="in"/>
       </net>
       <net>
-         <source name="comp_1 out"/>
-         <dest name="smooth2_1 in"/>
+         <source obj="comp_1" outlet="out"/>
+         <dest obj="smooth2_1" inlet="in"/>
       </net>
       <net>
-         <source name="smooth2_1 out"/>
-         <dest name="muls_1 in"/>
+         <source obj="smooth2_1" outlet="out"/>
+         <dest obj="muls_1" inlet="in"/>
       </net>
       <net>
-         <source name="muls_1 out"/>
-         <dest name="vca_1 v"/>
-         <dest name="chart_1 in"/>
+         <source obj="muls_1" outlet="out"/>
+         <dest obj="vca_1" inlet="v"/>
+         <dest obj="chart_1" inlet="in"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="out_1 left"/>
-         <dest name="out_1 right"/>
-         <dest name="follower_2 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="out_1" inlet="left"/>
+         <dest obj="out_1" inlet="right"/>
+         <dest obj="follower_2" inlet="in"/>
       </net>
       <net>
-         <source name="follower_2 amp"/>
-         <dest name="chart_2 in"/>
+         <source obj="follower_2" outlet="amp"/>
+         <dest obj="chart_2" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>898</width>
+      <height>660</height>
+   </windowPos>
 </patch-1.0>

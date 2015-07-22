@@ -3,7 +3,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="200" y="40">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="200" y="40">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -18,7 +18,7 @@
    <comment type="patch/comment" x="602" y="126" text="off: bandwidth limited saw wave"/>
    <comment type="patch/comment" x="602" y="140" text="on: aliased saw wave"/>
    <comment type="patch/comment" x="644" y="182" text="the difference should be very clear on high notes on the piano keyboard!"/>
-   <obj type="phasor3~" sha="343e0dfbaa48c69032d959ee1e7398e45000e0bf" name="phasor3_1" x="200" y="220">
+   <obj type="osc/phasor" sha="343e0dfbaa48c69032d959ee1e7398e45000e0bf" name="phasor3_1" x="200" y="220">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>

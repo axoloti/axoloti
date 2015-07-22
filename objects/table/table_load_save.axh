@@ -10,7 +10,7 @@
       </attribs>
    </obj>
    <comment type="patch/comment" x="14" y="112" text="record a sine bleep into a table"/>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="14" y="140">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_1" x="14" y="140">
       <params>
          <frac32.s.map name="pitch" value="2.0"/>
       </params>
@@ -22,7 +22,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="tabrecord~" sha="4acba2d788e3cee3e25db7b5319282026027ac69" name="tabrecord~_1" x="252" y="140">
+   <obj type="table/record" sha="4acba2d788e3cee3e25db7b5319282026027ac69" name="tabrecord~_1" x="252" y="140">
       <params/>
       <attribs>
          <objref attributeName="table" obj="t1"/>
@@ -72,14 +72,14 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="savetable" sha="ae643a04d0280e9d406bdc5cd21fb1d07723666d" name="savetable_1" x="378" y="448">
+   <obj type="table/save" sha="ae643a04d0280e9d406bdc5cd21fb1d07723666d" name="savetable_1" x="378" y="448">
       <params/>
       <attribs>
          <objref attributeName="table" obj="t1"/>
       </attribs>
    </obj>
    <comment type="patch/comment" x="294" y="546" text="load the table"/>
-   <obj type="loadtable" sha="efd09536a65a5b9f2e1765e4d7dab9d24a29aef8" name="loadtable_1" x="378" y="574">
+   <obj type="table/load" sha="efd09536a65a5b9f2e1765e4d7dab9d24a29aef8" name="loadtable_1" x="378" y="574">
       <params/>
       <attribs>
          <objref attributeName="table" obj="t1"/>

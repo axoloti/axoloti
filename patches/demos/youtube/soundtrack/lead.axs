@@ -35,7 +35,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd lin m x" sha="1bff4be3aeae590d80327085f5f7c771667d8938" name="envahd1" x="462" y="28">
+   <obj type="env/ahd lin m" sha="1bff4be3aeae590d80327085f5f7c771667d8938" name="envahd1" x="462" y="28">
       <params>
          <frac32.s.map name="a" value="10.0"/>
          <frac32.s.map name="d" value="17.0"/>

@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="noise/gaussian" sha="43d4dec8c6448021780e4d51ddedd98bd944f688" name="gaussian_1" x="28" y="98">
+   <obj type="noise/gaussian" sha="34a80904716df7e3875cee2c3056be75dc47aa9a" name="gaussian_1" x="28" y="98">
       <params/>
       <attribs/>
    </obj>
@@ -19,7 +19,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="28" y="294">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="28" y="294">
       <params/>
       <attribs/>
    </obj>
@@ -33,8 +33,8 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="gaussian white noise" x="532" y="322"/>
-   <comment type="patch/comment" name="uniform white noise" x="532" y="336"/>
+   <comment type="patch/comment" x="532" y="322" text="gaussian white noise"/>
+   <comment type="patch/comment" x="532" y="336" text="uniform white noise"/>
    <obj type="mux/mux 2" sha="c6b90f8c9bc3d2f8632ce90fca7a738c7153eb2f" name="inmux21" x="448" y="350">
       <params/>
       <attribs/>
@@ -55,40 +55,46 @@
    </obj>
    <nets>
       <net>
-         <source name="gaussian_1 wave"/>
-         <dest name="*c1 in"/>
+         <source obj="gaussian_1" outlet="wave"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="scope_128s_v21 in"/>
-         <dest name="inmux21 i1"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="scope_128s_v21" inlet="in"/>
+         <dest obj="inmux21" inlet="i1"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="*c2 in"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="*c2" inlet="in"/>
       </net>
       <net>
-         <source name="*c2 out"/>
-         <dest name="inmux21 i2"/>
-         <dest name="scope_128s_v21_ in"/>
+         <source obj="*c2" outlet="out"/>
+         <dest obj="inmux21" inlet="i2"/>
+         <dest obj="scope_128s_v21_" inlet="in"/>
       </net>
       <net>
-         <source name="inmux21 o"/>
-         <dest name="analyzer24db21 in"/>
-         <dest name="*c3 in"/>
+         <source obj="inmux21" outlet="o"/>
+         <dest obj="analyzer24db21" inlet="in"/>
+         <dest obj="*c3" inlet="in"/>
       </net>
       <net>
-         <source name="*c3 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
+         <source obj="*c3" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="cb11 out"/>
-         <dest name="inmux21 s"/>
+         <source obj="cb11" outlet="out"/>
+         <dest obj="inmux21" inlet="s"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>968</width>
+      <height>772</height>
+   </windowPos>
 </patch-1.0>

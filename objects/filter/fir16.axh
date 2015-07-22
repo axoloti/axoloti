@@ -30,7 +30,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw~_1" x="462" y="168">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw~_1" x="462" y="168">
       <params>
          <frac32.s.map name="pitch" value="5.0"/>
       </params>

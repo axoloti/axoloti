@@ -535,7 +535,7 @@ public class Patch {
     void PreSerialize() {
     }
 
-    void save(File f) {
+    boolean save(File f) {
         SortByPosition();
         PreSerialize();
         Serializer serializer = new Persister();
@@ -545,7 +545,9 @@ public class Patch {
             dirty = false;
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
+        return true;
 //        if (settings == null) {
 //            return;
 //        }

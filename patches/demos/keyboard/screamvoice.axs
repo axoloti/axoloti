@@ -25,13 +25,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env_old/ahd lin m x" sha="62a6c82f56f3c5daa5fb4f269acb3a33cf34992b" name="envahd1" x="448" y="28">
-      <params>
-         <frac32.s.map name="a" value="10.0"/>
-         <frac32.s.map name="d" value="17.0"/>
-      </params>
-      <attribs/>
-   </obj>
+   <zombie type="env_old/ahd lin m x" uuid="zombie" name="envahd1" x="448" y="28"/>
    <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c3_" x="224" y="70">
       <params>
          <frac32.u.map name="amp" value="16.0"/>
@@ -42,7 +36,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="616" y="112">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="616" y="112">
       <params>
          <frac32.s.map name="pitch" value="-61.0"/>
       </params>
@@ -55,7 +49,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc2" x="70" y="168">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc2" x="70" y="168">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -71,7 +65,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="154" y="252">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="154" y="252">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -84,7 +78,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="lpf_1" x="448" y="280">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="lpf_1" x="448" y="280">
       <params>
          <frac32.s.map name="pitch" value="-20.0"/>
          <frac32.u.map name="reso" MidiCC="11" value="59.5"/>
@@ -113,11 +107,11 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="84" y="350">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="84" y="350">
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp1" sha="91e2ecaa66340906540043ea41ac3987ce0aef17" name="lowpass_1" x="168" y="350">
+   <obj type="filter/lp1" sha="290a234e2f83eb072198d0158bcd5da02a3606c3" name="lowpass_1" x="168" y="350">
       <params>
          <frac32.s.map name="freq" value="60.5"/>
       </params>
@@ -133,107 +127,107 @@
    </obj>
    <nets>
       <net>
-         <source name="lpf_1 out"/>
-         <dest name="infclip_1_ in"/>
-         <dest name="clean outlet"/>
+         <source obj="lpf_1" outlet="out"/>
+         <dest obj="infclip_1_" inlet="in"/>
+         <dest obj="clean" inlet="outlet"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="mix21 in1"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="mix21" inlet="in1"/>
       </net>
       <net>
-         <source name="envahd1 env"/>
-         <dest name="vca_1 v"/>
-         <dest name="*c2 in2"/>
-         <dest name="a outlet"/>
+         <source class="axoloti.outlets.OutletInstanceZombie" obj="envahd1" outlet="env"/>
+         <dest obj="vca_1" inlet="v"/>
+         <dest obj="*c2" inlet="in2"/>
+         <dest obj="a" inlet="outlet"/>
       </net>
       <net>
-         <source name="infclip_1_ out"/>
-         <dest name="vca_1 a"/>
+         <source obj="infclip_1_" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="*c1 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="mix21 out"/>
-         <dest name="lpf_1 in"/>
+         <source obj="mix21" outlet="out"/>
+         <dest obj="lpf_1" inlet="in"/>
       </net>
       <net>
-         <source name="*c2 out"/>
-         <dest name="lpf_1 pitchm"/>
+         <source obj="*c2" outlet="out"/>
+         <dest obj="lpf_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="*c2 in1"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="*c2" inlet="in1"/>
       </net>
       <net>
-         <source name="mix11 out"/>
-         <dest name="saw_1 pitchm"/>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="saw_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="mix11 bus_in"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="mix11" inlet="bus_in"/>
       </net>
       <net>
-         <source name="osc2 wave"/>
-         <dest name="div321 in"/>
+         <source obj="osc2" outlet="wave"/>
+         <dest obj="div321" inlet="in"/>
       </net>
       <net>
-         <source name="div321 out"/>
-         <dest name="mix11 in1"/>
+         <source obj="div321" outlet="out"/>
+         <dest obj="mix11" inlet="in1"/>
       </net>
       <net>
-         <source name="c1 out"/>
-         <dest name="smooth1 in"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="smooth1" inlet="in"/>
       </net>
       <net>
-         <source name="smooth1 out"/>
-         <dest name="*c2 bus_in"/>
+         <source obj="smooth1" outlet="out"/>
+         <dest obj="*c2" inlet="bus_in"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="lowpass_1 in"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="lowpass_1" inlet="in"/>
       </net>
       <net>
-         <source name="lowpass_1 out"/>
-         <dest name="div161 in"/>
+         <source obj="lowpass_1" outlet="out"/>
+         <dest obj="div161" inlet="in"/>
       </net>
       <net>
-         <source name="div161 out"/>
-         <dest name="mix21 in2"/>
+         <source obj="div161" outlet="out"/>
+         <dest obj="mix21" inlet="in2"/>
       </net>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="envahd1 trig"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest class="axoloti.inlets.InletInstanceZombie" obj="envahd1" inlet="trig"/>
       </net>
       <net>
-         <source name="keyb1 velocity"/>
-         <dest name="inv1 in"/>
+         <source obj="keyb1" outlet="velocity"/>
+         <dest obj="inv1" inlet="in"/>
       </net>
       <net>
-         <source name="inv1 out"/>
-         <dest name="*c3 in"/>
+         <source obj="inv1" outlet="out"/>
+         <dest obj="*c3" inlet="in"/>
       </net>
       <net>
-         <source name="*c3 out"/>
-         <dest name="envahd1 am"/>
+         <source obj="*c3" outlet="out"/>
+         <dest class="axoloti.inlets.InletInstanceZombie" obj="envahd1" inlet="am"/>
       </net>
       <net>
-         <source name="keyb1 releaseVelocity"/>
-         <dest name="*c3_ in"/>
+         <source obj="keyb1" outlet="releaseVelocity"/>
+         <dest obj="*c3_" inlet="in"/>
       </net>
       <net>
-         <source name="*c3_ out"/>
-         <dest name="inv1_ in"/>
+         <source obj="*c3_" outlet="out"/>
+         <dest obj="inv1_" inlet="in"/>
       </net>
       <net>
-         <source name="inv1_ out"/>
-         <dest name="envahd1 dm"/>
+         <source obj="inv1_" outlet="out"/>
+         <dest class="axoloti.inlets.InletInstanceZombie" obj="envahd1" inlet="dm"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="v outlet"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="v" inlet="outlet"/>
       </net>
    </nets>
    <settings>
@@ -243,7 +237,12 @@
       <NPresetEntries>32</NPresetEntries>
       <NModulationSources>8</NModulationSources>
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
-      <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>1094</width>
+      <height>674</height>
+   </windowPos>
 </patch-1.0>

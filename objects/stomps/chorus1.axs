@@ -21,7 +21,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="speed" x="70" y="154">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="speed" x="70" y="154">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-41.0"/>
       </params>
@@ -39,7 +39,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/read interp" sha="22a07dcbe5007bc4095bed25946486e7c98caf23" name="delread21" x="476" y="154">
+   <obj type="delay/read interp" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread21" x="476" y="154">
       <params>
          <frac32.u.map name="time" value="1.0"/>
       </params>
@@ -71,7 +71,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/read interp" sha="22a07dcbe5007bc4095bed25946486e7c98caf23" name="delread22" x="476" y="252">
+   <obj type="delay/read interp" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread22" x="476" y="252">
       <params>
          <frac32.u.map name="time" value="1.0"/>
       </params>
@@ -89,69 +89,69 @@
    </obj>
    <nets>
       <net>
-         <source name="in inlet"/>
-         <dest name="del in"/>
-         <dest name="mux_1 i1"/>
-         <dest name="mux_2 i1"/>
+         <source obj="in" outlet="inlet"/>
+         <dest obj="del" inlet="in"/>
+         <dest obj="mux_1" inlet="i1"/>
+         <dest obj="mux_2" inlet="i1"/>
       </net>
       <net>
-         <source name="speed wave"/>
-         <dest name="bipolar2unipolar1 i"/>
-         <dest name="inv1 in"/>
+         <source obj="speed" outlet="wave"/>
+         <dest obj="bipolar2unipolar1" inlet="i"/>
+         <dest obj="inv1" inlet="in"/>
       </net>
       <net>
-         <source name="bipolar2unipolar1 o"/>
-         <dest name="vca_1 a"/>
+         <source obj="bipolar2unipolar1" outlet="o"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="inv1 out"/>
-         <dest name="bipolar2unipolar1_ i"/>
+         <source obj="inv1" outlet="out"/>
+         <dest obj="bipolar2unipolar1_" inlet="i"/>
       </net>
       <net>
-         <source name="bipolar2unipolar1_ o"/>
-         <dest name="vca_1_ a"/>
+         <source obj="bipolar2unipolar1_" outlet="o"/>
+         <dest obj="vca_1_" inlet="a"/>
       </net>
       <net>
-         <source name="depth out"/>
-         <dest name="vca_1 b"/>
-         <dest name="vca_1_ b"/>
+         <source obj="depth" outlet="out"/>
+         <dest obj="vca_1" inlet="b"/>
+         <dest obj="vca_1_" inlet="b"/>
       </net>
       <net>
-         <source name="vca_1 result"/>
-         <dest name="interp_1 i"/>
+         <source obj="vca_1" outlet="result"/>
+         <dest obj="interp_1" inlet="i"/>
       </net>
       <net>
-         <source name="interp_1 o"/>
-         <dest name="delread21 timem"/>
+         <source obj="interp_1" outlet="o"/>
+         <dest obj="delread21" inlet="time"/>
       </net>
       <net>
-         <source name="vca_1_ result"/>
-         <dest name="interp_2 i"/>
+         <source obj="vca_1_" outlet="result"/>
+         <dest obj="interp_2" inlet="i"/>
       </net>
       <net>
-         <source name="interp_2 o"/>
-         <dest name="delread22 timem"/>
+         <source obj="interp_2" outlet="o"/>
+         <dest obj="delread22" inlet="time"/>
       </net>
       <net>
-         <source name="mux_1 o"/>
-         <dest name="L outlet"/>
+         <source obj="mux_1" outlet="o"/>
+         <dest obj="L" inlet="outlet"/>
       </net>
       <net>
-         <source name="delread21 out"/>
-         <dest name="mux_1 i2"/>
+         <source obj="delread21" outlet="out"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
       <net>
-         <source name="delread22 out"/>
-         <dest name="mux_2 i2"/>
+         <source obj="delread22" outlet="out"/>
+         <dest obj="mux_2" inlet="i2"/>
       </net>
       <net>
-         <source name="mux_2 o"/>
-         <dest name="R outlet"/>
+         <source obj="mux_2" outlet="o"/>
+         <dest obj="R" inlet="outlet"/>
       </net>
       <net>
-         <source name="on o"/>
-         <dest name="mux_1 s"/>
-         <dest name="mux_2 s"/>
+         <source obj="on" outlet="o"/>
+         <dest obj="mux_1" inlet="s"/>
+         <dest obj="mux_2" inlet="s"/>
       </net>
    </nets>
    <settings>
@@ -159,5 +159,11 @@
       <MidiChannel>0</MidiChannel>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>1010</width>
+      <height>576</height>
+   </windowPos>
    <helpPatch>chorus3.axh</helpPatch>
 </patch-1.0>

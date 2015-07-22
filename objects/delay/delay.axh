@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="14" y="14">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_1" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="39.0"/>
       </params>
@@ -19,13 +19,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="238" y="98">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_1" x="238" y="98">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw~_1" x="14" y="112">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw~_1" x="14" y="112">
       <params>
          <frac32.s.map name="pitch" value="2.0"/>
       </params>
@@ -43,7 +43,7 @@
          <combo attributeName="size" selection="2048 (42.66ms)"/>
       </attribs>
    </obj>
-   <obj type="delay/read interp" sha="22a07dcbe5007bc4095bed25946486e7c98caf23" name="delread2~~_1" x="154" y="238">
+   <obj type="delay/read interp" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread2~~_1" x="154" y="238">
       <params>
          <frac32.u.map name="time" value="1.5"/>
       </params>
@@ -68,7 +68,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/read" sha="dadafc28db716ea19216eeaa2ad121763c34ec3b" name="delread~_1" x="154" y="336">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="delread~_1" x="154" y="336">
       <params>
          <frac32.u.map name="time" value="14.5"/>
       </params>
@@ -80,7 +80,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/read" sha="9428f1942521d9e80e7ca58ea38e1d417220e94f" name="delread~~_1" x="154" y="448">
+   <obj type="delay/read" sha="5fca22dde504617cc3aec49fd5fcc1d7296290ca" name="delread~~_1" x="154" y="448">
       <params>
          <frac32.u.map name="time" value="28.0"/>
       </params>
@@ -90,47 +90,53 @@
    </obj>
    <nets>
       <net>
-         <source name="div2_1 out"/>
-         <dest name="delwrite~_1 in"/>
-         <dest name="mix2_1 in1"/>
+         <source obj="div2_1" outlet="out"/>
+         <dest obj="delwrite~_1" inlet="in"/>
+         <dest obj="mix2_1" inlet="in1"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="dac~_1 left"/>
-         <dest name="dac~_1 right"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="dac~_1" inlet="left"/>
+         <dest obj="dac~_1" inlet="right"/>
       </net>
       <net>
-         <source name="delread2~~_1 out"/>
-         <dest name="mix2_1 in2"/>
+         <source obj="delread2~~_1" outlet="out"/>
+         <dest obj="mix2_1" inlet="in2"/>
       </net>
       <net>
-         <source name="cbp_1 out"/>
-         <dest name="osc~_1 pitchm"/>
+         <source obj="cbp_1" outlet="out"/>
+         <dest obj="osc~_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="osc~_1 wave"/>
-         <dest name="*c_2 in"/>
+         <source obj="osc~_1" outlet="wave"/>
+         <dest obj="*c_2" inlet="in"/>
       </net>
       <net>
-         <source name="*c_2 out"/>
-         <dest name="delread2~~_1 timem"/>
+         <source obj="*c_2" outlet="out"/>
+         <dest obj="delread2~~_1" inlet="time"/>
       </net>
       <net>
-         <source name="dirac~_1 out"/>
-         <dest name="div2_1 in"/>
+         <source obj="dirac~_1" outlet="out"/>
+         <dest obj="div2_1" inlet="in"/>
       </net>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="dirac~_1 trig"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="dirac~_1" inlet="trig"/>
       </net>
       <net>
-         <source name="mix2_1 out"/>
-         <dest name="scope_1 in"/>
-         <dest name="*c_1 in"/>
+         <source obj="mix2_1" outlet="out"/>
+         <dest obj="scope_1" inlet="in"/>
+         <dest obj="*c_1" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>842</width>
+      <height>758</height>
+   </windowPos>
 </patch-1.0>

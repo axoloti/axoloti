@@ -1,23 +1,23 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="14" y="14">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square1" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="-8.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="pulse/d" sha="e047de4d97e15e991286b65f7265528616d6b4e8" name="envd_1" x="182" y="14">
+   <obj type="pulse/d" sha="46a0d97746b9f9b086966bfa40e061a1b4995a9f" name="envd_1" x="182" y="14">
       <params>
          <frac32.u.map name="d" value="63.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="pulse/hd" sha="2f2f00d15a2d37df9d876b6d5d1ab615477d2144" name="envhd2_1" x="182" y="98">
+   <obj type="pulse/hd" sha="eb3db39b324fcb74b9f77d0983aaeb618e9ffeb7" name="envhd2_1" x="182" y="98">
       <params>
          <frac32.u.map name="d" value="16.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="pulse/ahd" sha="61680899fc217534b8e3a7e3070d23dd72c30cef" name="envahd_1" x="182" y="182">
+   <obj type="pulse/ahd" sha="c6880a536411f6ba7c29c4861899f3797bc7f0ea" name="envahd_1" x="182" y="182">
       <params>
          <frac32.u.map name="a" value="7.0"/>
          <frac32.u.map name="d" value="11.0"/>
@@ -68,7 +68,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="pulse/d m" sha="66c6300f16cd95cf2e28fdfc0b6a5f3470e38fe5" name="envd2_1" x="182" y="574">
+   <obj type="pulse/d m" sha="33a4190531c3a878e8c9038c56959a29fea1d074" name="envd2_1" x="182" y="574">
       <params>
          <frac32.u.map name="d" value="43.5"/>
       </params>
@@ -78,7 +78,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="pulse/ahd m" sha="7bab731cb24de8831d097241206917fdc1423364" name="envahd_2" x="182" y="672">
+   <obj type="pulse/ahd m" sha="50580fac49987304ee909273d3bc35911616cd74" name="envahd_2" x="182" y="672">
       <params>
          <frac32.u.map name="a" value="2.5"/>
          <frac32.u.map name="d" value="2.5"/>
@@ -91,7 +91,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="pulse/hd m" sha="c11c0e57918d0fba8546f18cee57d398ca8cbd90" name="envhd2_2" x="182" y="812">
+   <obj type="pulse/hd m" sha="9b59f5fe54ccb3a191bb8bb45782cd7622b84e46" name="envhd2_2" x="182" y="812">
       <params>
          <frac32.u.map name="d" value="2.0"/>
       </params>
@@ -103,85 +103,91 @@
    </obj>
    <nets>
       <net>
-         <source name="inmux61 o"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
-         <dest name="scope_128s_trig1 in"/>
+         <source obj="inmux61" outlet="o"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
+         <dest obj="scope_128s_trig1" inlet="in"/>
       </net>
       <net>
-         <source name="square1 wave"/>
-         <dest name="lfsrburst8_1 trig"/>
-         <dest name="lfsrburst6_1 trig"/>
-         <dest name="lfsrburst7_1 trig"/>
-         <dest name="lfsrburst9_1 trig"/>
-         <dest name="envd_1 trig"/>
-         <dest name="envhd2_1 trig"/>
-         <dest name="envahd_1 gate"/>
-         <dest name="envd2_1 trig"/>
-         <dest name="envahd_2 gate"/>
-         <dest name="envhd2_2 trig"/>
+         <source obj="square1" outlet="wave"/>
+         <dest obj="lfsrburst8_1" inlet="trig"/>
+         <dest obj="lfsrburst6_1" inlet="trig"/>
+         <dest obj="lfsrburst7_1" inlet="trig"/>
+         <dest obj="lfsrburst9_1" inlet="trig"/>
+         <dest obj="envd_1" inlet="trig"/>
+         <dest obj="envhd2_1" inlet="trig"/>
+         <dest obj="envahd_1" inlet="gate"/>
+         <dest obj="envd2_1" inlet="trig"/>
+         <dest obj="envahd_2" inlet="gate"/>
+         <dest obj="envhd2_2" inlet="trig"/>
       </net>
       <net>
-         <source name="envd_1 env"/>
-         <dest name="inmux61 i0"/>
+         <source obj="envd_1" outlet="env"/>
+         <dest obj="inmux61" inlet="i0"/>
       </net>
       <net>
-         <source name="envhd2_1 env"/>
-         <dest name="inmux61 i1"/>
+         <source obj="envhd2_1" outlet="env"/>
+         <dest obj="inmux61" inlet="i1"/>
       </net>
       <net>
-         <source name="envahd_1 env"/>
-         <dest name="inmux61 i2"/>
+         <source obj="envahd_1" outlet="env"/>
+         <dest obj="inmux61" inlet="i2"/>
       </net>
       <net>
-         <source name="lfsrburst6_1 out"/>
-         <dest name="inmux61 i3"/>
+         <source obj="lfsrburst6_1" outlet="out"/>
+         <dest obj="inmux61" inlet="i3"/>
       </net>
       <net>
-         <source name="lfsrburst7_1 out"/>
-         <dest name="inmux61 i4"/>
+         <source obj="lfsrburst7_1" outlet="out"/>
+         <dest obj="inmux61" inlet="i4"/>
       </net>
       <net>
-         <source name="lfsrburst8_1 out"/>
-         <dest name="inmux61 i5"/>
+         <source obj="lfsrburst8_1" outlet="out"/>
+         <dest obj="inmux61" inlet="i5"/>
       </net>
       <net>
-         <source name="lfsrburst9_1 out"/>
-         <dest name="inmux61 i6"/>
+         <source obj="lfsrburst9_1" outlet="out"/>
+         <dest obj="inmux61" inlet="i6"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="inmux61 s"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="inmux61" inlet="s"/>
       </net>
       <net>
-         <source name="envd2_1 env"/>
-         <dest name="inmux31 i0"/>
+         <source obj="envd2_1" outlet="env"/>
+         <dest obj="inmux31" inlet="i0"/>
       </net>
       <net>
-         <source name="envahd_2 env"/>
-         <dest name="inmux31 i1"/>
+         <source obj="envahd_2" outlet="env"/>
+         <dest obj="inmux31" inlet="i1"/>
       </net>
       <net>
-         <source name="envhd2_2 env"/>
-         <dest name="inmux31 i2"/>
+         <source obj="envhd2_2" outlet="env"/>
+         <dest obj="inmux31" inlet="i2"/>
       </net>
       <net>
-         <source name="inmux31 o"/>
-         <dest name="inmux61 i7"/>
+         <source obj="inmux31" outlet="o"/>
+         <dest obj="inmux61" inlet="i7"/>
       </net>
       <net>
-         <source name="c3 out"/>
-         <dest name="envd2_1 dm"/>
-         <dest name="envahd_2 dm"/>
-         <dest name="envhd2_2 dm"/>
+         <source obj="c3" outlet="out"/>
+         <dest obj="envd2_1" inlet="d"/>
+         <dest obj="envahd_2" inlet="d"/>
+         <dest obj="envhd2_2" inlet="d"/>
       </net>
       <net>
-         <source name="i_2 out"/>
-         <dest name="inmux31 s"/>
+         <source obj="i_2" outlet="out"/>
+         <dest obj="inmux31" inlet="s"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>940</width>
+      <height>1122</height>
+   </windowPos>
 </patch-1.0>

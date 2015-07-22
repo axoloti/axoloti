@@ -1,11 +1,11 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="14" y="14">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square1" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="-16.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="timer/pulselength" sha="2499426dff17a3fd549c8c6659254da15b6b5f1e" name="pulselength_1" x="252" y="14">
+   <obj type="timer/pulselength" sha="86ef23ee0ae7cffc4c8ae0d9e258473d5dc57764" name="pulselength_1" x="252" y="14">
       <params>
          <frac32.s.map name="delay" value="0.0"/>
       </params>
@@ -21,7 +21,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="timer/pulselengthm" sha="5d90a67235df290cb66eace59a15336edcb9bb32" name="pulselengthmx_1" x="252" y="126">
+   <obj type="timer/pulselengthm" sha="64ec08e76cf714563d1f08e0e755dd6736adf154" name="pulselengthmx_1" x="252" y="126">
       <params>
          <frac32.s.map name="delay" value="0.0"/>
       </params>
@@ -43,7 +43,7 @@
       </net>
       <net>
          <source obj="cbp1" outlet="out"/>
-         <dest obj="pulselengthmx_1" inlet="delaym"/>
+         <dest obj="pulselengthmx_1" inlet="delay"/>
       </net>
       <net>
          <source obj="pulselengthmx_1" outlet="pulse"/>

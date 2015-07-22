@@ -5,13 +5,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="phasor3q~" sha="c95d1332c224aad738fb4504cb00706af8221028" name="phasor3_1" x="40" y="60">
+   <obj type="osc/phasor compl" sha="c95d1332c224aad738fb4504cb00706af8221028" name="phasor3_1" x="40" y="60">
       <params>
          <frac32.s.map name="pitch" value="31.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="scope_128s" sha="a7ce66703f067983726298da17fabab409dca3dc" name="scope_128s_trig1" x="240" y="60">
+   <obj type="disp/scope 128 b" sha="a7ce66703f067983726298da17fabab409dca3dc" name="scope_128s_trig1" x="240" y="60">
       <params/>
       <attribs/>
    </obj>
@@ -19,11 +19,11 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="scope_128s" sha="a7ce66703f067983726298da17fabab409dca3dc" name="scope_128s_trig1__" x="520" y="60">
+   <obj type="disp/scope 128 b" sha="a7ce66703f067983726298da17fabab409dca3dc" name="scope_128s_trig1__" x="520" y="60">
       <params/>
       <attribs/>
    </obj>
-   <obj type="scope_128s" sha="a7ce66703f067983726298da17fabab409dca3dc" name="scope_128s_trig1_" x="240" y="240">
+   <obj type="disp/scope 128 b" sha="a7ce66703f067983726298da17fabab409dca3dc" name="scope_128s_trig1_" x="240" y="240">
       <params/>
       <attribs/>
    </obj>

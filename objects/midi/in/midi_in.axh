@@ -42,7 +42,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="midi/in/cc" sha="3013048b944c544b71bd052b735476d68e232bee" name="ctlin1" x="14" y="238">
+   <obj type="midi/in/cc" sha="394ff9a0feb281bfb1c335bba571a5ea0daa75b9" name="ctlin1" x="14" y="238">
       <params/>
       <attribs>
          <spinner attributeName="cc" value="1"/>
@@ -122,88 +122,94 @@
    </obj>
    <nets>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="gate in"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="gate" inlet="in"/>
       </net>
       <net>
-         <source name="keyb1 velocity"/>
-         <dest name="velo in"/>
+         <source obj="keyb1" outlet="velocity"/>
+         <dest obj="velo" inlet="in"/>
       </net>
       <net>
-         <source name="keyb1 releaseVelocity"/>
-         <dest name="relvelo in"/>
+         <source obj="keyb1" outlet="releaseVelocity"/>
+         <dest obj="relvelo" inlet="in"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="note in"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="note" inlet="in"/>
       </net>
       <net>
-         <source name="counter1 o"/>
-         <dest name="ibar161 in"/>
+         <source obj="counter1" outlet="o"/>
+         <dest obj="ibar161" inlet="in"/>
       </net>
       <net>
-         <source name="bendin1 bend"/>
-         <dest name="bend in"/>
+         <source obj="bendin1" outlet="bend"/>
+         <dest obj="bend" inlet="in"/>
       </net>
       <net>
-         <source name="ctlin1 midiCC"/>
-         <dest name="cc in"/>
+         <source obj="ctlin1" outlet="midiCC"/>
+         <dest obj="cc" inlet="in"/>
       </net>
       <net>
-         <source name="ctlin1 trig"/>
-         <dest name="counter1 trig"/>
+         <source obj="ctlin1" outlet="trig"/>
+         <dest obj="counter1" inlet="trig"/>
       </net>
       <net>
-         <source name="keybzone1 note"/>
-         <dest name="note_ in"/>
+         <source obj="keybzone1" outlet="note"/>
+         <dest obj="note_" inlet="in"/>
       </net>
       <net>
-         <source name="keybzone1 gate"/>
-         <dest name="gate_ in"/>
+         <source obj="keybzone1" outlet="gate"/>
+         <dest obj="gate_" inlet="in"/>
       </net>
       <net>
-         <source name="keybzone1 velocity"/>
-         <dest name="velo_ in"/>
+         <source obj="keybzone1" outlet="velocity"/>
+         <dest obj="velo_" inlet="in"/>
       </net>
       <net>
-         <source name="keybzone1 releaseVelocity"/>
-         <dest name="relvelo_ in"/>
+         <source obj="keybzone1" outlet="releaseVelocity"/>
+         <dest obj="relvelo_" inlet="in"/>
       </net>
       <net>
-         <source name="touchin1 o"/>
-         <dest name="displayU1 in"/>
+         <source obj="touchin1" outlet="o"/>
+         <dest obj="displayU1" inlet="in"/>
       </net>
       <net>
-         <source name="ctlini1 midiCC"/>
-         <dest name="cc_ in"/>
+         <source obj="ctlini1" outlet="midiCC"/>
+         <dest obj="cc_" inlet="in"/>
       </net>
       <net>
-         <source name="ctlini1 trig"/>
-         <dest name="counter1_ trig"/>
+         <source obj="ctlini1" outlet="trig"/>
+         <dest obj="counter1_" inlet="trig"/>
       </net>
       <net>
-         <source name="counter1_ o"/>
-         <dest name="ibar161_ in"/>
+         <source obj="counter1_" outlet="o"/>
+         <dest obj="ibar161_" inlet="in"/>
       </net>
       <net>
-         <source name="touchin1 trig"/>
-         <dest name="counter1___ trig"/>
+         <source obj="touchin1" outlet="trig"/>
+         <dest obj="counter1___" inlet="trig"/>
       </net>
       <net>
-         <source name="bendin1 trig"/>
-         <dest name="counter1__ trig"/>
+         <source obj="bendin1" outlet="trig"/>
+         <dest obj="counter1__" inlet="trig"/>
       </net>
       <net>
-         <source name="counter1__ o"/>
-         <dest name="ibar161__ in"/>
+         <source obj="counter1__" outlet="o"/>
+         <dest obj="ibar161__" inlet="in"/>
       </net>
       <net>
-         <source name="counter1___ o"/>
-         <dest name="ibar161___ in"/>
+         <source obj="counter1___" outlet="o"/>
+         <dest obj="ibar161___" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>716</width>
+      <height>842</height>
+   </windowPos>
 </patch-1.0>
