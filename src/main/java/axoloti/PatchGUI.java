@@ -165,7 +165,7 @@ public class PatchGUI extends Patch {
                     //System.out.println("importdata 2 " + t.getTransferData(DataFlavor.stringFlavor));
                     if (!locked) {
                         if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                            
+
                             paste((String) t.getTransferData(DataFlavor.stringFlavor), comp.getMousePosition(), false);
                         }
                     }
@@ -488,7 +488,7 @@ public class PatchGUI extends Patch {
                 }
 
             }
-            int minX=Integer.MAX_VALUE,minY=Integer.MAX_VALUE;
+            int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
             for (AxoObjectInstanceAbstract o : p.objectinstances) {
                 String original_name = o.getInstanceName();
                 if (original_name != null) {
@@ -523,17 +523,29 @@ public class PatchGUI extends Patch {
                     }
                     dict.put(original_name, new_name);
                 }
-                if(o.getX() < minX ) minX = o.getX();
-                if(o.getY() < minY ) minY = o.getY();
-
+                if (o.getX() < minX) {
+                    minX = o.getX();
+                }
+                if (o.getY() < minY) {
+                    minY = o.getY();
+                }
                 o.patch = this;
                 objectinstances.add(o);
                 ObjectLayer.add(o, 0);
                 o.PostConstructor();
+                int newposx = o.getX();
+                int newposy = o.getY();
+                if (pos != null) {
+                    // paste at cursor position, with delta snapped to grid
+                    newposx += Constants.xgrid * ((pos.x - minX + Constants.xgrid / 2) / Constants.xgrid);
+                    newposy += Constants.ygrid * ((pos.y - minY + Constants.ygrid / 2) / Constants.ygrid);
+                }
+                while (getObjectAtLocation(newposx, newposy) != null) {
+                    newposx += Constants.xgrid;
+                    newposy += Constants.ygrid;
+                }
+                o.setLocation(newposx, newposy);
                 o.SetSelected(true);
-            }
-            for (AxoObjectInstanceAbstract o : p.objectinstances) {
-                o.setLocation(o.getX() + pos.x - minX , o.getY() +pos.y - minY);
             }
             for (Net n : p.nets) {
                 InletInstance connectedInlet = null;
@@ -627,7 +639,7 @@ public class PatchGUI extends Patch {
             }
             AdjustSize();
         } catch (Exception ex) {
-            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
