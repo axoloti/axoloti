@@ -165,7 +165,8 @@ public class PatchGUI extends Patch {
                     //System.out.println("importdata 2 " + t.getTransferData(DataFlavor.stringFlavor));
                     if (!locked) {
                         if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                            paste((String) t.getTransferData(DataFlavor.stringFlavor), false);
+                            
+                            paste((String) t.getTransferData(DataFlavor.stringFlavor), comp.getMousePosition(), false);
                         }
                     }
                 } catch (UnsupportedFlavorException ex) {
@@ -466,7 +467,7 @@ public class PatchGUI extends Patch {
         Layers.setPreferredSize(new Dimension(5000, 5000));
     }
 
-    void paste(String v, boolean restoreConnectionsToExternalOutlets) {
+    void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         SelectNone();
         Serializer serializer = new Persister();
         try {
@@ -487,6 +488,7 @@ public class PatchGUI extends Patch {
                 }
 
             }
+            int minX=Integer.MAX_VALUE,minY=Integer.MAX_VALUE;
             for (AxoObjectInstanceAbstract o : p.objectinstances) {
                 String original_name = o.getInstanceName();
                 if (original_name != null) {
@@ -521,15 +523,17 @@ public class PatchGUI extends Patch {
                     }
                     dict.put(original_name, new_name);
                 }
-                while (getObjectAtLocation(o.getX(), o.getY()) != null) {
-                    o.setLocation(o.getX() + Constants.xgrid, o.getY() + Constants.ygrid);
-                }
+                if(o.getX() < minX ) minX = o.getX();
+                if(o.getY() < minY ) minY = o.getY();
 
                 o.patch = this;
                 objectinstances.add(o);
                 ObjectLayer.add(o, 0);
                 o.PostConstructor();
                 o.SetSelected(true);
+            }
+            for (AxoObjectInstanceAbstract o : p.objectinstances) {
+                o.setLocation(o.getX() + pos.x - minX , o.getY() +pos.y - minY);
             }
             for (Net n : p.nets) {
                 InletInstance connectedInlet = null;
