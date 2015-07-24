@@ -3,7 +3,7 @@
    <comment type="patch/comment" x="182" y="28" text="preset 1: smooth canyon"/>
    <comment type="patch/comment" x="182" y="42" text="preset 2: grainy canyon"/>
    <comment type="patch/comment" x="182" y="56" text="preset 3: bathroom chorus"/>
-   <comment type="patch/comment" x="140" y="106" text="todo: increase efficiency..."/>
+   <comment type="patch/comment" x="149" y="106" text="todo: increase efficiency..."/>
    <obj type="audio/in left" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="42" y="140">
       <params/>
       <attribs/>
