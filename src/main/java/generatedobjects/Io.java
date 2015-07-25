@@ -99,10 +99,9 @@ public class Io extends gentools {
             "PC1 (ADC1_IN11)",
             "PC2 (ADC1_IN12)",
             "PC3 (ADC1_IN13)",
-            "PC4 (ADC1_IN14)",
-            "PC5 (ADC1_IN15)"
+            "PC4 (ADC1_IN14)"
         };
-        String centries[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+        String centries[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"};
         o.attributes.add(new AxoAttributeComboBox("channel", mentries, centries));
         o.sKRateCode = "%out%= adcvalues[%channel%]<<15;";
         return o;
