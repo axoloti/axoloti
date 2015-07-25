@@ -233,7 +233,7 @@ public class AxoObjects {
                             }
                             String shaVerify = a.GenerateSHA();
                             if ((shaVerify != null) && (!shaVerify.equals(a.getSHA()))) {
-                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Incorrect sha hash detected for object: {0} its implementation does not match its signature.", fileEntry.getAbsolutePath());
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Incorrect sha hash detected for object: {0} its implementation does not match its signature. Correct SHA hash would be {1}", new Object[]{fileEntry.getAbsolutePath(),shaVerify});
                             }
                             AxoObjectTreeNode s = t.SubNodes.get(ShortID);
                             if (s == null) {
