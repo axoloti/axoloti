@@ -31,6 +31,7 @@
 bool repeat = FALSE;
 bool isEnabled = TRUE;
 uint32_t pattern = BLINK_BOOT;
+uint16_t voltage_50;
 uint16_t v50_min;
 uint16_t v50_max;
 bool sdcsw_prev = FALSE;
@@ -79,6 +80,7 @@ __attribute__((noreturn))
       v50_max = v;
     if (v < v50_min)
       v50_min = v;
+    voltage_50 = v;
     ADC3->CR2 |= ADC_CR2_SWSTART;
 
 // sdcard switch monitor
@@ -162,3 +164,12 @@ bool getErrorFlag(error_flag_t error) {
 void errorFlagClearAll(void) {
   errorflags = 0;
 }
+
+uint16_t sysmon_getVoltage50(void){
+  return voltage_50;
+}
+
+uint16_t sysmon_getVoltage10(void){
+  return adcvalues[15];
+}
+
