@@ -29,7 +29,6 @@
                <string>PC2 (ADC1_IN12)</string>
                <string>PC3 (ADC1_IN13)</string>
                <string>PC4 (ADC1_IN14)</string>
-               <string>PC5 (ADC1_IN15)</string>
             </MenuEntries>
             <CEntries>
                <string>0</string>
@@ -47,7 +46,6 @@
                <string>12</string>
                <string>13</string>
                <string>14</string>
-               <string>15</string>
             </CEntries>
          </combo>
       </attribs>
