@@ -80,8 +80,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     public static MainFrame mainframe;
     boolean even = false;
     ArrayList<PatchGUI> patches = new ArrayList<PatchGUI>();
-    String LinkFirmwareID;
-    String TargetFirmwareID;
+    String LocalFirmwareID;
+    String BoardFirmwareID;
     KeyboardFrame keyboard;
     FileManagerFrame filemanager;
     AxolotiRemoteControl remote;
@@ -105,7 +105,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         mainframe = this;
 
-        updateLinkFirmwareID();
+        updateLocalFirmwareID();
 
         qcmdprocessor = new QCmdProcessor();
         qcmdprocessorThread = new Thread(qcmdprocessor);
@@ -132,13 +132,13 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 } else {
                     try {
                         if (lr.getLevel() == Level.SEVERE) {
-                            
-                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(), 
+
+                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
                                     java.text.MessageFormat.format(lr.getMessage(), lr.getParameters()) + "\n", styleSevere);
                             MainFrame.this.toFront();
                         } else {
-                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(), 
-                                    java.text.MessageFormat.format(lr.getMessage(), lr.getParameters())  + "\n", styleFine);
+                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
+                                    java.text.MessageFormat.format(lr.getMessage(), lr.getParameters()) + "\n", styleFine);
                         }
                     } catch (BadLocationException ex) {
                         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -248,7 +248,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     }
 
     void flashUsingSDRam(String fname_flasher) {
-        updateLinkFirmwareID();
+        updateLocalFirmwareID();
         File f = new File(fname_flasher);
         if (f.canRead()) {
             qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
@@ -827,11 +827,11 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             return false;
         }
     }
-    
+
     public boolean runFileUpgrade(String patchName) {
         return runUpgradeDir(new File(patchName));
     }
-    
+
     private boolean runUpgradeDir(File f) {
         if (!f.exists()) {
             return true;
@@ -849,7 +849,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
                         return false;
                     }
                     String extension = name.substring(name.length() - 4);
-                    boolean b = (extension.equals(".axh") || extension.equals(".axp") || extension.equals(".axs") );
+                    boolean b = (extension.equals(".axh") || extension.equals(".axp") || extension.equals(".axs"));
                     return b;
                 }
             });
@@ -864,7 +864,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         return runUpgradeFile(f);
     }
 
-      private boolean runUpgradeFile(File f) {
+    private boolean runUpgradeFile(File f) {
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "upgrading {0}", f.getPath());
         Serializer serializer = new Persister();
         try {
@@ -885,19 +885,19 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             return false;
         }
     }
-    
+
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         Quit();
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemRefreshFWIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRefreshFWIDActionPerformed
-        updateLinkFirmwareID();
+        updateLocalFirmwareID();
     }//GEN-LAST:event_jMenuItemRefreshFWIDActionPerformed
 
     private void jMenuItemFlashDFUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashDFUActionPerformed
         if (Usb.isDFUDeviceAvailable()) {
-            updateLinkFirmwareID();
+            updateLocalFirmwareID();
             qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
             qcmdprocessor.AppendToQueue(new qcmds.QCmdDisconnect());
             qcmdprocessor.AppendToQueue(new qcmds.QCmdFlashDFU());
@@ -1130,22 +1130,24 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     }
 
-    public void updateLinkFirmwareID() {
-        LinkFirmwareID = FirmwareID.getFirmwareID();
-        //TargetFirmwareID = LinkFirmwareID;
-        jLabelFirmwareID.setText("Firmware ID = " + LinkFirmwareID);
-        Logger.getLogger(MainFrame.class.getName()).info("Link to firmware CRC " + LinkFirmwareID);
-        WarnedAboutFWCRCMismatch = false;
+    public void updateLocalFirmwareID() {
+        String fID = FirmwareID.getFirmwareID();
+        if (!fID.equals(LocalFirmwareID)) {
+            LocalFirmwareID = fID;
+            //TargetFirmwareID = LocalFirmwareID;
+            jLabelFirmwareID.setText("Firmware ID = " + LocalFirmwareID);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Local firmware CRC {0}", LocalFirmwareID);
+            WarnedAboutFWCRCMismatch = false;
+        }
     }
 
     public boolean WarnedAboutFWCRCMismatch = false;
 
     void setFirmwareID(String firmwareId) {
-        TargetFirmwareID = firmwareId;
-        if (!firmwareId.equals(this.LinkFirmwareID)) {
+        BoardFirmwareID = firmwareId;
+        if (!firmwareId.equals(this.LocalFirmwareID)) {
             if (!WarnedAboutFWCRCMismatch) {
-                Logger.getLogger(AxoObjects.class.getName()).severe("Firmware CRC mismatch! Please flash the firmware first! "
-                        + "Target firmware CRC = " + firmwareId + " <> source CRC" + this.LinkFirmwareID);
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Firmware CRC mismatch! Please flash the firmware first!\n" + "Board firmware CRC  {0} <> source code CRC {1}", new Object[]{firmwareId, this.LocalFirmwareID});
                 WarnedAboutFWCRCMismatch = true;
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -1159,7 +1161,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     public void interactiveFirmwareUpdate() {
         int s = JOptionPane.showConfirmDialog(this,
-                "Firmware CRC mismatch detected!\n"
+                "Firmware on the Axoloti board is up to date with software!\n"
                 + "Do you want to update the firmware?\n"
                 + "This process will cause a disconnect, "
                 + "the leds will blink for a minute, "
@@ -1168,7 +1170,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
                 + "When the leds stop blinking, you can connect again.",
                 "Firmware update...",
                 JOptionPane.YES_NO_OPTION);
-        if (s == 0) {
+        if (s == JOptionPane.YES_OPTION) {
             flashUsingSDRam(System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/flasher/flasher_build/flasher.bin");
         }
     }

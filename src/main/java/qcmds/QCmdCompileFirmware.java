@@ -36,7 +36,7 @@ public class QCmdCompileFirmware extends QCmdShellTask {
 
     @Override
     public String GetDoneMessage() {
-        MainFrame.mainframe.updateLinkFirmwareID();
+        MainFrame.mainframe.updateLocalFirmwareID();
         MainFrame.mainframe.WarnedAboutFWCRCMismatch = false;
         return "Done compiling firmware";
     }
