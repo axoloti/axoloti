@@ -168,7 +168,7 @@ public class PatchFrame extends javax.swing.JFrame {
     }
 
     public boolean AskClose() {
-        if (patch.isDirty()) {
+        if ( patch.isDirty() && patch.container() == null ) {
             Object[] options = {"Save",
                 "Don't save",
                 "Cancel"};
@@ -902,7 +902,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     private boolean GoLive() {
 
-        if (patch.getFileNamePath().endsWith(".axs")) {
+        if (patch.getFileNamePath().endsWith(".axs") || patch.container() != null) {
             Object[] options = {"Yes",
                 "No"};
 

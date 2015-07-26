@@ -175,13 +175,19 @@ public class axoloti_core {
     }
 
     public void setCPUSerial(ByteBuffer b) {
-        CPUIDData = b;
-        String s = "";
-        b.rewind();
-        while (b.remaining() > 0) {
-            s = s + String.format("%08X", b.getInt());
+        if(b != null) {
+            CPUIDData = b;
+            String s = "";
+            b.rewind();
+            while (b.remaining() > 0) {
+                s = s + String.format("%08X", b.getInt());
+            }
+            MainFrame.mainframe.setCpuID(s);
         }
-        MainFrame.mainframe.setCpuID(s);
+        else {
+            Logger.getLogger(axoloti_core.class.getName()).log(Level.SEVERE, "invalid CPU serial number",new Object());
+            MainFrame.mainframe.setCpuID("CFCFCFCF");
+        }
     }
 
     public ByteBuffer getCPUSerial() {

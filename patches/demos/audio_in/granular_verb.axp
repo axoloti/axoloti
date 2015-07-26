@@ -108,7 +108,7 @@
          </frac32.s.map>
       </params>
       <attribs>
-         <combo attributeName="poly" selection="15"/>
+         <combo attributeName="poly" selection="10"/>
          <combo attributeName="mididevice" selection="omni"/>
          <combo attributeName="midiport" selection="omni"/>
       </attribs>
