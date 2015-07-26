@@ -24,7 +24,7 @@ import axoloti.Connection;
  * @author Johannes Taelman
  */
 public class QCmdTransmitGetFWVersion implements QCmdSerialTask {
-
+    
     @Override
     public String GetStartMessage() {
         return "";
@@ -37,7 +37,9 @@ public class QCmdTransmitGetFWVersion implements QCmdSerialTask {
 
     @Override
     public QCmd Do(Connection connection) {
+        connection.ClearSync();
         connection.TransmitGetFWVersion();
+        connection.WaitSync();
         return this;
     }
 }

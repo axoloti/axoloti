@@ -80,8 +80,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     public static MainFrame mainframe;
     boolean even = false;
     ArrayList<PatchGUI> patches = new ArrayList<PatchGUI>();
-    String LocalFirmwareID;
-    String BoardFirmwareID;
+    String LinkFirmwareID;
+    String TargetFirmwareID;
     KeyboardFrame keyboard;
     FileManagerFrame filemanager;
     AxolotiRemoteControl remote;
@@ -105,7 +105,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         mainframe = this;
 
-        updateLocalFirmwareID();
+        updateLinkFirmwareID();
 
         qcmdprocessor = new QCmdProcessor();
         qcmdprocessorThread = new Thread(qcmdprocessor);
@@ -248,7 +248,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     }
 
     void flashUsingSDRam(String fname_flasher) {
-        updateLocalFirmwareID();
+        updateLinkFirmwareID();
         File f = new File(fname_flasher);
         if (f.canRead()) {
             qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
@@ -268,6 +268,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
         jButtonClear = new javax.swing.JButton();
         jScrollPaneLog = new javax.swing.JScrollPane();
         jTextPaneLog = new javax.swing.JTextPane();
@@ -279,7 +280,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jCheckBoxConnect = new javax.swing.JCheckBox();
         jLabelCPUID = new javax.swing.JLabel();
         jLabelFirmwareID = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabelVoltages = new javax.swing.JLabel();
+        jLabelIcon = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuNew = new javax.swing.JMenuItem();
@@ -315,6 +317,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jMenuHelpContents = new javax.swing.JMenuItem();
         jMenuAbout = new javax.swing.JMenuItem();
         jMenuCommunity = new javax.swing.JMenuItem();
+
+        jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Axoloti");
@@ -363,13 +367,18 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         jLabelFirmwareID.setText("FirmwareID");
 
+        jLabelVoltages.setText("jLabel2");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabelCPUID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabelFirmwareID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jCheckBoxConnect, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabelVoltages)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jLabelFirmwareID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,10 +387,12 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelCPUID)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelFirmwareID))
+                .addComponent(jLabelFirmwareID)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabelVoltages))
         );
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/axoloti_icon.png"))); // NOI18N
+        jLabelIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/axoloti_icon.png"))); // NOI18N
 
         jMenuFile.setText("File");
 
@@ -568,13 +579,13 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     jMenuWindow.setText("Window");
     jMenuWindow.addMenuListener(new javax.swing.event.MenuListener() {
-        public void menuSelected(javax.swing.event.MenuEvent evt) {
-            jMenuWindowMenuSelected(evt);
+        public void menuCanceled(javax.swing.event.MenuEvent evt) {
         }
         public void menuDeselected(javax.swing.event.MenuEvent evt) {
             jMenuWindowMenuDeselected(evt);
         }
-        public void menuCanceled(javax.swing.event.MenuEvent evt) {
+        public void menuSelected(javax.swing.event.MenuEvent evt) {
+            jMenuWindowMenuSelected(evt);
         }
     });
     jMenuBar1.add(jMenuWindow);
@@ -618,7 +629,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         .addComponent(jPanelProgress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addGroup(layout.createSequentialGroup()
             .addContainerGap()
-            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(18, 88, Short.MAX_VALUE)
@@ -628,14 +639,14 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jButtonClear))
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(jLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPaneLog, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+            .addComponent(jScrollPaneLog, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
             .addGap(0, 0, 0)
             .addComponent(jPanelProgress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
     );
@@ -892,12 +903,12 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemRefreshFWIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRefreshFWIDActionPerformed
-        updateLocalFirmwareID();
+        updateLinkFirmwareID();
     }//GEN-LAST:event_jMenuItemRefreshFWIDActionPerformed
 
     private void jMenuItemFlashDFUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashDFUActionPerformed
         if (Usb.isDFUDeviceAvailable()) {
-            updateLocalFirmwareID();
+            updateLinkFirmwareID();
             qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
             qcmdprocessor.AppendToQueue(new qcmds.QCmdDisconnect());
             qcmdprocessor.AppendToQueue(new qcmds.QCmdFlashDFU());
@@ -1027,10 +1038,12 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JButton jButtonClear;
     private javax.swing.JCheckBox jCheckBoxConnect;
     private javax.swing.JPopupMenu.Separator jDevSeparator;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelCPUID;
     private javax.swing.JLabel jLabelFirmwareID;
+    private javax.swing.JLabel jLabelIcon;
     private javax.swing.JLabel jLabelProgress;
+    private javax.swing.JLabel jLabelVoltages;
     private javax.swing.JMenuItem jMenuAbout;
     private javax.swing.JMenuItem jMenuAutoTest;
     private javax.swing.JMenuBar jMenuBar1;
@@ -1103,7 +1116,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         jMenuItemSelectCom.setEnabled(!connect);
 
         jMenuItemEnterDFU.setEnabled(connect);
-        jMenuItemFlashSDR.setEnabled(connect);
+        jMenuItemFlashSDR.setEnabled(connect && qcmdprocessor.serialconnection.getTargetProfile().hasSDRAM());
 
         if (!connect) {
             setCpuID(null);
@@ -1122,7 +1135,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     }
 
-    void setCpuID(String cpuId) {
+    public void setCpuID(String cpuId) {
         if (cpuId == null) {
             jLabelCPUID.setText(" ");
         } else {
@@ -1130,24 +1143,22 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     }
 
-    public void updateLocalFirmwareID() {
-        String fID = FirmwareID.getFirmwareID();
-        if (!fID.equals(LocalFirmwareID)) {
-            LocalFirmwareID = fID;
-            //TargetFirmwareID = LocalFirmwareID;
-            jLabelFirmwareID.setText("Firmware ID = " + LocalFirmwareID);
-            Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Local firmware CRC {0}", LocalFirmwareID);
-            WarnedAboutFWCRCMismatch = false;
-        }
+    public void updateLinkFirmwareID() {
+        LinkFirmwareID = FirmwareID.getFirmwareID();
+        //TargetFirmwareID = LinkFirmwareID;
+        jLabelFirmwareID.setText("Firmware ID = " + LinkFirmwareID);
+        Logger.getLogger(MainFrame.class.getName()).info("Link to firmware CRC " + LinkFirmwareID);
+        WarnedAboutFWCRCMismatch = false;
     }
 
     public boolean WarnedAboutFWCRCMismatch = false;
 
     void setFirmwareID(String firmwareId) {
-        BoardFirmwareID = firmwareId;
-        if (!firmwareId.equals(this.LocalFirmwareID)) {
+        TargetFirmwareID = firmwareId;
+        if (!firmwareId.equals(this.LinkFirmwareID)) {
             if (!WarnedAboutFWCRCMismatch) {
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Firmware CRC mismatch! Please flash the firmware first!\n" + "Board firmware CRC  {0} <> source code CRC {1}", new Object[]{firmwareId, this.LocalFirmwareID});
+                Logger.getLogger(AxoObjects.class.getName()).severe("Firmware CRC mismatch! Please flash the firmware first! "
+                        + "Target firmware CRC = " + firmwareId + " <> source CRC = " + this.LinkFirmwareID);
                 WarnedAboutFWCRCMismatch = true;
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -1159,9 +1170,35 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     }
 
+    private int v5000c = 0;
+    private int vdd00c = 0;
+
+    public void setVoltages(float v50, float vdd, boolean warning) {
+        int v5000 = (int) (v50 * 100.0f);
+        int vdd00 = (int) (vdd * 100.0f);
+        boolean upd = false;
+        if (((v5000c - v5000) > 1) || ((v5000 - v5000c) > 1)) {
+            v5000c = v5000;
+            upd = true;
+        }
+        if (((vdd00c - vdd00) > 1) || ((vdd00 - vdd00c) > 1)) {
+            vdd00c = vdd00;
+            upd = true;
+        }
+        if (upd) {
+            jLabelVoltages.setText(String.format("5V: %.2fV VDD: %.2fV", v5000c / 100.0f, vdd00c / 100.0f));
+        }
+
+        if (warning) {
+            jLabelVoltages.setForeground(Color.red);
+        } else {
+            jLabelVoltages.setForeground(Color.black);
+        }
+    }
+
     public void interactiveFirmwareUpdate() {
         int s = JOptionPane.showConfirmDialog(this,
-                "Firmware on the Axoloti board is up to date with software!\n"
+                "Firmware CRC mismatch detected!\n"
                 + "Do you want to update the firmware?\n"
                 + "This process will cause a disconnect, "
                 + "the leds will blink for a minute, "
@@ -1170,7 +1207,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
                 + "When the leds stop blinking, you can connect again.",
                 "Firmware update...",
                 JOptionPane.YES_NO_OPTION);
-        if (s == JOptionPane.YES_OPTION) {
+        if (s == 0) {
             flashUsingSDRam(System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/flasher/flasher_build/flasher.bin");
         }
     }

@@ -30,11 +30,11 @@ typedef int32_t int32buffer[BUFSIZE];
 //#define BOARD_AXOLOTI_V03 1
 #define BOARD_AXOLOTI_V05 1
 
-// firmware version 1.0.0.0
+// firmware version 1.0.0.1
 #define FWVERSION1 1
 #define FWVERSION2 0
 #define FWVERSION3 0
-#define FWVERSION4 0
+#define FWVERSION4 1
 
 #if (BOARD_STM32F4DISCOVERY)
 #elif (BOARD_AXOLOTI_V03)

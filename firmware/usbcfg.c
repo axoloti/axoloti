@@ -342,7 +342,7 @@ static USBInEndpointState ep2instate;
 static USBOutEndpointState ep2outstate;
 
 /**
- * @brief   EP3 initialization structure (both IN and OUT).
+ * @brief   EP2 initialization structure (both IN and OUT).
  */
 static const USBEndpointConfig ep2config = {
   USB_EP_MODE_TYPE_BULK,

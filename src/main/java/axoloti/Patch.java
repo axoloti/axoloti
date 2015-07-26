@@ -1132,7 +1132,7 @@ public void ShowCompileFail() {
 
         c += "void xpatch_init2(int fwid)\n"
                 + "{\n"
-                + "  if (fwid != 0x" + MainFrame.mainframe.LocalFirmwareID + ") {\n"
+                + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID+ ") {\n"
                 + "    patchMeta.fptr_dsp_process = 0;\n"
                 + "    return;"
                 + "  }\n"

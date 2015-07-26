@@ -1,6 +1,7 @@
 package axoloti;
 
 import axoloti.targetprofile.axoloti_core;
+import java.nio.ByteBuffer;
 import qcmds.QCmdSerialTask;
 
 /**
@@ -23,6 +24,7 @@ public abstract class Connection {
     abstract public void TransmitAppendFile(byte[] buffer);
     abstract public void TransmitCloseFile();
     abstract public void TransmitMemoryRead(int addr, int length);
+    abstract public void TransmitMemoryRead1Word(int addr);    
     abstract public void SendUpdatedPreset(byte[] b);
     abstract public void SendMidi(int m0, int m1, int m2);
     abstract public boolean AppendToQueue(QCmdSerialTask cmd);
@@ -33,6 +35,8 @@ public abstract class Connection {
     abstract public boolean WaitSync();
     abstract public void setPatch(Patch patch);
     abstract public axoloti_core getTargetProfile();
+    abstract public ByteBuffer getMemReadBuffer();
+    abstract public int getMemRead1Word();
     
     @Deprecated
     abstract public void writeBytes(byte[] data);
