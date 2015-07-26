@@ -967,6 +967,7 @@ public class Midi extends gentools {
                 + "  if (_note == data1-64) {\n"
                 + "    _rvelo = data2<<20;\n"
                 + "    _gate = 0;\n"
+                + "    _pressure = 0;\n"
                 + "  }\n"
                 + "} else if (status == %midichannel% + MIDI_CHANNEL_PRESSURE) {\n"
                 + "  _pressure = data1<<20;\n"
