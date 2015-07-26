@@ -24,29 +24,26 @@ import java.nio.ByteBuffer;
  *
  * @author Johannes Taelman
  */
-public class QCmdMemRead implements QCmdSerialTask {
+public class QCmdMemRead1Word implements QCmdSerialTask {
 
     final int addr;
-    final int length;
-    ByteBuffer result = null;
-
+    int result = 0;
     class Sync {
 
         boolean ready = false;
     }
     final Sync sync = new Sync();
 
-    public QCmdMemRead(int addr, int length) {
+    public QCmdMemRead1Word(int addr) {
         this.addr = addr;
-        this.length = length;
     }
 
     @Override
     public QCmd Do(Connection connection) {
         connection.ClearSync();
-        connection.TransmitMemoryRead(addr, length);
+        connection.TransmitMemoryRead1Word(addr);
         connection.WaitSync();
-        result = connection.getMemReadBuffer();
+        result = connection.getMemRead1Word();
         synchronized (sync) {
             sync.ready = true;
             sync.notifyAll();
@@ -54,7 +51,7 @@ public class QCmdMemRead implements QCmdSerialTask {
         return this;
     }
 
-    public ByteBuffer getResult() {
+    public int getResult() {
         if (sync.ready) {
             return result;
         } else {
@@ -66,7 +63,7 @@ public class QCmdMemRead implements QCmdSerialTask {
                 }
             }
         }
-        return result;
+        return 0;
     }
 
     @Override

@@ -40,6 +40,7 @@
 #include "midi.h"
 #include "midi_usb.h"
 #include "watchdog.h"
+#include "sysmon.h"
 
 //#define DEBUG_SERIAL 1
 
@@ -132,12 +133,12 @@ void PExTransmit(void) {
     if (AckPending) {
       int ack[7];
       ack[0] = 0x416F7841; // "AxoA"
-      ack[1] = GetFirmwareID();
+      ack[1] = 0; // reserved
       ack[2] = dspLoadPct;
       ack[3] = patchMeta.patchID;
-      ack[4] = *((int*)0x1FFF7A10); // CPU unique ID
-      ack[5] = *((int*)0x1FFF7A14); // CPU unique ID
-      ack[6] = *((int*)0x1FFF7A18); // CPU unique ID
+      ack[4] = sysmon_getVoltage10() + (sysmon_getVoltage50()<<16);
+      ack[5] = 0; // reserved
+      ack[6] = 0; // reserved
       chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                               (const unsigned char* )&ack[0], 7 * 4);
 
@@ -261,6 +262,7 @@ void ReadDirectoryListing(void) {
  * "AxoW" (int length, int addr, char[length] data) -> generic memory write
  * "Axow" (int length, int offset, char[12] filename, char[length] data) -> data write to sdcard
  * "Axor" (int offset, int length) -> generic memory read
+ * "Axoy" (int offset) -> generic memory read, single 32bit aligned
  * "AxoS" -> start patch
  * "Axos" -> stop patch
  * "AxoT" (char number) -> apply preset
@@ -337,7 +339,7 @@ void CopyPatchToFlash(void) {
 }
 
 void ReplyFWVersion(void) {
-  uint8_t reply[8];
+  uint8_t reply[16];
   reply[0] = 'A';
   reply[1] = 'x';
   reply[2] = 'o';
@@ -346,8 +348,17 @@ void ReplyFWVersion(void) {
   reply[5] = FWVERSION2; // minor
   reply[6] = FWVERSION3;
   reply[7] = FWVERSION4;
+  uint32_t fwid = GetFirmwareID();
+  reply[8] = (uint8_t)(fwid>>24);
+  reply[9] = (uint8_t)(fwid>>16);
+  reply[10] = (uint8_t)(fwid>>8);
+  reply[11] = (uint8_t)(fwid);
+  reply[12] = (uint8_t)(PATCHMAINLOC>>24);
+  reply[13] = (uint8_t)(PATCHMAINLOC>>16);
+  reply[14] = (uint8_t)(PATCHMAINLOC>>8);
+  reply[15] = (uint8_t)(PATCHMAINLOC);
   chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                          (const unsigned char* )(&reply[0]), 8);
+                          (const unsigned char* )(&reply[0]), 16);
 }
 
 void PExReceiveByte(unsigned char c) {
@@ -409,6 +420,9 @@ void PExReceiveByte(unsigned char c) {
         state = 4;
       }
       else if (c == 'r') { // generic read
+        state = 4;
+      }
+      else if (c == 'y') { // generic read
         state = 4;
       }
       else if (c == 'S') { // stop patch
@@ -886,7 +900,39 @@ void PExReceiveByte(unsigned char c) {
       break;
     }
   }
-  else {
+  else if (header == 'y') { // generic read, 32bit
+    switch (state) {
+    case 4:
+      offset = c;
+      state++;
+      break;
+    case 5:
+      offset += c << 8;
+      state++;
+      break;
+    case 6:
+      offset += c << 16;
+      state++;
+      break;
+    case 7:
+      offset += c << 24;
+
+      uint32_t read_repy_header[3];
+      ((char*)read_repy_header)[0] = 'A';
+      ((char*)read_repy_header)[1] = 'x';
+      ((char*)read_repy_header)[2] = 'o';
+      ((char*)read_repy_header)[3] = 'y';
+      read_repy_header[1] = offset;
+      read_repy_header[2] = *((uint32_t*)offset);
+      chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
+                              (const unsigned char* )(&read_repy_header[0]), 3 * 4);
+
+      AckPending = true;
+      header = 0;
+      state = 0;
+      break;
+    }
+  }  else {
     header = 0;
     state = 0;
   }
