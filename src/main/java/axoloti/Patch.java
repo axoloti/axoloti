@@ -102,6 +102,9 @@ public class Patch {
     @Element(required = false)
     private String helpPatch;
 
+    // patch this patch is contained in
+    public Patch container = null;
+
     public boolean presetUpdatePending = false;
 
     MainFrame GetMainFrame() {
@@ -131,8 +134,8 @@ public class Patch {
         GetQCmdProcessor().AppendToQueue(new QCmdStart(this));
         GetQCmdProcessor().AppendToQueue(new QCmdLock(this));
     }
-
-    public void ShowCompileFail() {
+    
+public void ShowCompileFail() {
         Unlock();
     }
 
@@ -229,6 +232,9 @@ public class Patch {
 
     public void SetDirty() {
         dirty = true;
+        if(container != null) {
+            container.SetDirty();
+        }
     }
 
     @Deprecated
@@ -245,6 +251,15 @@ public class Patch {
         return dirty;
     }
 
+    
+    public Patch container() {
+        return container;
+    }        
+
+    public void container(Patch c) {
+        container = c;
+    }        
+    
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         if (!IsLocked()) {
             if (obj == null) {
