@@ -1,5 +1,3 @@
-ENTRY(xpatch_init)
-
 MEMORY
 {
 /*
