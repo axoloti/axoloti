@@ -103,7 +103,7 @@ public class Patch {
     private String helpPatch;
 
     // patch this patch is contained in
-    public Patch container = null;
+    private Patch container = null;
 
     public boolean presetUpdatePending = false;
 

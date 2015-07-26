@@ -902,7 +902,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     private boolean GoLive() {
 
-        if (patch.getFileNamePath().endsWith(".axs")) {
+        if (patch.getFileNamePath().endsWith(".axs") || patch.container() != null) {
             Object[] options = {"Yes",
                 "No"};
 
