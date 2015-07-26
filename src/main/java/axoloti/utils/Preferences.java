@@ -135,7 +135,7 @@ public class Preferences {
     }
 
     static String GetPrefsFileLoc() {
-        return System.getProperty(axoloti.Axoloti.HOME_DIR)+File.separator+".preferences.xml";
+        return System.getProperty(axoloti.Axoloti.HOME_DIR)+File.separator+"axoloti.prefs";
     }
     
     private static Preferences singleton;
