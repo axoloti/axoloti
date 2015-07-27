@@ -1,9 +1,7 @@
+language: java
+jdk: oraclejdk8
 before_install:
-	sudo ./platform_linux/build.sh
-
+- sudo ./platform_linux/build.sh
 script:
-	ant
-	ant -Dbuild.bundle=true bundle
-	ant -Dbuild.runtime=true runtime
-
-
+- ant -Dbuild.bundle=true bundle
+- ant -Dbuild.runtime=true runtime
