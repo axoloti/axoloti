@@ -1,36 +1,32 @@
 <objdefs>
-   <obj.normal id="sine" uuid="556d54977a43597bf97427ca6c13e3d446859933" sha="85a8980923f6a3d4d93da8dcdde5536a86b273bf">
-      <upgradeSha>57fd153c89df1299ed1ecbe27c961ac52732ab5</upgradeSha>
-      <sDescription>FM sine wave oscillator, linear interpolated table, s-rate pitch input</sDescription>
+   <obj.normal id="sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f">
+      <sDescription>sine wave oscillator</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>osc.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="pitchm" description="pitch modulation"/>
-         <frac32buffer name="fm" description="frequency modulation"/>
-         <frac32buffer name="pm" description="phase modulation"/>
+         <frac32.bipolar name="pitch" description="pitch"/>
+         <frac32buffer name="freq" description="frequency"/>
+         <frac32buffer name="phase" description="phase"/>
       </inlets>
       <outlets>
          <frac32buffer.bipolar name="wave" description="sine wave"/>
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.pitch name="pitch" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.pitch>
+         <frac32.s.map.pitch name="pitch" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[uint32_t Phase;]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
       <code.krate><![CDATA[   int32_t freq;
-   MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
+   MTOFEXTENDED(param_pitch + inlet_pitch,freq);
 ]]></code.krate>
-      <code.srate><![CDATA[Phase += freq + inlet_fm[buffer_index];
+      <code.srate><![CDATA[Phase += freq + inlet_freq;
 int32_t r;
-int32_t p2 = Phase + (inlet_pm[buffer_index]<<4);
+int32_t p2 = Phase + (inlet_phase<<4);
 SINE2TINTERP(p2,r)
-outlet_wave[buffer_index]= (r>>4);
+outlet_wave= (r>>4);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

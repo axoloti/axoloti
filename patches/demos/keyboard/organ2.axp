@@ -24,7 +24,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="fx/chorus2" sha="3389201e65c0bb381a531005c14fd69da7a3e9ef" name="chorus21" x="336" y="14">
+   <obj type="fx/chorus" sha="3389201e65c0bb381a531005c14fd69da7a3e9ef" name="chorus21" x="336" y="14">
       <params>
          <frac32.u.map name="depth" value="1.5"/>
          <frac32.s.map name="speed" value="-27.0"/>
@@ -37,24 +37,24 @@
    </obj>
    <nets>
       <net>
-         <source name="chorus21 L"/>
-         <dest name="dacconfig1 left"/>
+         <source obj="chorus21" outlet="L"/>
+         <dest obj="dacconfig1" inlet="left"/>
       </net>
       <net>
-         <source name="chorus21 R"/>
-         <dest name="dacconfig1 right"/>
+         <source obj="chorus21" outlet="R"/>
+         <dest obj="dacconfig1" inlet="right"/>
       </net>
       <net>
-         <source name="pnoise_1 out"/>
-         <dest name="organvoice21 exci"/>
+         <source obj="pnoise_1" outlet="out"/>
+         <dest obj="organvoice21" inlet="exci"/>
       </net>
       <net>
-         <source name="organvoice21 o"/>
-         <dest name="muls_1 in"/>
+         <source obj="organvoice21" outlet="o"/>
+         <dest obj="muls_1" inlet="in"/>
       </net>
       <net>
-         <source name="muls_1 out"/>
-         <dest name="chorus21 in"/>
+         <source obj="muls_1" outlet="out"/>
+         <dest obj="chorus21" inlet="in"/>
       </net>
    </nets>
    <settings>

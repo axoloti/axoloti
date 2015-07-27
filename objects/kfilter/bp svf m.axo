@@ -1,27 +1,21 @@
 <objdefs>
-   <obj.normal id="bp svf m" uuid="46c50b981a15a7a6b3ccb3a4e4b0890f0f56b700" sha="7f64c70bc5ee47cc35b9f99649ec605e2417f8f9">
-      <upgradeSha>c6cff76c645280cfd10f7a35f509546eef157c4e</upgradeSha>
+   <obj.normal id="bp svf m" uuid="f1a76dc3f94e2d8e75ebfcd6372085b0069451e7" sha="8281fd1c3c96144a2de1a3a7e854cbb54b27f967">
+      <upgradeSha>cbeec645fa1bf17b58f4da27c7b50fba3027966c</upgradeSha>
       <sDescription>Bandpass filter, state-variable type, control rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
          <frac32 name="in" description="filter input"/>
-         <frac32 name="pitchm" description="pitch modulation input"/>
-         <frac32 name="resom" description="resonance modulation input"/>
+         <frac32 name="pitch" description="pitch input"/>
+         <frac32 name="reso" description="resonance input"/>
       </inlets>
       <outlets>
          <frac32 name="out" description="filter output"/>
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.kpitch name="pitch">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.kpitch>
-         <frac32.u.map.filterq name="reso">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.filterq>
+         <frac32.s.map.kpitch name="pitch"/>
+         <frac32.u.map.filterq name="reso"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t low;
@@ -30,11 +24,11 @@ int32_t band;
       <code.init><![CDATA[low = 0;
 band = 0;
 ]]></code.init>
-      <code.krate><![CDATA[int32_t damp = (0x80<<24) - (__USAT(inlet_resom + param_reso,27)<<4);
+      <code.krate><![CDATA[int32_t damp = (0x80<<24) - (__USAT(inlet_reso + param_reso,27)<<4);
 damp = ___SMMUL(damp,damp);
 int32_t alpha;
 int32_t freq;
-MTOFEXTENDED(param_pitch + inlet_pitchm,alpha);
+MTOFEXTENDED(param_pitch + inlet_pitch,alpha);
 SINE2TINTERP(alpha,freq);
 int32_t in1 = inlet_in;
 int32_t notch = inlet_in - (___SMMUL(damp,band)<<1);

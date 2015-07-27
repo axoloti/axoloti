@@ -1,12 +1,12 @@
 <objdefs>
-   <obj.normal id="hd m" uuid="52440c5f785b0c2b06092d83e628c4875cec7c28" sha="7933a17cd14650a1aa07e6b9d0accb26a413a73f">
-      <upgradeSha>c11c0e57918d0fba8546f18cee57d398ca8cbd90</upgradeSha>
+   <obj.normal id="hd m" uuid="a04c65376197e5c93c44323c79ea9f85eb31709e" sha="9b59f5fe54ccb3a191bb8bb45782cd7622b84e46">
+      <upgradeSha>5029ec1e49e66c2ceccd0bd9052751f503a49096</upgradeSha>
       <sDescription>hold/decay envelope with decay time modulation input, audio rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>pulse.axh</helpPatch>
       <inlets>
-         <frac32 name="dm" description="decay time modulation"/>
+         <frac32 name="d" description="decay time"/>
          <bool32.risingfalling name="trig" description="trigger"/>
       </inlets>
       <outlets>
@@ -14,10 +14,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="d" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="d" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;
@@ -25,8 +22,8 @@
       <code.init><![CDATA[   val = 0;
 ]]></code.init>
       <code.srate><![CDATA[   if (inlet_trig>0) val =1<<27;
-   else val -= ___SMMUL(val, (param_d+inlet_dm)>>1);
-   outlet_env[buffer_index] = val;
+   else val -= ___SMMUL(val, (param_d+inlet_d)>>1);
+   outlet_env = val;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

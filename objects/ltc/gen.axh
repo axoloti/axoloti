@@ -27,29 +27,35 @@
    </obj>
    <nets>
       <net>
-         <source name="ltc.gen_1 h"/>
-         <dest name="h in"/>
+         <source obj="ltc.gen_1" outlet="h"/>
+         <dest obj="h" inlet="in"/>
       </net>
       <net>
-         <source name="ltc.gen_1 m"/>
-         <dest name="m in"/>
+         <source obj="ltc.gen_1" outlet="m"/>
+         <dest obj="m" inlet="in"/>
       </net>
       <net>
-         <source name="ltc.gen_1 s"/>
-         <dest name="s in"/>
+         <source obj="ltc.gen_1" outlet="s"/>
+         <dest obj="s" inlet="in"/>
       </net>
       <net>
-         <source name="ltc.gen_1 f"/>
-         <dest name="f in"/>
+         <source obj="ltc.gen_1" outlet="f"/>
+         <dest obj="f" inlet="in"/>
       </net>
       <net>
-         <source name="ltc.gen_1 out"/>
-         <dest name="audio.out.audio_1 left"/>
-         <dest name="audio.out.audio_1 right"/>
+         <source obj="ltc.gen_1" outlet="out"/>
+         <dest obj="audio.out.audio_1" inlet="left"/>
+         <dest obj="audio.out.audio_1" inlet="right"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>618</width>
+      <height>408</height>
+   </windowPos>
 </patch-1.0>

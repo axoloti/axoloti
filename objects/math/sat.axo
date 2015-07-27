@@ -16,7 +16,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= __SSAT(inlet_in,28);]]></code.krate>
    </obj.normal>
-   <obj.normal id="sat" uuid="a64166c1389cd0d5c62a8d3cd5963613be84e9e8" sha="bb1c9551443fc48da6ce3830f3eeb31303dafd2d">
+   <obj.normal id="sat" uuid="a64166c1389cd0d5c62a8d3cd5963613be84e9e8" sha="99abbf9e35b69a79895360a5b6bc8dd1033933fb">
       <upgradeSha>b8886ae94381bc8961d0cbacd7e625a168dc08d5</upgradeSha>
       <sDescription>saturate to normal range</sDescription>
       <author>Johannes Taelman</author>
@@ -31,6 +31,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[outlet_out[buffer_index]= __SSAT(inlet_in[buffer_index],28);]]></code.srate>
+      <code.srate><![CDATA[outlet_out= __SSAT(inlet_in,28);]]></code.srate>
    </obj.normal>
 </objdefs>

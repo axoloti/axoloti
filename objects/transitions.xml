@@ -1,5 +1,47 @@
 <transitions>
     <NameTransition>
+        <OldName>square</OldName>
+        <new>
+            <NewName>osc/square</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>env/d lin m x</OldName>
+        <new>
+            <NewName>env/d lin m</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>env/ahd lin m x</OldName>
+        <new>
+            <NewName>env/ahd lin m</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>env/ahd lin x</OldName>
+        <new>
+            <NewName>env/ahd lin</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>filter/vcf~</OldName>
+        <new>
+            <NewName>filter/vcf</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>filter/vcf2~</OldName>
+        <new>
+            <NewName>filter/vcf2</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
+        <OldName>filter/vcf3~</OldName>
+        <new>
+            <NewName>filter/vcf3</NewName>
+        </new>
+    </NameTransition>
+    <NameTransition>
         <OldName>delread2~~</OldName>
         <new>
             <NewName>delay/read interp</NewName>
@@ -596,7 +638,7 @@
     <NameTransition>
         <OldName>lfsr~</OldName>
         <new>
-            <NewName>other/lfsr~</NewName>
+            <NewName>other/lfsr</NewName>
         </new>
     </NameTransition>
     <NameTransition>
@@ -1142,7 +1184,7 @@
     <NameTransition>
         <OldName>samplehold~</OldName>
         <new>
-            <NewName>dist/samplehold~</NewName>
+            <NewName>dist/samplehold</NewName>
         </new>
     </NameTransition>
     <NameTransition>
@@ -1334,7 +1376,7 @@
     <NameTransition>
         <OldName>tabrecord2~</OldName>
         <new>
-            <NewName>table/record2</NewName>
+            <NewName>table/record</NewName>
         </new>
     </NameTransition>
     <NameTransition>
@@ -1448,7 +1490,7 @@
     <NameTransition>
         <OldName>xfade~</OldName>
         <new>
-            <NewName>mix/xfade~</NewName>
+            <NewName>mix/xfade</NewName>
         </new>
     </NameTransition>
     <NameTransition>
@@ -1946,7 +1988,7 @@
     <NameTransition>
         <OldName>vcf3~</OldName>
         <new>
-            <NewName>filter/vcf3~</NewName>
+            <NewName>filter/vcf3</NewName>
         </new>
     </NameTransition>
     <NameTransition>

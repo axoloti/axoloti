@@ -21,7 +21,7 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="internal generator for testing" x="294" y="42"/>
+   <comment type="patch/comment" x="294" y="42" text="internal generator for testing"/>
    <obj type="ctrl/i radio 2 v" sha="d604c0651c8fa210f2ad1b890c885520eb58d0" name="i_1" x="98" y="98">
       <params>
          <int32.vradio name="value" value="0"/>
@@ -90,77 +90,77 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="offset - should be smooth (clock drift)" x="686" y="378"/>
+   <comment type="patch/comment" x="686" y="378" text="offset - should be smooth (clock drift)"/>
    <nets>
       <net>
-         <source name="decode_1 f"/>
-         <dest name="f_ in"/>
+         <source obj="decode_1" outlet="f"/>
+         <dest obj="f_" inlet="in"/>
       </net>
       <net>
-         <source name="decode_1 smp"/>
-         <dest name="i_2 in"/>
-         <dest name="&gt;&gt;_1 a"/>
+         <source obj="decode_1" outlet="smp"/>
+         <dest obj="i_2" inlet="in"/>
+         <dest obj="&gt;&gt;_1" inlet="a"/>
       </net>
       <net>
-         <source name="counter_1 o"/>
-         <dest name="i_3 in"/>
+         <source obj="counter_1" outlet="o"/>
+         <dest obj="i_3" inlet="in"/>
       </net>
       <net>
-         <source name="decode_1 h"/>
-         <dest name="h_ in"/>
+         <source obj="decode_1" outlet="h"/>
+         <dest obj="h_" inlet="in"/>
       </net>
       <net>
-         <source name="decode_1 m"/>
-         <dest name="m_ in"/>
+         <source obj="decode_1" outlet="m"/>
+         <dest obj="m_" inlet="in"/>
       </net>
       <net>
-         <source name="decode_1 s"/>
-         <dest name="s_ in"/>
+         <source obj="decode_1" outlet="s"/>
+         <dest obj="s_" inlet="in"/>
       </net>
       <net>
-         <source name="gen_1 out"/>
-         <dest name="mux_1 i1"/>
+         <source obj="gen_1" outlet="out"/>
+         <dest obj="mux_1" inlet="i1"/>
       </net>
       <net>
-         <source name="&gt;&gt;_1 result"/>
-         <dest name="sat_1 in"/>
+         <source obj="&gt;&gt;_1" outlet="result"/>
+         <dest obj="sat_1" inlet="in"/>
       </net>
       <net>
-         <source name="sat_1 out"/>
-         <dest name="chart_1 in"/>
+         <source obj="sat_1" outlet="out"/>
+         <dest obj="chart_1" inlet="in"/>
       </net>
       <net>
-         <source name="decode_1 sync"/>
-         <dest name="counter_1 trig"/>
+         <source obj="decode_1" outlet="sync"/>
+         <dest obj="counter_1" inlet="trig"/>
       </net>
       <net>
-         <source name="gen_1 h"/>
-         <dest name="h in"/>
+         <source obj="gen_1" outlet="h"/>
+         <dest obj="h" inlet="in"/>
       </net>
       <net>
-         <source name="gen_1 m"/>
-         <dest name="m in"/>
+         <source obj="gen_1" outlet="m"/>
+         <dest obj="m" inlet="in"/>
       </net>
       <net>
-         <source name="gen_1 s"/>
-         <dest name="s in"/>
+         <source obj="gen_1" outlet="s"/>
+         <dest obj="s" inlet="in"/>
       </net>
       <net>
-         <source name="gen_1 f"/>
-         <dest name="f in"/>
+         <source obj="gen_1" outlet="f"/>
+         <dest obj="f" inlet="in"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="mux_1 s"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="mux_1" inlet="s"/>
       </net>
       <net>
-         <source name="in_1 wave"/>
-         <dest name="mux_1 i2"/>
+         <source obj="in_1" outlet="wave"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
       <net>
-         <source name="mux_1 o"/>
-         <dest name="decode_1 in"/>
-         <dest name="scope_1 in"/>
+         <source obj="mux_1" outlet="o"/>
+         <dest obj="decode_1" inlet="in"/>
+         <dest obj="scope_1" inlet="in"/>
       </net>
    </nets>
    <settings>
@@ -173,4 +173,10 @@
       <Saturate>false</Saturate>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>996</width>
+      <height>688</height>
+   </windowPos>
 </patch-1.0>

@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="patch/comment" name="Midi Channels:" x="14" y="14"/>
-   <comment type="patch/comment" name="Lead : 1, Pads 3, HH 4, Drum 5" x="14" y="28"/>
+   <comment type="patch/comment" x="14" y="14" text="Midi Channels:"/>
+   <comment type="patch/comment" x="14" y="28" text="Lead : 1, Pads 3, HH 4, Drum 5"/>
    <obj type="./lead" name="lead_1" x="14" y="84">
       <params>
          <frac32.s.map name="lfo_flt" value="-61.0"/>
@@ -24,12 +24,12 @@
          <frac32.s.map name="osc1" value="-10.0"/>
          <frac32.s.map name="osc1_" value="23.0"/>
          <frac32.u.map name="smooth1" value="0.0"/>
-         <frac32.u.map name="envd1:a" value="0.0"/>
-         <frac32.u.map name="envd1:d" value="0.0"/>
+         <frac32.s.map name="envd1:a" value="0.0"/>
+         <frac32.s.map name="envd1:d" value="0.0"/>
          <frac32.s.map name="pwm_1" value="16.699999809265137"/>
          <frac32.u.map name="smooth1_" value="0.0"/>
-         <frac32.u.map name="envahd1:a" value="0.0"/>
-         <frac32.u.map name="envahd1:d" value="0.0"/>
+         <frac32.s.map name="envahd1:a" value="0.0"/>
+         <frac32.s.map name="envahd1:d" value="0.0"/>
          <frac32.s.map name="pwm_1_" value="-19.510048866271973"/>
          <frac32.s.map name="pwm_1__" value="-31.43801259994507"/>
          <frac32.u.map name="mix31:gain1" value="16.09999990463257"/>
@@ -60,7 +60,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="602" y="84">
+   <obj type="delay/echo fdbk mix" sha="6bc1204ca59cfb6fe995e01f4a68be52ca63cd0" name="echo2_1" x="602" y="84">
       <params>
          <frac32.u.map name="mix" value="32.0"/>
          <frac32.u.map name="feedback" value="20.5"/>
@@ -95,8 +95,8 @@
    </obj>
    <obj type="./bass" name="bass_1" x="392" y="364">
       <params>
-         <frac32.u.map name="env:a" value="0.0"/>
-         <frac32.u.map name="env:d" value="0.0"/>
+         <frac32.s.map name="env:a" value="0.0"/>
+         <frac32.s.map name="env:d" value="0.0"/>
          <frac32.u.map name="ftrack" value="36.5"/>
          <frac32.s.map name="vcf:pitch" value="-30.0"/>
          <frac32.u.map name="vcf:reso" value="13.0"/>
@@ -110,7 +110,7 @@
          <frac32.s.map name="env.envdlinmx_1" value="-3.0"/>
          <frac32.u.map name="arithmetic.*c_2" value="24.5"/>
          <frac32.s.map name="osc.sine_1" value="-30.0"/>
-         <frac32.u.map name="env.decay.m_1" value="26.5"/>
+         <frac32.s.map name="env.decay.m_1" value="26.5"/>
       </params>
       <attribs>
          <combo attributeName="midichannel" selection="5"/>
@@ -123,14 +123,14 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcff_1" x="742" y="364">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcff_1" x="742" y="364">
       <params>
          <frac32.s.map name="pitch" value="36.0"/>
          <frac32.u.map name="reso" value="43.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="fx/chorus2" name="chorus1" x="854" y="364">
+   <obj type="fx/chorus" name="chorus1" x="854" y="364">
       <params>
          <frac32.u.map name="depth" value="1.5"/>
          <frac32.s.map name="speed" value="-25.0"/>
@@ -175,85 +175,85 @@
    </obj>
    <nets>
       <net>
-         <source name="chorus1 L"/>
-         <dest name="mix24 in2"/>
+         <source obj="chorus1" outlet="L"/>
+         <dest obj="mix24" inlet="in2"/>
       </net>
       <net>
-         <source name="chorus1 R"/>
-         <dest name="mix24_ in2"/>
+         <source obj="chorus1" outlet="R"/>
+         <dest obj="mix24_" inlet="in2"/>
       </net>
       <net>
-         <source name="mix24 out"/>
-         <dest name="dac_11 wave"/>
-         <dest name="envahd2 in"/>
+         <source obj="mix24" outlet="out"/>
+         <dest obj="dac_11" inlet="wave"/>
+         <dest obj="envahd2" inlet="in"/>
       </net>
       <net>
-         <source name="mix24_ out"/>
-         <dest name="dac_21 wave"/>
+         <source obj="mix24_" outlet="out"/>
+         <dest obj="dac_21" inlet="wave"/>
       </net>
       <net>
-         <source name="echo2_1 out"/>
-         <dest name="mix24 in1"/>
-         <dest name="mix24_ in1"/>
+         <source obj="echo2_1" outlet="out"/>
+         <dest obj="mix24" inlet="in1"/>
+         <dest obj="mix24_" inlet="in1"/>
       </net>
       <net>
-         <source name="vcff_1 out"/>
-         <dest name="mix24 in3"/>
-         <dest name="mix24_ in3"/>
+         <source obj="vcff_1" outlet="out"/>
+         <dest obj="mix24" inlet="in3"/>
+         <dest obj="mix24_" inlet="in3"/>
       </net>
       <net>
-         <source name="envahd2 amp"/>
-         <dest name="*c3 in"/>
+         <source obj="envahd2" outlet="amp"/>
+         <dest obj="*c3" inlet="in"/>
       </net>
       <net>
-         <source name="*c3 out"/>
-         <dest name="vcff_1 pitchm"/>
+         <source obj="*c3" outlet="out"/>
+         <dest obj="vcff_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="hh_2 out"/>
-         <dest name="mix_1 in2"/>
-         <dest name="vu_2 in"/>
+         <source obj="hh_2" outlet="out"/>
+         <dest obj="mix_1" inlet="in2"/>
+         <dest obj="vu_2" inlet="in"/>
       </net>
       <net>
-         <source name="mix_2 out"/>
-         <dest name="vcff_1 in"/>
+         <source obj="mix_2" outlet="out"/>
+         <dest obj="vcff_1" inlet="in"/>
       </net>
       <net>
-         <source name="vacuumcleanerpad outlet_1"/>
-         <dest name="mix_1 in1"/>
-         <dest name="vu_3 in"/>
+         <source obj="vacuumcleanerpad" outlet="outlet_1"/>
+         <dest obj="mix_1" inlet="in1"/>
+         <dest obj="vu_3" inlet="in"/>
       </net>
       <net>
-         <source name="drummachine_1 bd"/>
-         <dest name="mix_2 in1"/>
-         <dest name="vu_5 in"/>
+         <source obj="drummachine_1" outlet="bd"/>
+         <dest obj="mix_2" inlet="in1"/>
+         <dest obj="vu_5" inlet="in"/>
       </net>
       <net>
-         <source name="drummachine_1 snr"/>
-         <dest name="mix_2 in2"/>
-         <dest name="vu_6 in"/>
+         <source obj="drummachine_1" outlet="snr"/>
+         <dest obj="mix_2" inlet="in2"/>
+         <dest obj="vu_6" inlet="in"/>
       </net>
       <net>
-         <source name="lead_1 out"/>
-         <dest name="mix_1 in3"/>
-         <dest name="vu_1 in"/>
+         <source obj="lead_1" outlet="out"/>
+         <dest obj="mix_1" inlet="in3"/>
+         <dest obj="vu_1" inlet="in"/>
       </net>
       <net>
-         <source name="mix_1 out"/>
-         <dest name="tremolo_1 in"/>
+         <source obj="mix_1" outlet="out"/>
+         <dest obj="tremolo_1" inlet="in"/>
       </net>
       <net>
-         <source name="tremolo_1 out"/>
-         <dest name="echo2_1 in"/>
+         <source obj="tremolo_1" outlet="out"/>
+         <dest obj="echo2_1" inlet="in"/>
       </net>
       <net>
-         <source name="tremolo_1 cv"/>
-         <dest name="bass_1 mod"/>
+         <source obj="tremolo_1" outlet="cv"/>
+         <dest obj="bass_1" inlet="mod"/>
       </net>
       <net>
-         <source name="bass_1 outlet_1"/>
-         <dest name="chorus1 in"/>
-         <dest name="vu_4 in"/>
+         <source obj="bass_1" outlet="outlet_1"/>
+         <dest obj="chorus1" inlet="in"/>
+         <dest obj="vu_4" inlet="in"/>
       </net>
    </nets>
    <settings>

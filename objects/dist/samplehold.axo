@@ -1,0 +1,61 @@
+<objdefs>
+   <obj.normal id="samplehold" uuid="b0a30d3d257d377dc36267f25514de345255cbd7" sha="44e27e8d4d1043ee5b7787b774903b749adc2fb8">
+      <upgradeSha>252bae103bd8e122a6fa41a92000c8c6abc39c7b</upgradeSha>
+      <sDescription>high quality audio rate sample and hold using blit synthesis (bandwidth limited)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="level input"/>
+         <frac32buffer name="trig" description="trigger input, triggers on rising zero-crossing"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="out" description="audio output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[  static const int blepvoices = 8;
+  int16_t *oscp[blepvoices];
+  int32_t vgain[blepvoices];
+  uint32_t nextvoice;
+  int32_t i0;
+  int32_t in0;
+  int32_t acc;
+]]></code.declaration>
+      <code.init><![CDATA[  int j;
+  for(j=0;j<blepvoices;j++)
+    oscp[j] = &blept[BLEPSIZE-1];
+  nextvoice = 0;
+  i0 = 0;
+  in0 = 0;
+  acc = 0;
+]]></code.init>
+      <code.krate><![CDATA[  int j;
+  int16_t *lastblep = &blept[BLEPSIZE-1];
+  for(j=0;j<BUFSIZE;j++){
+    int i;
+    int i1 = inlet_trig[j]>>2;
+    if ((i1>0)&&!(i0>0)){   // dispatch
+      nextvoice = (nextvoice+1)&(blepvoices-1);
+      int32_t x = (i1<<6)/(i1-i0);
+      oscp[nextvoice] = &blept[x];
+      int32_t val = (((64-x)*(inlet_in[j]>>2)) + (x*(in0>>2)))>>6;
+      vgain[nextvoice] = (acc-val)<<2;
+      acc = val;
+    }
+    int32_t sum=0;
+    i0 = i1;
+    in0 = inlet_in[j];
+    for(i=0;i<blepvoices;i++){ // sample
+      int16_t *t = oscp[i];
+      sum =___SMMLA((16384-(*t))<<16,vgain[i],sum);
+      t+=64;
+      if (t>=lastblep) {        t=lastblep;
+        vgain[i] = 0;
+      }
+      oscp[i]=t;
+    }
+    outlet_out[j]=(sum+acc)<<1;
+  }]]></code.krate>
+   </obj.normal>
+</objdefs>

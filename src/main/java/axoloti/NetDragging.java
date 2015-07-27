@@ -92,14 +92,14 @@ public class NetDragging extends Net {
             g2.setColor(c);
             DrawWire(g2, p0.x, p0.y, p1.x, p1.y);
 //  Indicate latched connections
-            if (false) {
-                int j = patch.objectinstances.indexOf(i.axoObj);
-                if (j <= lastSource) {
-                    int x = (p0.x + p1.x) / 2;
-                    int y = (int) (0.5f * (p0.y + p1.y) + Math.abs(p1.y - p0.y) * 0.3f + Math.abs(p1.x - p0.x) * 0.05f);
-                    g2.fillOval(x - 5, y - 5, 10, 10);
-                }
-            }
+//            if (false) {
+//                int j = patch.objectinstances.indexOf(i.axoObj);
+//                if (j <= lastSource) {
+//                    int x = (p0.x + p1.x) / 2;
+//                    int y = (int) (0.5f * (p0.y + p1.y) + Math.abs(p1.y - p0.y) * 0.3f + Math.abs(p1.x - p0.x) * 0.05f);
+//                    g2.fillOval(x - 5, y - 5, 10, 10);
+//                }
+//            }
         }
     }
 

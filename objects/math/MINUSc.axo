@@ -13,15 +13,12 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="c" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="c" noLabel="true"/>
       </params>
       <attribs/>
       <code.krate><![CDATA[outlet_out= inlet_in- param_c;]]></code.krate>
    </obj.normal>
-   <obj.normal id="-c" uuid="aafdb4cc793fc2dd9b2310a9833c7099a771cd33" sha="951b547a5dde856a5c6ac2e4cec705baee37e3a0">
+   <obj.normal id="-c" uuid="aafdb4cc793fc2dd9b2310a9833c7099a771cd33" sha="fa9d21bbc7519b8fc3efe863ba9b47c0590c5470">
       <upgradeSha>3ce2337e3d146554f568711a6b81d3578b0c92e0</upgradeSha>
       <sDescription>subtract constant</sDescription>
       <author>Johannes Taelman</author>
@@ -35,12 +32,9 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="c" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="c" noLabel="true"/>
       </params>
       <attribs/>
-      <code.srate><![CDATA[outlet_out[buffer_index]= inlet_in[buffer_index]- param_c;]]></code.srate>
+      <code.srate><![CDATA[outlet_out= inlet_in- param_c;]]></code.srate>
    </obj.normal>
 </objdefs>

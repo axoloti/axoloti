@@ -32,11 +32,11 @@ public final class OSDetect {
     public static OS getOS() {
         if (os == OS.UNKNOWN) {
             String osname = System.getProperty("os.name").toLowerCase();
-            if (osname.indexOf("win") >= 0) {
+            if (osname.contains("win")) {
                 os = OS.WIN;
-            } else if (osname.indexOf("mac") >= 0) {
+            } else if (osname.contains("mac")) {
                 os = OS.MAC;
-            } else if (osname.indexOf("nux") >= 0) {
+            } else if (osname.contains("nux")) {
                 os = OS.LINUX;
             }
         }

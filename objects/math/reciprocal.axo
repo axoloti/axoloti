@@ -21,7 +21,7 @@
         outlet_out = 1<<27;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="reciprocal" uuid="4be823e668871835d067cbfe42407b06f927f91f" sha="b835c904467e3c3ce12026cedf0d160a4646d497">
+   <obj.normal id="reciprocal" uuid="4be823e668871835d067cbfe42407b06f927f91f" sha="e20435580358b9ff5231dd01cd91063d8d0b98b">
       <upgradeSha>d4d6b03818ac9b3fa60fa7449f3414ebc196e238</upgradeSha>
       <sDescription>reciprocal, y = 64/x</sDescription>
       <author>Johannes Taelman</author>
@@ -36,11 +36,11 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[if (inlet_in[buffer_index]) {
-      float inf = inlet_in[buffer_index];
-      outlet_out[buffer_index] = (int)(281474976710656.f/inf);
+      <code.srate><![CDATA[if (inlet_in) {
+      float inf = inlet_in;
+      outlet_out = (int)(281474976710656.f/inf);
     } else
-        outlet_out[buffer_index] = 1<<27;
+        outlet_out = 1<<27;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

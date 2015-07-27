@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="lowpass" uuid="4f0d68b39b6f6b1c1d371b028d84391d14062d68" sha="82548cf1d1dcb44d5a65e22da994a09026443c25">
-      <upgradeSha>590df048ba2f7ab209a2bd1e88e49c2aae1051e0</upgradeSha>
+      <upgradeSha>ddf9ba7f2752a4966b7dae581d9c1c0ecc1b1118</upgradeSha>
       <sDescription>1st order lowpass filter, control rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,10 +12,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.lfopitch name="freq" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.lfopitch>
+         <frac32.s.map.lfopitch name="freq" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;

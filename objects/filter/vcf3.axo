@@ -1,0 +1,33 @@
+<objdefs>
+   <obj.normal id="vcf3" uuid="92455c652cd098cbb682a5497baa18abbf2ef865" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837">
+      <upgradeSha>ced9d9125e78e99a0399436836e98906ebc0172</upgradeSha>
+      <sDescription>2-pole resonant low-pass filter (biquad), filter updated at k-rate</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>filter.axh</helpPatch>
+      <inlets>
+         <frac32buffer name="in" description="filter input"/>
+         <frac32 name="pitch" description="pitch"/>
+         <frac32 name="reso" description="filter resonance"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="filter output"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map name="pitch"/>
+         <frac32.u.map.filterq name="reso"/>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[data_filter_biquad_A fd;
+]]></code.declaration>
+      <code.init><![CDATA[  init_filter_biquad_A(&fd);
+]]></code.init>
+      <code.krate><![CDATA[  {
+      int32_t freq;
+      MTOF(param_pitch + inlet_pitch,freq);
+      f_filter_biquad_A(&fd,inlet_in,outlet_out,freq,INT_MAX - (__USAT(inlet_reso + param_reso,27)<<4));
+   }
+]]></code.krate>
+   </obj.normal>
+</objdefs>

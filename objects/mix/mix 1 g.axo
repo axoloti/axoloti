@@ -13,17 +13,14 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.gain name="gain1" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain1" noLabel="true"/>
       </params>
       <attribs/>
       <code.krate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
    outlet_out=  __SSAT(inlet_bus__in + (accum<<1),28);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mix 1 g" uuid="e6982841c1bf323ee2062a4b6cc2737adafbd668" sha="e733e12d69da5e518bea20ed13e247f91979c2b7">
+   <obj.normal id="mix 1 g" uuid="e6982841c1bf323ee2062a4b6cc2737adafbd668" sha="60cd6c5fad7f3f3985ccf64c7d05086e1b2f5499">
       <upgradeSha>9837ebd6f7c0b2b3853ea475d91c943144e2273b</upgradeSha>
       <sDescription>1 input s-rate mixer, shows gain units</sDescription>
       <author>Johannes Taelman</author>
@@ -37,14 +34,11 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.gain name="gain1" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.gain>
+         <frac32.u.map.gain name="gain1" noLabel="true"/>
       </params>
       <attribs/>
-      <code.srate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1[buffer_index],param_gain1);
-   outlet_out[buffer_index]=  __SSAT(inlet_bus__in[buffer_index] + (accum<<1),28);
+      <code.srate><![CDATA[   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
+   outlet_out=  __SSAT(inlet_bus__in + (accum<<1),28);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

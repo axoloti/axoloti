@@ -9,15 +9,15 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="pitch envelope" x="224" y="84"/>
-   <comment type="patch/comment" name="combine note, envelope and lfo for oscillator pitch" x="336" y="140"/>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="112" y="168">
+   <comment type="patch/comment" x="224" y="84" text="pitch envelope"/>
+   <comment type="patch/comment" x="336" y="140" text="combine note, envelope and lfo for oscillator pitch"/>
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="112" y="168">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="pitch LFO" x="224" y="168"/>
+   <comment type="patch/comment" x="224" y="168" text="pitch LFO"/>
    <obj type="mix/mix 2" sha="90ac1a48634cb998bf3d0387eb5191531d6241fe" name="mix11" x="336" y="168">
       <params>
          <frac32.u.map name="gain1" value="8.5"/>
@@ -25,18 +25,18 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="oscillator" x="476" y="168"/>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="476" y="182">
+   <comment type="patch/comment" x="476" y="168" text="oscillator"/>
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="476" y="182">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="filter with envelope" x="252" y="336"/>
-   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1_" x="14" y="364">
+   <comment type="patch/comment" x="252" y="336" text="filter with envelope"/>
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd1_" x="14" y="364">
       <params>
-         <frac32.u.map name="a" value="29.5"/>
-         <frac32.u.map name="d" value="49.5"/>
+         <frac32.s.map name="a" value="29.5"/>
+         <frac32.s.map name="d" value="49.5"/>
       </params>
       <attribs/>
    </obj>
@@ -46,21 +46,21 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="lpf_1" x="252" y="364">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="lpf_1" x="252" y="364">
       <params>
          <frac32.s.map name="pitch" value="-6.0"/>
          <frac32.u.map name="reso" value="59.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd1" x="14" y="532">
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd1" x="14" y="532">
       <params>
-         <frac32.u.map name="a" value="30.5"/>
-         <frac32.u.map name="d" value="56.0"/>
+         <frac32.s.map name="a" value="30.5"/>
+         <frac32.s.map name="d" value="56.0"/>
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="amplitude envelope" x="126" y="532"/>
+   <comment type="patch/comment" x="126" y="532" text="amplitude envelope"/>
    <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_2" x="378" y="602">
       <params/>
       <attribs/>
@@ -77,55 +77,55 @@
    </obj>
    <nets>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="envd1 trig"/>
-         <dest name="envahd1 gate"/>
-         <dest name="envahd1_ gate"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="envd1" inlet="trig"/>
+         <dest obj="envahd1" inlet="gate"/>
+         <dest obj="envahd1_" inlet="gate"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="mix11 out"/>
-         <dest name="saw_1 pitchm"/>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="saw_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="mix11 bus_in"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="mix11" inlet="bus_in"/>
       </net>
       <net>
-         <source name="envd1 env"/>
-         <dest name="mix11 in1"/>
+         <source obj="envd1" outlet="env"/>
+         <dest obj="mix11" inlet="in1"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="mix11 in2"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="mix11" inlet="in2"/>
       </net>
       <net>
-         <source name="lpf_1 out"/>
-         <dest name="vca_2 a"/>
+         <source obj="lpf_1" outlet="out"/>
+         <dest obj="vca_2" inlet="a"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="lpf_1 in"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="lpf_1" inlet="in"/>
       </net>
       <net>
-         <source name="envahd1_ env"/>
-         <dest name="*c2 in"/>
+         <source obj="envahd1_" outlet="env"/>
+         <dest obj="*c2" inlet="in"/>
       </net>
       <net>
-         <source name="*c2 out"/>
-         <dest name="lpf_1 pitchm"/>
+         <source obj="*c2" outlet="out"/>
+         <dest obj="lpf_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="envahd1 env"/>
-         <dest name="vca_2 v"/>
+         <source obj="envahd1" outlet="env"/>
+         <dest obj="vca_2" inlet="v"/>
       </net>
       <net>
-         <source name="vca_2 o"/>
-         <dest name="*c1 in"/>
+         <source obj="vca_2" outlet="o"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
    </nets>
    <settings>

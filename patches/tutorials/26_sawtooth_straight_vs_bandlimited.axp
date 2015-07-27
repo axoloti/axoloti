@@ -1,9 +1,9 @@
 <patch-1.0>
-   <obj type="keyb" sha="d2b06e818348b14523c68fd021077192860093c0" name="keyb1" x="40" y="40">
+   <obj type="midi/in/keyb" sha="d2b06e818348b14523c68fd021077192860093c0" name="keyb1" x="40" y="40">
       <params/>
       <attribs/>
    </obj>
-   <obj type="saw~" sha="fac485938f0744316bc8361d4ad33f897cbff287" name="saw_1" x="200" y="40">
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="200" y="40">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -15,10 +15,10 @@
       </params>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="off: bandwidth limited saw wave" x="602" y="126"/>
-   <comment type="patch/comment" name="on: aliased saw wave" x="602" y="140"/>
-   <comment type="patch/comment" name="the difference should be very clear on high notes on the piano keyboard!" x="644" y="182"/>
-   <obj type="phasor3~" sha="60e3f3ea8b75d9dbd83583af0f2f725f09f6aba3" name="phasor3_1" x="200" y="220">
+   <comment type="patch/comment" x="602" y="126" text="off: bandwidth limited saw wave"/>
+   <comment type="patch/comment" x="602" y="140" text="on: aliased saw wave"/>
+   <comment type="patch/comment" x="644" y="182" text="the difference should be very clear on high notes on the piano keyboard!"/>
+   <obj type="osc/phasor" sha="343e0dfbaa48c69032d959ee1e7398e45000e0bf" name="phasor3_1" x="200" y="220">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -38,7 +38,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="c27566f972d15f25252f61b5cff014a3edce9706" name="dac_1" x="760" y="220">
+   <obj type="audio/out stereo" sha="c27566f972d15f25252f61b5cff014a3edce9706" name="dac_1" x="760" y="220">
       <params/>
       <attribs/>
    </obj>
@@ -54,39 +54,39 @@
    </obj>
    <nets>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="saw_1 pitchm"/>
-         <dest name="phasor3_1 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="saw_1" inlet="pitch"/>
+         <dest obj="phasor3_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="inmux21 i1"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="inmux21" inlet="i1"/>
       </net>
       <net>
-         <source name="cb11 o"/>
-         <dest name="inmux21 s"/>
+         <source obj="cb11" outlet="o"/>
+         <dest obj="inmux21" inlet="s"/>
       </net>
       <net>
-         <source name="phasor3_1 phasor"/>
-         <dest name="unipolar2bipolar1 i"/>
+         <source obj="phasor3_1" outlet="phasor"/>
+         <dest obj="unipolar2bipolar1" inlet="i"/>
       </net>
       <net>
-         <source name="unipolar2bipolar1 o"/>
-         <dest name="inmux21 i2"/>
+         <source obj="unipolar2bipolar1" outlet="o"/>
+         <dest obj="inmux21" inlet="i2"/>
       </net>
       <net>
-         <source name="inmux21 o"/>
-         <dest name="*c1 in"/>
-         <dest name="scope_1 in"/>
+         <source obj="inmux21" outlet="o"/>
+         <dest obj="*c1" inlet="in"/>
+         <dest obj="scope_1" inlet="in"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="dac_1 left"/>
-         <dest name="dac_1 right"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="dac_1" inlet="left"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="cb12 o"/>
-         <dest name="scope_1 hold"/>
+         <source obj="cb12" outlet="o"/>
+         <dest obj="scope_1" inlet="hold"/>
       </net>
    </nets>
    <settings>

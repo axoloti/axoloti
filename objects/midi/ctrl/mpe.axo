@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="mpe" uuid="94323477e6476a10b9332922e5dfcd2705641af1" sha="7d045bd3ec2368f42f90d2a142e3100fa2cf23c1">
-      <upgradeSha>df6476c993ae8899573dbd0c881e717e5eec19ea</upgradeSha>
+   <obj.normal id="mpe" uuid="94323477e6476a10b9332922e5dfcd2705641af1" sha="f897a9eb2f105dc7affd4af77664b52866c85d36">
+      <upgradeSha>3bfe643daf126a01a52ec457bad48ce9e408235c</upgradeSha>
       <sDescription>Controller input for MIDI Polyphonic Rxpression</sDescription>
       <author>Mark Harris</author>
       <license>BSD</license>
@@ -66,6 +66,7 @@ if ((status == MIDI_NOTE_ON + attr_midichannel) && (data2)) {
   if (_note == data1-64) {
     _rvelo = data2<<20;
     _gate = 0;
+    _pressure = 0;
   }
 } else if (status == attr_midichannel + MIDI_CHANNEL_PRESSURE) {
   _pressure = data1<<20;

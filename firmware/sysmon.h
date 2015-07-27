@@ -48,5 +48,7 @@ bool getErrorFlag(error_flag_t error);
 void errorFlagClearAll(void);
 void sysmon_disable_blinker(void);
 void sysmon_enable_blinker(void);
+uint16_t sysmon_getVoltage50(void);
+uint16_t sysmon_getVoltage10(void);
 
 #endif

@@ -1,28 +1,22 @@
 <objdefs>
-   <obj.normal id="ahd lin m" uuid="cf466c0a361286f2414bae49020ca4c7a8daa7eb" sha="3fce5b81c1ce8e44cafd93d6fd09f1bcc8e30fff">
-      <upgradeSha>62a6c82f56f3c5daa5fb4f269acb3a33cf34992b</upgradeSha>
+   <obj.normal id="ahd lin m" uuid="f9b46834ce96425064b4ed7f53ad8b91ea1ac0ef" sha="1bff4be3aeae590d80327085f5f7c771667d8938">
+      <upgradeSha>d0cac6ea96619a52e79850f405414313eac02532</upgradeSha>
       <sDescription>attack/hold/decay envelope, linear ramps, modulation inputs, extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>env.axh</helpPatch>
       <inlets>
          <bool32.risingfalling name="trig" description="trigger"/>
-         <frac32.bipolar name="am" description="attack time modulation"/>
-         <frac32.bipolar name="dm" description="decay time modulation"/>
+         <frac32.bipolar name="a" description="attack time"/>
+         <frac32.bipolar name="d" description="decay time"/>
       </inlets>
       <outlets>
          <frac32.positive name="env" description="envelope output"/>
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.klineartime.exp name="a">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.klineartime.exp>
-         <frac32.s.map.klineartime.exp name="d">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.klineartime.exp>
+         <frac32.s.map.klineartime.exp name="a"/>
+         <frac32.s.map.klineartime.exp name="d"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;
@@ -31,13 +25,13 @@
 ]]></code.init>
       <code.krate><![CDATA[if (inlet_trig > 0) {
   int32_t t;
-  int32_t at = param_a + inlet_am;
+  int32_t at = param_a + inlet_a;
   MTOF(-at,t);
   val += t>>6;
 }
 else {
   int32_t t;
-  int32_t dt = param_d + inlet_dm;
+  int32_t dt = param_d + inlet_d;
   MTOF(-dt,t);
   val -= t>>6;
 }

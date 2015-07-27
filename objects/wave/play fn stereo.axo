@@ -1,0 +1,74 @@
+<objdefs>
+   <obj.normal id="play fn stereo" uuid="b8acd66995d2fb45b86955af8cd5f7371b4864de" sha="874bd2e9190a9d31cbf9936f18315f9b38fd724a">
+      <upgradeSha>3062fead90473330bfb2670aab03b18a18f2426a</upgradeSha>
+      <sDescription>streaming playback of a stereo .wav file from sdcard (testing)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32 name="pos" description="position"/>
+         <bool32.rising name="start" description="trigger"/>
+         <bool32.rising name="stop" description="trigger"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="outl" description="output left"/>
+         <frac32buffer name="outr" description="output right"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <table name="fn"/>
+      </attribs>
+      <includes>
+         <include>./streamer.h</include>
+         <include>chibios/ext/fatfs/src/ff.h</include>
+      </includes>
+      <code.declaration><![CDATA[    WORKING_AREA(waThreadSD, 512);
+   sdReadFilePingpong *stream;
+   int starttrig;
+   int stoptrig;
+   char c[64];
+]]></code.declaration>
+      <code.init><![CDATA[static sdReadFilePingpong s __attribute__ ((section (".data")));
+// unmap from aliased memory for DMA
+stream = (sdReadFilePingpong *)(0x20000000 | (int)&s);
+stream->pingpong = CLOSED;
+stream->doSeek = 0;
+starttrig = 0;
+stoptrig = 0;
+strcpy(&c[0],"attr_fn");
+stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),
+                    HIGHPRIO, ThreadSD, (void *)stream);
+]]></code.init>
+      <code.dispose><![CDATA[sdStopStreamer(stream);
+]]></code.dispose>
+      <code.krate><![CDATA[     int32_t i;
+     if ((inlet_start>0) && !starttrig) {
+        sdOpenStream(stream,&c[0]);
+        sdSeekStream(stream,((inlet_pos)>>4)<<2);
+        starttrig=1;
+     } else if ((!(inlet_start>0)) && starttrig) {        starttrig=0;
+     }
+     if ((inlet_stop>0) && !stoptrig) {
+        sdCloseStream(stream);
+        stoptrig=1;
+     } else if ((!(inlet_stop>0)) && stoptrig) {        stoptrig=0;
+     }
+     int16_t *p = 0;
+     int16_t *q = 0;
+     p=sdReadStream(stream);
+     q=sdReadStream(stream);
+     if (p && q) {
+        for(i=0;i<BUFSIZE/2;i++){
+           outlet_outl[i] = (*(p++))<<10;
+           outlet_outr[i] = (*(p++))<<10;
+        }
+        for(;i<BUFSIZE;i++){
+           outlet_outl[i] = (*(q++))<<10;
+           outlet_outr[i] = (*(q++))<<10;
+        }
+     }
+     else 
+        for(i=0;i<BUFSIZE;i++) outlet_outl[i] = outlet_outr[i]= 0;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

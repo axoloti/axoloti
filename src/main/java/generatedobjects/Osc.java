@@ -81,46 +81,46 @@ public class Osc extends gentools {
     }
 
     static AxoObject CreateSRateSineOsc4() {
-        AxoObject o = new AxoObject("sine", "FM sine wave oscillator, linear interpolated table, s-rate pitch input");
+        AxoObject o = new AxoObject("sine", "sine wave oscillator");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "sine wave"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation"));
-        o.inlets.add(new InletFrac32Buffer("fm", "frequency modulation"));
-        o.inlets.add(new InletFrac32Buffer("pm", "phase modulation"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.inlets.add(new InletFrac32Buffer("freq", "frequency"));
+        o.inlets.add(new InletFrac32Buffer("phase", "phase"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
 
         o.sLocalData = "uint32_t Phase;";
         o.sInitCode = "Phase = 0;";
         o.sKRateCode = "   int32_t freq;\n"
-                + "   MTOFEXTENDED(%pitch% + %pitchm%,freq);\n";
-        o.sSRateCode = "Phase += freq + %fm%;\n"
+                + "   MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n";
+        o.sSRateCode = "Phase += freq + inlet_freq;\n"
                 + "int32_t r;\n"
-                + "int32_t p2 = Phase + (%pm%<<4);\n"
+                + "int32_t p2 = Phase + (inlet_phase<<4);\n"
                 + "SINE2TINTERP(p2,r)\n"
-                + "%wave%= (r>>4);\n";
+                + "outlet_wave= (r>>4);\n";
         return o;
     }
 
     static AxoObject CreateSRateSineOsc5() {
-        AxoObject o = new AxoObject("sine lin", "FM sine wave oscillator, linear interpolated sine table, s-rate frequency input, linear frequency input (goes all the way to 0)");
+        AxoObject o = new AxoObject("sine lin", "sine wave oscillator\nlinear frequency input (goes all the way to 0)");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "sine wave"));
-        o.inlets.add(new InletFrac32Bipolar("freqm", "frequency modulation"));
-        o.inlets.add(new InletFrac32BufferBipolar("pm", "phase modulation"));
+        o.inlets.add(new InletFrac32Bipolar("freq", "frequency"));
+        o.inlets.add(new InletFrac32BufferBipolar("phase", "phase"));
         o.params.add(new ParameterFrac32UMapFreq("freq"));
 
         o.sLocalData = "uint32_t Phase; ";
         o.sInitCode = "Phase = 0;";
-        o.sSRateCode = "Phase += (%freq% + %freqm%)<<4;\n"
+        o.sSRateCode = "Phase += (param_freq + inlet_freq)<<4;\n"
                 + "int32_t r;\n"
-                + "int32_t p2 = Phase + (%pm%<<4);\n"
+                + "int32_t p2 = Phase + (inlet_phase<<4);\n"
                 + "SINE2TINTERP(p2,r)\n"
-                + "%wave%= (r>>4);\n";
+                + "outlet_wave= (r>>4);\n";
         return o;
     }
 
     static AxoObject CreateSaw3Tilde() {
-        AxoObject o = new AxoObject("saw", "Bandwith limited saw wave oscillator");
+        AxoObject o = new AxoObject("saw", "saw wave oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.sLocalData = "  int32_t osc_p;\n"
                 + "  static const int blepvoices = 4;\n"
@@ -131,7 +131,7 @@ public class Osc extends gentools {
                 + "      oscp[j] = &blept[BLEPSIZE-1];"
                 + "   nextvoice = 0;";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "      MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  int16_t *lastblep = &blept[BLEPSIZE-1];\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
@@ -155,16 +155,16 @@ public class Osc extends gentools {
                 + "    sum = (16384*blepvoices)-sum - 8192;\n"
                 + "    uint32_t g = osc_p;\n"
                 + "    sum=(g>>5) + (sum<<13);\n"
-                + "    %wave%[j]=sum;\n"
+                + "    outlet_wave[j]=sum;\n"
                 + "  }";
         return o;
     }
 
     static AxoObject CreateSawSyncTilde() {
-        AxoObject o = new AxoObject("saw sync", "Bandwith limited saw wave oscillator with sync input");
+        AxoObject o = new AxoObject("saw sync", "Saw wave oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
-        o.inlets.add(new InletFrac32Buffer("sync", "sync input, resets oscillaotr phase on rising zero-crossing"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.inlets.add(new InletFrac32Buffer("sync", "sync, resets oscillator phase on rising zero-crossing"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.sLocalData = "  int32_t osc_p;\n"
                 + "  static const int blepvoices = 4;\n"
@@ -178,7 +178,7 @@ public class Osc extends gentools {
                 + "   nextvoice = 0;"
                 + "  i0 = 0;\n";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "      MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  int16_t *lastblep = &blept[BLEPSIZE-1];\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
@@ -210,34 +210,34 @@ public class Osc extends gentools {
                 + "    }\n"
                 + "    //sum = -sum;\n"
                 + "    uint32_t g = osc_p;\n"
-                + "    %wave%[j]=(g>>5)+sum-(1<<26);\n"
+                + "    outlet_wave[j]=(g>>5)+sum-(1<<26);\n"
                 + "  }";
         return o;
     }
 
     static AxoObject CreateSawTilde_cheap() {
-        AxoObject o = new AxoObject("saw cheap", "Non-bandwith limited saw wave oscillator, cheap sound");
+        AxoObject o = new AxoObject("saw cheap", "saw wave oscillator\nNon-bandwith limited, cheap sound");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, non-anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.includes = new HashSet<String>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
-                + "  MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "  MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
                 + "    osc_p+=freq;\n"
-                + "    %wave%[j] = (osc_p)>>5;\n"
+                + "    outlet_wave[j] = (osc_p)>>5;\n"
                 + "  }\n";
         return o;
     }
 
     static AxoObject CreateTriTilde() {
-        AxoObject o = new AxoObject("tri", "Bandwith limited triangle wave oscillator");
+        AxoObject o = new AxoObject("tri", "triangle oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "triangle wave, anti-aliased"));
 //        o.outlets.add(new OutletFrac32BufferBipolar("test", "triangle wave, anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.includes = new HashSet<String>();
         o.includes.add("./bltable.h");
@@ -253,7 +253,7 @@ public class Osc extends gentools {
                 + "    }\n"
                 + "   nextvoice = 0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
-                + "  MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "  MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  const int16_t *lastblep = &blt[BLEPSIZE-1];\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
@@ -284,38 +284,38 @@ public class Osc extends gentools {
                 + "      if (t>=lastblep) t=lastblep;\n"
                 + "      oscp[i]=t;\n"
                 + "    }\n"
-                + "    %wave%[j]=tri + (sum>>3);\n"
+                + "    outlet_wave[j]=tri + (sum>>3);\n"
                 + "  }\n";
         return o;
     }
 
     static AxoObject CreateTriTilde_cheap() {
-        AxoObject o = new AxoObject("tri cheap", "Non-bandwith limited triangle wave oscillator, cheap sound");
+        AxoObject o = new AxoObject("tri cheap", "triangle wave oscillator\nNon-bandwith limited, cheap sound");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "triangle wave, non-anti-aliased"));
 //        o.outlets.add(new OutletFrac32BufferBipolar("test", "triangle wave, anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.includes = new HashSet<String>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
-                + "  MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "  MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
                 + "    osc_p+=freq;\n"
                 + "    if (osc_p>0){\n"
-                + "       %wave%[j] = ((1<<30)-(osc_p))>>4;\n"
+                + "       outlet_wave[j] = ((1<<30)-(osc_p))>>4;\n"
                 + "    } else {\n"
-                + "       %wave%[j] = (osc_p+(1<<30))>>4;\n"
+                + "       outlet_wave[j] = (osc_p+(1<<30))>>4;\n"
                 + "    }\n"
                 + "}\n";
         return o;
     }
 
     static AxoObject CreateSquareTilde() {
-        AxoObject o = new AxoObject("square", "Bandwith limited square wave oscillator");
+        AxoObject o = new AxoObject("square", "square wave oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.sLocalData = "  int32_t osc_p;\n"
                 + "  static const int blepvoices = 8;\n"
@@ -326,7 +326,7 @@ public class Osc extends gentools {
                 + "      oscp[j] = &blept[BLEPSIZE-1];"
                 + "   nextvoice = 0;";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "      MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  int16_t *lastblep = &blept[BLEPSIZE-1];\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
@@ -348,38 +348,38 @@ public class Osc extends gentools {
                 + "      oscp[i]=t;\n"
                 + "    }\n"
                 + "    sum -= ((((nextvoice+1)&1)<<1)-1)<<13;\n"
-                + "    %wave%[j]=sum<<13;\n"
+                + "    outlet_wave[j]=sum<<13;\n"
                 + "  }";
         return o;
     }
 
     static AxoObject CreateSquareTilde_Cheap() {
-        AxoObject o = new AxoObject("square cheap", "Non-bandwith limited square wave oscillator, cheap sound");
+        AxoObject o = new AxoObject("square cheap", "square wave oscillator\nNon-bandwith limited, cheap sound");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, non-anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.includes = new HashSet<String>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
-                + "  MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "  MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
                 + "    osc_p+=freq;\n"
                 + "    if (osc_p>0){\n"
-                + "       %wave%[j] = (1<<26);\n"
+                + "       outlet_wave[j] = (1<<26);\n"
                 + "    } else {\n"
-                + "       %wave%[j] = -(1<<26);\n"
+                + "       outlet_wave[j] = -(1<<26);\n"
                 + "    }\n"
                 + "}\n";
         return o;
     }
 
     static AxoObject CreateSquareSyncTilde() {
-        AxoObject o = new AxoObject("square sync", "Bandwith limited square wave oscillator with sync input");
+        AxoObject o = new AxoObject("square sync", "square wave oscillator\nBandwith limited with sync input.\nSync resets oscillator phase on rising zero-crossing");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
-        o.inlets.add(new InletFrac32Buffer("sync", "sync input, resets oscillaotr phase on rising zero-crossing"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.inlets.add(new InletFrac32Buffer("sync", "sync, resets phase on rising zero-crossing"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.sLocalData = "  int32_t osc_p;\n"
                 + "  static const int blepvoices = 8;\n"
@@ -392,7 +392,7 @@ public class Osc extends gentools {
                 + "   nextvoice = 0;\n"
                 + "   i0 = 0;\n";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "      MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  int16_t *lastblep = &blept[BLEPSIZE-1];\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
@@ -423,16 +423,16 @@ public class Osc extends gentools {
                 + "      oscp[i]=t;\n"
                 + "    }\n"
                 + "    sum -= ((((nextvoice+1)&1)<<1)-1)<<13;\n"
-                + "    %wave%[j]=sum<<13;\n"
+                + "    outlet_wave[j]=sum<<13;\n"
                 + "  }";
         return o;
     }
 
     static AxoObject CreateSquare2Tilde() {
-        AxoObject o = new AxoObject("square2", "Bandwith limited square wave oscillator");
+        AxoObject o = new AxoObject("square2", "square wave oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, anti-aliased"));
         o.outlets.add(new OutletFrac32BufferBipolar("wave2", "square wave, anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.inlets.add(new InletInt32("shift", "shift"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.sLocalData = "  int32_t osc_p;\n"
@@ -444,7 +444,7 @@ public class Osc extends gentools {
                 + "      oscp[j] = &blept[BLEPSIZE-1];"
                 + "   nextvoice = 0;";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "      MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  int16_t *lastblep = &blept[BLEPSIZE-1];\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
@@ -465,16 +465,16 @@ public class Osc extends gentools {
                 + "      if (t>=lastblep) t=lastblep;\n"
                 + "      oscp[i]=t;\n"
                 + "    }\n"
-                + "    %wave%[j]=sum<<12;"
+                + "    outlet_wave[j]=sum<<12;"
                 + "    %wave2%[j] = (-((((nextvoice+1)&1)<<1)-1)<<14)<<12;\n"
                 + "  }";
         return o;
     }
 
     static AxoObject CreateSquare3Tilde() {
-        AxoObject o = new AxoObject("square3", "Bandwith limited square wave oscillator");
+        AxoObject o = new AxoObject("square3", "square wave oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.sLocalData = "  int32_t osc_p;\n"
                 + "  static const int blepvoices = 8;\n"
@@ -485,7 +485,7 @@ public class Osc extends gentools {
                 + "      oscp[j] = &blept[BLEPSIZE-1];"
                 + "   nextvoice = 0;";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "      MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  int16_t *lastblep = &blept[BLEPSIZE-1];\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
@@ -507,16 +507,16 @@ public class Osc extends gentools {
                 + "      oscp[i]=t;\n"
                 + "    }\n"
                 + "    sum -= ((((nextvoice+1)&1)<<1)-1)<<13;\n"
-                + "    %wave%[j]=sum<<13;\n"
+                + "    outlet_wave[j]=sum<<13;\n"
                 + "  }";
         return o;
     }
 
     static AxoObject CreatePWMTilde() {
-        AxoObject o = new AxoObject("pwm", "Bandwith limited pulse width modulation oscillator");
+        AxoObject o = new AxoObject("pwm", "pulse width modulation oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "pwm wave, anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
-        o.inlets.add(new InletFrac32Pos("pwm", "pwm ratio"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.inlets.add(new InletFrac32Pos("pw", "pulse width"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.sLocalData = "  int32_t osc_p;\n"
                 + "  static const int blepvoices = 8;\n"
@@ -528,7 +528,7 @@ public class Osc extends gentools {
                 + "      oscp[j] = &blept[BLEPSIZE-1];"
                 + "   nextvoice = 0;";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "      MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  int16_t *lastblep = &blept[BLEPSIZE-1];\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
@@ -545,15 +545,15 @@ public class Osc extends gentools {
                 + "      else if (freq)\n"
                 + "         x = (osc_p<<6)/freq;\n"
                 + "      oscp[nextvoice] = &blept[x];\n"
-                + "      pwmp = %pwm%;\n"
+                + "      pwmp = inlet_pw;\n"
                 + "    }\n"
                 + "    if ((osc_p-(pwmp<<4)>0)&&!(p-(pwmp<<4)>0)){   // dispatch\n"
                 + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
                 + "      int32_t x = 0;\n"
                 + "      if (freq>>24)\n"
-                + "        x = (osc_p-(%pwm%<<4))/(freq>>6);\n"
+                + "        x = (osc_p-(inlet_pw<<4))/(freq>>6);\n"
                 + "      else if (freq)\n"
-                + "        x = ((osc_p-(%pwm%<<4))<<6)/(freq);\n"
+                + "        x = ((osc_p-(inlet_pw<<4))<<6)/(freq);\n"
                 + "      oscp[nextvoice] = &blept[x];\n"
                 + "    }\n"
                 + "    for(i=0;i<blepvoices;i++){ // sample\n"
@@ -564,16 +564,16 @@ public class Osc extends gentools {
                 + "      oscp[i]=t;\n"
                 + "    }\n"
                 + "    sum -= ((((nextvoice+1)&1)<<1)-1)<<13;\n"
-                + "    %wave%[j]=sum<<13;\n"
+                + "    outlet_wave[j]=sum<<13;\n"
                 + "  }";
         return o;
     }
 
     static AxoObject CreatePWM2Tilde() {
-        AxoObject o = new AxoObject("pwm2", "Bandwith limited pulse width modulation oscillator");
+        AxoObject o = new AxoObject("pwm2", "pulse width modulation oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "pwm wave, anti-aliased"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation (semitones)"));
-        o.inlets.add(new InletFrac32Pos("pwm", "pwm ratio"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.inlets.add(new InletFrac32Pos("pw", "pulse width"));
         o.inlets.add(new InletInt32("shift", "shift"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.sLocalData = "  int32_t osc_p;\n"
@@ -586,7 +586,7 @@ public class Osc extends gentools {
                 + "      oscp[j] = &blept[BLEPSIZE-1];"
                 + "   nextvoice = 0;";
         o.sKRateCode = "      int32_t freq;\n"
-                + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "      MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "  int j;\n"
                 + "  int16_t *lastblep = &blept[BLEPSIZE-1];\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
@@ -599,11 +599,11 @@ public class Osc extends gentools {
                 + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
                 + "      int32_t x = osc_p/(freq>>6);\n"
                 + "      oscp[nextvoice] = &blept[x];\n"
-                + "      pwmp = %pwm%;\n"
+                + "      pwmp = inlet_pw;\n"
                 + "    }\n"
                 + "    if ((osc_p-(pwmp<<4)>0)&&!(p-(pwmp<<4)>0)){   // dispatch\n"
                 + "      nextvoice = (nextvoice+1)&(blepvoices-1);\n"
-                + "      int32_t x = (osc_p-(%pwm%<<4))/(freq>>6);\n"
+                + "      int32_t x = (osc_p-(inlet_pw<<4))/(freq>>6);\n"
                 + "      oscp[nextvoice] = &blept[x];\n"
                 + "    }\n"
                 + "    for(i=0;i<blepvoices;i++){ // sample\n"
@@ -615,70 +615,70 @@ public class Osc extends gentools {
                 + "    }\n"
                 + "    sum = sum*2;\n"
                 + "    sum -= ((((nextvoice+1)&1)<<1)-1)<<14;\n"
-                + "    %wave%[j]=sum<<12;\n"
+                + "    outlet_wave[j]=sum<<12;\n"
                 + "  }";
         return o;
     }
 
     static AxoObject CreateSRatePhasorOsc4() {
-        AxoObject o = new AxoObject("phasor", "phasor with logarithmic pitch plus linear frequency, k-rate pitch input");
+        AxoObject o = new AxoObject("phasor", "phasor\nsaw wave like oscillator");
         o.outlets.add(new OutletFrac32BufferPos("phasor", "phasor wave"));
-        o.inlets.add(new InletFrac32("pitchm", "pitch modulation"));
-        o.inlets.add(new InletFrac32Buffer("fm", "phase increment"));
+        o.inlets.add(new InletFrac32("pitch", "pitch"));
+        o.inlets.add(new InletFrac32Buffer("freq", "phase increment"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
 
         o.sLocalData = "uint32_t Phase;";
         o.sInitCode = "Phase = 0;";
         o.sKRateCode = "   uint32_t freq;\n"
-                + "   MTOFEXTENDED(%pitch% + %pitchm%,freq);\n";
-        o.sSRateCode = "Phase += (freq>>0) + %fm%;\n"
+                + "   MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n";
+        o.sSRateCode = "Phase += (freq>>0) + inlet_freq;\n"
                 + "   %phasor% = Phase>>5;\n";
         return o;
     }
 
     static AxoObject CreateSRatePhasor0() {
-        AxoObject o = new AxoObject("phasor lin", "phasor with linear frequency (goes all the way to 0)");
+        AxoObject o = new AxoObject("phasor lin", "phasor\nsaw like wave with linear frequency input(goes all the way to 0)");
         o.outlets.add(new OutletFrac32BufferPos("phasor", "phasor wave"));
-        o.inlets.add(new InletFrac32Bipolar("freqm", "frequency modulation"));
-        o.inlets.add(new InletFrac32BufferBipolar("pm", "phase modulation"));
+        o.inlets.add(new InletFrac32Bipolar("freq", "frequency"));
+        o.inlets.add(new InletFrac32BufferBipolar("phase", "phase"));
         o.params.add(new ParameterFrac32UMapFreq("freq"));
 
         o.sLocalData = "uint32_t Phase; ";
         o.sInitCode = "Phase = 0;";
-        o.sSRateCode = "Phase += (%freq% + %freqm%)<<4;\n"
+        o.sSRateCode = "Phase += (param_freq + inlet_freq)<<4;\n"
                 + "int32_t r;\n"
-                + "int32_t p2 = Phase + (%pm%<<4);\n"
+                + "int32_t p2 = Phase + (inlet_phase<<4);\n"
                 + "%phasor%= (p2>>4);\n";
         return o;
     }
 
     static AxoObject CreateSRatePhasor3q() {
-        AxoObject o = new AxoObject("phasor compl", "FM phasor, linear interpolated table, s-rate pitch input, 180 degree output");
+        AxoObject o = new AxoObject("phasor compl", "FM phasor\n 0 and 180 degree outputs");
         o.outlets.add(new OutletFrac32BufferPos("phasor0", "phasor wave"));
         o.outlets.add(new OutletFrac32BufferPos("phasor180", "phasor wave, 180 degrees shifted"));
-        o.inlets.add(new InletFrac32("pitchm", "phase increment"));
-        o.inlets.add(new InletFrac32Buffer("fm", "phase increment"));
+        o.inlets.add(new InletFrac32("pitch", "phase increment"));
+        o.inlets.add(new InletFrac32Buffer("freq", "phase increment"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
 
         o.sLocalData = "uint32_t Phase;";
         o.sInitCode = "Phase = 0;";
         o.sKRateCode = "   uint32_t freq;\n"
-                + "   MTOFEXTENDED(%pitch% + %pitchm%,freq);\n";
-        o.sSRateCode = "Phase += (freq>>0) + %fm%;\n"
+                + "   MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n";
+        o.sSRateCode = "Phase += (freq>>0) + inlet_freq;\n"
                 + "   %phasor0% = Phase>>5;\n"
                 + "   %phasor180% = (Phase+(1<<31))>>5;\n";
         return o;
     }
 
     static AxoObject CreateRandTilde() {
-        AxoObject o = new AxoObject("uniform", "uniform distributed (white) noise. Range -64..64");
+        AxoObject o = new AxoObject("uniform", "uniform distributed (white) noise\nRange -64..64");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "white noise"));
-        o.sSRateCode = "%wave%= (int32_t)(GenerateRandomNumber())>>4;";
+        o.sSRateCode = "outlet_wave= (int32_t)(GenerateRandomNumber())>>4;";
         return o;
     }
 
     static AxoObject CreateGaussTilde() {
-        AxoObject o = new AxoObject("gaussian", "pseudo gaussian distributed (white) noise. Range -64..64");
+        AxoObject o = new AxoObject("gaussian", "pseudo gaussian distributed (white) noise\nRange -64..64");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "white noise"));
         o.sLocalData = "uint32_t seeds[8];\n";
 // seeds from http://www.random.org/cgi-bin/randbyte?nbytes=32&format=h
@@ -696,7 +696,7 @@ public class Osc extends gentools {
                 + "   seeds[i] = (seeds[i] * 196314165) + 907633515;"
                 + "   n += ((int32_t)(seeds[i]))>>7;\n"
                 + "}\n"
-                + "%wave%= n;";
+                + "outlet_wave= n;";
         return o;
     }
 
@@ -711,7 +711,7 @@ public class Osc extends gentools {
      6
      */
     static AxoObject CreatePinkNoiseTilde() {
-        AxoObject o = new AxoObject("pink", "Cheap almost pink noise over 7 octaves. Range -64..64");
+        AxoObject o = new AxoObject("pink", "Cheap almost pink noise\nover 7 octaves. Range -64..64");
         o.outlets.add(new OutletFrac32BufferBipolar("out", "pink noise"));
         o.sLocalData = "static const int noct = 7;\n"
                 + "int32_t obuf[noct];\n"
@@ -747,7 +747,7 @@ public class Osc extends gentools {
     }
 
     static AxoObject CreatePinkNoise2Tilde() {
-        AxoObject o = new AxoObject("pink oct", "Cheap almost pink noise. Range -64..64. Configureable number of octaves.");
+        AxoObject o = new AxoObject("pink oct", "Cheap almost pink noise\nRange -64..64. Configureable number of octaves.");
         String mentries[] = {
             "1",
             "2",
@@ -792,7 +792,7 @@ public class Osc extends gentools {
     }
 
     static AxoObject CreatePinkNoise() {
-        AxoObject o = new AxoObject("pink", "Cheap almost pink noise over 7 octaves. Range -64..64");
+        AxoObject o = new AxoObject("pink", "Cheap almost pink noise\nover 7 octaves. Range -64..64");
         o.outlets.add(new OutletFrac32Bipolar("out", "pink noise"));
         o.sLocalData = "static const int noct = 7;\n"
                 + "int32_t obuf[noct];\n"
@@ -828,7 +828,7 @@ public class Osc extends gentools {
     }
 
     static AxoObject CreatePinkNoise2() {
-        AxoObject o = new AxoObject("pink oct", "Cheap almost pink noise. Range -64..64. Configureable number of octaves.");
+        AxoObject o = new AxoObject("pink oct", "Cheap almost pink noise\nRange -64..64. Configureable number of octaves.");
         String mentries[] = {
             "1",
             "2",
@@ -873,7 +873,7 @@ public class Osc extends gentools {
     }
 
     static AxoObject Create_lfsr() {
-        AxoObject o = new AxoObject("lfsr~", "linear feedback shift register cyclic pattern, audio rate");
+        AxoObject o = new AxoObject("lfsr", "linear feedback shift register cyclic pattern\naudio rate");
         o.outlets.add(new OutletFrac32BufferBipolar("out", "lfs pattern"));
         String mentries[] = {"0x9", "0xC", "0x12",
             "0x14",

@@ -22,7 +22,7 @@
    }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="xfade" uuid="cfac82d503dc55fd2e3f90d8d05283610532b8c4" sha="cef28e7c80ff99f372e17140ba1db8c07ce8d2f5">
+   <obj.normal id="xfade" uuid="cfac82d503dc55fd2e3f90d8d05283610532b8c4" sha="8707ff69830477dee45ce9254818bbe3bd42450e">
       <upgradeSha>e301a25211e0b6899b8b54c25e7ac5d9f404eda0</upgradeSha>
       <sDescription>crossfade between two inputs</sDescription>
       <author>Johannes Taelman</author>
@@ -39,13 +39,13 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[   {
-      int64_t a = (int64_t)inlet_i2[buffer_index] * inlet_c[buffer_index];
-      a += (int64_t)inlet_i1[buffer_index] * ((128<<20)-inlet_c[buffer_index]);
-      outlet_o[buffer_index]= a>>27;
+      int64_t a = (int64_t)inlet_i2 * inlet_c;
+      a += (int64_t)inlet_i1 * ((128<<20)-inlet_c);
+      outlet_o= a>>27;
    }
 ]]></code.srate>
    </obj.normal>
-   <obj.normal id="xfade~" uuid="8d77edf30e3870d3e7de1eacbe59a3b5bcb26322" sha="bcd063a15ab879dfedea907d97a82df8fe1501f4">
+   <obj.normal id="xfade" uuid="375dc91d218e96cdc9cbc7e92adb48f705ef701a" sha="46677d62cd61f18b6996ffad67cd94b74cd98f2d">
       <upgradeSha>7c7bb910e14c9ba3614f189bb924c86ca0a86890</upgradeSha>
       <sDescription>crossfade between two inputs</sDescription>
       <author>Johannes Taelman</author>
@@ -64,9 +64,9 @@
       <code.krate><![CDATA[   int32_t ccompl = ((128<<20)-inlet_c);
 ]]></code.krate>
       <code.srate><![CDATA[   {
-      int64_t a = (int64_t)inlet_i2[buffer_index] * inlet_c;
-      a += (int64_t)inlet_i1[buffer_index] * ccompl;
-      outlet_o[buffer_index]= a>>27;
+      int64_t a = (int64_t)inlet_i2 * inlet_c;
+      a += (int64_t)inlet_i1 * ccompl;
+      outlet_o= a>>27;
    }
 ]]></code.srate>
    </obj.normal>

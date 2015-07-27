@@ -17,7 +17,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="inmux4" sha="868ef20dcb0c47514ee473fd70c3e42cf81d71b8" name="inmux41" x="182" y="126">
+   <obj type="mux/mux 4" sha="868ef20dcb0c47514ee473fd70c3e42cf81d71b8" name="inmux41" x="182" y="126">
       <params/>
       <attribs/>
    </obj>
@@ -39,32 +39,38 @@
    </obj>
    <nets>
       <net>
-         <source name="c1 out"/>
-         <dest name="inmux41 i0"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="inmux41" inlet="i0"/>
       </net>
       <net>
-         <source name="c2 out"/>
-         <dest name="inmux41 i1"/>
+         <source obj="c2" outlet="out"/>
+         <dest obj="inmux41" inlet="i1"/>
       </net>
       <net>
-         <source name="c3 out"/>
-         <dest name="inmux41 i2"/>
+         <source obj="c3" outlet="out"/>
+         <dest obj="inmux41" inlet="i2"/>
       </net>
       <net>
-         <source name="c4 out"/>
-         <dest name="inmux41 i3"/>
+         <source obj="c4" outlet="out"/>
+         <dest obj="inmux41" inlet="i3"/>
       </net>
       <net>
-         <source name="inmux41 o"/>
-         <dest name="displayU1 in"/>
+         <source obj="inmux41" outlet="o"/>
+         <dest obj="displayU1" inlet="in"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="inmux41 s"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="inmux41" inlet="s"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>590</width>
+      <height>590</height>
+   </windowPos>
 </patch-1.0>

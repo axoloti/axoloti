@@ -12,38 +12,14 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="v0">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="v1">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="v2">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="v3">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="v4">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="v5">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="v6">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="v7">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="v0"/>
+         <frac32.u.map name="v1"/>
+         <frac32.u.map name="v2"/>
+         <frac32.u.map name="v3"/>
+         <frac32.u.map name="v4"/>
+         <frac32.u.map name="v5"/>
+         <frac32.u.map name="v6"/>
+         <frac32.u.map name="v7"/>
       </params>
       <attribs/>
       <code.krate><![CDATA[   switch(inlet_s>0?inlet_s:0) {

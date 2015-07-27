@@ -50,6 +50,7 @@ import org.simpleframework.xml.Root;
 /**
  *
  * @author Johannes Taelman
+ * @param <dt> data type
  */
 @Root(name = "param")
 public abstract class ParameterInstance<dt extends DataType> extends JPanel implements ActionListener {
@@ -439,10 +440,15 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
         });
 
         JMenu m_preset = new JMenu("Preset");
-        new AssignPresetMenuItems(this, m_preset);
+        // AssignPresetMenuItems, does stuff in ctor
+        AssignPresetMenuItems assignPresetMenuItems = new AssignPresetMenuItems(this, m_preset);
         m.add(m_preset);
     }
 
+    /**
+     *
+     * @return control component
+     */
     abstract public ACtrlComponent getControlComponent();
 
     abstract public boolean handleAdjustment();

@@ -1,5 +1,5 @@
 <patch-1.0>
-   <comment type="patch/comment" name="using the LED objects will disable standard led patterns until the patch stops!" x="14" y="14"/>
+   <comment type="patch/comment" x="14" y="14" text="using the LED objects will disable standard led patterns until the patch stops!"/>
    <obj type="ctrl/toggle" sha="f5742cc9eee76fae90a4e570c34596dd327b6c28" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="toggle_1" x="14" y="42">
       <params>
          <bool32.tgl name="b" value="1"/>
@@ -22,12 +22,12 @@
    </obj>
    <nets>
       <net>
-         <source name="toggle_1 o"/>
-         <dest name="led1_1 in"/>
+         <source obj="toggle_1" outlet="o"/>
+         <dest obj="led1_1" inlet="in"/>
       </net>
       <net>
-         <source name="toggle_2 o"/>
-         <dest name="led2_1 in"/>
+         <source obj="toggle_2" outlet="o"/>
+         <dest obj="led2_1" inlet="in"/>
       </net>
    </nets>
    <settings>

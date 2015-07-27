@@ -87,7 +87,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="demux 3" uuid="b6dd09966fdb43e521f7735128607ba41ea78af3" sha="aa55a7db90dd77cb420f706902a39d92b1b1008a">
+   <obj.normal id="demux 3" uuid="b6dd09966fdb43e521f7735128607ba41ea78af3" sha="c05f0df5505b7a0826b74c1917415d109cd7c024">
       <upgradeSha>129c7ffdc1dc207405715ead5330b62739fe0b56</upgradeSha>
       <sDescription>Demultiplexer. Connects inlet i to outlet number s. Other outlets copy their corresponding default inlets.</sDescription>
       <author>Johannes Taelman</author>
@@ -110,24 +110,24 @@
       <attribs/>
       <code.srate><![CDATA[   switch(inlet_s>0?inlet_s:0){
       case 0: 
-         outlet_o0[buffer_index] = inlet_i[buffer_index];
-         outlet_o1[buffer_index] = inlet_d1[buffer_index];
-         outlet_o2[buffer_index] = inlet_d2[buffer_index];
+         outlet_o0 = inlet_i;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
          break;
       case 1: 
-         outlet_o0[buffer_index] = inlet_d0[buffer_index];
-         outlet_o1[buffer_index] = inlet_i[buffer_index];
-         outlet_o2[buffer_index] = inlet_d2[buffer_index];
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_i;
+         outlet_o2 = inlet_d2;
          break;
       case 2: 
-         outlet_o0[buffer_index] = inlet_d0[buffer_index];
-         outlet_o1[buffer_index] = inlet_d1[buffer_index];
-         outlet_o2[buffer_index] = inlet_i[buffer_index];
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_i;
          break;
       default:
-         outlet_o0[buffer_index] = inlet_d0[buffer_index];
-         outlet_o1[buffer_index] = inlet_d1[buffer_index];
-         outlet_o2[buffer_index] = inlet_d2[buffer_index];
+         outlet_o0 = inlet_d0;
+         outlet_o1 = inlet_d1;
+         outlet_o2 = inlet_d2;
 }
 ]]></code.srate>
    </obj.normal>

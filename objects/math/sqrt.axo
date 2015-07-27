@@ -21,7 +21,7 @@ aif = _VSQRTF(aif);
 outlet_out= (int)aif;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="sqrt" uuid="1b69138b600d63436014c7927b9fc1d60a413331" sha="1f50b30547915b6440679880743fa2ae2bda05e5">
+   <obj.normal id="sqrt" uuid="1b69138b600d63436014c7927b9fc1d60a413331" sha="73217c1176b361e9b5799fc316151dc2d51cb5bc">
       <upgradeSha>4f48bc4fdb1725807a923dfb6e48225df40a992c</upgradeSha>
       <sDescription>square root (of absolute value), y = 8*sqrt(x)</sDescription>
       <author>Johannes Taelman</author>
@@ -36,11 +36,11 @@ outlet_out= (int)aif;
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[int32_t ai = inlet_in[buffer_index]>0?inlet_in[buffer_index]:-inlet_in[buffer_index];
+      <code.srate><![CDATA[int32_t ai = inlet_in>0?inlet_in:-inlet_in;
 float aif = ai;
 aif *= (1<<27);
 aif = _VSQRTF(aif);
-outlet_out[buffer_index]= (int)aif;
+outlet_out= (int)aif;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

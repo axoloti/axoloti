@@ -1,13 +1,14 @@
 <objdefs>
-   <obj.normal id="phasor compl" uuid="bdd623d618e38f2f40bc68b36346239756548637" sha="15eb8142a979333baac42c771ed195ffe60fce05">
-      <upgradeSha>bb3797f6808c1fa0ccf714c27361878a3fd8be29</upgradeSha>
-      <sDescription>FM phasor, linear interpolated table, s-rate pitch input, 180 degree output</sDescription>
+   <obj.normal id="phasor compl" uuid="11940ece0e29f3fae0d3c8e1fdabd63cacac5b48" sha="c95d1332c224aad738fb4504cb00706af8221028">
+      <upgradeSha>24751add22a3d3dc6160191dbf57a9a57e5fe19c</upgradeSha>
+      <sDescription>FM phasor
+ 0 and 180 degree outputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>osc.axh</helpPatch>
       <inlets>
-         <frac32 name="pitchm" description="phase increment"/>
-         <frac32buffer name="fm" description="phase increment"/>
+         <frac32 name="pitch" description="phase increment"/>
+         <frac32buffer name="freq" description="phase increment"/>
       </inlets>
       <outlets>
          <frac32buffer.positive name="phasor0" description="phasor wave"/>
@@ -15,20 +16,17 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.pitch name="pitch" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.pitch>
+         <frac32.s.map.pitch name="pitch" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[uint32_t Phase;]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
       <code.krate><![CDATA[   uint32_t freq;
-   MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
+   MTOFEXTENDED(param_pitch + inlet_pitch,freq);
 ]]></code.krate>
-      <code.srate><![CDATA[Phase += (freq>>0) + inlet_fm[buffer_index];
-   outlet_phasor0[buffer_index] = Phase>>5;
-   outlet_phasor180[buffer_index] = (Phase+(1<<31))>>5;
+      <code.srate><![CDATA[Phase += (freq>>0) + inlet_freq;
+   outlet_phasor0 = Phase>>5;
+   outlet_phasor180 = (Phase+(1<<31))>>5;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

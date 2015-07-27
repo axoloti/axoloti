@@ -2,6 +2,7 @@
 ## Axoloti
 #################
 
+*.log
 firmware/build/*
 firmware/flasher/flasher_build/*
 firmware/.dep/*
@@ -28,6 +29,7 @@ patch/xpatch.map
 /dist/
 hs_err_*.log
 axoloti_osx.zip
+private_key.*
 
 #Version file
 src/main/java/axoloti/Version.java

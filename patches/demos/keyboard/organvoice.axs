@@ -3,14 +3,14 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="ahd_1" x="182" y="0">
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="ahd_1" x="182" y="0">
       <params>
-         <frac32.u.map name="a" onParent="true" value="6.5"/>
-         <frac32.u.map name="d" onParent="true" value="37.0"/>
+         <frac32.s.map name="a" onParent="true" value="6.5"/>
+         <frac32.s.map name="d" onParent="true" value="37.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="p" x="322" y="28">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="p" x="322" y="28">
       <params>
          <frac32.s.map name="d" onParent="true" value="-14.0"/>
       </params>
@@ -24,7 +24,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="sine_1" x="126" y="126">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="sine_1" x="126" y="126">
       <params>
          <frac32.s.map name="pitch" value="-11.989999771118164"/>
       </params>
@@ -42,7 +42,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="sine_2" x="126" y="238">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="sine_2" x="126" y="238">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -66,7 +66,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="sine_3" x="126" y="350">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="sine_3" x="126" y="350">
       <params>
          <frac32.s.map name="pitch" value="11.989999771118164"/>
       </params>
@@ -95,78 +95,78 @@
    </obj>
    <nets>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="p trig"/>
-         <dest name="ahd_1 gate"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="p" inlet="trig"/>
+         <dest obj="ahd_1" inlet="gate"/>
       </net>
       <net>
-         <source name="sine_1 wave"/>
-         <dest name="mix_1 in1"/>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="mix_1" inlet="in1"/>
       </net>
       <net>
-         <source name="sine_2 wave"/>
-         <dest name="mix_1 in2"/>
+         <source obj="sine_2" outlet="wave"/>
+         <dest obj="mix_1" inlet="in2"/>
       </net>
       <net>
-         <source name="sine_3 wave"/>
-         <dest name="pm2 in"/>
-         <dest name="mix_1 in3"/>
+         <source obj="sine_3" outlet="wave"/>
+         <dest obj="pm2" inlet="in"/>
+         <dest obj="mix_1" inlet="in3"/>
       </net>
       <net>
-         <source name="pm2 out"/>
-         <dest name="sine_2 pm"/>
+         <source obj="pm2" outlet="out"/>
+         <dest obj="sine_2" inlet="phase"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="sine_1 pitchm"/>
-         <dest name="sine_2 pitchm"/>
-         <dest name="sine_3 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="sine_1" inlet="pitch"/>
+         <dest obj="sine_2" inlet="pitch"/>
+         <dest obj="sine_3" inlet="pitch"/>
       </net>
       <net>
-         <source name="mix_1 out"/>
-         <dest name="vca_1 a"/>
-         <dest name="pm1 in"/>
-         <dest name="pm3 in"/>
+         <source obj="mix_1" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
+         <dest obj="pm1" inlet="in"/>
+         <dest obj="pm3" inlet="in"/>
       </net>
       <net>
-         <source name="pm1 out"/>
-         <dest name="sine_1 pm"/>
+         <source obj="pm1" outlet="out"/>
+         <dest obj="sine_1" inlet="phase"/>
       </net>
       <net>
-         <source name="pm3 out"/>
-         <dest name="sine_3 pm"/>
+         <source obj="pm3" outlet="out"/>
+         <dest obj="sine_3" inlet="phase"/>
       </net>
       <net>
-         <source name="p env"/>
-         <dest name="div_1 in"/>
+         <source obj="p" outlet="env"/>
+         <dest obj="div_1" inlet="in"/>
       </net>
       <net>
-         <source name="div_1 out"/>
-         <dest name="pressure outlet"/>
+         <source obj="div_1" outlet="out"/>
+         <dest obj="pressure" inlet="outlet"/>
       </net>
       <net>
-         <source name="ahd_1 env"/>
-         <dest name="-1 in1"/>
+         <source obj="ahd_1" outlet="env"/>
+         <dest obj="-1" inlet="in1"/>
       </net>
       <net>
-         <source name="-1 out"/>
-         <dest name="satp1 in"/>
+         <source obj="-1" outlet="out"/>
+         <dest obj="satp1" inlet="in"/>
       </net>
       <net>
-         <source name="pressure_in inlet"/>
-         <dest name="-1 in2"/>
+         <source obj="pressure_in" outlet="inlet"/>
+         <dest obj="-1" inlet="in2"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="out outlet"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
       <net>
-         <source name="satp1 out"/>
-         <dest name="vca_1 v"/>
+         <source obj="satp1" outlet="out"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="noise inlet"/>
-         <dest name="mix_1 in4"/>
+         <source obj="noise" outlet="inlet"/>
+         <dest obj="mix_1" inlet="in4"/>
       </net>
    </nets>
    <settings>
@@ -177,7 +177,12 @@
       <NPresetEntries>4</NPresetEntries>
       <NModulationSources>4</NModulationSources>
       <NModulationTargetsPerSource>4</NModulationTargetsPerSource>
-      <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>828</width>
+      <height>786</height>
+   </windowPos>
 </patch-1.0>

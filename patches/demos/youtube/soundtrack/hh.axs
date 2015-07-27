@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_1" x="126" y="14">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="noise.uniform_1" x="126" y="14">
       <params/>
       <attribs/>
    </obj>
@@ -10,7 +10,7 @@
          <spinner attributeName="endNote" value="127"/>
       </attribs>
    </obj>
-   <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="env.decay.m_1" x="126" y="70">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="env.decay.m_1" x="126" y="70">
       <params>
          <frac32.s.map name="d" MidiCC="1" value="-39.5"/>
       </params>
@@ -24,7 +24,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/bp svf m" sha="561e56d24bf5c702564c7d043fda6d0d3003deec" name="bp" x="392" y="70">
+   <obj type="filter/bp svf m" sha="24097930d951f375e0839b70f065d71a782d8b23" name="bp" x="392" y="70">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="23.5"/>
@@ -37,36 +37,36 @@
    </obj>
    <nets>
       <net>
-         <source name="noise.uniform_1 wave"/>
-         <dest name="gain.vca~_1 a"/>
+         <source obj="noise.uniform_1" outlet="wave"/>
+         <dest obj="gain.vca~_1" inlet="a"/>
       </net>
       <net>
-         <source name="keyb_1 gate"/>
-         <dest name="env.decay.m_1 trig"/>
+         <source obj="keyb_1" outlet="gate"/>
+         <dest obj="env.decay.m_1" inlet="trig"/>
       </net>
       <net>
-         <source name="keyb_1 velocity"/>
-         <dest name="soft_1 a"/>
+         <source obj="keyb_1" outlet="velocity"/>
+         <dest obj="soft_1" inlet="a"/>
       </net>
       <net>
-         <source name="gain.vca~_1 o"/>
-         <dest name="bp in"/>
+         <source obj="gain.vca~_1" outlet="o"/>
+         <dest obj="bp" inlet="in"/>
       </net>
       <net>
-         <source name="bp out"/>
-         <dest name="out outlet"/>
+         <source obj="bp" outlet="out"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
       <net>
-         <source name="keyb_1 note"/>
-         <dest name="bp pitchm"/>
+         <source obj="keyb_1" outlet="note"/>
+         <dest obj="bp" inlet="pitch"/>
       </net>
       <net>
-         <source name="env.decay.m_1 env"/>
-         <dest name="soft_1 b"/>
+         <source obj="env.decay.m_1" outlet="env"/>
+         <dest obj="soft_1" inlet="b"/>
       </net>
       <net>
-         <source name="soft_1 result"/>
-         <dest name="gain.vca~_1 v"/>
+         <source obj="soft_1" outlet="result"/>
+         <dest obj="gain.vca~_1" inlet="v"/>
       </net>
    </nets>
    <settings>
@@ -77,7 +77,12 @@
       <NPresetEntries>32</NPresetEntries>
       <NModulationSources>8</NModulationSources>
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
-      <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>814</width>
+      <height>400</height>
+   </windowPos>
 </patch-1.0>

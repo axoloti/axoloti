@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="fdn4" uuid="b7812f987aee4aa5d4db9db316eb993f993259ae" sha="322488612f181dcbea337b35cd0490b34010af82">
+   <obj.normal id="fdn4" uuid="b7812f987aee4aa5d4db9db316eb993f993259ae" sha="da683dcf60f569b7354b1e5bf0d8e3a05c73faef">
       <upgradeSha>13d669964bda5b57297a930109b40a6bc2f548e4</upgradeSha>
       <sDescription>Feedback delay network with 4 delay lines. High quality 32bit.</sDescription>
       <author>Johannes Taelman</author>
@@ -19,10 +19,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="g" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="g" noLabel="true"/>
       </params>
       <attribs>
          <spinner name="d1" MinValue="2" MaxValue="4096" DefaultValue="128"/>
@@ -50,10 +47,10 @@ d4p = 0;
 ]]></code.init>
       <code.krate><![CDATA[int32_t g2 = 755299123+param_g;
 ]]></code.krate>
-      <code.srate><![CDATA[int32_t i1 = inlet_in1[buffer_index] + d1d[d1p];
-int32_t i2 = inlet_in2[buffer_index] + d2d[d2p];
-int32_t i3 = inlet_in3[buffer_index] + d3d[d3p];
-int32_t i4 = inlet_in4[buffer_index] + d4d[d4p];
+      <code.srate><![CDATA[int32_t i1 = inlet_in1 + d1d[d1p];
+int32_t i2 = inlet_in2 + d2d[d2p];
+int32_t i3 = inlet_in3 + d3d[d3p];
+int32_t i4 = inlet_in4 + d4d[d4p];
 int32_t t1 = i2 + i3;
 int32_t t2 = -i1 - i4;
 int32_t t3 = i1 - i4;
@@ -74,10 +71,10 @@ if (d1p == attr_d1) d1p = 0;
 if (d2p == attr_d2) d2p = 0;
 if (d3p == attr_d3) d3p = 0;
 if (d4p == attr_d4) d4p = 0;
-outlet_out1[buffer_index] = o1;
-outlet_out2[buffer_index] = o2;
-outlet_out3[buffer_index] = o3;
-outlet_out4[buffer_index] = o4;
+outlet_out1 = o1;
+outlet_out2 = o2;
+outlet_out3 = o3;
+outlet_out4 = o4;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

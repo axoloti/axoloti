@@ -136,8 +136,8 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U {
                 + PExName(vprefix) + ".pfunction(&" + PExName(vprefix) + ");\n"
                 + "  SetKVP_IPVP(&" + StructAccces + KVPName(vprefix) + ",ObjectKvpRoot, \"" + n + "\" ,"
                 + "&" + PExName(vprefix) + ","
-                + (((ParameterFrac32UMap) parameter).MinValue.getRaw()) + ","
-                + (((ParameterFrac32UMap) parameter).MaxValue.getRaw()) + ");\n"
+                + " 0,"
+                + " 1<<27);\n"
                 + "  KVP_RegisterObject(&" + StructAccces + KVPName(vprefix) + ");\n";
         if (modulators != null) {
             for (Modulation m : modulators) {

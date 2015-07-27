@@ -1,8 +1,8 @@
 <patch-1.0>
-   <comment type="patch/comment" name="unary ops, fractional" x="28" y="14"/>
-   <comment type="patch/comment" name="unary ops, integer" x="350" y="14"/>
-   <comment type="patch/comment" name="binary ops, fractional" x="714" y="14"/>
-   <comment type="patch/comment" name="binary ops, integer" x="1036" y="14"/>
+   <comment type="patch/comment" x="28" y="14" text="unary ops, fractional"/>
+   <comment type="patch/comment" x="350" y="14" text="unary ops, integer"/>
+   <comment type="patch/comment" x="714" y="14" text="binary ops, fractional"/>
+   <comment type="patch/comment" x="1036" y="14" text="binary ops, integer"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="c1" x="28" y="56">
       <params>
          <frac32.s.map name="value" value="27.0"/>
@@ -245,170 +245,176 @@
    </obj>
    <nets>
       <net>
-         <source name="c1 out"/>
-         <dest name="abs1 in"/>
-         <dest name="double1 in"/>
-         <dest name="half1 in"/>
-         <dest name="inv1 in"/>
-         <dest name="minus1 a"/>
-         <dest name="plus1 a"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="abs1" inlet="in"/>
+         <dest obj="double1" inlet="in"/>
+         <dest obj="half1" inlet="in"/>
+         <dest obj="inv1" inlet="in"/>
+         <dest obj="minus1" inlet="a"/>
+         <dest obj="plus1" inlet="a"/>
       </net>
       <net>
-         <source name="abs1 out"/>
-         <dest name="displayS1 in"/>
+         <source obj="abs1" outlet="out"/>
+         <dest obj="displayS1" inlet="in"/>
       </net>
       <net>
-         <source name="double1 out"/>
-         <dest name="displayS2 in"/>
+         <source obj="double1" outlet="out"/>
+         <dest obj="displayS2" inlet="in"/>
       </net>
       <net>
-         <source name="half1 out"/>
-         <dest name="displayS3 in"/>
+         <source obj="half1" outlet="out"/>
+         <dest obj="displayS3" inlet="in"/>
       </net>
       <net>
-         <source name="inv1 out"/>
-         <dest name="displayS4 in"/>
+         <source obj="inv1" outlet="out"/>
+         <dest obj="displayS4" inlet="in"/>
       </net>
       <net>
-         <source name="minus1 result"/>
-         <dest name="displayS5 in"/>
+         <source obj="minus1" outlet="result"/>
+         <dest obj="displayS5" inlet="in"/>
       </net>
       <net>
-         <source name="plus1 result"/>
-         <dest name="displayS6 in"/>
+         <source obj="plus1" outlet="result"/>
+         <dest obj="displayS6" inlet="in"/>
       </net>
       <net>
-         <source name="c2 out"/>
-         <dest name="toInt1 i"/>
+         <source obj="c2" outlet="out"/>
+         <dest obj="toInt1" inlet="i"/>
       </net>
       <net>
-         <source name="toInt1 o"/>
-         <dest name="abs2 in"/>
-         <dest name="double2 in"/>
-         <dest name="half2 in"/>
-         <dest name="inv2 in"/>
-         <dest name="minus12 a"/>
-         <dest name="plus12 a"/>
+         <source obj="toInt1" outlet="o"/>
+         <dest obj="abs2" inlet="in"/>
+         <dest obj="double2" inlet="in"/>
+         <dest obj="half2" inlet="in"/>
+         <dest obj="inv2" inlet="in"/>
+         <dest obj="minus12" inlet="a"/>
+         <dest obj="plus12" inlet="a"/>
       </net>
       <net>
-         <source name="abs2 out"/>
-         <dest name="d1 in"/>
+         <source obj="abs2" outlet="out"/>
+         <dest obj="d1" inlet="in"/>
       </net>
       <net>
-         <source name="double2 out"/>
-         <dest name="d2 in"/>
+         <source obj="double2" outlet="out"/>
+         <dest obj="d2" inlet="in"/>
       </net>
       <net>
-         <source name="half2 out"/>
-         <dest name="d3 in"/>
+         <source obj="half2" outlet="out"/>
+         <dest obj="d3" inlet="in"/>
       </net>
       <net>
-         <source name="inv2 out"/>
-         <dest name="d4 in"/>
+         <source obj="inv2" outlet="out"/>
+         <dest obj="d4" inlet="in"/>
       </net>
       <net>
-         <source name="minus12 result"/>
-         <dest name="d5 in"/>
+         <source obj="minus12" outlet="result"/>
+         <dest obj="d5" inlet="in"/>
       </net>
       <net>
-         <source name="plus12 result"/>
-         <dest name="d6 in"/>
+         <source obj="plus12" outlet="result"/>
+         <dest obj="d6" inlet="in"/>
       </net>
       <net>
-         <source name="c3 out"/>
-         <dest name="+1 in1"/>
-         <dest name="*1 a"/>
-         <dest name="-1 in1"/>
-         <dest name="max1 in1"/>
-         <dest name="min1 in1"/>
-         <dest name="&gt;1 in1"/>
+         <source obj="c3" outlet="out"/>
+         <dest obj="+1" inlet="in1"/>
+         <dest obj="*1" inlet="a"/>
+         <dest obj="-1" inlet="in1"/>
+         <dest obj="max1" inlet="in1"/>
+         <dest obj="min1" inlet="in1"/>
+         <dest obj="&gt;1" inlet="in1"/>
       </net>
       <net>
-         <source name="c4 out"/>
-         <dest name="+1 in2"/>
-         <dest name="*1 b"/>
-         <dest name="-1 in2"/>
-         <dest name="max1 in2"/>
-         <dest name="min1 in2"/>
-         <dest name="&gt;1 in2"/>
+         <source obj="c4" outlet="out"/>
+         <dest obj="+1" inlet="in2"/>
+         <dest obj="*1" inlet="b"/>
+         <dest obj="-1" inlet="in2"/>
+         <dest obj="max1" inlet="in2"/>
+         <dest obj="min1" inlet="in2"/>
+         <dest obj="&gt;1" inlet="in2"/>
       </net>
       <net>
-         <source name="&gt;1 out"/>
-         <dest name="dispb1 in"/>
+         <source obj="&gt;1" outlet="out"/>
+         <dest obj="dispb1" inlet="in"/>
       </net>
       <net>
-         <source name="c3_ out"/>
-         <dest name="toInt1_ i"/>
+         <source obj="c3_" outlet="out"/>
+         <dest obj="toInt1_" inlet="i"/>
       </net>
       <net>
-         <source name="c4_ out"/>
-         <dest name="toInt1__ i"/>
+         <source obj="c4_" outlet="out"/>
+         <dest obj="toInt1__" inlet="i"/>
       </net>
       <net>
-         <source name="toInt1_ o"/>
-         <dest name="+1_ in1"/>
-         <dest name="-1_ in1"/>
-         <dest name="&gt;2 in1"/>
-         <dest name="max2 in1"/>
-         <dest name="min2 in1"/>
-         <dest name="*1_ a"/>
+         <source obj="toInt1_" outlet="o"/>
+         <dest obj="+1_" inlet="in1"/>
+         <dest obj="-1_" inlet="in1"/>
+         <dest obj="&gt;2" inlet="in1"/>
+         <dest obj="max2" inlet="in1"/>
+         <dest obj="min2" inlet="in1"/>
+         <dest obj="*1_" inlet="a"/>
       </net>
       <net>
-         <source name="toInt1__ o"/>
-         <dest name="+1_ in2"/>
-         <dest name="&gt;2 in2"/>
-         <dest name="max2 in2"/>
-         <dest name="min2 in2"/>
-         <dest name="-1_ in2"/>
-         <dest name="*1_ b"/>
+         <source obj="toInt1__" outlet="o"/>
+         <dest obj="+1_" inlet="in2"/>
+         <dest obj="&gt;2" inlet="in2"/>
+         <dest obj="max2" inlet="in2"/>
+         <dest obj="min2" inlet="in2"/>
+         <dest obj="-1_" inlet="in2"/>
+         <dest obj="*1_" inlet="b"/>
       </net>
       <net>
-         <source name="+1_ out"/>
-         <dest name="d1_ in"/>
+         <source obj="+1_" outlet="out"/>
+         <dest obj="d1_" inlet="in"/>
       </net>
       <net>
-         <source name="*1_ result"/>
-         <dest name="d2_ in"/>
+         <source obj="*1_" outlet="result"/>
+         <dest obj="d2_" inlet="in"/>
       </net>
       <net>
-         <source name="-1_ out"/>
-         <dest name="d3_ in"/>
+         <source obj="-1_" outlet="out"/>
+         <dest obj="d3_" inlet="in"/>
       </net>
       <net>
-         <source name="max2 out"/>
-         <dest name="d4_ in"/>
+         <source obj="max2" outlet="out"/>
+         <dest obj="d4_" inlet="in"/>
       </net>
       <net>
-         <source name="min2 out"/>
-         <dest name="d5_ in"/>
+         <source obj="min2" outlet="out"/>
+         <dest obj="d5_" inlet="in"/>
       </net>
       <net>
-         <source name="+1 out"/>
-         <dest name="displayS1_ in"/>
+         <source obj="+1" outlet="out"/>
+         <dest obj="displayS1_" inlet="in"/>
       </net>
       <net>
-         <source name="*1 result"/>
-         <dest name="displayS2_ in"/>
+         <source obj="*1" outlet="result"/>
+         <dest obj="displayS2_" inlet="in"/>
       </net>
       <net>
-         <source name="-1 out"/>
-         <dest name="displayS3_ in"/>
+         <source obj="-1" outlet="out"/>
+         <dest obj="displayS3_" inlet="in"/>
       </net>
       <net>
-         <source name="max1 out"/>
-         <dest name="displayS4_ in"/>
+         <source obj="max1" outlet="out"/>
+         <dest obj="displayS4_" inlet="in"/>
       </net>
       <net>
-         <source name="min1 out"/>
-         <dest name="displayS5_ in"/>
+         <source obj="min1" outlet="out"/>
+         <dest obj="displayS5_" inlet="in"/>
       </net>
       <net>
-         <source name="&gt;2 out"/>
-         <dest name="dispb1_ in"/>
+         <source obj="&gt;2" outlet="out"/>
+         <dest obj="dispb1_" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>1626</width>
+      <height>786</height>
+   </windowPos>
 </patch-1.0>

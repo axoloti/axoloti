@@ -1,6 +1,6 @@
 <patch-1.0>
-   <comment type="patch/comment" name="Simple voice for a MPE synth. simply load in parent patch, set voices and connect to audio" x="56" y="14"/>
-   <obj type="osc/saw" sha="1a5088484533a3633e3eb849de47b478f1599369" name="saw_1" x="546" y="70">
+   <comment type="patch/comment" x="56" y="14" text="Simple voice for a MPE synth. simply load in parent patch, set voices and connect to audio"/>
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" name="saw_1" x="546" y="70">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -16,7 +16,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp m" sha="649887a8ccb34e5928d77426b8db79bed3e57f0f" name="lp_1" x="784" y="196">
+   <obj type="filter/lp m" sha="c2224dc682842eae1af4496f3f94a6afc1525ee4" name="lp_1" x="784" y="196">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="0.0"/>
          <frac32.u.map name="reso" onParent="true" value="0.0"/>
@@ -43,7 +43,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/square" sha="24c5025966e821443cc8e104039bc46f72de3607" name="sub_osc" x="546" y="294">
+   <obj type="osc/square" sha="7cccf8a95bf312ecc084f11f532cf5fda00b8c58" name="sub_osc" x="546" y="294">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="0.0"/>
       </params>
@@ -51,50 +51,50 @@
    </obj>
    <nets>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="outlet_1 outlet"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="outlet_1" inlet="outlet"/>
       </net>
       <net>
-         <source name="keyb_1 pitch"/>
-         <dest name="saw_1 pitchm"/>
-         <dest name="+_1 in1"/>
+         <source obj="keyb_1" outlet="pitch"/>
+         <dest obj="saw_1" inlet="pitch"/>
+         <dest obj="+_1" inlet="in1"/>
       </net>
       <net>
-         <source name="keyb_1 pressure"/>
-         <dest name="vca_1 v"/>
+         <source obj="keyb_1" outlet="pressure"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="keyb_1 timbre"/>
-         <dest name="div_1 in"/>
-         <dest name="lp_1 pitchm"/>
+         <source obj="keyb_1" outlet="timbre"/>
+         <dest obj="div_1" inlet="in"/>
+         <dest obj="lp_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="lp_1 out"/>
-         <dest name="vca_1 a"/>
+         <source obj="lp_1" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="div_1 out"/>
-         <dest name="div_2 in"/>
+         <source obj="div_1" outlet="out"/>
+         <dest obj="div_2" inlet="in"/>
       </net>
       <net>
-         <source name="div_2 out"/>
-         <dest name="+_1 in2"/>
+         <source obj="div_2" outlet="out"/>
+         <dest obj="+_1" inlet="in2"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="sub_osc_mix bus_in"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="sub_osc_mix" inlet="bus_in"/>
       </net>
       <net>
-         <source name="sub_osc wave"/>
-         <dest name="sub_osc_mix in1"/>
+         <source obj="sub_osc" outlet="wave"/>
+         <dest obj="sub_osc_mix" inlet="in1"/>
       </net>
       <net>
-         <source name="sub_osc_mix out"/>
-         <dest name="lp_1 in"/>
+         <source obj="sub_osc_mix" outlet="out"/>
+         <dest obj="lp_1" inlet="in"/>
       </net>
       <net>
-         <source name="+_1 out"/>
-         <dest name="sub_osc pitchm"/>
+         <source obj="+_1" outlet="out"/>
+         <dest obj="sub_osc" inlet="pitch"/>
       </net>
    </nets>
    <settings>

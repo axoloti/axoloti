@@ -1,13 +1,15 @@
 <objdefs>
-   <obj.normal id="record" uuid="507d38953d4b68b70fac5f2888679573c3345ded" sha="4a41ef902c9bb0430bb847a97d8598699d133b5d">
-      <upgradeSha>a11cd48fc41465d055106b87f9d341f6750abf93</upgradeSha>
-      <sDescription>record audio into table, records from the beginning till the end of the table</sDescription>
+   <obj.normal id="record" uuid="2f8909f3691be093f0b8cf6532d4acff2dcb1a9f" sha="4acba2d788e3cee3e25db7b5319282026027ac69">
+      <upgradeSha>7b9dddb5e5bdacc37c7b1641c124fd9280773b5a</upgradeSha>
+      <sDescription>record audio into table, starting from position</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>table.axh</helpPatch>
       <inlets>
          <frac32buffer name="wave" description="wave"/>
-         <bool32.rising name="trig" description="trigger"/>
+         <frac32.positive name="pos" description="start position in table"/>
+         <bool32.rising name="start" description="start playback"/>
+         <bool32.rising name="stop" description="stop playback"/>
       </inlets>
       <outlets/>
       <displays/>
@@ -15,23 +17,30 @@
       <attribs>
          <objref name="table"/>
       </attribs>
-      <code.declaration><![CDATA[   int ntrig;
+      <code.declaration><![CDATA[   int pstart;
+   int pstop;
    int pos;
 ]]></code.declaration>
-      <code.init><![CDATA[pos = -1;
+      <code.init><![CDATA[pos = 0;
+pstart = 0;
+pstop = 1;
 ]]></code.init>
-      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {
-      ntrig=1;
-      pos = 0;
-   }
-   else if (!(inlet_trig>0)) ntrig=0;
-     int32_t i;
-   if (pos>=0) {
-       if ((pos+BUFSIZE)< attr_table.LENGTH)
-          for(i=0;i<BUFSIZE;i++){
-              attr_table.array[pos++] = __SSAT(inlet_wave[i],28)>>attr_table.GAIN;
-          }
-       else pos = -1;
-   }]]></code.krate>
+      <code.krate><![CDATA[   if ((inlet_start>0) && !pstart) {
+      pstart = 1;
+      pstop = 0;
+      uint32_t asat = __USAT(inlet_pos,27);
+      pos = asat>>(27-attr_table.LENGTHPOW);
+  } else if (!(inlet_start>0)) {
+      pstart = 0;
+  }
+  if ((inlet_stop>0) && !pstop) {
+      pstop = 1;
+      pstart = 0;
+  } 
+]]></code.krate>
+      <code.srate><![CDATA[   if (!pstop)  {
+       if (pos< attr_table.LENGTH)
+              attr_table.array[pos++] = __SSAT(inlet_wave,28)>>attr_table.GAIN;
+   }]]></code.srate>
    </obj.normal>
 </objdefs>

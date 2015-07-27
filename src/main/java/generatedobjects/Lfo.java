@@ -44,16 +44,16 @@ public class Lfo extends gentools {
         WriteAxoObject(catName, CreateSaw3());
         WriteAxoObject(catName, CreateSawDown());
         WriteAxoObject(catName, CreateSawDown2());
-        WriteAxoObject(catName, CreateTaptempo());
+        //WriteAxoObject(catName, CreateTaptempo());
     }
 
     static AxoObject CreateSineLFO() {
         AxoObject o = new AxoObject("sine lin", "Cheapest sine wave LFO, non-interpolated table");
         o.outlets.add(new OutletFrac32Bipolar("out", "sine wave LFO, cheap and bad quality"));
-        o.inlets.add(new InletFrac32("frequency", "phase increment"));
+        o.inlets.add(new InletFrac32("freq", "phase increment"));
         o.sLocalData = "uint32_t Phase;";
         o.sInitCode = "Phase = 0;";
-        o.sKRateCode = "Phase += %frequency%;\n"
+        o.sKRateCode = "Phase += inlet_freq;\n"
                 + "%out%= sinet[Phase>>22]<<12;";
         return o;
     }
@@ -61,13 +61,13 @@ public class Lfo extends gentools {
     static AxoObject CreateKRateSineOsc1() {
         AxoObject o = new AxoObject("sine", "sine wave LFO, linear interpolated table, pitch input");
         o.outlets.add(new OutletFrac32Bipolar("wave", "sine wave"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapLFOPitch("pitch"));
         o.sLocalData = "uint32_t Phase;";
         o.sInitCode = "Phase = 0;";
         o.sKRateCode = "   {"
                 + "      int32_t freq;\n"
-                + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "      MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "      Phase += freq>>2;\n"
                 + "      int32_t r;\n"
                 + "      SINE2TINTERP(Phase,r)\n"
@@ -79,7 +79,7 @@ public class Lfo extends gentools {
     static AxoObject CreateKRateSineOscReset() {
         AxoObject o = new AxoObject("sine r", "sine wave LFO, linear interpolated table, pitch input, reset input");
         o.outlets.add(new OutletFrac32Bipolar("wave", "sine wave"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.inlets.add(new InletBool32Rising("reset", "reset phase"));
         o.inlets.add(new InletFrac32Bipolar("phase", "phase for reset"));
         o.params.add(new ParameterFrac32SMapLFOPitch("pitch"));
@@ -94,7 +94,7 @@ public class Lfo extends gentools {
                 + "     }"
                 + "   {"
                 + "      int32_t freq;\n"
-                + "      MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "      MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "      Phase += freq>>2;\n"
                 + "      int32_t r;\n"
                 + "      SINE2TINTERP(Phase,r)\n"
@@ -106,7 +106,7 @@ public class Lfo extends gentools {
     static AxoObject CreateSquare() {
         AxoObject o = new AxoObject("square", "square wave LFO, boolean output, frequency input");
         o.outlets.add(new OutletBool32("wave", "square wave"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.inlets.add(new InletBool32Rising("reset", "reset phase"));
         o.params.add(new ParameterFrac32SMapLFOPitch("pitch"));
         o.sLocalData = "int32_t Phase;\n"
@@ -120,7 +120,7 @@ public class Lfo extends gentools {
                 + "      } else {\n"
                 + "         if (!%reset%) r = 1;\n"
                 + "         int32_t freq;\n"
-                + "         MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "         MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "         Phase += freq>>2;\n"
                 + "      }\n"
                 + "      %wave%= (Phase>0)?1:0;\n"
@@ -153,7 +153,7 @@ public class Lfo extends gentools {
     static AxoObject CreateSaw2() {
         AxoObject o = new AxoObject("saw", "saw wave LFO, rising slope, pitch input");
         o.outlets.add(new OutletFrac32Pos("wave", "saw wave"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.inlets.add(new InletBool32Rising("reset", "reset phase"));
         o.params.add(new ParameterFrac32SMapLFOPitch("pitch"));
         o.sLocalData = "uint32_t Phase;\n"
@@ -167,7 +167,7 @@ public class Lfo extends gentools {
                 + "      } else {\n"
                 + "         if (!%reset%) r = 1;\n"
                 + "         int32_t freq;\n"
-                + "         MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "         MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "         Phase += freq>>2;\n"
                 + "      }\n"
                 + "      %wave%= (Phase>>5);\n"
@@ -179,7 +179,7 @@ public class Lfo extends gentools {
         AxoObject o = new AxoObject("saw r", "saw wave LFO, rising slope, pitch input, phase reset");
         o.outlets.add(new OutletFrac32Pos("wave", "saw wave"));
         o.outlets.add(new OutletBool32Pulse("sync", "sync output"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.inlets.add(new InletBool32Rising("reset", "reset phase"));
         o.params.add(new ParameterFrac32SMapLFOPitch("pitch"));
         o.sLocalData = "uint32_t Phase;\n"
@@ -195,7 +195,7 @@ public class Lfo extends gentools {
                 + "      } else {\n"
                 + "         if (!%reset%) r = 1;\n"
                 + "         int32_t freq;\n"
-                + "         MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "         MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "         Phase += freq>>2;\n"
                 + "      }\n"
                 + "      %sync% = (((int32_t)Phase)>=0)&&(pPhase<0);\n"
@@ -230,7 +230,7 @@ public class Lfo extends gentools {
     static AxoObject CreateSawDown2() {
         AxoObject o = new AxoObject("saw down", "saw wave LFO, falling slope, pitch input");
         o.outlets.add(new OutletFrac32Pos("wave", "saw wave"));
-        o.inlets.add(new InletFrac32Bipolar("pitchm", "pitch modulation"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.inlets.add(new InletBool32Rising("reset", "reset phase"));
         o.params.add(new ParameterFrac32SMapLFOPitch("pitch"));
         o.sLocalData = "uint32_t Phase;\n"
@@ -244,7 +244,7 @@ public class Lfo extends gentools {
                 + "      } else {\n"
                 + "         if (!%reset%) r = 1;\n"
                 + "         int32_t freq;\n"
-                + "         MTOFEXTENDED(%pitch% + %pitchm%,freq);\n"
+                + "         MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
                 + "         Phase -= freq>>2;\n"
                 + "      }\n"
                 + "      %wave%= (Phase>>5);\n"
@@ -252,6 +252,7 @@ public class Lfo extends gentools {
         return o;
     }
 
+    //broken
     static AxoObject CreateTaptempo() {
         AxoObject o = new AxoObject("taptempo", "taptempo follower");
         o.inlets.add(new InletBool32Rising("tap", "tap tap tap"));

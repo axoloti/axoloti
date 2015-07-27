@@ -1,11 +1,11 @@
 <patch-1.0>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="14">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="26.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1_" x="14" y="98">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1_" x="14" y="98">
       <params>
          <frac32.s.map name="pitch" value="27.0"/>
       </params>
@@ -19,13 +19,13 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="14" y="210">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="14" y="210">
       <params>
          <frac32.s.map name="pitch" value="4.199999809265137"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1_" x="14" y="322">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1_" x="14" y="322">
       <params>
          <frac32.s.map name="pitch" value="4.21999979019165"/>
       </params>
@@ -41,32 +41,38 @@
    </obj>
    <nets>
       <net>
-         <source name="samplehold1 out"/>
-         <dest name="kscope_128s1 in"/>
+         <source obj="samplehold1" outlet="out"/>
+         <dest obj="kscope_128s1" inlet="in"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="samplehold1 in"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="samplehold1" inlet="in"/>
       </net>
       <net>
-         <source name="osc1_ wave"/>
-         <dest name="samplehold1 s_h"/>
+         <source obj="osc1_" outlet="wave"/>
+         <dest obj="samplehold1" inlet="s_h"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="samplehold1_ in"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="samplehold1_" inlet="in"/>
       </net>
       <net>
-         <source name="osc_1_ wave"/>
-         <dest name="samplehold1_ s_h"/>
+         <source obj="osc_1_" outlet="wave"/>
+         <dest obj="samplehold1_" inlet="s_h"/>
       </net>
       <net>
-         <source name="samplehold1_ out"/>
-         <dest name="scope_128u_trig_v21 in"/>
+         <source obj="samplehold1_" outlet="out"/>
+         <dest obj="scope_128u_trig_v21" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>604</width>
+      <height>632</height>
+   </windowPos>
 </patch-1.0>

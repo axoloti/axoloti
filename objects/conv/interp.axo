@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" sha="367cb2b27c590b2d256df90c9877c51d87f725ee">
+   <obj.normal id="interp" uuid="d68c1a8709d8b55e3de8715d727ec0a2d8569d9a" sha="4b93f3e0f08b85924e07feabcdfe53fc11aa6a48">
       <upgradeSha>5a9175b8d44d830756d1599a86b4a6a49813a19b</upgradeSha>
       <sDescription>linear interpolation from k- to s-rate</sDescription>
       <author>Johannes Taelman</author>
@@ -20,7 +20,7 @@
    int32_t _i = _prev;
    _prev = inlet_i;
 ]]></code.krate>
-      <code.srate><![CDATA[   outlet_o[buffer_index] = _i;
+      <code.srate><![CDATA[   outlet_o = _i;
    _i += _step;
 ]]></code.srate>
    </obj.normal>

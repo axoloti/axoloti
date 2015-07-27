@@ -11,10 +11,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="value" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="value" noLabel="true"/>
       </params>
       <attribs/>
       <code.krate><![CDATA[outlet_out= param_value;

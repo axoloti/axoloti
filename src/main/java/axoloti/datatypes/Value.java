@@ -20,6 +20,7 @@ package axoloti.datatypes;
 /**
  *
  * @author Johannes Taelman
+ * @param <dt> data type
  */
 public abstract class Value<dt extends DataType> implements Comparable<dt> {
 

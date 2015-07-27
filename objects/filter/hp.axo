@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="hp" uuid="7829b56456e975f1d89bda2ad1c7ad678080a73b" sha="de47923046728f9eb4d6e6cbf26314bf518174fc">
-      <upgradeSha>2c3219893ab8ef42b46eb323284a077f0ba55d54</upgradeSha>
+      <upgradeSha>1bb35c88ec47652989c81ea3a857f65f44b8db6b</upgradeSha>
       <sDescription>2-pole resonant band-pass filter (biquad)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -13,14 +13,8 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.pitch name="pitch">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.pitch>
-         <frac32.u.map.filterq name="reso">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.filterq>
+         <frac32.s.map.pitch name="pitch"/>
+         <frac32.u.map.filterq name="reso"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[biquad_state bs;biquad_coefficients bc;

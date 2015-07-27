@@ -3,9 +3,9 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="the oscillator now follows the keyboard note" x="28" y="140"/>
-   <comment type="patch/comment" name="use the keyboard window (window menu) to play!" x="28" y="154"/>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="28" y="196">
+   <comment type="patch/comment" x="28" y="140" text="the oscillator now follows the keyboard note"/>
+   <comment type="patch/comment" x="28" y="154" text="use the keyboard window (window menu) to play!"/>
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc_1" x="28" y="196">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -15,32 +15,32 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="multiply with gate to make it only sound when a key is pressed." x="434" y="280"/>
-   <comment type="patch/comment" name="the oscillator frequency dial adjusts the transposition from normal tuning" x="28" y="322"/>
-   <comment type="patch/comment" name="the indicator does not follow the piano keyboard!" x="28" y="336"/>
+   <comment type="patch/comment" x="434" y="280" text="multiply with gate to make it only sound when a key is pressed."/>
+   <comment type="patch/comment" x="28" y="322" text="the oscillator frequency dial adjusts the transposition from normal tuning"/>
+   <comment type="patch/comment" x="28" y="336" text="the indicator does not follow the piano keyboard!"/>
    <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="28" y="392">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="Open next tutorial -&gt;" x="322" y="518"/>
+   <comment type="patch/comment" x="322" y="518" text="Open next tutorial -&gt;"/>
    <hyperlink type="patch/hyperlink" name="04_beating.axp" x="448" y="518"/>
    <nets>
       <net>
-         <source name="*1 result"/>
-         <dest name="dac~_1 right"/>
-         <dest name="dac~_1 left"/>
+         <source obj="*1" outlet="result"/>
+         <dest obj="dac~_1" inlet="right"/>
+         <dest obj="dac~_1" inlet="left"/>
       </net>
       <net>
-         <source name="keyb1 note"/>
-         <dest name="osc_1 pitchm"/>
+         <source obj="keyb1" outlet="note"/>
+         <dest obj="osc_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="osc_1 wave"/>
-         <dest name="*1 a"/>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="*1" inlet="a"/>
       </net>
       <net>
-         <source name="keyb1 gate"/>
-         <dest name="*1 b"/>
+         <source obj="keyb1" outlet="gate"/>
+         <dest obj="*1" inlet="b"/>
       </net>
    </nets>
    <settings>

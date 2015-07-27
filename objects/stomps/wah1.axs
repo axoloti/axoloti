@@ -25,7 +25,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="flt" x="154" y="126">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="flt" x="154" y="126">
       <params>
          <frac32.s.map name="pitch" value="-13.0"/>
          <frac32.u.map name="reso" onParent="true" value="58.5"/>
@@ -42,38 +42,44 @@
    </obj>
    <nets>
       <net>
-         <source name="freq out"/>
-         <dest name="smooth_1 in"/>
+         <source obj="freq" outlet="out"/>
+         <dest obj="smooth_1" inlet="in"/>
       </net>
       <net>
-         <source name="smooth_1 out"/>
-         <dest name="flt pitchm"/>
+         <source obj="smooth_1" outlet="out"/>
+         <dest obj="flt" inlet="pitch"/>
       </net>
       <net>
-         <source name="rectifier_2 out"/>
-         <dest name="flt in"/>
+         <source obj="rectifier_2" outlet="out"/>
+         <dest obj="flt" inlet="in"/>
       </net>
       <net>
-         <source name="in inlet"/>
-         <dest name="rectifier_2 in"/>
-         <dest name="mux_1 i1"/>
+         <source obj="in" outlet="inlet"/>
+         <dest obj="rectifier_2" inlet="in"/>
+         <dest obj="mux_1" inlet="i1"/>
       </net>
       <net>
-         <source name="flt out"/>
-         <dest name="mux_1 i2"/>
+         <source obj="flt" outlet="out"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
       <net>
-         <source name="mux_1 o"/>
-         <dest name="out outlet"/>
+         <source obj="mux_1" outlet="o"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
       <net>
-         <source name="on o"/>
-         <dest name="mux_1 s"/>
+         <source obj="on" outlet="o"/>
+         <dest obj="mux_1" inlet="s"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>660</width>
+      <height>436</height>
+   </windowPos>
    <helpPatch>wah1.axh</helpPatch>
 </patch-1.0>

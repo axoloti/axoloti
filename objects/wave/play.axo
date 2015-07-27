@@ -1,52 +1,64 @@
 <objdefs>
-   <obj.normal id="play" sha="980e4758c67d9edc2c677779056cfbb16f77649b">
-      <sDescription>streaming playback of a mono .wav file from sdcard (IN DEVELOPMENT)</sDescription>
+   <obj.normal id="play" uuid="2e6265136dbaaf4d885a669520546de2e3306819" sha="e3de36b8d0f8cce60996ae9130adc960c34e9324">
+      <upgradeSha>68357f2db7e09bf1250419b560bee8b31558a7f7</upgradeSha>
+      <sDescription>streaming playback of a mono .wav file from sdcard (testing)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets>
          <frac32 name="pos" description="position"/>
-         <bool32.risingfalling name="trig" description="trigger"/>
+         <bool32.rising name="start" description="trigger"/>
+         <bool32.rising name="stop" description="trigger"/>
+         <charptr32 name="filename" description="file name"/>
       </inlets>
       <outlets>
-         <frac32buffer name="o" description="output" SumBuffer="false"/>
+         <frac32buffer name="out" description="output"/>
       </outlets>
       <displays/>
       <params/>
-      <attribs>
-         <table name="wavefile"/>
-      </attribs>
+      <attribs/>
       <includes>
          <include>./streamer.h</include>
          <include>chibios/ext/fatfs/src/ff.h</include>
       </includes>
       <code.declaration><![CDATA[    WORKING_AREA(waThreadSD, 512);
    sdReadFilePingpong *stream;
-   int ntrig;
+   int starttrig;
+   int stoptrig;
 ]]></code.declaration>
-      <code.init><![CDATA[static sdReadFilePingpong s __attribute__ ((section (".rodata")));
-stream = &s;
+      <code.init><![CDATA[static sdReadFilePingpong s __attribute__ ((section (".data")));
+// unmap from aliased memory for DMA
+stream = (sdReadFilePingpong *)(0x20000000 | (int)&s);
 stream->pingpong = CLOSED;
 stream->doSeek = 0;
-ntrig = 0;
+starttrig = 0;
+stoptrig = 0;
 stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),
-                    HIGHPRIO, ThreadSD, (void *)stream);sdOpenStream(stream,"%wavefile%");
+                    HIGHPRIO, ThreadSD, (void *)stream);
 ]]></code.init>
       <code.dispose><![CDATA[sdStopStreamer(stream);
 ]]></code.dispose>
-      <code.krate><![CDATA[      int16_t *p = sdReadStream(stream);
-      int32_t i;
-      if (p && ntrig)
-        for (i = 0; i < BUFSIZE; i++)
-          %o%[i] = (*(p++)) << 10;
-      else
-        for (i = 0; i < BUFSIZE; i++)
-          %o%[i] = 0;
-      if ((%trig% > 0) && !ntrig) {
-        sdSeekStream(stream,((%pos%) >> 4) << 2);
-        ntrig = 1;
-      }
-      if (!(%trig% > 0) && ntrig)
-        ntrig = 0;
+      <code.krate><![CDATA[     int32_t i;
+     if ((inlet_start>0) && !starttrig) {
+        sdOpenStream(stream,inlet_filename);
+        sdSeekStream(stream,((inlet_pos)>>4)<<2);
+        starttrig=1;
+     } else if ((!(inlet_start>0)) && starttrig) {        starttrig=0;
+     }
+     if ((inlet_stop>0) && !stoptrig) {
+        sdCloseStream(stream);
+        stoptrig=1;
+     } else if ((!(inlet_stop>0)) && stoptrig) {        stoptrig=0;
+     }
+     int16_t *p = 0;
+     int16_t *q = 0;
+     p=sdReadStream(stream);
+     if (p) {
+        for(i=0;i<BUFSIZE;i++){
+           outlet_out[i] = (*(p++))<<10;
+        }
+     }
+     else 
+        for(i=0;i<BUFSIZE;i++) outlet_out[i] = 0;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

@@ -16,7 +16,7 @@
       <attribs/>
       <code.krate><![CDATA[outlet_out= __SSAT(inlet_in,25)<<3;]]></code.krate>
    </obj.normal>
-   <obj.normal id="muls 8" uuid="910989ec4cbbf3e9ac50429a9f27dc336f63ddd3" sha="a9b274e823ca35589701e73e7460f4355042fb6f">
+   <obj.normal id="muls 8" uuid="910989ec4cbbf3e9ac50429a9f27dc336f63ddd3" sha="759c05cdfd9ce649b7aadb2ceb42a02af957a69e">
       <upgradeSha>3b876043fb7aa6dff276407826cba102606eb254</upgradeSha>
       <sDescription>saturated multiply by 8</sDescription>
       <author>Johannes Taelman</author>
@@ -31,6 +31,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[outlet_out[buffer_index]= __SSAT(inlet_in[buffer_index],25)<<3;]]></code.srate>
+      <code.srate><![CDATA[outlet_out= __SSAT(inlet_in,25)<<3;]]></code.srate>
    </obj.normal>
 </objdefs>

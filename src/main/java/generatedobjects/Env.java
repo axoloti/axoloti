@@ -24,17 +24,13 @@ import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Bipolar;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32Bipolar;
 import axoloti.outlets.OutletFrac32Pos;
 import axoloti.outlets.OutletInt32Pos;
-import axoloti.parameters.ParameterFrac32SMap;
 import axoloti.parameters.ParameterFrac32SMapKDTimeExp;
 import axoloti.parameters.ParameterFrac32SMapKLineTimeExp;
 import axoloti.parameters.ParameterFrac32SMapKLineTimeExp2;
 import axoloti.parameters.ParameterFrac32UMap;
 import axoloti.parameters.ParameterFrac32UMapKDecayTime;
-import axoloti.parameters.ParameterFrac32UMapKDecayTimeReverse;
-import axoloti.parameters.ParameterFrac32UMapKLineTimeReverse;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**
@@ -50,6 +46,7 @@ public class Env extends gentools {
         WriteAxoObject(catName, Create_envadsr());
         WriteAxoObject(catName, Create_envad());
         WriteAxoObject(catName, Create_envd_new());
+        WriteAxoObject(catName, Create_envd_m_new());
 
         WriteAxoObject(catName, Create_envhd());
         WriteAxoObject(catName, Create_envahd());
@@ -81,8 +78,31 @@ public class Env extends gentools {
         o.sInitCode = "val = 0;\n"
                 + "ntrig = 0;\n";
         o.sKRateCode = "   if ((%trig%>0) && !ntrig) { val =1<<27; ntrig=1;}\n"
-                + "   else { if (!(%trig%>0)) ntrig=0; val = ___SMMUL(val, %d%)<<1;}\n"
+                + "   else { if (!(%trig%>0)) ntrig=0; val = ___SMMUL(val, param_d)<<1;}\n"
                 + "   %env% = val;\n";
+        return o;
+    }
+
+    static AxoObject Create_envd_m_new() {
+        AxoObject o = new AxoObject("d m", "decay envelope with modulation input");
+        o.inlets.add(new InletBool32Rising("trig", "trigger"));
+        o.inlets.add(new InletFrac32("d", "decay time"));
+        o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
+        o.params.add(new ParameterFrac32SMapKLineTimeExp("d"));
+        o.sLocalData = "int32_t val;\n"
+                + "int ntrig;\n";
+        o.sInitCode = "val = 0;\n"
+                + "ntrig = 0;\n";
+        o.sKRateCode = "   if ((inlet_trig>0) && !ntrig) { val =1<<27; ntrig=1;}\n"
+                + "   else { \n"
+                + "      if (!(inlet_trig>0)) ntrig=0; \n"
+                + "      int32_t in = - inlet_d - param_d;\n"
+                + "      int32_t c;\n"
+                + "      MTOFEXTENDED(in, c);\n"
+                + "      c = 0x7FFFFFFF - (c >> 2);\n"
+                + "      val = ___SMMUL(val, c)<<1;\n"
+                + "   }\n"
+                + "   outlet_env = val;\n";
         return o;
     }
 
@@ -94,7 +114,7 @@ public class Env extends gentools {
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "val = 0;\n";
         o.sKRateCode = "   if (%trig%>0) val =1<<27;\n"
-                + "   else val = ___SMMUL(val, %d%)<<1;\n"
+                + "   else val = ___SMMUL(val, param_d)<<1;\n"
                 + "   %env% = val;\n";
         return o;
     }
@@ -115,16 +135,16 @@ public class Env extends gentools {
 
     static AxoObject Create_envahd2() {
         AxoObject o = new AxoObject("ahd m", "attack hold decay envelope with modulation inputs");
-        o.inlets.add(new InletFrac32("am", "attack time modulation"));
-        o.inlets.add(new InletFrac32("dm", "decay time modulation"));
+        o.inlets.add(new InletFrac32("a", "attack time"));
+        o.inlets.add(new InletFrac32("d", "decay time"));
         o.inlets.add(new InletBool32RisingFalling("gate", "gate"));
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
         o.params.add(new ParameterFrac32UMapKDecayTime("a"));
         o.params.add(new ParameterFrac32UMapKDecayTime("d"));
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "   val = 0;\n";
-        o.sKRateCode = "   if (%gate%>0) val = ___SMMLA((1<<27)-val,(1<<26)-(%a%>>1)-(%am%>>1),val);\n"
-                + "   else val = ___SMMLA(val,(-1<<26)+(%d%>>1)+(%dm%>>1),val);\n"
+        o.sKRateCode = "   if (%gate%>0) val = ___SMMLA((1<<27)-val,(1<<26)-(param_a>>1)-(inlet_a>>1),val);\n"
+                + "   else val = ___SMMLA(val,(-1<<26)+(param_d>>1)+(inlet_d>>1),val);\n"
                 + "   %env%= val;\n";
         return o;
     }
@@ -154,13 +174,13 @@ public class Env extends gentools {
                 + "if (stage == 0){\n"
                 + "   val = ___SMMUL(val,%r%)<<1;\n"
                 + "} else if (stage == 1){\n"
-                + "   val = val + %a%;\n"
+                + "   val = val + param_a;\n"
                 + "   if (val<0) {\n"
                 + "      val =0x7FFFFFFF;\n"
                 + "      stage = 2;\n"
                 + "   }\n"
                 + "} else if (stage == 2) {\n"
-                + "   val = (%s%<<4) + (___SMMUL(val - (%s%<<4),%d%)<<1);\n"
+                + "   val = (%s%<<4) + (___SMMUL(val - (%s%<<4),param_d)<<1);\n"
                 + "}\n"
                 + "\n"
                 + "%env% = val>>4;";
@@ -216,7 +236,7 @@ public class Env extends gentools {
                 + "  if (!(%trig% > 0))\n"
                 + "    ntrig = 0;\n"
                 + "  int32_t t;\n"
-                + "  MTOF(-%d%,t);\n"
+                + "  MTOF(-param_d,t);\n"
                 + "  val -= t>>6;\n"
                 + "  if (val < 0)\n"
                 + "    val = 0;\n"
@@ -228,7 +248,7 @@ public class Env extends gentools {
     static AxoObject Create_envdlinmx() {
         AxoObject o = new AxoObject("d lin m", "decay envelope, linear ramp, modulation input");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
-        o.inlets.add(new InletFrac32Bipolar("dm", "d modulation"));
+        o.inlets.add(new InletFrac32Bipolar("d", "decay time"));
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
         o.params.add(new ParameterFrac32SMapKLineTimeExp("d"));
         o.sLocalData = "int32_t val;\n"
@@ -243,7 +263,7 @@ public class Env extends gentools {
                 + "  if (!(%trig% > 0))\n"
                 + "    ntrig = 0;\n"
                 + "  int32_t t;\n"
-                + "  int32_t dt = %d% + %dm%;\n"
+                + "  int32_t dt = param_d + inlet_d;\n"
                 + "  MTOF(-dt,t);\n"
                 + "  val -= t>>6;\n"
                 + "  if (val < 0)\n"
@@ -265,7 +285,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else {\n"
                 + "  int32_t t;\n"
-                + "  MTOF(-%d%,t);\n"
+                + "  MTOF(-param_d,t);\n"
                 + "  val -= t>>6;\n"
                 + "  if (val < 0)\n"
                 + "    val = 0;\n"
@@ -277,7 +297,7 @@ public class Env extends gentools {
     static AxoObject Create_envhdlinmx() {
         AxoObject o = new AxoObject("hd lin m", "hold/decay envelope, linear ramp, modulation input extended range");
         o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
-        o.inlets.add(new InletFrac32Bipolar("dm", "d modulation"));
+        o.inlets.add(new InletFrac32Bipolar("d", "decay time"));
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
         o.params.add(new ParameterFrac32SMapKLineTimeExp("d"));
         o.sLocalData = "int32_t val;\n";
@@ -287,7 +307,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else {\n"
                 + "  int32_t t;\n"
-                + "  int32_t dt = %d% + %dm%;\n"
+                + "  int32_t dt = param_d + inlet_d;\n"
                 + "  MTOF(-dt,t);\n"
                 + "  val -= t>>6;\n"
                 + "  if (val < 0)\n"
@@ -307,12 +327,12 @@ public class Env extends gentools {
         o.sInitCode = "val = 0;\n";
         o.sKRateCode = "if (%trig% > 0) {\n"
                 + "  int32_t t;\n"
-                + "  MTOF(-%a%,t);\n"
+                + "  MTOF(-param_a,t);\n"
                 + "  val += t>>6;\n"
                 + "}\n"
                 + "else {\n"
                 + "  int32_t t;\n"
-                + "  MTOF(-%d%,t);\n"
+                + "  MTOF(-param_d,t);\n"
                 + "  val -= t>>6;\n"
                 + "}\n"
                 + "val = __USAT(val,27);\n"
@@ -323,8 +343,8 @@ public class Env extends gentools {
     static AxoObject Create_envahdlinmx() {
         AxoObject o = new AxoObject("ahd lin m", "attack/hold/decay envelope, linear ramps, modulation inputs, extended range");
         o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
-        o.inlets.add(new InletFrac32Bipolar("am", "attack time modulation"));
-        o.inlets.add(new InletFrac32Bipolar("dm", "decay time modulation"));
+        o.inlets.add(new InletFrac32Bipolar("a", "attack time"));
+        o.inlets.add(new InletFrac32Bipolar("d", "decay time"));
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
         o.params.add(new ParameterFrac32SMapKLineTimeExp("a"));
         o.params.add(new ParameterFrac32SMapKLineTimeExp("d"));
@@ -332,13 +352,13 @@ public class Env extends gentools {
         o.sInitCode = "val = 0;\n";
         o.sKRateCode = "if (%trig% > 0) {\n"
                 + "  int32_t t;\n"
-                + "  int32_t at = %a% + %am%;\n"
+                + "  int32_t at = param_a + inlet_a;\n"
                 + "  MTOF(-at,t);\n"
                 + "  val += t>>6;\n"
                 + "}\n"
                 + "else {\n"
                 + "  int32_t t;\n"
-                + "  int32_t dt = %d% + %dm%;\n"
+                + "  int32_t dt = param_d + inlet_d;\n"
                 + "  MTOF(-dt,t);\n"
                 + "  val -= t>>6;\n"
                 + "}\n"
@@ -372,7 +392,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else if (phase1 == 1) {\n"
                 + "  int32_t t;\n"
-                + "  MTOF(-%tA%,t);\n"
+                + "  MTOF(-param_tA,t);\n"
                 + "  time1 += t>>2;\n"
                 + "  if (time1>=0)\n"
                 + "     val = %v0% + (___SMMUL(%v1%-%v0%,time1)<<1);\n"
@@ -384,7 +404,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else if (phase1 == 2) {\n"
                 + "  int32_t t;\n"
-                + "  MTOF(-%tB%,t);\n"
+                + "  MTOF(-param_tB,t);\n"
                 + "  time1 += t>>2;\n"
                 + "  if (time1>=0)\n"
                 + "     val = %v1% + (___SMMUL(%v2%-%v1%,time1)<<1);\n"
@@ -402,8 +422,8 @@ public class Env extends gentools {
     static AxoObject Create_line2mx() {
         AxoObject o = new AxoObject("line 2 m", "two piecewise linear ramps, extended range, time modulation inputs");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
-        o.inlets.add(new InletFrac32Bipolar("tAm", "time A (v0..v1) modulation"));
-        o.inlets.add(new InletFrac32Bipolar("tBm", "time B (v1..v2) modulation"));
+        o.inlets.add(new InletFrac32Bipolar("tA", "time A (v0..v1)"));
+        o.inlets.add(new InletFrac32Bipolar("tB", "time B (v1..v2)"));
         o.outlets.add(new OutletFrac32Pos("out", "output"));
         o.outlets.add(new OutletInt32Pos("phase", "phase index"));
         o.params.add(new ParameterFrac32UMap("v0"));
@@ -426,7 +446,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else if (phase1 == 1) {\n"
                 + "  int32_t t;\n"
-                + "  int32_t tA2 = %tA% + %tAm%;\n"
+                + "  int32_t tA2 = param_tA + inlet_tA;\n"
                 + "  MTOF(-tA2,t);\n"
                 + "  time1 += t>>2;\n"
                 + "  if (time1>=0)\n"
@@ -439,7 +459,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else if (phase1 == 2) {\n"
                 + "  int32_t t;\n"
-                + "  int32_t tB2 = %tB% + %tBm%;\n"
+                + "  int32_t tB2 = param_tB + inlet_tB;\n"
                 + "  MTOF(-tB2,t);\n"
                 + "  time1 += t>>2;\n"
                 + "  if (time1>=0)\n"
@@ -482,7 +502,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else if (phase1 == 1) {\n"
                 + "  int32_t t;\n"
-                + "  MTOF(-%tA%,t);\n"
+                + "  MTOF(-param_tA,t);\n"
                 + "  time1 += t>>2;\n"
                 + "  if (time1>=0)\n"
                 + "     val = %v0% + (___SMMUL(%v1%-%v0%,time1)<<1);\n"
@@ -494,7 +514,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else if (phase1 == 2) {\n"
                 + "  int32_t t;\n"
-                + "  MTOF(-%tB%,t);\n"
+                + "  MTOF(-param_tB,t);\n"
                 + "  time1 += t>>2;\n"
                 + "  if (time1>=0)\n"
                 + "     val = %v1% + (___SMMUL(%v2%-%v1%,time1)<<1);\n"
@@ -506,7 +526,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else if (phase1 == 3) {\n"
                 + "  int32_t t;\n"
-                + "  MTOF(-%tC%,t);\n"
+                + "  MTOF(-param_tC,t);\n"
                 + "  time1 += t>>2;\n"
                 + "  if (time1>=0)\n"
                 + "     val = %v2% + (___SMMUL(%v3%-%v2%,time1)<<1);\n"
@@ -524,9 +544,9 @@ public class Env extends gentools {
     static AxoObject Create_line3mx() {
         AxoObject o = new AxoObject("line 3 m", "Three piecewise linear ramps, time modulation inputs");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
-        o.inlets.add(new InletFrac32Bipolar("tAm", "time A (v0..v1) modulation"));
-        o.inlets.add(new InletFrac32Bipolar("tBm", "time B (v1..v2) modulation"));
-        o.inlets.add(new InletFrac32Bipolar("tCm", "time C (v2..v3) modulation"));
+        o.inlets.add(new InletFrac32Bipolar("tA", "time A (v0..v1)"));
+        o.inlets.add(new InletFrac32Bipolar("tB", "time B (v1..v2)"));
+        o.inlets.add(new InletFrac32Bipolar("tC", "time C (v2..v3)"));
         o.outlets.add(new OutletFrac32Pos("out", "output"));
         o.outlets.add(new OutletInt32Pos("phase", "phase index"));
         o.params.add(new ParameterFrac32UMap("v0"));
@@ -551,7 +571,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else if (phase1 == 1) {\n"
                 + "  int32_t t;\n"
-                + "  int32_t tA2 = %tA% + %tAm%;\n"
+                + "  int32_t tA2 = param_tA + inlet_tA;\n"
                 + "  MTOF(-tA2,t);\n"
                 + "  time1 += t>>2;\n"
                 + "  if (time1>=0)\n"
@@ -564,7 +584,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else if (phase1 == 2) {\n"
                 + "  int32_t t;\n"
-                + "  int32_t tB2 = %tB% + %tBm%;\n"
+                + "  int32_t tB2 = param_tB + inlet_tB;\n"
                 + "  MTOF(-tB2,t);\n"
                 + "  time1 += t>>2;\n"
                 + "  if (time1>=0)\n"
@@ -577,7 +597,7 @@ public class Env extends gentools {
                 + "}\n"
                 + "else if (phase1 == 3) {\n"
                 + "  int32_t t;\n"
-                + "  int32_t tC2 = %tC% + %tCm%;\n"
+                + "  int32_t tC2 = param_tC + inlet_tC;\n"
                 + "  MTOF(-tC2,t);\n"
                 + "  time1 += t>>2;\n"
                 + "  if (time1>=0)\n"

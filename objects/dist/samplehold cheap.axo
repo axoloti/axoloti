@@ -1,0 +1,30 @@
+<objdefs>
+   <obj.normal id="samplehold cheap" uuid="26f9d9effc930475de7024f19e7765e4accb44df" sha="c7ecc4278c6bc629cee90f5180967a74ff211b4e">
+      <upgradeSha>2cee48716f298f310de868cdc8ca00d4a2f34205</upgradeSha>
+      <sDescription>low-quality audio rate sample and hold using blit synthesis (not bandwidth limited)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="in" description="level input"/>
+         <frac32buffer name="trig" description="trigger input, triggers on rising zero-crossing"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="out" description="audio output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[  int32_t in0;
+  int32_t hold;
+]]></code.declaration>
+      <code.init><![CDATA[  in0 = 0;
+  hold = 0;
+]]></code.init>
+      <code.srate><![CDATA[  if ((inlet_trig>0)&&!(in0>0)){
+    hold = inlet_in>>1;
+  }
+  in0 = inlet_trig;
+  outlet_out = hold;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

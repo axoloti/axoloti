@@ -30,7 +30,7 @@ import java.awt.RenderingHints;
 public class LedstripComponent extends ADispComponent {
 
     private double value;
-    private int n;
+    private final int n;
     private static final int bsize = 12;
 
     public LedstripComponent(int value, int n) {

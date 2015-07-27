@@ -1,18 +1,18 @@
 <patch-1.0>
-   <obj type="keybzone_lru" sha="b9b28cf52b3421368e367f3718404222910c57a5" name="keybzone_lru_1" x="28" y="0">
+   <obj type="midi/in/keyb zone lru" sha="b9b28cf52b3421368e367f3718404222910c57a5" name="keybzone_lru_1" x="28" y="0">
       <params/>
       <attribs>
          <spinner attributeName="startNote" value="0"/>
          <spinner attributeName="endNote" value="126"/>
       </attribs>
    </obj>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="280" y="0">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_1" x="280" y="0">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="1.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="rand/uniform f trig" sha="7c693e3fcb8abe7dc3908628ef0eb911a4a19ce1" name="randtrig_1" x="378" y="0">
+   <obj type="rand/uniform f trig" sha="926c3f305c1c8031d3cad3e29eb688cee124ab2e" name="randtrig_1" x="378" y="0">
       <params/>
       <attribs/>
    </obj>
@@ -22,22 +22,22 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc_1" x="168" y="60">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc_1" x="168" y="60">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="3.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd" sha="ce83118fedc4aa5d92661fa45a38dcece91fbee4" name="envahd_1" x="350" y="140">
+   <obj type="env/ahd" sha="c4000e3e6417d9d57283d66476b83f22f975ff09" name="envahd_1" x="350" y="140">
       <params>
-         <frac32.u.map name="a" value="0.0"/>
-         <frac32.u.map name="d" value="54.0"/>
+         <frac32.s.map name="a" value="0.0"/>
+         <frac32.s.map name="d" value="54.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="531c9ac204c2f9ac2fcf690f587fd986e998ec50" name="envd_1" x="140" y="180">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd_1" x="140" y="180">
       <params>
-         <frac32.u.map name="d" onParent="true" value="2.5"/>
+         <frac32.s.map name="d" onParent="true" value="2.5"/>
       </params>
       <attribs/>
    </obj>
@@ -54,13 +54,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc~_1" x="14" y="340">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_1" x="14" y="340">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="sawsync~" sha="4173669d858d9547874f581b85f4e60313401651" name="sawsync~_1" x="112" y="340">
+   <obj type="sawsync~" sha="4e614d245ac924f3f8f7ea02b2a4ba9e84769849" name="sawsync~_1" x="112" y="340">
       <params>
          <frac32.s.map name="pitch" value="11.0"/>
       </params>
@@ -70,7 +70,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/hp1" sha="77d00a776a68c62ae84817f1fbdd50fd8102dc54" name="hipass~_1" x="378" y="340">
+   <obj type="filter/hp1" sha="f9059d53a5af0890dc1a1268b5679aa335731857" name="hipass~_1" x="378" y="340">
       <params>
          <frac32.u.map name="freq" value="0.0"/>
       </params>
@@ -86,61 +86,61 @@
    </obj>
    <nets>
       <net>
-         <source name="hipass~_1 out"/>
-         <dest name="dac~_1 left"/>
-         <dest name="dac~_1 right"/>
+         <source obj="hipass~_1" outlet="out"/>
+         <dest obj="dac~_1" inlet="left"/>
+         <dest obj="dac~_1" inlet="right"/>
       </net>
       <net>
-         <source name="osc~_1 wave"/>
-         <dest name="sawsync~_1 sync"/>
+         <source obj="osc~_1" outlet="wave"/>
+         <dest obj="sawsync~_1" inlet="sync"/>
       </net>
       <net>
-         <source name="keybzone_lru_1 note"/>
-         <dest name="osc~_1 pitchm"/>
-         <dest name="osc_1 pitchm"/>
-         <dest name="mix2_1 bus_in"/>
+         <source obj="keybzone_lru_1" outlet="note"/>
+         <dest obj="osc~_1" inlet="pitch"/>
+         <dest obj="osc_1" inlet="pitch"/>
+         <dest obj="mix2_1" inlet="bus_in"/>
       </net>
       <net>
-         <source name="keybzone_lru_1 gate"/>
-         <dest name="envahd_1 gate"/>
-         <dest name="envd_1 trig"/>
+         <source obj="keybzone_lru_1" outlet="gate"/>
+         <dest obj="envahd_1" inlet="gate"/>
+         <dest obj="envd_1" inlet="trig"/>
       </net>
       <net>
-         <source name="envd_1 env"/>
-         <dest name="mix2_1 in1"/>
+         <source obj="envd_1" outlet="env"/>
+         <dest obj="mix2_1" inlet="in1"/>
       </net>
       <net>
-         <source name="mix2_1 out"/>
-         <dest name="sawsync~_1 pitchm"/>
+         <source obj="mix2_1" outlet="out"/>
+         <dest obj="sawsync~_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="envahd_1 env"/>
-         <dest name="*c_1 in"/>
+         <source obj="envahd_1" outlet="env"/>
+         <dest obj="*c_1" inlet="in"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="vca~_1 v"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="vca~_1" inlet="v"/>
       </net>
       <net>
-         <source name="sawsync~_1 wave"/>
-         <dest name="vca~_1 a"/>
-         <dest name="scope_128s_v2_1 in"/>
+         <source obj="sawsync~_1" outlet="wave"/>
+         <dest obj="vca~_1" inlet="a"/>
+         <dest obj="scope_128s_v2_1" inlet="in"/>
       </net>
       <net>
-         <source name="vca~_1 o"/>
-         <dest name="hipass~_1 in"/>
+         <source obj="vca~_1" outlet="o"/>
+         <dest obj="hipass~_1" inlet="in"/>
       </net>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="randtrig_1 trig"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="randtrig_1" inlet="trig"/>
       </net>
       <net>
-         <source name="randtrig_1 rand"/>
-         <dest name="slew_1 in"/>
+         <source obj="randtrig_1" outlet="rand"/>
+         <dest obj="slew_1" inlet="in"/>
       </net>
       <net>
-         <source name="slew_1 out"/>
-         <dest name="mix2_1 in2"/>
+         <source obj="slew_1" outlet="out"/>
+         <dest obj="mix2_1" inlet="in2"/>
       </net>
    </nets>
    <settings>
@@ -151,4 +151,10 @@
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>968</width>
+      <height>750</height>
+   </windowPos>
 </patch-1.0>

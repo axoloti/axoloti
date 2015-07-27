@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="script2" sha="1478c410b77725959c034de4a2456dd1198e9080" name="script2_1" x="20" y="20">
+   <obj type="script2" sha="362a4413ceaefbe716480bf8f9c62eb3587fe6c0" name="script2_1" x="20" y="20">
       <params/>
       <attribs>
          <text attributeName="script">
@@ -30,13 +30,19 @@ void loop(){
    </obj>
    <nets>
       <net>
-         <source name="script2_1 out1_"/>
-         <dest name="scopeS1 in"/>
-         <dest name="displayS1 in"/>
+         <source obj="script2_1" outlet="out1_"/>
+         <dest obj="scopeS1" inlet="in"/>
+         <dest obj="displayS1" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>492</width>
+      <height>450</height>
+   </windowPos>
 </patch-1.0>

@@ -321,7 +321,7 @@ public class AxoObject extends AxoObjectAbstract {
                     || (sMidiNoteOnCode != null)
                     || (sMidiPBendCode != null)
                     || (sMidiResetControllersCode != null)) {
-                Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object " + InstanceName1 + " uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!");
+                Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object {0} uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!", InstanceName1);
             }
         }
 
@@ -512,7 +512,7 @@ public class AxoObject extends AxoObjectAbstract {
         }
         int targetLength = targetPath.length();
         int dirsUp = base.length - commonCount;
-        StringBuffer relative = new StringBuffer(dirsUp * 3 + targetLength - commonLength + 1);
+        StringBuilder relative = new StringBuilder(dirsUp * 3 + targetLength - commonLength + 1);
         for (int i = 0; i < dirsUp; i++) {
             relative.append("../");
         }

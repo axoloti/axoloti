@@ -1,7 +1,8 @@
 <objdefs>
-   <obj.normal id="pink oct" uuid="972351c4c2b2b4e358c64a64d119b5ddfa074f8e" sha="d2b39a938f7f3dc415ee5e592c0ad39f18fadfde">
+   <obj.normal id="pink oct" uuid="972351c4c2b2b4e358c64a64d119b5ddfa074f8e" sha="7facef3f51b342f663be4fdfd288f1f893ef0866">
       <upgradeSha>a0f29309c383a1fb931645051055b653db0ddc9</upgradeSha>
-      <sDescription>Cheap almost pink noise. Range -64..64. Configureable number of octaves.</sDescription>
+      <sDescription>Cheap almost pink noise
+Range -64..64. Configureable number of octaves.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <inlets/>
@@ -63,7 +64,7 @@ if (o==attr_octaves){
    sum += obuf[o];
 }
 seed = (seed * 196314165) + 907633515;
-outlet_out[buffer_index]= sum + (((int32_t)seed)>>attr_octaves);
+outlet_out= sum + (((int32_t)seed)>>attr_octaves);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

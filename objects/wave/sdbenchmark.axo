@@ -3,7 +3,6 @@
       <sDescription>sdcard benchmark</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
-      <helpPatch>wave.axh</helpPatch>
       <inlets/>
       <outlets/>
       <displays/>

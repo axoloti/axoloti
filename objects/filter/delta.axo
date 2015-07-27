@@ -22,7 +22,7 @@
    _ap = inlet_a;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="delta" uuid="db2367936da470c91bc3888b0a6a9f6fbea1863a" sha="f419ff3dcb8600f60a4cecbc9161fbae8bb6bf94">
+   <obj.normal id="delta" uuid="db2367936da470c91bc3888b0a6a9f6fbea1863a" sha="2930380a03400781e693de129354f7f7d4ca6015">
       <upgradeSha>a0571010403326d85c9c2c55e100910e30e1bbe4</upgradeSha>
       <sDescription>pseudo derivative, difference between previous and current value</sDescription>
       <author>Johannes Taelman</author>
@@ -41,8 +41,8 @@
 ]]></code.declaration>
       <code.init><![CDATA[   _ap = 0;
 ]]></code.init>
-      <code.srate><![CDATA[   outlet_d[buffer_index]= inlet_a[buffer_index] - _ap;
-   _ap = inlet_a[buffer_index];
+      <code.srate><![CDATA[   outlet_d= inlet_a - _ap;
+   _ap = inlet_a;
 ]]></code.srate>
    </obj.normal>
    <obj.normal id="delta" uuid="e4e7e4fbdbc88ac318c5e1d3959ec3c8eab1c1cc" sha="22a8dcf8a3c102861501da86bca54f9dca3840aa">

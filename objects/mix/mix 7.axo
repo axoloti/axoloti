@@ -19,34 +19,13 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="gain1">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain2">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain3">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain4">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain5">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain6">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain7">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="gain1"/>
+         <frac32.u.map name="gain2"/>
+         <frac32.u.map name="gain3"/>
+         <frac32.u.map name="gain4"/>
+         <frac32.u.map name="gain5"/>
+         <frac32.u.map name="gain6"/>
+         <frac32.u.map name="gain7"/>
       </params>
       <attribs/>
       <code.krate><![CDATA[{   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
@@ -60,7 +39,7 @@
 }
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="mix 7" uuid="1ddcf110bc38d78eddbc6d343aa8bf8a0953af76" sha="1ebc43dd981089314b5c32d5c89ef4b99e170bad">
+   <obj.normal id="mix 7" uuid="1ddcf110bc38d78eddbc6d343aa8bf8a0953af76" sha="c425c2b87845ed42fe17a984a2315dce99b9c222">
       <upgradeSha>e2e19d94516239bac4be0805adb91501669a4843</upgradeSha>
       <sDescription>7 input s-rate mixer</sDescription>
       <author>Johannes Taelman</author>
@@ -80,44 +59,23 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="gain1">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain2">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain3">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain4">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain5">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain6">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.u.map name="gain7">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="gain1"/>
+         <frac32.u.map name="gain2"/>
+         <frac32.u.map name="gain3"/>
+         <frac32.u.map name="gain4"/>
+         <frac32.u.map name="gain5"/>
+         <frac32.u.map name="gain6"/>
+         <frac32.u.map name="gain7"/>
       </params>
       <attribs/>
-      <code.srate><![CDATA[{   int32_t accum = ___SMMUL(inlet_in1[buffer_index],param_gain1);
-   accum = ___SMMLA(inlet_in2[buffer_index],param_gain2,accum);
-;   accum = ___SMMLA(inlet_in3[buffer_index],param_gain3,accum);
-;   accum = ___SMMLA(inlet_in4[buffer_index],param_gain4,accum);
-;   accum = ___SMMLA(inlet_in5[buffer_index],param_gain5,accum);
-;   accum = ___SMMLA(inlet_in6[buffer_index],param_gain6,accum);
-;   accum = ___SMMLA(inlet_in7[buffer_index],param_gain7,accum);
-;   outlet_out[buffer_index]=  __SSAT(inlet_bus__in[buffer_index] + (accum<<5),28);
+      <code.srate><![CDATA[{   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
+   accum = ___SMMLA(inlet_in2,param_gain2,accum);
+;   accum = ___SMMLA(inlet_in3,param_gain3,accum);
+;   accum = ___SMMLA(inlet_in4,param_gain4,accum);
+;   accum = ___SMMLA(inlet_in5,param_gain5,accum);
+;   accum = ___SMMLA(inlet_in6,param_gain6,accum);
+;   accum = ___SMMLA(inlet_in7,param_gain7,accum);
+;   outlet_out=  __SSAT(inlet_bus__in + (accum<<5),28);
 }
 ]]></code.srate>
    </obj.normal>

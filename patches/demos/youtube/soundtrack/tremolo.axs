@@ -7,7 +7,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="speed" x="14" y="70">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="speed" x="14" y="70">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="10.0"/>
       </params>
@@ -33,29 +33,35 @@
    </obj>
    <nets>
       <net>
-         <source name="c321_ o"/>
-         <dest name="intesity bus_in"/>
+         <source obj="c321_" outlet="o"/>
+         <dest obj="intesity" inlet="bus_in"/>
       </net>
       <net>
-         <source name="speed wave"/>
-         <dest name="intesity in1"/>
+         <source obj="speed" outlet="wave"/>
+         <dest obj="intesity" inlet="in1"/>
       </net>
       <net>
-         <source name="intesity out"/>
-         <dest name="vca_2_ v"/>
-         <dest name="cv outlet"/>
+         <source obj="intesity" outlet="out"/>
+         <dest obj="vca_2_" inlet="v"/>
+         <dest obj="cv" inlet="outlet"/>
       </net>
       <net>
-         <source name="in inlet"/>
-         <dest name="vca_2_ a"/>
+         <source obj="in" outlet="inlet"/>
+         <dest obj="vca_2_" inlet="a"/>
       </net>
       <net>
-         <source name="vca_2_ o"/>
-         <dest name="out outlet"/>
+         <source obj="vca_2_" outlet="o"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>646</width>
+      <height>436</height>
+   </windowPos>
 </patch-1.0>

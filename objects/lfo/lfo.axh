@@ -5,7 +5,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="210" y="14">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="210" y="14">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -17,7 +17,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw21" x="210" y="98">
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" name="saw21" x="210" y="98">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -29,13 +29,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/saw down" sha="374413e8279bb79209e158715ff652782fda082a" name="sawdown21" x="210" y="196">
+   <obj type="lfo/saw down" sha="2a84a3f10fa95e49f9b9cff209cbe7f6b5e1f9ea" name="sawdown21" x="210" y="196">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="210" y="294">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square1" x="210" y="294">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -89,75 +89,81 @@
    </obj>
    <nets>
       <net>
-         <source name="freq out"/>
-         <dest name="saw1 freq"/>
-         <dest name="sawdown1 freq"/>
+         <source obj="freq" outlet="out"/>
+         <dest obj="saw1" inlet="freq"/>
+         <dest obj="sawdown1" inlet="freq"/>
       </net>
       <net>
-         <source name="reset o"/>
-         <dest name="sawdown1 reset"/>
-         <dest name="saw1 reset"/>
-         <dest name="saw21 reset"/>
-         <dest name="sawdown21 reset"/>
-         <dest name="square1 reset"/>
+         <source obj="reset" outlet="o"/>
+         <dest obj="sawdown1" inlet="reset"/>
+         <dest obj="saw1" inlet="reset"/>
+         <dest obj="saw21" inlet="reset"/>
+         <dest obj="sawdown21" inlet="reset"/>
+         <dest obj="square1" inlet="reset"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="inmux81 i0"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="inmux81" inlet="i0"/>
       </net>
       <net>
-         <source name="inmux81 o"/>
-         <dest name="scopeS1 in"/>
-         <dest name="interp_1 i"/>
-         <dest name="scope_128s1 in"/>
+         <source obj="inmux81" outlet="o"/>
+         <dest obj="scopeS1" inlet="in"/>
+         <dest obj="interp_1" inlet="i"/>
+         <dest obj="scope_128s1" inlet="in"/>
       </net>
       <net>
-         <source name="saw21 wave"/>
-         <dest name="inmux81 i1"/>
+         <source obj="saw21" outlet="wave"/>
+         <dest obj="inmux81" inlet="i1"/>
       </net>
       <net>
-         <source name="sawdown21 wave"/>
-         <dest name="inmux81 i2"/>
+         <source obj="sawdown21" outlet="wave"/>
+         <dest obj="inmux81" inlet="i2"/>
       </net>
       <net>
-         <source name="square1 wave"/>
-         <dest name="inmux81 i3"/>
+         <source obj="square1" outlet="wave"/>
+         <dest obj="inmux81" inlet="i3"/>
       </net>
       <net>
-         <source name="saw1 wave"/>
-         <dest name="inmux81 i4"/>
+         <source obj="saw1" outlet="wave"/>
+         <dest obj="inmux81" inlet="i4"/>
       </net>
       <net>
-         <source name="sawdown1 wave"/>
-         <dest name="inmux81 i5"/>
+         <source obj="sawdown1" outlet="wave"/>
+         <dest obj="inmux81" inlet="i5"/>
       </net>
       <net>
-         <source name="cb11 o"/>
-         <dest name="scope_128s1 hold"/>
+         <source obj="cb11" outlet="o"/>
+         <dest obj="scope_128s1" inlet="hold"/>
       </net>
       <net>
-         <source name="interp_1 o"/>
-         <dest name="*c_1 in"/>
+         <source obj="interp_1" outlet="o"/>
+         <dest obj="*c_1" inlet="in"/>
       </net>
       <net>
-         <source name="i_1 out"/>
-         <dest name="inmux81 s"/>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="inmux81" inlet="s"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="dac_11 left"/>
-         <dest name="dac_11 right"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="dac_11" inlet="left"/>
+         <dest obj="dac_11" inlet="right"/>
       </net>
       <net>
-         <source name="freq_ out"/>
-         <dest name="osc1 pitchm"/>
-         <dest name="saw21 pitchm"/>
-         <dest name="sawdown21 pitchm"/>
-         <dest name="square1 pitchm"/>
+         <source obj="freq_" outlet="out"/>
+         <dest obj="osc1" inlet="pitch"/>
+         <dest obj="saw21" inlet="pitch"/>
+         <dest obj="sawdown21" inlet="pitch"/>
+         <dest obj="square1" inlet="pitch"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>1038</width>
+      <height>884</height>
+   </windowPos>
 </patch-1.0>

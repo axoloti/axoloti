@@ -1,0 +1,118 @@
+<patch-1.0>
+   <comment type="patch/comment" x="14" y="14" text="DOES NOT WORK YET"/>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="98" y="70">
+      <params>
+         <frac32.u.map name="value" value="4.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="string/indexed" sha="4c1c90721e5f530e9fbdcfa373edaffe908e605b" name="stringi1" x="210" y="70">
+      <params/>
+      <attribs>
+         <table attributeName="prefix" table="txx"/>
+         <table attributeName="suffix" table=".raw"/>
+      </attribs>
+   </obj>
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11_" x="532" y="126">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="14" y="182">
+      <params>
+         <frac32.s.map name="pitch" value="-60.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1" sha="75de53c9e6783829b405b702a6e7feb5ccaa8b00" name="mix11" x="140" y="182">
+      <params>
+         <frac32.u.map name="gain1" value="8.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc_1" x="252" y="182">
+      <params>
+         <frac32.s.map name="pitch" value="-15.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix11_" x="378" y="182">
+      <params>
+         <frac32.u.map name="gain1" value="15.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="unstable/wave/record" sha="bdd8bbc33127ba950db6ace64f72f194e749d41" name="recwave1" x="532" y="182">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="play" x="294" y="322">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="wave/play" sha="e3de36b8d0f8cce60996ae9130adc960c34e9324" uuid="2e6265136dbaaf4d885a669520546de2e3306819" name="play_1" x="392" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="audio/out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="532" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="audio/out right" sha="a23b68aa6010f51e12035361950edcd7afae239" name="dac_11_" x="532" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="mix11" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="mix11" outlet="out"/>
+         <dest obj="osc_1" inlet="pitchm"/>
+      </net>
+      <net>
+         <source obj="play" outlet="o"/>
+         <dest obj="play_1" inlet="start"/>
+      </net>
+      <net>
+         <source obj="stringi1" outlet="out"/>
+         <dest obj="recwave1" inlet="filename"/>
+         <dest obj="play_1" inlet="filename"/>
+      </net>
+      <net>
+         <source obj="cb11_" outlet="o"/>
+         <dest obj="recwave1" inlet="trig"/>
+      </net>
+      <net>
+         <source obj="c1" outlet="out"/>
+         <dest obj="stringi1" inlet="index"/>
+      </net>
+      <net>
+         <source obj="osc_1" outlet="wave"/>
+         <dest obj="mix11_" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="mix11_" outlet="out"/>
+         <dest obj="recwave1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="play_1" outlet="out"/>
+         <dest obj="dac_11" inlet="wave"/>
+         <dest obj="dac_11_" inlet="wave"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>496</x>
+      <y>192</y>
+      <width>842</width>
+      <height>688</height>
+   </windowPos>
+</patch-1.0>

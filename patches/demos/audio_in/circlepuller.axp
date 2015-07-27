@@ -21,7 +21,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="sine_1" x="504" y="42">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="sine_1" x="504" y="42">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
@@ -38,7 +38,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_1" x="14" y="70">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_1" x="14" y="70">
       <params>
          <frac32.s.map name="pitch" value="63.0"/>
       </params>
@@ -85,7 +85,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="vcf3~_1" x="504" y="266">
+   <obj type="filter/hp m" sha="c3a6ffa90d2d2057bfbd666463b169384503d2eb" name="hp 1" x="504" y="266">
       <params>
          <frac32.s.map name="pitch" value="13.0"/>
          <frac32.u.map name="reso" value="44.5"/>
@@ -130,7 +130,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/hp m" sha="b466075104a6afdf80a6d72b98e27a20d5188813" name="vcf3~_2" x="504" y="420">
+   <obj type="filter/hp m" sha="c3a6ffa90d2d2057bfbd666463b169384503d2eb" name="hp 2" x="504" y="420">
       <params>
          <frac32.s.map name="pitch" value="13.0"/>
          <frac32.u.map name="reso" value="44.5"/>
@@ -151,107 +151,107 @@
    </obj>
    <nets>
       <net>
-         <source name="in_1 wave"/>
-         <dest name="*c_2 in"/>
-         <dest name="soft_1 in"/>
-         <dest name="follower_1 in"/>
-         <dest name="comp_1 in"/>
+         <source obj="in_1" outlet="wave"/>
+         <dest obj="*c_2" inlet="in"/>
+         <dest obj="soft_1" inlet="in"/>
+         <dest obj="follower_1" inlet="in"/>
+         <dest obj="comp_1" inlet="in"/>
       </net>
       <net>
-         <source name="fdn4_1 out1"/>
-         <dest name="mix_1 in1"/>
+         <source obj="fdn4_1" outlet="out1"/>
+         <dest obj="mix_1" inlet="in1"/>
       </net>
       <net>
-         <source name="mix_2 out"/>
-         <dest name="out_1 left"/>
+         <source obj="mix_2" outlet="out"/>
+         <dest obj="out_1" inlet="left"/>
       </net>
       <net>
-         <source name="mix_1 out"/>
-         <dest name="vcf3~_1 in"/>
-         <dest name="vu_2 in"/>
+         <source obj="mix_1" outlet="out"/>
+         <dest obj="hp 1" inlet="in"/>
+         <dest obj="vu_2" inlet="in"/>
       </net>
       <net>
-         <source name="sine_1 wave"/>
-         <dest name="*c_1 in"/>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="*c_1" inlet="in"/>
       </net>
       <net>
-         <source name="*c_1 out"/>
-         <dest name="vcf3~_1 pitchm"/>
-         <dest name="vcf3~_2 pitchm"/>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="hp 1" inlet="pitch"/>
+         <dest obj="hp 2" inlet="pitch"/>
       </net>
       <net>
-         <source name="*c_2 out"/>
-         <dest name="fdn4_1 in1"/>
+         <source obj="*c_2" outlet="out"/>
+         <dest obj="fdn4_1" inlet="in1"/>
       </net>
       <net>
-         <source name="soft_1 out"/>
-         <dest name="mix_2 in2"/>
-         <dest name="mix_4 in2"/>
+         <source obj="soft_1" outlet="out"/>
+         <dest obj="mix_2" inlet="in2"/>
+         <dest obj="mix_4" inlet="in2"/>
       </net>
       <net>
-         <source name="vcf3~_1 out"/>
-         <dest name="vca_1 a"/>
-         <dest name="vu_1 in"/>
+         <source obj="hp 1" outlet="out"/>
+         <dest obj="vca_1" inlet="a"/>
+         <dest obj="vu_1" inlet="in"/>
       </net>
       <net>
-         <source name="muls_1 out"/>
-         <dest name="vu_3 in"/>
-         <dest name="mix_2 in1"/>
+         <source obj="muls_1" outlet="out"/>
+         <dest obj="vu_3" inlet="in"/>
+         <dest obj="mix_2" inlet="in1"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="muls_1 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="muls_1" inlet="in"/>
       </net>
       <net>
-         <source name="fdn4_1 out2"/>
-         <dest name="mix_1 in2"/>
+         <source obj="fdn4_1" outlet="out2"/>
+         <dest obj="mix_1" inlet="in2"/>
       </net>
       <net>
-         <source name="fdn4_1 out3"/>
-         <dest name="mix_3 in1"/>
+         <source obj="fdn4_1" outlet="out3"/>
+         <dest obj="mix_3" inlet="in1"/>
       </net>
       <net>
-         <source name="fdn4_1 out4"/>
-         <dest name="mix_3 in2"/>
+         <source obj="fdn4_1" outlet="out4"/>
+         <dest obj="mix_3" inlet="in2"/>
       </net>
       <net>
-         <source name="vcf3~_2 out"/>
-         <dest name="vca_2 a"/>
-         <dest name="vu_4 in"/>
+         <source obj="hp 2" outlet="out"/>
+         <dest obj="vca_2" inlet="a"/>
+         <dest obj="vu_4" inlet="in"/>
       </net>
       <net>
-         <source name="vca_2 o"/>
-         <dest name="muls_2 in"/>
+         <source obj="vca_2" outlet="o"/>
+         <dest obj="muls_2" inlet="in"/>
       </net>
       <net>
-         <source name="mix_3 out"/>
-         <dest name="vcf3~_2 in"/>
+         <source obj="mix_3" outlet="out"/>
+         <dest obj="hp 2" inlet="in"/>
       </net>
       <net>
-         <source name="mix_4 out"/>
-         <dest name="out_1 right"/>
+         <source obj="mix_4" outlet="out"/>
+         <dest obj="out_1" inlet="right"/>
       </net>
       <net>
-         <source name="muls_2 out"/>
-         <dest name="mix_4 in1"/>
+         <source obj="muls_2" outlet="out"/>
+         <dest obj="mix_4" inlet="in1"/>
       </net>
       <net>
-         <source name="square_1 wave"/>
-         <dest name="amp trig"/>
+         <source obj="square_1" outlet="wave"/>
+         <dest obj="amp" inlet="trig"/>
       </net>
       <net>
-         <source name="follower_1 amp"/>
-         <dest name="muls_3 in"/>
+         <source obj="follower_1" outlet="amp"/>
+         <dest obj="muls_3" inlet="in"/>
       </net>
       <net>
-         <source name="muls_3 out"/>
-         <dest name="amp v"/>
+         <source obj="muls_3" outlet="out"/>
+         <dest obj="amp" inlet="v"/>
       </net>
       <net>
-         <source name="comp_1 out"/>
-         <dest name="chart_1 in"/>
-         <dest name="vca_2 v"/>
-         <dest name="vca_1 v"/>
+         <source obj="comp_1" outlet="out"/>
+         <dest obj="chart_1" inlet="in"/>
+         <dest obj="vca_2" inlet="v"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
    </nets>
    <settings>
@@ -259,8 +259,8 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>0</x>
-      <y>23</y>
+      <x>76</x>
+      <y>39</y>
       <width>1374</width>
       <height>800</height>
    </windowPos>

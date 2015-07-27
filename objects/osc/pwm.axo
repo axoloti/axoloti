@@ -1,23 +1,20 @@
 <objdefs>
-   <obj.normal id="pwm" uuid="92dd578630d9e1490770179d988afc92e6584d6f" sha="ae584d01c09e7982535d5b96347cb5e96c9ac265">
-      <upgradeSha>a5f49fd39de0194bff6482e7b17ed3f35174578c</upgradeSha>
-      <sDescription>Bandwith limited pulse width modulation oscillator</sDescription>
+   <obj.normal id="pwm" uuid="a6b40ff63f161d8bac8ea2eba5b0dbffcf49b472" sha="4f216b9a125822434f813198e9be4da0b5e8b042">
+      <sDescription>pulse width modulation oscillator
+Bandwith limited</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>osc.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
-         <frac32.positive name="pwm" description="pwm ratio"/>
+         <frac32.bipolar name="pitch" description="pitch"/>
+         <frac32.positive name="pw" description="pulse width"/>
       </inlets>
       <outlets>
          <frac32buffer.bipolar name="wave" description="pwm wave, anti-aliased"/>
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.pitch name="pitch" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.pitch>
+         <frac32.s.map.pitch name="pitch" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[  int32_t osc_p;
@@ -30,7 +27,7 @@
     for(j=0;j<blepvoices;j++)
       oscp[j] = &blept[BLEPSIZE-1];   nextvoice = 0;]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitch,freq);
   int j;
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){
@@ -47,15 +44,15 @@
       else if (freq)
          x = (osc_p<<6)/freq;
       oscp[nextvoice] = &blept[x];
-      pwmp = inlet_pwm;
+      pwmp = inlet_pw;
     }
     if ((osc_p-(pwmp<<4)>0)&&!(p-(pwmp<<4)>0)){   // dispatch
       nextvoice = (nextvoice+1)&(blepvoices-1);
       int32_t x = 0;
       if (freq>>24)
-        x = (osc_p-(inlet_pwm<<4))/(freq>>6);
+        x = (osc_p-(inlet_pw<<4))/(freq>>6);
       else if (freq)
-        x = ((osc_p-(inlet_pwm<<4))<<6)/(freq);
+        x = ((osc_p-(inlet_pw<<4))<<6)/(freq);
       oscp[nextvoice] = &blept[x];
     }
     for(i=0;i<blepvoices;i++){ // sample

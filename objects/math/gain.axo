@@ -13,16 +13,13 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.gain16 name="amp" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.gain16>
+         <frac32.u.map.gain16 name="amp" noLabel="true"/>
       </params>
       <attribs/>
       <code.krate><![CDATA[outlet_out= __SSAT(___SMMUL(param_amp,__SSAT(inlet_in,28)<<4)<<1,28);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="gain" uuid="62b1c1a6337c7c8f6aec96408a432477b113cfa0" sha="b335fda43c3a2063ec951fd859db1fde7f1308be">
+   <obj.normal id="gain" uuid="62b1c1a6337c7c8f6aec96408a432477b113cfa0" sha="cda56a9f0ea80746e47be1a82a59ebc55bdba5d1">
       <upgradeSha>60c5fcc3503670dd02f8989bba108d80be59b518</upgradeSha>
       <sDescription>amplify up to 16 times (saturated)</sDescription>
       <author>Johannes Taelman</author>
@@ -36,13 +33,10 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.gain16 name="amp" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.gain16>
+         <frac32.u.map.gain16 name="amp" noLabel="true"/>
       </params>
       <attribs/>
-      <code.srate><![CDATA[outlet_out[buffer_index]= __SSAT(___SMMUL(param_amp,__SSAT(inlet_in[buffer_index],28)<<4)<<1,28);
+      <code.srate><![CDATA[outlet_out= __SSAT(___SMMUL(param_amp,__SSAT(inlet_in,28)<<4)<<1,28);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="line 3" uuid="2ef3c9b4af30c9e78e4e0ecaba15e172aaba9398" sha="a79a080b6a30e999acb3fafb398ba930a5e7f435">
-      <upgradeSha>8ced4c2fc64a1447d0b6cf0fe39e9eef560a3935</upgradeSha>
+      <upgradeSha>d36239728ce4bfb9acaa445cc70cbe063457b186</upgradeSha>
       <sDescription>Three piecewise linear ramps, extended range</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -14,34 +14,13 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="v0">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.s.map.klineartime.exp name="tA">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.klineartime.exp>
-         <frac32.u.map name="v1">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.s.map.klineartime.exp name="tB">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.klineartime.exp>
-         <frac32.u.map name="v2">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
-         <frac32.s.map.klineartime.exp name="tC">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.klineartime.exp>
-         <frac32.u.map name="v3">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="v0"/>
+         <frac32.s.map.klineartime.exp name="tA"/>
+         <frac32.u.map name="v1"/>
+         <frac32.s.map.klineartime.exp name="tB"/>
+         <frac32.u.map name="v2"/>
+         <frac32.s.map.klineartime.exp name="tC"/>
+         <frac32.u.map name="v3"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;

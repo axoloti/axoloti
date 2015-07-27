@@ -1,0 +1,658 @@
+<patch-1.0>
+   <comment type="patch/comment" x="182" y="14" text="granular reverb"/>
+   <comment type="patch/comment" x="182" y="28" text="preset 1: smooth canyon"/>
+   <comment type="patch/comment" x="182" y="42" text="preset 2: grainy canyon"/>
+   <comment type="patch/comment" x="182" y="56" text="preset 3: bathroom chorus"/>
+   <comment type="patch/comment" x="149" y="106" text="todo: increase efficiency..."/>
+   <obj type="audio/in left" sha="f36683ba4df4704fc1d45058134f1721a25d22f9" name="adc~1_1" x="42" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" sha="a73a2cafcf92eb4b6524655dcee98a569d5ddc28" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_1" x="126" y="140">
+      <params>
+         <frac32.u.map name="amp" value="13.5">
+            <presets>
+               <preset index="1">
+                  <f v="13.5"/>
+               </preset>
+               <preset index="2">
+                  <f v="13.5"/>
+               </preset>
+               <preset index="3">
+                  <f v="64.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <patcher type="patch/patcher" sha="da39a3ee5e6b4b0d3255bfef95601890afd80709" uuid="a245c220448000c901caef03c8b07740d533914a" name="patcher_1" x="238" y="140">
+      <params>
+         <frac32.u.map name="lspread" value="5.5">
+            <presets>
+               <preset index="1">
+                  <f v="5.5"/>
+               </preset>
+               <preset index="2">
+                  <f v="5.5"/>
+               </preset>
+               <preset index="3">
+                  <f v="5.5"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+         <frac32.u.map name="fb" value="0.6999998092651367">
+            <presets>
+               <preset index="1">
+                  <f v="0.6999998092651367"/>
+               </preset>
+               <preset index="2">
+                  <f v="0.6999998092651367"/>
+               </preset>
+               <preset index="3">
+                  <f v="14.699999809265137"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+         <frac32.u.map name="range" value="20.0">
+            <presets>
+               <preset index="1">
+                  <f v="20.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="20.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="0.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+         <frac32.u.map name="offset" value="29.0">
+            <presets>
+               <preset index="1">
+                  <f v="29.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="29.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="29.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+         <frac32.s.map name="length" value="7.0">
+            <presets>
+               <preset index="1">
+                  <f v="7.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="-5.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="20.0"/>
+               </preset>
+            </presets>
+         </frac32.s.map>
+         <frac32.s.map name="length_" value="10.0">
+            <presets>
+               <preset index="1">
+                  <f v="10.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="-5.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="18.0"/>
+               </preset>
+            </presets>
+         </frac32.s.map>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="10"/>
+         <combo attributeName="mididevice" selection="omni"/>
+         <combo attributeName="midiport" selection="omni"/>
+      </attribs>
+      <subpatch>
+         <obj type="ctrl/dial p" sha="501c30e07dedf3d701e8d0b33c3c234908c3388e" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="lspread" x="84" y="0">
+            <params>
+               <frac32.u.map name="value" onParent="true" value="0.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="ctrl/dial p" sha="501c30e07dedf3d701e8d0b33c3c234908c3388e" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="fb" x="532" y="0">
+            <params>
+               <frac32.u.map name="value" onParent="true" value="0.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="ctrl/dial p" sha="501c30e07dedf3d701e8d0b33c3c234908c3388e" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="range" x="644" y="14">
+            <params>
+               <frac32.u.map name="value" onParent="true" value="0.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="ctrl/dial p" sha="501c30e07dedf3d701e8d0b33c3c234908c3388e" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="offset" x="742" y="14">
+            <params>
+               <frac32.u.map name="value" onParent="true" value="0.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="rand/uniform f trig" sha="926c3f305c1c8031d3cad3e29eb688cee124ab2e" name="randtrig_1" x="0" y="98">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/*" sha="ec71f518aa0e133062e5a9d4828d3739865c99f" uuid="922423f2db9f222aa3e5ba095778288c446da47a" name="*_1" x="126" y="98">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="env/d lin m" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" name="length" x="210" y="98">
+            <params>
+               <frac32.s.map name="d" onParent="true" value="5.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="math/&gt;" sha="66caccb0a5493a2894a4643178419d30d067add1" name="&gt;_1" x="334" y="100">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="logic/inv" sha="a8bfe6f6bbfd2a76e25328c139315bc7aa2a6e18" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_1" x="420" y="112">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/*" sha="ec71f518aa0e133062e5a9d4828d3739865c99f" uuid="922423f2db9f222aa3e5ba095778288c446da47a" name="*_5" x="714" y="126">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/+" sha="49587c7bc7e1813d8a9a7a9be012580af00ea274" uuid="44553fdc8628c67ab535845ed1be304ad6c9553b" name="+_3" x="784" y="126">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/div 2" sha="2cb2778f41e0d462d7aed59480280459b497b573" uuid="f14884de1baf3e615e12ee162a96a013eca76789" name="div_1" x="868" y="126">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/c 64" sha="d1113fc908984d84da188083c282b80b2161e29" uuid="9116584b9960241e86c12effea4ce12d13871e77" name="c_1" x="448" y="182">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="conv/to f" sha="1ecea09351d0a8a9d0b72cdd3e089984d17af31" uuid="bdd08445689602ce174689ccb6be085f627d9892" name="to_1" x="532" y="182">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="table/play" sha="55ce618e6483a8cca2c69265cde12d1cc133b317" uuid="53c499b6f6fbdcc25b48906393123ca10030ed45" name="play_1" x="728" y="210">
+            <params/>
+            <attribs>
+               <objref attributeName="table" obj="../t"/>
+            </attribs>
+         </obj>
+         <obj type="patch/inlet a" sha="2944bdbaeb2a8a42d5a97163275d052f75668a86" name="in" x="168" y="252">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/window" sha="ff29ab0721db1b1238076400832e919d860fc38f" name="window_1" x="336" y="252">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/*" sha="ec71f518aa0e133062e5a9d4828d3739865c99f" uuid="922423f2db9f222aa3e5ba095778288c446da47a" name="*_4" x="462" y="252">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/-" sha="50b9299d5a370749aa9d6cfdb949bf3191a1f68" uuid="3280bb759e9fc189e134300e48dda7e903c9a110" name="-_1" x="532" y="252">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_2" x="616" y="252">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_1" x="882" y="308">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="patch/outlet a" sha="72226293648dde4dd4739bc1b8bc46a6bf660595" name="L" x="952" y="308">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_3" x="546" y="322">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/+" sha="9f8cb68e327acfaa43539be73ff97faab497ad45" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_1" x="630" y="322">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="table/record" sha="4acba2d788e3cee3e25db7b5319282026027ac69" name="tabrecord2~_1" x="728" y="322">
+            <params/>
+            <attribs>
+               <objref attributeName="table" obj="../t"/>
+            </attribs>
+         </obj>
+         <obj type="rand/uniform f trig" sha="926c3f305c1c8031d3cad3e29eb688cee124ab2e" name="randtrig_2" x="0" y="406">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/*" sha="ec71f518aa0e133062e5a9d4828d3739865c99f" uuid="922423f2db9f222aa3e5ba095778288c446da47a" name="*_2" x="126" y="406">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="env/d lin m" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" name="length_" x="224" y="406">
+            <params>
+               <frac32.s.map name="d" onParent="true" value="5.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="math/&gt;" sha="66caccb0a5493a2894a4643178419d30d067add1" name="&gt;_2" x="336" y="420">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="logic/inv" sha="a8bfe6f6bbfd2a76e25328c139315bc7aa2a6e18" uuid="2bd44b865d3b63ff9b80862242bf5be779e3ad5" name="inv_2" x="420" y="420">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/*" sha="ec71f518aa0e133062e5a9d4828d3739865c99f" uuid="922423f2db9f222aa3e5ba095778288c446da47a" name="*_6" x="714" y="448">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/+" sha="49587c7bc7e1813d8a9a7a9be012580af00ea274" uuid="44553fdc8628c67ab535845ed1be304ad6c9553b" name="+_4" x="784" y="448">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/div 2" sha="2cb2778f41e0d462d7aed59480280459b497b573" uuid="f14884de1baf3e615e12ee162a96a013eca76789" name="div_2" x="868" y="448">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/c 64" sha="d1113fc908984d84da188083c282b80b2161e29" uuid="9116584b9960241e86c12effea4ce12d13871e77" name="c_2" x="448" y="490">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="conv/to f" sha="1ecea09351d0a8a9d0b72cdd3e089984d17af31" uuid="bdd08445689602ce174689ccb6be085f627d9892" name="to_2" x="532" y="490">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="table/play" sha="55ce618e6483a8cca2c69265cde12d1cc133b317" uuid="53c499b6f6fbdcc25b48906393123ca10030ed45" name="play_2" x="728" y="518">
+            <params/>
+            <attribs>
+               <objref attributeName="table" obj="../t"/>
+            </attribs>
+         </obj>
+         <obj type="math/window" sha="ff29ab0721db1b1238076400832e919d860fc38f" name="window_2" x="350" y="560">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/*" sha="ec71f518aa0e133062e5a9d4828d3739865c99f" uuid="922423f2db9f222aa3e5ba095778288c446da47a" name="*_3" x="462" y="560">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/-" sha="50b9299d5a370749aa9d6cfdb949bf3191a1f68" uuid="3280bb759e9fc189e134300e48dda7e903c9a110" name="-_2" x="532" y="560">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_4" x="616" y="560">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_6" x="882" y="616">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="patch/outlet a" sha="72226293648dde4dd4739bc1b8bc46a6bf660595" name="R" x="952" y="616">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca~_5" x="546" y="630">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/+" sha="9f8cb68e327acfaa43539be73ff97faab497ad45" uuid="faedbea4612d9bd3644d6d3bf31946d848a70e19" name="+_2" x="630" y="630">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="table/record" sha="4acba2d788e3cee3e25db7b5319282026027ac69" name="tabrecord2~_2" x="728" y="630">
+            <params/>
+            <attribs>
+               <objref attributeName="table" obj="../t"/>
+            </attribs>
+         </obj>
+         <nets>
+            <net>
+               <source obj="length" outlet="env"/>
+               <dest obj="window_1" inlet="phase"/>
+               <dest obj="&gt;_1" inlet="in1"/>
+            </net>
+            <net>
+               <source obj="inv_1" outlet="o"/>
+               <dest obj="length" inlet="trig"/>
+               <dest obj="randtrig_1" inlet="trig"/>
+            </net>
+            <net>
+               <source obj="play_1" outlet="wave"/>
+               <dest obj="vca~_1" inlet="a"/>
+               <dest obj="vca~_2" inlet="a"/>
+            </net>
+            <net>
+               <source obj="vca~_1" outlet="o"/>
+               <dest obj="L" inlet="outlet"/>
+            </net>
+            <net>
+               <source obj="&gt;_1" outlet="out"/>
+               <dest obj="inv_1" inlet="i"/>
+               <dest obj="play_1" inlet="start"/>
+               <dest obj="tabrecord2~_1" inlet="start"/>
+            </net>
+            <net>
+               <source obj="c_1" outlet="o"/>
+               <dest obj="to_1" inlet="i"/>
+            </net>
+            <net>
+               <source obj="to_1" outlet="o"/>
+               <dest obj="-_1" inlet="in1"/>
+            </net>
+            <net>
+               <source obj="-_1" outlet="out"/>
+               <dest obj="vca~_2" inlet="v"/>
+            </net>
+            <net>
+               <source obj="vca~_2" outlet="o"/>
+               <dest obj="+_1" inlet="in1"/>
+            </net>
+            <net>
+               <source obj="in" outlet="inlet"/>
+               <dest obj="vca~_3" inlet="a"/>
+               <dest obj="vca~_5" inlet="a"/>
+            </net>
+            <net>
+               <source obj="+_1" outlet="out"/>
+               <dest obj="tabrecord2~_1" inlet="wave"/>
+            </net>
+            <net>
+               <source obj="vca~_3" outlet="o"/>
+               <dest obj="+_1" inlet="in2"/>
+            </net>
+            <net>
+               <source obj="length" outlet="env"/>
+               <dest obj="window_1" inlet="phase"/>
+               <dest obj="&gt;_1" inlet="in1"/>
+            </net>
+            <net>
+               <source obj="inv_1" outlet="o"/>
+               <dest obj="length" inlet="trig"/>
+               <dest obj="randtrig_1" inlet="trig"/>
+            </net>
+            <net>
+               <source obj="play_1" outlet="wave"/>
+               <dest obj="vca~_1" inlet="a"/>
+               <dest obj="vca~_2" inlet="a"/>
+            </net>
+            <net>
+               <source obj="vca~_1" outlet="o"/>
+               <dest obj="L" inlet="outlet"/>
+            </net>
+            <net>
+               <source obj="&gt;_1" outlet="out"/>
+               <dest obj="inv_1" inlet="i"/>
+            </net>
+            <net>
+               <source obj="c_1" outlet="o"/>
+               <dest obj="to_1" inlet="i"/>
+            </net>
+            <net>
+               <source obj="to_1" outlet="o"/>
+               <dest obj="-_1" inlet="in1"/>
+            </net>
+            <net>
+               <source obj="-_1" outlet="out"/>
+               <dest obj="vca~_2" inlet="v"/>
+            </net>
+            <net>
+               <source obj="vca~_2" outlet="o"/>
+               <dest obj="+_1" inlet="in1"/>
+            </net>
+            <net>
+               <source obj="in" outlet="inlet"/>
+               <dest obj="vca~_3" inlet="a"/>
+            </net>
+            <net>
+               <source obj="+_1" outlet="out"/>
+               <dest obj="tabrecord2~_1" inlet="wave"/>
+            </net>
+            <net>
+               <source obj="vca~_3" outlet="o"/>
+               <dest obj="+_1" inlet="in2"/>
+            </net>
+            <net>
+               <source obj="length_" outlet="env"/>
+               <dest obj="&gt;_2" inlet="in1"/>
+               <dest obj="window_2" inlet="phase"/>
+            </net>
+            <net>
+               <source obj="&gt;_2" outlet="out"/>
+               <dest obj="inv_2" inlet="i"/>
+               <dest obj="play_2" inlet="start"/>
+               <dest obj="tabrecord2~_2" inlet="start"/>
+            </net>
+            <net>
+               <source obj="inv_2" outlet="o"/>
+               <dest obj="randtrig_2" inlet="trig"/>
+               <dest obj="length_" inlet="trig"/>
+            </net>
+            <net>
+               <source obj="*_1" outlet="result"/>
+               <dest obj="length" inlet="d"/>
+            </net>
+            <net>
+               <source obj="lspread" outlet="out"/>
+               <dest obj="*_1" inlet="b"/>
+               <dest obj="*_2" inlet="b"/>
+            </net>
+            <net>
+               <source obj="randtrig_1" outlet="rand"/>
+               <dest obj="*_1" inlet="a"/>
+               <dest obj="*_5" inlet="a"/>
+            </net>
+            <net>
+               <source obj="randtrig_2" outlet="rand"/>
+               <dest obj="*_2" inlet="a"/>
+               <dest obj="*_6" inlet="a"/>
+            </net>
+            <net>
+               <source obj="*_2" outlet="result"/>
+               <dest obj="length_" inlet="d"/>
+            </net>
+            <net>
+               <source obj="window_2" outlet="win"/>
+               <dest obj="vca~_5" inlet="v"/>
+               <dest obj="*_3" inlet="b"/>
+               <dest obj="vca~_6" inlet="v"/>
+            </net>
+            <net>
+               <source obj="*_3" outlet="result"/>
+               <dest obj="-_2" inlet="in2"/>
+            </net>
+            <net>
+               <source obj="to_2" outlet="o"/>
+               <dest obj="-_2" inlet="in1"/>
+            </net>
+            <net>
+               <source obj="c_2" outlet="o"/>
+               <dest obj="to_2" inlet="i"/>
+            </net>
+            <net>
+               <source obj="play_2" outlet="wave"/>
+               <dest obj="vca~_6" inlet="a"/>
+               <dest obj="vca~_4" inlet="a"/>
+            </net>
+            <net>
+               <source obj="vca~_6" outlet="o"/>
+               <dest obj="R" inlet="outlet"/>
+            </net>
+            <net>
+               <source obj="div_2" outlet="out"/>
+               <dest obj="play_2" inlet="pos"/>
+               <dest obj="tabrecord2~_2" inlet="pos"/>
+            </net>
+            <net>
+               <source obj="vca~_4" outlet="o"/>
+               <dest obj="+_2" inlet="in1"/>
+            </net>
+            <net>
+               <source obj="vca~_5" outlet="o"/>
+               <dest obj="+_2" inlet="in2"/>
+            </net>
+            <net>
+               <source obj="+_2" outlet="out"/>
+               <dest obj="tabrecord2~_2" inlet="wave"/>
+            </net>
+            <net>
+               <source obj="-_2" outlet="out"/>
+               <dest obj="vca~_4" inlet="v"/>
+            </net>
+            <net>
+               <source obj="*_4" outlet="result"/>
+               <dest obj="-_1" inlet="in2"/>
+            </net>
+            <net>
+               <source obj="window_1" outlet="win"/>
+               <dest obj="*_4" inlet="b"/>
+               <dest obj="vca~_3" inlet="v"/>
+               <dest obj="vca~_1" inlet="v"/>
+            </net>
+            <net>
+               <source obj="fb" outlet="out"/>
+               <dest obj="*_4" inlet="a"/>
+               <dest obj="*_3" inlet="a"/>
+            </net>
+            <net>
+               <source obj="*_5" outlet="result"/>
+               <dest obj="+_3" inlet="in2"/>
+            </net>
+            <net>
+               <source obj="range" outlet="out"/>
+               <dest obj="*_5" inlet="b"/>
+               <dest obj="*_6" inlet="b"/>
+            </net>
+            <net>
+               <source obj="offset" outlet="out"/>
+               <dest obj="+_3" inlet="in1"/>
+               <dest obj="+_4" inlet="in1"/>
+            </net>
+            <net>
+               <source obj="*_5" outlet="result"/>
+               <dest obj="+_3" inlet="in2"/>
+            </net>
+            <net>
+               <source obj="*_6" outlet="result"/>
+               <dest obj="+_4" inlet="in2"/>
+            </net>
+            <net>
+               <source obj="div_1" outlet="out"/>
+               <dest obj="play_1" inlet="pos"/>
+               <dest obj="tabrecord2~_1" inlet="pos"/>
+            </net>
+            <net>
+               <source obj="+_3" outlet="out"/>
+               <dest obj="div_1" inlet="in"/>
+            </net>
+            <net>
+               <source obj="+_4" outlet="out"/>
+               <dest obj="div_2" inlet="in"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>polyphonic</subpatchmode>
+            <MidiChannel>1</MidiChannel>
+            <NPresets>0</NPresets>
+            <NPresetEntries>0</NPresetEntries>
+            <NModulationSources>0</NModulationSources>
+            <NModulationTargetsPerSource>0</NModulationTargetsPerSource>
+         </settings>
+         <notes><![CDATA[]]></notes>
+      </subpatch>
+   </patcher>
+   <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix1_1" x="364" y="140">
+      <params>
+         <frac32.u.map name="gain1" value="15.0">
+            <presets>
+               <preset index="1">
+                  <f v="15.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="15.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="15.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/alloc 32b sdram" sha="e3795b93aca7568798d8dc37dff1dad002ba684" uuid="1a4546b7b52747ea765093ac97444601c44721e8" name="t" x="98" y="238">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="65536"/>
+         <text attributeName="init">
+            <sText><![CDATA[]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <obj type="mix/mix 1" sha="f543e080bd2111cba525885443039f346703a594" name="mix1_2" x="364" y="238">
+      <params>
+         <frac32.u.map name="gain1" value="15.0">
+            <presets>
+               <preset index="1">
+                  <f v="15.0"/>
+               </preset>
+               <preset index="2">
+                  <f v="15.0"/>
+               </preset>
+               <preset index="3">
+                  <f v="15.0"/>
+               </preset>
+            </presets>
+         </frac32.u.map>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac~_1" x="476" y="238">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="adc~1_1" outlet="wave"/>
+         <dest obj="*c_1" inlet="in"/>
+         <dest obj="mix1_2" inlet="bus_in"/>
+         <dest obj="mix1_1" inlet="bus_in"/>
+      </net>
+      <net>
+         <source obj="mix1_1" outlet="out"/>
+         <dest obj="dac~_1" inlet="left"/>
+      </net>
+      <net>
+         <source obj="mix1_2" outlet="out"/>
+         <dest obj="dac~_1" inlet="right"/>
+      </net>
+      <net>
+         <source obj="patcher_1" outlet="L"/>
+         <dest obj="mix1_1" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="patcher_1" outlet="R"/>
+         <dest obj="mix1_2" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="patcher_1" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>236</x>
+      <y>523</y>
+      <width>790</width>
+      <height>661</height>
+   </windowPos>
+</patch-1.0>

@@ -1,0 +1,37 @@
+<objdefs>
+   <obj.normal id="d m" uuid="85e82f54dfc28839d300cda777af8907ae2a28d0" sha="3f6e6c6081782177f0dc9dfe9e50a99b54fe41f6">
+      <sDescription>decay envelope with modulation input</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>env.axh</helpPatch>
+      <inlets>
+         <bool32.rising name="trig" description="trigger"/>
+         <frac32 name="d" description="decay time"/>
+      </inlets>
+      <outlets>
+         <frac32.positive name="env" description="envelope output"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.klineartime.exp name="d" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+int ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[val = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) { val =1<<27; ntrig=1;}
+   else { 
+      if (!(inlet_trig>0)) ntrig=0; 
+      int32_t in = - inlet_d - param_d;
+      int32_t c;
+      MTOFEXTENDED(in, c);
+      c = 0x7FFFFFFF - (c >> 2);
+      val = ___SMMUL(val, c)<<1;
+   }
+   outlet_env = val;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

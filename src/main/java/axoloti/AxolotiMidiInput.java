@@ -26,11 +26,9 @@ import javax.sound.midi.Receiver;
 public class AxolotiMidiInput implements Receiver {
 
     public AxolotiMidiInput() {
-        device = null;
     }
 
     public void start(String midiDevice) {
-        close();
 
         if (midiDevice.isEmpty()) {
             return;
@@ -53,6 +51,7 @@ public class AxolotiMidiInput implements Receiver {
         }
     }
 
+    @Override
     public void send(MidiMessage msg, long timesStamp) {
         Connection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
         if ((connection != null) && connection.isConnected()) {
@@ -66,10 +65,8 @@ public class AxolotiMidiInput implements Receiver {
         }
     }
 
+    @Override
     public void close() {
-        if (device != null) {
-            device.close();
-        }
     }
-    private MidiDevice device;
+
 }

@@ -1,12 +1,12 @@
 <objdefs>
-   <obj.normal id="saw r" uuid="d1ba25bca51f913718932a78ed3481049f1cfbb0" sha="490b236441e3eb2d08fa14da9a933889b6270e54">
-      <upgradeSha>80d5f932fd3cac3d9abd87ccfe15d99c020d491f</upgradeSha>
+   <obj.normal id="saw r" uuid="6f79e6694e3e4b26c8732e836e54962eaf88dd1a" sha="171625d93cb16f133af571772179cbcefbae546d">
+      <upgradeSha>955ce7630b1a6f7ea1e2ebf522ad2632f03ef55a</upgradeSha>
       <sDescription>saw wave LFO, rising slope, pitch input, phase reset</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>lfo.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="pitchm" description="pitch modulation"/>
+         <frac32.bipolar name="pitch" description="pitch"/>
          <bool32.rising name="reset" description="reset phase"/>
       </inlets>
       <outlets>
@@ -15,10 +15,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.lfopitch name="pitch" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.lfopitch>
+         <frac32.s.map.lfopitch name="pitch" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[uint32_t Phase;
@@ -36,7 +33,7 @@ pPhase = 0;
       } else {
          if (!inlet_reset) r = 1;
          int32_t freq;
-         MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
+         MTOFEXTENDED(param_pitch + inlet_pitch,freq);
          Phase += freq>>2;
       }
       outlet_sync = (((int32_t)Phase)>=0)&&(pPhase<0);

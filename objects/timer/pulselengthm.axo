@@ -1,0 +1,44 @@
+<objdefs>
+   <obj.normal id="pulselengthm" uuid="62560cedc7cebe84778bc1bb4fc6c2122074a4ab" sha="64ec08e76cf714563d1f08e0e755dd6736adf154">
+      <upgradeSha>c6f3188b159e5c251be17c404a4d3586a43c2a86</upgradeSha>
+      <sDescription>Generates a single pulse after after a rising edge on trigger input. A new trigger before the pulse ends at the output, will extend the pulse. This version has a modulation input for the delay time. Extended range.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>timer.axh</helpPatch>
+      <inlets>
+         <bool32.rising name="trig" description="trigger"/>
+         <frac32.bipolar name="delay" description="delay"/>
+      </inlets>
+      <outlets>
+         <bool32 name="pulse" description="pulse output"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.klineartime.exp name="delay" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[int32_t val;
+int ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[val = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[if ((inlet_trig > 0) && !ntrig) {
+  val = 1 << 30;
+  ntrig = 1;
+  outlet_pulse = 1;
+}
+else {
+  if (!(inlet_trig > 0))
+    ntrig = 0;
+  if (val>0) {
+    int32_t t;
+    MTOF(-param_delay-inlet_delay,t);
+     val -= t>>3;
+     if (val<=0) outlet_pulse = 0;
+     else outlet_pulse = 1;
+  } else outlet_pulse = 0;
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>

@@ -1,32 +1,29 @@
 <objdefs>
-   <obj.normal id="sine lin" uuid="76e1fbd4ec919604532ce3cdb304c74aa6fe7c74" sha="ee8c12f590695fc6f9737cf3a36abef513eadb1d">
-      <upgradeSha>aa2d91984c32ce318dfd20c91518d6b34c94e12f</upgradeSha>
-      <sDescription>FM sine wave oscillator, linear interpolated sine table, s-rate frequency input, linear frequency input (goes all the way to 0)</sDescription>
+   <obj.normal id="sine lin" uuid="6a4458d598c9b8634b469d1a6e7f87971b5932f" sha="3a57035097adb60c79dfabdb4e3a3bd5d47791a1">
+      <sDescription>sine wave oscillator
+linear frequency input (goes all the way to 0)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>osc.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="freqm" description="frequency modulation"/>
-         <frac32buffer.bipolar name="pm" description="phase modulation"/>
+         <frac32.bipolar name="freq" description="frequency"/>
+         <frac32buffer.bipolar name="phase" description="phase"/>
       </inlets>
       <outlets>
          <frac32buffer.bipolar name="wave" description="sine wave"/>
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map.freq name="freq" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.freq>
+         <frac32.u.map.freq name="freq" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[uint32_t Phase; ]]></code.declaration>
       <code.init><![CDATA[Phase = 0;]]></code.init>
-      <code.srate><![CDATA[Phase += (param_freq + inlet_freqm)<<4;
+      <code.srate><![CDATA[Phase += (param_freq + inlet_freq)<<4;
 int32_t r;
-int32_t p2 = Phase + (inlet_pm[buffer_index]<<4);
+int32_t p2 = Phase + (inlet_phase<<4);
 SINE2TINTERP(p2,r)
-outlet_wave[buffer_index]= (r>>4);
+outlet_wave= (r>>4);
 ]]></code.srate>
    </obj.normal>
 </objdefs>

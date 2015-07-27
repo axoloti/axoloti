@@ -68,14 +68,14 @@ static msg_t ThreadDSP(void *arg) {
     watchdog_feed();
     if (!patchStatus) { // running
 #if (BOARD_STM32F4DISCOVERY)||(BOARD_AXOLOTI_V03)
-      // swap halfwords...
-      int i;
-      int32_t *p = inbuf;
-      for (i = 0; i < 32; i++) {
-        __ASM
-        volatile ("ror %0, %1, #16" : "=r" (*p) : "r" (*p));
-        p++;
-      }
+    // swap halfwords...
+    int i;
+    int32_t *p = inbuf;
+    for (i = 0; i < 32; i++) {
+      __ASM
+      volatile ("ror %0, %1, #16" : "=r" (*p) : "r" (*p));
+      p++;
+    }
 #endif
       (patchMeta.fptr_dsp_process)(inbuf, outbuf);
 #if (BOARD_STM32F4DISCOVERY)||(BOARD_AXOLOTI_V03)
@@ -102,16 +102,18 @@ static msg_t ThreadDSP(void *arg) {
 }
 
 void StopPatch(void) {
-  patchStatus = 2;
-  while (pThreadDSP) {
-    if (patchStatus == 1)
-      break;
+  if (!patchStatus) {
+    patchStatus = 2;
+    while (pThreadDSP) {
+      if (patchStatus == 1)
+        break;
+    }
+    if (patchMeta.fptr_patch_dispose != 0)
+      (patchMeta.fptr_patch_dispose)();
+    UIGoSafe();
+    InitPatch0();
+    sysmon_enable_blinker();
   }
-  if (patchMeta.fptr_patch_dispose != 0)
-    (patchMeta.fptr_patch_dispose)();
-  UIGoSafe();
-  InitPatch0();
-  sysmon_enable_blinker();
 }
 
 void StartPatch(void) {
@@ -122,14 +124,14 @@ void StartPatch(void) {
   patchMeta.fptr_dsp_process = 0;
   patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
   (patchMeta.fptr_patch_init)(GetFirmwareID());
-  if (patchMeta.fptr_dsp_process == 0){
+  if (patchMeta.fptr_dsp_process == 0) {
     // failed, incompatible firmwareID?
     return;
   }
   patchStatus = 0;
 }
 
-void start_dsp_thread(void){
+void start_dsp_thread(void) {
   if (!pThreadDSP)
     pThreadDSP = chThdCreateStatic(waThreadDSP, sizeof(waThreadDSP), HIGHPRIO,
                                    ThreadDSP, NULL);
@@ -145,7 +147,8 @@ void computebufI(int32_t *inp, int32_t *outp) {
     chSysLockFromIsr()
     ;
     chEvtSignalI(pThreadDSP, (eventmask_t)1);
-    chSysUnlockFromIsr();
+    chSysUnlockFromIsr()
+    ;
   }
   else
     for (i = 0; i < 32; i++) {
@@ -153,7 +156,8 @@ void computebufI(int32_t *inp, int32_t *outp) {
     }
 }
 
-void MidiInMsgHandler(midi_device_t  dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2) {
+void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t status,
+                      uint8_t data1, uint8_t data2) {
   if (!patchStatus) {
     (patchMeta.fptr_MidiInHandler)(dev, port, status, data1, data2);
   }
@@ -179,7 +183,8 @@ static msg_t ThreadLoader(void *arg) {
 
 void StartLoadPatchTread(void) {
   pThreadLoader = chThdCreateStatic(waThreadLoader, sizeof(waThreadLoader),
-                                    NORMALPRIO, ThreadLoader, NULL);
+  NORMALPRIO,
+                                    ThreadLoader, NULL);
 }
 
 void LoadPatch(char *name) {

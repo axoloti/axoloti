@@ -55,11 +55,8 @@ public class Table extends gentools {
         WriteAxoObject(catName, new AxoObject[]{CreateTableReadI(), CreateTableRead(), CreateTableReadTilde()});
         WriteAxoObject(catName, new AxoObject[]{CreateTableRead2(), CreateTableRead2T()});
         WriteAxoObject(catName, new AxoObject[]{CreateTableWrite(), CreateTableWriteI()});
-        WriteAxoObject(catName, CreateTableRecordTilde());
-        WriteAxoObject(catName, CreateTableRecord2Tilde());
-        WriteAxoObject(catName, CreateTablePlayTilde());
-        WriteAxoObject(catName, CreateTablePlay2Tilde());
-        WriteAxoObject(catName, CreateTablePlay3Tilde());
+        WriteAxoObject(catName, CreateTableRecord());
+        WriteAxoObject(catName, CreateTablePlay());
         WriteAxoObject(catName, SaveTable());
         WriteAxoObject(catName, LoadTable());
     }
@@ -319,103 +316,42 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTableRecordTilde() {
-        AxoObject o = new AxoObject("record", "record audio into table, records from the beginning till the end of the table");
-        o.inlets.add(new InletFrac32Buffer("wave", "wave"));
-        o.inlets.add(new InletBool32Rising("trig", "trigger"));
-        o.attributes.add(new AxoAttributeObjRef("table"));
-        o.sLocalData = "   int ntrig;\n"
-                + "   int pos;\n";
-        o.sInitCode = "pos = -1;\n";
-        o.sKRateCode = "   if ((%trig%>0) && !ntrig) {\n"
-                + "      ntrig=1;\n"
-                + "      pos = 0;\n"
-                + "   }\n"
-                + "   else if (!(%trig%>0)) ntrig=0;\n"
-                + "     int32_t i;\n"
-                + "   if (pos>=0) {\n"
-                + "       if ((pos+BUFSIZE)< %table%.LENGTH)\n"
-                + "          for(i=0;i<BUFSIZE;i++){\n"
-                + "              %table%.array[pos++] = __SSAT(%wave%[i],28)>>%table%.GAIN;\n"
-                + "          }\n"
-                + "       else pos = -1;\n"
-                + "   }";
-        return o;
-    }
 
-    static AxoObject CreateTableRecord2Tilde() {
-        AxoObject o = new AxoObject("record2", "record audio into table, starting from position");
+
+    static AxoObject CreateTableRecord() {
+        AxoObject o = new AxoObject("record", "record audio into table, starting from position");
         o.inlets.add(new InletFrac32Buffer("wave", "wave"));
         o.inlets.add(new InletFrac32Pos("pos", "start position in table"));
-        o.inlets.add(new InletBool32RisingFalling("en", "enable"));
+        o.inlets.add(new InletBool32Rising("start", "start playback"));
+        o.inlets.add(new InletBool32Rising("stop", "stop playback"));
         o.attributes.add(new AxoAttributeObjRef("table"));
-        o.sLocalData = "   int ntrig;\n"
+        o.sLocalData = "   int pstart;\n"
+                + "   int pstop;\n"
                 + "   int pos;\n";
-        o.sInitCode = "pos = -1;\n";
-        o.sKRateCode = "   if ((%en%>0) && !ntrig) {\n"
-                + "      ntrig=1;\n"
+        o.sInitCode = "pos = 0;\n"
+                + "pstart = 0;\n"
+                + "pstop = 1;\n";
+       o.sKRateCode = "   if ((%start%>0) && !pstart) {\n"
+                + "      pstart = 1;\n"
+                + "      pstop = 0;\n"
                 + "      uint32_t asat = __USAT(%pos%,27);\n"
                 + "      pos = asat>>(27-%table%.LENGTHPOW);\n"
-                + "   }\n"
-                + "   else if (!(%en%>0)) ntrig=0;\n";
-        o.sSRateCode = "   if (%en%>0) {\n"
+                + "  } else if (!(%start%>0)) {\n"
+                + "      pstart = 0;\n"
+                + "  }\n"
+                + "  if ((%stop%>0) && !pstop) {\n"
+                + "      pstop = 1;\n"
+                + "      pstart = 0;\n"
+                + "  } \n";
+        o.sSRateCode = "   if (!pstop)  {\n"
                 + "       if (pos< %table%.LENGTH)\n"
                 + "              %table%.array[pos++] = __SSAT(%wave%,28)>>%table%.GAIN;\n"
                 + "   }";
         return o;
     }
 
-    static AxoObject CreateTablePlayTilde() {
-        AxoObject o = new AxoObject("play", "play audio from table");
-        o.outlets.add(new OutletFrac32Buffer("wave", "wave"));
-        o.inlets.add(new InletBool32Rising("trig", "trigger"));
-        o.attributes.add(new AxoAttributeObjRef("table"));
-        o.sLocalData = "   int ntrig;\n"
-                + "   int pos;\n";
-        o.sInitCode = "pos = -1;\n"
-                + "ntrig = 0;\n";
-        o.sKRateCode = "   if ((%trig%>0) && !ntrig) {\n"
-                + "      ntrig=1;\n"
-                + "      pos = 0;\n"
-                + "   }\n"
-                + "   else if (!(%trig%>0)) ntrig=0;\n"
-                + "   int32_t i;\n"
-                + "   if ((pos>=0)&&((pos+BUFSIZE)< %table%.LENGTH))\n"
-                + "       for(i=0;i<BUFSIZE;i++){\n"
-                + "           %wave%[i]= %table%.array[pos++]<<%table%.GAIN;\n"
-                + "       }\n"
-                + "   else {"
-                + "       pos = -1;\n"
-                + "       for(i=0;i<BUFSIZE;i++) %wave%[i]= 0;\n"
-                + "   }";
-        return o;
-    }
-
-    static AxoObject CreateTablePlay2Tilde() {
-        AxoObject o = new AxoObject("play2", "play audio from table (non-transposed), starting from position");
-        o.outlets.add(new OutletFrac32Buffer("wave", "wave"));
-        o.inlets.add(new InletFrac32Pos("pos", "start position in table"));
-        o.inlets.add(new InletBool32RisingFalling("en", "enable"));
-        o.attributes.add(new AxoAttributeObjRef("table"));
-        o.sLocalData = "   int ntrig;\n"
-                + "   int pos;\n";
-        o.sInitCode = "pos = -1;\n";
-        o.sKRateCode = "   if ((%en%>0) && !ntrig) {\n"
-                + "      ntrig=1;\n"
-                + "      uint32_t asat = __USAT(%pos%,27);\n"
-                + "      pos = asat>>(27-%table%.LENGTHPOW);\n"
-                + "   }\n"
-                + "   else if (!(%en%>0)) ntrig=0;\n"
-                + "     int32_t i;\n";
-        o.sSRateCode = "   if (%en%>0) {\n"
-                + "       if (pos< %table%.LENGTH)\n"
-                + "              %wave% = %table%.array[pos++]<<%table%.GAIN;\n"
-                + "   } else %wave% = 0;";
-        return o;
-    }
-
-    static AxoObject CreateTablePlay3Tilde() {
-        AxoObject o = new AxoObject("play3", "play audio from table (non-transposed), starting from position");
+    static AxoObject CreateTablePlay() {
+        AxoObject o = new AxoObject("play", "play audio from table (non-transposed), starting from position");
         o.outlets.add(new OutletFrac32Buffer("wave", "wave"));
         o.inlets.add(new InletFrac32Pos("pos", "start position in table"));
         o.inlets.add(new InletBool32Rising("start", "start playback"));

@@ -7,7 +7,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="0" y="70">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="0" y="70">
       <params>
          <frac32.s.map name="pitch" value="2.0"/>
       </params>
@@ -20,10 +20,10 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="./organvoice" sha="c5567ee66bfe18fd9363c8ebe1d864e13b7b014d" name="organvoice1" x="182" y="70">
+   <obj type="./organvoice" name="organvoice1" x="182" y="70">
       <params>
-         <frac32.u.map name="ahd_1:a" value="0.0"/>
-         <frac32.u.map name="ahd_1:d" value="43.5"/>
+         <frac32.s.map name="ahd_1:a" value="0.0"/>
+         <frac32.s.map name="ahd_1:d" value="43.5"/>
          <frac32.s.map name="p" value="-28.5"/>
          <frac32.u.map name="pm1" value="0.0">
             <presets>
@@ -127,15 +127,18 @@
       </params>
       <attribs>
          <combo attributeName="poly" selection="16"/>
+         <combo attributeName="midichannel" selection="inherit"/>
+         <combo attributeName="mididevice" selection="omni"/>
+         <combo attributeName="midiport" selection="omni"/>
       </attribs>
    </obj>
-   <obj type="delay/echo fdbk mix" sha="779c3b8c43bc1738d3ebf6d4bdaee2b7d50b70ee" name="echo2_1" x="336" y="70">
+   <obj type="delay/echo fdbk mix" sha="6bc1204ca59cfb6fe995e01f4a68be52ca63cd0" name="echo2_1" x="336" y="70">
       <params>
          <frac32.u.map name="mix" value="3.0"/>
          <frac32.u.map name="feedback" value="16.0"/>
       </params>
       <attribs>
-         <spinner attributeName="delaylength" value="16847"/>
+         <spinner attributeName="delaylength" value="8192"/>
       </attribs>
    </obj>
    <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_21" x="448" y="70">
@@ -144,37 +147,43 @@
    </obj>
    <nets>
       <net>
-         <source name="echo2_1 out"/>
-         <dest name="dac_21 left"/>
-         <dest name="dac_21 right"/>
+         <source obj="echo2_1" outlet="out"/>
+         <dest obj="dac_21" inlet="left"/>
+         <dest obj="dac_21" inlet="right"/>
       </net>
       <net>
-         <source name="organvoice1 pressure"/>
-         <dest name="mix21 in2"/>
+         <source obj="organvoice1" outlet="pressure"/>
+         <dest obj="mix21" inlet="in2"/>
       </net>
       <net>
-         <source name="mix21 out"/>
-         <dest name="organvoice1 pressure_in"/>
+         <source obj="mix21" outlet="out"/>
+         <dest obj="organvoice1" inlet="pressure_in"/>
       </net>
       <net>
-         <source name="c_1 o"/>
-         <dest name="mix21 bus_in"/>
+         <source obj="c_1" outlet="o"/>
+         <dest obj="mix21" inlet="bus_in"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="mix21 in1"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="mix21" inlet="in1"/>
       </net>
       <net>
-         <source name="organvoice1 out"/>
-         <dest name="echo2_1 in"/>
+         <source obj="organvoice1" outlet="out"/>
+         <dest obj="echo2_1" inlet="in"/>
       </net>
       <net>
-         <source name="pnoise2_1 out"/>
-         <dest name="organvoice1 noise"/>
+         <source obj="pnoise2_1" outlet="out"/>
+         <dest obj="organvoice1" inlet="noise"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>130</x>
+      <y>114</y>
+      <width>758</width>
+      <height>400</height>
+   </windowPos>
 </patch-1.0>

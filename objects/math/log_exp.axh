@@ -65,48 +65,54 @@
    </obj>
    <nets>
       <net>
-         <source name="c1 out"/>
-         <dest name="log1 a"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="log1" inlet="a"/>
       </net>
       <net>
-         <source name="log1 result"/>
-         <dest name="displayS1 in"/>
+         <source obj="log1" outlet="result"/>
+         <dest obj="displayS1" inlet="in"/>
       </net>
       <net>
-         <source name="c1_ out"/>
-         <dest name="exp1 a"/>
+         <source obj="c1_" outlet="out"/>
+         <dest obj="exp1" inlet="a"/>
       </net>
       <net>
-         <source name="exp1 result"/>
-         <dest name="displayS2 in"/>
+         <source obj="exp1" outlet="result"/>
+         <dest obj="displayS2" inlet="in"/>
       </net>
       <net>
-         <source name="c1__ out"/>
-         <dest name="log1_ a"/>
+         <source obj="c1__" outlet="out"/>
+         <dest obj="log1_" inlet="a"/>
       </net>
       <net>
-         <source name="log1_ result"/>
-         <dest name="exp1_ a"/>
+         <source obj="log1_" outlet="result"/>
+         <dest obj="exp1_" inlet="a"/>
       </net>
       <net>
-         <source name="exp1_ result"/>
-         <dest name="displayU1 in"/>
+         <source obj="exp1_" outlet="result"/>
+         <dest obj="displayU1" inlet="in"/>
       </net>
       <net>
-         <source name="c1___ out"/>
-         <dest name="exp1__ a"/>
+         <source obj="c1___" outlet="out"/>
+         <dest obj="exp1__" inlet="a"/>
       </net>
       <net>
-         <source name="exp1__ result"/>
-         <dest name="log1__ a"/>
+         <source obj="exp1__" outlet="result"/>
+         <dest obj="log1__" inlet="a"/>
       </net>
       <net>
-         <source name="log1__ result"/>
-         <dest name="displayS3 in"/>
+         <source obj="log1__" outlet="result"/>
+         <dest obj="displayS3" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>618</width>
+      <height>646</height>
+   </windowPos>
 </patch-1.0>

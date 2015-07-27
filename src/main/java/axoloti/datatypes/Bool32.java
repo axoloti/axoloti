@@ -35,10 +35,7 @@ public class Bool32 implements DataType {
         if (Int32.d.equals(dest)) {
             return true;
         }
-        if (Frac32.d.equals(dest)) {
-            return true;
-        }
-        return false;
+        return Frac32.d.equals(dest);
     }
 
     @Override

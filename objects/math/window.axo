@@ -20,7 +20,7 @@
        outlet_win= (r>>4);
    }]]></code.krate>
    </obj.normal>
-   <obj.normal id="window" uuid="5582d4d31acd67073be69df4d31d686304e17161" sha="1bb02dc83c49fb3421e2c7fff89d26c5dec1000b">
+   <obj.normal id="window" uuid="5582d4d31acd67073be69df4d31d686304e17161" sha="5eb0df2ddb1317c495ad127430713029d29a46f2">
       <upgradeSha>279fd6991b5a8cf4c66e33feefccb9c9deb02f1d</upgradeSha>
       <sDescription>hanning window function, input 0..64</sDescription>
       <author>Johannes Taelman</author>
@@ -37,8 +37,8 @@
       <attribs/>
       <code.srate><![CDATA[   {
        int32_t r;
-       HANNING2TINTERP(inlet_phase[buffer_index]<<5,r)
-       outlet_win[buffer_index]= (r>>4);
+       HANNING2TINTERP(inlet_phase<<5,r)
+       outlet_win= (r>>4);
    }]]></code.srate>
    </obj.normal>
 </objdefs>

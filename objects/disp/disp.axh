@@ -1,7 +1,7 @@
 <patch-1.0>
-   <comment type="patch/comment" name="yellow = true/false&quot; = &quot;boolean" x="14" y="14"/>
-   <comment type="patch/comment" name="blue = -64.0 .. 64.0 = &quot;fractional&quot;" x="252" y="14"/>
-   <comment type="patch/comment" name="green = 0, 1, 2, 3, 4... (whole numbers) = &quot;integer&quot;" x="518" y="14"/>
+   <comment type="patch/comment" x="14" y="14" text="yellow = true/false&quot; = &quot;boolean"/>
+   <comment type="patch/comment" x="252" y="14" text="blue = -64.0 .. 64.0 = &quot;fractional&quot;"/>
+   <comment type="patch/comment" x="518" y="14" text="green = 0, 1, 2, 3, 4... (whole numbers) = &quot;integer&quot;"/>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb11" x="14" y="56">
       <params>
          <bool32.tgl name="b" value="1"/>
@@ -62,8 +62,8 @@
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="test the shortcuts: tab, arrows, entering values,..." x="14" y="266"/>
-   <obj type="osc/saw" sha="fac485938f0744316bc8361d4ad33f897cbff287" uuid="672d282db829da944d5580258269aa349c94bb24" name="saw_2" x="294" y="308">
+   <comment type="patch/comment" x="14" y="266" text="test the shortcuts: tab, arrows, entering values,..."/>
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" uuid="672d282db829da944d5580258269aa349c94bb24" name="saw_2" x="294" y="308">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
@@ -77,7 +77,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/saw" sha="510d077f286569c82ec986345e0096b8597af1ff" uuid="1dab096f1834d92fc669402f21dc15e951d977fe" name="saw_1" x="154" y="392">
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" uuid="1dab096f1834d92fc669402f21dc15e951d977fe" name="saw_1" x="154" y="392">
       <params>
          <frac32.s.map name="pitch" value="58.0"/>
       </params>
@@ -99,46 +99,46 @@
    </obj>
    <nets>
       <net>
-         <source name="cb11 o"/>
-         <dest name="bool_1 in"/>
+         <source obj="cb11" outlet="o"/>
+         <dest obj="bool_1" inlet="in"/>
       </net>
       <net>
-         <source name="c1 out"/>
-         <dest name="dial_1 in"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="dial_1" inlet="in"/>
       </net>
       <net>
-         <source name="cbp1 out"/>
-         <dest name="dial_2 in"/>
+         <source obj="cbp1" outlet="out"/>
+         <dest obj="dial_2" inlet="in"/>
       </net>
       <net>
-         <source name="i_4 out"/>
-         <dest name="i_12 in"/>
+         <source obj="i_4" outlet="out"/>
+         <dest obj="i_12" inlet="in"/>
       </net>
       <net>
-         <source name="i_17 out"/>
-         <dest name="i_18 in"/>
+         <source obj="i_17" outlet="out"/>
+         <dest obj="i_18" inlet="in"/>
       </net>
       <net>
-         <source name="i_19 out"/>
-         <dest name="i_20 in"/>
+         <source obj="i_19" outlet="out"/>
+         <dest obj="i_20" inlet="in"/>
       </net>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="kscope_1 in"/>
-         <dest name="vbar_1 in"/>
-         <dest name="vca_1 v"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="kscope_1" inlet="in"/>
+         <dest obj="vbar_1" inlet="in"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="cb11_ o"/>
-         <dest name="kscope_1 hold"/>
+         <source obj="cb11_" outlet="o"/>
+         <dest obj="kscope_1" inlet="hold"/>
       </net>
       <net>
-         <source name="saw_2 wave"/>
-         <dest name="vca_1 a"/>
+         <source obj="saw_2" outlet="wave"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="vu_1 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="vu_1" inlet="in"/>
       </net>
    </nets>
    <settings>

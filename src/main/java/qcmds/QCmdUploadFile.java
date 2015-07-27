@@ -58,7 +58,7 @@ public class QCmdUploadFile implements QCmdSerialTask {
     public QCmd Do(Connection connection) {
         connection.ClearSync();
         try {
-            Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading: " + f.getAbsolutePath());
+            Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading: {0}", f.getAbsolutePath());
             int tlength = (int) f.length();
             connection.TransmitCreateFile(filename, tlength);
             FileInputStream inputStream = new FileInputStream(f);
@@ -77,12 +77,12 @@ public class QCmdUploadFile implements QCmdSerialTask {
                 byte[] buffer = new byte[l];
                 int nRead = inputStream.read(buffer, 0, l);
                 if (nRead != l) {
-                    Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
+                    Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
                 }
                 connection.TransmitAppendFile(buffer);
                 int newpct = (100 * (tlength - remLength) / tlength);
                 if (newpct != pct) {
-                    Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading : " + newpct + "%");
+                    Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading : {0}%", newpct);
                 }
                 pct = newpct;
             } while (remLength > 0);

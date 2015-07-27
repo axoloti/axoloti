@@ -33,7 +33,7 @@ import javax.swing.JComponent;
  */
 public class SignalMetaDataIcon extends JComponent {
 
-    private SignalMetaData smd;
+    private final SignalMetaData smd;
 
     public SignalMetaDataIcon(SignalMetaData smd) {
         this.smd = smd;

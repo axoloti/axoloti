@@ -69,6 +69,7 @@ public class GeneratedObjects extends gentools {
         LTC.GenerateAll();
         Spat.GenerateAll();
         USB.GenerateAll();
+        Harmony.GenerateAll();
 
         {
             ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
@@ -101,7 +102,7 @@ public class GeneratedObjects extends gentools {
 
         WriteAxoObject("math", Create_glide());
 
-        WriteAxoObject(unstable, Create_testanno());
+//        WriteAxoObject(unstable, Create_testanno());
 
 //        objs.add(Create_FlashTableGranularPlay());
         //WriteAxoObject("util",modsource());

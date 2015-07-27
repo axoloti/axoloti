@@ -31,24 +31,30 @@
    </obj>
    <nets>
       <net>
-         <source name="cbp2 out"/>
-         <dest name="round1 in"/>
+         <source obj="cbp2" outlet="out"/>
+         <dest obj="round1" inlet="in"/>
       </net>
       <net>
-         <source name="round1 out"/>
-         <dest name="displayS1 in"/>
+         <source obj="round1" outlet="out"/>
+         <dest obj="displayS1" inlet="in"/>
       </net>
       <net>
-         <source name="cbp2_ out"/>
-         <dest name="round1_ a"/>
+         <source obj="cbp2_" outlet="out"/>
+         <dest obj="round1_" inlet="a"/>
       </net>
       <net>
-         <source name="round1_ b"/>
-         <dest name="displayS1_ in"/>
+         <source obj="round1_" outlet="b"/>
+         <dest obj="displayS1_" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>506</width>
+      <height>464</height>
+   </windowPos>
 </patch-1.0>

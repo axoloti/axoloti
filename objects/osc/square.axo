@@ -1,22 +1,19 @@
 <objdefs>
-   <obj.normal id="square" uuid="9932e3efadb76662665654f9b58bf12c00923f27" sha="a85e027441336ce2f7f54ea5cdfaedfacb47018e">
-      <upgradeSha>24c5025966e821443cc8e104039bc46f72de3607</upgradeSha>
-      <sDescription>Bandwith limited square wave oscillator</sDescription>
+   <obj.normal id="square" uuid="aa9592566d3673fe64dcaede132e9ebd45d2202f" sha="7cccf8a95bf312ecc084f11f532cf5fda00b8c58">
+      <sDescription>square wave oscillator
+Bandwith limited</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>osc.axh</helpPatch>
       <inlets>
-         <frac32.bipolar name="pitchm" description="pitch modulation (semitones)"/>
+         <frac32.bipolar name="pitch" description="pitch"/>
       </inlets>
       <outlets>
          <frac32buffer.bipolar name="wave" description="square wave, anti-aliased"/>
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.pitch name="pitch" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.pitch>
+         <frac32.s.map.pitch name="pitch" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[  int32_t osc_p;
@@ -28,7 +25,7 @@
     for(j=0;j<blepvoices;j++)
       oscp[j] = &blept[BLEPSIZE-1];   nextvoice = 0;]]></code.init>
       <code.krate><![CDATA[      int32_t freq;
-      MTOFEXTENDED(param_pitch + inlet_pitchm,freq);
+      MTOFEXTENDED(param_pitch + inlet_pitch,freq);
   int j;
   int16_t *lastblep = &blept[BLEPSIZE-1];
   for(j=0;j<BUFSIZE;j++){

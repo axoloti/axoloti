@@ -1,0 +1,95 @@
+<objdefs>
+   <obj.normal id="flashread interp" uuid="3bee14d4674a0d360d134757716120ffc29310a4" sha="5bf8648b0d5a5df01bb9d8aeb6f62cb164d7a6eb">
+      <upgradeSha>ee182884ff6601bedd6fe14e6f89cd89864e3b20</upgradeSha>
+      <sDescription>linear interpolated flash table read</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <frac32buffer name="pos" description="position"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="o" description="output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <combo name="sample">
+            <MenuEntries>
+               <string>808bd</string>
+               <string>808hatclose</string>
+               <string>808hatopen</string>
+               <string>808hitom</string>
+               <string>808midtom</string>
+               <string>808lotom</string>
+               <string>808snare</string>
+               <string>rockwehrmann</string>
+            </MenuEntries>
+            <CEntries>
+               <string>808bd</string>
+               <string>808hatclose</string>
+               <string>808hatopen</string>
+               <string>808hitom</string>
+               <string>808midtom</string>
+               <string>808lotom</string>
+               <string>808snare</string>
+               <string>rockwehrmann</string>
+            </CEntries>
+         </combo>
+         <combo name="size">
+            <MenuEntries>
+               <string>2</string>
+               <string>4</string>
+               <string>8</string>
+               <string>16</string>
+               <string>32</string>
+               <string>64</string>
+               <string>128</string>
+               <string>256</string>
+               <string>512</string>
+               <string>1024</string>
+               <string>2048</string>
+               <string>4096</string>
+               <string>8192</string>
+               <string>16384</string>
+               <string>32768</string>
+               <string>65536</string>
+            </MenuEntries>
+            <CEntries>
+               <string>1</string>
+               <string>2</string>
+               <string>3</string>
+               <string>4</string>
+               <string>5</string>
+               <string>6</string>
+               <string>7</string>
+               <string>8</string>
+               <string>9</string>
+               <string>10</string>
+               <string>11</string>
+               <string>12</string>
+               <string>13</string>
+               <string>14</string>
+               <string>15</string>
+               <string>16</string>
+            </CEntries>
+         </combo>
+      </attribs>
+      <code.declaration><![CDATA[static const uint32_t LENGTHPOW = (attr_size);
+static const uint32_t LENGTH = (1<<attr_size);
+static const uint32_t LENGTHMASK = ((1<<attr_size)-1);
+static const uint32_t BITS = 16;
+static const uint32_t GAIN = 12;
+]]></code.declaration>
+      <code.srate><![CDATA[extern int16_t _binary_attr_sample_raw_start;
+   uint32_t asat = __USAT(inlet_pos,27);
+    int index = asat>>(27-LENGTHPOW);
+   int32_t y1 = (((int16_t *)(&_binary_attr_sample_raw_start))[index])<<GAIN;
+   int32_t y2 = (((int16_t *)(&_binary_attr_sample_raw_start))[index+1])<<GAIN;
+   int frac = (asat - (index<<(27-LENGTHPOW)))<<(LENGTHPOW+3);
+  int32_t rr;
+  rr = ___SMMUL(y1,(1<<30)-frac);
+  rr = ___SMMLA(y2,frac,rr);
+outlet_o= rr<<2;
+]]></code.srate>
+   </obj.normal>
+</objdefs>

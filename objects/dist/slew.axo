@@ -13,10 +13,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="slew" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="slew" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t acc;
@@ -38,7 +35,7 @@ acc = __SSAT(acc,28);
 outlet_out = acc;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="slew" uuid="a739bd13e7ed589ee6581d2821c205d69c60fdc0" sha="16287f6dd82c3e4e8db6210498c5ad4fe0b0f433">
+   <obj.normal id="slew" uuid="a739bd13e7ed589ee6581d2821c205d69c60fdc0" sha="8866f0d620b5f0076685e40205702b91c379504c">
       <upgradeSha>b21f230004310005f3550792d307774153a89670</upgradeSha>
       <sDescription>symetric slew rate limiter (not bandwidth limited)</sDescription>
       <author>Johannes Taelman</author>
@@ -52,29 +49,26 @@ outlet_out = acc;
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="slew" noLabel="true">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map>
+         <frac32.u.map name="slew" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t acc;
 ]]></code.declaration>
       <code.init><![CDATA[acc = 0;
 ]]></code.init>
-      <code.srate><![CDATA[if (inlet_in[buffer_index]>acc){
-  if ((inlet_in[buffer_index]-acc)>param_slew)
+      <code.srate><![CDATA[if (inlet_in>acc){
+  if ((inlet_in-acc)>param_slew)
     acc += param_slew;
   else
-    acc = inlet_in[buffer_index];
+    acc = inlet_in;
 } else {
-  if ((acc-inlet_in[buffer_index])>param_slew)
+  if ((acc-inlet_in)>param_slew)
     acc -= param_slew;
   else
-    acc = inlet_in[buffer_index];
+    acc = inlet_in;
 }
 acc = __SSAT(acc,28);
-outlet_out[buffer_index] = acc;
+outlet_out = acc;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

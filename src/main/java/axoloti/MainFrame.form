@@ -2,6 +2,11 @@
 
 <Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jLabel1"/>
+      </Properties>
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="jMenuFile">
@@ -38,7 +43,7 @@
             </Menu>
             <Menu class="axoloti.menus.RecentFileMenu" name="recentFileMenu1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Open recent"/>
+                <Property name="text" type="java.lang.String" value="Open Recent"/>
               </Properties>
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
@@ -61,8 +66,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuAutoTest">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Automated test"/>
-                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="text" type="java.lang.String" value="Test Compilation"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuAutoTestActionPerformed"/>
@@ -115,7 +119,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSelectCom">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Select device..."/>
+                <Property name="text" type="java.lang.String" value="Select Device..."/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemSelectComActionPerformed"/>
@@ -178,7 +182,7 @@
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItemRefreshFWID">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Refresh firmware ID"/>
+                    <Property name="text" type="java.lang.String" value="Refresh Firmware ID"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRefreshFWIDActionPerformed"/>
@@ -294,7 +298,7 @@
           <Component id="jPanelProgress" alignment="0" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel2" min="-2" pref="70" max="-2" attributes="0"/>
+              <Component id="jLabelIcon" min="-2" pref="70" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" pref="88" max="32767" attributes="0"/>
@@ -306,16 +310,16 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jButtonClear" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jLabel2" pref="0" max="32767" attributes="0"/>
+                  <Component id="jLabelIcon" min="-2" pref="59" max="-2" attributes="0"/>
+                  <Component id="jPanel1" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPaneLog" pref="171" max="32767" attributes="0"/>
+              <Component id="jScrollPaneLog" pref="151" max="32767" attributes="0"/>
               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               <Component id="jPanelProgress" min="-2" max="-2" attributes="0"/>
           </Group>
@@ -403,8 +407,12 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jLabelCPUID" max="32767" attributes="0"/>
-              <Component id="jLabelFirmwareID" max="32767" attributes="0"/>
               <Component id="jCheckBoxConnect" alignment="0" pref="151" max="32767" attributes="0"/>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jLabelVoltages" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+              </Group>
+              <Component id="jLabelFirmwareID" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -415,6 +423,8 @@
                   <Component id="jLabelCPUID" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabelFirmwareID" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="jLabelVoltages" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -438,9 +448,14 @@
             <Property name="text" type="java.lang.String" value="FirmwareID"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="jLabelVoltages">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="jLabel2"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabel2">
+    <Component class="javax.swing.JLabel" name="jLabelIcon">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/resources/axoloti_icon.png"/>

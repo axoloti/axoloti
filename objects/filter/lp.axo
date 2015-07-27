@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="lp" uuid="1427779cf086ab83c8b03eeeac69c2a97759c651" sha="f08f8ceddfd25d03290d4164aa7884cd7257e242">
-      <upgradeSha>219ae48267404fac1e204a0ae6f3f1363e789297</upgradeSha>
+      <upgradeSha>79e9d661e723f1d5c847baa56e4131fece43b89</upgradeSha>
       <sDescription>2-pole resonant low-pass filter (biquad)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -13,14 +13,8 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.pitch name="pitch">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.pitch>
-         <frac32.u.map.filterq name="reso">
-            <MinValue v="0.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.u.map.filterq>
+         <frac32.s.map.pitch name="pitch"/>
+         <frac32.u.map.filterq name="reso"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[biquad_state bs;biquad_coefficients bc;

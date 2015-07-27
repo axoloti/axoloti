@@ -37,32 +37,38 @@
    </obj>
    <nets>
       <net>
-         <source name="c1 out"/>
-         <dest name="bitand in1"/>
-         <dest name="bitor in1"/>
-         <dest name="bitxor in1"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="bitand" inlet="in1"/>
+         <dest obj="bitor" inlet="in1"/>
+         <dest obj="bitxor" inlet="in1"/>
       </net>
       <net>
-         <source name="c2 out"/>
-         <dest name="bitand in2"/>
-         <dest name="bitor in2"/>
-         <dest name="bitxor in2"/>
+         <source obj="c2" outlet="out"/>
+         <dest obj="bitand" inlet="in2"/>
+         <dest obj="bitor" inlet="in2"/>
+         <dest obj="bitxor" inlet="in2"/>
       </net>
       <net>
-         <source name="bitor out"/>
-         <dest name="displayU1 in"/>
+         <source obj="bitor" outlet="out"/>
+         <dest obj="displayU1" inlet="in"/>
       </net>
       <net>
-         <source name="bitand out"/>
-         <dest name="displayU1_ in"/>
+         <source obj="bitand" outlet="out"/>
+         <dest obj="displayU1_" inlet="in"/>
       </net>
       <net>
-         <source name="bitxor out"/>
-         <dest name="displayU1__ in"/>
+         <source obj="bitxor" outlet="out"/>
+         <dest obj="displayU1__" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>506</width>
+      <height>492</height>
+   </windowPos>
 </patch-1.0>

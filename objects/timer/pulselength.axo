@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="pulselength" uuid="ca68725237d8ba8407773340801660a9fd9b0dba" sha="86ef23ee0ae7cffc4c8ae0d9e258473d5dc57764">
-      <upgradeSha>2499426dff17a3fd549c8c6659254da15b6b5f1e</upgradeSha>
+      <upgradeSha>4fce05a0b4eabaad8612fa820e5795de303284bf</upgradeSha>
       <sDescription>Generates a single pulse after a rising edge on trigger input. A new trigger before the pulse finishes at the output, extends the pulse.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -13,10 +13,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.klineartime.exp name="delay" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.klineartime.exp>
+         <frac32.s.map.klineartime.exp name="delay" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;

@@ -21,7 +21,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="speed" x="14" y="154">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="speed" x="14" y="154">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-56.0"/>
       </params>
@@ -39,7 +39,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="delay/read interp" sha="22a07dcbe5007bc4095bed25946486e7c98caf23" name="delread21" x="364" y="154">
+   <obj type="delay/read interp" sha="6fda3a4b04cc8fc49e63240c2fff115695ec7a7" name="delread21" x="364" y="154">
       <params>
          <frac32.u.map name="time" value="0.0"/>
       </params>
@@ -47,7 +47,7 @@
          <objref attributeName="delayname" obj="dela"/>
       </attribs>
    </obj>
-   <obj type="mix/xfade~" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="mix" x="532" y="154">
+   <obj type="mix/xfade" sha="7c7bb910e14c9ba3614f189bb924c86ca0a86890" name="mix" x="532" y="154">
       <params/>
       <attribs/>
    </obj>
@@ -67,50 +67,50 @@
    </obj>
    <nets>
       <net>
-         <source name="speed wave"/>
-         <dest name="bipolar2unipolar1 i"/>
+         <source obj="speed" outlet="wave"/>
+         <dest obj="bipolar2unipolar1" inlet="i"/>
       </net>
       <net>
-         <source name="bipolar2unipolar1 o"/>
-         <dest name="vca_1 a"/>
+         <source obj="bipolar2unipolar1" outlet="o"/>
+         <dest obj="vca_1" inlet="a"/>
       </net>
       <net>
-         <source name="depth out"/>
-         <dest name="vca_1 b"/>
+         <source obj="depth" outlet="out"/>
+         <dest obj="vca_1" inlet="b"/>
       </net>
       <net>
-         <source name="vca_1 result"/>
-         <dest name="interp_1 i"/>
+         <source obj="vca_1" outlet="result"/>
+         <dest obj="interp_1" inlet="i"/>
       </net>
       <net>
-         <source name="interp_1 o"/>
-         <dest name="delread21 timem"/>
+         <source obj="interp_1" outlet="o"/>
+         <dest obj="delread21" inlet="time"/>
       </net>
       <net>
-         <source name="in inlet"/>
-         <dest name="mix i1"/>
-         <dest name="mux_1 i1"/>
+         <source obj="in" outlet="inlet"/>
+         <dest obj="mix" inlet="i1"/>
+         <dest obj="mux_1" inlet="i1"/>
       </net>
       <net>
-         <source name="delread21 out"/>
-         <dest name="mix i2"/>
+         <source obj="delread21" outlet="out"/>
+         <dest obj="mix" inlet="i2"/>
       </net>
       <net>
-         <source name="mix o"/>
-         <dest name="dela in"/>
-         <dest name="mux_1 i2"/>
+         <source obj="mix" outlet="o"/>
+         <dest obj="dela" inlet="in"/>
+         <dest obj="mux_1" inlet="i2"/>
       </net>
       <net>
-         <source name="fdbk out"/>
-         <dest name="mix c"/>
+         <source obj="fdbk" outlet="out"/>
+         <dest obj="mix" inlet="c"/>
       </net>
       <net>
-         <source name="mux_1 o"/>
-         <dest name="out outlet"/>
+         <source obj="mux_1" outlet="o"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
       <net>
-         <source name="on o"/>
-         <dest name="mux_1 s"/>
+         <source obj="on" outlet="o"/>
+         <dest obj="mux_1" inlet="s"/>
       </net>
    </nets>
    <settings>
@@ -120,8 +120,13 @@
       <NPresetEntries>4</NPresetEntries>
       <NModulationSources>2</NModulationSources>
       <NModulationTargetsPerSource>2</NModulationTargetsPerSource>
-      <Author></Author>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>1010</width>
+      <height>548</height>
+   </windowPos>
    <helpPatch>flanger1.axh</helpPatch>
 </patch-1.0>

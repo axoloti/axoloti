@@ -16,7 +16,7 @@
       <code.krate><![CDATA[   outlet_o= (inlet_i-(1<<26))<<1;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="unipolar2bipolar" uuid="3345c38145a8120f27f13de7d1507d9aa22862ae" sha="36966e38c913683578091a9c39d09c87005d8d7c">
+   <obj.normal id="unipolar2bipolar" uuid="3345c38145a8120f27f13de7d1507d9aa22862ae" sha="69427841cd6b343811d10c93fc97e3219f85ac5a">
       <upgradeSha>8525be5d55df51043f07b379c6d326988e993946</upgradeSha>
       <sDescription>unipolar to bipolar</sDescription>
       <author>Johannes Taelman</author>
@@ -30,7 +30,7 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.srate><![CDATA[   outlet_o[buffer_index]= (inlet_i[buffer_index]-(1<<26))<<1;
+      <code.srate><![CDATA[   outlet_o= (inlet_i-(1<<26))<<1;
 ]]></code.srate>
    </obj.normal>
 </objdefs>

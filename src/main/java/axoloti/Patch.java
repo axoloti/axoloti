@@ -41,7 +41,6 @@ import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
-import axoloti.parameters.ParameterInstanceFrac32;
 import axoloti.utils.Constants;
 import displays.DisplayInstance;
 import java.awt.Dimension;
@@ -103,6 +102,9 @@ public class Patch {
     @Element(required = false)
     private String helpPatch;
 
+    // patch this patch is contained in
+    private Patch container = null;
+
     public boolean presetUpdatePending = false;
 
     MainFrame GetMainFrame() {
@@ -132,8 +134,8 @@ public class Patch {
         GetQCmdProcessor().AppendToQueue(new QCmdStart(this));
         GetQCmdProcessor().AppendToQueue(new QCmdLock(this));
     }
-
-    public void ShowCompileFail() {
+    
+public void ShowCompileFail() {
         Unlock();
     }
 
@@ -230,6 +232,9 @@ public class Patch {
 
     public void SetDirty() {
         dirty = true;
+        if(container != null) {
+            container.SetDirty();
+        }
     }
 
     @Deprecated
@@ -246,6 +251,15 @@ public class Patch {
         return dirty;
     }
 
+    
+    public Patch container() {
+        return container;
+    }        
+
+    public void container(Patch c) {
+        container = c;
+    }        
+    
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         if (!IsLocked()) {
             if (obj == null) {
@@ -259,7 +273,7 @@ public class Patch {
             }
             AxoObjectInstanceAbstract objinst = obj.CreateInstance(this, n + i, loc);
             SetDirty();
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "instance added, type " + obj.id);
+            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "instance added, type {0}", obj.id);
 
             Modulator[] m = obj.getModulators();
             if (m != null) {
@@ -333,7 +347,7 @@ public class Patch {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: already connected");
                 return null;
             } else if ((n1 != null) && (n2 == null)) {
-                if (n1.source.size() == 0) {
+                if (n1.source.isEmpty()) {
                     Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: adding outlet to inlet net");
                     n1.connectOutlet(ol);
                     return n1;
@@ -536,7 +550,7 @@ public class Patch {
     void PreSerialize() {
     }
 
-    void save(File f) {
+    boolean save(File f) {
         SortByPosition();
         PreSerialize();
         Serializer serializer = new Persister();
@@ -546,13 +560,15 @@ public class Patch {
             dirty = false;
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-        if (settings == null) {
-            return;
-        }
-        if (settings.subpatchmode == SubPatchMode.no) {
-            return;
-        }
+        return true;
+//        if (settings == null) {
+//            return;
+//        }
+//        if (settings.subpatchmode == SubPatchMode.no) {
+//            return;
+//        }
         /*
          String axoObjPath = getFileNamePath();
          int i = axoObjPath.lastIndexOf(".axp");
@@ -1116,7 +1132,7 @@ public class Patch {
 
         c += "void xpatch_init2(int fwid)\n"
                 + "{\n"
-                + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID + ") {\n"
+                + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID+ ") {\n"
                 + "    patchMeta.fptr_dsp_process = 0;\n"
                 + "    return;"
                 + "  }\n"
@@ -1923,7 +1939,7 @@ public class Patch {
                     pdata[index * 2 + 1] = p.value.getRaw();
                     index++;
                     if (index == settings.GetNPresetEntries()) {
-                        Logger.getLogger(Patch.class.getName()).severe("more than " + settings.GetNPresetEntries() + "entries in preset, skipping...");
+                        Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "more than {0}entries in preset, skipping...", settings.GetNPresetEntries());
                         return pdata;
                     }
                 }
@@ -1989,7 +2005,7 @@ public class Patch {
         }
 
         // check if instancename was standard name (objname_1 etc)
-        String newname = null;
+        String newname;
         String[] ss = n.split("_");
         boolean hasNumeralSuffix = false;
         try {
@@ -2087,7 +2103,7 @@ public class Patch {
         if (!(ProcessedInstances.size() == objectinstances.size())) {
             for (AxoObjectInstanceAbstract o : objectinstances) {
                 if (!ProcessedInstances.contains(o.getInstanceName())) {
-                    Logger.getLogger(Patch.class.getName()).severe("PromoteOverloading : fault in " + o.getInstanceName());
+                    Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "PromoteOverloading : fault in {0}", o.getInstanceName());
                 }
             }
         }

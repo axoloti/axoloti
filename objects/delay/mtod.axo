@@ -1,26 +1,23 @@
 <objdefs>
-   <obj.normal id="mtod" uuid="968d0c6522ebf121f66d437147e97ef879b6657a" sha="a5ddc7f510203544461c0c35a362fa7664708926">
-      <upgradeSha>800732c561d801c8b0c245ce1c6cd2413cd0ff6</upgradeSha>
+   <obj.normal id="mtod" uuid="bbaeb53acbf18f926c5febae31d8bf2f52725ee" sha="60139378b4e43b414539a7911c172765f979796">
+      <upgradeSha>2f1c1dd4a3bb82c4e52ded54d02b22eab6723834</upgradeSha>
       <sDescription>Pitch (note index) to period time</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>delay.axh</helpPatch>
       <inlets>
-         <frac32 name="pitchm" description="phase increment"/>
+         <frac32 name="pitch" description="phase increment"/>
       </inlets>
       <outlets>
          <frac32 name="delay" description="delay time"/>
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.pitch name="pitch" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.pitch>
+         <frac32.s.map.pitch name="pitch" noLabel="true"/>
       </params>
       <attribs/>
       <code.krate><![CDATA[   int32_t freq;
-   MTOF(0-param_pitch - inlet_pitchm,freq);
+   MTOF(0-param_pitch - inlet_pitch,freq);
    outlet_delay = freq;
 ]]></code.krate>
    </obj.normal>

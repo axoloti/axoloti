@@ -5,13 +5,13 @@
          <spinner attributeName="note" value="60"/>
       </attribs>
    </obj>
-   <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="d_1" x="210" y="14">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="d_1" x="210" y="14">
       <params>
          <frac32.s.map name="d" onParent="true" value="-20.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_2" x="322" y="14">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="noise.uniform_2" x="322" y="14">
       <params/>
       <attribs/>
    </obj>
@@ -19,13 +19,13 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp1" sha="91e2ecaa66340906540043ea41ac3987ce0aef17" name="filter.lowpass~_1" x="504" y="14">
+   <obj type="filter/lp1" sha="290a234e2f83eb072198d0158bcd5da02a3606c3" name="filter.lowpass~_1" x="504" y="14">
       <params>
          <frac32.s.map name="freq" onParent="true" value="-29.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin m x" sha="a2e1da37932bdfc8056cd08cca74d2ebc6735f40" name="env.envdlinmx_1" x="210" y="98">
+   <obj type="env/d lin m x" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" name="env.envdlinmx_1" x="210" y="98">
       <params>
          <frac32.s.map name="d" onParent="true" value="-13.0"/>
       </params>
@@ -37,7 +37,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="osc.sine_1" x="406" y="98">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc.sine_1" x="406" y="98">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-30.0"/>
       </params>
@@ -59,7 +59,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_1" x="308" y="294">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="noise.uniform_1" x="308" y="294">
       <params/>
       <attribs/>
    </obj>
@@ -77,9 +77,9 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d m" sha="50cab575d33b76fbf6279e2c0fa381124d3f1032" name="env.decay.m_1" x="294" y="336">
+   <obj type="env/d m" sha="3f6e6c6081782177f0dc9dfe9e50a99b54fe41f6" name="env.decay.m_1" x="294" y="336">
       <params>
-         <frac32.u.map name="d" onParent="true" value="11.5"/>
+         <frac32.s.map name="d" onParent="true" value="11.5"/>
       </params>
       <attribs/>
    </obj>
@@ -87,7 +87,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/bp svf" sha="64eb414253ad09d2d8c5945dc48b8e1d2ac5b321" name="filter.bpfsvf~_1" x="490" y="336">
+   <obj type="filter/bp svf" sha="ba4ac02f48ae93c7ecc9fac9b0e212cac7c21539" name="filter.bpfsvf~_1" x="490" y="336">
       <params>
          <frac32.s.map name="pitch" value="55.0"/>
          <frac32.u.map name="reso" value="23.5"/>
@@ -100,85 +100,85 @@
    </obj>
    <nets>
       <net>
-         <source name="noise.uniform_2 wave"/>
-         <dest name="arithmetic.abs_1 in"/>
+         <source obj="noise.uniform_2" outlet="wave"/>
+         <dest obj="arithmetic.abs_1" inlet="in"/>
       </net>
       <net>
-         <source name="env.envdlinmx_1 env"/>
-         <dest name="arithmetic.*_2 b"/>
+         <source obj="env.envdlinmx_1" outlet="env"/>
+         <dest obj="arithmetic.*_2" inlet="b"/>
       </net>
       <net>
-         <source name="osc.sine_1 wave"/>
-         <dest name="arithmetic.*_1 b"/>
+         <source obj="osc.sine_1" outlet="wave"/>
+         <dest obj="arithmetic.*_1" inlet="b"/>
       </net>
       <net>
-         <source name="arithmetic.*_1 result"/>
-         <dest name="arithmetic.*_2 a"/>
+         <source obj="arithmetic.*_1" outlet="result"/>
+         <dest obj="arithmetic.*_2" inlet="a"/>
       </net>
       <net>
-         <source name="arithmetic.*c_2 out"/>
-         <dest name="osc.sine_1 pitchm"/>
+         <source obj="arithmetic.*c_2" outlet="out"/>
+         <dest obj="osc.sine_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="arithmetic.abs_1 out"/>
-         <dest name="filter.lowpass~_1 in"/>
+         <source obj="arithmetic.abs_1" outlet="out"/>
+         <dest obj="filter.lowpass~_1" inlet="in"/>
       </net>
       <net>
-         <source name="filter.lowpass~_1 out"/>
-         <dest name="arithmetic.*_1 a"/>
+         <source obj="filter.lowpass~_1" outlet="out"/>
+         <dest obj="arithmetic.*_1" inlet="a"/>
       </net>
       <net>
-         <source name="keybnote1 gate"/>
-         <dest name="d_1 trig"/>
-         <dest name="env.envdlinmx_1 trig"/>
+         <source obj="keybnote1" outlet="gate"/>
+         <dest obj="d_1" inlet="trig"/>
+         <dest obj="env.envdlinmx_1" inlet="trig"/>
       </net>
       <net>
-         <source name="d_1 env"/>
-         <dest name="arithmetic.*c_2 in"/>
+         <source obj="d_1" outlet="env"/>
+         <dest obj="arithmetic.*c_2" inlet="in"/>
       </net>
       <net>
-         <source name="keybnote1 velocity"/>
-         <dest name="env.envdlinmx_1 dm"/>
+         <source obj="keybnote1" outlet="velocity"/>
+         <dest obj="env.envdlinmx_1" inlet="d"/>
       </net>
       <net>
-         <source name="env.decay.m_1 env"/>
-         <dest name="gain.vca~_1 v"/>
+         <source obj="env.decay.m_1" outlet="env"/>
+         <dest obj="gain.vca~_1" inlet="v"/>
       </net>
       <net>
-         <source name="noise.uniform_1 wave"/>
-         <dest name="gain.vca~_1 a"/>
+         <source obj="noise.uniform_1" outlet="wave"/>
+         <dest obj="gain.vca~_1" inlet="a"/>
       </net>
       <net>
-         <source name="gain.vca~_1 o"/>
-         <dest name="filter.bpfsvf~_1 in"/>
+         <source obj="gain.vca~_1" outlet="o"/>
+         <dest obj="filter.bpfsvf~_1" inlet="in"/>
       </net>
       <net>
-         <source name="keybnote1_ gate"/>
-         <dest name="env.decay.m_1 trig"/>
+         <source obj="keybnote1_" outlet="gate"/>
+         <dest obj="env.decay.m_1" inlet="trig"/>
       </net>
       <net>
-         <source name="keybnote1_ velocity"/>
-         <dest name="-_1 in2"/>
+         <source obj="keybnote1_" outlet="velocity"/>
+         <dest obj="-_1" inlet="in2"/>
       </net>
       <net>
-         <source name="c_1 o"/>
-         <dest name="-_1 in1"/>
+         <source obj="c_1" outlet="o"/>
+         <dest obj="-_1" inlet="in1"/>
       </net>
       <net>
-         <source name="-_1 out"/>
-         <dest name="div_1 in"/>
+         <source obj="-_1" outlet="out"/>
+         <dest obj="div_1" inlet="in"/>
       </net>
       <net>
-         <source name="div_1 out"/>
-         <dest name="env.decay.m_1 dm"/>
+         <source obj="div_1" outlet="out"/>
+         <dest obj="env.decay.m_1" inlet="d"/>
       </net>
       <net>
-         <source name="arithmetic.*_2 result"/>
-         <dest name="bd outlet"/>
+         <source obj="arithmetic.*_2" outlet="result"/>
+         <dest obj="bd" inlet="outlet"/>
       </net>
       <net>
-         <source name="filter.bpfsvf~_1 out"/>
-         <dest name="snr outlet"/>
+         <source obj="filter.bpfsvf~_1" outlet="out"/>
+         <dest obj="snr" inlet="outlet"/>
       </net>
    </nets>
    <settings>
@@ -191,4 +191,10 @@
       <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>912</width>
+      <height>646</height>
+   </windowPos>
 </patch-1.0>

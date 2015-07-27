@@ -1,0 +1,59 @@
+<patch-1.0>
+   <obj type="disp/note" sha="47a060e4a7fa766d1de9cf03c8aa236d79be3440" uuid="ce3190ad98b73b468f22221f555b01feee03226a" name="note_1" x="154" y="28">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="stomps/chorus1" uuid="308d235b433d167a0251a5a7ae02cb683bb5f1a1" name="obj_1" x="350" y="70">
+      <params>
+         <bool32.tgl name="on" value="0"/>
+         <frac32.u.map name="depth" value="7.0"/>
+         <frac32.s.map name="speed" value="-41.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" sha="c27566f972d15f25252f61b5cff014a3edce9706" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_1" x="532" y="70">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial b" sha="b26f881dfa1451f0269e068eb6b3d824b43b41d3" uuid="862e7d7f29093cb1ce4aed72244d118ad4d46692" name="dial_1" x="28" y="98">
+      <params>
+         <frac32.s.map name="value" value="-12.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="osc/saw" sha="fe2c3c02396657dfbc225c73f9340ad0c4c3eea6" uuid="672d282db829da944d5580258269aa349c94bb24" name="saw_1" x="154" y="98">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="obj_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="dial_1" outlet="out"/>
+         <dest obj="note_1" inlet="in"/>
+         <dest obj="saw_1" inlet="pitch"/>
+      </net>
+      <net>
+         <source obj="obj_1" outlet="L"/>
+         <dest obj="out_1" inlet="left"/>
+      </net>
+      <net>
+         <source obj="obj_1" outlet="R"/>
+         <dest obj="out_1" inlet="right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>572</x>
+      <y>588</y>
+      <width>987</width>
+      <height>400</height>
+   </windowPos>
+</patch-1.0>

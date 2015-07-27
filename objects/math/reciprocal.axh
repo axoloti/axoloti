@@ -23,21 +23,27 @@
    </obj>
    <nets>
       <net>
-         <source name="cbp1 out"/>
-         <dest name="reciprocal1 in"/>
+         <source obj="cbp1" outlet="out"/>
+         <dest obj="reciprocal1" inlet="in"/>
       </net>
       <net>
-         <source name="reciprocal1 out"/>
-         <dest name="displayS1 in"/>
-         <dest name="reciprocal1_ in"/>
+         <source obj="reciprocal1" outlet="out"/>
+         <dest obj="displayS1" inlet="in"/>
+         <dest obj="reciprocal1_" inlet="in"/>
       </net>
       <net>
-         <source name="reciprocal1_ out"/>
-         <dest name="displayS1_ in"/>
+         <source obj="reciprocal1_" outlet="out"/>
+         <dest obj="displayS1_" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>716</width>
+      <height>400</height>
+   </windowPos>
 </patch-1.0>

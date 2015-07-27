@@ -1,6 +1,6 @@
 <objdefs>
    <obj.normal id="ahd lin" uuid="4ed5fd29254747e71db6d1d4caa20a89a41740f0" sha="de09ade5b46ad7c4bbe57ce1bb266f7b77fc2078">
-      <upgradeSha>9bf8f884cf19cf1fea714e116e83fda6d6148adc</upgradeSha>
+      <upgradeSha>3ca8c83100dd709cbbcc3c1f3520d5e71862d069</upgradeSha>
       <sDescription>attack/hold/decay envelope, linear ramps</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -13,14 +13,8 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map.klineartime.exp name="a">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.klineartime.exp>
-         <frac32.s.map.klineartime.exp name="d">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map.klineartime.exp>
+         <frac32.s.map.klineartime.exp name="a"/>
+         <frac32.s.map.klineartime.exp name="d"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;

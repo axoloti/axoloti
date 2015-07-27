@@ -5,7 +5,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1" x="28" y="70">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="28" y="70">
       <params/>
       <attribs/>
    </obj>
@@ -19,7 +19,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="462" y="70">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="462" y="70">
       <params/>
       <attribs/>
    </obj>
@@ -29,7 +29,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="lfo/sine" sha="6215955d70f249301aa4141e75bdbc58d2782ae6" name="osc1" x="182" y="210">
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" name="osc1" x="182" y="210">
       <params>
          <frac32.s.map name="pitch" value="-64.0"/>
       </params>
@@ -41,7 +41,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="rand_1_" x="28" y="280">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1_" x="28" y="280">
       <params/>
       <attribs/>
    </obj>
@@ -53,7 +53,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="dac~" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1_" x="616" y="280">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1_" x="616" y="280">
       <params/>
       <attribs/>
    </obj>
@@ -77,7 +77,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="spat/pan m" sha="5d73816389e41249dbf47bd07b63e80247198585" name="panm1" x="462" y="574">
+   <obj type="spat/pan m" sha="4d5d8c47c2ede8c8bf61d50e38006ecb874ca7e7" name="panm1" x="462" y="574">
       <params/>
       <attribs/>
    </obj>
@@ -91,78 +91,84 @@
    </obj>
    <nets>
       <net>
-         <source name="pan1 left"/>
-         <dest name="dac_1 left"/>
+         <source obj="pan1" outlet="left"/>
+         <dest obj="dac_1" inlet="left"/>
       </net>
       <net>
-         <source name="pan1 right"/>
-         <dest name="dac_1 right"/>
+         <source obj="pan1" outlet="right"/>
+         <dest obj="dac_1" inlet="right"/>
       </net>
       <net>
-         <source name="rand_1 wave"/>
-         <dest name="inmux21 i2"/>
+         <source obj="rand_1" outlet="wave"/>
+         <dest obj="inmux21" inlet="i2"/>
       </net>
       <net>
-         <source name="inmux21 o"/>
-         <dest name="pan1 i1"/>
+         <source obj="inmux21" outlet="o"/>
+         <dest obj="pan1" inlet="i1"/>
       </net>
       <net>
-         <source name="cb11 o"/>
-         <dest name="inmux21 s"/>
+         <source obj="cb11" outlet="o"/>
+         <dest obj="inmux21" inlet="s"/>
       </net>
       <net>
-         <source name="rand_1_ wave"/>
-         <dest name="inmux21_ i2"/>
+         <source obj="rand_1_" outlet="wave"/>
+         <dest obj="inmux21_" inlet="i2"/>
       </net>
       <net>
-         <source name="cb11_ o"/>
-         <dest name="inmux21_ s"/>
+         <source obj="cb11_" outlet="o"/>
+         <dest obj="inmux21_" inlet="s"/>
       </net>
       <net>
-         <source name="inmux21_ o"/>
-         <dest name="pan1_ i1"/>
+         <source obj="inmux21_" outlet="o"/>
+         <dest obj="pan1_" inlet="i1"/>
       </net>
       <net>
-         <source name="osc1 wave"/>
-         <dest name="*c1 in"/>
+         <source obj="osc1" outlet="wave"/>
+         <dest obj="*c1" inlet="in"/>
       </net>
       <net>
-         <source name="*c1 out"/>
-         <dest name="panm1 c"/>
-         <dest name="pan1_ c"/>
+         <source obj="*c1" outlet="out"/>
+         <dest obj="panm1" inlet="c"/>
+         <dest obj="pan1_" inlet="c"/>
       </net>
       <net>
-         <source name="pan1_ left"/>
-         <dest name="dac_1_ left"/>
+         <source obj="pan1_" outlet="left"/>
+         <dest obj="dac_1_" inlet="left"/>
       </net>
       <net>
-         <source name="pan1_ right"/>
-         <dest name="dac_1_ right"/>
+         <source obj="pan1_" outlet="right"/>
+         <dest obj="dac_1_" inlet="right"/>
       </net>
       <net>
-         <source name="c1 out"/>
-         <dest name="pan2 i1"/>
-         <dest name="panm1 i1"/>
+         <source obj="c1" outlet="out"/>
+         <dest obj="pan2" inlet="i1"/>
+         <dest obj="panm1" inlet="i1"/>
       </net>
       <net>
-         <source name="pan2 left"/>
-         <dest name="displayS1 in"/>
+         <source obj="pan2" outlet="left"/>
+         <dest obj="displayS1" inlet="in"/>
       </net>
       <net>
-         <source name="pan2 right"/>
-         <dest name="displayS1_ in"/>
+         <source obj="pan2" outlet="right"/>
+         <dest obj="displayS1_" inlet="in"/>
       </net>
       <net>
-         <source name="panm1 left"/>
-         <dest name="displayS1__ in"/>
+         <source obj="panm1" outlet="left"/>
+         <dest obj="displayS1__" inlet="in"/>
       </net>
       <net>
-         <source name="panm1 right"/>
-         <dest name="displayS1___ in"/>
+         <source obj="panm1" outlet="right"/>
+         <dest obj="displayS1___" inlet="in"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>2</y>
+      <width>926</width>
+      <height>968</height>
+   </windowPos>
 </patch-1.0>

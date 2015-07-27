@@ -25,7 +25,6 @@ import components.ButtonComponent;
 import components.ButtonComponent.ActListener;
 import java.awt.Component;
 import java.awt.Point;
-import javax.swing.JPanel;
 import org.simpleframework.xml.Element;
 
 /**
@@ -57,6 +56,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (pg != null) {
             AxoObject ao = pg.GenerateAxoObj();
             setType(ao);
+            pg.container(patch);
         }
     }
 

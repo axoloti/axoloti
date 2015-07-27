@@ -1,0 +1,51 @@
+<objdefs>
+   <obj.normal id="vocoder 24" uuid="f6036f4a243310a03f6ca3dccc9c6bdda7c430ee" sha="b9c18fe342027a105c441c5a201e52c6f702df29">
+      <upgradeSha>6d9336d0af616451a51bbcc4675a9fce48d495e1</upgradeSha>
+      <sDescription>channel vocoder v1</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>vocoder 24.axh</helpPatch>
+      <inlets>
+         <frac32buffer name="car" description="carrier"/>
+         <frac32buffer name="mod" description="modulator"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="out" description="output"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.u.map name="reso" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[biquad_state bsmod[20];
+biquad_state bscar[20];
+biquad_coefficients bc[20];
+int32_t val[20];
+]]></code.declaration>
+      <code.init><![CDATA[int i;
+for(i=0;i<20;i++){
+   int32_t pitch = (-32 + (i*4))<<21;
+   int32_t freq;
+   MTOF(pitch,freq);
+   biquad_bp_coefs(&bc[i],freq,INT_MAX - (__USAT(%reso%,27)<<4));
+   biquad_clearstate(&bscar[i]);   biquad_clearstate(&bsmod[i]);}
+]]></code.init>
+      <code.krate><![CDATA[int32buffer o;
+int i;
+for(i=0;i<BUFSIZE;i++) o[i]=0;
+for(i=0;i<20;i++){
+int32buffer t;
+biquad_dsp(&bsmod[i],&bc[i],inlet_mod,t);
+long int accu = 0;
+int j;
+for(j=0;j<BUFSIZE;j++) accu += (t[j]>0?t[j]:-t[j]);
+val[i] -= val[i]>>6;
+val[i] += accu>>6;
+biquad_dsp(&bscar[i],&bc[i],inlet_car,t);
+for(j=0;j<BUFSIZE;j++) o[j] += ___SMMUL(t[j],val[i]);
+}
+int j;
+ for(j=0;j<BUFSIZE;j++) outlet_out[j] = o[j];
+]]></code.krate>
+   </obj.normal>
+</objdefs>

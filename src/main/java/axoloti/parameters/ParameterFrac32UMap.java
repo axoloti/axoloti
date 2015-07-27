@@ -27,20 +27,18 @@ import org.simpleframework.xml.Element;
  */
 public class ParameterFrac32UMap extends ParameterFrac32 {
 
-    @Element
+    @Deprecated
+    @Element(required = false)
     ValueFrac32 MinValue;
-    @Element
+    @Deprecated
+    @Element(required = false)
     ValueFrac32 MaxValue;
 
     public ParameterFrac32UMap() {
-        MinValue = new ValueFrac32(0);
-        MaxValue = new ValueFrac32(64);
     }
 
     public ParameterFrac32UMap(String name) {
         super(name);
-        MinValue = new ValueFrac32(0);
-        MaxValue = new ValueFrac32(64);
     }
 
     @Override

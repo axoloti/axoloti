@@ -1,5 +1,5 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square_3" x="0" y="0">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square_3" x="0" y="0">
       <params>
          <frac32.s.map name="pitch" value="-4.0"/>
       </params>
@@ -31,7 +31,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="uniform_1" x="588" y="112">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="uniform_1" x="588" y="112">
       <params/>
       <attribs/>
    </obj>
@@ -62,13 +62,13 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin x" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="adsr_1" x="588" y="168">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="adsr_1" x="588" y="168">
       <params>
          <frac32.s.map name="d" value="-64.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin x" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="adsr_4" x="686" y="168">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="adsr_4" x="686" y="168">
       <params>
          <frac32.s.map name="d" value="-36.0"/>
       </params>
@@ -78,7 +78,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d lin x" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="d_1" x="854" y="168">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="d_1" x="854" y="168">
       <params>
          <frac32.s.map name="d" value="42.0"/>
       </params>
@@ -101,7 +101,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_1" x="742" y="252">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_1" x="742" y="252">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="62.0"/>
@@ -168,7 +168,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin x" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="adsr_2" x="588" y="448">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="adsr_2" x="588" y="448">
       <params>
          <frac32.s.map name="d" value="-36.0"/>
       </params>
@@ -178,7 +178,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_2" x="742" y="448">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_2" x="742" y="448">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
          <frac32.u.map name="reso" value="57.5"/>
@@ -253,7 +253,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin x" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="adsr_3" x="588" y="630">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="adsr_3" x="588" y="630">
       <params>
          <frac32.s.map name="d" value="-1.0"/>
       </params>
@@ -263,7 +263,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/vcf3~" sha="a4c7bb4270fc01be85be81c8f212636b9c54eaea" name="vcf3~_3" x="742" y="630">
+   <obj type="filter/vcf3" sha="2a5cccf4517f54d2450ab7518925f49e4c41c837" name="vcf3~_3" x="742" y="630">
       <params>
          <frac32.s.map name="pitch" value="-24.0"/>
          <frac32.u.map name="reso" value="61.0"/>
@@ -295,170 +295,176 @@
    </obj>
    <nets>
       <net>
-         <source name="mix_1 out"/>
-         <dest name="fdn4_1 in1"/>
+         <source obj="mix_1" outlet="out"/>
+         <dest obj="fdn4_1" inlet="in1"/>
       </net>
       <net>
-         <source name="uniform_1 wave"/>
-         <dest name="vca_1 a"/>
-         <dest name="vca_2 a"/>
-         <dest name="vca_3 a"/>
+         <source obj="uniform_1" outlet="wave"/>
+         <dest obj="vca_1" inlet="a"/>
+         <dest obj="vca_2" inlet="a"/>
+         <dest obj="vca_3" inlet="a"/>
       </net>
       <net>
-         <source name="vca_1 o"/>
-         <dest name="vcf3~_1 in"/>
+         <source obj="vca_1" outlet="o"/>
+         <dest obj="vcf3~_1" inlet="in"/>
       </net>
       <net>
-         <source name="vcf3~_1 out"/>
-         <dest name="mix_1 in1"/>
+         <source obj="vcf3~_1" outlet="out"/>
+         <dest obj="mix_1" inlet="in1"/>
       </net>
       <net>
-         <source name="counter_1 o"/>
-         <dest name="sel_1 in"/>
-         <dest name="ibar_1 in"/>
+         <source obj="counter_1" outlet="o"/>
+         <dest obj="sel_1" inlet="in"/>
+         <dest obj="ibar_1" inlet="in"/>
       </net>
       <net>
-         <source name="sel_1 o"/>
-         <dest name="adsr_1 trig"/>
-         <dest name="latch_1 trig"/>
-         <dest name="d_1 trig"/>
+         <source obj="sel_1" outlet="o"/>
+         <dest obj="adsr_1" inlet="trig"/>
+         <dest obj="latch_1" inlet="trig"/>
+         <dest obj="d_1" inlet="trig"/>
       </net>
       <net>
-         <source name="adsr_2 env"/>
-         <dest name="vca_2 v"/>
+         <source obj="adsr_2" outlet="env"/>
+         <dest obj="vca_2" inlet="v"/>
       </net>
       <net>
-         <source name="vca_2 o"/>
-         <dest name="vcf3~_2 in"/>
+         <source obj="vca_2" outlet="o"/>
+         <dest obj="vcf3~_2" inlet="in"/>
       </net>
       <net>
-         <source name="vcf3~_2 out"/>
-         <dest name="mix_2 in1"/>
+         <source obj="vcf3~_2" outlet="out"/>
+         <dest obj="mix_2" inlet="in1"/>
       </net>
       <net>
-         <source name="counter_2 o"/>
-         <dest name="sel_3 in"/>
-         <dest name="ibar_2 in"/>
-         <dest name="sel_6 in"/>
+         <source obj="counter_2" outlet="o"/>
+         <dest obj="sel_3" inlet="in"/>
+         <dest obj="ibar_2" inlet="in"/>
+         <dest obj="sel_6" inlet="in"/>
       </net>
       <net>
-         <source name="sel_4 o"/>
-         <dest name="vcf3~_2 pitchm"/>
+         <source obj="sel_4" outlet="o"/>
+         <dest obj="vcf3~_2" inlet="pitch"/>
       </net>
       <net>
-         <source name="sel_3 o"/>
-         <dest name="adsr_2 trig"/>
+         <source obj="sel_3" outlet="o"/>
+         <dest obj="adsr_2" inlet="trig"/>
       </net>
       <net>
-         <source name="adsr_3 env"/>
-         <dest name="vca_3 v"/>
+         <source obj="adsr_3" outlet="env"/>
+         <dest obj="vca_3" inlet="v"/>
       </net>
       <net>
-         <source name="vca_3 o"/>
-         <dest name="vcf3~_3 in"/>
+         <source obj="vca_3" outlet="o"/>
+         <dest obj="vcf3~_3" inlet="in"/>
       </net>
       <net>
-         <source name="vcf3~_3 out"/>
-         <dest name="mix_3 in1"/>
+         <source obj="vcf3~_3" outlet="out"/>
+         <dest obj="mix_3" inlet="in1"/>
       </net>
       <net>
-         <source name="counter_3 o"/>
-         <dest name="sel_5 in"/>
-         <dest name="ibar_3 in"/>
+         <source obj="counter_3" outlet="o"/>
+         <dest obj="sel_5" inlet="in"/>
+         <dest obj="ibar_3" inlet="in"/>
       </net>
       <net>
-         <source name="sel_6 o"/>
-         <dest name="vcf3~_3 pitchm"/>
+         <source obj="sel_6" outlet="o"/>
+         <dest obj="vcf3~_3" inlet="pitch"/>
       </net>
       <net>
-         <source name="sel_5 o"/>
-         <dest name="adsr_3 trig"/>
+         <source obj="sel_5" outlet="o"/>
+         <dest obj="adsr_3" inlet="trig"/>
       </net>
       <net>
-         <source name="mix_2 out"/>
-         <dest name="fdn4_2 in1"/>
+         <source obj="mix_2" outlet="out"/>
+         <dest obj="fdn4_2" inlet="in1"/>
       </net>
       <net>
-         <source name="mix_3 out"/>
-         <dest name="fdn4_3 in1"/>
+         <source obj="mix_3" outlet="out"/>
+         <dest obj="fdn4_3" inlet="in1"/>
       </net>
       <net>
-         <source name="fdn4_3 out1"/>
-         <dest name="out_3 left"/>
+         <source obj="fdn4_3" outlet="out1"/>
+         <dest obj="out_3" inlet="left"/>
       </net>
       <net>
-         <source name="fdn4_3 out4"/>
-         <dest name="out_3 right"/>
+         <source obj="fdn4_3" outlet="out4"/>
+         <dest obj="out_3" inlet="right"/>
       </net>
       <net>
-         <source name="counter_4 o"/>
-         <dest name="sel_2 in"/>
-         <dest name="sel_4 in"/>
+         <source obj="counter_4" outlet="o"/>
+         <dest obj="sel_2" inlet="in"/>
+         <dest obj="sel_4" inlet="in"/>
       </net>
       <net>
-         <source name="flanger_1 out"/>
-         <dest name="out_2 left"/>
-         <dest name="out_2 right"/>
+         <source obj="flanger_1" outlet="out"/>
+         <dest obj="out_2" inlet="left"/>
+         <dest obj="out_2" inlet="right"/>
       </net>
       <net>
-         <source name="fdn4_2 out1"/>
-         <dest name="flanger_1 in"/>
+         <source obj="fdn4_2" outlet="out1"/>
+         <dest obj="flanger_1" inlet="in"/>
       </net>
       <net>
-         <source name="and_1 o"/>
-         <dest name="counter_1 trig"/>
-         <dest name="counter_2 trig"/>
-         <dest name="counter_3 trig"/>
-         <dest name="counter_4 trig"/>
-         <dest name="adsr_4 trig"/>
+         <source obj="and_1" outlet="o"/>
+         <dest obj="counter_1" inlet="trig"/>
+         <dest obj="counter_2" inlet="trig"/>
+         <dest obj="counter_3" inlet="trig"/>
+         <dest obj="counter_4" inlet="trig"/>
+         <dest obj="adsr_4" inlet="trig"/>
       </net>
       <net>
-         <source name="sel_2 o"/>
-         <dest name="latch_1 i"/>
+         <source obj="sel_2" outlet="o"/>
+         <dest obj="latch_1" inlet="i"/>
       </net>
       <net>
-         <source name="d_1 env"/>
-         <dest name="mix_4 in1"/>
+         <source obj="d_1" outlet="env"/>
+         <dest obj="mix_4" inlet="in1"/>
       </net>
       <net>
-         <source name="latch_1 o"/>
-         <dest name="mix_4 bus_in"/>
+         <source obj="latch_1" outlet="o"/>
+         <dest obj="mix_4" inlet="bus_in"/>
       </net>
       <net>
-         <source name="mix_4 out"/>
-         <dest name="vcf3~_1 pitchm"/>
+         <source obj="mix_4" outlet="out"/>
+         <dest obj="vcf3~_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="adsr_1 env"/>
-         <dest name="mix_5 in1"/>
+         <source obj="adsr_1" outlet="env"/>
+         <dest obj="mix_5" inlet="in1"/>
       </net>
       <net>
-         <source name="adsr_4 env"/>
-         <dest name="mix_5 in2"/>
+         <source obj="adsr_4" outlet="env"/>
+         <dest obj="mix_5" inlet="in2"/>
       </net>
       <net>
-         <source name="mix_5 out"/>
-         <dest name="vca_1 v"/>
+         <source obj="mix_5" outlet="out"/>
+         <dest obj="vca_1" inlet="v"/>
       </net>
       <net>
-         <source name="fdn4_1 out1"/>
-         <dest name="out_1 left"/>
+         <source obj="fdn4_1" outlet="out1"/>
+         <dest obj="out_1" inlet="left"/>
       </net>
       <net>
-         <source name="fdn4_1 out2"/>
-         <dest name="out_1 right"/>
+         <source obj="fdn4_1" outlet="out2"/>
+         <dest obj="out_1" inlet="right"/>
       </net>
       <net>
-         <source name="square_3 wave"/>
-         <dest name="and_1 i1"/>
+         <source obj="square_3" outlet="wave"/>
+         <dest obj="and_1" inlet="i1"/>
       </net>
       <net>
-         <source name="toggle_1 o"/>
-         <dest name="and_1 i2"/>
+         <source obj="toggle_1" outlet="o"/>
+         <dest obj="and_1" inlet="i2"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>121</x>
+      <y>53</y>
+      <width>1430</width>
+      <height>940</height>
+   </windowPos>
 </patch-1.0>

@@ -1,11 +1,11 @@
 <patch-1.0>
-   <obj type="lfo/square" sha="2619a1d94a07bf82a1e47e4e34485e9c4916cc18" name="square1" x="14" y="14">
+   <obj type="lfo/square" sha="b4420b58ca2ae5ece53d53540bc91bc9ed7a4b83" name="square1" x="14" y="14">
       <params>
          <frac32.s.map name="pitch" value="-40.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin" sha="2fe3360a9f50f985461b9b78ce73c22e8a334211" name="envdlinx1" x="182" y="14">
+   <obj type="env/d lin" sha="ff035f93b52d63f77aa7c8019ea2244fdcabf14d" name="envdlinx1" x="182" y="14">
       <params>
          <frac32.s.map name="d" value="28.0"/>
       </params>
@@ -21,7 +21,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin m" sha="a2e1da37932bdfc8056cd08cca74d2ebc6735f40" name="envdlinmx1" x="574" y="28">
+   <obj type="env/d lin m" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" name="envdlinmx1" x="574" y="28">
       <params>
          <frac32.s.map name="d" value="0.0"/>
       </params>
@@ -31,7 +31,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/hd lin" sha="585422d25dcc5441ac2a9eb81474d018f7e883de" name="envhdlinx1" x="182" y="140">
+   <obj type="env/hd lin" sha="bfa4e9d4d666127337aa1fca31f604535788ab1e" name="envhdlinx1" x="182" y="140">
       <params>
          <frac32.s.map name="d" value="28.0"/>
       </params>
@@ -41,7 +41,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/hd lin m" sha="dcb298f520e0bbab4d2ae0cbc4cffe086feab1fa" name="envhdlinmx1" x="574" y="154">
+   <obj type="env/hd lin m" sha="d4ef515cd9641d74a3558cb63ddc0c56e0543223" name="envhdlinmx1" x="574" y="154">
       <params>
          <frac32.s.map name="d" value="0.0"/>
       </params>
@@ -51,7 +51,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/ahd lin" sha="9bf8f884cf19cf1fea714e116e83fda6d6148adc" name="envahdlinx1" x="182" y="252">
+   <obj type="env/ahd lin" sha="de09ade5b46ad7c4bbe57ce1bb266f7b77fc2078" name="envahdlinx1" x="182" y="252">
       <params>
          <frac32.s.map name="a" value="29.0"/>
          <frac32.s.map name="d" value="29.0"/>
@@ -68,7 +68,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="env/ahd lin m" sha="62a6c82f56f3c5daa5fb4f269acb3a33cf34992b" name="envahdlinmx1" x="574" y="280">
+   <obj type="env/ahd lin m" sha="1bff4be3aeae590d80327085f5f7c771667d8938" name="envahdlinmx1" x="574" y="280">
       <params>
          <frac32.s.map name="a" value="0.0"/>
          <frac32.s.map name="d" value="0.0"/>
@@ -81,47 +81,47 @@
    </obj>
    <nets>
       <net>
-         <source name="envdlinx1 env"/>
-         <dest name="scopeS1 in"/>
+         <source obj="envdlinx1" outlet="env"/>
+         <dest obj="scopeS1" inlet="in"/>
       </net>
       <net>
-         <source name="square1 wave"/>
-         <dest name="envdlinx1 trig"/>
-         <dest name="envhdlinx1 trig"/>
-         <dest name="envahdlinx1 trig"/>
-         <dest name="envdlinmx1 trig"/>
-         <dest name="envhdlinmx1 trig"/>
-         <dest name="envahdlinmx1 trig"/>
+         <source obj="square1" outlet="wave"/>
+         <dest obj="envdlinx1" inlet="trig"/>
+         <dest obj="envhdlinx1" inlet="trig"/>
+         <dest obj="envahdlinx1" inlet="trig"/>
+         <dest obj="envdlinmx1" inlet="trig"/>
+         <dest obj="envhdlinmx1" inlet="trig"/>
+         <dest obj="envahdlinmx1" inlet="trig"/>
       </net>
       <net>
-         <source name="envhdlinx1 env"/>
-         <dest name="scopeS1_ in"/>
+         <source obj="envhdlinx1" outlet="env"/>
+         <dest obj="scopeS1_" inlet="in"/>
       </net>
       <net>
-         <source name="envahdlinx1 env"/>
-         <dest name="scopeS1__ in"/>
+         <source obj="envahdlinx1" outlet="env"/>
+         <dest obj="scopeS1__" inlet="in"/>
       </net>
       <net>
-         <source name="cbp1 out"/>
-         <dest name="envdlinmx1 dm"/>
-         <dest name="envhdlinmx1 dm"/>
-         <dest name="envahdlinmx1 dm"/>
+         <source obj="cbp1" outlet="out"/>
+         <dest obj="envdlinmx1" inlet="d"/>
+         <dest obj="envhdlinmx1" inlet="d"/>
+         <dest obj="envahdlinmx1" inlet="d"/>
       </net>
       <net>
-         <source name="envdlinmx1 env"/>
-         <dest name="scopeS1_____ in"/>
+         <source obj="envdlinmx1" outlet="env"/>
+         <dest obj="scopeS1_____" inlet="in"/>
       </net>
       <net>
-         <source name="envhdlinmx1 env"/>
-         <dest name="scopeS1______ in"/>
+         <source obj="envhdlinmx1" outlet="env"/>
+         <dest obj="scopeS1______" inlet="in"/>
       </net>
       <net>
-         <source name="envahdlinmx1 env"/>
-         <dest name="scopeS1_______ in"/>
+         <source obj="envahdlinmx1" outlet="env"/>
+         <dest obj="scopeS1_______" inlet="in"/>
       </net>
       <net>
-         <source name="cbp2 out"/>
-         <dest name="envahdlinmx1 am"/>
+         <source obj="cbp2" outlet="out"/>
+         <dest obj="envahdlinmx1" inlet="a"/>
       </net>
    </nets>
    <settings>

@@ -13,10 +13,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.s.map name="c" noLabel="true">
-            <MinValue v="-64.0"/>
-            <MaxValue v="63.5"/>
-         </frac32.s.map>
+         <frac32.s.map name="c" noLabel="true"/>
       </params>
       <attribs>
          <table name="line"/>

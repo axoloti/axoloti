@@ -34,7 +34,7 @@ import javax.swing.SwingUtilities;
 public class QCmdProcessor implements Runnable {
 
     BlockingQueue<QCmd> queue;
-    private BlockingQueue<QCmd> queueResponse;
+    private final BlockingQueue<QCmd> queueResponse;
     public Connection serialconnection;
     private Patch patch;
     MainFrame mainframe;
@@ -150,7 +150,7 @@ public class QCmdProcessor implements Runnable {
                 break;
             }
             try {
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (InterruptedException ex) {
                 Logger.getLogger(QCmdProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }

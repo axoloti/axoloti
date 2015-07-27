@@ -3,13 +3,13 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="61669c0e3c33c6cb64ed388d75b8e756d064e5a4" name="d1" x="112" y="14">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="d1" x="112" y="14">
       <params>
          <frac32.s.map name="d" onParent="true" value="-16.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="545caca792c6b8c27225590dd0240ef2d351a645" name="noise.uniform_2" x="224" y="14">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="noise.uniform_2" x="224" y="14">
       <params/>
       <attribs/>
    </obj>
@@ -17,13 +17,13 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="filter/lp1" sha="91e2ecaa66340906540043ea41ac3987ce0aef17" name="lp1" x="406" y="14">
+   <obj type="filter/lp1" sha="290a234e2f83eb072198d0158bcd5da02a3606c3" name="lp1" x="406" y="14">
       <params>
          <frac32.s.map name="freq" onParent="true" value="32.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="env/d lin m x" sha="a2e1da37932bdfc8056cd08cca74d2ebc6735f40" name="d2" x="112" y="98">
+   <obj type="env/d lin m" sha="7cd630c1ecdc64542bf24aadc0f3114629fdf37d" name="d2" x="112" y="98">
       <params>
          <frac32.s.map name="d" onParent="true" value="-12.0"/>
       </params>
@@ -35,7 +35,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="sine_1" x="308" y="98">
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="sine_1" x="308" y="98">
       <params>
          <frac32.s.map name="pitch" onParent="true" value="-44.0"/>
       </params>
@@ -55,49 +55,55 @@
    </obj>
    <nets>
       <net>
-         <source name="noise.uniform_2 wave"/>
-         <dest name="arithmetic.abs_1 in"/>
+         <source obj="noise.uniform_2" outlet="wave"/>
+         <dest obj="arithmetic.abs_1" inlet="in"/>
       </net>
       <net>
-         <source name="d2 env"/>
-         <dest name="*_2 b"/>
+         <source obj="d2" outlet="env"/>
+         <dest obj="*_2" inlet="b"/>
       </net>
       <net>
-         <source name="sine_1 wave"/>
-         <dest name="*_1 b"/>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="*_1" inlet="b"/>
       </net>
       <net>
-         <source name="*_1 result"/>
-         <dest name="*_2 a"/>
+         <source obj="*_1" outlet="result"/>
+         <dest obj="*_2" inlet="a"/>
       </net>
       <net>
-         <source name="amt out"/>
-         <dest name="sine_1 pitchm"/>
+         <source obj="amt" outlet="out"/>
+         <dest obj="sine_1" inlet="pitch"/>
       </net>
       <net>
-         <source name="arithmetic.abs_1 out"/>
-         <dest name="lp1 in"/>
+         <source obj="arithmetic.abs_1" outlet="out"/>
+         <dest obj="lp1" inlet="in"/>
       </net>
       <net>
-         <source name="lp1 out"/>
-         <dest name="*_1 a"/>
+         <source obj="lp1" outlet="out"/>
+         <dest obj="*_1" inlet="a"/>
       </net>
       <net>
-         <source name="trig inlet"/>
-         <dest name="d1 trig"/>
-         <dest name="d2 trig"/>
+         <source obj="trig" outlet="inlet"/>
+         <dest obj="d1" inlet="trig"/>
+         <dest obj="d2" inlet="trig"/>
       </net>
       <net>
-         <source name="d1 env"/>
-         <dest name="amt in"/>
+         <source obj="d1" outlet="env"/>
+         <dest obj="amt" inlet="in"/>
       </net>
       <net>
-         <source name="*_2 result"/>
-         <dest name="out outlet"/>
+         <source obj="*_2" outlet="result"/>
+         <dest obj="out" inlet="outlet"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>0</x>
+      <y>23</y>
+      <width>800</width>
+      <height>478</height>
+   </windowPos>
 </patch-1.0>

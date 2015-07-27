@@ -61,7 +61,7 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
                 String buildDir = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build";
                 f = new File(buildDir+"/axoloti.bin");
             }
-            Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware file path: " + f.getAbsolutePath());
+            Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware file path: {0}", f.getAbsolutePath());
             int tlength = (int) f.length();
             FileInputStream inputStream = new FileInputStream(f);
 
@@ -82,16 +82,16 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
             byte[] bb = new byte[tlength];
             int nRead = inputStream.read(bb, 0, tlength);
             if (nRead != tlength) {
-                Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
+                Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
             }
             inputStream.close();
             inputStream = new FileInputStream(f);
-            Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware file size: " + tlength);
+            Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware file size: {0}", tlength);
 //            bb.order(ByteOrder.LITTLE_ENDIAN);
             CRC32 zcrc = new CRC32();
             zcrc.update(bb);
             int zcrcv = (int) zcrc.getValue();
-            Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware crc: 0x" + Integer.toHexString(zcrcv));
+            Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware crc: 0x{0}", Integer.toHexString(zcrcv).toUpperCase());
             header[12] = (byte) (zcrcv);
             header[13] = (byte) (zcrcv >> 8);
             header[14] = (byte) (zcrcv >> 16);
@@ -111,7 +111,7 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
                 byte[] buffer = new byte[l];
                 nRead = inputStream.read(buffer, 0, l);
                 if (nRead != l) {
-                    Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
+                    Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
                 }
                 connection.UploadFragment(buffer, connection.getTargetProfile().getSDRAMAddr() + offset);
                 offset += nRead;

@@ -55,7 +55,7 @@ public class AxoObjects {
     public AxoObjectAbstract GetAxoObjectFromSHA(String n) {
         AxoObjectAbstract ao = transitionmgr.GetObjectFromSha(n);
         if (ao != null) {
-            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "upgraded object by SHA : " + ao.id);
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "upgraded object by SHA : {0}", ao.id);
             return ao;
         }
         AxoObjectAbstract r = ObjectHashMap.get(n);
@@ -77,17 +77,17 @@ public class AxoObjects {
             { // try object file
                 ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
                 String fnameA = bfname + ".axo";
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from object file : " + fnameA);
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from object file : {0}", fnameA);
                 File f = new File(fnameA);
                 if (f.isFile()) {
                     try {
                         AxoObjectFile of = serializer.read(AxoObjectFile.class, f);
                         AxoObjectAbstract o = of.objs.get(0);
-                        o.sPath = fnameA;
-                        // to be completed : loading overloaded objects too
-                        o.createdFromRelativePath = true;
                         if (o != null) {
-                            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : " + fnameA);
+                            o.sPath = fnameA;
+                            // to be completed : loading overloaded objects too
+                            o.createdFromRelativePath = true;
+                            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : {0}", fnameA);
                             set.add(o);
                             return set;
                         }
@@ -99,7 +99,7 @@ public class AxoObjects {
             { // try subpatch file
                 ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
                 String fnameP = bfname + ".axs";
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file in patch directory: " + fnameP);
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file in patch directory: {0}", fnameP);
                 File f = new File(fnameP);
                 if (f.isFile()) {
                     AxoObjectAbstract o = new AxoObjectFromPatch(f);
@@ -107,11 +107,9 @@ public class AxoObjects {
                         o.createdFromRelativePath = true;
                     }
                     o.sPath = f.getPath();
-                    if (o != null) {
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : " + fnameP);
-                        set.add(o);
-                        return set;
-                    }
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : {0}", fnameP);
+                    set.add(o);
+                    return set;
                 }
             }
         }
@@ -125,17 +123,15 @@ public class AxoObjects {
             String spath[] = MainFrame.prefs.getObjectSearchPath();
             for (String s : spath) {
                 String fsname = s + "/" + n + ".axs";
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file : " + fsname);
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file : {0}", fsname);
                 File fs = new File(fsname);
                 if (fs.isFile()) {
                     AxoObjectAbstract o = new AxoObjectFromPatch(fs);
 //                    o.createdFromRelativePath = true;
-                    if (o != null) {
-                        o.sPath = n + ".axs";
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file succeeded :" + fsname);
-                        set.add(o);
-                        return set;
-                    }
+                    o.sPath = n + ".axs";
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file succeeded :{0}", fsname);
+                    set.add(o);
+                    return set;
                 }
             }
             // last resort : transition?
@@ -233,13 +229,11 @@ public class AxoObjects {
                             a.shortId = ShortID;
                             String uuidVerify = a.GenerateUUID();
                             if ((uuidVerify != null) && (!uuidVerify.equals(a.getUUID()))) {
-                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
-                                        "Incorrect uuid hash detected for object: " + fileEntry.getAbsolutePath() + " , does not match its signature (" + a.getUUID() + "). True signature would be " + uuidVerify);
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Incorrect uuid hash detected for object: {0} , does not match its signature ({1}). True signature would be {2}", new Object[]{fileEntry.getAbsolutePath(), a.getUUID(), uuidVerify});
                             }
                             String shaVerify = a.GenerateSHA();
                             if ((shaVerify != null) && (!shaVerify.equals(a.getSHA()))) {
-                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
-                                        "Incorrect sha hash detected for object: " + fileEntry.getAbsolutePath() + " its implementation does not match its signature.");
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Incorrect sha hash detected for object: {0} its implementation does not match its signature. Correct SHA hash would be {1}", new Object[]{fileEntry.getAbsolutePath(),shaVerify});
                             }
                             AxoObjectTreeNode s = t.SubNodes.get(ShortID);
                             if (s == null) {
@@ -250,27 +244,21 @@ public class AxoObjects {
 
                             ObjectList.add(a);
                             if ((a.getSHA() != null) && (ObjectHashMap.containsKey(a.getSHA()))) {
-                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
-                                        "Duplicate SHA! " + fileEntry.getAbsolutePath() + "\nOriginal name: " + ObjectHashMap.get(a.getSHA()).id
-                                        + "\nPath: " + ObjectHashMap.get(a.getSHA()).sPath);
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Duplicate SHA! {0}\nOriginal name: {1}\nPath: {2}", new Object[]{fileEntry.getAbsolutePath(), ObjectHashMap.get(a.getSHA()).id, ObjectHashMap.get(a.getSHA()).sPath});
                             }
                             ObjectHashMap.put(a.getSHA(), a);
 
                             if (a.upgradeSha != null) {
                                 for (String usha : a.upgradeSha) {
                                     if (ObjectUpgradeHashMap.containsKey(usha)) {
-                                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
-                                                "Duplicate upgrade SHA! " + fileEntry.getAbsolutePath() + "\nOriginal name: " + ObjectUpgradeHashMap.get(usha).id
-                                                + "\nPath: " + ObjectUpgradeHashMap.get(usha).sPath);
+                                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Duplicate upgrade SHA! {0}\nOriginal name: {1}\nPath: {2}", new Object[]{fileEntry.getAbsolutePath(), ObjectUpgradeHashMap.get(usha).id, ObjectUpgradeHashMap.get(usha).sPath});
                                     }
                                     ObjectUpgradeHashMap.put(usha, a);
                                 }
                             }
 
                             if ((a.getUUID() != null) && (ObjectUUIDMap.containsKey(a.getUUID()))) {
-                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE,
-                                        "Duplicate UUID! " + fileEntry.getAbsolutePath() + "\nOriginal name: " + ObjectUUIDMap.get(a.getUUID()).id
-                                        + "\nPath: " + ObjectUUIDMap.get(a.getUUID()).sPath);
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Duplicate UUID! {0}\nOriginal name: {1}\nPath: {2}", new Object[]{fileEntry.getAbsolutePath(), ObjectUUIDMap.get(a.getUUID()).id, ObjectUUIDMap.get(a.getUUID()).sPath});
                             }
                             ObjectUUIDMap.put(a.getUUID(), a);
                         }
@@ -323,7 +311,7 @@ public class AxoObjects {
                 String spath[] = MainFrame.prefs.getObjectSearchPath();
                 if (spath != null) {
                     for (String path : spath) {
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "search path : " + path);
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "search path : {0}", path);
                         LoadAxoObjects(path);
                     }
                 } else {
@@ -334,7 +322,7 @@ public class AxoObjects {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "finished loading objects");
             }
         };
-        Thread LoaderThread = new Thread(objloader);
+        LoaderThread = new Thread(objloader);
         LoaderThread.start();
     }
 }

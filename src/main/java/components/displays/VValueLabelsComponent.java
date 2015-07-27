@@ -30,9 +30,9 @@ import javax.swing.JComponent;
  */
 public class VValueLabelsComponent extends JComponent {
 
-    private double max;
-    private double min;
-    private double tick;
+    private final double max;
+    private final double min;
+    private final double tick;
 
     int height = 128;
     int width = 25;

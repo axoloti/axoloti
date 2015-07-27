@@ -19,7 +19,7 @@
       <code.krate><![CDATA[   outlet_b= inlet_a & (~((1<<(28-attr_bits))-1));
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="quantize" uuid="c2e999efc45cf8c5077dd1b140dcc793221e050e" sha="4692b487234cff9e32a0b2a5bb32cadd88c5dc07">
+   <obj.normal id="quantize" uuid="c2e999efc45cf8c5077dd1b140dcc793221e050e" sha="9dea6860d04c1ab0b7e0abcfca2b4b454a79b76a">
       <upgradeSha>3cf3075bda10b7de86084f67a210bdfe4e310125</upgradeSha>
       <sDescription>quantize to n bits</sDescription>
       <author>Johannes Taelman</author>
@@ -36,7 +36,7 @@
       <attribs>
          <spinner name="bits" MinValue="1" MaxValue="28" DefaultValue="7"/>
       </attribs>
-      <code.srate><![CDATA[   outlet_b[buffer_index]= inlet_a[buffer_index] & (~((1<<(28-attr_bits))-1));
+      <code.srate><![CDATA[   outlet_b= inlet_a & (~((1<<(28-attr_bits))-1));
 ]]></code.srate>
    </obj.normal>
 </objdefs>

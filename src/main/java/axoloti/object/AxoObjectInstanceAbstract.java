@@ -64,8 +64,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public String typeSHA;
     @Attribute(name = "uuid", required = false)
     public String typeUUID;
-    @Attribute(name = "name")
-    private String InstanceName;
+    @Attribute(name = "name", required = false)
+    String InstanceName;
     @Attribute
     int x;
     @Attribute
@@ -80,6 +80,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     JPanel Titlebar;
     TextFieldComponent InstanceNameTF;
     LabelComponent InstanceLabel;
+    MouseListener ml;
+    MouseMotionListener mml;
 
     public AxoObjectInstanceAbstract() {
     }
@@ -150,7 +152,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         if (patch != null) {
             AxoObjectInstanceAbstract o1 = patch.GetObjectInstance(InstanceName);
             if ((o1 != null) && (o1 != this)) {
-                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name " + InstanceName + " already exists!");
+                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} already exists!", InstanceName);
                 doLayout();
                 repaint();
                 return;
@@ -191,7 +193,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         if (type == null) {
             ArrayList<AxoObjectAbstract> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, patch.GetCurrentWorkingDirectory());
             if (types == null) {
-                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name " + typeName + " not found");
+                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} not found", typeName);
             } else { // pick first
                 if (types.size() > 1) {
                     typeWasAmbiguous = true;
@@ -233,7 +235,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
         popup = new PopupMenu();
 
-        MouseListener ml = new MouseListener() {
+        ml = new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
                 if (patch != null) {
@@ -279,9 +281,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     dX = me.getXOnScreen() - getX();
                     dY = me.getYOnScreen() - getY();
                     dragging = true;
-                    if (Selected) {
+                    if (IsSelected()) {
                         for (AxoObjectInstanceAbstract o : patch.objectinstances) {
-                            if (o.Selected) {
+                            if (o.IsSelected()) {
                                 o.dX = me.getXOnScreen() - o.getX();
                                 o.dY = me.getYOnScreen() - o.getY();
                                 o.dragging = true;
@@ -316,7 +318,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         Titlebar.addMouseListener(ml);
         addMouseListener(ml);
 
-        MouseMotionListener mml = new MouseMotionListener() {
+        mml = new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent me) {
                 if (patch != null) {
@@ -393,7 +395,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                 String s = InstanceNameTF.getText();
                 setInstanceName(s);
                 getParent().remove(InstanceNameTF);
-                //patch.repaint();
+                patch.repaint();
             }
 
             @Override
@@ -405,6 +407,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             public void keyTyped(KeyEvent ke) {
             }
 
+            @Override
             public void keyReleased(KeyEvent ke) {
             }
 

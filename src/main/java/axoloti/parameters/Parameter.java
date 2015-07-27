@@ -33,6 +33,7 @@ import org.simpleframework.xml.core.Persister;
 /**
  *
  * @author Johannes Taelman
+ * @param <dt> data type
  */
 public abstract class Parameter<dt extends DataType> {
 
