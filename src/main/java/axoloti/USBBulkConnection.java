@@ -218,6 +218,13 @@ public class USBBulkConnection extends Connection {
         return null;
     }
 
+    private byte[] bb2ba(ByteBuffer bb) {
+        bb.rewind();
+        byte[] r = new byte[bb.remaining()];
+        bb.get(r, 0, r.length);
+        return r;
+    }
+
     @Override
     public boolean connect() {
         disconnect();
@@ -271,7 +278,7 @@ public class USBBulkConnection extends Connection {
                 Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "connected");
-            MainFrame.mainframe.ShowConnect();
+
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
@@ -292,30 +299,42 @@ public class USBBulkConnection extends Connection {
             qcmdp.AppendToQueue(q);
             targetProfile.setCPUSerial(q.getResult());
 
+            q = new QCmdMemRead(targetProfile.getOTPAddr(), 32);
+            qcmdp.AppendToQueue(q);
+            ByteBuffer otpInfo = q.getResult();
+
+            q = new QCmdMemRead(targetProfile.getOTPAddr() + 32, 256);
+            qcmdp.AppendToQueue(q);
+            ByteBuffer signature = q.getResult();
+            boolean signaturevalid = false;
+            if ((signature.getInt(0) == 0xFFFFFFFF) && (signature.getInt(1) == 0xFFFFFFFF)) {
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Can't validate authenticity, no signature present.");
+            } else {
+                signaturevalid = HWSignature.Verify(targetProfile.getCPUSerial(), otpInfo, bb2ba(signature));
+                if (signaturevalid) {
+                    String s = "";
+                    otpInfo.rewind();
+                    byte c = otpInfo.get();
+                    while (c != 0) {
+                        s += (char)(c&0xFF);
+                        c = otpInfo.get();
+                    }
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Authentic {0}", s);
+                } else {
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Can't validate authenticity, signature invalid!");
+                }
+            }
+
             boolean signing = false;
-            if (signing) {
-                q = new QCmdMemRead(targetProfile.getOTP0Addr(), targetProfile.getOTP0Length());
-                qcmdp.AppendToQueue(q);
-                targetProfile.setOTP0Data(q.getResult());
-
-                q = new QCmdMemRead(targetProfile.getOTP1Addr(), targetProfile.getOTP1Length());
-                qcmdp.AppendToQueue(q);
-                targetProfile.setOTP1Data(q.getResult());
-
-                ByteBuffer cpuidbb = targetProfile.getCPUSerial();
-                cpuidbb.rewind();
-                ByteBuffer otpinfo = targetProfile.CreateOTPInfo();
-                // to be completed ...
-
-                byte[] b = new byte[cpuidbb.remaining()];
-                cpuidbb.get(b, 0, b.length);
-                byte[] sign = HWSignature.Sign(b);
-                qcmdp.AppendToQueue(new QCmdWriteMem(targetProfile.getBKPSRAMAddr(), sign));
-
-                System.out.println("<signature>");
-                HWSignature.printByteArray(sign);
-                System.out.println("</signature>");
+            if (signing && !signaturevalid) {
+                qcmdp.WaitQueueFinished();
+                ByteBuffer writeotpinfo = targetProfile.CreateOTPInfo();
+                byte[] sign = HWSignature.Sign(targetProfile.getCPUSerial(), writeotpinfo);
+                qcmdp.AppendToQueue(new QCmdWriteMem(targetProfile.getBKPSRAMAddr(), bb2ba(writeotpinfo)));
+                qcmdp.AppendToQueue(new QCmdWriteMem(targetProfile.getBKPSRAMAddr() + 32, sign));
                 CRC32 zcrc = new CRC32();
+                writeotpinfo.rewind();
+                zcrc.update(writeotpinfo);
                 zcrc.update(sign);
                 int zcrcv = (int) zcrc.getValue();
                 System.out.println(String.format("key crc: %08X", zcrcv));
@@ -324,23 +343,35 @@ public class USBBulkConnection extends Connection {
                 crc[1] = (byte) ((zcrcv >> 8) & 0xFF);
                 crc[2] = (byte) ((zcrcv >> 16) & 0xFF);
                 crc[3] = (byte) ((zcrcv >> 24) & 0xFF);
-                qcmdp.AppendToQueue(new QCmdWriteMem(targetProfile.getBKPSRAMAddr() + HWSignature.length, crc));
+                qcmdp.AppendToQueue(new QCmdWriteMem(targetProfile.getBKPSRAMAddr() + 32 + 256, crc));
 
-                q = new QCmdMemRead(targetProfile.getBKPSRAMAddr(), HWSignature.length);
-                qcmdp.AppendToQueue(q);
+                // validate from bkpsram
                 qcmdp.WaitQueueFinished();
-                ByteBuffer signbb = q.getResult();
-                signbb.rewind();
-                byte[] signr = new byte[signbb.remaining()];
-                signbb.get(signr, 0, signr.length);
+                q = new QCmdMemRead(targetProfile.getBKPSRAMAddr(), 32);
+                qcmdp.AppendToQueue(q);
+                ByteBuffer otpInfo2 = q.getResult();
 
-                boolean valid = HWSignature.Verify(b, signr);
-                if (valid) {
-                    System.out.println("signature valid");
+                q = new QCmdMemRead(targetProfile.getBKPSRAMAddr() + 32, 256);
+                qcmdp.AppendToQueue(q);
+                ByteBuffer signature2 = q.getResult();
+
+                boolean signaturevalid2 = HWSignature.Verify(targetProfile.getCPUSerial(), otpInfo2, bb2ba(signature2));
+                if (signaturevalid2) {
+                    System.out.println("bpksram signature valid");
                 } else {
-                    System.out.println("signature INvalid");
+                    System.out.println("bpksram signature INvalid");
+                    return false;
                 }
+                System.out.println("<otpinfo>");
+                HWSignature.printByteArray(bb2ba(otpInfo2));
+                System.out.println("</otpinfo>");
+
+                System.out.println("<signature>");
+                HWSignature.printByteArray(sign);
+                System.out.println("</signature>");
+
             }
+            MainFrame.mainframe.ShowConnect();
             return true;
 
         } catch (Exception ex) {
@@ -1071,19 +1102,21 @@ public class USBBulkConnection extends Connection {
                         if (dataIndex == memReadLength + 7) {
                             memReadBuffer.rewind();
                             memReadBuffer.order(ByteOrder.LITTLE_ENDIAN);
-                            System.out.println("memread offset 0x" + Integer.toHexString(memReadAddr));
-                            int i = 0;
-                            while (memReadBuffer.hasRemaining()) {
-                                System.out.print(" " + String.format("%02X", memReadBuffer.get()));
-                                i++;
-                                //if ((i % 4) == 0) {
-                                //    System.out.print(" ");
-                                //}
-                                if ((i % 32) == 0) {
-                                    System.out.println();
-                                }
-                            }
-                            System.out.println();
+                            /*
+                             System.out.println("memread offset 0x" + Integer.toHexString(memReadAddr));
+                             int i = 0;
+                             while (memReadBuffer.hasRemaining()) {
+                             System.out.print(" " + String.format("%02X", memReadBuffer.get()));
+                             i++;
+                             //if ((i % 4) == 0) {
+                             //    System.out.print(" ");
+                             //}
+                             if ((i % 32) == 0) {
+                             System.out.println();
+                             }
+                             }
+                             System.out.println();
+                             */
                             GoIdleState();
                         }
                 }
@@ -1115,7 +1148,7 @@ public class USBBulkConnection extends Connection {
                         break;
                     case 7:
                         memReadValue += (cc & 0xFF) << 24;
-                        System.out.println(String.format("addr %08X value %08X", memReadAddr, memReadValue));
+                        //System.out.println(String.format("addr %08X value %08X", memReadAddr, memReadValue));
                         GoIdleState();
                 }
                 dataIndex++;
@@ -1158,7 +1191,7 @@ public class USBBulkConnection extends Connection {
                         break;
                     case 11:
                         patchentrypoint += (cc & 0xFF);
-                        Logger.getLogger(USBBulkConnection.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc %08X, patch entrypoint = %08X",
+                        Logger.getLogger(USBBulkConnection.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%08X, entrypoint=0x%08X",
                                 fwversion[0], fwversion[1], fwversion[2], fwversion[3], fwcrc, patchentrypoint));
                         GoIdleState();
                         break;

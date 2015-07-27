@@ -20,13 +20,6 @@ package axoloti.targetprofile;
 import axoloti.MainFrame;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.DoubleBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.LongBuffer;
-import java.nio.ShortBuffer;
-import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,11 +37,10 @@ public class axoloti_core {
 
     cputype_e cputype;
 
-    
-    public ByteBuffer CreateOTPInfo(){
-        return CreateOTPInfo(1,1,0,8);
+    public ByteBuffer CreateOTPInfo() {
+        return CreateOTPInfo(1, 1, 0, 8);
     }
-    
+
     public ByteBuffer CreateOTPInfo(
             int boardtype,
             int boardmajorversion,
@@ -56,16 +48,18 @@ public class axoloti_core {
             int sdramsize
     ) {
         try {
-            ByteBuffer bb = ByteBuffer.allocate(256);
-            String header = "Axoloti";
-            bb.rewind();            
+            ByteBuffer bb = ByteBuffer.allocate(32);
+            String header = "Axoloti Core";
+            bb.rewind();
             bb.put(header.getBytes("UTF8"));
+            while (bb.position() < 16) {
+                bb.put((byte)0);
+            }
             bb.putInt(boardtype);
             bb.putInt(boardmajorversion);
             bb.putInt(boardminorversion);
             bb.putInt(sdramsize);
-            
-            
+
             return bb;
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(axoloti_core.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,19 +80,11 @@ public class axoloti_core {
         return 8 * 1024 * 1024;
     }
 
-    public int getOTP0Addr() {
+    public int getOTPAddr() {
         return 0x1FFF7800;
     }
 
-    public int getOTP0Length() {
-        return 32;
-    }
-
-    public int getOTP1Addr() {
-        return 0x1FFF7820;
-    }
-
-    public int getOTP1Length() {
+    public int getOTPLength() {
         return 32;
     }
 
@@ -175,7 +161,7 @@ public class axoloti_core {
     }
 
     public void setCPUSerial(ByteBuffer b) {
-        if(b != null) {
+        if (b != null) {
             CPUIDData = b;
             String s = "";
             b.rewind();
@@ -183,8 +169,7 @@ public class axoloti_core {
                 s = s + String.format("%08X", b.getInt());
             }
             MainFrame.mainframe.setCpuID(s);
-        }
-        else {
+        } else {
             Logger.getLogger(axoloti_core.class.getName()).log(Level.SEVERE, "invalid CPU serial number, invalid protocol?, update firmware",new Object());
             MainFrame.mainframe.setCpuID("CFCFCFCF");
         }

@@ -24,6 +24,7 @@
 #include "axoloti_board.h"
 #include "ff.h"
 #include "midi.h"
+#include "crc32.h"
 
 typedef void (*fptr_patch_init_t)(int32_t fwID);
 typedef void (*fptr_patch_dispose_t)(void);

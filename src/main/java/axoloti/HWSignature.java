@@ -20,6 +20,7 @@ package axoloti;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -69,19 +70,45 @@ public class HWSignature {
         System.out.println();
     }
 
-    public static byte[] Sign(byte[] cpuid) throws Exception {
+    public static byte[] Sign(ByteBuffer cpuserial, ByteBuffer otpinfo) throws Exception {
+        if (cpuserial.limit() != 12) {
+            throw new Exception("cpuserial has wrong length");
+        }
+        if (otpinfo.limit() != 32) {
+            throw new Exception("otpinfo has wrong length");
+        }
+        byte[] sdata = new byte[12 + 32];
+        for (int i = 0; i < 12; i++) {
+            sdata[i] = cpuserial.get(i);
+        }
+        for (int i = 0; i < 32; i++) {
+            sdata[i + 12] = otpinfo.get(i);
+        }
         Signature sig = Signature.getInstance("SHA256withRSA");
         sig.initSign(ReadPrivateKey(PRIVATE_KEY_FILE));
-        sig.update(cpuid);
+        sig.update(sdata);
         byte[] signature = sig.sign();
         return signature;
     }
 
-    public static boolean Verify(byte[] cpuid, byte[] signature) throws Exception {
-        Signature sig2 = Signature.getInstance("SHA256withRSA");
-        sig2.initVerify(ReadPublicKey(PUBLIC_KEY_FILE));
-        sig2.update(cpuid);
-        return sig2.verify(signature);
+    public static boolean Verify(ByteBuffer cpuserial, ByteBuffer otpinfo, byte[] signature) throws Exception {
+        if (cpuserial.limit() != 12) {
+            throw new Exception("cpuserial has wrong length");
+        }
+        if (otpinfo.limit() != 32) {
+            throw new Exception("otpinfo has wrong length");
+        }
+        byte[] sdata = new byte[12 + 32];
+        for (int i = 0; i < 12; i++) {
+            sdata[i] = cpuserial.get(i);
+        }
+        for (int i = 0; i < 32; i++) {
+            sdata[i + 12] = otpinfo.get(i);
+        }
+        Signature sig = Signature.getInstance("SHA256withRSA");
+        sig.initVerify(ReadPublicKey(PUBLIC_KEY_FILE));
+        sig.update(sdata);
+        return sig.verify(signature);
     }
 
 }
