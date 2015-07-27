@@ -334,7 +334,7 @@ public class USBBulkConnection extends Connection {
                 qcmdp.AppendToQueue(new QCmdWriteMem(targetProfile.getBKPSRAMAddr() + 32, sign));
                 CRC32 zcrc = new CRC32();
                 writeotpinfo.rewind();
-                zcrc.update(writeotpinfo);
+                zcrc.update(bb2ba(writeotpinfo));
                 zcrc.update(sign);
                 int zcrcv = (int) zcrc.getValue();
                 System.out.println(String.format("key crc: %08X", zcrcv));
