@@ -68,9 +68,9 @@ then
     else
         echo "${ARCHIVE} already downloaded"
     fi
-    tar xfvj ${ARCHIVE}
-    cp -r gcc-arm-none-eabi-4_9-2015q2/* .
-    rm -rv gcc-arm-none-eabi-4_9-2015q2
+    tar xfj ${ARCHIVE}
+    cp -rv gcc-arm-none-eabi-4_9-2015q2/* .
+    rm -r gcc-arm-none-eabi-4_9-2015q2
 else
     echo "bin/arm-none-eabi-gcc already present, skipping..."
 fi
