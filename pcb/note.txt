@@ -1,3 +1,0 @@
-This design has been produced and tested. However I'd not recommend reproducing this design, as there is substantial room for improvements. I will not support this configuration.
-
-It's here for transparency and to enable open discussion.
