@@ -35,12 +35,12 @@ public class QCmdWriteMem implements QCmdSerialTask {
 
     @Override
     public String GetStartMessage() {
-        return "Start uploading";
+        return null;
     }
 
     @Override
     public String GetDoneMessage() {
-        return "Done uploading";
+        return null;
     }
 
     final int MaxBlockSize = 32768;
