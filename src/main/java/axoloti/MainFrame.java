@@ -1161,7 +1161,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         if (!firmwareId.equals(this.LinkFirmwareID)) {
             if (!WarnedAboutFWCRCMismatch) {
                 Logger.getLogger(AxoObjects.class.getName()).severe("Firmware CRC mismatch! Please flash the firmware first! "
-                        + "Target firmware CRC = " + firmwareId + " <> source CRC = " + this.LinkFirmwareID);
+                        + "Hardware firmware CRC = " + firmwareId + " <> Software CRC = " + this.LinkFirmwareID);
                 WarnedAboutFWCRCMismatch = true;
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override

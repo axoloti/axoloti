@@ -185,7 +185,7 @@ public class axoloti_core {
             MainFrame.mainframe.setCpuID(s);
         }
         else {
-            Logger.getLogger(axoloti_core.class.getName()).log(Level.SEVERE, "invalid CPU serial number",new Object());
+            Logger.getLogger(axoloti_core.class.getName()).log(Level.SEVERE, "invalid CPU serial number, invalid protocol?, update firmware",new Object());
             MainFrame.mainframe.setCpuID("CFCFCFCF");
         }
     }
