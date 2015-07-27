@@ -44,7 +44,7 @@ then
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "##### downloading ${ARCHIVE} #####"
-        #curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.8/$ARCHIVE > $ARCHIVE
+        curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.8/$ARCHIVE > $ARCHIVE
     else
         echo "##### ${ARCHIVE} already downloaded #####"
     fi
