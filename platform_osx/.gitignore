@@ -1,5 +1,4 @@
-gcc-arm-none-eabi-4_7-2013q2/
-gcc-arm-none-eabi-4_8-2014q3/
+gcc-arm-none-eabi-*/
 include/
 bin/
 lib/
@@ -13,4 +12,4 @@ src/make-3.82
 src/ChibiOS_2.*.zip
 x86_64/
 i386/
-gcc-arm-none-eabi-4_8-2014q3-20140805-mac.tar.bz2
+gcc-arm-none-eabi-*.tar.bz2
