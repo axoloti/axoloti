@@ -9,6 +9,10 @@ export axoloti_home=${axoloti_home:="$rootdir"}
 
 export PATH=$PATH:${platformdir}/bin
 
+echo PLATFORMDIR=${platformdir}
+echo PATH=$PATH
+ls ${platformdir}/bin
+
 cd ${axoloti_firmware}
 if [ ! -d "build" ]; 
 then
