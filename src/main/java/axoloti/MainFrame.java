@@ -1120,6 +1120,9 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
         if (!connect) {
             setCpuID(null);
+            jLabelVoltages.setText(" ");
+            v5000c = 0;
+            vdd00c = 0;
         }
     }
 
