@@ -10,7 +10,7 @@
         If the object name starts with "./" or "../"
         <ul>
             <li>the path relative to the current document path will be searched for a ".axo" file
-            <li>the path relative to the current document path will be searched for a ".axp" file                
+            <li>the path relative to the current document path will be searched for a ".axs" file                
         </ul>
         If the object name does not start with "./" or "../"
         <ul>
@@ -33,13 +33,12 @@
             <li>0x20000200-0x2000BFFF : firmware reserved memory
             <li>0x20011000-0x2001BFFF : patch memory (preferred area for execution)
             <li>0x20011001 : patch init function entry point
-            <li>0x10000000-0x1000DFFF : patch memory (CCM RAM, can't execute)
+            <li>0x10000000-0x1000DFFF : patch memory (CCM RAM, can't execute, can't DMA)
             <li>0x1000F000-0x1000FFFF : firmware reserved memory
             </ul>
         Important: CCM SRAM can't be used for DMA. This does not give errors/warnings, just invalid data!
         <h3>Future work: improving performance</h3>
         <ul><li>For the BLIT oscillators, rearranging the BLIT table to successive polyphase samples, will enable use of the FLASH memory data cache.
-            <li>Parameter data preparation in PEX callback function.
             <li>Biquad filter coefficient computation can be improved a lot!
             <li>The biquad filter itself also has room for improvement
             <li>making better use of subtypes: an int32pos outlet connected to an int32pos inlet does not require checking for negative values of the 2nd object.
