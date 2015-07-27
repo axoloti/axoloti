@@ -7,6 +7,8 @@ export axoloti_runtime=${axoloti_runtime:="$platformdir/.."}
 export axoloti_firmware=${axoloti_firmware:="$axoloti_release/firmware"}
 export axoloti_home=${axoloti_home:="$rootdir"}
 
+export PATH=$PATH:${platformdir}/bin
+
 cd ${axoloti_firmware}
 if [ ! -d "build" ]; 
 then

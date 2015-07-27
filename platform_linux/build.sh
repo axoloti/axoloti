@@ -12,8 +12,8 @@ echo -e "Press RETURN to continue\nCTRL-C if you are unsure!\n"
 read
 
 
-echo "apt get install -y libtool libudev-dev automake autoconf ant gcc-arm-none-eabi curl"
-sudo apt-get install -y libtool libudev-dev automake autoconf ant gcc-arm-none-eabi curl
+echo "apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0"
+sudo apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0
 
 PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
 
@@ -44,7 +44,7 @@ then
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "##### downloading ${ARCHIVE} #####"
-        curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.8/$ARCHIVE > $ARCHIVE
+        #curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.8/$ARCHIVE > $ARCHIVE
     else
         echo "##### ${ARCHIVE} already downloaded #####"
     fi
@@ -56,6 +56,23 @@ then
     mv chibios ../..
 else
     echo "##### chibios directory already present, skipping... #####"
+fi
+
+if [ ! -f "$PLATFORM_ROOT/bin/arm-none-eabi-gcc" ];
+then
+    ARCHIVE=gcc-arm-none-eabi-4_9-2015q2-20150609-linux.tar.bz2
+    if [ ! -f ${ARCHIVE} ];
+    then
+        echo "downloading ${ARCHIVE}"
+        curl -L https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q2-update/+download/$ARCHIVE > $ARCHIVE
+    else
+        echo "${ARCHIVE} already downloaded"
+    fi
+    tar xfvj ${ARCHIVE}
+    cp -r gcc-arm-none-eabi-4_9-2015q2/* .
+    rm -rv gcc-arm-none-eabi-4_9-2015q2
+else
+    echo "bin/arm-none-eabi-gcc already present, skipping..."
 fi
 
 
