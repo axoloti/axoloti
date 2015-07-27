@@ -1,6 +1,7 @@
 language: java
 jdk: oraclejdk8
 before_install:
+- sudo apt-get update -qq
 - sudo ./platform_linux/build.sh
 script:
 - ant -Dbuild.bundle=true bundle
