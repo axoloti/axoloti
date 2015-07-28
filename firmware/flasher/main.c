@@ -271,7 +271,7 @@ int main(void) {
   DBGPRINTCHAR('\r');
   DBGPRINTCHAR('\n');
 
-  chThdSleepMilliseconds(10);
+  chThdSleepMilliseconds(1000);
   NVIC_SystemReset();
   return 0;
 }
