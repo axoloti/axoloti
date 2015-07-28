@@ -307,7 +307,9 @@ public class USBBulkConnection extends Connection {
             qcmdp.AppendToQueue(q);
             ByteBuffer signature = q.getResult();
             boolean signaturevalid = false;
-            if ((signature.getInt(0) == 0xFFFFFFFF) && (signature.getInt(1) == 0xFFFFFFFF)) {
+            if (signature == null) {
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Can't obtain signature, upgrade firmware?");
+            } else if ((signature.getInt(0) == 0xFFFFFFFF) && (signature.getInt(1) == 0xFFFFFFFF)) {
                 Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Can't validate authenticity, no signature present.");
             } else {
                 signaturevalid = HWSignature.Verify(targetProfile.getCPUSerial(), otpInfo, bb2ba(signature));
