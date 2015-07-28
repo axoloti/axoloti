@@ -98,7 +98,7 @@ public class axoloti_core {
 
     public void setCPUIDCode(int i) {
         //System.out.println(String.format("idcode = %8X", i));
-        if ((i & 0x0FFF) == 0x0419) {
+        if (i==0 || (i & 0x0FFF) == 0x0419) {
             cputype = cputype_e.STM32F42xxx;
         } else {
             cputype = cputype_e.STM32F40xxx;

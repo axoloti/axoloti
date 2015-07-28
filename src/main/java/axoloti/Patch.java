@@ -1166,10 +1166,11 @@ public void ShowCompileFail() {
     String GenerateCode3() {
         CreateIID();
         SortByPosition();
+        String firmwaredir = System.getProperty(Axoloti.FIRMWARE_DIR);
         String c = "extern \"C\" { \n"
-                + "#include \"../" + Constants.firmwaredir + "/patch.h\"\n"
-                + "#include \"../" + Constants.firmwaredir + "/axoloti.h\"\n"
-                + "#include \"../" + Constants.firmwaredir + "/parameter_functions.h\"\n";
+                + "#include \"" + firmwaredir + "/patch.h\"\n"
+                + "#include \"" + firmwaredir + "/axoloti.h\"\n"
+                + "#include \"" + firmwaredir + "/parameter_functions.h\"\n";
         c += generateIncludes();
         c += "}\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"

@@ -17,6 +17,7 @@
  */
 package axoloti.utils;
 
+import axoloti.Axoloti;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class FirmwareID {
 
     static public String getFirmwareID() {
         try {
-            File f = new File(Constants.firmwaredir + "/build/axoloti.bin");
+            File f = new File(System.getProperty(Axoloti.FIRMWARE_DIR) +"/build/axoloti.bin");
             if (!f.canRead()) {
                 return "Please compile the firmware first";
             }
