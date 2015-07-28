@@ -114,6 +114,11 @@ public class PreferencesFrame extends javax.swing.JFrame {
         btnRuntimeDir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jScrollPane1.setViewportView(jTextPanePath);
 
@@ -296,6 +301,11 @@ public class PreferencesFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnRuntimeDirActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        txtFirmwareDir.setText(System.getProperty(axoloti.Axoloti.FIRMWARE_DIR));
+        txtRuntimeDir.setText(System.getProperty(axoloti.Axoloti.RUNTIME_DIR));
+    }//GEN-LAST:event_formWindowActivated
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFirmwareDir;

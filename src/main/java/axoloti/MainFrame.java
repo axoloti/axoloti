@@ -962,8 +962,18 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuCommunityActionPerformed
 
     private void jMenuItemFlashDefaultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashDefaultActionPerformed
-        String fname = System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/flasher/flasher_build/flasher.bin";
-        String pname = System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/build/axoloti.bin";
+        String curFirmwareDir = System.getProperty(Axoloti.FIRMWARE_DIR);
+        String sysFirmwareDir = System.getProperty(Axoloti.RELEASE_DIR) + "/firmware";
+
+        if(!curFirmwareDir.equals(sysFirmwareDir)) {
+            // if we are using the factory firmware, then we must switch back the firmware dir
+            // as this is where we pick up axoloti.elf from when building a patch
+            prefs.SetFirmwareDir(sysFirmwareDir);
+            prefs.SavePrefs();
+        }
+        
+        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
+        String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
         flashUsingSDRam(fname,pname);
     }//GEN-LAST:event_jMenuItemFlashDefaultActionPerformed
 
