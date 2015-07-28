@@ -76,9 +76,6 @@
   <!-- run the ant timestamp task -->
   <tstamp/>
 
-  <target name="-post-init">
-	<antcall target="create.build.version"/>
-  </target>
   <!-- Overrides -do-jar-->
   <target name="-do-jar">
 
