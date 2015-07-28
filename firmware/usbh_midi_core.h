@@ -46,8 +46,8 @@ int  usbh_MidiGetOutputBufferPending(void);
 int  usbh_MidiGetOutputBufferAvailable(void);
 
 //#define MIDI_MIN_POLL          10
-#define USBH_MIDI_EPS_IN_SIZE  32
-#define USBH_MIDI_EPS_OUT_SIZE 32
+#define USBH_MIDI_EPS_IN_SIZE  64
+#define USBH_MIDI_EPS_OUT_SIZE 64
 #define USB_AUDIO_CLASS 0x01
 #define USB_MIDISTREAMING_SubCLASS 0x03
 
