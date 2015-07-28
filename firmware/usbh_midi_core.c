@@ -138,7 +138,7 @@ void usbh_MidiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len) {
     uint8_t cin = CIN_SYSEX_START;
     uint8_t ph = cin | cn;
 	int i = 0;
-	for(i=0; i< (len - 3); i=i+3) {
+	for(i = 0; i< (len - 3); i += 3) {
 		next = (next + 1) % RING_BUFFER_SIZE;
 		// later do this up front... but read_ptr may be changing
 		if(next == send_ring_buffer.read_ptr) {
@@ -150,7 +150,6 @@ void usbh_MidiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len) {
 		send_ring_buffer.event[next].data[1] = bytes[i];
 		send_ring_buffer.event[next].data[2] = bytes[i + 1];
 		send_ring_buffer.event[next].data[3] = bytes[i + 2];
-
 	}
 
 	int res = len - i;
@@ -483,22 +482,29 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
             
             if (send_ring_buffer.read_ptr != send_ring_buffer.write_ptr)
             {
-                send_ring_buffer.read_ptr =(send_ring_buffer.read_ptr + 1) % RING_BUFFER_SIZE;
-                USBH_DbgLog("USB Host Output sending data @ %i", send_ring_buffer.read_ptr  );
+				MIDI_Handle->buff_out_len = 0;
+				while (send_ring_buffer.read_ptr != send_ring_buffer.write_ptr 
+						&& MIDI_Handle->buff_out_len + 4 <= MIDI_Handle->OutEpSize ) {
 
-                USBH_DbgLog("USB Host Output sending data : %x, %x, %x %x",
-                            send_ring_buffer.event[send_ring_buffer.read_ptr].data[0],
-                            send_ring_buffer.event[send_ring_buffer.read_ptr].data[1],
-                            send_ring_buffer.event[send_ring_buffer.read_ptr].data[2],
-                            send_ring_buffer.event[send_ring_buffer.read_ptr].data[3]);
-                
-                MIDI_Handle->buff_out[0] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[0];
-                MIDI_Handle->buff_out[1] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[1];
-                MIDI_Handle->buff_out[2] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[2];
-                MIDI_Handle->buff_out[3] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[3];
+						send_ring_buffer.read_ptr =(send_ring_buffer.read_ptr + 1) % RING_BUFFER_SIZE;
+						USBH_DbgLog("USB Host Output sending data @ %i", send_ring_buffer.read_ptr  );
+
+						USBH_DbgLog("USB Host Output sending data : %x, %x, %x %x",
+									send_ring_buffer.event[send_ring_buffer.read_ptr].data[0],
+									send_ring_buffer.event[send_ring_buffer.read_ptr].data[1],
+									send_ring_buffer.event[send_ring_buffer.read_ptr].data[2],
+									send_ring_buffer.event[send_ring_buffer.read_ptr].data[3]);
+						
+						MIDI_Handle->buff_out[MIDI_Handle->buff_out_len + 0] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[0];
+						MIDI_Handle->buff_out[MIDI_Handle->buff_out_len + 1] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[1];
+						MIDI_Handle->buff_out[MIDI_Handle->buff_out_len + 2] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[2];
+						MIDI_Handle->buff_out[MIDI_Handle->buff_out_len + 3] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[3];
+						MIDI_Handle->buff_out_len += 4;
+				}
                 
                 // later, use MIDI_Handle->OutEpSize
-                USBH_BulkSendData(phost, MIDI_Handle->buff_out, 4, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
+                USBH_BulkSendData(phost, MIDI_Handle->buff_out, MIDI_Handle->buff_out_len, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
+				USBH_DbgLog("USB Host Output sent bytes : %i", MIDI_Handle->buff_out_len);
                 
                 // now poll for completion
                 MIDI_Handle->state_out = MIDI_POLL;
@@ -509,12 +515,13 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
         case MIDI_POLL:
             if(URB_state_out == USBH_URB_DONE) {
                 USBH_DbgLog("USB Host Output  URB DONE");
+				MIDI_Handle->buff_out_len = 0;
                 MIDI_Handle->state_out = MIDI_SEND_DATA;
             }
             else if(URB_state_out == USBH_URB_NOTREADY) {
                 USBH_DbgLog("USB Host Output  NOT READY");
                 // send again
-                USBH_BulkSendData(phost, MIDI_Handle->buff_out, 4, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
+                USBH_BulkSendData(phost, MIDI_Handle->buff_out, MIDI_Handle->buff_out_len, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
                 MIDI_Handle->state_out = MIDI_POLL;
             } else if (URB_state_out == USBH_URB_IDLE) {
                 // wait
@@ -524,6 +531,7 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
                 // giveup
                 USBH_ErrLog("USB Host Output  Error sending data");
                 MIDI_Handle->state_out = MIDI_SEND_DATA;
+				MIDI_Handle->buff_out_len = 0;
             } else if (URB_state_out == USBH_URB_STALL) {
                 // stalled, reset ep
                 if (USBH_ClrFeature(phost, MIDI_Handle->OutEp) == USBH_OK) {
@@ -533,11 +541,13 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
                 else {
                     USBH_ErrLog("USB Host Output  write pipe stalled unable to clear");
                     MIDI_Handle->state_out = MIDI_SEND_DATA;
+					MIDI_Handle->buff_out_len = 0;
                 }
             } else {
                 // giveup
                 USBH_ErrLog("USB Host Output  unknown state sending data %x ", URB_state_out);
                 MIDI_Handle->state_out = MIDI_SEND_DATA;
+				MIDI_Handle->buff_out_len = 0;
             }
             break;
             
