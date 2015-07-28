@@ -135,10 +135,11 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 } else {
                     try {
                         String txt;
-                        if ((lr.getMessage() == null) && (lr.getThrown()!=null) ) {
+                        Throwable exc = lr.getThrown();
+                        if ((lr.getMessage() == null) && (exc!=null) ) {
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             PrintStream ps = new PrintStream(baos);
-                            lr.getThrown().printStackTrace(ps);
+                            exc.printStackTrace(ps);
                             txt = baos.toString("utf-8");
                         } else {
                             txt = java.text.MessageFormat.format(lr.getMessage(), lr.getParameters());
@@ -196,6 +197,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             jMenuItemRefreshFWID.setVisible(false);
         }
 
+        
         jMenuItemEnterDFU.setVisible(Axoloti.isDeveloper());
         jMenuItemFlashSDR.setVisible(Axoloti.isDeveloper());
         jMenuItemFCompile.setVisible(Axoloti.isDeveloper());
@@ -260,13 +262,18 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         }
     }
 
-    void flashUsingSDRam(String fname_flasher) {
+    void flashUsingSDRam(String fname_flasher, String pname) {
         updateLinkFirmwareID();
         File f = new File(fname_flasher);
+        File p = new File(pname);
         if (f.canRead()) {
-            qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam());
-            qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
-            qcmdprocessor.AppendToQueue(new QCmdStart(null));
+            if (p.canRead()) {
+                qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam(p));
+                qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
+                qcmdprocessor.AppendToQueue(new QCmdStart(null));
+            } else {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read firmware, please compile firmware! (file: {0} )", pname);
+            }
         } else {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read flasher, please compile firmware! (file: {0} )", fname_flasher);
         }
@@ -932,7 +939,8 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDRActionPerformed
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
-        flashUsingSDRam(fname);
+        String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
+        flashUsingSDRam(fname,pname);
     }//GEN-LAST:event_jMenuItemFlashSDRActionPerformed
 
     private void jMenuItemFCompileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFCompileActionPerformed
@@ -955,7 +963,8 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     private void jMenuItemFlashDefaultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashDefaultActionPerformed
         String fname = System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/flasher/flasher_build/flasher.bin";
-        flashUsingSDRam(fname);
+        String pname = System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/build/axoloti.bin";
+        flashUsingSDRam(fname,pname);
     }//GEN-LAST:event_jMenuItemFlashDefaultActionPerformed
 
     public void NewPatch() {
@@ -1129,6 +1138,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         jMenuItemSelectCom.setEnabled(!connect);
 
         jMenuItemEnterDFU.setEnabled(connect);
+        jMenuItemFlashDefault.setEnabled(connect && qcmdprocessor.serialconnection.getTargetProfile().hasSDRAM());
         jMenuItemFlashSDR.setEnabled(connect && qcmdprocessor.serialconnection.getTargetProfile().hasSDRAM());
 
         if (!connect) {
@@ -1163,7 +1173,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         LinkFirmwareID = FirmwareID.getFirmwareID();
         //TargetFirmwareID = LinkFirmwareID;
         jLabelFirmwareID.setText("Firmware ID = " + LinkFirmwareID);
-        Logger.getLogger(MainFrame.class.getName()).info("Link to firmware CRC " + LinkFirmwareID);
+        Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Link to firmware CRC {0}", LinkFirmwareID);
         WarnedAboutFWCRCMismatch = false;
     }
 
@@ -1173,8 +1183,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         TargetFirmwareID = firmwareId;
         if (!firmwareId.equals(this.LinkFirmwareID)) {
             if (!WarnedAboutFWCRCMismatch) {
-                Logger.getLogger(AxoObjects.class.getName()).severe("Firmware CRC mismatch! Please flash the firmware first! "
-                        + "Hardware firmware CRC = " + firmwareId + " <> Software CRC = " + this.LinkFirmwareID);
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE,"Firmware CRC mismatch! Please flash the firmware first! " + "Hardware firmware CRC = {0} <> Software CRC = {1}", new Object[]{firmwareId, this.LinkFirmwareID});
                 WarnedAboutFWCRCMismatch = true;
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -1224,7 +1233,9 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
                 "Firmware update...",
                 JOptionPane.YES_NO_OPTION);
         if (s == 0) {
-            flashUsingSDRam(System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/flasher/flasher_build/flasher.bin");
+            String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
+            String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
+            flashUsingSDRam(fname,pname);
         }
     }
 

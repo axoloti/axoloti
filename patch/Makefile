@@ -45,7 +45,7 @@ all:
 	@echo "APP"
 	$(CPP) $(CCFLAGS11) $(IINCDIR) -MD -MP -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o
 	@echo LINK
-	$(LD) $(LDFLAGS) ${BDIR}/xpatch.o -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${axoloti_release}/firmware/build/axoloti.elf -o ${BDIR}/xpatch.elf
+	$(LD) $(LDFLAGS) ${BDIR}/xpatch.o -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${axoloti_firmware}/build/axoloti.elf -o ${BDIR}/xpatch.elf
 	@echo BIN
 #	$(CP) -O binary -j .text  -j .init_array -j .rodata -j .rodata\* xpatch.elf xpatch.bin
 #   -j .text.startup -j .text.memcpy  
