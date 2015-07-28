@@ -116,9 +116,10 @@ void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, u
 void MidiSend1(midi_device_t dev, uint8_t port, uint8_t b0);
 void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1);
 void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
+void MidiSendSysEx(midi_device_t dev, uint8_t port, uint8_t bytes[], uint8_t len);
 
-// Note: this is used by a patcher, but is incorrect since it would need to know for which device
 int  MidiGetOutputBufferPending(midi_device_t dev);
+int  MidiGetOutputBufferAvailable(midi_device_t dev);
 
 
 #endif

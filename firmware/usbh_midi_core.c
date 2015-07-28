@@ -43,7 +43,7 @@
 
 USB_Setup_TypeDef MIDI_Setup;
 
-#define RING_BUFFER_SIZE 5
+#define RING_BUFFER_SIZE 64
 
 typedef struct
 {
@@ -56,7 +56,7 @@ static struct {
     MIDIEvent_t event[RING_BUFFER_SIZE];
     uint8_t read_ptr;
     uint8_t write_ptr;
-} send_ring_buffer  __attribute__ ((section (".ccmramend")));;
+} send_ring_buffer;
 
 
 
@@ -66,30 +66,29 @@ void usbh_midi_init(void)
 }
 
 
-// the Send etc, work for everything except Sysex
-inline uint8_t calcDS(uint8_t b0) {
-    // this works for everything bar SysEx,
-    // for sysex you need to use 0x4-0x7 to pack messages
+// CIN for everyting except sysex
+inline uint8_t calcCIN(uint8_t b0) {
     return (b0 & 0xF0 ) >> 4;
     
 }
 
-inline uint8_t calcCIN(uint8_t port, uint8_t b0) {
-    uint8_t ds  = calcDS(b0);
-    uint8_t cin = ((( port - 1) & 0x0F) << 4)  | ds;
-    return cin;
+// packey header CN | CIN
+inline uint8_t calcPH(uint8_t port, uint8_t b0) {
+    uint8_t cin  = calcCIN(b0);
+    uint8_t ph = ((( port - 1) & 0x0F) << 4)  | cin;
+    return ph;
 }
 
 
 void usbh_MidiSend1(uint8_t port, uint8_t b0) {
     USBH_DbgLog("usbh_MidiSend1");
-    uint8_t next = (send_ring_buffer.write_ptr+ 1) % RING_BUFFER_SIZE;
+    uint8_t next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
     
     if(next == send_ring_buffer.read_ptr) {
         USBH_ErrLog("usbh_MidiSend1 : ring buffer overflow");
     }
     
-    send_ring_buffer.event[next].data[0]=calcCIN(port, b0);
+    send_ring_buffer.event[next].data[0]=calcPH(port, b0);
     send_ring_buffer.event[next].data[1]=b0;
     send_ring_buffer.event[next].data[2]=0;
     send_ring_buffer.event[next].data[3]=0;
@@ -98,13 +97,13 @@ void usbh_MidiSend1(uint8_t port, uint8_t b0) {
 
 void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1) {
     USBH_DbgLog("usbh_MidiSend2");
-    uint8_t next = (send_ring_buffer.write_ptr+ 1) % RING_BUFFER_SIZE;
+    uint8_t next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
     
     if(next == send_ring_buffer.read_ptr) {
         USBH_ErrLog("usbh_MidiSend2 : ring buffer overflow");
     }
     
-    send_ring_buffer.event[next].data[0]=calcCIN(port, b0);
+    send_ring_buffer.event[next].data[0]=calcPH(port, b0);
     send_ring_buffer.event[next].data[1]=b0;
     send_ring_buffer.event[next].data[2]=b1;
     send_ring_buffer.event[next].data[3]=0;
@@ -113,21 +112,90 @@ void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1) {
 
 void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
     USBH_DbgLog("usbh_MidiSend3");
-    uint8_t next = (send_ring_buffer.write_ptr+ 1) % RING_BUFFER_SIZE;
+    uint8_t next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
     
     if(next == send_ring_buffer.read_ptr) {
         USBH_ErrLog("usbh_MidiSend3 : ring buffer overflow");
     }
     
-    send_ring_buffer.event[next].data[0]=calcCIN(port, b0);
+    send_ring_buffer.event[next].data[0]=calcPH(port, b0);
     send_ring_buffer.event[next].data[1]=b0;
     send_ring_buffer.event[next].data[2]=b1;
     send_ring_buffer.event[next].data[3]=b2;
     send_ring_buffer.write_ptr=next;
 }
 
+#define CIN_SYSEX_START 0x04
+#define CIN_SYSEX_END_1 0x05
+#define CIN_SYSEX_END_2 0x06
+#define CIN_SYSEX_END_3 0x07
+
+void usbh_MidiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len) {
+    USBH_DbgLog("usbh_MidiSysEx");
+    uint8_t next = 0;
+
+    uint8_t cn = ((( port - 1) & 0x0F) << 4);
+    uint8_t cin = CIN_SYSEX_START;
+    uint8_t ph = cin | cn;
+	int i = 0;
+	for(i=0; i< (len - 3); i=i+3) {
+		next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
+		// later do this up front... but read_ptr may be changing
+		if(next == send_ring_buffer.read_ptr) {
+			USBH_ErrLog("usbh_MidiSysEx : ring buffer overflow");
+		}
+
+		send_ring_buffer.event[next].data[0] = ph;
+		send_ring_buffer.event[next].data[1] = bytes[i];
+		send_ring_buffer.event[next].data[2] = bytes[i + 1];
+		send_ring_buffer.event[next].data[3] = bytes[i + 2];
+
+	}
+
+	int res = len - i;
+	
+	// end the sysex message, also handles special cases 2/3 bytes
+	next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
+	if(next == send_ring_buffer.read_ptr) {
+		USBH_ErrLog("usbh_MidiSysEx : ring buffer overflow");
+	}
+
+	if (res == 1) {
+		cin = CIN_SYSEX_END_1;
+		ph = cin | cn;
+		send_ring_buffer.event[next].data[0] = ph;
+		send_ring_buffer.event[next].data[1] = bytes[i];
+		send_ring_buffer.event[next].data[2] = 0;
+		send_ring_buffer.event[next].data[3] = 0;
+	} else if (res == 2) {
+		cin = CIN_SYSEX_END_2;
+		ph = cin | cn;
+		send_ring_buffer.event[next].data[0] = ph;
+		send_ring_buffer.event[next].data[1] = bytes[i];
+		send_ring_buffer.event[next].data[2] = bytes[i + 1];
+		send_ring_buffer.event[next].data[3] = 0;
+	} else if (res == 3) {
+		cin = CIN_SYSEX_END_3;
+		ph = cin | cn;
+		send_ring_buffer.event[next].data[0] = ph;
+		send_ring_buffer.event[next].data[1] = bytes[i];
+		send_ring_buffer.event[next].data[2] = bytes[i + 1];
+		send_ring_buffer.event[next].data[3] = bytes[i + 2];
+	}
+
+	send_ring_buffer.write_ptr=next;
+}
+
 int  usbh_MidiGetOutputBufferPending(void) {
-    return 0;
+	if(send_ring_buffer.write_ptr >= send_ring_buffer.read_ptr) {
+		return send_ring_buffer.write_ptr - send_ring_buffer.read_ptr;
+	}
+	
+    return send_ring_buffer.write_ptr + RING_BUFFER_SIZE - send_ring_buffer.read_ptr;
+}
+
+int  usbh_MidiGetOutputBufferAvailable(void) {
+	return RING_BUFFER_SIZE - usbh_MidiGetOutputBufferPending();
 }
 
 /** @defgroup USBH_MIDI_CORE_Private_Variables

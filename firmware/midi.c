@@ -97,6 +97,18 @@ void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t 
     }
 }
 
+void MidiSendSysEx(midi_device_t dev, uint8_t port, uint8_t bytes[], uint8_t len) {
+    switch (dev) {
+        case MIDI_DEVICE_USB_HOST: {
+            usbh_MidiSendSysEx(port,bytes,len);
+            break;
+        }
+        default: {
+            // nop
+        }
+    }
+}
+
 void midi_init(void) {
     serial_midi_init();
     usbh_midi_init();
@@ -112,11 +124,21 @@ int  MidiGetOutputBufferPending(midi_device_t dev)
         case MIDI_DEVICE_USB_HOST: {
             return usbh_MidiGetOutputBufferPending();
         }
-        case MIDI_DEVICE_INTERNAL: {
+        default: {
+            // not implemented 
             return 0;
         }
+    }
+}
+
+int  MidiGetOutputBufferAvailable(midi_device_t dev)
+{
+    switch (dev) {
+        case MIDI_DEVICE_USB_HOST: {
+            return usbh_MidiGetOutputBufferAvailable();
+        }
         default: {
-            // nop
+            // not implemented 
             return 0;
         }
     }
