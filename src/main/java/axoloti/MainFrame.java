@@ -36,9 +36,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -131,17 +134,27 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                     });
                 } else {
                     try {
+                        String txt;
+                        if ((lr.getMessage() == null) && (lr.getThrown()!=null) ) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            PrintStream ps = new PrintStream(baos);
+                            lr.getThrown().printStackTrace(ps);
+                            txt = baos.toString("utf-8");
+                        } else {
+                            txt = java.text.MessageFormat.format(lr.getMessage(), lr.getParameters());
+                        }
                         if (lr.getLevel() == Level.SEVERE) {
-
+                            
                             jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
-                                    java.text.MessageFormat.format(lr.getMessage(), lr.getParameters()) + "\n", styleSevere);
+                                    txt + "\n", styleSevere);
                             MainFrame.this.toFront();
                         } else {
                             jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
-                                    java.text.MessageFormat.format(lr.getMessage(), lr.getParameters()) + "\n", styleFine);
+                                    txt + "\n", styleFine);
                         }
                     } catch (BadLocationException ex) {
                         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (UnsupportedEncodingException ex) {
                     }
                     jTextPaneLog.setCaretPosition(jTextPaneLog.getText().length());
                     jTextPaneLog.validate();
