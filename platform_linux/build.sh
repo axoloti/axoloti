@@ -60,6 +60,7 @@ fi
 
 if [ ! -f "$PLATFORM_ROOT/bin/arm-none-eabi-gcc" ];
 then
+    cd "${PLATFORM_ROOT}"
     ARCHIVE=gcc-arm-none-eabi-4_9-2015q2-20150609-linux.tar.bz2
     if [ ! -f ${ARCHIVE} ];
     then
@@ -76,7 +77,7 @@ else
 fi
 
 
-if [ ! -f "$PLATFORM_ROOT/lib/libusb-1.0.a" ]; 
+if [ ! -f "$PLATFORM_ROOT/lib/libusb-1.0.a" ];
 then
     cd "${PLATFORM_ROOT}/src"
     ARDIR=libusb-1.0.19
@@ -107,7 +108,7 @@ then
     cd "${PLATFORM_ROOT}/src"
     ARDIR=dfu-util-0.8
     ARCHIVE=${ARDIR}.tar.gz
-    if [ ! -f $ARCHIVE ]; 
+    if [ ! -f $ARCHIVE ];
     then
         echo "##### downloading ${ARCHIVE} #####"
         curl -L http://dfu-util.sourceforge.net/releases/$ARCHIVE > $ARCHIVE
