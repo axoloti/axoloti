@@ -40,11 +40,14 @@ void usbh_midi_init(void);
 void usbh_MidiSend1(uint8_t port, uint8_t b0);
 void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1);
 void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
+void usbh_MidiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len);
+
 int  usbh_MidiGetOutputBufferPending(void);
+int  usbh_MidiGetOutputBufferAvailable(void);
 
 //#define MIDI_MIN_POLL          10
-#define USBH_MIDI_EPS_IN_SIZE  32
-#define USBH_MIDI_EPS_OUT_SIZE 32
+#define USBH_MIDI_EPS_IN_SIZE  64
+#define USBH_MIDI_EPS_OUT_SIZE 64
 #define USB_AUDIO_CLASS 0x01
 #define USB_MIDISTREAMING_SubCLASS 0x03
 
