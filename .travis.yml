@@ -4,8 +4,7 @@ os:
 language: java
 before_install:
 - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then jdk_switcher use oraclejdk8 && sudo apt-get update -qq && ./platform_linux/build.sh; fi"
-- "if [ ${TRAVIS_OS_NAME:-'linux'} = 'osx' ]; then brew install ant && ./platform_osx/build.sh; fi"
-- sudo ./platform_linux/build.sh
+- "if [ ${TRAVIS_OS_NAME:-'linux'} = 'osx' ]; then brew tap caskroom/cask && brew install brew-cask && brew cask install java && brew install ant && ./platform_osx/build.sh; fi"
 script:
 - ant
 - ant -Dbuild.bundle=true bundle
