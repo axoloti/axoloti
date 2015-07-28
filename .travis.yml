@@ -22,6 +22,7 @@ deploy:
     secure: ztzeYzBfCMNJnxFAlTq/dkvZdi4Ob+aWyUZBtAWlJDm+z6jeiT+015uDa0N+YEDKcyI3iWQbHwS9cZG8s5tpVwmjQ9jbkWOxeDaAOrsQKvgtxOXs5c2XDN0QejjK+f+rcxTS1zeyLNQ4YFbYEKtI/7gFYk8IBtEGs/ZatIDHUivKZ+VUmMIZnIxuCOQKAyQ/W9xEuFnIYezMrfRuTnmwpQ5z6ttiAt56HuHDVn4HOBNPLtbmoR9i0/BM0LMU5gpUC5QkLgmrweO5MngZLW7umC7sW8AVsOpwTCrtzPgWEAIyvl+I7E+PZaPLOtCc0WP6a076DROUmEHeog2Xg528EON4h3OsZJ2GnwT7nV+9k0lSWWv7w620paB5gwBGtWsLA3hrdfPBT/7HqN4oA6wW6g32Y1+GXxXk0Z4X+qSs0tFQI9DLYdEZ4PsLp1b4Q4mh61ys2+27S9UNdqp/5abxwknBVtbVujhPpyb7PPWjKrvMpqRLV9za/Tvj9iQuUCd57aGLT7GkeI2VSNgfIOrRN1iIBH5l0ivWfPn0BuPMhuNBAI9Rrz5h2DRY4zaGmW7VJkYKigxaOL7dVYHWCA7abOZsQBzzQsqpxoYDV2RhdttFadaELNlfimu1V4mYSqQZB2hBd+AuVE91n5eZ27CUBZ2FRLpUOGAJrv27ffrztt8=
   file: build/bundles/*
   file_glob: true  
+  skip_cleanup: true
   on:
     repo: JohannesTaelman/axoloti
     tags: true
