@@ -129,7 +129,7 @@
 			<arg line="-R platform_osx build/runtime/tmp/axoloti_runtime"/>
 		</exec>
 		<exec dir="." executable="hdiutil" os="Mac OS X">
-			<arg line="create -megabytes 400 build/runtime/macosx/axoloti_runtime.dmg -volname 'Axoloti Runtime'  -srcfolder build/runtime/tmp" />
+			<arg line="create -verbose -megabytes 400 build/runtime/macosx/axoloti_runtime.dmg -srcfolder build/runtime/tmp" />
 		</exec>
 		<!--Linux -->
 		<exec dir="." executable="cp" os="Linux">
