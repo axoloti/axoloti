@@ -4,6 +4,7 @@ before_install:
 - sudo apt-get update -qq
 - sudo ./platform_linux/build.sh
 script:
+- ant
 - ant -Dbuild.bundle=true bundle
 - ant -Dbuild.runtime=true runtime
 deploy:
