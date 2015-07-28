@@ -138,7 +138,7 @@
 			<arg line="-rf build/runtime/tmp/axoloti_runtime/arm_none-eabi/lib/arm6-m build/runtime/tmp/axoloti_runtime/arm_none-eabi/lib/arm7-ar build/runtime/tmp/axoloti_runtime/arm_none-eabi/lib/armt7-m "/>
 		</exec>
 		<exec dir="." executable="hdiutil" os="Mac OS X">
-			<arg line="create -verbose -megabytes 1024 build/runtime/macosx/axoloti_runtime.dmg -srcfolder build/runtime/tmp" />
+			<arg line="create -megabytes 512 build/runtime/macosx/axoloti_runtime.dmg -volname 'Axoloti Runtime' -srcfolder build/runtime/tmp" />
 		</exec>
 		<!--Linux -->
 		<exec dir="." executable="cp" os="Linux">
