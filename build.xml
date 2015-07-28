@@ -176,6 +176,7 @@
 			 <include name="CMSIS/**/*"/>
 			 <include name="patch/**/*"/>
 			 <include name="*.txt"/>
+			 <include name="public_key.der"/>
 		 </fx:fileset>
 	</fx:resources>
 
