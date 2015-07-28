@@ -1,7 +1,11 @@
+os:
+  - linux
+  - osx
 language: java
 jdk: oraclejdk8
 before_install:
-- sudo apt-get update -qq
+- "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then sudo apt-get update -qq && sudo ./platform_linux/build.sh; fi"
+- "if [ ${TRAVIS_OS_NAME:-'linux'} = 'osx' ]; then ./platform_osx/build.sh; fi"
 - sudo ./platform_linux/build.sh
 script:
 - ant

@@ -33,7 +33,7 @@ private_key.*
 axoloti.prefs
 
 #Version file
-src/main/java/axoloti/Version.java
+#src/main/java/axoloti/Version.java
 
 #################
 ## Eagle
