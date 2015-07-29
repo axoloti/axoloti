@@ -32,18 +32,23 @@ include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 INCDIR = $(CMSIS)/Include \
 		 $(PORTINC) $(KERNINC) $(TESTINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(FATFSINC) \
-         ${axoloti_firmware}
+         ${axoloti_firmware} 
          
 # Paths
 IINCDIR   = $(patsubst %,-I%,$(INCDIR) $(DINCDIR) $(UINCDIR))
 LLIBDIR   = $(patsubst %,-L%,$(DLIBDIR) $(ULIBDIR))
            
+all: ${BDIR}/xpatch.bin
 
-all:
+${BDIR}/xpatch.h.gch: ${axoloti_firmware}/xpatch.h ${axoloti_firmware}/patch.h ${axoloti_firmware}/axoloti.h ${axoloti_firmware}/parameter_functions.h
+	@echo "Build precompiled header"
+	$(CPP) $(CCFLAGS11) $(IINCDIR) -Winvalid-pch -MD -MP -c ${axoloti_firmware}/xpatch.h  -o ${BDIR}/xpatch.h.gch
+
+${BDIR}/xpatch.bin: ${BDIR}/xpatch.cpp ${BDIR}/xpatch.h.gch
 	@echo "RM"
 	rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
 	@echo "APP"
-	$(CPP) $(CCFLAGS11) $(IINCDIR) -MD -MP -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o
+	$(CPP) $(CCFLAGS11) -H $(IINCDIR) -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o 
 	@echo LINK
 	$(LD) $(LDFLAGS) ${BDIR}/xpatch.o -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${axoloti_firmware}/build/axoloti.elf -o ${BDIR}/xpatch.elf
 	@echo BIN
@@ -53,5 +58,6 @@ all:
 #	@echo SDCARD
 #	CP xpatch.bin T:\xpatch.bin
 clean:
-	rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
+	rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst ${BDIR}/xpatch.h.gch
 
+	
