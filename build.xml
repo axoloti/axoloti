@@ -184,7 +184,19 @@
 		</exec>                
   </target>
 
+  <target name="userguide">
+	<echo>generate user guide</echo>
+	<exec dir="." executable="curl" failifexecutionfails="false">
+		<arg line="http://community.axoloti.com/raw/50/1 -o doc/userguide.md"/>
+	</exec>
+	<exec dir="." executable="perl" output="doc/user guide.html" failifexecutionfails="false">
+		<arg line="thirdparty/Markdown_1.0.1/markdown.pl --html4tags doc/userguide.md"/>
+	</exec>
+  </target>
+
   <target name="bundle" if="build.bundle">
+	<antcall target="userguide"/>
+	<echo>generate user guide</echo>
 	<echo>${java.home}</echo>
 	<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
 			uri="javafx:com.sun.javafx.tools.ant"
