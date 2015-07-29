@@ -188,7 +188,7 @@ public class AxoObjectEditor extends JFrame {
 
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
-        jLabel1.setText("This object editor is uncomplete. The tabs for inlets, outlets, parameters, attributes are not working. ");
+        jLabel1.setText("This object editor is incomplete. The tabs for inlets, outlets, parameters, attributes are not working. ");
         jLabel1.setVerifyInputWhenFocusTarget(false);
         getContentPane().add(jLabel1);
 
