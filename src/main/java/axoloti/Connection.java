@@ -29,10 +29,12 @@ public abstract class Connection {
     abstract public void SendMidi(int m0, int m1, int m2);
     abstract public boolean AppendToQueue(QCmdSerialTask cmd);
     abstract public void TransmitGetFWVersion();
+    abstract public void TransmitCopyToFlash();
     abstract public void BringToDFU();
     abstract public void ClearSync();
-    abstract public void TransmitCopyToFlash();
     abstract public boolean WaitSync();
+    abstract public void ClearReadSync();
+    abstract public boolean WaitReadSync();
     abstract public void setPatch(Patch patch);
     abstract public axoloti_core getTargetProfile();
     abstract public ByteBuffer getMemReadBuffer();

@@ -74,6 +74,7 @@ public class USBBulkConnection extends Connection {
 
     public USBBulkConnection(Patch patch, BlockingQueue<QCmd> queueResponse) {
         this.sync = new Sync();
+        this.readsync = new Sync();
         this.patch = patch;
         this.queueResponse = queueResponse;
         disconnectRequested = false;
@@ -287,6 +288,11 @@ public class USBBulkConnection extends Connection {
             QCmdProcessor qcmdp = MainFrame.mainframe.getQcmdprocessor();
 
             qcmdp.AppendToQueue(new QCmdTransmitGetFWVersion());
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
             qcmdp.WaitQueueFinished();
 
             QCmdMemRead1Word q1 = new QCmdMemRead1Word(targetProfile.getCPUIDCodeAddr());
@@ -318,7 +324,7 @@ public class USBBulkConnection extends Connection {
                     otpInfo.rewind();
                     byte c = otpInfo.get();
                     while (c != 0) {
-                        s += (char)(c&0xFF);
+                        s += (char) (c & 0xFF);
                         c = otpInfo.get();
                     }
                     Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Authentic {0}", s);
@@ -468,6 +474,7 @@ public class USBBulkConnection extends Connection {
         boolean Acked = false;
     }
     final Sync sync;
+    final Sync readsync;
 
     @Override
     public void ClearSync() {
@@ -490,6 +497,29 @@ public class USBBulkConnection extends Connection {
             return sync.Acked;
         }
     }
+
+    @Override
+    public void ClearReadSync() {
+        synchronized (readsync) {
+            readsync.Acked = false;
+        }
+    }
+
+    @Override
+    public boolean WaitReadSync() {
+        synchronized (readsync) {
+            if (readsync.Acked) {
+                return readsync.Acked;
+            }
+            try {
+                readsync.wait(1000);
+            } catch (InterruptedException ex) {
+                //              Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, "Sync wait interrupted");
+            }
+            return readsync.Acked;
+        }
+    }
+
     private final byte[] startPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('s')};
     private final byte[] stopPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('S')};
     private final byte[] pingPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('p')};
@@ -1119,6 +1149,10 @@ public class USBBulkConnection extends Connection {
                              }
                              System.out.println();
                              */
+                            synchronized (readsync) {
+                                readsync.Acked = true;
+                                readsync.notifyAll();
+                            }
                             GoIdleState();
                         }
                 }
@@ -1151,6 +1185,10 @@ public class USBBulkConnection extends Connection {
                     case 7:
                         memReadValue += (cc & 0xFF) << 24;
                         //System.out.println(String.format("addr %08X value %08X", memReadAddr, memReadValue));
+                        synchronized (readsync) {
+                            readsync.Acked = true;
+                            readsync.notifyAll();
+                        }
                         GoIdleState();
                 }
                 dataIndex++;

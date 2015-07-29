@@ -28,6 +28,7 @@ public class QCmdMemRead1Word implements QCmdSerialTask {
 
     final int addr;
     int result = 0;
+
     class Sync {
 
         boolean ready = false;
@@ -40,11 +41,11 @@ public class QCmdMemRead1Word implements QCmdSerialTask {
 
     @Override
     public QCmd Do(Connection connection) {
-        connection.ClearSync();
-        connection.TransmitMemoryRead1Word(addr);
-        connection.WaitSync();
-        result = connection.getMemRead1Word();
         synchronized (sync) {
+            connection.ClearReadSync();
+            connection.TransmitMemoryRead1Word(addr);
+            connection.WaitReadSync();
+            result = connection.getMemRead1Word();
             sync.ready = true;
             sync.notifyAll();
         }
@@ -52,15 +53,14 @@ public class QCmdMemRead1Word implements QCmdSerialTask {
     }
 
     public int getResult() {
-        if (sync.ready) {
-            return result;
-        } else {
-            synchronized (sync) {
-                try {
-                    sync.wait(1000);
-                } catch (InterruptedException ex) {
-                    return result;
-                }
+        synchronized (sync) {
+            if (sync.ready) {
+                return result;
+            }
+            try {
+                sync.wait(10000);
+                return result;
+            } catch (InterruptedException ex) {
             }
         }
         return 0;

@@ -161,9 +161,18 @@
 		</exec>
 		<!--Windows -->
 		<mkdir dir="build/runtime/tmp_win/axoloti_runtime"/>
-		<exec dir="." executable="cp" os="Windows">
-			<arg line="-R platform_win build/runtime/tmp_win/axoloti_runtime"/>
+		<exec dir="." executable="cp.exe" osfamily="Windows">
+			<arg line="-R platform_win/* build/runtime/tmp_win/axoloti_runtime"/>
 		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/share"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/src"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/arm_none-eabi/lib/arm6-m build/runtime/tmp_win/axoloti_runtime/arm_none-eabi/tmp_win/arm7-ar build/runtime/tmp_win/axoloti_runtime/arm_none-eabi/lib/armt7-m "/>
+		</exec>                
   </target>
 
   <target name="bundle" if="build.bundle">
