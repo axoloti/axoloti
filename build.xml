@@ -184,6 +184,7 @@
 			uri="javafx:com.sun.javafx.tools.ant"
 			classpath=".:${java.home}/../lib/ant-javafx.jar"/>    
 	<fx:resources id="appRes">
+		 <fx:fileset type="license" dir="." includes="license.txt"/>
 		 <fx:fileset dir="dist">
          		<include name="axoloti-app.jar"/>
 		 </fx:fileset>
