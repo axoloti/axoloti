@@ -164,8 +164,8 @@
 		</exec>
 		<mkdir dir="build/runtime/linux"/>
 		<exec dir="build/runtime/tmp" executable="tar" os="Linux">
-			<arg value="-cvf"/>
-			<arg value="../linux/axoloti_runtime.tar"/>
+			<arg value="-zcvf"/>
+			<arg value="../linux/axoloti_runtime.tgz"/>
 			<arg value="."/>
 		</exec>
 		<!--Windows -->
