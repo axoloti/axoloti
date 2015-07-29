@@ -172,6 +172,9 @@ file "${PLATFORM_ROOT}/bin/make"
 file "${PLATFORM_ROOT}/bin/dfu-util"
 file "${PLATFORM_ROOT}/bin/libusb-1.0.0.dylib"
 
+echo "##### building firmware... #####"
+./compile_firmware.sh
+
 echo "##### building GUI... #####"
 cd "${PLATFORM_ROOT}"/..
 ant
