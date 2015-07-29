@@ -48,6 +48,7 @@ fi
 
 if [ ! -f "$PLATFORM_ROOT/bin/arm-none-eabi-gcc" ]; 
 then
+    cd "${PLATFORM_ROOT}/src"
     ARCHIVE=gcc-arm-none-eabi-4_9-2015q2-20150609-mac.tar.bz2
     if [ ! -f ${ARCHIVE} ]; 
     then
@@ -57,7 +58,7 @@ then
         echo "${ARCHIVE} already downloaded"
     fi
     tar xfvj ${ARCHIVE}
-    cp -r gcc-arm-none-eabi-4_9-2015q2/* .
+    cp -r gcc-arm-none-eabi-4_9-2015q2/* ..
     rm -rv gcc-arm-none-eabi-4_9-2015q2
 else
     echo "bin/arm-none-eabi-gcc already present, skipping..."

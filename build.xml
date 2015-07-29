@@ -120,6 +120,9 @@
   </target>
 
   <target name="runtime" if="build.runtime">
+		<exec dir="." executable="rm" >
+			<arg line="-rf build/runtime/"/>
+		</exec>
 		<mkdir dir="build/runtime"/>
 		<mkdir dir="build/runtime/macosx" />
 		<mkdir dir="build/runtime/tmp/axoloti_runtime" />
@@ -129,13 +132,13 @@
 			<arg line="-R platform_osx build/runtime/tmp/axoloti_runtime"/>
 		</exec>
 		<exec dir="." executable="rm" os="Mac OS X">
-			<arg line="-rf build/runtime/tmp/axoloti_runtime/share"/>
+			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_osx/share"/>
 		</exec>
 		<exec dir="." executable="rm" os="Mac OS X">
-			<arg line="-rf build/runtime/tmp/axoloti_runtime/src"/>
+			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_osx/src"/>
 		</exec>
 		<exec dir="." executable="rm" os="Mac OS X">
-			<arg line="-rf build/runtime/tmp/axoloti_runtime/arm_none-eabi/lib/arm6-m build/runtime/tmp/axoloti_runtime/arm_none-eabi/lib/arm7-ar build/runtime/tmp/axoloti_runtime/arm_none-eabi/lib/armt7-m "/>
+			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_osx/arm-none-eabi/lib/armv6-m build/runtime/tmp/axoloti_runtime/platform_osx/arm-none-eabi/lib/armv7-ar build/runtime/tmp/axoloti_runtime/platform_osx/arm-none-eabi/lib/armv7-m "/>
 		</exec>
 		<exec dir="." executable="hdiutil" os="Mac OS X">
 			<arg line="create -megabytes 512 build/runtime/macosx/axoloti_runtime.dmg -volname 'Axoloti Runtime' -srcfolder build/runtime/tmp" />
@@ -145,13 +148,13 @@
 			<arg line="-R platform_linux build/runtime/tmp/axoloti_runtime"/>
 		</exec>
 		<exec dir="." executable="rm" os="Linux">
-			<arg line="-rf build/runtime/tmp/axoloti_runtime/share"/>
+			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_linux/share"/>
 		</exec>
 		<exec dir="." executable="rm" os="Linux">
-			<arg line="-rf build/runtime/tmp/axoloti_runtime/src"/>
+			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_linux/src"/>
 		</exec>
 		<exec dir="." executable="rm" os="Linux">
-			<arg line="-rf build/runtime/tmp/axoloti_runtime/arm_none-eabi/lib/arm6-m build/runtime/tmp/axoloti_runtime/arm_none-eabi/lib/arm7-ar build/runtime/tmp/axoloti_runtime/arm_none-eabi/lib/armt7-m "/>
+			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_linux/arm-none-eabi/lib/armv6-m build/runtime/tmp/axoloti_runtime/platform_linux/arm-none-eabi/lib/armv7-ar build/runtime/tmp/axoloti_runtime/platform_linux/arm-none-eabi/lib/armv7-m "/>
 		</exec>
 		<mkdir dir="build/runtime/linux"/>
 		<exec dir="build/runtime/tmp" executable="tar" os="Linux">
@@ -165,13 +168,13 @@
 			<arg line="-R platform_win/* build/runtime/tmp_win/axoloti_runtime"/>
 		</exec>
 		<exec dir="." executable="rm" osfamily="Windows">
-			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/share"/>
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/share"/>
 		</exec>
 		<exec dir="." executable="rm" osfamily="Windows">
-			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/src"/>
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/src"/>
 		</exec>
 		<exec dir="." executable="rm" osfamily="Windows">
-			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/arm_none-eabi/lib/arm6-m build/runtime/tmp_win/axoloti_runtime/arm_none-eabi/tmp_win/arm7-ar build/runtime/tmp_win/axoloti_runtime/arm_none-eabi/lib/armt7-m "/>
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv6-m build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/tmp_win/armv7-ar build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv7-m "/>
 		</exec>                
   </target>
 
