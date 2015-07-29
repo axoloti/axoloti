@@ -49,9 +49,11 @@ SECTIONS {
    
     .bss (NOLOAD): ALIGN(4) SUBALIGN(4)
     {
+        PROVIDE(_pbss_start = .);        
         sbss = .;
         * (.bss);
         ebss = .;
+        PROVIDE(_pbss_end = .);        
     } > CCMSRAM
     
     .sdram (NOLOAD) : ALIGN(4) SUBALIGN(4)
