@@ -190,7 +190,7 @@
 		<arg line="http://community.axoloti.com/raw/50/1 -o doc/userguide.md"/>
 	</exec>
 	<exec dir="." executable="perl" output="doc/user guide.html" failifexecutionfails="false">
-		<arg line="thirdparty/Markdown_1.0.1/markdown.pl --html4tags doc/userguide.md"/>
+		<arg line="thirdparty/Markdown_1.0.1/Markdown.pl --html4tags doc/userguide.md"/>
 	</exec>
   </target>
 
