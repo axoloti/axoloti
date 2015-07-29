@@ -130,13 +130,14 @@ fi
 
 sudo apt-get install openjdk-7-jdk
 
+echo "##### compiling firmware... #####"
+cd "${PLATFORM_ROOT}"
+./compile_firmware.sh
+
 echo "##### building GUI... #####"
 cd "${PLATFORM_ROOT}"/..
 ant
 
-echo "##### compiling firmware... #####"
-cd "${PLATFORM_ROOT}"
-./compile_firmware.sh
 
 echo "DONE"
 
