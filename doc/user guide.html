@@ -1,206 +1,289 @@
-<html>
-    <body>
-        <h1>Axoloti</h1>
+<h1>Overview</h1>
 
-        <h2>Main window</h2>
-        The main window manages the connection with the Axoloti board, and also contains
-        a log of info and error messages.        
+<p>Axoloti consists of both hardware and software which work together to produce provide a virtual modular environment.
+With the Axoloti software we can create 'patches' which are uploaded to the Axoloti hardware and then run on the hardware.</p>
 
-        <h2>Patch window</h2>
-        Double click in an empty document ("patch") to create a new object (or press "n"). 
-        This brings up the object selector window. In the object selector you can type a name, objects containing the name will appear.                
+<p>Although the user does not see it, its interesting to note that when we upload these patches to the Axoloti board, we are uploading native code for the hardware, we are not interpreting these patches on the board - this is important as it means its is very efficient, close to the efficiency as you would get if you wrote the code specifically for the hardware!</p>
 
-        <h2>Objects</h2>
-        Objects contain:
-        <ul>
-            <li><b>titlebar</b> containing the kind of object
-            <li><b>instance name</b> the name you give it.
-                Duplicate names in a patch are illegal.
-            <li><b>inlets</b>: colored circles on the left side
-            <li><b>outlets</b> colored squares on the right side
-            <li><b>attributes</b> values that can only be set before running the patch.
-            <li><b>parameters</b> values that can be set before loading the patch and also be modified during a "live" session.
-            <li><b>indicators</b> visualizations of live data from the patch.
-        </ul>
-        Operations on objects (not in Live Mode):
-        <ul>
-            <li>Objects can be moved by dragging the titlebar.
-            <li>Objects can be selected by clicking the titlebar, or dragging a rectange around a group.
-            <li>Selected objects can be deleted by pressing delete or backspace.
-            <li>Objects can mutate to a different type by double-clicking on the title. Connections and parameters will be preserved. Attributes are not preserved (yet)!
-            <li>Instance name can be changed (a double click on the instancename brings up the instance name editor)
-            <li>Attributes can be changed
-            <li>Parameters can be changed by <ul>
-                    <li>mouse for units
-                    <li>shift-mouse for sub-units
-                    <li>arrow-up, arrow-down
-                    <li>shift-arrow-up, shift-arrow-down
-                    <li>page-up, page-down
-                    <li>home, end
-                    <li>or typing the number followed by enter
-                </ul>
-            <li>Some parameters have real-world units, displayed left of the dial. For some, multiple conversions are meaningful. Clicking on the real-world unit to alternate between different units. Eg. frequency in Hertz or period time in milliseconds.
-            <li>Parameter mapping to MIDI Continuous Controllers: right click on the parameter to assign a MIDI controller. Mapped parameters have a "C" mark right of the dial.
-        </ul>
-        Operations on objects (in Live Mode):
-        <ul>
-            <li>Parameters can be changed
-            <li>No objects can be added/moved/replaced!
-        </ul>
+<p>Also its important to remember, although this particular document concentrates on the Axoloti software, once the 'patch' is uploaded to the board, the Axoloti board can run completely independently, no computer or other controller is required.</p>
 
-        <h2>Connections</h2>
+<p>You can find more information about the hardware in another post in this "User Guide" </p>
 
-        Connections between objects can be made by dragging from an inlet to an outlet or from outlet to inlet.
-        Connections can be deleted via the pop-up menu (right-click) on inlets or outlets.
+<p>More topics from the user guide can be found in the <a href="http://community.axoloti.com/c/user-guide">Axoloti User Guide Forum</a></p>
 
-        Different data types are marked by different colors on the outlets, inlets and wires.
-        <ul>
-            <li><b>Red</b> connections are for s-rate (audio-rate, 48000 Hz). The normal range is -64 to 64 units.
-            <li><b>Blue</b> connection points are for k-rate (control-rate, 3000 Hz) fractional numbers. The normal range is -64 to 64 units. Control voltages in modular synthesizer lingo.
-            <li><b>Yellow</b> connections are for k-rate booleans. Gate signals in modular synthesizer lingo.
-            <li><b>Green</b> connections are for k-rate integers (whole numbers). The range is -2147483648 to 2147483647.
-            <li><b>Pink</b> connections are for strings. Mostly useful for dynamic filenames.
-        </ul>
+<h1>Axoloti GUI</h1>
 
-        <h3>connections between different types</h3>
-        <ul>
-            <li>A red output can be connected to a blue input, this will take one out of 16 audio samples.
-            <li>A yellow output can be connected to a blue input, this yields +64 units for true, 0 for false.
-            <li>A green output can be connected to a blue input.
-            <li>A blue output can be connected to a green input, the value is rounded down.
-            <li>A pink output must always be connected to a pink input. 
-        </ul>
+<p>The main focus of the Axoloti GUI is to allow the user to connect to the Axoloti hardware, build patches and upload these patches to the hardware.
+To do this there are two main windows, the console window and the patch window. 
+There is always one console window, but you can have many patch windows open.</p>
 
-        A connection that is illegal is drawn as a thick black dashed wire, and ignored.
+<h1>Console Window</h1>
 
-        <h2>Execution order</h2>
+<p>The console window shows information about the axoloti board that is connected, and various log messages.
+Assuming your axoloti board is connected, the first thing you will want to do is to ensure it is connected.
+(after the first time, it will automatically connect when you start Axoloti)</p>
 
-        Every object in the patch is executed once in the signal processing loop, at 3000Hz.
-        Objects are executed in reading order: left to right, top to bottom.
-        A connection from an outlet to an inlet earlier in the execution order, are buffered. 
-        So feedback topologies are legal, and never result in stack overflows.
+<p>First, use the 'Board Menu' and select 'Select Device', and you will see one (or more) Axoloti boards that are available for connection. (if not check your USB cables), select the device, and press ok.
+Now you can use the 'connect' button on the Console window, it will show in the log 'connected', and the current firmware version.
+This console window also shows the current firmware revision on the board, this is covered in the "Firmware vs Patch" post in the user guide.</p>
 
-        <h2>Live connection</h2>
+<p>Note: see how connected was in RED, this shows an important log message, often errors that need the users attention.</p>
 
-        Engaging live mode generates compilable code from the patch, compiles the code, uploads the binary and starts the binary on the board.
-        In live mode, only parameters can be changed.
-        Connections, execution order, location, attributes,... are all frozen.
+<p>We will be looking at the console window more, when we discuss transferring patches to the Axoloti board.</p>
 
-        <br>
-        <b>
-            Currently midi mapping, and modulation can be adjusted in live 
-            mode, but those changes are only in effect until after engaging live mode again.
-        </b>
+<h1>Patch Window</h1>
 
-        <h2>Keyboard shortcuts</h2>
-        <ul><li>Arrow keys to move selected objects
-            <li>To adjust a focused parameter : <ul>
-                <li>Up/down arrow keys to increment/decrement by a single units
-                <li>Shift-up/down arrow keys to increment/decrement by a tenth of a single unit
-                <li>Control-shift-up/down arrow keys to increment/decrement by one hundredth of a single unit
-                <li>Control-up/down arrow keys to increment/decrement by 5 units
-                <li>Page-up/page down to make coarse adjustments 
-                <li>Home/end to go to minimum/maximum
-                <li>or just start typing a value, followed by enter!
-                </ul>
-            <li>'c' to add a comment to the patch
-            <li>'n' to add an object to the patch
-        </ul>
+<p>This is the fun starts, as this is where the we create our synths, sequencers, or what ever else is in our imagination.
+Lets start by looking at a patch so see what we can do....</p>
 
-        <h2>Subpatching</h2>
-        To maintain clean patches, it is useful to define an object from a patch. 
-        To do this:<ul>
-            <li>Create a "child" patch, use inlet, and outlet objects to create connections in the resulting object.
-            <li>Save this patch.
-            <li>Create a new "mother" patch
-            <li>Save this patch to the same directory as the "child" patch
-            <li>you can use the "child" patch as an object, by entering the patch filename in the object selector (without .axs extension), prefixed by "./". 
-        </ul>
-        If you want to modify this object, and propagate the changes:
-        <ul><li>select "edit object definition" in the object popup menu
-            <li>the "child" patch window opens
-            <li>to propagate changes, save the child patch.
-            <li>"live" changes are not working in a child patch. Changes are only effective after re-enabling live mode.
-        </ul>
-        Parameters can be propagated to the encapsulating object, right-click on the parameter and select "show on parent".
-        "Show on parent" parameters are drawn in blue.
+<p>Use the File menu, and you can see there are options to create a new patch, open patch ...also there is a Library menu, which contains tutorials and demos.
+so lets start with a demo.  </p>
 
-        <h2>Polyphonic Subpatching</h2>
-        A polyphonic subpatch creates an array of the subpatch. Every element in this array is called a "voice".
-        For playing music, this automatically allocates notes played simultaneously to different voices.
-        You can obtain the index of the voice with the "voiceindex" object.
-        
-        <h2>Presets</h2>
-        A preset is a set of selected parameters and their new value. To include a parameter to a preset, select the preset index to edit in the toolbar. Then right-click on a parameter and select "include in current preset" in the popup-menu. The parameter will turn yellow. A yellow parameter is not updated live, but indicates that you are adjusting its value in the preset.
-        <b>Changes to presets are only updated after dis- and re-engaging the live checkbox!</b>
-        Presets in a sub-patch can be applied only with the "preset" object.
-        A preset in a "normal" sub-patch only affects the sub-patch.
-        A preset in a polyphonic sub-patch only affects one voice.        
-        
-        <h2>Advanced tricks</h2>
-        <h3>Working without hardware</h3>
-        Currently patches do not run without hardware attached. 
-        But you can test compilation. Choose "generate code" in the patch menu, and then "compile code".
-        Note: by default those menu items are invisible, and show up if you enable ExpertMode in .preferences.xml
-        <h3>Editing code after code generation and before upload</h3>
-        Do not use the "live" checkbox. Choose "generate code" in the patch menu, edit the code in the file "patch/xpatch.cpp", then choose "compile code" in the patch menu, and finally select "upload code".
-        The edits in the code are of course destroyed when the code generator runs again.
-        Note: by default those menu items are invisible, and show up if you enable ExpertMode in .preferences.xml
-        <h3>XML copy paste</h3>
-        Copy/paste uses XML in text format in the clipboard. You can copy an object from a patch, and paste it in a text editor, inspect/edit its internals, copy it from the text-editor and paste it into the patch again.
+<h2>Loading a demo</h2>
 
-        <h2>Axoloti core</h2>
+<p>Use File -> Library -> Demo -> Youtube ->Tybett</p>
 
-        <h3>Normal operation</h3>
-        By plugging in the usb-connection, the board powers up. The power LED should light up immediately. The other LED should flash three times if everything is OK.
-        
-        Patch binaries are specific to the version of the firmware. If the patch binary is made with a different version of the firmware, Axoloti will crash. 
-        In that case, unplug the sdcard before applying power to Axoloti, or hold button S2 during power-up.
+<p>This will open a patch with with the Tybett demo that has been shown on YouTube.
+It might look complicated, but no fear you will soon get accustomed to what is going on, and we are only hear to see a few important things.</p>
 
-        <h3>Connections</h3>
-        <ul>
-            <li>The 3.5mm (1/8") mini-jack is a headphone output. Use only for headphones. To connect other equipment, use the 6.35mm connector! This is because the headphone jack is electrically biased at 1.65V. 
-            <li>The 6.35mm (1/4") jacks are audio in- and output (labeled on the backside of the circuit board).
-            <li>The 5 pole DIN connectors are MIDI in- and output (labeled on the backside of the circuit board).
-            <li>micro-sd-card (should be FAT formatted)
-            <li>mini-usb also serves as the power source. For standalone use, you can use a USB adaptor, or an external USB battery, commercially available for smartphones and tablets. But you need a mini-usb plug, not the micro-USB (more common on tablets and smartphones).
-        </ul>
+<p>so with this patch window we can see lots of objects all connected by wires, more on this later.
+the most important thing about the patch window though is there are two modes.</p>
 
-        <h2>Common problems, errors and solutions</h2>
-        <h3>Fatal error: can't create build/obj/chcore_v7m.o: No such file or directory</h3>
-        (or: Fatal error: can't create build/obj/crt0.o: No such file or directory)<br>
-        Create an empty directory called "obj" in firmware/build. While you're there, also create the directory "lst" in the same place.
-        <h3>fatal error: diskio.h: No such file or directory</h3>
-        unzip chibios/ext/fatfs-0.9-patched.zip to chibios/ext/fatfs
-        <h3>Error: "region `SRAM' overflowed by 14760 bytes"</h3>
-        The executable binary code is too big to fit the allocated memory. 
-        <h3>Error: "region `CCMSRAM' overflowed by 66780 bytes"</h3>
-        The patch uses too much memory for variables to fit. Delay-lines, echos, RAM tables or sample streaming buffers are the biggest consumers of memory.
-        <h3>The Axoloti program froze up, can I still save my document?</h3>
-        Often yes, after disconnecting the USB cable, the program unfreezes.
-        <h3>The delay/read objects have no units</h3>
-        The knob-setting on the delay/delread objects is the fraction of the actual full delay length of the corresponding delay/write.
-        So if the delay/read is reading from a delayline of 1024 samples,
-        the zero position of the delay/read corresponds with zero samples, and the max position with 1024 samples.        
-        
-        <h2>Limitations</h2>
-        <ul>
-            <li>8 presets buttons in the GUI. The actual number of presets in a patch is configurable in patch settings dialog.
-            <li>The number of modulation sources and the number of modulation targets per source is configurable in patch settings dialog.
-            <li>The patch can use 64kB of on-chip RAM.
-            <li>The patch executable code can use 56kB of on-chip RAM.
-        </ul>
+<p>Edit Mode - (light background) , allows you to edit the patch.
+Live mode - (dark background) the patch is running on the Axoloti board, and you can control the parameters.</p>
 
-        <h2>Known issues</h2>
-        <ul>
-            <li>No undo function                
-            <li>Midi Controller mapping changes are not applied in live modus.                
-            <li>Modulation changes are not applied in live modus.
-            <li>the size of objects changes depending on ???
-            <li>OSX retina screens: radio buttons not drawn correctly?
-            <li>Object selector popup does not follow scrolling and misses some shortcuts. Also outside the screen if activated close to the bottom right
-            <li>Some limitations are not checked/enforced... (memory usage, number of presets, number of modulation sources/targets)
-            <li>if you computer goes in sleep, the connection is stuck. Unplug the board, save your work, quit Axoloti and launch it again.
-        </ul>
-    </body>
-</html>
+<p>When you open a patch, you always start in Edit mode.</p>
+
+<h1>Live Mode</h1>
+
+<p>Lets start with some sound!  (assuming you have the output jack connected to your speakers/mixer)</p>
+
+<p><strong>Important Note</strong> When you use a patch that you have not used before, or you have only just created <strong>always</strong> start with the gain on your headphones/mixer/speakers LOW and turn it up gradually. Different patches can have different volume levels and you don't want to damage your speakers/hearing!</p>
+
+<p>ok, so to send this patch to the Axoloti board  - you can press the Live checkbox.
+as this is a patch using a sequencer, you will instantly hear sound.</p>
+
+<p>Importantly you will see the background has changed colour to dark grey, this clearly indicates the patch is Live, and running on the Axoloti board.</p>
+
+<p>In Live mode, you can change the parameters that are on the screen.
+have a go, in the top right, you will see a box labelled LFO/Square, this object is controlling the tempo of this patch, you can use the mouse to control the dial in the box,  by clicking on the dial with the mouse, and then moving up or down.  (This can also be controlled via MIDI, but more on that later!)</p>
+
+<p>Also in Live mode you can use the preset recalls buttons at the top to change between different sets of saved presets, which are different groups of parameters values. (more later!)</p>
+
+<p>Note: when in  LIVE mode, you cannot edit the patch in any way (including moving objects). (
+as it is already loaded and running on the axoloti board) , to edit it you must leave LIVE mode. <br>
+Also can only have one patch running on a particular board at a time.</p>
+
+<p>Engaging live mode generates compatible code from the patch, compiles the code, uploads the binary and starts the binary on the board. In live mode, only parameters can be changed. Connections, execution order, location, attributes,... are all frozen. 
+Currently midi mapping, and modulation can be adjusted in live mode, but those changes are only in effect until after engaging live mode again.</p>
+
+<p>Leaving Live mode, easy... just click the Live checkbox again 
+(you will see you can also press CTRL/CMD +E as a shortcut for entering/leaving Live mode)</p>
+
+<h1>Edit Mode</h1>
+
+<p>Ok before we start editing lets get a little familiar with the what a patch is...</p>
+
+<p>The boxes are referred to as 'objects', and are like modules in a modular synth.
+objects contain inlets to connect to, and outlets to connect to other objects by using  virtual wires or connections.</p>
+
+<h2>Objects</h2>
+
+<p>Each objects has:</p>
+
+<ul>
+<li>titlebar, containing the kind of object</li>
+<li>instance name, the name you give it (a default is generated) Note: duplicate names in a patch are illegal.</li>
+<li>inlets: colored circles on the left side</li>
+<li>outlets colored squares on the right side</li>
+<li>attributes values that can only be set before running the patch.</li>
+<li>parameters values that can be set before loading the patch and also be modified during a "live" session. </li>
+</ul>
+
+<p>and some objects (called displays) also display various visualisations of live data from the patch.</p>
+
+<p>Operations on objects:  (not in Live Mode):</p>
+
+<ul>
+<li>Objects can be moved by dragging the titlebar.</li>
+<li>Objects can be selected by clicking the titlebar, or dragging a rectange around a group.</li>
+<li>Selected objects can be deleted by pressing delete or backspace.</li>
+<li>Objects can be replaced with a different type by double-clicking on the title (or selecting replace in the context menu). Connections and parameters will be preserved. Attributes are not preserved (yet), this is especially useful when you wish to change inlet/outlet types (e.g. control rate to audio rate)</li>
+<li>Instance name can be changed (a double click on the instancename brings up the instance name editor)</li>
+<li>Attributes can be changed</li>
+<li>Parameters can be changed by
+<ul>
+<li>mouse for units</li>
+<li>shift-mouse for sub-units</li>
+<li>arrow-up, arrow-down</li>
+<li>shift-arrow-up, shift-arrow-down</li>
+<li>page-up, page-down</li>
+<li>home, end</li>
+<li>typing the number followed by enter</li>
+</ul></li>
+</ul>
+
+<p><strong>Parameters,  Attributes and Displays</strong>
+An object can have 3 types of user interface elments
+Parameters - which can be changed at run time.  i.e. when Live  (and can also be modulated or controlled via midi CC)
+Attributes - can only be configured whilst editing the patch.
+Displays - show data coming from the axoloti board e.g. an oscilloscope (scope)</p>
+
+<p>Attributes are used where there would be too great an overhead to change them at run-time, which could potentially disrupt the audio e.g. increasing a delay line's size at run time could cause audio glitches.
+(the most common cases are for configuring buffer sizes/delay lines or configuring which tables/delays things are read from ... often they are text fields or drop down boxes - If you cant change it at run-time, its an attribute :) )</p>
+
+<p>Some parameters have real-world units, displayed left of the dial. For some, multiple conversions are meaningful. Clicking on the real-world unit to alternate between different units. Eg. frequency in Hertz or period time in milliseconds.
+Parameter can be mapped to MIDI Continuous Controllers, by right clicking on the parameter to assign a MIDI controller. Mapped parameters have a "C" mark right of the dial.
+Parameters can be modulated by other objects, right click on the parameter and select modulate, Modulated parameters have a "M" marked to right of the dial</p>
+
+<h1>Connections</h1>
+
+<h2>Connecting wires</h2>
+
+<p>Just drag an inlet to outlet (or vice versa)
+An outlet can connect to many inlets BUT an inlet can only be connected to one outlet.
+If you wish to connect 2 outlets to an inlet you will need to mix/sum them.</p>
+
+<h2>Disconnect a wire</h2>
+
+<ul>
+<li>select it and press delete </li>
+<li>right click on a inlet/outlet and select disconnect</li>
+<li>drag the connected inlet/outlet into space</li>
+</ul>
+
+<h2>Changing inlet source</h2>
+
+<p>if you want to change the outlet an inlet is connected to, simply drag the new outlet to the inlet, and the connection will be replaced</p>
+
+<h2>Connection network</h2>
+
+<p>a connection network is all of the wires that are connected to a particular outlet.
+you can delete them all at once with delete network</p>
+
+<h2>Connection (and Inlet/Outlet types)</h2>
+
+<p>Different data types are marked by different colors on the outlets, inlets and wires.</p>
+
+<ul>
+<li>Red connections are s-rate ( audio/sample rate - 48000 Hz). The normal range is -64 to 64 units.</li>
+<li>Blue connection points are k-rate (control-rate, 3000 Hz) fractional numbers. The normal range is -64 to 64 units, like control voltages on a modular synthesizer.</li>
+<li>Yellow connections are for k-rate booleans, like gate signals one a  modular synthesizer.</li>
+<li>Green connections are for k-rate integers (whole numbers). The range is a signed 32bit , e.g. -2147483648 to 2147483647. </li>
+<li>Pink connections are for strings. Mostly useful for dynamic filenames.</li>
+</ul>
+
+<h2>Connections between different types</h2>
+
+<p>A red output (audio) can be connected to a blue input (float), this will sample the audio, 1 in 16 audio samples.
+A yellow output (boolean) can be connected to a blue input (float), this yields +64 units for true, 0 for false.
+A green output  (integer) can be connected to a blue input(float).
+A blue output (float) can be connected to a green input (integer) the value is rounded down.
+A pink output must always be connected to a pink input. (strings)</p>
+
+<h1>Execution order</h1>
+
+<p>Every object in the patch is executed once in the signal processing loop, at 3000Hz. 
+These are processed in strict order, right to left, top to bottom.
+(Feedback is allowed, and will be processed in the next processing loop)</p>
+
+<h1>Documenting patches</h1>
+
+<p>Use comment objects and the patch notes (accessible from the menu) so you don't forget how your patch works :smile: 
+also changing the instance name (menu rename) helps when you have many objects of the same type</p>
+
+<h1>Saving a patch</h1>
+
+<p>Once you have created a patch, you can then save it using the File menu, and choose Save or Save As. </p>
+
+<h2>Presets</h2>
+
+<p>A preset is a set of selected parameters and their new value. To include a parameter to a preset, select the preset index to edit in the toolbar. Then right-click on a parameter and select "include in current preset" in the popup-menu. The parameter will turn yellow. A yellow parameter is not updated live, but indicates that you are adjusting its value in the preset. Changes to presets are only updated after dis- and re-engaging the live checkbox! Presets in a sub-patch can be applied only with the "preset" object. A preset in a "normal" sub-patch only affects the sub-patch. A preset in a polyphonic sub-patch only affects one voice.</p>
+
+<h1>Sub patching</h1>
+
+<p>Sub patches are an important building block in Axoloti.</p>
+
+<p>There are lots of uses for sub patches but the main reasons are:
+- creating 'utility' patches that you want to use in many patches
+- to simplify a very complex patch
+- for polyphonic voices </p>
+
+<p>Sub patches are just like main patches, but are saved with as 'Axoloti Subpatch' with an extension of AXS, the difference is they are never used on their own... they are always added to a main patch. 
+(we will also see later that sub-patches can often look like normal axoloti objects)</p>
+
+<p>Terminology, sometimes sub patches will be referred to as 'child patches' and the main patch is called the parent patch.</p>
+
+<p>a few important notes:</p>
+
+<ul>
+<li>to use a subpatch it must be saved (to disk) before you can included it in a main patch.</li>
+<li>to edit a sub-patch used in a main patch, always use select in the main patch, and from the context menu select 'edit object defintition'</li>
+</ul>
+
+<p>to create a sub-patch:</p>
+
+<ul>
+<li>Create a new patch, (this will be the sub patch)</li>
+<li>include inlet, and outlet objects allow data/audio to be passed to the main patch</li>
+<li>Save this patch (as an Axoloti Subpatch,  into the directory you are going to save the main patch) </li>
+<li>Create a new patch (this will be the parent)</li>
+<li>Save this patch (as an Axoloti Patch, into the same directory as the sub patch above)</li>
+<li>Bring up the object search window ( space/N)</li>
+<li>Enter the patch filename in the object selector (without .axs extension), prefixed by "./"</li>
+</ul>
+
+<p>If you want to modify the sub patch
+- In the main patch, select the sub patch object
+- select "edit object definition" in the object popup menu
+- the sub patch window opens
+- make the changes
+- save the sub-patch.</p>
+
+<p>Note: If the main patch is LIVE, changes to a sub-patch will not be propagated until the main patch is sent again to the board (e.g. take it offline, then select live again)</p>
+
+<p>Parameters can be propagated to the main patch by right-click on the parameter and select "show on parent". "Show on parent" parameters are drawn in blue.</p>
+
+<h1>Polyphonic Sub patching</h1>
+
+<p>An important use of Sub patches is to create polyphonic voices.
+If you place an oscillator in a patch, then you have one oscillator (with one pitch), what we need for polyphony is to have many copies of that oscillator, one for each voice.
+The way we achieve this is to create a sub patch, the sub patch is then used for each voice.
+When we add the sub-patch to the main patch we can say how many voices are created.
+Now when midi notes are played Axoloti will automatically allocate notes played simultaneously to different voices. </p>
+
+<p>Note: you can change some properties of how voices are allocated in the patch settings of the sub-patch, see "more on sub patching for details"</p>
+
+<p>For sound design purposes, you can also obtain the index of the voice with the "voiceindex" object... useful to make voices have some variation.</p>
+
+<h1>Patch Settings</h1>
+
+<p>With every patch you can store notes (View->notes) and also change the patches settings.
+Patch settiings include:</p>
+
+<ul>
+<li>Author, who wrote the patch</li>
+<li>Licence, the license for using/sharing the patch</li>
+<li>Midi Channel, if you are using midi objects what channel they receive data on  (affected by patch mode)</li>
+<li>Number of presets - how many presets can be store on the patch</li>
+<li>Entries per presets - the number of parameters that can be store on the preset</li>
+<li>Number of modulation source - number of modulation source on the patch (patch/modsource*)</li>
+<li>Numer of modulation targets - number of targets for sources</li>
+<li>Sub patch mode, how voices are handled, see 'more on sub patches'</li>
+<li>Has midi channel attribute - the midi channel is exposed on the parent patch, when used as a subpatch</li>
+<li>saturate audio - is the the audio output from this patch saurated</li>
+</ul>
+
+<h1>Zombies</h1>
+
+<p>If a patch is loaded and an object cannot be found, a zombie will be created (its bright red!) , your patch will not work, so you need to replace it... simply double click, or use replace object. if you replace with something with compatible inlet/outlets it will remain connected!
+(most likely to happen if you create your own subpatches and move them)</p>
+
+<h1>File types</h1>
+
+<p>Axoloti has 4 file types:
+AXO  - objects with functionality, found in search window 
+AXP  - patch, which contains objects and can be compiled and sent to Axoloti board
+AXS  - subpatch, a patch used by a main patch (see below)
+AXH - help patch, shows how to use an object.
+all except AXO, can be created by saving the patch with Save As...</p>
