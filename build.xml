@@ -250,7 +250,7 @@
 		     description="Axoloti application"
 		     license="GPL"
 		     copyright="Axoloti.com" >
-		<fx:icon href="src/main/java/resources/axoloti_icon.png"/>
+		<fx:icon href="src/main/java/resources/icon_128x128.png"/>
 	      </fx:info>
             <fx:application mainClass="axoloti.Axoloti"/>
 	    <fx:resources refid="appRes"/>
