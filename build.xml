@@ -218,6 +218,7 @@
 			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
 		 </fx:fileset>
 		 <fx:fileset dir=".">
+			 <include name="doc/*"/>
 			 <include name="patches/**/*"/>
 			 <include name="objects/**/*"/>
 			 <include name="firmware/**/*"/>

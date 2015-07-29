@@ -686,7 +686,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     private void jMenuHelpContentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuHelpContentsActionPerformed
         try {
-            File f = new File("doc/index.html");
+            File f = new File("doc/user guide.html");
             Desktop.getDesktop().browse(f.toURI());
         } catch (IOException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,4 +1,3 @@
-(Work in progress) 
 #Overview 
 Axoloti consists of both hardware and software which work together to produce provide a virtual modular environment.
 With the Axoloti software we can create 'patches' which are uploaded to the Axoloti hardware and then run on the hardware.
@@ -8,6 +7,9 @@ Although the user does not see it, its interesting to note that when we upload t
 Also its important to remember, although this particular document concentrates on the Axoloti software, once the 'patch' is uploaded to the board, the Axoloti board can run completely independently, no computer or other controller is required.
 
 You can find more information about the hardware in another post in this "User Guide" 
+
+More topics from the user guide can be found in the [Axoloti User Guide Forum][1]
+
 
 # Axoloti GUI
 The main focus of the Axoloti GUI is to allow the user to connect to the Axoloti hardware, build patches and upload these patches to the hardware.
@@ -251,3 +253,6 @@ AXP  - patch, which contains objects and can be compiled and sent to Axoloti boa
 AXS  - subpatch, a patch used by a main patch (see below)
 AXH - help patch, shows how to use an object.
 all except AXO, can be created by saving the patch with Save As...
+
+
+  [1]: http://community.axoloti.com/c/user-guide
