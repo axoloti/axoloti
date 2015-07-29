@@ -25,7 +25,12 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,6 +42,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import static javax.swing.TransferHandler.MOVE;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
@@ -58,7 +64,7 @@ public class PatchFrame extends javax.swing.JFrame {
      */
     PatchGUI patch;
 
-    public PatchFrame(PatchGUI patch, QCmdProcessor qcmdprocessor) {
+    public PatchFrame(final PatchGUI patch, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
         initComponents();
@@ -74,16 +80,62 @@ public class PatchFrame extends javax.swing.JFrame {
         menuItem.setText("Cut");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuEdit.add(menuItem);
-
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Patch p = patch.GetSelectedObjects();
+                p.PreSerialize();
+                Serializer serializer = new Persister();
+                try {
+                    Clipboard clip = getToolkit().getSystemClipboard();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    serializer.write(p, baos);
+                    StringSelection s = new StringSelection(baos.toString());
+                    clip.setContents(s, (ClipboardOwner) null);
+                    patch.deleteSelectedAxoObjInstances();
+                } catch (Exception ex) {
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         menuItem = new JMenuItem(new DefaultEditorKit.CopyAction());
         menuItem.setText("Copy");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuEdit.add(menuItem);
-
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Patch p = patch.GetSelectedObjects();
+                p.PreSerialize();
+                Serializer serializer = new Persister();
+                try {
+                    Clipboard clip = getToolkit().getSystemClipboard();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    serializer.write(p, baos);
+                    StringSelection s = new StringSelection(baos.toString());
+                    clip.setContents(s, (ClipboardOwner) null);
+                } catch (Exception ex) {
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         menuItem = new JMenuItem(new DefaultEditorKit.PasteAction());
         menuItem.setText("Paste");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jMenuEdit.add(menuItem);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Clipboard clip = getToolkit().getSystemClipboard();
+                try {
+                    patch.paste((String) clip.getData(DataFlavor.stringFlavor), null, false);
+                } catch (UnsupportedFlavorException ex) {
+                    Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
 
         UpdateConnectStatus();
         if (patch.getWindowPos() != null) {
