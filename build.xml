@@ -233,6 +233,9 @@
   <target name="bundle" if="build.bundle" depends="calc.build.version, calc.short.version, userguide">
 	<echo>bundling ${build.version} ${short.version}</echo>
 	<echo>${java.home}</echo>
+	<exec dir="." executable="rm" >
+		<arg line="-rf build/bundles/"/>
+	</exec>
 	<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
 			uri="javafx:com.sun.javafx.tools.ant"
 			classpath=".:${java.home}/../lib/ant-javafx.jar"/>    
@@ -299,6 +302,8 @@
 		     license="GPL"
 		     copyright="Axoloti.com" >
 		  		<fx:icon href="src/main/java/resources/icon_128x128.png"/>
+				<fx:splash href="src/main/java/resources/splash.png"/>
+		  		<fx:association icon="src/main/java/resources/icon_128x128.png" extension="axp axs axh axo"/>
 	      	</fx:info>
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="Linux-${short.version}"/>
 	    	<fx:resources refid="appRes"/>
@@ -312,6 +317,7 @@
 		     copyright="Axoloti.com" >
 				<fx:icon href="src/main/java/resources/axoloti_icon.icns"/>
 				<fx:splash href="src/main/java/resources/splash.png"/>
+		  		<fx:association extension="axp axs axh axo"/>
 	      	</fx:info>
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="Mac-${short.version}"/>
 	    	<fx:resources refid="appRes"/>
@@ -324,6 +330,8 @@
 		     license="GPL"
 		     copyright="Axoloti.com" >
 				<fx:icon href="src/main/java/resources/axoloti_icon.ico"/>
+				<fx:splash href="src/main/java/resources/splash.png"/>
+		  		<fx:association icon="src/main/java/resources/axoloti_icon.ico" extension="axp axs axh axo"/>
 	      	</fx:info>
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="Win-${short.version}"/>
 	    <fx:resources refid="appRes"/>
