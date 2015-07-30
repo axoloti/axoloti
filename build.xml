@@ -170,8 +170,8 @@
 		</exec>
 		<!--Windows -->
 		<mkdir dir="build/runtime/tmp_win/axoloti_runtime"/>
-		<exec dir="." executable="cp.exe" osfamily="Windows">
-			<arg line="-R platform_win/* build/runtime/tmp_win/axoloti_runtime"/>
+		<exec dir="." executable="cp" osfamily="Windows">
+			<arg line="-R platform_win build/runtime/tmp_win/axoloti_runtime"/>
 		</exec>
 		<exec dir="." executable="rm" osfamily="Windows">
 			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/share"/>
@@ -180,8 +180,47 @@
 			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/src"/>
 		</exec>
 		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/man"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-f build/runtime/tmp_win/axoloti_runtime/platform_win/mrproper.bat"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/apache-ant-1.9.4"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/include"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/contrib"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-f build/runtime/tmp_win/axoloti_runtime/platform_win/build.bat"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-f build/runtime/tmp_win/axoloti_runtime/platform_win/build.sh"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-f build/runtime/tmp_win/axoloti_runtime/platform_win/build_gui.bat"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-f build/runtime/tmp_win/axoloti_runtime/platform_win/build_dist.bat"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-f build/runtime/tmp_win/axoloti_runtime/platform_win/build-libusb.sh"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-f build/runtime/tmp_win/axoloti_runtime/platform_win/zadig.html"/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
 			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv6-m build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/tmp_win/armv7-ar build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv7-m "/>
 		</exec>                
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv6-m build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv7-ar build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv7-m "/>
+		</exec>
+		<exec dir="." executable="rm" osfamily="Windows">
+			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/lib/gcc/arm-none-eabi/4.9.3/armv6-m build/runtime/tmp_win/axoloti_runtime/platform_win/lib/gcc/arm-none-eabi/4.9.3/armv7-ar build/runtime/tmp_win/axoloti_runtime/platform_win/lib/gcc/arm-none-eabi/4.9.3/armv7-m "/>
+		</exec>
   </target>
 
   <target name="userguide">
@@ -287,7 +326,7 @@
 		     description="Axoloti application"
 		     license="GPL"
 		     copyright="Axoloti.com" >
-		<fx:icon href="src/main/java/resources/axoloti_icon.png"/>
+		<fx:icon href="src/main/java/resources/axoloti_icon.ico"/>
 	      </fx:info>
             <fx:application mainClass="axoloti.Axoloti"/>
 	    <fx:resources refid="appRes"/>
