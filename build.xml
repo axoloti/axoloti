@@ -189,8 +189,8 @@
 	<exec dir="." executable="curl" failifexecutionfails="false">
 		<arg line="http://community.axoloti.com/raw/50/1 -o doc/userguide.md"/>
 	</exec>
-	<exec dir="." executable="perl" output="doc/user guide.html" failifexecutionfails="false">
-		<arg line="thirdparty/Markdown_1.0.1/Markdown.pl --html4tags doc/userguide.md"/>
+	<exec dir="." executable="perl" failifexecutionfails="false">
+		<arg line="thirdparty/Markdown_1.0.1/Markdown.pl -output 'doc/user guide.html' --html4tags doc/userguide.md"/>
 	</exec>
   </target>
 

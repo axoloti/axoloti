@@ -189,12 +189,14 @@ else {
 
 		#### Check for command-line switches: #################
 		my %cli_opts;
+
 		use Getopt::Long;
 		Getopt::Long::Configure('pass_through');
 		GetOptions(\%cli_opts,
 			'version',
 			'shortversion',
 			'html4tags',
+			'output=s'
 		);
 		if ($cli_opts{'version'}) {		# Version info
 			print "\nThis is Markdown, version $VERSION.\n";
@@ -210,6 +212,9 @@ else {
 			$g_empty_element_suffix = ">";
 		}
 
+		if ($cli_opts{'output'}) {
+			open STDOUT, '>', $cli_opts{'output'};
+		}
 
 		#### Process incoming text: ###########################
 		my $text;
