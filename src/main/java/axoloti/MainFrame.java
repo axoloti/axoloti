@@ -30,6 +30,7 @@ import generatedobjects.GeneratedObjects;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -136,7 +137,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                     try {
                         String txt;
                         Throwable exc = lr.getThrown();
-                        if ((lr.getMessage() == null) && (exc!=null) ) {
+                        if ((lr.getMessage() == null) && (exc != null)) {
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             PrintStream ps = new PrintStream(baos);
                             exc.printStackTrace(ps);
@@ -145,7 +146,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                             txt = java.text.MessageFormat.format(lr.getMessage(), lr.getParameters());
                         }
                         if (lr.getLevel() == Level.SEVERE) {
-                            
+
                             jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
                                     txt + "\n", styleSevere);
                             MainFrame.this.toFront();
@@ -197,7 +198,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             jMenuItemRefreshFWID.setVisible(false);
         }
 
-        
         jMenuItemEnterDFU.setVisible(Axoloti.isDeveloper());
         jMenuItemFlashSDR.setVisible(Axoloti.isDeveloper());
         jMenuItemFCompile.setVisible(Axoloti.isDeveloper());
@@ -221,6 +221,34 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             ShowDisconnect();
         } else {
             qcmdprocessor.AppendToQueue(new QCmdStop());
+        }
+
+        for (String arg : args) {
+            if (!arg.startsWith("-")) {
+                if (arg.endsWith(".axp") || arg.endsWith(".axs") || arg.endsWith(".axh")) {
+                    final File f = new File(arg);
+                    if (f.exists() && f.canRead()) {
+                        Runnable r=new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    // wait for objects be loaded
+                                    if(axoObjects.LoaderThread.isAlive()) {
+                                        EventQueue.invokeLater(this);
+                                    } else {
+                                        MainFrame.mainframe.OpenPatch(f);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+                        EventQueue.invokeLater(r);
+                    }
+                } else if (arg.endsWith(".axo")) {
+                    // NOP for AXO at the moment
+                }
+            }
         }
     }
 
@@ -940,7 +968,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDRActionPerformed
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
         String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
-        flashUsingSDRam(fname,pname);
+        flashUsingSDRam(fname, pname);
     }//GEN-LAST:event_jMenuItemFlashSDRActionPerformed
 
     private void jMenuItemFCompileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFCompileActionPerformed
@@ -965,16 +993,16 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         String curFirmwareDir = System.getProperty(Axoloti.FIRMWARE_DIR);
         String sysFirmwareDir = System.getProperty(Axoloti.RELEASE_DIR) + "/firmware";
 
-        if(!curFirmwareDir.equals(sysFirmwareDir)) {
+        if (!curFirmwareDir.equals(sysFirmwareDir)) {
             // if we are using the factory firmware, then we must switch back the firmware dir
             // as this is where we pick up axoloti.elf from when building a patch
             prefs.SetFirmwareDir(sysFirmwareDir);
             prefs.SavePrefs();
         }
-        
+
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
         String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
-        flashUsingSDRam(fname,pname);
+        flashUsingSDRam(fname, pname);
     }//GEN-LAST:event_jMenuItemFlashDefaultActionPerformed
 
     public void NewPatch() {
@@ -1193,7 +1221,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         TargetFirmwareID = firmwareId;
         if (!firmwareId.equals(this.LinkFirmwareID)) {
             if (!WarnedAboutFWCRCMismatch) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE,"Firmware CRC mismatch! Please flash the firmware first! " + "Hardware firmware CRC = {0} <> Software CRC = {1}", new Object[]{firmwareId, this.LinkFirmwareID});
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Firmware CRC mismatch! Please flash the firmware first! " + "Hardware firmware CRC = {0} <> Software CRC = {1}", new Object[]{firmwareId, this.LinkFirmwareID});
                 WarnedAboutFWCRCMismatch = true;
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -1245,7 +1273,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         if (s == 0) {
             String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
             String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
-            flashUsingSDRam(fname,pname);
+            flashUsingSDRam(fname, pname);
         }
     }
 
