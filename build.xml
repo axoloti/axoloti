@@ -76,8 +76,7 @@
   <!-- run the ant timestamp task -->
   <tstamp/>
 
-  <target name="-post-init">
-	<antcall target="create.build.version"/>
+  <target name="-post-init" depends="create.build.version">
   </target>  
   <!-- Overrides -do-jar-->
   <target name="-do-jar">
@@ -114,12 +113,10 @@
     </jar>
   </target>
 
-  <target name="-post-jar">
-	<antcall target="bundle"/>
-	<antcall target="runtime"/>
+  <target name="-post-jar" depends="bundle, runtime">
   </target>
 
-  <target name="runtime" if="build.runtime">
+  <target name="runtime" if="build.runtime" depends="calc.short.version">
 		<exec dir="." executable="rm" >
 			<arg line="-rf build/runtime/"/>
 		</exec>
@@ -144,7 +141,7 @@
 			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_osx/lib/gcc/arm-none-eabi/4.9.3/armv6-m build/runtime/tmp/axoloti_runtime/platform_osx/lib/gcc/arm-none-eabi/4.9.3/armv7-ar build/runtime/tmp/axoloti_runtime/platform_osx/lib/gcc/arm-none-eabi/4.9.3/armv7-m "/>
 		</exec>
 		<exec dir="." executable="hdiutil" os="Mac OS X">
-			<arg line="create -megabytes 512 build/runtime/macosx/axoloti_runtime.dmg -volname 'Axoloti Runtime' -srcfolder build/runtime/tmp" />
+			<arg line="create -megabytes 512 build/runtime/macosx/axo_runtime_mac_${short.version}.dmg -volname 'Axoloti Runtime' -srcfolder build/runtime/tmp" />
 		</exec>
 		<!--Linux -->
 		<exec dir="." executable="cp" os="Linux">
@@ -165,7 +162,7 @@
 		<mkdir dir="build/runtime/linux"/>
 		<exec dir="build/runtime/tmp" executable="tar" os="Linux">
 			<arg value="-zcvf"/>
-			<arg value="../linux/axoloti_runtime.tgz"/>
+			<arg value="../linux/axo_runtime_linux_${short.version}.tgz"/>
 			<arg value="."/>
 		</exec>
 		<!--Windows -->
@@ -233,9 +230,8 @@
 	</exec>
   </target>
 
-  <target name="bundle" if="build.bundle">
-	<antcall target="userguide"/>
-	<echo>generate user guide</echo>
+  <target name="bundle" if="build.bundle" depends="calc.build.version, calc.short.version, userguide">
+	<echo>bundling ${build.version} ${short.version}</echo>
 	<echo>${java.home}</echo>
 	<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
 			uri="javafx:com.sun.javafx.tools.ant"
@@ -296,16 +292,16 @@
 		</manifest>
 	</fx:jar> 
 
-    	<fx:deploy os="Linux" nativeBundles="deb" width="100" height="100" outdir="build/" outfile="AxolotiApp">
+    	<fx:deploy os="Linux" nativeBundles="deb" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version}">
             <fx:info title="Axoloti" 
 		     vendor="axoloti" 
 		     description="Axoloti application"
 		     license="GPL"
 		     copyright="Axoloti.com" >
-		<fx:icon href="src/main/java/resources/icon_128x128.png"/>
-	      </fx:info>
-            <fx:application mainClass="axoloti.Axoloti"/>
-	    <fx:resources refid="appRes"/>
+		  		<fx:icon href="src/main/java/resources/icon_128x128.png"/>
+	      	</fx:info>
+			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="Linux-${short.version}"/>
+	    	<fx:resources refid="appRes"/>
     	</fx:deploy>
 
     	<fx:deploy os="Mac OS X" nativeBundles="dmg" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version}">
@@ -314,10 +310,11 @@
 		     description="Axoloti application"
 		     license="GPL"
 		     copyright="Axoloti.com" >
-		<fx:icon href="src/main/java/resources/axoloti_icon.icns"/>
-	      </fx:info>
-            <fx:application mainClass="axoloti.Axoloti"/>
-	    <fx:resources refid="appRes"/>
+				<fx:icon href="src/main/java/resources/axoloti_icon.icns"/>
+				<fx:splash href="src/main/java/resources/splash.png"/>
+	      	</fx:info>
+			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="Mac-${short.version}"/>
+	    	<fx:resources refid="appRes"/>
     	</fx:deploy>
 
     	<fx:deploy os="Windows" nativeBundles="msi" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version}">
@@ -326,18 +323,29 @@
 		     description="Axoloti application"
 		     license="GPL"
 		     copyright="Axoloti.com" >
-		<fx:icon href="src/main/java/resources/axoloti_icon.ico"/>
-	      </fx:info>
-            <fx:application mainClass="axoloti.Axoloti"/>
+				<fx:icon href="src/main/java/resources/axoloti_icon.ico"/>
+	      	</fx:info>
+			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="Win-${short.version}"/>
 	    <fx:resources refid="appRes"/>
     	</fx:deploy>
 
   </target>
 
-    <target name="create.build.version">
+    <target name="calc.short.version">
+        <exec executable="git" outputproperty="short.version" failifexecutionfails="false">
+            <arg line = "describe --tags --always" />
+        </exec>
+		<echo> calculated short ${short.version}</echo>
+    </target>
+
+    <target name="calc.build.version">
         <exec executable="git" outputproperty="build.version" failifexecutionfails="false">
             <arg line = "describe --long --tags --dirty --always" />
         </exec>
+		<echo> calculated ${build.version}</echo>
+    </target>
+
+    <target name="create.build.version" depends = "calc.build.version">
         <property name="build.version" value="(git missing)"/>
         <echo output="src/main/java/axoloti/Version.java" >package axoloti;</echo>
         <echo output="src/main/java/axoloti/Version.java" append="true">public class Version {</echo>
