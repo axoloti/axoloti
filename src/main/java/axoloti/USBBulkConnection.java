@@ -1231,8 +1231,10 @@ public class USBBulkConnection extends Connection {
                         break;
                     case 11:
                         patchentrypoint += (cc & 0xFF);
-                        Logger.getLogger(USBBulkConnection.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%08X, entrypoint=0x%08X",
-                                fwversion[0], fwversion[1], fwversion[2], fwversion[3], fwcrc, patchentrypoint));
+                        String sFwcrc = String.format("%08X",fwcrc);
+                        Logger.getLogger(USBBulkConnection.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%s, entrypoint=0x%08X",
+                                fwversion[0], fwversion[1], fwversion[2], fwversion[3], sFwcrc, patchentrypoint));
+                        MainFrame.mainframe.setFirmwareID(sFwcrc);
                         GoIdleState();
                         break;
                 }
