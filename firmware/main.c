@@ -153,6 +153,7 @@ int main(void) {
     // only try booting a patch when no exception is to be reported
 
 #if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
+    sdcard_attemptMountIfUnmounted();
     if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
       sdcard_loadPatch("0:start.bin");
 #endif
