@@ -26,6 +26,6 @@ deploy:
   file_glob: true  
   skip_cleanup: true
   on:
-    repo: JohannesTaelman/axoloti
+    repo: axoloti/axoloti
     tags: true
     all_branches: true
