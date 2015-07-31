@@ -96,6 +96,7 @@ public abstract class QCmdShellTask implements QCmd {
         list.add((axoloti.Axoloti.RUNTIME_DIR + "=" + RuntimeDir()));
         list.add((axoloti.Axoloti.HOME_DIR + "=" + HomeDir()));
         list.add((axoloti.Axoloti.RELEASE_DIR + "=" + ReleaseDir()));
+        list.add((axoloti.Axoloti.FIRMWARE_DIR + "=" + FirmwareDir()));
 
         String vars[] = new String[list.size()];
         list.toArray(vars);
