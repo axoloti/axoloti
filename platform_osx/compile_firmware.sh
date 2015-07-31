@@ -10,16 +10,5 @@ export axoloti_home=${axoloti_home:="$platformdir/.."}
 export PATH=$PATH:${platformdir}/bin
 #echo $PATH
 
-rm ${axoloti_home}/build/*.gch
-
-echo "Compiling firmware..."
 cd ${axoloti_firmware}
-mkdir -p build/obj
-mkdir -p build/lst
-make
-
-echo "Compiling firmware flasher..."
-cd flasher
-mkdir -p flasher_build/obj
-mkdir -p flasher_build/lst
-make
+${axoloti_firmware}/compile_firmware_osx.sh

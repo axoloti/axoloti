@@ -8,4 +8,4 @@ export axoloti_home=${axoloti_home:="$platformdir/.."}
 
 export PATH=$PATH:${platformdir}:${platformdir}/bin
 cd ${axoloti_firmware}
-make -f Makefile.patch
+${axoloti_firmware}/compile_patch_osx.sh
