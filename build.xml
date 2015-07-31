@@ -233,6 +233,9 @@
   <target name="bundle" if="build.bundle" depends="calc.build.version, calc.short.version, userguide">
 	<echo>bundling ${build.version} ${short.version}</echo>
 	<echo>${java.home}</echo>
+	<exec dir="." executable="rm" >
+		<arg line="-rf build/bundles/"/>
+	</exec>
 	<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
 			uri="javafx:com.sun.javafx.tools.ant"
 			classpath=".:${java.home}/../lib/ant-javafx.jar"/>    
@@ -299,8 +302,12 @@
 		     license="GPL"
 		     copyright="Axoloti.com" >
 		  		<fx:icon href="src/main/java/resources/icon_128x128.png"/>
+				<fx:splash href="src/main/java/resources/splash.png"/>
+<!-- not supported on travis jdk8 ?
+		  		<fx:association icon="src/main/java/resources/icon_128x128.png" mimetype="application/xml" extension="axp axs axh axo"/>
+-->
 	      	</fx:info>
-			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="Linux-${short.version}"/>
+			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="${short.version}"/>
 	    	<fx:resources refid="appRes"/>
     	</fx:deploy>
 
@@ -312,6 +319,9 @@
 		     copyright="Axoloti.com" >
 				<fx:icon href="src/main/java/resources/axoloti_icon.icns"/>
 				<fx:splash href="src/main/java/resources/splash.png"/>
+<!-- not supported on travis jdk8 ?
+		  		<fx:association mimetype="application/xml" extension="axp axs axh axo"/>
+-->
 	      	</fx:info>
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="Mac-${short.version}"/>
 	    	<fx:resources refid="appRes"/>
@@ -324,6 +334,10 @@
 		     license="GPL"
 		     copyright="Axoloti.com" >
 				<fx:icon href="src/main/java/resources/axoloti_icon.ico"/>
+				<fx:splash href="src/main/java/resources/splash.png"/>
+<!-- not supported on travis jdk8 ?
+		  		<fx:association icon="src/main/java/resources/axoloti_icon.ico" mimetype="application/xml" extension="axp axs axh axo"/>
+-->
 	      	</fx:info>
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="Win-${short.version}"/>
 	    <fx:resources refid="appRes"/>
@@ -332,10 +346,14 @@
   </target>
 
     <target name="calc.short.version">
-        <exec executable="git" outputproperty="short.version" failifexecutionfails="false">
+        <exec executable="git" outputproperty="tag.short.version" failifexecutionfails="false">
             <arg line = "describe --tags --always" />
         </exec>
-		<echo> calculated short ${short.version}</echo>
+        <exec executable="sed" inputstring="${tag.short.version}" outputproperty="short.version" failifexecutionfails="false">
+            <arg line = "'s/[a-zA-Z].*//'" />
+	</exec>
+        <property name="short.version" value="${tag.short.version}"/>
+	<echo> calculated short ${short.version}</echo>
     </target>
 
     <target name="calc.build.version">
