@@ -213,27 +213,6 @@ static const uint8_t vcom_string6[] = {
 };
 
 
-/*
- * Device Description string.
- */
-static const uint8_t vcom_string7[] = {
-  USB_DESC_BYTE(20),                    /* bLength.                         */
-  USB_DESC_BYTE(USB_DESCRIPTOR_STRING), /* bDescriptorType.                 */
-  'A', 0, 'x', 0, 'D', 0, 'u', 0, 'm', 0, 'm', 0, 'y', 0, '7', 0,
-  ' ', 0
-};
-
-
-/*
- * Device Description string.
- */
-static const uint8_t vcom_string8[] = {
-  USB_DESC_BYTE(20),                    /* bLength.                         */
-  USB_DESC_BYTE(USB_DESCRIPTOR_STRING), /* bDescriptorType.                 */
-  'A', 0, 'x', 0, 'D', 0, 'u', 0, 'm', 0, 'm', 0, 'y', 0, '8', 0,
-  ' ', 0
-};
-
 
 /* WCID implementation reference:
  *  https://github.com/pbatard/libwdi/wiki/WCID-Devices
@@ -255,9 +234,7 @@ static const USBDescriptor vcom_strings[] = {
   {sizeof vcom_string3, vcom_string3},
   {sizeof vcom_string4, vcom_string4},
   {sizeof vcom_string5, vcom_string5},
-  {sizeof vcom_string5, vcom_string6},
-  {sizeof vcom_string5, vcom_string7},
-  {sizeof vcom_string5, vcom_string8}
+  {sizeof vcom_string6, vcom_string6}
 };
 
 static const USBDescriptor vcid_descriptor = {sizeof vcid_string, vcid_string};
@@ -393,16 +370,21 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
 }
 
 static const uint8_t mscompatid[] = {
-0x28, 0x00, 0x00, 0x00,  /* DWORD (LE)  Descriptor length (40 bytes) */
+0x40, 0x00, 0x00, 0x00,  /* DWORD (LE)  Descriptor length (64 bytes) */
 0x00, 0x01,  /* BCD WORD (LE)   Version ('1.0') */
 0x04, 0x00,  /* WORD (LE)   Compatibility ID Descriptor index (0x0004) */
-0x01,    /* BYTE    Number of sections (1) */
+0x02,    /* BYTE    Number of sections (2) */
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,    /* 7 BYTES     Reserved */
+0x00,    /* BYTE    Interface Number (Interface #0) */
+0x01,    /* BYTE    Reserved */
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  /* 8 BYTES (NUL-terminated?) ASCII String    Compatible ID (null) */
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  /* 8 BYTES (NUL-terminated?) ASCII String    Sub-Compatible ID (unused) */
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  /* 6 BYTES      Reserved */
 0x02,    /* BYTE    Interface Number (Interface #2) */
 0x01,    /* BYTE    Reserved */
 0x57, 0x49, 0x4E, 0x55, 0x53, 0x42, 0x00, 0x00,  /* 8 BYTES (NUL-terminated?) ASCII String    Compatible ID ("WINUSB\0\0") */
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  /* 8 BYTES (NUL-terminated?) ASCII String    Sub-Compatible ID (unused) */
-0x00, 0x00, 0x00, 0x00, 0x00, 0x00  /* 6 BYTES      Reserved */
+0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  /* 6 BYTES      Reserved */
 };
 
 static bool_t specialRequestsHook(USBDriver *usbp) {
