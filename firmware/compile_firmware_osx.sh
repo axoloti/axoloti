@@ -1,4 +1,5 @@
 #!/bin/sh
+export PATH=$PATH:${axoloti_runtime}/platform_osx/bin
 rm ${axoloti_home}/build/*.gch
 
 echo "Compiling firmware..."
