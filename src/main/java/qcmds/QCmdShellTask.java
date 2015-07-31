@@ -82,6 +82,11 @@ public abstract class QCmdShellTask implements QCmd {
         return System.getProperty(axoloti.Axoloti.RELEASE_DIR);
     }
 
+    public String FirmwareDir() {
+        return System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
+    }
+    
+    
     public String[] GetEnv() {
         ArrayList<String> list = new ArrayList<String>();
         Map<String, String> env = System.getenv();

@@ -51,11 +51,11 @@ public class QCmdCompilePatch extends QCmdShellTask {
     @Override
     String GetExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return RuntimeDir() + "/platform_win/compile_patch.bat";
+            return FirmwareDir() + "/compile_patch_win.bat";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            return "/bin/sh " + RuntimeDir() + "/platform_osx/compile_patch.sh";
+            return "/bin/sh " + FirmwareDir() + "/compile_patch_osx.sh";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            return "/bin/sh " + RuntimeDir()+ "/platform_linux/compile_patch.sh";
+            return "/bin/sh " + FirmwareDir()+ "/compile_patch_linux.sh";
         } else {
             Logger.getLogger(QCmdCompilePatch.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;
