@@ -21,7 +21,7 @@ if not exist %MINGWGET% (
 
 set PATH=%PATH%;%MINGW%\msys\1.0\bin;%MINGW%\bin
 set HOME=.
-%MINGW%\msys\1.0\bin\bash.exe get_dependencies.sh
+%MINGW%\msys\1.0\bin\bash.exe build.sh
 
 call build_gui.bat
 call compile_firmware.bat

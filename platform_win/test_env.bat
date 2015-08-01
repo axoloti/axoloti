@@ -30,5 +30,5 @@ goto :EOF
 
 :fail
 ECHO Environment incomplete!
-ECHO Run platform_win\get_dependencies.bat...
+ECHO Run platform_win\build.bat...
 PAUSE

@@ -27,7 +27,7 @@ set ANT=%~dp0\apache-ant-1.9.4\bin\ant.bat
 echo ANT: %ANT%
 
 if not exist %ANT% (
-   echo ANT not found, please run get_dependencies.bat first
+   echo ANT not found, please run build.bat first
    pause
    goto :end
 )

@@ -335,7 +335,7 @@
     	</fx:deploy>
 
 	<exec dir="." executable="mv" os="Linux">
-		<arg line="build/bundles/axoloti-${short.version}.deb build/bundles/axoloti-linux-${short.version}.deb "/>
+		<arg line="build/bundles/axoloti-${short.version}.deb build/bundles/axoloti-linux-${short.version}.deb"/>
 	</exec>
 
     	<fx:deploy os="Windows" nativeBundles="msi" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version}">
@@ -353,6 +353,10 @@
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="${short.version}"/>
 	    <fx:resources refid="appRes"/>
     	</fx:deploy>
+
+	<exec dir="." executable="mv" osfamily="Windows">
+		<arg line="build/bundles/axoloti-${short.version}.msi build/bundles/axoloti-win-${short.version}.msi"/>
+	</exec>
 
   </target>
 
