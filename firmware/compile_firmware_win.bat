@@ -8,9 +8,8 @@ if not exist "build\" mkdir build
 if not exist "build\obj\" mkdir build\obj
 if not exist "build\lst\" mkdir build\lst
 
-if exist "%axoloti_home%\build\xpatch.h.gch" del "%axoloti_home%\build\xpatch.h.gch"
-
 echo "Compiling firmware..."
+make -f Makefile.patch clean
 make
 
 echo "Compiling firmware flasher..."

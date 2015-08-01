@@ -1,9 +1,10 @@
 #!/bin/sh
 export PATH=$PATH:${axoloti_runtime}/platform_osx/bin
-rm ${axoloti_home}/build/*.gch
 
 echo "Compiling firmware..."
 cd ${axoloti_firmware}
+make -f Makefile.patch clean
+
 mkdir -p build/obj
 mkdir -p build/lst
 make
