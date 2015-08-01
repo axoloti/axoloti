@@ -350,7 +350,7 @@
 		  		<fx:association icon="src/main/java/resources/axoloti_icon.ico" mimetype="application/xml" extension="axp axs axh axo"/>
 -->
 	      	</fx:info>
-			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="Win-${short.version}"/>
+			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="${short.version}"/>
 	    <fx:resources refid="appRes"/>
     	</fx:deploy>
 
