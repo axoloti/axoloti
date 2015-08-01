@@ -65,7 +65,7 @@ PROJECT = flasher
 BUILDDIR = flasher_build
 
 # Imported source files and paths
-CHIBIOS = ../../chibios
+CHIBIOS = ${axoloti_release}/chibios
 
 include board.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
