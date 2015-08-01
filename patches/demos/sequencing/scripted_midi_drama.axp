@@ -76,7 +76,7 @@
       <attribs/>
    </obj>
    <comment type="patch/comment" x="14" y="168" text="orchestra"/>
-   <obj type="./../keyboard/stringvoice" uuid="7c366f4d0e2cd2b10e4ad7fcf2ad41651bc605c" name="stringvoice1" x="14" y="196">
+   <obj type="./../synth/stringvoice" uuid="7c366f4d0e2cd2b10e4ad7fcf2ad41651bc605c" name="stringvoice1" x="14" y="196">
       <params>
          <frac32.s.map name="envf:a" value="0.0"/>
          <frac32.s.map name="envf:d" value="0.0"/>

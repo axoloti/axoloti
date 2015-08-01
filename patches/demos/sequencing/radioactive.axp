@@ -288,7 +288,7 @@
          </text>
       </attribs>
    </obj>
-   <obj type="./../keyboard/stringvoice" uuid="7c366f4d0e2cd2b10e4ad7fcf2ad41651bc605c" name="stringvoice_1" x="1008" y="644">
+   <obj type="./../synth/stringvoice" uuid="7c366f4d0e2cd2b10e4ad7fcf2ad41651bc605c" name="stringvoice_1" x="1008" y="644">
       <params>
          <frac32.s.map name="envf:a" value="0.0"/>
          <frac32.s.map name="envf:d" value="0.0"/>
