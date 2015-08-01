@@ -88,15 +88,19 @@ public class AttributeInstanceObjRef extends AttributeInstanceString {
         String o2 = "parent->";
         if ((axoObj.patch.getSettings().subpatchmode == SubPatchMode.polyphonic)
                 || (axoObj.patch.getSettings().subpatchmode == SubPatchMode.polychannel)
-                || (axoObj.patch.getSettings().subpatchmode == SubPatchMode.polyexpression) 
-                ) {
+                || (axoObj.patch.getSettings().subpatchmode == SubPatchMode.polyexpression)) {
             o2 = o2 + "common->";
         }
         while ((o.length() > 3) && (o.substring(0, 3).equals("../"))) {
             o2 = o2 + "parent->";
             o = o.substring(3);
         }
-        o2 = o2 + "instance" + CharEscape.CharEscape(o) + "_i";
+        String ao[] = o.split("/");
+        String o3 = "";
+        for (int i = 1; i < ao.length; i++) {
+            o3 = o3 + ".instance" + CharEscape.CharEscape(ao[i]) + "_i";
+        }
+        o2 = o2 + "instance" + CharEscape.CharEscape(ao[0]) + "_i" + o3;
         return o2;
     }
 
