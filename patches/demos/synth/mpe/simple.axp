@@ -1,0 +1,42 @@
+<patch-1.0>
+   <obj type="./simple_v" name="simple_v_1" x="154" y="126">
+      <params>
+         <frac32.u.map name="sub_osc_mix" value="63.5"/>
+         <frac32.s.map name="lp_1:pitch" value="41.0"/>
+         <frac32.u.map name="lp_1:reso" value="1.0"/>
+         <frac32.s.map name="sub_osc" value="-12.0"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="8"/>
+         <combo attributeName="mididevice" selection="omni"/>
+         <combo attributeName="midiport" selection="omni"/>
+      </attribs>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_2" x="462" y="126">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="simple_v_1" outlet="outlet_1"/>
+         <dest obj="out_2" inlet="left"/>
+         <dest obj="out_2" inlet="right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+      <Saturate>false</Saturate>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>812</x>
+      <y>175</y>
+      <width>1036</width>
+      <height>643</height>
+   </windowPos>
+</patch-1.0>

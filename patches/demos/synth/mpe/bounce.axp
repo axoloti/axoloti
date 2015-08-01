@@ -1,0 +1,42 @@
+<patch-1.0>
+   <obj type="./bounce_v" uuid="91d1d4e3e7e23ebe9ee3f4582b6140c36acc790a" name="bounce_v_1" x="196" y="154">
+      <params>
+         <frac32.s.map name="bounce time" value="13.0"/>
+         <frac32.s.map name="decay time" value="-5.0"/>
+         <frac32.u.map name="decay scale" value="5.5"/>
+      </params>
+      <attribs>
+         <combo attributeName="poly" selection="8"/>
+         <combo attributeName="mididevice" selection="omni"/>
+         <combo attributeName="midiport" selection="omni"/>
+      </attribs>
+   </obj>
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="378" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="bounce_v_1" outlet="outlet_1"/>
+         <dest obj="out_1" inlet="left"/>
+         <dest obj="out_1" inlet="right"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+      <Author>Mark Harris</Author>
+      <License>GPL</License>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>406</x>
+      <y>393</y>
+      <width>648</width>
+      <height>475</height>
+   </windowPos>
+</patch-1.0>

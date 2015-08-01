@@ -4,5 +4,5 @@ rem echo path %PATH%
 rem echo firmware %axoloti_firmware%
 rem echo runtime %axoloti_runtime%
 rem echo release %axoloti_release%
-cd %axoloti_release%\patch
-make
+cd %axoloti_firmware%
+call %axoloti_firmware%\compile_patch_win.bat
