@@ -4,7 +4,7 @@ call :setfirmware "%axoloti_firmware%"
 call :sethome "%axoloti_home%"
 call :setrelease "%axoloti_release%"
 
-set PATH=%axoloti_runtime%\bin
+set PATH=%axoloti_runtime%\platform_win\bin
 
 echo "setup build dir"
 cd %axoloti_firmware%
