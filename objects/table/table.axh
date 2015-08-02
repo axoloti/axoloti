@@ -72,7 +72,7 @@ for(i=0;i<LENGTH;i++)
    </obj>
    <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1__" x="1106" y="70">
       <params>
-         <frac32.u.map name="value" value="6.0"/>
+         <frac32.u.map name="value" value="8.5"/>
       </params>
       <attribs/>
    </obj>
@@ -144,6 +144,81 @@ for(i=0;i<LENGTH;i++)
       <params/>
       <attribs/>
    </obj>
+   <comment type="patch/comment" x="840" y="336" text="table in main, accessed in sub"/>
+   <obj type="table/alloc 32b" sha="84fa29116c34cf171f438ad40dc5e1e57432cb1d" name="ptable" x="840" y="350">
+      <params/>
+      <attribs>
+         <combo attributeName="size" selection="32"/>
+         <text attributeName="init">
+            <sText><![CDATA[int i;
+for(i=0;i<LENGTH;i++)
+	array[i]=0;]]></sText>
+         </text>
+      </attribs>
+   </obj>
+   <patcher type="patch/patcher" sha="da39a3ee5e6b4b0d3255bfef95601890afd80709" uuid="a245c220448000c901caef03c8b07740d533914a" name="patcher_2" x="924" y="350">
+      <params/>
+      <attribs/>
+      <subpatch>
+         <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" uuid="ef2a162678b533c5e46c4e3c0decba17b1862d85" name="tabwrite_5" x="28" y="56">
+            <params>
+               <frac32.s.map name="pitch" value="1.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="table/write" sha="d57515c0f3344ccf04436a1483b381a2b73aeba1" name="tabwrite_3" x="280" y="126">
+            <params/>
+            <attribs>
+               <objref attributeName="table" obj="../ptable"/>
+            </attribs>
+         </obj>
+         <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="tabwrite_2" x="28" y="154">
+            <params>
+               <frac32.s.map name="pitch" value="-2.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="logic/change" sha="31f9f39b8a82231a3534fbcf7b4dd65416f283e" uuid="42071f8cb4cfe1f35956c0bd5a313a57e049bec4" name="change_1" x="182" y="154">
+            <params/>
+            <attribs/>
+         </obj>
+         <nets>
+            <net>
+               <source obj="tabwrite_2" outlet="wave"/>
+               <dest obj="tabwrite_3" inlet="v"/>
+               <dest obj="change_1" inlet="in"/>
+            </net>
+            <net>
+               <source obj="change_1" outlet="trig"/>
+               <dest obj="tabwrite_3" inlet="trig"/>
+            </net>
+            <net>
+               <source obj="tabwrite_5" outlet="wave"/>
+               <dest obj="tabwrite_3" inlet="a"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>no</subpatchmode>
+         </settings>
+         <notes><![CDATA[]]></notes>
+      </subpatch>
+   </patcher>
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" uuid="ef2a162678b533c5e46c4e3c0decba17b1862d85" name="tabwrite_5" x="994" y="350">
+      <params>
+         <frac32.s.map name="pitch" value="20.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/read" sha="3a564a2679da8d3b011161732ada1645370520ba" uuid="1b71321dfa426c1cfed179d8ade93a69da0c5f2d" name="tabread3__" x="1092" y="350">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="ptable"/>
+      </attribs>
+   </obj>
+   <obj type="disp/kscope 128 b" sha="8d4224a2649d7e1034724772735c137003a43ad7" uuid="e71f3dd9bc5b799ad703079e63fb929dd75def0" name="kscope_2" x="1218" y="350">
+      <params/>
+      <attribs/>
+   </obj>
    <obj type="disp/ibar 16" sha="6202b6944fb6704b4fcdfb66663aba8e11d266d4" name="ibar161" x="224" y="406">
       <params/>
       <attribs/>
@@ -166,13 +241,88 @@ for(i=0;i<LENGTH;i++)
       </params>
       <attribs/>
    </obj>
-   <obj type="audio/out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="364" y="490">
+   <obj type="audio/out left" sha="d26fce66143f96b96fa3df63ea01b45ff4b3bef7" name="dac_11" x="420" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="924" y="532" text="table in subpatch"/>
+   <patcher type="patch/patcher" sha="da39a3ee5e6b4b0d3255bfef95601890afd80709" uuid="a245c220448000c901caef03c8b07740d533914a" name="patcher_1" x="924" y="546">
+      <params/>
+      <attribs/>
+      <subpatch>
+         <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" uuid="ef2a162678b533c5e46c4e3c0decba17b1862d85" name="tabwrite_5" x="28" y="56">
+            <params>
+               <frac32.s.map name="pitch" value="1.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="table/alloc 32b" sha="84fa29116c34cf171f438ad40dc5e1e57432cb1d" name="ptable" x="168" y="56">
+            <params/>
+            <attribs>
+               <combo attributeName="size" selection="32"/>
+               <text attributeName="init">
+                  <sText><![CDATA[int i;
+for(i=0;i<LENGTH;i++)
+	array[i]=0;]]></sText>
+               </text>
+            </attribs>
+         </obj>
+         <obj type="table/write" sha="d57515c0f3344ccf04436a1483b381a2b73aeba1" name="tabwrite_3" x="280" y="126">
+            <params/>
+            <attribs>
+               <objref attributeName="table" obj="ptable"/>
+            </attribs>
+         </obj>
+         <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="tabwrite_2" x="28" y="154">
+            <params>
+               <frac32.s.map name="pitch" value="-2.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="logic/change" sha="31f9f39b8a82231a3534fbcf7b4dd65416f283e" uuid="42071f8cb4cfe1f35956c0bd5a313a57e049bec4" name="change_1" x="182" y="154">
+            <params/>
+            <attribs/>
+         </obj>
+         <nets>
+            <net>
+               <source obj="tabwrite_2" outlet="wave"/>
+               <dest obj="tabwrite_3" inlet="v"/>
+               <dest obj="change_1" inlet="in"/>
+            </net>
+            <net>
+               <source obj="change_1" outlet="trig"/>
+               <dest obj="tabwrite_3" inlet="trig"/>
+            </net>
+            <net>
+               <source obj="tabwrite_5" outlet="wave"/>
+               <dest obj="tabwrite_3" inlet="a"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>no</subpatchmode>
+         </settings>
+         <notes><![CDATA[]]></notes>
+      </subpatch>
+   </patcher>
+   <obj type="lfo/saw" sha="bce38cfb8c1d56d3c98a8df7986ddf379f982033" uuid="ef2a162678b533c5e46c4e3c0decba17b1862d85" name="tabwrite_4" x="994" y="546">
+      <params>
+         <frac32.s.map name="pitch" value="20.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="table/read" sha="3a564a2679da8d3b011161732ada1645370520ba" uuid="1b71321dfa426c1cfed179d8ade93a69da0c5f2d" name="tabread3_" x="1092" y="546">
+      <params/>
+      <attribs>
+         <objref attributeName="table" obj="patcher_1/ptable"/>
+      </attribs>
+   </obj>
+   <obj type="disp/kscope 128 b" sha="8d4224a2649d7e1034724772735c137003a43ad7" uuid="e71f3dd9bc5b799ad703079e63fb929dd75def0" name="kscope_1" x="1218" y="546">
       <params/>
       <attribs/>
    </obj>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp_1" x="56" y="630">
       <params>
-         <frac32.s.map name="value" value="-4.439999580383301"/>
+         <frac32.s.map name="value" value="39.5600004196167"/>
       </params>
       <attribs/>
    </obj>
@@ -261,14 +411,30 @@ for(i=0;i<LENGTH;i++)
          <source obj="cbp_1" outlet="out"/>
          <dest obj="tabwrite_1" inlet="v"/>
       </net>
+      <net>
+         <source obj="tabwrite_4" outlet="wave"/>
+         <dest obj="tabread3_" inlet="a"/>
+      </net>
+      <net>
+         <source obj="tabread3_" outlet="o"/>
+         <dest obj="kscope_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="tabwrite_5" outlet="wave"/>
+         <dest obj="tabread3__" inlet="a"/>
+      </net>
+      <net>
+         <source obj="tabread3__" outlet="o"/>
+         <dest obj="kscope_2" inlet="in"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[note fdf ]]></notes>
    <windowPos>
-      <x>0</x>
-      <y>2</y>
+      <x>285</x>
+      <y>103</y>
       <width>1640</width>
       <height>1024</height>
    </windowPos>
