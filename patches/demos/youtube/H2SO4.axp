@@ -77,7 +77,7 @@
       <params>
          <bin16 name="p1" value="2321"/>
          <bin16 name="p2" value="17476"/>
-         <bin16 name="p3" value="1092"/>
+         <bin16 name="p3" value="49152"/>
          <bin16 name="p4" value="0"/>
       </params>
       <attribs/>
@@ -199,13 +199,13 @@
    </obj>
    <obj type="math/*c" sha="d72f5145b13ecb55e7f1d5435e7b048d12a4166e" name="*c_1" x="714" y="546">
       <params>
-         <frac32.u.map name="amp" value="62.0"/>
+         <frac32.u.map name="amp" value="24.0"/>
       </params>
       <attribs/>
    </obj>
    <obj type="env/d m" sha="3f6e6c6081782177f0dc9dfe9e50a99b54fe41f6" name="env.decay.m_1" x="812" y="546">
       <params>
-         <frac32.s.map name="d" value="13.0"/>
+         <frac32.s.map name="d" value="-14.0"/>
       </params>
       <attribs/>
    </obj>
@@ -798,8 +798,8 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>356</x>
-      <y>98</y>
+      <x>331</x>
+      <y>10</y>
       <width>1486</width>
       <height>1206</height>
    </windowPos>
