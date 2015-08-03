@@ -589,6 +589,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 s = s.replaceAll(p.GetCName(), p.CValue());
             }
             s = s.replace("attr_name", getCInstanceName());
+            s = s.replace("attr_legal_name", getLegalName());
             for (InletInstance i : inletInstances) {
                 Net n = patch.GetNet(i);
 //                s = s.replace("%" + i.GetLabel() + "%", i.GetCName());
@@ -633,6 +634,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             }
 
             s = s.replace("attr_name", getCInstanceName());
+            s = s.replace("attr_legal_name", getLegalName());
+           
             return s;
         }
         return "";
@@ -720,6 +723,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             s = s.replaceAll(p.GetCName(), p.CValue());
         }
         s = s.replace("attr_name", getCInstanceName());
+        s = s.replace("attr_legal_name", getLegalName());
+
         if (s.length() > 0) {
             return "{\n" + s + "}\n";
         } else {

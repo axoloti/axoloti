@@ -1,5 +1,6 @@
 <objdefs>
-   <obj.normal id="note quantizer" uuid="e7fa2bf0ef5cdfa2f36a9af9e3c218d0989fef49" sha="2eb19f6d2e7223f7ae71dee8e7a8c8566ba307a4">
+   <obj.normal id="note quantizer" uuid="d5343a4fea87a3e4f4dae20287226084550ea8d3" sha="13431d42028aa183f45816ccf88d37464b5ef22b">
+      <upgradeSha>197f71182416021f2b8487c8039736c5155c9d8e</upgradeSha>
       <sDescription>quantize note input to a scale</sDescription>
       <author>Mark Harris</author>
       <license>BSD</license>
@@ -8,6 +9,7 @@
          <frac32.bipolar name="note" description="note number (-64..63)"/>
          <int32 name="tonic" description="tonic note number (0-11)"/>
          <int32 name="offset" description="note input offset (0-128)"/>
+         <bool32 name="latch" description="latch to record scale notes"/>
       </inlets>
       <outlets>
          <frac32.bipolar name="note" description="note number (-64..63)"/>
@@ -23,8 +25,10 @@
     int32_t  _note;
     int32_t  _tonic;
     int32_t  _offset;
-    int32_t  _out;]]></code.declaration>
-      <code.init><![CDATA[   _note = 0;
+    int32_t  _out;
+    int32_t  _latch;
+]]></code.declaration>
+      <code.init><![CDATA[    _note = 0;
     _scaleVal = 0;
     _nscale = 0;
     _tonic = 0;
@@ -32,7 +36,8 @@
     for(int i=0;i<12;i++) {
         _scale[i] = 0;
     }]]></code.init>
-      <code.krate><![CDATA[    if (_scaleVal != param_b12) {
+      <code.krate><![CDATA[    _latch = inlet_latch;
+    if (_scaleVal != param_b12) {
         // calculate new scale parameters as they changed
         // optimize for evaluation
         int x=0;
@@ -56,5 +61,12 @@
     }
     outlet_note = _out;
 ]]></code.krate>
+      <code.midihandler><![CDATA[if (_latch && (status == MIDI_NOTE_ON + attr_midichannel ) && (data2)) {
+  int16_t note = data1 % 12;
+  int16_t mask = 1 << note;
+  int16_t nval = _scaleVal ^ mask;
+  PExParameterChange(&parent->PExch[PARAM_INDEX_attr_legal_name_b12],nval,0xFFFD);
+}
+]]></code.midihandler>
    </obj.normal>
 </objdefs>

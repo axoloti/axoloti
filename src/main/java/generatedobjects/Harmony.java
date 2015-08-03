@@ -17,6 +17,7 @@
  */
 package generatedobjects;
 
+import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletFrac32Bipolar;
 import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
@@ -41,6 +42,7 @@ public class Harmony extends gentools {
         o.inlets.add(new InletFrac32Bipolar("note", "note number (-64..63)"));
         o.inlets.add(new InletInt32("tonic", "tonic note number (0-11)"));
         o.inlets.add(new InletInt32("offset", "note input offset (0-128)"));
+        o.inlets.add(new InletBool32("latch", "latch to record scale notes"));
         o.outlets.add(new OutletFrac32Bipolar("note", "note number (-64..63)"));
         o.params.add(new ParameterBin12("b12"));
         o.sAuthor = "Mark Harris";
@@ -51,10 +53,11 @@ public class Harmony extends gentools {
                 + "    int32_t  _note;\n"
                 + "    int32_t  _tonic;\n"
                 + "    int32_t  _offset;\n"
-                + "    int32_t  _out;";
+                + "    int32_t  _out;\n"
+                + "    int32_t  _latch;\n";
 
         o.sInitCode
-                = "   _note = 0;\n"
+                = "    _note = 0;\n"
                 + "    _scaleVal = 0;\n"
                 + "    _nscale = 0;\n"
                 + "    _tonic = 0;\n"
@@ -64,7 +67,8 @@ public class Harmony extends gentools {
                 + "    }";
 
         o.sKRateCode
-                = "    if (_scaleVal != param_b12) {\n"
+                = "    _latch = inlet_latch;\n"
+                + "    if (_scaleVal != param_b12) {\n"
                 + "        // calculate new scale parameters as they changed\n"
                 + "        // optimize for evaluation\n"
                 + "        int x=0;\n"
@@ -87,6 +91,13 @@ public class Harmony extends gentools {
                 + "        _out = ((oct * 12 + _scale[n] + _tonic )  - 64 ) << 21;\n"
                 + "    }\n"
                 + "    outlet_note = _out;\n";
+        o.sMidiCode
+                = "if (_latch && (status == MIDI_NOTE_ON + %midichannel% ) && (data2)) {\n"
+                + "  int16_t note = data1 % 12;\n"
+                + "  int16_t mask = 1 << note;\n"
+                + "  int16_t nval = _scaleVal ^ mask;\n"
+                + "  PExParameterChange(&parent->PExch[PARAM_INDEX_attr_legal_name_b12],nval,0xFFFD);\n"
+                + "}\n";
         return o;
     }
 
