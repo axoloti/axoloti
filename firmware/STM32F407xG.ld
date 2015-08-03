@@ -146,6 +146,8 @@ SECTIONS
 
     .flashend :
     {
+        . = ALIGN(4);
+        LONG(0x12345678)
         PROVIDE(_flash_end = .);
     } > flash
 
