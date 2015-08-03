@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="button1" uuid="2f4fbacf3969a3a1ff9d23899566430051cb01f" sha="9f82aa3e60711d7f7aaaef5c74234df79ae925c2">
-      <upgradeSha>137e217036b363e8a4073692e20a93bc175b584c</upgradeSha>
+   <obj.normal id="button1" uuid="2f4fbacf3969a3a1ff9d23899566430051cb01f" sha="2d8a8388aa8ae748ba64967dc22e268e11146941">
+      <upgradeSha>7ddf50cad2f2a3bf69b838f383794c2d6a9d81ea</upgradeSha>
       <sDescription>button S1 on axoloti core board</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -12,6 +12,7 @@
       <displays/>
       <params/>
       <attribs/>
+      <code.init><![CDATA[palSetPadMode(SW1_PORT,SW1_PIN,PAL_MODE_INPUT);]]></code.init>
       <code.krate><![CDATA[outlet_out= palReadPad(SW1_PORT,SW1_PIN);]]></code.krate>
    </obj.normal>
 </objdefs>

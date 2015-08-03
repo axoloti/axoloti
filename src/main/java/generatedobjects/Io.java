@@ -177,6 +177,7 @@ public class Io extends gentools {
         AxoObject o = new AxoObject("button1", "button S1");
         o.outlets.add(new OutletBool32("out", "button state"));
         o.sDescription = "button S1 on axoloti core board";
+        o.sInitCode = "palSetPadMode(SW1_PORT,SW1_PIN,PAL_MODE_INPUT);";
         o.sKRateCode = "%out%= palReadPad(SW1_PORT,SW1_PIN);";
         return o;
     }
