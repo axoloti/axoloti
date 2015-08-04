@@ -29,6 +29,14 @@ SECTIONS {
         PROVIDE(__ctor_array_end = .);
     } > SRAM
 
+    destructors : ALIGN(4) SUBALIGN(4)
+    {
+        PROVIDE(__dtor_array_start = .);
+        KEEP(*(.fini_array))
+        KEEP(*(SORT(.fini_array.*)))
+        PROVIDE(__dtor_array_end = .);
+    } > SRAM
+
     .text : ALIGN(16) SUBALIGN(16)
     {
         * (.boot);
