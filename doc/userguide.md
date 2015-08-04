@@ -1,10 +1,11 @@
 #Overview 
-Axoloti consists of both hardware and software which work together to produce provide a virtual modular environment.
+Axoloti consists of both hardware and software which work together to provide a virtual modular environment.
 With the Axoloti software we can create 'patches' which are uploaded to the Axoloti hardware and then run on the hardware.
 
-Although the user does not see it, its interesting to note that when we upload these patches to the Axoloti board, we are uploading native code for the hardware, we are not interpreting these patches on the board - this is important as it means its is very efficient, close to the efficiency as you would get if you wrote the code specifically for the hardware!
+When we upload these patches to the Axoloti board, we are actually uploading native code for the hardware and not interpreting these patches on the board. 
+This means it runs very efficiently, close to the efficiency you would get if you wrote the code specifically for the hardware!
 
-Also its important to remember, although this particular document concentrates on the Axoloti software, once the 'patch' is uploaded to the board, the Axoloti board can run completely independently, no computer or other controller is required.
+Although this particular document concentrates on the Axoloti software, once the 'patch' is uploaded to the board, the Axoloti board can run completely independently, no computer or other controller is required.
 
 You can find more information about the hardware in another post in this "User Guide" 
 
@@ -21,8 +22,8 @@ The console window shows information about the axoloti board that is connected, 
 Assuming your axoloti board is connected, the first thing you will want to do is to ensure it is connected.
 (after the first time, it will automatically connect when you start Axoloti)
 
-First, use the 'Board Menu' and select 'Select Device', and you will see one (or more) Axoloti boards that are available for connection. (if not check your USB cables), select the device, and press ok.
-Now you can use the 'connect' button on the Console window, it will show in the log 'connected', and the current firmware version.
+First, use the 'Board Menu' and select 'Select Device', and you will see one (or more) Axoloti boards that are available for connection (if not, check your USB cables). Select the device, and press ok.
+Now you can use the 'connect' button on the Console window, it will print 'connected' in the log, as well as the current firmware version.
 This console window also shows the current firmware revision on the board, this is covered in the "Firmware vs Patch" post in the user guide.
 
 Note: see how connected was in RED, this shows an important log message, often errors that need the users attention.
@@ -30,17 +31,18 @@ Note: see how connected was in RED, this shows an important log message, often e
 We will be looking at the console window more, when we discuss transferring patches to the Axoloti board.
 
 #Patch Window
-This is the fun starts, as this is where the we create our synths, sequencers, or what ever else is in our imagination.
+This is where the fun starts, as this is where the we create our synths, sequencers, or what ever else is in our imagination.
 Lets start by looking at a patch so see what we can do....
 
-Use the File menu, and you can see there are options to create a new patch, open patch ...also there is a Library menu, which contains tutorials and demos.
-so lets start with a demo.  
+Use the File menu, and you can see there are options to create a new patch, open patch... and also a Library menu, which contains tutorials and demos.
+So lets start with a demo. 
 
 ##Loading a demo
-Use File -> Library -> Demo -> Youtube ->Tybett
+in the console window's File menu, use:
+File -> Library -> demos -> youtube ->tybett
 
 This will open a patch with with the Tybett demo that has been shown on YouTube.
-It might look complicated, but no fear you will soon get accustomed to what is going on, and we are only hear to see a few important things.
+It might look complicated, but you will soon get accustomed to what is going on, and we are only here to see a few important things.
 
 so with this patch window we can see lots of objects all connected by wires, more on this later.
 the most important thing about the patch window though is there are two modes.
