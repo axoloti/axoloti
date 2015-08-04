@@ -1130,6 +1130,10 @@ public void ShowCompileFail() {
                 + "  root.MidiInHandler(dev, port, status, data1, data2);\n"
                 + "}\n\n";
 
+        c += "typedef void (*funcp_t)(void);\n"
+                + "typedef funcp_t * funcpp_t;\n"
+                + "extern funcp_t __ctor_array_start;\n"
+                + "extern funcp_t __ctor_array_end;";
         c += "void xpatch_init2(int fwid)\n"
                 + "{\n"
                 + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID+ ") {\n"
@@ -1140,6 +1144,13 @@ public void ShowCompileFail() {
                 + "  extern uint32_t _pbss_end;\n"
                 + "  volatile uint32_t *p;\n"
                 + "  for(p=&_pbss_start;p<&_pbss_end;p++) *p++=0;\n"
+                + "  {\n"
+                + "    funcpp_t fpp = &__ctor_array_start;\n"
+                + "    while (fpp < &__ctor_array_end) {\n"
+                + "      (*fpp)();\n"
+                + "      fpp++;\n"
+                + "    }\n"
+                + "  }\n"
                 + "  patchMeta.npresets = " + settings.GetNPresets() + ";\n"
                 + "  patchMeta.npreset_entries = " + settings.GetNPresetEntries() + ";\n"
                 + "  patchMeta.pPresets = (PresetParamChange_t*) root.GetPresets();\n"
