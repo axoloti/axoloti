@@ -175,7 +175,7 @@ static msg_t ThreadLoader(void *arg) {
 #endif
   while (1) {
     chEvtWaitOne((eventmask_t)1);
-//    StopPatch();
+    StopPatch();
     sdcard_loadPatch(loadFName);
   }
   return (msg_t)0;
