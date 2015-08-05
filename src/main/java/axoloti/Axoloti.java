@@ -94,12 +94,12 @@ public class Axoloti {
 
     static boolean TestDir(String var) {
         String ev = System.getProperty(var);
-        File f = new File(var);
-        if (f.exists()) {
+        File f = new File(ev);
+        if (!f.exists()) {
             System.err.println(var + " Directory does not exist " + ev);
             return false;
         }
-        if (f.isDirectory()) {
+        if (!f.isDirectory()) {
             System.err.println(var + " should be a valid directory " + ev);
             return false;
         }
@@ -160,21 +160,21 @@ public class Axoloti {
                 buildir.mkdir();
             }
             if (!TestDir(HOME_DIR)) {
-                System.exit(-1);
+                 System.err.println("Home directory is invalid");
             }
 
             BuildEnv(RELEASE_DIR, defaultRelease);
             if (!TestDir(RELEASE_DIR)) {
-                System.exit(-1);
+                 System.err.println("Release directory is invalid");
             }
             BuildEnv(RUNTIME_DIR, defaultRuntime);
             if (!TestDir(RUNTIME_DIR)) {
-                System.exit(-1);
+                 System.err.println("Runtime directory is invalid");
             }
 
             BuildEnv(FIRMWARE_DIR, System.getProperty(RELEASE_DIR) + File.separator + "firmware");
             if (!TestDir(FIRMWARE_DIR)) {
-                System.exit(-1);
+                 System.err.println("Firmware directory is invalid");
             }
 
             Preferences prefs = Preferences.LoadPreferences();
