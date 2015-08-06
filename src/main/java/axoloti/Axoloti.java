@@ -120,7 +120,14 @@ public class Axoloti {
         String dirRelease = System.getProperty(RELEASE_DIR);
         String fwRelease = dirRelease + "/firmware";
         if (!fwRelease.equals(cacheFWDir)) {
-            cacheDeveloper = true;
+            File fR = new File(fwRelease);
+            File fE = new File(fwEnv);
+            try {
+                cacheDeveloper = !fR.getCanonicalPath().equals(fE.getCanonicalPath());
+            } catch (IOException ex) {
+                Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
+                cacheDeveloper = false;
+            }
         } else {
             File f = new File(dirRelease + File.separator + ".git");
             if (f.exists()) {
