@@ -54,8 +54,8 @@ typedef struct
 // very simple ring buffer
 static struct {
     MIDIEvent_t event[RING_BUFFER_SIZE];
-    uint8_t read_ptr;
-    uint8_t write_ptr;
+    volatile uint8_t read_ptr;
+    volatile uint8_t write_ptr;
 } send_ring_buffer;
 
 
@@ -477,6 +477,7 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
             if (URB_state_out == USBH_URB_STALL) {
                 USBH_ClrFeature(phost, MIDI_Handle->OutEp);
             } else if (URB_state_out == USBH_URB_ERROR) {
+                USBH_DbgLog("USB Host Output(SD) ERROR");
                 USBH_ClrFeature(phost, MIDI_Handle->OutEp);
             }
             
@@ -525,8 +526,7 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
                 MIDI_Handle->state_out = MIDI_POLL;
             } else if (URB_state_out == USBH_URB_IDLE) {
                 // wait
-                USBH_DbgLog("USB Host Output  IDLE");
-                MIDI_Handle->state_out = MIDI_SEND_DATA;
+                ; // NOP
             } else if (URB_state_out == USBH_URB_ERROR) {
                 // giveup
                 USBH_ErrLog("USB Host Output  Error sending data");
