@@ -43,7 +43,7 @@ public class QCmdCompileFirmware extends QCmdShellTask {
     
     @Override
     public File GetWorkingDir() {
-        return new File(System.getProperty(axoloti.Axoloti.FIRMWARE_DIR));
+        return new File(FirmwareDir());
     }
     
     @Override
@@ -51,9 +51,9 @@ public class QCmdCompileFirmware extends QCmdShellTask {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
             return FirmwareDir()+"/compile_firmware_win.bat";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            return "/bin/sh " + FirmwareDir() + "/compile_firmware_osx.sh";
+            return "/bin/sh ./compile_firmware_osx.sh";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            return "/bin/sh " + FirmwareDir() + "/compile_firmware_linux.sh";
+            return "/bin/sh ./compile_firmware_linux.sh";
         } else {
             Logger.getLogger(QCmdCompileFirmware.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;

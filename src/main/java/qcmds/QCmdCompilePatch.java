@@ -19,6 +19,7 @@ package qcmds;
 
 import axoloti.utils.OSDetect;
 import axoloti.Patch;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,15 +48,20 @@ public class QCmdCompilePatch extends QCmdShellTask {
             return "Compiling patch failed ( " + p.getFileNamePath() + " ) ";
         }
     }
-
+    
+    @Override
+    public File GetWorkingDir() {
+        return new File(FirmwareDir());
+    }
+    
     @Override
     String GetExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
             return FirmwareDir() + "/compile_patch_win.bat";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            return "/bin/sh " + FirmwareDir() + "/compile_patch_osx.sh";
+            return "/bin/sh ./compile_patch_osx.sh";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            return "/bin/sh " + FirmwareDir()+ "/compile_patch_linux.sh";
+            return "/bin/sh ./compile_patch_linux.sh";
         } else {
             Logger.getLogger(QCmdCompilePatch.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;
