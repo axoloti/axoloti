@@ -16,6 +16,17 @@ echo "apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 
 sudo apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0
 
 PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
+ARCH=$(uname -m | sed 's/x86_//;s/i[3-6]86/32/')
+if [ -f /etc/lsb-release ]; then
+    . /etc/lsb-release
+    OS=$DISTRIB_ID
+elif [ -f /etc/debian_version ]; then
+    OS=Debian  # XXX or Ubuntu??
+elif [ -f /etc/arch-release ]; then
+    OS=Archlinux
+else
+    OS=$(uname -s)
+fi
 
 cd "$PLATFORM_ROOT"
 
