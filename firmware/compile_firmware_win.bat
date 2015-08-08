@@ -16,6 +16,9 @@ if not exist "build\lst\" mkdir build\lst
 echo "Compiling firmware..."
 make -f Makefile.patch clean
 make
+IF %ERRORLEVEL% NEQ 0 (
+	exit /b 1
+)
 
 echo "Compiling firmware flasher..."
 cd flasher
@@ -24,6 +27,9 @@ if not exist "flasher_build\" mkdir flasher_build
 if not exist "flasher_build\obj\" mkdir flasher_build\obj
 if not exist "flasher_build\lst\" mkdir flasher_build\lst
 make
+IF %ERRORLEVEL% NEQ 0 (
+	exit /b 1
+)
 
 goto :eof
 

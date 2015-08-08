@@ -7,7 +7,9 @@ call :setrelease "%axoloti_release%"
 
 cd %axoloti_firmware%
 make -f Makefile.patch
-
+IF %ERRORLEVEL% NEQ 0 (
+	exit /b 1
+)
 goto :eof
 
 rem --- path shortening
