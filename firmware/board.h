@@ -1002,7 +1002,7 @@
                                      PIN_PUPDR_FLOATING(GPIOG_PIN10) |      \
                                      PIN_PUPDR_FLOATING(GPIOG_PIN11) |      \
                                      PIN_PUPDR_FLOATING(GPIOG_PIN12) |      \
-                                     PIN_PUPDR_FLOATING(GPIOG_PIN13) |      \
+                                     PIN_PUPDR_PULLUP(GPIOG_PIN13) |        \
                                      PIN_PUPDR_FLOATING(GPIOG_PIN14) |      \
                                      PIN_PUPDR_FLOATING(GPIOG_PIN15))
 #define VAL_GPIOG_ODR               (PIN_ODR_HIGH(GPIOG_PIN0) |             \
