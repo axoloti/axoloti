@@ -29,11 +29,11 @@ then
     case "$platform" in
         mac)
                 echo java -Xdock:name=Axoloti -jar $rootdir/dist/Axoloti.jar $* 
-                java -Xdock:name=Axoloti -jar $rootdir/dist/Axoloti.jar $* 2>&1 | tee $axoloti_home/axoloti.log
+                java -Xdock:name=Axoloti -jar $rootdir/dist/Axoloti.jar $* 2>&1 | tee "$axoloti_home/axoloti.log"
         ;;
         linux)
                 echo java -jar $rootdir/dist/Axoloti.jar $* 
-                java -jar $rootdir/dist/Axoloti.jar $* 2>&1 | tee $axoloti_home/axoloti.log
+                java -jar $rootdir/dist/Axoloti.jar $* 2>&1 | tee "$axoloti_home/axoloti.log"
         ;;
     esac
 else
