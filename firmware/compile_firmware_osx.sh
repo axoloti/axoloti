@@ -7,7 +7,9 @@ make -f Makefile.patch clean
 
 mkdir -p build/obj
 mkdir -p build/lst
-make
+if ! make ; then
+    exit 1
+fi
 
 echo "Compiling firmware flasher..."
 cd flasher
