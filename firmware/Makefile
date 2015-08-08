@@ -64,7 +64,13 @@ axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
 
 CHIBIOS = ${axoloti_release}/chibios
-FIRMWARE = ${axoloti_firmware}
+
+
+# theoretically should be this...., but CSRC expansion cannot cope with escape spaces
+#SPACE :=
+#SPACE +=
+#FIRMWARE=$(subst $(SPACE),\ ,${axoloti_firmware})
+FIRMWARE=.
 
 include board.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
