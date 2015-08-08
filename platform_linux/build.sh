@@ -21,20 +21,10 @@ cd "$PLATFORM_ROOT"
 
 ./add_udev_rules.sh
 
-if [ ! -d "${PLATFORM_ROOT}/bin" ]; 
-then
-    mkdir "${PLATFORM_ROOT}/bin"
-fi
+mkdir -p "${PLATFORM_ROOT}/bin"
+mkdir -p "${PLATFORM_ROOT}/lib"
+mkdir -p "${PLATFORM_ROOT}/src"
 
-if [ ! -d "${PLATFORM_ROOT}/lib" ]; 
-then
-    mkdir "${PLATFORM_ROOT}/lib"
-fi
-
-if [ ! -d "${PLATFORM_ROOT}/src" ]; 
-then
-    mkdir "${PLATFORM_ROOT}/src"
-fi
 
 if [ ! -d "${PLATFORM_ROOT}/../chibios" ]; 
 then
