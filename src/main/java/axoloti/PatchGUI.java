@@ -847,6 +847,8 @@ public class PatchGUI extends Patch {
         AxoObjectInstanceAbstract objinst = super.AddObjectInstance(obj, loc);
         if (objinst != null) {
             ObjectLayer.add(objinst);
+            SelectNone();
+            objinst.SetSelected(true);
             objinst.doLayout();
             AdjustSize();
             Layers.revalidate();
