@@ -5,7 +5,7 @@
    <comment type="patch/comment" x="714" y="42" text="50-63: strings chord"/>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp_2" x="56" y="56">
       <params>
-         <frac32.s.map name="value" value="0.0">
+         <frac32.s.map name="value" value="-20.0">
             <presets>
                <preset index="1">
                   <f v="-20.0"/>
@@ -75,7 +75,7 @@
          <bin16 name="p1" value="2147483647">
             <presets/>
          </bin16>
-         <bin16 name="p2" value="17476">
+         <bin16 name="p2" value="0">
             <presets>
                <preset index="1">
                   <i i="0"/>
@@ -91,7 +91,7 @@
                </preset>
             </presets>
          </bin16>
-         <bin16 name="p3" value="48059">
+         <bin16 name="p3" value="0">
             <presets>
                <preset index="1">
                   <i i="0"/>
@@ -117,19 +117,19 @@
    </obj>
    <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd_1" x="952" y="224">
       <params>
-         <frac32.s.map name="d" value="23.5"/>
+         <frac32.s.map name="d" value="-32.5"/>
       </params>
       <attribs/>
    </obj>
    <obj type="math/*c" sha="1ea155bb99343babad87e3ff0de80e6bf568e8da" name="*c_4" x="1050" y="224">
       <params>
-         <frac32.u.map name="amp" value="20.0"/>
+         <frac32.u.map name="amp" value="28.0"/>
       </params>
       <attribs/>
    </obj>
    <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_3" x="1120" y="224">
       <params>
-         <frac32.s.map name="pitch" value="-64.0"/>
+         <frac32.s.map name="pitch" value="-29.0"/>
       </params>
       <attribs/>
    </obj>
@@ -139,7 +139,7 @@
    </obj>
    <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix3_1" x="1288" y="224">
       <params>
-         <frac32.u.map name="gain1" value="32.0"/>
+         <frac32.u.map name="gain1" value="64.0"/>
          <frac32.u.map name="gain2" value="0.0"/>
          <frac32.u.map name="gain3" value="63.5"/>
       </params>
@@ -147,7 +147,7 @@
    </obj>
    <obj type="mix/mix 3" sha="3d37ac18e4393438042204df12d17aec499f09fb" name="mix3_2" x="1400" y="224">
       <params>
-         <frac32.u.map name="gain1" value="32.0"/>
+         <frac32.u.map name="gain1" value="64.0"/>
          <frac32.u.map name="gain2" value="63.5"/>
          <frac32.u.map name="gain3" value="0.0"/>
       </params>
@@ -163,7 +163,7 @@
    </obj>
    <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd_2" x="952" y="294">
       <params>
-         <frac32.s.map name="d" value="3.0"/>
+         <frac32.s.map name="d" value="22.0"/>
       </params>
       <attribs/>
    </obj>
@@ -184,7 +184,7 @@
    </obj>
    <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd_3" x="952" y="378">
       <params>
-         <frac32.s.map name="d" value="38.0"/>
+         <frac32.s.map name="d" value="-15.0"/>
       </params>
       <attribs/>
    </obj>
@@ -264,25 +264,25 @@
          <text attributeName="script">
             <sText><![CDATA[if (status == MIDI_NOTE_ON + attr_midichannel) {
 	if ((data1 == 57)) { // minor
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,80);
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+3,80);
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,data2);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+3,data2);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,data2);
 	} else if ((data1 == 53)) { // major
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,80);
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+4,80);
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,data2);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+4,data2);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,data2);
 	} else if ((data1 == 48)) { // major
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,80);
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+4,80);
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,data2);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+4,data2);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,data2);
 	} else if ((data1 == 50)) { // minor
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,80);
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+3,80);
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,data2);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+3,data2);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,data2);
 	} else if ((data1 > 50)&&(data1<59)){ // major
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,80);
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+4,80);
-		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,80);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1,data2);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+4,data2);
+		PatchMidiInHandler((midi_device_t) 0,0,MIDI_NOTE_ON+1,12+data1+7,data2);
 	}
 }]]></sText>
          </text>
@@ -290,20 +290,20 @@
    </obj>
    <obj type="./../synth/stringvoice" uuid="7c366f4d0e2cd2b10e4ad7fcf2ad41651bc605c" name="stringvoice_1" x="1008" y="644">
       <params>
-         <frac32.s.map name="envf:a" value="0.0"/>
+         <frac32.s.map name="envf:a" value="-54.0"/>
          <frac32.s.map name="envf:d" value="0.0"/>
-         <frac32.u.map name="envf:s" value="0.0"/>
+         <frac32.u.map name="envf:s" value="32.0"/>
          <frac32.s.map name="envf:r" value="0.0"/>
-         <frac32.u.map name="envahd21:a" value="58.0"/>
-         <frac32.u.map name="envahd21:d" value="42.0"/>
+         <frac32.u.map name="envahd21:a" value="12.5"/>
+         <frac32.u.map name="envahd21:d" value="62.5"/>
          <frac32.s.map name="osc2" value="-9.0"/>
          <frac32.u.map name="pwm" value="13.5"/>
-         <frac32.s.map name="vcf3_1:pitch" value="7.0"/>
+         <frac32.s.map name="vcf3_1:pitch" value="24.0"/>
          <frac32.u.map name="vcf3_1:reso" value="46.5"/>
       </params>
       <attribs>
-         <combo attributeName="poly" selection="1"/>
-         <combo attributeName="midichannel" selection="inherit"/>
+         <combo attributeName="poly" selection="8"/>
+         <combo attributeName="midichannel" selection="2"/>
          <combo attributeName="mididevice" selection="omni"/>
          <combo attributeName="midiport" selection="omni"/>
       </attribs>
@@ -372,7 +372,7 @@
    </obj>
    <obj type="ctrl/toggle" sha="a104f377191a424d537741cdfd7d5348bc16590c" name="cb1_1" x="658" y="1036">
       <params>
-         <bool32.tgl name="b" value="1">
+         <bool32.tgl name="b" value="0">
             <presets>
                <preset index="1">
                   <i i="0"/>
@@ -393,7 +393,7 @@
    </obj>
    <obj type="ctrl/dial b" sha="589b835807a3b8c8b05793bc4bd9adaf853f9705" name="cbp_1" x="392" y="1064">
       <params>
-         <frac32.s.map name="value" MidiCC="1" value="-64.0"/>
+         <frac32.s.map name="value" MidiCC="1" value="19.0"/>
       </params>
       <attribs/>
    </obj>
@@ -409,7 +409,7 @@
    </obj>
    <obj type="mix/mix 4" sha="217ea56f47dd7397f64930ffcddab7c794ad4f5c" name="mix4_1" x="938" y="1120">
       <params>
-         <frac32.u.map name="gain1" value="63.5">
+         <frac32.u.map name="gain1" value="0.0">
             <presets>
                <preset index="1">
                   <f v="0.0"/>
@@ -445,7 +445,7 @@
    </obj>
    <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" name="osc~_2" x="518" y="1134">
       <params>
-         <frac32.s.map name="pitch" value="24.0"/>
+         <frac32.s.map name="pitch" value="5.0"/>
       </params>
       <attribs/>
    </obj>
@@ -694,9 +694,9 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>398</x>
-      <y>23</y>
-      <width>1822</width>
-      <height>1413</height>
+      <x>165</x>
+      <y>16</y>
+      <width>1673</width>
+      <height>1125</height>
    </windowPos>
 </patch-1.0>

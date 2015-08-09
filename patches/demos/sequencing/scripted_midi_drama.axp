@@ -48,30 +48,30 @@
       </attribs>
    </obj>
    <comment type="patch/comment" x="126" y="14" text="the script is the conductor"/>
-   <comment type="patch/comment" x="616" y="28" text="drum 1"/>
-   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="616" y="56">
+   <comment type="patch/comment" x="462" y="28" text="drum 1"/>
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd1" x="462" y="56">
       <params>
-         <frac32.s.map name="d" value="5.5"/>
+         <frac32.s.map name="d" value="-8.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/pink" sha="60f2be0f8974717ae4480e80f70bfae0bb3f01d5" name="pnoise_1" x="714" y="56">
+   <obj type="noise/pink" sha="60f2be0f8974717ae4480e80f70bfae0bb3f01d5" name="pnoise_1" x="560" y="56">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="784" y="56">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1" x="630" y="56">
       <params/>
       <attribs/>
    </obj>
-   <obj type="noise/pink" sha="60f2be0f8974717ae4480e80f70bfae0bb3f01d5" name="pnoise_1_" x="714" y="126">
+   <obj type="noise/pink" sha="60f2be0f8974717ae4480e80f70bfae0bb3f01d5" name="pnoise_1_" x="560" y="126">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1_" x="784" y="126">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_1_" x="630" y="126">
       <params/>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_2" x="840" y="126">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_2" x="686" y="126">
       <params/>
       <attribs/>
    </obj>
@@ -90,49 +90,49 @@
          <frac32.u.map name="vcf3_1:reso" value="46.5"/>
       </params>
       <attribs>
-         <combo attributeName="poly" selection="1"/>
+         <combo attributeName="poly" selection="4"/>
          <combo attributeName="midichannel" selection="inherit"/>
          <combo attributeName="mididevice" selection="omni"/>
          <combo attributeName="midiport" selection="omni"/>
       </attribs>
    </obj>
-   <obj type="fx/chorus" name="chorus21" x="196" y="196">
+   <obj type="fx/chorus" name="chorus21" x="140" y="196">
       <params>
          <frac32.u.map name="depth" value="11.0"/>
          <frac32.s.map name="speed" value="-64.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="308" y="196">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_1" x="252" y="196">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="616" y="196" text="drum 2"/>
-   <obj type="math/==" sha="3215967e1a000a377c36699ca3bc414a25beaf48" name="inv1" x="616" y="224">
+   <comment type="patch/comment" x="462" y="196" text="drum 2"/>
+   <obj type="math/==" sha="3215967e1a000a377c36699ca3bc414a25beaf48" name="inv1" x="462" y="224">
       <params/>
       <attribs/>
    </obj>
-   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd2" x="686" y="224">
+   <obj type="env/d" sha="d9f7cfe1295d7bcc550714a18126d4f73c7c8411" name="envd2" x="532" y="224">
       <params>
-         <frac32.s.map name="d" value="20.0"/>
+         <frac32.s.map name="d" value="21.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="728" y="308">
+   <obj type="noise/uniform" sha="117e0adca76d1dc3810e120a06d022ef06093103" name="rand_1" x="574" y="308">
       <params/>
       <attribs/>
    </obj>
-   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_2" x="812" y="308">
+   <obj type="gain/vca" sha="6bbeaeb94e74091879965461ad0cb043f2e7f6cf" name="vca_2" x="658" y="308">
       <params/>
       <attribs/>
    </obj>
-   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1_" x="868" y="308">
+   <obj type="math/*c" sha="d36ecbd55095f4888a0ebda8efda68e015c5e72b" name="*c1_" x="714" y="308">
       <params>
          <frac32.u.map name="amp" value="25.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_2__" x="924" y="308">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="dac_2__" x="812" y="308">
       <params/>
       <attribs/>
    </obj>
@@ -334,7 +334,7 @@
    <windowPos>
       <x>266</x>
       <y>92</y>
-      <width>1234</width>
-      <height>982</height>
+      <width>1016</width>
+      <height>885</height>
    </windowPos>
 </patch-1.0>
