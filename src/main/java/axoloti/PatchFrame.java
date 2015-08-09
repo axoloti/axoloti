@@ -84,6 +84,10 @@ public class PatchFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Patch p = patch.GetSelectedObjects();
+                if (p.objectinstances.isEmpty()) { 
+                    getToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
+                    return ;
+                }
                 p.PreSerialize();
                 Serializer serializer = new Persister();
                 try {
@@ -106,6 +110,10 @@ public class PatchFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Patch p = patch.GetSelectedObjects();
+                if (p.objectinstances.isEmpty()) { 
+                    getToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
+                    return ;
+                }
                 p.PreSerialize();
                 Serializer serializer = new Persister();
                 try {
