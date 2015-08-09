@@ -68,7 +68,6 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap {
             n = axoObj.getInstanceName() + ":" + name;
         }
         String s = PExName(vprefix) + ".pfunction = " + GetPFunction() + ";\n"
-                + PExName(vprefix) + ".pfunction(&" + PExName(vprefix) + ");\n"
                 + "  SetKVP_IPVP(&" + StructAccces + KVPName(vprefix) + ",ObjectKvpRoot, \"" + n + "\" ,"
                 + "&" + PExName(vprefix) + ","
                 + " -1<<27,"

@@ -885,6 +885,14 @@ public void ShowCompileFail() {
                 c += " );\n";
             }
         }
+        c += "      int k;\n"
+                + "      for (k = 0; k < NPEXCH; k++) {\n"
+                + "        if (PExch[k].pfunction){\n"
+                + "          (PExch[k].pfunction)(&PExch[k]);\n"
+                + "        } else {\n"
+                + "          PExch[k].finalvalue = PExch[k].value;\n"
+                + "        }\n"
+                + "      }\n";
         return c;
     }
 
@@ -918,14 +926,6 @@ public void ShowCompileFail() {
         c += "void Init() {\n";
         c += GenerateParamInitCodePlusPlusSub("", "this");
         c += GenerateObjInitCodePlusPlusSub("", "this");
-        c += "      int k;\n"
-                + "      for (k = 0; k < NPEXCH; k++) {\n"
-                + "        if (PExch[k].pfunction){\n"
-                + "          (PExch[k].pfunction)(&PExch[k]);\n"
-                + "        } else {\n"
-                + "          PExch[k].finalvalue = PExch[k].value;\n"
-                + "        }\n"
-                + "      }\n";
         c += "}\n\n";
         return c;
     }
