@@ -42,7 +42,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import static javax.swing.TransferHandler.MOVE;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
@@ -757,22 +756,49 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         fc.setSelectedFile(f);
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File fileToBeSaved = fc.getSelectedFile();
-            if (!(fileToBeSaved.getAbsolutePath().endsWith(".axp")
-                    || fileToBeSaved.getAbsolutePath().endsWith(".axh")
-                    || fileToBeSaved.getAbsolutePath().endsWith(".axs"))) {
-
-                String ext = ".axp";
-                if (fc.getFileFilter() == axp) {
-                    ext = ".axp";
-                } else if (fc.getFileFilter() == axs) {
-                    ext = ".axs";
-                } else if (fc.getFileFilter() == axh) {
-                    ext = ".axh";
-                }
-
-                fileToBeSaved = new File(fc.getSelectedFile() + ext);
+            String filterext = ".axp";
+            if (fc.getFileFilter() == axp) {
+                filterext = ".axp";
+            } else if (fc.getFileFilter() == axs) {
+                filterext = ".axs";
+            } else if (fc.getFileFilter() == axh) {
+                filterext = ".axh";
             }
+
+            File fileToBeSaved = fc.getSelectedFile();
+            String ext = "";
+            String fname = fileToBeSaved.getAbsolutePath();
+            int dot=fname.lastIndexOf('.');
+            if(dot > 0 && fname.length() > dot+3) {
+                ext = fname.substring(dot);
+            }
+
+            
+            if (!(ext.equalsIgnoreCase(".axp")
+                    || ext.equalsIgnoreCase(".axh")
+                    || ext.equalsIgnoreCase(".axs"))) {
+
+                fileToBeSaved = new File(fc.getSelectedFile() + filterext);
+
+            } else if (!ext.equals(filterext)) {
+                Object[] options = {"Yes",
+                    "No"};
+                int n = JOptionPane.showOptionDialog(this,
+                        "File does not match filter, do you want to change extension to "+filterext+" ?",
+                        "Axoloti asks:",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                switch (n) {
+                    case JOptionPane.YES_OPTION:
+                        fileToBeSaved = new File(fname.substring(0,fname.length()-4) + filterext);
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        return;
+                }
+            } 
 
             if (fileToBeSaved.exists()) {
                 Object[] options = {"Yes",

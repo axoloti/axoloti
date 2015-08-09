@@ -81,13 +81,14 @@ public class AxoObjects {
                 File f = new File(fnameA);
                 if (f.isFile()) {
                     try {
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : {0}", fnameA);
                         AxoObjectFile of = serializer.read(AxoObjectFile.class, f);
                         AxoObjectAbstract o = of.objs.get(0);
                         if (o != null) {
                             o.sPath = fnameA;
                             // to be completed : loading overloaded objects too
                             o.createdFromRelativePath = true;
-                            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : {0}", fnameA);
+                            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "loaded : {0}", fnameA);
                             set.add(o);
                             return set;
                         }
@@ -102,12 +103,13 @@ public class AxoObjects {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "attempt to create object from subpatch file in patch directory: {0}", fnameP);
                 File f = new File(fnameP);
                 if (f.isFile()) {
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : {0}", fnameP);
                     AxoObjectAbstract o = new AxoObjectFromPatch(f);
                     if (n.startsWith("./") || n.startsWith("../")) {
                         o.createdFromRelativePath = true;
                     }
                     o.sPath = f.getPath();
-                    Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "hit : {0}", fnameP);
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "loaded : {0}", fnameP);
                     set.add(o);
                     return set;
                 }
