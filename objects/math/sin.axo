@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="sin" uuid="1964a1eea162423ab0d4ad3526e1940bcd3a43cf" sha="4986ce9e30872322358d35c32d9cf725b0700558">
-      <upgradeSha>6c2c51772640a985c60b8e74dd46cdab84f70868</upgradeSha>
+   <obj.normal id="sin" uuid="1964a1eea162423ab0d4ad3526e1940bcd3a43cf" sha="a9c0c4bc2dd9e0f4bf16860e8fabb5996b032cff">
+      <upgradeSha>52c6ba07e0435b09bf0a3f06e42b5e8735af0522</upgradeSha>
       <sDescription>sine function, -64..64 phase corresponds to -180 to 180 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -15,13 +15,13 @@
       <params/>
       <attribs/>
       <code.krate><![CDATA[       int32_t r;
-       SINE2TINTERP(inlet_phase<<4,r)
+       SINE2TINTERP(inlet_phase<<5,r)
        outlet_out= (r>>4);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="sin" uuid="3fd3c55bdecb474393c99b2a5b01e9bed143eca7" sha="113e9f85bd45995a459e1dde6cc7e564e0689adf">
-      <upgradeSha>1071012784f2bd65a87a083ab2b7c3d46db76c52</upgradeSha>
-      <sDescription>sine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
+   <obj.normal id="sin" uuid="3fd3c55bdecb474393c99b2a5b01e9bed143eca7" sha="51996a69a9846bb8ba863c4e645fc3024fd55a2">
+      <upgradeSha>e59edbd6fd2f3824f6e16890e859fe9944c46ff9</upgradeSha>
+      <sDescription>sine function, -64..64 corresponds to -360 to 360 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>math.axh</helpPatch>
@@ -35,7 +35,7 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[       int32_t r;
-       SINE2TINTERP(inlet_phase<<4,r)
+       SINE2TINTERP(inlet_phase<<5,r)
        outlet_out= (r>>4);
 ]]></code.srate>
    </obj.normal>

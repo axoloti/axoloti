@@ -41,37 +41,37 @@ public class Trigonometry extends gentools {
         o.inlets.add(new InletFrac32("phase", "phase"));
         o.outlets.add(new OutletFrac32("out", "sin(phase)"));
         o.sKRateCode = "       int32_t r;\n"
-                + "       SINE2TINTERP(%phase%<<4,r)\n"
+                + "       SINE2TINTERP(%phase%<<5,r)\n"
                 + "       %out%= (r>>4);\n";
         return o;
     }
 
     static AxoObject CreateSinTilde() {
-        AxoObject o = new AxoObject("sin", "sine function, -64..64 corresponds to -180 to 180 degrees");
+        AxoObject o = new AxoObject("sin", "sine function, -64..64 corresponds to -360 to 360 degrees");
         o.inlets.add(new InletFrac32Buffer("phase", "phase"));
         o.outlets.add(new OutletFrac32Buffer("out", "sin(phase)"));
         o.sSRateCode = "       int32_t r;\n"
-                + "       SINE2TINTERP(%phase%<<4,r)\n"
+                + "       SINE2TINTERP(%phase%<<5,r)\n"
                 + "       %out%= (r>>4);\n";
         return o;
     }
 
     static AxoObject CreateCos() {
-        AxoObject o = new AxoObject("cos", "cosine function, -64..64 phase corresponds to -180 to 180 degrees");
+        AxoObject o = new AxoObject("cos", "cosine function, -64..64 phase corresponds to -360 to 360 degrees");
         o.inlets.add(new InletFrac32("phase", "phase"));
         o.outlets.add(new OutletFrac32("out", "cos(phase)"));
         o.sKRateCode = "       int32_t r;\n"
-                + "       SINE2TINTERP((%phase%<<4)+(1<<30),r)\n"
+                + "       SINE2TINTERP((%phase%<<5)+(1<<30),r)\n"
                 + "       %out%= (r>>4);\n";
         return o;
     }
 
     static AxoObject CreateCosTilde() {
-        AxoObject o = new AxoObject("cos", "cosine function, -64..64 corresponds to -180 to 180 degrees");
+        AxoObject o = new AxoObject("cos", "cosine function, -64..64 corresponds to -360 to 360 degrees");
         o.inlets.add(new InletFrac32Buffer("phase", "phase"));
         o.outlets.add(new OutletFrac32Buffer("out", "cos(phase)"));
         o.sSRateCode = "       int32_t r;\n"
-                + "       SINE2TINTERP((%phase%<<4)+(1<<30),r)\n"
+                + "       SINE2TINTERP((%phase%<<5)+(1<<30),r)\n"
                 + "       %out%= (r>>4);\n";
         return o;
     }

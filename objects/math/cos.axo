@@ -1,7 +1,7 @@
 <objdefs>
-   <obj.normal id="cos" uuid="c813904f245103af9eafbc05ed6521f94472aed4" sha="f35ef0fb72b74c5766631ffb48402228769ef4d2">
-      <upgradeSha>bba0c20ab32678ed34365aeb6943b53d60b2c7</upgradeSha>
-      <sDescription>cosine function, -64..64 phase corresponds to -180 to 180 degrees</sDescription>
+   <obj.normal id="cos" uuid="c813904f245103af9eafbc05ed6521f94472aed4" sha="ea84a8b96450553c862d92427d033085619711a6">
+      <upgradeSha>fd9c640c4b6de7d473eef44a9f1d17505555e4de</upgradeSha>
+      <sDescription>cosine function, -64..64 phase corresponds to -360 to 360 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>math.axh</helpPatch>
@@ -15,13 +15,13 @@
       <params/>
       <attribs/>
       <code.krate><![CDATA[       int32_t r;
-       SINE2TINTERP((inlet_phase<<4)+(1<<30),r)
+       SINE2TINTERP((inlet_phase<<5)+(1<<30),r)
        outlet_out= (r>>4);
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="cos" uuid="a2ba1ca8d10b854e06728c088c43409866624fc1" sha="73d1b04d6b3a787548b0b35a4ed3f2c309c80500">
-      <upgradeSha>8e1816a884241ec4b44374c205dbcd18fe0d101e</upgradeSha>
-      <sDescription>cosine function, -64..64 corresponds to -180 to 180 degrees</sDescription>
+   <obj.normal id="cos" uuid="a2ba1ca8d10b854e06728c088c43409866624fc1" sha="1613f156e137151e931c5e21a08c593954cd8c3">
+      <upgradeSha>4b482091b883109ab237bc82d13fbf780ca1b828</upgradeSha>
+      <sDescription>cosine function, -64..64 corresponds to -360 to 360 degrees</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
       <helpPatch>math.axh</helpPatch>
@@ -35,7 +35,7 @@
       <params/>
       <attribs/>
       <code.srate><![CDATA[       int32_t r;
-       SINE2TINTERP((inlet_phase<<4)+(1<<30),r)
+       SINE2TINTERP((inlet_phase<<5)+(1<<30),r)
        outlet_out= (r>>4);
 ]]></code.srate>
    </obj.normal>
