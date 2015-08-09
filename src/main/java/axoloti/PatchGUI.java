@@ -138,6 +138,10 @@ public class PatchGUI extends Patch {
             @Override
             public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
                 Patch p = GetSelectedObjects();
+                if (p.objectinstances.isEmpty()) { 
+                    clip.setContents(new StringSelection(""), null);
+                    return ;
+                }
                 p.PreSerialize();
                 Serializer serializer = new Persister();
                 try {
@@ -469,6 +473,7 @@ public class PatchGUI extends Patch {
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         SelectNone();
+        if(v.isEmpty()) return;
         Serializer serializer = new Persister();
         try {
             PatchGUI p = serializer.read(PatchGUI.class, v);
@@ -847,6 +852,8 @@ public class PatchGUI extends Patch {
         AxoObjectInstanceAbstract objinst = super.AddObjectInstance(obj, loc);
         if (objinst != null) {
             ObjectLayer.add(objinst);
+            SelectNone();
+            objinst.SetSelected(true);
             objinst.doLayout();
             AdjustSize();
             Layers.revalidate();

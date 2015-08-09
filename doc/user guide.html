@@ -48,7 +48,7 @@ File -> Library -> demos -> youtube ->tybett</p>
 <p>This will open a patch with with the Tybett demo that has been shown on YouTube.
 It might look complicated, but you will soon get accustomed to what is going on, and we are only here to see a few important things.</p>
 
-<p>so with this patch window we can see lots of objects all connected by wires, more on this later.
+<p>With this patch window we can see lots of objects all connected by wires, more on this later.
 the most important thing about the patch window though is there are two modes.</p>
 
 <p>Edit Mode - (light background) , allows you to edit the patch.
@@ -113,13 +113,11 @@ objects contain inlets to connect to, and outlets to connect to other objects by
 <li>Objects can be replaced with a different type by double-clicking on the title (or selecting replace in the context menu). Connections and parameters will be preserved. Attributes are not preserved (yet), this is especially useful when you wish to change inlet/outlet types (e.g. control rate to audio rate)</li>
 <li>Instance name can be changed (a double click on the instancename brings up the instance name editor)</li>
 <li>Attributes can be changed</li>
-<li>Parameters can be changed by
+<li>Parameters can be changed by:
 <ul>
-<li>mouse for units</li>
-<li>shift-mouse for sub-units</li>
-<li>arrow-up, arrow-down</li>
-<li>shift-arrow-up, shift-arrow-down</li>
-<li>page-up, page-down</li>
+<li>mouse for units, + shift for sub-units, +shift+ctrl for fine units (e.g 0.5,0.05,0.01)</li>
+<li>arrow-up/down. shift-arrow-up/down</li>
+<li>page-up/down</li>
 <li>home, end</li>
 <li>typing the number followed by enter</li>
 </ul></li>
@@ -177,11 +175,13 @@ you can delete them all at once with delete network</p>
 
 <h2>Connections between different types</h2>
 
-<p>A red output (audio) can be connected to a blue input (float), this will sample the audio, 1 in 16 audio samples.
-A yellow output (boolean) can be connected to a blue input (float), this yields +64 units for true, 0 for false.
-A green output  (integer) can be connected to a blue input(float).
-A blue output (float) can be connected to a green input (integer) the value is rounded down.
-A pink output must always be connected to a pink input. (strings)</p>
+<ul>
+<li>A red output (audio) can be connected to a blue input (float), this will sample the audio, 1 in 16 audio samples.</li>
+<li>A yellow output (boolean) can be connected to a blue input (float), this yields +64 units for true, 0 for false.</li>
+<li>A green output  (integer) can be connected to a blue input(float).</li>
+<li>A blue output (float) can be connected to a green input (integer) the value is rounded down.</li>
+<li>A pink output must always be connected to a pink input. (strings)</li>
+</ul>
 
 <h1>Execution order</h1>
 
@@ -206,10 +206,13 @@ also changing the instance name (menu rename) helps when you have many objects o
 
 <p>Sub patches are an important building block in Axoloti.</p>
 
-<p>There are lots of uses for sub patches but the main reasons are:
-- creating 'utility' patches that you want to use in many patches
-- to simplify a very complex patch
-- for polyphonic voices </p>
+<p>There are lots of uses for sub patches but the main reasons are:</p>
+
+<ul>
+<li>creating 'utility' patches that you want to use in many patches</li>
+<li>to simplify a very complex patch</li>
+<li>for polyphonic voices </li>
+</ul>
 
 <p>Sub patches are just like main patches, but are saved with as 'Axoloti Subpatch' with an extension of AXS, the difference is they are never used on their own... they are always added to a main patch. 
 (we will also see later that sub-patches can often look like normal axoloti objects)</p>
@@ -235,12 +238,15 @@ also changing the instance name (menu rename) helps when you have many objects o
 <li>Enter the patch filename in the object selector (without .axs extension), prefixed by "./"</li>
 </ul>
 
-<p>If you want to modify the sub patch
-- In the main patch, select the sub patch object
-- select "edit object definition" in the object popup menu
-- the sub patch window opens
-- make the changes
-- save the sub-patch.</p>
+<p>If you want to modify the sub patch</p>
+
+<ul>
+<li>In the main patch, select the sub patch object</li>
+<li>select "edit object definition" in the object popup menu</li>
+<li>the sub patch window opens</li>
+<li>make the changes</li>
+<li>save the sub-patch.</li>
+</ul>
 
 <p>Note: If the main patch is LIVE, changes to a sub-patch will not be propagated until the main patch is sent again to the board (e.g. take it offline, then select live again)</p>
 

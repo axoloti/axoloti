@@ -2092,7 +2092,7 @@ public void ShowCompileFail() {
 
         this.delete(obj);
         newObj.setInstanceName(newname);
-
+        newObj.SetSelected(true);
         SetDirty();
     }
 

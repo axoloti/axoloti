@@ -44,7 +44,7 @@ File -> Library -> demos -> youtube ->tybett
 This will open a patch with with the Tybett demo that has been shown on YouTube.
 It might look complicated, but you will soon get accustomed to what is going on, and we are only here to see a few important things.
 
-so with this patch window we can see lots of objects all connected by wires, more on this later.
+With this patch window we can see lots of objects all connected by wires, more on this later.
 the most important thing about the patch window though is there are two modes.
 
 Edit Mode - (light background) , allows you to edit the patch.
@@ -105,14 +105,12 @@ Operations on objects:  (not in Live Mode):
 - Objects can be replaced with a different type by double-clicking on the title (or selecting replace in the context menu). Connections and parameters will be preserved. Attributes are not preserved (yet), this is especially useful when you wish to change inlet/outlet types (e.g. control rate to audio rate)
 - Instance name can be changed (a double click on the instancename brings up the instance name editor)
 - Attributes can be changed
-- Parameters can be changed by
-  - mouse for units
-  - shift-mouse for sub-units
-  - arrow-up, arrow-down
-  - shift-arrow-up, shift-arrow-down
-  - page-up, page-down
-  - home, end
-  - typing the number followed by enter
+- Parameters can be changed by:
+ - mouse for units, + shift for sub-units, +shift+ctrl for fine units (e.g 0.5,0.05,0.01)
+ - arrow-up/down. shift-arrow-up/down
+ - page-up/down
+ - home, end
+ - typing the number followed by enter
 
 **Parameters,  Attributes and Displays**
 An object can have 3 types of user interface elments
@@ -156,11 +154,12 @@ Different data types are marked by different colors on the outlets, inlets and w
 - Pink connections are for strings. Mostly useful for dynamic filenames.
 
 ##Connections between different types
-A red output (audio) can be connected to a blue input (float), this will sample the audio, 1 in 16 audio samples.
-A yellow output (boolean) can be connected to a blue input (float), this yields +64 units for true, 0 for false.
-A green output  (integer) can be connected to a blue input(float).
-A blue output (float) can be connected to a green input (integer) the value is rounded down.
-A pink output must always be connected to a pink input. (strings)
+
+- A red output (audio) can be connected to a blue input (float), this will sample the audio, 1 in 16 audio samples.
+- A yellow output (boolean) can be connected to a blue input (float), this yields +64 units for true, 0 for false.
+- A green output  (integer) can be connected to a blue input(float).
+- A blue output (float) can be connected to a green input (integer) the value is rounded down.
+- A pink output must always be connected to a pink input. (strings)
 
 #Execution order
 Every object in the patch is executed once in the signal processing loop, at 3000Hz. 
@@ -181,6 +180,7 @@ A preset is a set of selected parameters and their new value. To include a param
 Sub patches are an important building block in Axoloti.
 
 There are lots of uses for sub patches but the main reasons are:
+
 - creating 'utility' patches that you want to use in many patches
 - to simplify a very complex patch
 - for polyphonic voices 
@@ -207,6 +207,7 @@ to create a sub-patch:
 - Enter the patch filename in the object selector (without .axs extension), prefixed by "./"
 
 If you want to modify the sub patch
+
 - In the main patch, select the sub patch object
 - select "edit object definition" in the object popup menu
 - the sub patch window opens

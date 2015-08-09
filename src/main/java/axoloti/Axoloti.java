@@ -144,7 +144,14 @@ public class Axoloti {
             String defaultHome = curDir;
             String defaultRuntime = curDir;
             String defaultRelease = curDir;
-            if (OSDetect.getOS() == OSDetect.OS.WIN) {
+            
+            File git = new File("."+File.separator+".git");
+            if(git.exists()) {
+                // developer using git, assume they want everything local dir
+                System.out.println("defaulting to developer defaults, can be overridden");
+                defaultHome = ".";
+                defaultRuntime = ".";
+            } else if (OSDetect.getOS() == OSDetect.OS.WIN) {
                 // not sure which versions of windows this is valid for, good for 8!
                 defaultHome = System.getenv("HOMEPATH") + File.separator + "Documents" + File.separator + "axoloti";
                 defaultRuntime = System.getenv("ProgramFiles") + File.separator + "axoloti_runtime";
