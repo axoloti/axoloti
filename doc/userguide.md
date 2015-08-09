@@ -242,7 +242,7 @@ Patch settiings include:
 - Numer of modulation targets - number of targets for sources
 - Sub patch mode, how voices are handled, see 'more on sub patches'
 - Has midi channel attribute - the midi channel is exposed on the parent patch, when used as a subpatch
-- saturate audio - is the the audio output from this patch saurated
+- saturate audio - is the the audio output from this patch saturated
 
 #Zombies
 If a patch is loaded and an object cannot be found, a zombie will be created (its bright red!) , your patch will not work, so you need to replace it... simply double click, or use replace object. if you replace with something with compatible inlet/outlets it will remain connected!

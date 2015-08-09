@@ -754,6 +754,23 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         }
         File f = new File(fn);
         fc.setSelectedFile(f);
+
+        String ext = "";
+        int dot=fn.lastIndexOf('.');
+        if(dot > 0 && fn.length() > dot+3) {
+            ext = fn.substring(dot);
+        }
+        if (ext.equalsIgnoreCase(".axp")) {
+            fc.setFileFilter(axp);
+        } else if (ext.equalsIgnoreCase(".axs")) {
+            fc.setFileFilter(axs);
+        } else if (ext.equalsIgnoreCase(".axh")) {
+            fc.setFileFilter(axh);
+        }
+        else {
+            fc.setFileFilter(axp);
+        }
+        
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String filterext = ".axp";
@@ -766,9 +783,9 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             }
 
             File fileToBeSaved = fc.getSelectedFile();
-            String ext = "";
+            ext = "";
             String fname = fileToBeSaved.getAbsolutePath();
-            int dot=fname.lastIndexOf('.');
+            dot=fname.lastIndexOf('.');
             if(dot > 0 && fname.length() > dot+3) {
                 ext = fname.substring(dot);
             }
