@@ -47,6 +47,7 @@ public class FileManagerFrame extends javax.swing.JFrame {
     public FileManagerFrame() {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
+        jLabelSDInfo.setText("");
         jFileTable.setDropTarget(new DropTarget() {
             @Override
             public synchronized void drop(DropTargetDropEvent evt) {
@@ -84,6 +85,12 @@ public class FileManagerFrame extends javax.swing.JFrame {
         jButton1Refresh = new javax.swing.JButton();
         jLabelSDInfo = new javax.swing.JLabel();
         jButtonUpload = new javax.swing.JButton();
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jFileTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -183,6 +190,10 @@ public class FileManagerFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButtonUploadActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        RequestRefresh();
+    }//GEN-LAST:event_formWindowActivated
 
     public void ShowSDInfo(int clusters, int clustersize, int sectorsize) {
         jLabelSDInfo.setText("Free : " + ((long) clusters * (long) clustersize * (long) sectorsize / (1024 * 1024)) + "MB, Cluster size = " + clustersize * sectorsize);
