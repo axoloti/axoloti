@@ -101,8 +101,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     QCmdProcessor qcmdprocessor;
     Thread qcmdprocessorThread;
     static public Cursor transparentCursor;
-    AxolotiMidiInput midiInput;
     private final String[] args;
+    JMenu favouriteMenu;
 
     /**
      * Creates new form MainFrame
@@ -215,13 +215,16 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         PopulateLibraryMenu(jMenuLibrary);
 
         JMenu phelps = new JMenu("Library");
-        PopulateLibraryMenu(phelps, System.getProperty(Axoloti.RELEASE_DIR) + "/objects", ".axh");
+        PopulatePatchMenu(phelps, System.getProperty(Axoloti.RELEASE_DIR) + "/objects", ".axh");
         jMenuHelp.add(phelps);
 
         axoObjects = new AxoObjects();
         axoObjects.LoadAxoObjects();
-        midiInput = new AxolotiMidiInput();
-        initMidiInput(prefs.getMidiInputDevice());
+        
+        favouriteMenu = new JMenu("Favourites");
+        jMenuFile.insert(favouriteMenu, 3);
+        
+        updateFavouriteMenu();
 
         if (!TestDir(HOME_DIR, true)) {
              Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Home directory is invalid:{0}, does it exist?, can it be written to?", System.getProperty(Axoloti.HOME_DIR));
@@ -295,16 +298,20 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     return true;
 }
 
+    void PopulateFavouriteMenu(JMenu parent) {
+        PopulatePatchMenu(parent,prefs.getFavouriteDir(), ".axp");
+    }
+
     void PopulateLibraryMenu(JMenu parent) {
         JMenu ptut = new JMenu("tutorials");
-        PopulateLibraryMenu(ptut, System.getProperty(Axoloti.RELEASE_DIR) + "/patches/tutorials", ".axp");
+        PopulatePatchMenu(ptut, System.getProperty(Axoloti.RELEASE_DIR) + "/patches/tutorials", ".axp");
         parent.add(ptut);
         JMenu pdemos = new JMenu("demos");
-        PopulateLibraryMenu(pdemos, System.getProperty(Axoloti.RELEASE_DIR) + "/patches/demos", ".axp");
+        PopulatePatchMenu(pdemos, System.getProperty(Axoloti.RELEASE_DIR) + "/patches/demos", ".axp");
         parent.add(pdemos);
     }
 
-    void PopulateLibraryMenu(JMenu parent, String path, String ext) {
+    void PopulatePatchMenu(JMenu parent, String path, String ext) {
         File dir = new File(path);
         final String extension = ext;
         for (File subdir : dir.listFiles(new java.io.FileFilter() {
@@ -314,7 +321,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             }
         })) {
             JMenu fm = new JMenu(subdir.getName());
-            PopulateLibraryMenu(fm, subdir.getPath(), extension);
+            PopulatePatchMenu(fm, subdir.getPath(), extension);
             if (fm.getItemCount() > 0) {
                 parent.add(fm);
             }
@@ -1333,7 +1340,16 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     }
 
-    public void initMidiInput(String midiInputDevice) {
-        midiInput.start(midiInputDevice);
+    public void updateFavouriteMenu() {
+        String favouriteDir = prefs.getFavouriteDir();
+        if (favouriteDir!=null && !favouriteDir.isEmpty()) {
+            File f = new File(favouriteDir);
+            if(f.exists() && f.isDirectory()) {
+                PopulateFavouriteMenu(favouriteMenu);
+                favouriteMenu.setVisible(true);
+                return;
+            }
+        }
+        favouriteMenu.setVisible(false);
     }
 }

@@ -21,9 +21,6 @@ import axoloti.utils.Preferences;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sound.midi.MidiDevice;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JFileChooser;
 
 /**
@@ -51,29 +48,8 @@ public class PreferencesFrame extends javax.swing.JFrame {
             p += s + "\n";
         }
         jTextPanePath.setText(p);
-                
-        MidiDevice.Info[] devices;
-        devices = MidiSystem.getMidiDeviceInfo();
 
-        jComboBox2.addItem(MidiNone);
-        for (MidiDevice.Info info: devices) {
-            try {
-                MidiDevice dev = MidiSystem.getMidiDevice(info);
-                // yuch, only way to determine input devices, is by seeing
-                // if they are com.sun.media.sound.MidiInDevice, but this is a
-                // private class 
-                if (dev.getClass().getName().toLowerCase().contains("midiindevice")) {
-                    jComboBox2.addItem(info.getName());
-                }
-            }
-            catch (MidiUnavailableException e)
-            {
-            }               
-        }
-        String md=prefs.getMidiInputDevice();
-        if(!md.isEmpty()) {
-            jComboBox2.setSelectedItem(md);
-        }
+        txtFavDir.setText(prefs.getFavouriteDir());
         txtFirmwareDir.setText(System.getProperty(axoloti.Axoloti.FIRMWARE_DIR));
         txtRuntimeDir.setText(System.getProperty(axoloti.Axoloti.RUNTIME_DIR));
     }
@@ -82,9 +58,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
         prefs.setPollInterval(Integer.parseInt(jTextFieldPollInterval.getText()));
         prefs.setObjectSearchPath(jTextPanePath.getText().split("\n"));
         prefs.setMouseDialAngular(jComboBox1.getSelectedItem().equals("Angular"));
-        String dev = (String) jComboBox2.getSelectedItem();
-        if(dev.equals(MidiNone)) dev="";
-        prefs.setMidiInputDevice((String) dev);
+        prefs.setFavouriteDir(txtFavDir.getText());
     }
 
     /**
@@ -105,13 +79,14 @@ public class PreferencesFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
         txtFirmwareDir = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         txtRuntimeDir = new javax.swing.JLabel();
         btnFirmwareDir = new javax.swing.JButton();
         btnRuntimeDir = new javax.swing.JButton();
+        txtFavDir = new javax.swing.JLabel();
+        btnFavDir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -145,13 +120,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("Midi Input");
-
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
-            }
-        });
+        jLabel4.setText("Favourite Dir");
 
         jLabel5.setText("Firmware Dir");
 
@@ -175,6 +144,15 @@ public class PreferencesFrame extends javax.swing.JFrame {
             }
         });
 
+        txtFavDir.setText("jLabel6");
+
+        btnFavDir.setText("Select");
+        btnFavDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFavDirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -182,19 +160,11 @@ public class PreferencesFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(226, 226, 226)
+                        .addGap(583, 583, 583)
                         .addComponent(jButtonSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(53, 53, 53)
-                        .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
@@ -202,23 +172,32 @@ public class PreferencesFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jTextFieldPollInterval, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel1))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel7))
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtRuntimeDir, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txtFirmwareDir, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE))
-                        .addGap(65, 65, 65)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel4))
+                        .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnFirmwareDir, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRuntimeDir, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(6, 6, 6)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtFavDir, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnFavDir, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtRuntimeDir, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 179, Short.MAX_VALUE))
+                                    .addComponent(txtFirmwareDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(65, 65, 65)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnFirmwareDir, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnRuntimeDir, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(6, 6, 6))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -230,18 +209,23 @@ public class PreferencesFrame extends javax.swing.JFrame {
                     .addComponent(txtRuntimeDir)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtFirmwareDir)
-                    .addComponent(btnFirmwareDir))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1)
+                        .addGap(4, 4, 4))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtFirmwareDir)
+                            .addComponent(btnFirmwareDir))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnFavDir)
+                            .addComponent(txtFavDir))
+                        .addGap(25, 25, 25)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -266,9 +250,6 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
     }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-    }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void btnFirmwareDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirmwareDirActionPerformed
         JFileChooser chooser = new JFileChooser(prefs.getCurrentFileDirectory()); 
@@ -307,12 +288,28 @@ public class PreferencesFrame extends javax.swing.JFrame {
         txtRuntimeDir.setText(System.getProperty(axoloti.Axoloti.RUNTIME_DIR));
     }//GEN-LAST:event_formWindowActivated
 
+    private void btnFavDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFavDirActionPerformed
+        JFileChooser chooser = new JFileChooser(prefs.getCurrentFileDirectory());
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            String dir;
+            try {
+                dir = chooser.getSelectedFile().getCanonicalPath();
+                prefs.setFavouriteDir(dir);
+                txtFavDir.setText(dir);
+            } catch (IOException ex) {
+                Logger.getLogger(PreferencesFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnFavDirActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFavDir;
     private javax.swing.JButton btnFirmwareDir;
     private javax.swing.JButton btnRuntimeDir;
     private javax.swing.JButton jButtonSave;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -322,6 +319,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextFieldPollInterval;
     private javax.swing.JTextPane jTextPanePath;
+    private javax.swing.JLabel txtFavDir;
     private javax.swing.JLabel txtFirmwareDir;
     private javax.swing.JLabel txtRuntimeDir;
     // End of variables declaration//GEN-END:variables

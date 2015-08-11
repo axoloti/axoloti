@@ -50,13 +50,16 @@ public class Preferences {
     Boolean ExpertMode;
     @ElementList(required = false)
     ArrayList<String> recentFiles = new ArrayList<String>();
+    
+    @Deprecated
     @Element(required = false)
     String MidiInputDevice;
-    
     @Element(required = false)
     String RuntimeDir;
     @Element(required = false)
     String FirmwareDir;
+    @Element(required = false)
+    String FavouriteDir;
     
     boolean isDirty = false;
 
@@ -80,8 +83,8 @@ public class Preferences {
         if (ExpertMode == null) {
             ExpertMode = false;
         }
-        if (MidiInputDevice == null) {
-            MidiInputDevice = "";
+        if (FavouriteDir == null) {
+            FavouriteDir = "";
         }
     }
 
@@ -160,7 +163,7 @@ public class Preferences {
                     } else {
                         System.setProperty(axoloti.Axoloti.FIRMWARE_DIR, prefs.FirmwareDir);
                     }
-
+                    singleton.MidiInputDevice = null; // clear it out for the future
                 } catch (Exception ex) {
                     Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -227,16 +230,16 @@ public class Preferences {
         SetDirty();
     }
 
-    public String getMidiInputDevice() {
-        return MidiInputDevice;
+    public String getFavouriteDir() {
+        return FavouriteDir;
     }
 
-    public void setMidiInputDevice(String MidiInputDevice) {
-        if (this.MidiInputDevice.equals(MidiInputDevice)) {
+    public void setFavouriteDir(String favouriteDir) {
+        if (this.FavouriteDir.equals(favouriteDir)) {
             return;
         }
-        this.MidiInputDevice = MidiInputDevice;
-        MainFrame.mainframe.initMidiInput(this.MidiInputDevice);
+        this.FavouriteDir = favouriteDir;
+        MainFrame.mainframe.updateFavouriteMenu();
         SetDirty();
     }
 
