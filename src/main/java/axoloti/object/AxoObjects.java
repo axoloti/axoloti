@@ -294,7 +294,32 @@ public class AxoObjects {
         if (folder.isDirectory()) {
             AxoObjectTreeNode t = LoadAxoObjectsFromFolder(folder, "");
             if (t.Objects.size() > 0 || t.SubNodes.size() > 0) {
-                ObjectTree.SubNodes.put(folder.getName(), t);
+                String dirname = folder.getName();
+                if(!ObjectTree.SubNodes.containsKey(dirname)) {
+                    ObjectTree.SubNodes.put(dirname, t);
+                } else {
+                    // it should be noted, here , we never see this name...
+                    // it just needs to be unique, so not to overwirte the map
+                    // but just in case it becomes relevant in the future
+                    String pname=dirname;
+                    try {
+                        pname = folder.getCanonicalFile().getParent();
+                    } catch (IOException ex) {
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    if(!ObjectTree.SubNodes.containsKey(pname)){
+                        ObjectTree.SubNodes.put(pname, t);
+                    } else {
+                        // hmm, lets use the orig name with number
+                        int i=1;
+                        dirname=folder.getName() + "#" + i;
+                        while(ObjectTree.SubNodes.containsKey(dirname)){
+                            i++;
+                            dirname=folder.getName() + "#" + i;
+                        }
+                        ObjectTree.SubNodes.put(dirname, t);
+                    }
+                }
             }
         }
     }
