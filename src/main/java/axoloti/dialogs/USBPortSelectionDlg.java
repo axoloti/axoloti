@@ -241,6 +241,11 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
             }
         });
         jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -282,9 +287,7 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        cpuid = (String) model.getValueAt(0, 2);
-        setVisible(false);
+        onSelect();
     }//GEN-LAST:event_jButtonOKActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
@@ -296,6 +299,23 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
         Populate();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+      if (evt.getClickCount() == 2) {
+          onSelect();
+      }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void onSelect() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int selRow = 0;
+        if (jTable1.getSelectedRowCount() > 0 ) {
+            selRow = jTable1.getSelectedRow();
+        }
+        cpuid = (String) model.getValueAt(selRow, 2);
+        setVisible(false);        
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonCancel;
