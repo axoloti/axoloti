@@ -1253,7 +1253,14 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         if (cpuId == null) {
             jLabelCPUID.setText(" ");
         } else {
-            jLabelCPUID.setText("Cpu ID = " + cpuId);
+            String name = MainFrame.prefs.getBoardName(cpuId);
+            String txt;
+            if(name==null) {
+                jLabelCPUID.setText("Cpu ID = " + cpuId);
+            } else {
+                jLabelCPUID.setText("Cpu ID = " + cpuId + " ( " + name + " ) ");
+            }
+            
         }
     }
 

@@ -20,10 +20,12 @@ package axoloti.utils;
 import axoloti.MainFrame;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -61,6 +63,9 @@ public class Preferences {
     @Element(required = false)
     String FavouriteDir;
     
+    @ElementMap(required=false, entry="Boards", key="cpuid", attribute=true, inline=true)
+    HashMap<String,String> BoardNames;
+    
     boolean isDirty = false;
 
     final int nRecentFiles = 8;
@@ -85,6 +90,9 @@ public class Preferences {
         }
         if (FavouriteDir == null) {
             FavouriteDir = "";
+        }
+        if (BoardNames == null) {
+            BoardNames = new HashMap<String, String>();
         }
     }
 
@@ -251,5 +259,22 @@ public class Preferences {
     public void SetRuntimeDir(String dir) {
         RuntimeDir = dir;
         System.setProperty(axoloti.Axoloti.RUNTIME_DIR, dir);
+    }
+
+    public String getBoardName(String cpu) {
+        if(cpu==null) return null;
+        if (BoardNames.containsKey(cpu)) 
+            return BoardNames.get(cpu);
+        return null;
+    }
+
+    public void setBoardName(String cpuid, String name) {
+        if (name == null) {
+            BoardNames.remove(cpuid);
+        }
+        else {
+            BoardNames.put(cpuid, name);
+        }
+        SetDirty();
     }
 }

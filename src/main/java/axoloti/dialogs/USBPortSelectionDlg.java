@@ -17,6 +17,7 @@
  */
 package axoloti.dialogs;
 
+import axoloti.MainFrame;
 import static axoloti.usb.Usb.DeviceToPath;
 import static axoloti.usb.Usb.PID_AXOLOTI;
 import static axoloti.usb.Usb.PID_STM_DFU;
@@ -24,9 +25,13 @@ import static axoloti.usb.Usb.VID_AXOLOTI;
 import static axoloti.usb.Usb.VID_STM;
 import axoloti.utils.OSDetect;
 import static axoloti.utils.OSDetect.getOS;
+import axoloti.utils.Preferences;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import org.usb4java.Device;
 import org.usb4java.DeviceDescriptor;
 import org.usb4java.DeviceHandle;
@@ -67,10 +72,10 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                 DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                 int r = jTable1.getSelectedRow();
                 if (r >= 0) {
-                    String devName = (String) model.getValueAt(r, 0);
+                    String devName = (String) model.getValueAt(r, 1);
                     if (devName.equals(sAxolotiCore)) {
                         jButtonOK.setEnabled(true);
-                        cpuid = (String) model.getValueAt(r, 2);
+                        cpuid = (String) model.getValueAt(r, 3);
                     } else {
                         jButtonOK.setEnabled(false);
                     }
@@ -79,6 +84,25 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                 }
             }
         });
+        
+        jTable1.getModel().addTableModelListener(new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if(column!=0) return;
+                
+                TableModel model = (TableModel)e.getSource();
+                String name = (String) model.getValueAt(row, column);
+                String cpuid = (String) ((DefaultTableModel) jTable1.getModel()).getValueAt(row, 3);
+                Preferences prefs = MainFrame.mainframe.prefs;
+                prefs.setBoardName(cpuid,name);
+                prefs.SavePrefs();
+            }
+        });
+        
+        
     }
 
     public static String ErrorString(int result) {
@@ -128,17 +152,17 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                             if (result < 0) {
                                 if (getOS() == OSDetect.OS.WIN) {
                                     if (result == LibUsb.ERROR_NOT_SUPPORTED) {
-                                        model.addRow(new String[]{sDFUBootloader, DeviceToPath(device), "not accesseable : wrong driver installed"});
+                                        model.addRow(new String[]{"",sDFUBootloader, DeviceToPath(device), "not accesseable : wrong driver installed"});
                                     } else if (result == LibUsb.ERROR_ACCESS) {
-                                        model.addRow(new String[]{sDFUBootloader, DeviceToPath(device), "not accesseable : busy?"});
+                                        model.addRow(new String[]{"",sDFUBootloader, DeviceToPath(device), "not accesseable : busy?"});
                                     } else {
-                                        model.addRow(new String[]{sDFUBootloader, DeviceToPath(device), "not accesseable : " + result});
+                                        model.addRow(new String[]{"",sDFUBootloader, DeviceToPath(device), "not accesseable : " + result});
                                     }
                                 } else {
-                                    model.addRow(new String[]{sDFUBootloader, DeviceToPath(device), "not accesseable : " + result});
+                                    model.addRow(new String[]{"",sDFUBootloader, DeviceToPath(device), "not accesseable : " + result});
                                 }
                             } else {
-                                model.addRow(new String[]{sDFUBootloader, DeviceToPath(device), "driver OK, CPU ID indeterminate"});
+                                model.addRow(new String[]{"",sDFUBootloader, DeviceToPath(device), "driver OK, CPU ID indeterminate"});
                                 LibUsb.close(handle);
                             }
                         }
@@ -146,10 +170,12 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                         DeviceHandle handle = new DeviceHandle();
                         result = LibUsb.open(device, handle);
                         if (result < 0) {
-                            model.addRow(new String[]{sAxolotiCore, DeviceToPath(device), ErrorString(result)});
+                            model.addRow(new String[]{"",sAxolotiCore, DeviceToPath(device), ErrorString(result)});
                         } else {
                             String serial = LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber());
-                            model.addRow(new String[]{sAxolotiCore, DeviceToPath(device), serial});
+                            String name = MainFrame.prefs.getBoardName(serial);
+                            if(name==null) name = "";
+                            model.addRow(new String[]{name,sAxolotiCore, DeviceToPath(device), serial});
                             LibUsb.close(handle);
                         }
                     }
@@ -158,7 +184,7 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                 }
             }
             for (int r = 0; r < model.getRowCount(); r++) {
-                String id = (String) model.getValueAt(r, 2);
+                String id = (String) model.getValueAt(r, 3);
                 if (id.equals(this.defCPUID)) {
                     jTable1.setRowSelectionInterval(r, r);
                 }
@@ -222,14 +248,14 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Device", "Location", "CPU ID"
+                "Name", "Device", "Location", "CPU ID"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                true, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -311,7 +337,7 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
         if (jTable1.getSelectedRowCount() > 0 ) {
             selRow = jTable1.getSelectedRow();
         }
-        cpuid = (String) model.getValueAt(selRow, 2);
+        cpuid = (String) model.getValueAt(selRow, 3);
         setVisible(false);        
     }
     
