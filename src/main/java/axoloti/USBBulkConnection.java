@@ -466,7 +466,12 @@ public class USBBulkConnection extends Connection {
         USBPortSelectionDlg spsDlg = new USBPortSelectionDlg(null, true, cpuid);
         spsDlg.setVisible(true);
         cpuid = spsDlg.getCPUID();
-        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: {0}", cpuid);
+        String name = MainFrame.prefs.getBoardName(cpuid);
+        if(name==null) {
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: {0}", cpuid);
+        } else {
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: {0} name: {1}", new Object[]{cpuid, name});
+        }
     }
 
     class Sync {
