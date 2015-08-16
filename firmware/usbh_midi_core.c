@@ -238,12 +238,12 @@ USBH_ClassTypeDef  MIDI_Class = {
 
 inline bool isValidInput(MIDI_HandleTypeDef* pH)
 {
-    return pH->input_valid;
+    return pH!= NULL && pH->input_valid;
 }
 
 inline bool isValidOutput(MIDI_HandleTypeDef* pH)
 {
-    return pH->output_valid;
+    return pH!= NULL && pH->output_valid;
 }
 
 /*-----------------------------------------------------------------------------------------*/
@@ -362,22 +362,27 @@ static USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
  * @retval None
  */
 USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (__attribute__((__unused__))  USBH_HandleTypeDef *phost) {
-   	USBH_UsrLog("USBH_MIDI_InterfaceDeInit : closing interface");
-#if 0
+   	USBH_UsrLog("USB Host : device disconnected");
     MIDI_HandleTypeDef *MIDI_Handle = phost->pActiveClass->pData;
     if (isValidOutput(MIDI_Handle)) {
-        USB_OTG_HC_Halt(phost, MIDI_Handle->OutPipe);
-        USBH_Free_Channel(phost, MIDI_Handle->OutPipe);
+        USBH_ClosePipe(phost, MIDI_Handle->OutPipe);
+        USBH_FreePipe(phost, MIDI_Handle->OutPipe);
         MIDI_Handle->OutPipe = 0;
         MIDI_Handle->output_valid = false;
     }
     if (isValidInput(MIDI_Handle)) {
-        USB_OTG_HC_Halt(phost, MIDI_Handle->InPipe);
-        USBH_Free_Channel(phost, MIDI_Handle->InPipe);
+        USBH_ClosePipe(phost, MIDI_Handle->InPipe);
+        USBH_FreePipe(phost, MIDI_Handle->InPipe);
         MIDI_Handle->InPipe = 0;
         MIDI_Handle->input_valid = false;
     }
-#endif 
+    
+    if(phost->pActiveClass->pData)
+    {
+        USBH_free (phost->pActiveClass->pData);
+        phost->pActiveClass->pData = NULL;
+    }
+
     return USBH_OK;
 }
 /*-----------------------------------------------------------------------------------------*/
