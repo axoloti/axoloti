@@ -64,7 +64,9 @@ static struct {
 
 void usbh_midi_init(void)
 {
-    send_ring_buffer.read_ptr = send_ring_buffer.write_ptr = 0;
+    // make no bytes available for output, initialise will reset
+    send_ring_buffer.read_ptr  = 0;
+    send_ring_buffer.write_ptr = RING_BUFFER_SIZE - 1;
 }
 
 
@@ -205,7 +207,7 @@ int  usbh_MidiGetOutputBufferPending(void) {
 }
 
 int  usbh_MidiGetOutputBufferAvailable(void) {
-	return RING_BUFFER_SIZE - usbh_MidiGetOutputBufferPending();
+	return RING_BUFFER_SIZE - usbh_MidiGetOutputBufferPending() - 1;
 }
 
 /** @defgroup USBH_MIDI_CORE_Private_Variables
@@ -344,6 +346,10 @@ static USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
                 USBH_LL_SetToggle  (phost, MIDI_Handle->InPipe,0);
             }
             status = USBH_OK;
+
+            // ring buffer ready to use
+            send_ring_buffer.read_ptr  = send_ring_buffer.write_ptr = 0;
+
             return status;
         } // if, a midi interface
   
@@ -382,6 +388,10 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (__attribute__((__unused__))  USBH
         USBH_free (phost->pActiveClass->pData);
         phost->pActiveClass->pData = NULL;
     }
+
+    // make no bytes available for output
+    send_ring_buffer.read_ptr  = 0;
+    send_ring_buffer.write_ptr = RING_BUFFER_SIZE - 1;
 
     return USBH_OK;
 }
