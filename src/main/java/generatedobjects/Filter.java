@@ -95,7 +95,9 @@ public class Filter extends gentools {
 
         o.sLocalData = "data_filter_biquad_A fd;\n";
         o.sInitCode = "  init_filter_biquad_A(&fd);\n";
-        o.sKRateCode = " f_filter_biquad_A(&fd,%in%,%out%,%frequency%,INT_MAX - (__USAT(inlet_reso,27)<<4));\n";
+        o.sKRateCode = "      int32_t freq;\n"
+                + "      MTOF(inlet_frequency,freq);\n"
+                + " f_filter_biquad_A(&fd,inlet_in,outlet_out,freq,INT_MAX - (__USAT(inlet_reso,27)<<4));\n";
         return o;
     }
 

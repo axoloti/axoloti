@@ -1,6 +1,5 @@
 <objdefs>
-   <obj.normal id="vcf" uuid="2b0aad6aeb06cc86c5802d2f167e9f281d8c35e1" sha="838b6adfe63e6f1adf30485ead56d8663d221313">
-      <upgradeSha>89d5d3e9b0b4c460f17d5d8f384a3e92a4196e5</upgradeSha>
+   <obj.normal id="vcf" uuid="2b0aad6aeb06cc86c5802d2f167e9f281d8c35e1" sha="2bbcd1be0462b1f2637c334c66fe1a4719be61e2">
       <sDescription>2-pole resonant low-pass filter (biquad), filter updated at k-rate</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -20,7 +19,9 @@
 ]]></code.declaration>
       <code.init><![CDATA[  init_filter_biquad_A(&fd);
 ]]></code.init>
-      <code.krate><![CDATA[ f_filter_biquad_A(&fd,inlet_in,outlet_out,inlet_frequency,INT_MAX - (__USAT(inlet_reso,27)<<4));
+      <code.krate><![CDATA[      int32_t freq;
+      MTOF(inlet_frequency,freq);
+ f_filter_biquad_A(&fd,inlet_in,outlet_out,freq,INT_MAX - (__USAT(inlet_reso,27)<<4));
 ]]></code.krate>
    </obj.normal>
 </objdefs>
