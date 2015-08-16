@@ -46,7 +46,7 @@ USB_Setup_TypeDef MIDI_Setup;
 #define MIDI_MIN_READ_POLL 1
 #define MIDI_MIN_WRITE_POLL 1
 
-#define RING_BUFFER_SIZE 128
+#define RING_BUFFER_SIZE 64
 
 typedef struct
 {
