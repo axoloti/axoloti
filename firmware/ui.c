@@ -325,8 +325,8 @@ void EnterMenuLoad(void) {
       }
       else {
         int l = strlen(fn);
-        if ((fn[l - 4] == '.') && (fn[l - 3] == 'b') && (fn[l - 2] == 'i')
-            && (fn[l - 1] == 'n')) {
+        if ((fn[l - 4] == '.') && (fn[l - 3] == 'B') && (fn[l - 2] == 'I')
+            && (fn[l - 1] == 'N')) {
           char *s;
           s = (char *)memp;
           strcpy(s, fn);

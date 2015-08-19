@@ -31,8 +31,8 @@ Note: see how connected was in RED, this shows an important log message, often e
 We will be looking at the console window more, when we discuss transferring patches to the Axoloti board.
 
 #Patch Window
-This is where the fun starts, as this is where the we create our synths, sequencers, or what ever else is in our imagination.
-Lets start by looking at a patch so see what we can do....
+This is where the fun starts, as this is where we create our synths, sequencers, or what ever else is in our imagination.
+Lets start by looking at a patch to see what we can do....
 
 Use the File menu, and you can see there are options to create a new patch, open patch... and also a Library menu, which contains tutorials and demos.
 So lets start with a demo. 
@@ -80,7 +80,7 @@ Leaving Live mode, easy... just click the Live checkbox again
 
 #Edit Mode
 
-Ok before we start editing lets get a little familiar with the what a patch is...
+Ok before we start editing lets get a little familiar with what a patch is...
 
 The boxes are referred to as 'objects', and are like modules in a modular synth.
 objects contain inlets to connect to, and outlets to connect to other objects by using  virtual wires or connections.
