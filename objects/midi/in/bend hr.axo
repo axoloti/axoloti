@@ -1,0 +1,35 @@
+<objdefs>
+   <obj.normal id="bend hr" uuid="e4fa0e78f7aa37d4ece5dbd5b5fc726de695a035" sha="9ca23789dd53775d907a0815b5b0005b4aa9f90e">
+      <upgradeSha>47b353062c7e5a6917ea3b5e82c41cb96f50b484</upgradeSha>
+      <sDescription>Midi pitch bend input hi res</sDescription>
+      <author>Mark Harris</author>
+      <license>BSD</license>
+      <helpPatch>midi_in.axh</helpPatch>
+      <inlets/>
+      <outlets>
+         <frac32.bipolar name="bend" description="pitch bend, -64..64"/>
+         <bool32.pulse name="trig" description="trigger output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="ccl" MinValue="0" MaxValue="127" DefaultValue="85"/>
+      </attribs>
+      <code.declaration><![CDATA[int32_t _bend,bendl;
+int32_t ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[_bend = 0;bendl = 0;
+ntrig = 0;
+]]></code.init>
+      <code.krate><![CDATA[outlet_bend = _bend;
+outlet_trig = ntrig;
+ntrig = 0;
+]]></code.krate>
+      <code.midihandler><![CDATA[if (status == MIDI_PITCH_BEND + attr_midichannel) {  _bend = (((int)((data2<<7)+data1)-0x2000)<<14) + bendl;
+  ntrig = 1;
+} else if ((status == attr_midichannel + MIDI_CONTROL_CHANGE) && (data1 == attr_ccl)) {
+   bendl = data2 << 7;
+}
+]]></code.midihandler>
+   </obj.normal>
+</objdefs>
