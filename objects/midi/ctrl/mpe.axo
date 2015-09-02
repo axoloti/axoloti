@@ -1,7 +1,7 @@
 <objdefs>
-   <obj.normal id="mpe" uuid="94323477e6476a10b9332922e5dfcd2705641af1" sha="f897a9eb2f105dc7affd4af77664b52866c85d36">
-      <upgradeSha>3bfe643daf126a01a52ec457bad48ce9e408235c</upgradeSha>
-      <sDescription>Controller input for MIDI Polyphonic Rxpression</sDescription>
+   <obj.normal id="mpe" uuid="94323477e6476a10b9332922e5dfcd2705641af1" sha="b1886949cbef5dc9c062eca181ab249dbd290efa">
+      <upgradeSha>b39879a6eb8c4ee46c3763f469101ab7003cfbae</upgradeSha>
+      <sDescription>Controller input for MIDI Polyphonic Expression</sDescription>
       <author>Mark Harris</author>
       <license>BSD</license>
       <helpPatch>mpe.axh</helpPatch>
@@ -33,7 +33,7 @@ uint8_t _lastRPN_LSB;
 uint8_t _lastRPN_MSB;
 uint8_t _bendRange;
 int32_t _pitch;
-]]></code.declaration>
+int32_t _xl,_yl,_zl;static const uint8_t xccl = 85;static const uint8_t yccl = 87;static const uint8_t zccl = 86;]]></code.declaration>
       <code.init><![CDATA[
 _gate = 0;
 _note = 0;
@@ -41,6 +41,7 @@ _pressure = 0;
 _bend = 0;
 _timbre = 0;
 _bendRange = 48;
+_xl=_yl=_zl=0;
 ]]></code.init>
       <code.krate><![CDATA[
 outlet_note= _note<<21;
@@ -69,14 +70,17 @@ if ((status == MIDI_NOTE_ON + attr_midichannel) && (data2)) {
     _pressure = 0;
   }
 } else if (status == attr_midichannel + MIDI_CHANNEL_PRESSURE) {
-  _pressure = data1<<20;
+  _pressure = (data1<<20) + _zl;
 } else if (status == attr_midichannel + MIDI_PITCH_BEND) {
-  _bend = ((int)((data2<<7)+data1)-0x2000)<<14;
+  _bend = (((int)((data2<<7)+data1)-0x2000)<<14) + _xl;
   _pitch = (_note << 21) + ((_bend >> 6)* _bendRange );
 } else if (status == attr_midichannel + MIDI_CONTROL_CHANGE) {
   if (data1 == MIDI_C_TIMBRE) {
-    _timbre = ((int)(data2<<7)-0x2000)<<14;
-  } else if(data1 == MIDI_C_ALL_NOTES_OFF) {
+    _timbre = (((int)(data2<<7)-0x2000)<<14) + _yl;
+  } else if (data1 == zccl) {
+   _zl = data2 << 13;  } else if (data1 == xccl) {
+   _xl = data2 << 7;  } else if (data1 == yccl) {
+   _yl = data2 << 14;  } else if(data1 == MIDI_C_ALL_NOTES_OFF) {
     _gate = 0;
   } else if (data1 == MIDI_C_RPN_MSB || data1 == MIDI_C_RPN_LSB || data1 == MIDI_C_DATA_ENTRY) {
     switch(data1) {

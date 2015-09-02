@@ -1,0 +1,37 @@
+<objdefs>
+   <obj.normal id="cc hr i" uuid="72d8018c0f072c469fcd902b0423ba8fd5e6433" sha="e45bd1c5e4ff2f708c69432c32b67e4499ffdcca">
+      <upgradeSha>9bf570ac84bec83ba6f56ccd4f788ef77409dce7</upgradeSha>
+      <sDescription>Receives Midi Continuous Controller messages, 14 bit, float output</sDescription>
+      <author>Mark Harris</author>
+      <license>BSD</license>
+      <helpPatch>midi_in.axh</helpPatch>
+      <inlets/>
+      <outlets>
+         <frac32.positive name="midiCC" description="midi CC 0.0-64.0"/>
+         <bool32.pulse name="trig" description="trigger output"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs>
+         <spinner name="cc" MinValue="0" MaxValue="127" DefaultValue="0"/>
+         <spinner name="default" MinValue="0" MaxValue="127" DefaultValue="0"/>
+      </attribs>
+      <code.declaration><![CDATA[uint32_t ccl;
+uint32_t _ccv;
+uint8_t ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[_ccv = attr_default;ccl=0;ntrig=0;
+]]></code.init>
+      <code.krate><![CDATA[ outlet_midiCC= _ccv;
+outlet_trig = ntrig;
+ntrig = 0;
+]]></code.krate>
+      <code.midihandler><![CDATA[if ((status == attr_midichannel + MIDI_CONTROL_CHANGE) && (data1 == attr_cc)) {
+  _ccv = (data2 << 20) + ccl ;
+  ntrig = 1;
+} else if ((status == attr_midichannel + MIDI_CONTROL_CHANGE) && (data1 == (attr_cc+32))) {
+   ccl = data2 << 13;
+}
+]]></code.midihandler>
+   </obj.normal>
+</objdefs>
