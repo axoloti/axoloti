@@ -1220,7 +1220,9 @@ public void ShowCompileFail() {
                 + "      PExParameterChange(pex,origin->modvalue,0xFFFFFFEE);\n"
                 + "}\n";
 
+        
         c += GenerateStructCodePlusPlus("rootc", false, "rootc")
+                + "static const int polyIndex = 0;\n"
                 + GenerateParamInitCode3("rootc")
                 + GeneratePresetCode3("rootc")
                 + GenerateInitCodePlusPlus("rootc")
@@ -1228,6 +1230,9 @@ public void ShowCompileFail() {
                 + GenerateDSPCodePlusPlus("rootc", false)
                 + GenerateMidiCodePlusPlus("rootc")
                 + GeneratePatchCodePlusPlus("rootc");
+
+        c = c.replace("attr_poly", "1");
+        
         if (settings == null) {
             c = c.replace("attr_midichannel", "0");
         } else {
@@ -1265,9 +1270,11 @@ public void ShowCompileFail() {
         }
         /* object structures */
 //         ao.sCName = fnNoExtension;
-        ao.sLocalData = GenerateStructCodePlusPlusSub("attr_parent", true);
+        ao.sLocalData = GenerateStructCodePlusPlusSub("attr_parent", true)
+                        + "static const int polyIndex = 0;\n";
         ao.sLocalData += GenerateParamInitCode3("");
         ao.sLocalData += GeneratePresetCode3("");
+        ao.sLocalData = ao.sLocalData.replaceAll("attr_poly", "1");
         ao.sInitCode = GenerateParamInitCodePlusPlusSub("attr_parent", "this");
         ao.sInitCode += GenerateObjInitCodePlusPlusSub("attr_parent", "this");
         ao.sDisposeCode = GenerateDisposeCodePlusPlusSub("attr_parent");

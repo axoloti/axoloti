@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="alloc 16b sdram" uuid="6d8eb0fd68f404cb5d14e7d4c8c146c8ccf09da1" sha="45edfe455be5f8c670a3c7f15c5fdd694aae5007">
-      <upgradeSha>e676cfd6165b33f48b68585d94681b986ca31e22</upgradeSha>
+   <obj.normal id="alloc 16b sdram" uuid="6d8eb0fd68f404cb5d14e7d4c8c146c8ccf09da1" sha="cb01936107b7ffc557704e6a7dcb4838fbb9fe02">
+      <upgradeSha>666ea27edeb33c103a061ea851dcb097985b9edb</upgradeSha>
       <sDescription>allocate 16bit table in SDRAM memory, -128.00 .. 127.99</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -67,8 +67,8 @@ static const uint32_t BITS = 16;
 static const uint32_t GAIN = 12;
 int16_t *array;
 ]]></code.declaration>
-      <code.init><![CDATA[static int16_t _array[LENGTH] __attribute__ ((section (".sdram")));
-array = _array;
+      <code.init><![CDATA[static int16_t _array[attr_poly][LENGTH] __attribute__ ((section (".sdram")));
+array = &_array[parent->polyIndex][0];
 { 
   int i;
   for(i=0;i<LENGTH;i++) array[i]=0;

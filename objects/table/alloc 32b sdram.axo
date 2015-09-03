@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="alloc 32b sdram" uuid="1a4546b7b52747ea765093ac97444601c44721e8" sha="e3795b93aca7568798d8dc37dff1dad002ba684">
-      <upgradeSha>4487420212d1a826e25aa61cd5abdc0238ea3207</upgradeSha>
+   <obj.normal id="alloc 32b sdram" uuid="1a4546b7b52747ea765093ac97444601c44721e8" sha="b1d59d2d6fb50c9999f11aa494fb0f0411301026">
+      <upgradeSha>f08ccbf86a1ba7ab420c79a9299d8821ae6ccedd</upgradeSha>
       <sDescription>allocate 32bit table in SDRAM memory</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -67,8 +67,8 @@ static const uint32_t BITS = 32;
 static const uint32_t GAIN = 0;
 int32_t *array;
 ]]></code.declaration>
-      <code.init><![CDATA[static int32_t _array[LENGTH] __attribute__ ((section (".sdram")));
-array = _array;
+      <code.init><![CDATA[static int32_t _array[attr_poly][LENGTH] __attribute__ ((section (".sdram")));
+array = &_array[parent->polyIndex][0];
 { 
   int i;
   for(i=0;i<LENGTH;i++) array[i]=0;

@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="write sdram" uuid="5ae03f8d7b815edcfc40585d8bbac2ed48460fba" sha="aa55d7ae111ced1fafde9a6f6386d746292dc8d1">
-      <upgradeSha>3b156a92fef726fce69a05c2e670a365457a1728</upgradeSha>
+   <obj.normal id="write sdram" uuid="5ae03f8d7b815edcfc40585d8bbac2ed48460fba" sha="63d300dd732507b7237b5fd45676bc14c9e77ce7">
+      <upgradeSha>f23229ed5bcfe9be1e32cc2bdef89205e2914866</upgradeSha>
       <sDescription>delayline definition, read it with &quot;delay/read&quot; objects referencing the instance name of this object</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -52,8 +52,8 @@ static const uint32_t LENGTH = (1<<attr_size);
 static const uint32_t LENGTHMASK = ((1<<attr_size)-1);
 int16_t *array;
 uint32_t writepos;]]></code.declaration>
-      <code.init><![CDATA[static int16_t _array[1<<attr_size]  __attribute__ ((section (".sdram")));
-array = _array;
+      <code.init><![CDATA[static int16_t _array[attr_poly][1<<attr_size]  __attribute__ ((section (".sdram")));
+array = &_array[parent->polyIndex][0];
    int i;
    writepos = 0;
    for(i=0;i<LENGTH;i++) array[i] = 0;

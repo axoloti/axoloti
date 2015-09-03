@@ -165,8 +165,8 @@ public class Delay extends gentools {
                 + "static const uint32_t LENGTHMASK = ((1<<%size%)-1);\n"
                 + "int16_t *array;\n"
                 + "uint32_t writepos;";
-        o.sInitCode = "static int16_t _array[1<<%size%]  __attribute__ ((section (\".sdram\")));\n"
-                + "array = _array;\n"
+        o.sInitCode = "static int16_t _array[attr_poly][1<<attr_size]  __attribute__ ((section (\".sdram\")));\n"
+                + "array = &_array[parent->polyIndex][0];\n"
                 + "   int i;\n"
                 + "   writepos = 0;\n"
                 + "   for(i=0;i<LENGTH;i++) array[i] = 0;\n";

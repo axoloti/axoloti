@@ -139,8 +139,8 @@ public class Table extends gentools {
                 + "static const uint32_t BITS = 8;\n"
                 + "static const uint32_t GAIN = 20;\n"
                 + "int8_t *array;\n";
-        o.sInitCode = "static int8_t _array[LENGTH] __attribute__ ((section (\".sdram\")));\n"
-                + "array = _array;\n"
+        o.sInitCode = "static int8_t _array[attr_poly][LENGTH] __attribute__ ((section (\".sdram\")));\n"
+                + "array = &_array[parent->polyIndex][0];\n"
                 + "{ \n"
                 + "  int i;\n"
                 + "  for(i=0;i<LENGTH;i++) array[i]=0;\n"
@@ -164,8 +164,8 @@ public class Table extends gentools {
                 + "static const uint32_t BITS = 16;\n"
                 + "static const uint32_t GAIN = 12;\n"
                 + "int16_t *array;\n";
-        o.sInitCode = "static int16_t _array[LENGTH] __attribute__ ((section (\".sdram\")));\n"
-                + "array = _array;\n"
+        o.sInitCode = "static int16_t _array[attr_poly][LENGTH] __attribute__ ((section (\".sdram\")));\n"
+                + "array = &_array[parent->polyIndex][0];\n"
                 + "{ \n"
                 + "  int i;\n"
                 + "  for(i=0;i<LENGTH;i++) array[i]=0;\n"
@@ -189,8 +189,8 @@ public class Table extends gentools {
                 + "static const uint32_t BITS = 32;\n"
                 + "static const uint32_t GAIN = 0;\n"
                 + "int32_t *array;\n";
-        o.sInitCode = "static int32_t _array[LENGTH] __attribute__ ((section (\".sdram\")));\n"
-                + "array = _array;\n"
+        o.sInitCode = "static int32_t _array[attr_poly][LENGTH] __attribute__ ((section (\".sdram\")));\n"
+                + "array = &_array[parent->polyIndex][0];\n"
                 + "{ \n"
                 + "  int i;\n"
                 + "  for(i=0;i<LENGTH;i++) array[i]=0;\n"
