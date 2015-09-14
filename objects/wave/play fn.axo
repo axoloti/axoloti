@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="play fn" uuid="25910f7130532e4934eed3cf2a934324790d0f00" sha="60926d7b3ffb8a3a9d5b9d72347f2797f413f2fc">
-      <upgradeSha>63d5dde6ced5795919efc3f3fed92b507d3767d9</upgradeSha>
+   <obj.normal id="play fn" uuid="25910f7130532e4934eed3cf2a934324790d0f00" sha="265ea21a8733c426440c843758b78eb5ae459cd9">
+      <upgradeSha>bb9bf009c724826f0c2ba3f250583ff51bfca2d</upgradeSha>
       <sDescription>streaming playback of a mono .wav file from sdcard (testing). Direct filename.</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -32,6 +32,7 @@
 stream = (sdReadFilePingpong *)(0x20000000 | (int)&s);
 stream->pingpong = CLOSED;
 stream->doSeek = 0;
+stream->offset = -1;
 starttrig = 0;
 stoptrig = 0;
 strcpy(&c[0],"attr_fn");

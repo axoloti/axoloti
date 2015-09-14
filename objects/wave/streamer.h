@@ -56,7 +56,7 @@ static __INL msg_t ThreadSD(void *arg) {
       busy = 0;
       sdReadFilePingpong *s = (sdReadFilePingpong *)arg;
       if (s->pingpong == OPEN) {
-        if (&s->offset >=0) {
+        if (s->offset >=0) {
           err = f_close(&s->f);
         }
         err = f_open(&s->f, &s->filename[0], FA_READ | FA_OPEN_EXISTING);
@@ -101,6 +101,7 @@ static __INL msg_t ThreadSD(void *arg) {
         s->pingpong = CLOSED;
         err = f_truncate(&s->f);
         err = f_close(&s->f);
+        s->offset = -1;
         LogTextMessage("closerec");
         busy = 1;
       }

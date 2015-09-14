@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="play" uuid="2e6265136dbaaf4d885a669520546de2e3306819" sha="e3de36b8d0f8cce60996ae9130adc960c34e9324">
-      <upgradeSha>68357f2db7e09bf1250419b560bee8b31558a7f7</upgradeSha>
+   <obj.normal id="play" uuid="2e6265136dbaaf4d885a669520546de2e3306819" sha="766385f1919d1fbf35897f3a145eff88a9466101">
+      <upgradeSha>4001586d0047477331b18d6208b99b5b1074d545</upgradeSha>
       <sDescription>streaming playback of a mono .wav file from sdcard (testing)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -30,6 +30,7 @@
 stream = (sdReadFilePingpong *)(0x20000000 | (int)&s);
 stream->pingpong = CLOSED;
 stream->doSeek = 0;
+stream->offset = -1;
 starttrig = 0;
 stoptrig = 0;
 stream->pThreadSD = chThdCreateStatic(waThreadSD, sizeof(waThreadSD),
