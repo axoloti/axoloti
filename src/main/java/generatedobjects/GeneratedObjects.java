@@ -233,7 +233,7 @@ public class GeneratedObjects extends gentools {
                 + "}\n"
                 + "else if (!(%inc%>0)) ntrig=0;\n"
                 + "if ((%dec%>0) && !dtrig) {\n"
-                + "   count--; if (count<0) {count = %maximum%; %c% = 1;}\n"
+                + "   count--; if (count<0) {count = %maximum%-1; %c% = 1;}\n"
                 + "   dtrig=1;\n"
                 + "}\n"
                 + "else if (!(%dec%>0)) dtrig=0;\n"

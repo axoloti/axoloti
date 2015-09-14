@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="counter2" uuid="d9536f238ab92e53ac93d5927c3b43ceef998dc1" sha="520bfefaef89b5ba4deb2a4d79b4236f0b321489">
-      <upgradeSha>15f2cb0c8e4088e3a7bd37444354cfabe7d005cf</upgradeSha>
+   <obj.normal id="counter2" uuid="d9536f238ab92e53ac93d5927c3b43ceef998dc1" sha="fc13210a4b0fe22801e8753bc335a08ac168b9e3">
+      <upgradeSha>777e797f3c71bcd213087a5d605621e81239b3f7</upgradeSha>
       <sDescription>cyclic up/down counter</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -39,7 +39,7 @@ if ((inlet_inc>0) && !ntrig) {
 }
 else if (!(inlet_inc>0)) ntrig=0;
 if ((inlet_dec>0) && !dtrig) {
-   count--; if (count<0) {count = param_maximum; outlet_c = 1;}
+   count--; if (count<0) {count = param_maximum-1; outlet_c = 1;}
    dtrig=1;
 }
 else if (!(inlet_dec>0)) dtrig=0;
