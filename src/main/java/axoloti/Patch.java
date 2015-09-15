@@ -134,8 +134,8 @@ public class Patch {
         GetQCmdProcessor().AppendToQueue(new QCmdStart(this));
         GetQCmdProcessor().AppendToQueue(new QCmdLock(this));
     }
-    
-public void ShowCompileFail() {
+
+    public void ShowCompileFail() {
         Unlock();
     }
 
@@ -232,7 +232,7 @@ public void ShowCompileFail() {
 
     public void SetDirty() {
         dirty = true;
-        if(container != null) {
+        if (container != null) {
             container.SetDirty();
         }
     }
@@ -251,15 +251,14 @@ public void ShowCompileFail() {
         return dirty;
     }
 
-    
     public Patch container() {
         return container;
-    }        
+    }
 
     public void container(Patch c) {
         container = c;
-    }        
-    
+    }
+
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         if (!IsLocked()) {
             if (obj == null) {
@@ -738,19 +737,7 @@ public void ShowCompileFail() {
         c += "    static const uint32_t NMODULATIONSOURCES = " + settings.GetNModulationSources() + ";\n";
         c += "    static const uint32_t NMODULATIONTARGETS = " + settings.GetNModulationTargetsPerSource() + ";\n";
         c += "    PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS];\n";
-        /*
-         c += "    void PExParameterChange(int index, int32_t value, int32_t mask) {\n"
-         + "  PExch[index].modvalue -= (patchMeta.pPExch)[index].value;\n"
-         + "  PExch[index].value = value;\n"
-         + "  PExch[index].modvalue += (patchMeta.pPExch)[index].value;\n"
-         + "  PExch[index].signals = mask;\n"
-         + "  if (PExch[index].pfunction) {\n"
-         + "    PExch[index].finalvalue =  (PExch[index].pfunction)(PExch[index].modvalue,index);\n"
-         + "  } else {\n"
-         + "    PExch[index].finalvalue = PExch[index].modvalue;\n"
-         + "  }\n"
-         + "}";
-         */
+        c += "    PExModulationTargetProd_t PExModulationProd[attr_poly][NMODULATIONSOURCES][NMODULATIONTARGETS];\n";
         return c;
     }
 
@@ -909,9 +896,13 @@ public void ShowCompileFail() {
         c += "      PExch[j].pfunction = 0;\n";
 //        c += "      PExch[j].finalvalue = p[j];\n"; /*TBC*/
         c += "   }\n";
+        c += "   PExModulationTargetProd_t *pp = &PExModulationProd[0][0][0];\n";
+        c += "   for(j=0;j<attr_poly*NMODULATIONSOURCES*NMODULATIONTARGETS;j++){\n";
+        c += "      *pp = 0; pp++;\n";
+        c += "   }\n";
         c += "   for(i=0;i<NMODULATIONSOURCES;i++) {\n"
                 + "	 for(j=0;j<NMODULATIONTARGETS;j++) {\n"
-                + "	   PExModulationSources[i][j].PEx = 0;\n"
+                + "	   PExModulationSources[i][j].parameterIndex = -1;\n"
                 + "	 }\n"
                 + "   };\n";
         c += "     displayVector[0] = 0x446F7841;\n"; // "AxoD"
@@ -1144,10 +1135,9 @@ public void ShowCompileFail() {
                 + "  }\n"
                 + "}\n\n";
 
-
         c += "void xpatch_init2(int fwid)\n"
                 + "{\n"
-                + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID+ ") {\n"
+                + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID + ") {\n"
                 + "    patchMeta.fptr_dsp_process = 0;\n"
                 + "    return;"
                 + "  }\n"
@@ -1220,7 +1210,6 @@ public void ShowCompileFail() {
                 + "      PExParameterChange(pex,origin->modvalue,0xFFFFFFEE);\n"
                 + "}\n";
 
-        
         c += GenerateStructCodePlusPlus("rootc", false, "rootc")
                 + "static const int polyIndex = 0;\n"
                 + GenerateParamInitCode3("rootc")
@@ -1232,7 +1221,7 @@ public void ShowCompileFail() {
                 + GeneratePatchCodePlusPlus("rootc");
 
         c = c.replace("attr_poly", "1");
-        
+
         if (settings == null) {
             c = c.replace("attr_midichannel", "0");
         } else {
@@ -1271,7 +1260,7 @@ public void ShowCompileFail() {
         /* object structures */
 //         ao.sCName = fnNoExtension;
         ao.sLocalData = GenerateStructCodePlusPlusSub("attr_parent", true)
-                        + "static const int polyIndex = 0;\n";
+                + "static const int polyIndex = 0;\n";
         ao.sLocalData += GenerateParamInitCode3("");
         ao.sLocalData += GeneratePresetCode3("");
         ao.sLocalData = ao.sLocalData.replaceAll("attr_poly", "1");
@@ -1465,6 +1454,10 @@ public void ShowCompileFail() {
         ao.sLocalData += "int32_t priority;\n";
         ao.sLocalData += "int32_t sustain;\n";
         ao.sLocalData += "int8_t pressed[attr_poly];\n";
+
+        ao.sLocalData = ao.sLocalData.replaceAll("parent->PExModulationSources", "parent->common->PExModulationSources");
+        ao.sLocalData = ao.sLocalData.replaceAll("parent->PExModulationProd", "parent->common->PExModulationProd");
+
         ao.sInitCode = GenerateParamInitCodePlusPlusSub("", "parent");
         ao.sInitCode += "int k;\n"
                 + "   for(k=0;k<NPEXCH;k++){\n"

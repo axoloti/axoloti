@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="keyb mod" uuid="abcd509d15e7d13d5381203fd2b4d0ac6fe57bb3" sha="f260e12fe47ac77a26f84d35423e8661908d3040">
-      <upgradeSha>28ee8d4a4d892435f85a18a03ef8ce40bcaad48e</upgradeSha>
+   <obj.normal id="keyb mod" uuid="abcd509d15e7d13d5381203fd2b4d0ac6fe57bb3" sha="f8104760e1bff277d234a0e23ad5dd9f5562efc4">
+      <upgradeSha>3d6d0662c94cade3f868bd248c4f86c6703f460</upgradeSha>
       <sDescription>Monophonic MIDI keyboard note input, gate, velocity and release velocity modulation source</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -42,14 +42,29 @@ outlet_releaseVelocity= _rvelo<<20;
   _note = data1-64;
   _gate = 1<<27;
   _gate2 = 0;
-  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name_velocity][0],NMODULATIONTARGETS,_velo<<20);
-  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name_note][0],NMODULATIONTARGETS,_note<<21);
+  PExModulationSourceChange(
+    &parent->PExModulationSources[parent->MODULATOR_attr_name_velocity][0],
+    &parent->PExModulationProd[parent->polyIndex][parent->MODULATOR_attr_name_velocity][0],
+    NMODULATIONTARGETS,
+    &parent->PExch[0],
+    _velo<<20);
+  PExModulationSourceChange(
+    &parent->PExModulationSources[parent->MODULATOR_attr_name_note][0],
+    &parent->PExModulationProd[parent->polyIndex][parent->MODULATOR_attr_name_note][0],
+    NMODULATIONTARGETS,
+    &parent->PExch[0],
+    _note<<21);
 } else if (((status == MIDI_NOTE_ON + attr_midichannel) && (!data2))||
           (status == MIDI_NOTE_OFF + attr_midichannel)) {
   if (_note == data1-64) {
     _rvelo = data2;
     _gate = 0;
-  PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name_releasevelocity][0],NMODULATIONTARGETS,_rvelo<<20);
+  PExModulationSourceChange(
+    &parent->PExModulationSources[parent->MODULATOR_attr_name_releasevelocity][0],
+    &parent->PExModulationProd[parent->polyIndex][parent->MODULATOR_attr_name_releasevelocity][0],
+    NMODULATIONTARGETS,
+    &parent->PExch[0],
+    _rvelo<<20);
   }
 } else if ((status == attr_midichannel + MIDI_CONTROL_CHANGE)&&(data1 == MIDI_C_ALL_NOTES_OFF)) {
   _gate = 0;

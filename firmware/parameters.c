@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013, 2014, 2015 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -20,18 +20,21 @@
 #include "axoloti_math.h"
 
 void PExModulationSourceChange(PExModulationTarget_t *modulation,
-                               int32_t nTargets, int32_t value) {
+                               PExModulationTargetProd_t *product,
+                               int32_t nTargets,
+                               ParameterExchange_t *parameters,
+                               int32_t value) {
   PExModulationTarget_t *s = modulation;
   int t;
   for (t = 0; t < nTargets; t++) {
     PExModulationTarget_t *target = &s[t];
-    ParameterExchange_t *PEx = target->PEx;
-    if (!PEx)
+    if (target->parameterIndex == -1)
       continue;
+    ParameterExchange_t *PEx = &parameters[target->parameterIndex];
     int32_t v = PEx->modvalue;
-    v -= target->prod;
+    v -= product[t];
     int32_t n = ___SMMUL(value, target->amount) << 5;
-    target->prod = n;
+    product[t] = n;
     v += n;
     PEx->modvalue = v;
     if (PEx->pfunction) {

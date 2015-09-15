@@ -188,9 +188,14 @@ public class Patch extends gentools {
         AxoObject o = new AxoObject("modsource_cc", "midi cc modulation source");
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
         o.SetProvidesModulationSource();
-        o.sMidiCode = "        if ((status == MIDI_CONTROL_CHANGE + attr_midichannel)&&(data1 == %cc%)) {\n"
-                + "            PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name][0],NMODULATIONTARGETS,data2<<20);\n"
-                + "        }\n";
+        o.sMidiCode = "if ((status == MIDI_CONTROL_CHANGE + attr_midichannel)&&(data1 == %cc%)) {\n"
+                + "  PExModulationSourceChange(\n"
+                + "    &parent->PExModulationSources[parent->MODULATOR_attr_name][0],\n"
+                + "    &parent->PExModulationProd[parent->polyIndex][parent->MODULATOR_attr_name][0],\n"
+                + "    NMODULATIONTARGETS,\n"
+                + "    &parent->PExch[0],\n"
+                + "    data2<<20);\n"
+                + "}\n";
         return o;
     }
 
@@ -204,7 +209,15 @@ public class Patch extends gentools {
 //        o.sInitCode = "int i;\n"
 //                + "for(i=0;i<NMODULATIONTARGETS;i++)\n"
 //                + "   parent2->PExModulationSources[MODULATOR_%name%][i].PEx = 0;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {PExModulationSourceChange(&parent->PExModulationSources[MODULATOR_attr_name][0],NMODULATIONTARGETS,%v%);  ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {\n"
+                + "  PExModulationSourceChange(\n"
+                + "    &parent->PExModulationSources[parent->MODULATOR_attr_name][0],\n"
+                + "    &parent->PExModulationProd[parent->polyIndex][parent->MODULATOR_attr_name][0],\n"
+                + "    NMODULATIONTARGETS,\n"
+                + "    &parent->PExch[0],\n"
+                + "    %v%);"
+                + "  ntrig=1;\n"
+                + "}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
