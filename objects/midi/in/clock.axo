@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="clock" uuid="f1aa3a79d6de9bd6d38dc64c9d4bb5c9de4f4198" sha="1637298ca1893391b89d9c016c7ae76d752acf72">
-      <upgradeSha>13586a64672deab674298a2d8c8ad917b055c653</upgradeSha>
+   <obj.normal id="clock" uuid="f1aa3a79d6de9bd6d38dc64c9d4bb5c9de4f4198" sha="91b0b615d5152624e86190bff106bdf7f7eb6b36">
+      <upgradeSha>b65bc9ea4362ec738d0cacd52dcee768b0b2102f</upgradeSha>
       <sDescription>Midi clock slave</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -27,7 +27,6 @@ outlet_pos4ppq = _pos/6;
 outlet_pos24ppq = _pos;
 ]]></code.krate>
       <code.midihandler><![CDATA[if (status == MIDI_TIMING_CLOCK) {
-  _active = 1;
   _pos_shadow++;
   _pos = _pos_shadow;
 } else if (status == MIDI_START) {
