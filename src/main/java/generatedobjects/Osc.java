@@ -29,7 +29,10 @@ import axoloti.outlets.OutletFrac32Bipolar;
 import axoloti.outlets.OutletFrac32BufferBipolar;
 import axoloti.outlets.OutletFrac32BufferPos;
 import axoloti.parameters.ParameterFrac32SMapPitch;
+import axoloti.parameters.ParameterFrac32UMap;
 import axoloti.parameters.ParameterFrac32UMapFreq;
+import axoloti.parameters.ParameterFrac32UMapGain;
+import axoloti.parameters.ParameterFrac32UMapGain16;
 import static generatedobjects.gentools.WriteAxoObject;
 import java.util.HashSet;
 
@@ -47,11 +50,14 @@ public class Osc extends gentools {
         WriteAxoObject(catName, CreateSRateSineOsc4());
 //        WriteAxoObject(unstable + "osc", CreateSRateSineOsc5());
         WriteAxoObject(catName, CreateSRateSineOsc5());
+//        WriteAxoObject(catName, CreateSineAdd8());
 //        WriteAxoObject("osc",CreateSawTilde());
 //        WriteAxoObject("osc", CreateSaw2Tilde());
         WriteAxoObject(catName, CreateSaw3Tilde());
         WriteAxoObject(catName, CreateSawSyncTilde());
         WriteAxoObject(catName, CreateSawTilde_cheap());
+        WriteAxoObject(catName, CreateSaw7());
+//        WriteAxoObject(catName, CreateSquare7());
         WriteAxoObject(catName, CreateTriTilde());
         WriteAxoObject(catName, CreateTriTilde_cheap());
         WriteAxoObject(catName, CreateSquareTilde());
@@ -98,6 +104,40 @@ public class Osc extends gentools {
                 + "SINE2TINTERP(p2,r)\n"
                 + "outlet_wave= (r>>4);\n";
         return o;
+    }
+
+    static AxoObject CreateSineAdd8() {
+        AxoObject o = new AxoObject("sine 8", "sine wave oscillator");
+        o.outlets.add(new OutletFrac32BufferBipolar("wave", "sine wave"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.inlets.add(new InletFrac32Buffer("freq", "frequency"));
+        o.inlets.add(new InletFrac32Buffer("phase", "phase"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        int n = 8;
+        for (int i = 0; i < n; i++) {
+            o.params.add(new ParameterFrac32UMap("ratio" + (i + 1)));
+            o.params.add(new ParameterFrac32UMapGain("gain" + (i + 1)));
+        }
+        o.sLocalData = "uint32_t Phase[" + n + "];";
+        o.sInitCode = "int i;"
+                + "for(i=0;i<" + n + ";i++) Phase[i] = 0;";
+        o.sKRateCode = "   int32_t freq;\n"
+                + "   MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n";
+        o.sSRateCode = "int32_t acc = 0;";
+        for (int i = 0; i < n; i++) {
+            o.sSRateCode += "Phase[" + i + "] +=   ;\n"
+                    + " "
+                    + "acc = smmla(,,acc);\n";
+        }
+        /*
+         +"Phase[0] = "
+         + "Phase += freq + inlet_freq;\n"
+         + "int32_t r;\n"
+         + "int32_t p2 = Phase + (inlet_phase<<4);\n"
+         + "SINE2TINTERP(p2,r)\n"
+         + "outlet_wave= (r>>4);\n";*/
+        return o;
+
     }
 
     static AxoObject CreateSRateSineOsc5() {
@@ -230,6 +270,101 @@ public class Osc extends gentools {
                 + "    osc_p+=freq;\n"
                 + "    outlet_wave[j] = (osc_p)>>5;\n"
                 + "  }\n";
+        return o;
+    }
+
+    static AxoObject CreateSaw7() {
+        AxoObject o = new AxoObject("supersaw", "seven detuned saw wave oscillators\nNon-bandwith limited");
+        o.outlets.add(new OutletFrac32BufferBipolar("wave", "supersaw wave"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.includes = new HashSet<String>();
+        o.sLocalData = "  int32_t osc_p[7];\n";
+        o.sInitCode = "int i;\n"
+                + "for(i=0;i<7;i++)\n"
+                + "    osc_p[i]=0;\n";
+        o.sKRateCode = "  uint32_t f0;\n"
+                + "  uint32_t f[6];\n"
+                + "  MTOFEXTENDED(param_pitch + inlet_pitch,f0);\n"
+                + "  int i,j;\n"
+                + "  f[0] = ___SMMLA(f0,-0x05432123,f0);\n"
+                + "  f[1] = ___SMMLA(f0,-0x03111111,f0);\n"
+                + "  f[2] = ___SMMLA(f0,-0x01020304,f0);\n"
+                + "  f[3] = ___SMMLA(f0,0x01030450,f0);\n"
+                + "  f[4] = ___SMMLA(f0,0x03212121,f0);\n"
+                + "  f[5] = ___SMMLA(f0,0x05542211,f0);\n"
+                + "  int32_t f0i = 0x7fffffff/(1+((int)f0)>>11);\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    int32_t p1 = osc_p[6];\n"
+                + "    int32_t p2 = p1 + f0;\n"
+                + "    osc_p[6] = p2;\n"
+                + "    if ((p2<0)&&(p1>0))\n"
+                + "      outlet_wave[j] = ___SMMLS(f0i, p2<<1, 0x400)<<14;\n"
+                + "    else\n"
+                + "      outlet_wave[j] = p2>>7;\n"
+                + "\n"
+                + "    for(i=0;i<6;i++){\n"
+                + "      int32_t p1 = osc_p[i];\n"
+                + "      int32_t p2 = p1 + f[i];\n"
+                + "      osc_p[i] = p2;\n"
+                + "      if ((p2<0)&&(p1>0))\n"
+                + "        outlet_wave[j] += ___SMMLS(f0i, p2<<1, 0x400)<<14;\n"
+                + "      else\n"
+                + "        outlet_wave[j] += p2>>7;\n"
+                + "    }\n"
+                + "}";
+        /*
+         "  uint32_t f0;\n"
+         + "  uint32_t f[6];\n"
+         + "  MTOFEXTENDED(param_pitch + inlet_pitch,f0);\n"
+         + "  int i,j;\n"
+         + "  f[0] = ___SMMLA(f0,-0x05432123,f0);\n"
+         + "  f[1] = ___SMMLA(f0,-0x03111111,f0);\n"
+         + "  f[2] = ___SMMLA(f0,-0x01020304,f0);\n"
+         + "  f[3] = ___SMMLA(f0,0x01030450,f0);\n"
+         + "  f[4] = ___SMMLA(f0,0x03212121,f0);\n"
+         + "  f[5] = ___SMMLA(f0,0x05542211,f0);\n"
+         + "\n"
+         + "  for(j=0;j<BUFSIZE;j++){\n"
+         + "    osc_p[6]+=f0;\n"
+         + "    outlet_wave[j] = (osc_p[6])>>7;\n"
+         + "    for(i=0;i<6;i++){\n"
+         + "      osc_p[i]+=f[i];\n"
+         + "      outlet_wave[j] += (osc_p[i])>>7;\n"
+         + "    }\n"
+         + "}\n";*/
+        return o;
+    }
+
+    static AxoObject CreateSquare7() {
+        AxoObject o = new AxoObject("supersquare", "seven detuned square wave oscillators\nNon-bandwith limited");
+        o.outlets.add(new OutletFrac32BufferBipolar("wave", "supersaw wave"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.includes = new HashSet<String>();
+        o.sLocalData = "  int32_t osc_p[7];\n";
+        o.sInitCode = "int i;\n"
+                + "for(i=0;i<7;i++)\n"
+                + "    osc_p[i]=0;\n";
+        o.sKRateCode = "  uint32_t f0;\n"
+                + "  uint32_t f[6];\n"
+                + "  MTOFEXTENDED(param_pitch + inlet_pitch,f0);\n"
+                + "  int i,j;\n"
+                + "  f[0] = ___SMMLA(f0,-0x05432123,f0);\n"
+                + "  f[1] = ___SMMLA(f0,-0x03111111,f0);\n"
+                + "  f[2] = ___SMMLA(f0,-0x01020304,f0);\n"
+                + "  f[3] = ___SMMLA(f0,0x01030450,f0);\n"
+                + "  f[4] = ___SMMLA(f0,0x03212121,f0);\n"
+                + "  f[5] = ___SMMLA(f0,0x05542211,f0);\n"
+                + "\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    osc_p[6]+=f0;\n"
+                + "    outlet_wave[j] = (osc_p[6]>0)<<24;\n"
+                + "    for(i=0;i<6;i++){\n"
+                + "      osc_p[i]+=f[i];\n"
+                + "      outlet_wave[j] += (osc_p[i]>0)<<24;\n"
+                + "    }\n"
+                + "}\n";
         return o;
     }
 
