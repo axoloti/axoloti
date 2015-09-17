@@ -124,7 +124,6 @@ public class Patch {
 
     void GoLive() {
         ShowPreset(0);
-        ClearDirty();
         WriteCode();
         presetUpdatePending = false;
         GetQCmdProcessor().SetPatch(null);
