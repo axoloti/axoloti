@@ -58,12 +58,11 @@ typedef struct {
   int32_t amount;
 } PExModulationTarget_t;
 
-typedef int32_t PExModulationTargetProd_t;
 
 void PExModulationSourceChange(PExModulationTarget_t *modulation,
-                               PExModulationTargetProd_t *product,
                                int32_t nTargets,
                                ParameterExchange_t *parameters,
+                               int32_t *oldvalue,
                                int32_t value);
 
 void PExParameterChange(ParameterExchange_t *param, int32_t value,

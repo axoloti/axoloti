@@ -191,9 +191,9 @@ public class Patch extends gentools {
         o.sMidiCode = "if ((status == MIDI_CONTROL_CHANGE + attr_midichannel)&&(data1 == %cc%)) {\n"
                 + "  PExModulationSourceChange(\n"
                 + "    &parent->PExModulationSources[parent->MODULATOR_attr_name][0],\n"
-                + "    &parent->PExModulationProd[parent->polyIndex][parent->MODULATOR_attr_name][0],\n"
                 + "    NMODULATIONTARGETS,\n"
                 + "    &parent->PExch[0],\n"
+                + "    &parent->PExModulationPrevVal[parent->polyIndex][parent->MODULATOR_attr_name],\n"
                 + "    data2<<20);\n"
                 + "}\n";
         return o;
@@ -212,9 +212,9 @@ public class Patch extends gentools {
         o.sKRateCode = "if ((%trig%>0) && !ntrig) {\n"
                 + "  PExModulationSourceChange(\n"
                 + "    &parent->PExModulationSources[parent->MODULATOR_attr_name][0],\n"
-                + "    &parent->PExModulationProd[parent->polyIndex][parent->MODULATOR_attr_name][0],\n"
                 + "    NMODULATIONTARGETS,\n"
                 + "    &parent->PExch[0],\n"
+                + "    &parent->PExModulationPrevVal[parent->polyIndex][parent->MODULATOR_attr_name],\n"
                 + "    %v%);"
                 + "  ntrig=1;\n"
                 + "}\n"

@@ -20,9 +20,9 @@
 #include "axoloti_math.h"
 
 void PExModulationSourceChange(PExModulationTarget_t *modulation,
-                               PExModulationTargetProd_t *product,
                                int32_t nTargets,
                                ParameterExchange_t *parameters,
+                               int32_t *oldvalue,
                                int32_t value) {
   PExModulationTarget_t *s = modulation;
   int t;
@@ -32,10 +32,9 @@ void PExModulationSourceChange(PExModulationTarget_t *modulation,
       continue;
     ParameterExchange_t *PEx = &parameters[target->parameterIndex];
     int32_t v = PEx->modvalue;
-    v -= product[t];
-    int32_t n = ___SMMUL(value, target->amount) << 5;
-    product[t] = n;
-    v += n;
+    v -= ___SMMUL(*oldvalue, target->amount) << 5;
+    v += ___SMMUL(value, target->amount) << 5;
+    *oldvalue = value;
     PEx->modvalue = v;
     if (PEx->pfunction) {
       (PEx->pfunction)(PEx);

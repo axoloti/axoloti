@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="modsource_cc" uuid="51a13657c316562376567970bbc2a6308abfb7c7" sha="eb582d9614b4f5cd7cd1f3a584d53dfb1e6645b3">
-      <upgradeSha>bb84ca75822c6965bfc6c380740e5702d61dcc77</upgradeSha>
+   <obj.normal id="modsource_cc" uuid="51a13657c316562376567970bbc2a6308abfb7c7" sha="b1e5930fc679b99dfb8d06cdedd6daf77c993cbe">
+      <upgradeSha>115ca773b020735ac199142f4e9e25824d83ec1c</upgradeSha>
       <sDescription>midi cc modulation source</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -15,9 +15,9 @@
       <code.midihandler><![CDATA[if ((status == MIDI_CONTROL_CHANGE + attr_midichannel)&&(data1 == attr_cc)) {
   PExModulationSourceChange(
     &parent->PExModulationSources[parent->MODULATOR_attr_name][0],
-    &parent->PExModulationProd[parent->polyIndex][parent->MODULATOR_attr_name][0],
     NMODULATIONTARGETS,
     &parent->PExch[0],
+    &parent->PExModulationPrevVal[parent->polyIndex][parent->MODULATOR_attr_name],
     data2<<20);
 }
 ]]></code.midihandler>

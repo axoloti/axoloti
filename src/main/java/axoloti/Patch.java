@@ -727,6 +727,13 @@ public class Patch {
 
     /* the c++ code generator */
     String GeneratePexchAndDisplayCode() {
+        String c = GeneratePexchAndDisplayCodeV();
+        c += "    PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS];\n";
+        c += "    int32_t PExModulationPrevVal[attr_poly][NMODULATIONSOURCES];\n";
+        return c;
+    }
+
+    String GeneratePexchAndDisplayCodeV() {
         String c = "";
         c += "    static const uint32_t NPEXCH = " + +ParameterInstances.size() + ";\n";
         c += "    ParameterExchange_t PExch[NPEXCH];\n";
@@ -735,11 +742,9 @@ public class Patch {
         c += "    static const uint32_t NPRESET_ENTRIES = " + settings.GetNPresetEntries() + ";\n";
         c += "    static const uint32_t NMODULATIONSOURCES = " + settings.GetNModulationSources() + ";\n";
         c += "    static const uint32_t NMODULATIONTARGETS = " + settings.GetNModulationTargetsPerSource() + ";\n";
-        c += "    PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS];\n";
-        c += "    PExModulationTargetProd_t PExModulationProd[attr_poly][NMODULATIONSOURCES][NMODULATIONTARGETS];\n";
         return c;
-    }
-
+    }    
+    
     String GenerateObjectCode(String classname, boolean enableOnParent, String OnParentAccess) {
         String c = "";
         {
@@ -895,8 +900,8 @@ public class Patch {
         c += "      PExch[j].pfunction = 0;\n";
 //        c += "      PExch[j].finalvalue = p[j];\n"; /*TBC*/
         c += "   }\n";
-        c += "   PExModulationTargetProd_t *pp = &PExModulationProd[0][0][0];\n";
-        c += "   for(j=0;j<attr_poly*NMODULATIONSOURCES*NMODULATIONTARGETS;j++){\n";
+        c += "   int32_t *pp = &PExModulationPrevVal[0][0];\n";
+        c += "   for(j=0;j<attr_poly*NMODULATIONSOURCES;j++){\n";
         c += "      *pp = 0; pp++;\n";
         c += "   }\n";
         c += "   for(i=0;i<NMODULATIONSOURCES;i++) {\n"
@@ -1416,7 +1421,7 @@ public class Patch {
         ao.sLocalData += "class voice {\n";
         ao.sLocalData += "   public:\n";
         ao.sLocalData += "   int polyIndex;\n";
-        ao.sLocalData += GeneratePexchAndDisplayCode();
+        ao.sLocalData += GeneratePexchAndDisplayCodeV();
         ao.sLocalData += GenerateObjectCode("voice", true, "parent->common->");
         ao.sLocalData += "attr_parent *common;\n";
         ao.sLocalData += "void Init(voice *parent) {\n";
@@ -1455,7 +1460,7 @@ public class Patch {
         ao.sLocalData += "int8_t pressed[attr_poly];\n";
 
         ao.sLocalData = ao.sLocalData.replaceAll("parent->PExModulationSources", "parent->common->PExModulationSources");
-        ao.sLocalData = ao.sLocalData.replaceAll("parent->PExModulationProd", "parent->common->PExModulationProd");
+        ao.sLocalData = ao.sLocalData.replaceAll("parent->PExModulationPrevVal", "parent->common->PExModulationPrevVal");
 
         ao.sInitCode = GenerateParamInitCodePlusPlusSub("", "parent");
         ao.sInitCode += "int k;\n"
