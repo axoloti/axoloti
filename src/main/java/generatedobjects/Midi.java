@@ -72,6 +72,7 @@ public class Midi extends gentools {
         WriteAxoObject(catName, Create_ctloutauto());
         WriteAxoObject(catName, Create_ctlout_any());
         WriteAxoObject(catName, Create_bendout());
+        WriteAxoObject(catName, Create_pgmout());
         WriteAxoObject(catName, Create_clockgen());
         WriteAxoObject(catName, Create_queuestate());
 
@@ -256,8 +257,8 @@ public class Midi extends gentools {
                 + "} else if ((status == %midichannel% + MIDI_CONTROL_CHANGE) && (data1 == (%cc%+32))) {\n"
                 + "   ccl = data2 << 13;\n"
                 + "}\n";
-        o.sKRateCode = 
-                " %midiCC%= _ccv;\n"
+        o.sKRateCode
+                = " %midiCC%= _ccv;\n"
                 + "%trig% = ntrig;\n"
                 + "ntrig = 0;\n";
         return o;
@@ -281,13 +282,13 @@ public class Midi extends gentools {
                 + "} else if ((status == %midichannel% + MIDI_CONTROL_CHANGE) && (data1 == (%ccl%))) {\n"
                 + "   ccl = data2 << 13;\n"
                 + "}\n";
-        o.sKRateCode = 
-                " %midiCC%= _ccv;\n"
+        o.sKRateCode
+                = " %midiCC%= _ccv;\n"
                 + "%trig% = ntrig;\n"
                 + "ntrig = 0;\n";
         return o;
     }
-    
+
     static AxoObject Create_keyb() {
         AxoObject o = new AxoObject("keyb", "Monophonic MIDI keyboard note input, gate, velocity and release velocity");
         o.outlets.add(new OutletFrac32Bipolar("note", "midi note number (-64..63)"));
@@ -721,11 +722,11 @@ public class Midi extends gentools {
         return o;
     }
 
-    static String cdev[] = {"MIDI_DEVICE_DIN, 1", 
-        "MIDI_DEVICE_USB_HOST, 1", 
-        "MIDI_DEVICE_USB_HOST, 2", 
-        "MIDI_DEVICE_USB_HOST, 3", 
-        "MIDI_DEVICE_USB_HOST, 4", 
+    static String cdev[] = {"MIDI_DEVICE_DIN, 1",
+        "MIDI_DEVICE_USB_HOST, 1",
+        "MIDI_DEVICE_USB_HOST, 2",
+        "MIDI_DEVICE_USB_HOST, 3",
+        "MIDI_DEVICE_USB_HOST, 4",
         "MIDI_DEVICE_INTERNAL, 1",
         "MIDI_DEVICE_INTERNAL, 2",
         "MIDI_DEVICE_USB_DEVICE, 1"};
@@ -865,6 +866,18 @@ public class Midi extends gentools {
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
         o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend3((midi_device_t) %device% , MIDI_PITCH_BEND + (%channel%-1),(%bend%>>14)&0x7F,(%bend%>>21)+64);  ntrig=1;}\n"
+                + "if (!(%trig%>0)) ntrig=0;\n";
+        return o;
+    }
+
+    static AxoObject Create_pgmout() {
+        AxoObject o = new AxoObject("pgm", "Midi program change output");
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
+        o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
+        o.inlets.add(new InletInt32Pos("pgm", "prgram number (0-127)"));
+        o.inlets.add(new InletBool32Rising("trig", "trigger"));
+        o.sLocalData = "int ntrig;\n";
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend2((midi_device_t) %device% , MIDI_PROGRAM_CHANGE + (%channel%-1),%pgm%&0x7F; ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }
