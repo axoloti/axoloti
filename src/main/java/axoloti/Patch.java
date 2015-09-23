@@ -77,11 +77,11 @@ import qcmds.QCmdUploadPatch;
 public class Patch {
 
     public @ElementListUnion({
-        @ElementList(entry = "obj", type = AxoObjectInstance.class, inline = true),
-        @ElementList(entry = "patcher", type = AxoObjectInstancePatcher.class, inline = true),
-        @ElementList(entry = "comment", type = AxoObjectInstanceComment.class, inline = true),
-        @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true),
-        @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true)})
+        @ElementList(entry = "obj", type = AxoObjectInstance.class, inline = true, required = false),
+        @ElementList(entry = "patcher", type = AxoObjectInstancePatcher.class, inline = true, required = false),
+        @ElementList(entry = "comment", type = AxoObjectInstanceComment.class, inline = true, required = false),
+        @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true, required = false),
+        @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true, required = false)})
     ArrayList<AxoObjectInstanceAbstract> objectinstances = new ArrayList<AxoObjectInstanceAbstract>();
     @ElementList(name = "nets")
     ArrayList<Net> nets = new ArrayList<Net>();
