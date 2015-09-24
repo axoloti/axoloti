@@ -39,6 +39,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DnDConstants;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -49,8 +50,11 @@ import java.awt.event.MouseMotionAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
@@ -138,9 +142,9 @@ public class PatchGUI extends Patch {
             @Override
             public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
                 Patch p = GetSelectedObjects();
-                if (p.objectinstances.isEmpty()) { 
+                if (p.objectinstances.isEmpty()) {
                     clip.setContents(new StringSelection(""), null);
-                    return ;
+                    return;
                 }
                 p.PreSerialize();
                 Serializer serializer = new Persister();
@@ -416,7 +420,8 @@ public class PatchGUI extends Patch {
         Layers.invalidate();
         Layers.repaint();
 
-        DropTarget dt = new DropTarget() {
+        DropTarget dt;
+        dt = new DropTarget() {
 
             @Override
             public synchronized void dragOver(DropTargetDragEvent dtde) {
@@ -433,6 +438,28 @@ public class PatchGUI extends Patch {
             @Override
             public synchronized void drop(DropTargetDropEvent dtde) {
                 Transferable t = dtde.getTransferable();
+                if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    try {
+                        dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                        List<File> flist = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
+                        for (File f : flist) {
+                            if (f.exists() && f.canRead()) {
+                                AxoObjectAbstract o = new AxoObjectFromPatch(f);
+                                String fn = f.getCanonicalPath();
+                                if (GetCurrentWorkingDirectory() != null && fn.startsWith(GetCurrentWorkingDirectory())) {
+                                    o.createdFromRelativePath = true;
+                                }
+                                AddObjectInstance(o, dtde.getLocation());
+                            }
+                        }
+                        dtde.dropComplete(true);
+                    } catch (UnsupportedFlavorException ex) {
+                        Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                        Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    return;
+                }
                 try {
                     String s = (String) t.getTransferData(DataFlavor.stringFlavor);
                     String ss[] = s.split("::");
@@ -473,7 +500,9 @@ public class PatchGUI extends Patch {
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         SelectNone();
-        if(v.isEmpty()) return;
+        if (v.isEmpty()) {
+            return;
+        }
         Serializer serializer = new Persister();
         try {
             PatchGUI p = serializer.read(PatchGUI.class, v);

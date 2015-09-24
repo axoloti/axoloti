@@ -39,7 +39,7 @@ public class AxoObjectFromPatch extends AxoObject {
     PatchFrame pf;
     File f;
 
-    AxoObjectFromPatch(File f) {
+    public AxoObjectFromPatch(File f) {
         this.f = f;
         Serializer serializer = new Persister();
         try {
