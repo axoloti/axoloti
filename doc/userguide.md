@@ -157,8 +157,11 @@ Different data types are marked by different colors on the outlets, inlets and w
 
 - A red output (audio) can be connected to a blue input (float), this will sample the audio, 1 in 16 audio samples.
 - A yellow output (boolean) can be connected to a blue input (float), this yields +64 units for true, 0 for false.
-- A green output  (integer) can be connected to a blue input(float).
+- A yellow output (boolean) can be connected to a green input (float), this yields 1 for true, 0 for false.
+- A green output (integer) can be connected to a blue input(float).
+- A green output (integer) can be connected to a yellow input (boolean), evaluates to true when the value is positive, or to false when zero or negative.
 - A blue output (float) can be connected to a green input (integer) the value is rounded down.
+- A blue output (float) can be connected to a yellow input (boolean), evaluates to true when the value is positive, or to false when zero or negative.
 - A pink output must always be connected to a pink input. (strings)
 
 #Execution order

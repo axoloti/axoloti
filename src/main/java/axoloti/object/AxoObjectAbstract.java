@@ -56,7 +56,7 @@ public abstract class AxoObjectAbstract implements Comparable {
 
     public String shortId;
 
-    boolean createdFromRelativePath = false;
+    public boolean createdFromRelativePath = false;
 
     @Element(name = "author", required = false)
     public String sAuthor;
