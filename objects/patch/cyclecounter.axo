@@ -1,0 +1,17 @@
+<objdefs>
+   <obj.normal id="cyclecounter" uuid="6b9e9c2187a0e07fb56029aef6ccaaf1f9621e35" sha="c85b3276db258529c65ea915fc441399d5ffdf85">
+      <sDescription>Outputs the cpu clock cycle counter, a 32bit integer incrementing on every clock cycle. Useful for benchmarking objects.</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>cyclecounter.axh</helpPatch>
+      <inlets/>
+      <outlets>
+         <int32 name="t" description="cpu time in ticks"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.krate><![CDATA[outlet_t = hal_lld_get_counter_value();
+]]></code.krate>
+   </obj.normal>
+</objdefs>

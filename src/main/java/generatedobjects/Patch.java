@@ -69,6 +69,7 @@ public class Patch extends gentools {
         WriteAxoObject(catName, CreatePolyIndex());
 
         WriteAxoObject(catName, CreatePatcher());
+        WriteAxoObject(catName, CreateCyclecounter());
 
     }
 
@@ -230,8 +231,8 @@ public class Patch extends gentools {
     static AxoObjectAbstract Create_hyperlink() {
         AxoObjectHyperlink o = new AxoObjectHyperlink("hyperlink", "hyperlink to a patch or a URL opened in your browser");
         return o;
-    }    
-    
+    }
+
     static AxoObject CreatePreset() {
         AxoObject o = new AxoObject("preset", "apply preset, preset zero = init, and will reset ALL parameters, not just the presets");
         o.inlets.add(new InletInt32("preset", "preset number"));
@@ -270,6 +271,13 @@ public class Patch extends gentools {
 
     static AxoObject CreatePatcher() {
         AxoObject o = new AxoObjectPatcher("patcher", "Subpatch object stored in the patch document (IN DEVELOPMENT!)");
+        return o;
+    }
+
+    static AxoObject CreateCyclecounter() {
+        AxoObject o = new AxoObject("cyclecounter", "Outputs the cpu clock cycle counter, a 32bit integer incrementing on every clock cycle. Useful for benchmarking objects.");
+        o.outlets.add(new OutletInt32("t", "cpu time in ticks"));
+        o.sKRateCode = "outlet_t = hal_lld_get_counter_value();\n";
         return o;
     }
 }

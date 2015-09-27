@@ -1,0 +1,52 @@
+<patch-1.0>
+   <comment type="patch/comment" x="14" y="14" text="The cyclecounter object outputs a counter that increments on every cpu clock cycle"/>
+   <comment type="patch/comment" x="14" y="42" text="This can be used to measure the number of cpu cycles consumed in objects"/>
+   <obj type="patch/cyclecounter" sha="c85b3276db258529c65ea915fc441399d5ffdf85" uuid="6b9e9c2187a0e07fb56029aef6ccaaf1f9621e35" name="cyclecounter_1" x="14" y="70">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="14" y="126" text="between here...."/>
+   <obj type="osc/sine" sha="edec4a9d5f533ea748cd564ce8c69673dd78742f" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="14" y="154">
+      <params>
+         <frac32.s.map name="pitch" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="42" y="280" text=".... and here"/>
+   <obj type="patch/cyclecounter" sha="c85b3276db258529c65ea915fc441399d5ffdf85" uuid="6b9e9c2187a0e07fb56029aef6ccaaf1f9621e35" name="cyclecounter_2" x="14" y="308">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/-" sha="554de2692f3e366237f42785f5b0d75ff7823aa3" uuid="1643d55e6e7ce1c995a5e66db9f54fd969e6c9b7" name="-_1" x="168" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/i" sha="e98a25a12afc62efc1991c3bb5290ccdf7214102" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="i_1" x="252" y="322">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="cyclecounter_1" outlet="t"/>
+         <dest obj="-_1" inlet="in2"/>
+      </net>
+      <net>
+         <source obj="cyclecounter_2" outlet="t"/>
+         <dest obj="-_1" inlet="in1"/>
+      </net>
+      <net>
+         <source obj="-_1" outlet="out"/>
+         <dest obj="i_1" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>324</x>
+      <y>210</y>
+      <width>573</width>
+      <height>520</height>
+   </windowPos>
+</patch-1.0>
