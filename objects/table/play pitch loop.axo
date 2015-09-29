@@ -1,0 +1,65 @@
+<objdefs>
+   <obj.normal id="play pitch loop" uuid="41d8c84adc483392ddfc34b5db9c75dfe271ac25" sha="56c4ad811bef6da4d6fc0fc8cb863d00d1ede005">
+      <sDescription>play audio sample from table with pitch control, starting from position</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>table.axh</helpPatch>
+      <inlets>
+         <bool32.rising name="start" description="start playback"/>
+         <bool32.rising name="stop" description="stop playback"/>
+         <frac32.bipolar name="pitch" description="pitch modulation"/>
+         <frac32.positive name="pos" description="start position in table"/>
+      </inlets>
+      <outlets>
+         <frac32buffer name="wave" description="wave"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.pitch name="pitch"/>
+         <int32 name="loopstart">
+            <MinValue i="0"/>
+            <MaxValue i="1073741824"/>
+         </int32>
+         <int32 name="loopend">
+            <MinValue i="0"/>
+            <MaxValue i="1073741824"/>
+         </int32>
+      </params>
+      <attribs>
+         <objref name="table"/>
+      </attribs>
+      <code.declaration><![CDATA[   int pstart;
+   int pstop;
+   uint64_t pos;
+]]></code.declaration>
+      <code.init><![CDATA[pos = 0;
+pstart = 0;
+pstop = 1;
+]]></code.init>
+      <code.krate><![CDATA[   if ((inlet_start>0) && !pstart) {
+      pstart = 1;
+      pstop = 0;
+      uint32_t asat = __USAT(inlet_pos,27);
+      pos = ((uint64_t)(asat>>(27-attr_table.LENGTHPOW)))<<32;
+   } else if (!(inlet_start>0)) {
+      pstart = 0;
+   }
+   if ((inlet_stop>0) && !pstop) {
+      pstop = 1;
+      pstart = 0;
+   }
+   uint32_t f0;
+   MTOFEXTENDED(param_pitch + inlet_pitch,f0);
+]]></code.krate>
+      <code.srate><![CDATA[   if (!pstop) {
+      if ((pos>>32)<attr_table.LENGTH) {
+         uint32_t r = ___SMMUL(attr_table.array[pos>>32]<<attr_table.GAIN,INT32_MAX-(((uint32_t)pos)>>1));
+         r = ___SMMLA(attr_table.array[(pos>>32)+1]<<attr_table.GAIN,(((uint32_t)pos)>>1),r);
+         outlet_wave = r;
+         pos += ((uint64_t)f0)<<4;
+      }
+      else outlet_wave = 0;
+   } else outlet_wave = 0;
+]]></code.srate>
+   </obj.normal>
+</objdefs>
