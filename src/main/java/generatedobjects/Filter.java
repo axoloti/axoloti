@@ -71,7 +71,8 @@ public class Filter extends gentools {
 
         WriteAxoObject(catName, Create_lpfsvf_tilde());
         WriteAxoObject(catName, Create_hpfsvf_tilde());
-        WriteAxoObject(catName, Create_bpfsvf_tilde());
+        WriteAxoObject(catName, Create_bpfsvf_tilde());        
+        WriteAxoObject(catName, Create_svf_multimode_tilde());
 
 //UNRELEASED        WriteAxoObject(catName, Create_lpfsvf_drive());
 
@@ -628,6 +629,37 @@ public class Filter extends gentools {
         return o;
     }
 
+    static AxoObject Create_svf_multimode_tilde() {
+        AxoObject o = new AxoObject("multimode svf m", "multimode filter, state-variable type, modulation inputs");
+        o.inlets.add(new InletFrac32Buffer("in", "filter input"));
+        o.inlets.add(new InletFrac32("pitch", "pitch"));
+        o.inlets.add(new InletFrac32("reso", "resonance"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.params.add(new ParameterFrac32UMapFilterQ("reso"));
+        o.outlets.add(new OutletFrac32Buffer("hp", "highpass filter output"));
+        o.outlets.add(new OutletFrac32Buffer("bp", "bandpass filter output"));
+        o.outlets.add(new OutletFrac32Buffer("lp", "lowpass filter output"));
+        o.sLocalData = "int32_t low;\n"
+                + "int32_t band;\n";
+        o.sInitCode = "low = 0;\n"
+                + "band = 0;\n";
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
+                + "damp = ___SMMUL(damp,damp);\n"
+                + "int32_t alpha;\n"
+                + "int32_t freq;\n"
+                + "MTOFEXTENDED(param_pitch,alpha);\n"
+                + "SINE2TINTERP(alpha,freq);\n";
+        o.sSRateCode = "int32_t in1 = %in%;\n"
+                + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
+                + "low = low + (___SMMUL(freq,band)<<1);\n"
+                + "int32_t high  = notch - low;\n"
+                + "band = (___SMMUL(freq,high)<<1) + band;// - drive*band*band*band;\n"
+                + "%lp% = low;\n"
+                + "%hp% = high;\n"
+                + "%bp% = band;\n";
+        return o;
+    }        
+    
     static AxoObject Create_bp_svf_m() {
         AxoObject o = new AxoObject("bp svf m", "Bandpass filter, state-variable type, modulation inputs");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
