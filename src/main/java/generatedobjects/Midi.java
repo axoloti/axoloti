@@ -877,7 +877,7 @@ public class Midi extends gentools {
         o.inlets.add(new InletInt32Pos("pgm", "prgram number (0-127)"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.sLocalData = "int ntrig;\n";
-        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend2((midi_device_t) %device% , MIDI_PROGRAM_CHANGE + (%channel%-1),%pgm%&0x7F; ntrig=1;}\n"
+        o.sKRateCode = "if ((%trig%>0) && !ntrig) {MidiSend2((midi_device_t) %device% , MIDI_PROGRAM_CHANGE + (%channel%-1),%pgm%&0x7F); ntrig=1;}\n"
                 + "if (!(%trig%>0)) ntrig=0;\n";
         return o;
     }

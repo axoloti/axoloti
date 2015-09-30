@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="pgm" uuid="c2132a9daa2f3d70629754593838e5e921f42ef1" sha="13092647c8b3b3aa781d9757a6276dc918a7b5cb">
-      <upgradeSha>99f4f2cf0eb2c02d6069025414bf7e64c2827d72</upgradeSha>
+   <obj.normal id="pgm" uuid="c2132a9daa2f3d70629754593838e5e921f42ef1" sha="855f347f9e87755982c0ee4445ea195d172960b2">
+      <upgradeSha>fd2f4c0087509eedc956e403e6fda61c226e07b8</upgradeSha>
       <sDescription>Midi program change output</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -39,7 +39,7 @@
       </attribs>
       <code.declaration><![CDATA[int ntrig;
 ]]></code.declaration>
-      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {MidiSend2((midi_device_t) attr_device , MIDI_PROGRAM_CHANGE + (attr_channel-1),inlet_pgm&0x7F; ntrig=1;}
+      <code.krate><![CDATA[if ((inlet_trig>0) && !ntrig) {MidiSend2((midi_device_t) attr_device , MIDI_PROGRAM_CHANGE + (attr_channel-1),inlet_pgm&0x7F); ntrig=1;}
 if (!(inlet_trig>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>
