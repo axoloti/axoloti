@@ -92,7 +92,7 @@ public class Mux extends gentools {
         o.inlets.add(new InletCharPtr32("i2", "input 2"));
         o.inlets.add(new InletBool32("s", "select"));
         o.outlets.add(new OutletCharPtr32("o", "output"));
-        o.sKRateCode = "   %o%= (%s%)?%i2%:%i1%;\n";
+        o.sKRateCode = "   %o%= (%s%)?(char *)%i2%:(char *)%i1%;\n";
         return o;
     }    
     
@@ -169,9 +169,9 @@ public class Mux extends gentools {
         o.outlets.add(new OutletCharPtr32("o", "output"));
         o.sKRateCode = "   switch(%s%>0?%s%:0){\n";
         for (int i = 0; i < n; i++) {
-            o.sKRateCode += "      case " + i + ": %o%= %i" + i + "%;break;\n";
+            o.sKRateCode += "      case " + i + ": %o%= (char *)%i" + i + "%;break;\n";
         }
-        o.sKRateCode += "      default: %o%= %i" + (n - 1) + "%;break;\n";
+        o.sKRateCode += "      default: %o%= (char *)%i" + (n - 1) + "%;break;\n";
         o.sKRateCode += "}\n";
         return o;
     }
