@@ -187,7 +187,7 @@ void StartLoadPatchTread(void) {
                                     ThreadLoader, NULL);
 }
 
-void LoadPatch(char *name) {
+void LoadPatch(const char *name) {
   strcpy(loadFName, name);
   chEvtSignal(pThreadLoader, (eventmask_t)1);
 }

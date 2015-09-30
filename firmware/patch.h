@@ -80,6 +80,6 @@ void start_dsp_thread(void);
 #define PATCHFLASHSIZE 0xB000
 
 void StartLoadPatchTread(void);
-void LoadPatch(char *name);
+void LoadPatch(const char *name);
 
 #endif //__PATCH_H

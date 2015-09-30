@@ -1,0 +1,23 @@
+<objdefs>
+   <obj.normal id="load fn" uuid="12a194acdd5b94470e044f98e8e025d0dac65e18" sha="4c86820df33887810dbc91478d9742e2b76d8bd6">
+      <upgradeSha>1eb50e75c77b94aea60f2ab32dfa8e5b976a2041</upgradeSha>
+      <sDescription>load a patch from sdcard</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <bool32.rising name="trig" description="trigger"/>
+         <charptr32 name="fn" description="filename"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[ntrig = 1;
+]]></code.init>
+      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {LoadPatch(inlet_fn); ntrig=1;}
+   else if (!(inlet_trig>0)) ntrig=0;
+]]></code.krate>
+   </obj.normal>
+</objdefs>
