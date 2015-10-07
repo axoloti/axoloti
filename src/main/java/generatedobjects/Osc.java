@@ -56,12 +56,14 @@ public class Osc extends gentools {
         WriteAxoObject(catName, CreateSaw3Tilde());
         WriteAxoObject(catName, CreateSawSyncTilde());
         WriteAxoObject(catName, CreateSawTilde_cheap());
+        WriteAxoObject(catName, CreateSawTilde_medium());
         WriteAxoObject(catName, CreateSaw7());
-//        WriteAxoObject(catName, CreateSquare7());
+        WriteAxoObject(catName, CreateSquare7());
         WriteAxoObject(catName, CreateTriTilde());
         WriteAxoObject(catName, CreateTriTilde_cheap());
         WriteAxoObject(catName, CreateSquareTilde());
         WriteAxoObject(catName, CreateSquareTilde_Cheap());
+        WriteAxoObject(catName, CreateSquareTilde_Medium());
         WriteAxoObject(catName, CreateSquareSyncTilde());
 //        WriteAxoObject(catName, CreateSquare2Tilde());
 //        WriteAxoObject(catName, CreateSquare3Tilde());
@@ -273,33 +275,64 @@ public class Osc extends gentools {
         return o;
     }
 
+    static AxoObject CreateSawTilde_medium() {
+        AxoObject o = new AxoObject("saw medium", "saw wave oscillator\nNon-bandwith limited, medium quality");
+        o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, non-anti-aliased"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.includes = new HashSet<String>();
+        o.sLocalData = "  int32_t osc_p;\n";
+        o.sInitCode = "    osc_p=0;\n";
+        o.sKRateCode = "  uint32_t freq;\n"
+                + "  MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
+                + "  int32_t f0i = 0x7fffffff/(1+((int)freq)>>11);\n"
+                + "  int j;\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    int32_t p1 = osc_p;\n"
+                + "    int32_t p2 = p1 + freq;\n"
+                + "    osc_p = p2;\n"
+                + "    if ((p2<0)&&(p1>0))\n"
+                //                + "      outlet_wave[j] = ___SMMLS(f0i, p2<<1, 0x400)<<14;\n"
+                + "outlet_wave[j] = ___SMMLS(f0i, p2&~(1<<31), 0x200)<<15;\n"
+                + "    else\n"
+                + "      outlet_wave[j] = p2>>7;\n"
+                + "  }\n";
+        return o;
+    }
+
     static AxoObject CreateSaw7() {
         AxoObject o = new AxoObject("supersaw", "seven detuned saw wave oscillators\nNon-bandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "supersaw wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.inlets.add(new InletFrac32Bipolar("detune", "detune"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.params.add(new ParameterFrac32UMap("detune"));
+        o.params.add(new ParameterFrac32UMap("amt"));
         o.includes = new HashSet<String>();
         o.sLocalData = "  int32_t osc_p[7];\n";
         o.sInitCode = "int i;\n"
                 + "for(i=0;i<7;i++)\n"
-                + "    osc_p[i]=0;\n";
+                + "    osc_p[i]=i<<28;\n";
         o.sKRateCode = "  uint32_t f0;\n"
                 + "  uint32_t f[6];\n"
                 + "  MTOFEXTENDED(param_pitch + inlet_pitch,f0);\n"
+                + "  uint32_t det1 = __USAT(param_detune + inlet_detune,27);\n"
+                + "  uint32_t det = ___SMMUL(det1,det1);\n"
+                + "  uint32_t f0d = ___SMMUL(det<<8,f0);\n"
                 + "  int i,j;\n"
-                + "  f[0] = ___SMMLA(f0,-0x05432123,f0);\n"
-                + "  f[1] = ___SMMLA(f0,-0x03111111,f0);\n"
-                + "  f[2] = ___SMMLA(f0,-0x01020304,f0);\n"
-                + "  f[3] = ___SMMLA(f0,0x01030450,f0);\n"
-                + "  f[4] = ___SMMLA(f0,0x03212121,f0);\n"
-                + "  f[5] = ___SMMLA(f0,0x05542211,f0);\n"
+                + "  f[0] = ___SMMLA(f0d,-0x54321230,f0);\n"
+                + "  f[1] = ___SMMLA(f0d,-0x31111110,f0);\n"
+                + "  f[2] = ___SMMLA(f0d,-0x10203040,f0);\n"
+                + "  f[3] = ___SMMLA(f0d,0x10304500,f0);\n"
+                + "  f[4] = ___SMMLA(f0d,0x32121210,f0);\n"
+                + "  f[5] = ___SMMLA(f0d,0x55422110,f0);\n"
                 + "  int32_t f0i = 0x7fffffff/(1+((int)f0)>>11);\n"
                 + "  for(j=0;j<BUFSIZE;j++){\n"
                 + "    int32_t p1 = osc_p[6];\n"
                 + "    int32_t p2 = p1 + f0;\n"
                 + "    osc_p[6] = p2;\n"
                 + "    if ((p2<0)&&(p1>0))\n"
-                + "      outlet_wave[j] = ___SMMLS(f0i, p2<<1, 0x400)<<14;\n"
+                + "      outlet_wave[j] = ___SMMLS(f0i, p2&~(1<<31), 0x200)<<15;\n"
                 + "    else\n"
                 + "      outlet_wave[j] = p2>>7;\n"
                 + "\n"
@@ -308,7 +341,7 @@ public class Osc extends gentools {
                 + "      int32_t p2 = p1 + f[i];\n"
                 + "      osc_p[i] = p2;\n"
                 + "      if ((p2<0)&&(p1>0))\n"
-                + "        outlet_wave[j] += ___SMMLS(f0i, p2<<1, 0x400)<<14;\n"
+                + "        outlet_wave[j] += ___SMMLS(f0i, p2&~(1<<31), 0x200)<<15;\n"
                 + "      else\n"
                 + "        outlet_wave[j] += p2>>7;\n"
                 + "    }\n"
@@ -507,6 +540,32 @@ public class Osc extends gentools {
                 + "       outlet_wave[j] = -(1<<26);\n"
                 + "    }\n"
                 + "}\n";
+        return o;
+    }
+
+    static AxoObject CreateSquareTilde_Medium() {
+        AxoObject o = new AxoObject("square medium", "square wave oscillator\nNon-bandwith limited, medium quality");
+        o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave"));
+        o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.includes = new HashSet<String>();
+        o.sLocalData = "  int32_t osc_p;\n";
+        o.sInitCode = "    osc_p=0;\n";
+        o.sKRateCode = "  uint32_t freq;\n"
+                + "  MTOFEXTENDED(param_pitch + inlet_pitch,freq);\n"
+                + "  int j;\n"
+                + "  int32_t f0i = 0x7fffffff/(1+(freq)>>11);\n"
+                + "  for(j=0;j<BUFSIZE;j++){\n"
+                + "    int32_t p1 = osc_p;\n"
+                + "    int32_t p2 = p1 + freq;\n"
+                + "    osc_p = p2;\n"
+                + "    if ((p2<0)&&(p1>0))\n"
+                + "      outlet_wave[j] = ___SMMLS(f0i, (-p1)<<1, 0x400)<<16;\n"
+                + "    else if ((p1<0)&&(p2>0))\n"
+                + "      outlet_wave[j] = ___SMMLS(f0i, (p1)<<1, -0x400)<<16;\n"
+                + "    else\n"
+                + "      outlet_wave[j] = (p2>0)?-(1<<26):((1<<26));\n"
+                + "  }\n";
         return o;
     }
 
