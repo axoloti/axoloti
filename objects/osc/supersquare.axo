@@ -1,0 +1,46 @@
+<objdefs>
+   <obj.normal id="supersquare" uuid="ed9ce670bb2de7c801d5a1843f6669ce9d176b08" sha="bae26f8f359ac1243f2b7c1185135b233c1f6d6f">
+      <sDescription>seven detuned square wave oscillators
+Non-bandwith limited</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
+      <inlets>
+         <frac32.bipolar name="pitch" description="pitch"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="wave" description="supersaw wave"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.pitch name="pitch" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[  int32_t osc_p[7];
+]]></code.declaration>
+      <code.init><![CDATA[int i;
+for(i=0;i<7;i++)
+    osc_p[i]=0;
+]]></code.init>
+      <code.krate><![CDATA[  uint32_t f0;
+  uint32_t f[6];
+  MTOFEXTENDED(param_pitch + inlet_pitch,f0);
+  int i,j;
+  f[0] = ___SMMLA(f0,-0x05432123,f0);
+  f[1] = ___SMMLA(f0,-0x03111111,f0);
+  f[2] = ___SMMLA(f0,-0x01020304,f0);
+  f[3] = ___SMMLA(f0,0x01030450,f0);
+  f[4] = ___SMMLA(f0,0x03212121,f0);
+  f[5] = ___SMMLA(f0,0x05542211,f0);
+
+  for(j=0;j<BUFSIZE;j++){
+    osc_p[6]+=f0;
+    outlet_wave[j] = (osc_p[6]>0)<<24;
+    for(i=0;i<6;i++){
+      osc_p[i]+=f[i];
+      outlet_wave[j] += (osc_p[i]>0)<<24;
+    }
+}
+]]></code.krate>
+   </obj.normal>
+</objdefs>

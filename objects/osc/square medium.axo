@@ -1,0 +1,40 @@
+<objdefs>
+   <obj.normal id="square medium" uuid="d8675e626c34278d4df80ca15ee965d647908d2f" sha="6e0a1e700c156ae259f30cb0ddb2b18b1ae23701">
+      <sDescription>square wave oscillator
+Non-bandwith limited, medium quality</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
+      <inlets>
+         <frac32.bipolar name="pitch" description="pitch"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="wave" description="square wave"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.pitch name="pitch" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[  int32_t osc_p;
+]]></code.declaration>
+      <code.init><![CDATA[    osc_p=0;
+]]></code.init>
+      <code.krate><![CDATA[  uint32_t freq;
+  MTOFEXTENDED(param_pitch + inlet_pitch,freq);
+  int j;
+  int32_t f0i = 0x7fffffff/(1+(freq)>>11);
+  for(j=0;j<BUFSIZE;j++){
+    int32_t p1 = osc_p;
+    int32_t p2 = p1 + freq;
+    osc_p = p2;
+    if ((p2<0)&&(p1>0))
+      outlet_wave[j] = ___SMMLS(f0i, (-p1)<<1, 0x400)<<16;
+    else if ((p1<0)&&(p2>0))
+      outlet_wave[j] = ___SMMLS(f0i, (p1)<<1, -0x400)<<16;
+    else
+      outlet_wave[j] = (p2>0)?-(1<<26):((1<<26));
+  }
+]]></code.krate>
+   </obj.normal>
+</objdefs>

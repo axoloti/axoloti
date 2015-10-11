@@ -228,7 +228,7 @@ public class Arithmetic extends gentools {
         AxoObject o = new AxoObject("+1", "adds one unit");
         o.inlets.add(new InletFrac32Buffer("a", "a"));
         o.outlets.add(new OutletFrac32Buffer("result", "a+1"));
-        o.sKRateCode = "%result%= %a%+(1<<21);";
+        o.sSRateCode = "%result%= %a%+(1<<21);";
         return o;
     }
 
@@ -252,7 +252,7 @@ public class Arithmetic extends gentools {
         AxoObject o = new AxoObject("-1", "subtracts one unit");
         o.inlets.add(new InletFrac32Buffer("a", "a"));
         o.outlets.add(new OutletFrac32Buffer("result", "a-1"));
-        o.sKRateCode = "%result%= %a%-(1<<21);";
+        o.sSRateCode = "%result%= %a%-(1<<21);";
         return o;
     }
 
