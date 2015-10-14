@@ -1,0 +1,38 @@
+<objdefs>
+   <obj.normal id="saw medium" uuid="388a55fef8413cfaf26a2a76ed21a7c28bef4e9d" sha="c8a8f97ff19bf9e50b239702dbfa202a5f381d9a">
+      <sDescription>saw wave oscillator
+Non-bandwith limited, medium quality</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <helpPatch>osc.axh</helpPatch>
+      <inlets>
+         <frac32.bipolar name="pitch" description="pitch"/>
+      </inlets>
+      <outlets>
+         <frac32buffer.bipolar name="wave" description="saw wave, non-anti-aliased"/>
+      </outlets>
+      <displays/>
+      <params>
+         <frac32.s.map.pitch name="pitch" noLabel="true"/>
+      </params>
+      <attribs/>
+      <code.declaration><![CDATA[  int32_t osc_p;
+]]></code.declaration>
+      <code.init><![CDATA[    osc_p=0;
+]]></code.init>
+      <code.krate><![CDATA[  uint32_t freq;
+  MTOFEXTENDED(param_pitch + inlet_pitch,freq);
+  int32_t f0i = 0x7fffffff/(1+((int)freq)>>11);
+  int j;
+  for(j=0;j<BUFSIZE;j++){
+    int32_t p1 = osc_p;
+    int32_t p2 = p1 + freq;
+    osc_p = p2;
+    if ((p2<0)&&(p1>0))
+outlet_wave[j] = ___SMMLS(f0i, p2&~(1<<31), 0x200)<<15;
+    else
+      outlet_wave[j] = p2>>7;
+  }
+]]></code.krate>
+   </obj.normal>
+</objdefs>

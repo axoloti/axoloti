@@ -48,6 +48,6 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.krate><![CDATA[outlet_result= inlet_a-(1<<21);]]></code.krate>
+      <code.srate><![CDATA[outlet_result= inlet_a-(1<<21);]]></code.srate>
    </obj.normal>
 </objdefs>
