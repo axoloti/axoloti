@@ -62,6 +62,10 @@ public class Preferences {
     String FirmwareDir;
     @Element(required = false)
     String FavouriteDir;
+    @Element(required = false)
+    String ControllerObject;
+    @Element(required = false)
+    Boolean ControllerEnabled;
     
     @ElementMap(required=false, entry="Boards", key="cpuid", attribute=true, inline=true)
     HashMap<String,String> BoardNames;
@@ -93,6 +97,10 @@ public class Preferences {
         }
         if (BoardNames == null) {
             BoardNames = new HashMap<String, String>();
+        }
+        if (ControllerObject == null) {
+            ControllerObject = "";
+            ControllerEnabled = false;
         }
     }
 
@@ -276,5 +284,20 @@ public class Preferences {
             BoardNames.put(cpuid, name);
         }
         SetDirty();
+    }
+
+    public String getControllerObject() {
+        return ControllerObject;
+    }
+    
+    public void setControllerObject(String s) {
+        ControllerObject = s;
+    }
+
+    public void setControllerEnabled(boolean b) {
+        ControllerEnabled = b;
+    }
+    public boolean isControllerEnabled() {
+        return ControllerEnabled;
     }
 }
