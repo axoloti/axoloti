@@ -363,14 +363,23 @@ void EnterMenuFormat(void) {
 static void UIPollButtons(void);
 static void UIUpdateLCD(void);
 
-static WORKING_AREA(waThreadUI, 2048);
-static msg_t ThreadUI(void *arg) {
-  int refreshLCD=0;
-  while(1) {
+void AxolotiControlUpdate(void) {
+  static int refreshLCD=0;
     UIPollButtons();
     if (!(0x0F & refreshLCD++)) {
       UIUpdateLCD();
       LCD_display();
+    }
+}
+
+
+void (*pControlUpdate)(void) = AxolotiControlUpdate;
+
+static WORKING_AREA(waThreadUI, 2048);
+static msg_t ThreadUI(void *arg) {
+  while(1) {
+    if(pControlUpdate != 0L) {
+        pControlUpdate();
     }
     AxoboardADCConvert();
     PollMidiIn();
@@ -383,6 +392,16 @@ static msg_t ThreadUI(void *arg) {
 static void UIUpdateLCD(void);
 static void UIPollButtons2(void);
 
+void AxolotiControlUpdate(void) {
+#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
+    do_axoloti_control();
+    UIPollButtons2();
+    UIUpdateLCD();
+#endif
+}
+
+void (*pControlUpdate)(void) = AxolotiControlUpdate;
+
 static WORKING_AREA(waThreadUI, 1024);
 static msg_t ThreadUI(void *arg) {
   (void)(arg);
@@ -393,11 +412,9 @@ static msg_t ThreadUI(void *arg) {
 //    AxoboardADCConvert();
     PExTransmit();
     PExReceive();
-#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
-    do_axoloti_control();
-    UIPollButtons2();
-    UIUpdateLCD();
-#endif
+    if(pControlUpdate != 0L) {
+        pControlUpdate();
+    }
     chThdSleepMilliseconds(2);
   }
   return (msg_t)0;
