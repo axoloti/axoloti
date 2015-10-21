@@ -148,14 +148,22 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 } else {
                     try {
                         String txt;
+                        String excTxt = "";
                         Throwable exc = lr.getThrown();
-                        if ((lr.getMessage() == null) && (exc != null)) {
+                        if (exc != null) {
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
                             PrintStream ps = new PrintStream(baos);
                             exc.printStackTrace(ps);
-                            txt = baos.toString("utf-8");
+                            excTxt = exc.toString();
+                            excTxt = excTxt + "\n" + baos.toString("utf-8");
+                        }
+                        if (lr.getMessage() == null) {
+                            txt = excTxt;
                         } else {
                             txt = java.text.MessageFormat.format(lr.getMessage(), lr.getParameters());
+                            if (excTxt.length()>0) {
+                                txt = txt + "," + excTxt;
+                            }
                         }
                         if (lr.getLevel() == Level.SEVERE) {
 
