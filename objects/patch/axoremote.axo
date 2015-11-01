@@ -1,0 +1,15 @@
+<objdefs>
+   <obj.normal id="axoremote" uuid="a97d2b283d8c88deae9654658e9f178f14a6b92a" sha="27aa7b076278a3511f2ca0e20660723e8e77447">
+      <sDescription>Controller object for axoloti remote</sDescription>
+      <author>Mark Harris</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration/>
+      <code.init><![CDATA[ pControlUpdate = AxolotiControlUpdate; ]]></code.init>
+      <code.krate/>
+   </obj.normal>
+</objdefs>

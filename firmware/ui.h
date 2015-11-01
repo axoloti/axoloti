@@ -211,4 +211,7 @@ void SetKVP_FNCTN(struct KeyValuePair *kvp, struct KeyValuePair *parent,
 
 void UIGoSafe(void);
 
+void AxolotiControlUpdate(void);
+extern void (*pControlUpdate)(void);
+
 #endif
