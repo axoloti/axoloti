@@ -32,6 +32,7 @@ import axoloti.object.AxoObjectComment;
 import axoloti.object.AxoObjectHyperlink;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.outlets.OutletBool32;
+import axoloti.outlets.OutletCharPtr32;
 import axoloti.outlets.OutletFrac32;
 import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInt32;
@@ -50,10 +51,12 @@ public class Patch extends gentools {
         WriteAxoObject(catName, Create_inlet_b());
         WriteAxoObject(catName, Create_inlet_i());
         WriteAxoObject(catName, Create_inlet_tilde());
+        WriteAxoObject(catName, Create_inlet_string());
         WriteAxoObject(catName, Create_outlet());
         WriteAxoObject(catName, Create_outlet_b());
         WriteAxoObject(catName, Create_outlet_i());
         WriteAxoObject(catName, Create_outlet_tilde());
+        WriteAxoObject(catName, Create_outlet_string());
         WriteAxoObject(catName, CreatePreset());
         WriteAxoObject(catName, Create_comment());
         WriteAxoObject(catName, Create_hyperlink());
@@ -107,6 +110,13 @@ public class Patch extends gentools {
         return o;
     }
 
+    static AxoObject Create_inlet_string() {
+        AxoObject o = new AxoObject("inlet str", "String inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)");
+        o.outlets.add(new OutletCharPtr32("inlet", "inlet"));
+        o.sLocalData = "charptr32 _inlet;\n";
+        o.sSRateCode = "   %inlet% = (char *)_inlet;";
+        return o;
+    }
     static AxoObject Create_send() {
         AxoObject o = new AxoObject("send f", "send (to recv object), fractional type");
         o.inlets.add(new InletFrac32("v", "v"));
@@ -184,6 +194,14 @@ public class Patch extends gentools {
         o.inlets.add(new InletFrac32Buffer("outlet", "outlet"));
         o.sLocalData = "int32buffer _outlet;\n";
         o.sSRateCode = "   _outlet[buffer_index] = %outlet%;\n";
+        return o;
+    }
+    
+          static AxoObject Create_outlet_string() {
+        AxoObject o = new AxoObject("outlet str", "String outlet. The outlet object becomes an outlet connector when this patch is used as an object (subpatch)");
+        o.inlets.add(new InletCharPtr32("outlet", "outlet"));
+        o.sLocalData = "charptr32 _outlet;\n";
+        o.sSRateCode = "   (char *)_outlet = %outlet%;\n";
         return o;
     }
 
