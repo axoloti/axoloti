@@ -20,6 +20,7 @@ package axoloti;
 import axoloti.attribute.AttributeInstance;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.inlets.InletBool32;
+import axoloti.inlets.InletCharPtr32;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInstance;
@@ -36,6 +37,7 @@ import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.object.AxoObjectZombie;
 import axoloti.object.AxoObjects;
 import axoloti.outlets.OutletBool32;
+import axoloti.outlets.OutletCharPtr32;
 import axoloti.outlets.OutletFrac32;
 import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
@@ -1313,6 +1315,8 @@ public class Patch {
                 ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
             } else if (o.typeName.equals("patch/inlet a")) {
                 ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
+            } else if (o.typeName.equals("patch/inlet string")) {
+                ao.inlets.add(new InletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             } else if (o.typeName.equals("patch/outlet f")) {
                 ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
             } else if (o.typeName.equals("patch/outlet i")) {
@@ -1321,6 +1325,8 @@ public class Patch {
                 ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
             } else if (o.typeName.equals("patch/outlet a")) {
                 ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
+            } else if (o.typeName.equals("patch/outlet string")) {
+                ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
                 if (p.isOnParent()) {
@@ -1355,7 +1361,7 @@ public class Patch {
         }
         ao.sKRateCode += GenerateDSPCodePlusPlusSub("attr_parent", true);
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
+            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b") || o.typeName.equals("patch/outlet string")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = " + o.getCInstanceName() + "_i._outlet;\n";
             } else if (o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "      for(i=0;i<BUFSIZE;i++) outlet_" + o.getLegalName() + "[i] = " + o.getCInstanceName() + "_i._outlet[i];\n";
@@ -1459,6 +1465,8 @@ public class Patch {
                 ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
             } else if (o.typeName.equals("patch/inlet a")) {
                 ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
+            } else if (o.typeName.equals("patch/inlet string")) {
+                ao.inlets.add(new InletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             } else if (o.typeName.equals("patch/outlet f")) {
                 ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
             } else if (o.typeName.equals("patch/outlet i")) {
@@ -1467,6 +1475,8 @@ public class Patch {
                 ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
             } else if (o.typeName.equals("patch/outlet a")) {
                 ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
+            } else if (o.typeName.equals("patch/outlet string")) {
+                ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
                 if (p.isOnParent()) {
@@ -1562,7 +1572,7 @@ public class Patch {
                 + "}\n";
         ao.sKRateCode = "";
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
+            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i")  || o.typeName.equals("patch/outlet string")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = 0;\n";
             } else if (o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
@@ -1575,7 +1585,7 @@ public class Patch {
 
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("inlet") || o.typeName.equals("inlet_i") || o.typeName.equals("inlet_b")
-                    || o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
+                    || o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b") || o.typeName.equals("patch/inlet string")) {
                 ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
             } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
                 ao.sKRateCode += "{int j; for(j=0;j<BUFSIZE;j++) getVoices()[vi]." + o.getCInstanceName() + "_i._inlet[j] = inlet_" + o.getLegalName() + "[j];}\n";
@@ -1585,7 +1595,8 @@ public class Patch {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("outlet") || o.typeName.equals("patch/outlet f")
                     || o.typeName.equals("patch/outlet i")
-                    || o.typeName.equals("patch/outlet b")) {
+                    || o.typeName.equals("patch/outlet b")
+                    || o.typeName.equals("patch/outlet string")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
             } else if (o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
