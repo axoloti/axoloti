@@ -1572,7 +1572,8 @@ public class Patch {
                 + "}\n";
         ao.sKRateCode = "";
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i")  || o.typeName.equals("patch/outlet string")) {
+            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i")
+                    || o.typeName.equals("patch/outlet b") || o.typeName.equals("patch/outlet string")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = 0;\n";
             } else if (o.typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
