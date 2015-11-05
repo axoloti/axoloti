@@ -299,7 +299,7 @@ public class PatchFrame extends javax.swing.JFrame {
         jCheckBoxMenuItemLive = new javax.swing.JCheckBoxMenuItem();
         jMenuItemUploadSD = new javax.swing.JMenuItem();
         jMenuItemUploadSDStart = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItemUploadInternalFlash = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         jMenuGenerateCode = new javax.swing.JMenuItem();
         jMenuCompileCode = new javax.swing.JMenuItem();
@@ -539,13 +539,13 @@ jCheckBoxMenuItemLive.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuPatch.add(jMenuItemUploadSDStart);
 
-    jMenuItem2.setText("Upload to internal flash");
-    jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+    jMenuItemUploadInternalFlash.setText("Upload to internal flash");
+    jMenuItemUploadInternalFlash.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItem2ActionPerformed(evt);
+            jMenuItemUploadInternalFlashActionPerformed(evt);
         }
     });
-    jMenuPatch.add(jMenuItem2);
+    jMenuPatch.add(jMenuItemUploadInternalFlash);
     jMenuPatch.add(jSeparator3);
 
     jMenuGenerateCode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
@@ -628,13 +628,13 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     jMenuWindow.setMnemonic('W');
     jMenuWindow.setText("Window");
     jMenuWindow.addMenuListener(new javax.swing.event.MenuListener() {
-        public void menuSelected(javax.swing.event.MenuEvent evt) {
-            jMenuWindowMenuSelected(evt);
+        public void menuCanceled(javax.swing.event.MenuEvent evt) {
         }
         public void menuDeselected(javax.swing.event.MenuEvent evt) {
             jMenuWindowMenuDeselected(evt);
         }
-        public void menuCanceled(javax.swing.event.MenuEvent evt) {
+        public void menuSelected(javax.swing.event.MenuEvent evt) {
+            jMenuWindowMenuSelected(evt);
         }
     });
     jMenuBar1.add(jMenuWindow);
@@ -988,12 +988,13 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         c.setContents(new StringSelection(baos.toString()), null);
     }//GEN-LAST:event_jMenuSaveClipActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void jMenuItemUploadInternalFlashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadInternalFlashActionPerformed
+        patch.WriteCode();
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patch));
         qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadPatch());
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCopyPatchToFlash());
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_jMenuItemUploadInternalFlashActionPerformed
 
     private void jMenuItemAddObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddObjActionPerformed
         patch.ShowClassSelector(new Point(20, 20), null, null);
@@ -1046,7 +1047,6 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuGenerateCode;
     private javax.swing.JMenu jMenuHelp;
     private javax.swing.JMenuItem jMenuHelpContents;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemAddObj;
     private javax.swing.JMenuItem jMenuItemAdjScroll;
     private javax.swing.JMenuItem jMenuItemClearPreset;
@@ -1058,6 +1058,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemSelectAll;
     private javax.swing.JMenuItem jMenuItemSettings;
     private javax.swing.JMenuItem jMenuItemUnlock;
+    private javax.swing.JMenuItem jMenuItemUploadInternalFlash;
     private javax.swing.JMenuItem jMenuItemUploadSD;
     private javax.swing.JMenuItem jMenuItemUploadSDStart;
     private javax.swing.JMenuItem jMenuNew;
