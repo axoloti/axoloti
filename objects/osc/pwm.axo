@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="pwm" uuid="a6b40ff63f161d8bac8ea2eba5b0dbffcf49b472" sha="4f216b9a125822434f813198e9be4da0b5e8b042">
+   <obj.normal id="pwm" uuid="a6b40ff63f161d8bac8ea2eba5b0dbffcf49b472" sha="d157b5424d365fe9d0dbb9b8c6cffd0e9a528afe">
       <sDescription>pulse width modulation oscillator
 Bandwith limited</sDescription>
       <author>Johannes Taelman</author>
@@ -7,7 +7,7 @@ Bandwith limited</sDescription>
       <helpPatch>osc.axh</helpPatch>
       <inlets>
          <frac32.bipolar name="pitch" description="pitch"/>
-         <frac32.positive name="pw" description="pulse width"/>
+         <frac32.bipolar name="pw" description="pulse width. Zero corresponds to 50% duty cycle."/>
       </inlets>
       <outlets>
          <frac32buffer.bipolar name="wave" description="pwm wave, anti-aliased"/>
@@ -26,7 +26,7 @@ Bandwith limited</sDescription>
       <code.init><![CDATA[    int j;
     for(j=0;j<blepvoices;j++)
       oscp[j] = &blept[BLEPSIZE-1];   nextvoice = 0;]]></code.init>
-      <code.krate><![CDATA[      int32_t freq;
+      <code.krate><![CDATA[      uint32_t freq;
       MTOFEXTENDED(param_pitch + inlet_pitch,freq);
   int j;
   int16_t *lastblep = &blept[BLEPSIZE-1];
@@ -36,24 +36,46 @@ Bandwith limited</sDescription>
     p = osc_p;
     osc_p = p+freq;
     int32_t sum=0;
-    if ((osc_p>0)&&!(p>0)){   // dispatch
-      nextvoice = (nextvoice+1)&(blepvoices-1);
-      int32_t x = 0;
-      if (freq>>24)
-         x = osc_p/(freq>>6);
-      else if (freq)
-         x = (osc_p<<6)/freq;
-      oscp[nextvoice] = &blept[x];
-      pwmp = inlet_pw;
-    }
-    if ((osc_p-(pwmp<<4)>0)&&!(p-(pwmp<<4)>0)){   // dispatch
-      nextvoice = (nextvoice+1)&(blepvoices-1);
-      int32_t x = 0;
-      if (freq>>24)
-        x = (osc_p-(inlet_pw<<4))/(freq>>6);
-      else if (freq)
-        x = ((osc_p-(inlet_pw<<4))<<6)/(freq);
-      oscp[nextvoice] = &blept[x];
+    if (((int32_t)osc_p)>=((int32_t)(osc_p-pwmp))){
+      if ((osc_p>0)&&!(p>0)){   // dispatch
+        nextvoice = (nextvoice+1)&(blepvoices-1);
+        int32_t x = 0;
+        if (freq>>24)
+           x = osc_p/(freq>>6);
+        else if (freq)
+           x = (osc_p<<6)/freq;
+        oscp[nextvoice] = &blept[x];
+        pwmp = ((1<<27)+inlet_pw)<<4;
+      }
+      if (((osc_p-pwmp)>0)&&!((p-pwmp)>0)){   // dispatch
+        nextvoice = (nextvoice+1)&(blepvoices-1);
+        uint32_t x = 0;
+        if (freq>>24)
+          x = (osc_p-pwmp)/(freq>>6);
+        else if (freq)
+          x = ((osc_p-pwmp)<<6)/(freq);
+        oscp[nextvoice] = &blept[x];
+      }
+    } else {
+      if (((osc_p-pwmp)>0)&&!((p-pwmp)>0)){   // dispatch
+        nextvoice = (nextvoice+1)&(blepvoices-1);
+        uint32_t x = 0;
+        if (freq>>24)
+          x = (osc_p-pwmp)/(freq>>6);
+        else if (freq)
+          x = ((osc_p-pwmp)<<6)/(freq);
+        oscp[nextvoice] = &blept[x];
+      }
+      if ((osc_p>0)&&!(p>0)){   // dispatch
+        nextvoice = (nextvoice+1)&(blepvoices-1);
+        int32_t x = 0;
+        if (freq>>24)
+           x = osc_p/(freq>>6);
+        else if (freq)
+           x = (osc_p<<6)/freq;
+        oscp[nextvoice] = &blept[x];
+        pwmp = ((1<<27)+inlet_pw)<<4;
+      }
     }
     for(i=0;i<blepvoices;i++){ // sample
       int16_t *t = oscp[i];
