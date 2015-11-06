@@ -111,10 +111,10 @@ public class Patch extends gentools {
     }
 
     static AxoObject Create_inlet_string() {
-        AxoObject o = new AxoObject("inlet str", "String inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)");
+        AxoObject o = new AxoObject("inlet string", "String inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)");
         o.outlets.add(new OutletCharPtr32("inlet", "inlet"));
         o.sLocalData = "charptr32 _inlet;\n";
-        o.sSRateCode = "   %inlet% = (char *)_inlet;";
+        o.sKRateCode = "   %inlet% = (const char *)_inlet;";
         return o;
     }
     static AxoObject Create_send() {
@@ -198,10 +198,10 @@ public class Patch extends gentools {
     }
     
           static AxoObject Create_outlet_string() {
-        AxoObject o = new AxoObject("outlet str", "String outlet. The outlet object becomes an outlet connector when this patch is used as an object (subpatch)");
+        AxoObject o = new AxoObject("outlet string", "String outlet. The outlet object becomes an outlet connector when this patch is used as an object (subpatch)");
         o.inlets.add(new InletCharPtr32("outlet", "outlet"));
         o.sLocalData = "charptr32 _outlet;\n";
-        o.sSRateCode = "   (char *)_outlet = %outlet%;\n";
+        o.sKRateCode = "   (char *)_outlet = %outlet%;\n";
         return o;
     }
 

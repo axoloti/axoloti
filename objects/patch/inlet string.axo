@@ -1,0 +1,18 @@
+<objdefs>
+   <obj.normal id="inlet string" uuid="6c562c1a7890cccf18fa7327d8baa476d0926cd8" sha="8b54094a17f5bf912ab7b9139ab75d5b877b3961">
+      <sDescription>String inlet. The inlet object becomes an inlet connector when this patch is used as an object (subpatch)</sDescription>
+      <author>Gesloten Cirkel (axoloti by Johannes Taelman)</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets>
+         <charptr32 name="inlet" description="inlet"/>
+      </outlets>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[const char *_inlet;
+]]></code.declaration>
+      <code.krate><![CDATA[  outlet_inlet = (char *)_inlet;
+]]></code.krate>
+   </obj.normal>
+</objdefs>
