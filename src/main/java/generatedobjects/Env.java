@@ -26,6 +26,7 @@ import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
 import axoloti.outlets.OutletFrac32Pos;
 import axoloti.outlets.OutletInt32Pos;
+import axoloti.parameters.ParameterFrac32SMap;
 import axoloti.parameters.ParameterFrac32SMapKDTimeExp;
 import axoloti.parameters.ParameterFrac32SMapKLineTimeExp;
 import axoloti.parameters.ParameterFrac32SMapKLineTimeExp2;
@@ -44,6 +45,7 @@ public class Env extends gentools {
 
         catName = "env";
         WriteAxoObject(catName, Create_envadsr());
+        WriteAxoObject(catName, Create_envadsrm());
         WriteAxoObject(catName, Create_envad());
         WriteAxoObject(catName, Create_envd_new());
         WriteAxoObject(catName, Create_envd_m_new());
@@ -184,6 +186,58 @@ public class Env extends gentools {
                 + "}\n"
                 + "\n"
                 + "%env% = val>>4;";
+        return o;
+    }
+
+    static AxoObject Create_envadsrm() {
+        AxoObject o = new AxoObject("adsr m", "Attack/decay/sustain/release envelope with modulation inputs");
+        o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
+        o.inlets.add(new InletBool32RisingFalling("gate", "gate"));
+        o.inlets.add(new InletFrac32Bipolar("a", "attack time modulation"));
+        o.inlets.add(new InletFrac32Bipolar("d", "decay time modulation"));
+        o.inlets.add(new InletFrac32Bipolar("s", "sustail level modulation"));
+        o.inlets.add(new InletFrac32Bipolar("r", "release time modulation"));
+        o.params.add(new ParameterFrac32SMap("a"));
+        o.params.add(new ParameterFrac32SMap("d"));
+        o.params.add(new ParameterFrac32UMap("s"));
+        o.params.add(new ParameterFrac32SMap("r"));
+        o.sLocalData = "int8_t stage;\n"
+                + "int ntrig;\n"
+                + "int32_t val;\n";
+        o.sInitCode = "stage = 0;\n"
+                + "ntrig = 0;\n"
+                + "val = 0;\n";
+        o.sKRateCode = "if ((inlet_gate>0) && !ntrig) {\n"
+                + "   stage = 1;\n"
+                + "   ntrig = 1;\n"
+                + "}\n"
+                + "if (!(inlet_gate>0) && ntrig) {\n"
+                + "   stage = 0;\n"
+                + "   ntrig = 0;\n"
+                + "}\n"
+                + "if (stage == 0){\n"
+                + "   int32_t r1;\n"
+                + "   int32_t r2;\n"
+                + "   MTOF(- param_r - inlet_r, r1);\n"
+                + "   r1 = 0x7FFFFFFF - (r1 >> 2);\n"
+                + "   val = ___SMMUL(val,r1)<<1;\n"
+                + "} else if (stage == 1){\n"
+                + "   int32_t a;\n"
+                + "   MTOF(- param_a - inlet_a,a);\n"
+                + "   a = a >> 2;\n"
+                + "   val = val + a;\n"
+                + "   if (val<0) {\n"
+                + "      val =0x7FFFFFFF;\n"
+                + "      stage = 2;\n"
+                + "   }\n"
+                + "} else if (stage == 2) {\n"
+                + "   int32_t s = __USAT(param_s + inlet_s, 27);\n"
+                + "   int32_t d;\n"
+                + "   MTOF(- param_d - inlet_d, d);\n"
+                + "   d = 0x7FFFFFFF - (d >> 2);\n"
+                + "   val = (s<<4) + (___SMMUL(val - (s<<4),d)<<1);\n"
+                + "}\n"
+                + "outlet_env = val>>4;\n";
         return o;
     }
 
