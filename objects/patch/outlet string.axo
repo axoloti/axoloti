@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="outlet string" uuid="515c49b96c1c486e74e0f5f1e5e7314007c8a2e" sha="d95ad4ebc566f4641fc10d29770535ed972f6df5">
+   <obj.normal id="outlet string" uuid="515c49b96c1c486e74e0f5f1e5e7314007c8a2e" sha="4e16c2bebe54823c3311fe1d64f9929fdcada740">
       <sDescription>String Outlet</sDescription>
       <author>Gesloten Cirkel (axoloti by Johannes Taelman)</author>
       <license>BSD</license>
@@ -10,9 +10,9 @@
       <displays/>
       <params/>
       <attribs/>
-      <code.declaration><![CDATA[char *_outlet;
+      <code.declaration><![CDATA[const char *_outlet;
 ]]></code.declaration>
-      <code.krate><![CDATA[  _outlet = (char *)inlet_outlet;
+      <code.krate><![CDATA[  _outlet = inlet_outlet;
 ]]></code.krate>
    </obj.normal>
 </objdefs>
