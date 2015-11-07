@@ -404,6 +404,7 @@ USBH_StatusTypeDef  USBH_Process(USBH_HandleTypeDef *phost)
 {
   __IO USBH_StatusTypeDef status = USBH_FAIL;
   uint8_t idx = 0;
+  uint8_t intf = 0;
   
   switch (phost->gState)
   {
@@ -527,10 +528,14 @@ USBH_StatusTypeDef  USBH_Process(USBH_HandleTypeDef *phost)
       
       for (idx = 0; idx < USBH_MAX_NUM_SUPPORTED_CLASS ; idx ++)
       {
-        if(phost->pClass[idx]->ClassCode == phost->device.CfgDesc.Itf_Desc[0].bInterfaceClass)
-        {
-          phost->pActiveClass = phost->pClass[idx];
+        for (intf = 0; intf < phost->device.CfgDesc.bNumInterfaces; intf ++) {
+          if(phost->pClass[idx]->ClassCode == phost->device.CfgDesc.Itf_Desc[intf].bInterfaceClass)
+          {
+            phost->pActiveClass = phost->pClass[idx];
+            break;
+          }
         }
+        if(phost->pActiveClass != NULL) break;
       }
       
       if(phost->pActiveClass != NULL)

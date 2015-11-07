@@ -546,8 +546,9 @@ void MY_USBH_Init(void) {
   USBH_Init(&hUSBHost, USBH_UserProcess, 0);
 
   /* Add Supported Class */
-  USBH_RegisterClass(&hUSBHost, USBH_HID_CLASS);
+  /* highest priority first */
   USBH_RegisterClass(&hUSBHost, USBH_MIDI_CLASS);
+  USBH_RegisterClass(&hUSBHost, USBH_HID_CLASS);
 
   /* Start Host Process */
   USBH_Start(&hUSBHost);
