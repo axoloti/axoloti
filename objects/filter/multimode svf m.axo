@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="multimode svf m" uuid="71d5f8b2131b691d591a9a9ee28771309f8938d" sha="d666fbf5a7afe35efff0e6392b405118cf378fdf">
-      <upgradeSha>e44012618acf4febc18c305387ef61caeb817e63</upgradeSha>
+   <obj.normal id="multimode svf m" uuid="71d5f8b2131b691d591a9a9ee28771309f8938d" sha="4090d6ffd6000f64e953e5e7aab37348c0763c86">
+      <upgradeSha>c10a30fcf81456fb74bceab1163c587cfa7112d5</upgradeSha>
       <sDescription>multimode filter, state-variable type, modulation inputs</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -27,11 +27,12 @@ int32_t band;
       <code.init><![CDATA[low = 0;
 band = 0;
 ]]></code.init>
-      <code.krate><![CDATA[int32_t damp = (0x80<<24) - (param_reso<<4);
+      <code.krate><![CDATA[int32_t damp = (0x80<<24) - (__USAT(inlet_reso + param_reso,27)<<4);
 damp = ___SMMUL(damp,damp);
 int32_t alpha;
 int32_t freq;
-MTOFEXTENDED(param_pitch,alpha);
+int32_t pitch = __SSAT(param_pitch+inlet_pitch,28);
+MTOFEXTENDED(pitch,alpha);
 SINE2TINTERP(alpha,freq);
 ]]></code.krate>
       <code.srate><![CDATA[int32_t in1 = inlet_in;

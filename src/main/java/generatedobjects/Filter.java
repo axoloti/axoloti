@@ -643,11 +643,12 @@ public class Filter extends gentools {
                 + "int32_t band;\n";
         o.sInitCode = "low = 0;\n"
                 + "band = 0;\n";
-        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (__USAT(inlet_reso + param_reso,27)<<4);\n"
                 + "damp = ___SMMUL(damp,damp);\n"
                 + "int32_t alpha;\n"
                 + "int32_t freq;\n"
-                + "MTOFEXTENDED(param_pitch,alpha);\n"
+                + "int32_t pitch = __SSAT(param_pitch+inlet_pitch,28);\n"
+                + "MTOFEXTENDED(pitch,alpha);\n"
                 + "SINE2TINTERP(alpha,freq);\n";
         o.sSRateCode = "int32_t in1 = %in%;\n"
                 + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
