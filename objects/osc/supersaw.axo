@@ -1,5 +1,5 @@
 <objdefs>
-   <obj.normal id="supersaw" uuid="8a13f78c53e915330348d1198afc5cfc611d2e51" sha="d1b143937540d194ccb317c8bd784a99cafac38c">
+   <obj.normal id="supersaw" uuid="ece83feb36cfaee7dc3964b75c485774ea0309cf" sha="f4304da7825769e08136a4c4e064635dbe5e4316">
       <sDescription>seven detuned saw wave oscillators
 Non-bandwith limited</sDescription>
       <author>Johannes Taelman</author>
@@ -16,7 +16,6 @@ Non-bandwith limited</sDescription>
       <params>
          <frac32.s.map.pitch name="pitch"/>
          <frac32.u.map name="detune"/>
-         <frac32.u.map name="amt"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[  int32_t osc_p[7];

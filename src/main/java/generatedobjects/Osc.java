@@ -307,7 +307,7 @@ public class Osc extends gentools {
         o.inlets.add(new InletFrac32Bipolar("detune", "detune"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.params.add(new ParameterFrac32UMap("detune"));
-        o.params.add(new ParameterFrac32UMap("amt"));
+        //o.params.add(new ParameterFrac32UMap("amt"));
         o.includes = new HashSet<String>();
         o.sLocalData = "  int32_t osc_p[7];\n";
         o.sInitCode = "int i;\n"
