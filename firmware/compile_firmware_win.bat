@@ -30,6 +30,19 @@ make
 IF %ERRORLEVEL% NEQ 0 (
 	exit /b 1
 )
+cd ..
+
+echo "Compiling firmware mounter..."
+cd mounter
+if not exist ".dep\" mkdir .dep
+if not exist "mounter_build\" mkdir mounter_build
+if not exist "mounter_build\obj\" mkdir mounter_build\obj
+if not exist "mounter_build\lst\" mkdir mounter_build\lst
+make
+IF %ERRORLEVEL% NEQ 0 (
+	exit /b 1
+)
+cd ..
 
 goto :eof
 

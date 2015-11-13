@@ -414,6 +414,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jMenuItemFDisconnect = new javax.swing.JMenuItem();
         jMenuItemPing = new javax.swing.JMenuItem();
         jMenuItemPanic = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuFirmware = new javax.swing.JMenu();
         jMenuItemFlashDefault = new javax.swing.JMenuItem();
         jMenuItemFlashDFU = new javax.swing.JMenuItem();
@@ -640,6 +641,14 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuBoard.add(jMenuItemPanic);
 
+    jMenuItem1.setText("Enter card reader mode (disconnects editor)");
+    jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItem1ActionPerformed(evt);
+        }
+    });
+    jMenuBoard.add(jMenuItem1);
+
     jMenuFirmware.setText("Firmware");
 
     jMenuItemFlashDefault.setText("Flash");
@@ -697,13 +706,13 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     jMenuWindow.setText("Window");
     jMenuWindow.addMenuListener(new javax.swing.event.MenuListener() {
-        public void menuSelected(javax.swing.event.MenuEvent evt) {
-            jMenuWindowMenuSelected(evt);
+        public void menuCanceled(javax.swing.event.MenuEvent evt) {
         }
         public void menuDeselected(javax.swing.event.MenuEvent evt) {
             jMenuWindowMenuDeselected(evt);
         }
-        public void menuCanceled(javax.swing.event.MenuEvent evt) {
+        public void menuSelected(javax.swing.event.MenuEvent evt) {
+            jMenuWindowMenuSelected(evt);
         }
     });
     jMenuBar1.add(jMenuWindow);
@@ -1089,6 +1098,18 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     }//GEN-LAST:event_jMenuOpenURLActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/mounter.bin";
+        File f = new File(fname);
+        if (f.canRead()) {
+                qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
+                qcmdprocessor.AppendToQueue(new QCmdStart(null));
+        } else {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read mounter firmware, please compile mounter firmware! (file: {0} )", fname);
+        }
+        
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     public void NewPatch() {
         PatchGUI patch1 = new PatchGUI();
         PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
@@ -1214,6 +1235,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenu jMenuFirmware;
     private javax.swing.JMenu jMenuHelp;
     private javax.swing.JMenuItem jMenuHelpContents;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemEnterDFU;
     private javax.swing.JMenuItem jMenuItemFCompile;
