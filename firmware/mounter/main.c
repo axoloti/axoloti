@@ -18,8 +18,8 @@ static const uint8_t deviceDescriptorData[] =
         0x00,   /* device sub-class (none, specified in interface) */
         0x00,   /* device protocol (none, specified in interface)  */
         64,     /* max packet size of control end-point            */
-        0x0483, /* vendor ID (STMicroelectronics!)                 */
-        0x5740, /* product ID (STM32F407)                          */
+        0x16C0, /* vendor ID (Voti)                                */
+        0x03E8, /* product ID (lab use only!)                      */
         0x0100, /* device release number                           */
         1,      /* index of manufacturer string descriptor         */
         2,      /* index of product string descriptor              */
@@ -62,7 +62,7 @@ static const uint8_t configurationDescriptorData[] =
     /* end-point descriptor */
     USB_DESC_ENDPOINT
     (
-        USB_MS_DATA_EP | 0x80, /* address (end point index | OUT direction)      */
+        USB_MS_DATA_EP | 0x00, /* address (end point index | IN direction)       */
         USB_EP_MODE_TYPE_BULK, /* attributes (bulk)                              */
         64,                    /* max packet size                                */
         0x05                   /* polling interval (ignored for bulk end-points) */
@@ -71,7 +71,7 @@ static const uint8_t configurationDescriptorData[] =
     /* end-point descriptor */
     USB_DESC_ENDPOINT
     (
-        USB_MS_DATA_EP | 0x00, /* address (end point index | IN direction)       */
+        USB_MS_DATA_EP | 0x80, /* address (end point index | OUT direction)      */
         USB_EP_MODE_TYPE_BULK, /* attributes (bulk)                              */
         64,                    /* max packet size                                */
         0x05                   /* polling interval (ignored for bulk end-points) */
@@ -162,6 +162,12 @@ static const USBDescriptor* getDescriptor(USBDriver* usbp, uint8_t type, uint8_t
     return 0;
 }
 
+
+
+/* USB mass storage driver */
+USBMassStorageDriver UMSD1;
+
+
 /* Handles global events of the USB driver */
 static void usbEvent(USBDriver* usbp, usbevent_t event)
 {
@@ -169,7 +175,8 @@ static void usbEvent(USBDriver* usbp, usbevent_t event)
     {
         case USB_EVENT_CONFIGURED:
             chSysLockFromIsr();
-            msdConfigureHookI(usbp);
+//            usbInitEndpointI(usbp, USB_MS_DATA_EP, &ep_data_config);
+            msdConfigureHookI(&UMSD1);
             chSysUnlockFromIsr();
             break;
 
@@ -213,30 +220,43 @@ static USBMassStorageConfig msdConfig =
     "0.1"
 };
 
-/* USB mass storage driver */
-USBMassStorageDriver UMSD1;
-
 extern int _vectors;
 
 int main(void)
 {
   // copy vector table
-  memcpy((char *)0x20000000, (const char *)&_vectors, 0x200);
+//  memcpy((char *)0x20000000, (const char *)&_vectors, 0x200);
   // remap SRAM1 to 0x00000000
-  SYSCFG->MEMRMP |= 0x03;
+//  SYSCFG->MEMRMP |= 0x03;
 	
-	
+
+//    HAL_DeInit();
+
     /* system & hardware initialization */
     halInit();
 
     // float usb inputs, hope the host notices detach...
-    palSetPadMode(GPIOA, 11, PAL_MODE_INPUT); palSetPadMode(GPIOA, 12, PAL_MODE_INPUT);
+    palSetPadMode(GPIOA, 11, PAL_MODE_INPUT);
+    palSetPadMode(GPIOA, 12, PAL_MODE_INPUT);
     // setup LEDs
     palSetPadMode(LED1_PORT,LED1_PIN,PAL_MODE_OUTPUT_PUSHPULL);
     palSetPad(LED1_PORT,LED1_PIN);
 
     chSysInit();
 	
+    chThdSleepMilliseconds(1000);
+
+    palSetPadMode(GPIOA, 11, PAL_MODE_ALTERNATE(10));
+    palSetPadMode(GPIOA, 12, PAL_MODE_ALTERNATE(10));
+
+    palSetPadMode(GPIOC, 8, PAL_MODE_ALTERNATE(12) | PAL_STM32_OSPEED_HIGHEST);
+    palSetPadMode(GPIOC, 9, PAL_MODE_ALTERNATE(12) | PAL_STM32_OSPEED_HIGHEST);
+    palSetPadMode(GPIOC, 10, PAL_MODE_ALTERNATE(12) | PAL_STM32_OSPEED_HIGHEST);
+    palSetPadMode(GPIOC, 11, PAL_MODE_ALTERNATE(12) | PAL_STM32_OSPEED_HIGHEST);
+    palSetPadMode(GPIOC, 12, PAL_MODE_ALTERNATE(12) | PAL_STM32_OSPEED_HIGHEST);
+    palSetPadMode(GPIOD, 2, PAL_MODE_ALTERNATE(12) | PAL_STM32_OSPEED_HIGHEST);
+    chThdSleepMilliseconds(50);
+
     /* initialize the SD card */
     sdcStart(&SDCD1, NULL);
     sdcConnect(&SDCD1);
@@ -244,14 +264,21 @@ int main(void)
     /* initialize the USB mass storage driver */
     msdInit(&UMSD1);
 
-    /* start the USB mass storage service */
-    msdStart(&UMSD1, &msdConfig);
-
     /* turn off green LED, turn on red LED */
     palSetPadMode(LED1_PORT, LED1_PIN, PAL_MODE_OUTPUT_PUSHPULL);
     palClearPad(LED1_PORT, LED1_PIN);
     palSetPadMode(LED2_PORT, LED2_PIN, PAL_MODE_OUTPUT_PUSHPULL);
     palSetPad(LED2_PORT, LED2_PIN);
+
+    /* start the USB mass storage service */
+    msdStart(&UMSD1, &msdConfig);
+
+    /* watch the mass storage events */
+    EventListener connected;
+    EventListener ejected;
+    chEvtRegisterMask(&UMSD1.evt_connected, &connected, EVENT_MASK(1));
+    chEvtRegisterMask(&UMSD1.evt_ejected, &ejected, EVENT_MASK(2));
+
 
     /* start the USB driver */
     usbDisconnectBus(&USBD1);
@@ -260,11 +287,6 @@ int main(void)
     usbConnectBus(&USBD1);
 
 	
-    /* watch the mass storage events */
-    EventListener connected;
-    EventListener ejected;
-    chEvtRegisterMask(&UMSD1.evt_connected, &connected, EVENT_MASK(1));
-    chEvtRegisterMask(&UMSD1.evt_ejected, &ejected, EVENT_MASK(2));
 
     while (TRUE)
     {
