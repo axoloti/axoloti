@@ -16,3 +16,11 @@ cd flasher
 mkdir -p flasher_build/obj
 mkdir -p flasher_build/lst
 make
+cd ..
+
+echo "Compiling firmware mounter..."
+cd mounter
+mkdir -p mounter_build/obj
+mkdir -p mounter_build/lst
+make
+cd ..
