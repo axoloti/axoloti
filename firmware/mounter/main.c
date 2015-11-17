@@ -191,7 +191,7 @@ static void usbEvent(USBDriver* usbp, usbevent_t event)
 }
 
 /* Configuration of the USB driver */
-const USBConfig usbConfig =
+static const USBConfig usbConfig =
 {
     usbEvent,
     getDescriptor,
@@ -209,7 +209,7 @@ static void usbActivity(bool_t active)
 }
 
 /* USB mass storage configuration */
-static USBMassStorageConfig msdConfig =
+static const USBMassStorageConfig msdConfig =
 {
     &USBD1,
     (BaseBlockDevice*)&SDCD1,
@@ -225,11 +225,10 @@ extern int _vectors;
 int main(void)
 {
   // copy vector table
-//  memcpy((char *)0x20000000, (const char *)&_vectors, 0x200);
+  memcpy((char *)0x20000000, (const char *)&_vectors, 0x200);
   // remap SRAM1 to 0x00000000
-//  SYSCFG->MEMRMP |= 0x03;
+  SYSCFG->MEMRMP |= 0x03;
 	
-
 //    HAL_DeInit();
 
     /* system & hardware initialization */
@@ -240,7 +239,9 @@ int main(void)
     palSetPadMode(GPIOA, 12, PAL_MODE_INPUT);
     // setup LEDs
     palSetPadMode(LED1_PORT,LED1_PIN,PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPad(LED1_PORT,LED1_PIN);
+    palSetPadMode(LED2_PORT, LED2_PIN, PAL_MODE_OUTPUT_PUSHPULL);
+    palClearPad(LED1_PORT,LED1_PIN);
+    palSetPad(LED2_PORT,LED2_PIN);
 
     chSysInit();
 	
@@ -286,7 +287,6 @@ int main(void)
     usbStart(&USBD1, &usbConfig);
     usbConnectBus(&USBD1);
 
-	
 
     while (TRUE)
     {
