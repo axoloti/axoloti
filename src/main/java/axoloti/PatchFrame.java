@@ -20,6 +20,7 @@ package axoloti;
 import axoloti.dialogs.AboutFrame;
 import axoloti.object.AxoObjects;
 import axoloti.utils.Constants;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -83,9 +84,9 @@ public class PatchFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Patch p = patch.GetSelectedObjects();
-                if (p.objectinstances.isEmpty()) { 
+                if (p.objectinstances.isEmpty()) {
                     getToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
-                    return ;
+                    return;
                 }
                 p.PreSerialize();
                 Serializer serializer = new Persister();
@@ -109,9 +110,9 @@ public class PatchFrame extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Patch p = patch.GetSelectedObjects();
-                if (p.objectinstances.isEmpty()) { 
+                if (p.objectinstances.isEmpty()) {
                     getToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
-                    return ;
+                    return;
                 }
                 p.PreSerialize();
                 Serializer serializer = new Persister();
@@ -227,7 +228,7 @@ public class PatchFrame extends javax.swing.JFrame {
     }
 
     public boolean AskClose() {
-        if ( patch.isDirty() && patch.container() == null ) {
+        if (patch.isDirty() && patch.container() == null) {
             Object[] options = {"Save",
                 "Don't save",
                 "Cancel"};
@@ -319,6 +320,11 @@ public class PatchFrame extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+        });
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                formFocusLost(evt);
             }
         });
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
@@ -756,8 +762,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         fc.setSelectedFile(f);
 
         String ext = "";
-        int dot=fn.lastIndexOf('.');
-        if(dot > 0 && fn.length() > dot+3) {
+        int dot = fn.lastIndexOf('.');
+        if (dot > 0 && fn.length() > dot + 3) {
             ext = fn.substring(dot);
         }
         if (ext.equalsIgnoreCase(".axp")) {
@@ -766,11 +772,10 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             fc.setFileFilter(axs);
         } else if (ext.equalsIgnoreCase(".axh")) {
             fc.setFileFilter(axh);
-        }
-        else {
+        } else {
             fc.setFileFilter(axp);
         }
-        
+
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String filterext = ".axp";
@@ -785,12 +790,11 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             File fileToBeSaved = fc.getSelectedFile();
             ext = "";
             String fname = fileToBeSaved.getAbsolutePath();
-            dot=fname.lastIndexOf('.');
-            if(dot > 0 && fname.length() > dot+3) {
+            dot = fname.lastIndexOf('.');
+            if (dot > 0 && fname.length() > dot + 3) {
                 ext = fname.substring(dot);
             }
 
-            
             if (!(ext.equalsIgnoreCase(".axp")
                     || ext.equalsIgnoreCase(".axh")
                     || ext.equalsIgnoreCase(".axs"))) {
@@ -801,7 +805,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                 Object[] options = {"Yes",
                     "No"};
                 int n = JOptionPane.showOptionDialog(this,
-                        "File does not match filter, do you want to change extension to "+filterext+" ?",
+                        "File does not match filter, do you want to change extension to " + filterext + " ?",
                         "Axoloti asks:",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE,
@@ -810,12 +814,12 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                         options[1]);
                 switch (n) {
                     case JOptionPane.YES_OPTION:
-                        fileToBeSaved = new File(fname.substring(0,fname.length()-4) + filterext);
+                        fileToBeSaved = new File(fname.substring(0, fname.length() - 4) + filterext);
                         break;
                     case JOptionPane.NO_OPTION:
                         return;
                 }
-            } 
+            }
 
             if (fileToBeSaved.exists()) {
                 Object[] options = {"Yes",
@@ -1003,6 +1007,10 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private void jMenuCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCloseActionPerformed
         AskClose();
     }//GEN-LAST:event_jMenuCloseActionPerformed
+
+    private void formFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusLost
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_formFocusLost
 
     private boolean GoLive() {
 

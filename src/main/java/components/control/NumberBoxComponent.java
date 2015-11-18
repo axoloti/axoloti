@@ -43,9 +43,7 @@ import java.awt.Robot;
  *
  * @author Johannes Taelman
  */
-
 // FIXME: integer versus float model. Currently NumberBoxComponent assumes integers...
-
 public class NumberBoxComponent extends ACtrlComponent {
 
     private double value;
@@ -95,7 +93,6 @@ public class NumberBoxComponent extends ACtrlComponent {
         if (isEnabled()) {
             double v;
             if ((MousePressedBtn == MouseEvent.BUTTON1)) {
-                getRootPane().setCursor(MainFrame.transparentCursor);
                 double t = tick;
                 t = t * 0.1;
                 if (e.isShiftDown()) {
@@ -133,6 +130,7 @@ public class NumberBoxComponent extends ACtrlComponent {
         MousePressedCoordX = e.getXOnScreen();
         MousePressedCoordY = e.getYOnScreen();
         MousePressedBtn = e.getButton();
+        getRootPane().setCursor(MainFrame.transparentCursor);
     }
 
     @Override
@@ -251,14 +249,14 @@ public class NumberBoxComponent extends ACtrlComponent {
         int h = 3;
         int v = 4;
         if (getWidth() < 20) {
-            s = String.format("%d", (int)value);
+            s = String.format("%d", (int) value);
             if (s.length() < 2) {
                 h = 3;
             } else {
                 h = 0;
             }
         } else {
-            s = String.format("%5d", (int)value);
+            s = String.format("%5d", (int) value);
         }
         if (getHeight() < 15) {
             v = 2;
