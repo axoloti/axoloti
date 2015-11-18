@@ -43,34 +43,10 @@
 #define STM32_CLOCK48_REQUIRED              TRUE
 #define STM32_SW                            STM32_SW_PLL
 #define STM32_PLLSRC                        STM32_PLLSRC_HSE
-
-#if 1 // 168Mhz
 #define STM32_PLLM_VALUE                    8
 #define STM32_PLLN_VALUE                    336
 #define STM32_PLLP_VALUE                    2
 #define STM32_PLLQ_VALUE                    7
-#elif 0 // 216MHz
-#define STM32_PLLM_VALUE                    8
-#define STM32_PLLN_VALUE                    432
-#define STM32_PLLP_VALUE                    2
-#define STM32_PLLQ_VALUE                    9
-#elif 0 // 240Mhz
-#define STM32_PLLM_VALUE                    4
-#define STM32_PLLN_VALUE                    240
-#define STM32_PLLP_VALUE                    2
-#define STM32_PLLQ_VALUE                    10
-#elif 0 // 264Mhz
-#define STM32_PLLM_VALUE                    4
-#define STM32_PLLN_VALUE                    264
-#define STM32_PLLP_VALUE                    2
-#define STM32_PLLQ_VALUE                    11
-#else // 288Mhz
-#define STM32_PLLM_VALUE                    4
-#define STM32_PLLN_VALUE                    288
-#define STM32_PLLP_VALUE                    2
-#define STM32_PLLQ_VALUE                    12
-#endif
-
 #define STM32_HPRE                          STM32_HPRE_DIV1
 #define STM32_PPRE1                         STM32_PPRE1_DIV4
 #define STM32_PPRE2                         STM32_PPRE2_DIV2
@@ -269,7 +245,7 @@
  * UART driver system settings.
  */
 
-#define STM32_UART_USE_USART1               FALSE
+#define STM32_UART_USE_USART1               TRUE
 #define STM32_UART_USART1_RX_DMA_STREAM     STM32_DMA_STREAM_ID(2, 5)
 #define STM32_UART_USART1_TX_DMA_STREAM     STM32_DMA_STREAM_ID(2, 7)
 #define STM32_UART_USART1_IRQ_PRIORITY      12
@@ -281,7 +257,7 @@
 #define STM32_UART_USART2_IRQ_PRIORITY      12
 #define STM32_UART_USART2_DMA_PRIORITY      0
 
-#define STM32_UART_USE_USART3               FALSE
+#define STM32_UART_USE_USART3               TRUE
 #define STM32_UART_USART3_RX_DMA_STREAM     STM32_DMA_STREAM_ID(1, 1)
 #define STM32_UART_USART3_TX_DMA_STREAM     STM32_DMA_STREAM_ID(1, 3)
 #define STM32_UART_USART3_IRQ_PRIORITY      12
