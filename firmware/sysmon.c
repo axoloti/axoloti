@@ -120,14 +120,14 @@ void sysmon_init(void) {
   // ADC3 for 5V supply monitoring
   rccEnableADC3(FALSE);
   ADC3->CR2 = ADC_CR2_ADON;
-  ADC3->SMPR1 = 0x07FFFFFFFF;
-  ADC3->SMPR2 = 0x3F7FFFFFFFF;
+  ADC3->SMPR1 = 0x07FFFFFF;
+  ADC3->SMPR2 = 0x3F7FFFFF;
   ADC3->SQR1 = 0;
   ADC3->SQR2 = 0;
   ADC3->SQR3 = 8;
   ADC3->CR2 |= ADC_CR2_SWSTART;
   v50_max = 0;
-  v50_min = 0xFFFFFFFF;
+  v50_min = 0xFFFF;
 
   isEnabled = true;
 
