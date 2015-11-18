@@ -297,7 +297,8 @@ int main(void)
         }
         else if (event == EVENT_MASK(2))
         {
-            /* media ejected */
+            /* media ejected : bye bye !*/
+            NVIC_SystemReset();
         }
     }
 
