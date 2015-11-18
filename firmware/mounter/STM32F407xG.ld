@@ -14,11 +14,11 @@ MEMORY
 */
 
       SRAM (rwx) : ORIGIN = 0x20011000, LENGTH = 0x00009000 
-      CCMSRAM (rwx) : ORIGIN = 0x10000000, LENGTH = 0x0000E000 /* CCM - ccmramend */
+      CCMSRAM : ORIGIN = 0x10000000, LENGTH = 0x0000E000 /* CCM - ccmramend */
 }
 
-__main_stack_size__     = 0x200;
-__process_stack_size__  = 0x200;
+__main_stack_size__     = 0x400;
+__process_stack_size__  = 0x400;
 
 SECTIONS {
     . = 0;
@@ -65,17 +65,22 @@ SECTIONS {
         KEEP(*(vectors))
     } > SRAM
 
-    .data : ALIGN(4) SUBALIGN(4)
-    {
-        sdata = .;
-        * (.data);
-        edata = .;
-    } > SRAM
-    
 
     _etext = .;
     _textdata = _etext;
-    
+
+    .data : ALIGN(4) SUBALIGN(4)
+    {
+        . = ALIGN(4);
+        PROVIDE(_data = .);
+        *(.data)
+        . = ALIGN(4);
+        *(.data.*)
+        . = ALIGN(4);
+        *(.ramtext)
+        . = ALIGN(4);
+        PROVIDE(_edata = .);
+    } > SRAM
     
     .stacks :
     {
@@ -91,21 +96,6 @@ SECTIONS {
         __process_stack_end__ = .;
         __main_thread_stack_end__ = .;
     } > CCMSRAM
-    
-
-
-    .data :
-    {
-        . = ALIGN(4);
-        PROVIDE(_data = .);
-        *(.data)
-        . = ALIGN(4);
-        *(.data.*)
-        . = ALIGN(4);
-        *(.ramtext)
-        . = ALIGN(4);
-        PROVIDE(_edata = .);
-    } > SRAM
 
     .bss :
     {
