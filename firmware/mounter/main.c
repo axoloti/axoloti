@@ -228,8 +228,6 @@ int main(void)
   memcpy((char *)0x20000000, (const char *)&_vectors, 0x200);
   // remap SRAM1 to 0x00000000
   SYSCFG->MEMRMP |= 0x03;
-	
-//    HAL_DeInit();
 
     /* system & hardware initialization */
     halInit();
@@ -244,8 +242,6 @@ int main(void)
     palSetPad(LED2_PORT,LED2_PIN);
 
     chSysInit();
-	
-    chThdSleepMilliseconds(1000);
 
     palSetPadMode(GPIOA, 11, PAL_MODE_ALTERNATE(10));
     palSetPadMode(GPIOA, 12, PAL_MODE_ALTERNATE(10));
