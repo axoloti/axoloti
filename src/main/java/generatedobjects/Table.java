@@ -186,9 +186,9 @@ public class Table extends gentools {
         AxoObject o = new AxoObject("alloc 16b sdram load", "allocate 16bit table in SDRAM memory, -128.00 .. 127.99");
         String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
             "1024", "2048", "4096", "8192", "16384", "32768",
-            "65536", "131072", "262144", "524288", "1048576", "2097152"};
+            "65536", "131072", "262144", "524288", "1048576", "2097152", "4194304"};
         String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
-            "16", "17", "18", "19", "20", "21"};
+            "16", "17", "18", "19", "20", "21", "22"};
         o.attributes.add(new AxoAttributeComboBox("size", mentries, centries));
         o.attributes.add(new AxoAttributeTablename("filename"));
         o.sLocalData = "static const uint32_t LENGTHPOW = (%size%);\n"
@@ -206,7 +206,7 @@ public class Table extends gentools {
                 + "UINT bytes_read;\n"
                 + "err = f_open(&FileObject, \"%filename%\", FA_READ | FA_OPEN_EXISTING);\n"
                 + "if (err != FR_OK) {LogTextMessage(\"Open failed\\n\"); return;}\n"
-                + "int rem_sz = sizeof(_array[0])*LENGTH;\n"
+                + "int rem_sz = sizeof(_array[0]);\n"
                 + "int offset = 0;\n"
                 + "while (rem_sz>0) {\n"
                 + "  if (rem_sz>sizeof(fbuff)) {\n"
