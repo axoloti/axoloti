@@ -1,5 +1,5 @@
 #!/bin/sh
-export PATH=$PATH:${axoloti_runtime}/platform_linux/bin
+export PATH=${axoloti_runtime}/platform_linux/bin:$PATH
 
 cd "${axoloti_firmware}"
 make -f Makefile.patch clean
