@@ -20,6 +20,7 @@ package axoloti.dialogs;
 import axoloti.MainFrame;
 import static axoloti.usb.Usb.DeviceToPath;
 import static axoloti.usb.Usb.PID_AXOLOTI;
+import static axoloti.usb.Usb.PID_AXOLOTI_SDCARD;
 import static axoloti.usb.Usb.PID_STM_DFU;
 import static axoloti.usb.Usb.VID_AXOLOTI;
 import static axoloti.usb.Usb.VID_STM;
@@ -50,6 +51,7 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
 
     private final String sDFUBootloader = "STM DFU Bootloader";
     private final String sAxolotiCore = "Axoloti Core";
+    private final String sAxolotiSDCard = "Axoloti SDCard reader";
 
     /**
      * Creates new form USBPortSelectionDlg
@@ -178,6 +180,8 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                             model.addRow(new String[]{name,sAxolotiCore, DeviceToPath(device), serial});
                             LibUsb.close(handle);
                         }
+                    } else if (descriptor.idVendor() == VID_AXOLOTI && descriptor.idProduct() == PID_AXOLOTI_SDCARD) {
+                        model.addRow(new String[]{"",sAxolotiSDCard, DeviceToPath(device), "unmount disk to connect"});
                     }
                 } else {
                     throw new LibUsbException("Unable to read device descriptor", result);

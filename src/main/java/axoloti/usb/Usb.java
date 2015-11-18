@@ -34,6 +34,7 @@ public class Usb {
     static final public short PID_STM_STLINK = (short) 0x3748;
     static final public short VID_AXOLOTI = (short) 0x16C0;
     static final public short PID_AXOLOTI = (short) 0x0442;
+    static final public short PID_AXOLOTI_SDCARD = (short) 0x0443;
 
     public Usb() {
     }
