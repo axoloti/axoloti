@@ -19,7 +19,7 @@ static const uint8_t deviceDescriptorData[] =
         0x00,   /* device protocol (none, specified in interface)  */
         64,     /* max packet size of control end-point            */
         0x16C0, /* vendor ID (Voti)                                */
-        0x03E8, /* product ID (lab use only!)                      */
+        0x0443, /* product ID (lab use only!)                      */
         0x0100, /* device release number                           */
         1,      /* index of manufacturer string descriptor         */
         2,      /* index of product string descriptor              */
@@ -99,9 +99,9 @@ static const USBDescriptor languageDescriptor =
 /* Vendor descriptor */
 static const uint8_t vendorDescriptorData[] =
 {
-    USB_DESC_BYTE(22),
+    USB_DESC_BYTE(16),
     USB_DESC_BYTE(USB_DESCRIPTOR_STRING),
-    'D', 0, 'e', 0, 'm', 0, 'o', 0, 'V', 0, 'e', 0, 'n', 0, 'd', 0, 'o', 0, 'r', 0
+    'A', 0, 'x', 0, 'o', 0, 'l', 0, 'o', 0, 't', 0, 'i', 0
 };
 static const USBDescriptor vendorDescriptor =
 {
@@ -112,9 +112,9 @@ static const USBDescriptor vendorDescriptor =
 /* Product descriptor */
 static const uint8_t productDescriptorData[] =
 {
-    USB_DESC_BYTE(24),
+    USB_DESC_BYTE(22),
     USB_DESC_BYTE(USB_DESCRIPTOR_STRING),
-    'D', 0, 'e', 0, 'm', 0, 'o', 0, 'P', 0, 'r', 0, 'o', 0, 'd', 0, 'u', 0, 'c', 0, 't', 0
+    'C', 0, 'a', 0, 'r', 0, 'd', 0, 'r', 0, 'e', 0, 'a', 0, 'd', 0, 'e', 0, 'r', 0
 };
 static const USBDescriptor productDescriptor =
 {
@@ -215,8 +215,8 @@ static const USBMassStorageConfig msdConfig =
     (BaseBlockDevice*)&SDCD1,
     USB_MS_DATA_EP,
     &usbActivity,
-    "DVendor",
-    "DProduct",
+    "Axoloti",
+    "Cardreader",
     "0.1"
 };
 
@@ -298,6 +298,8 @@ int main(void)
         else if (event == EVENT_MASK(2))
         {
             /* media ejected : bye bye !*/
+            usbDisconnectBus(&USBD1);
+            chThdSleepMilliseconds(1000);
             NVIC_SystemReset();
         }
     }
