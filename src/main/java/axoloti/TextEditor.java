@@ -17,7 +17,10 @@
  */
 package axoloti;
 
+import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
+import org.fife.ui.rtextarea.*;
+import org.fife.ui.rsyntaxtextarea.*;
 
 /**
  *
@@ -26,7 +29,7 @@ import javax.swing.ImageIcon;
 public class TextEditor extends javax.swing.JFrame {
 
     StringRef s;
-
+    RSyntaxTextArea textArea;
     /**
      * Creates new form TextEditor
      * @param s initial string
@@ -34,16 +37,24 @@ public class TextEditor extends javax.swing.JFrame {
     public TextEditor(StringRef s) {
         initComponents();
         this.s = s;
-        jEditorPane1.setText(s.s);
+        textArea = new RSyntaxTextArea(20, 60);
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+        textArea.setCodeFoldingEnabled(true);
+        RTextScrollPane sp = new RTextScrollPane(textArea);
+        cp.setLayout(new BorderLayout());
+        cp.add(sp);      
+        textArea.setVisible(true);
+        setContentPane(cp);
+        textArea.setText(s.s);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
     }
 
     public void SetText(String s) {
-        jEditorPane1.setText(s);
+        textArea.setText(s);
     }
 
     public String GetText() {
-        return jEditorPane1.getText();
+        return textArea.getText();
     }
 
     /**
@@ -55,8 +66,7 @@ public class TextEditor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
+        cp = new javax.swing.JPanel();
 
         setMinimumSize(new java.awt.Dimension(256, 128));
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
@@ -68,43 +78,37 @@ public class TextEditor extends javax.swing.JFrame {
             }
         });
 
-        jEditorPane1.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
-        jEditorPane1.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                jEditorPane1InputMethodTextChanged(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jEditorPane1);
+        javax.swing.GroupLayout cpLayout = new javax.swing.GroupLayout(cp);
+        cp.setLayout(cpLayout);
+        cpLayout.setHorizontalGroup(
+            cpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 365, Short.MAX_VALUE)
+        );
+        cpLayout.setVerticalGroup(
+            cpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 257, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+            .addComponent(cp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+            .addComponent(cp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jEditorPane1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jEditorPane1InputMethodTextChanged
-//        System.out.println("txt changed");
-//        attr.sText = jEditorPane1.getText();
-        s.s = jEditorPane1.getText();
-    }//GEN-LAST:event_jEditorPane1InputMethodTextChanged
-
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
 //        System.out.println("txt changed (lost focus)");
 //        attr.sText = jEditorPane1.getText();
-        s.s = jEditorPane1.getText();
+        s.s = textArea.getText();
     }//GEN-LAST:event_formWindowLostFocus
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JEditorPane jEditorPane1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel cp;
     // End of variables declaration//GEN-END:variables
 }
