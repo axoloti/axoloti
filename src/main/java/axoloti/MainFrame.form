@@ -167,6 +167,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemPanicActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemMount">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Enter card reader mode (disconnects editor)"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemMountActionPerformed"/>
+              </Events>
+            </MenuItem>
             <Menu class="javax.swing.JMenu" name="jMenuFirmware">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Firmware"/>
