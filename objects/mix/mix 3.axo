@@ -15,9 +15,15 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="gain1"/>
-         <frac32.u.map name="gain2"/>
-         <frac32.u.map name="gain3"/>
+         <frac32.u.map name="gain1">
+            <DefaultValue v="32.0"/>
+         </frac32.u.map>
+         <frac32.u.map name="gain2">
+            <DefaultValue v="32.0"/>
+         </frac32.u.map>
+         <frac32.u.map name="gain3">
+            <DefaultValue v="32.0"/>
+         </frac32.u.map>
       </params>
       <attribs/>
       <code.krate><![CDATA[{   int32_t accum = ___SMMUL(inlet_in1,param_gain1);
@@ -43,9 +49,15 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="gain1"/>
-         <frac32.u.map name="gain2"/>
-         <frac32.u.map name="gain3"/>
+         <frac32.u.map name="gain1">
+            <DefaultValue v="32.0"/>
+         </frac32.u.map>
+         <frac32.u.map name="gain2">
+            <DefaultValue v="32.0"/>
+         </frac32.u.map>
+         <frac32.u.map name="gain3">
+            <DefaultValue v="32.0"/>
+         </frac32.u.map>
       </params>
       <attribs/>
       <code.srate><![CDATA[{   int32_t accum = ___SMMUL(inlet_in1,param_gain1);

@@ -37,4 +37,9 @@ public abstract class ParameterFrac32 extends Parameter<Frac32> {
         super(name);
     }
 
+    public ParameterFrac32(String name, ValueFrac32 DefaultValue) {
+        super(name);
+        this.DefaultValue = DefaultValue;
+    }
+    
 }

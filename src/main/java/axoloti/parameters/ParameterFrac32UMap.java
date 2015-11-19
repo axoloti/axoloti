@@ -41,6 +41,10 @@ public class ParameterFrac32UMap extends ParameterFrac32 {
         super(name);
     }
 
+    public ParameterFrac32UMap(String name, ValueFrac32 DefaultValue) {
+        super(name, DefaultValue);
+    }
+    
     @Override
     public ParameterInstanceFrac32UMap InstanceFactory() {
         return new ParameterInstanceFrac32UMap();
