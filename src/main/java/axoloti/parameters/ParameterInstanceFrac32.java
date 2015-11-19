@@ -24,7 +24,11 @@ import axoloti.datatypes.Frac32;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.object.AxoObjectInstance;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 
@@ -90,6 +94,21 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
         if (((ParameterFrac32) parameter).DefaultValue != null) {
             value.setRaw(((ParameterFrac32) parameter).DefaultValue.getRaw());
         }
+    }
+
+    @Override
+    public void populatePopup(JPopupMenu m) {
+        super.populatePopup(m);
+        JMenuItem m_default = new JMenuItem("Reset to default value");
+        m_default.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                applyDefaultValue();
+                getControlComponent().setValue(value.getDouble());
+                handleAdjustment();
+            }
+        });
+        m.add(m_default);
     }
 
     public void updateModulation(int index, double amount) {
