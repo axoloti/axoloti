@@ -1,7 +1,7 @@
 @ECHO OFF
 setlocal
 if not defined axoloti_runtime (
-   set axoloti_runtime=%~sdp0
+   set axoloti_runtime=%~sdp0\..
 )
 call %~sdp0\path.bat
 call %~sdp0\test_env.bat

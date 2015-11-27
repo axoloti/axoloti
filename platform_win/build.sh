@@ -9,7 +9,7 @@ then
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
-        wget http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.8/${ARCHIVE}
+        curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.8/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi
@@ -29,7 +29,7 @@ then
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
-        wget -nc --no-check-certificate https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q2-update/+download/${ARCHIVE}
+        curl -L https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q2-update/+download/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi    
@@ -40,7 +40,7 @@ fi
 if [ ! -f "bin/make.exe" ];
 then
     echo "downloading make"
-    wget -nc http://gnuwin32.sourceforge.net/downlinks/make-bin-zip.php
+    curl -L http://gnuwin32.sourceforge.net/downlinks/make-bin-zip.php > make-3.81-bin.zip
     unzip -o make-3.81-bin.zip 
     rm make-3.81-bin.zip
 fi
@@ -49,7 +49,7 @@ fi
 if [ ! -f "bin/libiconv2.dll" ];
 then
     echo "downloading make-dep"
-    wget -nc http://gnuwin32.sourceforge.net/downlinks/make-dep-zip.php
+    curl -L http://gnuwin32.sourceforge.net/downlinks/make-dep-zip.php > make-3.81-dep.zip
     unzip -o make-3.81-dep.zip
     rm make-3.81-dep.zip
 fi
@@ -57,36 +57,14 @@ fi
 if [ ! -f "bin/rm.exe" ];
 then
     echo "downloading rm"
-    wget -nc http://gnuwin32.sourceforge.net/downlinks/coreutils-bin-zip.php
+    curl -L http://gnuwin32.sourceforge.net/downlinks/coreutils-bin-zip.php > coreutils-5.3.0-bin.zip
     unzip -o coreutils-5.3.0-bin.zip
     rm coreutils-5.3.0-bin.zip
 fi
 
-cd bin
-
-    if [ ! -f "dfu-util.exe" ];
-    then
-        echo "downloading dfu-util"
-        wget -nc http://dfu-util.sourceforge.net/releases/dfu-util-0.8-binaries/win32-mingw32/dfu-util.exe
-    fi
-
-    if [ ! -f "dfu-prefix.exe" ];
-    then
-        echo "downloading dfu-prefix"
-        wget -nc http://dfu-util.sourceforge.net/releases/dfu-util-0.8-binaries/win32-mingw32/dfu-prefix.exe
-    fi
-
-    if [ ! -f "dfu-suffix.exe" ];
-    then
-        echo "downloading dfu-suffix"
-        wget -nc http://dfu-util.sourceforge.net/releases/dfu-util-0.8-binaries/win32-mingw32/dfu-suffix.exe
-    fi
-
-cd ..
-
-if [ ! -f "bin/libusb-1.0.dll" ];
+if [ ! -f "bin/dfu-util.exe" ];
 then
-    ./build-libusb.sh
+    ./build-dfu-util.sh
 fi
 
 if [ ! -d "apache-ant-1.9.4" ];
@@ -95,7 +73,7 @@ then
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
-        wget -nc http://archive.apache.org/dist/ant/binaries/${ARCHIVE}
+        curl -L http://archive.apache.org/dist/ant/binaries/${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi    
@@ -110,7 +88,7 @@ then
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
-        wget http://zadig.akeo.ie/downloads/${ARCHIVE}
+        curl -L http://zadig.akeo.ie/downloads/${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi        

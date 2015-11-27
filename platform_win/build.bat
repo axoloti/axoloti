@@ -4,26 +4,28 @@ setlocal
 
 cd %~sdp0
 
-set MINGW=C:\MinGW
-set MINGWGET=%MINGW%\bin\mingw-get.exe
+set MSYS32=c:\msys32
+set PACMAN=%MSYS32%\usr\bin\pacman.exe
 
-if not exist %MINGWGET% (
-  echo MinGW not installed
-  echo download and run http://www.mingw.org/download/installer
+if not exist %PACMAN% (
+  echo %PACMAN% not found,
+  echo MSYS32 not installed
+  echo download and run msys2-i686 from http://msys2.github.io/
   echo and then re-run this script
   echo launching a browser for you...
-  start /max http://www.mingw.org/download/installer
+  start /max http://msys2.github.io/
   pause
   goto :end
 )
 
-%MINGWGET% install mingw32-gcc-g++ autoconf msys-bash libtool libz msys-make msys-wget msys-unzip msys-diffutils msys-patch
+%PACMAN% pacman -S --needed git gcc autoconf libtool make wget unzip diffutils patch pkg-config mingw-w64-i686-gcc
 
-set PATH=%PATH%;%MINGW%\msys\1.0\bin;%MINGW%\bin
+set PATH=%PATH%;%MSYS32%\usr\bin
 set HOME=.
-%MINGW%\msys\1.0\bin\bash.exe build.sh
+%MSYS32%\usr\bin\bash.exe build.sh
 
 call build_gui.bat
+
 call compile_firmware.bat
 
 echo READY
