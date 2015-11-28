@@ -76,6 +76,6 @@ echo "##### Compiling dfu-util ######"
 if [ ! -f "bin/dfu-util.exe" ];
 then
 	cd dfu-util-0.8
-    ./configure --host=$MINGW_VERSION --prefix=$BUILD_DIR && make && make install
+    ./configure --host=$MINGW_VERSION --prefix=$BUILD_DIR && make LDFLAGS="-static" && make install
 	cd ..
 fi
