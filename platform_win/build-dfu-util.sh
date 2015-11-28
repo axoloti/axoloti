@@ -9,9 +9,13 @@
 
 set -e
 
+PATH=/mingw32/bin:$PATH
+
 BUILD_DIR=$PWD
 MINGW_VERSION=i686-mingw-msys
-PKG_CONFIG_PATH=$BUILD_DIR/lib/pkgconfig
+export PKG_CONFIG_PATH=$BUILD_DIR/lib/pkgconfig
+export CC="i686-w64-mingw32-gcc"
+export LD="i686-w64-mingw32-gcc"
 
 ##########################################################################
 # libusb
@@ -41,14 +45,10 @@ fi
 echo "##### Compiling libusb ######"
 
 cd libusb-1.0.19/
-if [ ! -f "Makefile" ];
+if [ ! -f "{BUILD_DIR}/lib/libusb-1.0.a" ];
 then
-# CC='gcc -static-libgcc' to avoid libgcc_s_dw2-1.dll dependency
-    ./configure --host=$MINGW_VERSION --prefix=$BUILD_DIR 
-#CC='gcc -static-libgcc'
+    ./configure --host=$MINGW_VERSION --prefix=$BUILD_DIR && make CFLAGS="-DWINVER=0x0501" && make install
 fi
-make CFLAGS="-DWINVER=0x0501"
-make install
 cd ..
 
 
@@ -73,10 +73,9 @@ then
 fi
 
 echo "##### Compiling dfu-util ######"
-cd dfu-util-0.8
-if [ ! -f "Makefile" ];
+if [ ! -f "bin/dfu-util.exe" ];
 then
-    CC=gcc -static
-    ./configure --host=$MINGW_VERSION --prefix=$BUILD_DIR --prefix=$BUILD_DIR && make && make install
+	cd dfu-util-0.8
+    ./configure --host=$MINGW_VERSION --prefix=$BUILD_DIR && make && make install
+	cd ..
 fi
-cd ..
