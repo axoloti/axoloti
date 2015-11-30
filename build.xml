@@ -97,7 +97,7 @@
 
       <!-- Include external library -->
       <zipfileset excludes="META-INF/*.SF" src="lib/simple-xml-2.7.1.jar"/>
-      <zipfileset excludes="META-INF/*.SF" src="lib/rsyntaxtextarea-2.5.8"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/rsyntaxtextarea-2.5.8.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/usb4java-1.2.0.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-linux-arm.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-linux-x86.jar"/>
