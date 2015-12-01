@@ -32,6 +32,7 @@ import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterFrac32UMap;
+import axoloti.utils.Preferences;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -171,6 +172,25 @@ public class gentools {
                 oo.depends = null;
             }
 
+            if (oo.sInitCode != null && oo.sInitCode.isEmpty()) {
+                oo.sInitCode = null;
+            }
+            if (oo.sLocalData != null && oo.sLocalData.isEmpty()) {
+                oo.sLocalData = null;
+            }
+            if (oo.sKRateCode != null && oo.sKRateCode.isEmpty()) {
+                oo.sKRateCode = null;
+            }
+            if (oo.sSRateCode != null && oo.sSRateCode.isEmpty()) {
+                oo.sSRateCode = null;
+            }
+            if (oo.sDisposeCode != null && oo.sDisposeCode.isEmpty()) {
+                oo.sDisposeCode = null;
+            }
+            if (oo.sMidiCode != null && oo.sMidiCode.isEmpty()) {
+                oo.sMidiCode = null;
+            }
+
             /*
              if (oo.sKRateCode!=null)
              CheckString(oo,oo.sKRateCode);
@@ -287,28 +307,61 @@ public class gentools {
     }
 
     static public void WriteAxoObject(String path, AxoObjectAbstract o) {
-        String fn = ConvertToLegalFilename(o.id);
+        File f;
+        String fn;
+        if (!path.endsWith(".axo")) {
+            fn = ConvertToLegalFilename(o.id);
 
-        int i = fn.lastIndexOf('.');
-        if (i > 0) {
-            path = path + "." + fn.substring(0, i);
-            fn = fn.substring(i);
+            int i = fn.lastIndexOf('.');
+            if (i > 0) {
+                path = path + "." + fn.substring(0, i);
+                fn = fn.substring(i);
+            }
+            path = path.replace('\\', '/');
+            fn = fn.replace('\\', '/');
+
+            o.id = o.id.replace('\\', '/');
+            i = o.id.lastIndexOf('/');
+            if (i > 0) {
+                o.id = o.id.substring(i + 1);
+            }
+
+            File fd = new File("objects/" + path);
+            if (!fd.isDirectory()) {
+                fd.mkdirs();
+            }
+            f = new File("objects/" + path + "/" + fn + ".axo");
+        } else {
+            f = new File(path);
+            fn = f.getName();
+            String objPath = null;
+            for (String s : Preferences.LoadPreferences().getObjectSearchPath()) {
+                if (path.startsWith(s)) {
+                    objPath = path.substring(s.length() + 1);
+                    break;
+                }
+                File f2 = new File(s);
+                String s2 = f2.getAbsolutePath();
+                if (path.startsWith(s2)) {
+                    objPath = path.substring(s2.length() + 1);
+                    break;
+                }
+            }
+            if (objPath != null) {
+                fn = fn.replace('\\', '/');
+                int ii = fn.lastIndexOf('/');
+                if (ii < 0) {
+                    ii = 0;
+                }
+                fn = fn.substring(ii, fn.length() - 4);
+                objPath = objPath.replace('\\', '/');
+                //System.out.printf("1 path %s objPath %s\n", path, objPath);
+                path = objPath.substring(0, objPath.lastIndexOf('/'));
+                //fn = objPath.substring(0,fn.length()-4);                
+                System.out.printf("2 path %s objPath %s fn %s\n", path, objPath, fn);
+                o.id = o.id.substring(o.id.lastIndexOf('/') + 1);
+            }
         }
-        path = path.replace('\\', '/');
-        fn = fn.replace('\\', '/');
-
-        o.id = o.id.replace('\\', '/');
-        i = o.id.lastIndexOf('/');
-        if (i > 0) {
-            o.id = o.id.substring(i + 1);
-        }
-
-        File fd = new File("objects/" + path);
-        if (!fd.isDirectory()) {
-            fd.mkdirs();
-        }
-
-        File f = new File("objects/" + path + "/" + fn + ".axo");
         AxoObjectFile a = new AxoObjectFile();
         a.objs = new ArrayList<AxoObjectAbstract>();
         a.objs.add(o);

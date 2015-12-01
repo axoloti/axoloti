@@ -64,7 +64,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="This object editor is incomplete. The tabs for inlets, outlets, parameters, attributes are not editable. "/>
+        <Property name="text" type="java.lang.String" value="This object editor is incomplete. The tabs for inlets, outlets, parameters, attributes are not editable. Bundles of multiple objects in one file are not supported."/>
         <Property name="verifyInputWhenFocusTarget" type="boolean" value="false"/>
       </Properties>
     </Component>

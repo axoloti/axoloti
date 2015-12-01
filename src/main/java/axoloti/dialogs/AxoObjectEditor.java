@@ -23,6 +23,7 @@ import axoloti.object.AxoObject;
 import axoloti.outlets.Outlet;
 import axoloti.parameters.Parameter;
 import displays.Display;
+import static generatedobjects.gentools.WriteAxoObject;
 import java.awt.BorderLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -208,7 +209,7 @@ public class AxoObjectEditor extends JFrame {
 
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
-        jLabel1.setText("This object editor is incomplete. The tabs for inlets, outlets, parameters, attributes are not editable. ");
+        jLabel1.setText("This object editor is incomplete. The tabs for inlets, outlets, parameters, attributes are not editable. Bundles of multiple objects in one file are not supported.");
         jLabel1.setVerifyInputWhenFocusTarget(false);
         getContentPane().add(jLabel1);
 
@@ -607,7 +608,7 @@ public class AxoObjectEditor extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
-        Logger.getLogger(this.getName()).log(Level.SEVERE, "Saving obj not implemented...");
+        WriteAxoObject(obj.sPath, obj);
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
