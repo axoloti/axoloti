@@ -35,7 +35,7 @@ public class Dynamics extends gentools {
     }
 
     static AxoObject CreateCompressor() {
-        AxoObject o = new AxoObject("comp", "Dynamic range compressor. Gain calculation only. Envelope follower, attatck, decay and VCA are not included.");
+        AxoObject o = new AxoObject("comp", "Dynamic range compressor. Gain calculation only. Envelope follower, attack, decay and VCA are not included.");
         o.params.add(new ParameterFrac32UMap("tresh"));
         o.params.add(new ParameterFrac32UMap("ratio"));
         o.inlets.add(new InletFrac32("in", "in"));
