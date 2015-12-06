@@ -4,6 +4,7 @@
       <sDescription>Outputs the voice index number from 0 to n-1. Only works in a polyphonic sub-patch!</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
+      <helpPatch>polyindex.axh</helpPatch>
       <inlets/>
       <outlets>
          <int32.positive name="index" description="index from 0 to n-1"/>

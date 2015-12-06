@@ -1,0 +1,87 @@
+<patch-1.0>
+   <comment type="patch/comment" x="14" y="14" text="polyindex object works inside a polyphonic subpatch"/>
+   <comment type="patch/comment" x="70" y="56" text="oulets of polyphonic subpatches output the sum of all subpatch voices"/>
+   <patcher type="patch/patcher" sha="da39a3ee5e6b4b0d3255bfef95601890afd80709" uuid="a245c220448000c901caef03c8b07740d533914a" name="patcher_1" x="14" y="84">
+      <params/>
+      <attribs>
+         <combo attributeName="poly" selection="4"/>
+         <combo attributeName="mididevice" selection="omni"/>
+         <combo attributeName="midiport" selection="omni"/>
+      </attribs>
+      <subpatch>
+         <obj type="patch/polyindex" sha="499a6acc6df4a405a04b6ad8df8e7ab489ee5234" name="polyindex1" x="14" y="14">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="patch/outlet i" sha="9c18b5ec0ea721bb98852ab326891478ca87a360" uuid="aae2176b26209e34e4fdeba5edb1ace82d178655" name="polyIndexSum" x="140" y="14">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="math/c 1" sha="ea3f53ea316f208a3ff2da087adce60e5e319c91" name="c11" x="14" y="70">
+            <params/>
+            <attribs/>
+         </obj>
+         <obj type="patch/outlet i" sha="9c18b5ec0ea721bb98852ab326891478ca87a360" uuid="aae2176b26209e34e4fdeba5edb1ace82d178655" name="oneSum" x="140" y="70">
+            <params/>
+            <attribs/>
+         </obj>
+         <nets>
+            <net>
+               <source obj="polyindex1" outlet="index"/>
+               <dest obj="polyIndexSum" inlet="outlet"/>
+            </net>
+            <net>
+               <source obj="c11" outlet="o"/>
+               <dest obj="oneSum" inlet="outlet"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>polyphonic</subpatchmode>
+            <MidiChannel>1</MidiChannel>
+            <NPresets>8</NPresets>
+            <NPresetEntries>32</NPresetEntries>
+            <NModulationSources>8</NModulationSources>
+            <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+         </settings>
+         <notes><![CDATA[]]></notes>
+         <windowPos>
+            <x>135</x>
+            <y>0</y>
+            <width>450</width>
+            <height>400</height>
+         </windowPos>
+      </subpatch>
+   </patcher>
+   <obj type="disp/i" sha="e98a25a12afc62efc1991c3bb5290ccdf7214102" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="displayU1" x="210" y="84">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="266" y="84" text="sum of polyIndex"/>
+   <comment type="patch/comment" x="280" y="112" text="0+1+2+3..."/>
+   <obj type="disp/i" sha="e98a25a12afc62efc1991c3bb5290ccdf7214102" uuid="5e35fd0c62d81e70017289250cf28edd26e19e4a" name="displayU1_" x="210" y="168">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="266" y="168" text="sum of ones"/>
+   <comment type="patch/comment" x="280" y="196" text="1+1+1+1"/>
+   <nets>
+      <net>
+         <source obj="patcher_1" outlet="polyIndexSum"/>
+         <dest obj="displayU1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="patcher_1" outlet="oneSum"/>
+         <dest obj="displayU1_" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>316</x>
+      <y>236</y>
+      <width>586</width>
+      <height>464</height>
+   </windowPos>
+</patch-1.0>
