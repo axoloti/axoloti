@@ -44,7 +44,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  */
 public class AxoObjectEditor extends JFrame {
 
-    AxoObject obj;
+    final AxoObject obj;
     private final RSyntaxTextArea jTextAreaLocalData;
     private final RSyntaxTextArea jTextAreaInitCode;
     private final RSyntaxTextArea jTextAreaKRateCode;
@@ -63,7 +63,7 @@ public class AxoObjectEditor extends JFrame {
         return rsta;
     }
 
-    public AxoObjectEditor(AxoObject obj) {
+    public AxoObjectEditor(final AxoObject obj) {
         initComponents();
         jTextAreaLocalData = initCodeEditor(jPanelLocalData);
         jTextAreaInitCode = initCodeEditor(jPanelInitCode);
@@ -123,11 +123,7 @@ public class AxoObjectEditor extends JFrame {
 
             @Override
             public void focusLost(FocusEvent e) {
-                AxoObjectEditor.this.obj.sLocalData = jTextAreaLocalData.getText();
-                AxoObjectEditor.this.obj.sInitCode = jTextAreaInitCode.getText();
-                AxoObjectEditor.this.obj.sKRateCode = jTextAreaKRateCode.getText();
-                AxoObjectEditor.this.obj.sSRateCode = jTextAreaSRateCode.getText();
-                AxoObjectEditor.this.obj.sDisposeCode = jTextAreaDisposeCode.getText();
+                applyChanges();
             }
         };
 
@@ -136,6 +132,14 @@ public class AxoObjectEditor extends JFrame {
         jTextAreaKRateCode.addFocusListener(fl);
         jTextAreaSRateCode.addFocusListener(fl);
         jTextAreaDisposeCode.addFocusListener(fl);
+    }
+
+    void applyChanges() {
+        obj.sLocalData = jTextAreaLocalData.getText();
+        obj.sInitCode = jTextAreaInitCode.getText();
+        obj.sKRateCode = jTextAreaKRateCode.getText();
+        obj.sSRateCode = jTextAreaSRateCode.getText();
+        obj.sDisposeCode = jTextAreaDisposeCode.getText();
     }
 
     /**
@@ -608,6 +612,7 @@ public class AxoObjectEditor extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
+        applyChanges();
         WriteAxoObject(obj.sPath, obj);
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
