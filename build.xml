@@ -269,6 +269,9 @@
 			 <include name="firmware/flasher/*" />
 			 <include name="firmware/flasher/flasher_build/*.bin" />
 			 <include name="firmware/flasher/flasher_build/*.elf" />
+			 <include name="firmware/mounter/*" />
+			 <include name="firmware/mounter/mounter_build/*.bin" />
+			 <include name="firmware/mounter/mounter_build/*.elf" />
 			 <include name="chibios/*"/>
 			 <include name="chibios/boards/ST_STM32F4_DISCOVERY/*"/>
 			 <include name="chibios/ext/**/*"/>
