@@ -4,12 +4,13 @@ set -e
 
 if [ ! -d "../chibios" ]; 
 then
-    ARDIR=ChibiOS_2.6.8
+    CH_VERSION=2.6.8
+    ARDIR=ChibiOS_${CH_VERSION}
     ARCHIVE=${ARDIR}.zip
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
-        curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%202.6.8/${ARCHIVE} > ${ARCHIVE}
+        curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%20${CH_VERSION}/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi
@@ -73,7 +74,7 @@ then
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
-        curl -L http://archive.apache.org/dist/ant/binaries/${ARCHIVE}
+        curl -L http://archive.apache.org/dist/ant/binaries/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi    
@@ -88,7 +89,7 @@ then
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
-        curl -L http://zadig.akeo.ie/downloads/${ARCHIVE}
+        curl -L http://zadig.akeo.ie/downloads/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi        
