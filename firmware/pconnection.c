@@ -111,7 +111,7 @@ void TransmitDisplayPckt(void) {
 }
 
 void LogTextMessage(const char* format, ...) {
-  if (usbGetDriverStateI(BDU1.config->usbp) == USB_ACTIVE) {
+  if ((usbGetDriverStateI(BDU1.config->usbp) == USB_ACTIVE) && (connected)) {
     int h = 0x546F7841; // "AxoT"
     chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                             (const unsigned char* )&h, 4);
