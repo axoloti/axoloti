@@ -39,6 +39,9 @@ public abstract class Parameter<dt extends DataType> {
 
     @Attribute
     public String name;
+    @Attribute(required = false)
+    public String description;
+    
 //    @Attribute(required = false)
 //    Value<dt> defaultVal;
     @Attribute(required = false)

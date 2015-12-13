@@ -148,6 +148,11 @@ public abstract class ParameterInstance<dt extends DataType> extends JPanel impl
 //            ShowPreset(axoObj.patch.presetNo);
 
         ctrl = CreateControl();
+        if (parameter.description != null) {
+            ctrl.setToolTipText(parameter.description);
+        } else {
+            ctrl.setToolTipText(parameter.name);            
+        }
         add(getControlComponent());
         getControlComponent().addMouseListener(popupMouseListener);
         getControlComponent().addACtrlListener(new ACtrlListener() {
