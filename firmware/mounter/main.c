@@ -268,7 +268,13 @@ int main(void)
     palSetPad(LED2_PORT, LED2_PIN);
 
     /* start the USB mass storage service */
-    msdStart(&UMSD1, &msdConfig);
+    int ret = msdStart(&UMSD1, &msdConfig);
+    if (ret != 0) {
+        /* no media found : bye bye !*/
+        usbDisconnectBus(&USBD1);
+        chThdSleepMilliseconds(1000);
+        NVIC_SystemReset();
+    }
 
     /* watch the mass storage events */
     EventListener connected;

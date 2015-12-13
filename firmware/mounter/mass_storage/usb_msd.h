@@ -148,7 +148,7 @@ void msdInit(USBMassStorageDriver *msdp);
  *          The block device must be connected but no file system must be mounted,
  *          everything is handled by the host system.
  */
-void msdStart(USBMassStorageDriver *msdp, const USBMassStorageConfig *config);
+int msdStart(USBMassStorageDriver *msdp, const USBMassStorageConfig *config);
 
 /**
  * @brief   Stops a USB mass storage driver.

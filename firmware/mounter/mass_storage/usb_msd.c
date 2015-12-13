@@ -771,7 +771,7 @@ void msdInit(USBMassStorageDriver *msdp) {
 /**
  * @brief Starts a USB mass storage driver
  */
-void msdStart(USBMassStorageDriver *msdp, const USBMassStorageConfig *config) {
+int msdStart(USBMassStorageDriver *msdp, const USBMassStorageConfig *config) {
 
     chDbgCheck(msdp != NULL, "msdStart");
     chDbgCheck(config != NULL, "msdStart");
@@ -793,8 +793,13 @@ void msdStart(USBMassStorageDriver *msdp, const USBMassStorageConfig *config) {
     msdp->state = MSD_IDLE;
 
     /* make sure block device is working */
+    i = 0;
     while (blkGetDriverState(config->bbdp) != BLK_READY) {
         chThdSleepMilliseconds(50);
+        i++;
+        if (i>20) {
+            return -1;
+        }
     }
 
     /* get block device information */
@@ -807,6 +812,8 @@ void msdStart(USBMassStorageDriver *msdp, const USBMassStorageConfig *config) {
 
     /* run the thread */
     msdp->thread = chThdCreateStatic(mass_storage_thread_wa, sizeof(mass_storage_thread_wa), NORMALPRIO, mass_storage_thread, msdp);
+    
+    return 0;
 }
 
 /**
