@@ -315,9 +315,7 @@
 		     copyright="Axoloti.com" >
 		  		<fx:icon href="src/main/java/resources/icon_128x128.png"/>
 				<fx:splash href="src/main/java/resources/splash.png"/>
-<!-- not supported on travis jdk8 < jdku40 on travis-ci
 		  		<fx:association icon="src/main/java/resources/icon_128x128.png" mimetype="application/xml" extension="axp axs axh axo"/>
--->
 	      	</fx:info>
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="${short.version}"/>
 	    	<fx:resources refid="appRes"/>
