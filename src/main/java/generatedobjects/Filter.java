@@ -71,11 +71,10 @@ public class Filter extends gentools {
 
         WriteAxoObject(catName, Create_lpfsvf_tilde());
         WriteAxoObject(catName, Create_hpfsvf_tilde());
-        WriteAxoObject(catName, Create_bpfsvf_tilde());        
+        WriteAxoObject(catName, Create_bpfsvf_tilde());
         WriteAxoObject(catName, Create_svf_multimode_tilde());
 
 //UNRELEASED        WriteAxoObject(catName, Create_lpfsvf_drive());
-
         WriteAxoObject(catName, Create_bp_svf_m());
 
 //        WriteAxoObject(catName, Create_lpfsvf2_tilde());
@@ -291,7 +290,7 @@ public class Filter extends gentools {
         AxoObject o = new AxoObject("hp1", "1st order hipass filter");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
-        o.params.add(new ParameterFrac32UMap("freq"));
+        o.params.add(new ParameterFrac32SMapPitch("freq"));
         o.sLocalData = "int32_t val;\n";
         o.sInitCode = "val = 0;\n";
         o.sKRateCode = "int32_t f;\n"
@@ -659,8 +658,8 @@ public class Filter extends gentools {
                 + "%hp% = high;\n"
                 + "%bp% = band;\n";
         return o;
-    }        
-    
+    }
+
     static AxoObject Create_bp_svf_m() {
         AxoObject o = new AxoObject("bp svf m", "Bandpass filter, state-variable type, modulation inputs");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));

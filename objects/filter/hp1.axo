@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="hp1" uuid="d9277a48ec26e6f11be9d4bd6dc383a6057addba" sha="f9059d53a5af0890dc1a1268b5679aa335731857">
-      <upgradeSha>1a2585df47ed4cdc94db6cb3c3e0639ae503967</upgradeSha>
+   <obj.normal id="hp1" uuid="abea7276611b289bed35b80345a6bc4efd4d9a4e" sha="ed40461bd5cc89cc428a41b8354d18019305249c">
+      <upgradeSha>8bfd816a6bc5608c6ef65c1378c6a16df528f842</upgradeSha>
       <sDescription>1st order hipass filter</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -13,7 +13,7 @@
       </outlets>
       <displays/>
       <params>
-         <frac32.u.map name="freq" noLabel="true"/>
+         <frac32.s.map.pitch name="freq" noLabel="true"/>
       </params>
       <attribs/>
       <code.declaration><![CDATA[int32_t val;
