@@ -82,7 +82,7 @@ extern void fakefree(void * p);
 
 #define osThreadDef(name, fn, prio, instances, stacksz) \
   static WORKING_AREA(wa##name, 512); \
-  Thread *name = chThdCreateStatic(wa##name, sizeof(wa##name), NORMALPRIO, fn, phost); \
+  Thread *name = chThdCreateStatic(wa##name, sizeof(wa##name), HIGHPRIO, fn, phost); \
   phost->os_event = name;
 #define osThreadCreate(x,y) x
 #define osThread(x) x
