@@ -1,14 +1,18 @@
 <html><body>
 <h1>Compiling from source on Windows</h1>
-        <h2>MinGW</h2>
-        Download and run the MinGW installer from <a href="http://www.mingw.org/download/installer">http://www.mingw.org/download/installer</a>.
-        Use the default settings. When the package selector window comes up, you can quit the installer. The required packages will be fetched automatically...
+        <h2>MSYS2</h2>
+        Download and install msys2-i686 from <a href="http://msys2.github.io/">http://msys2.github.io/</a>.
+        Use the default settings. Follow the instructions on the webpage.
         <h2>Install JDK</h2>
         download and run the JDK installer from <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a>
-        pick "jdk-8u45-windows-i586.exe"
+        pick "jdk-8u65-windows-i586.exe"
         For developers, I recommend downloading and installing the Netbeans with JDK package from <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-142931.html">http://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-142931.html</a>
-        <h2>Get all dependencies</h2>
-        Double-click the "get_dependencies.bat" script in the platform_win directory. This downloads, extract, and compiles all necessary tools.
+        <h2>Get Axoloti</h2>        
+        Clone the axoloti repository using the github windows client, or using the command line (the MSYS2 shell provides git command line tools).
+        <pre>git clone https://github.com/axoloti/axoloti</pre>
+        <h2>Compile Axoloti</h2>
+        Run the "build.bat" script in the platform_win directory. This will download, extract, and compile all necessary tools.<p>
+        Note: the dfu-util executable build with msys2 does not work properly... The <a href="https://github.com/axoloti/axoloti/releases/download/1.0.6/axo_runtime_win-1.0.6.zip">windows runtime</a> contains a working libusb + dfu-util.
         <h2>Next</h2>
         Continue to <a href="getting started on windows.html">getting started on windows</a>
     </body>
