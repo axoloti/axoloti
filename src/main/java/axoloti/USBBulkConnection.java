@@ -467,7 +467,7 @@ public class USBBulkConnection extends Connection {
         spsDlg.setVisible(true);
         cpuid = spsDlg.getCPUID();
         String name = MainFrame.prefs.getBoardName(cpuid);
-        if(name==null) {
+        if (name == null) {
             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: {0}", cpuid);
         } else {
             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: {0} name: {1}", new Object[]{cpuid, name});
@@ -489,18 +489,23 @@ public class USBBulkConnection extends Connection {
     }
 
     @Override
-    public boolean WaitSync() {
+    public boolean WaitSync(int msec) {
         synchronized (sync) {
             if (sync.Acked) {
                 return sync.Acked;
             }
             try {
-                sync.wait(1000);
+                sync.wait(msec);
             } catch (InterruptedException ex) {
                 //              Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, "Sync wait interrupted");
             }
             return sync.Acked;
         }
+    }
+
+    @Override
+    public boolean WaitSync() {
+        return WaitSync(1000);
     }
 
     @Override
@@ -1236,7 +1241,7 @@ public class USBBulkConnection extends Connection {
                         break;
                     case 11:
                         patchentrypoint += (cc & 0xFF);
-                        String sFwcrc = String.format("%08X",fwcrc);
+                        String sFwcrc = String.format("%08X", fwcrc);
                         Logger.getLogger(USBBulkConnection.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%s, entrypoint=0x%08X",
                                 fwversion[0], fwversion[1], fwversion[2], fwversion[3], sFwcrc, patchentrypoint));
                         MainFrame.mainframe.setFirmwareID(sFwcrc);

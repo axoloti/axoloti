@@ -32,6 +32,7 @@ public abstract class Connection {
     abstract public void TransmitCopyToFlash();
     abstract public void BringToDFU();
     abstract public void ClearSync();
+    abstract public boolean WaitSync(int msec);
     abstract public boolean WaitSync();
     abstract public void ClearReadSync();
     abstract public boolean WaitReadSync();
