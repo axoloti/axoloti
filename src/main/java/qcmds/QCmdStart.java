@@ -19,6 +19,8 @@ package qcmds;
 
 import axoloti.Connection;
 import axoloti.Patch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -54,6 +56,7 @@ public class QCmdStart implements QCmdSerialTask {
         if (connection.WaitSync(patch_start_timeout)) {
             return this;
         } else {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "patch start taking too long, disconnecting");
             return new QCmdDisconnect();
         }
     }
