@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="play stereo" uuid="843bbc92c4a45c5ba551de32538934e186dc4a41" sha="a50c637620f513c34f323e7087e37d5591e5f1b">
-      <upgradeSha>6316a9ebd972e1c2fae73bf304dfe831d2fd5e1b</upgradeSha>
+   <obj.normal id="play stereo" uuid="843bbc92c4a45c5ba551de32538934e186dc4a41" sha="7f871582bbfacbdbcccc2b311ce1032b09d4a01b">
+      <upgradeSha>99ad4d96ca36ed2641a9d19e0874fa2f9c8e3b90</upgradeSha>
       <sDescription>streaming playback of a stereo .wav file from sdcard (testing)</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -26,9 +26,9 @@
    int starttrig;
    int stoptrig;
 ]]></code.declaration>
-      <code.init><![CDATA[static sdReadFilePingpong s __attribute__ ((section (".data")));
+      <code.init><![CDATA[static sdReadFilePingpong s[attr_poly] __attribute__ ((section (".data")));
 // unmap from aliased memory for DMA
-stream = (sdReadFilePingpong *)(0x20000000 | (int)&s);
+stream = (sdReadFilePingpong *)(0x20000000 | (int)&s[parent->polyIndex]);
 stream->pingpong = CLOSED;
 stream->doSeek = 0;
 stream->offset = -1;
