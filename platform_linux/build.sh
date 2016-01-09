@@ -106,7 +106,7 @@ then
     else
         echo "##### ${ARCHIVE} already downloaded #####"
     fi
-    tar xfvj ${ARCHIVE}
+    tar xfj ${ARCHIVE}
 
     cd "${PLATFORM_ROOT}/src/libusb-1.0.19"
 
@@ -132,7 +132,7 @@ then
     else
         echo "##### ${ARCHIVE} already downloaded #####"
     fi
-    tar xfvz ${ARCHIVE}
+    tar xfz ${ARCHIVE}
 
     cd "${PLATFORM_ROOT}/src/${ARDIR}"
     ./configure --prefix="${PLATFORM_ROOT}" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.a -ludev -pthread" USB_CFLAGS="-I${PLATFORM_ROOT}/include/libusb-1.0/"

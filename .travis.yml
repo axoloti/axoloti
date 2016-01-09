@@ -3,9 +3,25 @@ os:
   - osx
 language: java
 before_install:
-- "if [ ${TRAVIS_OS_NAME:-'linux'} = 'linux' ]; then sudo apt-get update -qq && sudo apt-get install -qq oracle-java8-installer && jdk_switcher use oraclejdk8 && ./platform_linux/build.sh; fi"
-- "if [ ${TRAVIS_OS_NAME:-'linux'} = 'osx' ]; then brew update && brew tap caskroom/cask && brew install brew-cask && brew cask install java && brew install ant && ./platform_osx/build.sh; fi"
-- "javac -version"
+  - >
+    case "${TRAVIS_OS_NAME:-linux}" in
+    linux)
+      sudo apt-get update -qq
+	  sudo apt-get install -qq oracle-java8-installer
+	  jdk_switcher use oraclejdk8
+	  ./platform_linux/build.sh
+      ;;
+    osx)
+      brew update --quiet
+	  brew tap caskroom/cask --quiet 
+	  brew install brew-cask 
+	  brew cask install java 
+	  brew install ant 
+	  ./platform_osx/build.sh
+      ;;
+    esac;
+    javac -version;
+
 script:
 - ant
 - ant -Dbuild.bundle=true bundle

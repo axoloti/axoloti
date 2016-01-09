@@ -57,9 +57,9 @@ then
     else
         echo "${ARCHIVE} already downloaded"
     fi
-    tar xfvj ${ARCHIVE}
+    tar xfj ${ARCHIVE}
     cp -r gcc-arm-none-eabi-4_9-2015q2/* ..
-    rm -rv gcc-arm-none-eabi-4_9-2015q2
+    rm -r gcc-arm-none-eabi-4_9-2015q2
 else
     echo "bin/arm-none-eabi-gcc already present, skipping..."
 fi
@@ -77,7 +77,7 @@ then
     else
         echo "${ARCHIVE} already downloaded"
     fi
-    tar xfvj ${ARCHIVE}
+    tar xfj ${ARCHIVE}
     
     cd "${PLATFORM_ROOT}/src/libusb-1.0.19"
 
@@ -113,7 +113,7 @@ then
     else
         echo "$ARCHIVE already downloaded"
     fi
-    tar xfvz ${ARCHIVE}
+    tar xfz ${ARCHIVE}
 
     cd "${PLATFORM_ROOT}/src/${ARDIR}"
     ./configure --prefix="${PLATFORM_ROOT}/i386" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.0.dylib" USB_CFLAGS=-I${PLATFORM_ROOT}/i386/include/libusb-1.0/ CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
@@ -148,7 +148,7 @@ then
         echo "${ARCHIVE} already downloaded"
     fi
 
-    tar xfvz $ARCHIVE
+    tar xfz $ARCHIVE
 
     cd "${PLATFORM_ROOT}/src/${ARDIR}"
     ./configure --prefix="${PLATFORM_ROOT}/i386" CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
