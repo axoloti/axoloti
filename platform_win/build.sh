@@ -15,11 +15,11 @@ then
         echo "${ARCHIVE} already downloaded"
     fi
 
-    unzip -o ${ARCHIVE}
+    unzip -q -o ${ARCHIVE}
     rm ${ARCHIVE}
     mv ${ARDIR} chibios
     cd chibios/ext
-    unzip -o ./fatfs-0.9-patched.zip
+    unzip -q -o ./fatfs-0.9-patched.zip
     cd ../../
     mv chibios ..
 fi
@@ -34,7 +34,7 @@ then
     else
         echo "${ARCHIVE} already downloaded"
     fi    
-    unzip -o ${ARCHIVE}
+    unzip -q -o ${ARCHIVE}
     rm ${ARCHIVE}
 fi
 
@@ -42,7 +42,7 @@ if [ ! -f "bin/make.exe" ];
 then
     echo "downloading make"
     curl -L http://gnuwin32.sourceforge.net/downlinks/make-bin-zip.php > make-3.81-bin.zip
-    unzip -o make-3.81-bin.zip 
+    unzip -q -o make-3.81-bin.zip 
     rm make-3.81-bin.zip
 fi
 
@@ -51,7 +51,7 @@ if [ ! -f "bin/libiconv2.dll" ];
 then
     echo "downloading make-dep"
     curl -L http://gnuwin32.sourceforge.net/downlinks/make-dep-zip.php > make-3.81-dep.zip
-    unzip -o make-3.81-dep.zip
+    unzip -q -o make-3.81-dep.zip
     rm make-3.81-dep.zip
 fi
 
@@ -59,7 +59,7 @@ if [ ! -f "bin/rm.exe" ];
 then
     echo "downloading rm"
     curl -L http://gnuwin32.sourceforge.net/downlinks/coreutils-bin-zip.php > coreutils-5.3.0-bin.zip
-    unzip -o coreutils-5.3.0-bin.zip
+    unzip -q -o coreutils-5.3.0-bin.zip
     rm coreutils-5.3.0-bin.zip
 fi
 
@@ -79,7 +79,7 @@ then
         echo "${ARCHIVE} already downloaded"
     fi    
 
-    unzip ${ARCHIVE}
+    unzip -q ${ARCHIVE}
     rm ${ARCHIVE}
 fi
 

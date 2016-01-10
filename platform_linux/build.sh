@@ -65,10 +65,10 @@ then
     else
         echo "##### ${ARCHIVE} already downloaded #####"
     fi
-    unzip -o ${ARCHIVE}
+    unzip -q -o ${ARCHIVE}
     mv ${ARDIR} chibios
     cd chibios/ext
-    unzip -o ./fatfs-0.9-patched.zip
+    unzip -q -o ./fatfs-0.9-patched.zip
     cd ../../
     mv chibios ../..
 else
