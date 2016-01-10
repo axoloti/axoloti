@@ -7,31 +7,31 @@ before_install:
     case "${TRAVIS_OS_NAME:-linux}" in
     linux)
       sudo apt-get update -qq
-	  sudo apt-get install -qq oracle-java8-installer
-	  jdk_switcher use oraclejdk8
-	  ./platform_linux/build.sh
+      sudo apt-get install -qq oracle-java8-installer
+      jdk_switcher use oraclejdk8
+      ./platform_linux/build.sh
       ;;
     osx)
       brew update --quiet
-	  brew tap caskroom/cask --quiet 
-	  brew install brew-cask 
-	  brew cask install java 
-	  brew install ant 
-	  ./platform_osx/build.sh
+      brew tap caskroom/cask --quiet 
+      brew install brew-cask 
+      brew cask install java 
+      brew install ant 
+      ./platform_osx/build.sh
       ;;
     esac;
     javac -version;
 
 script:
-- ant
-- ant -Dbuild.bundle=true bundle
-- ant -Dbuild.runtime=true runtime
+  - ant
+  - ant -Dbuild.bundle=true bundle
+  - ant -Dbuild.runtime=true runtime
 
 before_deploy:
-    - pwd
-    - ls ${TRAVIS_BUILD_DIR}
-    - ls ${TRAVIS_BUILD_DIR}/build
-    - ls ${TRAVIS_BUILD_DIR}/build/bundles
+  - pwd
+  - ls ${TRAVIS_BUILD_DIR}
+  - ls ${TRAVIS_BUILD_DIR}/build
+  - ls ${TRAVIS_BUILD_DIR}/build/bundles
     
 deploy:
   provider: releases
