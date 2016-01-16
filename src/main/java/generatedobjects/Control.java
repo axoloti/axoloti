@@ -17,6 +17,7 @@
  */
 package generatedobjects;
 
+import axoloti.inlets.InletFrac32Pos;
 import axoloti.object.AxoObject;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletFrac32;
@@ -47,6 +48,7 @@ public class Control extends gentools {
         WriteAxoObject(catName, CreateB1Mom());
         WriteAxoObject(catName, CreateCB16());
         WriteAxoObject(catName, CreateI());
+        WriteAxoObject(catName, CreateHook());
         WriteAxoObject(catName, CreateIRadioH(2));
         WriteAxoObject(catName, CreateIRadioH(4));
         WriteAxoObject(catName, CreateIRadioH(8));
@@ -104,6 +106,42 @@ public class Control extends gentools {
         o.outlets.add(new OutletInt32Pos("out", "output"));
         o.params.add(new ParameterInt32Box("value", 0, 65536));
         o.sKRateCode = "%out%= %value%;\n";
+        return o;
+    }
+
+    static AxoObject CreateHook() {
+        AxoObject o = new AxoObject("hook", "inlet value passed through after hitting control value");
+        o.inlets.add(new InletFrac32Pos("in", "input"));
+        o.outlets.add(new OutletFrac32Pos("out", "output"));
+        o.outlets.add(new OutletBool32("hooked", "hooked"));
+        o.params.add(new ParameterFrac32UMap("value"));
+        o.sLocalData = "int32_t nhooked; //0:hooked, 1:gt, 2:lt, 4:unhooked\n"
+                + "int32_t param_cache;\n";
+        o.sInitCode = "nhooked = 4;\n";
+        o.sKRateCode = "if (nhooked) {\n"
+                + "	outlet_out = param_value;\n"
+                + "	if (param_value > inlet_in){\n"
+                + "		nhooked |= 1;\n"
+                + "		if (nhooked == 7) {\n"
+                + "			nhooked = 0;\n"
+                + "			param_cache = param_value;\n"
+                + "		}\n"
+                + "	} else {\n"
+                + "		nhooked |= 2;\n"
+                + "		if (nhooked == 7) {\n"
+                + "			nhooked = 0;\n"
+                + "			param_cache = param_value;\n"
+                + "		}\n"
+                + "	}\n"
+                + "} else {\n"
+                + "	outlet_out = inlet_in;\n"
+                + "	if (param_cache != param_value) \n"
+                + "		nhooked = 4;\n"
+                + "	else\n"
+                + "		PExParameterChange(&parent->PExch[PARAM_INDEX_attr_legal_name_value],inlet_in,0xFFFD);\n"
+                + "		param_cache = inlet_in;\n"
+                + "}\n"
+                + "outlet_hooked = !nhooked;\n";
         return o;
     }
 

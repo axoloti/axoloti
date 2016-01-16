@@ -794,9 +794,10 @@ public class USBBulkConnection extends Connection {
                             .getName()).log(Level.INFO, "Rx paramchange IID mismatch{0} {1}", new Object[]{index, value});
                     return;
                 }
-
+                if (!pi.GetNeedsTransmit()) {
+                    pi.SetValueRaw(value);
+                }
 //                System.out.println("rcv ppc objname:" + pi.axoObj.getInstanceName() + " pname:"+ pi.name);
-                pi.SetValueRaw(value);
             }
         });
 

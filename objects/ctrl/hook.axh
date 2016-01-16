@@ -1,0 +1,94 @@
+<patch-1.0>
+   <comment type="patch/comment" x="14" y="14" text="hook behavior for parameters"/>
+   <comment type="patch/comment" x="42" y="42" text="useful to prevent jumps in parameters"/>
+   <comment type="patch/comment" x="42" y="56" text="and controlling parameters with potentiometers/faders on gpio analog input"/>
+   <obj type="ctrl/dial p" sha="501c30e07dedf3d701e8d0b33c3c234908c3388e" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_1" x="14" y="98">
+      <params>
+         <frac32.u.map name="value" value="49.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/hook" sha="29063658698d4f92cc5a27f66430ef6f9ba2e0c" uuid="39cd40e6f91f43dd1b4285eb769d7cd5613b5709" name="hook" x="98" y="98">
+      <params>
+         <frac32.u.map name="value" value="48.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" sha="5a62a6a55b2a4ed72cdc1543ff6d670b9e69ec38" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_2" x="196" y="98">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="330cd7d2342f59124b04a39d118a0ab97185ecaa" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_1" x="196" y="196">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="lfo/sine" sha="a2851b3d62ed0faceefc98038d9571422f0ce260" uuid="75f7330c26a13953215dccc3b7b9008545c9daa9" name="saw_1" x="14" y="308">
+      <params>
+         <frac32.s.map name="pitch" value="-40.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/bipolar2unipolar" sha="93baeaf78c9a228f23225186d21e61abc921c3d6" uuid="f6f63d71053d572d3c795f83c7ec11dfbbce82dd" name="bipolar2unipolar_1" x="126" y="308">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/hook" sha="29063658698d4f92cc5a27f66430ef6f9ba2e0c" uuid="39cd40e6f91f43dd1b4285eb769d7cd5613b5709" name="hook_" x="266" y="308">
+      <params>
+         <frac32.u.map name="value" value="10.562306880950928"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial p" sha="5a62a6a55b2a4ed72cdc1543ff6d670b9e69ec38" uuid="44fd18b562e434b3230441681132dbeabb15cdc5" name="dial_3" x="364" y="308">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/chart p" sha="d8cf970a568c1d1bd09e7b952f862b6c8d658358" uuid="58f42040a894006a5f73ed8cb8d0bd45481b28cd" name="chart_1" x="364" y="406">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/bool" sha="330cd7d2342f59124b04a39d118a0ab97185ecaa" uuid="a0ee71d48208b71752cbb8c05e55145106ef3946" name="bool_2" x="280" y="420">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="dial_1" outlet="out"/>
+         <dest obj="hook" inlet="in"/>
+      </net>
+      <net>
+         <source obj="hook" outlet="out"/>
+         <dest obj="dial_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="hook" outlet="hooked"/>
+         <dest obj="bool_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="hook_" outlet="out"/>
+         <dest obj="dial_3" inlet="in"/>
+         <dest obj="chart_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="hook_" outlet="hooked"/>
+         <dest obj="bool_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="bipolar2unipolar_1" inlet="i"/>
+      </net>
+      <net>
+         <source obj="bipolar2unipolar_1" outlet="o"/>
+         <dest obj="hook_" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>822</x>
+      <y>591</y>
+      <width>704</width>
+      <height>572</height>
+   </windowPos>
+</patch-1.0>
