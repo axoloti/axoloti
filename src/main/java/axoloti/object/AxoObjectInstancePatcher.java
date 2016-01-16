@@ -21,6 +21,9 @@ import axoloti.MainFrame;
 import axoloti.Patch;
 import axoloti.PatchFrame;
 import axoloti.PatchGUI;
+import axoloti.inlets.InletInstance;
+import axoloti.outlets.OutletInstance;
+import axoloti.parameters.ParameterInstance;
 import components.ButtonComponent;
 import components.ButtonComponent.ActListener;
 import java.awt.Component;
@@ -64,6 +67,15 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (pg != null) {
             AxoObject ao = pg.GenerateAxoObj();
             setType(ao);
+            for (ParameterInstance pi : parameterInstances) {
+                pi.axoObj = null;
+            }
+            for (InletInstance pi : inletInstances) {
+                pi.axoObj = null;
+            }
+            for (OutletInstance pi : outletInstances) {
+                pi.axoObj = null;
+            }
             PostConstructor();
         }
         for (Component cmp : getComponents()) {

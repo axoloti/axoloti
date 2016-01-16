@@ -288,34 +288,51 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         p_displays.add(Box.createHorizontalGlue());
         p_params.add(Box.createHorizontalGlue());
 
-//        inletInstances = new ArrayList<InletInstance>();
-//        outletInstances =
+        for (InletInstance inl : inletInstances) {
+            inl.axoObj = null;
+        }
         for (Inlet inl : getType().inlets) {
-            InletInstance inlin = GetInletInstance(inl.name);
-            if (inlin == null) {
-                inlin = new InletInstance(inl, this);
-                inletInstances.add(inlin);
+            InletInstance inlinp = GetInletInstance(inl.name);
+            InletInstance inlin = new InletInstance(inl, this);
+            if (inlinp != null) {
+                inlinp.axoObj = this;
+                getPatch().AddConnection(inlinp, inlin);
+                getPatch().disconnect(inlinp);
+                inletInstances.remove(inlinp);
             }
+            inletInstances.add(inlin);
             inlin.setAlignmentX(LEFT_ALIGNMENT);
             p_inlets.add(inlin);
         }
 
+        for (OutletInstance outl : outletInstances) {
+            outl.axoObj = null;
+        }
         for (Outlet o : getType().outlets) {
-            OutletInstance oin = GetOutletInstance(o.name);
-            if (oin == null) {
-                oin = new OutletInstance(o, this);
-                outletInstances.add(oin);
+            OutletInstance oinp = GetOutletInstance(o.name);
+            OutletInstance oin = new OutletInstance(o, this);
+            if (oinp != null) {
+                oinp.axoObj = this;
+                //getPatch().AddConnection(oinp,oin);
+                Net n = getPatch().GetNet(oinp);
+                if (n!=null){
+                    n.connectOutlet(oin);
+                }
+                getPatch().disconnect(oinp);
+                outletInstances.remove(oinp);
             }
+            outletInstances.add(oin);
             oin.setAlignmentX(RIGHT_ALIGNMENT);
             p_outlets.add(oin);
-        }/*
+        }
+
+        /*
          if (p_inlets.getComponents().length == 0){
          p_inlets.add(Box.createHorizontalGlue());
          }
          if (p_outlets.getComponents().length == 0){
          p_outlets.add(Box.createHorizontalGlue());
          }*/
-
         p_iolets.add(p_inlets);
         p_iolets.add(Box.createHorizontalGlue());
         p_iolets.add(p_outlets);
@@ -354,6 +371,30 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 if (pi.axoObj == null) {
                     attributeInstances.remove(pi);
                     Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved attribute {0}:{1}", new Object[]{getInstanceName(), pi.getAttributeName()});
+                    cont = true;
+                    break;
+                }
+            }
+        } while (cont);
+        do {
+            cont = false;
+            for (InletInstance pi : inletInstances) {
+                if (pi.axoObj == null) {
+                    getPatch().disconnect(pi);
+                    inletInstances.remove(pi);
+                    Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved inlet {0}:{1}", new Object[]{getInstanceName(), pi.getInletname()});
+                    cont = true;
+                    break;
+                }
+            }
+        } while (cont);
+        do {
+            cont = false;
+            for (OutletInstance pi : outletInstances) {
+                if (pi.axoObj == null) {
+                    getPatch().disconnect(pi);
+                    outletInstances.remove(pi);
+                    Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved outlet {0}:{1}", new Object[]{getInstanceName(), pi.getOutletname()});
                     cont = true;
                     break;
                 }
@@ -409,10 +450,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         for (InletInstance o : inletInstances) {
             if (n.equals(o.GetLabel())) {
                 return o;
-            }
-            else {
+            } else {
                 String s = Synonyms.instance().inlet(n);
-                if(o.GetLabel().equals(s)) {
+                if (o.GetLabel().equals(s)) {
                     return o;
                 }
             }
@@ -425,10 +465,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         for (OutletInstance o : outletInstances) {
             if (n.equals(o.GetLabel())) {
                 return o;
-            }
-            else {
+            } else {
                 String s = Synonyms.instance().outlet(n);
-                if(o.GetLabel().equals(s)) {
+                if (o.GetLabel().equals(s)) {
                     return o;
                 }
             }
@@ -635,7 +674,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
             s = s.replace("attr_name", getCInstanceName());
             s = s.replace("attr_legal_name", getLegalName());
-           
+
             return s;
         }
         return "";
