@@ -65,7 +65,7 @@ public class CheckboxComponent extends ACtrlComponent {
     }
 
     private boolean GetFieldValue(int position) {
-        return (((int) value) & (1 << position)) > 0;
+        return (((int) value) & (1 << position)) != 0;
     }
 
     @Override
