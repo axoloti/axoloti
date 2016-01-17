@@ -40,7 +40,7 @@ public class RecentFileMenu extends JMenu {
                     JMenuItem mi = new JMenuItem(s);
                     mi.setActionCommand("open:" + s);
                     mi.addActionListener(MainFrame.mainframe);
-                    add(mi,0);
+                    add(mi, 0);
                 }
             }
 

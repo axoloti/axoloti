@@ -318,6 +318,7 @@ public class PatchFrame extends javax.swing.JFrame {
         jMenuHelp = new javax.swing.JMenu();
         jMenuHelpContents = new javax.swing.JMenuItem();
         jMenuAbout = new javax.swing.JMenuItem();
+        helpLibraryMenu1 = new axoloti.menus.HelpLibraryMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -668,6 +669,9 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         }
     });
     jMenuHelp.add(jMenuAbout);
+
+    helpLibraryMenu1.setText("Library");
+    jMenuHelp.add(helpLibraryMenu1);
 
     jMenuBar1.add(jMenuHelp);
 
@@ -1042,6 +1046,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
+    private axoloti.menus.HelpLibraryMenu helpLibraryMenu1;
     private javax.swing.JCheckBox jCheckBoxLive;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemCordsInBackground;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemLive;

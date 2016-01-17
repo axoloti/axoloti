@@ -28,6 +28,7 @@ import javax.swing.JMenuItem;
  * @author jtaelman
  */
 public class PopulatePatchMenu {
+
     static void PopulatePatchMenu(JMenu parent, String path, String ext) {
         File dir = new File(path);
         final String extension = ext;
@@ -55,5 +56,5 @@ public class PopulatePatchMenu {
             fm.addActionListener(MainFrame.mainframe);
             parent.add(fm);
         }
-    }    
+    }
 }

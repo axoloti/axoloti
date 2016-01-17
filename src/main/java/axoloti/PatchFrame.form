@@ -338,6 +338,11 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuAboutActionPerformed"/>
               </Events>
             </MenuItem>
+            <Menu class="axoloti.menus.HelpLibraryMenu" name="helpLibraryMenu1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Library"/>
+              </Properties>
+            </Menu>
           </SubComponents>
         </Menu>
       </SubComponents>
