@@ -17,22 +17,13 @@
  */
 package displays;
 
-import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueFrac32;
 import components.displays.VLineComponent;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceFrac4ByteVBar extends DisplayInstance1 {
-
-    ValueFrac32 value = new ValueFrac32();
-
-    @Override
-    public Value getValueRef() {
-        return value;
-    }
+public class DisplayInstanceFrac4ByteVBar extends DisplayInstanceFrac32<DisplayFrac4ByteVBar> {
 
     private VLineComponent vbar[];
 

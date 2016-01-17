@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,7 +17,7 @@
  */
 package axoloti.attribute;
 
-import axoloti.attributedefinition.AxoAttribute;
+import axoloti.attributedefinition.AxoAttributeWavefile;
 import axoloti.object.AxoObjectInstance;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -41,7 +41,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class AttributeInstanceWavefile extends AttributeInstance {
+public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWavefile> {
 
     @Attribute
     String waveFilename;
@@ -51,7 +51,7 @@ public class AttributeInstanceWavefile extends AttributeInstance {
     public AttributeInstanceWavefile() {
     }
 
-    public AttributeInstanceWavefile(AxoAttribute param, AxoObjectInstance axoObj1) {
+    public AttributeInstanceWavefile(AxoAttributeWavefile param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
 //        PostConstructor();
     }
@@ -79,7 +79,7 @@ public class AttributeInstanceWavefile extends AttributeInstance {
     @Override
     public String CValue() {
         String s = " {";
-        File fp = new File(axoObj.getPatch().getFileNamePath());
+        File fp = new File(GetObjectInstance().getPatch().getFileNamePath());
         File f = new File(fp.getParent() + "/" + waveFilename);
         System.out.println("waveFilename : " + fp.getParent() + "/" + waveFilename + "\n");
 

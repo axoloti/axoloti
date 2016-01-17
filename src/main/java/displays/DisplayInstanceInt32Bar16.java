@@ -23,7 +23,7 @@ import components.displays.LedstripComponent;
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceInt32Bar16 extends DisplayInstanceInt32 {
+public class DisplayInstanceInt32Bar16 extends DisplayInstanceInt32<DisplayInt32Bar16> {
 
     private LedstripComponent readout;
 

@@ -34,7 +34,7 @@ public class DisplayFrac32UDial extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceFrac32UDial InstanceFactory() {
         return new DisplayInstanceFrac32UDial();
     }
 

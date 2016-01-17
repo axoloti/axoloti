@@ -34,7 +34,7 @@ public class DisplayInt32HexLabel extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceInt32HexLabel InstanceFactory() {
         return new DisplayInstanceInt32HexLabel();
     }
 

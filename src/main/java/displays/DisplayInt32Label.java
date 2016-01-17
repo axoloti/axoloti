@@ -34,7 +34,7 @@ public class DisplayInt32Label extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceInt32Label InstanceFactory() {
         return new DisplayInstanceInt32Label();
     }
 

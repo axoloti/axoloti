@@ -34,7 +34,7 @@ public class DisplayNoteLabel extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceNoteLabel InstanceFactory() {
         return new DisplayInstanceNoteLabel();
     }
 

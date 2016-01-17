@@ -29,7 +29,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class ParameterInstanceBin1 extends ParameterInstanceInt32 {
+public class ParameterInstanceBin1 extends ParameterInstanceInt32<ParameterBin1> {
 
     public ParameterInstanceBin1() {
     }
@@ -72,7 +72,7 @@ public class ParameterInstanceBin1 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void setValue(Value<Int32> value) {
+    public void setValue(Value value) {
         super.setValue(value);
         updateV();
     }
@@ -90,4 +90,5 @@ public class ParameterInstanceBin1 extends ParameterInstanceInt32 {
         AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(this, m1);
         m.add(m1);
     }
+
 }

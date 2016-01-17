@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -25,7 +25,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class AttributeInstanceInt extends AttributeInstance {
+public abstract class AttributeInstanceInt<T extends AxoAttribute> extends AttributeInstance<T> {
 
     @Attribute
     int value;
@@ -33,7 +33,7 @@ public abstract class AttributeInstanceInt extends AttributeInstance {
     public AttributeInstanceInt() {
     }
 
-    public AttributeInstanceInt(AxoAttribute param, AxoObjectInstance axoObj1) {
+    public AttributeInstanceInt(T param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
     }
 

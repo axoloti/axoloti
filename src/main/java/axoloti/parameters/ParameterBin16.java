@@ -17,13 +17,11 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Int32;
-
 /**
  *
  * @author Johannes Taelman
  */
-public class ParameterBin16 extends Parameter<Int32> {
+public class ParameterBin16 extends Parameter {
 
     public ParameterBin16() {
     }

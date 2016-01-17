@@ -24,7 +24,7 @@ import axoloti.datatypes.ValueFrac32;
  *
  * @author Johannes Taelman
  */
-public abstract class DisplayInstanceFrac32 extends DisplayInstance1 {
+public abstract class DisplayInstanceFrac32<T extends Display> extends DisplayInstance1<T> {
 
     ValueFrac32 value = new ValueFrac32();
 

@@ -20,6 +20,7 @@ package axoloti.inlets;
 import axoloti.Net;
 import axoloti.NetDragging;
 import axoloti.PatchGUI;
+import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
@@ -63,7 +64,7 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "dest")
-public class InletInstance extends JPanel {
+public class InletInstance<T extends Inlet> extends JPanel implements AtomInstance<T> {
 
     @Attribute(required = false)
     @Deprecated
@@ -73,7 +74,7 @@ public class InletInstance extends JPanel {
     @Attribute(name = "inlet", required = false)
     public String inletname;
 
-    private final Inlet inlet;
+    private final T inlet;
     public AxoObjectInstanceAbstract axoObj;
     JLabel lbl;
     JComponent jack;
@@ -105,6 +106,16 @@ public class InletInstance extends JPanel {
             int sepIndex = name.lastIndexOf(' ');
             return name.substring(sepIndex + 1);
         }
+    }
+
+    @Override
+    public AxoObjectInstanceAbstract GetObjectInstance() {
+        return axoObj;
+    }
+
+    @Override
+    public T GetDefinition() {
+        return inlet;
     }
 
     class DragGestureListImp implements DragGestureListener {
@@ -273,7 +284,7 @@ public class InletInstance extends JPanel {
 
     }
 
-    public InletInstance(Inlet inlet, final AxoObjectInstance axoObj) {
+    public InletInstance(T inlet, final AxoObjectInstance axoObj) {
         this.inlet = inlet;
         this.axoObj = axoObj;
         RefreshName();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -19,6 +19,7 @@ package axoloti.attributedefinition;
 
 import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceInt32;
+import axoloti.object.AxoObjectInstance;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -34,14 +35,14 @@ public class AxoAttributeInt32 extends AxoAttribute {
     @Attribute
     int DefaultValue;
 
+    public AxoAttributeInt32() {
+    }
+
     public AxoAttributeInt32(String name, int MinValue, int MaxValue, int DefaultValue) {
-        this.name = name;
+        super(name);
         this.MinValue = MinValue;
         this.MaxValue = MaxValue;
         this.DefaultValue = DefaultValue;
-    }
-
-    public AxoAttributeInt32() {
     }
 
     public int getMinValue() {
@@ -57,7 +58,7 @@ public class AxoAttributeInt32 extends AxoAttribute {
     }
 
     @Override
-    public AttributeInstance InstanceFactory() {
-        return new AttributeInstanceInt32();
+    public AttributeInstanceInt32 InstanceFactory(AxoObjectInstance o) {
+        return new AttributeInstanceInt32(this, o);
     }
 }

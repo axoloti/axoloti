@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,6 +17,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
 import static axoloti.utils.CharEscape.CharEscape;
@@ -29,26 +30,28 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class AttributeInstance extends JPanel {
+public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel implements AtomInstance<T> {
 
     @Attribute
-    public String attributeName;
-    public AxoAttribute attr;
-    public AxoObjectInstance axoObj;
+    String attributeName;
+
+    T attr;
+
+    private AxoObjectInstance axoObj;
     LabelComponent lbl;
 
     public AttributeInstance() {
     }
 
-    public AttributeInstance(AxoAttribute param, AxoObjectInstance axoObj1) {
-        attr = param;
+    public AttributeInstance(T attr, AxoObjectInstance axoObj1) {
+        this.attr = attr;
         axoObj = axoObj1;
         attributeName = attr.getName();
     }
 
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        add(new LabelComponent(attr.getName()));
+        add(new LabelComponent(GetDefinition().getName()));
         doLayout();
         setSize(getPreferredSize());
         doLayout();
@@ -65,8 +68,19 @@ public abstract class AttributeInstance extends JPanel {
     public abstract String CValue();
 
     public abstract void CopyValueFrom(AttributeInstance a1);
-        
-    public String GetCName(){
+
+    public String GetCName() {
         return "attr_" + CharEscape(attributeName);
     }
+
+    @Override
+    public AxoObjectInstance GetObjectInstance() {
+        return axoObj;
+    }
+
+    @Override
+    public T GetDefinition() {
+        return attr;
+    }
+
 }

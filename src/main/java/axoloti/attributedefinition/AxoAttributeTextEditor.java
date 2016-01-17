@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,8 +17,8 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceTextEditor;
+import axoloti.object.AxoObjectInstance;
 
 /**
  *
@@ -26,15 +26,15 @@ import axoloti.attribute.AttributeInstanceTextEditor;
  */
 public class AxoAttributeTextEditor extends AxoAttribute {
 
-    public AxoAttributeTextEditor(String name) {
-        this.name = name;
-    }
-
     public AxoAttributeTextEditor() {
     }
 
+    public AxoAttributeTextEditor(String name) {
+        super(name);
+    }
+
     @Override
-    public AttributeInstance InstanceFactory() {
-        return new AttributeInstanceTextEditor();
+    public AttributeInstanceTextEditor InstanceFactory(AxoObjectInstance o) {
+        return new AttributeInstanceTextEditor(this, o);
     }
 }

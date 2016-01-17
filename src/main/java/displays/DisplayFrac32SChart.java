@@ -34,7 +34,7 @@ public class DisplayFrac32SChart extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceFrac32SChart InstanceFactory() {
         return new DisplayInstanceFrac32SChart();
     }
 

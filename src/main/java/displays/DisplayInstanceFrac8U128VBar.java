@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceFrac8U128VBar extends DisplayInstance {
+public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U128VBar> {
 
     final int n = 128;
 

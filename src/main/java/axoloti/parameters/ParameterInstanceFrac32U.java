@@ -23,7 +23,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class ParameterInstanceFrac32U extends ParameterInstanceFrac32 {
+public abstract class ParameterInstanceFrac32U<T extends ParameterFrac32> extends ParameterInstanceFrac32<T> {
 
     public ParameterInstanceFrac32U() {
     }

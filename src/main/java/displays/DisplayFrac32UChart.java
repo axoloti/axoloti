@@ -34,7 +34,7 @@ public class DisplayFrac32UChart extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceFrac32UChart InstanceFactory() {
         return new DisplayInstanceFrac32UChart();
     }
 

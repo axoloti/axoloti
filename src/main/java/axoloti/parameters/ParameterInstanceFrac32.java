@@ -36,12 +36,12 @@ import org.simpleframework.xml.ElementList;
  *
  * @author Johannes Taelman
  */
-public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> {
+public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extends ParameterInstance<Tx> {
 
     @Attribute(name = "value", required = false)
     public double getValuex() {
         return value.getDouble();
-    }
+    }        
     @ElementList(required = false)
     ArrayList<Modulation> modulators;
 
@@ -61,7 +61,7 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
 
     abstract double getTick();
 
-    public ParameterInstanceFrac32(Parameter<Frac32> param, AxoObjectInstance axoObj1) {
+    public ParameterInstanceFrac32(Tx param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
         //value = new ValueFrac32();
     }
@@ -83,7 +83,7 @@ public abstract class ParameterInstanceFrac32 extends ParameterInstance<Frac32> 
     }
 
     @Override
-    public void setValue(Value<Frac32> value) {
+    public void setValue(Value value) {
         super.setValue(value);
         this.value.setDouble(value.getDouble());
         updateV();

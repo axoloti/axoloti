@@ -17,14 +17,13 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Int32;
 import java.security.MessageDigest;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class ParameterBin1 extends Parameter<Int32> {
+public class ParameterBin1 extends Parameter<ParameterInstanceBin1> {
 
     public ParameterBin1() {
     }
@@ -34,13 +33,13 @@ public class ParameterBin1 extends Parameter<Int32> {
     }
 
     @Override
-    public ParameterInstanceBin1 InstanceFactory() {
-        return new ParameterInstanceBin1();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("bool32.t".getBytes());
+    }
+    
+    @Override
+    public ParameterInstanceBin1 InstanceFactory() {
+        return new ParameterInstanceBin1();
     }
 }

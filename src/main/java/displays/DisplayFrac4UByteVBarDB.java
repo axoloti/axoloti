@@ -34,7 +34,7 @@ public class DisplayFrac4UByteVBarDB extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceFrac4UByteVBarDB InstanceFactory() {
         return new DisplayInstanceFrac4UByteVBarDB();
     }
 

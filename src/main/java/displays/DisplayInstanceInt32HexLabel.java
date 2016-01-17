@@ -23,7 +23,7 @@ import components.LabelComponent;
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceInt32HexLabel extends DisplayInstanceInt32 {
+public class DisplayInstanceInt32HexLabel extends DisplayInstanceInt32<DisplayInt32HexLabel> {
 
     private LabelComponent readout;
 

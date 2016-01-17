@@ -26,7 +26,7 @@ import org.simpleframework.xml.Element;
  *
  * @author Johannes Taelman
  */
-public class ParameterInt32HRadio extends Parameter<Int32> {
+public class ParameterInt32HRadio extends Parameter<ParameterInstanceInt32HRadio> {
 
     @Element
     ValueInt32 MaxValue;
@@ -40,7 +40,7 @@ public class ParameterInt32HRadio extends Parameter<Int32> {
     }
 
     @Override
-    public ParameterInstance InstanceFactory() {
+    public ParameterInstanceInt32HRadio InstanceFactory() {
         ParameterInstanceInt32HRadio b = new ParameterInstanceInt32HRadio();
         return b;
     }

@@ -23,7 +23,7 @@ import components.displays.ScopeComponent;
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceFrac32UChart extends DisplayInstanceFrac32 {
+public class DisplayInstanceFrac32UChart extends DisplayInstanceFrac32<DisplayFrac32UChart> {
 
     private ScopeComponent scope;
 

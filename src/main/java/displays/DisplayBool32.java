@@ -34,7 +34,7 @@ public class DisplayBool32 extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceBool32 InstanceFactory() {
         return new DisplayInstanceBool32();
     }
 

@@ -21,6 +21,7 @@ import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.NetDragging;
 import axoloti.PatchGUI;
+import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.InletInstance;
 import axoloti.object.AxoObjectInstance;
@@ -63,7 +64,7 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "source")
-public class OutletInstance extends JPanel implements Comparable<OutletInstance> {
+public class OutletInstance<T extends Outlet> extends JPanel implements Comparable<OutletInstance>, AtomInstance<T> {
 
     @Deprecated
     @Attribute(required = false)
@@ -73,7 +74,7 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
     @Attribute(name = "outlet", required = false)
     public String outletname;
 
-    private final Outlet outlet;
+    private final T outlet;
     public AxoObjectInstanceAbstract axoObj;
     OutletInstancePopupMenu popup = new OutletInstancePopupMenu(this);
     JLabel lbl;
@@ -101,6 +102,16 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
             int sepIndex = name.lastIndexOf(' ');
             return name.substring(sepIndex + 1);
         }
+    }
+
+    @Override
+    public AxoObjectInstanceAbstract GetObjectInstance() {
+        return axoObj;
+    }
+
+    @Override
+    public T GetDefinition() {
+        return outlet;
     }
 
     class DragGestureListImp implements DragGestureListener {
@@ -166,7 +177,7 @@ public class OutletInstance extends JPanel implements Comparable<OutletInstance>
         this.axoObj = null;
     }
 
-    public OutletInstance(Outlet outlet, AxoObjectInstance axoObj) {
+    public OutletInstance(T outlet, AxoObjectInstance axoObj) {
         this.outlet = outlet;
         this.axoObj = axoObj;
         RefreshName();

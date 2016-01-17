@@ -39,8 +39,8 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U {
-
+public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends ParameterInstanceFrac32U<T> {
+ 
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
 
@@ -207,7 +207,7 @@ public class ParameterInstanceFrac32UMap extends ParameterInstanceFrac32U {
         new AssignMidiCCMenuItems(this, m1);
         m.add(m1);
         JMenu m2 = new JMenu("Modulation");
-        new AssignModulatorMenuItems(this, m2);
+        new AssignModulatorMenuItems((ParameterInstanceFrac32UMap<ParameterFrac32>)this, m2);
         m.add(m2);
     }
 

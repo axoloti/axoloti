@@ -17,6 +17,7 @@
  */
 package displays;
 
+import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import java.security.MessageDigest;
@@ -26,7 +27,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class Display {
+public abstract class Display<T extends DisplayInstance> implements AtomDefinition {
 
     @Attribute
     public String name;
@@ -40,6 +41,11 @@ public abstract class Display {
         this.name = name;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+    
     public int getLength() {
         return 1;
     }
@@ -48,6 +54,7 @@ public abstract class Display {
         return "disp_" + name;
     }    
     
+    @Override
     public DisplayInstance CreateInstance(AxoObjectInstance o) {
         // resolve deserialized object, copy value and remove
         DisplayInstance pidn = null;
@@ -79,7 +86,7 @@ public abstract class Display {
         }
     }
 
-    public abstract DisplayInstance InstanceFactory();
+    public abstract T InstanceFactory();
 
     public abstract DataType getDatatype();
 

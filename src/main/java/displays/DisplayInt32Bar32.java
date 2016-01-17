@@ -34,7 +34,7 @@ public class DisplayInt32Bar32 extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceInt32Bar32 InstanceFactory() {
         return new DisplayInstanceInt32Bar32();
     }
 

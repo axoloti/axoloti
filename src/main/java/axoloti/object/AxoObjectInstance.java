@@ -368,7 +368,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         do {
             cont = false;
             for (AttributeInstance pi : attributeInstances) {
-                if (pi.axoObj == null) {
+                if (pi.GetObjectInstance() == null) {
                     attributeInstances.remove(pi);
                     Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved attribute {0}:{1}", new Object[]{getInstanceName(), pi.getAttributeName()});
                     cont = true;

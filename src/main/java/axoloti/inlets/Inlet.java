@@ -17,8 +17,11 @@
  */
 package axoloti.inlets;
 
+import axoloti.atom.AtomDefinition;
+import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
+import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Attribute;
@@ -27,7 +30,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class Inlet {
+public abstract class Inlet implements AtomDefinition {
 
     @Attribute
     public String name;
@@ -42,10 +45,20 @@ public abstract class Inlet {
         this.description = description;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+    
     public String GetCName() {
         return "inlet_" + CharEscape.CharEscape(name);
     }
 
+    @Override
+    public AtomInstance CreateInstance(AxoObjectInstance o) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }    
+    
     public abstract DataType getDatatype();
 
     SignalMetaData GetSignalMetaData() {

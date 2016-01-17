@@ -23,7 +23,7 @@ import components.displays.DispComponent;
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceFrac32SDial extends DisplayInstanceFrac32 {
+public class DisplayInstanceFrac32SDial extends DisplayInstanceFrac32<DisplayFrac32SDial> {
 
     private DispComponent dial;
 

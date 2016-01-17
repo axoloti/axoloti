@@ -34,7 +34,7 @@ public class DisplayFrac32VU extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceFrac32VU InstanceFactory() {
         return new DisplayInstanceFrac32VU();
     }
 

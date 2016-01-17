@@ -23,7 +23,7 @@ import components.LabelComponent;
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceInt32Label extends DisplayInstanceInt32 {
+public class DisplayInstanceInt32Label extends DisplayInstanceInt32<DisplayInt32Label> {
 
     private LabelComponent readout;
 

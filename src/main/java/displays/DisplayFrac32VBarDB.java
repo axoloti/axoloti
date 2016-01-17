@@ -34,7 +34,7 @@ public class DisplayFrac32VBarDB extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceFrac32VBarDB InstanceFactory() {
         return new DisplayInstanceFrac32VBarDB();
     }
 

@@ -2108,7 +2108,7 @@ public class Patch {
         }
         Map<String, AttributeInstance> attrs = new TreeMap<String, AttributeInstance>();
         for (AttributeInstance a : obj.getAttributeInstances()) {
-            attrs.put(a.attributeName, a);
+            attrs.put(a.getName(), a);
         }
         Map<String, InletInstance> inlets = new TreeMap<String, InletInstance>();
         for (InletInstance il : obj.GetInletInstances()) {
@@ -2150,7 +2150,7 @@ public class Patch {
             }
         }
         for (AttributeInstance a : newObj.getAttributeInstances()) {
-            AttributeInstance a1 = attrs.get(a.attributeName);
+            AttributeInstance a1 = attrs.get(a.getName());
             if (a1 != null) {
                 a.CopyValueFrom(a1);
             }

@@ -24,7 +24,7 @@ import axoloti.datatypes.ValueInt32;
  *
  * @author Johannes Taelman
  */
-public abstract class DisplayInstanceInt32 extends DisplayInstance1 {
+public abstract class DisplayInstanceInt32<T extends Display> extends DisplayInstance1<T> {
 
     ValueInt32 value = new ValueInt32();
 

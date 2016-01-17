@@ -25,7 +25,7 @@ import components.LabelComponent;
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceNoteLabel extends DisplayInstanceFrac32 {
+public class DisplayInstanceNoteLabel extends DisplayInstanceFrac32<DisplayNoteLabel> {
 
     private LabelComponent readout;
     private final NativeToReal conv;

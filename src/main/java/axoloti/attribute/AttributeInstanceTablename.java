@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,7 +17,7 @@
  */
 package axoloti.attribute;
 
-import axoloti.attributedefinition.AxoAttribute;
+import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
@@ -33,7 +33,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class AttributeInstanceTablename extends AttributeInstanceString {
+public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttributeTablename> {
 
     @Attribute(name = "table")
     String tableName = "";
@@ -43,7 +43,7 @@ public class AttributeInstanceTablename extends AttributeInstanceString {
     public AttributeInstanceTablename() {
     }
 
-    public AttributeInstanceTablename(AxoAttribute param, AxoObjectInstance axoObj1) {
+    public AttributeInstanceTablename(AxoAttributeTablename param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
     }
 
@@ -111,4 +111,5 @@ public class AttributeInstanceTablename extends AttributeInstanceString {
             TFtableName.setText(tableName);
         }
     }
+
 }

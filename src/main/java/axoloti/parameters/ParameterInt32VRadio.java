@@ -17,7 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Int32;
 import axoloti.datatypes.ValueInt32;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Element;
@@ -26,7 +25,7 @@ import org.simpleframework.xml.Element;
  *
  * @author Johannes Taelman
  */
-public class ParameterInt32VRadio extends Parameter<Int32> {
+public class ParameterInt32VRadio extends Parameter<ParameterInstanceInt32VRadio> {
 
     @Element
     ValueInt32 MaxValue;
@@ -40,7 +39,7 @@ public class ParameterInt32VRadio extends Parameter<Int32> {
     }
 
     @Override
-    public ParameterInstance InstanceFactory() {
+    public ParameterInstanceInt32VRadio InstanceFactory() {
         ParameterInstanceInt32VRadio b = new ParameterInstanceInt32VRadio();
         return b;
     }

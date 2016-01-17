@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -21,13 +21,14 @@ package axoloti.attributedefinition;
  *
  * @author Johannes Taelman
  */
+import axoloti.atom.AtomDefinition;
 import axoloti.attribute.AttributeInstance;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Attribute;
 
-public abstract class AxoAttribute {
+public abstract class AxoAttribute implements AtomDefinition {
 
     @Attribute
     String name;
@@ -39,10 +40,12 @@ public abstract class AxoAttribute {
         this.name = name;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public AttributeInstance CreateInstance(AxoObjectInstance o) {
         // resolve deserialized object, copy value and remove
         AttributeInstance pidn = null;
@@ -61,21 +64,14 @@ public abstract class AxoAttribute {
         }
         if (pidn == null) {
 //            System.out.println("no match " + this.name);
-            AttributeInstance pi = InstanceFactory();
-            pi.axoObj = o;
-            pi.attributeName = this.name;
-            pi.attr = this;
-//            pi.SetValue(DefaultValue);
+            AttributeInstance pi = InstanceFactory(o);
             o.add(pi);
             pi.PostConstructor();
             return pi;
         } else {
 //            System.out.println("match" + pidn.getName());
             o.getAttributeInstances().remove(pidn);
-            AttributeInstance pi = InstanceFactory();
-            pi.axoObj = o;
-            pi.attributeName = this.name;
-            pi.attr = this;
+            AttributeInstance pi = InstanceFactory(o);
             pi.CopyValueFrom(pidn);
             o.add(pi);
             pi.PostConstructor();
@@ -83,13 +79,14 @@ public abstract class AxoAttribute {
         }
     }
 
-    public abstract AttributeInstance InstanceFactory();
+    public abstract AttributeInstance InstanceFactory(AxoObjectInstance o);
 
     public void updateSHA(MessageDigest md) {
         md.update(name.getBytes());
     }
-    
-    public String GetCName(){
+
+    public String GetCName() {
         return "attr_" + CharEscape.CharEscape(name);
     }
+
 }

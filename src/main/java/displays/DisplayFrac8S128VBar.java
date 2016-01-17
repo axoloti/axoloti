@@ -34,7 +34,7 @@ public class DisplayFrac8S128VBar extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceFrac8S128VBar InstanceFactory() {
         return new DisplayInstanceFrac8S128VBar();
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -18,7 +18,7 @@
 package axoloti.attribute;
 
 import axoloti.SubPatchMode;
-import axoloti.attributedefinition.AxoAttribute;
+import axoloti.attributedefinition.AxoAttributeObjRef;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import axoloti.utils.Constants;
@@ -35,7 +35,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class AttributeInstanceObjRef extends AttributeInstanceString {
+public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttributeObjRef> {
 
     @Attribute(name = "obj")
     String objName = "";
@@ -45,7 +45,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString {
     public AttributeInstanceObjRef() {
     }
 
-    public AttributeInstanceObjRef(AxoAttribute param, AxoObjectInstance axoObj1) {
+    public AttributeInstanceObjRef(AxoAttributeObjRef param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
     }
 
@@ -88,9 +88,9 @@ public class AttributeInstanceObjRef extends AttributeInstanceString {
         String o2 = "parent->";
 
         if ((o.length() > 3) && (o.substring(0, 3).equals("../"))
-                && ((axoObj.patch.getSettings().subpatchmode == SubPatchMode.polyphonic)
-                || (axoObj.patch.getSettings().subpatchmode == SubPatchMode.polychannel)
-                || (axoObj.patch.getSettings().subpatchmode == SubPatchMode.polyexpression))) {
+                && ((GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polyphonic)
+                || (GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polychannel)
+                || (GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polyexpression))) {
             o2 = o2 + "common->";
         }
 
@@ -133,5 +133,4 @@ public class AttributeInstanceObjRef extends AttributeInstanceString {
             TFObjName.setText(objName);
         }
     }
-
 }

@@ -35,7 +35,7 @@ public class DisplayVScale extends Display {
     }
 
     @Override
-    public DisplayInstance InstanceFactory() {
+    public DisplayInstanceVScale InstanceFactory() {
         return new DisplayInstanceVScale();
     }
 

@@ -25,14 +25,7 @@ import components.displays.VBarComponentDB;
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceFrac32VBarDB extends DisplayInstance1 {
-
-    ValueFrac32 value = new ValueFrac32();
-
-    @Override
-    public Value getValueRef() {
-        return value;
-    }
+public class DisplayInstanceFrac32VBarDB extends DisplayInstanceFrac32<DisplayFrac32VBarDB> {
 
     private VBarComponentDB vbar;
 

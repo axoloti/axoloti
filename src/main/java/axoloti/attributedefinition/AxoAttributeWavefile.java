@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,8 +17,8 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceWavefile;
+import axoloti.object.AxoObjectInstance;
 
 /**
  *
@@ -34,7 +34,7 @@ public class AxoAttributeWavefile extends AxoAttribute {
     }
 
     @Override
-    public AttributeInstance InstanceFactory() {
-        return new AttributeInstanceWavefile();
+    public AttributeInstanceWavefile InstanceFactory(AxoObjectInstance o) {
+        return new AttributeInstanceWavefile(this, o);
     }
 }

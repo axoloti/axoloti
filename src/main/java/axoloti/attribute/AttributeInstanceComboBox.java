@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,7 +17,6 @@
  */
 package axoloti.attribute;
 
-import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.Constants;
@@ -28,7 +27,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class AttributeInstanceComboBox extends AttributeInstanceString {
+public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttributeComboBox> {
 
     @Attribute(name = "selection", required = false)
     String selection;
@@ -37,7 +36,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString {
     public AttributeInstanceComboBox() {
     }
 
-    public AttributeInstanceComboBox(AxoAttribute param, AxoObjectInstance axoObj1) {
+    public AttributeInstanceComboBox(AxoAttributeComboBox param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
     }
 
@@ -45,7 +44,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString {
     public void PostConstructor() {
         super.PostConstructor();
 //        final DefaultComboBoxModel model = new DefaultComboBoxModel(((AxoAttributeComboBox) attr).getMenuEntries().toArray());
-        comboBox = new DropDownComponent(((AxoAttributeComboBox) attr).getMenuEntries());
+        comboBox = new DropDownComponent(GetDefinition().getMenuEntries());
         comboBox.setFont(Constants.font);
         setString(selection);
         comboBox.addItemListener(new DropDownComponent.DDCListener() {
@@ -73,7 +72,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString {
 
     @Override
     public String CValue() {
-        String s = ((AxoAttributeComboBox) attr).getCEntries().get(comboBox.getSelectedIndex());
+        String s = GetDefinition().getCEntries().get(comboBox.getSelectedIndex());
         if (s != null) {
             return s;
         } else {

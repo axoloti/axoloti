@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -24,12 +24,12 @@ import axoloti.object.AxoObjectInstance;
  *
  * @author Johannes Taelman
  */
-public abstract class AttributeInstanceString extends AttributeInstance {
+public abstract class AttributeInstanceString<T extends AxoAttribute> extends AttributeInstance<T> {
 
     public AttributeInstanceString() {
     }
 
-    public AttributeInstanceString(AxoAttribute param, AxoObjectInstance axoObj1) {
+    public AttributeInstanceString(T param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
     }
 

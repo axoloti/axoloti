@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceVScale extends DisplayInstance {
+public class DisplayInstanceVScale extends DisplayInstance<DisplayVScale> {
 
     private VValueLabelsComponent vlabels;
 

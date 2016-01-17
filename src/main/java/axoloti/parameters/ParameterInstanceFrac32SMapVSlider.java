@@ -29,7 +29,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S {
+public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S<ParameterFrac32SMapVSlider> {
 
     public ParameterInstanceFrac32SMapVSlider() {
         super();

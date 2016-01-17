@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -18,7 +18,6 @@
 package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttributeInt32;
-import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
 import java.awt.Dimension;
 import javax.swing.JLabel;
@@ -30,7 +29,7 @@ import javax.swing.event.ChangeListener;
  *
  * @author Johannes Taelman
  */
-public class AttributeInstanceInt32 extends AttributeInstanceInt {
+public class AttributeInstanceInt32 extends AttributeInstanceInt<AxoAttributeInt32> {
 
     JSlider slider;
     JLabel vlabel;
@@ -38,7 +37,7 @@ public class AttributeInstanceInt32 extends AttributeInstanceInt {
     public AttributeInstanceInt32() {
     }
 
-    public AttributeInstanceInt32(AxoAttribute param, AxoObjectInstance axoObj1) {
+    public AttributeInstanceInt32(AxoAttributeInt32 param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
 //        PostConstructor();
     }
@@ -50,14 +49,14 @@ public class AttributeInstanceInt32 extends AttributeInstanceInt {
         Dimension d = slider.getSize();
         d.width = 128;
         d.height = 22;
-        if (value < ((AxoAttributeInt32) attr).getMinValue()) {
-            value = ((AxoAttributeInt32) attr).getMinValue();
+        if (value < (attr).getMinValue()) {
+            value = (attr).getMinValue();
         }
-        if (value > ((AxoAttributeInt32) attr).getMaxValue()) {
-            value = ((AxoAttributeInt32) attr).getMaxValue();
+        if (value > (attr).getMaxValue()) {
+            value = (attr).getMaxValue();
         }
-        slider.setMinimum(((AxoAttributeInt32) attr).getMinValue());
-        slider.setMaximum(((AxoAttributeInt32) attr).getMaxValue());
+        slider.setMinimum((attr).getMinValue());
+        slider.setMaximum((attr).getMaxValue());
         slider.setValue(value);
         slider.setMaximumSize(d);
         slider.setMinimumSize(d);
@@ -102,5 +101,4 @@ public class AttributeInstanceInt32 extends AttributeInstanceInt {
     public void setValue(int value) {
         this.value = value;
     }
-
 }

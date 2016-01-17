@@ -17,22 +17,13 @@
  */
 package displays;
 
-import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueFrac32;
 import components.displays.VUComponent;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceFrac32VU extends DisplayInstance1 {
-
-    ValueFrac32 value = new ValueFrac32();
-
-    @Override
-    public Value getValueRef() {
-        return value;
-    }
+public class DisplayInstanceFrac32VU extends DisplayInstanceFrac32<DisplayFrac32VU> {
 
     private VUComponent vu;
 

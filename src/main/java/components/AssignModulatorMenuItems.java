@@ -20,6 +20,7 @@ package components;
 import axoloti.Modulation;
 import axoloti.Modulator;
 import axoloti.datatypes.ValueFrac32;
+import axoloti.parameters.ParameterFrac32;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
@@ -37,7 +38,7 @@ import javax.swing.JPanel;
  */
 public class AssignModulatorMenuItems {
 
-    public AssignModulatorMenuItems(final ParameterInstanceFrac32UMap param, JComponent parent) {
+    public AssignModulatorMenuItems(final ParameterInstanceFrac32UMap<ParameterFrac32> param, JComponent parent) {
         final ArrayList<HSliderComponent> hsls = new ArrayList<HSliderComponent>();
 
         //this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

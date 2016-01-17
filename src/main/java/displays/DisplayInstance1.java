@@ -24,7 +24,7 @@ import java.nio.ByteBuffer;
  *
  * @author Johannes Taelman
  */
-public abstract class DisplayInstance1 extends DisplayInstance {
+public abstract class DisplayInstance1<T extends Display> extends DisplayInstance<T> {
 
     public DisplayInstance1() {
         super();

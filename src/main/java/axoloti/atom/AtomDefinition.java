@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,31 +15,18 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.parameters;
+package axoloti.atom;
 
-import java.security.MessageDigest;
+import axoloti.object.AxoObjectInstance;
 
 /**
  *
- * @author Johannes Taelman
+ * @author jtaelman
  */
-public class ParameterBin1Momentary extends Parameter {
-
-    public ParameterBin1Momentary() {
-    }
-
-    public ParameterBin1Momentary(String name) {
-        super(name);
-    }
-
-    @Override
-    public ParameterInstanceBin1Momentary InstanceFactory() {
-        return new ParameterInstanceBin1Momentary();
-    }
-
-    @Override
-    public void updateSHA(MessageDigest md) {
-        super.updateSHA(md);
-        md.update("bool32.b".getBytes());
-    }
+/**
+ * An Axoloti Object Definition is composed out of AtomDefinition
+**/
+public interface AtomDefinition {
+    abstract public String getName();
+    abstract public AtomInstance CreateInstance(AxoObjectInstance o);
 }

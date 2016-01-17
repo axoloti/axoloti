@@ -23,7 +23,7 @@ import axoloti.datatypes.Int32;
  *
  * @author Johannes Taelman
  */
-public class Parameter4LevelX16 extends Parameter<Int32> {
+public class Parameter4LevelX16 extends Parameter<ParameterInstance4LevelX16> {
 
     public Parameter4LevelX16() {
     }

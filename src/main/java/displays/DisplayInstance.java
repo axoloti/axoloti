@@ -17,32 +17,50 @@
  */
 package displays;
 
+import axoloti.atom.AtomInstance;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceAbstract;
 import components.LabelComponent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.nio.ByteBuffer;
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import org.simpleframework.xml.Attribute;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class DisplayInstance extends JPanel {
+public abstract class DisplayInstance<T extends Display> extends JPanel implements AtomInstance<T> {
 
     @Attribute
     public String name;
     @Attribute(required = false)
     Boolean onParent;
     protected int index;
-    public Display display;
+    public T display;
     public AxoObjectInstance axoObj;
     protected int offset;
 
     public DisplayInstance() {
     }
 
-    public String GetCName(){
+    @Override
+    public AxoObjectInstanceAbstract GetObjectInstance() {
+        return axoObj;
+    }
+
+    @Override
+    public T GetDefinition() {
+        return display;
+    }    
+    
+    public String GetCName() {
         return display.GetCName();
     }
 
