@@ -217,10 +217,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jMenuItemFCompile.setVisible(Axoloti.isDeveloper());
         jDevSeparator.setVisible(Axoloti.isDeveloper());
 
-        JMenu phelps = new JMenu("Library");
-        //PopulatePatchMenu.PopulatePatchMenu(phelps, System.getProperty(Axoloti.RELEASE_DIR) + "/objects", ".axh");
-        jMenuHelp.add(phelps);
-
         axoObjects = new AxoObjects();
         axoObjects.LoadAxoObjects();
 
@@ -371,6 +367,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jMenuHelpContents = new javax.swing.JMenuItem();
         jMenuAbout = new javax.swing.JMenuItem();
         jMenuCommunity = new javax.swing.JMenuItem();
+        helpLibraryMenu1 = new axoloti.menus.HelpLibraryMenu();
 
         jLabel1.setText("jLabel1");
 
@@ -677,6 +674,9 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     });
     jMenuHelp.add(jMenuCommunity);
+
+    helpLibraryMenu1.setText("Library");
+    jMenuHelp.add(helpLibraryMenu1);
 
     jMenuBar1.add(jMenuHelp);
 
@@ -1150,6 +1150,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.menus.FavouriteMenu favouriteMenu1;
     private javax.swing.Box.Filler filler1;
+    private axoloti.menus.HelpLibraryMenu helpLibraryMenu1;
     private javax.swing.JButton jButtonClear;
     private javax.swing.JCheckBox jCheckBoxConnect;
     private javax.swing.JPopupMenu.Separator jDevSeparator;
