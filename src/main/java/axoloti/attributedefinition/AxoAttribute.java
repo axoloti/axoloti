@@ -51,7 +51,7 @@ public abstract class AxoAttribute implements AtomDefinition {
         AttributeInstance pidn = null;
         for (AttributeInstance pi : o.getAttributeInstances()) {
 //            System.out.println("compare " + this.name + "<>" + pi.name);
-            if (pi.getAttributeName().equals(this.name)) {
+            if (pi.getName().equals(this.name)) {
                 /*
                  if (InstanceFactory().getClass().isInstance(pi)) {
                  pidn = (AttributeInstance) pi;

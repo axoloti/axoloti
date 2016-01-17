@@ -286,6 +286,11 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
 //        return ("" + index);
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
     public String getLegalName() {
         return CharEscape.CharEscape(name);
     }
@@ -495,10 +500,10 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         return axoObj;
     }
 
-    public void UnlinkObjectInstance(){
+    public void UnlinkObjectInstance() {
         axoObj = null;
     }
-        
+
     @Override
     public T GetDefinition() {
         return parameter;
