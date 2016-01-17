@@ -325,11 +325,11 @@ public class Patch {
 
     public Net AddConnection(InletInstance il, OutletInstance ol) {
         if (!IsLocked()) {
-            if (il.axoObj.patch != this) {
+            if (il.GetObjectInstance().patch != this) {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: different patch");
                 return null;
             }
-            if (ol.axoObj.patch != this) {
+            if (ol.GetObjectInstance().patch != this) {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: different patch");
                 return null;
             }
@@ -388,11 +388,11 @@ public class Patch {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: same inlet");
                 return null;
             }
-            if (il.axoObj.patch != this) {
+            if (il.GetObjectInstance().patch != this) {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: different patch");
                 return null;
             }
-            if (ol.axoObj.patch != this) {
+            if (ol.GetObjectInstance().patch != this) {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: different patch");
                 return null;
             }
@@ -769,7 +769,7 @@ public class Patch {
             c += "/* parameter instance indices */\n";
             int k = 0;
             for (ParameterInstance p : ParameterInstances) {
-                c += "static const int PARAM_INDEX_" + p.axoObj.getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
+                c += "static const int PARAM_INDEX_" + p.GetObjectInstance().getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
                 k++;
             }
         }
@@ -1050,14 +1050,14 @@ public class Patch {
             if ((n != null) && (n.isValidNet())) {
                 if (i.GetDataType().equals(n.GetDataType())) {
                     if (n.NeedsLatch()
-                            && (objectinstances.indexOf(n.source.get(0).axoObj) >= objectinstances.indexOf(o))) {
+                            && (objectinstances.indexOf(n.source.get(0).GetObjectInstance()) >= objectinstances.indexOf(o))) {
                         c += n.CName() + "Latch";
                     } else {
                         c += n.CName();
                     }
                 } else {
                     if (n.NeedsLatch()
-                            && (objectinstances.indexOf(n.source.get(0).axoObj) >= objectinstances.indexOf(o))) {
+                            && (objectinstances.indexOf(n.source.get(0).GetObjectInstance()) >= objectinstances.indexOf(o))) {
                         c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName() + "Latch");
                     } else {
                         c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName());
@@ -1495,7 +1495,7 @@ public class Patch {
         ao.sLocalData += "/* parameter instance indices */\n";
         int k = 0;
         for (ParameterInstance p : ParameterInstances) {
-            ao.sLocalData += "static const int PARAM_INDEX_" + p.axoObj.getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
+            ao.sLocalData += "static const int PARAM_INDEX_" + p.GetObjectInstance().getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
             k++;
         }
 
@@ -2104,7 +2104,7 @@ public class Patch {
         // TODO: copy attributes tooo!
         Map<String, ParameterInstance> params = new TreeMap<String, ParameterInstance>();
         for (ParameterInstance p : obj.getParameterInstances()) {
-            params.put(p.name, p);
+            params.put(p.getName(), p);
         }
         Map<String, AttributeInstance> attrs = new TreeMap<String, AttributeInstance>();
         for (AttributeInstance a : obj.getAttributeInstances()) {
@@ -2144,7 +2144,7 @@ public class Patch {
         AxoObjectInstanceAbstract newObj = AddObjectInstance(objType, obj.getLocation());
 
         for (ParameterInstance p : newObj.getParameterInstances()) {
-            ParameterInstance p1 = params.get(p.name);
+            ParameterInstance p1 = params.get(p.getName());
             if (p1 != null) {
                 p.CopyValueFrom(p1);
             }

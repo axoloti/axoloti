@@ -379,7 +379,7 @@ public class AxoObject extends AxoObjectAbstract {
     @Override
     public Inlet GetInlet(String n) {
         for (Inlet i : inlets) {
-            if (i.name.equals(n)) {
+            if (i.getName().equals(n)) {
                 return i;
             }
         }
@@ -389,7 +389,7 @@ public class AxoObject extends AxoObjectAbstract {
     @Override
     public Outlet GetOutlet(String n) {
         for (Outlet i : outlets) {
-            if (i.name.equals(n)) {
+            if (i.getName().equals(n)) {
                 return i;
             }
         }

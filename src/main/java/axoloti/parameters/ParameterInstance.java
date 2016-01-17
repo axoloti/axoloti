@@ -19,10 +19,8 @@ package axoloti.parameters;
 
 import axoloti.Preset;
 import axoloti.atom.AtomInstance;
-import axoloti.datatypes.DataType;
 import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import components.AssignMidiCCComponent;
@@ -57,7 +55,7 @@ import org.simpleframework.xml.Root;
 public abstract class ParameterInstance<T extends Parameter> extends JPanel implements ActionListener, AtomInstance<T> {
 
     @Attribute
-    public String name;
+    String name;
     @Attribute(required = false)
     private Boolean onParent;
     protected int index;
@@ -65,7 +63,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     @ElementList(required = false)
     ArrayList<Preset> presets;
     protected boolean needsTransmit = false;
-    public AxoObjectInstance axoObj;
+    AxoObjectInstance axoObj;
 //    JLabel lbl;
     LabelComponent valuelbl = new LabelComponent("123456789");
     NativeToReal convs[];
@@ -497,6 +495,10 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         return axoObj;
     }
 
+    public void UnlinkObjectInstance(){
+        axoObj = null;
+    }
+        
     @Override
     public T GetDefinition() {
         return parameter;

@@ -289,13 +289,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         p_params.add(Box.createHorizontalGlue());
 
         for (InletInstance inl : inletInstances) {
-            inl.axoObj = null;
+            inl.UnlinkObjectInstance();
         }
         for (Inlet inl : getType().inlets) {
-            InletInstance inlinp = GetInletInstance(inl.name);
+            InletInstance inlinp = GetInletInstance(inl.getName());
             InletInstance inlin = new InletInstance(inl, this);
             if (inlinp != null) {
-                inlinp.axoObj = this;
                 getPatch().AddConnection(inlinp, inlin);
                 getPatch().disconnect(inlinp);
                 inletInstances.remove(inlinp);
@@ -306,14 +305,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
 
         for (OutletInstance outl : outletInstances) {
-            outl.axoObj = null;
+            outl.UnlinkObjectInstance();
         }
         for (Outlet o : getType().outlets) {
-            OutletInstance oinp = GetOutletInstance(o.name);
+            OutletInstance oinp = GetOutletInstance(o.getName());
             OutletInstance oin = new OutletInstance(o, this);
             if (oinp != null) {
-                oinp.axoObj = this;
-                //getPatch().AddConnection(oinp,oin);
                 Net n = getPatch().GetNet(oinp);
                 if (n!=null){
                     n.connectOutlet(oin);
@@ -357,9 +354,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         do {
             cont = false;
             for (ParameterInstance pi : parameterInstances) {
-                if (pi.axoObj == null) {
+                if (pi.GetObjectInstance() == null) {
                     parameterInstances.remove(pi);
-                    Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved parameter {0}:{1}", new Object[]{getInstanceName(), pi.name});
+                    Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved parameter {0}:{1}", new Object[]{getInstanceName(), pi.getName()});
                     cont = true;
                     break;
                 }
@@ -379,7 +376,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         do {
             cont = false;
             for (InletInstance pi : inletInstances) {
-                if (pi.axoObj == null) {
+                if (pi.GetObjectInstance() == null) {
                     getPatch().disconnect(pi);
                     inletInstances.remove(pi);
                     Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved inlet {0}:{1}", new Object[]{getInstanceName(), pi.getInletname()});
@@ -391,7 +388,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         do {
             cont = false;
             for (OutletInstance pi : outletInstances) {
-                if (pi.axoObj == null) {
+                if (pi.GetObjectInstance() == null) {
                     getPatch().disconnect(pi);
                     outletInstances.remove(pi);
                     Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Unresolved outlet {0}:{1}", new Object[]{getInstanceName(), pi.getOutletname()});
@@ -564,7 +561,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         c += "parent = _parent;\n";
         for (ParameterInstance p : parameterInstances) {
             if (p.parameter.PropagateToChild != null) {
-                c += "// on Parent: propagate " + p.name + " " + enableOnParent + " " + getLegalName() + "" + p.parameter.PropagateToChild + "\n";
+                c += "// on Parent: propagate " + p.getName() + " " + enableOnParent + " " + getLegalName() + "" + p.parameter.PropagateToChild + "\n";
                 c += p.PExName("parent->") + ".pfunction = PropagateToSub;\n";
                 c += p.PExName("parent->") + ".finalvalue = (int32_t)(&(parent->instance"
                         + getLegalName() + "_i.PExch[instance" + getLegalName() + "::PARAM_INDEX_"
@@ -830,7 +827,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             if (d == null) {
                 continue;
             }
-            String name = j.getInlet().name;
+            String name = j.getInlet().getName();
             for (int i = 0; i < candidates.size(); i++) {
                 AxoObjectAbstract o = candidates.get(i);
                 Inlet i2 = o.GetInlet(name);

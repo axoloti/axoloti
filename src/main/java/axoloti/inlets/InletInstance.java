@@ -75,7 +75,7 @@ public class InletInstance<T extends Inlet> extends JPanel implements AtomInstan
     public String inletname;
 
     private final T inlet;
-    public AxoObjectInstanceAbstract axoObj;
+    AxoObjectInstanceAbstract axoObj;
     JLabel lbl;
     JComponent jack;
     InletInstancePopupMenu popup = new InletInstancePopupMenu(this);
@@ -113,6 +113,10 @@ public class InletInstance<T extends Inlet> extends JPanel implements AtomInstan
         return axoObj;
     }
 
+    public void UnlinkObjectInstance(){
+        axoObj = null;
+    }   
+    
     @Override
     public T GetDefinition() {
         return inlet;

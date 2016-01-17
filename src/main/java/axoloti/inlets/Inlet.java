@@ -33,7 +33,7 @@ import org.simpleframework.xml.Attribute;
 public abstract class Inlet implements AtomDefinition {
 
     @Attribute
-    public String name;
+    String name;
     @Attribute(required = false)
     public String description;
 

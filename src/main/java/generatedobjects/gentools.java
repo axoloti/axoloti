@@ -72,20 +72,20 @@ public class gentools {
     @Deprecated
     static void CheckString(AxoObject o, String s) {
         for (Parameter p : o.params) {
-            s = s.replaceAll("%" + p.name + "%", "");
-            s = s.replaceAll("_" + p.name, "");
+            s = s.replaceAll("%" + p.getName() + "%", "");
+            s = s.replaceAll("_" + p.getName(), "");
         }
         for (Inlet p : o.inlets) {
-            s = s.replaceAll("%" + p.name + "%", "");
-            s = s.replaceAll("_" + p.name, "");
+            s = s.replaceAll("%" + p.getName() + "%", "");
+            s = s.replaceAll("_" + p.getName(), "");
         }
         for (Outlet p : o.outlets) {
-            s = s.replaceAll("%" + p.name + "%", "");
-            s = s.replaceAll("_" + p.name, "");
+            s = s.replaceAll("%" + p.getName() + "%", "");
+            s = s.replaceAll("_" + p.getName(), "");
         }
         for (displays.Display p : o.displays) {
-            s = s.replaceAll("%" + p.name + "%", "");
-            s = s.replaceAll("_" + p.name, "");
+            s = s.replaceAll("%" + p.getName() + "%", "");
+            s = s.replaceAll("_" + p.getName(), "");
         }
 
         s = s.replaceAll("ntrig", "");
@@ -97,18 +97,18 @@ public class gentools {
         s = s.replaceAll("int", "");
         s = s.replaceAll("default", "");
         for (Parameter p : o.params) {
-            if (s.contains(p.name)) {
-                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.name + "\n" + s);
+            if (s.contains(p.getName())) {
+                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
             }
         }
         for (Inlet p : o.inlets) {
-            if (s.contains(p.name)) {
-                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.name + "\n" + s);
+            if (s.contains(p.getName())) {
+                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
             }
         }
         for (Outlet p : o.outlets) {
-            if (s.contains(p.name)) {
-                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.name + "\n" + s);
+            if (s.contains(p.getName())) {
+                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
             }
         }
 
@@ -247,26 +247,26 @@ public class gentools {
             }
             for (Inlet p : oo.inlets) {
                 if (oo.sKRateCode != null) {
-                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
                 if (oo.sSRateCode != null) {
-                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
             }
             for (Outlet p : oo.outlets) {
                 if (oo.sKRateCode != null) {
-                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
                 if (oo.sSRateCode != null) {
-                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
             }
             for (displays.Display p : oo.displays) {
                 if (oo.sInitCode != null) {
-                    oo.sInitCode = oo.sInitCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    oo.sInitCode = oo.sInitCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
                 if (oo.sKRateCode != null) {
-                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
             }
             if (oo.sInitCode != null) {

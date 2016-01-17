@@ -30,7 +30,7 @@ import org.simpleframework.xml.Attribute;
 public abstract class Display<T extends DisplayInstance> implements AtomDefinition {
 
     @Attribute
-    public String name;
+    String name;
     @Attribute(required = false)
     public Boolean noLabel;
 

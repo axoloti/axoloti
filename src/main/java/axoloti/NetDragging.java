@@ -75,7 +75,7 @@ public class NetDragging extends Net {
         int lastSource = 0;
         for (OutletInstance i : source) {
 //  Indicate latched connections
-            int j = patch.objectinstances.indexOf(i.axoObj);
+            int j = patch.objectinstances.indexOf(i.GetObjectInstance());
             if (j > lastSource) {
                 lastSource = j;
             }

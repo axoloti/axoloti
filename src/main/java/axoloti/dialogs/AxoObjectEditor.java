@@ -87,21 +87,21 @@ public class AxoObjectEditor extends JFrame {
         jTextDesc.setText(obj.sDescription);
 
         for (Inlet i : obj.GetInlets()) {
-            ((DefaultTableModel) jTableInlets.getModel()).addRow(new Object[]{i.name, i.getDatatype() == null ? i.getClass().getSimpleName() : i.getDatatype().CType(), i.description});
+            ((DefaultTableModel) jTableInlets.getModel()).addRow(new Object[]{i.getName(), i.getDatatype() == null ? i.getClass().getSimpleName() : i.getDatatype().CType(), i.description});
         }
 
         for (Outlet i : obj.GetOutlets()) {
-            ((DefaultTableModel) jTableOutlets.getModel()).addRow(new Object[]{i.name, i.getDatatype() == null ? i.getClass().getSimpleName() : i.getDatatype().CType(), i.description});
+            ((DefaultTableModel) jTableOutlets.getModel()).addRow(new Object[]{i.getName(), i.getDatatype() == null ? i.getClass().getSimpleName() : i.getDatatype().CType(), i.description});
         }
 
         for (Parameter i : obj.params) {
-            ((DefaultTableModel) jTableParams.getModel()).addRow(new Object[]{i.name, i.getDatatype() == null ? i.getClass().getSimpleName() : i.getDatatype().CType()});
+            ((DefaultTableModel) jTableParams.getModel()).addRow(new Object[]{i.getName(), i.getDatatype() == null ? i.getClass().getSimpleName() : i.getDatatype().CType()});
         }
         for (AxoAttribute i : obj.attributes) {
             ((DefaultTableModel) jTableAttribs.getModel()).addRow(new Object[]{i.getName(), i.getClass().getSimpleName()});
         }
         for (Display i : obj.displays) {
-            ((DefaultTableModel) jTableAttribs.getModel()).addRow(new Object[]{i.name, i.getDatatype() == null ? i.getClass().getSimpleName() : i.getDatatype().CType()});
+            ((DefaultTableModel) jTableAttribs.getModel()).addRow(new Object[]{i.getName(), i.getDatatype() == null ? i.getClass().getSimpleName() : i.getDatatype().CType()});
         }
 
         if (obj.includes != null) {

@@ -75,7 +75,7 @@ public class OutletInstance<T extends Outlet> extends JPanel implements Comparab
     public String outletname;
 
     private final T outlet;
-    public AxoObjectInstanceAbstract axoObj;
+    AxoObjectInstanceAbstract axoObj;
     OutletInstancePopupMenu popup = new OutletInstancePopupMenu(this);
     JLabel lbl;
     JComponent jack;
@@ -109,6 +109,10 @@ public class OutletInstance<T extends Outlet> extends JPanel implements Comparab
         return axoObj;
     }
 
+    public void UnlinkObjectInstance(){
+        axoObj = null;
+    }
+    
     @Override
     public T GetDefinition() {
         return outlet;

@@ -746,12 +746,12 @@ public class PatchGUI extends Patch {
         for (Net n : nets) {
             int sel = 0;
             for (InletInstance i : n.dest) {
-                if (i.axoObj.IsSelected()) {
+                if (i.GetObjectInstance().IsSelected()) {
                     sel++;
                 }
             }
             for (OutletInstance i : n.source) {
-                if (i.axoObj.IsSelected()) {
+                if (i.GetObjectInstance().IsSelected()) {
                     sel++;
                 }
             }

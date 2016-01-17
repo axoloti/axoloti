@@ -130,14 +130,14 @@ public class Net extends JPanel {
     }
 
     public void connectInlet(InletInstance inlet) {
-        if (inlet.axoObj.patch != patch) {
+        if (inlet.GetObjectInstance().patch != patch) {
             return;
         }
         dest.add(inlet);
     }
 
     public void connectOutlet(OutletInstance outlet) {
-        if (outlet.axoObj.patch == patch) {
+        if (outlet.GetObjectInstance().patch == patch) {
             source.add(outlet);
         }
     }
@@ -223,7 +223,7 @@ public class Net extends JPanel {
         int lastSource = 0;
         for (OutletInstance i : source) {
 //  Indicate latched connections
-            int j = patch.objectinstances.indexOf(i.axoObj);
+            int j = patch.objectinstances.indexOf(i.GetObjectInstance());
             if (j > lastSource) {
                 lastSource = j;
             }
@@ -257,14 +257,14 @@ public class Net extends JPanel {
         // reads before last write on net
         int lastSource = 0;
         for (OutletInstance s : source) {
-            int i = patch.objectinstances.indexOf(s.axoObj);
+            int i = patch.objectinstances.indexOf(s.GetObjectInstance());
             if (i > lastSource) {
                 lastSource = i;
             }
         }
         int firstDest = java.lang.Integer.MAX_VALUE;
         for (InletInstance d : dest) {
-            int i = patch.objectinstances.indexOf(d.axoObj);
+            int i = patch.objectinstances.indexOf(d.GetObjectInstance());
             if (i < firstDest) {
                 firstDest = i;
             }
