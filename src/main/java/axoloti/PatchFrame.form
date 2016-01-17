@@ -32,6 +32,24 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuOpenActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuOpenURL">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Open from URL..."/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuOpenURLActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <Menu class="axoloti.menus.RecentFileMenu" name="recentFileMenu1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Open Recent"/>
+              </Properties>
+            </Menu>
+            <Menu class="axoloti.menus.LibraryMenu" name="libraryMenu1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Library"/>
+              </Properties>
+            </Menu>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuClose">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -293,15 +311,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenuWindow">
-          <Properties>
-            <Property name="mnemonic" type="int" value="87"/>
-            <Property name="text" type="java.lang.String" value="Window"/>
-          </Properties>
-          <Events>
-            <EventHandler event="menuDeselected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="jMenuWindowMenuDeselected"/>
-            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="jMenuWindowMenuSelected"/>
-          </Events>
+        <Menu class="axoloti.menus.WindowMenu" name="windowMenu1">
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuHelp">
           <Properties>

@@ -44,14 +44,19 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuOpenURLActionPerformed"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenuLibrary">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Library"/>
-              </Properties>
-            </Menu>
             <Menu class="axoloti.menus.RecentFileMenu" name="recentFileMenu1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Open Recent"/>
+              </Properties>
+            </Menu>
+            <Menu class="axoloti.menus.FavouriteMenu" name="favouriteMenu1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Favorites"/>
+              </Properties>
+            </Menu>
+            <Menu class="axoloti.menus.LibraryMenu" name="libraryMenu1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Library"/>
               </Properties>
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
@@ -234,14 +239,7 @@
             </Menu>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenuWindow">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Window"/>
-          </Properties>
-          <Events>
-            <EventHandler event="menuDeselected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="jMenuWindowMenuDeselected"/>
-            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="jMenuWindowMenuSelected"/>
-          </Events>
+        <Menu class="axoloti.menus.WindowMenu" name="windowMenu1">
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenuHelp">
           <Properties>

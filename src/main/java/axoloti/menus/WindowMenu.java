@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014, 2015 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,8 +15,10 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti;
+package axoloti.menus;
 
+import axoloti.MainFrame;
+import axoloti.Patch;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JCheckBoxMenuItem;
@@ -28,7 +30,38 @@ import javax.swing.JSeparator;
  *
  * @author Johannes Taelman
  */
-public class WindowMenu {
+public class WindowMenu extends JMenu {
+
+    public WindowMenu() {
+        initComponents();
+    }
+
+    private void initComponents() {
+        setText("Window");
+        addMenuListener(new javax.swing.event.MenuListener() {
+            @Override
+            public void menuCanceled(javax.swing.event.MenuEvent evt) {
+            }
+
+            @Override
+            public void menuDeselected(javax.swing.event.MenuEvent evt) {
+                jMenuWindowMenuDeselected(evt);
+            }
+
+            @Override
+            public void menuSelected(javax.swing.event.MenuEvent evt) {
+                jMenuWindowMenuSelected(evt);
+            }
+        });
+    }
+
+    private void jMenuWindowMenuSelected(javax.swing.event.MenuEvent evt) {
+        PopulateWindowMenu(this);
+    }
+
+    private void jMenuWindowMenuDeselected(javax.swing.event.MenuEvent evt) {
+        removeAll();
+    }
 
     static class WindowMenuItemActionListener implements ActionListener {
 
@@ -71,24 +104,24 @@ public class WindowMenu {
             jMenuWindow.add(a);
         }
         {
-            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.keyboard, "Keyboard");
+            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getKeyboard(), "Keyboard");
             //a.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             jMenuWindow.add(a);
         }
         {
-            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.filemanager, "File Manager");
+            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getFilemanager(), "File Manager");
             //a.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             jMenuWindow.add(a);
         }
         {
-            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.remote, "Remote");
+            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getRemote(), "Remote");
             //a.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             jMenuWindow.add(a);
         }
 
         jMenuWindow.add(new JSeparator());
-        for (Patch p : MainFrame.mainframe.patches) {
-            JFrame frame = p.patchframe;
+        for (Patch p : MainFrame.mainframe.getPatches()) {
+            JFrame frame = p.getPatchframe();
             jMenuWindow.add(new WindowMenuItem(frame));
         }
     }
