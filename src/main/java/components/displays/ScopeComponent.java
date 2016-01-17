@@ -74,6 +74,8 @@ public class ScopeComponent extends ADispComponent {
             g2.drawPolyline(java.util.Arrays.copyOfRange(xvalue, index, length - 1),
                     java.util.Arrays.copyOfRange(value, index, length - 1), length - index - 1);
         }
+        int v = (int) Project(0);
+        g2.drawLine(0, v, length, v);
     }
 
     @Override
@@ -84,11 +86,15 @@ public class ScopeComponent extends ADispComponent {
         if (value > max) {
             value = max;
         }
-        this.value[index++] = (int) (1 + (vsize * (max - value)) / ((max - min)));
+        this.value[index++] = (int) Project(value);
         if (index >= length) {
             index = 0;
         }
         repaint();
+    }
+
+    double Project(double value) {
+        return (1 + (vsize * (max - value)) / ((max - min)));
     }
 
     public double getMinimum() {
