@@ -345,6 +345,7 @@ public class Table extends gentools {
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.attributes.add(new AxoAttributeObjRef("table"));
         o.sLocalData = "   int ntrig;\n";
+        o.sInitCode =  "   int ntrig = 0;\n";
         o.sKRateCode = "   if ((%trig%>0) && !ntrig) {\n"
                 + "      ntrig=1;\n"
                 + "      %table%.array[__USAT(%a%,27)>>(27-%table%.LENGTHPOW)]=__SSAT(%v%,28)>>%table%.GAIN;\n"
@@ -360,6 +361,7 @@ public class Table extends gentools {
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.attributes.add(new AxoAttributeObjRef("table"));
         o.sLocalData = "   int ntrig;\n";
+        o.sInitCode =  "   int ntrig = 0;\n";
         o.sKRateCode = "   if ((%trig%>0) && !ntrig) {\n"
                 + "      ntrig=1;\n"
                 + "      if (%a%<%table%.LENGTH)\n"

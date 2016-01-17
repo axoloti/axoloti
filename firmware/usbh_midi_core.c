@@ -55,6 +55,7 @@ typedef struct
 
 
 // very simple ring buffer
+// Note: this should be moved into main midi structure. (hub support will need this) 
 static struct {
     MIDIEvent_t event[RING_BUFFER_SIZE];
     volatile uint8_t read_ptr;
@@ -68,6 +69,10 @@ void usbh_midi_init(void)
     // make no bytes available for output, initialise will reset
     send_ring_buffer.read_ptr  = 0;
     send_ring_buffer.write_ptr = RING_BUFFER_SIZE - 1;
+}
+
+void usbh_midi_reset_buffer(void) {
+    send_ring_buffer.read_ptr = send_ring_buffer.write_ptr = 0;
 }
 
 
@@ -220,13 +225,6 @@ int  usbh_MidiGetOutputBufferAvailable(void) {
 
 /****************** MIDI interface ****************************/
 
-static USBH_StatusTypeDef USBH_MIDI_InterfaceInit  (USBH_HandleTypeDef *phost);
-static USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (USBH_HandleTypeDef *phost);
-static USBH_StatusTypeDef USBH_MIDI_ClassRequest(USBH_HandleTypeDef *phost);
-static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost);
-static USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost);
-
-
 USBH_ClassTypeDef  MIDI_Class = {
   "MID",
   USB_AUDIO_CLASS,
@@ -239,15 +237,16 @@ USBH_ClassTypeDef  MIDI_Class = {
 };
 
 
-inline bool isValidInput(MIDI_HandleTypeDef* pH)
-{
+bool isValidInput(MIDI_HandleTypeDef* pH)
+{           
     return pH!= NULL && pH->input_valid;
-}
-
-inline bool isValidOutput(MIDI_HandleTypeDef* pH)
-{
+}           
+            
+bool isValidOutput(MIDI_HandleTypeDef* pH)
+{           
     return pH!= NULL && pH->output_valid;
 }
+
 
 /*-----------------------------------------------------------------------------------------*/
 /**
@@ -257,13 +256,13 @@ inline bool isValidOutput(MIDI_HandleTypeDef* pH)
  * @param  hdev: Selected device property
  * @retval  USBH_Status :Response for USB MIDI driver intialization
  */
-static USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
+USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
 
     USBH_StatusTypeDef status = USBH_FAIL;
     MIDI_HandleTypeDef *MIDI_Handle;
 
     uint8_t interface;
-    send_ring_buffer.read_ptr = send_ring_buffer.write_ptr = 0;
+    usbh_midi_init();
 
     // this is limited to one midi interface, and also currently only 1 input and 1 output endpoint on that interface
     
@@ -331,6 +330,9 @@ static USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
                                 USB_EP_TYPE_BULK,
                                 MIDI_Handle->OutEpSize);
                 USBH_LL_SetToggle  (phost, MIDI_Handle->OutPipe,0);
+
+                // ring buffer ready to use
+                usbh_midi_reset_buffer();
             }
             
             if (isValidInput(MIDI_Handle)) {
@@ -348,8 +350,6 @@ static USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
             }
             status = USBH_OK;
 
-            // ring buffer ready to use
-            send_ring_buffer.read_ptr  = send_ring_buffer.write_ptr = 0;
 
             return status;
         } // if, a midi interface
@@ -405,7 +405,7 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (__attribute__((__unused__))  USBH
  * @param  hdev: Selected device property
  * @retval  USBH_Status :Response for USB Set Protocol request
  */
-static USBH_StatusTypeDef USBH_MIDI_ClassRequest(__attribute__((__unused__))  USBH_HandleTypeDef *phost) {
+USBH_StatusTypeDef USBH_MIDI_ClassRequest(__attribute__((__unused__))  USBH_HandleTypeDef *phost) {
     USBH_StatusTypeDef status = USBH_OK;
 
     return status;
@@ -421,7 +421,7 @@ static USBH_StatusTypeDef USBH_MIDI_ClassRequest(__attribute__((__unused__))  US
  */
 
 
-static USBH_StatusTypeDef USBH_MIDI_ProcessInput(USBH_HandleTypeDef *phost) {
+USBH_StatusTypeDef USBH_MIDI_ProcessInput(USBH_HandleTypeDef *phost) {
     USBH_StatusTypeDef status = USBH_OK;
     MIDI_HandleTypeDef *MIDI_Handle = phost->pActiveClass->pData;
 
@@ -485,7 +485,7 @@ static USBH_StatusTypeDef USBH_MIDI_ProcessInput(USBH_HandleTypeDef *phost) {
 // PING = 1 for HS, apparently ,but 0 or 1 makes no difference
 #define SEND_DATA_DO_PING 1
 
-static USBH_StatusTypeDef USBH_MIDI_ProcessOutput(USBH_HandleTypeDef *phost) {
+USBH_StatusTypeDef USBH_MIDI_ProcessOutput(USBH_HandleTypeDef *phost) {
     USBH_StatusTypeDef status = USBH_OK;
     MIDI_HandleTypeDef *MIDI_Handle = phost->pActiveClass->pData;
 
@@ -558,7 +558,7 @@ static USBH_StatusTypeDef USBH_MIDI_ProcessOutput(USBH_HandleTypeDef *phost) {
                 MIDI_Handle->state_out = MIDI_POLL;
             } else if (URB_state_out == USBH_URB_IDLE) {
                 // wait
-                USBH_DbgLog("USB Host Output IDLE %i " ,MIDI_Handle->buff_out_len);
+                //USBH_DbgLog("USB Host Output IDLE %i " ,MIDI_Handle->buff_out_len);
                 ; // NOP
             } else if (URB_state_out == USBH_URB_ERROR) {
                 // giveup
@@ -591,7 +591,7 @@ static USBH_StatusTypeDef USBH_MIDI_ProcessOutput(USBH_HandleTypeDef *phost) {
     return status;
 }
 
-static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
+USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
     USBH_StatusTypeDef status=USBH_OK;
 
     status =  USBH_MIDI_ProcessInput(phost);
@@ -602,7 +602,7 @@ static USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
 }
 /*-----------------------------------------------------------------------------------------*/
 
-static USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost) {
+USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost) {
     MIDI_HandleTypeDef *MIDI_Handle =  (MIDI_HandleTypeDef *) phost->pActiveClass->pData;
 
     if (!isValidInput(MIDI_Handle) && !isValidOutput(MIDI_Handle)) {
