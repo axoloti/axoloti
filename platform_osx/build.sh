@@ -174,6 +174,7 @@ file "${PLATFORM_ROOT}/bin/dfu-util"
 file "${PLATFORM_ROOT}/bin/libusb-1.0.0.dylib"
 
 echo "##### building firmware... #####"
+cd "$PLATFORM_ROOT"
 ./compile_firmware.sh
 
 echo "##### building GUI... #####"

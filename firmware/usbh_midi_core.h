@@ -37,6 +37,7 @@
 
 // external midi interface
 void usbh_midi_init(void);
+void usbh_midi_reset_buffer(void);
 void usbh_MidiSend1(uint8_t port, uint8_t b0);
 void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1);
 void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
@@ -139,6 +140,17 @@ extern void MIDI_CB(uint8_t a,uint8_t b,uint8_t c,uint8_t d);
 //uint8_t MIDI_RcvData(uint8_t *outBuf);
 
 typedef USBH_HandleTypeDef USB_OTG_CORE_HANDLE;
+
+USBH_StatusTypeDef USBH_MIDI_InterfaceInit  (USBH_HandleTypeDef *phost);
+USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (USBH_HandleTypeDef *phost);
+USBH_StatusTypeDef USBH_MIDI_ClassRequest(USBH_HandleTypeDef *phost);
+USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost);
+USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost);
+
+
+bool isValidInput(MIDI_HandleTypeDef* pH);
+bool isValidOutput(MIDI_HandleTypeDef* pH);
+
 
 #endif /* __USBH_MIDI_CORE_H */
 
