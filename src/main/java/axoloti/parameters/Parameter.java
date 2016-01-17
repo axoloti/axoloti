@@ -34,7 +34,6 @@ import org.simpleframework.xml.core.Persister;
 /**
  *
  * @author Johannes Taelman
- * @param <dt> data type
  */
 public abstract class Parameter<T extends ParameterInstance> implements AtomDefinition {
 
