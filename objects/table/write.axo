@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="write" uuid="ae85c48e960e33bd95ba61cce3832cf2a3a3de26" sha="30bbf808f0c1fd3a6184ed463839d27797fd43c5">
-      <upgradeSha>d57515c0f3344ccf04436a1483b381a2b73aeba1</upgradeSha>
+   <obj.normal id="write" uuid="ae85c48e960e33bd95ba61cce3832cf2a3a3de26" sha="9afa21d64053884949ebebf441acbd0f5292726e">
+      <upgradeSha>e1b3ef27dd917d23c9fdc8cc6056a2bc920dabd</upgradeSha>
       <sDescription>write to table</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -18,6 +18,8 @@
       </attribs>
       <code.declaration><![CDATA[   int ntrig;
 ]]></code.declaration>
+      <code.init><![CDATA[   int ntrig = 0;
+]]></code.init>
       <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {
       ntrig=1;
       attr_table.array[__USAT(inlet_a,27)>>(27-attr_table.LENGTHPOW)]=__SSAT(inlet_v,28)>>attr_table.GAIN;
@@ -25,8 +27,8 @@
    if (!(inlet_trig>0)) ntrig=0;
 ]]></code.krate>
    </obj.normal>
-   <obj.normal id="write" uuid="50b8c8807ba1fc700ed79381c9360a982e0c3fb9" sha="1c91ce8614cadb0dc4b4f00db2d3b18d030df263">
-      <upgradeSha>27fd4ced2949a883990a38df165fea0d15e1bc2b</upgradeSha>
+   <obj.normal id="write" uuid="50b8c8807ba1fc700ed79381c9360a982e0c3fb9" sha="fcebb23ade1d722ecd10e67c0fda410208e9db6f">
+      <upgradeSha>7436ee1e76ada922e3c980297581d5d6d80b90e8</upgradeSha>
       <sDescription>write to table</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -44,6 +46,8 @@
       </attribs>
       <code.declaration><![CDATA[   int ntrig;
 ]]></code.declaration>
+      <code.init><![CDATA[   int ntrig = 0;
+]]></code.init>
       <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {
       ntrig=1;
       if (inlet_a<attr_table.LENGTH)

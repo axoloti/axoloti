@@ -194,8 +194,7 @@ These are processed in strict order, right to left, top to bottom.
 
 <h1>Documenting patches</h1>
 
-<p>Use comment objects and the patch notes (accessible from the menu) so you don't forget how your patch works :smile: 
-also changing the instance name (menu rename) helps when you have many objects of the same type</p>
+<p>Use comment objects and the patch notes (accessible from the menu) so you don't forget how your patch works, also changing the instance name (menu rename) helps when you have many objects of the same type</p>
 
 <h1>Saving a patch</h1>
 
@@ -217,10 +216,35 @@ also changing the instance name (menu rename) helps when you have many objects o
 <li>for polyphonic voices </li>
 </ul>
 
+<p>Terminology, sometimes sub patches will be referred to as 'child patches' and the main patch is called the parent patch.</p>
+
+<p>Sub patches can be create in two different ways, either embedded into the patch (i.e. saved in the AXP) or as a separate file (AXS) . Functionally they operate the same, the difference is embedded patch does not need to be saved separately, but cannot then be re-used on other patches. 
+Most often embedded patches are used, especially during 'development' of a patch, and the subpatch files (AXS) are create if you wish to use the same functionality in other patches.
+(note: you can copy and paste embedded patches, like other objects , but of course this means any change you want to make has to be made to individual copies)</p>
+
+<h2>Embedded sub patches</h2>
+
+<p>To create an embedded sub-patch </p>
+
+<ul>
+<li>create a new object of type 'patch/patcher'</li>
+<li>click the edit object, this will open a new patch window for you to add contents</li>
+<li>you can add inlet/outlet objects to communicate with main patch</li>
+<li>you can edit the patch settings, e.g. to create multiple voices</li>
+<li>you can add parameters to parent</li>
+<li>once you have finished editing, close the window <strong>AND click update</strong> on the patch/patcher</li>
+</ul>
+
+<p>tip: remember you can rename the patch/patcher object to a more meaningful name.</p>
+
+<p>using embedded patchers makes creating voices trivial, and keeps all of the patch in one file, which means its easy to share. you can even cut and paste embedded patchers to other patches to re-use them.</p>
+
+<p>unless you have a particular reason to use sub-patch files, you should use embedded patches.</p>
+
+<h2>Sub patch files (AXS)</h2>
+
 <p>Sub patches are just like main patches, but are saved with as 'Axoloti Subpatch' with an extension of AXS, the difference is they are never used on their own... they are always added to a main patch. 
 (we will also see later that sub-patches can often look like normal axoloti objects)</p>
-
-<p>Terminology, sometimes sub patches will be referred to as 'child patches' and the main patch is called the parent patch.</p>
 
 <p>a few important notes:</p>
 
@@ -254,6 +278,9 @@ also changing the instance name (menu rename) helps when you have many objects o
 <p>Note: If the main patch is LIVE, changes to a sub-patch will not be propagated until the main patch is sent again to the board (e.g. take it offline, then select live again)</p>
 
 <p>Parameters can be propagated to the main patch by right-click on the parameter and select "show on parent". "Show on parent" parameters are drawn in blue.</p>
+
+<p>Sub-patch files (AXS) are useful were you wish to create a generic object that you can use in many different patches, with the advantage that if you update the AXS all patches using it will use the new implementation.
+(this 'advantage' can be considered a disadvantage if you want consistency in old patches... in which case you may prefer embedded patches or will need to version the AXS) </p>
 
 <h1>Polyphonic Sub patching</h1>
 
@@ -298,3 +325,22 @@ AXP  - patch, which contains objects and can be compiled and sent to Axoloti boa
 AXS  - subpatch, a patch used by a main patch (see below)
 AXH - help patch, shows how to use an object.
 all except AXO, can be created by saving the patch with Save As...</p>
+
+<h1>Object and Sub-patch search patch</h1>
+
+<p>By default axoloti will look in the objects sub-directory for objects files and sub-patches.
+(if you start with ./ (as suggested in sub-patch section) this will also look in the same directory as the patch)</p>
+
+<p>If you develop your own sub-patches that you wish to see as objects, or your own custom objects (axo) or third party objects, then these can be placed in their own directory (do NOT mix with the ones supplied with Axoloti). we would recommend you place this in the axoloti documents directory.
+to do this:</p>
+
+<ul>
+<li>File -> Preferences</li>
+<li><p>Add a path to the object search patch e.g.</p>
+
+<p>objects 
+  /Users/bob/Documents/axoloti/objects</p></li>
+</ul>
+
+<p>Its important to note, that an objects identity (name) is not only its filename but also its path 
+e.g. midi/in/cc.axo    needs to be in the directory /Users/bob/Documents/axoloti/objects/midi/in</p>

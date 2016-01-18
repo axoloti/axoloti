@@ -398,7 +398,8 @@ static void USBH_ParseCfgDesc (USBH_CfgDescTypeDef* cfg_desc,
       pdesc = USBH_GetNextDesc((uint8_t *)pdesc, &ptr);
       if (pdesc->bDescriptorType   == USB_DESC_TYPE_INTERFACE) 
       {
-        pif = &cfg_desc->Itf_Desc[if_ix];
+        uint8_t if_num   = *(uint8_t  *) (((uint8_t*) pdesc) + 2);
+        pif = &cfg_desc->Itf_Desc[if_num];
         USBH_ParseInterfaceDesc (pif, (uint8_t *)pdesc);            
         
         ep_ix = 0;
@@ -408,12 +409,12 @@ static void USBH_ParseCfgDesc (USBH_CfgDescTypeDef* cfg_desc,
           pdesc = USBH_GetNextDesc((uint8_t*) pdesc, &ptr);
           if (pdesc->bDescriptorType   == USB_DESC_TYPE_ENDPOINT) 
           {  
-            pep = &cfg_desc->Itf_Desc[if_ix].Ep_Desc[ep_ix];
+            pep = &cfg_desc->Itf_Desc[if_num].Ep_Desc[ep_ix];
             USBH_ParseEPDesc (pep, (uint8_t *)pdesc);
             ep_ix++;
           }
         }
-        if_ix++;
+        if_ix = if_num + 1;
       }
     }
   }  

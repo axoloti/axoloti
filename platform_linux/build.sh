@@ -31,11 +31,11 @@ case $OS in
         sudo apt-get install -y libtool libudev-dev automake autoconf \
         ant curl lib32z1 lib32ncurses5 lib32bz2-1.0
         ;;
-    Archlinux)
+    Archlinux|Arch)
         echo "pacman -Syy"
         sudo pacman -Syy
-        echo "pacman -Syy libtool automake autoconf curl lib32-ncurses lib32-bzip2"
-        sudo pacman -S --noconfirm libtool automake autoconf curl \
+        echo "pacman -S --noconfirm apache-ant libtool automake autoconf curl lib32-ncurses lib32-bzip2"
+        sudo pacman -S --noconfirm apache-ant libtool automake autoconf curl \
              lib32-ncurses lib32-bzip2
         ;;
     *)
