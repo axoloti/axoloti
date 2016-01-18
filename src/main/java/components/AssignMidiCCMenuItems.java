@@ -17,10 +17,14 @@
  */
 package components;
 
+import axoloti.dialogs.MidiAssignments;
 import axoloti.parameters.ParameterInstance;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -31,6 +35,20 @@ import javax.swing.JRadioButton;
 public class AssignMidiCCMenuItems {
 
     public AssignMidiCCMenuItems(final ParameterInstance param, JComponent parent) {
+        JMenuItem m = new JMenuItem("Assign...");
+        m.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MidiAssignments ma = new MidiAssignments(null, true, param);
+                int v = ma.getResult();
+                if (v>=0) {
+                    param.actionPerformed(new ActionEvent(this, 0, "CC" + v));
+                } else {
+                    param.actionPerformed(new ActionEvent(this, 0, "none"));                    
+                }
+            }
+        });
+        parent.add(m);
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(16, 0));
         ButtonGroup group = new ButtonGroup();
