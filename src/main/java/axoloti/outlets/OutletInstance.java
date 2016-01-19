@@ -109,10 +109,6 @@ public class OutletInstance<T extends Outlet> extends JPanel implements Comparab
         return axoObj;
     }
 
-    public void UnlinkObjectInstance(){
-        axoObj = null;
-    }
-    
     @Override
     public T GetDefinition() {
         return outlet;

@@ -57,6 +57,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
         doLayout();
     }
 
+    @Override
     public String getName() {
         return attributeName;
     }

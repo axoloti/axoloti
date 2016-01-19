@@ -47,36 +47,10 @@ public abstract class AxoAttribute implements AtomDefinition {
 
     @Override
     public AttributeInstance CreateInstance(AxoObjectInstance o) {
-        // resolve deserialized object, copy value and remove
-        AttributeInstance pidn = null;
-        for (AttributeInstance pi : o.getAttributeInstances()) {
-//            System.out.println("compare " + this.name + "<>" + pi.name);
-            if (pi.getName().equals(this.name)) {
-                /*
-                 if (InstanceFactory().getClass().isInstance(pi)) {
-                 pidn = (AttributeInstance) pi;
-                 } else {
-                 o.getAttributeInstances().remove(pi);
-                 }*/
-                pidn = (AttributeInstance) pi;
-                break;
-            }
-        }
-        if (pidn == null) {
-//            System.out.println("no match " + this.name);
-            AttributeInstance pi = InstanceFactory(o);
-            o.add(pi);
-            pi.PostConstructor();
-            return pi;
-        } else {
-//            System.out.println("match" + pidn.getName());
-            o.getAttributeInstances().remove(pidn);
-            AttributeInstance pi = InstanceFactory(o);
-            pi.CopyValueFrom(pidn);
-            o.add(pi);
-            pi.PostConstructor();
-            return pi;
-        }
+        AttributeInstance pi = InstanceFactory(o);
+        o.add(pi);
+        pi.PostConstructor();
+        return pi;
     }
 
     public abstract AttributeInstance InstanceFactory(AxoObjectInstance o);

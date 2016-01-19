@@ -113,10 +113,6 @@ public class InletInstance<T extends Inlet> extends JPanel implements AtomInstan
         return axoObj;
     }
 
-    public void UnlinkObjectInstance(){
-        axoObj = null;
-    }   
-    
     @Override
     public T GetDefinition() {
         return inlet;

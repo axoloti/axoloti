@@ -67,15 +67,6 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (pg != null) {
             AxoObject ao = pg.GenerateAxoObj();
             setType(ao);
-            for (ParameterInstance pi : parameterInstances) {
-                pi.UnlinkObjectInstance();
-            }
-            for (InletInstance pi : inletInstances) {
-                pi.UnlinkObjectInstance();
-            }
-            for (OutletInstance pi : outletInstances) {
-                pi.UnlinkObjectInstance();
-            }
             PostConstructor();
         }
         for (Component cmp : getComponents()) {

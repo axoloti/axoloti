@@ -72,39 +72,14 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
 
     @Override
     public ParameterInstance CreateInstance(AxoObjectInstance o) {
-        // resolve deserialized object, copy value and remove
-        T pidn = null;
-        for (ParameterInstance pi : o.parameterInstances) {
-//            System.out.println("compare " + this.name + "<>" + pi.name);
-            if (pi.name.equals(this.name)) {
-                pidn = (T) pi;
-                break;
-            }
-        }
-        if (pidn == null) {
-//            System.out.println("no match " + this.name);
-            ParameterInstance pi = InstanceFactory();
-            pi.axoObj = o;
-            pi.name = this.name;
-            pi.parameter = this;
-//            pi.SetValue(DefaultValue);
-            pi.applyDefaultValue();
-            o.p_params.add(pi);
-            pi.PostConstructor();
-            return pi;
-        } else {
-//            System.out.println("match" + pidn.getName());
-            ParameterInstance pi = InstanceFactory();
-//            pidn.convs = pi.convs;
-            o.parameterInstances.remove(pidn);
-            pi.axoObj = o;
-            pi.name = this.name;
-            pi.parameter = this;
-            pi.CopyValueFrom(pidn);
-            pi.PostConstructor();
-            o.p_params.add(pi);
-            return pi;
-        }
+        ParameterInstance pi = InstanceFactory();
+        pi.axoObj = o;
+        pi.name = this.name;
+        pi.parameter = this;
+        pi.applyDefaultValue();
+        o.p_params.add(pi);
+        pi.PostConstructor();
+        return pi;
     }
 
     public abstract T InstanceFactory();
