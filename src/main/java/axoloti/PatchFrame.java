@@ -278,15 +278,18 @@ public class PatchFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuNew = new javax.swing.JMenuItem();
+        jSeparator6 = new javax.swing.JPopupMenu.Separator();
         jMenuOpen = new javax.swing.JMenuItem();
         jMenuOpenURL = new javax.swing.JMenuItem();
         recentFileMenu1 = new axoloti.menus.RecentFileMenu();
         libraryMenu1 = new axoloti.menus.LibraryMenu();
-        jMenuClose = new javax.swing.JMenuItem();
+        favouriteMenu1 = new axoloti.menus.FavouriteMenu();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
         jMenuSave = new javax.swing.JMenuItem();
         jMenuSaveAs = new javax.swing.JMenuItem();
         jMenuSaveClip = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuClose = new javax.swing.JMenuItem();
         jMenuQuit = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
         jMenuItemDelete = new javax.swing.JMenuItem();
@@ -389,6 +392,7 @@ public class PatchFrame extends javax.swing.JFrame {
         }
     });
     jMenuFile.add(jMenuNew);
+    jMenuFile.add(jSeparator6);
 
     jMenuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -414,15 +418,9 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
     libraryMenu1.setText("Library");
     jMenuFile.add(libraryMenu1);
 
-    jMenuClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,
-        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-jMenuClose.setText("Close");
-jMenuClose.addActionListener(new java.awt.event.ActionListener() {
-    public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jMenuCloseActionPerformed(evt);
-    }
-    });
-    jMenuFile.add(jMenuClose);
+    favouriteMenu1.setText("Favorites");
+    jMenuFile.add(favouriteMenu1);
+    jMenuFile.add(jSeparator5);
 
     jMenuSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -450,6 +448,16 @@ jMenuSave.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuFile.add(jMenuSaveClip);
     jMenuFile.add(jSeparator1);
+
+    jMenuClose.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,
+        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+jMenuClose.setText("Close");
+jMenuClose.addActionListener(new java.awt.event.ActionListener() {
+    public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuCloseActionPerformed(evt);
+    }
+    });
+    jMenuFile.add(jMenuClose);
 
     jMenuQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -1044,6 +1052,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     /* write to sdcard...
      */
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private axoloti.menus.FavouriteMenu favouriteMenu1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private axoloti.menus.HelpLibraryMenu helpLibraryMenu1;
@@ -1091,6 +1100,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
+    private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPanel jToolbarPanel;
     private axoloti.menus.LibraryMenu libraryMenu1;
     private axoloti.menus.RecentFileMenu recentFileMenu1;

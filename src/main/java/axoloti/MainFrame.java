@@ -331,12 +331,12 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jLabelIcon = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
-        jMenuNew = new javax.swing.JMenuItem();
+        jMenuNewPatch = new javax.swing.JMenuItem();
         jMenuOpen = new javax.swing.JMenuItem();
         jMenuOpenURL = new javax.swing.JMenuItem();
         recentFileMenu1 = new axoloti.menus.RecentFileMenu();
-        favouriteMenu1 = new axoloti.menus.FavouriteMenu();
         libraryMenu1 = new axoloti.menus.LibraryMenu();
+        favouriteMenu1 = new axoloti.menus.FavouriteMenu();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuReloadObjects = new javax.swing.JMenuItem();
         jMenuRegenerateObjects = new javax.swing.JMenuItem();
@@ -447,15 +447,15 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         jMenuFile.setText("File");
 
-        jMenuNew.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
+        jMenuNewPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
             Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-    jMenuNew.setText("New");
-    jMenuNew.addActionListener(new java.awt.event.ActionListener() {
+    jMenuNewPatch.setText("New patch");
+    jMenuNewPatch.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuNewActionPerformed(evt);
+            jMenuNewPatchActionPerformed(evt);
         }
     });
-    jMenuFile.add(jMenuNew);
+    jMenuFile.add(jMenuNewPatch);
 
     jMenuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -478,11 +478,11 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
     recentFileMenu1.setText("Open Recent");
     jMenuFile.add(recentFileMenu1);
 
-    favouriteMenu1.setText("Favorites");
-    jMenuFile.add(favouriteMenu1);
-
     libraryMenu1.setText("Library");
     jMenuFile.add(libraryMenu1);
+
+    favouriteMenu1.setText("Favorites");
+    jMenuFile.add(favouriteMenu1);
     jMenuFile.add(jSeparator2);
 
     jMenuReloadObjects.setText("Reload Objects");
@@ -1039,9 +1039,9 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         OpenPatch();
     }//GEN-LAST:event_jMenuOpenActionPerformed
 
-    private void jMenuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewActionPerformed
+    private void jMenuNewPatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewPatchActionPerformed
         NewPatch();
-    }//GEN-LAST:event_jMenuNewActionPerformed
+    }//GEN-LAST:event_jMenuNewPatchActionPerformed
 
     public void NewPatch() {
         PatchGUI patch1 = new PatchGUI();
@@ -1051,7 +1051,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         patches.add(patch1);
         pf.setVisible(true);
     }
-
+    
     public void OpenPatch() {
         final JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
@@ -1184,7 +1184,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemPreferences;
     private javax.swing.JMenuItem jMenuItemRefreshFWID;
     private javax.swing.JMenuItem jMenuItemSelectCom;
-    private javax.swing.JMenuItem jMenuNew;
+    private javax.swing.JMenuItem jMenuNewPatch;
     private javax.swing.JMenuItem jMenuOpen;
     private javax.swing.JMenuItem jMenuOpenURL;
     private javax.swing.JMenuItem jMenuQuit;

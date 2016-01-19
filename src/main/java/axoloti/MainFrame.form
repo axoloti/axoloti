@@ -14,15 +14,15 @@
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuNew">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuNewPatch">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_N,&#xa;    Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="New"/>
+                <Property name="text" type="java.lang.String" value="New patch"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuNewActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuNewPatchActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuOpen">
@@ -49,14 +49,14 @@
                 <Property name="text" type="java.lang.String" value="Open Recent"/>
               </Properties>
             </Menu>
-            <Menu class="axoloti.menus.FavouriteMenu" name="favouriteMenu1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Favorites"/>
-              </Properties>
-            </Menu>
             <Menu class="axoloti.menus.LibraryMenu" name="libraryMenu1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Library"/>
+              </Properties>
+            </Menu>
+            <Menu class="axoloti.menus.FavouriteMenu" name="favouriteMenu1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Favorites"/>
               </Properties>
             </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">

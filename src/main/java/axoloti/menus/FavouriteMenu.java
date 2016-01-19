@@ -18,44 +18,15 @@
 package axoloti.menus;
 
 import static axoloti.MainFrame.prefs;
-import static axoloti.menus.PopulatePatchMenu.PopulatePatchMenu;
 import java.io.File;
-import javax.swing.JMenu;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 /**
  *
  * @author jtaelman
  */
-public class FavouriteMenu extends JMenu {
+public class FavouriteMenu extends PopulatePatchMenuDynamic {
 
     public FavouriteMenu() {
-        addMenuListener(new MenuListener() {
-            @Override
-            public void menuSelected(MenuEvent e) {
-                String favouriteDir = prefs.getFavouriteDir();
-                if (favouriteDir != null && !favouriteDir.isEmpty()) {
-                    File f = new File(favouriteDir);
-                    if (f.exists() && f.isDirectory()) {
-                        PopulatePatchMenu(FavouriteMenu.this, prefs.getFavouriteDir(), ".axp");
-                        FavouriteMenu.this.setVisible(true);
-                        return;
-                    }
-                }
-                setVisible(false);
-            }
-
-            @Override
-            public void menuDeselected(MenuEvent e) {
-                removeAll();
-            }
-
-            @Override
-            public void menuCanceled(MenuEvent e) {
-                removeAll();
-            }
-        });
+        super("hello", new File(prefs.getFavouriteDir()), ".axp");
     }
-
 }
