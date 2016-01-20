@@ -340,12 +340,13 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 //        p_iolets.setBackground(Color.red);
 
         for (AxoAttribute p : getType().attributes) {
-            AttributeInstance attri = p.CreateInstance(this);
+            AttributeInstance attrp1 = null;
             for (AttributeInstance attrp : pAttributeInstances) {
-                if (attrp.getName().equals(attri.getName())) {
-                    attri.CopyValueFrom(attrp);
+                if (attrp.getName().equals(p.getName())) {
+                    attrp1 = attrp;
                 }
             }
+            AttributeInstance attri = p.CreateInstance(this, attrp1);
             attri.setAlignmentX(LEFT_ALIGNMENT);
             add(attri);
             attri.doLayout();

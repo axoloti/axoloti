@@ -53,6 +53,16 @@ public abstract class AxoAttribute implements AtomDefinition {
         return pi;
     }
 
+    public AttributeInstance CreateInstance(AxoObjectInstance o, AttributeInstance a) {
+        AttributeInstance pi = InstanceFactory(o);
+        if (a != null) {
+            pi.CopyValueFrom(a);
+        }
+        o.add(pi);
+        pi.PostConstructor();
+        return pi;
+    }
+
     public abstract AttributeInstance InstanceFactory(AxoObjectInstance o);
 
     public void updateSHA(MessageDigest md) {
