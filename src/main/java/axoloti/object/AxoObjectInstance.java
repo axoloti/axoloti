@@ -263,12 +263,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         JPanel p_iolets = new JPanel();
         p_iolets.setLayout(new BoxLayout(p_iolets, BoxLayout.LINE_AXIS));
         p_iolets.setAlignmentX(LEFT_ALIGNMENT);
+        p_iolets.setAlignmentY(TOP_ALIGNMENT);
         JPanel p_inlets = new JPanel();
         p_inlets.setLayout(new BoxLayout(p_inlets, BoxLayout.PAGE_AXIS));
         p_inlets.setAlignmentX(LEFT_ALIGNMENT);
+        p_inlets.setAlignmentY(TOP_ALIGNMENT);
         JPanel p_outlets = new JPanel();
         p_outlets.setLayout(new BoxLayout(p_outlets, BoxLayout.PAGE_AXIS));
         p_outlets.setAlignmentX(RIGHT_ALIGNMENT);
+        p_outlets.setAlignmentY(TOP_ALIGNMENT);
         p_params = new JPanel();
         if (getType().getRotatedParams()) {
             p_params.setLayout(new BoxLayout(p_params, BoxLayout.LINE_AXIS));
