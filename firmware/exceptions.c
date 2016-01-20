@@ -47,7 +47,8 @@ typedef enum {
   watchdog_soft,
   watchdog_hard,
   brownout,
-  goto_DFU
+  goto_DFU,
+  fatfs_error
 } faulttype;
 
 typedef struct {
@@ -199,6 +200,29 @@ void exception_initiate_dfu(void) {
   NVIC_SystemReset();
 }
 
+const char * const fs_err_name[] = {
+  "FR_OK",
+  "FR_DISK_ERR",
+  "FR_INT_ERR",
+  "FR_NOT_READY",
+  "FR_NO_FILE",
+  "FR_NO_PATH",
+  "FR_INVALID_NAME",
+  "FR_DENIED",
+  "FR_EXIST",
+  "FR_INVALID_OBJECT",
+  "FR_WRITE_PROTECTED",
+  "FR_INVALID_DRIVE",
+  "FR_NOT_ENABLED",
+  "FR_NO_FILESYSTEM",
+  "FR_MKFS_ABORTED",
+  "FR_TIMEOUT",
+  "FR_LOCKED",
+  "FR_NOT_ENOUGH_CORE",
+  "FR_TOO_MANY_OPEN_FILES",
+  "FR_INVALID_PARAMETER"
+};
+
 void exception_checkandreport(void) {
   if (exception_check()) {
     bool report_registers = 0;
@@ -216,7 +240,11 @@ void exception_checkandreport(void) {
     else if (exceptiondump->type == brownout) {
       LogTextMessage("exception: brownout");
     }
-    else {
+    else if (exceptiondump->type == fatfs_error) {
+      LogTextMessage("file error: %s, filename:\"%s\"",fs_err_name[exceptiondump->r0],(char *)(BKPSRAM_BASE)+12);
+    }
+    else
+    {
       LogTextMessage("unknown exception?");
     }
 
@@ -239,6 +267,24 @@ void exception_checkandreport(void) {
     }
     exception_clear();
   }
+}
+
+void report_fatfs_error(int errno, char *fn) {
+  if (exceptiondump->magicnumber == ERROR_MAGIC_NUMBER)
+    return;
+
+  char *p;
+  p = (char *)(BKPSRAM_BASE)+12;
+  if (fn!=0) {
+    int i = 20;
+    while(i-- && *fn){
+      *p++ = *fn++;
+    }
+  }
+  *p = 0;
+  exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
+  exceptiondump->type = fatfs_error;
+  exceptiondump->r0 = errno;
 }
 
 void dbg_set_i(int i) {

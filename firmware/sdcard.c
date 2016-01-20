@@ -24,6 +24,7 @@
 #include "sdcard.h"
 #include <string.h>
 #include "chprintf.h"
+#include "exceptions.h"
 
 /*===========================================================================*/
 /* SDCard                                                                    */
@@ -201,6 +202,7 @@ void sdcard_loadPatch(char *fname) {
   err = f_open(&FileObject, fname, FA_READ | FA_OPEN_EXISTING);
   chThdSleepMilliseconds(10);
   if (err != FR_OK) {
+	report_fatfs_error(err,fname);
     return;
   }
   err = f_read(&FileObject, (uint8_t *)PATCHMAINLOC, 0xE000,

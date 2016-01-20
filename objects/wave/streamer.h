@@ -58,8 +58,10 @@ static __INL msg_t ThreadSD(void *arg) {
       if (s->pingpong == OPEN) {
         if (s->offset >=0) {
           err = f_close(&s->f);
+          if (err) report_fatfs_error(err,0);
         }
         err = f_open(&s->f, &s->filename[0], FA_READ | FA_OPEN_EXISTING);
+        if (err) report_fatfs_error(err,&s->filename[0]);
 //          s->f.cltbl = &s->clmt[0];                      /* Enable fast seek feature (cltbl != NULL) */
 //          s->clmt[0] = SZ_TBL;                      /* Set table size */
 //          err = f_lseek(&s->f, CREATE_LINKMAP);     /* Create CLMT */
@@ -67,6 +69,7 @@ static __INL msg_t ThreadSD(void *arg) {
         if (!s->doSeek) {
           err = f_read(&s->f, s->fbuff0.i8buff, SDREADFILEPINGPONGSIZE * 4,
                        &bytes_read);
+          if (err) report_fatfs_error(err,&s->filename[0]);
           s->offset = 0;
           chSysDisable();
           if (s->pingpong != CLOSING)
@@ -78,11 +81,11 @@ static __INL msg_t ThreadSD(void *arg) {
       else if (s->pingpong == OPENREC) {
         LogTextMessage("rec : opening");
         err = f_open(&s->f, &s->filename[0], FA_WRITE | FA_CREATE_ALWAYS);
-        if (err!=0) LogTextMessage("rec : open fail");
+        if (err) report_fatfs_error(err,&s->filename[0]);
         err = f_lseek(&s->f, PRE_SIZE);
-        if (err!=0) LogTextMessage("rec : seek1 fail");
+        if (err) report_fatfs_error(err,&s->filename[0]);
         err = f_lseek(&s->f, 0);
-        if (err!=0) LogTextMessage("rec : seek2 fail");
+        if (err) report_fatfs_error(err,&s->filename[0]);
         s->offset = 0;
         chSysDisable();
         if (s->pingpong != CLOSING)
@@ -94,6 +97,7 @@ static __INL msg_t ThreadSD(void *arg) {
       if (s->pingpong == CLOSING) {
         s->pingpong = CLOSED;
         err = f_close(&s->f);
+        if (err) report_fatfs_error(err,&s->filename[0]);
         s->offset = -1;
         busy = 1;
       }
@@ -108,8 +112,10 @@ static __INL msg_t ThreadSD(void *arg) {
       else if (s->doSeek && (s->pingpong != CLOSED)) {
         s->pingpong = SEEKING;
         err = f_lseek(&s->f, s->seekPos);
+        if (err) report_fatfs_error(err,&s->filename[0]);
         err = f_read(&s->f, s->fbuff0.i8buff, SDREADFILEPINGPONGSIZE * 4,
                      &bytes_read);
+        if (err) report_fatfs_error(err,&s->filename[0]);
         s->offset = 0;
         s->doSeek = 0;
         chSysDisable();
@@ -122,6 +128,7 @@ static __INL msg_t ThreadSD(void *arg) {
         if (f_tell(&s->f) + SDREADFILEPINGPONGSIZE * 4 < f_size(&s->f)) {
           err = f_read(&s->f, s->fbuff0.i8buff, SDREADFILEPINGPONGSIZE * 4,
                        &bytes_read);
+          if (err) report_fatfs_error(err,&s->filename[0]);
           chSysDisable();
           if (s->pingpong == PLAYB_READA)
             s->pingpong = PLAYB;
@@ -141,6 +148,7 @@ static __INL msg_t ThreadSD(void *arg) {
         if (f_tell(&s->f) + SDREADFILEPINGPONGSIZE * 4 < f_size(&s->f)) {
           err = f_read(&s->f, s->fbuff1.i8buff, SDREADFILEPINGPONGSIZE * 4,
                        &bytes_read);
+          if (err) report_fatfs_error(err,&s->filename[0]);
           chSysDisable();
           if (s->pingpong == PLAYA_READB)
             s->pingpong = PLAYA;
@@ -188,6 +196,7 @@ static __INL msg_t ThreadSD(void *arg) {
   sdReadFilePingpong *s = (sdReadFilePingpong *)arg;
   if (s->pingpong != CLOSED) {
     err = f_close(&s->f);
+    if (err) report_fatfs_error(err,&s->filename[0]);
   }
 //  LogTextMessage("streamer thread : terminated");
 

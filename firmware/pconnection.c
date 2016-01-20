@@ -221,6 +221,8 @@ static FRESULT scan_files(char *path) {
                                 (const unsigned char* )fbuff, l + 9);
       }
     }
+  } else {
+	  report_fatfs_error(res,0);
   }
   return res;
 }
@@ -232,7 +234,7 @@ void ReadDirectoryListing(void) {
 
   err = f_getfree("/", &clusters, &fsp);
   if (err != FR_OK) {
-    LogTextMessage("FS: f_getfree() failed\r\n");
+	report_fatfs_error(err,0);
     return;
   }
   /*
@@ -287,15 +289,15 @@ void CreateFile(void) {
   FRESULT err;
   err = f_open(&pFile, &FileName[0], FA_WRITE | FA_CREATE_ALWAYS);
   if (err != FR_OK) {
-    LogTextMessage("File open failed");
+    report_fatfs_error(err,&FileName[0]);
   }
   err = f_lseek(&pFile, pFileSize);
   if (err != FR_OK) {
-    LogTextMessage("File resize failed");
+    report_fatfs_error(err,&FileName[0]);
   }
   err = f_lseek(&pFile, 0);
   if (err != FR_OK) {
-    LogTextMessage("File seek failed");
+    report_fatfs_error(err,&FileName[0]);
   }
 }
 
@@ -303,7 +305,7 @@ void CloseFile(void) {
   FRESULT err;
   err = f_close(&pFile);
   if (err != FR_OK) {
-    LogTextMessage("File close failed");
+    report_fatfs_error(err,&FileName[0]);
   }
 }
 
@@ -744,7 +746,7 @@ void PExReceiveByte(unsigned char c) {
           err = f_write(&pFile, (char *)PATCHMAINLOC, length,
                         (void *)&bytes_written);
           if (err != FR_OK) {
-            LogTextMessage("File write failed");
+            report_fatfs_error(err,0);
           }
           AckPending = 1;
         }

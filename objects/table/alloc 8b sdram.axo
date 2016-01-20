@@ -33,6 +33,7 @@
                <string>524288</string>
                <string>1048576</string>
                <string>2097152</string>
+               <string>4194304</string>
             </MenuEntries>
             <CEntries>
                <string>1</string>
@@ -56,6 +57,7 @@
                <string>19</string>
                <string>20</string>
                <string>21</string>
+               <string>22</string>
             </CEntries>
          </combo>
          <text name="init"/>
