@@ -132,6 +132,7 @@ public class AxoObjectEditor extends JFrame {
         jTextAreaKRateCode.addFocusListener(fl);
         jTextAreaSRateCode.addFocusListener(fl);
         jTextAreaDisposeCode.addFocusListener(fl);
+        jTextAreaMidiCode.addFocusListener(fl);
     }
 
     void applyChanges() {
@@ -140,6 +141,7 @@ public class AxoObjectEditor extends JFrame {
         obj.sKRateCode = jTextAreaKRateCode.getText();
         obj.sSRateCode = jTextAreaSRateCode.getText();
         obj.sDisposeCode = jTextAreaDisposeCode.getText();
+        obj.sMidiCode = jTextAreaMidiCode.getText();
     }
 
     /**
