@@ -17,6 +17,8 @@
  */
 package axoloti.dialogs;
 
+import axoloti.DocumentWindow;
+import axoloti.DocumentWindowList;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.inlets.Inlet;
 import axoloti.object.AxoObject;
@@ -37,12 +39,13 @@ import javax.swing.table.DefaultTableModel;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import qcmds.QCmdProcessor;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class AxoObjectEditor extends JFrame {
+public class AxoObjectEditor extends JFrame implements DocumentWindow {
 
     final AxoObject obj;
     private final RSyntaxTextArea jTextAreaLocalData;
@@ -65,6 +68,7 @@ public class AxoObjectEditor extends JFrame {
 
     public AxoObjectEditor(final AxoObject obj) {
         initComponents();
+        DocumentWindowList.RegisterWindow(this);
         jTextAreaLocalData = initCodeEditor(jPanelLocalData);
         jTextAreaInitCode = initCodeEditor(jPanelInitCode);
         jTextAreaKRateCode = initCodeEditor(jPanelKRateCode);
@@ -144,6 +148,11 @@ public class AxoObjectEditor extends JFrame {
         obj.sMidiCode = jTextAreaMidiCode.getText();
     }
 
+    public void Close() {
+        DocumentWindowList.UnregisterWindow(this);
+        dispose();
+    }    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -199,6 +208,7 @@ public class AxoObjectEditor extends JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
         jMenuItemSave = new javax.swing.JMenuItem();
+        windowMenu1 = new axoloti.menus.WindowMenu();
 
         jInternalFrame1.setVisible(true);
 
@@ -213,6 +223,12 @@ public class AxoObjectEditor extends JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
         jLabel1.setText("This object editor is incomplete. The tabs for inlets, outlets, parameters, attributes are not editable. Bundles of multiple objects in one file are not supported.");
@@ -607,6 +623,7 @@ public class AxoObjectEditor extends JFrame {
         jMenuFile.add(jMenuItemSave);
 
         jMenuBar1.add(jMenuFile);
+        jMenuBar1.add(windowMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -617,6 +634,10 @@ public class AxoObjectEditor extends JFrame {
         applyChanges();
         WriteAxoObject(obj.sPath, obj);
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Close();
+    }//GEN-LAST:event_formWindowClosing
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JInternalFrame jInternalFrame1;
@@ -665,5 +686,17 @@ public class AxoObjectEditor extends JFrame {
     private javax.swing.JTable jTableOutlets;
     private javax.swing.JTable jTableParams;
     private javax.swing.JTextArea jTextDesc;
+    private axoloti.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public JFrame GetFrame() {
+        return this;
+    }
+
+    @Override
+    public boolean AskClose() {
+        Close();
+        return false; //TBC
+    }
 }

@@ -76,8 +76,8 @@ public class QCmdProcessor implements Runnable {
             }
         }
     }
-
-    public QCmdProcessor() {
+    
+    protected QCmdProcessor() {
         queue = new ArrayBlockingQueue<QCmd>(10);
         queueResponse = new ArrayBlockingQueue<QCmd>(10);
         serialconnection = new USBBulkConnection(null, queueResponse);
@@ -87,6 +87,14 @@ public class QCmdProcessor implements Runnable {
         dialTransmitterThread = new Thread(dialTransmitter);
     }
 
+    private static QCmdProcessor singleton = null;
+    
+    public static QCmdProcessor getQCmdProcessor() {
+        if (singleton == null)
+            singleton = new QCmdProcessor();
+        return singleton;
+    }
+    
     public Patch getPatch() {
         return patch;
     }
@@ -188,7 +196,11 @@ public class QCmdProcessor implements Runnable {
                 if (QCmdSerialTask.class.isInstance(cmd)) {
                     if (serialconnection.isConnected()) {
                         serialconnection.AppendToQueue((QCmdSerialTask) cmd);
-                        publish(queueResponse.take());
+                        QCmd response = queueResponse.take();
+                        publish(response);
+                        if (response instanceof QCmdDisconnect){
+                            queue.clear();
+                        }
                     }
                 }
                 if (QCmdGUITask.class.isInstance(cmd)) {

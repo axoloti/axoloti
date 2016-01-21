@@ -40,6 +40,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -57,7 +58,7 @@ import qcmds.QCmdUploadPatch;
  *
  * @author Johannes Taelman
  */
-public class PatchFrame extends javax.swing.JFrame {
+public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener {
 
     /**
      * Creates new form PatchFrame
@@ -70,6 +71,9 @@ public class PatchFrame extends javax.swing.JFrame {
         initComponents();
         this.patch = patch;
         this.patch.patchframe = this;
+        DocumentWindowList.RegisterWindow(this);
+        MainFrame.mainframe.qcmdprocessor.serialconnection.addConnectionStatusListener(this);
+        
         jToolbarPanel.add(new components.PresetPanel(patch));
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
         jScrollPane1.setViewportView(patch.Layers);
@@ -199,6 +203,7 @@ public class PatchFrame extends javax.swing.JFrame {
         }
     }
 
+    @Override
     public void ShowDisconnect() {
         if (patch.IsLocked()) {
             patch.Unlock();
@@ -209,6 +214,7 @@ public class PatchFrame extends javax.swing.JFrame {
         jCheckBoxMenuItemLive.setSelected(false);
     }
 
+    @Override
     public void ShowConnect() {
         patch.Unlock();
         jCheckBoxLive.setSelected(false);
@@ -223,10 +229,12 @@ public class PatchFrame extends javax.swing.JFrame {
     }
 
     public void Close() {
-        patch.GetMainFrame().patches.remove(patch);
+        DocumentWindowList.UnregisterWindow(this);
+        MainFrame.mainframe.qcmdprocessor.serialconnection.removeConnectionStatusListener(this);
         dispose();
     }
 
+    @Override
     public boolean AskClose() {
         if (patch.isDirty() && patch.container() == null) {
             Object[] options = {"Save",
@@ -318,20 +326,17 @@ public class PatchFrame extends javax.swing.JFrame {
         jMenuItemPresetCurrentToInit = new javax.swing.JMenuItem();
         jMenuItemDifferenceToPreset = new javax.swing.JMenuItem();
         windowMenu1 = new axoloti.menus.WindowMenu();
-        jMenuHelp = new javax.swing.JMenu();
-        jMenuHelpContents = new javax.swing.JMenuItem();
-        jMenuAbout = new javax.swing.JMenuItem();
-        helpLibraryMenu1 = new axoloti.menus.HelpLibraryMenu();
+        helpMenu1 = new axoloti.menus.HelpMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 formFocusLost(evt);
+            }
+        });
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
@@ -658,30 +663,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     jMenuBar1.add(jMenuPreset);
     jMenuBar1.add(windowMenu1);
 
-    jMenuHelp.setMnemonic('H');
-    jMenuHelp.setText("Help");
-
-    jMenuHelpContents.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-    jMenuHelpContents.setText("Help Contents");
-    jMenuHelpContents.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuHelpContentsActionPerformed(evt);
-        }
-    });
-    jMenuHelp.add(jMenuHelpContents);
-
-    jMenuAbout.setText("About...");
-    jMenuAbout.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuAboutActionPerformed(evt);
-        }
-    });
-    jMenuHelp.add(jMenuAbout);
-
-    helpLibraryMenu1.setText("Library");
-    jMenuHelp.add(helpLibraryMenu1);
-
-    jMenuBar1.add(jMenuHelp);
+    helpMenu1.setText("Help");
+    jMenuBar1.add(helpMenu1);
 
     setJMenuBar(jMenuBar1);
 
@@ -911,19 +894,6 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         patch.DifferenceToPreset();
     }//GEN-LAST:event_jMenuItemDifferenceToPresetActionPerformed
 
-    private void jMenuHelpContentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuHelpContentsActionPerformed
-        try {
-            File f = new File("doc/index.html");
-            Desktop.getDesktop().browse(f.toURI());
-        } catch (IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jMenuHelpContentsActionPerformed
-
-    private void jMenuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAboutActionPerformed
-        AboutFrame.aboutFrame.setVisible(true);
-    }//GEN-LAST:event_jMenuAboutActionPerformed
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         AskClose();
     }//GEN-LAST:event_formWindowClosing
@@ -1055,20 +1025,17 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private axoloti.menus.FavouriteMenu favouriteMenu1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
-    private axoloti.menus.HelpLibraryMenu helpLibraryMenu1;
+    private axoloti.menus.HelpMenu helpMenu1;
     private javax.swing.JCheckBox jCheckBoxLive;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemCordsInBackground;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemLive;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenuItem jMenuAbout;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuClose;
     private javax.swing.JMenuItem jMenuCompileCode;
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenuItem jMenuGenerateCode;
-    private javax.swing.JMenu jMenuHelp;
-    private javax.swing.JMenuItem jMenuHelpContents;
     private javax.swing.JMenuItem jMenuItemAddObj;
     private javax.swing.JMenuItem jMenuItemAdjScroll;
     private javax.swing.JMenuItem jMenuItemClearPreset;
@@ -1117,5 +1084,10 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             return;
         }
         jProgressBarDSPLoad.setValue(pct);
+    }
+
+    @Override
+    public JFrame GetFrame() {
+        return this;
     }
 }

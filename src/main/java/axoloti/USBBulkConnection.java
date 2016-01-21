@@ -31,6 +31,7 @@ import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -112,7 +113,7 @@ public class USBBulkConnection extends Connection {
         if (connected) {
             disconnectRequested = true;
             connected = false;
-            MainFrame.mainframe.ShowDisconnect();
+            ShowDisconnect();
             queueSerialTask.clear();
             try {
                 Thread.sleep(100);
@@ -379,12 +380,12 @@ public class USBBulkConnection extends Connection {
                 System.out.println("</signature>");
 
             }
-            MainFrame.mainframe.ShowConnect();
+            ShowConnect();
             return true;
 
         } catch (Exception ex) {
             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
-            MainFrame.mainframe.ShowDisconnect();
+            ShowDisconnect();
             return false;
         }
     }
