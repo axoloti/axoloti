@@ -18,6 +18,7 @@
 package axoloti.dialogs;
 
 import axoloti.Connection;
+import axoloti.ConnectionStatusListener;
 import axoloti.MainFrame;
 import components.PianoComponent;
 import components.control.ACtrlEvent;
@@ -27,12 +28,13 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.SpinnerNumberModel;
+import qcmds.QCmdProcessor;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class KeyboardFrame extends javax.swing.JFrame {
+public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatusListener {
 
     /**
      * Creates new form PianoFrame
@@ -43,6 +45,7 @@ public class KeyboardFrame extends javax.swing.JFrame {
 
     public KeyboardFrame() {
         initComponents();
+        QCmdProcessor.getQCmdProcessor().serialconnection.addConnectionStatusListener(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         piano = new PianoComponent() {
             @Override
@@ -182,4 +185,17 @@ public class KeyboardFrame extends javax.swing.JFrame {
     private javax.swing.JSlider jSliderVelocity;
     private javax.swing.JSpinner jSpinner1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void ShowConnect() {
+        piano.setEnabled(true);
+        pbenddial.setEnabled(true);
+    }
+
+    @Override
+    public void ShowDisconnect() {
+        piano.clear();
+        piano.setEnabled(false);
+        pbenddial.setEnabled(false);
+    }
 }
