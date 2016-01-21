@@ -1,0 +1,23 @@
+<objdefs>
+   <obj.normal id="load i" uuid="b79124f5b7d1e8b39e187677ddab6260ce8c60a3" sha="d2711c363de1e269430f64d480bbc2529532a0e2">
+      <upgradeSha>3a23008b17fa36aaedfbfb8bce9571e3e7931cdf</upgradeSha>
+      <sDescription>load a patch from sdcard, index in patch bank file</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets>
+         <int32.positive name="i" description="index"/>
+         <bool32.rising name="trig" description="trigger"/>
+      </inlets>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+      <code.declaration><![CDATA[int ntrig;
+]]></code.declaration>
+      <code.init><![CDATA[ntrig = 1;
+]]></code.init>
+      <code.krate><![CDATA[   if ((inlet_trig>0) && !ntrig) {LoadPatchIndexed(inlet_i); ntrig=1;}
+   else if (!(inlet_trig>0)) ntrig=0;
+]]></code.krate>
+   </obj.normal>
+</objdefs>

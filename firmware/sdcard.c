@@ -208,9 +208,14 @@ void sdcard_loadPatch(char *fname) {
   err = f_read(&FileObject, (uint8_t *)PATCHMAINLOC, 0xE000,
                (void *)&bytes_read);
   if (err != FR_OK) {
-    chSysHalt();
+    report_fatfs_error(err,fname);
+    return;
   }
   err = f_close(&FileObject);
+  if (err != FR_OK) {
+    report_fatfs_error(err,fname);
+    return;
+  }
   chThdSleepMilliseconds(10);
   StartPatch();
 }

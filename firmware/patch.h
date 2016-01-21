@@ -82,5 +82,6 @@ void start_dsp_thread(void);
 
 void StartLoadPatchTread(void);
 void LoadPatch(const char *name);
+void LoadPatchIndexed(uint32_t index);
 
 #endif //__PATCH_H
