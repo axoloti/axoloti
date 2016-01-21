@@ -2,6 +2,7 @@ package axoloti;
 
 import axoloti.targetprofile.axoloti_core;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import qcmds.QCmdSerialTask;
 
 /**
@@ -40,6 +41,28 @@ public abstract class Connection {
     abstract public axoloti_core getTargetProfile();
     abstract public ByteBuffer getMemReadBuffer();
     abstract public int getMemRead1Word();
+
+    private ArrayList<ConnectionStatusListener> csls = new ArrayList<ConnectionStatusListener>();
+
+    public void addConnectionStatusListener(ConnectionStatusListener csl) {
+        csls.add(csl);
+    }
+
+    public void removeConnectionStatusListener(ConnectionStatusListener csl) {
+        csls.remove(csl);
+    }
+
+    public void ShowDisconnect() {
+        for (ConnectionStatusListener csl : csls) {
+            csl.ShowDisconnect();
+        }
+    }
+
+    public void ShowConnect() {
+        for (ConnectionStatusListener csl : csls) {
+            csl.ShowConnect();
+        }
+    }
     
     @Deprecated
     abstract public void writeBytes(byte[] data);
