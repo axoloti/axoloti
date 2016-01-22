@@ -237,7 +237,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         ShowDisconnect();
 
-        boolean success = qcmdprocessor.serialconnection.connect();
+        boolean success = USBBulkConnection.GetConnection().connect();
         if (success) {
             qcmdprocessor.AppendToQueue(new QCmdStop());
             ShowConnect();
@@ -705,23 +705,23 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuItemPingActionPerformed
 
     private void jMenuItemFDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFDisconnectActionPerformed
-        qcmdprocessor.serialconnection.disconnect();
+        USBBulkConnection.GetConnection().disconnect();
     }//GEN-LAST:event_jMenuItemFDisconnectActionPerformed
 
     private void jMenuItemFConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFConnectActionPerformed
-        qcmdprocessor.serialconnection.connect();
+        USBBulkConnection.GetConnection().connect();
     }//GEN-LAST:event_jMenuItemFConnectActionPerformed
 
     private void jMenuItemSelectComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectComActionPerformed
-        qcmdprocessor.serialconnection.SelectPort();
+        USBBulkConnection.GetConnection().SelectPort();
     }//GEN-LAST:event_jMenuItemSelectComActionPerformed
 
     private void jCheckBoxConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxConnectActionPerformed
         if (!jCheckBoxConnect.isSelected()) {
-            qcmdprocessor.serialconnection.disconnect();
+            USBBulkConnection.GetConnection().disconnect();
         } else {
             qcmdprocessor.Panic();
-            boolean success = qcmdprocessor.serialconnection.connect();
+            boolean success = USBBulkConnection.GetConnection().connect();
             if (!success) {
                 //ShowDisconnect();
             } else {
@@ -800,7 +800,6 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
             patch1.setFileNamePath(f.getPath());
             patch1.PostContructor();
-            pf.UpdateConnectStatus();
             patch1.WriteCode();
             qcmdprocessor.WaitQueueFinished();
             Thread.sleep(500);
@@ -865,7 +864,6 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
             patch1.setFileNamePath(f.getPath());
             patch1.PostContructor();
-            pf.UpdateConnectStatus();
             status = patch1.save(f);
             if (status == false) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "UPGRADING FAILED: {0}", f.getPath());
@@ -1079,7 +1077,6 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
             patch1.setFileNamePath(name);
             patch1.PostContructor();
-            pf.UpdateConnectStatus();
             patch1.setFileNamePath(name);
             pf.setVisible(true);
         } catch (Exception ex) {
@@ -1094,7 +1091,6 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
             patch1.setFileNamePath(f.getAbsolutePath());
             patch1.PostContructor();
-            pf.UpdateConnectStatus();
             patch1.setFileNamePath(f.getPath());
             pf.setVisible(true);
             MainFrame.prefs.addRecentFile(f.getAbsolutePath());
@@ -1183,8 +1179,8 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
         jMenuItemEnterDFU.setEnabled(connect);
         jMenuItemMount.setEnabled(connect);
-        jMenuItemFlashDefault.setEnabled(connect && qcmdprocessor.serialconnection.getTargetProfile().hasSDRAM());
-        jMenuItemFlashSDR.setEnabled(connect && qcmdprocessor.serialconnection.getTargetProfile().hasSDRAM());
+        jMenuItemFlashDefault.setEnabled(connect && USBBulkConnection.GetConnection().getTargetProfile().hasSDRAM());
+        jMenuItemFlashSDR.setEnabled(connect && USBBulkConnection.GetConnection().getTargetProfile().hasSDRAM());
 
         if (!connect) {
             setCpuID(null);

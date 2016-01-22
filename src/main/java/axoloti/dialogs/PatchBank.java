@@ -21,6 +21,7 @@ import axoloti.ConnectionStatusListener;
 import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
 import axoloti.MainFrame;
+import axoloti.USBBulkConnection;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,7 +56,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         DocumentWindowList.RegisterWindow(this);
-        QCmdProcessor.getQCmdProcessor().serialconnection.addConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         for (int i = 0; i < 128; i++) {
             model.addRow(new Object[]{i, ""});
@@ -226,7 +227,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
-        QCmdProcessor.getQCmdProcessor().serialconnection.removeConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
         dispose();
     }
 
@@ -385,7 +386,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
     private void jButtonUploadBankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadBankActionPerformed
         QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-        if (processor.serialconnection != null) {
+        if (USBBulkConnection.GetConnection().isConnected()) {
             processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "index.axb"));
         }
     }//GEN-LAST:event_jButtonUploadBankActionPerformed

@@ -21,6 +21,7 @@ import axoloti.ConnectionStatusListener;
 import axoloti.DocumentWindowList;
 import axoloti.MainFrame;
 import static axoloti.MainFrame.prefs;
+import axoloti.USBBulkConnection;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
@@ -50,7 +51,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
      */
     public FileManagerFrame() {
         initComponents();
-        QCmdProcessor.getQCmdProcessor().serialconnection.addConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jLabelSDInfo.setText("");
         jFileTable.setDropTarget(new DropTarget() {
@@ -60,7 +61,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                     evt.acceptDrop(DnDConstants.ACTION_COPY);
                     List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                     QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-                    if (processor.serialconnection != null) {
+                    if (USBBulkConnection.GetConnection().isConnected()) {
                         for (File f : droppedFiles) {
                             System.out.println(f.getName());
                             if (!f.canRead()) {
@@ -190,10 +191,9 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     }// </editor-fold>//GEN-END:initComponents
 
     void RequestRefresh() {
-        QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-        if (processor.serialconnection != null) {
-            processor.serialconnection.TransmitStop();
-            processor.serialconnection.TransmitGetFileList();
+        if (USBBulkConnection.GetConnection().isConnected()) {
+            USBBulkConnection.GetConnection().TransmitStop();
+            USBBulkConnection.GetConnection().TransmitGetFileList();
         }
     }
 
@@ -203,7 +203,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
         QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-        if (processor.serialconnection != null) {
+        if (USBBulkConnection.GetConnection().isConnected()) {
             final JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
             int returnVal = fc.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -229,7 +229,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     }//GEN-LAST:event_formWindowActivated
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        QCmdProcessor.getQCmdProcessor().serialconnection.removeConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
     }//GEN-LAST:event_formWindowClosing
     
     public void ShowSDInfo(int clusters, int clustersize, int sectorsize) {

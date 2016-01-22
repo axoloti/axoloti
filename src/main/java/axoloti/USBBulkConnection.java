@@ -31,7 +31,6 @@ import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -56,28 +55,23 @@ import qcmds.QCmdWriteMem;
 public class USBBulkConnection extends Connection {
 
     private Patch patch;
-    boolean disconnectRequested;
-    boolean connected;
-    Thread transmitterThread;
-    Thread receiverThread;
-    BlockingQueue<QCmdSerialTask> queueSerialTask;
-    private final BlockingQueue<QCmd> queueResponse;
-    String cpuid;
+    private boolean disconnectRequested;
+    private boolean connected;
+    private Thread transmitterThread;
+    private Thread receiverThread;
+    private final BlockingQueue<QCmdSerialTask> queueSerialTask;
+    private String cpuid;
     private axoloti_core targetProfile;
     private final Context context;
     private DeviceHandle handle;
-    private Device device;
-    private String devicePath;
-
     private final short bulkVID = (short) 0x16C0;
     private final short bulkPID = (short) 0x0442;
     private final int interfaceNumber = 2;
 
-    public USBBulkConnection(Patch patch, BlockingQueue<QCmd> queueResponse) {
+    protected USBBulkConnection() {
         this.sync = new Sync();
         this.readsync = new Sync();
-        this.patch = patch;
-        this.queueResponse = queueResponse;
+        this.patch = null;
         disconnectRequested = false;
         connected = false;
         queueSerialTask = new ArrayBlockingQueue<QCmdSerialTask>(10);
@@ -150,7 +144,6 @@ public class USBBulkConnection extends Connection {
             }
 
             LibUsb.close(handle);
-            devicePath = null;
             handle = null;
             CpuId0 = 0;
             CpuId1 = 0;
@@ -435,15 +428,17 @@ public class USBBulkConnection extends Connection {
 
     @Override
     public void SendMidi(int m0, int m1, int m2) {
-        byte[] data = new byte[7];
-        data[0] = 'A';
-        data[1] = 'x';
-        data[2] = 'o';
-        data[3] = 'M';
-        data[4] = (byte) m0;
-        data[5] = (byte) m1;
-        data[6] = (byte) m2;
-        writeBytes(data);
+        if (isConnected()) {
+            byte[] data = new byte[7];
+            data[0] = 'A';
+            data[1] = 'x';
+            data[2] = 'o';
+            data[3] = 'M';
+            data[4] = (byte) m0;
+            data[5] = (byte) m1;
+            data[6] = (byte) m2;
+            writeBytes(data);
+        }
     }
 
     @Override
@@ -473,6 +468,15 @@ public class USBBulkConnection extends Connection {
         } else {
             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: {0} name: {1}", new Object[]{cpuid, name});
         }
+    }
+
+    static private USBBulkConnection conn = null;
+
+    public static Connection GetConnection() {
+        if (conn == null) {
+            conn = new USBBulkConnection();
+        }
+        return conn;
     }
 
     class Sync {
@@ -732,7 +736,7 @@ public class USBBulkConnection extends Connection {
                     QCmdSerialTask cmd = queueSerialTask.take();
                     QCmd response = cmd.Do(USBBulkConnection.this);
                     if (response != null) {
-                        queueResponse.add(response);
+                        QCmdProcessor.getQCmdProcessor().getQueueResponse().add(response);
                     }
                 } catch (InterruptedException ex) {
                     Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);

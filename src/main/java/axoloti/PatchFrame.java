@@ -72,7 +72,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         this.patch = patch;
         this.patch.patchframe = this;
         DocumentWindowList.RegisterWindow(this);
-        MainFrame.mainframe.qcmdprocessor.serialconnection.addConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
         
         jToolbarPanel.add(new components.PresetPanel(patch));
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
@@ -149,7 +149,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             }
         });
 
-        UpdateConnectStatus();
         if (patch.getWindowPos() != null) {
             setBounds(patch.getWindowPos());
         } else {
@@ -180,14 +179,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
          patch.invalidate();*/
     }
     QCmdProcessor qcmdprocessor;
-
-    public final void UpdateConnectStatus() {
-        if (qcmdprocessor.serialconnection.isConnected()) {
-            ShowConnect();
-        } else {
-            ShowDisconnect();
-        }
-    }
 
     public void SetLive(boolean b) {
         if (b) {
@@ -230,7 +221,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
-        MainFrame.mainframe.qcmdprocessor.serialconnection.removeConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
         dispose();
     }
 
