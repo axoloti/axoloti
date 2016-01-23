@@ -363,6 +363,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                     pin.CopyValueFrom(pinp);
                 }
             }
+            pin.PostConstructor();
             pin.setAlignmentX(RIGHT_ALIGNMENT);
             pin.doLayout();
             parameterInstances.add(pin);
