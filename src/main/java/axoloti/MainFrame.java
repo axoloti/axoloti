@@ -28,6 +28,8 @@ import axoloti.dialogs.KeyboardFrame;
 import axoloti.dialogs.PreferencesFrame;
 import axoloti.object.AxoObjects;
 import axoloti.usb.Usb;
+import axoloti.utils.AxoGitLibrary;
+import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.FirmwareID;
 import axoloti.utils.Preferences;
 import generatedobjects.GeneratedObjects;
@@ -337,6 +339,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         recentFileMenu1 = new axoloti.menus.RecentFileMenu();
         libraryMenu1 = new axoloti.menus.LibraryMenu();
         favouriteMenu1 = new axoloti.menus.FavouriteMenu();
+        jMenuSync = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuReloadObjects = new javax.swing.JMenuItem();
         jMenuRegenerateObjects = new javax.swing.JMenuItem();
@@ -483,6 +486,14 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
 
     favouriteMenu1.setText("Favorites");
     jMenuFile.add(favouriteMenu1);
+
+    jMenuSync.setText("Sync Libraries");
+    jMenuSync.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuSyncActionPerformed(evt);
+        }
+    });
+    jMenuFile.add(jMenuSync);
     jMenuFile.add(jSeparator2);
 
     jMenuReloadObjects.setText("Reload Objects");
@@ -1043,6 +1054,15 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         NewPatch();
     }//GEN-LAST:event_jMenuNewPatchActionPerformed
 
+    private void jMenuSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSyncActionPerformed
+        for(AxolotiLibrary lib : prefs.getLibraries()) {
+            if(lib.getEnabled() && lib.getType().equalsIgnoreCase("git")) {
+                AxoGitLibrary glib = new AxoGitLibrary(lib);
+                glib.sync();
+            }
+        }
+    }//GEN-LAST:event_jMenuSyncActionPerformed
+
     public void NewPatch() {
         PatchGUI patch1 = new PatchGUI();
         PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
@@ -1190,6 +1210,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuQuit;
     private javax.swing.JMenuItem jMenuRegenerateObjects;
     private javax.swing.JMenuItem jMenuReloadObjects;
+    private javax.swing.JMenuItem jMenuSync;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelProgress;
     private javax.swing.JProgressBar jProgressBar1;
