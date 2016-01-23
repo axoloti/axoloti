@@ -73,7 +73,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         this.patch.patchframe = this;
         DocumentWindowList.RegisterWindow(this);
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
-        
+
         jToolbarPanel.add(new components.PresetPanel(patch));
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
         jScrollPane1.setViewportView(patch.Layers);
@@ -168,6 +168,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuPreset.setVisible(false);
         jMenuItemAdjScroll.setVisible(false);
         patch.Layers.requestFocus();
+        if (USBBulkConnection.GetConnection().isConnected()) {
+            ShowConnect();
+        }
 
         //        jScrollPane1.setAutoscrolls(true);
         /*
