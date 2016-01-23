@@ -263,12 +263,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         JPanel p_iolets = new JPanel();
         p_iolets.setLayout(new BoxLayout(p_iolets, BoxLayout.LINE_AXIS));
         p_iolets.setAlignmentX(LEFT_ALIGNMENT);
+        p_iolets.setAlignmentY(TOP_ALIGNMENT);
         JPanel p_inlets = new JPanel();
         p_inlets.setLayout(new BoxLayout(p_inlets, BoxLayout.PAGE_AXIS));
         p_inlets.setAlignmentX(LEFT_ALIGNMENT);
+        p_inlets.setAlignmentY(TOP_ALIGNMENT);
         JPanel p_outlets = new JPanel();
         p_outlets.setLayout(new BoxLayout(p_outlets, BoxLayout.PAGE_AXIS));
         p_outlets.setAlignmentX(RIGHT_ALIGNMENT);
+        p_outlets.setAlignmentY(TOP_ALIGNMENT);
         p_params = new JPanel();
         if (getType().getRotatedParams()) {
             p_params.setLayout(new BoxLayout(p_params, BoxLayout.LINE_AXIS));
@@ -340,12 +343,13 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 //        p_iolets.setBackground(Color.red);
 
         for (AxoAttribute p : getType().attributes) {
-            AttributeInstance attri = p.CreateInstance(this);
+            AttributeInstance attrp1 = null;
             for (AttributeInstance attrp : pAttributeInstances) {
-                if (attrp.getName().equals(attri.getName())) {
-                    attri.CopyValueFrom(attrp);
+                if (attrp.getName().equals(p.getName())) {
+                    attrp1 = attrp;
                 }
             }
+            AttributeInstance attri = p.CreateInstance(this, attrp1);
             attri.setAlignmentX(LEFT_ALIGNMENT);
             add(attri);
             attri.doLayout();
@@ -359,6 +363,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                     pin.CopyValueFrom(pinp);
                 }
             }
+            pin.PostConstructor();
             pin.setAlignmentX(RIGHT_ALIGNMENT);
             pin.doLayout();
             parameterInstances.add(pin);

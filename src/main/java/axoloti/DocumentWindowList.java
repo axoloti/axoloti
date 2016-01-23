@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,27 +15,27 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package qcmds;
+package axoloti;
 
-import axoloti.MainFrame;
+import java.util.ArrayList;
 
 /**
  *
- * @author Johannes Taelman
+ * @author jtaelman
  */
-public class QCmdShowDisconnect implements QCmdGUITask {
+public class DocumentWindowList {
 
-    @Override
-    public String GetStartMessage() {
-        return null;
+    static ArrayList<DocumentWindow> list = new ArrayList<DocumentWindow>();
+
+    static public void RegisterWindow(DocumentWindow w) {
+        list.add(w);
     }
 
-    @Override
-    public String GetDoneMessage() {
-        return null;
+    static public void UnregisterWindow(DocumentWindow w) {
+        list.remove(w);
     }
 
-    public void DoGUI(QCmdProcessor processor) {
-        processor.serialconnection.ShowDisconnect();
+    static public ArrayList<DocumentWindow> GetList() {
+        return list;
     }
 }

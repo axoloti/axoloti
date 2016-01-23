@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="save" uuid="3e4108b607d56d9e1cd10abb898b58eea11e53b2" sha="ae643a04d0280e9d406bdc5cd21fb1d07723666d">
-      <upgradeSha>a722ebfda4ff4eac184af7cba9f84968d501a6bc</upgradeSha>
+   <obj.normal id="save" uuid="3e4108b607d56d9e1cd10abb898b58eea11e53b2" sha="a6a78fc95ca516080b6ec10207c0a6c8dc1e6a9a">
+      <upgradeSha>579c72fcc946028f7555dc0b640488b8489bdae0</upgradeSha>
       <sDescription>save table to sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -31,7 +31,7 @@
     FRESULT err;
     UINT bytes_written;
     err = f_open(&FileObject, inlet_filename, FA_WRITE | FA_CREATE_ALWAYS);
-    if (err != FR_OK) LogTextMessage("Open failed\n");
+    if (err != FR_OK) {report_fatfs_error(err,"inlet_filename"); return;}
     int rem_sz = sizeof(*attr_table.array)*attr_table.LENGTH;
     int offset = 0;
     while (rem_sz>0) {
@@ -45,9 +45,9 @@
         err = f_write(&FileObject, fbuff, rem_sz, &bytes_written);
         rem_sz = 0;
       }
-    }    if (err != FR_OK) LogTextMessage("Write failed\n");
+    }    if (err != FR_OK) report_fatfs_error(err,"inlet_filename");
     err = f_close(&FileObject);
-    if (err != FR_OK) LogTextMessage("Close failed\n");
+    if (err != FR_OK) report_fatfs_error(err,"inlet_filename");
   }
   else if (!(inlet_trig>0)) ntrig=0;
 ]]></code.krate>

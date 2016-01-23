@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="alloc 16b sdram load" uuid="e6b85dad3ab43565cda93ea4c43c73b668b1cd43" sha="df6d33403cce836d86f550d90d32db835b87c4f2">
-      <upgradeSha>60f3899b65671828e2cd32b3660e348af105674d</upgradeSha>
+   <obj.normal id="alloc 16b sdram load" uuid="e6b85dad3ab43565cda93ea4c43c73b668b1cd43" sha="4554392af3637f13826cd71eb68668d9acdec66d">
+      <upgradeSha>24b1d447e8f1b1e1f87d7928cf851c60d7879824</upgradeSha>
       <sDescription>allocate 16bit table in SDRAM memory, -128.00 .. 127.99</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -80,7 +80,7 @@ FIL FileObject;
 FRESULT err;
 UINT bytes_read;
 err = f_open(&FileObject, "attr_filename", FA_READ | FA_OPEN_EXISTING);
-if (err != FR_OK) {LogTextMessage("Open failed\n"); return;}
+if (err != FR_OK) {report_fatfs_error(err,"attr_filename"); return;}
 int rem_sz = sizeof(_array[0]);
 int offset = 0;
 while (rem_sz>0) {

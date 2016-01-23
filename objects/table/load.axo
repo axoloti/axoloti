@@ -1,6 +1,6 @@
 <objdefs>
-   <obj.normal id="load" uuid="9acc3f4565f8074e16f3520d0e4817c9c60a963e" sha="efd09536a65a5b9f2e1765e4d7dab9d24a29aef8">
-      <upgradeSha>3e3f6c57105be73d74299351d14de67519d585c5</upgradeSha>
+   <obj.normal id="load" uuid="600cc22c6734d23a82620da1a14e78782a7e168e" sha="1dd619384c568b5f9651bd5690af9f3bcf6ec7c0">
+      <upgradeSha>d9220dffa4b03b49a97727d904d4dbbb4684c45d</upgradeSha>
       <sDescription>load table from sdcard</sDescription>
       <author>Johannes Taelman</author>
       <license>BSD</license>
@@ -9,9 +9,7 @@
          <charptr32 name="filename" description="file name"/>
          <bool32.rising name="trig" description="trigger"/>
       </inlets>
-      <outlets>
-         <int32 name="bw" description="bw"/>
-      </outlets>
+      <outlets/>
       <displays/>
       <params/>
       <attribs>
@@ -24,10 +22,8 @@
          <depend>fatfs</depend>
       </depends>
       <code.declaration><![CDATA[  int ntrig;
-   int _bw;
 ]]></code.declaration>
       <code.init><![CDATA[  ntrig = 0;
-_bw = 0;
 ]]></code.init>
       <code.krate><![CDATA[  if ((inlet_trig>0) && !ntrig) {
     ntrig=1;
@@ -35,7 +31,7 @@ _bw = 0;
     FRESULT err;
     UINT bytes_read;
     err = f_open(&FileObject, inlet_filename, FA_READ | FA_OPEN_EXISTING);
-    if (err != FR_OK) {LogTextMessage("Open failed\n"); _bw = err; return;}
+    if (err != FR_OK) { report_fatfs_error(err,"inlet_filename"); return;}
     int rem_sz = sizeof(*attr_table.array)*attr_table.LENGTH;
     int offset = 0;
     while (rem_sz>0) {
@@ -50,12 +46,11 @@ _bw = 0;
         memcpy((char *)(&attr_table.array[0]) + offset,(char *)fbuff,bytes_read);
         rem_sz = 0;
       }
-    }    if (err != FR_OK) {LogTextMessage("Read failed\n"); _bw = err; return;};
+    }    if (err != FR_OK) { report_fatfs_error(err,"inlet_filename"); return;};
     err = f_close(&FileObject);
-    if (err != FR_OK) {LogTextMessage("Close failed\n");_bw = err; return;};
+    if (err != FR_OK) { report_fatfs_error(err,"inlet_filename"); return;};
   }
   else if (!(inlet_trig>0)) ntrig=0;
-outlet_bw = _bw;
 ]]></code.krate>
    </obj.normal>
 </objdefs>

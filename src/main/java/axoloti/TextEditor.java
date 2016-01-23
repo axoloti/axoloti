@@ -19,6 +19,7 @@ package axoloti;
 
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import org.fife.ui.rtextarea.*;
 import org.fife.ui.rsyntaxtextarea.*;
 
@@ -26,23 +27,26 @@ import org.fife.ui.rsyntaxtextarea.*;
  *
  * @author Johannes Taelman
  */
-public class TextEditor extends javax.swing.JFrame {
+public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
 
     StringRef s;
     RSyntaxTextArea textArea;
+
     /**
      * Creates new form TextEditor
+     *
      * @param s initial string
      */
     public TextEditor(StringRef s) {
         initComponents();
+        DocumentWindowList.RegisterWindow(this);
         this.s = s;
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
         textArea.setCodeFoldingEnabled(true);
         RTextScrollPane sp = new RTextScrollPane(textArea);
         cp.setLayout(new BorderLayout());
-        cp.add(sp);      
+        cp.add(sp);
         textArea.setVisible(true);
         setContentPane(cp);
         textArea.setText(s.s);
@@ -55,6 +59,11 @@ public class TextEditor extends javax.swing.JFrame {
 
     public String GetText() {
         return textArea.getText();
+    }
+
+    public void Close() {
+        DocumentWindowList.UnregisterWindow(this);
+        dispose();
     }
 
     /**
@@ -111,4 +120,14 @@ public class TextEditor extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cp;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public JFrame GetFrame() {
+        return this;
+    }
+
+    public boolean AskClose() {
+        Close();
+        return false; //TBC
+    }
 }

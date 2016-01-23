@@ -165,6 +165,8 @@ void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t status,
 
 // Thread to load a new patch from within a patch
 
+static const char *index_fn = "0:index.axb";
+
 static char loadFName[16];
 static WORKING_AREA(waThreadLoader, 1024);
 static Thread *pThreadLoader;
@@ -176,18 +178,72 @@ static msg_t ThreadLoader(void *arg) {
   while (1) {
     chEvtWaitOne((eventmask_t)1);
     StopPatch();
-    sdcard_loadPatch(loadFName);
+    if (loadFName[0])
+      sdcard_loadPatch(loadFName);
+    else {
+      FRESULT err;
+      FIL f;
+      uint32_t bytes_read;
+      uint32_t index = *(uint32_t *)(&loadFName[4]);
+      err = f_open(&f,index_fn,FA_READ | FA_OPEN_EXISTING);
+      if (err) report_fatfs_error(err,index_fn);
+      err = f_read(&f, (uint8_t *)PATCHMAINLOC, 0xE000,
+                   (void *)&bytes_read);
+      if (err != FR_OK) {
+        report_fatfs_error(err,index_fn);
+        continue;
+      }
+      err = f_close(&f);
+      if (err != FR_OK) {
+        report_fatfs_error(err,index_fn);
+        continue;
+      }
+      char *t;
+      t = (char *)PATCHMAINLOC;
+      uint32_t cindex = 0;
+
+      //LogTextMessage("load %d %d %x",index, bytes_read, t);
+      while (bytes_read) {
+        //LogTextMessage("scan %d",*t);
+        if (cindex == index) {
+          //LogTextMessage("match %d",index);
+          char *p, *e;
+          p = t; e = t;
+          while((*e != '\n') && bytes_read){
+            e++;
+            bytes_read--;
+          }
+          if (bytes_read) {
+            *e = 0;
+            sdcard_loadPatch(p);
+          }
+          goto cont;
+        }
+        if (*t == '\n'){
+          cindex++;
+        }
+        t++;
+        bytes_read--;
+      }
+cont:
+      ;
+    }
   }
   return (msg_t)0;
 }
 
 void StartLoadPatchTread(void) {
   pThreadLoader = chThdCreateStatic(waThreadLoader, sizeof(waThreadLoader),
-  NORMALPRIO,
-                                    ThreadLoader, NULL);
+  NORMALPRIO, ThreadLoader, NULL);
 }
 
 void LoadPatch(const char *name) {
   strcpy(loadFName, name);
+  chEvtSignal(pThreadLoader, (eventmask_t)1);
+}
+
+void LoadPatchIndexed(uint32_t index) {
+  loadFName[0] = 0;
+  *(uint32_t *)(&loadFName[4]) = index;
   chEvtSignal(pThreadLoader, (eventmask_t)1);
 }

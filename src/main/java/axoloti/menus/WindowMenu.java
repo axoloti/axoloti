@@ -17,8 +17,9 @@
  */
 package axoloti.menus;
 
+import axoloti.DocumentWindow;
+import axoloti.DocumentWindowList;
 import axoloti.MainFrame;
-import axoloti.Patch;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JCheckBoxMenuItem;
@@ -120,9 +121,10 @@ public class WindowMenu extends JMenu {
         }
 
         jMenuWindow.add(new JSeparator());
-        for (Patch p : MainFrame.mainframe.getPatches()) {
-            JFrame frame = p.getPatchframe();
+        for (DocumentWindow p : DocumentWindowList.GetList()) {
+            JFrame frame = p.GetFrame();
             jMenuWindow.add(new WindowMenuItem(frame));
         }
     }
+
 }

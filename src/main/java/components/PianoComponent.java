@@ -96,6 +96,13 @@ public abstract class PianoComponent extends JComponent {
 
     public abstract void KeyDown(int key);
 
+    public void clear() {
+        for (int i=0;i<selection.length;i++) {
+            selection[i] = false;
+        }
+        repaint();
+    }
+
     private int keyToX(int i) {
         return (28 * (i / 12) + keyx[i % 12]) * quarterKeyWidth;
     }
@@ -116,13 +123,21 @@ public abstract class PianoComponent extends JComponent {
                     // selected
                     g2.setColor(Color.gray);
                     g2.fillRect(x, 0, 2 * KeyWidth, height);
-                    g2.setColor(Color.black);
+                    if (isEnabled()) {
+                        g2.setColor(Color.black);
+                    } else {
+                        g2.setColor(Color.gray);
+                    }
                     g2.drawRect(x, 0, 2 * KeyWidth, height);
                 } else {
                     // not selected
                     g2.setColor(Color.white);
                     g2.fillRect(x, 0, 2 * KeyWidth, height);
-                    g2.setColor(Color.black);
+                    if (isEnabled()) {
+                        g2.setColor(Color.black);
+                    } else {
+                        g2.setColor(Color.gray);
+                    }
                     g2.drawRect(x, 0, 2 * KeyWidth, height);
                 }
             }
@@ -135,10 +150,18 @@ public abstract class PianoComponent extends JComponent {
                 if (selection[i]) {
                     g2.setColor(Color.gray);
                     g2.fillRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
-                    g2.setColor(Color.black);
+                    if (isEnabled()) {
+                        g2.setColor(Color.black);
+                    } else {
+                        g2.setColor(Color.gray);
+                    }
                     g2.drawRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
                 } else {
-                    g2.setColor(Color.black);
+                    if (isEnabled()) {
+                        g2.setColor(Color.black);
+                    } else {
+                        g2.setColor(Color.gray);
+                    }
                     g2.fillRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
                     g2.drawRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
                 }
@@ -169,6 +192,9 @@ public abstract class PianoComponent extends JComponent {
     }
 
     int HitTest(int x, int y) {
+        if (!isEnabled()) {
+            return -1;
+        }
         int o = 12 * (x / (28 * quarterKeyWidth));
         int oe = o + 12;
         if (oe > 128) {

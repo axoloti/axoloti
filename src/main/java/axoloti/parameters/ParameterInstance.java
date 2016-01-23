@@ -64,7 +64,6 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     ArrayList<Preset> presets;
     protected boolean needsTransmit = false;
     AxoObjectInstance axoObj;
-//    JLabel lbl;
     LabelComponent valuelbl = new LabelComponent("123456789");
     NativeToReal convs[];
     int selectedConv = 0;

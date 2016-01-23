@@ -17,14 +17,19 @@
  */
 package axoloti.dialogs;
 
+import axoloti.ConnectionStatusListener;
+import axoloti.DocumentWindowList;
 import axoloti.MainFrame;
 import static axoloti.MainFrame.prefs;
+import axoloti.USBBulkConnection;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -39,13 +44,14 @@ import qcmds.QCmdUploadFile;
  *
  * @author Johannes Taelman
  */
-public class FileManagerFrame extends javax.swing.JFrame {
+public class FileManagerFrame extends javax.swing.JFrame implements ConnectionStatusListener {
 
     /**
      * Creates new form FileManagerFrame
      */
     public FileManagerFrame() {
         initComponents();
+        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jLabelSDInfo.setText("");
         jFileTable.setDropTarget(new DropTarget() {
@@ -55,10 +61,14 @@ public class FileManagerFrame extends javax.swing.JFrame {
                     evt.acceptDrop(DnDConstants.ACTION_COPY);
                     List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                     QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-                    if (processor.serialconnection != null) {
+                    if (USBBulkConnection.GetConnection().isConnected()) {
                         for (File f : droppedFiles) {
                             System.out.println(f.getName());
-                            processor.AppendToQueue(new QCmdUploadFile(f, f.getName()));
+                            if (!f.canRead()) {
+                                Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, "Can't read file");
+                            } else {
+                                processor.AppendToQueue(new QCmdUploadFile(new FileInputStream(f), f.getName()));
+                            }
                         }
                         RequestRefresh();
                     }
@@ -85,10 +95,17 @@ public class FileManagerFrame extends javax.swing.JFrame {
         jButton1Refresh = new javax.swing.JButton();
         jLabelSDInfo = new javax.swing.JLabel();
         jButtonUpload = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        windowMenu1 = new axoloti.menus.WindowMenu();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
 
@@ -137,6 +154,15 @@ public class FileManagerFrame extends javax.swing.JFrame {
             }
         });
 
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(windowMenu1);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -158,17 +184,16 @@ public class FileManagerFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelSDInfo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     void RequestRefresh() {
-        QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-        if (processor.serialconnection != null) {
-            processor.serialconnection.TransmitStop();
-            processor.serialconnection.TransmitGetFileList();
+        if (USBBulkConnection.GetConnection().isConnected()) {
+            USBBulkConnection.GetConnection().TransmitStop();
+            USBBulkConnection.GetConnection().TransmitGetFileList();
         }
     }
 
@@ -178,23 +203,35 @@ public class FileManagerFrame extends javax.swing.JFrame {
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
         QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-        if (processor.serialconnection != null) {
+        if (USBBulkConnection.GetConnection().isConnected()) {
             final JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
             int returnVal = fc.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 prefs.setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
                 File f = fc.getSelectedFile();
                 if (f != null) {
-                    processor.AppendToQueue(new QCmdUploadFile(f, f.getName()));
+                    if (!f.canRead()) {
+                        Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, "Can't read file");
+                        return;
+                    }
+                    try {
+                        processor.AppendToQueue(new QCmdUploadFile(new FileInputStream(f), f.getName()));
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }
     }//GEN-LAST:event_jButtonUploadActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        RequestRefresh();
+        // RequestRefresh();
     }//GEN-LAST:event_formWindowActivated
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
+    }//GEN-LAST:event_formWindowClosing
+    
     public void ShowSDInfo(int clusters, int clustersize, int sectorsize) {
         jLabelSDInfo.setText("Free : " + ((long) clusters * (long) clustersize * (long) sectorsize / (1024 * 1024)) + "MB, Cluster size = " + clustersize * sectorsize);
         DefaultTableModel model = (DefaultTableModel) jFileTable.getModel();
@@ -204,7 +241,7 @@ public class FileManagerFrame extends javax.swing.JFrame {
             rows--;
         }
     }
-
+    
     public void AddFile(String fname, int size) {
         DefaultTableModel model = (DefaultTableModel) jFileTable.getModel();
         int i = fname.lastIndexOf('.');
@@ -231,6 +268,26 @@ public class FileManagerFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButtonUpload;
     private javax.swing.JTable jFileTable;
     private javax.swing.JLabel jLabelSDInfo;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private axoloti.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void ShowConnect() {
+        jButton1Refresh.setEnabled(true);
+        jButtonUpload.setEnabled(true);
+        jFileTable.setEnabled(true);
+        jLabelSDInfo.setText("");
+    }
+    
+    @Override
+    public void ShowDisconnect() {
+        jButton1Refresh.setEnabled(false);
+        jButtonUpload.setEnabled(false);
+        jFileTable.setEnabled(false);
+        jLabelSDInfo.setText("");
+    }
 }

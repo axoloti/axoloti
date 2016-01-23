@@ -26,6 +26,7 @@ import axoloti.inlets.InletCharPtr32;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInt32;
+import axoloti.inlets.InletInt32Pos;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectComment;
@@ -69,6 +70,7 @@ public class Patch extends gentools {
         WriteAxoObject(catName, Create_recvi());
         WriteAxoObject(catName, Create_recvb());
         WriteAxoObject(catName, CreateLoadPatch());
+        WriteAxoObject(catName, CreateLoadPatchIndexed());
         WriteAxoObject(catName, CreateLoadPatchFn());
 //        WriteAxoObject("patch", CreateInitMsg());
         WriteAxoObject(catName, CreatePolyIndex());
@@ -275,6 +277,17 @@ public class Patch extends gentools {
         return o;
     }
 
+    static AxoObject CreateLoadPatchIndexed() {
+        AxoObject o = new AxoObject("load i", "load a patch from sdcard, index in patch bank file");
+        o.inlets.add(new InletInt32Pos("i", "index"));
+        o.inlets.add(new InletBool32Rising("trig", "trigger"));
+        o.sLocalData = "int ntrig;\n";
+        o.sInitCode = "ntrig = 1;\n";
+        o.sKRateCode = "   if ((%trig%>0) && !ntrig) {LoadPatchIndexed(inlet_i); ntrig=1;}\n"
+                + "   else if (!(%trig%>0)) ntrig=0;\n";
+        return o;
+    }    
+    
     static AxoObject CreateLoadPatchFn() {
         AxoObject o = new AxoObject("load fn", "load a patch from sdcard");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));

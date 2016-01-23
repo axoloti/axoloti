@@ -25,6 +25,7 @@
 #include "ff.h"
 #include "midi.h"
 #include "crc32.h"
+#include "exceptions.h"
 
 typedef void (*fptr_patch_init_t)(int32_t fwID);
 typedef void (*fptr_patch_dispose_t)(void);
@@ -81,5 +82,6 @@ void start_dsp_thread(void);
 
 void StartLoadPatchTread(void);
 void LoadPatch(const char *name);
+void LoadPatchIndexed(uint32_t index);
 
 #endif //__PATCH_H

@@ -17,8 +17,8 @@
  */
 package axoloti.dialogs;
 
-import axoloti.Connection;
-import axoloti.MainFrame;
+import axoloti.ConnectionStatusListener;
+import axoloti.USBBulkConnection;
 import components.PianoComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
@@ -32,7 +32,7 @@ import javax.swing.SpinnerNumberModel;
  *
  * @author Johannes Taelman
  */
-public class KeyboardFrame extends javax.swing.JFrame {
+public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatusListener {
 
     /**
      * Creates new form PianoFrame
@@ -43,22 +43,17 @@ public class KeyboardFrame extends javax.swing.JFrame {
 
     public KeyboardFrame() {
         initComponents();
+        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         piano = new PianoComponent() {
             @Override
             public void KeyDown(int key) {
-                Connection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
-                if ((connection != null) && connection.isConnected()) {
-                    connection.SendMidi(0x90 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, jSliderVelocity.getValue());
-                }
+                USBBulkConnection.GetConnection().SendMidi(0x90 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, jSliderVelocity.getValue());
             }
 
             @Override
             public void KeyUp(int key) {
-                Connection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
-                if ((connection != null) && connection.isConnected()) {
-                    connection.SendMidi(0x80 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, 80);
-                }
+                USBBulkConnection.GetConnection().SendMidi(0x80 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, 80);
             }
 
         };
@@ -73,10 +68,7 @@ public class KeyboardFrame extends javax.swing.JFrame {
         pbenddial.addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
-                Connection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
-                if ((connection != null) && connection.isConnected()) {
-                    connection.SendMidi(0xE0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
-                }
+                USBBulkConnection.GetConnection().SendMidi(0xE0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
             }
         });
         jPanel1.add(new JLabel("bend"));
@@ -163,10 +155,8 @@ public class KeyboardFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAllNotesOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAllNotesOffActionPerformed
-        Connection connection = MainFrame.mainframe.getQcmdprocessor().serialconnection;
-        if ((connection != null) && connection.isConnected()) {
-            connection.SendMidi(0xB0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0x7B, 80);
-        }
+        USBBulkConnection.GetConnection().SendMidi(0xB0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0x7B, 80);
+        piano.clear();
     }//GEN-LAST:event_jButtonAllNotesOffActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -182,4 +172,18 @@ public class KeyboardFrame extends javax.swing.JFrame {
     private javax.swing.JSlider jSliderVelocity;
     private javax.swing.JSpinner jSpinner1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void ShowConnect() {
+        piano.clear();
+        piano.setEnabled(true);
+        pbenddial.setEnabled(true);
+    }
+
+    @Override
+    public void ShowDisconnect() {
+        piano.clear();
+        piano.setEnabled(false);
+        pbenddial.setEnabled(false);
+    }
 }
