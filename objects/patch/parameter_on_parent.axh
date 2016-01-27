@@ -1,0 +1,80 @@
+<patch-1.0>
+   <comment type="patch/comment" x="14" y="14" text="shows how the parameter-on-parent works"/>
+   <patcher type="patch/patcher" sha="da39a3ee5e6b4b0d3255bfef95601890afd80709" uuid="a245c220448000c901caef03c8b07740d533914a" name="patcher_1" x="14" y="42">
+      <params>
+         <frac32.u.map name="c2" value="2.0"/>
+      </params>
+      <attribs/>
+      <subpatch>
+         <comment type="patch/comment" x="14" y="14" text="normal"/>
+         <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1" x="14" y="42">
+            <params>
+               <frac32.u.map name="value" value="1.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="patch/outlet f" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="one" x="182" y="42">
+            <params/>
+            <attribs/>
+         </obj>
+         <comment type="patch/comment" x="14" y="140" text="control on parent"/>
+         <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="14" y="168">
+            <params>
+               <frac32.u.map name="value" onParent="true" value="2.0"/>
+            </params>
+            <attribs/>
+         </obj>
+         <obj type="patch/outlet f" sha="aac48d98f5fc2318197fd0a8587cf5f3e3ef4902" name="two" x="182" y="168">
+            <params/>
+            <attribs/>
+         </obj>
+         <nets>
+            <net>
+               <source obj="c1" outlet="out"/>
+               <dest obj="one" inlet="outlet"/>
+            </net>
+            <net>
+               <source obj="c2" outlet="out"/>
+               <dest obj="two" inlet="outlet"/>
+            </net>
+         </nets>
+         <settings>
+            <subpatchmode>no</subpatchmode>
+         </settings>
+         <notes><![CDATA[]]></notes>
+      </subpatch>
+   </patcher>
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="98" y="42">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS2" x="98" y="140">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="patcher_1" outlet="one"/>
+         <dest obj="displayS1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="patcher_1" outlet="two"/>
+         <dest obj="displayS2" inlet="in"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+      <MidiChannel>1</MidiChannel>
+      <NPresets>8</NPresets>
+      <NPresetEntries>32</NPresetEntries>
+      <NModulationSources>8</NModulationSources>
+      <NModulationTargetsPerSource>8</NModulationTargetsPerSource>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>510</x>
+      <y>311</y>
+      <width>365</width>
+      <height>441</height>
+   </windowPos>
+</patch-1.0>
