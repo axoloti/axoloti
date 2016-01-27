@@ -18,7 +18,8 @@
 package axoloti.objecteditor;
 
 import axoloti.atom.AtomDefinition;
-import java.awt.Color;
+import axoloti.object.AxoObject;
+import axoloti.object.ObjectModifiedListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.annotation.Annotation;
@@ -43,20 +44,20 @@ import javax.swing.table.AbstractTableModel;
  * @author jtaelman
  * @param <T>
  */
-class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
+abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel implements ObjectModifiedListener {
 
-    ArrayList<T> AtomDefinitions;
     final T[] AtomDefinitionsList;
+    AxoObject obj;
 
     public AtomDefinitionsEditor(T[] AtomDefinitionsList) {
         this.AtomDefinitionsList = AtomDefinitionsList;
     }
 
-    public void setAtomDefinitions(ArrayList<T> AtomDefinitions) {
-        this.AtomDefinitions = AtomDefinitions;
-    }
+    abstract ArrayList<T> GetAtomDefinitions();
 
-    void initComponents() {
+    void initComponents(AxoObject obj) {
+        this.obj = obj;
+        obj.addObjectModifiedListener(this);
         jScrollPane1 = new JScrollPane();
         jTable1 = new JTable();
         jTable1.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -68,7 +69,7 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
         jScrollPane2 = new JScrollPane();
         add(jScrollPane2);
         jScrollPane2.setViewportView(jText);
-        
+
         jButtonAdd = new JButton("Add");
         jButtonAdd.addActionListener(new ActionListener() {
 
@@ -77,10 +78,9 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 try {
                     T o = (T) AtomDefinitionsList[0].getClass().newInstance();
                     o.setName("new");
-                    AtomDefinitions.add(o);
-                    jTable1.revalidate();
-                    jTable1.repaint();
-                    jTable1.setRowSelectionInterval(AtomDefinitions.size() - 1, AtomDefinitions.size() - 1);
+                    GetAtomDefinitions().add(o);
+                    jTable1.setRowSelectionInterval(GetAtomDefinitions().size() - 1, GetAtomDefinitions().size() - 1);
+                    AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                 } catch (InstantiationException ex) {
                     Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalAccessException ex) {
@@ -97,9 +97,8 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 if (row < 0) {
                     return;
                 }
-                AtomDefinitions.remove(row);
-                jTable1.revalidate();
-                jTable1.repaint();
+                GetAtomDefinitions().remove(row);
+                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
             }
         });
         add(jButtonRemove);
@@ -111,11 +110,10 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 if (row < 1) {
                     return;
                 }
-                T o = AtomDefinitions.remove(row);
-                AtomDefinitions.add(row - 1, o);
+                T o = GetAtomDefinitions().remove(row);
+                GetAtomDefinitions().add(row - 1, o);
                 jTable1.setRowSelectionInterval(row - 1, row - 1);
-                jTable1.revalidate();
-                jTable1.repaint();
+                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
             }
         });
         add(jButtonMoveUp);
@@ -127,14 +125,13 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 if (row < 0) {
                     return;
                 }
-                if (row > (AtomDefinitions.size() - 1)) {
+                if (row > (GetAtomDefinitions().size() - 1)) {
                     return;
                 }
-                T o = AtomDefinitions.remove(row);
-                AtomDefinitions.add(row + 1, o);
+                T o = GetAtomDefinitions().remove(row);
+                GetAtomDefinitions().add(row + 1, o);
+                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                 jTable1.setRowSelectionInterval(row + 1, row + 1);
-                jTable1.revalidate();
-                jTable1.repaint();
             }
         });
         add(jButtonMoveDown);
@@ -155,16 +152,19 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
             @Override
             public Class getColumnClass(int column) {
                 switch (column) {
-                    case 0: return String.class;
-                    case 1: return getValueAt(0, column).getClass();
-                    case 2: return String.class;                        
+                    case 0:
+                        return String.class;
+                    case 1:
+                        return getValueAt(0, column).getClass();
+                    case 2:
+                        return String.class;
                 }
                 return null;
             }
 
             @Override
             public int getRowCount() {
-                return AtomDefinitions.size();
+                return GetAtomDefinitions().size();
             }
 
             @Override
@@ -174,12 +174,14 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                     case 0:
                         assert (value instanceof String);
                         GetAtomDefinition(rowIndex).setName((String) value);
+                        AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                         break;
                     case 1:
                         try {
                             T j = (T) value.getClass().newInstance();
                             j.setName(GetAtomDefinition(rowIndex).getName());
-                            AtomDefinitions.set(rowIndex, j);
+                            GetAtomDefinitions().set(rowIndex, j);
+                            AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                         } catch (InstantiationException ex) {
                             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (IllegalAccessException ex) {
@@ -189,12 +191,13 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                     case 2:
                         assert (value instanceof String);
                         GetAtomDefinition(rowIndex).setDescription((String) value);
+                        AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                         break;
                 }
             }
 
             T GetAtomDefinition(int rowIndex) {
-                return AtomDefinitions.get(rowIndex);
+                return GetAtomDefinitions().get(rowIndex);
             }
 
             @Override
@@ -203,13 +206,13 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
 
                 switch (columnIndex) {
                     case 0:
-                        returnValue = AtomDefinitions.get(rowIndex).getName();
+                        returnValue = GetAtomDefinitions().get(rowIndex).getName();
                         break;
                     case 1:
-                        returnValue = AtomDefinitions.get(rowIndex);
+                        returnValue = GetAtomDefinitions().get(rowIndex);
                         break;
                     case 2:
-                        returnValue = AtomDefinitions.get(rowIndex).getDescription();
+                        returnValue = GetAtomDefinitions().get(rowIndex).getDescription();
                         break;
                 }
 
@@ -233,13 +236,13 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                     jButtonMoveDown.setEnabled(false);
                 } else {
                     jButtonMoveUp.setEnabled(row > 0);
-                    jButtonMoveDown.setEnabled(row < AtomDefinitions.size() - 1);
-                    
-                    T o = AtomDefinitions.get(row);
+                    jButtonMoveDown.setEnabled(row < GetAtomDefinitions().size() - 1);
+
+                    T o = GetAtomDefinitions().get(row);
                     Class c = o.getClass();
                     Annotation annotations[] = c.getAnnotations();
                     String s = "";
-                    for(Annotation a:annotations){
+                    for (Annotation a : annotations) {
                         s += a.getClass().getName();
                     }
                     jText.setText(s);
@@ -256,5 +259,18 @@ class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
     JButton jButtonMoveUp;
     JButton jButtonMoveDown;
     JButton jButtonRemove;
-    JButton jButtonAdd;    
+    JButton jButtonAdd;
+
+    @Override
+    public void ObjectModified(Object src) {
+        jTable1.revalidate();
+        jTable1.repaint();
+    }
+
+    @Override
+    public void removeNotify() {
+        super.removeNotify();
+        obj.removeObjectModifiedListener(this);
+    }
+
 }

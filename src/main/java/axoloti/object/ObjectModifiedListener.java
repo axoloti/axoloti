@@ -15,25 +15,13 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.objecteditor;
-
-import axoloti.inlets.Inlet;
-import axoloti.inlets.InletTypes;
-import java.util.ArrayList;
+package axoloti.object;
 
 /**
  *
  * @author jtaelman
  */
-public class InletDefinitionsEditorPanel extends AtomDefinitionsEditor<Inlet> {
+public interface ObjectModifiedListener {
 
-    public InletDefinitionsEditorPanel() {
-        super(InletTypes.getTypes());
-    }
-
-    @Override
-    ArrayList<Inlet> GetAtomDefinitions() {
-        return obj.GetInlets();
-    }
-
+    void ObjectModified(Object src);
 }

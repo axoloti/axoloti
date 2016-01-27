@@ -19,6 +19,7 @@ package axoloti.objecteditor;
 
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterTypes;
+import java.util.ArrayList;
 
 /**
  *
@@ -28,5 +29,10 @@ public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter
 
     public ParamDefinitionsEditorPanel() {
         super(ParameterTypes.getTypes());
+    }
+
+    @Override
+    ArrayList<Parameter> GetAtomDefinitions() {
+        return obj.params;
     }
 }

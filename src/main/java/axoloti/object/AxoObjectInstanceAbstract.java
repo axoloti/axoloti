@@ -56,7 +56,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "obj_abstr")
-public abstract class AxoObjectInstanceAbstract extends JPanel implements Comparable<AxoObjectInstanceAbstract> {
+public abstract class AxoObjectInstanceAbstract extends JPanel implements Comparable<AxoObjectInstanceAbstract>, ObjectModifiedListener {
 
     @Attribute(name = "type")
     public String typeName;
@@ -609,5 +609,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         d.width = ((d.width + Constants.xgrid - 1) / Constants.xgrid) * Constants.xgrid;
         d.height = ((d.height + Constants.ygrid - 1) / Constants.ygrid) * Constants.ygrid;
         setSize(d);
+    }
+
+    @Override
+    public void ObjectModified(Object src) {
     }
 }

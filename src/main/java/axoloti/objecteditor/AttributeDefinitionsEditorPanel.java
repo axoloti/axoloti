@@ -19,6 +19,7 @@ package axoloti.objecteditor;
 
 import axoloti.attributedefinition.AttributeTypes;
 import axoloti.attributedefinition.AxoAttribute;
+import java.util.ArrayList;
 
 /**
  *
@@ -28,5 +29,10 @@ public class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAt
 
     public AttributeDefinitionsEditorPanel() {
         super(AttributeTypes.getTypes());
+    }
+
+    @Override
+    ArrayList<AxoAttribute> GetAtomDefinitions() {
+        return obj.attributes;
     }
 }

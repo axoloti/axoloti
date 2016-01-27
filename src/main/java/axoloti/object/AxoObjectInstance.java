@@ -55,7 +55,7 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "obj")
-public class AxoObjectInstance extends AxoObjectInstanceAbstract {
+public class AxoObjectInstance extends AxoObjectInstanceAbstract implements ObjectModifiedListener {
 
     public ArrayList<InletInstance> inletInstances;
     public ArrayList<OutletInstance> outletInstances;
@@ -116,7 +116,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         } else if (this instanceof AxoObjectInstancePatcherObject) {
             ((AxoObjectInstancePatcherObject) this).updateObj1();
         }
-
         ArrayList<ParameterInstance> pParameterInstances = parameterInstances;
         ArrayList<AttributeInstance> pAttributeInstances = attributeInstances;
         ArrayList<InletInstance> pInletInstances = inletInstances;
@@ -383,6 +382,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         add(p_displays);
         p_params.setAlignmentX(LEFT_ALIGNMENT);
         p_displays.setAlignmentX(LEFT_ALIGNMENT);
+
+        getType().addObjectModifiedListener(this);
+
         resizeToGrid();
     }
 
@@ -838,5 +840,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     @Override
     public ArrayList<DisplayInstance> GetDisplayInstances() {
         return displayInstances;
+    }
+
+    @Override
+    public void ObjectModified(Object src) {
+        if (getPatch() != null) {
+            getPatch().ChangeObjectInstanceType(this, this.getType());
+        }
     }
 }

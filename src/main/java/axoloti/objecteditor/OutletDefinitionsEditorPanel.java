@@ -19,6 +19,7 @@ package axoloti.objecteditor;
 
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletTypes;
+import java.util.ArrayList;
 
 /**
  *
@@ -28,5 +29,10 @@ public class OutletDefinitionsEditorPanel extends AtomDefinitionsEditor<Outlet> 
 
     public OutletDefinitionsEditorPanel() {
         super(OutletTypes.getTypes());
+    }
+
+    @Override
+    ArrayList<Outlet> GetAtomDefinitions() {
+        return obj.GetOutlets();
     }
 }

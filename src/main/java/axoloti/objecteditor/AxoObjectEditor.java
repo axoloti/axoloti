@@ -19,11 +19,9 @@ package axoloti.objecteditor;
 
 import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
-import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectInstance;
-import axoloti.parameters.Parameter;
-import displays.Display;
+import axoloti.object.ObjectModifiedListener;
 import static generatedobjects.gentools.WriteAxoObject;
 import java.awt.BorderLayout;
 import java.awt.Point;
@@ -46,8 +44,8 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public class AxoObjectEditor extends JFrame implements DocumentWindow {
-
+public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectModifiedListener {
+    
     final AxoObject obj;
     private final RSyntaxTextArea jTextAreaLocalData;
     private final RSyntaxTextArea jTextAreaInitCode;
@@ -55,7 +53,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow {
     private final RSyntaxTextArea jTextAreaSRateCode;
     private final RSyntaxTextArea jTextAreaDisposeCode;
     private final RSyntaxTextArea jTextAreaMidiCode;
-
+    
     static RSyntaxTextArea initCodeEditor(JPanel p) {
         RSyntaxTextArea rsta = new RSyntaxTextArea(20, 60);
         rsta.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
@@ -66,10 +64,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow {
         rsta.setVisible(true);
         return rsta;
     }
-
+    
     public AxoObjectEditor(final AxoObject obj) {
         initComponents();
         DocumentWindowList.RegisterWindow(this);
+        obj.addObjectModifiedListener(this);
         jTextAreaLocalData = initCodeEditor(jPanelLocalData);
         jTextAreaInitCode = initCodeEditor(jPanelInitCode);
         jTextAreaKRateCode = initCodeEditor(jPanelKRateCode2);
@@ -79,34 +78,19 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         setTitle(obj.id);
         this.obj = obj;
-        jTextAreaLocalData.setText(obj.sLocalData);
-        jTextAreaInitCode.setText(obj.sInitCode);
-        jTextAreaKRateCode.setText(obj.sKRateCode);
-        jTextAreaSRateCode.setText(obj.sSRateCode);
-        jTextAreaDisposeCode.setText(obj.sDisposeCode);
-        jTextAreaMidiCode.setText(obj.sMidiCode);
-
+        
         jLabelName.setText(obj.getCName());
         jLabelLicense.setText(obj.sLicense);
         jLabelAuthor.setText(obj.sAuthor);
         jTextDesc.setText(obj.sDescription);
-
-        inletDefinitionsEditor1.setAtomDefinitions(obj.inlets);
-        inletDefinitionsEditor1.initComponents();
-
-        outletDefinitionsEditorPanel1.setAtomDefinitions(obj.outlets);
-        outletDefinitionsEditorPanel1.initComponents();
-
-        paramDefinitionsEditorPanel1.setAtomDefinitions(obj.params);
-        paramDefinitionsEditorPanel1.initComponents();
-
-        attributeDefinitionsEditorPanel1.setAtomDefinitions(obj.attributes);
-        attributeDefinitionsEditorPanel1.initComponents();
         
-        displayDefinitionsEditorPanel1.setAtomDefinitions(obj.displays);
-        displayDefinitionsEditorPanel1.initComponents();
+        inletDefinitionsEditor1.initComponents(obj);
+        outletDefinitionsEditorPanel1.initComponents(obj);
+        paramDefinitionsEditorPanel1.initComponents(obj);
+        attributeDefinitionsEditorPanel1.initComponents(obj);
+        displayDefinitionsEditorPanel1.initComponents(obj);
         
-        AxoObjectInstance obji = obj.CreateInstance(null, "test", new Point(0,0));
+        AxoObjectInstance obji = obj.CreateInstance(null, "test", new Point(0, 0));
         jPanelKRateCode1.setText(obji.GenerateDoFunctionPlusPlus("", "", false));
         
         if (obj.includes != null) {
@@ -114,32 +98,34 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow {
                 ((DefaultListModel) jListIncludes.getModel()).addElement(i);
             }
         }
-
+        
         if (obj.depends != null) {
             for (String i : obj.depends) {
                 ((DefaultListModel) jListDepends.getModel()).addElement(i);
             }
         }
-
+        
         FocusListener fl = new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
             }
-
+            
             @Override
             public void focusLost(FocusEvent e) {
                 applyChanges();
             }
         };
-
+        
         jTextAreaLocalData.addFocusListener(fl);
         jTextAreaInitCode.addFocusListener(fl);
         jTextAreaKRateCode.addFocusListener(fl);
         jTextAreaSRateCode.addFocusListener(fl);
         jTextAreaDisposeCode.addFocusListener(fl);
         jTextAreaMidiCode.addFocusListener(fl);
+        rSyntaxTextAreaXML.setEditable(false);
+        FireObjectModified();
     }
-
+    
     void applyChanges() {
         obj.sLocalData = jTextAreaLocalData.getText();
         obj.sInitCode = jTextAreaInitCode.getText();
@@ -148,9 +134,29 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow {
         obj.sDisposeCode = jTextAreaDisposeCode.getText();
         obj.sMidiCode = jTextAreaMidiCode.getText();
     }
-
+    
+    void FireObjectModified() {
+        jTextAreaLocalData.setText(obj.sLocalData);
+        jTextAreaInitCode.setText(obj.sInitCode);
+        jTextAreaKRateCode.setText(obj.sKRateCode);
+        jTextAreaSRateCode.setText(obj.sSRateCode);
+        jTextAreaDisposeCode.setText(obj.sDisposeCode);
+        jTextAreaMidiCode.setText(obj.sMidiCode);
+        Serializer serializer = new Persister();
+        ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
+        try {
+            serializer.write(obj, os);
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        rSyntaxTextAreaXML.setText(os.toString());
+        rSyntaxTextAreaXML.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
+        rSyntaxTextAreaXML.setCodeFoldingEnabled(true);        
+    }
+    
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
+        obj.removeObjectModifiedListener(this);
         dispose();
     }
 
@@ -545,16 +551,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow {
     }//GEN-LAST:event_formWindowClosing
 
     private void jPanelXMLFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPanelXMLFocusGained
-        Serializer serializer = new Persister();
-        ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
-        try {
-            serializer.write(obj, os);
-        } catch (Exception ex) {
-            Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        rSyntaxTextAreaXML.setText(os.toString());
-        rSyntaxTextAreaXML.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
-        rSyntaxTextAreaXML.setCodeFoldingEnabled(true);
+
     }//GEN-LAST:event_jPanelXMLFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -607,14 +604,15 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow {
     public JFrame GetFrame() {
         return this;
     }
-
+    
     @Override
     public boolean AskClose() {
         Close();
         return false; //TBC
     }
-
-    private Point Point(int i, int i0) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    @Override
+    public void ObjectModified(Object src) {
+        FireObjectModified();
     }
 }

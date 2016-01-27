@@ -290,7 +290,7 @@ public class AxoObject extends AxoObjectAbstract {
         includes = new HashSet<String>();
     }
 
-    ArrayList<AxoObjectInstance> instances;
+    ArrayList<ObjectModifiedListener> instances = new ArrayList<ObjectModifiedListener>();
     AxoObjectEditor editor;
 
     public void OpenEditor() {
@@ -304,9 +304,7 @@ public class AxoObject extends AxoObjectAbstract {
     @Override
     public void DeleteInstance(AxoObjectInstanceAbstract o) {
         if ((o != null) && (o instanceof AxoObjectInstance)) {
-            if (instances != null) {
-                instances.remove((AxoObjectInstance) o);
-            }
+            instances.remove((AxoObjectInstance) o);
         }
     }
 
@@ -330,13 +328,6 @@ public class AxoObject extends AxoObjectAbstract {
             patch.objectinstances.add(o);
         }
         o.PostConstructor();
-
-        if (patch != null) {
-            if (instances == null) {
-                instances = new ArrayList<AxoObjectInstance>();
-            }
-            instances.add(o);
-        }
         return o;
     }
 
@@ -449,7 +440,7 @@ public class AxoObject extends AxoObjectAbstract {
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, null, ex);
             return null;
-        }        
+        }
     }
 
     @Override
@@ -472,14 +463,13 @@ public class AxoObject extends AxoObjectAbstract {
             for (Display i : displays) {
                 i.updateSHA(md);
             }
-            return  (new BigInteger(1, md.digest())).toString(16);
+            return (new BigInteger(1, md.digest())).toString(16);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
-    
-    
+
     public Boolean getRotatedParams() {
         if (rotatedParams == null) {
             return false;
@@ -580,6 +570,24 @@ public class AxoObject extends AxoObjectAbstract {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void FireObjectModified(Object src) {
+        ArrayList<ObjectModifiedListener> c = new ArrayList<ObjectModifiedListener>(instances);
+        for (ObjectModifiedListener oml : c) {
+            oml.ObjectModified(src);
+        }
+    }
+
+    @Override
+    public void addObjectModifiedListener(ObjectModifiedListener oml) {
+        instances.add(oml);
+    }
+
+    @Override
+    public void removeObjectModifiedListener(ObjectModifiedListener oml) {
+        instances.remove(oml);
     }
 
 }
