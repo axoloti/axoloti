@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,22 +15,32 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.atom;
-
-import axoloti.object.AxoObjectInstance;
+package axoloti.inlets;
 
 /**
  *
  * @author jtaelman
  */
-/**
- * An Axoloti Object Definition is composed out of AtomDefinition
-**/
-public interface AtomDefinition {
-    abstract public String getName();
-    abstract public void setName(String name);
-    abstract public AtomInstance CreateInstance(AxoObjectInstance o);
-    abstract public String getDescription();
-    abstract public void setDescription(String description);
-//    abstract public AtomDefinition Factory(String name);    
+public class InletTypes {
+
+    final static Inlet types[] = {
+        new InletBool32(),
+        new InletBool32Rising(),
+        new InletBool32RisingFalling(),
+        new InletFrac32(),
+        new InletFrac32Pos(),
+        new InletFrac32Bipolar(),
+        new InletFrac32Buffer(),
+        new InletFrac32BufferBipolar(),
+        new InletFrac32BufferPos(),
+        new InletInt32(),
+        new InletInt32Bipolar(),
+        new InletInt32Pos(),
+        new InletCharPtr32()
+    };
+
+    static public Inlet[] getTypes() {
+        return types;
+    }
+
 }

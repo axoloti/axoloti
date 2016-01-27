@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,22 +15,18 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.atom;
+package axoloti.objecteditor;
 
-import axoloti.object.AxoObjectInstance;
+import axoloti.parameters.Parameter;
+import axoloti.parameters.ParameterTypes;
 
 /**
  *
  * @author jtaelman
  */
-/**
- * An Axoloti Object Definition is composed out of AtomDefinition
-**/
-public interface AtomDefinition {
-    abstract public String getName();
-    abstract public void setName(String name);
-    abstract public AtomInstance CreateInstance(AxoObjectInstance o);
-    abstract public String getDescription();
-    abstract public void setDescription(String description);
-//    abstract public AtomDefinition Factory(String name);    
+public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter> {
+
+    public ParamDefinitionsEditorPanel() {
+        super(ParameterTypes.getTypes());
+    }
 }

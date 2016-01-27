@@ -32,6 +32,7 @@ import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectComment;
 import axoloti.object.AxoObjectHyperlink;
 import axoloti.object.AxoObjectPatcher;
+import axoloti.object.AxoObjectPatcherObject;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletCharPtr32;
 import axoloti.outlets.OutletFrac32;
@@ -76,6 +77,7 @@ public class Patch extends gentools {
         WriteAxoObject(catName, CreatePolyIndex());
 
         WriteAxoObject(catName, CreatePatcher());
+        WriteAxoObject(catName, CreatePatcherObject());
         WriteAxoObject(catName, CreateCyclecounter());
 
     }
@@ -318,6 +320,11 @@ public class Patch extends gentools {
         return o;
     }
 
+    static AxoObject CreatePatcherObject() {
+        AxoObject o = new AxoObjectPatcherObject("object", "Object stored in the patch document (IN DEVELOPMENT!)");
+        return o;
+    }   
+    
     static AxoObject CreateCyclecounter() {
         AxoObject o = new AxoObject("cyclecounter", "Outputs the cpu clock cycle counter, a 32bit integer incrementing on every clock cycle. Useful for benchmarking objects.");
         o.outlets.add(new OutletInt32("t", "cpu time in ticks"));

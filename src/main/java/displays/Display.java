@@ -32,6 +32,8 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     @Attribute
     String name;
     @Attribute(required = false)
+    public String description;
+    @Attribute(required = false)
     public Boolean noLabel;
 
     public Display() {
@@ -45,15 +47,30 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     public String getName() {
         return name;
     }
-    
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getLength() {
         return 1;
     }
-    
-    public String GetCName(){
+
+    public String GetCName() {
         return "disp_" + name;
-    }    
-    
+    }
+
     @Override
     public DisplayInstance CreateInstance(AxoObjectInstance o) {
         DisplayInstance pi = InstanceFactory();

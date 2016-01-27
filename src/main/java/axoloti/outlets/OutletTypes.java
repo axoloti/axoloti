@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,22 +15,31 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.atom;
-
-import axoloti.object.AxoObjectInstance;
+package axoloti.outlets;
 
 /**
  *
  * @author jtaelman
  */
-/**
- * An Axoloti Object Definition is composed out of AtomDefinition
-**/
-public interface AtomDefinition {
-    abstract public String getName();
-    abstract public void setName(String name);
-    abstract public AtomInstance CreateInstance(AxoObjectInstance o);
-    abstract public String getDescription();
-    abstract public void setDescription(String description);
-//    abstract public AtomDefinition Factory(String name);    
+public class OutletTypes {
+
+    final static Outlet types[] = {
+        new OutletBool32(),
+        new OutletBool32Pulse(),
+        new OutletCharPtr32(),
+        new OutletFrac32(),
+        new OutletFrac32Bipolar(),
+        new OutletFrac32Pos(),
+        new OutletFrac32Buffer(),
+        new OutletFrac32BufferBipolar(),
+        new OutletFrac32BufferPos(),
+        new OutletInt32(),
+        new OutletInt32Bipolar(),
+        new OutletInt32Pos()
+    };
+
+    static public Outlet[] getTypes() {
+        return types;
+    }
+
 }

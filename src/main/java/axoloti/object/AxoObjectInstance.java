@@ -113,6 +113,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         super.PostConstructor();
         if (this instanceof AxoObjectInstancePatcher) {
             ((AxoObjectInstancePatcher) this).updateObj1();
+        } else if (this instanceof AxoObjectInstancePatcherObject) {
+            ((AxoObjectInstancePatcherObject) this).updateObj1();
         }
 
         ArrayList<ParameterInstance> pParameterInstances = parameterInstances;
@@ -596,13 +598,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             }
             s = s.replace("attr_name", getCInstanceName());
             s = s.replace("attr_legal_name", getLegalName());
-            for (InletInstance i : inletInstances) {
-                Net n = patch.GetNet(i);
-//                s = s.replace("%" + i.GetLabel() + "%", i.GetCName());
-            }
-            for (OutletInstance i : outletInstances) {
-//                s = s.replace("%" + i.GetLabel() + "%", i.GetCName());
-            }
             for (ParameterInstance p : parameterInstances) {
                 if (p.isOnParent() && enableOnParent) {
 //                    s = s.replace("%" + p.name + "%", OnParentAccess + p.variableName(vprefix, enableOnParent));

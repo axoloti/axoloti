@@ -33,6 +33,7 @@ import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceComment;
 import axoloti.object.AxoObjectInstanceHyperlink;
 import axoloti.object.AxoObjectInstancePatcher;
+import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.object.AxoObjectZombie;
 import axoloti.object.AxoObjects;
@@ -81,6 +82,7 @@ public class Patch {
     public @ElementListUnion({
         @ElementList(entry = "obj", type = AxoObjectInstance.class, inline = true, required = false),
         @ElementList(entry = "patcher", type = AxoObjectInstancePatcher.class, inline = true, required = false),
+        @ElementList(entry = "patchobj", type = AxoObjectInstancePatcherObject.class, inline = true, required = false),
         @ElementList(entry = "comment", type = AxoObjectInstanceComment.class, inline = true, required = false),
         @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true, required = false),
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true, required = false)})

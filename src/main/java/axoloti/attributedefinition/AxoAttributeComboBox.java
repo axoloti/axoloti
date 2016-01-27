@@ -17,7 +17,6 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceComboBox;
 import axoloti.object.AxoObjectInstance;
 import java.util.ArrayList;

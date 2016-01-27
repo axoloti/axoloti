@@ -27,7 +27,7 @@ import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
 import axoloti.attributedefinition.AxoAttributeWavefile;
-import axoloti.dialogs.AxoObjectEditor;
+import axoloti.objecteditor.AxoObjectEditor;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletBool32Rising;
