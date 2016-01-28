@@ -138,21 +138,9 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
                 + " 0,"
                 + " 1<<27);\n"
                 + "  KVP_RegisterObject(&" + StructAccces + KVPName(vprefix) + ");\n";
-        if (modulators != null) {
-            for (Modulation m : modulators) {
-                Modulator mod = axoObj.patch.GetModulatorOfModulation(m);
-                if (mod == null) {
-                    System.out.println("modulator not found");
-                    continue;
-                }
-                int modulation_index = mod.Modulations.indexOf(m);
-                s += "  parent->PExModulationSources[parent->" + mod.getCName() + "][" + modulation_index + "].parameterIndex = " + indexName() + ";\n";
-                s += "  parent->PExModulationSources[parent->" + mod.getCName() + "][" + modulation_index + "].amount = " + m.getValue().getRaw() + ";\n";
-            }
-        }
         return s;
     }
-
+    
     @Override
     public void updateModulation(int index, double amount) {
         super.updateModulation(index, amount);

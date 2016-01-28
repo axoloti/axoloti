@@ -540,9 +540,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 c += p.PExName("parent->") + ".finalvalue = (int32_t)(&(parent->instance"
                         + getLegalName() + "_i.PExch[instance" + getLegalName() + "::PARAM_INDEX_"
                         + p.parameter.PropagateToChild + "]));\n";
+                
             } else {
                 c += p.GenerateCodeInit("parent->", "");
             }
+            c += p.GenerateCodeInitModulator("parent->", "");
             //           if ((p.isOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
             //String parentparametername = classname.substring(8);

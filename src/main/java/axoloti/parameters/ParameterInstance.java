@@ -503,5 +503,9 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public T GetDefinition() {
         return parameter;
     }
+    
+    public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
+        return "";
+    }
 
 }

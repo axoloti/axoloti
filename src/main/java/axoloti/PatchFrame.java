@@ -315,6 +315,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuUploadCode = new javax.swing.JMenuItem();
         jMenuItemLock = new javax.swing.JMenuItem();
         jMenuItemUnlock = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuPreset = new javax.swing.JMenu();
         jMenuItemClearPreset = new javax.swing.JMenuItem();
         jMenuItemPresetCurrentToInit = new javax.swing.JMenuItem();
@@ -624,6 +625,14 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         }
     });
     jMenuPatch.add(jMenuItemUnlock);
+
+    jMenuItem1.setText("Dump modulation matrix");
+    jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItem1ActionPerformed(evt);
+        }
+    });
+    jMenuPatch.add(jMenuItem1);
 
     jMenuBar1.add(jMenuPatch);
 
@@ -988,6 +997,11 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         MainFrame.mainframe.OpenURL();
     }//GEN-LAST:event_jMenuOpenURLActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        String s = patch.ModulationMatrixInitCode();
+        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "modmatrix \n{0}", s);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     private boolean GoLive() {
 
         if (patch.getFileNamePath().endsWith(".axs") || patch.container() != null) {
@@ -1030,6 +1044,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenuItem jMenuGenerateCode;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemAddObj;
     private javax.swing.JMenuItem jMenuItemAdjScroll;
     private javax.swing.JMenuItem jMenuItemClearPreset;
