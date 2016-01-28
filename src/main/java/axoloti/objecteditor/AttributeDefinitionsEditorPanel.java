@@ -35,4 +35,9 @@ public class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAt
     ArrayList<AxoAttribute> GetAtomDefinitions() {
         return obj.attributes;
     }
+
+    @Override
+    String getDefaultName() {
+        return "attribute";
+    }
 }

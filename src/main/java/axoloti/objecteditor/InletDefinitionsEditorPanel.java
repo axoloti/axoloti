@@ -36,4 +36,9 @@ public class InletDefinitionsEditorPanel extends AtomDefinitionsEditor<Inlet> {
         return obj.GetInlets();
     }
 
+    @Override
+    String getDefaultName() {
+        return "inlet";
+    }
+
 }

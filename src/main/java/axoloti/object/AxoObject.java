@@ -582,7 +582,9 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public void addObjectModifiedListener(ObjectModifiedListener oml) {
-        instances.add(oml);
+        if (!instances.contains(oml)) {
+            instances.add(oml);
+        }
     }
 
     @Override

@@ -44,7 +44,7 @@ import javax.swing.table.AbstractTableModel;
  * @author jtaelman
  * @param <T>
  */
-abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel implements ObjectModifiedListener {
+abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
 
     final T[] AtomDefinitionsList;
     AxoObject obj;
@@ -55,9 +55,24 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
 
     abstract ArrayList<T> GetAtomDefinitions();
 
+    abstract String getDefaultName();
+
+    final ObjectModifiedListener oml = new ObjectModifiedListener() {
+        @Override
+        public void ObjectModified(Object src
+        ) {
+            jTable1.revalidate();
+            jTable1.repaint();
+        }
+
+        public void removeNotify() {
+            obj.removeObjectModifiedListener(this);
+        }
+    };
+
     void initComponents(AxoObject obj) {
         this.obj = obj;
-        obj.addObjectModifiedListener(this);
+        obj.addObjectModifiedListener(oml);
         jScrollPane1 = new JScrollPane();
         jTable1 = new JTable();
         jTable1.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -77,7 +92,20 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
             public void actionPerformed(ActionEvent e) {
                 try {
                     T o = (T) AtomDefinitionsList[0].getClass().newInstance();
-                    o.setName("new");
+                    int i = 0;
+                    while (true) {
+                        i++;
+                        boolean free = true;
+                        for (T a : GetAtomDefinitions()) {
+                            if (a.getName().equals(getDefaultName() + i)) {
+                                free = false;
+                            }
+                        }
+                        if (free == true) {
+                            break;
+                        }
+                    }
+                    o.setName(getDefaultName() + i);
                     GetAtomDefinitions().add(o);
                     jTable1.setRowSelectionInterval(GetAtomDefinitions().size() - 1, GetAtomDefinitions().size() - 1);
                     AtomDefinitionsEditor.this.obj.FireObjectModified(this);
@@ -260,17 +288,5 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
     JButton jButtonMoveDown;
     JButton jButtonRemove;
     JButton jButtonAdd;
-
-    @Override
-    public void ObjectModified(Object src) {
-        jTable1.revalidate();
-        jTable1.repaint();
-    }
-
-    @Override
-    public void removeNotify() {
-        super.removeNotify();
-        obj.removeObjectModifiedListener(this);
-    }
 
 }

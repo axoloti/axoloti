@@ -35,4 +35,9 @@ public class OutletDefinitionsEditorPanel extends AtomDefinitionsEditor<Outlet> 
     ArrayList<Outlet> GetAtomDefinitions() {
         return obj.GetOutlets();
     }
+
+    @Override
+    String getDefaultName() {
+        return "outlet";
+    }
 }

@@ -35,4 +35,9 @@ public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter
     ArrayList<Parameter> GetAtomDefinitions() {
         return obj.params;
     }
+
+    @Override
+    String getDefaultName() {
+        return "parameter";
+    }
 }

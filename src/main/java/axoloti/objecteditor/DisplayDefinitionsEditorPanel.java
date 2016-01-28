@@ -36,4 +36,8 @@ public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display
         return obj.displays;
     }
 
+    @Override
+    String getDefaultName() {
+        return "display";
+    }
 }
