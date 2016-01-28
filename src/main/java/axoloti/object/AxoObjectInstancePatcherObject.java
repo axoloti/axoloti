@@ -51,7 +51,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     public void updateObj1() {
         if (ao == null) {
             ao = new AxoObject();
-            ao.id = "id";
+            ao.id = "patch/object";
             ao.sDescription = "description";
         }
         if (aoe == null) {
@@ -83,7 +83,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     public void edit() {
         if (ao == null) {
             ao = new AxoObject();
-            ao.id = "id";
+//            ao.id = "id";
             ao.sDescription = "description";
         }
         if (aoe == null) {
@@ -107,19 +107,15 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
             }
         });
         add(BtnEdit);
-        ButtonComponent BtnUpdate = new ButtonComponent("update");
-        BtnUpdate.setAlignmentX(LEFT_ALIGNMENT);
-        BtnUpdate.setAlignmentY(TOP_ALIGNMENT);
-        BtnUpdate.addActListener(new ActListener() {
-            @Override
-            public void OnPushed() {
-                updateObj();
-            }
-        });
-        add(BtnUpdate);
         for (Component cmp : getComponents()) {
             cmp.doLayout();
         }        
         resizeToGrid();
     }
+    
+    @Override
+    public void ObjectModified(Object src) {
+        updateObj();
+    }
+    
 }
