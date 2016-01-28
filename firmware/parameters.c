@@ -34,7 +34,6 @@ void PExModulationSourceChange(PExModulationTarget_t *modulation,
     int32_t v = PEx->modvalue;
     v -= ___SMMUL(*oldvalue, target->amount) << 5;
     v += ___SMMUL(value, target->amount) << 5;
-    *oldvalue = value;
     PEx->modvalue = v;
     if (PEx->pfunction) {
       (PEx->pfunction)(PEx);
@@ -44,6 +43,7 @@ void PExModulationSourceChange(PExModulationTarget_t *modulation,
       PEx->finalvalue = v;
     }
   }
+  *oldvalue = value;
 }
 
 void PExParameterChange(ParameterExchange_t *param, int32_t value,

@@ -774,10 +774,6 @@ public class Patch {
                 k++;
             }
         }
-        {
-            c += "    PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS] = \n";
-            c += ModulationMatrixInitCode();
-        }
         c += "/* controller classes */\n";
         if (controllerinstance != null) {
             c += controllerinstance.GenerateClass(classname, OnParentAccess, enableOnParent);
@@ -868,6 +864,45 @@ public class Patch {
                 + "   }\n"
                 + "}\n";
         return c;
+    }
+
+    String GenerateModulationCode3() {
+        String s = "   static PExModulationTarget_t * GetModulationTable(void){\n";
+        s += "    static const PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS] = \n";
+        s += "{";
+        for (int i = 0; i < settings.GetNModulationSources(); i++) {
+            s += "{";
+            if (i < Modulators.size()) {
+                Modulator m = Modulators.get(i);
+                for (int j = 0; j < settings.GetNModulationTargetsPerSource(); j++) {
+                    if (j < m.Modulations.size()) {
+                        Modulation n = m.Modulations.get(j);
+                        s += "{" + n.destination.indexName() + ", " + n.value.getRaw() + "}";
+                    } else {
+                        s += "{-1,0}";
+                    }
+                    if (j != settings.GetNModulationTargetsPerSource() - 1) {
+                        s += ",";
+                    } else {
+                        s += "}";
+                    }
+                }
+            } else {
+                for (int j = 0; j < settings.GetNModulationTargetsPerSource() - 1; j++) {
+                    s += "{-1,0},";
+                }
+                s += "{-1,0}}";
+            }
+            if (i != settings.GetNModulationSources() - 1) {
+                s += ",\n";
+            } else {
+                s += "};\n";
+            }
+        }
+        s += "   return (PExModulationTarget_t *)&PExModulationSources[0][0];\n";
+        s += "   };\n";
+
+        return s;
     }
 
     String GenerateParamInitCode3(String ClassName) {
@@ -1288,6 +1323,7 @@ public class Patch {
                 + "static const int polyIndex = 0;\n"
                 + GenerateParamInitCode3("rootc")
                 + GeneratePresetCode3("rootc")
+                + GenerateModulationCode3()
                 + GenerateInitCodePlusPlus("rootc")
                 + GenerateDisposeCodePlusPlus("rootc")
                 + GenerateDSPCodePlusPlus("rootc", false)
@@ -1341,6 +1377,7 @@ public class Patch {
                 + "static const int polyIndex = 0;\n";
         ao.sLocalData += GenerateParamInitCode3("");
         ao.sLocalData += GeneratePresetCode3("");
+        ao.sLocalData += GenerateModulationCode3();
         ao.sLocalData = ao.sLocalData.replaceAll("attr_poly", "1");
         ao.sInitCode = GenerateParamInitCodePlusPlusSub("attr_parent", "this");
         ao.sInitCode += GenerateObjInitCodePlusPlusSub("attr_parent", "this");
@@ -1501,6 +1538,7 @@ public class Patch {
         }
 
         ao.sLocalData += GeneratePresetCode3("");
+        ao.sLocalData += GenerateModulationCode3();
         ao.sLocalData += "class voice {\n";
         ao.sLocalData += "   public:\n";
         ao.sLocalData += "   int polyIndex;\n";
@@ -2272,37 +2310,4 @@ public class Patch {
         return patchframe;
     }
 
-    String ModulationMatrixInitCode() {
-        String s = "{";
-        for (int i = 0; i < settings.GetNModulationSources(); i++) {
-            s += "{";
-            if (i < Modulators.size()) {
-                Modulator m = Modulators.get(i);
-                for (int j = 0; j < settings.GetNModulationTargetsPerSource(); j++) {
-                    if (j < m.Modulations.size()) {
-                        Modulation n = m.Modulations.get(j);
-                        s += "{" + n.destination.indexName() + ", " + n.value.getRaw()+ "}";
-                    } else {
-                        s += "{-1,0}";
-                    }
-                    if (j == settings.GetNModulationTargetsPerSource() - 1) {
-                        s += "}";
-                    } else {
-                        s += ",";
-                    }
-                }
-            } else {
-                for (int j = 0; j < settings.GetNModulationTargetsPerSource() - 1; j++) {
-                    s += "{-1,0},";
-                }
-                s += "{-1,0}}";
-            }
-            if (i == settings.GetNModulationSources() - 1) {
-                s += "};\n";
-            } else {
-                s += ",\n";
-            }
-        }
-        return s;
-    }
 }
