@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,29 +15,38 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.objecteditor;
+package axoloti.displays;
 
-import axoloti.displays.Display;
-import axoloti.displays.DisplayTypes;
-import java.util.ArrayList;
+import axoloti.datatypes.Frac32;
+import java.security.MessageDigest;
 
 /**
  *
- * @author jtaelman
+ * @author Johannes Taelman
  */
-public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
+public class DisplayNoteLabel extends Display {
 
-    public DisplayDefinitionsEditorPanel() {
-        super(DisplayTypes.getTypes());
+    public DisplayNoteLabel() {
+    }
+
+    public DisplayNoteLabel(String name) {
+        super(name);
     }
 
     @Override
-    ArrayList<Display> GetAtomDefinitions() {
-        return obj.displays;
+    public DisplayInstanceNoteLabel InstanceFactory() {
+        return new DisplayInstanceNoteLabel();
     }
 
     @Override
-    String getDefaultName() {
-        return "display";
+    public void updateSHA(MessageDigest md) {
+        super.updateSHA(md);
+        md.update("note.label".getBytes());
     }
+    
+    @Override
+    public  Frac32 getDatatype() {
+        return  Frac32.d;
+    }    
+    
 }

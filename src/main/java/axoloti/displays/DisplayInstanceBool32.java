@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,29 +15,36 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.objecteditor;
+package axoloti.displays;
 
-import axoloti.displays.Display;
-import axoloti.displays.DisplayTypes;
-import java.util.ArrayList;
+import axoloti.object.AxoObjectInstanceAbstract;
+import components.displays.LedstripComponent;
 
 /**
  *
- * @author jtaelman
+ * @author Johannes Taelman
  */
-public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
+public class DisplayInstanceBool32<DisplayBool32> extends DisplayInstanceInt32 {
 
-    public DisplayDefinitionsEditorPanel() {
-        super(DisplayTypes.getTypes());
+    private LedstripComponent readout;
+
+    public DisplayInstanceBool32() {
+        super();
     }
 
     @Override
-    ArrayList<Display> GetAtomDefinitions() {
-        return obj.displays;
+    public void PostConstructor() {
+        super.PostConstructor();
+
+        readout = new LedstripComponent(0, 1);
+        add(readout);
+        readout.setSize(readout.getHeight(), 80);
+        setSize(getPreferredSize());
+        doLayout();
     }
 
     @Override
-    String getDefaultName() {
-        return "display";
+    public void updateV() {
+        readout.setValue(value.getInt() > 0 ? 1 : 0);
     }
 }

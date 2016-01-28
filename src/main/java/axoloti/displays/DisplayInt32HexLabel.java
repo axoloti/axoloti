@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,29 +15,38 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.objecteditor;
+package axoloti.displays;
 
-import axoloti.displays.Display;
-import axoloti.displays.DisplayTypes;
-import java.util.ArrayList;
+import axoloti.datatypes. Int32;
+import java.security.MessageDigest;
 
 /**
  *
- * @author jtaelman
+ * @author Johannes Taelman
  */
-public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
+public class DisplayInt32HexLabel extends Display {
 
-    public DisplayDefinitionsEditorPanel() {
-        super(DisplayTypes.getTypes());
+    public DisplayInt32HexLabel() {
+    }
+
+    public DisplayInt32HexLabel(String name) {
+        super(name);
     }
 
     @Override
-    ArrayList<Display> GetAtomDefinitions() {
-        return obj.displays;
+    public DisplayInstanceInt32HexLabel InstanceFactory() {
+        return new DisplayInstanceInt32HexLabel();
     }
 
     @Override
-    String getDefaultName() {
-        return "display";
+    public void updateSHA(MessageDigest md) {
+        super.updateSHA(md);
+        md.update("int32.hexlabel".getBytes());
     }
+    
+    @Override
+    public  Int32 getDatatype() {
+        return  Int32.d;
+    }    
+    
 }

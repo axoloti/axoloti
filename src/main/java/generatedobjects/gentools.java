@@ -83,7 +83,7 @@ public class gentools {
             s = s.replaceAll("%" + p.getName() + "%", "");
             s = s.replaceAll("_" + p.getName(), "");
         }
-        for (displays.Display p : o.displays) {
+        for (axoloti.displays.Display p : o.displays) {
             s = s.replaceAll("%" + p.getName() + "%", "");
             s = s.replaceAll("_" + p.getName(), "");
         }
@@ -261,7 +261,7 @@ public class gentools {
                     oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
             }
-            for (displays.Display p : oo.displays) {
+            for (axoloti.displays.Display p : oo.displays) {
                 if (oo.sInitCode != null) {
                     oo.sInitCode = oo.sInitCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }

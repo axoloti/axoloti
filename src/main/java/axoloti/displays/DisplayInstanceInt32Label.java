@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,29 +15,33 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.objecteditor;
+package axoloti.displays;
 
-import axoloti.displays.Display;
-import axoloti.displays.DisplayTypes;
-import java.util.ArrayList;
+import components.LabelComponent;
 
 /**
  *
- * @author jtaelman
+ * @author Johannes Taelman
  */
-public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
+public class DisplayInstanceInt32Label extends DisplayInstanceInt32<DisplayInt32Label> {
 
-    public DisplayDefinitionsEditorPanel() {
-        super(DisplayTypes.getTypes());
+    private LabelComponent readout;
+
+    public DisplayInstanceInt32Label() {
+        super();
     }
 
     @Override
-    ArrayList<Display> GetAtomDefinitions() {
-        return obj.displays;
+    public void PostConstructor() {
+        super.PostConstructor();
+
+        readout = new LabelComponent("xxxxxx");
+        add(readout);
+        readout.setSize(80, 18);
     }
 
     @Override
-    String getDefaultName() {
-        return "display";
+    public void updateV() {
+        readout.setText(Integer.toString(value.getInt()));
     }
 }

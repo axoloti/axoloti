@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,29 +15,21 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.objecteditor;
+package axoloti.displays;
 
-import axoloti.displays.Display;
-import axoloti.displays.DisplayTypes;
-import java.util.ArrayList;
+import axoloti.datatypes.Value;
+import axoloti.datatypes.ValueFrac32;
 
 /**
  *
- * @author jtaelman
+ * @author Johannes Taelman
  */
-public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
+public abstract class DisplayInstanceFrac32<T extends Display> extends DisplayInstance1<T> {
 
-    public DisplayDefinitionsEditorPanel() {
-        super(DisplayTypes.getTypes());
-    }
+    ValueFrac32 value = new ValueFrac32();
 
     @Override
-    ArrayList<Display> GetAtomDefinitions() {
-        return obj.displays;
-    }
-
-    @Override
-    String getDefaultName() {
-        return "display";
+    public Value getValueRef() {
+        return value;
     }
 }

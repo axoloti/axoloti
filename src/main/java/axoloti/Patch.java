@@ -45,7 +45,7 @@ import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.Preferences;
-import displays.DisplayInstance;
+import axoloti.displays.DisplayInstance;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,29 +15,33 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.objecteditor;
+package axoloti.displays;
 
-import axoloti.displays.Display;
-import axoloti.displays.DisplayTypes;
-import java.util.ArrayList;
+import axoloti.datatypes.Value;
+import axoloti.datatypes.ValueFrac32;
+import components.displays.VBarComponentDB;
 
 /**
  *
- * @author jtaelman
+ * @author Johannes Taelman
  */
-public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
+public class DisplayInstanceFrac32VBarDB extends DisplayInstanceFrac32<DisplayFrac32VBarDB> {
 
-    public DisplayDefinitionsEditorPanel() {
-        super(DisplayTypes.getTypes());
+    private VBarComponentDB vbar;
+
+    public DisplayInstanceFrac32VBarDB() {
     }
 
     @Override
-    ArrayList<Display> GetAtomDefinitions() {
-        return obj.displays;
+    public void PostConstructor() {
+        super.PostConstructor();
+        vbar = new VBarComponentDB(-200, -60, 10);
+        vbar.setValue(0);
+        add(vbar);
     }
 
     @Override
-    String getDefaultName() {
-        return "display";
+    public void updateV() {
+        vbar.setValue(value.getDouble());
     }
 }

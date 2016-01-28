@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,29 +15,37 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.objecteditor;
+package axoloti.displays;
 
-import axoloti.displays.Display;
-import axoloti.displays.DisplayTypes;
-import java.util.ArrayList;
+import axoloti.datatypes.Value;
+import java.nio.ByteBuffer;
 
 /**
  *
- * @author jtaelman
+ * @author Johannes Taelman
  */
-public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
+public abstract class DisplayInstance1<T extends Display> extends DisplayInstance<T> {
 
-    public DisplayDefinitionsEditorPanel() {
-        super(DisplayTypes.getTypes());
+    public DisplayInstance1() {
+        super();
     }
 
     @Override
-    ArrayList<Display> GetAtomDefinitions() {
-        return obj.displays;
+    public String GenerateCodeInit(String vprefix) {
+        String s = GetCName() + " = 0;\n";
+        return s;
     }
 
     @Override
-    String getDefaultName() {
-        return "display";
+    public String valueName(String vprefix) {
+        return "displayVector[" + offset + "]";
+    }
+
+    public abstract Value getValueRef();
+
+    @Override
+    public void ProcessByteBuffer(ByteBuffer bb) {
+        getValueRef().setRaw(bb.getInt());
+        updateV();
     }
 }

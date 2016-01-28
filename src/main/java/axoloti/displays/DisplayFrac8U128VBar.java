@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,29 +15,37 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.objecteditor;
+package axoloti.displays;
 
-import axoloti.displays.Display;
-import axoloti.displays.DisplayTypes;
-import java.util.ArrayList;
+import axoloti.datatypes.Int8Ptr;
+import java.security.MessageDigest;
 
 /**
  *
- * @author jtaelman
+ * @author Johannes Taelman
  */
-public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
+public class DisplayFrac8U128VBar extends Display {
 
-    public DisplayDefinitionsEditorPanel() {
-        super(DisplayTypes.getTypes());
+    public DisplayFrac8U128VBar() {
+    }
+
+    public DisplayFrac8U128VBar(String name) {
+        super(name);
     }
 
     @Override
-    ArrayList<Display> GetAtomDefinitions() {
-        return obj.displays;
+    public DisplayInstanceFrac8U128VBar InstanceFactory() {
+        return new DisplayInstanceFrac8U128VBar();
     }
 
     @Override
-    String getDefaultName() {
-        return "display";
+    public void updateSHA(MessageDigest md) {
+        super.updateSHA(md);
+        md.update("frac8.u.128.vbar".getBytes());
+    }
+
+    @Override
+    public Int8Ptr getDatatype() {
+        return Int8Ptr.d;
     }
 }

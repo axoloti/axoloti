@@ -22,10 +22,10 @@ import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
 import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.parameters.ParameterFrac32UMap;
-import displays.DisplayFrac32VBar;
-import displays.DisplayFrac32VBarDB;
-import displays.DisplayFrac4UByteVBar;
-import displays.DisplayVScale;
+import axoloti.displays.DisplayFrac32VBar;
+import axoloti.displays.DisplayFrac32VBarDB;
+import axoloti.displays.DisplayFrac4UByteVBar;
+import axoloti.displays.DisplayVScale;
 
 /**
  *

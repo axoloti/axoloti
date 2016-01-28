@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2016 Johannes Taelman
+ * Copyright (C) 2013, 2014 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,29 +15,32 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.objecteditor;
+package axoloti.displays;
 
-import axoloti.displays.Display;
-import axoloti.displays.DisplayTypes;
-import java.util.ArrayList;
+import components.displays.DispComponent;
 
 /**
  *
- * @author jtaelman
+ * @author Johannes Taelman
  */
-public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
+public class DisplayInstanceFrac32UDial extends DisplayInstanceFrac32<DisplayFrac32UDial> {
 
-    public DisplayDefinitionsEditorPanel() {
-        super(DisplayTypes.getTypes());
+    private DispComponent dial;
+
+    public DisplayInstanceFrac32UDial() {
+        super();
     }
 
     @Override
-    ArrayList<Display> GetAtomDefinitions() {
-        return obj.displays;
+    public void PostConstructor() {
+        super.PostConstructor();
+
+        dial = new DispComponent(0.0, 0.0, 64.0);
+        add(dial);
     }
 
     @Override
-    String getDefaultName() {
-        return "display";
+    public void updateV() {
+        dial.setValue(value.getDouble());
     }
 }

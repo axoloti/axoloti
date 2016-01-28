@@ -28,7 +28,7 @@ import axoloti.utils.CharEscape;
 import axoloti.utils.Constants;
 import components.LabelComponent;
 import components.TextFieldComponent;
-import displays.DisplayInstance;
+import axoloti.displays.DisplayInstance;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
