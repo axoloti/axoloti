@@ -18,9 +18,9 @@
 package axoloti.dialogs;
 
 import axoloti.ConnectionStatusListener;
-import axoloti.DocumentWindowList;
 import axoloti.MainFrame;
 import static axoloti.MainFrame.prefs;
+import axoloti.SDCardInfo;
 import axoloti.USBBulkConnection;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -36,7 +36,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdUploadFile;
 
@@ -54,6 +54,88 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jLabelSDInfo.setText("");
+
+        jFileTable.setModel(new AbstractTableModel() {
+            private String[] columnNames = {"Name", "Type", "Size", "Date"};
+
+            @Override
+            public int getColumnCount() {
+                return columnNames.length;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return columnNames[column];
+            }
+
+            @Override
+            public Class getColumnClass(int column) {
+                return String.class;
+            }
+
+            @Override
+            public int getRowCount() {
+                return SDCardInfo.getInstance().getFiles().size();
+            }
+
+            @Override
+            public void setValueAt(Object value, int rowIndex, int columnIndex) {
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                Object returnValue = null;
+
+                switch (columnIndex) {
+                    case 0: {
+                        String fname = SDCardInfo.getInstance().getFiles().get(rowIndex).getFilename();
+                        int i = fname.lastIndexOf('.');
+                        if (i > 0) {
+                            returnValue = fname.substring(0, i);
+                        } else {
+                            returnValue = fname;
+                        }
+                    }
+                    break;
+                    case 1: {
+                        String fname = SDCardInfo.getInstance().getFiles().get(rowIndex).getFilename();
+                        int i = fname.lastIndexOf('.');
+                        if (i > 0) {
+                            returnValue = fname.substring(i + 1);
+                        } else {
+                            returnValue = fname;
+                        }
+                    }
+                    break;
+                    case 2: {
+                        String s;
+                        int size = SDCardInfo.getInstance().getFiles().get(rowIndex).getSize();
+                        if (size < 10240) {
+                            s = "" + size + "  bytes";
+                        } else if (size < 10240 * 1024) {
+                            s = "" + (size / 1024) + " kB";
+                        } else {
+                            s = "" + (size / (1024 * 1024)) + " MB";
+                        }
+                        returnValue = s;
+                    }
+                    break;
+                    case 3: {
+                        returnValue = SDCardInfo.getInstance().getFiles().get(rowIndex).getTimestamp().getTime().toString();
+                    }
+                    break;
+                }
+
+                return returnValue;
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return (columnIndex == 1);
+            }
+
+        });
+
         jFileTable.setDropTarget(new DropTarget() {
             @Override
             public synchronized void drop(DropTargetDropEvent evt) {
@@ -114,14 +196,14 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
             },
             new String [] {
-                "Name", "Type", "Size"
+                "Name", "Type", "Size", "Date"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -231,36 +313,14 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
     }//GEN-LAST:event_formWindowClosing
-    
-    public void ShowSDInfo(int clusters, int clustersize, int sectorsize) {
+
+    public void refresh() {
+        int clusters = SDCardInfo.getInstance().getClusters();
+        int clustersize = SDCardInfo.getInstance().getClustersize();
+        int sectorsize = SDCardInfo.getInstance().getSectorsize();
         jLabelSDInfo.setText("Free : " + ((long) clusters * (long) clustersize * (long) sectorsize / (1024 * 1024)) + "MB, Cluster size = " + clustersize * sectorsize);
-        DefaultTableModel model = (DefaultTableModel) jFileTable.getModel();
-        int rows = model.getRowCount();
-        while (rows > 0) {
-            model.removeRow(rows - 1);
-            rows--;
-        }
-    }
-    
-    public void AddFile(String fname, int size) {
-        DefaultTableModel model = (DefaultTableModel) jFileTable.getModel();
-        int i = fname.lastIndexOf('.');
-        String base;
-        String ext;
-        if (i > 0) {
-            base = fname.substring(0, i);
-            ext = fname.substring(i + 1);
-        } else {
-            base = fname;
-            ext = "";
-        }
-        if (size < 10240) {
-            model.addRow(new Object[]{base, ext, "" + size + "  bytes"});
-        } else if (size < 10240 * 1024) {
-            model.addRow(new Object[]{base, ext, "" + (size / 1024) + " kB"});
-        } else {
-            model.addRow(new Object[]{base, ext, "" + (size / (1024 * 1024)) + " MB"});
-        }
+        jFileTable.revalidate();
+        jFileTable.repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -282,7 +342,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         jFileTable.setEnabled(true);
         jLabelSDInfo.setText("");
     }
-    
+
     @Override
     public void ShowDisconnect() {
         jButton1Refresh.setEnabled(false);
