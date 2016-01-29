@@ -1929,7 +1929,7 @@ public class Patch {
         return o;
     }
 
-    void WriteCode() {
+    public void WriteCode() {
         String c = GenerateCode3();
 
         try {
@@ -1945,7 +1945,7 @@ public class Patch {
         Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Generate code complete");
     }
 
-    void Compile() {
+    public void Compile() {
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
     }
 

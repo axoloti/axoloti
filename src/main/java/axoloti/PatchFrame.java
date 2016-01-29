@@ -17,11 +17,9 @@
  */
 package axoloti;
 
-import axoloti.dialogs.AboutFrame;
 import axoloti.object.AxoObjects;
 import axoloti.utils.Constants;
 import java.awt.Cursor;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -44,7 +42,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -688,7 +685,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jCheckBoxLiveActionPerformed
 
     private void jMenuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuOpenActionPerformed
-        MainFrame.mainframe.OpenPatch();
+        FileUtils.Open(this);
     }//GEN-LAST:event_jMenuOpenActionPerformed
 
     private void jMenuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveActionPerformed
@@ -705,57 +702,9 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
         final JFileChooser fc = new JFileChooser(MainFrame.prefs.getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
-        FileFilter axp = new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                if (file.getName().endsWith("axp")) {
-                    return true;
-                } else if (file.isDirectory()) {
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public String getDescription() {
-                return "Axoloti Patch";
-            }
-        };
-        FileFilter axh = new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                if (file.getName().endsWith("axh")) {
-                    return true;
-                } else if (file.isDirectory()) {
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public String getDescription() {
-                return "Axoloti Help";
-            }
-        };
-        FileFilter axs = new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                if (file.getName().endsWith("axs")) {
-                    return true;
-                } else if (file.isDirectory()) {
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public String getDescription() {
-                return "Axoloti Subpatch";
-            }
-        };
-        fc.addChoosableFileFilter(axp);
-        fc.addChoosableFileFilter(axs);
-        fc.addChoosableFileFilter(axh);
+        fc.addChoosableFileFilter(FileUtils.axpFileFilter);
+        fc.addChoosableFileFilter(FileUtils.axsFileFilter);
+        fc.addChoosableFileFilter(FileUtils.axhFileFilter);
         String fn = patch.getFileNamePath();
         if (fn == null) {
             fn = "untitled";
@@ -769,23 +718,23 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
             ext = fn.substring(dot);
         }
         if (ext.equalsIgnoreCase(".axp")) {
-            fc.setFileFilter(axp);
+            fc.setFileFilter(FileUtils.axpFileFilter);
         } else if (ext.equalsIgnoreCase(".axs")) {
-            fc.setFileFilter(axs);
+            fc.setFileFilter(FileUtils.axsFileFilter);
         } else if (ext.equalsIgnoreCase(".axh")) {
-            fc.setFileFilter(axh);
+            fc.setFileFilter(FileUtils.axhFileFilter);
         } else {
-            fc.setFileFilter(axp);
+            fc.setFileFilter(FileUtils.axpFileFilter);
         }
 
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             String filterext = ".axp";
-            if (fc.getFileFilter() == axp) {
+            if (fc.getFileFilter() == FileUtils.axpFileFilter) {
                 filterext = ".axp";
-            } else if (fc.getFileFilter() == axs) {
+            } else if (fc.getFileFilter() == FileUtils.axsFileFilter) {
                 filterext = ".axs";
-            } else if (fc.getFileFilter() == axh) {
+            } else if (fc.getFileFilter() == FileUtils.axhFileFilter) {
                 filterext = ".axh";
             }
 
@@ -949,7 +898,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "target filename:{0}", FileNameNoPath);
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patch));
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdWriteFile("0:" + FileNameNoPath));
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(getBinFile(), "0:" + FileNameNoPath));
     }//GEN-LAST:event_jMenuItemUploadSDActionPerformed
 
     private void jMenuItemUploadSDStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDStartActionPerformed
@@ -958,7 +907,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "target filename:{0}", FileNameNoPath);
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patch));
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdWriteFile("0:" + FileNameNoPath));
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(getBinFile(), "0:" + FileNameNoPath));
     }//GEN-LAST:event_jMenuItemUploadSDStartActionPerformed
 
     private void jMenuSaveClipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveClipActionPerformed
@@ -1098,5 +1047,24 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     @Override
     public JFrame GetFrame() {
         return this;
+    }
+
+    @Override
+    public File getFile() {
+        if (patch.getFileNamePath() == null) {
+            return null;
+        } else {
+            return new File(patch.getFileNamePath());
+        }
+    }
+
+    public PatchGUI getPatch() {
+        return patch;
+    }
+
+    public File getBinFile() {
+        String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";;
+        return new File(buildDir + "/xpatch.bin");
+//            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath());        
     }
 }

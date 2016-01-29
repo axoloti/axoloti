@@ -179,7 +179,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             popm_help.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    MainFrame.mainframe.OpenPatch(getType().GetHelpPatchFile());
+                    PatchGUI.OpenPatch(getType().GetHelpPatchFile());
                 }
             });
             popup.add(popm_help);
