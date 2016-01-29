@@ -18,6 +18,7 @@
 package axoloti;
 
 import java.awt.BorderLayout;
+import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import org.fife.ui.rtextarea.*;
@@ -129,5 +130,10 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
     public boolean AskClose() {
         Close();
         return false; //TBC
+    }
+
+    @Override
+    public File getFile() {
+        return null;
     }
 }

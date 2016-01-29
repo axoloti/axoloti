@@ -32,6 +32,8 @@ public abstract class AxoAttribute implements AtomDefinition {
 
     @Attribute
     String name;
+    @Attribute(required = false)
+    public String description;
 
     public AxoAttribute() {
     }
@@ -41,10 +43,30 @@ public abstract class AxoAttribute implements AtomDefinition {
     }
 
     @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
     @Override
     public AttributeInstance CreateInstance(AxoObjectInstance o) {
         AttributeInstance pi = InstanceFactory(o);

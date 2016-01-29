@@ -86,7 +86,7 @@ import qcmds.QCmdUploadPatch;
  *
  * @author Johannes Taelman
  */
-public final class MainFrame extends javax.swing.JFrame implements ActionListener, ConnectionStatusListener  {
+public final class MainFrame extends javax.swing.JFrame implements ActionListener, ConnectionStatusListener {
 
     static public Preferences prefs = Preferences.LoadPreferences();
     static public AxoObjects axoObjects;
@@ -258,7 +258,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                                     if (axoObjects.LoaderThread.isAlive()) {
                                         EventQueue.invokeLater(this);
                                     } else {
-                                        MainFrame.mainframe.OpenPatch(f);
+                                        PatchGUI.OpenPatch(f);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -978,7 +978,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         OpenURL();
     }//GEN-LAST:event_jMenuOpenURLActionPerformed
 
-    public void OpenURL(){
+    public void OpenURL() {
         String url = JOptionPane.showInputDialog(this, "Enter URL:");
         if (url == null) {
             return;
@@ -986,16 +986,16 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         try {
             InputStream input = new URL(url).openStream();
             String name = url.substring(url.lastIndexOf("/") + 1, url.length());
-            OpenPatch(name, input);
+            PatchGUI.OpenPatch(name, input);
         } catch (MalformedURLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Invalid URL {0}\n{1}", new Object[]{url, ex});
         } catch (IOException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Unable to open URL {0}\n{1}", new Object[]{url, ex});
-        }        
+        }
     }
-    
+
     private void jMenuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuOpenActionPerformed
-        OpenPatch();
+        FileUtils.Open(this);
     }//GEN-LAST:event_jMenuOpenActionPerformed
 
     private void jMenuNewPatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewPatchActionPerformed
@@ -1023,101 +1023,11 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         pf.setVisible(true);
     }
 
-    public void NewBank() { 
+    public void NewBank() {
         PatchBank b = new PatchBank();
         b.setVisible(true);
     }
-    
-    public void OpenPatch() {
-        final JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
-        fc.setAcceptAllFileFilterUsed(false);
-        fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp", "axh", "axs"));
-        fc.addChoosableFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                if (file.getName().endsWith("axp")) {
-                    return true;
-                } else if (file.isDirectory()) {
-                    return true;
-                }
-                return false;
-            }
 
-            @Override
-            public String getDescription() {
-                return "Axoloti Patch";
-            }
-        });
-        fc.addChoosableFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                if (file.getName().endsWith("axh")) {
-                    return true;
-                } else if (file.isDirectory()) {
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public String getDescription() {
-                return "Axoloti Help";
-            }
-        });
-        fc.addChoosableFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                if (file.getName().endsWith("axs")) {
-                    return true;
-                } else if (file.isDirectory()) {
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public String getDescription() {
-                return "Axoloti Subpatch";
-            }
-        });
-
-        int returnVal = fc.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            prefs.setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
-            prefs.SavePrefs();
-            File f = fc.getSelectedFile();
-            OpenPatch(f);
-        }
-    }
-
-    public void OpenPatch(String name, InputStream stream) {
-        Serializer serializer = new Persister();
-        try {
-            PatchGUI patch1 = serializer.read(PatchGUI.class, stream);
-            PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
-            patch1.setFileNamePath(name);
-            patch1.PostContructor();
-            patch1.setFileNamePath(name);
-            pf.setVisible(true);
-        } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void OpenPatch(File f) {
-        Serializer serializer = new Persister();
-        try {
-            PatchGUI patch1 = serializer.read(PatchGUI.class, f);
-            PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
-            patch1.setFileNamePath(f.getAbsolutePath());
-            patch1.PostContructor();
-            patch1.setFileNamePath(f.getPath());
-            pf.setVisible(true);
-            MainFrame.prefs.addRecentFile(f.getAbsolutePath());
-        } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.menus.FavouriteMenu favouriteMenu1;
@@ -1234,7 +1144,6 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
             } else {
                 jLabelCPUID.setText("Cpu ID = " + cpuId + " ( " + name + " ) ");
             }
-
         }
     }
 
@@ -1317,7 +1226,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         String cmd = e.getActionCommand();
         if (cmd.startsWith("open:")) {
             String fn = cmd.substring(5);
-            OpenPatch(new File(fn));
+            PatchGUI.OpenPatch(new File(fn));
         }
     }
 

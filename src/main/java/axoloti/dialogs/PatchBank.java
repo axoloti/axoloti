@@ -20,23 +20,37 @@ package axoloti.dialogs;
 import axoloti.ConnectionStatusListener;
 import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
+import static axoloti.FileUtils.axpFileFilter;
 import axoloti.MainFrame;
+import static axoloti.MainFrame.prefs;
+import axoloti.PatchFrame;
+import axoloti.PatchGUI;
 import axoloti.USBBulkConnection;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.nio.ByteBuffer;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdUploadFile;
@@ -49,18 +63,152 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
     String FilenamePath = null;
 
+    final String fileExtension = ".axb";
+
+    ArrayList<File> files;
+
     /**
      * Creates new form PatchBank
      */
     public PatchBank() {
         initComponents();
+        files = new ArrayList<File>();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         DocumentWindowList.RegisterWindow(this);
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        for (int i = 0; i < 128; i++) {
-            model.addRow(new Object[]{i, ""});
+        jTable1.setModel(new AbstractTableModel() {
+            private String[] columnNames = {"Index", "File", "on sdcard"};
+
+            @Override
+            public int getColumnCount() {
+                return columnNames.length;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return columnNames[column];
+            }
+
+            @Override
+            public Class getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return String.class;
+                    case 1:
+                        return String.class;
+                    case 2:
+                        return String.class;
+                }
+                return null;
+            }
+
+            @Override
+            public int getRowCount() {
+                return files.size();
+            }
+
+            @Override
+            public void setValueAt(Object value, int rowIndex, int columnIndex) {
+
+                switch (columnIndex) {
+                    case 0:
+                        break;
+                    case 1:
+                        String svalue = (String) value;
+                        if (svalue != null && !svalue.isEmpty()) {
+                            File f = new File(svalue);
+                            if (f.exists() && f.isFile() && f.canRead()) {
+                                files.set(rowIndex, f);
+                                refresh();
+                            }
+                        }
+                        break;
+                    case 2:
+                        break;
+                }
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                Object returnValue = null;
+
+                switch (columnIndex) {
+                    case 0:
+                        returnValue = Integer.toString(rowIndex);
+                        break;
+                    case 1:
+                        if (files.get(rowIndex) != null) {
+                            returnValue = toRelative(files.get(rowIndex));
+                        } else {
+                            returnValue = "";
+                        }
+                        break;
+                    case 2:
+                        returnValue = toSDCFilename(files.get(rowIndex));
+                        break;
+                }
+
+                return returnValue;
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return (columnIndex == 1);
+            }
+
+        });
+
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(90);
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int row = jTable1.getSelectedRow();
+                if (row < 0) {
+                    jButtonUp.setEnabled(false);
+                    jButtonDown.setEnabled(false);
+                    jButtonOpen.setEnabled(false);
+                } else {
+                    jButtonUp.setEnabled(row > 0);
+                    jButtonDown.setEnabled(row < files.size() - 1);
+                    jButtonOpen.setEnabled(true);
+                }
+            }
+        });
+
+    }
+
+    public void refresh() {
+        jTable1.revalidate();
+        jTable1.repaint();
+    }
+
+    String toRelative(File f) {
+        if (FilenamePath != null && !FilenamePath.isEmpty()) {
+            Path pathAbsolute = Paths.get(f.getPath());
+            Path pathBase = Paths.get(new File(FilenamePath).getParent());
+            Path pathRelative = pathBase.relativize(pathAbsolute);
+//            String base = new File(FilenamePath).getParent();
+//            return new File(base).toURI().relativize(f.toURI()).getPath();
+            return pathRelative.toString();
+        } else {
+            return f.getAbsolutePath();
         }
+    }
+
+    String toSDCFilename(File f) {
+        String s = f.getName();
+        String noext = s.substring(0, s.length() - 4);
+        if (noext.length() > 8) {
+            noext = noext.substring(0, 8);
+        }
+        return noext + ".bin";
+    }
+
+    File fromRelative(String s) {
+        Path basePath = FileSystems.getDefault().getPath(FilenamePath);
+        Path resolvedPath = basePath.getParent().resolve(s);
+        return resolvedPath.toFile();
     }
 
     public byte[] GetContents() {
@@ -80,32 +228,42 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         return b;
     }
 
-    void Open(File f) {
-        InputStream s;
+    void Open(File f) throws IOException {
         try {
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            s = new FileInputStream(f);
-
-            for (int i = 0; i < 128; i++) {
-                model.addRow(new Object[]{i, ""});
+            FilenamePath = f.getPath();
+            InputStream fs = new FileInputStream(f);
+            BufferedReader fbs = new BufferedReader(new InputStreamReader(fs));
+            String s;
+            files = new ArrayList<File>();
+            while ((s = fbs.readLine())
+                    != null) {
+                File ff = fromRelative(s);
+                if (ff != null) {
+                    files.add(ff);
+                }
             }
-            s.close();
+            fs.close();
+            refresh();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
             Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     void Save(File f) {
-        FileOutputStream fo;
+        FilenamePath = f.getPath();
         try {
-            fo = new FileOutputStream(f);
-            fo.write(GetContents());
+            PrintWriter pw = new PrintWriter(f);
+            for (File file : files) {
+                String fn = toRelative(file);
+                pw.println(fn);
+            }
+            pw.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PatchBank.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PatchBank.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -120,6 +278,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 Save(f);
             }
         }
+        refresh();
     }
 
     void SaveAs() {
@@ -154,15 +313,15 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (dot > 0 && fn.length() > dot + 3) {
             ext = fn.substring(dot);
         }
-        if (ext.equalsIgnoreCase(".axb")) {
+        if (ext.equalsIgnoreCase(fileExtension)) {
             fc.setFileFilter(axb);
         }
 
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            String filterext = ".axb";
+            String filterext = fileExtension;
             if (fc.getFileFilter() == axb) {
-                filterext = ".axb";
+                filterext = fileExtension;
             }
 
             File fileToBeSaved = fc.getSelectedFile();
@@ -173,7 +332,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 ext = fname.substring(dot);
             }
 
-            if (!ext.equalsIgnoreCase(".axb")) {
+            if (!ext.equalsIgnoreCase(fileExtension)) {
                 fileToBeSaved = new File(fc.getSelectedFile() + filterext);
 
             } else if (!ext.equals(filterext)) {
@@ -278,6 +437,13 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        jButtonUp = new javax.swing.JButton();
+        jButtonDown = new javax.swing.JButton();
+        jButtonRemove = new javax.swing.JButton();
+        jButtonAdd = new javax.swing.JButton();
+        jButtonOpen = new javax.swing.JButton();
+        jButtonUpload = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItemSave = new javax.swing.JMenuItem();
@@ -311,7 +477,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonUploadBank)
-                .addContainerGap(119, Short.MAX_VALUE))
+                .addContainerGap(185, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -320,7 +486,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonUploadBank))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1);
@@ -354,6 +520,82 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         getContentPane().add(jScrollPane1);
+
+        jButtonUp.setText("Move up");
+        jButtonUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUpActionPerformed(evt);
+            }
+        });
+
+        jButtonDown.setText("Move Down");
+        jButtonDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDownActionPerformed(evt);
+            }
+        });
+
+        jButtonRemove.setText("Remove");
+        jButtonRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoveActionPerformed(evt);
+            }
+        });
+
+        jButtonAdd.setText("Add");
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddActionPerformed(evt);
+            }
+        });
+
+        jButtonOpen.setText("Open");
+        jButtonOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOpenActionPerformed(evt);
+            }
+        });
+
+        jButtonUpload.setText("Upload");
+        jButtonUpload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUploadActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonUp)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonDown)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonRemove)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonAdd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonOpen)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonUpload)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonUp)
+                    .addComponent(jButtonDown)
+                    .addComponent(jButtonRemove)
+                    .addComponent(jButtonAdd)
+                    .addComponent(jButtonOpen)
+                    .addComponent(jButtonUpload)))
+        );
+
+        getContentPane().add(jPanel2);
 
         jMenu1.setText("File");
 
@@ -403,8 +645,82 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         AskClose();
     }//GEN-LAST:event_formWindowClosing
 
+    private void jButtonUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpActionPerformed
+        int row = jTable1.getSelectedRow();
+        if (row < 1) {
+            return;
+        }
+        File o = files.remove(row);
+        files.add(row - 1, o);
+        jTable1.setRowSelectionInterval(row - 1, row - 1);
+        refresh();
+    }//GEN-LAST:event_jButtonUpActionPerformed
+
+    private void jButtonDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDownActionPerformed
+        int row = jTable1.getSelectedRow();
+        if (row < 0) {
+            return;
+        }
+        if (row > (files.size() - 1)) {
+            return;
+        }
+        File o = files.remove(row);
+        files.add(row + 1, o);
+        jTable1.setRowSelectionInterval(row + 1, row + 1);
+        refresh();
+    }//GEN-LAST:event_jButtonDownActionPerformed
+
+    private void jButtonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveActionPerformed
+        int row = jTable1.getSelectedRow();
+        if (row < 0) {
+            return;
+        }
+        files.remove(row);
+        refresh();
+    }//GEN-LAST:event_jButtonRemoveActionPerformed
+
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
+        JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp"));
+        fc.addChoosableFileFilter(axpFileFilter);
+        int returnVal = fc.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            files.add(fc.getSelectedFile());
+            refresh();
+        }
+    }//GEN-LAST:event_jButtonAddActionPerformed
+
+    private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
+        int row = jTable1.getSelectedRow();
+        if (row >= 0) {
+            File f = files.get(jTable1.getSelectedRow());
+            if (f.isFile() && f.canRead()) {
+                PatchGUI.OpenPatch(f);
+            }
+        }
+    }//GEN-LAST:event_jButtonOpenActionPerformed
+
+    private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
+        File f = files.get(jTable1.getSelectedRow());
+        if (!f.isFile() || !f.canRead()) {
+            return;
+        }
+        PatchFrame pf = PatchGUI.OpenPatch(f);
+        PatchGUI p = pf.getPatch();
+        p.WriteCode();
+        p.Compile();
+        QCmdProcessor.getQCmdProcessor().AppendToQueue(new qcmds.QCmdUploadFile(pf.getBinFile(), "0:" + toSDCFilename(f)));
+    }//GEN-LAST:event_jButtonUploadActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonDown;
+    private javax.swing.JButton jButtonOpen;
+    private javax.swing.JButton jButtonRemove;
+    private javax.swing.JButton jButtonUp;
+    private javax.swing.JButton jButtonUpload;
     private javax.swing.JButton jButtonUploadBank;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
@@ -413,6 +729,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     private javax.swing.JMenuItem jMenuItemSave;
     private javax.swing.JMenuItem jMenuItemSaveAs;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private axoloti.menus.WindowMenu windowMenu1;
@@ -431,6 +748,25 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     @Override
     public void ShowDisconnect() {
         jButtonUploadBank.setEnabled(false);
+    }
+
+    static public void OpenBank(File f) {
+        PatchBank pb = new PatchBank();
+        try {
+            pb.Open(f);
+            pb.setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public File getFile() {
+        if (FilenamePath == null) {
+            return null;
+        } else {
+            return new File(FilenamePath);
+        }
     }
 
 }

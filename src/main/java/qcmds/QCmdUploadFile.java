@@ -20,7 +20,6 @@ package qcmds;
 import axoloti.Connection;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
@@ -33,11 +32,18 @@ import java.util.logging.Logger;
 public class QCmdUploadFile implements QCmdSerialTask {
 
     InputStream inputStream;
-    String filename;
+    final String filename;
+    File file;
 
     public QCmdUploadFile(InputStream inputStream, String filename) {
         this.inputStream = inputStream;
         this.filename = filename;
+    }
+
+    public QCmdUploadFile(File file, String filename) {
+        this.file = file;
+        this.filename = filename;
+        inputStream = null;
     }
 
     @Override
@@ -54,9 +60,12 @@ public class QCmdUploadFile implements QCmdSerialTask {
     public QCmd Do(Connection connection) {
         connection.ClearSync();
         try {
+            if (inputStream == null) {
+                inputStream = new FileInputStream(file);
+            }
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading: {0}", filename);
             connection.TransmitCreateFile(filename, 0);
-            
+
             int MaxBlockSize = 32768;
             int tlength = inputStream.available();
             int remLength = inputStream.available();

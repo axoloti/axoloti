@@ -33,8 +33,8 @@ import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
 import components.LabelComponent;
 import components.PopupIcon;
-import displays.Display;
-import displays.DisplayInstance;
+import axoloti.displays.Display;
+import axoloti.displays.DisplayInstance;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.MenuItem;
 import java.awt.Point;
@@ -55,7 +55,7 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "obj")
-public class AxoObjectInstance extends AxoObjectInstanceAbstract {
+public class AxoObjectInstance extends AxoObjectInstanceAbstract implements ObjectModifiedListener {
 
     public ArrayList<InletInstance> inletInstances;
     public ArrayList<OutletInstance> outletInstances;
@@ -113,8 +113,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         super.PostConstructor();
         if (this instanceof AxoObjectInstancePatcher) {
             ((AxoObjectInstancePatcher) this).updateObj1();
+        } else if (this instanceof AxoObjectInstancePatcherObject) {
+            ((AxoObjectInstancePatcherObject) this).updateObj1();
         }
-
         ArrayList<ParameterInstance> pParameterInstances = parameterInstances;
         ArrayList<AttributeInstance> pAttributeInstances = attributeInstances;
         ArrayList<InletInstance> pInletInstances = inletInstances;
@@ -178,7 +179,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             popm_help.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    MainFrame.mainframe.OpenPatch(getType().GetHelpPatchFile());
+                    PatchGUI.OpenPatch(getType().GetHelpPatchFile());
                 }
             });
             popup.add(popm_help);
@@ -381,6 +382,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         add(p_displays);
         p_params.setAlignmentX(LEFT_ALIGNMENT);
         p_displays.setAlignmentX(LEFT_ALIGNMENT);
+
+        getType().addObjectModifiedListener(this);
+
         resizeToGrid();
     }
 
@@ -536,9 +540,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 c += p.PExName("parent->") + ".finalvalue = (int32_t)(&(parent->instance"
                         + getLegalName() + "_i.PExch[instance" + getLegalName() + "::PARAM_INDEX_"
                         + p.parameter.PropagateToChild + "]));\n";
+                
             } else {
                 c += p.GenerateCodeInit("parent->", "");
             }
+            c += p.GenerateCodeInitModulator("parent->", "");
             //           if ((p.isOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
             //String parentparametername = classname.substring(8);
@@ -596,13 +602,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             }
             s = s.replace("attr_name", getCInstanceName());
             s = s.replace("attr_legal_name", getLegalName());
-            for (InletInstance i : inletInstances) {
-                Net n = patch.GetNet(i);
-//                s = s.replace("%" + i.GetLabel() + "%", i.GetCName());
-            }
-            for (OutletInstance i : outletInstances) {
-//                s = s.replace("%" + i.GetLabel() + "%", i.GetCName());
-            }
             for (ParameterInstance p : parameterInstances) {
                 if (p.isOnParent() && enableOnParent) {
 //                    s = s.replace("%" + p.name + "%", OnParentAccess + p.variableName(vprefix, enableOnParent));
@@ -843,5 +842,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     @Override
     public ArrayList<DisplayInstance> GetDisplayInstances() {
         return displayInstances;
+    }
+
+    @Override
+    public void ObjectModified(Object src) {
+        if (getPatch() != null) {
+            getPatch().ChangeObjectInstanceType(this, this.getType());
+        }
     }
 }

@@ -32,6 +32,7 @@ import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectComment;
 import axoloti.object.AxoObjectHyperlink;
 import axoloti.object.AxoObjectPatcher;
+import axoloti.object.AxoObjectPatcherObject;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletCharPtr32;
 import axoloti.outlets.OutletFrac32;
@@ -76,6 +77,7 @@ public class Patch extends gentools {
         WriteAxoObject(catName, CreatePolyIndex());
 
         WriteAxoObject(catName, CreatePatcher());
+        WriteAxoObject(catName, CreatePatcherObject());
         WriteAxoObject(catName, CreateCyclecounter());
 
     }
@@ -213,7 +215,7 @@ public class Patch extends gentools {
         o.SetProvidesModulationSource();
         o.sMidiCode = "if ((status == MIDI_CONTROL_CHANGE + attr_midichannel)&&(data1 == %cc%)) {\n"
                 + "  PExModulationSourceChange(\n"
-                + "    &parent->PExModulationSources[parent->MODULATOR_attr_name][0],\n"
+                + "    &parent->GetModulationTable()[parent->MODULATOR_attr_name*NMODULATIONTARGETS],\n"
                 + "    NMODULATIONTARGETS,\n"
                 + "    &parent->PExch[0],\n"
                 + "    &parent->PExModulationPrevVal[parent->polyIndex][parent->MODULATOR_attr_name],\n"
@@ -234,7 +236,7 @@ public class Patch extends gentools {
 //                + "   parent2->PExModulationSources[MODULATOR_%name%][i].PEx = 0;\n";
         o.sKRateCode = "if ((%trig%>0) && !ntrig) {\n"
                 + "  PExModulationSourceChange(\n"
-                + "    &parent->PExModulationSources[parent->MODULATOR_attr_name][0],\n"
+                + "    &parent->GetModulationTable()[parent->MODULATOR_attr_name*NMODULATIONTARGETS],\n"
                 + "    NMODULATIONTARGETS,\n"
                 + "    &parent->PExch[0],\n"
                 + "    &parent->PExModulationPrevVal[parent->polyIndex][parent->MODULATOR_attr_name],\n"
@@ -318,6 +320,11 @@ public class Patch extends gentools {
         return o;
     }
 
+    static AxoObject CreatePatcherObject() {
+        AxoObject o = new AxoObjectPatcherObject("object", "Object stored in the patch document (IN DEVELOPMENT!)");
+        return o;
+    }   
+    
     static AxoObject CreateCyclecounter() {
         AxoObject o = new AxoObject("cyclecounter", "Outputs the cpu clock cycle counter, a 32bit integer incrementing on every clock cycle. Useful for benchmarking objects.");
         o.outlets.add(new OutletInt32("t", "cpu time in ticks"));

@@ -46,10 +46,30 @@ public abstract class Inlet implements AtomDefinition {
     }
 
     @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
     public String getName() {
         return name;
     }
-    
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String GetCName() {
         return "inlet_" + CharEscape.CharEscape(name);
     }
@@ -57,8 +77,8 @@ public abstract class Inlet implements AtomDefinition {
     @Override
     public AtomInstance CreateInstance(AxoObjectInstance o) {
         throw new UnsupportedOperationException("Not supported yet.");
-    }    
-    
+    }
+
     public abstract DataType getDatatype();
 
     SignalMetaData GetSignalMetaData() {

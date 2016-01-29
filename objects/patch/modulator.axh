@@ -4,7 +4,7 @@
       <params/>
       <attribs/>
    </obj>
-   <obj type="patch/modsource" sha="7c62ac4dc64da3f882068c7a4a4b5860cba293bf" name="modpitch" x="182" y="56">
+   <obj type="patch/modsource" sha="e0ee10b85ac38b70a682a69ace823af08f4b707d" name="modpitch" x="182" y="56">
       <params/>
       <attribs/>
    </obj>
@@ -19,48 +19,63 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="350" y="224">
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1" x="112" y="224">
       <params/>
       <attribs/>
    </obj>
    <comment type="patch/comment" x="28" y="322" text="modulated values are not shown on the dial, only affect the internal value!"/>
-   <comment type="patch/comment" x="28" y="378" text="another two modulation sources"/>
-   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="28" y="420">
+   <comment type="patch/comment" x="28" y="350" text="another target of the same source :"/>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c1_" x="28" y="378">
       <params>
-         <frac32.u.map name="value" value="32.0"/>
+         <frac32.u.map name="value" value="15.0">
+            <modulators>
+               <modulation sourceName="modpitch" modName="" value="20.0"/>
+            </modulators>
+         </frac32.u.map>
       </params>
       <attribs/>
    </obj>
-   <obj type="logic/change speedlim" sha="8139aa36b2337921d024c8963005fa8129f270ce" name="changespeedlim1" x="98" y="420">
+   <obj type="disp/dial p" sha="5ff4edecce7038619b91d1d056c33eecbc4eaf30" name="displayU1_" x="112" y="378">
+      <params/>
+      <attribs/>
+   </obj>
+   <comment type="patch/comment" x="28" y="490" text="another two modulation sources"/>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c2" x="28" y="518">
+      <params>
+         <frac32.u.map name="value" value="0.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="logic/change speedlim" sha="8139aa36b2337921d024c8963005fa8129f270ce" name="changespeedlim1" x="98" y="518">
       <params>
          <frac32.u.map name="d" value="46.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="patch/modsource" sha="7c62ac4dc64da3f882068c7a4a4b5860cba293bf" name="mod_c2" x="266" y="420">
+   <obj type="patch/modsource" sha="e0ee10b85ac38b70a682a69ace823af08f4b707d" name="mod_c2" x="266" y="518">
       <params/>
       <attribs/>
    </obj>
-   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="28" y="504">
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c3" x="28" y="602">
       <params>
-         <frac32.u.map name="value" value="32.0"/>
+         <frac32.u.map name="value" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="logic/change speedlim" sha="8139aa36b2337921d024c8963005fa8129f270ce" name="changespeedlim1_" x="98" y="504">
+   <obj type="logic/change speedlim" sha="8139aa36b2337921d024c8963005fa8129f270ce" name="changespeedlim1_" x="98" y="602">
       <params>
          <frac32.u.map name="d" value="46.5"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="patch/modsource" sha="7c62ac4dc64da3f882068c7a4a4b5860cba293bf" name="mod_c3" x="266" y="504">
+   <obj type="patch/modsource" sha="e0ee10b85ac38b70a682a69ace823af08f4b707d" name="mod_c3" x="266" y="602">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" x="28" y="616" text="c4 is modulated by both mod_c2 and c3"/>
-   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="28" y="658">
+   <comment type="patch/comment" x="28" y="714" text="c4 is modulated by both mod_c2 and c3"/>
+   <obj type="ctrl/dial p" sha="1f21216639bb798a4ea7902940999a5bcfd0de90" name="c4" x="28" y="742">
       <params>
-         <frac32.u.map name="value" value="0.0">
+         <frac32.u.map name="value" value="32.0">
             <modulators>
                <modulation sourceName="modpitch" value="0.0"/>
                <modulation sourceName="mod_c2" value="10.0"/>
@@ -70,7 +85,7 @@
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="98" y="658">
+   <obj type="disp/dial b" sha="b12c45ba7611d19c7b97481e73889da65eb2f9e" name="displayS1" x="98" y="742">
       <params/>
       <attribs/>
    </obj>
@@ -109,10 +124,14 @@
          <source obj="changespeedlim1_" outlet="trig"/>
          <dest obj="mod_c3" inlet="trig"/>
       </net>
+      <net>
+         <source obj="c1_" outlet="out"/>
+         <dest obj="displayU1_" inlet="in"/>
+      </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
-      <MidiChannel>0</MidiChannel>
+      <MidiChannel>1</MidiChannel>
       <NPresets>8</NPresets>
       <NPresetEntries>32</NPresetEntries>
       <NModulationSources>8</NModulationSources>
@@ -120,8 +139,8 @@
    </settings>
    <notes><![CDATA[]]></notes>
    <windowPos>
-      <x>0</x>
-      <y>2</y>
+      <x>760</x>
+      <y>226</y>
       <width>660</width>
       <height>968</height>
    </windowPos>

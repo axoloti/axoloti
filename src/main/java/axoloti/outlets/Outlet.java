@@ -52,6 +52,11 @@ public class Outlet implements AtomDefinition {
         this.description = description;
     }
 
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
     public String GetCName() {
         return "outlet_" + CharEscape.CharEscape(name);
     }
@@ -68,6 +73,21 @@ public class Outlet implements AtomDefinition {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

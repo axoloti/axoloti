@@ -25,7 +25,7 @@ import axoloti.dialogs.USBPortSelectionDlg;
 import static axoloti.dialogs.USBPortSelectionDlg.ErrorString;
 import axoloti.parameters.ParameterInstance;
 import axoloti.targetprofile.axoloti_core;
-import displays.DisplayInstance;
+import axoloti.displays.DisplayInstance;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;

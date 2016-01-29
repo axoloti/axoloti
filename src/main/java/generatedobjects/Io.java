@@ -26,7 +26,7 @@ import axoloti.object.AxoObject;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletFrac32;
 import axoloti.outlets.OutletFrac32Buffer;
-import displays.DisplayFrac32VU;
+import axoloti.displays.DisplayFrac32VU;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**

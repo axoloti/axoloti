@@ -33,6 +33,7 @@ import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceComment;
 import axoloti.object.AxoObjectInstanceHyperlink;
 import axoloti.object.AxoObjectInstancePatcher;
+import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.object.AxoObjectZombie;
 import axoloti.object.AxoObjects;
@@ -44,7 +45,7 @@ import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.Preferences;
-import displays.DisplayInstance;
+import axoloti.displays.DisplayInstance;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -81,6 +82,7 @@ public class Patch {
     public @ElementListUnion({
         @ElementList(entry = "obj", type = AxoObjectInstance.class, inline = true, required = false),
         @ElementList(entry = "patcher", type = AxoObjectInstancePatcher.class, inline = true, required = false),
+        @ElementList(entry = "patchobj", type = AxoObjectInstancePatcherObject.class, inline = true, required = false),
         @ElementList(entry = "comment", type = AxoObjectInstanceComment.class, inline = true, required = false),
         @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true, required = false),
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true, required = false)})
@@ -738,7 +740,6 @@ public class Patch {
     /* the c++ code generator */
     String GeneratePexchAndDisplayCode() {
         String c = GeneratePexchAndDisplayCodeV();
-        c += "    PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS];\n";
         c += "    int32_t PExModulationPrevVal[attr_poly][NMODULATIONSOURCES];\n";
         return c;
     }
@@ -865,6 +866,45 @@ public class Patch {
         return c;
     }
 
+    String GenerateModulationCode3() {
+        String s = "   static PExModulationTarget_t * GetModulationTable(void){\n";
+        s += "    static const PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS] = \n";
+        s += "{";
+        for (int i = 0; i < settings.GetNModulationSources(); i++) {
+            s += "{";
+            if (i < Modulators.size()) {
+                Modulator m = Modulators.get(i);
+                for (int j = 0; j < settings.GetNModulationTargetsPerSource(); j++) {
+                    if (j < m.Modulations.size()) {
+                        Modulation n = m.Modulations.get(j);
+                        s += "{" + n.destination.indexName() + ", " + n.value.getRaw() + "}";
+                    } else {
+                        s += "{-1,0}";
+                    }
+                    if (j != settings.GetNModulationTargetsPerSource() - 1) {
+                        s += ",";
+                    } else {
+                        s += "}";
+                    }
+                }
+            } else {
+                for (int j = 0; j < settings.GetNModulationTargetsPerSource() - 1; j++) {
+                    s += "{-1,0},";
+                }
+                s += "{-1,0}}";
+            }
+            if (i != settings.GetNModulationSources() - 1) {
+                s += ",\n";
+            } else {
+                s += "};\n";
+            }
+        }
+        s += "   return (PExModulationTarget_t *)&PExModulationSources[0][0];\n";
+        s += "   };\n";
+
+        return s;
+    }
+
     String GenerateParamInitCode3(String ClassName) {
         int s = ParameterInstances.size();
         String c = "   static const int32_t * GetInitParams(void){\n"
@@ -940,11 +980,6 @@ public class Patch {
         c += "   for(j=0;j<attr_poly*NMODULATIONSOURCES;j++){\n";
         c += "      *pp = 0; pp++;\n";
         c += "   }\n";
-        c += "   for(i=0;i<NMODULATIONSOURCES;i++) {\n"
-                + "	 for(j=0;j<NMODULATIONTARGETS;j++) {\n"
-                + "	   PExModulationSources[i][j].parameterIndex = -1;\n"
-                + "	 }\n"
-                + "   };\n";
         c += "     displayVector[0] = 0x446F7841;\n"; // "AxoD"
         c += "     displayVector[1] = 0;\n";
         c += "     displayVector[2] = " + displayDataLength + ";\n";
@@ -1288,6 +1323,7 @@ public class Patch {
                 + "static const int polyIndex = 0;\n"
                 + GenerateParamInitCode3("rootc")
                 + GeneratePresetCode3("rootc")
+                + GenerateModulationCode3()
                 + GenerateInitCodePlusPlus("rootc")
                 + GenerateDisposeCodePlusPlus("rootc")
                 + GenerateDSPCodePlusPlus("rootc", false)
@@ -1341,6 +1377,7 @@ public class Patch {
                 + "static const int polyIndex = 0;\n";
         ao.sLocalData += GenerateParamInitCode3("");
         ao.sLocalData += GeneratePresetCode3("");
+        ao.sLocalData += GenerateModulationCode3();
         ao.sLocalData = ao.sLocalData.replaceAll("attr_poly", "1");
         ao.sInitCode = GenerateParamInitCodePlusPlusSub("attr_parent", "this");
         ao.sInitCode += GenerateObjInitCodePlusPlusSub("attr_parent", "this");
@@ -1501,6 +1538,7 @@ public class Patch {
         }
 
         ao.sLocalData += GeneratePresetCode3("");
+        ao.sLocalData += GenerateModulationCode3();
         ao.sLocalData += "class voice {\n";
         ao.sLocalData += "   public:\n";
         ao.sLocalData += "   int polyIndex;\n";
@@ -1891,7 +1929,7 @@ public class Patch {
         return o;
     }
 
-    void WriteCode() {
+    public void WriteCode() {
         String c = GenerateCode3();
 
         try {
@@ -1907,7 +1945,7 @@ public class Patch {
         Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Generate code complete");
     }
 
-    void Compile() {
+    public void Compile() {
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
     }
 
@@ -2271,4 +2309,5 @@ public class Patch {
     public PatchFrame getPatchframe() {
         return patchframe;
     }
+
 }

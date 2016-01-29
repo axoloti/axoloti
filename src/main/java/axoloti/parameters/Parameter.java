@@ -71,6 +71,26 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     }
 
     @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+   
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
     public ParameterInstance CreateInstance(AxoObjectInstance o) {
         ParameterInstance pi = InstanceFactory();
         pi.axoObj = o;

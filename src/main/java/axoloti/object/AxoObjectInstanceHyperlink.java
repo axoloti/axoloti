@@ -17,8 +17,10 @@
  */
 package axoloti.object;
 
+import axoloti.FileUtils;
 import axoloti.MainFrame;
 import axoloti.Patch;
+import axoloti.PatchGUI;
 import components.LabelComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
@@ -76,7 +78,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
             s = s.substring(0, s.lastIndexOf(File.separatorChar));
             File f = new File(s + File.separatorChar + link);
             if (f.canRead()) {
-                MainFrame.mainframe.OpenPatch(f);
+                PatchGUI.OpenPatch(f);
             } else {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, "can''t read file {0}", f.getAbsolutePath());                
             }

@@ -1,0 +1,12 @@
+<objdefs>
+   <obj.normal class="axoloti.object.AxoObjectPatcherObject" id="object" uuid="d9f44795bfd6115f91bc84d9b38087afd0709f6e" sha="da39a3ee5e6b4b0d3255bfef95601890afd80709">
+      <sDescription>Object stored in the patch document (IN DEVELOPMENT!)</sDescription>
+      <author>Johannes Taelman</author>
+      <license>BSD</license>
+      <inlets/>
+      <outlets/>
+      <displays/>
+      <params/>
+      <attribs/>
+   </obj.normal>
+</objdefs>
