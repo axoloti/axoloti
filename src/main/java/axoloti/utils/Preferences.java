@@ -367,7 +367,7 @@ public class Preferences {
         libraries = new ArrayList<AxolotiLibrary>();
 
         libraries.add(new AxolotiLibrary(
-                "factory",
+                AxolotiLibrary.FACTORY_ID,
                 "git",
                 System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-factory" + File.separator,
                 true,
@@ -382,7 +382,7 @@ public class Preferences {
         ));
 
         libraries.add(new AxolotiLibrary(
-                "userlibrary",
+                AxolotiLibrary.USER_LIBRARY_ID,
                 "git",
                 System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-contrib" + File.separator,
                 true,

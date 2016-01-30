@@ -66,7 +66,7 @@ public class TransitionManager {
     public void LoadTransitions() {
         Serializer serializer = new Persister();
         try {
-            AxolotiLibrary lib = MainFrame.prefs.getLibrary("factory");
+            AxolotiLibrary lib = MainFrame.prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
             if(lib != null) {
                 transitions = serializer.read(Transitions.class, new File(lib.getLocalLocation() + filename));
             } else {

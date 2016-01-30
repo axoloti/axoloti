@@ -27,6 +27,10 @@ public class AxolotiLibrary {
     private String Password;
     @Element(required = false)
     private boolean AutoSync;
+    
+    
+    public static String FACTORY_ID = "axoloti-factory";
+    public static String USER_LIBRARY_ID = "axoloti-contrib";
 
     public AxolotiLibrary() {
         Id = "";
