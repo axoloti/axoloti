@@ -5,17 +5,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 public class AxoGitLibrary extends AxolotiLibrary {
 
     public AxoGitLibrary(String id, String type, String lloc, boolean e, String rloc, boolean auto) {
-        super(id, type, lloc, e, rloc,auto);
+        super(id, type, lloc, e, rloc, auto);
 
     }
 
@@ -74,10 +76,14 @@ public class AxoGitLibrary extends AxolotiLibrary {
             }
 
             try {
-                Git git = Git.cloneRepository()
-                        .setURI(getRemoteLocation())
-                        .setDirectory(ldir)
-                        .call();
+
+                CloneCommand clone = Git.cloneRepository();
+                clone.setURI(getRemoteLocation());
+                clone.setDirectory(ldir);
+                if (getUserId() != null && getUserId().length() > 0) {
+                    clone.setCredentialsProvider(new UsernamePasswordCredentialsProvider(getUserId(), getPassword()));
+                }
+                clone.call();
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Repo initialised Successfully : {0}", getId());
             } catch (GitAPIException ex) {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "init repo FAILED : {0}", getId());
