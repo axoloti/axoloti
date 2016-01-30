@@ -79,6 +79,10 @@
   <target name="-post-init" depends="create.build.version">
   </target>  
   <!-- Overrides -do-jar-->
+
+  <target name="-javadoc-build">
+  </target> 
+
   <target name="-do-jar">
 
     <!-- With included source files -->
