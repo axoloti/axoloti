@@ -28,5 +28,11 @@ public class AxoFileLibrary
         if(!ldir.exists()) {
             ldir.mkdirs();
         }
+        
+        // default directory structure
+        File odir = new File(ldir, "objects");
+        if(!odir.exists()) odir.mkdirs();
+        File pdir = new File(ldir, "patches");
+        if(!pdir.exists()) pdir.mkdirs();
     }
 }

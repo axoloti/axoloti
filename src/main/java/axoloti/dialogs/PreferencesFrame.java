@@ -98,7 +98,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
         prefs.setPollInterval(Integer.parseInt(jTextFieldPollInterval.getText()));
         prefs.setMouseDialAngular(jComboBox1.getSelectedItem().equals("Angular"));
         prefs.setFavouriteDir(txtFavDir.getText());
-        prefs.setControllerObject(jTextFieldController.getText());
+        prefs.setControllerObject(jTextFieldController.getText().trim());
         prefs.setControllerEnabled(jControllerEnabled.isSelected());
     }
 

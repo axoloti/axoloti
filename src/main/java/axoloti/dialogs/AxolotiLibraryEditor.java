@@ -241,10 +241,10 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
     }//GEN-LAST:event_jTypeComboActionPerformed
 
     private void jOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOKActionPerformed
-        library.setId(jId.getText());
-        library.setLocalLocation(jLocalDir.getText());
-        library.setRemoteLocation(jRemotePath.getText());
-        library.setUserId(jUserId.getText());
+        library.setId(jId.getText().trim());
+        library.setLocalLocation(jLocalDir.getText().trim());
+        library.setRemoteLocation(jRemotePath.getText().trim());
+        library.setUserId(jUserId.getText().trim());
         library.setPassword(new String(jPassword.getPassword()));
         library.setEnabled(jEnabled.isSelected());
         library.setType((String) jTypeCombo.getSelectedItem());
@@ -259,7 +259,9 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
     }//GEN-LAST:event_jCancelActionPerformed
 
     private void jInitRepoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jInitRepoActionPerformed
-        AxoGitLibrary gitlib = new AxoGitLibrary(jId.getText(), (String) jTypeCombo.getSelectedItem(), jLocalDir.getText(), jEnabled.isSelected(), jRemotePath.getText(), jAutoSync.isSelected());
+        AxoGitLibrary gitlib = new AxoGitLibrary(jId.getText().trim(), (String) jTypeCombo.getSelectedItem(), jLocalDir.getText().trim(), jEnabled.isSelected(), jRemotePath.getText().trim(), jAutoSync.isSelected());
+        gitlib.setUserId(jUserId.getText().trim());
+        gitlib.setPassword(new String(jPassword.getPassword()));
         gitlib.init();
     }//GEN-LAST:event_jInitRepoActionPerformed
 
