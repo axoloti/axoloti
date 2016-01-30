@@ -20,6 +20,7 @@ package transitions;
 import axoloti.MainFrame;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjects;
+import axoloti.utils.AxolotiLibrary;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,7 +65,12 @@ public class TransitionManager {
     public void LoadTransitions() {
         Serializer serializer = new Persister();
         try {
-            transitions = serializer.read(Transitions.class, new File(filename));
+            AxolotiLibrary lib = MainFrame.prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+            if(lib != null) {
+                transitions = serializer.read(Transitions.class, new File(lib.getLocalLocation() + filename));
+            } else {
+                Logger.getLogger(TransitionManager.class.getName()).log(Level.WARNING,"not loading transitions cannot find factory library");
+            }
         } catch (Exception ex) {
             Logger.getLogger(TransitionManager.class.getName()).log(Level.SEVERE, null, ex);
         }

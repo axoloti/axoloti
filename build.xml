@@ -79,6 +79,10 @@
   <target name="-post-init" depends="create.build.version">
   </target>  
   <!-- Overrides -do-jar-->
+
+  <target name="-javadoc-build">
+  </target> 
+
   <target name="-do-jar">
 
     <!-- With included source files -->
@@ -96,6 +100,10 @@
       <fileset dir="build/classes"/>
 
       <!-- Include external library -->
+      <zipfileset excludes="META-INF/*.SF" src="lib/org.eclipse.jgit-4.2.0.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/jsch-0.1.53.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/slf4j-api-1.7.13.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/slf4j-simple-1.7.13.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/simple-xml-2.7.1.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/rsyntaxtextarea-2.5.8.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/usb4java-1.2.0.jar"/>
@@ -246,8 +254,12 @@
          		<include name="axoloti-app.jar"/>
 		 </fx:fileset>
 		 <fx:fileset dir="lib">
+             <include name="org.eclipse.jgit-4.2.0.jar"/>
+             <include name="jsch-0.1.53.jar"/>
+             <include name="slf4j-api-1.7.13.jar"/>
+             <include name="slf4j-simple-1.7.13.jar"/>
 			 <include name="simple-xml-2.7.1.jar"/>
-                         <include name="rsyntaxtextarea-2.5.8.jar"/>
+             <include name="rsyntaxtextarea-2.5.8.jar"/>
 			 <include name="usb4java-1.2.0/lib/usb4java-1.2.0.jar"/>
 			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-arm.jar"/>
 			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-x86.jar"/>
@@ -259,8 +271,6 @@
 		 </fx:fileset>
 		 <fx:fileset dir=".">
 			 <include name="doc/*"/>
-			 <include name="patches/**/*"/>
-			 <include name="objects/**/*"/>
 			 <include name="firmware/*" />
 			 <include name="firmware/STM*/**/*" />
 			 <include name="firmware/samples/*" />

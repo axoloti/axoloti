@@ -21,7 +21,6 @@ import static axoloti.Axoloti.FIRMWARE_DIR;
 import static axoloti.Axoloti.HOME_DIR;
 import static axoloti.Axoloti.RELEASE_DIR;
 import static axoloti.Axoloti.RUNTIME_DIR;
-import axoloti.dialogs.AboutFrame;
 import axoloti.dialogs.AxolotiRemoteControl;
 import axoloti.dialogs.FileManagerFrame;
 import axoloti.dialogs.KeyboardFrame;
@@ -29,12 +28,12 @@ import axoloti.dialogs.PatchBank;
 import axoloti.dialogs.PreferencesFrame;
 import axoloti.object.AxoObjects;
 import axoloti.usb.Usb;
+import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.FirmwareID;
 import axoloti.utils.Preferences;
 import generatedobjects.GeneratedObjects;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -50,22 +49,16 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -218,6 +211,13 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jMenuItemFCompile.setVisible(Axoloti.isDeveloper());
         jDevSeparator.setVisible(Axoloti.isDeveloper());
 
+        for(AxolotiLibrary lib : prefs.getLibraries()) {
+            if (lib.isAutoSync() && lib.getEnabled()) {
+                lib.sync();
+            }
+        }
+        
+        
         axoObjects = new AxoObjects();
         axoObjects.LoadAxoObjects();
 
@@ -338,6 +338,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         recentFileMenu1 = new axoloti.menus.RecentFileMenu();
         libraryMenu1 = new axoloti.menus.LibraryMenu();
         favouriteMenu1 = new axoloti.menus.FavouriteMenu();
+        jMenuSync = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jMenuReloadObjects = new javax.swing.JMenuItem();
         jMenuRegenerateObjects = new javax.swing.JMenuItem();
@@ -488,6 +489,14 @@ jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
 
     favouriteMenu1.setText("Favorites");
     jMenuFile.add(favouriteMenu1);
+
+    jMenuSync.setText("Sync Libraries");
+    jMenuSync.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuSyncActionPerformed(evt);
+        }
+    });
+    jMenuFile.add(jMenuSync);
     jMenuFile.add(jSeparator2);
 
     jMenuReloadObjects.setText("Reload Objects");
@@ -992,6 +1001,13 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         NewPatch();
     }//GEN-LAST:event_jMenuNewPatchActionPerformed
 
+    private void jMenuSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSyncActionPerformed
+        for(AxolotiLibrary lib : prefs.getLibraries()) {
+            lib.sync();
+        }
+        axoObjects.LoadAxoObjects();
+    }//GEN-LAST:event_jMenuSyncActionPerformed
+
     private void jMenuNewBankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewBankActionPerformed
         NewBank();
     }//GEN-LAST:event_jMenuNewBankActionPerformed
@@ -1050,6 +1066,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuQuit;
     private javax.swing.JMenuItem jMenuRegenerateObjects;
     private javax.swing.JMenuItem jMenuReloadObjects;
+    private javax.swing.JMenuItem jMenuSync;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelProgress;
     private javax.swing.JProgressBar jProgressBar1;

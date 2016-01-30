@@ -110,7 +110,7 @@ public class Axoloti {
     private static String cacheFWDir = null;
     private static boolean cacheDeveloper = false;
 
-    static boolean isDeveloper() {
+    public static boolean isDeveloper() {
         String fwEnv = System.getProperty(FIRMWARE_DIR);
         if (cacheFWDir != null && fwEnv.equals(cacheFWDir)) {
             return cacheDeveloper;

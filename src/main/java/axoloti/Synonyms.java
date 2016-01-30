@@ -1,5 +1,6 @@
 package axoloti;
 
+import axoloti.utils.AxolotiLibrary;
 import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -40,7 +41,14 @@ public class Synonyms {
     static void load() {
         Serializer serializer = new Persister();
         try {
-            instance = serializer.read(Synonyms.class, new File(filename));
+            AxolotiLibrary lib = MainFrame.prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+            if(lib != null) {
+                instance = serializer.read(Synonyms.class, new File(lib.getLocalLocation() + filename));
+            } else {
+                Logger.getLogger(Synonyms.class.getName()).log(Level.WARNING,"not loading synonyms cannot find factory library");
+            }
+
+            
         } catch (Exception ex) {
             Logger.getLogger(Synonyms.class.getName()).log(Level.SEVERE, null, ex);
         }
