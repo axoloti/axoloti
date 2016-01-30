@@ -213,9 +213,8 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
     public byte[] GetContents() {
         ByteBuffer data = ByteBuffer.allocateDirect(128 * 256);
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        for (int i = 0; i < 128; i++) {
-            String fn = (String) model.getValueAt(i, 1);
+        for (File file : files) {
+            String fn = (String) file.getName();
             for (char c : fn.toCharArray()) {
                 data.put((byte) c);
             }

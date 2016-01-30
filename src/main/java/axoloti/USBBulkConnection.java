@@ -31,6 +31,7 @@ import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.Charset;
+import java.util.Calendar;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -633,6 +634,62 @@ public class USBBulkConnection extends Connection {
         WaitSync();
     }
 
+    public void TransmitCreateFile(String filename, int size, Calendar date) {
+        byte[] data = new byte[15 + filename.length()];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'C';
+        data[4] = (byte) size;
+        data[5] = (byte) (size >> 8);
+        data[6] = (byte) (size >> 16);
+        data[7] = (byte) (size >> 24);
+        data[8] = 0;
+        data[9] = 'f';
+        int dy = date.get(Calendar.YEAR);
+        int dm = date.get(Calendar.MONTH)+1;
+        int dd = date.get(Calendar.DAY_OF_MONTH);
+        int th = date.get(Calendar.HOUR_OF_DAY);
+        int tm = date.get(Calendar.MINUTE);
+        int ts = date.get(Calendar.SECOND);
+        int t = ((dy - 1980) * 512) | (dm * 32) | dd;
+        int d = (th * 2048) | (tm * 32) | (ts / 2);
+        data[10] = (byte)(t & 0xff);
+        data[11] = (byte)(t >> 8);
+        data[12] = (byte)(d & 0xff);
+        data[13] = (byte)(d >> 8);
+        int i = 14;
+        for (int j = 0; j < filename.length(); j++) {
+            data[i++] = (byte) filename.charAt(j);
+        }
+        data[i] = 0;
+        ClearSync();
+        writeBytes(data);
+        WaitSync();
+    }
+        
+    public void TransmitCreateDirectory(String filename) {
+        byte[] data = new byte[9 + filename.length()];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'C';
+        data[4] = 0;
+        data[5] = 0;
+        data[6] = 0;
+        data[7] = 0;
+        data[8] = 0;
+        data[9] = 'd';
+        int i = 10;
+        for (int j = 0; j < filename.length(); j++) {
+            data[i++] = (byte) filename.charAt(j);
+        }
+        data[i] = 0;
+        ClearSync();
+        writeBytes(data);
+        WaitSync();
+    }        
+    
     @Override
     public void TransmitAppendFile(byte[] buffer) {
         byte[] data = new byte[8];

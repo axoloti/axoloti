@@ -149,7 +149,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                             if (!f.canRead()) {
                                 Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, "Can't read file");
                             } else {
-                                processor.AppendToQueue(new QCmdUploadFile(new FileInputStream(f), f.getName()));
+                                processor.AppendToQueue(new QCmdUploadFile(f, f.getName()));
                             }
                         }
                         RequestRefresh();
@@ -296,11 +296,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                         Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, "Can't read file");
                         return;
                     }
-                    try {
-                        processor.AppendToQueue(new QCmdUploadFile(new FileInputStream(f), f.getName()));
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    processor.AppendToQueue(new QCmdUploadFile(f, f.getName()));
                 }
             }
         }
