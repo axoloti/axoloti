@@ -992,7 +992,7 @@ public class USBBulkConnection extends Connection {
                                 state = ReceiverState.fileinfo;
                                 fileinfoRcvBuffer.clear();
                                 dataIndex = 0;
-                                dataLength = 4;
+                                dataLength = 8;
                                 break;
                             case 'r':
                                 state = ReceiverState.memread;
@@ -1095,7 +1095,7 @@ public class USBBulkConnection extends Connection {
 //                            + sdinfoRcvBuffer.asIntBuffer().get(0) + " "
 //                            + sdinfoRcvBuffer.asIntBuffer().get(1) + " "
 //                            + sdinfoRcvBuffer.asIntBuffer().get(2));
-                    MainFrame.mainframe.filemanager.ShowSDInfo(sdinfoRcvBuffer.asIntBuffer().get(0), sdinfoRcvBuffer.asIntBuffer().get(1), sdinfoRcvBuffer.asIntBuffer().get(2));
+                    SDCardInfo.getInstance().SetInfo(sdinfoRcvBuffer.asIntBuffer().get(0), sdinfoRcvBuffer.asIntBuffer().get(1), sdinfoRcvBuffer.asIntBuffer().get(2));
                     GoIdleState();
                 }
                 break;
@@ -1110,8 +1110,9 @@ public class USBBulkConnection extends Connection {
                     fileinfoRcvBuffer.limit(fileinfoRcvBuffer.position());
                     fileinfoRcvBuffer.rewind();
                     int size = fileinfoRcvBuffer.getInt();
+                    int timestamp = fileinfoRcvBuffer.getInt();
                     CharBuffer cb = Charset.forName("ISO-8859-1").decode(fileinfoRcvBuffer);
-                    MainFrame.mainframe.filemanager.AddFile(cb.toString(), size);
+                    SDCardInfo.getInstance().AddFile(cb.toString(), size, timestamp);
 //                    Logger.getLogger(SerialConnection.class.getName()).info("fileinfo: " + cb.toString());
                     GoIdleState();
                 }

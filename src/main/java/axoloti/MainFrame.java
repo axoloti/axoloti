@@ -115,6 +115,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         qcmdprocessorThread = new Thread(qcmdprocessor);
         qcmdprocessorThread.setName("QCmdProcessor");
         qcmdprocessorThread.start();
+        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
 
         final Style styleSevere = jTextPaneLog.addStyle("severe", null);
         final Style styleFine = jTextPaneLog.addStyle("fine", null);

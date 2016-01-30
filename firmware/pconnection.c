@@ -202,23 +202,19 @@ static FRESULT scan_files(char *path) {
         path[--i] = 0;
       }
       else {
-        //chprintf(chp, "%s/%s\r\n", path, fn);
-        ((char*)fbuff)[0] = 'A';
-        ((char*)fbuff)[1] = 'x';
-        ((char*)fbuff)[2] = 'o';
-        ((char*)fbuff)[3] = 'f';
-        fbuff[1] = fno.fsize;
-        /*
-         strcpy(&((char*)fbuff)[4],path);
-         int l = strlen((char *)(&fbuff[0]));
-         ((char*)&fbuff[0])[l] = '/';
-         strcpy(&((char*)&fbuff[0])[l+1],fn);
-         l = strlen((char *)(&fbuff[0]));
-         */
-        strcpy(&((char*)fbuff)[8], fn);
-        int l = strlen((char *)(&fbuff[2]));
+        char *msg = &((char*)fbuff)[64];
+        msg[0] = 'A';
+        msg[1] = 'x';
+        msg[2] = 'o';
+        msg[3] = 'f';
+        *(int32_t *)(&msg[4]) = fno.fsize;
+        *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
+        strcpy(&msg[12], path);
+        msg[12+i] = '/';
+        strcpy(&msg[12+i+1], fn);
+        int l = strlen(&msg[12]);
         chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                                (const unsigned char* )fbuff, l + 9);
+                                (const unsigned char* )msg, l+12+1);
       }
     }
   } else {

@@ -80,7 +80,7 @@ public class Preferences {
 
     boolean isDirty = false;
 
-    final int nRecentFiles = 8;
+    final int nRecentFiles = 16;
 
     final int minimumPollInterval = 20;
 
