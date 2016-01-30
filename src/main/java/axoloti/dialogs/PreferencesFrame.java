@@ -17,20 +17,15 @@
  */
 package axoloti.dialogs;
 
-import axoloti.MainFrame;
+import axoloti.utils.AxoFileLibrary;
+import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.Preferences;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -471,7 +466,15 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
         AxolotiLibrary lib = new AxolotiLibrary();
         AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true, lib);
-        prefs.updateLibrary(lib.getId(), lib);
+        
+        AxolotiLibrary newlib;
+        if(lib.getRemoteLocation() == null || lib.getRemoteLocation().length()==0) {
+            newlib = new AxoFileLibrary(lib.getId(),lib.getType(),lib.getLocalLocation(),lib.getEnabled());
+        }
+        else {
+            newlib = new AxoGitLibrary(lib.getId(),lib.getType(),lib.getLocalLocation(),lib.getEnabled(),lib.getRemoteLocation());
+        }
+        prefs.updateLibrary(lib.getId(), newlib);
         PopulateLibrary();
     }//GEN-LAST:event_jAddLibBtnActionPerformed
 

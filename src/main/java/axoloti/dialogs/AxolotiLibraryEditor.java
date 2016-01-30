@@ -5,18 +5,20 @@
  */
 package axoloti.dialogs;
 
+import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
-import java.awt.Point;
 
 /**
  *
  * @author kodiak
  */
 public class AxolotiLibraryEditor extends javax.swing.JDialog {
+
     private AxolotiLibrary library;
 
     /**
      * Creates new form AxolotiLibrary
+     *
      * @param parent
      * @param modal
      */
@@ -27,7 +29,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         populate();
         setVisible(true);
     }
-    
+
     public AxolotiLibraryEditor(java.awt.Frame parent, boolean modal, AxolotiLibrary lib) {
         super(parent, modal);
         initComponents();
@@ -35,7 +37,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         populate();
         setVisible(true);
     }
-    
+
     final void populate() {
         jId.setText(library.getId());
         jEnabled.setSelected(library.getEnabled());
@@ -43,10 +45,10 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         jRemotePath.setText(library.getRemoteLocation());
         jUserId.setText(library.getUserId());
         jPassword.setText(library.getPassword());
-        
-        String [] types = { "local", "git" };
+
+        String[] types = {"local", "git"};
         jTypeCombo.removeAllItems();
-        for(String t : types) {
+        for (String t : types) {
             jTypeCombo.addItem(t);
         }
         jTypeCombo.setSelectedItem(library.getType());
@@ -78,6 +80,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         jPassword = new javax.swing.JPasswordField();
         jOK = new javax.swing.JButton();
         jCancel = new javax.swing.JButton();
+        jInitRepo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -131,6 +134,13 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
             }
         });
 
+        jInitRepo.setText("Init");
+        jInitRepo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jInitRepoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -160,16 +170,19 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
                             .addComponent(jLabel6)
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jRemotePath, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jRemotePath, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jInitRepo))
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jUserId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGap(257, 257, 257))))))
-                .addContainerGap(11, Short.MAX_VALUE))
+                                    .addGap(244, 244, 244))))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(352, Short.MAX_VALUE)
                 .addComponent(jOK)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCancel)
@@ -195,7 +208,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jRemotePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -206,8 +219,9 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                    .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jInitRepo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jOK)
                     .addComponent(jCancel))
@@ -229,19 +243,25 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         library.setEnabled(jEnabled.isSelected());
         library.setType((String) jTypeCombo.getSelectedItem());
         setVisible(false);
-        dispose();      
+        dispose();
     }//GEN-LAST:event_jOKActionPerformed
 
     private void jCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCancelActionPerformed
-       setVisible(false);
-       dispose();
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_jCancelActionPerformed
+
+    private void jInitRepoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jInitRepoActionPerformed
+        AxoGitLibrary gitlib = new AxoGitLibrary(jId.getText(), (String) jTypeCombo.getSelectedItem(), jLocalDir.getText(), jEnabled.isSelected(), jRemotePath.getText());
+        gitlib.init();
+    }//GEN-LAST:event_jInitRepoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jCancel;
     private javax.swing.JCheckBox jEnabled;
     private javax.swing.JTextField jId;
+    private javax.swing.JButton jInitRepo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

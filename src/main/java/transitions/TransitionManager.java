@@ -21,7 +21,6 @@ import axoloti.MainFrame;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjects;
 import axoloti.utils.AxolotiLibrary;
-import axoloti.utils.Preferences;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;

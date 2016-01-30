@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
@@ -73,7 +74,12 @@ public class Preferences {
     @ElementMap(required = false, entry = "Boards", key = "cpuid", attribute = true, inline = true)
     HashMap<String, String> BoardNames;
 
-    @ElementList(entry = "libraries", type = AxolotiLibrary.class, inline = true, required = false)
+//    @Path("outlets")
+    @ElementListUnion({
+        @ElementList(entry = "gitlib", type = AxoGitLibrary.class, inline = true, required = false),
+        @ElementList(entry = "filelib", type = AxoFileLibrary.class, inline = true, required = false)
+    }
+    )
     ArrayList<AxolotiLibrary> libraries;
 
     String[] ObjectPath;
@@ -143,11 +149,10 @@ public class Preferences {
     public void updateLibrary(String id, AxolotiLibrary newlib) {
         for (AxolotiLibrary lib : libraries) {
             if (lib.getId().equals(id)) {
-                if(lib != newlib) {
+                if (lib != newlib) {
                     libraries.remove(lib);
                     break;
-                }
-                else {
+                } else {
                     return;
                 }
             }
@@ -221,13 +226,15 @@ public class Preferences {
                     Serializer serializer = new Persister();
                     Preferences prefs = serializer.read(Preferences.class, p);
                     singleton = prefs;
-                    if (prefs.RuntimeDir == null) {
+                    if (prefs.RuntimeDir
+                            == null) {
                         prefs.RuntimeDir = System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
                         prefs.SetDirty();
                     } else {
                         System.setProperty(axoloti.Axoloti.RUNTIME_DIR, prefs.RuntimeDir);
                     }
-                    if (prefs.FirmwareDir == null) {
+                    if (prefs.FirmwareDir
+                            == null) {
                         prefs.FirmwareDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
                         prefs.SetDirty();
                     } else {
@@ -237,11 +244,13 @@ public class Preferences {
                     if (prefs.libraries.isEmpty()) {
                         prefs.ResetLibraries();
                     }
+
                     prefs.buildObjectSearchPatch();
 
                     singleton.MidiInputDevice = null; // clear it out for the future
                 } catch (Exception ex) {
-                    Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Preferences.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 singleton = new Preferences();
@@ -251,16 +260,22 @@ public class Preferences {
         return singleton;
     }
 
-    public void SavePrefs() {
-        Logger.getLogger(Preferences.class.getName()).log(Level.INFO, "Saving preferences...");
+    public
+            void SavePrefs() {
+        Logger.getLogger(Preferences.class
+                .getName()).log(Level.INFO, "Saving preferences...");
         Serializer serializer = new Persister();
         File f = new File(GetPrefsFileLoc());
-        Logger.getLogger(Preferences.class.getName()).log(Level.INFO, "preferences path : {0}", f.getAbsolutePath());
+
+        Logger.getLogger(Preferences.class
+                .getName()).log(Level.INFO, "preferences path : {0}", f.getAbsolutePath());
+
         try {
             serializer.write(this, f);
         } catch (Exception ex) {
             Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         ClearDirty();
     }
 
@@ -366,28 +381,34 @@ public class Preferences {
     public final void ResetLibraries() {
         libraries = new ArrayList<AxolotiLibrary>();
 
-        libraries.add(new AxolotiLibrary(
+        libraries.add(new AxoGitLibrary(
                 AxolotiLibrary.FACTORY_ID,
                 "git",
                 System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-factory" + File.separator,
                 true,
-                "https://github.com/axoloti/axoloti-factory"
+                "https://github.com/axoloti/axoloti-factory.git"
         ));
-        libraries.add(new AxolotiLibrary(
+        libraries.add(new AxoFileLibrary(
                 "home",
                 "local",
                 System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator,
-                true,
-                ""
+                true
         ));
 
-        libraries.add(new AxolotiLibrary(
+        libraries.add(new AxoGitLibrary(
                 AxolotiLibrary.USER_LIBRARY_ID,
                 "git",
                 System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-contrib" + File.separator,
                 true,
-                "https://github.com/axoloti/axoloti-contrib"
+                "https://github.com/axoloti/axoloti-contrib.git"
         ));
+        
+        // initialise the libraries
+        for (AxolotiLibrary lib : libraries) {
+            if (lib.getEnabled()) {
+                lib.init();
+            }
+        }
         buildObjectSearchPatch();
     }
 
