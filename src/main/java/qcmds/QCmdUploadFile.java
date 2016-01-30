@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,7 +65,11 @@ public class QCmdUploadFile implements QCmdSerialTask {
                 inputStream = new FileInputStream(file);
             }
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading: {0}", filename);
-            connection.TransmitCreateFile(filename, 0);
+            Calendar ts = Calendar.getInstance();
+            if (file !=null ){
+                ts.setTimeInMillis(file.lastModified());
+            }
+            connection.TransmitCreateFile(filename, 0, ts);
 
             int MaxBlockSize = 32768;
             int tlength = inputStream.available();

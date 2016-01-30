@@ -275,25 +275,61 @@ void ReadDirectoryListing(void) {
  * "AxoB (int or) (int and)" buttons for virtual Axoloti Control
  */
 
-char FileName[16];
+char FileName[64];
 
 FIL pFile;
 int pFileSize;
 
 void CreateFile(void) {
   sdcard_attemptMountIfUnmounted();
-  FRESULT err;
-  err = f_open(&pFile, &FileName[0], FA_WRITE | FA_CREATE_ALWAYS);
-  if (err != FR_OK) {
-    report_fatfs_error(err,&FileName[0]);
-  }
-  err = f_lseek(&pFile, pFileSize);
-  if (err != FR_OK) {
-    report_fatfs_error(err,&FileName[0]);
-  }
-  err = f_lseek(&pFile, 0);
-  if (err != FR_OK) {
-    report_fatfs_error(err,&FileName[0]);
+  if (FileName[0]) {
+    // backwards compatibility
+    FRESULT err;
+    err = f_open(&pFile, &FileName[0], FA_WRITE | FA_CREATE_ALWAYS);
+    if (err != FR_OK) {
+      report_fatfs_error(err,&FileName[0]);
+    }
+    err = f_lseek(&pFile, pFileSize);
+    if (err != FR_OK) {
+      report_fatfs_error(err,&FileName[0]);
+    }
+    err = f_lseek(&pFile, 0);
+    if (err != FR_OK) {
+      report_fatfs_error(err,&FileName[0]);
+    }
+  } else {
+    // filename[0] == 0
+    if (FileName[1]=='d') {
+      // create directory
+      FRESULT err;
+      err = f_mkdir(&FileName[6]);
+      if (err != FR_OK) {
+        report_fatfs_error(err,&FileName[6]);
+      }
+      // and set timestamp
+      FILINFO fno;
+      fno.fdate = FileName[2] + (FileName[3]<<8);
+      fno.ftime = FileName[4] + (FileName[5]<<8);
+      err = f_utime(&FileName[6],&fno);
+      if (err != FR_OK) {
+        report_fatfs_error(err,&FileName[6]);
+      }
+    } else if (FileName[1]=='f') {
+      // create file
+      FRESULT err;
+      err = f_open(&pFile, &FileName[6], FA_WRITE | FA_CREATE_ALWAYS);
+      if (err != FR_OK) {
+        report_fatfs_error(err,&FileName[6]);
+      }
+      err = f_lseek(&pFile, pFileSize);
+      if (err != FR_OK) {
+        report_fatfs_error(err,&FileName[6]);
+      }
+      err = f_lseek(&pFile, 0);
+      if (err != FR_OK) {
+        report_fatfs_error(err,&FileName[6]);
+      }
+    }
   }
 }
 
@@ -302,6 +338,16 @@ void CloseFile(void) {
   err = f_close(&pFile);
   if (err != FR_OK) {
     report_fatfs_error(err,&FileName[0]);
+  }
+  if (!FileName[0]) {
+    // and set timestamp
+    FILINFO fno;
+    fno.fdate = FileName[2] + (FileName[3]<<8);
+    fno.ftime = FileName[4] + (FileName[5]<<8);
+    err = f_utime(&FileName[6],&fno);
+    if (err != FR_OK) {
+      report_fatfs_error(err,&FileName[6]);
+    }
   }
 }
 
@@ -693,6 +739,11 @@ void PExReceiveByte(unsigned char c) {
       break;
     case 7:
       pFileSize += c << 24;
+      state++;
+      break;
+    case 8:
+      FileName[state - 8] = c;
+      // filename starting with null means there are attributes present
       state++;
       break;
     default:
