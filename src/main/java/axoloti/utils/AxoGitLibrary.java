@@ -14,8 +14,8 @@ import org.eclipse.jgit.submodule.SubmoduleWalk;
 
 public class AxoGitLibrary extends AxolotiLibrary {
 
-    public AxoGitLibrary(String id, String type, String lloc, boolean e, String rloc) {
-        super(id, type, lloc, e, rloc);
+    public AxoGitLibrary(String id, String type, String lloc, boolean e, String rloc, boolean auto) {
+        super(id, type, lloc, e, rloc,auto);
 
     }
 
@@ -78,6 +78,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
                         .setURI(getRemoteLocation())
                         .setDirectory(ldir)
                         .call();
+                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Repo initialised Successfully : {0}", getId());
             } catch (GitAPIException ex) {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "init repo FAILED : {0}", getId());
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);

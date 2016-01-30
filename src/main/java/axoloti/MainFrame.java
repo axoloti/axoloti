@@ -28,7 +28,6 @@ import axoloti.dialogs.PatchBank;
 import axoloti.dialogs.PreferencesFrame;
 import axoloti.object.AxoObjects;
 import axoloti.usb.Usb;
-import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.FirmwareID;
 import axoloti.utils.Preferences;
@@ -212,6 +211,13 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jMenuItemFCompile.setVisible(Axoloti.isDeveloper());
         jDevSeparator.setVisible(Axoloti.isDeveloper());
 
+        for(AxolotiLibrary lib : prefs.getLibraries()) {
+            if (lib.isAutoSync() && lib.getEnabled()) {
+                lib.sync();
+            }
+        }
+        
+        
         axoObjects = new AxoObjects();
         axoObjects.LoadAxoObjects();
 
@@ -997,11 +1003,9 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     private void jMenuSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSyncActionPerformed
         for(AxolotiLibrary lib : prefs.getLibraries()) {
-            if(lib.getEnabled() && lib.getType().equalsIgnoreCase("git")) {
-                AxoGitLibrary glib = new AxoGitLibrary(lib);
-                glib.sync();
-            }
+            lib.sync();
         }
+        axoObjects.LoadAxoObjects();
     }//GEN-LAST:event_jMenuSyncActionPerformed
 
     private void jMenuNewBankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewBankActionPerformed

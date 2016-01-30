@@ -386,7 +386,8 @@ public class Preferences {
                 "git",
                 System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-factory" + File.separator,
                 true,
-                "https://github.com/axoloti/axoloti-factory.git"
+                "https://github.com/axoloti/axoloti-factory.git",
+                false
         ));
         libraries.add(new AxoFileLibrary(
                 "home",
@@ -400,7 +401,8 @@ public class Preferences {
                 "git",
                 System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-contrib" + File.separator,
                 true,
-                "https://github.com/axoloti/axoloti-contrib.git"
+                "https://github.com/axoloti/axoloti-contrib.git",
+                false
         ));
         
         // initialise the libraries

@@ -18,7 +18,9 @@
 package axoloti.menus;
 
 import axoloti.Axoloti;
+import static axoloti.MainFrame.prefs;
 import static axoloti.menus.PopulatePatchMenu.PopulatePatchMenu;
+import axoloti.utils.AxolotiLibrary;
 import javax.swing.JMenu;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -34,11 +36,19 @@ public class LibraryMenu extends JMenu {
         addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
+                String dir = "";
+                AxolotiLibrary lib = prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+                if (lib != null) {
+                    dir = lib.getLocalLocation();
+                } else {
+                    dir = "/";
+                }
+                
                 JMenu ptut = new JMenu("tutorials");
-                PopulatePatchMenu(ptut, System.getProperty(Axoloti.RELEASE_DIR) + "/patches/tutorials", ".axp");
+                PopulatePatchMenu(ptut, dir + "patches/tutorials", ".axp");
                 add(ptut);
                 JMenu pdemos = new JMenu("demos");
-                PopulatePatchMenu(pdemos, System.getProperty(Axoloti.RELEASE_DIR) + "/patches/demos", ".axp");
+                PopulatePatchMenu(pdemos, dir + "patches/demos", ".axp");
                 add(pdemos);
             }
 

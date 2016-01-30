@@ -41,10 +41,10 @@ public class AxolotiLibrary {
         RemoteLocation = "";
         UserId = "";
         Password = "";
-        AutoSync = true;
+        AutoSync = false;
     }
 
-    public AxolotiLibrary(String id, String type, String lloc, boolean e, String rloc) {
+    public AxolotiLibrary(String id, String type, String lloc, boolean e, String rloc, boolean auto) {
         Id = id;
         Type = type;
         LocalLocation = lloc;
@@ -52,7 +52,7 @@ public class AxolotiLibrary {
         RemoteLocation = rloc;
         UserId = "";
         Password = "";
-        AutoSync = true;
+        AutoSync = auto;
     }
 
     public void setId(String Id) {

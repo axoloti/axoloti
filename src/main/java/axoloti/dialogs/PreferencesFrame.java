@@ -472,7 +472,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
             newlib = new AxoFileLibrary(lib.getId(),lib.getType(),lib.getLocalLocation(),lib.getEnabled());
         }
         else {
-            newlib = new AxoGitLibrary(lib.getId(),lib.getType(),lib.getLocalLocation(),lib.getEnabled(),lib.getRemoteLocation());
+            newlib = new AxoGitLibrary(lib.getId(),lib.getType(),lib.getLocalLocation(),lib.getEnabled(),lib.getRemoteLocation(), lib.isAutoSync());
         }
         prefs.updateLibrary(lib.getId(), newlib);
         PopulateLibrary();

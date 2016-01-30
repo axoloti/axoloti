@@ -45,6 +45,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         jRemotePath.setText(library.getRemoteLocation());
         jUserId.setText(library.getUserId());
         jPassword.setText(library.getPassword());
+        jAutoSync.setSelected(library.isAutoSync());
 
         String[] types = {"local", "git"};
         jTypeCombo.removeAllItems();
@@ -81,6 +82,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         jOK = new javax.swing.JButton();
         jCancel = new javax.swing.JButton();
         jInitRepo = new javax.swing.JButton();
+        jAutoSync = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -141,6 +143,8 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
             }
         });
 
+        jAutoSync.setText("Auto Sync");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -179,7 +183,8 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
                                     .addComponent(jInitRepo))
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jUserId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGap(244, 244, 244))))))
+                                    .addGap(138, 138, 138)
+                                    .addComponent(jAutoSync))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(352, Short.MAX_VALUE)
@@ -215,7 +220,8 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jUserId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel6)
+                    .addComponent(jAutoSync))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -242,6 +248,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         library.setPassword(new String(jPassword.getPassword()));
         library.setEnabled(jEnabled.isSelected());
         library.setType((String) jTypeCombo.getSelectedItem());
+        library.setAutoSync(jAutoSync.isSelected());
         setVisible(false);
         dispose();
     }//GEN-LAST:event_jOKActionPerformed
@@ -252,12 +259,13 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
     }//GEN-LAST:event_jCancelActionPerformed
 
     private void jInitRepoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jInitRepoActionPerformed
-        AxoGitLibrary gitlib = new AxoGitLibrary(jId.getText(), (String) jTypeCombo.getSelectedItem(), jLocalDir.getText(), jEnabled.isSelected(), jRemotePath.getText());
+        AxoGitLibrary gitlib = new AxoGitLibrary(jId.getText(), (String) jTypeCombo.getSelectedItem(), jLocalDir.getText(), jEnabled.isSelected(), jRemotePath.getText(), jAutoSync.isSelected());
         gitlib.init();
     }//GEN-LAST:event_jInitRepoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox jAutoSync;
     private javax.swing.JButton jCancel;
     private javax.swing.JCheckBox jEnabled;
     private javax.swing.JTextField jId;
