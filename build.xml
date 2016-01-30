@@ -271,8 +271,6 @@
 		 </fx:fileset>
 		 <fx:fileset dir=".">
 			 <include name="doc/*"/>
-			 <include name="patches/**/*"/>
-			 <include name="objects/**/*"/>
 			 <include name="firmware/*" />
 			 <include name="firmware/STM*/**/*" />
 			 <include name="firmware/samples/*" />

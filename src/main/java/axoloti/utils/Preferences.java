@@ -368,11 +368,11 @@ public class Preferences {
 
         libraries.add(new AxolotiLibrary(
                 "factory",
-                "local",
-                System.getProperty(axoloti.Axoloti.RELEASE_DIR) + File.separator,
+                "git",
+                System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-factory" + File.separator,
                 true,
-                ""));
-
+                "https://github.com/axoloti/axoloti-factory"
+        ));
         libraries.add(new AxolotiLibrary(
                 "home",
                 "local",
