@@ -151,14 +151,12 @@ public class Preferences {
             if (lib.getId().equals(id)) {
                 if (lib != newlib) {
                     libraries.remove(lib);
+                    libraries.add(newlib);
                     break;
-                } else {
-                    return;
                 }
             }
         }
 
-        libraries.add(newlib);
         buildObjectSearchPatch();
         SetDirty();
     }

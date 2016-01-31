@@ -10,6 +10,8 @@ import org.simpleframework.xml.Root;
  * Represents a location for objects and patches to be picked up
  */
 // this will become abstract
+// (currently this is used to hold the data, so that the library editor is is typeless)
+
 @Root(name = "library")
 public class AxolotiLibrary {
 
@@ -22,6 +24,8 @@ public class AxolotiLibrary {
     @Element(required = true)
     private Boolean Enabled;
     @Element(required = false)
+
+    // these are only requird for remote libraries
     private String RemoteLocation;
     @Element(required = false)
     private String UserId;
@@ -29,6 +33,10 @@ public class AxolotiLibrary {
     private String Password;
     @Element(required = false)
     private boolean AutoSync;
+    @Element(required = false)
+    private String Revision;
+    @Element(required = false)
+    private String ContributorPrefix;
 
     public static String FACTORY_ID = "axoloti-factory";
     public static String USER_LIBRARY_ID = "axoloti-contrib";
@@ -123,11 +131,8 @@ public class AxolotiLibrary {
     public void sync() {
     }
 
-    ;
     public void init() {
     }
-
-    ;
 
     protected void delete(File f) throws IOException {
         if (f.isDirectory()) {
@@ -138,5 +143,21 @@ public class AxolotiLibrary {
         if (!f.delete()) {
             throw new FileNotFoundException("Failed to delete file: " + f);
         }
+    }
+
+    public String getRevision() {
+        return Revision;
+    }
+
+    public void setRevision(String Revision) {
+        this.Revision = Revision;
+    }
+
+    public String getContributorPrefix() {
+        return ContributorPrefix;
+    }
+
+    public void setContributorPrefix(String ContributorPrefix) {
+        this.ContributorPrefix = ContributorPrefix;
     }
 }

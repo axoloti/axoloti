@@ -5,13 +5,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.jgit.api.AddCommand;
+import org.eclipse.jgit.api.CheckoutCommand;
+import org.eclipse.jgit.api.CheckoutResult;
 import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PullResult;
+import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.Status;
+import org.eclipse.jgit.api.StatusCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
+import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 public class AxoGitLibrary extends AxolotiLibrary {
@@ -26,6 +37,8 @@ public class AxoGitLibrary extends AxolotiLibrary {
 
     @Override
     public void sync() {
+
+        // get repository
         Git git = null;
         try {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -45,17 +58,27 @@ public class AxoGitLibrary extends AxolotiLibrary {
         }
 
         if (git != null) {
-            try {
-                PullResult res = git.pull().call();
-                if (res.isSuccessful()) {
-                    Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Sync Successful : {0}", getId());
-                } else {
-                    Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync FAILED : {0}", getId());
-                }
-            } catch (GitAPIException ex) {
-                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync FAILED : {0}", getId());
-                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+            if (!pull(git)) {
+                return;
             }
+            boolean isDirty = isDirty(git);
+            if (isDirty && isAuth()) {
+                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications detected : {0}", getId());
+                if (!add(git)) {
+                    return;
+                }
+                if (!commit(git)) {
+                    return;
+                }
+                if (!push(git)) {
+                    return;
+                }
+                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications uploaded : {0}", getId());
+            }
+            if (!checkout(git)) {
+                return;
+            }
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Sync Successful : {0}", getId());
         }
     }
 
@@ -75,29 +98,150 @@ public class AxoGitLibrary extends AxolotiLibrary {
                 ldir.mkdirs();
             }
 
+            CloneCommand cmd = Git.cloneRepository();
+            cmd.setURI(getRemoteLocation());
+            cmd.setDirectory(ldir);
+            if (isAuth()) {
+                cmd.setCredentialsProvider(new UsernamePasswordCredentialsProvider(getUserId(), getPassword()));
+            }
             try {
-
-                CloneCommand clone = Git.cloneRepository();
-                clone.setURI(getRemoteLocation());
-                clone.setDirectory(ldir);
-                if (getUserId() != null && getUserId().length() > 0) {
-                    clone.setCredentialsProvider(new UsernamePasswordCredentialsProvider(getUserId(), getPassword()));
-                }
-                clone.call();
+                cmd.call();
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Repo initialised Successfully : {0}", getId());
             } catch (GitAPIException ex) {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "init repo FAILED : {0}", getId());
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+                return;
             }
-
         } else {
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Developer mode do NOT init() repo : {0}", getId());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Developer mode do NOT clone repo : {0}", getId());
+        }
+        // sync afterwards to ensure on correct branch
+        sync();
+    }
+
+    private boolean pull(Git git) {
+        PullCommand cmd = git.pull();
+        if (isAuth()) {
+            cmd.setCredentialsProvider(new UsernamePasswordCredentialsProvider(getUserId(), getPassword()));
+        }
+        try {
+            PullResult res = cmd.call();
+            if (!res.isSuccessful()) {
+                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (pull) FAILED : {0}", getId());
+                return false;
+            }
+            return true;
+
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (pull) FAILED : {0}", getId());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    private boolean checkout(Git git) {
+        String rev = getRevision();
+        if (rev == null || rev.length() == 0) {
+            rev = "master";
+        }
+        CheckoutCommand cmd = git.checkout();
+        cmd.setName(rev);
+        try {
+            cmd.call();
+            CheckoutResult res = cmd.getResult();
+            if (!res.getStatus().equals(CheckoutResult.Status.OK)) {
+                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (checkout) FAILED : {0}", getId());
+                return false;
+            }
+            return true;
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (checkout) FAILED : {0}", getId());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+
+    }
+
+    private boolean add(Git git) {
+        AddCommand cmd = git.add();
+        String pre = "";
+        if (getContributorPrefix() != null && getContributorPrefix().length() > 0) {
+            pre = getContributorPrefix() + File.separator;
+        }
+        cmd.addFilepattern("objects" + File.separator + pre + ".");
+        cmd.addFilepattern("patches" + File.separator + pre + ".");
+        try {
+            cmd.call();
+            return true;
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (add) FAILED : {0}", getId());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+
+    }
+
+    private boolean commit(Git git) {
+        CommitCommand cmd = git.commit();
+        cmd.setAll(true);
+        cmd.setMessage("commit from axoloti UI");
+        try {
+            RevCommit rev = cmd.call();
+            return true;
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (commit) FAILED : {0}", getId());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    private boolean push(Git git) {
+        PushCommand cmd = git.push();
+        if (isAuth()) {
+            cmd.setCredentialsProvider(new UsernamePasswordCredentialsProvider(getUserId(), getPassword()));
         }
 
+        try {
+            Iterable<PushResult> res = cmd.call();
+            return true;
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (push) FAILED : {0}", getId());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    private boolean isDirty(Git git) {
+        try {
+            StatusCommand cmd = git.status();
+            String pre = "";
+            if (getContributorPrefix() != null && getContributorPrefix().length() > 0) {
+                pre = getContributorPrefix() + File.separator;
+            }
+            cmd.addPath("objects" + File.separator + pre);
+            cmd.addPath("patches" + File.separator + pre);
+            Status status = cmd.call();
+            if (status.isClean() ) {
+                return false;
+            }
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications detected: {0}", getId());
+
+            return true;
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoWorkTreeException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (status) FAILED : {0}", getId());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     private boolean usingSubmodule() {
         return (Axoloti.isDeveloper()
                 && (getId().equals(AxolotiLibrary.FACTORY_ID) || getId().equals(AxolotiLibrary.USER_LIBRARY_ID)));
+    }
+
+    private boolean isAuth() {
+        return getUserId() != null && getUserId().length() > 0;
     }
 }
