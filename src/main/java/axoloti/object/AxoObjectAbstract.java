@@ -22,6 +22,7 @@ import axoloti.Patch;
 import axoloti.inlets.Inlet;
 import axoloti.outlets.Outlet;
 import java.awt.Point;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;

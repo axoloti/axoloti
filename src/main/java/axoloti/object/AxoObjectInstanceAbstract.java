@@ -42,6 +42,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -613,5 +614,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
     @Override
     public void ObjectModified(Object src) {
+    }
+
+    public ArrayList<File> GetDependendSDFiles() {
+        return null;
     }
 }

@@ -17,7 +17,6 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceInt32;
 import axoloti.object.AxoObjectInstance;
 import org.simpleframework.xml.Attribute;

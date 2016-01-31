@@ -42,6 +42,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,7 +85,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         @ElementList(entry = "combo", type = AttributeInstanceComboBox.class, inline = true, required = false),
         @ElementList(entry = "int", type = AttributeInstanceInt32.class, inline = true, required = false),
         @ElementList(entry = "spinner", type = AttributeInstanceSpinner.class, inline = true, required = false),
-        @ElementList(entry = "file", type = AttributeInstanceWavefile.class, inline = true, required = false),
+        @ElementList(entry = "file", type = AttributeInstanceSDFile.class, inline = true, required = false),
         @ElementList(entry = "text", type = AttributeInstanceTextEditor.class, inline = true, required = false)})
     ArrayList<AttributeInstance> attributeInstances;
     public ArrayList<DisplayInstance> displayInstances;
@@ -540,7 +542,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 c += p.PExName("parent->") + ".finalvalue = (int32_t)(&(parent->instance"
                         + getLegalName() + "_i.PExch[instance" + getLegalName() + "::PARAM_INDEX_"
                         + p.parameter.PropagateToChild + "]));\n";
-                
+
             } else {
                 c += p.GenerateCodeInit("parent->", "");
             }
@@ -849,5 +851,17 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         if (getPatch() != null) {
             getPatch().ChangeObjectInstanceType(this, this.getType());
         }
+    }
+
+    @Override
+    public ArrayList<File> GetDependendSDFiles() {
+        ArrayList<File> files = new ArrayList<File>();
+        for (AttributeInstance a : attributeInstances) {
+            ArrayList<File> f2 = a.GetDependendSDFiles();
+            if (f2 != null) {
+                files.addAll(f2);
+            }
+        }
+        return files;
     }
 }

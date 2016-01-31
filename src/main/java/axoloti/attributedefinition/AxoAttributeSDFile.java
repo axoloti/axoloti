@@ -17,47 +17,24 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstanceSpinner;
+import axoloti.attribute.AttributeInstanceSDFile;
 import axoloti.object.AxoObjectInstance;
-import org.simpleframework.xml.Attribute;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class AxoAttributeSpinner extends AxoAttribute {
+public class AxoAttributeSDFile extends AxoAttribute {
 
-    @Attribute
-    int MinValue;
-    @Attribute
-    int MaxValue;
-    @Attribute
-    int DefaultValue;
-
-    public AxoAttributeSpinner() {
+    public AxoAttributeSDFile() {
     }
 
-    public AxoAttributeSpinner(String name, int MinValue, int MaxValue, int DefaultValue) {
+    public AxoAttributeSDFile(String name) {
         super(name);
-        this.MinValue = MinValue;
-        this.MaxValue = MaxValue;
-        this.DefaultValue = DefaultValue;
-    }
-
-    public int getMinValue() {
-        return MinValue;
-    }
-
-    public int getMaxValue() {
-        return MaxValue;
-    }
-
-    public int getDefaultValue() {
-        return DefaultValue;
     }
 
     @Override
-    public AttributeInstanceSpinner InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceSpinner(this, o);
+    public AttributeInstanceSDFile InstanceFactory(AxoObjectInstance o) {
+        return new AttributeInstanceSDFile(this, o);
     }
 }

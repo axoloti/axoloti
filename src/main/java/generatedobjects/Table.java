@@ -19,6 +19,7 @@ package generatedobjects;
 
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.attributedefinition.AxoAttributeObjRef;
+import axoloti.attributedefinition.AxoAttributeSDFile;
 import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
 import axoloti.inlets.InletBool32Rising;
@@ -32,7 +33,6 @@ import axoloti.inlets.InletInt32Pos;
 import axoloti.object.AxoObject;
 import axoloti.outlets.OutletFrac32;
 import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterFrac32SMapPitch;
 import axoloti.parameters.ParameterFrac32SMapVSlider;
 import axoloti.parameters.ParameterInt32Box;
@@ -189,7 +189,7 @@ public class Table extends gentools {
         String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
             "16", "17", "18", "19", "20", "21", "22"};
         o.attributes.add(new AxoAttributeComboBox("size", mentries, centries));
-        o.attributes.add(new AxoAttributeTablename("filename"));
+        o.attributes.add(new AxoAttributeSDFile("filename"));
         o.sLocalData = "static const uint32_t LENGTHPOW = (%size%);\n"
                 + "static const uint32_t LENGTH = (1<<%size%);\n"
                 + "static const uint32_t LENGTHMASK = ((1<<%size%)-1);\n"

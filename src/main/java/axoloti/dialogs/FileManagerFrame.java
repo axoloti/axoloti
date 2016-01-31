@@ -21,6 +21,7 @@ import axoloti.ConnectionStatusListener;
 import axoloti.MainFrame;
 import static axoloti.MainFrame.prefs;
 import axoloti.SDCardInfo;
+import axoloti.SDFileInfo;
 import axoloti.USBBulkConnection;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -28,15 +29,16 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import qcmds.QCmdDeleteFile;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdUploadFile;
 
@@ -131,9 +133,8 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return (columnIndex == 1);
+                return false;
             }
-
         });
 
         jFileTable.setDropTarget(new DropTarget() {
@@ -161,6 +162,18 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                 }
             }
         });
+
+        jFileTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int row = jFileTable.getSelectedRow();
+                if (row < 0) {
+                    jButtonDelete.setEnabled(false);
+                } else {
+                    jButtonDelete.setEnabled(true);
+                }
+            }
+        });
     }
 
     /**
@@ -177,6 +190,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         jButton1Refresh = new javax.swing.JButton();
         jLabelSDInfo = new javax.swing.JLabel();
         jButtonUpload = new javax.swing.JButton();
+        jButtonDelete = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -236,6 +250,13 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
             }
         });
 
+        jButtonDelete.setText("Delete");
+        jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
@@ -256,6 +277,10 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                 .addGap(0, 0, Short.MAX_VALUE))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
             .addComponent(jLabelSDInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonDelete)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,7 +291,10 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelSDInfo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonDelete)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -284,7 +312,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     }//GEN-LAST:event_jButton1RefreshActionPerformed
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
-        QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
         if (USBBulkConnection.GetConnection().isConnected()) {
             final JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
             int returnVal = fc.showOpenDialog(this);
@@ -310,6 +338,15 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
     }//GEN-LAST:event_formWindowClosing
 
+    private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
+        int rowIndex = jFileTable.getSelectedRow();
+        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
+        if (rowIndex >= 0) {
+            SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+            processor.AppendToQueue(new QCmdDeleteFile(f.getFilename()));
+        }
+    }//GEN-LAST:event_jButtonDeleteActionPerformed
+
     public void refresh() {
         int clusters = SDCardInfo.getInstance().getClusters();
         int clustersize = SDCardInfo.getInstance().getClustersize();
@@ -321,6 +358,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1Refresh;
+    private javax.swing.JButton jButtonDelete;
     private javax.swing.JButton jButtonUpload;
     private javax.swing.JTable jFileTable;
     private javax.swing.JLabel jLabelSDInfo;
@@ -337,6 +375,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         jButtonUpload.setEnabled(true);
         jFileTable.setEnabled(true);
         jLabelSDInfo.setText("");
+        jButtonDelete.setEnabled(true);
     }
 
     @Override
@@ -345,5 +384,6 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         jButtonUpload.setEnabled(false);
         jFileTable.setEnabled(false);
         jLabelSDInfo.setText("");
+        jButtonDelete.setEnabled(false);
     }
 }

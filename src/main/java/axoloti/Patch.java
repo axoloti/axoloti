@@ -70,6 +70,7 @@ import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
 import qcmds.QCmdStart;
 import qcmds.QCmdStop;
+import qcmds.QCmdUploadFile;
 import qcmds.QCmdUploadPatch;
 
 /**
@@ -128,11 +129,29 @@ public class Patch {
     }
 
     void GoLive() {
+        GetQCmdProcessor().AppendToQueue(new QCmdStop());
+
+        ArrayList<File> files = GetDependendSDFiles();
+        for (File f : files) {
+            if (!f.exists()) {
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "File reference unresolved: {}", f.getName());
+                continue;
+            }
+            if (!f.canRead()) {
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Can't read file {}", f.getName());
+                continue;
+            }
+            if (!SDCardInfo.getInstance().exists(f.getName(), f.lastModified(), f.length())){
+                GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, f.getName()));            
+            } else {
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());                
+            }
+        }
+
         ShowPreset(0);
         WriteCode();
         presetUpdatePending = false;
         GetQCmdProcessor().SetPatch(null);
-        GetQCmdProcessor().AppendToQueue(new QCmdStop());
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
         GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
         GetQCmdProcessor().AppendToQueue(new QCmdStart(this));
@@ -2310,4 +2329,14 @@ public class Patch {
         return patchframe;
     }
 
+    public ArrayList<File> GetDependendSDFiles() {
+        ArrayList<File> files = new ArrayList<File>();
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            ArrayList<File> f2 = o.GetDependendSDFiles();
+            if (f2 != null) {
+                files.addAll(f2);
+            }
+        }
+        return files;
+    }
 }

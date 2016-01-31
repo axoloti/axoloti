@@ -23,6 +23,7 @@ import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.attributedefinition.AxoAttributeInt32;
 import axoloti.attributedefinition.AxoAttributeObjRef;
+import axoloti.attributedefinition.AxoAttributeSDFile;
 import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
@@ -228,7 +229,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = "combo", type = AxoAttributeComboBox.class, inline = true, required = false),
         @ElementList(entry = "int", type = AxoAttributeInt32.class, inline = true, required = false),
         @ElementList(entry = "spinner", type = AxoAttributeSpinner.class, inline = true, required = false),
-        @ElementList(entry = "file", type = AxoAttributeWavefile.class, inline = true, required = false),
+        @ElementList(entry = "file", type = AxoAttributeSDFile.class, inline = true, required = false),
         @ElementList(entry = "text", type = AxoAttributeTextEditor.class, inline = true, required = false)})
     public ArrayList<AxoAttribute> attributes; // literal constants
     @ElementList(name = "includes", entry = "include", type = String.class, required = false)

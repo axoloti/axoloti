@@ -18,6 +18,7 @@
 package qcmds;
 
 import axoloti.Connection;
+import axoloti.SDCardInfo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,6 +36,8 @@ public class QCmdUploadFile implements QCmdSerialTask {
     InputStream inputStream;
     final String filename;
     File file;
+    long size;
+    long tsEpoch;
 
     public QCmdUploadFile(InputStream inputStream, String filename) {
         this.inputStream = inputStream;
@@ -66,14 +69,14 @@ public class QCmdUploadFile implements QCmdSerialTask {
             }
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading: {0}", filename);
             Calendar ts = Calendar.getInstance();
-            if (file !=null ){
+            if (file != null) {
                 ts.setTimeInMillis(file.lastModified());
             }
-            connection.TransmitCreateFile(filename, 0, ts);
-
-            int MaxBlockSize = 32768;
             int tlength = inputStream.available();
             int remLength = inputStream.available();
+            size = tlength;
+            connection.TransmitCreateFile(filename, tlength, ts);
+            int MaxBlockSize = 32768;
             int pct = 0;
             do {
                 int l;
@@ -100,6 +103,9 @@ public class QCmdUploadFile implements QCmdSerialTask {
 
             inputStream.close();
             connection.TransmitCloseFile();
+            
+            SDCardInfo.getInstance().AddFile(filename, (int) size, 0);
+            
             return this;
         } catch (IOException ex) {
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "IOException", ex);

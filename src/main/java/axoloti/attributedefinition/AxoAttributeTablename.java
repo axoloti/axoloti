@@ -17,7 +17,6 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceTablename;
 import axoloti.object.AxoObjectInstance;
 

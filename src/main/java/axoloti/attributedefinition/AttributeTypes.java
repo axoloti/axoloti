@@ -29,6 +29,7 @@ public class AttributeTypes {
         new AxoAttributeObjRef(),
         new AxoAttributeSpinner(),
         new AxoAttributeTablename(),
+        new AxoAttributeSDFile(),
         new AxoAttributeTextEditor(),
         new AxoAttributeWavefile()
     };

@@ -172,17 +172,17 @@ void PExTransmit(void) {
   }
 }
 
+char FileName[64];
+
 static FRESULT scan_files(char *path) {
   FRESULT res;
   FILINFO fno;
   DIR dir;
   int i;
   char *fn;
-
-#if _USE_LFN
-  fno.lfname = 0;
-  fno.lfsize = 0;
-#endif
+  char *msg = &((char*)fbuff)[64];
+  fno.lfname = &FileName[0];
+  fno.lfsize = sizeof(FileName);
   res = f_opendir(&dir, path);
   if (res == FR_OK) {
     i = strlen(path);
@@ -192,17 +192,17 @@ static FRESULT scan_files(char *path) {
         break;
       if (fno.fname[0] == '.')
         continue;
+#if _USE_LFN
+      fn = *fno.lfname ? fno.lfname : fno.fname;
+#else
       fn = fno.fname;
+#endif
       if (fno.fattrib & AM_DIR) {
-        path[i++] = '/';
-        strcpy(&path[i], fn);
+        sprintf(&path[i], "/%s", fn);
         res = scan_files(path);
-        if (res != FR_OK)
-          break;
-        path[--i] = 0;
-      }
-      else {
-        char *msg = &((char*)fbuff)[64];
+        path[i] = 0;
+        if (res != FR_OK) break;
+      } else {
         msg[0] = 'A';
         msg[1] = 'x';
         msg[2] = 'o';
@@ -214,7 +214,7 @@ static FRESULT scan_files(char *path) {
         strcpy(&msg[12+i+1], fn);
         int l = strlen(&msg[12]);
         chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                                (const unsigned char* )msg, l+12+1);
+                                (const unsigned char* )msg, l+13);
       }
     }
   } else {
@@ -275,8 +275,6 @@ void ReadDirectoryListing(void) {
  * "AxoB (int or) (int and)" buttons for virtual Axoloti Control
  */
 
-char FileName[64];
-
 FIL pFile;
 int pFileSize;
 
@@ -328,6 +326,13 @@ void CreateFile(void) {
       err = f_lseek(&pFile, 0);
       if (err != FR_OK) {
         report_fatfs_error(err,&FileName[6]);
+      }
+    } else if (FileName[1]=='D') {
+      // delete
+      FRESULT err;
+      err = f_unlink(&FileName[2]);
+      if (err != FR_OK) {
+        report_fatfs_error(err,&FileName[2]);
       }
     }
   }

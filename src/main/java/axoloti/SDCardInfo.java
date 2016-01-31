@@ -72,14 +72,40 @@ public class SDCardInfo {
         int DY = 1980 + ((timestamp & 0x0FE00) >> 9);
         int DM = ((timestamp & 0x01E0) >> 5);
         int DD = (timestamp & 0x001F);
-        int TH = (int)((timestamp & 0x0F8000000l) >> 27);
+        int TH = (int) ((timestamp & 0x0F8000000l) >> 27);
         int TM = (timestamp & 0x07E00000) >> 21;
         int TS = (timestamp & 0x001F0000) >> 15;
         Calendar date = Calendar.getInstance();
-        date.set(DY, DM-1, DD, TH, TM, TS);
+        date.set(DY, DM - 1, DD, TH, TM, TS);
+        if (fname.lastIndexOf(0) > 0) {
+            fname = fname.substring(0, fname.lastIndexOf(0));
+        }
         SDFileInfo sdf = new SDFileInfo(fname, date, size);
         files.add(sdf);
         MainFrame.mainframe.filemanager.refresh();
+    }
+
+    public void Delete(String fname) {
+        SDFileInfo f1 = null;
+        for (SDFileInfo f : files) {
+            if (f.filename.equalsIgnoreCase(fname)) {
+                f1 = f;
+                break;
+            }
+        }
+        if (f1 != null) {
+            files.remove(f1);
+            MainFrame.mainframe.filemanager.refresh();
+        }
+    }
+
+    public boolean exists(String name, long timestampEpoch, long size) {
+        for (SDFileInfo f : files) {
+            if (f.filename.equalsIgnoreCase("/" + name) && f.size == size && (Math.abs(f.timestamp.getTimeInMillis() - timestampEpoch) < 3000)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
