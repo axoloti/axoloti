@@ -51,6 +51,10 @@ public class AxoGitLibrary extends AxolotiLibrary {
                 String relDir = System.getProperty(Axoloti.RELEASE_DIR);
                 Git parent = Git.open(new File(relDir));
                 repository = SubmoduleWalk.getSubmoduleRepository(parent.getRepository(), getId());
+                if (repository == null) {
+                    Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "sync repo FAILED cannot find submodule : {0}", getId());
+                    return;
+                }
             } else {
                 repository = Git.open(new File(getLocalLocation())).getRepository();
             }
