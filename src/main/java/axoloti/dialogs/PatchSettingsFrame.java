@@ -17,10 +17,15 @@
  */
 package axoloti.dialogs;
 
+import axoloti.DocumentWindow;
+import axoloti.Patch;
 import axoloti.PatchSettings;
 import axoloti.SubPatchMode;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
@@ -28,16 +33,21 @@ import javax.swing.SpinnerNumberModel;
  *
  * @author Johannes Taelman
  */
-public class PatchSettingsFrame extends javax.swing.JFrame {
+public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWindow {
 
     PatchSettings settings;
 
+    final Patch patch;
+    
     /**
      * Creates new form PatchSettingsFrame
      * @param settings settings to load/save 
      */
-    public PatchSettingsFrame(PatchSettings settings) {
+    public PatchSettingsFrame(PatchSettings settings, Patch patch) {
         initComponents();
+        this.patch = patch;
+        setTitle("settings");
+        patch.getPatchframe().GetChildDocuments().add(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.settings = settings;
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setValue(settings.GetMidiChannel());
@@ -422,4 +432,24 @@ public class PatchSettingsFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldAttributions;
     private javax.swing.JTextField jTextFieldAuthor;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public JFrame GetFrame() {
+        return this;
+    }
+
+    @Override
+    public boolean AskClose() {
+        return false;
+    }
+
+    @Override
+    public File getFile() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<DocumentWindow> GetChildDocuments() {
+        return null;
+    }
 }

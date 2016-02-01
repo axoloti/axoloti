@@ -19,6 +19,7 @@ package axoloti;
 
 import java.awt.BorderLayout;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import org.fife.ui.rtextarea.*;
@@ -32,15 +33,17 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
 
     StringRef s;
     RSyntaxTextArea textArea;
+    final DocumentWindow parent;
 
     /**
      * Creates new form TextEditor
      *
      * @param s initial string
      */
-    public TextEditor(StringRef s) {
+    public TextEditor(StringRef s, DocumentWindow parent) {
         initComponents();
-        DocumentWindowList.RegisterWindow(this);
+        this.parent = parent;
+        parent.GetChildDocuments().add(this);
         this.s = s;
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
@@ -63,7 +66,7 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
     }
 
     public void Close() {
-        DocumentWindowList.UnregisterWindow(this);
+        parent.GetChildDocuments().remove(this);
         dispose();
     }
 
@@ -127,6 +130,7 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
         return this;
     }
 
+    @Override
     public boolean AskClose() {
         Close();
         return false; //TBC
@@ -134,6 +138,11 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
 
     @Override
     public File getFile() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<DocumentWindow> GetChildDocuments() {
         return null;
     }
 }

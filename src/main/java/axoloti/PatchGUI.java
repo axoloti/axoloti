@@ -715,8 +715,8 @@ public class PatchGUI extends Patch {
 
     void ShowNotesFrame() {
         if (NotesFrame == null) {
-            NotesFrame = new TextEditor(new StringRef());
-            NotesFrame.setTitle(patchframe.getTitle() + ":notes");
+            NotesFrame = new TextEditor(new StringRef(), getPatchframe());
+            NotesFrame.setTitle("notes");
             NotesFrame.SetText(notes);
             NotesFrame.addFocusListener(new FocusListener() {
                 @Override

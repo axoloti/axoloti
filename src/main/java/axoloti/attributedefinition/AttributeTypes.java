@@ -30,8 +30,7 @@ public class AttributeTypes {
         new AxoAttributeSpinner(),
         new AxoAttributeTablename(),
         new AxoAttributeSDFile(),
-        new AxoAttributeTextEditor(),
-        new AxoAttributeWavefile()
+        new AxoAttributeTextEditor()
     };
 
     static public AxoAttribute[] getTypes() {

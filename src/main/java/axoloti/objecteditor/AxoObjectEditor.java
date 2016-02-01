@@ -29,6 +29,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -587,6 +588,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
 
     @Override
     public File getFile() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<DocumentWindow> GetChildDocuments() {
         return null;
     }
 }

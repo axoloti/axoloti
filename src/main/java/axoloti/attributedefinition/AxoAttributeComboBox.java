@@ -35,6 +35,14 @@ public class AxoAttributeComboBox extends AxoAttribute {
     ArrayList<String> CEntries;
 
     public AxoAttributeComboBox() {
+        if (MenuEntries == null) {
+            MenuEntries = new ArrayList<String>();
+            MenuEntries.add("foo");
+        }
+        if (CEntries == null) {
+            CEntries = new ArrayList<String>();
+            CEntries.add("foo");
+        }
     }
 
     public AxoAttributeComboBox(String name, String MenuEntries[], String CEntries[]) {

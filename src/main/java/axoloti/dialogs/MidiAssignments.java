@@ -21,6 +21,7 @@ import axoloti.Patch;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.parameters.ParameterInstance;
 import java.util.Collection;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -35,6 +36,7 @@ public class MidiAssignments extends javax.swing.JDialog {
     public MidiAssignments(java.awt.Frame parent, boolean modal, ParameterInstance param) {
         super(parent, modal);
         initComponents();
+        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         Patch patch = param.GetObjectInstance().patch;
         String CCObj[] = new String[128];
@@ -67,7 +69,7 @@ public class MidiAssignments extends javax.swing.JDialog {
     }
 
     private int result;
-    
+
     public int getResult() {
         return result;
     }
