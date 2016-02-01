@@ -131,7 +131,7 @@ public class AxolotiLibrary {
     public void sync() {
     }
 
-    public void init() {
+    public void init(boolean delete) {
     }
 
     protected void delete(File f) throws IOException {

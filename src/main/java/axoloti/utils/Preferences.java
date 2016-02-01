@@ -149,6 +149,7 @@ public class Preferences {
     }
 
     public void updateLibrary(String id, AxolotiLibrary newlib) {
+        boolean found = false;
         for (AxolotiLibrary lib : libraries) {
             if (lib.getId().equals(id)) {
                 if (lib != newlib) {
@@ -156,9 +157,10 @@ public class Preferences {
                     libraries.add(newlib);
                     break;
                 }
+                found = true;
             }
         }
-
+        if(!found) libraries.add(newlib);
         buildObjectSearchPatch();
         SetDirty();
     }
@@ -242,7 +244,7 @@ public class Preferences {
                     }
 
                     if (prefs.libraries.isEmpty()) {
-                        prefs.ResetLibraries();
+                        prefs.ResetLibraries(false);
                     }
 
                     prefs.buildObjectSearchPatch();
@@ -254,7 +256,7 @@ public class Preferences {
                 }
             } else {
                 singleton = new Preferences();
-                singleton.ResetLibraries();
+                singleton.ResetLibraries(false);
             }
         }
         return singleton;
@@ -378,7 +380,7 @@ public class Preferences {
         return ControllerEnabled;
     }
 
-    public final void ResetLibraries() {
+    public final void ResetLibraries(boolean delete) {
         libraries = new ArrayList<AxolotiLibrary>();
 
         AxoGitLibrary factory = new AxoGitLibrary(
@@ -419,7 +421,7 @@ public class Preferences {
         // initialise the libraries
         for (AxolotiLibrary lib : libraries) {
             if (lib.getEnabled()) {
-                lib.init();
+                lib.init(delete);
             }
         }
         buildObjectSearchPatch();

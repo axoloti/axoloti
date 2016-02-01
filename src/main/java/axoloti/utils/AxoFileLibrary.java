@@ -19,7 +19,7 @@ public class AxoFileLibrary
     }
 
     @Override
-    public void init() {
+    public void init(boolean delete) {
         // NOP 
         // would be dangerous to delete local files
         // we should assume they are not backed up
