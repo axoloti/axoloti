@@ -36,19 +36,23 @@ import javax.swing.table.DefaultTableModel;
 public class PreferencesFrame extends javax.swing.JFrame {
 
     final static String MidiNone = "None";
-    Preferences prefs;
+
+    static PreferencesFrame singleton = null;
+
+    public static PreferencesFrame GetPreferencesFrame() {
+        if (singleton == null) {
+            singleton = new PreferencesFrame();
+        }
+        return singleton;
+    }
 
     /**
      * Creates new form PreferencesFrame
      *
-     * @param prefs preferences to load/save
      */
-    public PreferencesFrame(Preferences prefs) {
+    private PreferencesFrame() {
         initComponents();
-        if (prefs == null) {
-            throw new Error();
-        }
-        this.prefs = prefs;
+        Preferences prefs = Preferences.LoadPreferences();
         jTextFieldPollInterval.setText(Integer.toString(prefs.getPollInterval()));
 
         txtFavDir.setText(prefs.getFavouriteDir());
@@ -97,6 +101,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
     }
 
     void Apply() {
+        Preferences prefs = Preferences.LoadPreferences();
         prefs.setPollInterval(Integer.parseInt(jTextFieldPollInterval.getText()));
         prefs.setMouseDialAngular(jComboBox1.getSelectedItem().equals("Angular"));
         prefs.setFavouriteDir(txtFavDir.getText());
@@ -111,7 +116,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
             model.removeRow(0);
         }
 
-        for (AxolotiLibrary lib : prefs.getLibraries()) {
+        for (AxolotiLibrary lib : Preferences.LoadPreferences().getLibraries()) {
             model.addRow(new Object[]{lib.getType(), lib.getId(), lib.getLocalLocation(), lib.getEnabled()});
         }
         jLibraryTable.setCellSelectionEnabled(false);
@@ -404,7 +409,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
         Apply();
-        prefs.SavePrefs();
+        Preferences.LoadPreferences().SavePrefs();
         setVisible(false);
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
@@ -412,14 +417,14 @@ public class PreferencesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void btnFirmwareDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirmwareDirActionPerformed
-        JFileChooser chooser = new JFileChooser(prefs.getCurrentFileDirectory());
+        JFileChooser chooser = new JFileChooser(Preferences.LoadPreferences().getCurrentFileDirectory());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             String dir;
             try {
                 dir = chooser.getSelectedFile().getCanonicalPath();
-                prefs.SetFirmwareDir(dir);
+                Preferences.LoadPreferences().SetFirmwareDir(dir);
                 txtFirmwareDir.setText(dir);
             } catch (IOException ex) {
                 Logger.getLogger(PreferencesFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -428,14 +433,14 @@ public class PreferencesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnFirmwareDirActionPerformed
 
     private void btnRuntimeDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRuntimeDirActionPerformed
-        JFileChooser chooser = new JFileChooser(prefs.getCurrentFileDirectory());
+        JFileChooser chooser = new JFileChooser(Preferences.LoadPreferences().getCurrentFileDirectory());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             String dir;
             try {
                 dir = chooser.getSelectedFile().getCanonicalPath();
-                prefs.SetRuntimeDir(dir);
+                Preferences.LoadPreferences().SetRuntimeDir(dir);
                 txtRuntimeDir.setText(dir);
             } catch (IOException ex) {
                 Logger.getLogger(PreferencesFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -449,14 +454,14 @@ public class PreferencesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowActivated
 
     private void btnFavDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFavDirActionPerformed
-        JFileChooser chooser = new JFileChooser(prefs.getCurrentFileDirectory());
+        JFileChooser chooser = new JFileChooser(Preferences.LoadPreferences().getCurrentFileDirectory());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             String dir;
             try {
                 dir = chooser.getSelectedFile().getCanonicalPath();
-                prefs.setFavouriteDir(dir);
+                Preferences.LoadPreferences().setFavouriteDir(dir);
                 txtFavDir.setText(dir);
             } catch (IOException ex) {
                 Logger.getLogger(PreferencesFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -472,17 +477,16 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
         AxolotiLibrary lib = new AxolotiLibrary();
         AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true, lib);
-        
+
         AxolotiLibrary newlib;
-        if(lib.getRemoteLocation() == null || lib.getRemoteLocation().length()==0) {
-            newlib = new AxoFileLibrary(lib.getId(),lib.getType(),lib.getLocalLocation(),lib.getEnabled());
-        }
-        else {
-            newlib = new AxoGitLibrary(lib.getId(),lib.getType(),lib.getLocalLocation(),lib.getEnabled(),lib.getRemoteLocation(), lib.isAutoSync());
+        if (lib.getRemoteLocation() == null || lib.getRemoteLocation().length() == 0) {
+            newlib = new AxoFileLibrary(lib.getId(), lib.getType(), lib.getLocalLocation(), lib.getEnabled());
+        } else {
+            newlib = new AxoGitLibrary(lib.getId(), lib.getType(), lib.getLocalLocation(), lib.getEnabled(), lib.getRemoteLocation(), lib.isAutoSync());
             newlib.setContributorPrefix(lib.getContributorPrefix());
             newlib.setRevision(lib.getRevision());
         }
-        prefs.updateLibrary(lib.getId(), newlib);
+        Preferences.LoadPreferences().updateLibrary(lib.getId(), newlib);
         PopulateLibrary();
     }//GEN-LAST:event_jAddLibBtnActionPerformed
 
@@ -491,7 +495,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
         int idx = jLibraryTable.getSelectedRow();
         if (idx >= 0) {
             String id = (String) model.getValueAt(idx, 1);
-            prefs.removeLibrary(id);
+            Preferences.LoadPreferences().removeLibrary(id);
         }
 
         PopulateLibrary();
@@ -499,15 +503,17 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
     private void jResetLibActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jResetLibActionPerformed
         boolean delete = false;
-        
-        if(!Axoloti.isDeveloper()) {
+
+        if (!Axoloti.isDeveloper()) {
             int options = JOptionPane.OK_CANCEL_OPTION;
-            int res = JOptionPane.showConfirmDialog (this, "Reset will delete existing factory and contrib directories\n Continue?","Warning",options);
-            if(res == JOptionPane.CANCEL_OPTION) return;
+            int res = JOptionPane.showConfirmDialog(this, "Reset will delete existing factory and contrib directories\n Continue?", "Warning", options);
+            if (res == JOptionPane.CANCEL_OPTION) {
+                return;
+            }
             delete = (res == JOptionPane.OK_OPTION);
         }
-        
-        prefs.ResetLibraries(delete);
+
+        Preferences.LoadPreferences().ResetLibraries(delete);
         PopulateLibrary();
     }//GEN-LAST:event_jResetLibActionPerformed
 
@@ -516,10 +522,10 @@ public class PreferencesFrame extends javax.swing.JFrame {
         int idx = jLibraryTable.getSelectedRow();
         if (idx >= 0) {
             String id = (String) model.getValueAt(idx, 1);
-            AxolotiLibrary lib = prefs.getLibrary(id);
+            AxolotiLibrary lib = Preferences.LoadPreferences().getLibrary(id);
             if (lib != null) {
                 AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true, lib);
-                prefs.updateLibrary(lib.getId(), lib);
+                Preferences.LoadPreferences().updateLibrary(lib.getId(), lib);
                 PopulateLibrary();
             }
         }

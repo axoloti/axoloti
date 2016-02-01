@@ -92,7 +92,7 @@ public class Preferences {
 
     final int minimumPollInterval = 20;
 
-    public Preferences() {
+    protected Preferences() {
         if (CurrentFileDirectory == null) {
             CurrentFileDirectory = "";
         }

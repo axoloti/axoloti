@@ -17,7 +17,7 @@
  */
 package axoloti.menus;
 
-import static axoloti.MainFrame.prefs;
+import axoloti.utils.Preferences;
 import java.io.File;
 
 /**
@@ -27,6 +27,6 @@ import java.io.File;
 public class FavouriteMenu extends PopulatePatchMenuDynamic {
 
     public FavouriteMenu() {
-        super("hello", new File(prefs.getFavouriteDir()), ".axp");
+        super("hello", new File(Preferences.LoadPreferences().getFavouriteDir()), ".axp");
     }
 }
