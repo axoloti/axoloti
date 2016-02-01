@@ -443,7 +443,8 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         jButtonOpen = new javax.swing.JButton();
         jButtonUpload = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        fileMenu1 = new axoloti.menus.FileMenu();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItemSave = new javax.swing.JMenuItem();
         jMenuItemSaveAs = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -595,7 +596,8 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
         getContentPane().add(jPanel2);
 
-        jMenu1.setText("File");
+        fileMenu1.setText("File");
+        fileMenu1.add(jSeparator1);
 
         jMenuItemSave.setText("Save");
         jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
@@ -603,7 +605,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 jMenuItemSaveActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItemSave);
+        fileMenu1.add(jMenuItemSave);
 
         jMenuItemSaveAs.setText("Save as...");
         jMenuItemSaveAs.addActionListener(new java.awt.event.ActionListener() {
@@ -611,9 +613,9 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 jMenuItemSaveAsActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItemSaveAs);
+        fileMenu1.add(jMenuItemSaveAs);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(fileMenu1);
 
         jMenu2.setText("Edit");
         jMenuBar1.add(jMenu2);
@@ -713,6 +715,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private axoloti.menus.FileMenu fileMenu1;
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonDown;
     private javax.swing.JButton jButtonOpen;
@@ -721,7 +724,6 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     private javax.swing.JButton jButtonUpload;
     private javax.swing.JButton jButtonUploadBank;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemSave;
@@ -729,6 +731,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTable jTable1;
     private axoloti.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables

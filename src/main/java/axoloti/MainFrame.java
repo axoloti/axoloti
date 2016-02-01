@@ -31,7 +31,6 @@ import axoloti.usb.Usb;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.FirmwareID;
 import axoloti.utils.Preferences;
-import generatedobjects.GeneratedObjects;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
@@ -102,6 +101,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     public MainFrame(String args[]) {
         this.args = args;
         initComponents();
+        fileMenu.initComponents();        
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
         transparentCursor = getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null);
@@ -201,8 +201,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         remote.setVisible(false);
 
         if (!prefs.getExpertMode()) {
-            jMenuRegenerateObjects.setVisible(false);
-            jMenuAutoTest.setVisible(false);
             jMenuItemRefreshFWID.setVisible(false);
         }
 
@@ -330,23 +328,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jLabelVoltages = new javax.swing.JLabel();
         jLabelIcon = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenuFile = new javax.swing.JMenu();
-        jMenuNewPatch = new javax.swing.JMenuItem();
-        jMenuNewBank = new javax.swing.JMenuItem();
-        jMenuOpen = new javax.swing.JMenuItem();
-        jMenuOpenURL = new javax.swing.JMenuItem();
-        recentFileMenu1 = new axoloti.menus.RecentFileMenu();
-        libraryMenu1 = new axoloti.menus.LibraryMenu();
-        favouriteMenu1 = new axoloti.menus.FavouriteMenu();
-        jMenuSync = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        jMenuReloadObjects = new javax.swing.JMenuItem();
-        jMenuRegenerateObjects = new javax.swing.JMenuItem();
-        jMenuAutoTest = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
-        jMenuItemPreferences = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuQuit = new javax.swing.JMenuItem();
+        fileMenu = new axoloti.menus.FileMenu();
         jMenuEdit = new javax.swing.JMenu();
         jMenuItemCopy = new javax.swing.JMenuItem();
         jMenuBoard = new javax.swing.JMenu();
@@ -443,124 +425,25 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         jLabelIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/axoloti_icon.png"))); // NOI18N
 
-        jMenuFile.setText("File");
+        fileMenu.setText("File");
+        jMenuBar1.add(fileMenu);
 
-        jMenuNewPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
+        jMenuEdit.setText("Edit");
+
+        jMenuItemCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
             Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-    jMenuNewPatch.setText("New patch");
-    jMenuNewPatch.addActionListener(new java.awt.event.ActionListener() {
+    jMenuItemCopy.setText("Copy");
+    jMenuEdit.add(jMenuItemCopy);
+
+    jMenuBar1.add(jMenuEdit);
+
+    jMenuBoard.setText("Board");
+
+    jMenuItemSelectCom.setText("Select Device...");
+    jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuNewPatchActionPerformed(evt);
+            jMenuItemSelectComActionPerformed(evt);
         }
-    });
-    jMenuFile.add(jMenuNewPatch);
-
-    jMenuNewBank.setText("New patch bank");
-    jMenuNewBank.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuNewBankActionPerformed(evt);
-        }
-    });
-    jMenuFile.add(jMenuNewBank);
-
-    jMenuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
-        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-jMenuOpen.setText("Open...");
-jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
-    public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jMenuOpenActionPerformed(evt);
-    }
-    });
-    jMenuFile.add(jMenuOpen);
-
-    jMenuOpenURL.setText("Open from URL...");
-    jMenuOpenURL.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuOpenURLActionPerformed(evt);
-        }
-    });
-    jMenuFile.add(jMenuOpenURL);
-
-    recentFileMenu1.setText("Open Recent");
-    jMenuFile.add(recentFileMenu1);
-
-    libraryMenu1.setText("Library");
-    jMenuFile.add(libraryMenu1);
-
-    favouriteMenu1.setText("Favorites");
-    jMenuFile.add(favouriteMenu1);
-
-    jMenuSync.setText("Sync Libraries");
-    jMenuSync.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuSyncActionPerformed(evt);
-        }
-    });
-    jMenuFile.add(jMenuSync);
-    jMenuFile.add(jSeparator2);
-
-    jMenuReloadObjects.setText("Reload Objects");
-    jMenuReloadObjects.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuReloadObjectsActionPerformed(evt);
-        }
-    });
-    jMenuFile.add(jMenuReloadObjects);
-
-    jMenuRegenerateObjects.setText("Regenerate Objects");
-    jMenuRegenerateObjects.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuRegenerateObjectsActionPerformed(evt);
-        }
-    });
-    jMenuFile.add(jMenuRegenerateObjects);
-
-    jMenuAutoTest.setText("Test Compilation");
-    jMenuAutoTest.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuAutoTestActionPerformed(evt);
-        }
-    });
-    jMenuFile.add(jMenuAutoTest);
-    jMenuFile.add(jSeparator3);
-
-    jMenuItemPreferences.setText("Preferences...");
-    jMenuItemPreferences.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemPreferencesActionPerformed(evt);
-        }
-    });
-    jMenuFile.add(jMenuItemPreferences);
-    jMenuFile.add(jSeparator1);
-
-    jMenuQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
-        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-jMenuQuit.setText("Quit");
-jMenuQuit.addActionListener(new java.awt.event.ActionListener() {
-    public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jMenuQuitActionPerformed(evt);
-    }
-    });
-    jMenuFile.add(jMenuQuit);
-
-    jMenuBar1.add(jMenuFile);
-
-    jMenuEdit.setText("Edit");
-
-    jMenuItemCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
-        Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-jMenuItemCopy.setText("Copy");
-jMenuEdit.add(jMenuItemCopy);
-
-jMenuBar1.add(jMenuEdit);
-
-jMenuBoard.setText("Board");
-
-jMenuItemSelectCom.setText("Select Device...");
-jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
-    public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jMenuItemSelectComActionPerformed(evt);
-    }
     });
     jMenuBoard.add(jMenuItemSelectCom);
 
@@ -948,35 +831,6 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
     }//GEN-LAST:event_jMenuItemMountActionPerformed
 
-    private void jMenuQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuQuitActionPerformed
-        Quit();
-    }//GEN-LAST:event_jMenuQuitActionPerformed
-
-    private void jMenuItemPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPreferencesActionPerformed
-        if (pp == null) {
-            pp = new PreferencesFrame(MainFrame.prefs);
-        }
-        pp.setState(java.awt.Frame.NORMAL);
-        pp.setVisible(true);
-    }//GEN-LAST:event_jMenuItemPreferencesActionPerformed
-
-    private void jMenuAutoTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAutoTestActionPerformed
-        runAllTests();
-    }//GEN-LAST:event_jMenuAutoTestActionPerformed
-
-    private void jMenuRegenerateObjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRegenerateObjectsActionPerformed
-        GeneratedObjects.WriteAxoObjects();
-        jMenuReloadObjectsActionPerformed(evt);
-    }//GEN-LAST:event_jMenuRegenerateObjectsActionPerformed
-
-    private void jMenuReloadObjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuReloadObjectsActionPerformed
-        axoObjects.LoadAxoObjects();
-    }//GEN-LAST:event_jMenuReloadObjectsActionPerformed
-
-    private void jMenuOpenURLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuOpenURLActionPerformed
-        OpenURL();
-    }//GEN-LAST:event_jMenuOpenURLActionPerformed
-
     public void OpenURL() {
         String url = JOptionPane.showInputDialog(this, "Enter URL:");
         if (url == null) {
@@ -993,25 +847,6 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
         }
     }
 
-    private void jMenuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuOpenActionPerformed
-        FileUtils.Open(this);
-    }//GEN-LAST:event_jMenuOpenActionPerformed
-
-    private void jMenuNewPatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewPatchActionPerformed
-        NewPatch();
-    }//GEN-LAST:event_jMenuNewPatchActionPerformed
-
-    private void jMenuSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSyncActionPerformed
-        for(AxolotiLibrary lib : prefs.getLibraries()) {
-            lib.sync();
-        }
-        axoObjects.LoadAxoObjects();
-    }//GEN-LAST:event_jMenuSyncActionPerformed
-
-    private void jMenuNewBankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewBankActionPerformed
-        NewBank();
-    }//GEN-LAST:event_jMenuNewBankActionPerformed
-
     public void NewPatch() {
         PatchGUI patch1 = new PatchGUI();
         PatchFrame pf = new PatchFrame(patch1, qcmdprocessor);
@@ -1027,7 +862,7 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private axoloti.menus.FavouriteMenu favouriteMenu1;
+    private axoloti.menus.FileMenu fileMenu;
     private javax.swing.Box.Filler filler1;
     private axoloti.menus.HelpMenu helpMenu1;
     private javax.swing.JButton jButtonClear;
@@ -1039,11 +874,9 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JLabel jLabelIcon;
     private javax.swing.JLabel jLabelProgress;
     private javax.swing.JLabel jLabelVoltages;
-    private javax.swing.JMenuItem jMenuAutoTest;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuBoard;
     private javax.swing.JMenu jMenuEdit;
-    private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenu jMenuFirmware;
     private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemEnterDFU;
@@ -1056,27 +889,13 @@ jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuItemMount;
     private javax.swing.JMenuItem jMenuItemPanic;
     private javax.swing.JMenuItem jMenuItemPing;
-    private javax.swing.JMenuItem jMenuItemPreferences;
     private javax.swing.JMenuItem jMenuItemRefreshFWID;
     private javax.swing.JMenuItem jMenuItemSelectCom;
-    private javax.swing.JMenuItem jMenuNewBank;
-    private javax.swing.JMenuItem jMenuNewPatch;
-    private javax.swing.JMenuItem jMenuOpen;
-    private javax.swing.JMenuItem jMenuOpenURL;
-    private javax.swing.JMenuItem jMenuQuit;
-    private javax.swing.JMenuItem jMenuRegenerateObjects;
-    private javax.swing.JMenuItem jMenuReloadObjects;
-    private javax.swing.JMenuItem jMenuSync;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelProgress;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPaneLog;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
-    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JTextPane jTextPaneLog;
-    private axoloti.menus.LibraryMenu libraryMenu1;
-    private axoloti.menus.RecentFileMenu recentFileMenu1;
     private axoloti.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
 
