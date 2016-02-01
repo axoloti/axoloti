@@ -69,14 +69,14 @@ public class PatchSettings {
         MidiChannel = i;
     }
 
-    public boolean GetMidiChannelSelector() {
+    public boolean GetMidiSelector() {
         if (HasMidiChannelSelector == null) {
             return false;
         }
         return HasMidiChannelSelector;
     }
 
-    public void SetMidiChannelSelector(boolean b) {
+    public void SetMidiSelector(boolean b) {
         if (b) {
             HasMidiChannelSelector = b;
         } else {

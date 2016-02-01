@@ -141,10 +141,10 @@ public class Patch {
                 Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Can't read file {}", f.getName());
                 continue;
             }
-            if (!SDCardInfo.getInstance().exists(f.getName(), f.lastModified(), f.length())){
-                GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, f.getName()));            
+            if (!SDCardInfo.getInstance().exists(f.getName(), f.lastModified(), f.length())) {
+                GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, f.getName()));
             } else {
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());                
+                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
             }
         }
 
@@ -1356,6 +1356,10 @@ public class Patch {
         } else {
             c = c.replace("attr_midichannel", Integer.toString(settings.GetMidiChannel() - 1));
         }
+        if (settings == null || !settings.GetMidiSelector()) {
+            c = c.replace("attr_mididevice", "0");
+            c = c.replace("attr_midiport", "0");
+        }
         return c;
     }
 
@@ -1430,11 +1434,22 @@ public class Patch {
             }
         }
 
-        ao.sMidiCode = GenerateMidiInCodePlusPlus();
-        if ((settings != null) && (settings.GetMidiChannelSelector())) {
+        ao.sMidiCode = ""
+                + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
+                + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
+                + GenerateMidiInCodePlusPlus();
+
+        if ((settings != null) && (settings.GetMidiSelector())) {
             String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
             ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
+            // use a cut down list of those currently supported
+            String cdev[] = {"0", "1", "2", "3", "15"};
+            String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
+            ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
+            String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
         }
         return ao;
     }
@@ -1504,19 +1519,18 @@ public class Patch {
         }
         String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         ao.attributes.add(new AxoAttributeComboBox("poly", centries, centries));
-        if ((settings != null) && (settings.GetMidiChannelSelector())) {
+        if ((settings != null) && (settings.GetMidiSelector())) {
             String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
             ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
+            // use a cut down list of those currently supported
+            String cdev[] = {"0", "1", "2", "3", "15"};
+            String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
+            ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
+            String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
         }
-
-        // use a cut down list of those currently supported
-        String cdev[] = {"0", "1", "2", "3", "15"};
-        String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
-        ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
-        String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-        String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-        ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
 
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (o.typeName.equals("patch/inlet f")) {

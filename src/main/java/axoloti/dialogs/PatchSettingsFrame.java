@@ -78,7 +78,7 @@ public class PatchSettingsFrame extends javax.swing.JFrame {
                 jComboBoxMode.setSelectedIndex(5);
                 break;
         }
-        jCheckBoxHasChannelAttrib.setSelected(settings.GetMidiChannelSelector());
+        jCheckBoxHasChannelAttrib.setSelected(settings.GetMidiSelector());
         jCheckBoxSaturate.setSelected(settings.getSaturate());
     }
 
@@ -169,7 +169,7 @@ public class PatchSettingsFrame extends javax.swing.JFrame {
             }
         });
 
-        jCheckBoxHasChannelAttrib.setText("Has MIDI channel attribute");
+        jCheckBoxHasChannelAttrib.setText("Has MIDI selector");
         jCheckBoxHasChannelAttrib.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxHasChannelAttribActionPerformed(evt);
@@ -378,7 +378,7 @@ public class PatchSettingsFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jSpinnerModulationTargetsStateChanged
 
     private void jCheckBoxHasChannelAttribActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxHasChannelAttribActionPerformed
-        settings.SetMidiChannelSelector(jCheckBoxHasChannelAttrib.isSelected());
+        settings.SetMidiSelector(jCheckBoxHasChannelAttrib.isSelected());
     }//GEN-LAST:event_jCheckBoxHasChannelAttribActionPerformed
 
     private void jComboBoxLicenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLicenseActionPerformed
