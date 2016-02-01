@@ -767,4 +767,8 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         }
     }
 
+    @Override
+    public ArrayList<DocumentWindow> GetChildDocuments() {
+        return null;
+    }
 }

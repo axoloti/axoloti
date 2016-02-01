@@ -22,6 +22,7 @@ import axoloti.DocumentWindowList;
 import axoloti.MainFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -81,7 +82,7 @@ public class WindowMenu extends JMenu {
         private final JFrame frame;
 
         public WindowMenuItem(JFrame frame, String itemname) {
-            super(frame.getTitle());
+            super(itemname);
             this.frame = frame;
             addActionListener(wmiAL);
         }
@@ -94,6 +95,17 @@ public class WindowMenu extends JMenu {
 
         public JFrame getFrame() {
             return frame;
+        }
+    }
+
+    static void PopulateDocuments(JMenu jMenuWindow, String prefix, ArrayList<DocumentWindow> dwl) {
+        for (DocumentWindow p : dwl) {
+            JFrame frame = p.GetFrame();
+            WindowMenuItem wmi = new WindowMenuItem(frame, prefix + frame.getTitle());
+            jMenuWindow.add(wmi);
+            if (p.GetChildDocuments()!=null) {
+                PopulateDocuments(jMenuWindow, "> " + prefix, p.GetChildDocuments());
+            }
         }
     }
 
@@ -121,10 +133,7 @@ public class WindowMenu extends JMenu {
         }
 
         jMenuWindow.add(new JSeparator());
-        for (DocumentWindow p : DocumentWindowList.GetList()) {
-            JFrame frame = p.GetFrame();
-            jMenuWindow.add(new WindowMenuItem(frame));
-        }
+        PopulateDocuments(jMenuWindow, "", DocumentWindowList.GetList());
     }
 
 }

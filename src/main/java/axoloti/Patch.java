@@ -914,10 +914,9 @@ public class Patch {
             }
             if (i != settings.GetNModulationSources() - 1) {
                 s += ",\n";
-            } else {
-                s += "};\n";
             }
         }
+        s += "};\n";
         s += "   return (PExModulationTarget_t *)&PExModulationSources[0][0];\n";
         s += "   };\n";
 

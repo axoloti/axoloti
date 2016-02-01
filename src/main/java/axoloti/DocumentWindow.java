@@ -18,6 +18,7 @@
 package axoloti;
 
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 
 /**
@@ -31,4 +32,6 @@ public interface DocumentWindow {
     public boolean AskClose();
 
     public File getFile();
+
+    public ArrayList<DocumentWindow> GetChildDocuments();
 }

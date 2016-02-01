@@ -65,7 +65,7 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
             @Override
             public void OnPushed() {
                 if (editor == null) {
-                    editor = new TextEditor(sRef);
+                    editor = new TextEditor(sRef, GetObjectInstance().getPatch().getPatchframe());
                     editor.setTitle(GetObjectInstance().getInstanceName() + "/" + attr.getName());
                 }
                 editor.setState(java.awt.Frame.NORMAL);

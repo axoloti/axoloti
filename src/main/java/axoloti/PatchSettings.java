@@ -49,7 +49,7 @@ public class PatchSettings {
     @Element(required = false)
     private Boolean Saturate;
     PatchSettingsFrame editor;
-
+    
     public int GetMidiChannel() {
         if (MidiChannel != null) {
             SetMidiChannel(MidiChannel);
@@ -132,9 +132,9 @@ public class PatchSettings {
         NModulationTargetsPerSource = i;
     }
 
-    void showEditor() {
+    void showEditor(Patch patch) {
         if (editor == null) {
-            editor = new PatchSettingsFrame(this);
+            editor = new PatchSettingsFrame(this, patch);
         }
         editor.setVisible(true);
         editor.setState(java.awt.Frame.NORMAL);

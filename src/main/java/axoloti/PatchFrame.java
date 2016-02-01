@@ -34,6 +34,7 @@ import java.awt.event.KeyEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -870,7 +871,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         if (patch.settings == null) {
             patch.settings = new PatchSettings();
         }
-        patch.settings.showEditor();
+        patch.settings.showEditor(patch);
     }//GEN-LAST:event_jMenuItemSettingsActionPerformed
 
     private void jCheckBoxMenuItemLiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemLiveActionPerformed
@@ -1066,5 +1067,12 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";;
         return new File(buildDir + "/xpatch.bin");
 //            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath());        
+    }
+
+    ArrayList<DocumentWindow> dwl = new ArrayList<DocumentWindow>();
+    
+    @Override
+    public ArrayList<DocumentWindow> GetChildDocuments() {
+        return dwl;
     }
 }
