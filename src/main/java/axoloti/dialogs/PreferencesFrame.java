@@ -22,11 +22,15 @@ import axoloti.utils.AxoFileLibrary;
 import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.Preferences;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -58,6 +62,21 @@ public class PreferencesFrame extends javax.swing.JFrame {
         jTextFieldController.setText(prefs.getControllerObject());
         jTextFieldController.setEnabled(prefs.isControllerEnabled());
         PopulateLibrary();
+
+        //double click to edit library
+        jLibraryTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent me) {
+                JTable table = (JTable) me.getSource();
+                Point p = me.getPoint();
+                int idx = table.rowAtPoint(p);
+                if (me.getClickCount() == 2) {
+                    if (idx >= 0) {
+                        editLibraryRow(idx);
+                    }
+                }
+            }
+        });
 
 //        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 //            @Override
@@ -472,16 +491,14 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
         AxolotiLibrary lib = new AxolotiLibrary();
         AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true, lib);
-        
+
         AxolotiLibrary newlib;
-        if(lib.getRemoteLocation() == null || lib.getRemoteLocation().length()==0) {
-            newlib = new AxoFileLibrary(lib.getId(),lib.getType(),lib.getLocalLocation(),lib.getEnabled());
+        if (lib.getRemoteLocation() == null || lib.getRemoteLocation().length() == 0) {
+            newlib = new AxoFileLibrary();
+        } else {
+            newlib = new AxoGitLibrary();
         }
-        else {
-            newlib = new AxoGitLibrary(lib.getId(),lib.getType(),lib.getLocalLocation(),lib.getEnabled(),lib.getRemoteLocation(), lib.isAutoSync());
-            newlib.setContributorPrefix(lib.getContributorPrefix());
-            newlib.setRevision(lib.getRevision());
-        }
+        newlib.clone(lib);
         prefs.updateLibrary(lib.getId(), newlib);
         PopulateLibrary();
     }//GEN-LAST:event_jAddLibBtnActionPerformed
@@ -499,14 +516,16 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
     private void jResetLibActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jResetLibActionPerformed
         boolean delete = false;
-        
-        if(!Axoloti.isDeveloper()) {
+
+        if (!Axoloti.isDeveloper()) {
             int options = JOptionPane.OK_CANCEL_OPTION;
-            int res = JOptionPane.showConfirmDialog (this, "Reset will delete existing factory and contrib directories\n Continue?","Warning",options);
-            if(res == JOptionPane.CANCEL_OPTION) return;
+            int res = JOptionPane.showConfirmDialog(this, "Reset will delete existing factory and contrib directories\n Continue?", "Warning", options);
+            if (res == JOptionPane.CANCEL_OPTION) {
+                return;
+            }
             delete = (res == JOptionPane.OK_OPTION);
         }
-        
+
         prefs.ResetLibraries(delete);
         PopulateLibrary();
     }//GEN-LAST:event_jResetLibActionPerformed
@@ -515,6 +534,13 @@ public class PreferencesFrame extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jLibraryTable.getModel();
         int idx = jLibraryTable.getSelectedRow();
         if (idx >= 0) {
+            editLibraryRow(idx);
+        }
+    }//GEN-LAST:event_jEditLibActionPerformed
+
+    private void editLibraryRow(int idx) {
+        if (idx >= 0) {
+            DefaultTableModel model = (DefaultTableModel) jLibraryTable.getModel();
             String id = (String) model.getValueAt(idx, 1);
             AxolotiLibrary lib = prefs.getLibrary(id);
             if (lib != null) {
@@ -523,7 +549,8 @@ public class PreferencesFrame extends javax.swing.JFrame {
                 PopulateLibrary();
             }
         }
-    }//GEN-LAST:event_jEditLibActionPerformed
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFavDir;

@@ -23,9 +23,9 @@ public class AxolotiLibrary {
     private String LocalLocation;
     @Element(required = true)
     private Boolean Enabled;
-    @Element(required = false)
 
     // these are only requird for remote libraries
+    @Element(required = false)
     private String RemoteLocation;
     @Element(required = false)
     private String UserId;
@@ -38,8 +38,8 @@ public class AxolotiLibrary {
     @Element(required = false)
     private String ContributorPrefix;
 
-    public static String FACTORY_ID = "axoloti-factory";
-    public static String USER_LIBRARY_ID = "axoloti-contrib";
+    public static String FACTORY_ID = "factory";
+    public static String USER_LIBRARY_ID = "community";
 
     public AxolotiLibrary() {
         Id = "";
@@ -50,6 +50,8 @@ public class AxolotiLibrary {
         UserId = "";
         Password = "";
         AutoSync = false;
+        Revision = "";
+        ContributorPrefix = "";
     }
 
     public AxolotiLibrary(String id, String type, String lloc, boolean e, String rloc, boolean auto) {
@@ -61,6 +63,19 @@ public class AxolotiLibrary {
         UserId = "";
         Password = "";
         AutoSync = auto;
+    }
+    
+    public void clone(AxolotiLibrary lib) {
+        Id = lib.Id;
+        Type = lib.Type;
+        Enabled = lib.Enabled;
+        LocalLocation = lib.LocalLocation;
+        RemoteLocation = lib.RemoteLocation;
+        UserId = lib.UserId;
+        Password = lib.Password;
+        AutoSync = lib.AutoSync;
+        Revision = lib.Revision;
+        ContributorPrefix = lib.ContributorPrefix;  
     }
 
     public void setId(String Id) {
