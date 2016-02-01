@@ -17,6 +17,7 @@
  */
 package axoloti.dialogs;
 
+import axoloti.Axoloti;
 import axoloti.utils.AxoFileLibrary;
 import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -496,7 +498,16 @@ public class PreferencesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jDelLibBtnActionPerformed
 
     private void jResetLibActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jResetLibActionPerformed
-        prefs.ResetLibraries();
+        boolean delete = false;
+        
+        if(!Axoloti.isDeveloper()) {
+            int options = JOptionPane.OK_CANCEL_OPTION;
+            int res = JOptionPane.showConfirmDialog (this, "Reset will delete existing factory and contrib directories\n Continue?","Warning",options);
+            if(res == JOptionPane.CANCEL_OPTION) return;
+            delete = (res == JOptionPane.OK_OPTION);
+        }
+        
+        prefs.ResetLibraries(delete);
         PopulateLibrary();
     }//GEN-LAST:event_jResetLibActionPerformed
 

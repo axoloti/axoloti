@@ -28,7 +28,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="jOK" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jCancel" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -75,7 +75,10 @@
                                   </Group>
                               </Group>
                               <EmptySpace pref="29" max="32767" attributes="0"/>
-                              <Component id="jInitRepo" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jInitRepo" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jSyncBtn" alignment="1" min="-2" pref="75" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
@@ -151,14 +154,15 @@
                   <Component id="jRemotePath" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jInitRepo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jRevision" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jAutoSync" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jSyncBtn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="15" max="32767" attributes="0"/>
+              <EmptySpace pref="19" max="32767" attributes="0"/>
               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -298,6 +302,7 @@
     <Component class="javax.swing.JButton" name="jCancel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancel"/>
+        <Property name="defaultCapable" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCancelActionPerformed"/>
@@ -306,6 +311,7 @@
     <Component class="javax.swing.JButton" name="jInitRepo">
       <Properties>
         <Property name="text" type="java.lang.String" value="Init"/>
+        <Property name="defaultCapable" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jInitRepoActionPerformed"/>
@@ -319,6 +325,7 @@
     <Component class="javax.swing.JButton" name="jSelectDirBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="Select"/>
+        <Property name="defaultCapable" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jSelectDirBtnActionPerformed"/>
@@ -376,6 +383,15 @@
           <Dimension value="[100, 28]"/>
         </Property>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jSyncBtn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Sync"/>
+        <Property name="defaultCapable" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jSyncBtnActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

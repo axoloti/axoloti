@@ -8,11 +8,17 @@ package axoloti.dialogs;
 import static axoloti.MainFrame.prefs;
 import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
+import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
 
 /**
  *
@@ -99,6 +105,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jPrefix = new javax.swing.JTextField();
+        jSyncBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -146,6 +153,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         });
 
         jCancel.setText("Cancel");
+        jCancel.setDefaultCapable(false);
         jCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCancelActionPerformed(evt);
@@ -153,6 +161,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         });
 
         jInitRepo.setText("Init");
+        jInitRepo.setDefaultCapable(false);
         jInitRepo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jInitRepoActionPerformed(evt);
@@ -162,6 +171,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         jAutoSync.setText("Auto Sync");
 
         jSelectDirBtn.setText("Select");
+        jSelectDirBtn.setDefaultCapable(false);
         jSelectDirBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jSelectDirBtnActionPerformed(evt);
@@ -181,6 +191,14 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
 
         jPrefix.setPreferredSize(new java.awt.Dimension(100, 28));
 
+        jSyncBtn.setText("Sync");
+        jSyncBtn.setDefaultCapable(false);
+        jSyncBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSyncBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -190,7 +208,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jOK)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCancel))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(17, 17, 17)
@@ -227,7 +245,9 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
                                         .addGap(1, 1, 1)
                                         .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                                .addComponent(jInitRepo))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jInitRepo, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jSyncBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,13 +303,14 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jRemotePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jInitRepo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jRevision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jAutoSync)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                    .addComponent(jLabel10)
+                    .addComponent(jSyncBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -320,16 +341,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
     }//GEN-LAST:event_jTypeComboActionPerformed
 
     private void jOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOKActionPerformed
-        library.setId(jId.getText().trim());
-        library.setLocalLocation(jLocalDir.getText().trim());
-        library.setRemoteLocation(jRemotePath.getText().trim());
-        library.setUserId(jUserId.getText().trim());
-        library.setPassword(new String(jPassword.getPassword()));
-        library.setEnabled(jEnabled.isSelected());
-        library.setType((String) jTypeCombo.getSelectedItem());
-        library.setAutoSync(jAutoSync.isSelected());
-        library.setContributorPrefix(jPrefix.getText().trim());
-        library.setRevision(jRevision.getText().trim());
+        populateLib(library);
         setVisible(false);
         dispose();
     }//GEN-LAST:event_jOKActionPerformed
@@ -340,33 +352,70 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
     }//GEN-LAST:event_jCancelActionPerformed
 
     private void jInitRepoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jInitRepoActionPerformed
-        AxoGitLibrary gitlib = new AxoGitLibrary(jId.getText().trim(), (String) jTypeCombo.getSelectedItem(), jLocalDir.getText().trim(), jEnabled.isSelected(), jRemotePath.getText().trim(), jAutoSync.isSelected());
-        gitlib.setUserId(jUserId.getText().trim());
-        gitlib.setPassword(new String(jPassword.getPassword()));
-        gitlib.setContributorPrefix(jPrefix.getText().trim());
-        gitlib.setRevision(jRevision.getText().trim());
+        boolean delete;
+        int options = JOptionPane.OK_CANCEL_OPTION;
+        int res = JOptionPane.showConfirmDialog(this, "Init will delete existing directory\n Continue?", "Warning", options);
+        if (res == JOptionPane.CANCEL_OPTION) {
+            return;
+        }
+        delete = (res == JOptionPane.OK_OPTION);
 
-        gitlib.init();
+        AxoGitLibrary gitlib = new AxoGitLibrary();
+        populateLib(gitlib);
+        gitlib.init(delete);
     }//GEN-LAST:event_jInitRepoActionPerformed
 
     private void jSelectDirBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSelectDirBtnActionPerformed
         String dir = jLocalDir.getText();
-        if(dir == null || dir.length() == 0) {
+        if (dir == null || dir.length() == 0) {
             dir = prefs.getCurrentFileDirectory();
-        }   
-            
-        JFileChooser chooser = new JFileChooser(dir);
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+        }
+
+        File seldir = new File(dir).getParentFile();
+        JFileChooser fc = new JFileChooser(seldir);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                return f.isDirectory();
+            }
+
+            @Override
+            public String getDescription() {
+                return "Any folder";
+            }
+        });
+
+        fc.setDialogTitle("Select Directory");
+        fc.setDialogType(JFileChooser.SAVE_DIALOG);
+        fc.setApproveButtonText("Select");
+        ArrayList<JPanel> jpanels = new ArrayList<JPanel>();
+        for (Component c : fc.getComponents()) {
+            if (c instanceof JPanel) {
+                jpanels.add((JPanel) c);
+            }
+        }
+        jpanels.get(0).getComponent(0).setVisible(false);
+        if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            seldir = fc.getSelectedFile();
+            if (!seldir.exists()) {
+                seldir = seldir.getParentFile();
+            }
             try {
-                dir = chooser.getSelectedFile().getCanonicalPath();
-                jLocalDir.setText(dir+File.separator);
+                dir = seldir.getCanonicalPath();
+                jLocalDir.setText(dir + File.separator);
             } catch (IOException ex) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
             }
         }
+
     }//GEN-LAST:event_jSelectDirBtnActionPerformed
+
+    private void jSyncBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSyncBtnActionPerformed
+        AxoGitLibrary gitlib = new AxoGitLibrary();
+        populateLib(gitlib);
+        gitlib.sync();
+    }//GEN-LAST:event_jSyncBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -395,6 +444,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
     private javax.swing.JTextField jRevision;
     private javax.swing.JButton jSelectDirBtn;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton jSyncBtn;
     private javax.swing.JComboBox jTypeCombo;
     private javax.swing.JTextField jUserId;
     // End of variables declaration//GEN-END:variables
@@ -405,5 +455,18 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
 
     public void setLibrary(AxolotiLibrary library) {
         this.library = library;
+    }
+
+    private void populateLib(AxolotiLibrary library) {
+        library.setId(jId.getText().trim());
+        library.setLocalLocation(jLocalDir.getText().trim());
+        library.setRemoteLocation(jRemotePath.getText().trim());
+        library.setUserId(jUserId.getText().trim());
+        library.setPassword(new String(jPassword.getPassword()));
+        library.setEnabled(jEnabled.isSelected());
+        library.setType((String) jTypeCombo.getSelectedItem());
+        library.setAutoSync(jAutoSync.isSelected());
+        library.setContributorPrefix(jPrefix.getText().trim());
+        library.setRevision(jRevision.getText().trim());
     }
 }

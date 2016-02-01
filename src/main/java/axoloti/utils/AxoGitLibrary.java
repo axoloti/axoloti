@@ -83,17 +83,18 @@ public class AxoGitLibrary extends AxolotiLibrary {
     }
 
     @Override
-    public void init() {
+    public void init(boolean delete) {
         File ldir = new File(getLocalLocation());
 
         if (!usingSubmodule()) {
-//        if(ldir.exists()) {
-//            try {
-//                delete(ldir);
-//            } catch (IOException ex) {
-//                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
+            if (delete && ldir.exists()) {
+                try {
+                    delete(ldir);
+                } catch (IOException ex) {
+                    Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
             if (!ldir.exists()) {
                 ldir.mkdirs();
             }
@@ -221,7 +222,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
             cmd.addPath("objects" + File.separator + pre);
             cmd.addPath("patches" + File.separator + pre);
             Status status = cmd.call();
-            if (status.isClean() ) {
+            if (status.isClean()) {
                 return false;
             }
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications detected: {0}", getId());
