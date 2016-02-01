@@ -84,11 +84,11 @@ then
 
     patch -N -p1 < ../libusb.stdfu.patch
 
-    ./configure --prefix="${PLATFORM_ROOT}/i386" CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
+    ./configure --prefix="${PLATFORM_ROOT}/i386" CFLAGS="-arch i386 -mmacosx-version-min=10.6" LDFLAGS="-arch i386"
     make 
     make install
     make clean
-    ./configure --prefix="${PLATFORM_ROOT}/x86_64" CFLAGS="-arch x86_64 -mmacosx-version-min=10.5" LDFLAGS="-arch x86_64"
+    ./configure --prefix="${PLATFORM_ROOT}/x86_64" CFLAGS="-arch x86_64 -mmacosx-version-min=10.6" LDFLAGS="-arch x86_64"
     make 
     make install
     make clean
@@ -117,14 +117,14 @@ then
     tar xfz ${ARCHIVE}
 
     cd "${PLATFORM_ROOT}/src/${ARDIR}"
-    ./configure --prefix="${PLATFORM_ROOT}/i386" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.0.dylib" USB_CFLAGS=-I${PLATFORM_ROOT}/i386/include/libusb-1.0/ CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
+    ./configure --prefix="${PLATFORM_ROOT}/i386" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.0.dylib" USB_CFLAGS=-I${PLATFORM_ROOT}/i386/include/libusb-1.0/ CFLAGS="-arch i386 -mmacosx-version-min=10.6" LDFLAGS="-arch i386"
     make 
     make install
     make clean
 
     cd "$PLATFORM_ROOT/src/$ARDIR"
     make clean
-    ./configure --prefix="${PLATFORM_ROOT}/x86_64" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.0.dylib" USB_CFLAGS=-I${PLATFORM_ROOT}/x86_64/include/libusb-1.0/ CFLAGS="-arch x86_64 -mmacosx-version-min=10.5" LDFLAGS="-arch x86_64"
+    ./configure --prefix="${PLATFORM_ROOT}/x86_64" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.0.dylib" USB_CFLAGS=-I${PLATFORM_ROOT}/x86_64/include/libusb-1.0/ CFLAGS="-arch x86_64 -mmacosx-version-min=10.6" LDFLAGS="-arch x86_64"
     make 
     make install
     make clean
@@ -152,13 +152,13 @@ then
     tar xfz $ARCHIVE
 
     cd "${PLATFORM_ROOT}/src/${ARDIR}"
-    ./configure --prefix="${PLATFORM_ROOT}/i386" CFLAGS="-arch i386 -mmacosx-version-min=10.5" LDFLAGS="-arch i386"
+    ./configure --prefix="${PLATFORM_ROOT}/i386" CFLAGS="-arch i386 -mmacosx-version-min=10.6" LDFLAGS="-arch i386"
     make 
     make install
     make clean
 
     cd "${PLATFORM_ROOT}/src/${ARDIR}"
-    ./configure --prefix="${PLATFORM_ROOT}/x86_64" CFLAGS="-arch x86_64 -mmacosx-version-min=10.5" LDFLAGS="-arch x86_64"
+    ./configure --prefix="${PLATFORM_ROOT}/x86_64" CFLAGS="-arch x86_64 -mmacosx-version-min=10.6" LDFLAGS="-arch x86_64"
     make 
     make install
     make clean
