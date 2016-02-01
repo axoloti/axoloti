@@ -3,6 +3,7 @@ package axoloti.utils;
 import axoloti.Axoloti;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jgit.api.AddCommand;
@@ -10,6 +11,7 @@ import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CheckoutResult;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CommitCommand;
+import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PullResult;
@@ -18,6 +20,7 @@ import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.StatusCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
@@ -94,7 +97,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
                     Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             if (!ldir.exists()) {
                 ldir.mkdirs();
             }
@@ -145,8 +148,41 @@ public class AxoGitLibrary extends AxolotiLibrary {
         if (rev == null || rev.length() == 0) {
             rev = "master";
         }
+
+        // check to see if already checked out
+        try {
+            if (rev.equals(git.getRepository().getBranch())) {
+                return true;
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (check local branch) FAILED : {0}", getId());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // check to see if branch is already available locally
+        String localref = "refs/heads/" + rev;
+        boolean localAvailable = false;
+        List<Ref> bl_call;
+        try {
+            bl_call = git.branchList().call();
+            for (Ref ref : bl_call) {
+                if (ref.getName().equals(localref)) {
+                    localAvailable = true;
+                }
+            }
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (bracnh list) FAILED : {0}", getId());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         CheckoutCommand cmd = git.checkout();
         cmd.setName(rev);
+        if (!localAvailable) {
+            // create local branch pointing to remote branch
+            cmd.setCreateBranch(true);
+            cmd.setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.SET_UPSTREAM);
+            cmd.setStartPoint("origin/" + rev);
+        }
         try {
             cmd.call();
             CheckoutResult res = cmd.getResult();
