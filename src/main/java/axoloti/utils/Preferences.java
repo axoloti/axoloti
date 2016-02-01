@@ -17,6 +17,8 @@
  */
 package axoloti.utils;
 
+import axoloti.Axoloti;
+import axoloti.Version;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -379,14 +381,25 @@ public class Preferences {
     public final void ResetLibraries() {
         libraries = new ArrayList<AxolotiLibrary>();
 
-        libraries.add(new AxoGitLibrary(
+        AxoGitLibrary factory = new AxoGitLibrary(
                 AxolotiLibrary.FACTORY_ID,
                 "git",
                 System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-factory" + File.separator,
                 true,
                 "https://github.com/axoloti/axoloti-factory.git",
                 false
-        ));
+        );
+        if(!Axoloti.isDeveloper()) {
+            String ver = Version.AXOLOTI_VERSION;
+            // an unclean version has something like 1.0.6-82-gf5a5e03-dirty
+            // strip it to 1.0.6
+            if(ver.indexOf('-')>=0) {
+                ver = ver.substring(0, ver.indexOf('-'));
+            }
+            factory.setRevision(ver);
+        }
+        libraries.add(factory);
+        
         libraries.add(new AxoFileLibrary(
                 "home",
                 "local",
