@@ -101,20 +101,12 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     public MainFrame(String args[]) {
         this.args = args;
         initComponents();
-        fileMenu.initComponents();        
+        fileMenu.initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
         transparentCursor = getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null);
 
         mainframe = this;
-
-        updateLinkFirmwareID();
-
-        qcmdprocessor = QCmdProcessor.getQCmdProcessor();
-        qcmdprocessorThread = new Thread(qcmdprocessor);
-        qcmdprocessorThread.setName("QCmdProcessor");
-        qcmdprocessorThread.start();
-        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
 
         final Style styleSevere = jTextPaneLog.addStyle("severe", null);
         final Style styleFine = jTextPaneLog.addStyle("fine", null);
@@ -209,16 +201,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jMenuItemFCompile.setVisible(Axoloti.isDeveloper());
         jDevSeparator.setVisible(Axoloti.isDeveloper());
 
-        for(AxolotiLibrary lib : prefs.getLibraries()) {
-            if (lib.isAutoSync() && lib.getEnabled()) {
-                lib.sync();
-            }
-        }
-        
-        
-        axoObjects = new AxoObjects();
-        axoObjects.LoadAxoObjects();
-
         if (!TestDir(HOME_DIR, true)) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Home directory is invalid:{0}, does it exist?, can it be written to?", System.getProperty(Axoloti.HOME_DIR));
         }
@@ -234,13 +216,62 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Firmware directory is invalid:{0}, does it exist?", System.getProperty(Axoloti.FIRMWARE_DIR));
         }
 
-        ShowDisconnect();
+        // do NOT do any serious initialisation in constructor
+        // as a stalling error could prevent event loop running and our logging
+        // console opening
+        Runnable initr;
+        initr = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String tsuf = "";
+                    if (Axoloti.isFailSafeMode()) {
+                        Logger.getLogger(MainFrame.class.getName()).log(Level.WARNING, "Fail safe mode activated");
+                        tsuf = "fail safe";
+                    }
+                    if (Axoloti.isDeveloper()) {
+                        if (tsuf.length() > 0) {
+                            tsuf += ",";
+                        }
+                        tsuf += "developer";
+                    }
+                    if (tsuf.length() > 0) {
+                        MainFrame.this.setTitle(MainFrame.this.getTitle() + " (" + tsuf + ")");
+                    }
 
-        boolean success = USBBulkConnection.GetConnection().connect();
-        if (success) {
-            qcmdprocessor.AppendToQueue(new QCmdStop());
-            ShowConnect();
-        }
+                    updateLinkFirmwareID();
+
+                    qcmdprocessor = QCmdProcessor.getQCmdProcessor();
+                    qcmdprocessorThread = new Thread(qcmdprocessor);
+                    qcmdprocessorThread.setName("QCmdProcessor");
+                    qcmdprocessorThread.start();
+                    USBBulkConnection.GetConnection().addConnectionStatusListener(MainFrame.this);
+
+                    if (!Axoloti.isFailSafeMode()) {
+                        for (AxolotiLibrary lib : prefs.getLibraries()) {
+                            if (lib.isAutoSync() && lib.getEnabled()) {
+                                lib.sync();
+                            }
+                        }
+                    }
+                    axoObjects = new AxoObjects();
+                    axoObjects.LoadAxoObjects();
+
+                    ShowDisconnect();
+                    if (!Axoloti.isFailSafeMode()) {
+                        boolean success = USBBulkConnection.GetConnection().connect();
+                        if (success) {
+                            qcmdprocessor.AppendToQueue(new QCmdStop());
+                            ShowConnect();
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        EventQueue.invokeLater(initr);
 
         for (String arg : args) {
             if (!arg.startsWith("-")) {
