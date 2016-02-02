@@ -671,7 +671,7 @@ public class USBBulkConnection extends Connection {
 
     @Override
     public void TransmitDeleteFile(String filename) {
-        byte[] data = new byte[11 + filename.length()];
+        byte[] data = new byte[15 + filename.length()];
         data[0] = 'A';
         data[1] = 'x';
         data[2] = 'o';
@@ -681,8 +681,12 @@ public class USBBulkConnection extends Connection {
         data[6] = 0;
         data[7] = 0;
         data[8] = 0;
-        data[9] = 'D';
-        int i = 10;
+        data[9] = 'D';        
+        data[10] = 0;
+        data[11] = 0;
+        data[12] = 0;
+        data[13] = 0;
+        int i = 14;
         for (int j = 0; j < filename.length(); j++) {
             data[i++] = (byte) filename.charAt(j);
         }
@@ -692,8 +696,9 @@ public class USBBulkConnection extends Connection {
         WaitSync();
     }    
     
+    @Override
     public void TransmitCreateDirectory(String filename) {
-        byte[] data = new byte[11 + filename.length()];
+        byte[] data = new byte[15 + filename.length()];
         data[0] = 'A';
         data[1] = 'x';
         data[2] = 'o';
@@ -704,7 +709,12 @@ public class USBBulkConnection extends Connection {
         data[7] = 0;
         data[8] = 0;
         data[9] = 'd';
-        int i = 10;
+        data[10] = 0;
+        data[11] = 0;
+        data[12] = 0;
+        data[13] = 0;
+        
+        int i = 14;
         for (int j = 0; j < filename.length(); j++) {
             data[i++] = (byte) filename.charAt(j);
         }

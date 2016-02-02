@@ -47,4 +47,25 @@ public class SDFileInfo {
         return size;
     }
 
+    public boolean isDirectory() {
+        return filename.endsWith("/");
+    }
+
+    public String getFilenameNoExtension() {
+        int i = filename.lastIndexOf('.');
+        if (i > 0) {
+            return filename.substring(0, i);
+        } else {
+            return "";
+        }
+    }
+
+    public String getExtension() {
+        int i = filename.lastIndexOf('.');
+        if (i > 0) {
+            return filename.substring(i + 1);
+        } else {
+            return "";
+        }
+    }
 }

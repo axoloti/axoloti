@@ -71,6 +71,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
      */
     public PatchBank() {
         initComponents();
+        fileMenu1.initComponents();
         files = new ArrayList<File>();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         DocumentWindowList.RegisterWindow(this);
@@ -451,6 +452,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         windowMenu1 = new axoloti.menus.WindowMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Untitled patch bank");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);

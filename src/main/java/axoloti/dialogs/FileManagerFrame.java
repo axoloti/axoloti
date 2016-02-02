@@ -35,9 +35,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import qcmds.QCmdCreateDirectory;
 import qcmds.QCmdDeleteFile;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdUploadFile;
@@ -90,36 +92,37 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
                 switch (columnIndex) {
                     case 0: {
-                        String fname = SDCardInfo.getInstance().getFiles().get(rowIndex).getFilename();
-                        int i = fname.lastIndexOf('.');
-                        if (i > 0) {
-                            returnValue = fname.substring(0, i);
+                        SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+                        if (f.isDirectory()) {
+                            returnValue = f.getFilename();
                         } else {
-                            returnValue = fname;
+                            returnValue = f.getFilenameNoExtension();
                         }
                     }
                     break;
                     case 1: {
-                        String fname = SDCardInfo.getInstance().getFiles().get(rowIndex).getFilename();
-                        int i = fname.lastIndexOf('.');
-                        if (i > 0) {
-                            returnValue = fname.substring(i + 1);
+                        SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+                        if (f.isDirectory()) {
+                            returnValue = "";
                         } else {
-                            returnValue = fname;
+                            returnValue = f.getExtension();
                         }
                     }
                     break;
                     case 2: {
-                        String s;
-                        int size = SDCardInfo.getInstance().getFiles().get(rowIndex).getSize();
-                        if (size < 10240) {
-                            s = "" + size + "  bytes";
-                        } else if (size < 10240 * 1024) {
-                            s = "" + (size / 1024) + " kB";
+                        SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+                        if (f.isDirectory()) {
+                            returnValue = "";
                         } else {
-                            s = "" + (size / (1024 * 1024)) + " MB";
+                            int size = f.getSize();
+                            if (size < 10240) {
+                                returnValue = "" + size + "  bytes";
+                            } else if (size < 10240 * 1024) {
+                                returnValue = "" + (size / 1024) + " kB";
+                            } else {
+                                returnValue = "" + (size / (1024 * 1024)) + " MB";
+                            }
                         }
-                        returnValue = s;
                     }
                     break;
                     case 3: {
@@ -191,6 +194,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         jLabelSDInfo = new javax.swing.JLabel();
         jButtonUpload = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
+        jButtonCreateDir = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -257,6 +261,13 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
             }
         });
 
+        jButtonCreateDir.setText("Create directory...");
+        jButtonCreateDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCreateDirActionPerformed(evt);
+            }
+        });
+
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
@@ -281,6 +292,8 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                 .addComponent(jButtonDelete)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonUpload)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonCreateDir)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -294,7 +307,8 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonDelete)
-                    .addComponent(jButtonUpload))
+                    .addComponent(jButtonUpload)
+                    .addComponent(jButtonCreateDir))
                 .addGap(5, 5, 5))
         );
 
@@ -348,6 +362,15 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
+    private void jButtonCreateDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateDirActionPerformed
+        String fn = JOptionPane.showInputDialog(this, "Directory name?");
+        if (fn != null && !fn.isEmpty()) {
+            QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
+            processor.AppendToQueue(new QCmdCreateDirectory(fn));
+        }
+
+    }//GEN-LAST:event_jButtonCreateDirActionPerformed
+
     public void refresh() {
         int clusters = SDCardInfo.getInstance().getClusters();
         int clustersize = SDCardInfo.getInstance().getClustersize();
@@ -359,6 +382,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1Refresh;
+    private javax.swing.JButton jButtonCreateDir;
     private javax.swing.JButton jButtonDelete;
     private javax.swing.JButton jButtonUpload;
     private javax.swing.JTable jFileTable;
@@ -377,6 +401,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         jFileTable.setEnabled(true);
         jLabelSDInfo.setText("");
         jButtonDelete.setEnabled(true);
+        jButtonCreateDir.setEnabled(true);
     }
 
     @Override
@@ -386,5 +411,6 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         jFileTable.setEnabled(false);
         jLabelSDInfo.setText("");
         jButtonDelete.setEnabled(false);
+        jButtonCreateDir.setEnabled(false);
     }
 }

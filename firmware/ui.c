@@ -402,7 +402,7 @@ void AxolotiControlUpdate(void) {
 
 void (*pControlUpdate)(void) = AxolotiControlUpdate;
 
-static WORKING_AREA(waThreadUI, 1024);
+static WORKING_AREA(waThreadUI, 1142);
 static msg_t ThreadUI(void *arg) {
   (void)(arg);
 #if CH_USE_REGISTRY

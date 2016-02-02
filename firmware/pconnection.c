@@ -199,6 +199,20 @@ static FRESULT scan_files(char *path) {
 #endif
       if (fno.fattrib & AM_DIR) {
         sprintf(&path[i], "/%s", fn);
+#if 1
+        msg[0] = 'A';
+        msg[1] = 'x';
+        msg[2] = 'o';
+        msg[3] = 'f';
+        *(int32_t *)(&msg[4]) = fno.fsize;
+        *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
+        strcpy(&msg[12], path);
+        int l = strlen(&msg[12]);
+        msg[12+l] = '/';
+        msg[13+l] = 0;
+        chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
+                                (const unsigned char* )msg, l+14);
+#endif
         res = scan_files(path);
         path[i] = 0;
         if (res != FR_OK) break;
@@ -278,7 +292,7 @@ void ReadDirectoryListing(void) {
 FIL pFile;
 int pFileSize;
 
-void CreateFile(void) {
+void ManipulateFile(void) {
   sdcard_attemptMountIfUnmounted();
   if (FileName[0]) {
     // backwards compatibility
@@ -330,9 +344,9 @@ void CreateFile(void) {
     } else if (FileName[1]=='D') {
       // delete
       FRESULT err;
-      err = f_unlink(&FileName[2]);
+      err = f_unlink(&FileName[6]);
       if (err != FR_OK) {
-        report_fatfs_error(err,&FileName[2]);
+        report_fatfs_error(err,&FileName[6]);
       }
     }
   }
@@ -752,13 +766,13 @@ void PExReceiveByte(unsigned char c) {
       state++;
       break;
     default:
-      if (c) {
+      if (c || ((!FileName[0])&&(state<14))) {
         FileName[state - 8] = c;
         state++;
       }
       else {
         FileName[state - 8] = 0;
-        CreateFile();
+        ManipulateFile();
         header = 0;
         state = 0;
         AckPending = 1;
