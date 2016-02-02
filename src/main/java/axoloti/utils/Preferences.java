@@ -160,7 +160,9 @@ public class Preferences {
                 found = true;
             }
         }
-        if(!found) libraries.add(newlib);
+        if (!found) {
+            libraries.add(newlib);
+        }
         buildObjectSearchPatch();
         SetDirty();
     }
@@ -262,8 +264,7 @@ public class Preferences {
         return singleton;
     }
 
-    public
-            void SavePrefs() {
+    public void SavePrefs() {
         Logger.getLogger(Preferences.class
                 .getName()).log(Level.INFO, "Saving preferences...");
         Serializer serializer = new Persister();
@@ -391,17 +392,17 @@ public class Preferences {
                 "https://github.com/axoloti/axoloti-factory.git",
                 false
         );
-        if(!Axoloti.isDeveloper()) {
+        if (!Axoloti.isDeveloper()) {
             String ver = Version.AXOLOTI_VERSION;
             // an unclean version has something like 1.0.6-82-gf5a5e03-dirty
             // strip it to 1.0.6
-            if(ver.indexOf('-')>=0) {
+            if (ver.indexOf('-') >= 0) {
                 ver = ver.substring(0, ver.indexOf('-'));
             }
             factory.setRevision(ver);
         }
         libraries.add(factory);
-        
+
         libraries.add(new AxoFileLibrary(
                 "home",
                 "local",
@@ -417,11 +418,13 @@ public class Preferences {
                 "https://github.com/axoloti/axoloti-contrib.git",
                 false
         ));
-        
-        // initialise the libraries
-        for (AxolotiLibrary lib : libraries) {
-            if (lib.getEnabled()) {
-                lib.init(delete);
+
+        if (!Axoloti.isFailSafeMode()) {
+            // initialise the libraries
+            for (AxolotiLibrary lib : libraries) {
+                if (lib.getEnabled()) {
+                    lib.init(delete);
+                }
             }
         }
         buildObjectSearchPatch();

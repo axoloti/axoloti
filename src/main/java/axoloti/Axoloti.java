@@ -41,14 +41,13 @@ public class Axoloti {
     public final static String RELEASE_DIR = "axoloti_release";
     public final static String FIRMWARE_DIR = "axoloti_firmware";
 
-    
-        /**
+    /**
      * @param args the command line arguments
      */
     public static void main(final String[] args) {
         try {
             initProperties();
-            
+
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             if (System.getProperty("os.name").contains("OS X")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -67,12 +66,11 @@ public class Axoloti {
             throw new Error(e);
         }
         System.setProperty("line.separator", "\n");
-        
+
         Synonyms.instance(); // prime it
         handleCommandLine(args);
-   }
-    
-    
+    }
+
     static void BuildEnv(String var, String def) {
         String ev = System.getProperty(var);
         if (ev == null) {
@@ -137,74 +135,95 @@ public class Axoloti {
         return cacheDeveloper;
     }
 
-    private static void initProperties() throws URISyntaxException, IOException  {
-            String curDir = System.getProperty("user.dir");
-            File jarFile = new File(Axoloti.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            String jarDir = jarFile.getParentFile().getCanonicalPath();
-            String defaultHome = curDir;
-            String defaultRuntime = curDir;
-            String defaultRelease = curDir;
-            
-            File git = new File("."+File.separator+".git");
-            if(git.exists()) {
-                // developer using git, assume they want everything local dir
-                System.out.println("defaulting to developer defaults, can be overridden");
-                defaultHome = ".";
-                defaultRuntime = ".";
-            } else if (OSDetect.getOS() == OSDetect.OS.WIN) {
-                // not sure which versions of windows this is valid for, good for 8!
-                defaultHome = System.getenv("HOMEPATH") + File.separator + "Documents" + File.separator + "axoloti";
-                defaultRuntime = System.getenv("ProgramFiles") + File.separator + "axoloti_runtime";
-            } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-                defaultHome = System.getenv("HOME") + "/Documents/axoloti";
-                defaultRuntime = "/Applications/axoloti_runtime";
-            } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-                defaultHome = System.getenv("HOME") + "/axoloti";
-                defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
-            }
+    static boolean failSafeMode = false;
 
-            BuildEnv(HOME_DIR, defaultHome);
-            File homedir = new File(System.getProperty(HOME_DIR));
-            if (!homedir.exists()) {
-                homedir.mkdir();
+    static void checkFailSafeModeActive() {
+        failSafeMode = false;
+        String homedir = System.getProperty(HOME_DIR);
+        if (homedir == null) {
+            return;
+        }
+        try {
+            File f = new File(homedir + File.separator + "failsafe");
+            if (f.exists()) {
+                System.err.print("fail safe mode");
+                failSafeMode = true;
             }
-
-            File buildir = new File(System.getProperty(HOME_DIR) + File.separator + "build");
-            if (!buildir.exists()) {
-                buildir.mkdir();
-            }
-            if (!TestDir(HOME_DIR)) {
-                 System.err.println("Home directory is invalid");
-            }
-
-            BuildEnv(RELEASE_DIR, defaultRelease);
-            if (!TestDir(RELEASE_DIR)) {
-                 System.err.println("Release directory is invalid");
-            }
-            BuildEnv(RUNTIME_DIR, defaultRuntime);
-            if (!TestDir(RUNTIME_DIR)) {
-                 System.err.println("Runtime directory is invalid");
-            }
-
-            BuildEnv(FIRMWARE_DIR, System.getProperty(RELEASE_DIR) + File.separator + "firmware");
-            if (!TestDir(FIRMWARE_DIR)) {
-                 System.err.println("Firmware directory is invalid");
-            }
-
-            Preferences prefs = Preferences.LoadPreferences();
-
-            System.out.println("Axoloti Directories:\n"
-                    + "Current = " + curDir + "\n"
-                    + "Jar = " + jarDir + "\n"
-                    + "Release = " + System.getProperty(RELEASE_DIR) + "\n"
-                    + "Runtime = " + System.getProperty(RUNTIME_DIR) + "\n"
-                    + "Firmware = " + System.getProperty(FIRMWARE_DIR) + "\n"
-                    + "AxolotiHome = " + System.getProperty(HOME_DIR)
-            );
- 
+        } catch (Throwable e) {
+        }
     }
-    
 
+    public static boolean isFailSafeMode() {
+        return failSafeMode;
+    }
+
+    private static void initProperties() throws URISyntaxException, IOException {
+        String curDir = System.getProperty("user.dir");
+        File jarFile = new File(Axoloti.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        String jarDir = jarFile.getParentFile().getCanonicalPath();
+        String defaultHome = curDir;
+        String defaultRuntime = curDir;
+        String defaultRelease = curDir;
+
+        File git = new File("." + File.separator + ".git");
+        if (git.exists()) {
+            // developer using git, assume they want everything local dir
+            System.out.println("defaulting to developer defaults, can be overridden");
+            defaultHome = ".";
+            defaultRuntime = ".";
+        } else if (OSDetect.getOS() == OSDetect.OS.WIN) {
+            // not sure which versions of windows this is valid for, good for 8!
+            defaultHome = System.getenv("HOMEPATH") + File.separator + "Documents" + File.separator + "axoloti";
+            defaultRuntime = System.getenv("ProgramFiles") + File.separator + "axoloti_runtime";
+        } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
+            defaultHome = System.getenv("HOME") + "/Documents/axoloti";
+            defaultRuntime = "/Applications/axoloti_runtime";
+        } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
+            defaultHome = System.getenv("HOME") + "/axoloti";
+            defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
+        }
+
+        BuildEnv(HOME_DIR, defaultHome);
+        File homedir = new File(System.getProperty(HOME_DIR));
+        if (!homedir.exists()) {
+            homedir.mkdir();
+        }
+
+        File buildir = new File(System.getProperty(HOME_DIR) + File.separator + "build");
+        if (!buildir.exists()) {
+            buildir.mkdir();
+        }
+        if (!TestDir(HOME_DIR)) {
+            System.err.println("Home directory is invalid");
+        }
+        checkFailSafeModeActive(); // do this as as possible after home dir setup
+
+        BuildEnv(RELEASE_DIR, defaultRelease);
+        if (!TestDir(RELEASE_DIR)) {
+            System.err.println("Release directory is invalid");
+        }
+        BuildEnv(RUNTIME_DIR, defaultRuntime);
+        if (!TestDir(RUNTIME_DIR)) {
+            System.err.println("Runtime directory is invalid");
+        }
+
+        BuildEnv(FIRMWARE_DIR, System.getProperty(RELEASE_DIR) + File.separator + "firmware");
+        if (!TestDir(FIRMWARE_DIR)) {
+            System.err.println("Firmware directory is invalid");
+        }
+
+        Preferences prefs = Preferences.LoadPreferences();
+
+        System.out.println("Axoloti Directories:\n"
+                + "Current = " + curDir + "\n"
+                + "Jar = " + jarDir + "\n"
+                + "Release = " + System.getProperty(RELEASE_DIR) + "\n"
+                + "Runtime = " + System.getProperty(RUNTIME_DIR) + "\n"
+                + "Firmware = " + System.getProperty(FIRMWARE_DIR) + "\n"
+                + "AxolotiHome = " + System.getProperty(HOME_DIR)
+        );
+
+    }
 
     private static void handleCommandLine(final String args[]) {
         boolean cmdLineOnly = false;
@@ -303,5 +322,6 @@ public class Axoloti {
                     }
                 }
             });
-        }}
+        }
+    }
 }
