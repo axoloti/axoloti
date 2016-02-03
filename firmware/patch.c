@@ -167,7 +167,7 @@ void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t status,
 
 static const char *index_fn = "0:index.axb";
 
-static char loadFName[16];
+static char loadFName[64];
 static WORKING_AREA(waThreadLoader, 1024);
 static Thread *pThreadLoader;
 static msg_t ThreadLoader(void *arg) {

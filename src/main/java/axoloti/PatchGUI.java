@@ -51,8 +51,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1014,13 +1012,10 @@ public class PatchGUI extends Patch {
         }
     }
 
-    public static PatchFrame OpenPatch(File f) {
+    public static PatchFrame OpenPatchInvisible(File f) {
         for (DocumentWindow dw : DocumentWindowList.GetList()) {
             if (f.equals(dw.getFile())) {
                 JFrame frame1 = dw.GetFrame();
-                frame1.setVisible(true);
-                frame1.setState(java.awt.Frame.NORMAL);
-                frame1.toFront();
                 if (frame1 instanceof PatchFrame) {
                     return (PatchFrame) frame1;
                 } else {
@@ -1036,7 +1031,6 @@ public class PatchGUI extends Patch {
             patch1.setFileNamePath(f.getAbsolutePath());
             patch1.PostContructor();
             patch1.setFileNamePath(f.getPath());
-            pf.setVisible(true);
             return pf;
         } catch (Exception ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -1044,4 +1038,11 @@ public class PatchGUI extends Patch {
         }
     }
 
+    public static PatchFrame OpenPatch(File f) {
+        PatchFrame pf = OpenPatchInvisible(f);
+        pf.setVisible(true);
+        pf.setState(java.awt.Frame.NORMAL);
+        pf.toFront();
+        return pf;
+    }
 }

@@ -17,14 +17,8 @@
  */
 package axoloti.object;
 
-import axoloti.MainFrame;
 import axoloti.Patch;
-import axoloti.PatchFrame;
-import axoloti.PatchGUI;
-import axoloti.inlets.InletInstance;
 import axoloti.objecteditor.AxoObjectEditor;
-import axoloti.outlets.OutletInstance;
-import axoloti.parameters.ParameterInstance;
 import components.ButtonComponent;
 import components.ButtonComponent.ActListener;
 import java.awt.Component;
@@ -59,12 +53,12 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         }
         setType(ao);
         /*
-        if (pg != null) {
-            AxoObject ao = pg.GenerateAxoObj();
-            setType(ao);
-            pg.container(patch);
-        }
-*/
+         if (pg != null) {
+         AxoObject ao = pg.GenerateAxoObj();
+         setType(ao);
+         pg.container(patch);
+         }
+         */
     }
 
     public void updateObj() {
@@ -109,13 +103,13 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         add(BtnEdit);
         for (Component cmp : getComponents()) {
             cmp.doLayout();
-        }        
+        }
         resizeToGrid();
     }
-    
+
     @Override
     public void ObjectModified(Object src) {
         updateObj();
     }
-    
+
 }

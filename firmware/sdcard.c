@@ -199,6 +199,25 @@ void sdcard_loadPatch(char *fname) {
 
   StopPatch();
 
+  // change working directory
+
+  int i=0;
+  for(i=strlen(fname);i;i--){
+    if (fname[i]='/')
+      break;
+  }
+  if (i>0) {
+    fname[i]=0;
+    err = f_chdir(fname);
+    if (err != FR_OK) {
+      report_fatfs_error(err,fname);
+      return;
+    }
+    fname[i]='/';
+  } else {
+    f_chdir("/");
+  }
+
   err = f_open(&FileObject, fname, FA_READ | FA_OPEN_EXISTING);
   chThdSleepMilliseconds(10);
   if (err != FR_OK) {

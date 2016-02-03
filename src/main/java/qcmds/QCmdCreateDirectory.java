@@ -19,6 +19,7 @@ package qcmds;
 
 import axoloti.Connection;
 import axoloti.SDCardInfo;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,9 +30,16 @@ import java.util.logging.Logger;
 public class QCmdCreateDirectory implements QCmdSerialTask {
 
     final String filename;
+    final Calendar date;
 
     public QCmdCreateDirectory(String filename) {
         this.filename = filename;
+        date = Calendar.getInstance();
+    }
+
+    public QCmdCreateDirectory(String filename, Calendar date) {
+        this.filename = filename;
+        this.date = date;
     }
 
     @Override
@@ -49,7 +57,8 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
     public QCmd Do(Connection connection) {
         connection.ClearSync();
         Logger.getLogger(QCmdCreateDirectory.class.getName()).log(Level.INFO, "creating dir: {0}", filename);
-        connection.TransmitCreateDirectory(filename);
+        connection.TransmitCreateDirectory(filename, date);
+        SDCardInfo.getInstance().AddFile(filename, 0, date);
         return this;
     }
 

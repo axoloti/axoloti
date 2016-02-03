@@ -24,7 +24,7 @@ public abstract class Connection {
     abstract public void TransmitVirtualButton(int b_or, int b_and, int enc1, int enc2, int enc3, int enc4);
     abstract public void TransmitCreateFile(String filename, int size);
     abstract public void TransmitCreateFile(String filename, int size, Calendar date);
-    abstract public void TransmitCreateDirectory(String filename);
+    abstract public void TransmitCreateDirectory(String filename, Calendar date);
     abstract public void TransmitDeleteFile(String filename);
     abstract public void TransmitAppendFile(byte[] buffer);
     abstract public void TransmitCloseFile();

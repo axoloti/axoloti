@@ -70,7 +70,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         fileMenu1.initComponents();
         this.patch = patch;
         this.patch.patchframe = this;
-        DocumentWindowList.RegisterWindow(this);
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
 
         jToolbarPanel.add(new components.PresetPanel(patch));
@@ -317,6 +316,14 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 formFocusLost(evt);
+            }
+        });
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                formComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
             }
         });
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -819,26 +826,11 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jCheckBoxMenuItemLiveActionPerformed
 
     private void jMenuItemUploadSDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDActionPerformed
-        patch.WriteCode();
-        String FileNameNoPath = patch.getFileNamePath();
-        String separator = System.getProperty("file.separator");
-        int lastSeparatorIndex = FileNameNoPath.lastIndexOf(separator);
-        if (lastSeparatorIndex > 0) {
-            FileNameNoPath = FileNameNoPath.substring(lastSeparatorIndex + 1);
-        }
-        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "target filename:{0}", FileNameNoPath);
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patch));
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(getBinFile(), "0:" + FileNameNoPath));
+        patch.UploadToSDCard();
     }//GEN-LAST:event_jMenuItemUploadSDActionPerformed
 
     private void jMenuItemUploadSDStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDStartActionPerformed
-        patch.WriteCode();
-        String FileNameNoPath = "start.bin";
-        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "target filename:{0}", FileNameNoPath);
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patch));
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(getBinFile(), "0:" + FileNameNoPath));
+        patch.UploadToSDCard("/start.bin");
     }//GEN-LAST:event_jMenuItemUploadSDStartActionPerformed
 
     private void jMenuSaveClipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveClipActionPerformed
@@ -877,6 +869,14 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         String s = patch.GenerateModulationCode3();
         Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "modmatrix \n{0}", s);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        DocumentWindowList.RegisterWindow(this);
+    }//GEN-LAST:event_formComponentShown
+
+    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
+        DocumentWindowList.UnregisterWindow(this);
+    }//GEN-LAST:event_formComponentHidden
 
     private boolean GoLive() {
 
@@ -980,14 +980,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         return patch;
     }
 
-    public File getBinFile() {
-        String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";;
-        return new File(buildDir + "/xpatch.bin");
-//            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath());        
-    }
-
     ArrayList<DocumentWindow> dwl = new ArrayList<DocumentWindow>();
-    
+
     @Override
     public ArrayList<DocumentWindow> GetChildDocuments() {
         return dwl;

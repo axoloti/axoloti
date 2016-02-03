@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -697,7 +697,7 @@ public class USBBulkConnection extends Connection {
     }    
     
     @Override
-    public void TransmitCreateDirectory(String filename) {
+    public void TransmitCreateDirectory(String filename, Calendar date) {
         byte[] data = new byte[15 + filename.length()];
         data[0] = 'A';
         data[1] = 'x';

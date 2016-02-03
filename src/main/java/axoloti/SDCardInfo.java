@@ -77,6 +77,10 @@ public class SDCardInfo {
         int TS = (timestamp & 0x001F0000) >> 15;
         Calendar date = Calendar.getInstance();
         date.set(DY, DM - 1, DD, TH, TM, TS);
+        AddFile(fname, size, date);
+    }
+
+    public void AddFile(String fname, int size, Calendar date) {
         if (fname.lastIndexOf(0) > 0) {
             fname = fname.substring(0, fname.lastIndexOf(0));
         }
@@ -88,7 +92,8 @@ public class SDCardInfo {
     public void Delete(String fname) {
         SDFileInfo f1 = null;
         for (SDFileInfo f : files) {
-            if (f.filename.equalsIgnoreCase(fname)) {
+            if (f.filename.equalsIgnoreCase(fname)
+                    || f.filename.equalsIgnoreCase(fname + "/")) {
                 f1 = f;
                 break;
             }

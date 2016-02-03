@@ -43,7 +43,6 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
     public TextEditor(StringRef s, DocumentWindow parent) {
         initComponents();
         this.parent = parent;
-        parent.GetChildDocuments().add(this);
         this.s = s;
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
@@ -83,6 +82,14 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
 
         setMinimumSize(new java.awt.Dimension(256, 128));
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                formComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
             }
@@ -121,6 +128,15 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
 //        attr.sText = jEditorPane1.getText();
         s.s = textArea.getText();
     }//GEN-LAST:event_formWindowLostFocus
+
+    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
+        parent.GetChildDocuments().remove(this);
+    }//GEN-LAST:event_formComponentHidden
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        parent.GetChildDocuments().add(this);
+    }//GEN-LAST:event_formComponentShown
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cp;
     // End of variables declaration//GEN-END:variables

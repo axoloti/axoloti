@@ -144,7 +144,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                         }
                         break;
                     case 2:
-                        returnValue = toSDCFilename(files.get(rowIndex));
+                        returnValue = "";
                         break;
                 }
 
@@ -194,15 +194,6 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         } else {
             return f.getAbsolutePath();
         }
-    }
-
-    String toSDCFilename(File f) {
-        String s = f.getName();
-        String noext = s.substring(0, s.length() - 4);
-        if (noext.length() > 8) {
-            noext = noext.substring(0, 8);
-        }
-        return noext + ".bin";
     }
 
     File fromRelative(String s) {
@@ -708,11 +699,12 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (!f.isFile() || !f.canRead()) {
             return;
         }
-        PatchFrame pf = PatchGUI.OpenPatch(f);
+        PatchFrame pf = PatchGUI.OpenPatchInvisible(f);
         PatchGUI p = pf.getPatch();
         p.WriteCode();
         p.Compile();
-        QCmdProcessor.getQCmdProcessor().AppendToQueue(new qcmds.QCmdUploadFile(pf.getBinFile(), "0:" + toSDCFilename(f)));
+        p.UploadToSDCard();
+        pf.Close();
     }//GEN-LAST:event_jButtonUploadActionPerformed
 
 
@@ -746,11 +738,13 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     @Override
     public void ShowConnect() {
         jButtonUploadBank.setEnabled(true);
+        jButtonUpload.setEnabled(true);
     }
 
     @Override
     public void ShowDisconnect() {
         jButtonUploadBank.setEnabled(false);
+        jButtonUpload.setEnabled(false);
     }
 
     static public void OpenBank(File f) {

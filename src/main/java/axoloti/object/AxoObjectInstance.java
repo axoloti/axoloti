@@ -43,7 +43,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -196,6 +195,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             });
             popup.add(popm_adapt);
         }
+
+        MenuItem popm_embed = new MenuItem("embed (convert to patcher/object");
+        popm_embed.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                ConvertToEmbeddedObj();
+            }
+        });
+        popup.add(popm_embed);
 
         /*
          h.add(Box.createHorizontalStrut(3));
@@ -423,11 +431,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         for (InletInstance o : inletInstances) {
             if (n.equals(o.GetLabel())) {
                 return o;
-            } else {
-                String s = Synonyms.instance().inlet(n);
-                if (o.GetLabel().equals(s)) {
-                    return o;
-                }
+            }
+        }
+        for (InletInstance o : inletInstances) {
+            String s = Synonyms.instance().inlet(n);
+            if (o.GetLabel().equals(s)) {
+                return o;
             }
         }
         return null;
@@ -438,11 +447,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         for (OutletInstance o : outletInstances) {
             if (n.equals(o.GetLabel())) {
                 return o;
-            } else {
-                String s = Synonyms.instance().outlet(n);
-                if (o.GetLabel().equals(s)) {
-                    return o;
-                }
+            }
+        }
+        for (OutletInstance o : outletInstances) {
+            String s = Synonyms.instance().outlet(n);
+            if (o.GetLabel().equals(s)) {
+                return o;
             }
         }
         return null;
@@ -863,5 +873,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             }
         }
         return files;
+    }
+
+    void ConvertToEmbeddedObj() {
+        ///////////////////////
     }
 }

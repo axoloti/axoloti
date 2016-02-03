@@ -2352,4 +2352,42 @@ public class Patch {
         }
         return files;
     }
+
+    public File getBinFile() {
+        String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";;
+        return new File(buildDir + "/xpatch.bin");
+//            Logger.getLogger(QCmdWriteFile.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath());        
+    }
+
+    public void UploadToSDCard(String sdfilename) {
+        WriteCode();
+        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
+        QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
+        // create subdirs...
+        
+        for (int i = 1; i < sdfilename.length(); i++) {
+            if (sdfilename.charAt(i) == '/') {
+                qcmdprocessor.AppendToQueue(new qcmds.QCmdCreateDirectory(sdfilename.substring(0, i)));
+                qcmdprocessor.WaitQueueFinished();
+            }
+        }
+        qcmdprocessor.WaitQueueFinished();
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(getBinFile(), sdfilename));
+    }
+
+    public void UploadToSDCard() {
+        String FileNameNoPath = getFileNamePath();
+        String separator = System.getProperty("file.separator");
+        int lastSeparatorIndex = FileNameNoPath.lastIndexOf(separator);
+        if (lastSeparatorIndex > 0) {
+            FileNameNoPath = FileNameNoPath.substring(lastSeparatorIndex + 1);
+        }
+        String FileNameNoExt = FileNameNoPath;
+        if (FileNameNoExt.endsWith(".axp") || FileNameNoExt.endsWith(".axs")) {
+            FileNameNoExt = FileNameNoExt.substring(0, FileNameNoExt.length() - 4);
+        }
+        UploadToSDCard("/" + FileNameNoExt + "/patch.bin");
+    }
 }

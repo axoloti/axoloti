@@ -30,12 +30,14 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -126,7 +128,12 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                     }
                     break;
                     case 3: {
-                        returnValue = SDCardInfo.getInstance().getFiles().get(rowIndex).getTimestamp().getTime().toString();
+                        Calendar c = SDCardInfo.getInstance().getFiles().get(rowIndex).getTimestamp();
+                        if (c.get(Calendar.YEAR) > 1979) {
+                            returnValue = c.getTime().toString();
+                        } else {
+                            returnValue = "";
+                        }
                     }
                     break;
                 }
@@ -165,7 +172,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                 }
             }
         });
-
+        jFileTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jFileTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -358,7 +365,15 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
         if (rowIndex >= 0) {
             SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
-            processor.AppendToQueue(new QCmdDeleteFile(f.getFilename()));
+            if (!f.isDirectory()) {
+                processor.AppendToQueue(new QCmdDeleteFile(f.getFilename()));
+            } else {
+                String ff = f.getFilename();
+                if (ff.endsWith("/")) {
+                    ff = ff.substring(0, ff.length() - 1);
+                }
+                processor.AppendToQueue(new QCmdDeleteFile(ff));
+            }
         }
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 

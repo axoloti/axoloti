@@ -647,7 +647,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             qcmdprocessor.Panic();
             boolean success = USBBulkConnection.GetConnection().connect();
             if (!success) {
-                //ShowDisconnect();
+                ShowDisconnect();
             } else {
                 qcmdprocessor.AppendToQueue(new QCmdStop());
             }
