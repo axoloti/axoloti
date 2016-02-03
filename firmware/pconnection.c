@@ -264,6 +264,7 @@ void ReadDirectoryListing(void) {
                           (const unsigned char* )(&fbuff[0]), 16);
   chThdSleepMilliseconds(10);
   fbuff[0] = 0;
+  f_chdir("/");
   scan_files((char *)&fbuff[0]);
 }
 
