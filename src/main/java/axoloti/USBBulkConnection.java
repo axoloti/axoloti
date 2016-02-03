@@ -856,7 +856,7 @@ public class USBBulkConnection extends Connection {
         targetProfile.setVoltages(Voltages);
     }
 
-    void RPacketParamChange(final int index, final int value) {
+    void RPacketParamChange(final int index, final int value, final int patchID) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public
@@ -870,6 +870,10 @@ public class USBBulkConnection extends Connection {
                 if (!patch.IsLocked()) {
                     return;
 
+                }
+                if (patch.GetIID() != patchID) {
+                    patch.Unlock();
+                    return;
                 }
                 if (index >= patch.ParameterInstances.size()) {
                     Logger.getLogger(USBBulkConnection.class
@@ -885,11 +889,6 @@ public class USBBulkConnection extends Connection {
                     return;
                 }
 
-                if (patch.GetIID() != IID) {
-                    Logger.getLogger(USBBulkConnection.class
-                            .getName()).log(Level.INFO, "Rx paramchange IID mismatch{0} {1}", new Object[]{index, value});
-                    return;
-                }
                 if (!pi.GetNeedsTransmit()) {
                     pi.SetValueRaw(value);
                 }
@@ -1032,11 +1031,11 @@ public class USBBulkConnection extends Connection {
                         break;
                     case 3:
                         switch (c) {
-                            case 'P':
+                            case 'Q':
                                 state = ReceiverState.paramchangePckt;
                                 //System.out.println("param packet start");
                                 dataIndex = 0;
-                                dataLength = 8;
+                                dataLength = 12;
                                 break;
                             case 'A':
                                 state = ReceiverState.ackPckt;
@@ -1117,7 +1116,7 @@ public class USBBulkConnection extends Connection {
 //                    System.out.println("pch packet i=" +dataIndex + " v=" + c + " c="+ (char)(cc));
                 if (dataIndex == dataLength) {
                     //System.out.println("param packet complete 0x" + Integer.toHexString(packetData[1]) + "    0x" + Integer.toHexString(packetData[0]));
-                    RPacketParamChange(packetData[1], packetData[0]);
+                    RPacketParamChange(packetData[2], packetData[1],packetData[0]);
                     GoIdleState();
                 }
                 break;

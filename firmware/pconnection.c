@@ -161,7 +161,8 @@ void PExTransmit(void) {
           int v = (patchMeta.pPExch)[i].value;
           patchMeta.pPExch[i].signals &= ~0x01;
           PExMessage msg;
-          msg.header = 0x506F7841; //"AxoP"
+          msg.header = 0x516F7841; //"AxoQ"
+          msg.patchID = patchMeta.patchID;
           msg.index = i;
           msg.value = v;
           chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
@@ -435,6 +436,7 @@ void PExReceiveByte(unsigned char c) {
   static int length;
   static int a;
   static int b;
+  static uint32_t patchid;
 
   if (!header) {
     switch (state) {
@@ -547,31 +549,50 @@ void PExReceiveByte(unsigned char c) {
   else if (header == 'P') { // param change
     switch (state) {
     case 4:
-      value = c;
+      patchid = c;
       state++;
       break;
     case 5:
-      value += c << 8;
+      patchid += c << 8;
       state++;
       break;
     case 6:
-      value += c << 16;
+      patchid += c << 16;
       state++;
       break;
     case 7:
-      value += c << 24;
+      patchid += c << 24;
       state++;
       break;
     case 8:
-      index = c;
+      value = c;
       state++;
       break;
     case 9:
+      value += c << 8;
+      state++;
+      break;
+    case 10:
+      value += c << 16;
+      state++;
+      break;
+    case 11:
+      value += c << 24;
+      state++;
+      break;
+    case 12:
+      index = c;
+      state++;
+      break;
+    case 13:
       index += c << 8;
       state = 0;
       header = 0;
-      if (index < patchMeta.numPEx) {
+      if ((patchid == patchMeta.patchID) &&
+          (index < patchMeta.numPEx)) {
         PExParameterChange(&(patchMeta.pPExch)[index], value, 0xFFFFFFEE);
+      } else {
+        LogTextMessage("patchid %8X",patchid);
       }
       break;
     default:

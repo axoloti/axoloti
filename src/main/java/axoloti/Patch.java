@@ -1281,7 +1281,7 @@ public class Patch {
 
     int IID = -1; // iid identifies the patch
 
-    int GetIID() {
+    public int GetIID() {
         return IID;
     }
 
