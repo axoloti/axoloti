@@ -591,8 +591,6 @@ void PExReceiveByte(unsigned char c) {
       if ((patchid == patchMeta.patchID) &&
           (index < patchMeta.numPEx)) {
         PExParameterChange(&(patchMeta.pPExch)[index], value, 0xFFFFFFEE);
-      } else {
-        LogTextMessage("patchid %8X",patchid);
       }
       break;
     default:
