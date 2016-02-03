@@ -198,9 +198,10 @@ static FRESULT scan_files(char *path) {
 #else
       fn = fno.fname;
 #endif
+      if (fn[0] == '.')
+        continue;
       if (fno.fattrib & AM_DIR) {
         sprintf(&path[i], "/%s", fn);
-#if 1
         msg[0] = 'A';
         msg[1] = 'x';
         msg[2] = 'o';
@@ -213,7 +214,6 @@ static FRESULT scan_files(char *path) {
         msg[13+l] = 0;
         chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                                 (const unsigned char* )msg, l+14);
-#endif
         res = scan_files(path);
         path[i] = 0;
         if (res != FR_OK) break;
