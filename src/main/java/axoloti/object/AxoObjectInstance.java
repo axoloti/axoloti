@@ -90,6 +90,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public ArrayList<DisplayInstance> displayInstances;
     LabelComponent IndexLabel;
 
+    boolean deferredObjTypeUpdate = false;
+    
     @Override
     public void refreshIndex() {
         if (patch != null) {
@@ -481,6 +483,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         for (AttributeInstance a : attributeInstances) {
             a.UnLock();
         }
+        if (deferredObjTypeUpdate) {
+            getPatch().ChangeObjectInstanceType(this, this.getType());
+            deferredObjTypeUpdate = false;
+        }
     }
 
     @Override
@@ -705,6 +711,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         return s;
     }
 
+    public final static String MidiHandlerFunctionHeader = "void MidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2) {\n";
+    
     @Override
     public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
         String s = "";
@@ -718,7 +726,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         {
             String d3 = GenerateCodeMidiHandler("");
             if (!d3.isEmpty()) {
-                s += "void MidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2){\n";
+                s += MidiHandlerFunctionHeader;
                 s += d3;
                 s += "}\n";
             }
@@ -855,11 +863,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public ArrayList<DisplayInstance> GetDisplayInstances() {
         return displayInstances;
     }
-
+    
     @Override
     public void ObjectModified(Object src) {
         if (getPatch() != null) {
-            getPatch().ChangeObjectInstanceType(this, this.getType());
+            if (!getPatch().IsLocked()){
+                getPatch().ChangeObjectInstanceType(this, this.getType());
+            } else {
+                deferredObjTypeUpdate = true;
+            }
         }
     }
 
@@ -876,6 +888,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     }
 
     void ConvertToEmbeddedObj() {
-        ///////////////////////
+        try {
+            ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object",null);
+            if (ol.isEmpty()) return;
+            AxoObjectAbstract o = ol.get(0);
+            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject)getPatch().ChangeObjectInstanceType(this, o);
+            oi.ao = getType().clone();            
+            oi.updateObj();
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

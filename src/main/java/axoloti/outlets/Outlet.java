@@ -30,7 +30,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class Outlet implements AtomDefinition {
+public class Outlet implements AtomDefinition, Cloneable {
 
     @Attribute
     String name;
@@ -93,5 +93,10 @@ public class Outlet implements AtomDefinition {
     @Override
     public AtomInstance CreateInstance(AxoObjectInstance o) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Outlet clone() throws CloneNotSupportedException {
+        return (Outlet) super.clone();
     }
 }

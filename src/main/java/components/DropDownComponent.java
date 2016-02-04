@@ -91,7 +91,9 @@ public class DropDownComponent extends JComponent implements MouseListener {
         int[] yp = new int[]{vmargin, vmargin, vmargin + htick * 2};
         g2.fillPolygon(xp, yp, 3);
         setFont(Constants.font);
-        g2.drawString(Items.get(SelectedIndex), 4, 12);
+        if (Items.size() > 0) {
+            g2.drawString(Items.get(SelectedIndex), 4, 12);
+        }
     }
 
     public int getSelectedIndex() {

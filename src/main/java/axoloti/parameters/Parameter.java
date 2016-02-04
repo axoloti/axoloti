@@ -35,7 +35,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public abstract class Parameter<T extends ParameterInstance> implements AtomDefinition {
+public abstract class Parameter<T extends ParameterInstance> implements AtomDefinition, Cloneable {
 
     @Attribute
     public String name;
@@ -124,4 +124,9 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
         md.update(name.getBytes());
 //        md.update((byte) getDatatype().hashCode());
     }
+    
+    @Override
+    public Parameter clone() throws CloneNotSupportedException {
+        return (Parameter) super.clone();
+    }    
 }

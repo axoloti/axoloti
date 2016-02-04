@@ -27,6 +27,9 @@ import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
@@ -36,6 +39,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -76,15 +81,57 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jTextAreaKRateCode = initCodeEditor(jPanelKRateCode2);
         jTextAreaSRateCode = initCodeEditor(jPanelSRateCode);
         jTextAreaDisposeCode = initCodeEditor(jPanelDisposeCode);
-        jTextAreaMidiCode = initCodeEditor(jPanelMidiCode);
+        jTextAreaMidiCode = initCodeEditor(jPanelMidiCode2);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         setTitle(obj.id);
         this.obj = obj;
 
         jLabelName.setText(obj.getCName());
         jTextFieldAuthor.setText(obj.sAuthor);
+        jTextFieldAuthor.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (obj.sAuthor != null && !obj.sAuthor.equals(jTextFieldAuthor.getText())) {
+                    obj.sAuthor = jTextFieldAuthor.getText();
+                }
+                FireObjectModified();
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+        });
+
         jTextFieldLicense.setText(obj.sLicense);
+        jTextFieldLicense.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (obj.sLicense != null && !obj.sLicense.equals(jTextFieldLicense.getText())) {
+                    obj.sLicense = jTextFieldLicense.getText();
+                }
+                FireObjectModified();
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+        });
         jTextDesc.setText(obj.sDescription);
+        jTextDesc.addFocusListener(new FocusListener() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (obj.sDescription != null && !obj.sLicense.equals(jTextDesc.getText())) {
+                    obj.sDescription = jTextDesc.getText();
+                }
+                FireObjectModified();
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+        });
+
+        jLabelMidiPrototype.setText(AxoObjectInstance.MidiHandlerFunctionHeader);
 
         inletDefinitionsEditor1.initComponents(obj);
         outletDefinitionsEditorPanel1.initComponents(obj);
@@ -173,8 +220,6 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
     private void initComponents() {
 
         jInternalFrame1 = new javax.swing.JInternalFrame();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -209,6 +254,8 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jPanelSRateCode = new javax.swing.JPanel();
         jPanelDisposeCode = new javax.swing.JPanel();
         jPanelMidiCode = new javax.swing.JPanel();
+        jLabelMidiPrototype = new javax.swing.JLabel();
+        jPanelMidiCode2 = new javax.swing.JPanel();
         jPanelXML = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         rSyntaxTextAreaXML = new org.fife.ui.rsyntaxtextarea.RSyntaxTextArea();
@@ -232,19 +279,13 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(540, 400));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
-
-        jLabel1.setText("This object editor is incomplete. The tabs for inlets, outlets, parameters, attributes are not editable. Bundles of multiple objects in one file are not supported.");
-        jLabel1.setVerifyInputWhenFocusTarget(false);
-        getContentPane().add(jLabel1);
-
-        jLabel3.setText("Only the code-editors work. Changes are applied only by (re-)enabling live on a patch. Changes propagate to all instances wihtout reloading.");
-        getContentPane().add(jLabel3);
         getContentPane().add(jLabel4);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(640, 100));
@@ -268,6 +309,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jPanel2.add(jLabel8);
 
         jTextFieldAuthor.setText("jTextField1");
+        jTextFieldAuthor.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldAuthorFocusLost(evt);
+            }
+        });
         jPanel2.add(jTextFieldAuthor);
 
         jLabel9.setText("License:");
@@ -315,11 +361,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         inletDefinitionsEditor1.setLayout(inletDefinitionsEditor1Layout);
         inletDefinitionsEditor1Layout.setHorizontalGroup(
             inletDefinitionsEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
         inletDefinitionsEditor1Layout.setVerticalGroup(
             inletDefinitionsEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Inlets", inletDefinitionsEditor1);
@@ -328,11 +374,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         outletDefinitionsEditorPanel1.setLayout(outletDefinitionsEditorPanel1Layout);
         outletDefinitionsEditorPanel1Layout.setHorizontalGroup(
             outletDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
         outletDefinitionsEditorPanel1Layout.setVerticalGroup(
             outletDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Outlets", outletDefinitionsEditorPanel1);
@@ -341,11 +387,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         attributeDefinitionsEditorPanel1.setLayout(attributeDefinitionsEditorPanel1Layout);
         attributeDefinitionsEditorPanel1Layout.setHorizontalGroup(
             attributeDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
         attributeDefinitionsEditorPanel1Layout.setVerticalGroup(
             attributeDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Attributes", attributeDefinitionsEditorPanel1);
@@ -354,11 +400,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         paramDefinitionsEditorPanel1.setLayout(paramDefinitionsEditorPanel1Layout);
         paramDefinitionsEditorPanel1Layout.setHorizontalGroup(
             paramDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
         paramDefinitionsEditorPanel1Layout.setVerticalGroup(
             paramDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Parameters", paramDefinitionsEditorPanel1);
@@ -367,11 +413,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         displayDefinitionsEditorPanel1.setLayout(displayDefinitionsEditorPanel1Layout);
         displayDefinitionsEditorPanel1Layout.setHorizontalGroup(
             displayDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
         displayDefinitionsEditorPanel1Layout.setVerticalGroup(
             displayDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Displays", displayDefinitionsEditorPanel1);
@@ -380,11 +426,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jPanelLocalData.setLayout(jPanelLocalDataLayout);
         jPanelLocalDataLayout.setHorizontalGroup(
             jPanelLocalDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
         jPanelLocalDataLayout.setVerticalGroup(
             jPanelLocalDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Local Data", jPanelLocalData);
@@ -393,11 +439,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jPanelInitCode.setLayout(jPanelInitCodeLayout);
         jPanelInitCodeLayout.setHorizontalGroup(
             jPanelInitCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
         jPanelInitCodeLayout.setVerticalGroup(
             jPanelInitCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Init Code", jPanelInitCode);
@@ -411,11 +457,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jPanelKRateCode2.setLayout(jPanelKRateCode2Layout);
         jPanelKRateCode2Layout.setHorizontalGroup(
             jPanelKRateCode2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
         jPanelKRateCode2Layout.setVerticalGroup(
             jPanelKRateCode2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 309, Short.MAX_VALUE)
+            .addGap(0, 288, Short.MAX_VALUE)
         );
 
         jPanelKRateCode.add(jPanelKRateCode2);
@@ -426,11 +472,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jPanelSRateCode.setLayout(jPanelSRateCodeLayout);
         jPanelSRateCodeLayout.setHorizontalGroup(
             jPanelSRateCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
         jPanelSRateCodeLayout.setVerticalGroup(
             jPanelSRateCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("S-rate Code", jPanelSRateCode);
@@ -439,25 +485,32 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jPanelDisposeCode.setLayout(jPanelDisposeCodeLayout);
         jPanelDisposeCodeLayout.setHorizontalGroup(
             jPanelDisposeCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
         jPanelDisposeCodeLayout.setVerticalGroup(
             jPanelDisposeCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Dispose Code", jPanelDisposeCode);
 
-        javax.swing.GroupLayout jPanelMidiCodeLayout = new javax.swing.GroupLayout(jPanelMidiCode);
-        jPanelMidiCode.setLayout(jPanelMidiCodeLayout);
-        jPanelMidiCodeLayout.setHorizontalGroup(
-            jPanelMidiCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 406, Short.MAX_VALUE)
+        jPanelMidiCode.setLayout(new javax.swing.BoxLayout(jPanelMidiCode, javax.swing.BoxLayout.Y_AXIS));
+
+        jLabelMidiPrototype.setText("jLabel11");
+        jPanelMidiCode.add(jLabelMidiPrototype);
+
+        javax.swing.GroupLayout jPanelMidiCode2Layout = new javax.swing.GroupLayout(jPanelMidiCode2);
+        jPanelMidiCode2.setLayout(jPanelMidiCode2Layout);
+        jPanelMidiCode2Layout.setHorizontalGroup(
+            jPanelMidiCode2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 466, Short.MAX_VALUE)
         );
-        jPanelMidiCodeLayout.setVerticalGroup(
-            jPanelMidiCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 323, Short.MAX_VALUE)
+        jPanelMidiCode2Layout.setVerticalGroup(
+            jPanelMidiCode2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 288, Short.MAX_VALUE)
         );
+
+        jPanelMidiCode.add(jPanelMidiCode2);
 
         jTabbedPane1.addTab("MIDI Code", jPanelMidiCode);
 
@@ -475,11 +528,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jPanelXML.setLayout(jPanelXMLLayout);
         jPanelXMLLayout.setHorizontalGroup(
             jPanelXMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
         );
         jPanelXMLLayout.setVerticalGroup(
             jPanelXMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("XML", jPanelXML);
@@ -522,21 +575,24 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
 
     }//GEN-LAST:event_jPanelXMLFocusGained
 
+    private void jTextFieldAuthorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAuthorFocusLost
+
+    }//GEN-LAST:event_jTextFieldAuthorFocusLost
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.objecteditor.AttributeDefinitionsEditorPanel attributeDefinitionsEditorPanel1;
     private axoloti.objecteditor.DisplayDefinitionsEditorPanel displayDefinitionsEditorPanel1;
     private axoloti.objecteditor.InletDefinitionsEditorPanel inletDefinitionsEditor1;
     private javax.swing.JInternalFrame jInternalFrame1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelMidiPrototype;
     private javax.swing.JLabel jLabelName;
     private javax.swing.JList jListDepends;
     private javax.swing.JList jListIncludes;
@@ -553,6 +609,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
     private javax.swing.JPanel jPanelKRateCode2;
     private javax.swing.JPanel jPanelLocalData;
     private javax.swing.JPanel jPanelMidiCode;
+    private javax.swing.JPanel jPanelMidiCode2;
     private javax.swing.JPanel jPanelOverview;
     private javax.swing.JPanel jPanelSRateCode;
     private javax.swing.JPanel jPanelXML;

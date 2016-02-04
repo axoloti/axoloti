@@ -87,6 +87,9 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
 
     @Override
     public void setString(String selection) {
+        if (comboBox.getItemCount() == 0) {
+            return;
+        }
         this.selection = selection;
         if (comboBox == null) {
             return;

@@ -2158,11 +2158,11 @@ public class Patch {
         }
     }
 
-    boolean IsLocked() {
+    public boolean IsLocked() {
         return locked;
     }
 
-    public void ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
+    public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
         /*
          if (obj.getType() == objType) {
          return;
@@ -2256,6 +2256,7 @@ public class Patch {
         newObj.setInstanceName(newname);
         newObj.SetSelected(true);
         SetDirty();
+        return newObj;
     }
 
     void invalidate() {

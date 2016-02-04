@@ -48,9 +48,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
             ao.id = "patch/object";
             ao.sDescription = "description";
         }
-        if (aoe == null) {
-            aoe = new AxoObjectEditor(ao);
-        }
         setType(ao);
         /*
          if (pg != null) {
@@ -63,6 +60,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
 
     public void updateObj() {
         if (ao != null) {
+            ao.id = "patch/object";
             setType(ao);
             PostConstructor();
         }
@@ -105,11 +103,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
             cmp.doLayout();
         }
         resizeToGrid();
-    }
-
-    @Override
-    public void ObjectModified(Object src) {
-        updateObj();
     }
 
 }

@@ -126,6 +126,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                     return;
                 }
                 GetAtomDefinitions().remove(row);
+                if (row > 0) {
+                    jTable1.setRowSelectionInterval(row - 1, row - 1);
+                }
                 AtomDefinitionsEditor.this.obj.FireObjectModified(this);
             }
         });

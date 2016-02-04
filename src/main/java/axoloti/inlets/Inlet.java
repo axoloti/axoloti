@@ -30,7 +30,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class Inlet implements AtomDefinition {
+public abstract class Inlet implements AtomDefinition, Cloneable {
 
     @Attribute
     String name;
@@ -88,5 +88,10 @@ public abstract class Inlet implements AtomDefinition {
     public void updateSHA(MessageDigest md) {
         md.update(name.getBytes());
         md.update((byte) getDatatype().hashCode());
+    }
+
+    @Override
+    public Inlet clone() throws CloneNotSupportedException {
+        return (Inlet)super.clone();
     }
 }

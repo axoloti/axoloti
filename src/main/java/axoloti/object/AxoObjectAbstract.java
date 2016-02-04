@@ -37,7 +37,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "objdef")
-public abstract class AxoObjectAbstract implements Comparable {
+public abstract class AxoObjectAbstract implements Comparable, Cloneable {
 
     @Attribute
     public String id;
@@ -188,4 +188,5 @@ public abstract class AxoObjectAbstract implements Comparable {
 
     public void removeObjectModifiedListener(ObjectModifiedListener oml) {
     }
+
 }

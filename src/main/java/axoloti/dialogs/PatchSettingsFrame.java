@@ -38,16 +38,16 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
     PatchSettings settings;
 
     final Patch patch;
-    
+
     /**
      * Creates new form PatchSettingsFrame
-     * @param settings settings to load/save 
+     *
+     * @param settings settings to load/save
      */
     public PatchSettingsFrame(PatchSettings settings, Patch patch) {
         initComponents();
         this.patch = patch;
         setTitle("settings");
-        patch.getPatchframe().GetChildDocuments().add(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.settings = settings;
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setValue(settings.GetMidiChannel());
@@ -122,6 +122,15 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
         jCheckBoxSaturate = new javax.swing.JCheckBox();
         jLabel10 = new javax.swing.JLabel();
         jTextFieldAttributions = new javax.swing.JTextField();
+
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                formComponentHidden(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         jLabel1.setText("MIDI Channel");
 
@@ -408,6 +417,14 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
     private void jTextFieldAttributionsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAttributionsFocusLost
         settings.setAttributions(jTextFieldAttributions.getText());
     }//GEN-LAST:event_jTextFieldAttributionsFocusLost
+
+    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
+        patch.getPatchframe().GetChildDocuments().remove(this);
+    }//GEN-LAST:event_formComponentHidden
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        patch.getPatchframe().GetChildDocuments().add(this);
+    }//GEN-LAST:event_formComponentShown
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBoxHasChannelAttrib;

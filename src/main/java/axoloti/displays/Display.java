@@ -27,7 +27,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class Display<T extends DisplayInstance> implements AtomDefinition {
+public abstract class Display<T extends DisplayInstance> implements AtomDefinition, Cloneable {
 
     @Attribute
     String name;
@@ -62,11 +62,11 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     @Override
     public String toString() {
         return this.getClass().getSimpleName();
-    }    
+    }
 
     public int getLength() {
         return 1;
@@ -94,5 +94,10 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     public void updateSHA(MessageDigest md) {
         md.update(name.getBytes());
 //        md.update((byte)getDatatype().hashCode());
+    }
+
+    @Override
+    public Display clone() throws CloneNotSupportedException {
+        return (Display) super.clone();
     }
 }

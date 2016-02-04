@@ -28,7 +28,7 @@ import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Attribute;
 
-public abstract class AxoAttribute implements AtomDefinition {
+public abstract class AxoAttribute implements AtomDefinition, Cloneable {
 
     @Attribute
     String name;
@@ -66,7 +66,7 @@ public abstract class AxoAttribute implements AtomDefinition {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     @Override
     public AttributeInstance CreateInstance(AxoObjectInstance o) {
         AttributeInstance pi = InstanceFactory(o);
@@ -95,4 +95,8 @@ public abstract class AxoAttribute implements AtomDefinition {
         return "attr_" + CharEscape.CharEscape(name);
     }
 
+    @Override
+    public AxoAttribute clone() throws CloneNotSupportedException {
+        return (AxoAttribute) super.clone();
+    }
 }

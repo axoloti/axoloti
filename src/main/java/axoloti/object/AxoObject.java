@@ -593,4 +593,29 @@ public class AxoObject extends AxoObjectAbstract {
         instances.remove(oml);
     }
 
+    @Override
+    public AxoObject clone() throws CloneNotSupportedException {
+        AxoObject c = (AxoObject)super.clone();
+        c.inlets = new ArrayList<Inlet>();
+        for(Inlet i:inlets){
+            c.inlets.add(i.clone());
+        }
+        c.outlets = new ArrayList<Outlet>();
+        for(Outlet i:outlets){
+            c.outlets.add(i.clone());
+        }
+        c.params = new ArrayList<Parameter>();
+        for(Parameter i:params){
+            c.params.add(i.clone());
+        }
+        c.displays = new ArrayList<Display>();
+        for(Display i:displays){
+            c.displays.add(i.clone());
+        }
+        c.attributes = new ArrayList<AxoAttribute>();
+        for(AxoAttribute i:attributes){
+            c.attributes.add(i.clone());
+        }
+        return c;
+    }    
 }
