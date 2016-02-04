@@ -153,9 +153,8 @@ public class Preferences {
         for (AxolotiLibrary lib : libraries) {
             if (lib.getId().equals(id)) {
                 if (lib != newlib) {
-                    libraries.remove(lib);
-                    libraries.add(newlib);
-                    break;
+                    int idx = libraries.indexOf(lib);
+                    libraries.set(idx, newlib);
                 }
                 found = true;
             }

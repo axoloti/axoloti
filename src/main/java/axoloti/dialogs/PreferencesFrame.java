@@ -498,10 +498,10 @@ public class PreferencesFrame extends javax.swing.JFrame {
         AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true, lib);
 
         AxolotiLibrary newlib;
-        if (lib.getRemoteLocation() == null || lib.getRemoteLocation().length() == 0) {
-            newlib = new AxoFileLibrary();
-        } else {
+        if (AxoGitLibrary.TYPE.equals(lib.getType())) {
             newlib = new AxoGitLibrary();
+        } else {
+            newlib = new AxoFileLibrary();
         }
         newlib.clone(lib);
         Preferences.LoadPreferences().updateLibrary(lib.getId(), newlib);
@@ -549,8 +549,18 @@ public class PreferencesFrame extends javax.swing.JFrame {
             String id = (String) model.getValueAt(idx, 1);
             AxolotiLibrary lib = Preferences.LoadPreferences().getLibrary(id);
             if (lib != null) {
+                String type = lib.getType();
                 AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true, lib);
-                Preferences.LoadPreferences().updateLibrary(lib.getId(), lib);
+                AxolotiLibrary updlib = lib;
+                if(!lib.getType().equals(type)) {
+                  if (AxoGitLibrary.TYPE.equals(lib.getType())) {
+                       updlib = new AxoGitLibrary();
+                   } else {
+                       updlib = new AxoFileLibrary();
+                   }
+                  updlib.clone(lib);
+                }
+                Preferences.LoadPreferences().updateLibrary(lib.getId(), updlib);
                 PopulateLibrary();
             }
         }
