@@ -208,7 +208,7 @@ static FRESULT scan_files(char *path) {
         msg[3] = 'f';
         *(int32_t *)(&msg[4]) = fno.fsize;
         *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
-        strcpy(&msg[12], path);
+        strcpy(&msg[12], &path[1]);
         int l = strlen(&msg[12]);
         msg[12+l] = '/';
         msg[13+l] = 0;
@@ -224,9 +224,9 @@ static FRESULT scan_files(char *path) {
         msg[3] = 'f';
         *(int32_t *)(&msg[4]) = fno.fsize;
         *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
-        strcpy(&msg[12], path);
-        msg[12+i] = '/';
-        strcpy(&msg[12+i+1], fn);
+        strcpy(&msg[12], &path[1]);
+        msg[12+i-1] = '/';
+        strcpy(&msg[12+i], fn);
         int l = strlen(&msg[12]);
         chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                                 (const unsigned char* )msg, l+13);
@@ -264,9 +264,21 @@ void ReadDirectoryListing(void) {
   chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                           (const unsigned char* )(&fbuff[0]), 16);
   chThdSleepMilliseconds(10);
-  fbuff[0] = 0;
-  f_chdir("/");
+  fbuff[0] = '/';
+  fbuff[1] = 0;
   scan_files((char *)&fbuff[0]);
+
+  char *msg = &((char*)fbuff)[64];
+  msg[0] = 'A';
+  msg[1] = 'x';
+  msg[2] = 'o';
+  msg[3] = 'f';
+  *(int32_t *)(&msg[4]) = 0;
+  *(int32_t *)(&msg[8]) = 0;
+  msg[12] = '/';
+  msg[13] = 0;
+  chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
+                          (const unsigned char* )msg, 14);
 }
 
 /* input data decoder state machine
