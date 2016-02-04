@@ -29,6 +29,7 @@ import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 public class AxoGitLibrary extends AxolotiLibrary {
+    public static String TYPE="git";
 
     public AxoGitLibrary(String id, String type, String lloc, boolean e, String rloc, boolean auto) {
         super(id, type, lloc, e, rloc, auto);
@@ -44,13 +45,14 @@ public class AxoGitLibrary extends AxolotiLibrary {
         // get repository
         Git git = null;
         try {
-            FileRepositoryBuilder builder = new FileRepositoryBuilder();
             Repository repository;
             if (usingSubmodule()) {
                 // special case, in developer mode, we have the repos as sub modules, these need to be accessed via the parent repo
                 String relDir = System.getProperty(Axoloti.RELEASE_DIR);
                 Git parent = Git.open(new File(relDir));
-                repository = SubmoduleWalk.getSubmoduleRepository(parent.getRepository(), getId());
+                File ldir = new File(getLocalLocation());
+                String ldirstr = ldir.getName();
+                repository = SubmoduleWalk.getSubmoduleRepository(parent.getRepository(), ldirstr);
                 if (repository == null) {
                     Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "sync repo FAILED cannot find submodule : {0}", getId());
                     return;
@@ -94,6 +96,11 @@ public class AxoGitLibrary extends AxolotiLibrary {
         File ldir = new File(getLocalLocation());
 
         if (!usingSubmodule()) {
+            if(getRemoteLocation()==null || getRemoteLocation().length()==0) {
+                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "init FAILED - no remote specified : {0}", getId());
+                return;
+            }
+            
             if (delete && ldir.exists()) {
                 try {
                     delete(ldir);

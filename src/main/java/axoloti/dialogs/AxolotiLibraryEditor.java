@@ -6,6 +6,7 @@
 package axoloti.dialogs;
 
 import static axoloti.MainFrame.prefs;
+import axoloti.utils.AxoFileLibrary;
 import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
 import java.awt.Component;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
@@ -47,6 +47,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         initComponents();
         library = lib;
         populate();
+        jId.setEnabled(false);
         setVisible(true);
     }
 
@@ -61,7 +62,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         jRevision.setText(library.getRevision());
         jPrefix.setText(library.getContributorPrefix());
 
-        String[] types = {"local", "git"};
+        String[] types = {AxoFileLibrary.TYPE, AxoGitLibrary.TYPE};
         jTypeCombo.removeAllItems();
         for (String t : types) {
             jTypeCombo.addItem(t);
