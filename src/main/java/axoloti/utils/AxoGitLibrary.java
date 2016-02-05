@@ -19,12 +19,10 @@ import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.StatusCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.submodule.SubmoduleWalk;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -215,8 +213,8 @@ public class AxoGitLibrary extends AxolotiLibrary {
     private boolean add(Git git) {
         AddCommand cmd = git.add();
         if (getContributorPrefix() != null && getContributorPrefix().length() > 0) {
-            cmd.addFilepattern("objects/" + getContributorPrefix() + "/.");
-            cmd.addFilepattern("patches/" + getContributorPrefix() + "/.");
+            cmd.addFilepattern("objects/" + getContributorPrefix());
+            cmd.addFilepattern("patches/" + getContributorPrefix());
         } else {
             cmd.addFilepattern(".");
         }
@@ -287,7 +285,9 @@ public class AxoGitLibrary extends AxolotiLibrary {
     }
 
     private boolean usingSubmodule() {
+        // are we in developer mode, and not pointing elsewhere
         return (Axoloti.isDeveloper()
+                && getLocalLocation().startsWith(System.getProperty(Axoloti.RELEASE_DIR))
                 && (getId().equals(AxolotiLibrary.FACTORY_ID) || getId().equals(AxolotiLibrary.USER_LIBRARY_ID)));
     }
 
