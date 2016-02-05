@@ -72,6 +72,9 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
 
     @Override
     public String CValue() {
+        if (GetDefinition().getCEntries().isEmpty()){
+            return "";
+        }
         String s = GetDefinition().getCEntries().get(comboBox.getSelectedIndex());
         if (s != null) {
             return s;
@@ -87,11 +90,11 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
 
     @Override
     public void setString(String selection) {
-        if (comboBox.getItemCount() == 0) {
-            return;
-        }
         this.selection = selection;
         if (comboBox == null) {
+            return;
+        }
+        if (comboBox.getItemCount() == 0) {
             return;
         }
         if (selection == null) {

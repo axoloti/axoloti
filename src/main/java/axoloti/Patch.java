@@ -134,11 +134,11 @@ public class Patch {
         ArrayList<File> files = GetDependendSDFiles();
         for (File f : files) {
             if (!f.exists()) {
-                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "File reference unresolved: {}", f.getName());
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "File reference unresolved: {0}", f.getName());
                 continue;
             }
             if (!f.canRead()) {
-                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Can't read file {}", f.getName());
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Can't read file {0}", f.getName());
                 continue;
             }
             if (!SDCardInfo.getInstance().exists(f.getName(), f.lastModified(), f.length())) {

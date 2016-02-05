@@ -25,7 +25,6 @@ public class AttributeTypes {
 
     final static AxoAttribute types[] = {
         new AxoAttributeComboBox(),
-        new AxoAttributeInt32(),
         new AxoAttributeObjRef(),
         new AxoAttributeSpinner(),
         new AxoAttributeTablename(),
