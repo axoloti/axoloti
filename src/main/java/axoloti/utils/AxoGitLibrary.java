@@ -19,6 +19,7 @@ import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.StatusCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.dircache.DirCache;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
@@ -29,7 +30,8 @@ import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 public class AxoGitLibrary extends AxolotiLibrary {
-    public static String TYPE="git";
+
+    public static String TYPE = "git";
 
     public AxoGitLibrary(String id, String type, String lloc, boolean e, String rloc, boolean auto) {
         super(id, type, lloc, e, rloc, auto);
@@ -96,11 +98,11 @@ public class AxoGitLibrary extends AxolotiLibrary {
         File ldir = new File(getLocalLocation());
 
         if (!usingSubmodule()) {
-            if(getRemoteLocation()==null || getRemoteLocation().length()==0) {
+            if (getRemoteLocation() == null || getRemoteLocation().length() == 0) {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "init FAILED - no remote specified : {0}", getId());
                 return;
             }
-            
+
             if (delete && ldir.exists()) {
                 try {
                     delete(ldir);
@@ -212,12 +214,13 @@ public class AxoGitLibrary extends AxolotiLibrary {
 
     private boolean add(Git git) {
         AddCommand cmd = git.add();
-        String pre = "";
         if (getContributorPrefix() != null && getContributorPrefix().length() > 0) {
-            pre = getContributorPrefix() + File.separator;
+            cmd.addFilepattern("objects/" + getContributorPrefix() + "/.");
+            cmd.addFilepattern("patches/" + getContributorPrefix() + "/.");
+        } else {
+            cmd.addFilepattern(".");
         }
-        cmd.addFilepattern("objects" + File.separator + pre + ".");
-        cmd.addFilepattern("patches" + File.separator + pre + ".");
+        cmd.setUpdate(false);
         try {
             cmd.call();
             return true;
@@ -233,6 +236,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
         CommitCommand cmd = git.commit();
         cmd.setAll(true);
         cmd.setMessage("commit from axoloti UI");
+        cmd.setAllowEmpty(false);
         try {
             RevCommit rev = cmd.call();
             return true;
@@ -272,8 +276,6 @@ public class AxoGitLibrary extends AxolotiLibrary {
             if (status.isClean()) {
                 return false;
             }
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications detected: {0}", getId());
-
             return true;
         } catch (GitAPIException ex) {
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
