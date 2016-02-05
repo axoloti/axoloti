@@ -75,6 +75,8 @@ public class Midi extends gentools {
         WriteAxoObject(catName, Create_pgmout());
         WriteAxoObject(catName, Create_clockgen());
         WriteAxoObject(catName, Create_queuestate());
+        WriteAxoObject(catName, Create_polytouchout());
+        WriteAxoObject(catName, Create_channeltouchout());
 
         catName = "midi/intern";
         WriteAxoObject(catName, Create_intern_noteout());
@@ -83,6 +85,8 @@ public class Midi extends gentools {
         WriteAxoObject(catName, Create_intern_ctlout_any());
         WriteAxoObject(catName, Create_intern_bendout());
         WriteAxoObject(catName, Create_intern_clockgen());
+        WriteAxoObject(catName, Create_intern_polytouchout());
+        WriteAxoObject(catName, Create_intern_channeltouchout());
 
         catName = "midi/ctrl";
         WriteAxoObject(catName, Create_mpe());
@@ -882,6 +886,46 @@ public class Midi extends gentools {
         return o;
     }
 
+    static AxoObject Create_polytouchout() {
+        AxoObject o = new AxoObject("poly touch", "Midi poly pressure output");
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
+        o.sAuthor = "Mark Harris";
+
+        o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
+        o.inlets.add(new InletFrac32Bipolar("note", "note (-64..63)"));
+        o.inlets.add(new InletFrac32Pos("pressure", "pressure"));
+        o.inlets.add(new InletBool32Rising("trig", "trigger"));
+        o.sLocalData = "int ntrig;\n"
+                + "int note;";
+        o.sInitCode = "note=0;ntrig=0;\n";
+        o.sKRateCode = ""
+                + "if ((%trig%>0) && !ntrig) {\n"
+                + "note = (64+(%note%>>21))&0x7F;\n"
+                + "MidiSend3((midi_device_t) %device%, MIDI_POLY_PRESSURE + (%channel%-1),note,%pressure%>>20);  ntrig=1;\n"
+                + "}\n"
+                + "if (!(%trig%>0) && ntrig) {ntrig=0;}\n";
+        return o;
+    }
+
+    static AxoObject Create_channeltouchout() {
+        AxoObject o = new AxoObject("channel touch", "Midi channel pressure output");
+        o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
+        o.sAuthor = "Mark Harris";
+
+        o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
+        o.inlets.add(new InletFrac32Pos("pressure", "pressure"));
+        o.inlets.add(new InletBool32Rising("trig", "trigger"));
+        o.sLocalData = "int ntrig;\n"
+                + "int note;";
+        o.sInitCode = "note=0;ntrig=0;\n";
+        o.sKRateCode = ""
+                + "if ((%trig%>0) && !ntrig) {\n"
+                + "MidiSend2((midi_device_t) %device%, MIDI_CHANNEL_PRESSURE + (%channel%-1),%pressure%>>20);  ntrig=1;\n"
+                + "}\n"
+                + "if (!(%trig%>0) && ntrig) {ntrig=0;}\n";
+        return o;
+    }
+
     static AxoObject Create_midiscript() {
         AxoObject o = new AxoObject("script", "script with 2 outputs, triggered by MIDI input");
         o.outlets.add(new OutletFrac32("out1_", "out1"));
@@ -1021,7 +1065,44 @@ public class Midi extends gentools {
                 + "%pos24ppq% = _pos24ppq;\n";
         return o;
     }
+    static AxoObject Create_intern_polytouchout() {
+        AxoObject o = new AxoObject("poly touch", "Midi poly pressure output");
+        o.sAuthor = "Mark Harris";
 
+        o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
+        o.inlets.add(new InletFrac32Bipolar("note", "note (-64..63)"));
+        o.inlets.add(new InletFrac32Pos("pressure", "pressure"));
+        o.inlets.add(new InletBool32Rising("trig", "trigger"));
+        o.sLocalData = "int ntrig;\n"
+                + "int note;";
+        o.sInitCode = "note=0;ntrig=0;\n";
+        o.sKRateCode = ""
+                + "if ((%trig%>0) && !ntrig) {\n"
+                + "note = (64+(%note%>>21))&0x7F;\n"
+                + "PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0,MIDI_POLY_PRESSURE + (%channel%-1),note,%pressure%>>20);  ntrig=1;\n"
+                + "}\n"
+                + "if (!(%trig%>0) && ntrig) {ntrig=0;}\n";
+        return o;
+    }
+
+    static AxoObject Create_intern_channeltouchout() {
+        AxoObject o = new AxoObject("channel touch", "Midi channel pressure output");
+        o.sAuthor = "Mark Harris";
+
+        o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
+        o.inlets.add(new InletFrac32Pos("pressure", "pressure"));
+        o.inlets.add(new InletBool32Rising("trig", "trigger"));
+        o.sLocalData = "int ntrig;\n"
+                + "int note;";
+        o.sInitCode = "note=0;ntrig=0;\n";
+        o.sKRateCode = ""
+                + "if ((%trig%>0) && !ntrig) {\n"
+                + "PatchMidiInHandler(MIDI_DEVICE_INTERNAL, 0, MIDI_CHANNEL_PRESSURE + (%channel%-1),%pressure%>>20,0);  ntrig=1;\n"
+                + "}\n"
+                + "if (!(%trig%>0) && ntrig) {ntrig=0;}\n";
+        return o;
+    }
+    
     static AxoObject Create_mpe() {
         AxoObject o = new AxoObject("mpe", "Controller input for MIDI Polyphonic Expression");
         o.sAuthor = "Mark Harris";
