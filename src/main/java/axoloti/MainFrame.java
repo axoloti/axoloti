@@ -1073,7 +1073,11 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         String cmd = e.getActionCommand();
         if (cmd.startsWith("open:")) {
             String fn = cmd.substring(5);
-            PatchGUI.OpenPatch(new File(fn));
+            if (fn.endsWith(".axb")) {
+                PatchBank.OpenBank(new File(fn));
+            } else if (fn.endsWith(".axp") || fn.endsWith(".axs") || fn.endsWith(".axh")) {
+                PatchGUI.OpenPatch(new File(fn));
+            }
         }
     }
 
