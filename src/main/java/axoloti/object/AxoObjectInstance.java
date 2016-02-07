@@ -894,6 +894,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             AxoObjectAbstract o = ol.get(0);
             AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject)getPatch().ChangeObjectInstanceType(this, o);
             oi.ao = getType().clone();            
+            oi.ao.sPath = "";
+            oi.ao.upgradeSha = null;
             oi.updateObj();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);

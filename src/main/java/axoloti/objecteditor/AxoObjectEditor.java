@@ -19,6 +19,8 @@ package axoloti.objecteditor;
 
 import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
+import axoloti.FileUtils;
+import axoloti.MainFrame;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.ObjectModifiedListener;
@@ -27,9 +29,6 @@ import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyVetoException;
-import java.beans.VetoableChangeListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
@@ -37,10 +36,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -74,6 +73,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
 
     public AxoObjectEditor(final AxoObject obj) {
         initComponents();
+        fileMenu1.initComponents();
         DocumentWindowList.RegisterWindow(this);
         obj.addObjectModifiedListener(this);
         jTextAreaLocalData = initCodeEditor(jPanelLocalData);
@@ -261,9 +261,12 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         rSyntaxTextAreaXML = new org.fife.ui.rsyntaxtextarea.RSyntaxTextArea();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenuFile = new javax.swing.JMenu();
+        fileMenu1 = new axoloti.menus.FileMenu();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItemSave = new javax.swing.JMenuItem();
+        jMenuItemSaveAs = new javax.swing.JMenuItem();
         windowMenu1 = new axoloti.menus.WindowMenu();
+        helpMenu1 = new axoloti.menus.HelpMenu();
 
         jInternalFrame1.setVisible(true);
 
@@ -544,7 +547,8 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
 
         getContentPane().add(jPanel1);
 
-        jMenuFile.setText("File");
+        fileMenu1.setText("File");
+        fileMenu1.add(jSeparator1);
 
         jMenuItemSave.setText("Save");
         jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
@@ -552,20 +556,26 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
                 jMenuItemSaveActionPerformed(evt);
             }
         });
-        jMenuFile.add(jMenuItemSave);
+        fileMenu1.add(jMenuItemSave);
 
-        jMenuBar1.add(jMenuFile);
+        jMenuItemSaveAs.setText("Save as...");
+        jMenuItemSaveAs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSaveAsActionPerformed(evt);
+            }
+        });
+        fileMenu1.add(jMenuItemSaveAs);
+
+        jMenuBar1.add(fileMenu1);
         jMenuBar1.add(windowMenu1);
+
+        helpMenu1.setText("Help");
+        jMenuBar1.add(helpMenu1);
 
         setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
-        applyChanges();
-        WriteAxoObject(obj.sPath, obj);
-    }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         Close();
@@ -579,9 +589,91 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
 
     }//GEN-LAST:event_jTextFieldAuthorFocusLost
 
+    private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
+        applyChanges();
+        WriteAxoObject(obj.sPath, obj);
+    }//GEN-LAST:event_jMenuItemSaveActionPerformed
+
+    private void jMenuItemSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveAsActionPerformed
+        applyChanges();
+        final JFileChooser fc = new JFileChooser(MainFrame.prefs.getCurrentFileDirectory());
+        fc.setAcceptAllFileFilterUsed(false);
+        String fn = obj.sPath;
+        if (fn == null) {
+            fn = "untitled";
+        }
+        File f = new File(fn);
+        fc.setSelectedFile(f);
+
+        String ext = ".axb";
+        fc.setFileFilter(FileUtils.axoFileFilter);
+
+        int returnVal = fc.showSaveDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            String filterext = ".axo";
+
+            File fileToBeSaved = fc.getSelectedFile();
+            ext = "";
+            String fname = fileToBeSaved.getAbsolutePath();
+            int dot = fname.lastIndexOf('.');
+            if (dot > 0 && fname.length() > dot + 3) {
+                ext = fname.substring(dot);
+            }
+
+            if (!(ext.equalsIgnoreCase(".axo"))) {
+
+                fileToBeSaved = new File(fc.getSelectedFile() + filterext);
+
+            } else if (!ext.equals(filterext)) {
+                Object[] options = {"Yes",
+                    "No"};
+                int n = JOptionPane.showOptionDialog(this,
+                        "File does not match filter, do you want to change extension to " + filterext + " ?",
+                        "Axoloti asks:",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                switch (n) {
+                    case JOptionPane.YES_OPTION:
+                        fileToBeSaved = new File(fname.substring(0, fname.length() - 4) + filterext);
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        return;
+                }
+            }
+
+            if (fileToBeSaved.exists()) {
+                Object[] options = {"Yes",
+                    "No"};
+                int n = JOptionPane.showOptionDialog(this,
+                        "File exists, do you want to overwrite ?",
+                        "Axoloti asks:",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                switch (n) {
+                    case JOptionPane.YES_OPTION:
+                        break;
+                    case JOptionPane.NO_OPTION:
+                        return;
+                }
+            }
+
+            obj.sPath = fileToBeSaved.getPath();
+            MainFrame.prefs.setCurrentFileDirectory(fileToBeSaved.getPath());
+            WriteAxoObject(obj.sPath, obj);
+        }
+    }//GEN-LAST:event_jMenuItemSaveAsActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.objecteditor.AttributeDefinitionsEditorPanel attributeDefinitionsEditorPanel1;
     private axoloti.objecteditor.DisplayDefinitionsEditorPanel displayDefinitionsEditorPanel1;
+    private axoloti.menus.FileMenu fileMenu1;
+    private axoloti.menus.HelpMenu helpMenu1;
     private axoloti.objecteditor.InletDefinitionsEditorPanel inletDefinitionsEditor1;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel10;
@@ -597,8 +689,8 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
     private javax.swing.JList jListDepends;
     private javax.swing.JList jListIncludes;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenuItem jMenuItemSave;
+    private javax.swing.JMenuItem jMenuItemSaveAs;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -617,6 +709,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
     private javax.swing.JScrollPane jScrollPane13;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextDesc;
     private javax.swing.JTextField jTextFieldAuthor;

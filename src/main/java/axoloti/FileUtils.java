@@ -22,7 +22,7 @@ public class FileUtils {
     public final static FileFilter axpFileFilter = new FileFilter() {
         @Override
         public boolean accept(File file) {
-            if (file.getName().endsWith("axp")) {
+            if (file.getName().endsWith(".axp")) {
                 return true;
             } else if (file.isDirectory()) {
                 return true;
@@ -39,7 +39,7 @@ public class FileUtils {
     public final static FileFilter axhFileFilter = new FileFilter() {
         @Override
         public boolean accept(File file) {
-            if (file.getName().endsWith("axh")) {
+            if (file.getName().endsWith(".axh")) {
                 return true;
             } else if (file.isDirectory()) {
                 return true;
@@ -56,7 +56,7 @@ public class FileUtils {
     public final static FileFilter axsFileFilter = new FileFilter() {
         @Override
         public boolean accept(File file) {
-            if (file.getName().endsWith("axs")) {
+            if (file.getName().endsWith(".axs")) {
                 return true;
             } else if (file.isDirectory()) {
                 return true;
@@ -73,7 +73,7 @@ public class FileUtils {
     public final static FileFilter axbFileFilter = new FileFilter() {
         @Override
         public boolean accept(File file) {
-            if (file.getName().endsWith("axb")) {
+            if (file.getName().endsWith(".axb")) {
                 return true;
             } else if (file.isDirectory()) {
                 return true;
@@ -84,6 +84,23 @@ public class FileUtils {
         @Override
         public String getDescription() {
             return "Axoloti Patch Bank";
+        }
+    };
+
+    public final static FileFilter axoFileFilter = new FileFilter() {
+        @Override
+        public boolean accept(File file) {
+            if (file.getName().endsWith(".axo")) {
+                return true;
+            } else if (file.isDirectory()) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public String getDescription() {
+            return "Axoloti Object";
         }
     };
 
