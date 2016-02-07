@@ -648,17 +648,17 @@ public class USBBulkConnection extends Connection {
         data[8] = 0;
         data[9] = 'f';
         int dy = date.get(Calendar.YEAR);
-        int dm = date.get(Calendar.MONTH)+1;
+        int dm = date.get(Calendar.MONTH) + 1;
         int dd = date.get(Calendar.DAY_OF_MONTH);
         int th = date.get(Calendar.HOUR_OF_DAY);
         int tm = date.get(Calendar.MINUTE);
         int ts = date.get(Calendar.SECOND);
         int t = ((dy - 1980) * 512) | (dm * 32) | dd;
         int d = (th * 2048) | (tm * 32) | (ts / 2);
-        data[10] = (byte)(t & 0xff);
-        data[11] = (byte)(t >> 8);
-        data[12] = (byte)(d & 0xff);
-        data[13] = (byte)(d >> 8);
+        data[10] = (byte) (t & 0xff);
+        data[11] = (byte) (t >> 8);
+        data[12] = (byte) (d & 0xff);
+        data[13] = (byte) (d >> 8);
         int i = 14;
         for (int j = 0; j < filename.length(); j++) {
             data[i++] = (byte) filename.charAt(j);
@@ -681,7 +681,7 @@ public class USBBulkConnection extends Connection {
         data[6] = 0;
         data[7] = 0;
         data[8] = 0;
-        data[9] = 'D';        
+        data[9] = 'D';
         data[10] = 0;
         data[11] = 0;
         data[12] = 0;
@@ -694,8 +694,35 @@ public class USBBulkConnection extends Connection {
         ClearSync();
         writeBytes(data);
         WaitSync();
-    }    
-    
+    }
+
+    @Override
+    public void TransmitChangeWorkingDirectory(String path) {
+        byte[] data = new byte[15 + path.length()];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'C';
+        data[4] = 0;
+        data[5] = 0;
+        data[6] = 0;
+        data[7] = 0;
+        data[8] = 0;
+        data[9] = 'C';
+        data[10] = 0;
+        data[11] = 0;
+        data[12] = 0;
+        data[13] = 0;
+        int i = 14;
+        for (int j = 0; j < path.length(); j++) {
+            data[i++] = (byte) path.charAt(j);
+        }
+        data[i] = 0;
+        ClearSync();
+        writeBytes(data);
+        WaitSync();
+    }
+
     @Override
     public void TransmitCreateDirectory(String filename, Calendar date) {
         byte[] data = new byte[15 + filename.length()];
@@ -713,7 +740,7 @@ public class USBBulkConnection extends Connection {
         data[11] = 0;
         data[12] = 0;
         data[13] = 0;
-        
+
         int i = 14;
         for (int j = 0; j < filename.length(); j++) {
             data[i++] = (byte) filename.charAt(j);
@@ -722,8 +749,8 @@ public class USBBulkConnection extends Connection {
         ClearSync();
         writeBytes(data);
         WaitSync();
-    }        
-    
+    }
+
     @Override
     public void TransmitAppendFile(byte[] buffer) {
         byte[] data = new byte[8];
@@ -1116,7 +1143,7 @@ public class USBBulkConnection extends Connection {
 //                    System.out.println("pch packet i=" +dataIndex + " v=" + c + " c="+ (char)(cc));
                 if (dataIndex == dataLength) {
                     //System.out.println("param packet complete 0x" + Integer.toHexString(packetData[1]) + "    0x" + Integer.toHexString(packetData[0]));
-                    RPacketParamChange(packetData[2], packetData[1],packetData[0]);
+                    RPacketParamChange(packetData[2], packetData[1], packetData[0]);
                     GoIdleState();
                 }
                 break;

@@ -275,7 +275,14 @@ void report_fatfs_error(int errno, const char *fn) {
 
   char *p;
   p = (char *)(BKPSRAM_BASE)+12;
+
   if (fn!=0) {
+    if (*fn != '/') {
+      // prepend CWD
+      f_getcwd(p,40);
+      while(*p!=0) p++;
+      *p++ = '/';
+    }
     int i = 20;
     while(i-- && *fn){
       *p++ = *fn++;

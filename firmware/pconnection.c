@@ -362,6 +362,13 @@ void ManipulateFile(void) {
       if (err != FR_OK) {
         report_fatfs_error(err,&FileName[6]);
       }
+    } else if (FileName[1]=='C') {
+      // change working directory
+      FRESULT err;
+      err = f_chdir(&FileName[6]);
+      if (err != FR_OK) {
+        report_fatfs_error(err,&FileName[6]);
+      }
     }
   }
 }

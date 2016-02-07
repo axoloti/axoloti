@@ -26,6 +26,7 @@ public abstract class Connection {
     abstract public void TransmitCreateFile(String filename, int size, Calendar date);
     abstract public void TransmitCreateDirectory(String filename, Calendar date);
     abstract public void TransmitDeleteFile(String filename);
+    abstract public void TransmitChangeWorkingDirectory(String path);
     abstract public void TransmitAppendFile(byte[] buffer);
     abstract public void TransmitCloseFile();
     abstract public void TransmitMemoryRead(int addr, int length);
