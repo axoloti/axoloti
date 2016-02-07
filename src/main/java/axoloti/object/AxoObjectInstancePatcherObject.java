@@ -85,6 +85,11 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         aoe.setVisible(true);
     }
 
+   @Override
+    public void ObjectModified(Object src) {
+        updateObj();
+    }        
+    
     @Override
     public void PostConstructor() {
         super.PostConstructor();
