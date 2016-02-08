@@ -46,3 +46,5 @@ deploy:
     repo: axoloti/axoloti
     tags: true
     all_branches: true
+git:
+    depth: 1000
