@@ -200,6 +200,8 @@ static FRESULT scan_files(char *path) {
 #endif
       if (fn[0] == '.')
         continue;
+      if (fno.fattrib & AM_HID)
+        continue;
       if (fno.fattrib & AM_DIR) {
         sprintf(&path[i], "/%s", fn);
         msg[0] = 'A';
