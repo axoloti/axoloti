@@ -48,7 +48,8 @@ typedef enum {
   watchdog_hard,
   brownout,
   goto_DFU,
-  fatfs_error
+  fatfs_error,
+  patch_load_crc_fail
 } faulttype;
 
 typedef struct {
@@ -243,6 +244,9 @@ void exception_checkandreport(void) {
     else if (exceptiondump->type == fatfs_error) {
       LogTextMessage("file error: %s, filename:\"%s\"",fs_err_name[exceptiondump->r0],(char *)(BKPSRAM_BASE)+12);
     }
+    else if (exceptiondump->type == patch_load_crc_fail) {
+      LogTextMessage("failed to load patch, firmware version mismatch? filename:\"%s\"",(char *)(BKPSRAM_BASE)+12);
+    }
     else
     {
       LogTextMessage("unknown exception?");
@@ -292,6 +296,28 @@ void report_fatfs_error(int errno, const char *fn) {
   exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
   exceptiondump->type = fatfs_error;
   exceptiondump->r0 = errno;
+}
+
+void report_patchLoadFail(const char *fn) {
+  if (exceptiondump->magicnumber == ERROR_MAGIC_NUMBER)
+    return;
+  exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
+  exceptiondump->type = patch_load_crc_fail;
+  char *p;
+  p = (char *)(BKPSRAM_BASE)+12;
+  if (fn!=0) {
+    if (*fn != '/') {
+      // prepend CWD
+      f_getcwd(p,40);
+      while(*p!=0) p++;
+      *p++ = '/';
+    }
+    int i = 20;
+    while(i-- && *fn){
+      *p++ = *fn++;
+    }
+  }
+  *p = 0;
 }
 
 void dbg_set_i(int i) {

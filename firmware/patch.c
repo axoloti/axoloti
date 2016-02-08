@@ -44,6 +44,7 @@ void InitPatch0(void) {
   patchMeta.npresets = 0;
   patchMeta.npreset_entries = 0;
   patchMeta.pPresets = 0;
+  patchMeta.patchID = 0;
 }
 
 int dspLoadPct; // DSP load in percent
@@ -116,6 +117,8 @@ void StopPatch(void) {
   }
 }
 
+static char loadFName[64] = {'f','l','a','s','h',0};
+
 void StartPatch(void) {
   KVP_ClearObjects();
   sdcard_attemptMountIfUnmounted();
@@ -125,7 +128,7 @@ void StartPatch(void) {
   patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
   (patchMeta.fptr_patch_init)(GetFirmwareID());
   if (patchMeta.fptr_dsp_process == 0) {
-    // failed, incompatible firmwareID?
+    report_patchLoadFail((const char *)&loadFName[0]);
     return;
   }
   patchStatus = 0;
@@ -167,7 +170,6 @@ void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t status,
 
 static const char *index_fn = "/index.axb";
 
-static char loadFName[64];
 static WORKING_AREA(waThreadLoader, 1024);
 static Thread *pThreadLoader;
 static msg_t ThreadLoader(void *arg) {

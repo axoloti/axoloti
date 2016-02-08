@@ -199,7 +199,7 @@ void sdcard_loadPatch(char *fname) {
 
   StopPatch();
 
-  LogTextMessage("load %s",fname);
+//  LogTextMessage("load %s",fname);
 
   // change working directory
 
@@ -210,7 +210,7 @@ void sdcard_loadPatch(char *fname) {
   }
   if (i>0) {
     fname[i]=0;
-    LogTextMessage("chdir %s",fname);
+//    LogTextMessage("chdir %s",fname);
     err = f_chdir(fname);
     if (err != FR_OK) {
       report_fatfs_error(err,fname);
