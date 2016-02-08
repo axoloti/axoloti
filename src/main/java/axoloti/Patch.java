@@ -868,6 +868,13 @@ public class Patch {
         c += "   };\n";
 
         c += "void ApplyPreset(int index){\n"
+                + "   if (!index) {\n"
+                + "     int i;\n"
+                + "     int32_t *p = GetInitParams();\n"
+                + "     for(i=0;i<NPEXCH;i++){\n"
+                + "        PExParameterChange(&PExch[i],p[i],0xFFEF);\n"
+                + "     }\n"
+                + "   }\n"
                 + "   index--;\n"
                 + "   if (index < NPRESETS) {\n"
                 + "     PresetParamChange_t *pa = (PresetParamChange_t *)(GetPresets());\n"
@@ -925,7 +932,7 @@ public class Patch {
 
     String GenerateParamInitCode3(String ClassName) {
         int s = ParameterInstances.size();
-        String c = "   static const int32_t * GetInitParams(void){\n"
+        String c = "   static int32_t * GetInitParams(void){\n"
                 + "      static const int32_t p[" + s + "]= {\n";
         for (int i = 0; i < s; i++) {
             c += "      " + ParameterInstances.get(i).GetValueRaw();
@@ -936,7 +943,7 @@ public class Patch {
             }
         }
         c += "      };\n"
-                + "      return &p[0];\n"
+                + "      return (int32_t *)&p[0];\n"
                 + "   }";
         return c;
     }

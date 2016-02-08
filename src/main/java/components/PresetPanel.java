@@ -98,7 +98,6 @@ public class PresetPanel extends javax.swing.JPanel {
         jButtonRI.setText("i");
         jButtonRI.setBorderPainted(false);
         jButtonRI.setDefaultCapable(false);
-        jButtonRI.setEnabled(false);
         jButtonRI.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jButtonRI.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
