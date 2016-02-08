@@ -17,11 +17,8 @@
  */
 package axoloti.menus;
 
-import axoloti.Axoloti;
 import static axoloti.MainFrame.prefs;
-import static axoloti.menus.PopulatePatchMenu.PopulatePatchMenu;
 import axoloti.utils.AxolotiLibrary;
-import java.io.File;
 import javax.swing.JMenu;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;

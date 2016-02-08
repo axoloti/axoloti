@@ -377,6 +377,7 @@
         <exec executable="git" outputproperty="tag.short.version" failifexecutionfails="false">
             <arg line = "describe --tags --always" />
         </exec>
+        <property name="tag.short.version" value="(git missing)"/>
         <exec executable="sed" inputstring="${tag.short.version}" outputproperty="short.version" failifexecutionfails="false">
             <arg line = "'s/[a-zA-Z\-].*//'" />
 	</exec>
@@ -391,12 +392,14 @@
 		<echo> calculated ${build.version}</echo>
     </target>
 
-    <target name="create.build.version" depends = "calc.build.version">
+    <target name="create.build.version" depends = "calc.build.version, calc.short.version">
         <property name="build.version" value="(git missing)"/>
-        <echo output="src/main/java/axoloti/Version.java" >package axoloti;</echo>
-        <echo output="src/main/java/axoloti/Version.java" append="true">public class Version {</echo>
-        <echo output="src/main/java/axoloti/Version.java" append="true">public final static String AXOLOTI_VERSION ="${build.version}";</echo>
-        <echo output="src/main/java/axoloti/Version.java" append="true">};</echo>
+        <property name="short.version" value="(git missing)"/>
+        <echo output="src/main/java/axoloti/Version.java" >package axoloti;${line.separator}</echo>
+        <echo output="src/main/java/axoloti/Version.java" append="true">public class Version {${line.separator}</echo>
+        <echo output="src/main/java/axoloti/Version.java" append="true">public final static String AXOLOTI_VERSION = "${build.version}";${line.separator}</echo>
+        <echo output="src/main/java/axoloti/Version.java" append="true">public final static String AXOLOTI_SHORT_VERSION = "${short.version}";${line.separator}</echo>
+        <echo output="src/main/java/axoloti/Version.java" append="true">};${line.separator}</echo>
     </target>
       
 </project>
