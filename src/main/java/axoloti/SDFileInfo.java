@@ -56,7 +56,7 @@ public class SDFileInfo {
         if (i > 0) {
             return filename.substring(0, i);
         } else {
-            return "";
+            return filename;
         }
     }
 
