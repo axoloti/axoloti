@@ -869,16 +869,18 @@ public class USBBulkConnection extends Connection {
     int CpuId1 = 0;
     int CpuId2 = 0;
     int fwcrc = -1;
-    int IID = 0;
 
     void Acknowledge(int DSPLoad, int PatchID, int Voltages, int CpuId1, int CpuId2) {
         synchronized (sync) {
             sync.Acked = true;
             sync.notifyAll();
         }
-        IID = PatchID;
         if (patch != null) {
-            patch.SetDSPLoad(DSPLoad);
+            if ((patch.GetIID() != PatchID) && patch.IsLocked()) {
+                patch.Unlock();
+            } else {
+                patch.SetDSPLoad(DSPLoad);
+            }
         }
         targetProfile.setVoltages(Voltages);
     }
