@@ -571,8 +571,21 @@ public class Io extends gentools {
             "63"
         };
         o.attributes.add(new AxoAttributeComboBox("headphones", HPVolM, HPVolC));
+        String OutputModeM[] = {
+            "Stereo",
+            "Mono(L)",
+            "Balanced(L)"
+        };
+        String OutputModeC[] = {
+            "A_STEREO",
+            "A_MONO",
+            "A_BALANCED"
+        };
+        o.attributes.add(new AxoAttributeComboBox("mode", OutputModeM, OutputModeC));
         o.sInitCode = "ADAU1961_WriteRegister(0x4023,(%headphones%<<2)+3);\n"
-                + "ADAU1961_WriteRegister(0x4024,(%headphones%<<2)+3);\n";
+                + "ADAU1961_WriteRegister(0x4024,(%headphones%<<2)+3);\n"
+                + "AudioOutputMode = %mode% ;\n"
+                ;
         return o;
     }
 
