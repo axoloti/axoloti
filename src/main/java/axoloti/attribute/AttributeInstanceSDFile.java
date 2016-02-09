@@ -17,6 +17,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.SDFileReference;
 import axoloti.attributedefinition.AxoAttributeSDFile;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.Constants;
@@ -133,9 +134,12 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
-    public ArrayList<File> GetDependendSDFiles() {
-        ArrayList<File> files = new ArrayList<File>(1);
-        files.add(getFile());
+    public ArrayList<SDFileReference> GetDependendSDFiles() {
+        ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
+        File f = getFile();
+        if (f.exists()) {
+            files.add(new SDFileReference(f, f.getName()));
+        }
         return files;
     }
 

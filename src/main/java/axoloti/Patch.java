@@ -54,6 +54,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -64,7 +65,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
+import qcmds.QCmdChangeWorkingDirectory;
 import qcmds.QCmdCompilePatch;
+import qcmds.QCmdCreateDirectory;
 import qcmds.QCmdLock;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
@@ -128,11 +131,11 @@ public class Patch {
         return settings;
     }
 
-    void GoLive() {
-        GetQCmdProcessor().AppendToQueue(new QCmdStop());
-
-        ArrayList<File> files = GetDependendSDFiles();
-        for (File f : files) {
+    void UploadDependentFiles() {
+        String sdpath = getSDCardPath();
+        ArrayList<SDFileReference> files = GetDependendSDFiles();
+        for (SDFileReference fref : files) {
+            File f = fref.localfile;
             if (!f.exists()) {
                 Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "File reference unresolved: {0}", f.getName());
                 continue;
@@ -141,13 +144,26 @@ public class Patch {
                 Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Can't read file {0}", f.getName());
                 continue;
             }
-            if (!SDCardInfo.getInstance().exists(f.getName(), f.lastModified(), f.length())) {
-                GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, f.getName()));
+            if (!SDCardInfo.getInstance().exists("/" + sdpath + "/" + fref.targetPath, f.lastModified(), f.length())) {
+                if (f.length() > 8 * 1024 * 1024) {
+                    Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
+                    continue;
+                }
+                GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, "/" + sdpath + "/" + fref.targetPath));
             } else {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
             }
         }
+    }
 
+    void GoLive() {
+        GetQCmdProcessor().AppendToQueue(new QCmdStop());
+        String f = "/" + getSDCardPath();
+        System.out.println("pathf" + f);
+        GetQCmdProcessor().AppendToQueue(new QCmdCreateDirectory(f));
+        GetQCmdProcessor().AppendToQueue(new QCmdChangeWorkingDirectory(f));
+//        GetQCmdProcessor().AppendToQueue(new QCmdStop());
+        UploadDependentFiles();
         ShowPreset(0);
         WriteCode();
         presetUpdatePending = false;
@@ -2368,10 +2384,10 @@ public class Patch {
         return patchframe;
     }
 
-    public ArrayList<File> GetDependendSDFiles() {
-        ArrayList<File> files = new ArrayList<File>();
+    public ArrayList<SDFileReference> GetDependendSDFiles() {
+        ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            ArrayList<File> f2 = o.GetDependendSDFiles();
+            ArrayList<SDFileReference> f2 = o.GetDependendSDFiles();
             if (f2 != null) {
                 files.addAll(f2);
             }
@@ -2392,7 +2408,7 @@ public class Patch {
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
         // create subdirs...
-        
+
         for (int i = 1; i < sdfilename.length(); i++) {
             if (sdfilename.charAt(i) == '/') {
                 qcmdprocessor.AppendToQueue(new qcmds.QCmdCreateDirectory(sdfilename.substring(0, i)));
@@ -2400,10 +2416,26 @@ public class Patch {
             }
         }
         qcmdprocessor.WaitQueueFinished();
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(getBinFile(), sdfilename));
+        Calendar cal;
+        if (dirty) {
+            cal = Calendar.getInstance();
+        } else {
+            cal = Calendar.getInstance();
+            if (FileNamePath != null && !FileNamePath.isEmpty()) {
+                File f = new File(FileNamePath);
+                if (f.exists()) {
+                    cal.setTimeInMillis(f.lastModified());
+                }
+            }
+        }
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(getBinFile(), sdfilename, cal));
     }
 
     public void UploadToSDCard() {
+        UploadToSDCard("/" + getSDCardPath() + "/patch.bin");
+    }
+
+    public String getSDCardPath() {
         String FileNameNoPath = getFileNamePath();
         String separator = System.getProperty("file.separator");
         int lastSeparatorIndex = FileNameNoPath.lastIndexOf(separator);
@@ -2411,9 +2443,9 @@ public class Patch {
             FileNameNoPath = FileNameNoPath.substring(lastSeparatorIndex + 1);
         }
         String FileNameNoExt = FileNameNoPath;
-        if (FileNameNoExt.endsWith(".axp") || FileNameNoExt.endsWith(".axs")) {
+        if (FileNameNoExt.endsWith(".axp") || FileNameNoExt.endsWith(".axs") || FileNameNoExt.endsWith(".axh")) {
             FileNameNoExt = FileNameNoExt.substring(0, FileNameNoExt.length() - 4);
         }
-        UploadToSDCard("/" + FileNameNoExt + "/patch.bin");
+        return FileNameNoExt;
     }
 }

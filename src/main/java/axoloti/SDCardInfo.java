@@ -26,7 +26,7 @@ import java.util.Calendar;
  */
 public class SDCardInfo {
 
-    ArrayList<SDFileInfo> files = new ArrayList<SDFileInfo>();
+    final ArrayList<SDFileInfo> files = new ArrayList<SDFileInfo>();
     boolean available = false;
     int clusters = 0;
     int clustersize = 0;
@@ -50,7 +50,7 @@ public class SDCardInfo {
         this.clusters = clusters;
         this.clustersize = clustersize;
         this.sectorsize = sectorsize;
-        files = new ArrayList<SDFileInfo>();
+        files.clear();
         busy = true;
         MainFrame.mainframe.filemanager.refresh();
     }
@@ -92,29 +92,39 @@ public class SDCardInfo {
             return;
         }
         SDFileInfo sdf = new SDFileInfo(fname, date, size);
-        files.add(sdf);
+        synchronized (files) {
+            files.add(sdf);
+        }
         MainFrame.mainframe.filemanager.refresh();
     }
 
     public void Delete(String fname) {
-        SDFileInfo f1 = null;
-        for (SDFileInfo f : files) {
-            if (f.filename.equalsIgnoreCase(fname)
-                    || f.filename.equalsIgnoreCase(fname + "/")) {
-                f1 = f;
-                break;
+        synchronized (files) {
+            SDFileInfo f1 = null;
+            for (SDFileInfo f : files) {
+                if (f.filename.equalsIgnoreCase(fname)
+                        || f.filename.equalsIgnoreCase(fname + "/")) {
+                    f1 = f;
+                    break;
+                }
             }
-        }
-        if (f1 != null) {
-            files.remove(f1);
-            MainFrame.mainframe.filemanager.refresh();
+            if (f1 != null) {
+                files.remove(f1);
+                MainFrame.mainframe.filemanager.refresh();
+            }
         }
     }
 
     public boolean exists(String name, long timestampEpoch, long size) {
-        for (SDFileInfo f : files) {
-            if (f.filename.equalsIgnoreCase("/" + name) && f.size == size && (Math.abs(f.timestamp.getTimeInMillis() - timestampEpoch) < 3000)) {
-                return true;
+        synchronized (files) {
+            if (!name.startsWith("/")) {
+                name = "/" + name;
+            }
+            System.out.println("exists? " + name);
+            for (SDFileInfo f : files) {
+                if (f.filename.equalsIgnoreCase(name) && f.size == size && (Math.abs(f.timestamp.getTimeInMillis() - timestampEpoch) < 3000)) {
+                    return true;
+                }
             }
         }
         return false;

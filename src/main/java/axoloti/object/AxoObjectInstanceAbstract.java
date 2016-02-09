@@ -20,6 +20,7 @@ package axoloti.object;
 import axoloti.MainFrame;
 import axoloti.Patch;
 import axoloti.PatchGUI;
+import axoloti.SDFileReference;
 import axoloti.attribute.AttributeInstance;
 import axoloti.inlets.InletInstance;
 import axoloti.outlets.OutletInstance;
@@ -616,7 +617,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public void ObjectModified(Object src) {
     }
 
-    public ArrayList<File> GetDependendSDFiles() {
+    public ArrayList<SDFileReference> GetDependendSDFiles() {
         return null;
     }
 }

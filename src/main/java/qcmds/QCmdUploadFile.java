@@ -35,6 +35,7 @@ public class QCmdUploadFile implements QCmdSerialTask {
 
     InputStream inputStream;
     final String filename;
+    final Calendar cal;
     File file;
     long size;
     long tsEpoch;
@@ -42,12 +43,21 @@ public class QCmdUploadFile implements QCmdSerialTask {
     public QCmdUploadFile(InputStream inputStream, String filename) {
         this.inputStream = inputStream;
         this.filename = filename;
+        this.cal = null;
     }
 
     public QCmdUploadFile(File file, String filename) {
         this.file = file;
         this.filename = filename;
         inputStream = null;
+        this.cal = null;
+    }
+
+    public QCmdUploadFile(File file, String filename, Calendar cal) {
+        this.file = file;
+        this.filename = filename;
+        inputStream = null;
+        this.cal = cal;
     }
 
     @Override
@@ -68,9 +78,14 @@ public class QCmdUploadFile implements QCmdSerialTask {
                 inputStream = new FileInputStream(file);
             }
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading: {0}", filename);
-            Calendar ts = Calendar.getInstance();
-            if (file != null) {
+            Calendar ts;
+            if (cal != null) {
+                ts = cal;
+            } else if (file != null) {
+                ts = Calendar.getInstance();
                 ts.setTimeInMillis(file.lastModified());
+            } else {
+                ts = Calendar.getInstance();
             }
             int tlength = inputStream.available();
             int remLength = inputStream.available();
@@ -103,9 +118,9 @@ public class QCmdUploadFile implements QCmdSerialTask {
 
             inputStream.close();
             connection.TransmitCloseFile();
-            
-            SDCardInfo.getInstance().AddFile(filename, (int) size, 0);
-            
+
+            SDCardInfo.getInstance().AddFile(filename, (int) size, ts);
+
             return this;
         } catch (IOException ex) {
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "IOException", ex);
