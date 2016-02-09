@@ -1227,7 +1227,17 @@ public class Patch {
                 + "  int i;\n"
                 + "  for(i=0;i<BUFSIZE;i++){\n"
                 + "    AudioInputLeft[i] = inbuf[i*2]>>4;\n"
-                + "    AudioInputRight[i] = inbuf[i*2+1]>>4;\n"
+                + "    switch(AudioInputMode) {\n"
+                + "       case A_MONO:\n"
+                + "             AudioInputRight[i] = AudioInputLeft[i];break;\n"
+                + "       case A_BALANCED:\n"
+                + "             AudioInputLeft[i] = (AudioInputLeft[i] - (inbuf[i*2+1]>>4) ) >> 1;\n"
+                + "             AudioInputRight[i] = AudioInputLeft[i];"
+                + "             break;\n"
+                + "       case A_STEREO:\n"
+                + "       default:\n"
+                + "             AudioInputRight[i] = inbuf[i*2+1]>>4;\n"
+                + "     }\n"
                 + "  }\n"
                 + "  root.dsp();\n";
         if (settings.getSaturate()) {
@@ -1372,6 +1382,7 @@ public class Patch {
         c += "     int32buffer AudioOutputRight;\n";
         c += "     typedef enum { A_STEREO, A_MONO, A_BALANCED } AudioModeType;\n";
         c += "     AudioModeType AudioOutputMode = A_STEREO;\n";
+        c += "     AudioModeType AudioInputMode = A_STEREO;\n";
 
         c += "static void PropagateToSub(ParameterExchange_t *origin) {\n"
                 + "      ParameterExchange_t *pex = (ParameterExchange_t *)origin->finalvalue;\n"
