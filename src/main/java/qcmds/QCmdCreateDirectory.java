@@ -49,7 +49,6 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
 
     @Override
     public String GetDoneMessage() {
-        SDCardInfo.getInstance().Delete(filename);
         return "Done creating directory";
     }
 
@@ -58,7 +57,11 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
         connection.ClearSync();
         Logger.getLogger(QCmdCreateDirectory.class.getName()).log(Level.INFO, "creating dir: {0}", filename);
         connection.TransmitCreateDirectory(filename, date);
-        SDCardInfo.getInstance().AddFile(filename, 0, date);
+        String fn = filename;
+        if (!fn.endsWith("/")) {
+            fn = fn + "/";
+        }
+        SDCardInfo.getInstance().AddFile(fn, 0, date);
         return this;
     }
 

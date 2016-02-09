@@ -18,7 +18,6 @@
 package qcmds;
 
 import axoloti.Connection;
-import axoloti.SDCardInfo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,19 +35,18 @@ public class QCmdChangeWorkingDirectory implements QCmdSerialTask {
 
     @Override
     public String GetStartMessage() {
-        return "Start deleting file on sdcard : " + filename;
+        return "Changing working directory on sdcard : " + filename;
     }
 
     @Override
     public String GetDoneMessage() {
-        SDCardInfo.getInstance().Delete(filename);
-        return "Done deleting file";
+        return "Done changing working directory";
     }
 
     @Override
     public QCmd Do(Connection connection) {
         connection.ClearSync();
-        Logger.getLogger(QCmdChangeWorkingDirectory.class.getName()).log(Level.INFO, "deleting: {0}", filename);
+        Logger.getLogger(QCmdChangeWorkingDirectory.class.getName()).log(Level.INFO, "Change working directory: {0}", filename);
         connection.TransmitChangeWorkingDirectory(filename);
         return this;
     }
