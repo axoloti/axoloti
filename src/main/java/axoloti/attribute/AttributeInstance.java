@@ -17,6 +17,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.SDFileReference;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
@@ -86,7 +87,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
         return attr;
     }
 
-    public ArrayList<File> GetDependendSDFiles() {
+    public ArrayList<SDFileReference> GetDependendSDFiles() {
         return null;
     }
 }

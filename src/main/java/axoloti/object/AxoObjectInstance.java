@@ -21,6 +21,7 @@ import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.Patch;
 import axoloti.PatchGUI;
+import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.attribute.*;
 import axoloti.attributedefinition.AxoAttribute;
@@ -91,7 +92,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     LabelComponent IndexLabel;
 
     boolean deferredObjTypeUpdate = false;
-    
+
     @Override
     public void refreshIndex() {
         if (patch != null) {
@@ -712,7 +713,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     }
 
     public final static String MidiHandlerFunctionHeader = "void MidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2) {\n";
-    
+
     @Override
     public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
         String s = "";
@@ -863,11 +864,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public ArrayList<DisplayInstance> GetDisplayInstances() {
         return displayInstances;
     }
-    
+
     @Override
     public void ObjectModified(Object src) {
         if (getPatch() != null) {
-            if (!getPatch().IsLocked()){
+            if (!getPatch().IsLocked()) {
                 getPatch().ChangeObjectInstanceType(this, this.getType());
             } else {
                 deferredObjTypeUpdate = true;
@@ -876,10 +877,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     }
 
     @Override
-    public ArrayList<File> GetDependendSDFiles() {
-        ArrayList<File> files = new ArrayList<File>();
+    public ArrayList<SDFileReference> GetDependendSDFiles() {
+        ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
         for (AttributeInstance a : attributeInstances) {
-            ArrayList<File> f2 = a.GetDependendSDFiles();
+            ArrayList<SDFileReference> f2 = a.GetDependendSDFiles();
             if (f2 != null) {
                 files.addAll(f2);
             }
@@ -889,11 +890,13 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     void ConvertToEmbeddedObj() {
         try {
-            ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object",null);
-            if (ol.isEmpty()) return;
+            ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object", null);
+            if (ol.isEmpty()) {
+                return;
+            }
             AxoObjectAbstract o = ol.get(0);
-            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject)getPatch().ChangeObjectInstanceType(this, o);
-            oi.ao = getType().clone();            
+            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatch().ChangeObjectInstanceType(this, o);
+            oi.ao = getType().clone();
             oi.ao.sPath = "";
             oi.ao.upgradeSha = null;
             oi.updateObj();
