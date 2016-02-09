@@ -1217,16 +1217,32 @@ public class Patch {
         if (settings.getSaturate()) {
             c += "  for(i=0;i<BUFSIZE;i++){\n"
                     + "    outbuf[i*2] = __SSAT(AudioOutputLeft[i],28)<<4;\n"
-                    + "    outbuf[i*2+1] = __SSAT(AudioOutputRight[i],28)<<4;\n"
-                    + "  }\n"
-                    + "}\n\n";
+                    + "    switch(AudioOutputMode) {\n"
+                    + "       case A_MONO:\n"
+                    + "             outbuf[i*2+1] = 0;break;\n"
+                    + "       case A_BALANCED:\n"
+                    + "             outbuf[i*2+1] = ~ outbuf[i*2];break;\n"
+                    + "       case A_STEREO:\n"
+                    + "       default:\n"
+                    + "             outbuf[i*2+1] = __SSAT(AudioOutputRight[i],28)<<4;\n"
+                    + "     }\n"
+                    + "  }\n";
         } else {
             c += "  for(i=0;i<BUFSIZE;i++){\n"
                     + "    outbuf[i*2] = AudioOutputLeft[i];\n"
-                    + "    outbuf[i*2+1] = AudioOutputRight[i];\n"
-                    + "  }\n"
-                    + "}\n\n";
+                    + "    switch(AudioOutputMode) {\n"
+                    + "       case A_MONO:\n"
+                    + "             outbuf[i*2+1] = 0;break;\n"
+                    + "       case A_BALANCED:\n"
+                    + "             outbuf[i*2+1] = ~ outbuf[i*2];break;\n"
+                    + "       case A_STEREO:\n"
+                    + "       default:\n"
+                    + "             outbuf[i*2+1] = AudioOutputRight[i];\n"
+                    + "     }\n"
+                    + "  }\n";
         }
+        c += "}\n\n";
+        
         c += "void ApplyPreset(int32_t i) {\n"
                 + "   root.ApplyPreset(i);\n"
                 + "}\n\n";
@@ -1338,6 +1354,8 @@ public class Patch {
         c += "     int32buffer AudioInputRight;\n";
         c += "     int32buffer AudioOutputLeft;\n";
         c += "     int32buffer AudioOutputRight;\n";
+        c += "     typedef enum { A_STEREO, A_MONO, A_BALANCED } AudioModeType;\n";
+        c += "     AudioModeType AudioOutputMode = A_STEREO;\n";
 
         c += "static void PropagateToSub(ParameterExchange_t *origin) {\n"
                 + "      ParameterExchange_t *pex = (ParameterExchange_t *)origin->finalvalue;\n"
