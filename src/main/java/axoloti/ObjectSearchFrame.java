@@ -406,7 +406,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 if (target_object == null) {
                     p.AddObjectInstance(x, new Point(patchLocX, patchLocY));
                 } else {
-                    p.ChangeObjectInstanceType(target_object, x);
+                    AxoObjectInstanceAbstract oi = p.ChangeObjectInstanceType(target_object, x);
                 }
             }
             setVisible(false);
