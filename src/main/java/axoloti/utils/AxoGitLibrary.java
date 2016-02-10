@@ -182,7 +182,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
                 }
             }
         } catch (GitAPIException ex) {
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (bracnh list) FAILED : {0}", getId());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (branch list) FAILED : {0}", getId());
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
         }
 
