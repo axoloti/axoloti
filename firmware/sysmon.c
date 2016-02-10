@@ -98,7 +98,7 @@ __attribute__((noreturn))
         pattern_index = 0;
         pattern = BLINK_OVERLOAD;
       }
-      LoadPatch("0:start.bin");
+      LoadPatch("/start.bin");
     }
     sdcsw_prev = sdcsw;
 #endif
