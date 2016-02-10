@@ -240,6 +240,8 @@ static msg_t ThreadLoader(void *arg) {
         t++;
         bytes_read--;
       }
+      if (!bytes_read)
+        LogTextMessage("patch load out-of-range %d",index);
 cont:
       ;
     }
