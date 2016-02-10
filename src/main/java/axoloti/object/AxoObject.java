@@ -560,7 +560,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     public File GetHelpPatchFile() {
-        if (helpPatch == null) {
+        if ((helpPatch == null) || (sPath == null) || sPath.isEmpty()) {
             return null;
         }
         File o = new File(sPath);
@@ -595,27 +595,27 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public AxoObject clone() throws CloneNotSupportedException {
-        AxoObject c = (AxoObject)super.clone();
+        AxoObject c = (AxoObject) super.clone();
         c.inlets = new ArrayList<Inlet>();
-        for(Inlet i:inlets){
+        for (Inlet i : inlets) {
             c.inlets.add(i.clone());
         }
         c.outlets = new ArrayList<Outlet>();
-        for(Outlet i:outlets){
+        for (Outlet i : outlets) {
             c.outlets.add(i.clone());
         }
         c.params = new ArrayList<Parameter>();
-        for(Parameter i:params){
+        for (Parameter i : params) {
             c.params.add(i.clone());
         }
         c.displays = new ArrayList<Display>();
-        for(Display i:displays){
+        for (Display i : displays) {
             c.displays.add(i.clone());
         }
         c.attributes = new ArrayList<AxoAttribute>();
-        for(AxoAttribute i:attributes){
+        for (AxoAttribute i : attributes) {
             c.attributes.add(i.clone());
         }
         return c;
-    }    
+    }
 }
