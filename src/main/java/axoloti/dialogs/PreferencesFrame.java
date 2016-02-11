@@ -494,8 +494,8 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
     private void jAddLibBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAddLibBtnActionPerformed
 
-        AxolotiLibrary lib = new AxolotiLibrary();
-        AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true, lib);
+        AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true);
+        AxolotiLibrary lib = d.getLibrary();
 
         AxolotiLibrary newlib;
         if (AxoGitLibrary.TYPE.equals(lib.getType())) {
