@@ -124,6 +124,8 @@ void StartPatch(void) {
   sdcard_attemptMountIfUnmounted();
   // reinit pin configuration for adc
   adc_configpads();
+  int *ccm; // clear ccmram area declared in ramlink.ld
+  for(ccm = 0x10000000;ccm<0x10000000+0x0000C000;ccm++) *ccm=0;
   patchMeta.fptr_dsp_process = 0;
   patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
   (patchMeta.fptr_patch_init)(GetFirmwareID());
