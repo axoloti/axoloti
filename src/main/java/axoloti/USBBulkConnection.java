@@ -891,9 +891,7 @@ public class USBBulkConnection extends Connection {
             public
                     void run() {
                 if (patch == null) {
-                    Logger.getLogger(USBBulkConnection.class
-                            .getName()).log(Level.INFO, "Rx paramchange patch null{0} {1}", new Object[]{index, value});
-
+                    //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange patch null {0} {1}", new Object[]{index, value});
                     return;
                 }
                 if (!patch.IsLocked()) {
