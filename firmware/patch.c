@@ -242,8 +242,11 @@ static msg_t ThreadLoader(void *arg) {
         t++;
         bytes_read--;
       }
-      if (!bytes_read)
+      if (!bytes_read) {
         LogTextMessage("patch load out-of-range %d",index);
+        strcpy(&loadFName[0],"/start.bin");
+        sdcard_loadPatch(loadFName);
+      }
 cont:
       ;
     }
