@@ -1304,7 +1304,7 @@ public class Patch {
                 + "  extern uint32_t _pbss_start;\n"
                 + "  extern uint32_t _pbss_end;\n"
                 + "  volatile uint32_t *p;\n"
-                + "  for(p=&_pbss_start;p<&_pbss_end;p++) *p++=0;\n"
+                + "  for(p=&_pbss_start;p<&_pbss_end;p++) *p=0;\n"
                 + "  {\n"
                 + "    funcpp_t fpp = &__ctor_array_start;\n"
                 + "    while (fpp < &__ctor_array_end) {\n"
