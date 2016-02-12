@@ -116,7 +116,7 @@ public class Axoloti {
         cacheFWDir = fwEnv;
         cacheDeveloper = false;
         String dirRelease = System.getProperty(RELEASE_DIR);
-        String fwRelease = dirRelease + "/firmware";
+        String fwRelease = dirRelease + File.separator + "firmware";
         if (!fwRelease.equals(cacheFWDir)) {
             File fR = new File(fwRelease);
             File fE = new File(fwEnv);
