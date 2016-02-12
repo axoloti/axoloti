@@ -122,7 +122,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
             try {
                 cmd.call();
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Repo initialised Successfully : {0}", getId());
-            } catch (GitAPIException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "init repo FAILED : {0}", getId());
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
                 return;
