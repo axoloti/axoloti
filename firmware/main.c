@@ -157,10 +157,10 @@ int main(void) {
     if (fs_ready && !palReadPad(SW2_PORT, SW2_PIN)){
       // button S2 not pressed
       FRESULT res;
-      res = f_stat("/start.bin", NULL);
-      if (res == FR_OK) {
-        sdcard_loadPatch("/start.bin");
-      }
+//      res = f_stat("/start.bin", NULL);
+//      if (res == FR_OK) {
+        LoadPatch("/start.bin");
+//      }
     }
 #endif
 
