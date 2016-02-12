@@ -225,36 +225,40 @@ public class Preferences {
         if (singleton == null) {
             File p = new File(Preferences.GetPrefsFileLoc());
             if (p.exists()) {
+                Preferences prefs = null;
                 try {
                     Serializer serializer = new Persister();
-                    Preferences prefs = serializer.read(Preferences.class, p);
-                    singleton = prefs;
-                    if (prefs.RuntimeDir
-                            == null) {
-                        prefs.RuntimeDir = System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
-                        prefs.SetDirty();
-                    } else {
-                        System.setProperty(axoloti.Axoloti.RUNTIME_DIR, prefs.RuntimeDir);
-                    }
-                    if (prefs.FirmwareDir
-                            == null) {
-                        prefs.FirmwareDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
-                        prefs.SetDirty();
-                    } else {
-                        System.setProperty(axoloti.Axoloti.FIRMWARE_DIR, prefs.FirmwareDir);
-                    }
-
-                    if (prefs.libraries.isEmpty()) {
-                        prefs.ResetLibraries(false);
-                    }
-
-                    prefs.buildObjectSearchPatch();
-
-                    singleton.MidiInputDevice = null; // clear it out for the future
+                    prefs = serializer.read(Preferences.class, p);
                 } catch (Exception ex) {
                     Logger.getLogger(Preferences.class
                             .getName()).log(Level.SEVERE, null, ex);
                 }
+                if (prefs == null){
+                    prefs = new Preferences();
+                }
+                singleton = prefs;
+                if (prefs.RuntimeDir
+                        == null) {
+                    prefs.RuntimeDir = System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
+                    prefs.SetDirty();
+                } else {
+                    System.setProperty(axoloti.Axoloti.RUNTIME_DIR, prefs.RuntimeDir);
+                }
+                if (prefs.FirmwareDir
+                        == null) {
+                    prefs.FirmwareDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
+                    prefs.SetDirty();
+                } else {
+                    System.setProperty(axoloti.Axoloti.FIRMWARE_DIR, prefs.FirmwareDir);
+                }
+
+                if (prefs.libraries.isEmpty()) {
+                    prefs.ResetLibraries(false);
+                }
+
+                prefs.buildObjectSearchPatch();
+
+                singleton.MidiInputDevice = null; // clear it out for the future
             } else {
                 singleton = new Preferences();
                 singleton.ResetLibraries(false);
