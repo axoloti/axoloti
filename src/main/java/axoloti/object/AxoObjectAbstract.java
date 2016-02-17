@@ -176,6 +176,10 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
         this.sha = sha;
     }
 
+    public void setUUID(String uuid) {
+        this.uuid = uuid;
+    }
+
     public HashSet<String> getUpgradeSha() {
         return upgradeSha;
     }

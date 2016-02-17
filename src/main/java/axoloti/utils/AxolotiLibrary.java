@@ -77,6 +77,11 @@ public class AxolotiLibrary {
         Revision = lib.Revision;
         ContributorPrefix = lib.ContributorPrefix;  
     }
+    
+    public boolean isReadOnly () {
+        // tmp, will be adding read-only property
+        return Id.equals(FACTORY_ID);
+    }
 
     public void setId(String Id) {
         this.Id = Id;

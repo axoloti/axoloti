@@ -469,7 +469,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonUploadBank)
-                .addContainerGap(185, Short.MAX_VALUE))
+                .addContainerGap(237, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -570,7 +570,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 .addComponent(jButtonAdd)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonOpen)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jButtonUpload)
                 .addContainerGap())
         );
