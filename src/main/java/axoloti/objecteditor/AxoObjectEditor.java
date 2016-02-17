@@ -118,7 +118,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jTextDesc.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (obj.sDescription != null && !obj.sLicense.equals(jTextDesc.getText())) {
+                if (obj.sLicense != null && !obj.sLicense.equals(jTextDesc.getText())) {
                     obj.sDescription = jTextDesc.getText();
                 }
                 FireObjectModified();
@@ -169,7 +169,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         rSyntaxTextAreaXML.setEditable(false);
         FireObjectModified();
         
-        // is it from teh factory?
+        // is it from the factory?
         AxolotiLibrary sellib = null; 
         for(AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
             if(obj.sPath!= null && obj.sPath.startsWith(lib.getLocalLocation())) {
@@ -182,6 +182,10 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         if(sellib !=null) {
             jMenuItemSave.setEnabled(!sellib.isReadOnly());
         }
+        if( obj.sPath == null) {
+            jMenuItemSave.setEnabled(false);
+        }
+            
     }
 
     void applyChanges() {
@@ -602,7 +606,6 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
         applyChanges();
-        obj.setSHA(obj.GenerateSHA());
         WriteAxoObject(obj.sPath, obj);
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
