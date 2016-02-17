@@ -5,24 +5,21 @@
  */
 package axoloti.objecteditor;
 
-import axoloti.FileUtils;
 import axoloti.MainFrame;
 import static axoloti.MainFrame.axoObjects;
 import axoloti.object.AxoObject;
-import axoloti.object.AxoObjects;
 import axoloti.utils.AxolotiLibrary;
-import static generatedobjects.gentools.WriteAxoObject;
+import generatedobjects.gentools;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author kodiak
  */
 public class AddToLibraryDlg extends javax.swing.JDialog {
+
     private final AxoObject obj_;
 
     public AddToLibraryDlg(AxoObjectEditor parent, boolean modal, AxoObject obj) {
@@ -210,27 +207,30 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
 
     private void jOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOKActionPerformed
         modifiedData();
-            
+
         AxoObject obj;
         try {
             obj = obj_.clone();
+            obj.shortId = jObjectName.getText();
+            obj.id = jObjectName.getText();
+            obj.setSHA(obj.GenerateSHA());
             obj.id = jPath.getText() + "/" + jObjectName.getText();
             obj.sPath = jFileTxt.getText();
             obj.setUUID(obj.GenerateUUID());
-            obj.setSHA(obj.GenerateSHA());
+            obj.addUpgradeSHA(null);
             File f = new File(obj.sPath);
             if (!f.exists()) {
                 File dir = f.getParentFile();
-                if(!dir.exists()) {
+                if (!dir.exists()) {
                     dir.mkdirs();
                 }
             }
-            WriteAxoObject(obj.sPath, obj);
+            gentools.WriteAxoObject(obj.sPath, obj);
             axoObjects.LoadAxoObjects();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AddToLibraryDlg.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         setVisible(false);
         dispose();
     }//GEN-LAST:event_jOKActionPerformed
@@ -271,63 +271,61 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 
-    
-    
     private void populateFields() {
         String objid = obj_.id;
         String objpath = "";
         int ididx = obj_.id.lastIndexOf('/');
-        if(ididx>0) {
-            objid = obj_.id.substring(ididx+1);
+        if (ididx > 0) {
+            objid = obj_.id.substring(ididx + 1);
             //default, will use lib path if we find it
             objpath = obj_.id.substring(0, ididx);
         }
-            
+
         jObjectName.setText(objid);
-      
-        AxolotiLibrary sellib = null; 
-        for(AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
+
+        AxolotiLibrary sellib = null;
+        for (AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
             if (!lib.isReadOnly()) {
                 jLibrary.addItem(lib.getId());
             }
-            if(obj_.sPath!= null && obj_.sPath.startsWith(lib.getLocalLocation())) {
-                
-                if(sellib == null || sellib.getLocalLocation().length() < lib.getLocalLocation().length()) {
+            if (obj_.sPath != null && obj_.sPath.startsWith(lib.getLocalLocation())) {
+
+                if (sellib == null || sellib.getLocalLocation().length() < lib.getLocalLocation().length()) {
                     sellib = lib;
                 }
             }
         }
-        
-        if(sellib == null || sellib.isReadOnly()) {
+
+        if (sellib == null || sellib.isReadOnly()) {
             jLibrary.setSelectedItem(AxolotiLibrary.USER_LIBRARY_ID);
         } else {
             jLibrary.setSelectedItem(sellib.getId());
         }
-        if (sellib!=null) {
+        if (sellib != null) {
             String cp = sellib.getContributorPrefix();
-            int cplen =  ( cp!= null && cp.length() > 0 ? cp.length() + 1 : 0);
+            int cplen = (cp != null && cp.length() > 0 ? cp.length() + 1 : 0);
             // allow for 'objects'
-            String tmp =  obj_.sPath.substring(sellib.getLocalLocation().length());
+            String tmp = obj_.sPath.substring(sellib.getLocalLocation().length());
             int lidx = tmp.lastIndexOf(File.separator);
-            tmp = tmp.substring(8 + cplen,lidx);
+            tmp = tmp.substring(8 + cplen, lidx);
             objpath = tmp.replace(File.separatorChar, '/');
         }
         jPath.setText(objpath);
         modifiedData();
     }
-    
+
     private void modifiedData() {
-        if(jLibrary.getSelectedIndex() >= 0 )
-        {
+        jObjectName.setText(jObjectName.getText().trim());
+        jPath.setText(jPath.getText().trim());
+        if (jLibrary.getSelectedIndex() >= 0) {
             AxolotiLibrary lib = MainFrame.prefs.getLibrary((String) jLibrary.getSelectedObjects()[0]);
             StringBuilder file = new StringBuilder();
             StringBuilder objname = new StringBuilder();
- 
+
             file.append(lib.getLocalLocation());
             file.append("objects").append(File.separator);
             String cp = lib.getContributorPrefix();
-            if(cp !=  null && cp.length()>0)
-            {
+            if (cp != null && cp.length() > 0) {
                 file.append(cp).append(File.separator);
                 objname.append(cp).append(File.separator);
             }
