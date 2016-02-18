@@ -54,6 +54,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
+@Deprecated
 public class gentools {
 
     static protected Serializer serializer = new Persister();
@@ -213,7 +214,7 @@ public class gentools {
             o.SetIncludes(null);
         }
         o.id = catname + "/" + relativeID; // uuid based on full name
-        String upgradeSha = o.GenerateSHA();
+//        String upgradeSha = o.GenerateSHA();
         o.getUUID();
         o.id = relativeID;
         if (o instanceof AxoObject) {
@@ -301,11 +302,11 @@ public class gentools {
             }
         }
 
-        String sha = o.GenerateSHA();
-        o.setSHA(sha);
-        if ((upgradeSha != null) && (!upgradeSha.equals(sha))) {
-            o.addUpgradeSHA(upgradeSha);
-        }
+//        String sha = o.GenerateSHA();
+//        o.setSHA(sha);
+//        if ((upgradeSha != null) && (!upgradeSha.equals(sha))) {
+//            o.addUpgradeSHA(upgradeSha);
+//        }
     }
 
     static public void WriteAxoObject(String path, AxoObjectAbstract o) {

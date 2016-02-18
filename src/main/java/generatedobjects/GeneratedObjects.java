@@ -30,6 +30,7 @@ import java.util.ArrayList;
  *
  * @author Johannes Taelman
  */
+@Deprecated
 public class GeneratedObjects extends gentools {
 
     static public void WriteAxoObjects() {

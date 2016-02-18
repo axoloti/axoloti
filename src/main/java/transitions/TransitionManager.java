@@ -19,7 +19,6 @@ package transitions;
 
 import axoloti.MainFrame;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.object.AxoObjects;
 import axoloti.utils.AxolotiLibrary;
 import java.io.File;
 import java.util.logging.Level;
@@ -38,36 +37,13 @@ public class TransitionManager {
 
     String filename = "objects/transitions.xml";
 
-    public void CreateTransitions() {
-        transitions = new Transitions();
-        AxoObjects oldObjects = new AxoObjects();
-        oldObjects.LoadAxoObjects("obsolete_objects");
-        for (AxoObjectAbstract oOld : oldObjects.ObjectList) {
-            AxoObjectAbstract oNew = MainFrame.axoObjects.GetAxoObjectFromSHA(oOld.getSHA());
-            if (oNew != null) {
-                if (!oOld.id.equals(oNew.id)) {
-                    //transitions.transitions.put(oOld.id, oNew.id);
-                    NameTransition tr = new NameTransition(oNew.id);
-                    transitions.nametransitions.put(oOld.shortId, tr);
-                }
-            } else {
-                System.out.println(oOld.shortId);
-            }
-        }
-        Serializer serializer = new Persister();
-        try {
-            serializer.write(transitions, new File(filename));
-        } catch (Exception ex) {
-            Logger.getLogger(TransitionManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     public void LoadTransitions() {
         Serializer serializer = new Persister();
         try {
             AxolotiLibrary lib = MainFrame.prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
             if(lib != null) {
-                transitions = serializer.read(Transitions.class, new File(lib.getLocalLocation() + filename));
+                // loose transition read, ignore sha transitions
+                transitions = serializer.read(Transitions.class, new File(lib.getLocalLocation() + filename),false);
             } else {
                 Logger.getLogger(TransitionManager.class.getName()).log(Level.WARNING,"not loading transitions cannot find factory library");
             }
@@ -87,14 +63,5 @@ public class TransitionManager {
             }
         }
         return null;
-    }
-
-    public AxoObjectAbstract GetObjectFromSha(String sha) {
-        ShaTransition str = transitions.shatransitions.get(sha);
-        if (str == null) {
-            return null;
-        }
-        AxoObjectAbstract r = MainFrame.axoObjects.GetAxoObjectFromSHA(str.NewSha);
-        return r;
     }
 }

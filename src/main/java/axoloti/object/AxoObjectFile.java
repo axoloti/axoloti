@@ -17,10 +17,14 @@
  */
 package axoloti.object;
 
+import axoloti.Version;
 import java.util.ArrayList;
+import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Complete;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -28,6 +32,8 @@ import org.simpleframework.xml.Root;
  */
 @Root(name = "objdefs")
 public class AxoObjectFile {
+    @Attribute(required = false)
+    String appVersion;
 
     @ElementListUnion({
         @ElementList(entry = "obj.normal", type = AxoObject.class, inline = true, required = false),
@@ -38,5 +44,16 @@ public class AxoObjectFile {
 
     public AxoObjectFile() {
         objs = new ArrayList<AxoObjectAbstract>();
+    }
+    
+    @Complete 
+    public void Complete() {
+        // called after deserialializtion
+    }
+    
+    @Persist
+    public void Persist() {
+        // called prior to serialization
+        appVersion = Version.AXOLOTI_SHORT_VERSION;
     }
 }

@@ -24,7 +24,6 @@ import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.ObjectModifiedListener;
 import axoloti.utils.AxolotiLibrary;
-import static generatedobjects.gentools.WriteAxoObject;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
@@ -48,9 +47,10 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectModifiedListener {
+public final class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectModifiedListener {
 
-    final AxoObject obj;
+    AxoObject editObj;
+    final AxoObject origObj;
     private final RSyntaxTextArea jTextAreaLocalData;
     private final RSyntaxTextArea jTextAreaInitCode;
     private final RSyntaxTextArea jTextAreaKRateCode;
@@ -69,11 +69,10 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         return rsta;
     }
 
-    public AxoObjectEditor(final AxoObject obj) {
+    public AxoObjectEditor(final AxoObject origObj, boolean editOriginal) {
         initComponents();
         fileMenu1.initComponents();
         DocumentWindowList.RegisterWindow(this);
-        obj.addObjectModifiedListener(this);
         jTextAreaLocalData = initCodeEditor(jPanelLocalData);
         jTextAreaInitCode = initCodeEditor(jPanelInitCode);
         jTextAreaKRateCode = initCodeEditor(jPanelKRateCode2);
@@ -81,16 +80,28 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jTextAreaDisposeCode = initCodeEditor(jPanelDisposeCode);
         jTextAreaMidiCode = initCodeEditor(jPanelMidiCode2);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
-        setTitle(obj.id);
-        this.obj = obj;
+        setTitle(origObj.id);
+        this.origObj = origObj;
+        if (editOriginal) {
+            this.editObj = origObj;
+        }
+        else {
+            try {
+                this.editObj = origObj.clone();
+            } catch (CloneNotSupportedException ex) {
+                Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
+                this.editObj = new AxoObject();
+            }
+        }
+        editObj.addObjectModifiedListener(this);
 
-        jLabelName.setText(obj.getCName());
-        jTextFieldAuthor.setText(obj.sAuthor);
+        jLabelName.setText(editObj.getCName());
+        jTextFieldAuthor.setText(editObj.sAuthor);
         jTextFieldAuthor.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (obj.sAuthor != null && !obj.sAuthor.equals(jTextFieldAuthor.getText())) {
-                    obj.sAuthor = jTextFieldAuthor.getText();
+                if (editObj.sAuthor != null && !editObj.sAuthor.equals(jTextFieldAuthor.getText())) {
+                    editObj.sAuthor = jTextFieldAuthor.getText();
                 }
                 FireObjectModified();
             }
@@ -100,12 +111,12 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
             }
         });
 
-        jTextFieldLicense.setText(obj.sLicense);
+        jTextFieldLicense.setText(editObj.sLicense);
         jTextFieldLicense.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (obj.sLicense != null && !obj.sLicense.equals(jTextFieldLicense.getText())) {
-                    obj.sLicense = jTextFieldLicense.getText();
+                if (editObj.sLicense != null && !editObj.sLicense.equals(jTextFieldLicense.getText())) {
+                    editObj.sLicense = jTextFieldLicense.getText();
                 }
                 FireObjectModified();
             }
@@ -114,12 +125,12 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
             public void focusGained(FocusEvent e) {
             }
         });
-        jTextDesc.setText(obj.sDescription);
+        jTextDesc.setText(editObj.sDescription);
         jTextDesc.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (obj.sLicense != null && !obj.sLicense.equals(jTextDesc.getText())) {
-                    obj.sDescription = jTextDesc.getText();
+                if (editObj.sLicense != null && !editObj.sLicense.equals(jTextDesc.getText())) {
+                    editObj.sDescription = jTextDesc.getText();
                 }
                 FireObjectModified();
             }
@@ -131,20 +142,20 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
 
         jLabelMidiPrototype.setText(AxoObjectInstance.MidiHandlerFunctionHeader);
 
-        inletDefinitionsEditor1.initComponents(obj);
-        outletDefinitionsEditorPanel1.initComponents(obj);
-        paramDefinitionsEditorPanel1.initComponents(obj);
-        attributeDefinitionsEditorPanel1.initComponents(obj);
-        displayDefinitionsEditorPanel1.initComponents(obj);
+        inletDefinitionsEditor1.initComponents(editObj);
+        outletDefinitionsEditorPanel1.initComponents(editObj);
+        paramDefinitionsEditorPanel1.initComponents(editObj);
+        attributeDefinitionsEditorPanel1.initComponents(editObj);
+        displayDefinitionsEditorPanel1.initComponents(editObj);
 
-        if (obj.includes != null) {
-            for (String i : obj.includes) {
+        if (editObj.includes != null) {
+            for (String i : editObj.includes) {
                 ((DefaultListModel) jListIncludes.getModel()).addElement(i);
             }
         }
 
-        if (obj.depends != null) {
-            for (String i : obj.depends) {
+        if (editObj.depends != null) {
+            for (String i : editObj.depends) {
                 ((DefaultListModel) jListDepends.getModel()).addElement(i);
             }
         }
@@ -156,7 +167,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
 
             @Override
             public void focusLost(FocusEvent e) {
-                applyChanges();
+                applyChangesToEdit();
             }
         };
 
@@ -168,46 +179,59 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         jTextAreaMidiCode.addFocusListener(fl);
         rSyntaxTextAreaXML.setEditable(false);
         FireObjectModified();
-        
+
         // is it from the factory?
-        AxolotiLibrary sellib = null; 
-        for(AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
-            if(obj.sPath!= null && obj.sPath.startsWith(lib.getLocalLocation())) {
-                
-                if(sellib == null || sellib.getLocalLocation().length() < lib.getLocalLocation().length()) {
+        AxolotiLibrary sellib = null;
+        for (AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
+            if (editObj.sPath != null && editObj.sPath.startsWith(lib.getLocalLocation())) {
+
+                if (sellib == null || sellib.getLocalLocation().length() < lib.getLocalLocation().length()) {
                     sellib = lib;
                 }
             }
         }
-        if(sellib !=null) {
+        if (sellib != null) {
             jMenuItemSave.setEnabled(!sellib.isReadOnly());
         }
-        if( obj.sPath == null) {
+        if (editObj.sPath == null) {
             jMenuItemSave.setEnabled(false);
         }
-            
     }
 
-    void applyChanges() {
-        obj.sLocalData = jTextAreaLocalData.getText();
-        obj.sInitCode = jTextAreaInitCode.getText();
-        obj.sKRateCode = jTextAreaKRateCode.getText();
-        obj.sSRateCode = jTextAreaSRateCode.getText();
-        obj.sDisposeCode = jTextAreaDisposeCode.getText();
-        obj.sMidiCode = jTextAreaMidiCode.getText();
+    void applyChangesToEdit() {
+        editObj.sLocalData = jTextAreaLocalData.getText();
+        editObj.sInitCode = jTextAreaInitCode.getText();
+        editObj.sKRateCode = jTextAreaKRateCode.getText();
+        editObj.sSRateCode = jTextAreaSRateCode.getText();
+        editObj.sDisposeCode = jTextAreaDisposeCode.getText();
+        editObj.sMidiCode = jTextAreaMidiCode.getText();
+    }
+
+    void applyChangesToOriginal() {
+        applyChangesToEdit();
+        origObj.sAuthor = editObj.sAuthor;
+        origObj.sDescription = editObj.sDescription;
+        origObj.sLicense = editObj.sLicense;
+        origObj.helpPatch = editObj.helpPatch;
+        origObj.sLocalData = editObj.sLocalData;
+        origObj.sInitCode = editObj.sInitCode;
+        origObj.sKRateCode = editObj.sKRateCode;
+        origObj.sSRateCode = editObj.sSRateCode;
+        origObj.sDisposeCode = editObj.sDisposeCode;
+        origObj.sMidiCode = editObj.sMidiCode;
     }
 
     void FireObjectModified() {
-        jTextAreaLocalData.setText(obj.sLocalData);
-        jTextAreaInitCode.setText(obj.sInitCode);
-        jTextAreaKRateCode.setText(obj.sKRateCode);
-        jTextAreaSRateCode.setText(obj.sSRateCode);
-        jTextAreaDisposeCode.setText(obj.sDisposeCode);
-        jTextAreaMidiCode.setText(obj.sMidiCode);
+        jTextAreaLocalData.setText(editObj.sLocalData);
+        jTextAreaInitCode.setText(editObj.sInitCode);
+        jTextAreaKRateCode.setText(editObj.sKRateCode);
+        jTextAreaSRateCode.setText(editObj.sSRateCode);
+        jTextAreaDisposeCode.setText(editObj.sDisposeCode);
+        jTextAreaMidiCode.setText(editObj.sMidiCode);
         Serializer serializer = new Persister();
         ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
         try {
-            serializer.write(obj, os);
+            serializer.write(editObj, os);
         } catch (Exception ex) {
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -215,14 +239,14 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
         rSyntaxTextAreaXML.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
         rSyntaxTextAreaXML.setCodeFoldingEnabled(true);
 
-        AxoObjectInstance obji = obj.CreateInstance(null, "test", new Point(0, 0));
+        AxoObjectInstance obji = editObj.CreateInstance(null, "test", new Point(0, 0));
         jPanelKRateCode1.setText(obji.GenerateDoFunctionPlusPlus("", "", false));
         jPanelKRateCode1.setFont(jTextAreaKRateCode.getFont());
     }
 
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
-        obj.removeObjectModifiedListener(this);
+        editObj.removeObjectModifiedListener(this);
         dispose();
     }
 
@@ -605,15 +629,16 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectMod
     }//GEN-LAST:event_jTextFieldAuthorFocusLost
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
-        applyChanges();
-        WriteAxoObject(obj.sPath, obj);
+        applyChangesToOriginal();
+
+        MainFrame.axoObjects.WriteAxoObject(editObj.sPath, editObj);
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void jMenuItemAddToLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddToLibraryActionPerformed
-        applyChanges();
-        AddToLibraryDlg dlg = new AddToLibraryDlg(this, true,obj);
+        applyChangesToEdit();
+        AddToLibraryDlg dlg = new AddToLibraryDlg(this, true, editObj);
         dlg.setVisible(true);
-  //      Close();
+        //      Close();
     }//GEN-LAST:event_jMenuItemAddToLibraryActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

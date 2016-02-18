@@ -64,6 +64,8 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
+import org.simpleframework.xml.core.Complete;
+import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Persister;
 import qcmds.QCmdChangeWorkingDirectory;
 import qcmds.QCmdCompilePatch;
@@ -83,6 +85,8 @@ import qcmds.QCmdUploadPatch;
 @Root
 public class Patch {
 
+    @Attribute(required = false)
+    String appVersion;
     public @ElementListUnion({
         @ElementList(entry = "obj", type = AxoObjectInstance.class, inline = true, required = false),
         @ElementList(entry = "patcher", type = AxoObjectInstancePatcher.class, inline = true, required = false),
@@ -115,7 +119,18 @@ public class Patch {
     private AxoObjectInstanceAbstract controllerinstance;
 
     public boolean presetUpdatePending = false;
-
+    
+    @Complete 
+    public void Complete() {
+        // called after deserialializtion
+    }
+    
+    @Persist
+    public void Persist() {
+        // called prior to serialization
+        appVersion = Version.AXOLOTI_SHORT_VERSION;
+    }
+    
     MainFrame GetMainFrame() {
         return MainFrame.mainframe;
     }
@@ -200,7 +215,7 @@ public class Patch {
 
     public Patch() {
         super();
-    }
+   }
 
     public void PostContructor() {
         for (AxoObjectInstanceAbstract o : objectinstances) {

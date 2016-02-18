@@ -43,7 +43,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,6 +61,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
     @Attribute(name = "type")
     public String typeName;
+    @Deprecated
     @Attribute(name = "sha", required = false)
     public String typeSHA;
     @Attribute(name = "uuid", required = false)
@@ -122,12 +122,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
             System.out.println(rPath);
             typeName = rPath;
-//            File f = new File();
-//            f.ge
-//            typeName = 
         }
 
-        typeSHA = type.getSHA();
         typeUUID = type.getUUID();
         this.InstanceName = InstanceName1;
         this.x = location.x;
@@ -185,13 +181,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                 typeName = type.id;
             }
         }
-        if ((type == null) && (typeSHA != null)) {
-            type = MainFrame.axoObjects.GetAxoObjectFromSHA(typeSHA);
-            if (type != null) {
-                System.out.println("restored from SHA:" + type.id);
-                typeName = type.id;
-            }
-        }
         if (type == null) {
             ArrayList<AxoObjectAbstract> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, patch.GetCurrentWorkingDirectory());
             if (types == null) {
@@ -206,7 +195,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     type = aou.Load();
                     return (AxoObject) type;
                 }
-                typeSHA = type.getSHA();
             }
         }
         return type;

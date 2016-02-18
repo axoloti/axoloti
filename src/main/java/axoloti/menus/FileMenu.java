@@ -185,8 +185,8 @@ public class FileMenu extends JMenu {
         });
         add(jMenuQuit);
 
+        jMenuRegenerateObjects.setVisible(false);
         if (!Preferences.LoadPreferences().getExpertMode()) {
-            jMenuRegenerateObjects.setVisible(false);
             jMenuAutoTest.setVisible(false);
         }
     }
@@ -196,6 +196,7 @@ public class FileMenu extends JMenu {
     private javax.swing.JMenuItem jMenuOpen;
     private javax.swing.JMenuItem jMenuOpenURL;
     private javax.swing.JMenuItem jMenuQuit;
+    @Deprecated
     private javax.swing.JMenuItem jMenuRegenerateObjects;
     private javax.swing.JMenuItem jMenuReloadObjects;
     private javax.swing.JMenuItem jMenuSync;
