@@ -8,6 +8,7 @@ package axoloti.objecteditor;
 import axoloti.MainFrame;
 import static axoloti.MainFrame.axoObjects;
 import axoloti.object.AxoObject;
+import axoloti.object.AxoObjects;
 import axoloti.utils.AxolotiLibrary;
 import java.io.File;
 import java.util.logging.Level;
@@ -328,7 +329,7 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
             objname.append(jPath.getText()).append(File.separator);
             file.append(jPath.getText()).append(File.separator);
             objname.append(jObjectName.getText());
-            file.append(jObjectName.getText());
+            file.append(AxoObjects.ConvertToLegalFilename(jObjectName.getText()));
             jFileTxt.setText(file.toString() + ".axo");
             jObjectNameTxt.setText(objname.toString());
         }

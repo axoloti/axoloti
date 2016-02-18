@@ -356,7 +356,7 @@ public class AxoObjects {
         LoaderThread.start();
     }
     
-    static String ConvertToLegalFilename(String s) {
+    public static String ConvertToLegalFilename(String s) {
         s = s.replaceAll("<", "LT");
         s = s.replaceAll(">", "GT");
         s = s.replaceAll("\\*", "STAR");
