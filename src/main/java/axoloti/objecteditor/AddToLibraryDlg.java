@@ -8,8 +8,8 @@ package axoloti.objecteditor;
 import axoloti.MainFrame;
 import static axoloti.MainFrame.axoObjects;
 import axoloti.object.AxoObject;
+import axoloti.object.AxoObjects;
 import axoloti.utils.AxolotiLibrary;
-import generatedobjects.gentools;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -213,11 +213,8 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
             obj = obj_.clone();
             obj.shortId = jObjectName.getText();
             obj.id = jObjectName.getText();
-            obj.setSHA(obj.GenerateSHA());
-            obj.id = jPath.getText() + "/" + jObjectName.getText();
             obj.sPath = jFileTxt.getText();
             obj.setUUID(obj.GenerateUUID());
-            obj.addUpgradeSHA(null);
             File f = new File(obj.sPath);
             if (!f.exists()) {
                 File dir = f.getParentFile();
@@ -225,7 +222,7 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
                     dir.mkdirs();
                 }
             }
-            gentools.WriteAxoObject(obj.sPath, obj);
+            MainFrame.axoObjects.WriteAxoObject(obj.sPath, obj);
             axoObjects.LoadAxoObjects();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AddToLibraryDlg.class.getName()).log(Level.SEVERE, null, ex);
@@ -332,7 +329,7 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
             objname.append(jPath.getText()).append(File.separator);
             file.append(jPath.getText()).append(File.separator);
             objname.append(jObjectName.getText());
-            file.append(jObjectName.getText());
+            file.append(AxoObjects.ConvertToLegalFilename(jObjectName.getText()));
             jFileTxt.setText(file.toString() + ".axo");
             jObjectNameTxt.setText(objname.toString());
         }

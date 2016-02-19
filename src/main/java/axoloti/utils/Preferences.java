@@ -226,12 +226,19 @@ public class Preferences {
             File p = new File(Preferences.GetPrefsFileLoc());
             if (p.exists()) {
                 Preferences prefs = null;
+                Serializer serializer = new Persister();
                 try {
-                    Serializer serializer = new Persister();
                     prefs = serializer.read(Preferences.class, p);
                 } catch (Exception ex) {
-                    Logger.getLogger(Preferences.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                    try {
+                        Logger.getLogger(Preferences.class
+                                .getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Preferences.class
+                                .getName()).log(Level.INFO,"Attempt to load preferenced in relaxed mode");
+                        prefs = serializer.read(Preferences.class, p,false);
+                    } catch (Exception ex1) {
+                        Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex1);
+                    }
                 }
                 if (prefs == null){
                     prefs = new Preferences();

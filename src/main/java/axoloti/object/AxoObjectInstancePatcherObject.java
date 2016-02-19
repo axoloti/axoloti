@@ -79,7 +79,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
             ao.sDescription = "description";
         }
         if (aoe == null) {
-            aoe = new AxoObjectEditor(ao);
+            aoe = new AxoObjectEditor(ao,true);
         }
         aoe.setState(java.awt.Frame.NORMAL);
         aoe.setVisible(true);

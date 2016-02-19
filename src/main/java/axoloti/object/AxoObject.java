@@ -27,7 +27,6 @@ import axoloti.attributedefinition.AxoAttributeSDFile;
 import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
-import axoloti.attributedefinition.AxoAttributeWavefile;
 import axoloti.objecteditor.AxoObjectEditor;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletBool32;
@@ -108,12 +107,10 @@ import axoloti.displays.DisplayNoteLabel;
 import axoloti.displays.DisplayVScale;
 import java.awt.Point;
 import java.io.File;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
@@ -296,10 +293,14 @@ public class AxoObject extends AxoObjectAbstract {
 
     public void OpenEditor() {
         if (editor == null) {
-            editor = new AxoObjectEditor(this);
+            editor = new AxoObjectEditor(this,false);
         }
         editor.setState(java.awt.Frame.NORMAL);
         editor.setVisible(true);
+    }
+
+    public void CloseEditor() {
+       editor = null; 
     }
 
     @Override
@@ -403,72 +404,11 @@ public class AxoObject extends AxoObjectAbstract {
         return id;
     }
 
-    @Override
-    public String GenerateSHA() {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA");
-            for (Inlet i : inlets) {
-                i.updateSHA(md);
-            }
-            for (Outlet i : outlets) {
-                i.updateSHA(md);
-            }
-            for (Parameter i : params) {
-                i.updateSHA(md);
-            }
-            for (AxoAttribute i : attributes) {
-                i.updateSHA(md);
-            }
-            for (Display i : displays) {
-                i.updateSHA(md);
-            }
-            if (sLocalData != null) {
-                md.update(sLocalData.getBytes());
-            }
-            if (sInitCode != null) {
-                md.update(sInitCode.getBytes());
-            }
-            if (sKRateCode != null) {
-                md.update(sKRateCode.getBytes());
-            }
-            if (sSRateCode != null) {
-                md.update(sSRateCode.getBytes());
-            }
-            if (sMidiCode != null) {
-                md.update(sMidiCode.getBytes());
-            }
-            return (new BigInteger(1, md.digest())).toString(16);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
 
     @Override
     public String GenerateUUID() {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA");
-            md.update(id.getBytes());
-            for (Inlet i : inlets) {
-                i.updateSHA(md);
-            }
-            for (Outlet i : outlets) {
-                i.updateSHA(md);
-            }
-            for (Parameter i : params) {
-                i.updateSHA(md);
-            }
-            for (AxoAttribute i : attributes) {
-                i.updateSHA(md);
-            }
-            for (Display i : displays) {
-                i.updateSHA(md);
-            }
-            return (new BigInteger(1, md.digest())).toString(16);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+        UUID uuid= UUID.randomUUID();
+        return uuid.toString();
     }
 
     public Boolean getRotatedParams() {

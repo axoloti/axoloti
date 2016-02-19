@@ -20,15 +20,20 @@ package axoloti.object;
 import axoloti.MainFrame;
 import axoloti.utils.AxolotiLibrary;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Serializer;
@@ -43,8 +48,6 @@ public class AxoObjects {
 
     public AxoObjectTreeNode ObjectTree;
     public ArrayList<AxoObjectAbstract> ObjectList;
-    HashMap<String, AxoObjectAbstract> ObjectHashMap;
-    HashMap<String, AxoObjectAbstract> ObjectUpgradeHashMap;
     HashMap<String, AxoObjectAbstract> ObjectUUIDMap;
 
     TransitionManager transitionmgr;
@@ -53,18 +56,6 @@ public class AxoObjects {
         return ObjectUUIDMap.get(n);
     }
 
-    public AxoObjectAbstract GetAxoObjectFromSHA(String n) {
-        AxoObjectAbstract ao = transitionmgr.GetObjectFromSha(n);
-        if (ao != null) {
-            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "upgraded object by SHA : {0}", ao.id);
-            return ao;
-        }
-        AxoObjectAbstract r = ObjectHashMap.get(n);
-        if (r == null) {
-            r = ObjectUpgradeHashMap.get(n);
-        }
-        return r;
-    }
 
     public ArrayList<AxoObjectAbstract> GetAxoObjectFromName(String n, String cwd) {
         String bfname = null;
@@ -81,9 +72,22 @@ public class AxoObjects {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.FINE, "attempt to create object from object file : {0}", fnameA);
                 File f = new File(fnameA);
                 if (f.isFile()) {
+                    boolean loadOK = false;
+                    AxoObjectFile of = null;
                     try {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.FINE, "hit : {0}", fnameA);
-                        AxoObjectFile of = serializer.read(AxoObjectFile.class, f);
+                        of = serializer.read(AxoObjectFile.class, f);
+                        loadOK = true;
+                    } catch (Exception ex) {
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+                        try {
+                            of = serializer.read(AxoObjectFile.class, f, false);
+                            loadOK = true;
+                        } catch (Exception ex1) {
+                            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }
+                    if (loadOK) {
                         AxoObjectAbstract o = of.objs.get(0);
                         if (o != null) {
                             o.sPath = fnameA;
@@ -93,8 +97,6 @@ public class AxoObjects {
                             set.add(o);
                             return set;
                         }
-                    } catch (Exception ex) {
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
@@ -153,8 +155,6 @@ public class AxoObjects {
     public AxoObjects() {
         ObjectTree = new AxoObjectTreeNode("/");
         ObjectList = new ArrayList<AxoObjectAbstract>();
-        ObjectHashMap = new HashMap<String, AxoObjectAbstract>();
-        ObjectUpgradeHashMap = new HashMap<String, AxoObjectAbstract>();
         ObjectUUIDMap = new HashMap<String, AxoObjectAbstract>();
     }
 
@@ -233,8 +233,19 @@ public class AxoObjects {
                 }
             } else {
                 if (fileEntry.getName().endsWith(".axo")) {
+                    AxoObjectFile o = null;
                     try {
-                        AxoObjectFile o = serializer.read(AxoObjectFile.class, fileEntry);
+                         o = serializer.read(AxoObjectFile.class, fileEntry);
+                    } catch (Exception ex) {
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ex);
+                        try {
+                            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO,"Error reading object, try relaxed mode {0}",fileEntry.getAbsolutePath());
+                            o = serializer.read(AxoObjectFile.class, fileEntry, false);
+                        } catch (Exception ex1) {
+                            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }
+                    if (o!=null) {
                         for (AxoObjectAbstract a : o.objs) {
                             a.sPath = fileEntry.getAbsolutePath();
                             if (!prefix.isEmpty()) {
@@ -246,14 +257,6 @@ public class AxoObjects {
                                 ShortID = ShortID.substring(i + 1);
                             }
                             a.shortId = ShortID;
-                            String uuidVerify = a.GenerateUUID();
-                            if ((uuidVerify != null) && (!uuidVerify.equals(a.getUUID()))) {
-                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Incorrect uuid hash detected for object: {0} , does not match its signature ({1}). True signature would be {2}", new Object[]{fileEntry.getAbsolutePath(), a.getUUID(), uuidVerify});
-                            }
-                            String shaVerify = a.GenerateSHA();
-                            if ((shaVerify != null) && (!shaVerify.equals(a.getSHA()))) {
-                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Incorrect sha hash detected for object: {0} its implementation does not match its signature. Correct SHA hash would be {1}", new Object[]{fileEntry.getAbsolutePath(), shaVerify});
-                            }
                             AxoObjectTreeNode s = t.SubNodes.get(ShortID);
                             if (s == null) {
                                 t.Objects.add(a);
@@ -262,27 +265,12 @@ public class AxoObjects {
                             }
 
                             ObjectList.add(a);
-                            if ((a.getSHA() != null) && (ObjectHashMap.containsKey(a.getSHA()))) {
-                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Duplicate SHA! {0}\nOriginal name: {1}\nPath: {2}", new Object[]{fileEntry.getAbsolutePath(), ObjectHashMap.get(a.getSHA()).id, ObjectHashMap.get(a.getSHA()).sPath});
-                            }
-                            ObjectHashMap.put(a.getSHA(), a);
-
-                            if (a.upgradeSha != null) {
-                                for (String usha : a.upgradeSha) {
-                                    if (ObjectUpgradeHashMap.containsKey(usha)) {
-                                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Duplicate upgrade SHA! {0}\nOriginal name: {1}\nPath: {2}", new Object[]{fileEntry.getAbsolutePath(), ObjectUpgradeHashMap.get(usha).id, ObjectUpgradeHashMap.get(usha).sPath});
-                                    }
-                                    ObjectUpgradeHashMap.put(usha, a);
-                                }
-                            }
 
                             if ((a.getUUID() != null) && (ObjectUUIDMap.containsKey(a.getUUID()))) {
                                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Duplicate UUID! {0}\nOriginal name: {1}\nPath: {2}", new Object[]{fileEntry.getAbsolutePath(), ObjectUUIDMap.get(a.getUUID()).id, ObjectUUIDMap.get(a.getUUID()).sPath});
                             }
                             ObjectUUIDMap.put(a.getUUID(), a);
                         }
-                    } catch (Exception ex) {
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ex);
                     }
                 } else if (fileEntry.getName().endsWith(".axs")) {
                     try {
@@ -349,8 +337,6 @@ public class AxoObjects {
             public void run() {
                 ObjectTree = new AxoObjectTreeNode("/");
                 ObjectList = new ArrayList<AxoObjectAbstract>();
-                ObjectHashMap = new HashMap<String, AxoObjectAbstract>();
-                ObjectUpgradeHashMap = new HashMap<String, AxoObjectAbstract>();
                 ObjectUUIDMap = new HashMap<String, AxoObjectAbstract>();
                 String spath[] = MainFrame.prefs.getObjectSearchPath();
                 if (spath != null) {
@@ -369,4 +355,174 @@ public class AxoObjects {
         LoaderThread = new Thread(objloader);
         LoaderThread.start();
     }
+    
+    public static String ConvertToLegalFilename(String s) {
+        s = s.replaceAll("<", "LT");
+        s = s.replaceAll(">", "GT");
+        s = s.replaceAll("\\*", "STAR");
+        s = s.replaceAll("~", "TILDE");
+        s = s.replaceAll("\\+", "PLUS");
+        s = s.replaceAll("-", "MINUS");
+        s = s.replaceAll("/", "SLASH");
+        //if (!cn.equals(o.id)) o.sCName = cn;        
+        return s;
+    }
+    
+    void PostProcessObject(AxoObjectAbstract o) {
+        if (o instanceof AxoObject) {
+            // remove labels when there's only a single parameter
+            AxoObject oo = (AxoObject) o;
+            if ((oo.params != null) && (oo.params.size() == 1)) {
+                oo.params.get(0).noLabel = true;
+            }
+            if ((oo.displays != null) && (oo.displays.size() == 1)) {
+                oo.displays.get(0).noLabel = true;
+            }
+            if (oo.depends == null) {
+                oo.depends = new HashSet<String>();
+            }
+            String c = oo.sSRateCode + oo.sKRateCode + oo.sInitCode + oo.sLocalData;
+            if (c.contains("f_open")) {
+                oo.depends.add("fatfs");
+            }
+            if (c.contains("ADAU1961_WriteRegister")) {
+                oo.depends.add("ADAU1361");
+            }
+            if (c.contains("PWMD1")) {
+                oo.depends.add("PWMD1");
+            }
+            if (c.contains("PWMD2")) {
+                oo.depends.add("PWMD2");
+            }
+            if (c.contains("PWMD3")) {
+                oo.depends.add("PWMD3");
+            }
+            if (c.contains("PWMD4")) {
+                oo.depends.add("PWMD4");
+            }
+            if (c.contains("PWMD5")) {
+                oo.depends.add("PWMD5");
+            }
+            if (c.contains("PWMD6")) {
+                oo.depends.add("PWMD6");
+            }
+            if (c.contains("SD1")) {
+                oo.depends.add("SD1");
+            }
+            if (c.contains("SD2")) {
+                oo.depends.add("SD2");
+            }
+            if (c.contains("SPID1")) {
+                oo.depends.add("SPID1");
+            }
+            if (c.contains("SPID2")) {
+                oo.depends.add("SPID2");
+            }
+            if (c.contains("I2CD1")) {
+                oo.depends.add("I2CD1");
+            }
+            if (oo.depends.isEmpty()) {
+                oo.depends = null;
+            }
+
+            if (oo.sInitCode != null && oo.sInitCode.isEmpty()) {
+                oo.sInitCode = null;
+            }
+            if (oo.sLocalData != null && oo.sLocalData.isEmpty()) {
+                oo.sLocalData = null;
+            }
+            if (oo.sKRateCode != null && oo.sKRateCode.isEmpty()) {
+                oo.sKRateCode = null;
+            }
+            if (oo.sSRateCode != null && oo.sSRateCode.isEmpty()) {
+                oo.sSRateCode = null;
+            }
+            if (oo.sDisposeCode != null && oo.sDisposeCode.isEmpty()) {
+                oo.sDisposeCode = null;
+            }
+            if (oo.sMidiCode != null && oo.sMidiCode.isEmpty()) {
+                oo.sMidiCode = null;
+            }
+        }
+        if (o.sAuthor == null) {
+            o.sAuthor = "Johannes Taelman";
+        }
+        if (o.sLicense == null) {
+            o.sLicense = "BSD";
+        }
+        if (o.GetIncludes() == null) {
+            o.SetIncludes(null);
+        }
+        if ((o.GetIncludes() != null) && o.GetIncludes().isEmpty()) {
+            o.SetIncludes(null);
+        }
+    }
+
+     public void WriteAxoObject(String path, AxoObjectAbstract o) {
+        File f =new File(path);
+
+        AxoObjectFile a = new AxoObjectFile();
+        a.objs = new ArrayList<AxoObjectAbstract>();
+        a.objs.add(o);
+        for (AxoObjectAbstract oa : a.objs) {
+            PostProcessObject(oa);
+        }
+        if (f.exists()) {
+            ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
+            try {
+                serializer.write(a, os);
+            } catch (Exception ex) {
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            boolean identical = false;
+            try {
+                InputStream is1 = new FileInputStream(f);
+                byte[] bo = os.toByteArray();
+                InputStream is2 = new ByteArrayInputStream(bo);
+                while (true) {
+                    int i1 = is1.read();
+                    int i2 = is2.read();
+                    if ((i2 == -1) && (i1 == -1)) {
+                        identical = true;
+                        break;
+                    }
+                    if (i1 == -1) {
+                        break;
+                    }
+                    if (i2 == -1) {
+                        break;
+                    }
+                    if (i1 != i2) {
+                        break;
+                    }
+                }
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (!identical) {
+                // overwrite with new
+                try {
+                    System.out.println("object file changed : " + f.getName());
+                    serializer.write(a, f);
+                } catch (Exception ex) {
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                System.out.println("object file unchanged : " + f.getName());
+            }
+        } else {
+            // just write a new one
+            try {
+                serializer.write(a, f);
+                System.out.println("object file created : " + f.getName());
+            } catch (Exception ex) {
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    
 }

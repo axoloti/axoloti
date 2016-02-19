@@ -29,11 +29,8 @@ public class Transitions {
     @ElementMap(entry = "NameTransition", key = "OldName", value = "new", inline = true)
     public HashMap<String, NameTransition> nametransitions;
 
-    @ElementMap(entry = "ShaTransition", key = "OldSha", value = "new", inline = true)
-    public HashMap<String, ShaTransition> shatransitions;
 
     public Transitions() {
         nametransitions = new HashMap<String, NameTransition>();
-        shatransitions = new HashMap<String, ShaTransition>();
     }
 }

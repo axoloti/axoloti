@@ -62,11 +62,6 @@ public class AxoObjectUnloaded extends AxoObjectAbstract {
     }
 
     @Override
-    public String GenerateSHA() {
-        return "unloaded";
-    }
-
-    @Override
     public String GenerateUUID() {
         return "unloaded";
     }
