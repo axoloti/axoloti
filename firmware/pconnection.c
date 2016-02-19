@@ -331,7 +331,7 @@ void ManipulateFile(void) {
       // create directory
       FRESULT err;
       err = f_mkdir(&FileName[6]);
-      if (err != FR_OK) {
+      if ((err != FR_OK) && (err != FR_EXIST)) {
         report_fatfs_error(err,&FileName[6]);
       }
       // and set timestamp
