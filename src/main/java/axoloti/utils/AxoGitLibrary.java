@@ -355,10 +355,10 @@ public class AxoGitLibrary extends AxolotiLibrary {
             StatusCommand cmd = git.status();
             String pre = "";
             if (getContributorPrefix() != null && getContributorPrefix().length() > 0) {
-                pre = getContributorPrefix() + File.separator;
+                pre = getContributorPrefix() + "/";
             }
-            cmd.addPath("objects" + File.separator + pre);
-            cmd.addPath("patches" + File.separator + pre);
+            cmd.addPath("objects/" + pre);
+            cmd.addPath("patches/" + pre);
             Status status = cmd.call();
             return !status.isClean();
         } catch (GitAPIException ex) {
