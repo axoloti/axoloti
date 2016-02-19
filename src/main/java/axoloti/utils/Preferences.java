@@ -402,15 +402,6 @@ public class Preferences {
                 "https://github.com/axoloti/axoloti-factory.git",
                 false
         );
-        if (!Axoloti.isDeveloper()) {
-            String ver = Version.AXOLOTI_VERSION;
-            // an unclean version has something like 1.0.6-82-gf5a5e03-dirty
-            // strip it to 1.0.6
-            if (ver.indexOf('-') >= 0) {
-                ver = ver.substring(0, ver.indexOf('-'));
-            }
-            factory.setRevision(ver);
-        }
         libraries.add(factory);
 
         libraries.add(new AxoFileLibrary(

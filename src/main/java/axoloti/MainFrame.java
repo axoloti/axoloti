@@ -254,6 +254,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                             }
                         }
                     }
+                    for (AxolotiLibrary lib : prefs.getLibraries()) {
+                        lib.reportStatus();
+                    }
                     axoObjects = new AxoObjects();
                     axoObjects.LoadAxoObjects();
 
