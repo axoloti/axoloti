@@ -57,7 +57,7 @@ public class FileMenu extends JMenu {
     }
 
     public void initComponents() {
-        
+
         int pos = 0;
         jMenuNewBank = new JMenuItem();
         jMenuNewPatch = new JMenuItem();
@@ -85,7 +85,7 @@ public class FileMenu extends JMenu {
                 jMenuNewPatchActionPerformed(evt);
             }
         });
-        insert(jMenuNewPatch,pos++);
+        insert(jMenuNewPatch, pos++);
 
         jMenuNewBank.setText("New patch bank");
         jMenuNewBank.addActionListener(new java.awt.event.ActionListener() {
@@ -94,7 +94,7 @@ public class FileMenu extends JMenu {
                 jMenuNewBankActionPerformed(evt);
             }
         });
-        insert(jMenuNewBank,pos++);
+        insert(jMenuNewBank, pos++);
 
         jMenuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
                 Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -105,7 +105,7 @@ public class FileMenu extends JMenu {
                 jMenuOpenActionPerformed(evt);
             }
         });
-        insert(jMenuOpen,pos++);
+        insert(jMenuOpen, pos++);
 
         jMenuOpenURL.setText("Open from URL...");
         jMenuOpenURL.addActionListener(new java.awt.event.ActionListener() {
@@ -114,16 +114,16 @@ public class FileMenu extends JMenu {
                 jMenuOpenURLActionPerformed(evt);
             }
         });
-        insert(jMenuOpenURL,pos++);
+        insert(jMenuOpenURL, pos++);
 
         recentFileMenu1.setText("Open Recent");
-        insert(recentFileMenu1,pos++);
+        insert(recentFileMenu1, pos++);
 
         libraryMenu1.setText("Library");
-        insert(libraryMenu1,pos++);
+        insert(libraryMenu1, pos++);
 
         favouriteMenu1.setText("Favorites");
-        insert(favouriteMenu1,pos++);
+        insert(favouriteMenu1, pos++);
 
         jMenuSync.setText("Sync Libraries");
         jMenuSync.addActionListener(new java.awt.event.ActionListener() {
@@ -132,7 +132,7 @@ public class FileMenu extends JMenu {
                 jMenuSyncActionPerformed(evt);
             }
         });
-        insert(jMenuSync,pos++);
+        insert(jMenuSync, pos++);
 
         add(jSeparator2);
 
@@ -280,7 +280,7 @@ public class FileMenu extends JMenu {
     }
 
     private void jMenuQuitActionPerformed(java.awt.event.ActionEvent evt) {
-        //Quit();
+        MainFrame.mainframe.Quit();
     }
 
 }
