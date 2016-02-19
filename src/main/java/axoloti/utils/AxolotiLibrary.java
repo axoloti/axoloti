@@ -1,10 +1,13 @@
 package axoloti.utils;
 
+import axoloti.Axoloti;
+import axoloti.Version;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
+import sun.rmi.transport.TransportConstants;
 
 /**
  * Represents a location for objects and patches to be picked up
@@ -153,6 +156,8 @@ public class AxolotiLibrary {
 
     public void init(boolean delete) {
     }
+    public void reportStatus() {
+    }
 
     protected void delete(File f) throws IOException {
         if (f.isDirectory()) {
@@ -163,6 +168,19 @@ public class AxolotiLibrary {
         if (!f.delete()) {
             throw new FileNotFoundException("Failed to delete file: " + f);
         }
+    }
+    
+    
+    public String getBranch() {
+        String branch = getRevision();
+        if (branch == null || branch.length() == 0) {
+            if(getId().equals(FACTORY_ID) && !Axoloti.isDeveloper()) {
+                branch = Version.AXOLOTI_SHORT_VERSION;
+            } else {
+                branch = "master";
+            }
+        }
+        return branch;
     }
 
     public String getRevision() {

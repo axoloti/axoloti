@@ -1,6 +1,8 @@
 package axoloti.utils;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AxoFileLibrary
         extends AxolotiLibrary {
@@ -19,7 +21,15 @@ public class AxoFileLibrary
     public void sync() {
         // NOP
     }
-
+    
+    public void reportStatus() {
+        File f = new File(getLocalLocation()); 
+        if(!f.exists()) {
+           Logger.getLogger(AxoFileLibrary.class.getName()).log(Level.WARNING, "Status : {0} : local directory missing", getId());
+        }
+        Logger.getLogger(AxoFileLibrary.class.getName()).log(Level.INFO, "Status : {0} : OK", getId());
+    }
+    
     @Override
     public void init(boolean delete) {
         // NOP 
