@@ -248,6 +248,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         DocumentWindowList.UnregisterWindow(this);
         editObj.removeObjectModifiedListener(this);
         dispose();
+        origObj.CloseEditor();
     }
 
     /**

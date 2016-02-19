@@ -299,6 +299,10 @@ public class AxoObject extends AxoObjectAbstract {
         editor.setVisible(true);
     }
 
+    public void CloseEditor() {
+       editor = null; 
+    }
+
     @Override
     public void DeleteInstance(AxoObjectInstanceAbstract o) {
         if ((o != null) && (o instanceof AxoObjectInstance)) {
