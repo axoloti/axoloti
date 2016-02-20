@@ -100,8 +100,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         jTextFieldAuthor.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (editObj.sAuthor != null && !editObj.sAuthor.equals(jTextFieldAuthor.getText())) {
-                    editObj.sAuthor = jTextFieldAuthor.getText();
+                if (editObj.sAuthor == null || !editObj.sAuthor.equals(jTextFieldAuthor.getText())) {
+                    editObj.sAuthor = jTextFieldAuthor.getText().trim();
                 }
                 FireObjectModified();
             }
@@ -115,8 +115,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         jTextFieldLicense.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (editObj.sLicense != null && !editObj.sLicense.equals(jTextFieldLicense.getText())) {
-                    editObj.sLicense = jTextFieldLicense.getText();
+                if (editObj.sLicense == null || !editObj.sLicense.equals(jTextFieldLicense.getText())) {
+                    editObj.sLicense = jTextFieldLicense.getText().trim();
                 }
                 FireObjectModified();
             }
@@ -129,8 +129,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         jTextDesc.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (editObj.sLicense != null && !editObj.sLicense.equals(jTextDesc.getText())) {
-                    editObj.sDescription = jTextDesc.getText();
+                if (editObj.sLicense == null || !editObj.sLicense.equals(jTextDesc.getText())) {
+                    editObj.sDescription = jTextDesc.getText().trim();
                 }
                 FireObjectModified();
             }
@@ -219,6 +219,13 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         origObj.sSRateCode = editObj.sSRateCode;
         origObj.sDisposeCode = editObj.sDisposeCode;
         origObj.sMidiCode = editObj.sMidiCode;
+        origObj.inlets = editObj.inlets;
+        origObj.outlets = editObj.outlets;
+        origObj.includes = editObj.includes;
+        origObj.depends = editObj.depends;
+        origObj.displays = editObj.displays;
+        origObj.attributes = editObj.attributes;
+        origObj.params = editObj.params;
     }
 
     void FireObjectModified() {
