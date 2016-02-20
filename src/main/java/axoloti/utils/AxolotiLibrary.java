@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-import sun.rmi.transport.TransportConstants;
 
 /**
  * Represents a location for objects and patches to be picked up

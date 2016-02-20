@@ -260,17 +260,28 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
                 jLibrary.addItem(lib.getId());
             }
             if (obj_.sPath != null && obj_.sPath.startsWith(lib.getLocalLocation())) {
-
-                if (sellib == null || sellib.getLocalLocation().length() < lib.getLocalLocation().length()) {
+               if (sellib == null || sellib.getLocalLocation().length() < lib.getLocalLocation().length()) {
                     sellib = lib;
                 }
             }
         }
 
-        if (sellib == null || sellib.isReadOnly()) {
+        if (sellib == null) {
             jLibrary.setSelectedItem(AxolotiLibrary.USER_LIBRARY_ID);
         } else {
-            jLibrary.setSelectedItem(sellib.getId());
+            if(sellib.isReadOnly()) {
+                 jLibrary.setSelectedItem(AxolotiLibrary.USER_LIBRARY_ID);
+            } else {
+                jLibrary.setSelectedItem(sellib.getId());
+            }
+            if(sellib.getContributorPrefix()!=null) {
+                String cp = sellib.getContributorPrefix();
+                if(cp.length()>0) {
+                    if(obj_.id.startsWith(cp)) {
+                        jObjectName.setText(obj_.id.substring(cp.length()+1));
+                    }
+                }
+            }
         }
         modifiedData();
     }
