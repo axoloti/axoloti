@@ -444,11 +444,8 @@ public class AxoObjects {
                 oo.sMidiCode = null;
             }
         }
-        if (o.sAuthor == null) {
-            o.sAuthor = "Johannes Taelman";
-        }
         if (o.sLicense == null) {
-            o.sLicense = "BSD";
+            o.sLicense = "GPL";
         }
         if (o.GetIncludes() == null) {
             o.SetIncludes(null);
@@ -467,6 +464,9 @@ public class AxoObjects {
         for (AxoObjectAbstract oa : a.objs) {
             PostProcessObject(oa);
         }
+        // arghh, in memory use /midi/in/cc persist as cc !
+        String id = o.id;
+        o.id = o.shortId;
         if (f.exists()) {
             ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
             try {
@@ -522,6 +522,7 @@ public class AxoObjects {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        o.id = id;
     }
     
     
