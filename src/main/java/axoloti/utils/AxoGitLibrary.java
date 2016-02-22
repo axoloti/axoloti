@@ -38,16 +38,16 @@ public class AxoGitLibrary extends AxolotiLibrary {
 
     public AxoGitLibrary() {
     }
-    
-    @Override 
+
+    @Override
     public void reportStatus() {
-        File f = new File(getLocalLocation()); 
-        if(!f.exists()) {
-           Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Status : {0} : local directory missing ", logDetails());
+        File f = new File(getLocalLocation());
+        if (!f.exists()) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Status : {0} : local directory missing ", logDetails());
         }
 
         // get repository
-        Git git = null;
+        Git git;
         try {
             Repository repository;
             if (usingSubmodule()) {
@@ -66,10 +66,11 @@ public class AxoGitLibrary extends AxolotiLibrary {
             }
             git = new Git(repository);
             reportStatus(git);
+            git.close();
 
         } catch (IOException ex) {
-           Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
-           Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Status: exception {0}" ,logDetails());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Status: exception {0}", logDetails());
         }
     }
 
@@ -102,24 +103,29 @@ public class AxoGitLibrary extends AxolotiLibrary {
 
         if (git != null) {
             if (!pull(git)) {
+                git.close();
                 return;
             }
             boolean isDirty = isDirty(git);
             if (isDirty && isAuth()) {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications detected : {0}", logDetails());
                 if (!add(git)) {
+                    git.close();
                     return;
                 }
                 if (!commit(git)) {
+                    git.close();
                     return;
                 }
                 if (!push(git)) {
+                    git.close();
                     return;
                 }
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications uploaded : {0}", logDetails());
                 reportStatus(git);
             }
             if (!checkout(git)) {
+                git.close();
                 return;
             }
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Sync Successful : {0}", logDetails());
@@ -278,26 +284,30 @@ public class AxoGitLibrary extends AxolotiLibrary {
         }
         return false;
     }
-    
+
     private boolean reportStatus(Git git) {
         StatusCommand cmd = git.status();
         try {
             String overallStatus = "OK";
             Status status = cmd.call();
-            
+
             StringBuilder details = new StringBuilder();
-            
+
             try {
                 details.append(git.getRepository().getBranch());
             } catch (IOException ex) {
                 details.append("branch error");
             }
             details.append(",");
-            if(status.isClean()) details.append("clean"); else details.append("dirty");
-            
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Status: {0} : {1}  ( {2} )" ,new Object[]{logDetails(), overallStatus, details.toString()});
-            if(!status.isClean()) {
-                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Changes for: {0}" ,logDetails());
+            if (status.isClean()) {
+                details.append("clean");
+            } else {
+                details.append("dirty");
+            }
+
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Status: {0} : {1}  ( {2} )", new Object[]{logDetails(), overallStatus, details.toString()});
+            if (!status.isClean()) {
+                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Changes for: {0}", logDetails());
                 for (String f : status.getAdded()) {
                     Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "added: {0} ", f);
                 }
@@ -329,7 +339,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
             return true;
         } catch (GitAPIException ex) {
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Status: exception  {0}" ,logDetails());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Status: exception  {0}", logDetails());
         }
         return false;
     }
@@ -380,7 +390,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
     private boolean isAuth() {
         return getUserId() != null && getUserId().length() > 0;
     }
-    
+
     private String logDetails() {
         StringBuilder str = new StringBuilder();
         str.append(getId()).append(" (").append(getBranch());
