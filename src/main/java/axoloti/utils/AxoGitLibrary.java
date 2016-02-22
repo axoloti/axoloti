@@ -66,7 +66,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
             }
             git = new Git(repository);
             reportStatus(git);
-            git.close();
+            git.getRepository().close();
 
         } catch (IOException ex) {
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,32 +103,33 @@ public class AxoGitLibrary extends AxolotiLibrary {
 
         if (git != null) {
             if (!pull(git)) {
-                git.close();
+                git.getRepository().close();
                 return;
             }
             boolean isDirty = isDirty(git);
             if (isDirty && isAuth()) {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications detected : {0}", logDetails());
                 if (!add(git)) {
-                    git.close();
+                    git.getRepository().close();
                     return;
                 }
                 if (!commit(git)) {
-                    git.close();
+                    git.getRepository().close();
                     return;
                 }
                 if (!push(git)) {
-                    git.close();
+                    git.getRepository().close();
                     return;
                 }
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications uploaded : {0}", logDetails());
                 reportStatus(git);
             }
             if (!checkout(git)) {
-                git.close();
+                git.getRepository().close();
                 return;
             }
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Sync Successful : {0}", logDetails());
+	    git.getRepository().close();
         }
     }
 
@@ -163,7 +164,8 @@ public class AxoGitLibrary extends AxolotiLibrary {
                 cmd.setCredentialsProvider(new UsernamePasswordCredentialsProvider(getUserId(), getPassword()));
             }
             try {
-                cmd.call();
+                Git git=cmd.call();
+		git.getRepository().close();
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Repo initialised Successfully : {0}", logDetails());
             } catch (Exception ex) {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "init repo FAILED : {0}", getId());
