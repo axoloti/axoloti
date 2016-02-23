@@ -103,7 +103,12 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
 
     @Override
     public String CValue() {
-        return getFile().getName();
+        File f = getFile();
+        if (f!=null) {
+            return f.getName();
+        } else {
+            return fileName;
+        }
     }
 
     @Override
@@ -137,7 +142,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
         File f = getFile();
-        if (f.exists()) {
+        if (f != null && f.exists()) {
             files.add(new SDFileReference(f, f.getName()));
         }
         return files;
@@ -145,7 +150,14 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
 
     File getFile() {
         Path basePath = FileSystems.getDefault().getPath(GetObjectInstance().getPatch().getFileNamePath());
-        Path resolvedPath = basePath.getParent().resolve(fileName);
+        Path parent = basePath.getParent();
+        if (parent == null) {
+            return null;
+        }
+        Path resolvedPath = parent.resolve(fileName);
+        if (resolvedPath == null) {
+            return null;
+        }
         return resolvedPath.toFile();
     }
 
