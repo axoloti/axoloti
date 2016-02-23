@@ -234,6 +234,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             }
             fs.close();
             refresh();
+            setTitle(FilenamePath);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -365,6 +366,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             }
 
             FilenamePath = fileToBeSaved.getPath();
+            setTitle(FilenamePath);
             MainFrame.prefs.setCurrentFileDirectory(fileToBeSaved.getPath());
             Save(fileToBeSaved);
         }
