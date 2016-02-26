@@ -2220,7 +2220,8 @@ public class Patch {
 
     public void Unlock() {
         locked = false;
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        ArrayList<AxoObjectInstanceAbstract> objInstsClone = (ArrayList<AxoObjectInstanceAbstract>)objectinstances.clone();
+        for (AxoObjectInstanceAbstract o : objInstsClone) {
             o.Unlock();
         }
     }
