@@ -29,11 +29,24 @@ public class PresetPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form PresetPanel
+     *
      * @param p patch to recall preset
      */
     public PresetPanel(Patch p) {
         this.p = p;
         initComponents();
+    }
+
+    public void ShowLive(boolean live) {
+        jButtonRI.setEnabled(live);
+        jButtonR1.setEnabled(live);
+        jButtonR2.setEnabled(live);
+        jButtonR3.setEnabled(live);
+        jButtonR4.setEnabled(live);
+        jButtonR5.setEnabled(live);
+        jButtonR6.setEnabled(live);
+        jButtonR7.setEnabled(live);
+        jButtonR8.setEnabled(live);
     }
 
     /**

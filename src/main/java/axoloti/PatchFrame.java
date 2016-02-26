@@ -19,6 +19,7 @@ package axoloti;
 
 import axoloti.object.AxoObjects;
 import axoloti.utils.Constants;
+import components.PresetPanel;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -63,6 +64,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
      */
     PatchGUI patch;
 
+    private PresetPanel presetPanel;
+
     public PatchFrame(final PatchGUI patch, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
@@ -72,7 +75,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         this.patch.patchframe = this;
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
 
-        jToolbarPanel.add(new components.PresetPanel(patch));
+        presetPanel = new PresetPanel(patch);
+        jToolbarPanel.add(presetPanel);
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
         jScrollPane1.setViewportView(patch.Layers);
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.ygrid / 2);
@@ -187,11 +191,13 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             jCheckBoxLive.setEnabled(true);
             jCheckBoxMenuItemLive.setSelected(true);
             jCheckBoxMenuItemLive.setEnabled(true);
+            presetPanel.ShowLive(true);
         } else {
             jCheckBoxLive.setSelected(false);
             jCheckBoxLive.setEnabled(true);
             jCheckBoxMenuItemLive.setSelected(false);
             jCheckBoxMenuItemLive.setEnabled(true);
+            presetPanel.ShowLive(false);
         }
     }
 
