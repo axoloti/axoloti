@@ -286,6 +286,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuSave = new javax.swing.JMenuItem();
         jMenuSaveAs = new javax.swing.JMenuItem();
+        jMenuSaveCopy = new javax.swing.JMenuItem();
         jMenuSaveClip = new javax.swing.JMenuItem();
         jMenuClose = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
@@ -403,6 +404,14 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     });
     fileMenu1.add(jMenuSaveAs);
+
+    jMenuSaveCopy.setText("Save Copy...");
+    jMenuSaveCopy.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuSaveCopyActionPerformed(evt);
+        }
+    });
+    fileMenu1.add(jMenuSaveCopy);
 
     jMenuSaveClip.setText("Save To Clipboard");
     jMenuSaveClip.addActionListener(new java.awt.event.ActionListener() {
@@ -651,7 +660,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         }
     }//GEN-LAST:event_jMenuSaveActionPerformed
 
-    private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
+    File FileChooserSave() {
         final JFileChooser fc = new JFileChooser(MainFrame.prefs.getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(FileUtils.axpFileFilter);
@@ -720,7 +729,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                         fileToBeSaved = new File(fname.substring(0, fname.length() - 4) + filterext);
                         break;
                     case JOptionPane.NO_OPTION:
-                        return;
+                        return null;
                 }
             }
 
@@ -739,10 +748,18 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
                     case JOptionPane.YES_OPTION:
                         break;
                     case JOptionPane.NO_OPTION:
-                        return;
+                        return null;
                 }
             }
+            return fileToBeSaved;
+        } else {
+            return null;
+        }
+    }
 
+    private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
+        File fileToBeSaved = FileChooserSave();
+        if (fileToBeSaved != null) {
             patch.setFileNamePath(fileToBeSaved.getPath());
             MainFrame.prefs.setCurrentFileDirectory(fileToBeSaved.getPath());
             patch.save(fileToBeSaved);
@@ -884,6 +901,14 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         DocumentWindowList.UnregisterWindow(this);
     }//GEN-LAST:event_formComponentHidden
 
+    private void jMenuSaveCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveCopyActionPerformed
+        File fileToBeSaved = FileChooserSave();
+        if (fileToBeSaved != null) {
+            MainFrame.prefs.setCurrentFileDirectory(fileToBeSaved.getPath());
+            patch.save(fileToBeSaved);
+        }
+    }//GEN-LAST:event_jMenuSaveCopyActionPerformed
+
     private boolean GoLive() {
 
         if (patch.getFileNamePath().endsWith(".axs") || patch.container() != null) {
@@ -945,6 +970,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuSave;
     private javax.swing.JMenuItem jMenuSaveAs;
     private javax.swing.JMenuItem jMenuSaveClip;
+    private javax.swing.JMenuItem jMenuSaveCopy;
     private javax.swing.JMenuItem jMenuUploadCode;
     private javax.swing.JMenu jMenuView;
     private javax.swing.JProgressBar jProgressBarDSPLoad;
