@@ -342,6 +342,9 @@ public class AxoGitLibrary extends AxolotiLibrary {
         } catch (GitAPIException ex) {
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Status: exception  {0}", logDetails());
+        } catch (NoWorkTreeException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);            
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Status: exception  {0}", logDetails());
         }
         return false;
     }
