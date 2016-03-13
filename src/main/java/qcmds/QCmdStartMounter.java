@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,51 +17,29 @@
  */
 package qcmds;
 
-import axoloti.Connection;
-import axoloti.Patch;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Johannes Taelman
  */
-public class QCmdStart implements QCmdSerialTask {
+public class QCmdStartMounter extends QCmdStart {
 
-    Patch p;
-
-    static int patch_start_timeout = 10000; //msec
-
-    public QCmdStart(Patch p) {
-        this.p = p;
+    public QCmdStartMounter() {
+        super(null);
     }
 
     @Override
     public String GetStartMessage() {
-        return "Starting patch...";
+        return "Start mounting sdcard...";
     }
 
     @Override
     public String GetDoneMessage() {
-        return "Done starting patch";
-    }
-
-    public String GetTimeOutMessage() {
-        return "patch start taking too long, disconnecting";
+        return "mounting...";
     }
 
     @Override
-    public QCmd Do(Connection connection) {
-        connection.ClearSync();
-
-        connection.setPatch(p);
-
-        connection.TransmitStart();
-        if (connection.WaitSync(patch_start_timeout)) {
-            return this;
-        } else {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, GetTimeOutMessage());
-            return new QCmdDisconnect();
-        }
+    public String GetTimeOutMessage() {
+        return "SDCard mounter active, editor connection lost. Unmount/eject the sdcard volume in Explorer or Finder to enable editor connection again.";
     }
+
 }

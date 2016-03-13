@@ -67,7 +67,8 @@ import qcmds.QCmdBringToDFUMode;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdPing;
 import qcmds.QCmdProcessor;
-import qcmds.QCmdStart;
+import qcmds.QCmdStartFlasher;
+import qcmds.QCmdStartMounter;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadFWSDRam;
 import qcmds.QCmdUploadPatch;
@@ -329,7 +330,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             if (p.canRead()) {
                 qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam(p));
                 qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
-                qcmdprocessor.AppendToQueue(new QCmdStart(null));
+                qcmdprocessor.AppendToQueue(new QCmdStartFlasher());
             } else {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read firmware, please compile firmware! (file: {0} )", pname);
             }
@@ -857,7 +858,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         File f = new File(fname);
         if (f.canRead()) {
             qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
-            qcmdprocessor.AppendToQueue(new QCmdStart(null));
+            qcmdprocessor.AppendToQueue(new QCmdStartMounter());
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "will disconnect, unmount sdcard to go back to normal mode (required to connect)");
         } else {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read mounter firmware, please compile mounter firmware! (file: {0} )", fname);
