@@ -364,6 +364,7 @@ public class AxoObjects {
         s = s.replaceAll("\\+", "PLUS");
         s = s.replaceAll("-", "MINUS");
         s = s.replaceAll("/", "SLASH");
+        s = s.replaceAll(":", "COLON");
         //if (!cn.equals(o.id)) o.sCName = cn;        
         return s;
     }
