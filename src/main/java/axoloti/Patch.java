@@ -119,18 +119,18 @@ public class Patch {
     private AxoObjectInstanceAbstract controllerinstance;
 
     public boolean presetUpdatePending = false;
-    
-    @Complete 
+
+    @Complete
     public void Complete() {
         // called after deserialializtion
     }
-    
+
     @Persist
     public void Persist() {
         // called prior to serialization
         appVersion = Version.AXOLOTI_SHORT_VERSION;
     }
-    
+
     MainFrame GetMainFrame() {
         return MainFrame.mainframe;
     }
@@ -215,7 +215,7 @@ public class Patch {
 
     public Patch() {
         super();
-   }
+    }
 
     public void PostContructor() {
         for (AxoObjectInstanceAbstract o : objectinstances) {
@@ -1155,8 +1155,11 @@ public class Patch {
                         c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName());
                     }
                 }
-            } else { // unconnected input
+            } else if (n == null) { // unconnected input
                 c += i.GetDataType().GenerateSetDefaultValueCode();
+            } else if (!n.isValidNet()) {
+                c += i.GetDataType().GenerateSetDefaultValueCode();
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.objname + ":" + i.getInletname());
             }
             needsComma = true;
         }
@@ -1283,7 +1286,7 @@ public class Patch {
                     + "  }\n";
         }
         c += "}\n\n";
-        
+
         c += "void ApplyPreset(int32_t i) {\n"
                 + "   root.ApplyPreset(i);\n"
                 + "}\n\n";
@@ -2220,7 +2223,7 @@ public class Patch {
 
     public void Unlock() {
         locked = false;
-        ArrayList<AxoObjectInstanceAbstract> objInstsClone = (ArrayList<AxoObjectInstanceAbstract>)objectinstances.clone();
+        ArrayList<AxoObjectInstanceAbstract> objInstsClone = (ArrayList<AxoObjectInstanceAbstract>) objectinstances.clone();
         for (AxoObjectInstanceAbstract o : objInstsClone) {
             o.Unlock();
         }
@@ -2232,7 +2235,7 @@ public class Patch {
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
         /*
-         if (obj.getType() == objType) {
+        if (obj.getType() == objType) {
          return;
          }*/
         String n = obj.getInstanceName();
@@ -2252,7 +2255,7 @@ public class Patch {
         Map<String, InletInstance> inlets = new TreeMap<String, InletInstance>();
         for (InletInstance il : obj.GetInletInstances()) {
             inlets.put(il.GetLabel(), il);
-        }
+    }
         Map<String, OutletInstance> outlets = new TreeMap<String, OutletInstance>();
         for (OutletInstance ol : obj.GetOutletInstances()) {
             outlets.put(ol.GetLabel(), ol);
@@ -2349,7 +2352,7 @@ public class Patch {
             for (AxoObjectInstanceAbstract o : objectinstances) {
                 if (!ProcessedInstances.contains(o.getInstanceName())) {
                     ProcessedInstances.add(o.getInstanceName());
-                    o.PromoteToOverloadedObj();
+                        o.PromoteToOverloadedObj();
                     p = true;
                     break;
                 }
