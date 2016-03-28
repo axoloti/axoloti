@@ -141,6 +141,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
     public void setType(AxoObjectAbstract type) {
         this.type = type;
+        typeUUID = type.getUUID();
     }
 
     public void setInstanceName(String InstanceName) {
@@ -608,4 +609,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         return null;
     }
+
+    public boolean isTypeWasAmbiguous() {
+        return typeWasAmbiguous;
+    }       
 }

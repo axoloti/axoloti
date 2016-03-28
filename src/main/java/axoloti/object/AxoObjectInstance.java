@@ -87,7 +87,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         @ElementList(entry = "spinner", type = AttributeInstanceSpinner.class, inline = true, required = false),
         @ElementList(entry = "file", type = AttributeInstanceSDFile.class, inline = true, required = false),
         @ElementList(entry = "text", type = AttributeInstanceTextEditor.class, inline = true, required = false)})
-    ArrayList<AttributeInstance> attributeInstances;
+    public ArrayList<AttributeInstance> attributeInstances;
     public ArrayList<DisplayInstance> displayInstances;
     LabelComponent IndexLabel;
 
@@ -313,9 +313,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 Net n = getPatch().GetNet(inlinp);
                 if (n != null) {
                     n.connectInlet(inlin);
+                    getPatch().disconnect(inlinp);
                 }
-                getPatch().disconnect(inlinp);
-                inletInstances.remove(inlinp);
             }
             inletInstances.add(inlin);
             inlin.setAlignmentX(LEFT_ALIGNMENT);
@@ -334,9 +333,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 Net n = getPatch().GetNet(oinp);
                 if (n != null) {
                     n.connectOutlet(oin);
+                    getPatch().disconnect(oinp);
                 }
-                getPatch().disconnect(oinp);
-                outletInstances.remove(oinp);
             }
             outletInstances.add(oin);
             oin.setAlignmentX(RIGHT_ALIGNMENT);
@@ -797,7 +795,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             return;
         }
         if (candidates.isEmpty()) {
-            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "could not resolve any candidates{0}", id);
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "could not resolve any candidates {0}", id);
         }
         if (candidates.size() == 1) {
             return;
@@ -853,10 +851,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             return;
         }
         if (selected != getType()) {
-            //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"promoting " + this + " to " + selected);            
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"promoting " + this + " to " + selected);            
             patch.ChangeObjectInstanceType(this, selected);
         } else {
-            //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion");            
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion for {0}", typeName);            
         }
     }
 

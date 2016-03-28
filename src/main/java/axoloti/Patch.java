@@ -2234,100 +2234,29 @@ public class Patch {
     }
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
-        /*
         if (obj.getType() == objType) {
-         return;
-         }*/
+            return obj;
+        }
+        if (!(obj instanceof AxoObjectInstance)) {
+            return obj;
+        }
         String n = obj.getInstanceName();
         obj.setInstanceName(n + "____tmp");
-
-        //        if (obj.getType().id.equals(objType.id)) return;
-        // TODO: preserve presets and modulations
-        // TODO: copy attributes tooo!
-        Map<String, ParameterInstance> params = new TreeMap<String, ParameterInstance>();
-        for (ParameterInstance p : obj.getParameterInstances()) {
-            params.put(p.getName(), p);
+        AxoObjectInstanceAbstract obj1 = AddObjectInstance(objType, obj.getLocation());
+        if ((obj1 instanceof AxoObjectInstance) && (obj instanceof AxoObjectInstance)) {
+            AxoObjectInstance new_obj = (AxoObjectInstance) obj1;
+            AxoObjectInstance old_obj = (AxoObjectInstance) obj;
+            new_obj.outletInstances = old_obj.outletInstances;
+            new_obj.inletInstances = old_obj.inletInstances;
+            new_obj.parameterInstances = old_obj.parameterInstances;
+            new_obj.attributeInstances = old_obj.attributeInstances;
+            new_obj.PostConstructor();
         }
-        Map<String, AttributeInstance> attrs = new TreeMap<String, AttributeInstance>();
-        for (AttributeInstance a : obj.getAttributeInstances()) {
-            attrs.put(a.getName(), a);
-        }
-        Map<String, InletInstance> inlets = new TreeMap<String, InletInstance>();
-        for (InletInstance il : obj.GetInletInstances()) {
-            inlets.put(il.GetLabel(), il);
-    }
-        Map<String, OutletInstance> outlets = new TreeMap<String, OutletInstance>();
-        for (OutletInstance ol : obj.GetOutletInstances()) {
-            outlets.put(ol.GetLabel(), ol);
-        }
-
-        // check if instancename was standard name (objname_1 etc)
-        String newname;
-        String[] ss = n.split("_");
-        boolean hasNumeralSuffix = false;
-        try {
-            if ((ss.length > 1) && (Integer.toString(Integer.parseInt(ss[ss.length - 1]))).equals(ss[ss.length - 1])) {
-                hasNumeralSuffix = true;
-            }
-        } catch (NumberFormatException e) {
-        }
-        if ((hasNumeralSuffix) && (obj.typeName.equals(n.substring(0, n.length() - ss[ss.length - 1].length() - 1)))) {
-            // find free index
-            int i = 1;
-            String n2 = objType.getDefaultInstanceName() + "_";
-            while (GetObjectInstance(n2 + i) != null) {
-                i++;
-            }
-            newname = n2 + i;
-        } else {
-            // preserve instancename
-            newname = n;
-        }
-        AxoObjectInstanceAbstract newObj = AddObjectInstance(objType, obj.getLocation());
-
-        for (ParameterInstance p : newObj.getParameterInstances()) {
-            ParameterInstance p1 = params.get(p.getName());
-            if (p1 != null) {
-                p.CopyValueFrom(p1);
-            }
-        }
-        for (AttributeInstance a : newObj.getAttributeInstances()) {
-            AttributeInstance a1 = attrs.get(a.getName());
-            if (a1 != null) {
-                a.CopyValueFrom(a1);
-            }
-        }
-        for (OutletInstance ol : newObj.GetOutletInstances()) {
-            OutletInstance ol1 = outlets.get(ol.GetLabel());
-            if (ol1 != null) {
-                Net n1 = GetNet(ol1);
-                if (n1 != null && n1.dest != null) {
-                    ArrayList<InletInstance> dests = new ArrayList<InletInstance>(n1.dest);
-                    for (InletInstance i : dests) {
-                        AddConnection(i, ol);
-                    }
-                }
-            }
-        }
-
-        for (InletInstance il : newObj.GetInletInstances()) {
-            InletInstance il1 = inlets.get(il.GetLabel());
-            if (il1 != null) {
-                Net n1 = GetNet(il1);
-                if (n1 != null && n1.source != null) {
-                    ArrayList<OutletInstance> srcs = new ArrayList<OutletInstance>(n1.source);
-                    for (OutletInstance o : srcs) {
-                        AddConnection(il, o);
-                    }
-                }
-            }
-        }
-
-        this.delete(obj);
-        newObj.setInstanceName(newname);
-        newObj.SetSelected(true);
-        SetDirty();
-        return newObj;
+        delete(obj);
+        obj1.setName(n);
+        obj1.PostConstructor();
+        obj1.repaint();
+        return obj1;
     }
 
     void invalidate() {
@@ -2352,7 +2281,9 @@ public class Patch {
             for (AxoObjectInstanceAbstract o : objectinstances) {
                 if (!ProcessedInstances.contains(o.getInstanceName())) {
                     ProcessedInstances.add(o.getInstanceName());
+                    if (o.isTypeWasAmbiguous()) {
                         o.PromoteToOverloadedObj();
+                    }
                     p = true;
                     break;
                 }
