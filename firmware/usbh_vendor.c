@@ -37,7 +37,7 @@ USBH_ClassTypeDef  Vendor_Class = {
 
 static USBH_StatusTypeDef USBH_Vendor_InterfaceInit(USBH_HandleTypeDef *phost) {
 
-    USBH_StatusTypeDef status = USBH_FAIL;
+    USBH_StatusTypeDef status = USBH_NOT_SUPPORTED;
 
     if(phost->device.DevDesc.idVendor == USB_ACCESS_VID && phost->device.DevDesc.idProduct == USB_VIRUS_PID) {
        	USBH_UsrLog("USB Access Virus detected");
