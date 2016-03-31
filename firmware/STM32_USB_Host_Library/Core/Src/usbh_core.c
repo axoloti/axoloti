@@ -525,13 +525,26 @@ USBH_StatusTypeDef  USBH_Process(USBH_HandleTypeDef *phost)
     else
     {
       phost->pActiveClass = NULL;
+      bool bFound = false;
       
-      for (idx = 0; idx < USBH_MAX_NUM_SUPPORTED_CLASS ; idx ++)
+      USBH_StatusTypeDef initStatus = USBH_NOT_SUPPORTED;
+      for (idx = 0; idx < USBH_MAX_NUM_SUPPORTED_CLASS && !bFound; idx ++)
       {
-        for (intf = 0; intf < phost->device.CfgDesc.bNumInterfaces; intf ++) {
+        for (intf = 0; intf < phost->device.CfgDesc.bNumInterfaces && !bFound; intf ++) {
           if(phost->pClass[idx]->ClassCode == phost->device.CfgDesc.Itf_Desc[intf].bInterfaceClass)
           {
             phost->pActiveClass = phost->pClass[idx];
+            initStatus = phost->pActiveClass->Init(phost);
+            if (initStatus == USBH_OK) {
+                bFound = true;
+            } else if (initStatus == USBH_NOT_SUPPORTED) {
+                // its not supported by this class, try others
+                phost->pActiveClass = NULL;
+            }
+            else {
+                // failed to start
+                bFound = true;
+            }
             break;
           }
         }
@@ -540,19 +553,16 @@ USBH_StatusTypeDef  USBH_Process(USBH_HandleTypeDef *phost)
       
       if(phost->pActiveClass != NULL)
       {
-        if(phost->pActiveClass->Init(phost)== USBH_OK)
-        {
-          phost->gState  = HOST_CLASS_REQUEST; 
-          USBH_UsrLog ("%s class started.", phost->pActiveClass->Name);
-          
-          /* Inform user that a class has been activated */
-          phost->pUser(phost, HOST_USER_CLASS_SELECTED);   
-        }
-        else
-        {
-          phost->gState  = HOST_ABORT_STATE;
-          USBH_UsrLog ("Device not supporting %s class.", phost->pActiveClass->Name);
-        }
+          if (initStatus == USBH_OK) {
+              phost->gState  = HOST_CLASS_REQUEST; 
+              USBH_UsrLog ("%s class started.", phost->pActiveClass->Name);
+
+              /* Inform user that a class has been activated */
+              phost->pUser(phost, HOST_USER_CLASS_SELECTED);   
+          } else {
+             phost->gState  = HOST_ABORT_STATE;
+             USBH_UsrLog ("%s class failed to init", phost->pActiveClass->Name);
+          }
       }
       else
       {
