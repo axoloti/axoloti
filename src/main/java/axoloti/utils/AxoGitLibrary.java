@@ -107,8 +107,10 @@ public class AxoGitLibrary extends AxolotiLibrary {
                 return;
             }
             boolean isDirty = isDirty(git);
-            if (isDirty && isAuth()) {
+            if (isDirty) {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications detected : {0}", logDetails());
+            }
+            if (isDirty && isAuth()) {
                 if (!add(git)) {
                     git.getRepository().close();
                     return;
@@ -205,6 +207,26 @@ public class AxoGitLibrary extends AxolotiLibrary {
         // check to see if already checked out
         try {
             if (branch.equals(git.getRepository().getBranch())) {
+                // has the user changed a brannch, that they are not authorised to change
+                boolean isDirty = isDirty(git);
+                if(isDirty && !isAuth()) {
+                    Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "unauthorised changes, resetting : {0}", logDetails());
+                    CheckoutCommand cmd = git.checkout();
+                    cmd.setAllPaths(true);
+                    //cmd.setName(branch);
+                    try {
+                        cmd.call();
+                        CheckoutResult res = cmd.getResult();
+                        if (!res.getStatus().equals(CheckoutResult.Status.OK)) {
+                            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (checkout) FAILED : {0}", logDetails());
+                            return false;
+                        }
+                        return true;
+                    } catch (GitAPIException ex) {
+                        Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Sync (checkout) FAILED : {0}", logDetails());
+                        Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 return true;
             }
         } catch (IOException ex) {

@@ -166,7 +166,7 @@ Different data types are marked by different colors on the outlets, inlets and w
 
 #Execution order
 Every object in the patch is executed once in the signal processing loop, at 3000Hz. 
-These are processed in strict order, right to left, top to bottom.
+These are processed in strict order, left to right, top to bottom.
 (Feedback is allowed, and will be processed in the next processing loop)
 
 #Documenting patches
