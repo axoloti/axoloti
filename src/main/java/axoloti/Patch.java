@@ -2238,26 +2238,42 @@ public class Patch {
         if (obj.getType() == objType) {
             return obj;
         }
-        if (!(obj instanceof AxoObjectInstance)) {
-            return obj;
+        if (obj instanceof AxoObjectInstance) {
+            String n = obj.getInstanceName();
+            obj.setInstanceName(n + "____tmp");
+            AxoObjectInstanceAbstract obj1 = AddObjectInstance(objType, obj.getLocation());
+            if ((obj1 instanceof AxoObjectInstance)) {
+                AxoObjectInstance new_obj = (AxoObjectInstance) obj1;
+                AxoObjectInstance old_obj = (AxoObjectInstance) obj;
+                new_obj.outletInstances = old_obj.outletInstances;
+                new_obj.inletInstances = old_obj.inletInstances;
+                new_obj.parameterInstances = old_obj.parameterInstances;
+                new_obj.attributeInstances = old_obj.attributeInstances;
+                new_obj.PostConstructor();
+            }
+            delete(obj);
+            obj1.setName(n);
+            obj1.PostConstructor();
+            obj1.repaint();
+            return obj1;
+        } else if (obj instanceof AxoObjectInstanceZombie) {
+            String n = obj.getInstanceName();
+            obj.setInstanceName(n + "____tmp");
+            AxoObjectInstanceAbstract obj1 = AddObjectInstance(objType, obj.getLocation());
+            if ((obj1 instanceof AxoObjectInstance)) {
+                AxoObjectInstance new_obj = (AxoObjectInstance) obj1;
+                AxoObjectInstanceZombie old_obj = (AxoObjectInstanceZombie) obj;
+                new_obj.outletInstances = old_obj.outletInstances;
+                new_obj.inletInstances = old_obj.inletInstances;
+                new_obj.PostConstructor();
+            }
+            delete(obj);
+            obj1.setName(n);
+            obj1.PostConstructor();
+            obj1.repaint();
+            return obj1;
         }
-        String n = obj.getInstanceName();
-        obj.setInstanceName(n + "____tmp");
-        AxoObjectInstanceAbstract obj1 = AddObjectInstance(objType, obj.getLocation());
-        if ((obj1 instanceof AxoObjectInstance) && (obj instanceof AxoObjectInstance)) {
-            AxoObjectInstance new_obj = (AxoObjectInstance) obj1;
-            AxoObjectInstance old_obj = (AxoObjectInstance) obj;
-            new_obj.outletInstances = old_obj.outletInstances;
-            new_obj.inletInstances = old_obj.inletInstances;
-            new_obj.parameterInstances = old_obj.parameterInstances;
-            new_obj.attributeInstances = old_obj.attributeInstances;
-            new_obj.PostConstructor();
-        }
-        delete(obj);
-        obj1.setName(n);
-        obj1.PostConstructor();
-        obj1.repaint();
-        return obj1;
+        return obj;
     }
 
     void invalidate() {
