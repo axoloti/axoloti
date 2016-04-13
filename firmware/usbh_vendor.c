@@ -52,7 +52,7 @@ static USBH_StatusTypeDef USBH_Virus_InterfaceInit(USBH_HandleTypeDef *phost) {
     MIDI_HandleTypeDef *MIDI_Handle;
     USBH_StatusTypeDef status = USBH_FAIL;
 
-    const uint8_t interface = 3;
+    const uint8_t interface = 5;
 
     usbh_midi_init(); 
 

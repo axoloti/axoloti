@@ -386,37 +386,52 @@ static void USBH_ParseCfgDesc (USBH_CfgDescTypeDef* cfg_desc,
   cfg_desc->bmAttributes        = *(uint8_t  *) (buf + 7);
   cfg_desc->bMaxPower           = *(uint8_t  *) (buf + 8);    
   
-  
   if (length > USB_CONFIGURATION_DESC_SIZE)
   {
+    USBH_UsrLog("cfg desc: num interfaces %u", cfg_desc->bNumInterfaces);
     ptr = USB_LEN_CFG_DESC;
     pif = (USBH_InterfaceDescTypeDef *)0;
-    
-    
-    while ((if_ix < USBH_MAX_NUM_INTERFACES ) && (ptr < cfg_desc->wTotalLength))
+    if_ix = 0;
+    ep_ix = 0;
+    pep = (USBH_EpDescTypeDef *)0;        
+    int8_t if_num = -1;
+
+    while (ptr < cfg_desc->wTotalLength) 
     {
-      pdesc = USBH_GetNextDesc((uint8_t *)pdesc, &ptr);
-      if (pdesc->bDescriptorType   == USB_DESC_TYPE_INTERFACE) 
-      {
-        uint8_t if_num   = *(uint8_t  *) (((uint8_t*) pdesc) + 2);
-        pif = &cfg_desc->Itf_Desc[if_num];
-        USBH_ParseInterfaceDesc (pif, (uint8_t *)pdesc);            
-        
-        ep_ix = 0;
-        pep = (USBH_EpDescTypeDef *)0;        
-        while ((ep_ix < pif->bNumEndpoints) && (ptr < cfg_desc->wTotalLength))
+        pdesc = USBH_GetNextDesc((uint8_t *)pdesc, &ptr);
+        if (pdesc->bDescriptorType == USB_DESC_TYPE_INTERFACE) 
         {
-          pdesc = USBH_GetNextDesc((uint8_t*) pdesc, &ptr);
-          if (pdesc->bDescriptorType   == USB_DESC_TYPE_ENDPOINT) 
-          {  
-            pep = &cfg_desc->Itf_Desc[if_num].Ep_Desc[ep_ix];
-            USBH_ParseEPDesc (pep, (uint8_t *)pdesc);
-            ep_ix++;
-          }
+            if(if_ix < USBH_MAX_NUM_INTERFACES)
+            { 
+                pif = &cfg_desc->Itf_Desc[if_ix];
+                USBH_ParseInterfaceDesc (pif, (uint8_t *)pdesc);            
+                pep = (USBH_EpDescTypeDef *)0;        
+                ep_ix = 0;
+                if_num = if_ix;
+                if_ix++;
+                USBH_UsrLog("interface: interface %u, num %u, numep %u, class %x , sub class %x", if_num, pif->bInterfaceNumber, pif->bNumEndpoints, pif->bInterfaceClass, pif->bInterfaceSubClass);
+                if(if_num + 1 > cfg_desc->bNumInterfaces) 
+                {
+                    USBH_UsrLog("interface: more interfaces described, that config detailed, use actual number");
+                    cfg_desc->bNumInterfaces = if_num + 1; // remember zero based
+                }
+            }
+            else {
+                // new interface, but no more room so, dont read more endpoints
+                if_num = -1;
+            }
         }
-        if_ix = if_num + 1;
-      }
-    }
+        else if (pdesc->bDescriptorType == USB_DESC_TYPE_ENDPOINT) 
+        {
+            if( if_num >= 0 && pif != 0 && ep_ix < pif->bNumEndpoints && ep_ix < USBH_MAX_NUM_ENDPOINTS)
+            {  
+                pep = &cfg_desc->Itf_Desc[if_num].Ep_Desc[ep_ix];
+                USBH_ParseEPDesc (pep, (uint8_t *)pdesc);
+                USBH_UsrLog("endpoint: interface %u, ep num %u, addr  %x", if_num, ep_ix, pep->bEndpointAddress); 
+                ep_ix++;
+            }
+        }
+    }    
   }  
 }
 

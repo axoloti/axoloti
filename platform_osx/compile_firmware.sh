@@ -8,4 +8,4 @@ export axoloti_firmware=${axoloti_firmware:="$axoloti_release/firmware"}
 export axoloti_home=${axoloti_home:="$platformdir/.."}
 
 cd "${axoloti_firmware}"
-"${axoloti_firmware}/compile_firmware_osx.sh"
+"${axoloti_firmware}/compile_firmware_osx.sh" $1
