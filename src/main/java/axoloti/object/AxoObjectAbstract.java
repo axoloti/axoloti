@@ -56,7 +56,7 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
         @ElementList(entry = "upgradeSha", type = String.class, inline = true, required = false),})
     HashSet<String> upgradeSha;
 
-    @Element
+    @Element(name = "sDescription", required = false)
     public String sDescription;
 
     public String shortId;

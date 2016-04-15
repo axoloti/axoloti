@@ -198,7 +198,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             jMenuItemApply.setEnabled(!sellib.isReadOnly());
         }
         // embedded object
-        if (editObj.sPath == null) {
+        if (editObj.sPath == null || editObj.sPath.length()==0) {
             jMenuItemSave.setEnabled(false);
         }
     }

@@ -135,15 +135,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         final PopupIcon popupIcon = new PopupIcon();
         popupIcon.setPopupIconListener(
                 new PopupIcon.PopupIconListener() {
-                    @Override
-                    public void ShowPopup() {
-                        if (popup.getParent() == null) {
-                            popupIcon.add(popup);
-                        }
-                        popup.show(popupIcon,
-                                0, popupIcon.getHeight());
-                    }
-                });
+            @Override
+            public void ShowPopup() {
+                if (popup.getParent() == null) {
+                    popupIcon.add(popup);
+                }
+                popup.show(popupIcon,
+                        0, popupIcon.getHeight());
+            }
+        });
         Titlebar.add(popupIcon);
 
         LabelComponent idlbl = new LabelComponent(typeName);
@@ -199,14 +199,16 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             popup.add(popm_adapt);
         }
 
-        MenuItem popm_embed = new MenuItem("embed (convert to patcher/object");
-        popm_embed.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                ConvertToEmbeddedObj();
-            }
-        });
-        popup.add(popm_embed);
+        if (!(this instanceof AxoObjectInstancePatcherObject)) {
+            MenuItem popm_embed = new MenuItem("embed as patcher object");
+            popm_embed.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    ConvertToEmbeddedObj();
+                }
+            });
+            popup.add(popm_embed);
+        }
 
         /*
          h.add(Box.createHorizontalStrut(3));
@@ -851,10 +853,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             return;
         }
         if (selected != getType()) {
-            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"promoting " + this + " to " + selected);            
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "promoting " + this + " to " + selected);
             patch.ChangeObjectInstanceType(this, selected);
         } else {
-            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion for {0}", typeName);            
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "no promotion for {0}", typeName);
         }
     }
 
@@ -893,10 +895,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 return;
             }
             AxoObjectAbstract o = ol.get(0);
+            String iname = getInstanceName();
             AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatch().ChangeObjectInstanceType(this, o);
-            oi.ao = getType().clone();
+            AxoObject ao = getType();
+            oi.ao = new AxoObject(ao.id,ao.sDescription);
+            oi.ao.copy(ao);
             oi.ao.sPath = "";
             oi.ao.upgradeSha = null;
+            oi.ao.CloseEditor();
+            oi.setInstanceName(iname);
             oi.updateObj();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
