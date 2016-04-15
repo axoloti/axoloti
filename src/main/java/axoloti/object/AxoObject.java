@@ -293,14 +293,14 @@ public class AxoObject extends AxoObjectAbstract {
 
     public void OpenEditor() {
         if (editor == null) {
-            editor = new AxoObjectEditor(this,false);
+            editor = new AxoObjectEditor(this, false);
         }
         editor.setState(java.awt.Frame.NORMAL);
         editor.setVisible(true);
     }
 
     public void CloseEditor() {
-       editor = null; 
+        editor = null;
     }
 
     @Override
@@ -404,10 +404,9 @@ public class AxoObject extends AxoObjectAbstract {
         return id;
     }
 
-
     @Override
     public String GenerateUUID() {
-        UUID uuid= UUID.randomUUID();
+        UUID uuid = UUID.randomUUID();
         return uuid.toString();
     }
 
@@ -480,12 +479,10 @@ public class AxoObject extends AxoObjectAbstract {
                 }
             }
             return r;
+        } else if (includes.isEmpty()) {
+            return null;
         } else {
-            if (includes.isEmpty()) {
-                return null;
-            } else {
-                return includes;
-            }
+            return includes;
         }
     }
 
@@ -557,5 +554,57 @@ public class AxoObject extends AxoObjectAbstract {
             c.attributes.add(i.clone());
         }
         return c;
+    }
+
+    public void copy(AxoObject o) throws CloneNotSupportedException {
+
+        inlets = new ArrayList<Inlet>();
+        for (Inlet i : o.inlets) {
+            inlets.add(i.clone());
+        }
+        outlets = new ArrayList<Outlet>();
+        for (Outlet i : o.outlets) {
+            outlets.add(i.clone());
+        }
+        params = new ArrayList<Parameter>();
+        for (Parameter i : o.params) {
+            params.add(i.clone());
+        }
+        displays = new ArrayList<Display>();
+        for (Display i : o.displays) {
+            displays.add(i.clone());
+        }
+        attributes = new ArrayList<AxoAttribute>();
+        for (AxoAttribute i : o.attributes) {
+            attributes.add(i.clone());
+        }
+
+        helpPatch = o.helpPatch;
+        providesModulationSource = o.providesModulationSource;
+        rotatedParams = o.rotatedParams;
+        if (o.ModulationSources != null) {
+            ModulationSources = (ArrayList<String>) o.ModulationSources.clone();
+        } else {
+            ModulationSources = null;
+        }
+        if (o.includes != null) {
+            includes = (HashSet<String>) o.includes.clone();
+        } else {
+            o.includes = null;
+        }
+        if (o.depends != null) {
+            depends = (HashSet<String>) o.depends.clone();
+        } else {
+            o.depends = null;
+
+        }
+        sLocalData = o.sLocalData;
+        sInitCode = o.sInitCode;
+        sDisposeCode = o.sDisposeCode;
+        sKRateCode = o.sKRateCode;
+        sSRateCode = o.sSRateCode;
+        sMidiCode = o.sMidiCode;
+        sAuthor = o.sAuthor;
+        sLicense = o.sLicense;
     }
 }
