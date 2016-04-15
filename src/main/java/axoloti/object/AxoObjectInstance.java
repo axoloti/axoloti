@@ -902,6 +902,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             oi.ao.copy(ao);
             oi.ao.sPath = "";
             oi.ao.upgradeSha = null;
+            oi.ao.CloseEditor();
             oi.setInstanceName(iname);
             oi.updateObj();
         } catch (CloneNotSupportedException ex) {
