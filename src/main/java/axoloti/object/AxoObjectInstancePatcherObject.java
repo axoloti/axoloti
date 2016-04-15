@@ -84,6 +84,9 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         aoe.setState(java.awt.Frame.NORMAL);
         aoe.setVisible(true);
     }
+    public boolean isEditorOpen() {
+        return aoe != null && aoe.isVisible();
+    }
 
    @Override
     public void ObjectModified(Object src) {
