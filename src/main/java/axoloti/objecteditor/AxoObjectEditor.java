@@ -193,13 +193,17 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
                 }
             }
         }
-        if (sellib != null) {
-            jMenuItemSave.setEnabled(!sellib.isReadOnly());
-            jMenuItemApply.setEnabled(!sellib.isReadOnly());
-        }
-        // embedded object
         if (editObj.sPath == null || editObj.sPath.length()==0) {
+            // embedded object
             jMenuItemSave.setEnabled(false);
+            jMenuItemApply.setEnabled(true);
+        }
+        else {
+            // normal objects
+            if (sellib != null) {
+                jMenuItemSave.setEnabled(!sellib.isReadOnly());
+            }
+            jMenuItemApply.setEnabled(false);
         }
     }
 
@@ -260,7 +264,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     public void Close() {
         // warn if changes, and its not an embedded object
 
-        if (modified && editObj.sPath != null) {
+        if (modified) {
             if(jMenuItemSave.isEnabled()) {
                 int result = JOptionPane.showConfirmDialog(this, "Unsaved changes, do you want to save?",
                     "Close", JOptionPane.YES_NO_CANCEL_OPTION);
@@ -269,6 +273,19 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
                         return;
                     case JOptionPane.YES_OPTION:
                         jMenuItemSaveActionPerformed(null);
+                        // fall through to close
+                    case JOptionPane.NO_OPTION:
+                    default:
+                        ;
+                }
+            } else if(jMenuItemApply.isEnabled()) {
+                int result = JOptionPane.showConfirmDialog(this, "Unsaved changes, do you want to apply?",
+                    "Close", JOptionPane.YES_NO_CANCEL_OPTION);
+                switch(result) {
+                    case JOptionPane.CANCEL_OPTION:
+                        return;
+                    case JOptionPane.YES_OPTION:
+                        jMenuItemApplyActionPerformed(null);
                         // fall through to close
                     case JOptionPane.NO_OPTION:
                     default:
