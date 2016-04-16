@@ -676,11 +676,15 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     }
 
     public boolean runPatchTests() {
-        return runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/patches"));
+        AxolotiLibrary fLib= prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+        if(fLib == null) return false;
+        return runTestDir(new File(fLib.getLocalLocation() + "patches"));
     }
 
     public boolean runObjectTests() {
-        return runTestDir(new File(System.getProperty(Axoloti.RELEASE_DIR) + "/objects"));
+        AxolotiLibrary fLib= prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+        if(fLib == null) return false;
+        return runTestDir(new File(fLib.getLocalLocation() + "objects"));
     }
 
     public boolean runFileTest(String patchName) {
