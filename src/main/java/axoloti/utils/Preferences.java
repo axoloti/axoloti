@@ -137,6 +137,7 @@ public class Preferences {
     }
 
     public AxolotiLibrary getLibrary(String id) {
+        if(libraries == null) return null;
         for (AxolotiLibrary lib : libraries) {
             if (lib.getId().equals(id)) {
                 return lib;
