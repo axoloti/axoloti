@@ -236,6 +236,20 @@ public class AxoObjects {
                     AxoObjectFile o = null;
                     try {
                          o = serializer.read(AxoObjectFile.class, fileEntry);
+                    } catch (java.lang.reflect.InvocationTargetException ite) {
+                        if(ite.getTargetException() instanceof AxoObjectFile.ObjectVersionException) {
+                            AxoObjectFile.ObjectVersionException ove = (AxoObjectFile.ObjectVersionException) ite.getTargetException();
+                            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Object produced with newer version of Axoloti {0} {1}", 
+                                                                            new Object[]{fileEntry.getAbsoluteFile(), ove.getMessage()});
+                        } else {
+                            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ite);
+                            try {
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO,"Error reading object, try relaxed mode {0}",fileEntry.getAbsolutePath());
+                                o = serializer.read(AxoObjectFile.class, fileEntry, false);
+                            } catch (Exception ex1) {
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
+                        }
                     } catch (Exception ex) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ex);
                         try {

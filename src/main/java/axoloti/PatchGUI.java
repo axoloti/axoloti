@@ -1032,6 +1032,15 @@ public class PatchGUI extends Patch {
             patch1.PostContructor();
             patch1.setFileNamePath(f.getPath());
             return pf;
+        } catch (java.lang.reflect.InvocationTargetException ite) {
+            if(ite.getTargetException() instanceof Patch.PatchVersionException) {
+                Patch.PatchVersionException pve = (Patch.PatchVersionException) ite.getTargetException();
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Patch produced with newer version of Axoloti {0} {1}", 
+                                                                new Object[]{f.getAbsoluteFile(), pve.getMessage()});
+            } else {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ite);
+            }
+            return null;
         } catch (Exception ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             return null;
