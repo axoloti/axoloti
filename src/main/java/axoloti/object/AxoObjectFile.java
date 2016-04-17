@@ -25,6 +25,7 @@ import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.core.Complete;
 import org.simpleframework.xml.core.Persist;
+import org.simpleframework.xml.core.Validate;
 
 /**
  *
@@ -32,6 +33,7 @@ import org.simpleframework.xml.core.Persist;
  */
 @Root(name = "objdefs")
 public class AxoObjectFile {
+
     @Attribute(required = false)
     String appVersion;
 
@@ -42,15 +44,107 @@ public class AxoObjectFile {
     })
     public ArrayList<AxoObjectAbstract> objs;
 
+    static public class ObjectVersionException
+            extends RuntimeException {
+
+        ObjectVersionException(String msg) {
+            super(msg);
+        }
+    }
+
+    private static final int AVX = getVersionX(Version.AXOLOTI_SHORT_VERSION),
+            AVY = getVersionY(Version.AXOLOTI_SHORT_VERSION),
+            AVZ = getVersionZ(Version.AXOLOTI_SHORT_VERSION);
+
+    private static int getVersionX(String vS) {
+        if (vS != null) {
+            int i = vS.indexOf('.');
+            if (i > 0) {
+                String v = vS.substring(0, i);
+                try {
+                    return Integer.valueOf(v);
+                } catch (NumberFormatException e) {
+                }
+            }
+        }
+        return -1;
+    }
+
+    private static int getVersionY(String vS) {
+        if (vS != null) {
+            int i = vS.indexOf('.');
+            if (i > 0) {
+                int j = vS.indexOf('.', i + 1);
+                if (j > 0) {
+                    String v = vS.substring(i + 1, j);
+                    try {
+                        return Integer.valueOf(v);
+                    } catch (NumberFormatException e) {
+
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    private static int getVersionZ(String vS) {
+        if (vS != null) {
+            int i = vS.indexOf('.');
+            if (i > 0) {
+                int j = vS.indexOf('.', i + 1);
+                if (j > 0) {
+                    String v = vS.substring(j + 1);
+                    try {
+                        return Integer.valueOf(v);
+                    } catch (NumberFormatException e) {
+
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
     public AxoObjectFile() {
         objs = new ArrayList<AxoObjectAbstract>();
     }
-    
-    @Complete 
+
+    @Validate
+    public void Validate() {
+        // called after deserialializtion, stops validation
+        if (appVersion != null
+                && !appVersion.equals(Version.AXOLOTI_SHORT_VERSION)) {
+            int vX = getVersionX(appVersion);
+            int vY = getVersionY(appVersion);
+            int vZ = getVersionZ(appVersion);
+
+            if (AVX > vX) {
+                return;
+            }
+            if (AVX == vX) {
+                if (AVY > vY) {
+                    return;
+                }
+                if (AVY == vY) {
+                    if (AVZ > vZ) {
+                        return;
+                    }
+                    if (AVZ == vZ) {
+                        return;
+                    }
+                }
+            }
+
+            throw new ObjectVersionException(appVersion);
+        }
+    }
+
+    @Complete
     public void Complete() {
         // called after deserialializtion
     }
-    
+
     @Persist
     public void Persist() {
         // called prior to serialization

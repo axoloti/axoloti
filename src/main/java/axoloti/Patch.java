@@ -17,7 +17,6 @@
  */
 package axoloti;
 
-import axoloti.attribute.AttributeInstance;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletCharPtr32;
@@ -58,15 +57,14 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Complete;
 import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.core.Validate;
 import qcmds.QCmdChangeWorkingDirectory;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdCreateDirectory;
@@ -119,6 +117,98 @@ public class Patch {
     private AxoObjectInstanceAbstract controllerinstance;
 
     public boolean presetUpdatePending = false;
+
+    static public class PatchVersionException
+            extends RuntimeException {
+
+        PatchVersionException(String msg) {
+            super(msg);
+        }
+    }
+
+    private static final int AVX = getVersionX(Version.AXOLOTI_SHORT_VERSION),
+            AVY = getVersionY(Version.AXOLOTI_SHORT_VERSION),
+            AVZ = getVersionZ(Version.AXOLOTI_SHORT_VERSION);
+
+    private static int getVersionX(String vS) {
+        if (vS != null) {
+            int i = vS.indexOf('.');
+            if (i > 0) {
+                String v = vS.substring(0, i);
+                try {
+                    return Integer.valueOf(v);
+                } catch (NumberFormatException e) {
+                }
+            }
+        }
+        return -1;
+    }
+
+    private static int getVersionY(String vS) {
+        if (vS != null) {
+            int i = vS.indexOf('.');
+            if (i > 0) {
+                int j = vS.indexOf('.', i + 1);
+                if (j > 0) {
+                    String v = vS.substring(i + 1, j);
+                    try {
+                        return Integer.valueOf(v);
+                    } catch (NumberFormatException e) {
+
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    private static int getVersionZ(String vS) {
+        if (vS != null) {
+            int i = vS.indexOf('.');
+            if (i > 0) {
+                int j = vS.indexOf('.', i + 1);
+                if (j > 0) {
+                    String v = vS.substring(j + 1);
+                    try {
+                        return Integer.valueOf(v);
+                    } catch (NumberFormatException e) {
+
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    @Validate
+    public void Validate() {
+        // called after deserialializtion, stops validation
+        if (appVersion != null
+                && !appVersion.equals(Version.AXOLOTI_SHORT_VERSION)) {
+            int vX = getVersionX(appVersion);
+            int vY = getVersionY(appVersion);
+            int vZ = getVersionZ(appVersion);
+
+            if (AVX > vX) {
+                return;
+            }
+            if (AVX == vX) {
+                if (AVY > vY) {
+                    return;
+                }
+                if (AVY == vY) {
+                    if (AVZ > vZ) {
+                        return;
+                    }
+                    if (AVZ == vZ) {
+                        return;
+                    }
+                }
+            }
+
+            throw new PatchVersionException(appVersion);
+        }
+    }
 
     @Complete
     public void Complete() {
@@ -367,6 +457,7 @@ public class Patch {
         }
         return null;
     }
+
     /*
      private boolean CompatType(DataType source, DataType d2){
      if (d1 == d2) return true;
@@ -1147,13 +1238,11 @@ public class Patch {
                     } else {
                         c += n.CName();
                     }
+                } else if (n.NeedsLatch()
+                        && (objectinstances.indexOf(n.source.get(0).GetObjectInstance()) >= objectinstances.indexOf(o))) {
+                    c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName() + "Latch");
                 } else {
-                    if (n.NeedsLatch()
-                            && (objectinstances.indexOf(n.source.get(0).GetObjectInstance()) >= objectinstances.indexOf(o))) {
-                        c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName() + "Latch");
-                    } else {
-                        c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName());
-                    }
+                    c += n.GetDataType().GenerateConversionToType(i.GetDataType(), n.CName());
                 }
             } else if (n == null) { // unconnected input
                 c += i.GetDataType().GenerateSetDefaultValueCode();
@@ -1174,12 +1263,10 @@ public class Patch {
                 } else {
                     c += n.CName() + "+";
                 }
+            } else if (i.GetDataType() instanceof axoloti.datatypes.DataTypeBuffer) {
+                c += "UNCONNECTED_OUTPUT_BUFFER";
             } else {
-                if (i.GetDataType() instanceof axoloti.datatypes.DataTypeBuffer) {
-                    c += "UNCONNECTED_OUTPUT_BUFFER";
-                } else {
-                    c += "UNCONNECTED_OUTPUT";
-                }
+                c += "UNCONNECTED_OUTPUT";
             }
             needsComma = true;
         }
@@ -2060,6 +2147,7 @@ public class Patch {
             }
         }
     }
+
     /*
      void ApplyPreset(int i) { // OBSOLETE
      presetNo = i;
@@ -2134,6 +2222,7 @@ public class Patch {
          }
          }*/
     }
+
     /*
      PresetParameterChange IncludeParameterInPreset(ParameterInstance param) {
      if (presetNo>0){
