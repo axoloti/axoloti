@@ -20,6 +20,7 @@ package axoloti;
 import axoloti.object.AxoObjects;
 import axoloti.utils.OSDetect;
 import axoloti.utils.Preferences;
+import axoloti.utils.AxolotiLibrary;
 import java.awt.EventQueue;
 import java.awt.SplashScreen;
 import java.io.File;
@@ -164,6 +165,7 @@ public class Axoloti {
         String defaultHome = curDir;
         String defaultRuntime = curDir;
         String defaultRelease = curDir;
+        boolean versionedHome = false;
 
         File git = new File("." + File.separator + ".git");
         if (git.exists()) {
@@ -171,16 +173,37 @@ public class Axoloti {
             System.out.println("defaulting to developer defaults, can be overridden");
             defaultHome = ".";
             defaultRuntime = ".";
-        } else if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            // not sure which versions of windows this is valid for, good for 8!
-            defaultHome = System.getenv("HOMEPATH") + File.separator + "Documents" + File.separator + "axoloti";
-            defaultRuntime = System.getenv("ProgramFiles") + File.separator + "axoloti_runtime";
-        } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            defaultHome = System.getenv("HOME") + "/Documents/axoloti";
-            defaultRuntime = "/Applications/axoloti_runtime";
-        } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            defaultHome = System.getenv("HOME") + "/axoloti";
-            defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
+        } else {
+            String docDir;
+            if (null != OSDetect.getOS()) 
+                switch (OSDetect.getOS()) {
+                case WIN:
+                    // not sure which versions of windows this is valid for, good for 8!
+                    docDir = System.getenv("HOMEPATH") + File.separator + "Documents" + File.separator;
+                    defaultRuntime = System.getenv("ProgramFiles") + File.separator + "axoloti_runtime";
+                    break;
+                case MAC:
+                    docDir = System.getenv("HOME") + "/Documents/";
+                    defaultRuntime = "/Applications/axoloti_runtime";
+                    break;
+                case LINUX:
+                default:
+                    docDir = System.getenv("HOME") + "/";
+                    defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
+                    break;
+            } else {
+                    docDir = System.getenv("HOME") + "/";
+                    defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
+            }
+            
+            String ver = Version.AXOLOTI_SHORT_VERSION.replace(".", "_");
+            File versionHome= new File(docDir + "axoloti_"+ver);
+            if(versionHome.exists()) {
+                defaultHome = docDir + "axoloti_"+ver;
+                versionedHome = true;
+            } else {
+                defaultHome = docDir + "axoloti";
+            }
         }
 
         BuildEnv(HOME_DIR, defaultHome);
@@ -213,6 +236,23 @@ public class Axoloti {
         }
 
         Preferences prefs = Preferences.LoadPreferences();
+        if (versionedHome) {
+            String fwDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
+            if(! fwDir.startsWith(System.getProperty(RELEASE_DIR)) && !fwDir.startsWith(System.getProperty(HOME_DIR))) {
+                System.out.println("Using versioned home, will reset firmware");
+                prefs.SetFirmwareDir(System.getProperty(RELEASE_DIR) + File.separator + "firmware");
+            }
+
+            AxolotiLibrary lib = prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+            if(lib != null) {
+                File locdir = new File(lib.getLocalLocation());
+                File verdir = new File(System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-factory"+File.separator);
+                if(! locdir.getCanonicalPath().equals(verdir.getCanonicalPath())) {
+                    System.out.println("Using versioned home, will reset libraries");
+                    prefs.ResetLibraries(true);
+                }
+            }
+        }
 
         System.out.println("Axoloti Directories:\n"
                 + "Current = " + curDir + "\n"

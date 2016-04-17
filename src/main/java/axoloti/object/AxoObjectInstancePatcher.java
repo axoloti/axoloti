@@ -58,6 +58,8 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (pg != null) {
             AxoObject ao = pg.GenerateAxoObj();
             setType(ao);
+            ao.id = "patch/patcher";
+            ao.sDescription = "description";
             pg.container(patch);
         }
     }
