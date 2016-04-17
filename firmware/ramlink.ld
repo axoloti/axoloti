@@ -21,6 +21,15 @@ MEMORY
 
 SECTIONS {
 
+    .text : ALIGN(16) SUBALIGN(16)
+    {
+	/* Note: the .boot section _must_ be first in the resulting binary,
+	 * as that is where the firmware calls the patch when loaded. */
+        * (.boot);
+        * (.text);
+        etext = .;
+    } > SRAM
+    
     constructors : ALIGN(4) SUBALIGN(4)
     {
         PROVIDE(__ctor_array_start = .);
@@ -37,13 +46,6 @@ SECTIONS {
         PROVIDE(__dtor_array_end = .);
     } > SRAM
 
-    .text : ALIGN(16) SUBALIGN(16)
-    {
-        * (.boot);
-        * (.text);
-        etext = .;
-    } > SRAM
-    
     .rodata : ALIGN(4) SUBALIGN(4) 
     {
         * (.rodata);
