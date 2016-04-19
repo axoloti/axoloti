@@ -21,6 +21,8 @@ import static axoloti.Axoloti.FIRMWARE_DIR;
 import static axoloti.Axoloti.HOME_DIR;
 import static axoloti.Axoloti.RELEASE_DIR;
 import static axoloti.Axoloti.RUNTIME_DIR;
+import static axoloti.Version.AXOLOTI_VERSION;
+import static axoloti.Version.AXOLOTI_BUILD_TIME;
 import axoloti.dialogs.AxolotiRemoteControl;
 import axoloti.dialogs.FileManagerFrame;
 import axoloti.dialogs.KeyboardFrame;
@@ -239,6 +241,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                     if (tsuf.length() > 0) {
                         MainFrame.this.setTitle(MainFrame.this.getTitle() + " (" + tsuf + ")");
                     }
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Axoloti version : {0}  build time : {1}", new Object[] {Version.AXOLOTI_VERSION, Version.AXOLOTI_BUILD_TIME});
 
                     updateLinkFirmwareID();
 
