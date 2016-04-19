@@ -32,6 +32,8 @@ import org.simpleframework.xml.ElementMap;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.core.Persist;
+import org.simpleframework.xml.*;
 
 /**
  *
@@ -39,6 +41,9 @@ import org.simpleframework.xml.core.Persister;
  */
 @Root
 public class Preferences {
+
+    @Attribute(required = false)
+    String appVersion;
 
     @Element(required = false)
     String CurrentFileDirectory;
@@ -122,6 +127,12 @@ public class Preferences {
         if (libraries == null) {
             libraries = new ArrayList<AxolotiLibrary>();
         }
+    }
+
+    @Persist
+    public void Persist() {
+        // called prior to serialization
+        appVersion = Version.AXOLOTI_SHORT_VERSION;
     }
 
     void SetDirty() {
