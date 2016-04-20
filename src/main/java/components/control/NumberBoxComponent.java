@@ -53,6 +53,13 @@ public class NumberBoxComponent extends ACtrlComponent {
     private NativeToReal convs[];
     private String keybBuffer = "";
 
+    private boolean hiliteUp = false;
+    private boolean hiliteDown = false;
+    private boolean dragging = false;
+
+    int rmargin = 5;
+    int htick = 3;
+
     public void setNative(NativeToReal convs[]) {
         this.convs = convs;
     }
@@ -90,7 +97,7 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     @Override
     protected void mouseDragged(MouseEvent e) {
-        if (isEnabled()) {
+        if (isEnabled() && dragging) {
             double v;
             if ((MousePressedBtn == MouseEvent.BUTTON1)) {
                 double t = tick;
@@ -127,14 +134,34 @@ public class NumberBoxComponent extends ACtrlComponent {
     @Override
     protected void mousePressed(MouseEvent e) {
         grabFocus();
-        MousePressedCoordX = e.getXOnScreen();
-        MousePressedCoordY = e.getYOnScreen();
-        MousePressedBtn = e.getButton();
-        getRootPane().setCursor(MainFrame.transparentCursor);
+        if (isEnabled() && (e.getX() >= getWidth() - rmargin - htick * 2)) {
+            dragging = false;
+            if (e.getY() > getHeight() / 2) {
+                hiliteDown = true;
+                setValue(value - tick);
+            } else {
+                hiliteUp = true;
+                setValue(value + tick);
+            }
+        } else {
+            dragging = true;
+            MousePressedCoordX = e.getXOnScreen();
+            MousePressedCoordY = e.getYOnScreen();
+            MousePressedBtn = e.getButton();
+            getRootPane().setCursor(MainFrame.transparentCursor);
+        }
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
+        if (hiliteDown) {
+            hiliteDown = false;
+            repaint();
+        }
+        if (hiliteUp) {
+            hiliteUp = false;
+            repaint();
+        }
         getRootPane().setCursor(Cursor.getDefaultCursor());
     }
 
@@ -270,24 +297,30 @@ public class NumberBoxComponent extends ACtrlComponent {
             g2.drawString(keybBuffer, h, getSize().height - v);
         }
 
-        int rmargin = 5;
-        int htick = 3;
-
         if (getWidth() < 20) {
             rmargin = -1;
             htick = 1;
         }
+        g2.setStroke(strokeThin);
         {
             int[] xp = new int[]{getWidth() - rmargin - htick * 2, getWidth() - rmargin, getWidth() - rmargin - htick};
             final int vmargin = getHeight() - htick - 3;
             int[] yp = new int[]{vmargin, vmargin, vmargin + htick};
-            g2.fillPolygon(xp, yp, 3);
+            if (hiliteDown) {
+                g2.drawPolygon(xp, yp, 3);
+            } else {
+                g2.fillPolygon(xp, yp, 3);
+            }
         }
         {
             int[] xp = new int[]{getWidth() - rmargin - htick * 2, getWidth() - rmargin, getWidth() - rmargin - htick};
             final int vmargin = 4;
             int[] yp = new int[]{vmargin + htick, vmargin + htick, vmargin};
-            g2.fillPolygon(xp, yp, 3);
+            if (hiliteUp) {
+                g2.drawPolygon(xp, yp, 3);
+            } else {
+                g2.fillPolygon(xp, yp, 3);
+            }
         }
     }
 
