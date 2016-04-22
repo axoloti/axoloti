@@ -293,7 +293,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     public void OpenEditor() {
         if (editor == null) {
-            editor = new AxoObjectEditor(this, false);
+            editor = new AxoObjectEditor(this);
         }
         editor.setState(java.awt.Frame.NORMAL);
         editor.setVisible(true);
