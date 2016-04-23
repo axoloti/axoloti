@@ -158,7 +158,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         popm_edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                getType().OpenEditor();
+                OpenEditor();
             }
         });
         popup.add(popm_edit);
@@ -418,6 +418,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         attributeInstances = new ArrayList<AttributeInstance>();
     }
 
+    public void OpenEditor() {
+        getType().OpenEditor();
+    }
+    
     @Override
     public void setInstanceName(String s) {
         super.setInstanceName(s);

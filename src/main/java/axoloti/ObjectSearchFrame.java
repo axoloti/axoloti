@@ -48,6 +48,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     public AxoObjectAbstract type;
     private final PatchGUI p;
     public AxoObjectInstanceAbstract target_object;
+    private AxoObjectTreeNode objectTree;
 
     /**
      * Creates new form ObjectSearchFrame
@@ -59,6 +60,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
         this.p = p;
         DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
+        this.objectTree = MainFrame.axoObjects.ObjectTree;
         this.root = PopulateJTree(MainFrame.axoObjects.ObjectTree, root1);
         tm = new DefaultTreeModel(this.root);
         jTree1.setModel(tm);
@@ -239,6 +241,14 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     int patchLocY;
 
     void Launch(Point patchLoc, AxoObjectInstanceAbstract o, String searchString) {
+        if(this.objectTree != MainFrame.axoObjects.ObjectTree) {
+            DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
+            this.objectTree = MainFrame.axoObjects.ObjectTree;
+            this.root = PopulateJTree(MainFrame.axoObjects.ObjectTree, root1);
+            tm = new DefaultTreeModel(this.root);
+            jTree1.setModel(tm);
+        }
+        
         accepted = false;
         patchLocX = patchLoc.x;
         patchLocY = patchLoc.y;
