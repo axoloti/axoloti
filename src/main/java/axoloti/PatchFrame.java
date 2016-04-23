@@ -163,6 +163,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         if (!MainFrame.prefs.getExpertMode()) {
             jSeparator3.setVisible(false);
             jMenuItemLock.setVisible(false);
+            jMenuGenerateAndCompileCode.setVisible(false);
             jMenuGenerateCode.setVisible(false);
             jMenuCompileCode.setVisible(false);
             jMenuUploadCode.setVisible(false);
@@ -308,6 +309,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuItemUploadSDStart = new javax.swing.JMenuItem();
         jMenuItemUploadInternalFlash = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        jMenuGenerateAndCompileCode = new javax.swing.JMenuItem();
         jMenuGenerateCode = new javax.swing.JMenuItem();
         jMenuCompileCode = new javax.swing.JMenuItem();
         jMenuUploadCode = new javax.swing.JMenuItem();
@@ -543,6 +545,14 @@ jCheckBoxMenuItemLive.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuPatch.add(jMenuItemUploadInternalFlash);
     jMenuPatch.add(jSeparator3);
+
+    jMenuGenerateAndCompileCode.setText("Generate & Compile code");
+    jMenuGenerateAndCompileCode.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuGenerateAndCompileCodeActionPerformed(evt);
+        }
+    });
+    jMenuPatch.add(jMenuGenerateAndCompileCode);
 
     jMenuGenerateCode.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -911,6 +921,11 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         }
     }//GEN-LAST:event_jMenuSaveCopyActionPerformed
 
+    private void jMenuGenerateAndCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGenerateAndCompileCodeActionPerformed
+        patch.WriteCode();
+        patch.Compile();
+    }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
+
     private boolean GoLive() {
         for (AxoObjectInstanceAbstract i : patch.objectinstances) {
             if(i instanceof AxoObjectInstancePatcherObject) {
@@ -960,6 +975,7 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JMenuItem jMenuClose;
     private javax.swing.JMenuItem jMenuCompileCode;
     private javax.swing.JMenu jMenuEdit;
+    private javax.swing.JMenuItem jMenuGenerateAndCompileCode;
     private javax.swing.JMenuItem jMenuGenerateCode;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemAddObj;
