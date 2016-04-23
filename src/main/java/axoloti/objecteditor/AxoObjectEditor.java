@@ -94,7 +94,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         attributeDefinitionsEditorPanel1.initComponents(editObj);
         displayDefinitionsEditorPanel1.initComponents(editObj);
 
-        FireObjectModified();
 
         jTextFieldAuthor.addFocusListener(new FocusListener() {
             @Override
@@ -180,6 +179,9 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             }
             jMenuItemApply.setEnabled(false);
         }
+        
+        editObj.FireObjectModified(this);
+        jTextDesc.requestFocus();
     }
     
     void initFields() {
@@ -210,7 +212,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     boolean compareField(String oVal, String nVal) {
         String ov = oVal, nv = nVal;
         if (ov == null) ov = "";
-        if (nv == null) nv = "";
         return ov.equals(nv);
     }
             
@@ -263,36 +264,35 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         editObj.sSRateCode = jTextAreaSRateCode.getText();
         editObj.sDisposeCode = jTextAreaDisposeCode.getText();
         editObj.sMidiCode = jTextAreaMidiCode.getText();
+        
+        if(editObj.sAuthor.isEmpty()) editObj.sAuthor = null;
+        if(editObj.sDescription.isEmpty()) editObj.sDescription = null;
+        if(editObj.sLicense.isEmpty()) editObj.sLicense = null;
+        if(editObj.sLocalData.isEmpty()) editObj.sLocalData = null;
+        if(editObj.sInitCode.isEmpty()) editObj.sInitCode = null;
+        if(editObj.sKRateCode.isEmpty()) editObj.sKRateCode = null;
+        if(editObj.sSRateCode.isEmpty()) editObj.sSRateCode = null;
+        if(editObj.sDisposeCode.isEmpty()) editObj.sDisposeCode = null;
+        if(editObj.sMidiCode.isEmpty()) editObj.sMidiCode = null;
+        
     }
 
     void applyChangesToOriginal() {
         applyChangesToEdit();
-        origObj.sAuthor = editObj.sAuthor;
-        origObj.sDescription = editObj.sDescription;
-        origObj.sLicense = editObj.sLicense;
-        origObj.helpPatch = editObj.helpPatch;
-        origObj.sLocalData = editObj.sLocalData;
-        origObj.sInitCode = editObj.sInitCode;
-        origObj.sKRateCode = editObj.sKRateCode;
-        origObj.sSRateCode = editObj.sSRateCode;
-        origObj.sDisposeCode = editObj.sDisposeCode;
-        origObj.sMidiCode = editObj.sMidiCode;
-        origObj.inlets = editObj.inlets;
-        origObj.outlets = editObj.outlets;
-        origObj.includes = editObj.includes;
-        origObj.depends = editObj.depends;
-        origObj.displays = editObj.displays;
-        origObj.attributes = editObj.attributes;
-        origObj.params = editObj.params;
+        try {
+            origObj.copy(editObj);
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     void FireObjectModified() {
-        jTextAreaLocalData.setText(editObj.sLocalData);
-        jTextAreaInitCode.setText(editObj.sInitCode);
-        jTextAreaKRateCode.setText(editObj.sKRateCode);
-        jTextAreaSRateCode.setText(editObj.sSRateCode);
-        jTextAreaDisposeCode.setText(editObj.sDisposeCode);
-        jTextAreaMidiCode.setText(editObj.sMidiCode);
+        jTextAreaLocalData.setText(editObj.sLocalData == null ? "" : editObj.sLocalData);
+        jTextAreaInitCode.setText(editObj.sInitCode == null ? "" : editObj.sInitCode );
+        jTextAreaKRateCode.setText(editObj.sKRateCode == null ? "" :editObj.sKRateCode );
+        jTextAreaSRateCode.setText(editObj.sSRateCode == null ? "" : editObj.sSRateCode );
+        jTextAreaDisposeCode.setText(editObj.sDisposeCode == null ? "" : editObj.sDisposeCode );
+        jTextAreaMidiCode.setText(editObj.sMidiCode == null ? "" : editObj.sMidiCode);
         Serializer serializer = new Persister();
         ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
         try {
@@ -311,12 +311,16 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     
     public void initEditFromOrig() {
         try {
-            this.editObj = origObj.clone();
+            if(editObj == null)
+                editObj = origObj.clone();
+            else
+                editObj.copy(origObj);
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
-            this.editObj = new AxoObject();
+            editObj = new AxoObject();
         }
         editObj.addObjectModifiedListener(this);
+        editObj.FireObjectModified(this);
         initFields();
     }
     
@@ -769,6 +773,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         applyChangesToOriginal();
         origObj.FireObjectModified(this);
         MainFrame.axoObjects.WriteAxoObject(editObj.sPath, editObj);
+        MainFrame.axoObjects.LoadAxoObjects();
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void jMenuItemAddToLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddToLibraryActionPerformed
@@ -781,7 +786,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     private void jMenuItemApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplyActionPerformed
         applyChangesToOriginal();
         origObj.FireObjectModified(this);
-        // dont clear modified, so they are still prompted to save.
+        MainFrame.axoObjects.LoadAxoObjects();
     }//GEN-LAST:event_jMenuItemApplyActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

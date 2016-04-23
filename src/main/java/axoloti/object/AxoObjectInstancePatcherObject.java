@@ -22,7 +22,9 @@ import axoloti.objecteditor.AxoObjectEditor;
 import components.ButtonComponent;
 import components.ButtonComponent.ActListener;
 import java.awt.Component;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
+import javax.swing.SwingUtilities;
 import org.simpleframework.xml.Element;
 
 /**
@@ -85,9 +87,14 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         }
         if (aoe == null) {
             aoe = new AxoObjectEditor(ao);
-        }
-        aoe.setState(java.awt.Frame.NORMAL);
-        aoe.setVisible(true);
+        } 
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                aoe.setState(java.awt.Frame.NORMAL);
+                aoe.setVisible(true);
+            }
+        });
     }
     public boolean isEditorOpen() {
         return aoe != null && aoe.isVisible();
