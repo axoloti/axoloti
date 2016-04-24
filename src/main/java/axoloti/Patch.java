@@ -1663,7 +1663,7 @@ public class Patch {
 //    }
     // Poly voices from one (or omni) midi channel
     AxoObject GenerateAxoObjPoly() {
-//        SortByPosition();
+        SortByPosition();
         AxoObject ao = new AxoObject("unnamedobject", FileNamePath);
         ao.includes = getIncludes();
         ao.depends = getDepends();
