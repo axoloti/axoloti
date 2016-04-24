@@ -114,6 +114,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
+import org.simpleframework.xml.core.Complete;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -268,6 +270,7 @@ public class AxoObject extends AxoObjectAbstract {
     @Element(name = "code.midiresetcontrollers", required = false, data = true)
     @Deprecated
     public String sMidiResetControllersCode;
+    
 
     public AxoObject() {
         inlets = new ArrayList<Inlet>();
