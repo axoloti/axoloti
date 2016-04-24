@@ -23,6 +23,8 @@ import axoloti.object.ObjectModifiedListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +35,6 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -48,6 +49,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
 
     final T[] AtomDefinitionsList;
     AxoObject obj;
+    private T o;
 
     public AtomDefinitionsEditor(T[] AtomDefinitionsList) {
         this.AtomDefinitionsList = AtomDefinitionsList;
@@ -70,6 +72,83 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
         }
     };
 
+    static String StringArrayToString(ArrayList<String> va) {
+        // items quoted, separated by comma
+        // quote characters escaped with backslash
+        String s = "";
+        boolean first = true;
+        for (String s1 : va) {
+            if (!first) {
+                s += ", ";
+            }
+            String s2 = s1.replaceAll("\\\\", "\\\\\\");
+            s2 = s2.replaceAll("\"", "\\\\\"");
+            s += "\"" + s2 + "\"";
+            first = false;
+        }
+        return s;
+    }
+
+    static ArrayList<String> StringToStringArrayList(String s) {
+        // items separated by comma
+        // items can be within quotes
+        // backlash to escape quote character
+        ArrayList<String> l = new ArrayList<String>();
+        int si = 0;
+        int se = 0;
+        boolean quoted = false;
+        boolean escaped = false;
+        String e = "";
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (!escaped) {
+                switch (c) {
+                    case '\"':
+                        if (!quoted) {
+                            quoted = true;
+                            e = e.trim();
+                            si = i;
+                        } else {
+                            quoted = false;
+                            se = i;
+                        }
+                        break;
+                    case ',':
+                        if (!quoted) {
+                            if (i == 0) {
+                                l.add("");
+                                si = 1;
+                            } else if (se > si) {
+                                // quoted
+                                l.add(e);
+                                si = i + 1;
+                                e = "";
+                            } else {
+                                l.add(e);
+                                si = i + 1;
+                                e = "";
+                            }
+                        } else {
+                            e += c;
+                        }
+                        break;
+                    case '\\':
+                        escaped = true;
+                        break;
+                    default:
+                        e += c;
+                }
+            } else {
+                e += c;
+                escaped = false;
+            }
+        }
+        if (e.length() > 0) {
+            l.add(e);
+        }
+        return l;
+    }
+
     void initComponents(AxoObject obj) {
         this.obj = obj;
         obj.addObjectModifiedListener(oml);
@@ -80,10 +159,18 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         jScrollPane1.add(jTable1);
         add(jScrollPane1);
-        jText = new JTextArea();
+
+        jPanel1 = new JPanel();
+        jPanel1.setLayout(new BoxLayout(jPanel1, BoxLayout.X_AXIS));
+        add(jPanel1);
+
         jScrollPane2 = new JScrollPane();
+        jTable2 = new JTable();
+        jTable2.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable2.setVisible(true);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        jScrollPane2.add(jTable2);
         add(jScrollPane2);
-        jScrollPane2.setViewportView(jText);
 
         jButtonAdd = new JButton("Add");
         jButtonAdd.addActionListener(new ActionListener() {
@@ -116,7 +203,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 }
             }
         });
-        add(jButtonAdd);
+        jPanel1.add(jButtonAdd);
         jButtonRemove = new JButton("Remove");
         jButtonRemove.addActionListener(new ActionListener() {
             @Override
@@ -132,7 +219,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 AtomDefinitionsEditor.this.obj.FireObjectModified(this);
             }
         });
-        add(jButtonRemove);
+        jPanel1.add(jButtonRemove);
         jButtonMoveUp = new JButton("Move up");
         jButtonMoveUp.addActionListener(new ActionListener() {
             @Override
@@ -147,7 +234,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 AtomDefinitionsEditor.this.obj.FireObjectModified(this);
             }
         });
-        add(jButtonMoveUp);
+        jPanel1.add(jButtonMoveUp);
         jButtonMoveDown = new JButton("Move down");
         jButtonMoveDown.addActionListener(new ActionListener() {
             @Override
@@ -165,10 +252,10 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 jTable1.setRowSelectionInterval(row + 1, row + 1);
             }
         });
-        add(jButtonMoveDown);
+        jPanel1.add(jButtonMoveDown);
         jScrollPane1.setVisible(true);
         jTable1.setModel(new AbstractTableModel() {
-            private String[] columnNames = {"Name", "Class", "Description"};
+            private final String[] columnNames = {"Name", "Class", "Description"};
 
             @Override
             public int getColumnCount() {
@@ -213,6 +300,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                             j.setName(GetAtomDefinition(rowIndex).getName());
                             GetAtomDefinitions().set(rowIndex, j);
                             AtomDefinitionsEditor.this.obj.FireObjectModified(this);
+                            UpdateTable2();
                         } catch (InstantiationException ex) {
                             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
                         } catch (IllegalAccessException ex) {
@@ -268,28 +356,151 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 } else {
                     jButtonMoveUp.setEnabled(row > 0);
                     jButtonMoveDown.setEnabled(row < GetAtomDefinitions().size() - 1);
-
-                    T o = GetAtomDefinitions().get(row);
-                    Class c = o.getClass();
-                    Annotation annotations[] = c.getAnnotations();
-                    String s = "";
-                    for (Annotation a : annotations) {
-                        s += a.getClass().getName();
-                    }
-                    jText.setText(s);
+                    UpdateTable2();
                 }
             }
         });
+
+        jTable2.setModel(new AbstractTableModel() {
+            private String[] columnNames = {"Property", "Value"};
+
+            @Override
+            public int getColumnCount() {
+                return columnNames.length;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return columnNames[column];
+            }
+
+            @Override
+            public Class getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return String.class;
+                    case 1:
+                        return String.class;
+                }
+                return null;
+            }
+
+            @Override
+            public int getRowCount() {
+                if (o == null) {
+                    return 0;
+                }
+                return fields.size();
+            }
+
+            @Override
+            public void setValueAt(Object value, int rowIndex, int columnIndex) {
+                switch (columnIndex) {
+                    case 0:
+                        assert (false);
+                        break;
+                    case 1:
+                        Field f = fields.get(rowIndex);
+                        Type t = f.getType();
+                        if (f.getType() == int.class) {
+                            try {
+                                f.setInt(o, Integer.parseInt((String) value));
+                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
+                            } catch (IllegalArgumentException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IllegalAccessException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else if (f.getType() == ArrayList.class) {
+                            try {
+                                ArrayList<String> l = (ArrayList<String>) f.get(o);
+                                l.clear();
+                                String s = (String) value;
+                                l.addAll(StringToStringArrayList(s));
+                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
+                            } catch (IllegalArgumentException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IllegalAccessException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        break;
+                }
+
+            }
+
+            @Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+                if (o == null) {
+                    return null;
+                }
+                Object returnValue = null;
+                switch (columnIndex) {
+                    case 0:
+                        returnValue = fields.get(rowIndex).getName();
+                        break;
+                    case 1: {
+                        try {
+                            Object v = fields.get(rowIndex).get(o);
+                            if (v instanceof ArrayList) {
+                                ArrayList<String> va = (ArrayList<String>) v;
+                                returnValue = StringArrayToString(va);
+                            } else {
+                                returnValue = v.toString();
+                            }
+                        } catch (IllegalArgumentException ex) {
+                            return "illegal argument";
+                        } catch (IllegalAccessException ex) {
+                            return "illegal access";
+                        }
+                    }
+                    break;
+                }
+
+                return returnValue;
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return (columnIndex == 1);
+            }
+
+        });
+
         jScrollPane1.setViewportView(jTable1);
+        jScrollPane2.setViewportView(jTable2);
+    }
+
+    ArrayList<Field> fields = new ArrayList<Field>();
+
+    void UpdateTable2() {
+        fields.clear();
+        int row = jTable1.getSelectedRow();
+        if (row != -1) {
+            o = GetAtomDefinitions().get(row);
+            Class c = o.getClass();
+            Field fs[] = c.getDeclaredFields();
+            for (Field f : fs) {
+                Annotation annotations[] = f.getAnnotations();
+                for (Annotation a : annotations) {
+                    if (a.annotationType().getCanonicalName().equals("org.simpleframework.xml.Attribute")) {
+                        fields.add(f);
+                    } else if (a.annotationType().getCanonicalName().equals("org.simpleframework.xml.ElementList")) {
+                        fields.add(f);
+                    }
+                }
+            }
+        }
+        ((AbstractTableModel) jTable2.getModel()).fireTableDataChanged();
     }
 
     JScrollPane jScrollPane1;
-    JTable jTable1;
     JScrollPane jScrollPane2;
-    JTextArea jText;
+    JTable jTable1;
+    JTable jTable2;
     JButton jButtonMoveUp;
     JButton jButtonMoveDown;
     JButton jButtonRemove;
     JButton jButtonAdd;
-
+    JPanel jPanel1;
 }

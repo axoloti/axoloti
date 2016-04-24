@@ -28,11 +28,11 @@ import org.simpleframework.xml.Attribute;
 public class AxoAttributeSpinner extends AxoAttribute {
 
     @Attribute
-    int MinValue;
+    public int MinValue;
     @Attribute
-    int MaxValue;
+    public int MaxValue;
     @Attribute
-    int DefaultValue;
+    public int DefaultValue;
 
     public AxoAttributeSpinner() {
     }
