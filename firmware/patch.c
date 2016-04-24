@@ -48,7 +48,6 @@ void InitPatch0(void) {
 }
 
 int dspLoadPct; // DSP load in percent
-unsigned int CycleTime;
 unsigned int DspTime;
 
 static int32_t inbuf[32];
@@ -64,7 +63,6 @@ static msg_t ThreadDSP(void *arg) {
   while (1) {
     chEvtWaitOne((eventmask_t)1);
     static unsigned int tStart;
-    CycleTime = RTT2US(hal_lld_get_counter_value() - tStart);
     tStart = hal_lld_get_counter_value();
     watchdog_feed();
     if (!patchStatus) { // running
@@ -97,7 +95,18 @@ static msg_t ThreadDSP(void *arg) {
     }
     adc_convert();
     DspTime = RTT2US(hal_lld_get_counter_value() - tStart);
-    dspLoadPct = (100 * DspTime) / CycleTime;
+    dspLoadPct = (100 * DspTime) / (1000000/3000);
+    if (dspLoadPct>99) {
+      // overload:
+      // clear output buffers
+      // and give other processes a chance
+      int i;
+      for (i = 0; i < 32; i++) {
+        outbuf[i] = 0;
+      }
+//      LogTextMessage("dsp overrun");
+      chThdSleepMilliseconds(1);
+    }
   }
   return (msg_t)0;
 }
