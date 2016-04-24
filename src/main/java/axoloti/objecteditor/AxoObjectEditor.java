@@ -230,6 +230,10 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         } catch (Exception ex) {
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.INFO, "orig {0}", origOS.toString());
+        Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.INFO, "edit {0}", editOS.toString());
+
         return ! (origOS.toString().equals(editOS.toString()));
     }        
     
@@ -251,6 +255,13 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         editObj.sDisposeCode = jTextAreaDisposeCode.getText();
         editObj.sMidiCode = jTextAreaMidiCode.getText();
         
+        if(editObj.sLocalData.isEmpty()) editObj.sLocalData = null;
+        if(editObj.sInitCode.isEmpty()) editObj.sInitCode = null;
+        if(editObj.sKRateCode.isEmpty()) editObj.sKRateCode = null;
+        if(editObj.sSRateCode.isEmpty()) editObj.sSRateCode = null;
+        if(editObj.sDisposeCode.isEmpty()) editObj.sDisposeCode = null;
+        if(editObj.sMidiCode.isEmpty()) editObj.sMidiCode = null;
+
         if(m) FireObjectModified();
     }
     
@@ -785,6 +796,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
     private void jMenuItemApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplyActionPerformed
         applyChangesToOriginal();
+        hasChanged();
         origObj.FireObjectModified(this);
         MainFrame.axoObjects.LoadAxoObjects();
     }//GEN-LAST:event_jMenuItemApplyActionPerformed
