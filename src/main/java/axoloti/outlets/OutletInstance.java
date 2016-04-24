@@ -263,7 +263,7 @@ public class OutletInstance<T extends Outlet> extends JPanel implements Comparab
 //                    } else 
                         if ((il = axoObj.patch.getInletByReference(ss[0], ss[1])) != null) {
                             Net n = axoObj.patch.AddConnection(il, OutletInstance.this);
-                            axoObj.patch.PromoteOverloading();
+                            axoObj.patch.PromoteOverloading(false);
                             if (n != null) {
                                 n.setSelected(false);
                                 n.repaint();

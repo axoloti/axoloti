@@ -795,6 +795,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         if (getType() instanceof AxoObjectFromPatch) {
             return;
         }
+        if (getType() instanceof AxoObjectPatcher) {
+            return;
+        }
+        if (getType() instanceof AxoObjectPatcherObject) {
+            return;
+        }
         String id = typeName;
         ArrayList<AxoObjectAbstract> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, patch.GetCurrentWorkingDirectory());
         if (candidates == null) {

@@ -349,7 +349,7 @@ public class Patch {
             n.patch = this;
             n.PostConstructor();
         }
-        PromoteOverloading();
+        PromoteOverloading(true);
         ShowPreset(0);
         if (settings == null) {
             settings = new PatchSettings();
@@ -465,7 +465,6 @@ public class Patch {
      if ((d1 == DataType.frac32)&&(d2 == DataType.bool32)) return true;
      return false;
      }*/
-
     public Net AddConnection(InletInstance il, OutletInstance ol) {
         if (!IsLocked()) {
             if (il.GetObjectInstance().patch != this) {
@@ -2195,7 +2194,6 @@ public class Patch {
      }
      }
      */
-
     void ClearCurrentPreset() {
     }
 
@@ -2268,7 +2266,6 @@ public class Patch {
      */
     //final int NPRESETS = 8;
     //final int NPRESET_ENTRIES = 32;
-
     public int[] DistillPreset(int i) {
         int[] pdata;
         pdata = new int[settings.GetNPresetEntries() * 2];
@@ -2378,7 +2375,12 @@ public class Patch {
         GetQCmdProcessor().AppendToQueue(new QCmdRecallPreset(i));
     }
 
-    public void PromoteOverloading() {
+    /**
+     *
+     * @param initial If true, only objects restored from object name reference
+     * (not UUID) will promote to a variant with the same name. 
+     */
+    public void PromoteOverloading(boolean initial) {
         refreshIndexes();
         Set<String> ProcessedInstances = new HashSet<String>();
         boolean p = true;
@@ -2387,7 +2389,7 @@ public class Patch {
             for (AxoObjectInstanceAbstract o : objectinstances) {
                 if (!ProcessedInstances.contains(o.getInstanceName())) {
                     ProcessedInstances.add(o.getInstanceName());
-                    if (o.isTypeWasAmbiguous()) {
+                    if (!initial || o.isTypeWasAmbiguous()) {
                         o.PromoteToOverloadedObj();
                     }
                     p = true;

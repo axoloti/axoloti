@@ -231,14 +231,14 @@ public class InletInstance<T extends Inlet> extends JPanel implements AtomInstan
                         InletInstance il;
                         if ((ol = axoObj.patch.getOutletByReference(ss[0], ss[1])) != null) {
                             Net n1 = axoObj.patch.AddConnection(InletInstance.this, ol);
-                            axoObj.patch.PromoteOverloading();
+                            axoObj.patch.PromoteOverloading(false);
                             if (n1 != null) {
                                 n1.setSelected(false);
                                 n1.repaint();
                             }
                         } else if ((il = axoObj.patch.getInletByReference(ss[0], ss[1])) != null) {
                             Net n1 = axoObj.patch.AddConnection(InletInstance.this, il);
-                            axoObj.patch.PromoteOverloading();
+                            axoObj.patch.PromoteOverloading(false);
                             if (n1 != null) {
                                 n1.setSelected(false);
                                 n1.repaint();
