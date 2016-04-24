@@ -796,7 +796,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
     private void jMenuItemApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplyActionPerformed
         applyChangesToOriginal();
-        hasChanged();
         origObj.FireObjectModified(this);
         MainFrame.axoObjects.LoadAxoObjects();
     }//GEN-LAST:event_jMenuItemApplyActionPerformed

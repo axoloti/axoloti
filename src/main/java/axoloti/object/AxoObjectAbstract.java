@@ -19,7 +19,6 @@ package axoloti.object;
 
 import axoloti.Modulator;
 import axoloti.Patch;
-import axoloti.Version;
 import axoloti.inlets.Inlet;
 import axoloti.outlets.Outlet;
 import java.awt.Point;
@@ -31,7 +30,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Complete;
+import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Persist;
 
 /**
@@ -68,21 +67,21 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
     @Element(name = "license", required = false)
     public String sLicense;
     public String sPath;
-    
-    
-    @Complete 
-    public void Complete() {
+
+    @Commit
+    public void Commit() {
         // called after deserialializtion
         this.sha = null;
         this.upgradeSha = null;
     }
-    
+
     @Persist
     public void Persist() {
         // called prior to serialization
+        this.sha = null;
+        this.upgradeSha = null;
     }
-    
-    
+
     public AxoObjectAbstract() {
         this.sha = null;
         this.upgradeSha = null;

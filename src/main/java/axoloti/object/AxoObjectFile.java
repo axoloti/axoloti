@@ -140,10 +140,6 @@ public class AxoObjectFile {
         }
     }
 
-    @Complete
-    public void Complete() {
-        // called after deserialializtion
-    }
 
     @Persist
     public void Persist() {
