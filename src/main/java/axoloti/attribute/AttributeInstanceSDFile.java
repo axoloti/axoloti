@@ -104,7 +104,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     @Override
     public String CValue() {
         File f = getFile();
-        if (f!=null) {
+        if (f != null) {
             return f.getName();
         } else {
             return fileName;
@@ -116,12 +116,18 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         if (TFFileName != null) {
             TFFileName.setEnabled(false);
         }
+        if (ButtonChooseFile != null) {
+            ButtonChooseFile.setEnabled(false);
+        }
     }
 
     @Override
     public void UnLock() {
         if (TFFileName != null) {
             TFFileName.setEnabled(true);
+        }
+        if (ButtonChooseFile != null) {
+            ButtonChooseFile.setEnabled(true);
         }
     }
 
