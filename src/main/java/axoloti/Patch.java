@@ -1864,7 +1864,7 @@ public class Patch {
                 + "          (status == MIDI_NOTE_OFF + attr_midichannel)) {\n"
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++){\n"
-                + "    if (notePlaying[i] == data1){\n"
+                + "    if ((notePlaying[i] == data1) && pressed[i]){\n"
                 + "      voicePriority[i] = priority++;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
