@@ -315,13 +315,16 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 Net n = getPatch().GetNet(inlinp);
                 if (n != null) {
                     n.connectInlet(inlin);
-                    getPatch().disconnect(inlinp);
                 }
             }
             inletInstances.add(inlin);
             inlin.setAlignmentX(LEFT_ALIGNMENT);
             p_inlets.add(inlin);
         }
+        // disconnect stale inlets from nets
+        for (InletInstance inlin1 : pInletInstances) {
+            getPatch().disconnect(inlin1);
+        }        
 
         for (Outlet o : getType().outlets) {
             OutletInstance oinp = null;
@@ -335,13 +338,16 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 Net n = getPatch().GetNet(oinp);
                 if (n != null) {
                     n.connectOutlet(oin);
-                    getPatch().disconnect(oinp);
                 }
             }
             outletInstances.add(oin);
             oin.setAlignmentX(RIGHT_ALIGNMENT);
             p_outlets.add(oin);
         }
+        // disconnect stale outlets from nets
+        for (OutletInstance oinp1 : pOutletInstances) {
+            getPatch().disconnect(oinp1);
+        }        
 
         /*
          if (p_inlets.getComponents().length == 0){
