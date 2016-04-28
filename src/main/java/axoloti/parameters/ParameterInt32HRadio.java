@@ -17,7 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Int32;
 import axoloti.datatypes.ValueInt32;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Element;
@@ -29,9 +28,10 @@ import org.simpleframework.xml.Element;
 public class ParameterInt32HRadio extends Parameter<ParameterInstanceInt32HRadio> {
 
     @Element
-    ValueInt32 MaxValue;
+    public ValueInt32 MaxValue;
 
     public ParameterInt32HRadio() {
+        this.MaxValue = new ValueInt32(1);
     }
 
     public ParameterInt32HRadio(String name, int MinValue, int MaxValue) {

@@ -18,6 +18,7 @@
 package axoloti.objecteditor;
 
 import axoloti.atom.AtomDefinition;
+import axoloti.datatypes.ValueInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.ObjectModifiedListener;
 import java.awt.event.ActionEvent;
@@ -423,6 +424,15 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                             } catch (IllegalAccessException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             }
+                        } else if (f.getType() == ValueInt32.class) {
+                            try {
+                                ValueInt32 v = (ValueInt32) f.get(o);
+                                v.setInt(Integer.parseInt((String) value));
+                            } catch (IllegalArgumentException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IllegalAccessException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                         break;
                 }
@@ -445,6 +455,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                             if (v instanceof ArrayList) {
                                 ArrayList<String> va = (ArrayList<String>) v;
                                 returnValue = StringArrayToString(va);
+                            } else if (v instanceof ValueInt32) {
+                                ValueInt32 vi = (ValueInt32) v;
+                                returnValue = String.valueOf(vi.getInt());
                             } else {
                                 returnValue = v.toString();
                             }
@@ -483,9 +496,13 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
             for (Field f : fs) {
                 Annotation annotations[] = f.getAnnotations();
                 for (Annotation a : annotations) {
-                    if (a.annotationType().getCanonicalName().equals("org.simpleframework.xml.Attribute")) {
+                    if (a.annotationType().getCanonicalName().equals("@java.lang.Deprecated")) {
+                        break;
+                    } else if (a.annotationType().getCanonicalName().equals("org.simpleframework.xml.Attribute")) {
                         fields.add(f);
                     } else if (a.annotationType().getCanonicalName().equals("org.simpleframework.xml.ElementList")) {
+                        fields.add(f);
+                    } else if (a.annotationType().getCanonicalName().equals("org.simpleframework.xml.Element")) {
                         fields.add(f);
                     }
                 }

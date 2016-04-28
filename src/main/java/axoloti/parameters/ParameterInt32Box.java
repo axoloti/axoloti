@@ -17,7 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Int32;
 import axoloti.datatypes.ValueInt32;
 import java.security.MessageDigest;
 import org.simpleframework.xml.Element;
@@ -29,11 +28,13 @@ import org.simpleframework.xml.Element;
 public class ParameterInt32Box extends Parameter<ParameterInstanceInt32Box> {
 
     @Element
-    ValueInt32 MinValue;
+    public ValueInt32 MinValue;
     @Element
-    ValueInt32 MaxValue;
+    public ValueInt32 MaxValue;
 
     public ParameterInt32Box() {
+        this.MinValue = new ValueInt32(0);
+        this.MaxValue = new ValueInt32(0);
     }
 
     public ParameterInt32Box(String name, int MinValue, int MaxValue) {
