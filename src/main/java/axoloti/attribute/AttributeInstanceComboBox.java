@@ -21,6 +21,7 @@ import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.Constants;
 import components.DropDownComponent;
+import java.util.logging.Level;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -72,7 +73,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
 
     @Override
     public String CValue() {
-        if (GetDefinition().getCEntries().isEmpty()){
+        if (GetDefinition().getCEntries().isEmpty()) {
             return "";
         }
         String s = GetDefinition().getCEntries().get(comboBox.getSelectedIndex());
@@ -110,5 +111,6 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
                 return;
             }
         }
+        java.util.logging.Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Error: object \"{0}\" attribute \"{1}\", value \"{2}\" unmatched", new Object[]{GetObjectInstance().getInstanceName(), GetDefinition().getName(), selection});
     }
 }
