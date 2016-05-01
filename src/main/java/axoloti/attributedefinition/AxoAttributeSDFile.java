@@ -37,4 +37,11 @@ public class AxoAttributeSDFile extends AxoAttribute {
     public AttributeInstanceSDFile InstanceFactory(AxoObjectInstance o) {
         return new AttributeInstanceSDFile(this, o);
     }
+
+    static public final String TypeName = "file";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

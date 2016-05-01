@@ -50,4 +50,11 @@ public class ParameterInt32VRadio extends Parameter<ParameterInstanceInt32VRadio
         super.updateSHA(md);
         md.update(("int32.vradio" + MaxValue.getInt()).getBytes());
     }
+
+    static public final String TypeName = "int32.vradio";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

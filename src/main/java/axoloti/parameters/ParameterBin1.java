@@ -42,4 +42,11 @@ public class ParameterBin1 extends Parameter<ParameterInstanceBin1> {
     public ParameterInstanceBin1 InstanceFactory() {
         return new ParameterInstanceBin1();
     }
+
+    static public final String TypeName = "bool32.tgl";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

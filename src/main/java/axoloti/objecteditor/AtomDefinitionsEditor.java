@@ -256,7 +256,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
         jPanel1.add(jButtonMoveDown);
         jScrollPane1.setVisible(true);
         jTable1.setModel(new AbstractTableModel() {
-            private final String[] columnNames = {"Name", "Class", "Description"};
+            private final String[] columnNames = {"Name", "Type", "Description"};
 
             @Override
             public int getColumnCount() {
@@ -329,7 +329,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                         returnValue = GetAtomDefinitions().get(rowIndex).getName();
                         break;
                     case 1:
-                        returnValue = GetAtomDefinitions().get(rowIndex);
+                        returnValue = GetAtomDefinitions().get(rowIndex).getTypeName();
                         break;
                     case 2:
                         returnValue = GetAtomDefinitions().get(rowIndex).getDescription();

@@ -43,10 +43,17 @@ public class DisplayNoteLabel extends Display {
         super.updateSHA(md);
         md.update("note.label".getBytes());
     }
-    
+
     @Override
-    public  Frac32 getDatatype() {
-        return  Frac32.d;
-    }    
-    
+    public Frac32 getDatatype() {
+        return Frac32.d;
+    }
+
+    static public final String TypeName = "note.label";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
+
 }

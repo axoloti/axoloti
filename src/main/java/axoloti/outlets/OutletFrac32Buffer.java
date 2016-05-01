@@ -38,4 +38,11 @@ public class OutletFrac32Buffer extends Outlet {
     public DataType getDatatype() {
         return Frac32buffer.d;
     }
+
+    static public final String TypeName = "frac32buffer";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

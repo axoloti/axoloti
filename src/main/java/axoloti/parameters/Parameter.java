@@ -84,10 +84,10 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     public void setDescription(String description) {
         this.description = description;
     }
-   
+
     @Override
     public String toString() {
-        return this.getClass().getSimpleName();
+        return getTypeName();
     }
 
     @Override
@@ -124,9 +124,9 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
         md.update(name.getBytes());
 //        md.update((byte) getDatatype().hashCode());
     }
-    
+
     @Override
     public Parameter clone() throws CloneNotSupportedException {
         return (Parameter) super.clone();
-    }    
+    }
 }

@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import axoloti.datatypes. Int32;
+import axoloti.datatypes.Int32;
 import java.security.MessageDigest;
 
 /**
@@ -45,8 +45,15 @@ public class DisplayFrac32VBarDB extends Display {
     }
 
     @Override
-    public  Int32 getDatatype() {
-        return  Int32.d;
+    public Int32 getDatatype() {
+        return Int32.d;
+    }
+
+    static public final String TypeName = "frac32.vbar.db";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
     }
 
 }

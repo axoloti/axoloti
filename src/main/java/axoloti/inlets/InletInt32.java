@@ -38,4 +38,12 @@ public class InletInt32 extends Inlet {
     public DataType getDatatype() {
         return Int32.d;
     }
+
+    static public final String TypeName = "int32";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
+    
 }

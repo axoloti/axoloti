@@ -43,4 +43,10 @@ public class ParameterFrac32SMapKDTimeExp extends ParameterFrac32SMap {
         return p;
     }
 
+    static public final String TypeName = "frac32.s.map.kdecaytime.exp";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

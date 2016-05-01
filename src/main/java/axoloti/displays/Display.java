@@ -65,7 +65,7 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName();
+        return getTypeName();
     }
 
     public int getLength() {
@@ -99,5 +99,5 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     @Override
     public Display clone() throws CloneNotSupportedException {
         return (Display) super.clone();
-    }
+    }    
 }

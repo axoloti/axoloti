@@ -42,4 +42,11 @@ public class ParameterBin1Momentary extends Parameter {
         super.updateSHA(md);
         md.update("bool32.b".getBytes());
     }
+
+    static public final String TypeName = "bool32.mom";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

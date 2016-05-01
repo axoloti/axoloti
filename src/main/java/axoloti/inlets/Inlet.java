@@ -47,7 +47,7 @@ public abstract class Inlet implements AtomDefinition, Cloneable {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName();
+        return getTypeName();
     }
 
     @Override

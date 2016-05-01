@@ -32,5 +32,8 @@ public interface AtomDefinition {
     abstract public AtomInstance CreateInstance(AxoObjectInstance o);
     abstract public String getDescription();
     abstract public void setDescription(String description);
+
+    abstract public String getTypeName();
+
 //    abstract public AtomDefinition Factory(String name);    
 }

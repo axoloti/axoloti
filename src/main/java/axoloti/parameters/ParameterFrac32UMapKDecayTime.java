@@ -42,4 +42,10 @@ public class ParameterFrac32UMapKDecayTime extends ParameterFrac32UMap {
         return p;
     }
 
+    static public final String TypeName = "frac32.u.map.kdecaytime";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

@@ -38,4 +38,11 @@ public class OutletBool32 extends Outlet {
     public DataType getDatatype() {
         return Bool32.d;
     }
+
+    static public final String TypeName = "bool32";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

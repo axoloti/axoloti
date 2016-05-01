@@ -37,4 +37,11 @@ public class OutletFrac32BufferBipolar extends OutletFrac32Buffer {
     SignalMetaData GetSignalMetaData() {
         return SignalMetaData.bipolar;
     }
+
+    static public final String TypeName = "frac32buffer.bipolar";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

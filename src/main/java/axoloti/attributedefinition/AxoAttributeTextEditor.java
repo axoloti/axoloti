@@ -37,4 +37,11 @@ public class AxoAttributeTextEditor extends AxoAttribute {
     public AttributeInstanceTextEditor InstanceFactory(AxoObjectInstance o) {
         return new AttributeInstanceTextEditor(this, o);
     }
+
+    static public final String TypeName = "text";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

@@ -44,4 +44,11 @@ public class ParameterFrac32SMapLFOPitch extends ParameterFrac32SMap {
         p.convs = convs;
         return p;
     }
+
+    static public final String TypeName = "frac32.s.map.lfopitch";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

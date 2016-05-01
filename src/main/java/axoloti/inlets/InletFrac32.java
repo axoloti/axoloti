@@ -38,4 +38,11 @@ public class InletFrac32 extends Inlet {
     public DataType getDatatype() {
         return Frac32.d;
     }
+
+    static public final String TypeName = "frac32";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

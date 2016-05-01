@@ -34,4 +34,11 @@ public class ParameterBin16 extends Parameter {
     public ParameterInstanceBin16 InstanceFactory() {
         return new ParameterInstanceBin16();
     }
+
+    static public final String TypeName = "bin16";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

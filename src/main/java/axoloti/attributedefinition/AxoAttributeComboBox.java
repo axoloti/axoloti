@@ -63,4 +63,11 @@ public class AxoAttributeComboBox extends AxoAttribute {
     public AttributeInstanceComboBox InstanceFactory(AxoObjectInstance o) {
         return new AttributeInstanceComboBox(this, o);
     }
+
+    static public final String TypeName = "combo";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

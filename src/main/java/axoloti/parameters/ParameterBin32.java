@@ -34,4 +34,11 @@ public class ParameterBin32 extends Parameter {
     public ParameterInstanceBin32 InstanceFactory() {
         return new ParameterInstanceBin32();
     }
+
+    static public final String TypeName = "bin32";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

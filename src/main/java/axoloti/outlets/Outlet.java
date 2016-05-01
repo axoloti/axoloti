@@ -30,7 +30,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class Outlet implements AtomDefinition, Cloneable {
+public abstract class Outlet implements AtomDefinition, Cloneable {
 
     @Attribute
     String name;
@@ -54,7 +54,7 @@ public class Outlet implements AtomDefinition, Cloneable {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName();
+        return getTypeName();
     }
 
     public String GetCName() {

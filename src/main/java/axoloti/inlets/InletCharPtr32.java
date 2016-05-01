@@ -37,4 +37,12 @@ public class InletCharPtr32 extends Inlet {
     public DataType getDatatype() {
         return CharPtr32.d;
     }
+
+    static public final String TypeName = "charptr32";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
+    
 }

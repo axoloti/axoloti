@@ -55,4 +55,11 @@ public class ParameterFrac32UMap extends ParameterFrac32 {
         super.updateSHA(md);
         md.update("frac32.u.map".getBytes());
     }
+
+    static public final String TypeName = "frac32.u.map";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

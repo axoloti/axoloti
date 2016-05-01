@@ -56,4 +56,11 @@ public class ParameterInt32BoxSmall extends Parameter<ParameterInstanceInt32BoxS
         super.updateSHA(md);
         md.update("int32.dial.small".getBytes());
     }
+
+    static public final String TypeName = "int32.mini";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

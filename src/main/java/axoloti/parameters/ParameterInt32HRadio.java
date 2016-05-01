@@ -50,4 +50,11 @@ public class ParameterInt32HRadio extends Parameter<ParameterInstanceInt32HRadio
         super.updateSHA(md);
         md.update(("int32.hradio" + MaxValue.getInt()).getBytes());
     }
+
+    static public final String TypeName = "int32.hradio";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

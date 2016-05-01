@@ -35,6 +35,14 @@ public class AxoAttributeObjRef extends AxoAttribute {
 
     @Override
     public AttributeInstanceObjRef InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceObjRef(this,o);
+        return new AttributeInstanceObjRef(this, o);
     }
+
+    static public final String TypeName = "objref";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
+
 }

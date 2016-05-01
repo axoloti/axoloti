@@ -42,4 +42,11 @@ public class ParameterFrac32SMapKPitch extends ParameterFrac32SMap {
         p.convs = convs;
         return p;
     }
+
+    static public final String TypeName = "frac32.s.map.kpitch";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

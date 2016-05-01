@@ -41,6 +41,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
+@Deprecated
 public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWavefile> {
 
     @Attribute

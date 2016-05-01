@@ -48,4 +48,12 @@ public class DisplayFrac8U128VBar extends Display {
     public Int8Ptr getDatatype() {
         return Int8Ptr.d;
     }
+
+    static public final String TypeName = "uint8array128.vbar";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
+
 }

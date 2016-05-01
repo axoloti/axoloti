@@ -42,4 +42,10 @@ public class ParameterFrac32UMapKDecayTimeReverse extends ParameterFrac32UMap {
         return p;
     }
 
+    static public final String TypeName = "frac32.u.map.kdecaytime.reverse";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

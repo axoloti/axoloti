@@ -41,4 +41,11 @@ public class ParameterFrac32UMapRatio extends ParameterFrac32UMap {
         p.convs = convs;
         return p;
     }
+
+    static public final String TypeName = "frac32.u.map.ratio";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

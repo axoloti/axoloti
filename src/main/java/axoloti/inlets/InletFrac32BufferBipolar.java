@@ -36,4 +36,12 @@ public class InletFrac32BufferBipolar extends InletFrac32Buffer {
     SignalMetaData GetSignalMetaData() {
         return SignalMetaData.bipolar;
     }
+    
+    static public final String TypeName = "frac32buffer.bipolar";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
+    
 }

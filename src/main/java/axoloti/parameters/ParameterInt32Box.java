@@ -56,4 +56,11 @@ public class ParameterInt32Box extends Parameter<ParameterInstanceInt32Box> {
         super.updateSHA(md);
         md.update("int32.dial".getBytes());
     }
+
+    static public final String TypeName = "int32";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

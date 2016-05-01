@@ -60,4 +60,11 @@ public class AxoAttributeInt32 extends AxoAttribute {
     public AttributeInstanceInt32 InstanceFactory(AxoObjectInstance o) {
         return new AttributeInstanceInt32(this, o);
     }
+
+    static public final String TypeName = "int";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

@@ -38,5 +38,11 @@ public class InletBool32 extends Inlet {
     public DataType getDatatype() {
         return Bool32.d;
     }
+    
+    static public final String TypeName = "bool32";
 
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

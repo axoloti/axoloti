@@ -105,6 +105,7 @@ import axoloti.displays.DisplayInt32HexLabel;
 import axoloti.displays.DisplayInt32Label;
 import axoloti.displays.DisplayNoteLabel;
 import axoloti.displays.DisplayVScale;
+import axoloti.parameters.ParameterFrac32SMapKDTimeExp;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
@@ -134,102 +135,102 @@ public class AxoObject extends AxoObjectAbstract {
     public ArrayList<String> ModulationSources;
     @Path("inlets")
     @ElementListUnion({
-        @ElementList(entry = "bool32", type = InletBool32.class, inline = true, required = false),
-        @ElementList(entry = "bool32.rising", type = InletBool32Rising.class, inline = true, required = false),
-        @ElementList(entry = "bool32.risingfalling", type = InletBool32RisingFalling.class, inline = true, required = false),
-        @ElementList(entry = "frac32", type = InletFrac32.class, inline = true, required = false),
-        @ElementList(entry = "frac32.positive", type = InletFrac32Pos.class, inline = true, required = false),
-        @ElementList(entry = "frac32.bipolar", type = InletFrac32Bipolar.class, inline = true, required = false),
-        @ElementList(entry = "charptr32", type = InletCharPtr32.class, inline = true, required = false),
-        @ElementList(entry = "int32", type = InletInt32.class, inline = true, required = false),
-        @ElementList(entry = "int32.positive", type = InletInt32Pos.class, inline = true, required = false),
-        @ElementList(entry = "int32.bipolar", type = InletInt32Bipolar.class, inline = true, required = false),
-        @ElementList(entry = "frac32buffer", type = InletFrac32Buffer.class, inline = true, required = false),
-        @ElementList(entry = "frac32buffer.positive", type = InletFrac32BufferPos.class, inline = true, required = false),
-        @ElementList(entry = "frac32buffer.bipolar", type = InletFrac32BufferBipolar.class, inline = true, required = false)
+        @ElementList(entry = InletBool32Rising.TypeName, type = InletBool32Rising.class, inline = true, required = false),
+        @ElementList(entry = InletBool32RisingFalling.TypeName, type = InletBool32RisingFalling.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32.TypeName, type = InletFrac32.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32Pos.TypeName, type = InletFrac32Pos.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32Bipolar.TypeName, type = InletFrac32Bipolar.class, inline = true, required = false),
+        @ElementList(entry = InletCharPtr32.TypeName, type = InletCharPtr32.class, inline = true, required = false),
+        @ElementList(entry = InletInt32.TypeName, type = InletInt32.class, inline = true, required = false),
+        @ElementList(entry = InletInt32Pos.TypeName, type = InletInt32Pos.class, inline = true, required = false),
+        @ElementList(entry = InletInt32Bipolar.TypeName, type = InletInt32Bipolar.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32Buffer.TypeName, type = InletFrac32Buffer.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32BufferPos.TypeName, type = InletFrac32BufferPos.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32BufferBipolar.TypeName, type = InletFrac32BufferBipolar.class, inline = true, required = false)
     })
     public ArrayList<Inlet> inlets;
     @Path("outlets")
     @ElementListUnion({
-        @ElementList(entry = "bool32", type = OutletBool32.class, inline = true, required = false),
-        @ElementList(entry = "bool32.pulse", type = OutletBool32Pulse.class, inline = true, required = false),
-        @ElementList(entry = "frac32", type = OutletFrac32.class, inline = true, required = false),
-        @ElementList(entry = "frac32.positive", type = OutletFrac32Pos.class, inline = true, required = false),
-        @ElementList(entry = "frac32.bipolar", type = OutletFrac32Bipolar.class, inline = true, required = false),
-        @ElementList(entry = "charptr32", type = OutletCharPtr32.class, inline = true, required = false),
-        @ElementList(entry = "int32", type = OutletInt32.class, inline = true, required = false),
-        @ElementList(entry = "int32.positive", type = OutletInt32Pos.class, inline = true, required = false),
-        @ElementList(entry = "int32.bipolar", type = OutletInt32Bipolar.class, inline = true, required = false),
-        @ElementList(entry = "frac32buffer", type = OutletFrac32Buffer.class, inline = true, required = false),
-        @ElementList(entry = "frac32buffer.positive", type = OutletFrac32BufferPos.class, inline = true, required = false),
-        @ElementList(entry = "frac32buffer.bipolar", type = OutletFrac32BufferBipolar.class, inline = true, required = false)
+        @ElementList(entry = OutletBool32.TypeName, type = OutletBool32.class, inline = true, required = false),
+        @ElementList(entry = OutletBool32Pulse.TypeName, type = OutletBool32Pulse.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32.TypeName, type = OutletFrac32.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32Pos.TypeName, type = OutletFrac32Pos.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32Bipolar.TypeName, type = OutletFrac32Bipolar.class, inline = true, required = false),
+        @ElementList(entry = OutletCharPtr32.TypeName, type = OutletCharPtr32.class, inline = true, required = false),
+        @ElementList(entry = OutletInt32.TypeName, type = OutletInt32.class, inline = true, required = false),
+        @ElementList(entry = OutletInt32Pos.TypeName, type = OutletInt32Pos.class, inline = true, required = false),
+        @ElementList(entry = OutletInt32Bipolar.TypeName, type = OutletInt32Bipolar.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32Buffer.TypeName, type = OutletFrac32Buffer.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32BufferPos.TypeName, type = OutletFrac32BufferPos.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32BufferBipolar.TypeName, type = OutletFrac32BufferBipolar.class, inline = true, required = false)
     })
     public ArrayList<Outlet> outlets;
     @Path("displays")
     @ElementListUnion({
-        @ElementList(entry = "bool32", type = DisplayBool32.class, inline = true, required = false),
-        @ElementList(entry = "frac32.s.chart", type = DisplayFrac32SChart.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.chart", type = DisplayFrac32UChart.class, inline = true, required = false),
-        @ElementList(entry = "frac32.s.dial", type = DisplayFrac32SDial.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.dial", type = DisplayFrac32UDial.class, inline = true, required = false),
-        @ElementList(entry = "frac32.vu", type = DisplayFrac32VU.class, inline = true, required = false),
-        @ElementList(entry = "frac32.vbar", type = DisplayFrac32VBar.class, inline = true, required = false),
-        @ElementList(entry = "frac32.vbar.db", type = DisplayFrac32VBarDB.class, inline = true, required = false),
-        @ElementList(entry = "frac4byte.vbar", type = DisplayFrac4ByteVBar.class, inline = true, required = false),
-        @ElementList(entry = "frac4ubyte.vbar", type = DisplayFrac4UByteVBar.class, inline = true, required = false),
-        @ElementList(entry = "frac4ubyte.vbar.db", type = DisplayFrac4UByteVBarDB.class, inline = true, required = false),
-        @ElementList(entry = "int32.label", type = DisplayInt32Label.class, inline = true, required = false),
-        @ElementList(entry = "int32.hexlabel", type = DisplayInt32HexLabel.class, inline = true, required = false),
-        @ElementList(entry = "int32.bar16", type = DisplayInt32Bar16.class, inline = true, required = false),
-        @ElementList(entry = "int32.bar32", type = DisplayInt32Bar32.class, inline = true, required = false),
-        @ElementList(entry = "vscale", type = DisplayVScale.class, inline = true, required = false),
-        @ElementList(entry = "int8array128.vbar", type = DisplayFrac8S128VBar.class, inline = true, required = false),
-        @ElementList(entry = "uint8array128.vbar", type = DisplayFrac8U128VBar.class, inline = true, required = false),
-        @ElementList(entry = "note.label", type = DisplayNoteLabel.class, inline = true, required = false)
+        @ElementList(entry = DisplayBool32.TypeName, type = DisplayBool32.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32SChart.TypeName, type = DisplayFrac32SChart.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32UChart.TypeName, type = DisplayFrac32UChart.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32SDial.TypeName, type = DisplayFrac32SDial.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32UDial.TypeName, type = DisplayFrac32UDial.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32VU.TypeName, type = DisplayFrac32VU.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32VBar.TypeName, type = DisplayFrac32VBar.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32VBarDB.TypeName, type = DisplayFrac32VBarDB.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac4ByteVBar.TypeName, type = DisplayFrac4ByteVBar.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac4UByteVBar.TypeName, type = DisplayFrac4UByteVBar.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac4UByteVBarDB.TypeName, type = DisplayFrac4UByteVBarDB.class, inline = true, required = false),
+        @ElementList(entry = DisplayInt32Label.TypeName, type = DisplayInt32Label.class, inline = true, required = false),
+        @ElementList(entry = DisplayInt32HexLabel.TypeName, type = DisplayInt32HexLabel.class, inline = true, required = false),
+        @ElementList(entry = DisplayInt32Bar16.TypeName, type = DisplayInt32Bar16.class, inline = true, required = false),
+        @ElementList(entry = DisplayInt32Bar32.TypeName, type = DisplayInt32Bar32.class, inline = true, required = false),
+        @ElementList(entry = DisplayVScale.TypeName, type = DisplayVScale.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac8S128VBar.TypeName, type = DisplayFrac8S128VBar.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac8U128VBar.TypeName, type = DisplayFrac8U128VBar.class, inline = true, required = false),
+        @ElementList(entry = DisplayNoteLabel.TypeName, type = DisplayNoteLabel.class, inline = true, required = false)
     })
     public ArrayList<Display> displays; // readouts
     @Path("params")
     @ElementListUnion({
-        @ElementList(entry = "frac32.u.map", type = ParameterFrac32UMap.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.map.freq", type = ParameterFrac32UMapFreq.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.map.kdecaytime", type = ParameterFrac32UMapKDecayTime.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.map.kdecaytime.reverse", type = ParameterFrac32UMapKDecayTimeReverse.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.map.klineartime.reverse", type = ParameterFrac32UMapKLineTimeReverse.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.map.gain", type = ParameterFrac32UMapGain.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.map.gain16", type = ParameterFrac32UMapGain16.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.map.squaregain", type = ParameterFrac32UMapGainSquare.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.map.ratio", type = ParameterFrac32UMapRatio.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.map.filterq", type = ParameterFrac32UMapFilterQ.class, inline = true, required = false),
-        @ElementList(entry = "frac32.s.map", type = ParameterFrac32SMap.class, inline = true, required = false),
-        @ElementList(entry = "frac32.s.map.pitch", type = ParameterFrac32SMapPitch.class, inline = true, required = false),
-        @ElementList(entry = "frac32.s.map.kpitch", type = ParameterFrac32SMapKPitch.class, inline = true, required = false),
-        @ElementList(entry = "frac32.s.map.lfopitch", type = ParameterFrac32SMapLFOPitch.class, inline = true, required = false),
-        @ElementList(entry = "frac32.s.map.klineartime.exp", type = ParameterFrac32SMapKLineTimeExp.class, inline = true, required = false),
-        @ElementList(entry = "frac32.s.map.klineartime.exp2", type = ParameterFrac32SMapKLineTimeExp2.class, inline = true, required = false),
-        @ElementList(entry = "frac32.u.mapvsl", type = ParameterFrac32UMapVSlider.class, inline = true, required = false),
-        @ElementList(entry = "frac32.s.mapvsl", type = ParameterFrac32SMapVSlider.class, inline = true, required = false),
-        @ElementList(entry = "frac32.s.map.ratio", type = ParameterFrac32SMapRatio.class, inline = true, required = false),
-        @ElementList(entry = "int32", type = ParameterInt32Box.class, inline = true, required = false),
-        @ElementList(entry = "int32.mini", type = ParameterInt32BoxSmall.class, inline = true, required = false),
-        @ElementList(entry = "int32.hradio", type = ParameterInt32HRadio.class, inline = true, required = false),
-        @ElementList(entry = "int32.vradio", type = ParameterInt32VRadio.class, inline = true, required = false),
-        @ElementList(entry = "int2x16", type = Parameter4LevelX16.class, inline = true, required = false),
-        @ElementList(entry = "bin12", type = ParameterBin12.class, inline = true, required = false),
-        @ElementList(entry = "bin16", type = ParameterBin16.class, inline = true, required = false),
-        @ElementList(entry = "bin32", type = ParameterBin32.class, inline = true, required = false),
-        @ElementList(entry = "bool32.tgl", type = ParameterBin1.class, inline = true, required = false),
-        @ElementList(entry = "bool32.mom", type = ParameterBin1Momentary.class, inline = true, required = false)
+        @ElementList(entry = ParameterFrac32UMap.TypeName, type = ParameterFrac32UMap.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapFreq.TypeName, type = ParameterFrac32UMapFreq.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapKDecayTime.TypeName, type = ParameterFrac32UMapKDecayTime.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapKDecayTimeReverse.TypeName, type = ParameterFrac32UMapKDecayTimeReverse.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapKLineTimeReverse.TypeName, type = ParameterFrac32UMapKLineTimeReverse.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapGain.TypeName, type = ParameterFrac32UMapGain.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapGain16.TypeName, type = ParameterFrac32UMapGain16.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapGainSquare.TypeName, type = ParameterFrac32UMapGainSquare.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapRatio.TypeName, type = ParameterFrac32UMapRatio.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapFilterQ.TypeName, type = ParameterFrac32UMapFilterQ.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMap.TypeName, type = ParameterFrac32SMap.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapPitch.TypeName, type = ParameterFrac32SMapPitch.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapKDTimeExp.TypeName, type = ParameterFrac32SMapKDTimeExp.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapKPitch.TypeName, type = ParameterFrac32SMapKPitch.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapLFOPitch.TypeName, type = ParameterFrac32SMapLFOPitch.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapKLineTimeExp.TypeName, type = ParameterFrac32SMapKLineTimeExp.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapKLineTimeExp2.TypeName, type = ParameterFrac32SMapKLineTimeExp2.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapVSlider.TypeName, type = ParameterFrac32UMapVSlider.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapVSlider.TypeName, type = ParameterFrac32SMapVSlider.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapRatio.TypeName, type = ParameterFrac32SMapRatio.class, inline = true, required = false),
+        @ElementList(entry = ParameterInt32Box.TypeName, type = ParameterInt32Box.class, inline = true, required = false),
+        @ElementList(entry = ParameterInt32BoxSmall.TypeName, type = ParameterInt32BoxSmall.class, inline = true, required = false),
+        @ElementList(entry = ParameterInt32HRadio.TypeName, type = ParameterInt32HRadio.class, inline = true, required = false),
+        @ElementList(entry = ParameterInt32VRadio.TypeName, type = ParameterInt32VRadio.class, inline = true, required = false),
+        @ElementList(entry = Parameter4LevelX16.TypeName, type = Parameter4LevelX16.class, inline = true, required = false),
+        @ElementList(entry = ParameterBin12.TypeName, type = ParameterBin12.class, inline = true, required = false),
+        @ElementList(entry = ParameterBin16.TypeName, type = ParameterBin16.class, inline = true, required = false),
+        @ElementList(entry = ParameterBin32.TypeName, type = ParameterBin32.class, inline = true, required = false),
+        @ElementList(entry = ParameterBin1.TypeName, type = ParameterBin1.class, inline = true, required = false),
+        @ElementList(entry = ParameterBin1Momentary.TypeName, type = ParameterBin1Momentary.class, inline = true, required = false)
     })
     public ArrayList<Parameter> params; // variables
     @Path("attribs")
     @ElementListUnion({
-        @ElementList(entry = "objref", type = AxoAttributeObjRef.class, inline = true, required = false),
-        @ElementList(entry = "table", type = AxoAttributeTablename.class, inline = true, required = false),
-        @ElementList(entry = "combo", type = AxoAttributeComboBox.class, inline = true, required = false),
-        @ElementList(entry = "int", type = AxoAttributeInt32.class, inline = true, required = false),
-        @ElementList(entry = "spinner", type = AxoAttributeSpinner.class, inline = true, required = false),
-        @ElementList(entry = "file", type = AxoAttributeSDFile.class, inline = true, required = false),
-        @ElementList(entry = "text", type = AxoAttributeTextEditor.class, inline = true, required = false)})
+        @ElementList(entry = AxoAttributeObjRef.TypeName, type = AxoAttributeObjRef.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeTablename.TypeName, type = AxoAttributeTablename.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeComboBox.TypeName, type = AxoAttributeComboBox.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeInt32.TypeName, type = AxoAttributeInt32.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeSpinner.TypeName, type = AxoAttributeSpinner.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeSDFile.TypeName, type = AxoAttributeSDFile.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeTextEditor.TypeName, type = AxoAttributeTextEditor.class, inline = true, required = false)})
     public ArrayList<AxoAttribute> attributes; // literal constants
     @ElementList(name = "includes", entry = "include", type = String.class, required = false)
     public HashSet<String> includes;
@@ -270,7 +271,6 @@ public class AxoObject extends AxoObjectAbstract {
     @Element(name = "code.midiresetcontrollers", required = false, data = true)
     @Deprecated
     public String sMidiResetControllersCode;
-    
 
     public AxoObject() {
         inlets = new ArrayList<Inlet>();
@@ -305,9 +305,9 @@ public class AxoObject extends AxoObjectAbstract {
     public void CloseEditor() {
         editor = null;
     }
-    
+
     public boolean isEditorOpen() {
-        return editor !=null && editor.isVisible();
+        return editor != null && editor.isVisible();
     }
 
     @Override

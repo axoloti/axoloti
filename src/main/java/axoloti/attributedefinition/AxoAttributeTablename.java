@@ -37,4 +37,11 @@ public class AxoAttributeTablename extends AxoAttribute {
     public AttributeInstanceTablename InstanceFactory(AxoObjectInstance o) {
         return new AttributeInstanceTablename(this, o);
     }
+
+    static public final String TypeName = "table";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

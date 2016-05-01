@@ -37,4 +37,12 @@ public class InletBool32Rising extends InletBool32 {
     SignalMetaData GetSignalMetaData() {
         return SignalMetaData.rising;
     }
+    
+    static public final String TypeName = "bool32.rising";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
+    
 }

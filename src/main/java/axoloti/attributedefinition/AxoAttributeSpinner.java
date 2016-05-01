@@ -60,4 +60,11 @@ public class AxoAttributeSpinner extends AxoAttribute {
     public AttributeInstanceSpinner InstanceFactory(AxoObjectInstance o) {
         return new AttributeInstanceSpinner(this, o);
     }
+
+    static public final String TypeName = "spinner";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
 }

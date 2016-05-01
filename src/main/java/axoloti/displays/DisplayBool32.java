@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import axoloti.datatypes. Int32;
+import axoloti.datatypes.Int32;
 import java.security.MessageDigest;
 
 /**
@@ -45,7 +45,15 @@ public class DisplayBool32 extends Display {
     }
 
     @Override
-    public  Int32 getDatatype() {
-        return  Int32.d;
+    public Int32 getDatatype() {
+        return Int32.d;
     }
+
+    static public final String TypeName = "bool32";
+
+    @Override
+    public String getTypeName() {
+        return TypeName;
+    }
+
 }
