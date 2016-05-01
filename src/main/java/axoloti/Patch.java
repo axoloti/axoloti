@@ -2320,7 +2320,7 @@ public class Patch {
         return locked;
     }
 
-    public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
+    public AxoObjectInstanceAbstract ChangeObjectInstanceType1(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
         if (obj.getType() == objType) {
             return obj;
         }
@@ -2335,11 +2335,8 @@ public class Patch {
                 new_obj.inletInstances = old_obj.inletInstances;
                 new_obj.parameterInstances = old_obj.parameterInstances;
                 new_obj.attributeInstances = old_obj.attributeInstances;
-                new_obj.PostConstructor();
             }
-            delete(obj);
             obj1.setName(n);
-            obj1.PostConstructor();
             obj1.repaint();
             return obj1;
         } else if (obj instanceof AxoObjectInstanceZombie) {
@@ -2351,17 +2348,23 @@ public class Patch {
                 AxoObjectInstanceZombie old_obj = (AxoObjectInstanceZombie) obj;
                 new_obj.outletInstances = old_obj.outletInstances;
                 new_obj.inletInstances = old_obj.inletInstances;
-                new_obj.PostConstructor();
             }
-            delete(obj);
             obj1.setName(n);
-            obj1.PostConstructor();
             obj1.repaint();
             return obj1;
         }
         return obj;
     }
 
+    public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
+        AxoObjectInstanceAbstract obj1 = ChangeObjectInstanceType1(obj, objType);
+        if (obj1!=obj){
+            obj1.PostConstructor();
+            delete(obj);
+        }
+        return obj1;
+    }
+    
     void invalidate() {
     }
 
