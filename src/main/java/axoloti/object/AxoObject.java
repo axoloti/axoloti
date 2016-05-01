@@ -135,6 +135,7 @@ public class AxoObject extends AxoObjectAbstract {
     public ArrayList<String> ModulationSources;
     @Path("inlets")
     @ElementListUnion({
+        @ElementList(entry = InletBool32.TypeName, type = InletBool32.class, inline = true, required = false),
         @ElementList(entry = InletBool32Rising.TypeName, type = InletBool32Rising.class, inline = true, required = false),
         @ElementList(entry = InletBool32RisingFalling.TypeName, type = InletBool32RisingFalling.class, inline = true, required = false),
         @ElementList(entry = InletFrac32.TypeName, type = InletFrac32.class, inline = true, required = false),
