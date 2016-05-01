@@ -65,6 +65,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.TransferHandler;
+import javax.xml.stream.XMLStreamException;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -673,6 +674,8 @@ public class PatchGUI extends Patch {
                 }
             }
             AdjustSize();
+        } catch (javax.xml.stream.XMLStreamException ex) {
+            // silence
         } catch (Exception ex) {
             Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
