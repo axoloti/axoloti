@@ -28,6 +28,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
@@ -108,7 +109,7 @@ public class DialComponent extends ACtrlComponent {
                     v = value + t * (MousePressedCoordY - e.getYOnScreen());
                     if (robot == null) {
                         try {
-                            robot = new Robot();
+                            robot = new Robot(MouseInfo.getPointerInfo().getDevice());
                         } catch (AWTException ex) {
                             Logger.getLogger(DialComponent.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -143,6 +144,7 @@ public class DialComponent extends ACtrlComponent {
     @Override
     protected void mouseReleased(MouseEvent e) {
         getRootPane().setCursor(Cursor.getDefaultCursor());
+        robot = null;
     }
 
     @Override

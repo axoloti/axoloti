@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
 import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.event.MouseEvent;
@@ -61,6 +62,7 @@ public abstract class RControlEncoder extends JComponent {
             @Override
             public void mouseReleased(MouseEvent e) {
                 getRootPane().setCursor(Cursor.getDefaultCursor());
+                robot = null;
             }
 
             @Override
@@ -82,7 +84,7 @@ public abstract class RControlEncoder extends JComponent {
                     if (Math.abs(v) > 2) {
                         if (robot == null) {
                             try {
-                                robot = new Robot();
+                                robot = new Robot(MouseInfo.getPointerInfo().getDevice());
                             } catch (AWTException ex) {
                                 Logger.getLogger(RControlEncoder.class.getName()).log(Level.SEVERE, null, ex);
                             }
