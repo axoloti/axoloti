@@ -18,6 +18,7 @@
 
 #include "ch.h"
 #include "hal.h"
+#include "ff.h"
 #include "codec.h"
 #include "chprintf.h"
 #include "pconnection.h"
