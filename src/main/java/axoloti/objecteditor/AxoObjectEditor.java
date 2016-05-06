@@ -231,8 +231,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.INFO, "orig {0}", origOS.toString());
-        Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.INFO, "edit {0}", editOS.toString());
+//        Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.INFO, "orig {0}", origOS.toString());
+//        Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.INFO, "edit {0}", editOS.toString());
 
         return ! (origOS.toString().equals(editOS.toString()));
     }        
