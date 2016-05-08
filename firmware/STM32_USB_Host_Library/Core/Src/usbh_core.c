@@ -615,7 +615,9 @@ USBH_StatusTypeDef  USBH_Process(USBH_HandleTypeDef *phost)
     {
       phost->pActiveClass->DeInit(phost); 
       phost->pActiveClass = NULL;
-    }     
+      //HAL_HCD_Init(phost->device);
+    }
+
     break;
     
   case HOST_ABORT_STATE:
@@ -924,7 +926,7 @@ static void USBH_Process_OS(void const * argument)
   
   for(;;)
   {
-    event = osMessageGet(((USBH_HandleTypeDef *)argument)->os_event, osWaitForever );
+    event = osMessageGet(((USBH_HandleTypeDef *)argument)->os_event, 200 );
     
 //    if( event.status == osEventMessage )
     {

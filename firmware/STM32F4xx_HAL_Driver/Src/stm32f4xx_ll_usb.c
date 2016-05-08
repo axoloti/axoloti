@@ -1463,7 +1463,7 @@ HAL_StatusTypeDef USB_HC_Init(USB_OTG_GlobalTypeDef *USBx,
 #if defined   (__CC_ARM) /*!< ARM Compiler */
 #pragma O0
 #elif defined (__GNUC__) /*!< GNU Compiler */
-#pragma GCC optimize ("O0")
+#pragma GCC optimize ("O2")
 #endif /* __CC_ARM */
 HAL_StatusTypeDef USB_HC_StartXfer(USB_OTG_GlobalTypeDef *USBx, USB_OTG_HCTypeDef *hc, uint8_t dma)
 {

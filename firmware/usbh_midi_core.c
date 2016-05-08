@@ -439,10 +439,10 @@ USBH_StatusTypeDef USBH_MIDI_ProcessInput(USBH_HandleTypeDef *phost) {
 
         case MIDI_GET_DATA:
             if (URB_state_in == USBH_URB_STALL) {
-                USBH_DbgLog("USB Host Input,GD  URB STALL");
+                USBH_ErrLog("USB Host Input,GD  URB STALL");
                 USBH_ClrFeature(phost, MIDI_Handle->InEp);
             } else if (URB_state_in == USBH_URB_ERROR) {
-                USBH_DbgLog("USB Host Input,GD  URB ERROR");
+                USBH_ErrLog("USB Host Input,GD  URB ERROR");
                 USBH_ClrFeature(phost, MIDI_Handle->InEp);
             }
 
@@ -458,20 +458,21 @@ USBH_StatusTypeDef USBH_MIDI_ProcessInput(USBH_HandleTypeDef *phost) {
                 
                 int n = USBH_LL_GetLastXferSize(phost, MIDI_Handle->InPipe);
                 for (i=0; i<n; i+=4) {
-                    MIDI_CB(MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
+                    if (MIDI_Handle->buff_in[0+i]) {
+                        MIDI_CB(MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
                 //	USBH_DbgLog("USB Host Input recv data : %x, %x, %x %x",
 				//				MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
+                    }
                 }
+                USBH_BulkReceiveData(phost, MIDI_Handle->buff_in, MIDI_Handle->InEpSize, MIDI_Handle->InPipe);
                     
-                MIDI_Handle->buff_in[1] = 0;
-                // MIDI_Handle->state_in = MIDI_IDLE;
                 MIDI_Handle->read_timer = phost->Timer;
             } else if (URB_state_in == USBH_URB_STALL) {
-                USBH_ErrLog("USB Host Input,POLL  URB STALL");
+                USBH_ErrLog("USB Host Input,POLL  URB STALL 2");
                 if (USBH_ClrFeature(phost, MIDI_Handle->InEp) == USBH_OK) {
                     MIDI_Handle->state_in = MIDI_GET_DATA;
                 }
-            } // if STALL
+            }
             break;
 
         default:
@@ -609,26 +610,7 @@ USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost) {
         return USBH_OK; //?
     }
     
-    // note: phost->Timer can overflow, as its a uint32
-    if (MIDI_Handle->state_in == MIDI_POLL) {
-        if (( phost->Timer - MIDI_Handle->read_timer) >= MIDI_Handle->read_poll 
-              || phost->Timer < MIDI_Handle->read_timer)  {
-            // regulalry send a data request (READ)
-            MIDI_Handle->state_in = MIDI_GET_DATA;
-            #if (USBH_USE_OS == 1)
-            osMessagePutI ( phost->os_event, USBH_URB_EVENT, 0);
-            #endif
-        }
-
-#if 0 // MH I dont think this is necessary, I added as a 'just in case'
-    } else if (MIDI_Handle->state_out == MIDI_POLL) {
-        if(( phost->Timer - MIDI_Handle->timer) >= MIDI_Handle->write_poll) {
-            #if (USBH_USE_OS == 1)
-            osMessagePutI ( phost->os_event, USBH_URB_EVENT, 0);
-            #endif
-        }
-#endif 
-    } else if (MIDI_Handle->state_out == MIDI_SEND_DATA) {
+    if (MIDI_Handle->state_out == MIDI_SEND_DATA) {
         
         if (( phost->Timer - MIDI_Handle->write_timer) >= MIDI_Handle->write_poll
               || phost->Timer < MIDI_Handle->write_timer) {
