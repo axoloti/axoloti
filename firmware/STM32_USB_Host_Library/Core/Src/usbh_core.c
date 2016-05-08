@@ -615,7 +615,7 @@ USBH_StatusTypeDef  USBH_Process(USBH_HandleTypeDef *phost)
     {
       phost->pActiveClass->DeInit(phost); 
       phost->pActiveClass = NULL;
-      //HAL_HCD_Init(phost->device);
+      USBH_LL_Stop(phost);
     }
 
     break;
