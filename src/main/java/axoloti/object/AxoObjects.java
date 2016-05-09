@@ -38,7 +38,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import transitions.TransitionManager;
 
 /**
  *
@@ -49,8 +48,6 @@ public class AxoObjects {
     public AxoObjectTreeNode ObjectTree;
     public ArrayList<AxoObjectAbstract> ObjectList;
     HashMap<String, AxoObjectAbstract> ObjectUUIDMap;
-
-    TransitionManager transitionmgr;
 
     public AxoObjectAbstract GetAxoObjectFromUUID(String n) {
         return ObjectUUIDMap.get(n);
@@ -138,12 +135,6 @@ public class AxoObjects {
                     set.add(o);
                     return set;
                 }
-            }
-            // last resort : transition?
-            AxoObjectAbstract ao = transitionmgr.GetObjectFromName(n);
-            if (ao != null) {
-                set.add(ao);
-                return set;
             }
             return null;
         } else {
@@ -361,8 +352,6 @@ public class AxoObjects {
                 } else {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "search path empty!");
                 }
-                transitionmgr = new TransitionManager();
-                transitionmgr.LoadTransitions();
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "finished loading objects");
             }
         };
