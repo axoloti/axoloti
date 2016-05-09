@@ -394,7 +394,7 @@
 
     <target name="create.build.version" depends = "calc.build.version, calc.short.version">
 		<tstamp>
-		    <format property="build.time" pattern="dd/MM/yyyy HH:mm ss z"/>
+		    <format property="build.time" pattern="dd/MM/yyyy HH:mm:ss z"/>
 		</tstamp>
 		<property name="build.version" value="(git missing)"/>
         <property name="short.version" value="(git missing)"/>
