@@ -615,7 +615,14 @@ USBH_StatusTypeDef  USBH_Process(USBH_HandleTypeDef *phost)
     {
       phost->pActiveClass->DeInit(phost); 
       phost->pActiveClass = NULL;
-      USBH_LL_Stop(phost);
+      // this sequence can probably be reduced...
+      USBH_Delay(100);
+      HAL_HCD_Stop(phost->pData);
+      USBH_Delay(100);
+      HAL_HCD_Init(phost->pData);
+      USBH_Delay(100);
+      HAL_HCD_Start(phost->pData);
+      USBH_Delay(100);
     }
 
     break;
