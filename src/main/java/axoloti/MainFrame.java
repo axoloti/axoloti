@@ -1065,7 +1065,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 + "the leds will blink for a minute, "
                 + "do not interrupt until the leds "
                 + "stop blinking.\n"
-                + "When the leds stop blinking, you can connect again.",
+                + "When the leds stop blinking, you can connect again.\n"
+                + "Note: if there is a USB device connected to USB Host port, unplug it now.",
                 "Firmware update...",
                 JOptionPane.YES_NO_OPTION);
         if (s == 0) {
