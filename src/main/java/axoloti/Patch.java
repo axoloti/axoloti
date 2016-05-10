@@ -1402,7 +1402,6 @@ public class Patch {
         c += "void xpatch_init2(int fwid)\n"
                 + "{\n"
                 + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID + ") {\n"
-                + "    patchMeta.fptr_dsp_process = 0;\n"
                 + "    return;"
                 + "  }\n"
                 + "  extern uint32_t _pbss_start;\n"
