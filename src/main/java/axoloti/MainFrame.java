@@ -826,7 +826,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             qcmdprocessor.AppendToQueue(new qcmds.QCmdDisconnect());
             qcmdprocessor.AppendToQueue(new qcmds.QCmdFlashDFU());
         } else {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "No devices in DFU mode detected. To bring Axoloti Core in DFU mode, remove power from Axoloti Core, and power it up while holding button S1. The USB port needs to be connected with this computer too...");
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "No devices in DFU mode detected. To bring Axoloti Core in DFU mode, remove power from Axoloti Core, and then connect the micro-USB port to your computer while holding button S1. The LEDs will stay off when in DFU mode.");
         }
     }//GEN-LAST:event_jMenuItemFlashDFUActionPerformed
 

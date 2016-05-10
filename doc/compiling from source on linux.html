@@ -1,29 +1,33 @@
 <html><body>
-<h1>Compiling from source on Linux</h1>
+        <h1>Compiling from source on Linux</h1>
+
+        <h2>Important</h2>
+        <b>
+            Regular users are recommended to download an install a release version, rather than compiling from source. Releases are published at <a href="https://github.com/axoloti/axoloti/releases">https://github.com/axoloti/axoloti/releases</a>.
+        </b>
+
         Assuming Ubuntu Linux. Other Distributions may need minor changes.
-        <h2>Download</h2>
 
-        
-        <h3>From GIT</h3>
+        <h2>Cloning the GIT repository</h2>
         Open a terminal and enter:<p>
-        <code>
-            $> <b>git clone https://github.com/axoloti/axoloti.git</b><br>
-            $> <b>cd axoloti</b><br>            
-            $> <b>git submodule update --init --recursive</b><br>
-        </code>       
-        
-        <h2>Install</h2>
-        
-        
-        open a terminal and enter:<p>
-        <code>
-            $> <b>cd axoloti</b><br>
-            $> <b>cd platform_linux</b><br>
-            $> <b>./build.sh</b><br>
-        </code>
-        Root privileges are required to add a udev rule to grant access to Axoloti Core on USB. The install script will ask you for this.
+            <code>
+                $> <b>git clone https://github.com/axoloti/axoloti.git</b><br>
+                $> <b>cd axoloti</b><br>
+                $> <b>git submodule update --init --recursive</b><br>
+            </code>
 
-        <h2>Next</h2>
-        Continue to <a href="getting started on windows.html">getting started on windows</a>
+        <h2>Compiling</h2>
+        open a terminal and enter:<p>
+            <code>
+                $> <b>cd platform_linux</b><br>
+                $> <b>./build.sh</b><br>
+                $> <b>cd ..</b><br>
+            </code><p>
+            Root privileges are required to add a udev rule to grant access to Axoloti Core on USB. The install script will ask you for this.
+
+        <h2>Launching</h2>
+        <code>
+            $> <b>./Axoloti.sh</b>
+        </code>
     </body>
 </html>
