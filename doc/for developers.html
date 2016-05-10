@@ -16,14 +16,11 @@
         <ul>
             <li>When opening a document, or pasting from the clipboard, the "UUID" 
                 hash stored in the document will be matched against objects 
-                pre-loaded from the path. The "UUID hash" of an object is unique
+                pre-loaded from the path. The "UUID" of an object is unique
                 to the name, and inlets, outlets, parameters, attributes (name+type) of the object.
                 The loaded object may have a different name, or changed 
                 documentation, but since the functional implementation is the same, 
                 it is probably an update of naming or documentation of the object. 
-            <li>If no UUID match was found, the "SHA" will be matched against objects 
-                pre-loaded from the path. The "SHA hash" of an object is unique
-                to the functional implementation of the object.
             <li>Objects in the search path by name
             <li>Patches in the search path by name
         </ul>

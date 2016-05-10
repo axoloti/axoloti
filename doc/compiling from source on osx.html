@@ -5,26 +5,34 @@
         <h2>Install Java JDK</h2>
         <h2>Install XCode</h2>
         <h2>Obtain source code from github</h2>
-        Install the GitHub application <a href = "https://mac.github.com/">https://mac.github.com/</a>
-        
-        Or if you have git installed, open a terminal, and enter
-        <code>~$ git clone https://github.com/axoloti/axoloti.git</code>        
+        Install the GitHub application <a href = "https://mac.github.com/">https://mac.github.com/</a>.        
+        Or if you have git installed, open a terminal, and enter<p>
+        <code>
+            ~$> <b>git clone https://github.com/axoloti/axoloti.git</b><br>
+            ~$> <b>cd axoloti</b><br>       
+            ~$> <b>git submodule update --init --recursive</b><br>       
+        </code>        
 
         <h2>Compile the GUI</h2>
 
         open a terminal, go to the axoloti directory and run<p>
-        <code>ant</code>        
-
-        If you don't have ant installed, this can be obtained through "brew"
-        <code>brew update</code>
-        <code>brew install ant</code>
+        <code>
+            ~$> <b>ant</b></code><p>
+            
+            If you don't have ant installed, this can be obtained through "brew"<p>
+        <code>
+            ~$> <b>brew update</b><br>
+            ~$> <b>brew install ant</b>        
+        </code><p>
         that would require one to have <a href = "http://brew.sh/">http://brew.sh/</a> installed of course...
         
         <h2>Obtain the platform_osx binaries</h2>
         
-        open a terminal, go to the axoloti directory and run<br>
-        <code>cd platform_osx<br>
-            ./build.sh</code><p>
+        open a terminal, go to the axoloti directory and run<p>
+        <code>        
+            ~$> <b>cd platform_osx</b><br>
+            ~$> <b>./build.sh</b><br>
+        </code><p>
         
             <h2><a href="getting started on osx.html">Next</a></h2>
     </body>
