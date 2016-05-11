@@ -21,7 +21,7 @@
 #include "ch.h"
 #include "hal.h"
 
-#define WATCHDOG_ENABLED TRUE
+#define WATCHDOG_ENABLED 0
 
 
 void watchdog_init(void) {
