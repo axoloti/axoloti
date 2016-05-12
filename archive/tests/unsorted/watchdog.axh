@@ -1,58 +1,65 @@
-<patch-1.0>
-   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="sine_1" x="14" y="14">
+<patch-1.0 appVersion="1.0.10">
+   <comment type="patch/comment" x="14" y="14" text="the watchdog is a firmware mechanism that reboots the processor when it&apos;s unresponsive for some time"/>
+   <obj type="osc/sine" sha="57fd153c89df1299ed1ecbe27c961ac52732ab5" name="sine_1" x="14" y="42">
       <params>
          <frac32.s.map name="pitch" value="-12.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="112" y="14">
+   <obj type="audio/out stereo" sha="b933bb91801a126126313c11f773158b5ca2face" name="out_1" x="112" y="42">
       <params/>
       <attribs/>
    </obj>
-   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw_1" x="266" y="14">
+   <obj type="lfo/saw" sha="44413381d696d82ab57e28ec39239114e5e61ba3" name="saw_1" x="266" y="42">
       <params>
          <frac32.s.map name="pitch" value="0.0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="chart_1" x="364" y="14">
+   <obj type="disp/chart p" sha="8f2bc320aef06b8fef20b6dd1e928025aa9b067" name="chart_1" x="378" y="42">
       <params/>
       <attribs/>
    </obj>
-   <comment type="patch/comment" name="Trigger infinite loop: crash!" x="14" y="154"/>
-   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="i_1" x="14" y="182">
+   <comment type="patch/comment" x="14" y="182" text="Trigger infinite loop: crash!"/>
+   <obj type="ctrl/button" sha="15ee4f76478131dcc3e0ff8d36be5480bdb1b7d4" name="i_1" x="14" y="210">
       <params>
          <bool32.mom name="b" value="0"/>
       </params>
       <attribs/>
    </obj>
-   <obj type="script/oneliner_k" sha="215ebed562f5105b7cff0ec13065e31a257ab1ee" name="oneliner_k_1" x="84" y="182">
+   <obj type="script/oneliner_k" sha="215ebed562f5105b7cff0ec13065e31a257ab1ee" name="oneliner_k_1" x="84" y="210">
       <params>
          <frac32.s.map name="c" value="0.0"/>
       </params>
       <attribs>
-         <table attributeName="line" table="if (%in%) while(1){}"/>
+         <table attributeName="line" table="if (inlet_in) while(1){}"/>
       </attribs>
    </obj>
-   <comment type="patch/comment" name="the board should reboot by itself..." x="14" y="294"/>
-   <comment type="patch/comment" name="wait 20 seconds and then press &quot;connect&quot; again. The source of the crash will then be reported in the log." x="14" y="308"/>
+   <comment type="patch/comment" x="14" y="322" text="the board should reboot by itself..."/>
+   <comment type="patch/comment" x="14" y="336" text="wait 20 seconds and then press &quot;connect&quot; again. The source of the crash will then be reported in the log."/>
    <nets>
       <net>
-         <source name="saw_1 wave"/>
-         <dest name="chart_1 in"/>
+         <source obj="saw_1" outlet="wave"/>
+         <dest obj="chart_1" inlet="in"/>
       </net>
       <net>
-         <source name="i_1 o"/>
-         <dest name="oneliner_k_1 in"/>
+         <source obj="i_1" outlet="o"/>
+         <dest obj="oneliner_k_1" inlet="in"/>
       </net>
       <net>
-         <source name="sine_1 wave"/>
-         <dest name="out_1 left"/>
-         <dest name="out_1 right"/>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="out_1" inlet="left"/>
+         <dest obj="out_1" inlet="right"/>
       </net>
    </nets>
    <settings>
       <subpatchmode>no</subpatchmode>
    </settings>
    <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>535</x>
+      <y>348</y>
+      <width>674</width>
+      <height>618</height>
+   </windowPos>
 </patch-1.0>
