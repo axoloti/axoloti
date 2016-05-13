@@ -21,6 +21,7 @@ import axoloti.MainFrame;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
+import axoloti.utils.OSDetect;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -167,16 +168,19 @@ public class NumberBoxComponent extends ACtrlComponent {
         robot = null;
     }
 
+    private boolean isControlDown(KeyEvent ke) {
+        return OSDetect.getOS() == OSDetect.OS.MAC ? ke.isAltDown() : ke.isControlDown();
+    }
     @Override
     public void keyPressed(KeyEvent ke) {
         if (isEnabled()) {
             double steps = tick;
             if (ke.isShiftDown()) {
                 steps = steps * 0.1; // mini steps!
-                if (ke.isControlDown()) {
+                if (isControlDown(ke)) {
                     steps = steps * 0.1; // micro steps!                
                 }
-            } else if (ke.isControlDown()) {
+            } else if (isControlDown(ke)) {
                 steps = steps * 10.0; //accelerate!
             }
             switch (ke.getKeyCode()) {

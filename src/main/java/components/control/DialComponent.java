@@ -21,6 +21,7 @@ import axoloti.MainFrame;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
+import axoloti.utils.OSDetect;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -128,7 +129,7 @@ public class DialComponent extends ACtrlComponent {
     }
     int MousePressedCoordX = 0;
     int MousePressedCoordY = 0;
-    int MousePressedBtn = 0;
+    int MousePressedBtn =  MouseEvent.NOBUTTON;
 
     @Override
     protected void mousePressed(MouseEvent e) {
@@ -136,27 +137,49 @@ public class DialComponent extends ACtrlComponent {
             grabFocus();
             MousePressedCoordX = e.getXOnScreen();
             MousePressedCoordY = e.getYOnScreen();
+            
+            int lastBtn = MousePressedBtn;
             MousePressedBtn = e.getButton();
-            getRootPane().setCursor(MainFrame.transparentCursor);
+            
+            if (lastBtn != MouseEvent.NOBUTTON) {
+                if (lastBtn == MouseEvent.BUTTON1) {
+                    // now have both mouse buttons pressed...
+                    getRootPane().setCursor(Cursor.getDefaultCursor());
+                  robot = null;
+                } 
+            }
+            
+            if(MousePressedBtn == MouseEvent.BUTTON1) {
+               getRootPane().setCursor(MainFrame.transparentCursor);
+            } else {
+               // now have another button pressed
+               getRootPane().setCursor(Cursor.getDefaultCursor());
+               robot = null;
+            }
         }
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
         getRootPane().setCursor(Cursor.getDefaultCursor());
+        MousePressedBtn = MouseEvent.NOBUTTON;
         robot = null;
     }
 
+    private boolean isControlDown(KeyEvent ke) {
+        return OSDetect.getOS() == OSDetect.OS.MAC ? ke.isAltDown() : ke.isControlDown();
+    }
+    
     @Override
     public void keyPressed(KeyEvent ke) {
         if (isEnabled()) {
             double steps = tick;
             if (ke.isShiftDown()) {
                 steps = steps * 0.1; // mini steps!
-                if (ke.isControlDown()) {
+                if (isControlDown(ke)) {
                     steps = steps * 0.1; // micro steps!                
                 }
-            } else if (ke.isControlDown()) {
+            } else if (isControlDown(ke)) {
                 steps = steps * 10.0; //accelerate!
             }
             switch (ke.getKeyCode()) {
