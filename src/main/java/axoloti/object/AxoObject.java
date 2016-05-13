@@ -614,5 +614,6 @@ public class AxoObject extends AxoObjectAbstract {
         sMidiCode = o.sMidiCode;
         sAuthor = o.sAuthor;
         sLicense = o.sLicense;
+        sDescription = o.sDescription;
     }
 }
