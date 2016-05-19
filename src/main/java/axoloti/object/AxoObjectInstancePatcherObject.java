@@ -22,7 +22,6 @@ import axoloti.objecteditor.AxoObjectEditor;
 import components.ButtonComponent;
 import components.ButtonComponent.ActListener;
 import java.awt.Component;
-import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import javax.swing.SwingUtilities;
 import org.simpleframework.xml.Element;
@@ -36,6 +35,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     AxoObjectEditor aoe;
     @Element(name = "object")
     AxoObject ao;
+    ButtonComponent BtnEdit;
 
     public AxoObjectInstancePatcherObject() {
     }
@@ -73,12 +73,12 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         invalidate();
         validate();
     }
-    
+
     @Override
     public void OpenEditor() {
         edit();
     }
-   
+
     public void edit() {
         if (ao == null) {
             ao = new AxoObject();
@@ -87,7 +87,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         }
         if (aoe == null) {
             aoe = new AxoObjectEditor(ao);
-        } 
+        }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -96,20 +96,21 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
             }
         });
     }
+
     public boolean isEditorOpen() {
         return aoe != null && aoe.isVisible();
     }
 
-   @Override
+    @Override
     public void ObjectModified(Object src) {
         updateObj();
-    }        
-    
+    }
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();
         //updateObj();
-        ButtonComponent BtnEdit = new ButtonComponent("edit");
+        BtnEdit = new ButtonComponent("edit");
         BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
         BtnEdit.setAlignmentY(TOP_ALIGNMENT);
         BtnEdit.addActListener(new ActListener() {
@@ -125,4 +126,19 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         resizeToGrid();
     }
 
+    @Override
+    public void Unlock() {
+        super.Unlock();
+        if (BtnEdit != null) {
+            BtnEdit.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void Lock() {
+        super.Lock();
+        if (BtnEdit != null) {
+            BtnEdit.setEnabled(false);
+        }
+    }
 }
