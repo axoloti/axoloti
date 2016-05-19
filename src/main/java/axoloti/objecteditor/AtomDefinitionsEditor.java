@@ -18,6 +18,7 @@
 package axoloti.objecteditor;
 
 import axoloti.atom.AtomDefinition;
+import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.ObjectModifiedListener;
@@ -196,6 +197,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                     o.setName(getDefaultName() + i);
                     GetAtomDefinitions().add(o);
                     jTable1.setRowSelectionInterval(GetAtomDefinitions().size() - 1, GetAtomDefinitions().size() - 1);
+                    UpdateTable2();
                     AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                 } catch (InstantiationException ex) {
                     Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -217,6 +219,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 if (row > 0) {
                     jTable1.setRowSelectionInterval(row - 1, row - 1);
                 }
+                UpdateTable2();
                 AtomDefinitionsEditor.this.obj.FireObjectModified(this);
             }
         });
@@ -354,6 +357,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                 if (row < 0) {
                     jButtonMoveUp.setEnabled(false);
                     jButtonMoveDown.setEnabled(false);
+                    UpdateTable2();
                 } else {
                     jButtonMoveUp.setEnabled(row > 0);
                     jButtonMoveDown.setEnabled(row < GetAtomDefinitions().size() - 1);
@@ -452,7 +456,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                     case 1: {
                         try {
                             Object v = fields.get(rowIndex).get(o);
-                            if (v instanceof ArrayList) {
+                            if (v == null) {
+                                return "";
+                            } else if (v instanceof ArrayList) {
                                 ArrayList<String> va = (ArrayList<String>) v;
                                 returnValue = StringArrayToString(va);
                             } else if (v instanceof ValueInt32) {
@@ -489,7 +495,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
     void UpdateTable2() {
         fields.clear();
         int row = jTable1.getSelectedRow();
-        if (row != -1) {
+        if (row != -1 && (row < GetAtomDefinitions().size())) {
             o = GetAtomDefinitions().get(row);
             Class c = o.getClass();
             Field fs[] = c.getDeclaredFields();
