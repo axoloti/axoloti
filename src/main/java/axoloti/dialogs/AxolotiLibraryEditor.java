@@ -70,7 +70,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
             jTypeCombo.addItem(t);
         }
         jTypeCombo.setSelectedItem(library.getType());
-        
+
         boolean expert = MainFrame.prefs.getExpertMode() || Axoloti.isDeveloper();
         boolean lockDown
                 = !expert
@@ -350,6 +350,33 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
     }//GEN-LAST:event_jTypeComboActionPerformed
 
     private void jOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jOKActionPerformed
+        if (jId.getText() == null || jId.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Id is required, and must be unique",
+                    "Invalid Library",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (jLocalDir.getText() == null || jLocalDir.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Local directory is required, and must be valid",
+                    "Invalid Library",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (jId.getText().equals(AxolotiLibrary.USER_LIBRARY_ID)
+                && (jUserId.getText() != null && jUserId.getText().length() > 0)) {
+            char[] p = jPassword.getPassword();
+            if ((jPrefix.getText() == null || jPrefix.getText().length() == 0)
+                    || (p == null || p.length == 0)) {
+                JOptionPane.showMessageDialog(this,
+                        "Contributors for the community library need to specify username, password and prefix",
+                        "Invalid Library",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
         populateLib(library);
         setVisible(false);
         dispose();

@@ -39,8 +39,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PreferencesFrame extends javax.swing.JFrame {
 
-    final static String MidiNone = "None";
-
     static PreferencesFrame singleton = null;
 
     public static PreferencesFrame GetPreferencesFrame() {
@@ -256,7 +254,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Type", "Name", "Location", "Enabled"
+                "Type", "Id", "Location", "Enabled"
             }
         ) {
             Class[] types = new Class [] {
@@ -274,6 +272,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jLibraryTable.setColumnSelectionAllowed(true);
         jLibraryTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jLibraryTable);
         jLibraryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
