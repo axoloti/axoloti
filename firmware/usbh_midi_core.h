@@ -65,6 +65,7 @@ typedef enum {
   MIDI_BUSY,
   MIDI_GET_DATA,
   MIDI_POLL,
+  MIDI_RETRY,
   MIDI_ERROR
 } MIDI_State_t;
 
@@ -120,10 +121,10 @@ typedef struct _MIDI_Process {
   uint8_t buff_out_len;
 //  uint16_t             length;
 //  uint8_t              ep_addr;
-  uint16_t             read_poll;
-  uint32_t             read_timer;
-  uint16_t             write_poll;
-  uint32_t             write_timer;
+//  uint16_t             read_poll;
+//  uint32_t             read_timer;
+//  uint16_t             write_poll;
+//  uint32_t             write_timer;
 //  uint8_t              DataReady;
 //  USBH_MIDIDesc_t      HID_Desc;
   USBH_StatusTypeDef  ( * Init)(USBH_HandleTypeDef *phost);
