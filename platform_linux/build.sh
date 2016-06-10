@@ -21,6 +21,8 @@ elif [ -f /etc/debian_version ]; then
     OS=Debian  # XXX or Ubuntu??
 elif [ -f /etc/arch-release ]; then
     OS=Archlinux
+elif [ -f /etc/gentoo-release ]; then
+    OS=Gentoo
 else
     OS=$(uname -s)
 fi
@@ -38,6 +40,9 @@ case $OS in
         sudo pacman -S --noconfirm apache-ant libtool automake autoconf curl \
              lib32-ncurses lib32-bzip2
         ;;
+    Gentoo)
+	echo "detected Gentoo"
+	;;
     *)
         echo "Cannot handle dist: $OS"
         exit
@@ -154,6 +159,10 @@ case $OS in
         echo "pacman -Syy jdk7-openjdk"
         sudo pacman -S --noconfirm jdk7-openjdk
         ;;
+    Gentoo)
+	echo "emerge --update jdk:1.7 ant"
+	sudo emerge --update jdk:1.7 ant
+	;;
 esac
 
 
