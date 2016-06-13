@@ -31,7 +31,7 @@ case $OS in
     Ubuntu|Debian)
         echo "apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0"
         sudo apt-get install -y libtool libudev-dev automake autoconf \
-             ant curl lib32z1 lib32ncurses5
+        ant curl lib32z1 lib32ncurses5
 
         # On more recent versions of Ubuntu
         # the libbz2 package is multi-arch
