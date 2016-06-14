@@ -251,7 +251,7 @@ public class FileMenu extends JMenu {
         }
     }
 
-    private void jMenuOpenActionPerformed(java.awt.event.ActionEvent evt) {       
+    private void jMenuOpenActionPerformed(java.awt.event.ActionEvent evt) {
         FileUtils.Open((JFrame) SwingUtilities.getWindowAncestor(this));
     }
 
