@@ -17,8 +17,8 @@
  */
 package qcmds;
 
-import axoloti.parameters.ParameterInstance;
 import axoloti.Patch;
+import axoloti.parameters.ParameterInstance;
 
 /**
  *

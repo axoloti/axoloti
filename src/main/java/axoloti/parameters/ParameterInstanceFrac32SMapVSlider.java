@@ -17,8 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.Modulation;
-import axoloti.Modulator;
 import axoloti.Preset;
 import components.control.VSliderComponent;
 import java.awt.Color;
@@ -99,7 +97,9 @@ public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S
 
     @Override
     public VSliderComponent CreateControl() {
-        return new VSliderComponent(0.0, getMin(), getMax(), getTick());
+        VSliderComponent v = new VSliderComponent(0.0, getMin(), getMax(), getTick());
+        v.setParentAxoObjectInstance(axoObj);
+        return v;
     }
 
     @Override

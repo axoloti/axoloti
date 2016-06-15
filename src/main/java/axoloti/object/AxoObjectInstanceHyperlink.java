@@ -17,8 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.FileUtils;
-import axoloti.MainFrame;
 import axoloti.Patch;
 import axoloti.PatchGUI;
 import components.LabelComponent;

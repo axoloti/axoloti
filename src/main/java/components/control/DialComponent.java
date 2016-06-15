@@ -30,8 +30,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Robot;
 import java.awt.Stroke;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -39,7 +39,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.awt.Robot;
 
 /**
  *
@@ -53,7 +52,6 @@ public class DialComponent extends ACtrlComponent {
     private double tick;
     private NativeToReal convs[];
     private String keybBuffer = "";
-
     public void setNative(NativeToReal convs[]) {
         this.convs = convs;
     }
@@ -129,7 +127,7 @@ public class DialComponent extends ACtrlComponent {
     }
     int MousePressedCoordX = 0;
     int MousePressedCoordY = 0;
-    int MousePressedBtn =  MouseEvent.NOBUTTON;
+    int MousePressedBtn = MouseEvent.NOBUTTON;
 
     @Override
     protected void mousePressed(MouseEvent e) {
@@ -137,24 +135,24 @@ public class DialComponent extends ACtrlComponent {
             grabFocus();
             MousePressedCoordX = e.getXOnScreen();
             MousePressedCoordY = e.getYOnScreen();
-            
+
             int lastBtn = MousePressedBtn;
             MousePressedBtn = e.getButton();
-            
+
             if (lastBtn != MouseEvent.NOBUTTON) {
                 if (lastBtn == MouseEvent.BUTTON1) {
                     // now have both mouse buttons pressed...
                     getRootPane().setCursor(Cursor.getDefaultCursor());
-                  robot = null;
-                } 
+                    robot = null;
+                }
             }
-            
-            if(MousePressedBtn == MouseEvent.BUTTON1) {
-               getRootPane().setCursor(MainFrame.transparentCursor);
+
+            if (MousePressedBtn == MouseEvent.BUTTON1) {
+                getRootPane().setCursor(MainFrame.transparentCursor);
             } else {
-               // now have another button pressed
-               getRootPane().setCursor(Cursor.getDefaultCursor());
-               robot = null;
+                // now have another button pressed
+                getRootPane().setCursor(Cursor.getDefaultCursor());
+                robot = null;
             }
         }
     }
@@ -169,7 +167,7 @@ public class DialComponent extends ACtrlComponent {
     private boolean isControlDown(KeyEvent ke) {
         return OSDetect.getOS() == OSDetect.OS.MAC ? ke.isAltDown() : ke.isControlDown();
     }
-    
+
     @Override
     public void keyPressed(KeyEvent ke) {
         if (isEnabled()) {
@@ -216,17 +214,14 @@ public class DialComponent extends ACtrlComponent {
                     }
                     keybBuffer = "";
                     ke.consume();
-                    repaint();
                     break;
                 case KeyEvent.VK_BACK_SPACE:
                     keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
                     ke.consume();
-                    repaint();
                     break;
                 case KeyEvent.VK_ESCAPE:
                     keybBuffer = "";
                     ke.consume();
-                    repaint();
                     break;
                 default:
             }
@@ -245,7 +240,6 @@ public class DialComponent extends ACtrlComponent {
                 case '.':
                     keybBuffer += ke.getKeyChar();
                     ke.consume();
-                    repaint();
                     break;
                 default:
             }
@@ -290,11 +284,11 @@ public class DialComponent extends ACtrlComponent {
             g2.drawLine(radius, radius, radius + x, radius + y);
             if (keybBuffer.isEmpty()) {
                 String s = String.format("%5.2f", value);
-                g2.setFont(Constants.font);
+                g2.setFont(Constants.FONT);
                 g2.drawString(s, 0, getSize().height);
             } else {
                 g2.setColor(Color.red);
-                g2.setFont(Constants.font);
+                g2.setFont(Constants.FONT);
                 g2.drawString(keybBuffer, 0, getSize().height);
             }
         }
@@ -311,7 +305,6 @@ public class DialComponent extends ACtrlComponent {
         this.value = value;
 
         if (convs != null) {
-            Point p = getParent().getLocationOnScreen();
             String s = "<html>";
             for (NativeToReal c : convs) {
                 s += c.ToReal(new ValueFrac32(value)) + "<br>";
@@ -319,7 +312,6 @@ public class DialComponent extends ACtrlComponent {
             this.setToolTipText(s);
         }
 
-        repaint();
         fireEvent();
     }
 
@@ -351,4 +343,5 @@ public class DialComponent extends ACtrlComponent {
     public void setTick(double tick) {
         this.tick = tick;
     }
+
 }

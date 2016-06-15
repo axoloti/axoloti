@@ -24,10 +24,13 @@ import axoloti.PatchFrame;
 import axoloti.PatchGUI;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
+import axoloti.ZoomUtils;
 import axoloti.attribute.*;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.Frac32buffer;
+import axoloti.displays.Display;
+import axoloti.displays.DisplayInstance;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
 import axoloti.outlets.Outlet;
@@ -35,21 +38,18 @@ import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
 import components.LabelComponent;
 import components.PopupIcon;
-import axoloti.displays.Display;
-import axoloti.displays.DisplayInstance;
 import static java.awt.Component.LEFT_ALIGNMENT;
-import java.awt.MenuItem;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import org.simpleframework.xml.*;
 
@@ -112,6 +112,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     }
     public JPanel p_params;
     public JPanel p_displays;
+    public JPanel p_inlets;
+    public JPanel p_outlets;
+
 
     void updateObj1() {
         getType().addObjectModifiedListener(this);
@@ -134,15 +137,13 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
         final PopupIcon popupIcon = new PopupIcon();
-        popupIcon.setPopupIconListener(
-                new PopupIcon.PopupIconListener() {
+        popupIcon.setPopupIconListener(new PopupIcon.PopupIconListener() {
                     @Override
                     public void ShowPopup() {
                         if (popup.getParent() == null) {
                             popupIcon.add(popup);
                         }
-                        popup.show(popupIcon,
-                                0, popupIcon.getHeight());
+                        ZoomUtils.showZoomedPopupMenu(popupIcon, AxoObjectInstance.this, popup);
                     }
                 });
         Titlebar.add(popupIcon);
@@ -155,7 +156,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 + "<p>Author: " + getType().sAuthor
                 + "<p>License: " + getType().sLicense
                 + "<p>Path: " + getType().sPath);
-        MenuItem popm_edit = new MenuItem("edit object definition");
+        JMenuItem popm_edit = new JMenuItem("edit object definition");
         popm_edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -163,7 +164,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             }
         });
         popup.add(popm_edit);
-        MenuItem popm_editInstanceName = new MenuItem("edit instance name");
+        JMenuItem popm_editInstanceName = new JMenuItem("edit instance name");
         popm_editInstanceName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -171,7 +172,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             }
         });
         popup.add(popm_editInstanceName);
-        MenuItem popm_substitute = new MenuItem("replace");
+        JMenuItem popm_substitute = new JMenuItem("replace");
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -180,7 +181,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         });
         popup.add(popm_substitute);
         if (getType().GetHelpPatchFile() != null) {
-            MenuItem popm_help = new MenuItem("help");
+            JMenuItem popm_help = new JMenuItem("help");
             popm_help.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
@@ -190,7 +191,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             popup.add(popm_help);
         }
         if (MainFrame.prefs.getExpertMode()) {
-            MenuItem popm_adapt = new MenuItem("adapt homonym");
+            JMenuItem popm_adapt = new JMenuItem("adapt homonym");
             popm_adapt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
@@ -201,7 +202,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         }
 
         if (type instanceof AxoObjectFromPatch) {
-            MenuItem popm_embed = new MenuItem("embed as patch/patcher");
+            JMenuItem popm_embed = new JMenuItem("embed as patch/patcher");
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
@@ -210,7 +211,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             });
             popup.add(popm_embed);
         } else if (!(this instanceof AxoObjectInstancePatcherObject)) {
-            MenuItem popm_embed = new MenuItem("embed as patch/object");
+            JMenuItem popm_embed = new JMenuItem("embed as patch/object");
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
@@ -244,35 +245,13 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             }
 
             @Override
-            public void mousePressed(MouseEvent me) {
-                if (me.isPopupTrigger()) {
-                } else if (!IsLocked()) {
-                    dX = me.getXOnScreen() - getX();
-                    dY = me.getYOnScreen() - getY();
-                    dragging = true;
-                    if (IsSelected()) {
-                        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
-                            if (o.IsSelected()) {
-                                o.dX = me.getXOnScreen() - o.getX();
-                                o.dY = me.getYOnScreen() - o.getY();
-                                o.dragging = true;
-                            }
-                        }
-                    }
-                }
+            public void mousePressed(MouseEvent e) {
+                AxoObjectInstance.this.handleMousePressed(e);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (dragging) {
-                    dragging = false;
-                    if (patch != null) {
-                        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
-                            o.dragging = false;
-                        }
-                        patch.AdjustSize();
-                    }
-                }
+                AxoObjectInstance.this.handleMouseReleased(e);
             }
 
             @Override
@@ -290,11 +269,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         p_iolets.setLayout(new BoxLayout(p_iolets, BoxLayout.LINE_AXIS));
         p_iolets.setAlignmentX(LEFT_ALIGNMENT);
         p_iolets.setAlignmentY(TOP_ALIGNMENT);
-        JPanel p_inlets = new JPanel();
+        p_inlets = new JPanel();
         p_inlets.setLayout(new BoxLayout(p_inlets, BoxLayout.PAGE_AXIS));
         p_inlets.setAlignmentX(LEFT_ALIGNMENT);
         p_inlets.setAlignmentY(TOP_ALIGNMENT);
-        JPanel p_outlets = new JPanel();
+        p_outlets = new JPanel();
         p_outlets.setLayout(new BoxLayout(p_outlets, BoxLayout.PAGE_AXIS));
         p_outlets.setAlignmentX(RIGHT_ALIGNMENT);
         p_outlets.setAlignmentY(TOP_ALIGNMENT);
@@ -437,7 +416,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public void OpenEditor() {
         getType().OpenEditor();
     }
-
+    
     @Override
     public void setInstanceName(String s) {
         super.setInstanceName(s);

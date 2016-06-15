@@ -18,6 +18,7 @@
 package axoloti;
 
 import axoloti.inlets.InletInstance;
+import axoloti.iolet.IoletAbstract;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstanceAbstract;
@@ -26,6 +27,7 @@ import axoloti.outlets.OutletInstance;
 import axoloti.utils.Constants;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -36,10 +38,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DnDConstants;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -47,6 +49,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -61,11 +65,13 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLayer;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
 import javax.swing.TransferHandler;
-import javax.xml.stream.XMLStreamException;
+import javax.swing.plaf.LayerUI;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -88,56 +94,72 @@ public class PatchGUI extends Patch {
     final static String patchMidiKey = "midi/in/keyb";
     final static String patchDisplay = "disp/";
 
-    JLayeredPane Layers = new JLayeredPane();
-    JPanel ObjectLayer = new JPanel();
-    JPanel NetLayer = new JPanel();
-    public JPanel SelectionRectLayer = new JPanel();
+    public JLayeredPane Layers = new JLayeredPane();
+
+    public JPanel objectLayerPanel = new JPanel();
+
+    public ZoomUI zoomUI = new ZoomUI(Constants.INITIAL_ZOOM,
+            Constants.ZOOM_STEP,
+            Constants.MAXIMUM_ZOOM,
+            Constants.MINIMUM_ZOOM,
+            this);
+    JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel, zoomUI);
+
+    public JPanel netLayerPanel = new JPanel();
+    JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel, zoomUI);
+
+    public JPanel selectionRectLayerPanel = new JPanel();
+    JLayer<JComponent> selectionRectLayer = new JLayer<JComponent>(selectionRectLayerPanel, zoomUI);
+
+    public JPanel unzoomedLayerPanel = new JPanel();
+    JLayer<JComponent> unzoomedLayer = new JLayer<JComponent>(unzoomedLayerPanel, new LayerUI<JComponent>());
+
     SelectionRectangle selectionrectangle = new SelectionRectangle();
     Point selectionRectStart;
+    Point panOrigin;
     Boolean Button1down = false;
+    Boolean Button2down = false;
     public AxoObjectFromPatch ObjEditor;
 
     public PatchGUI() {
         super();
-        Layers.setLayout(null);
-        Layers.setSize(5000, 5000);
-        Layers.setLocation(0, 0);
-        ObjectLayer.setLayout(null);
-        ObjectLayer.setSize(5000, 5000);
-        ObjectLayer.setLocation(0, 0);
-        NetLayer.setLayout(null);
-        NetLayer.setSize(5000, 5000);
-        NetLayer.setLocation(0, 0);
-        SelectionRectLayer.setLayout(null);
-        SelectionRectLayer.setSize(5000, 5000);
-        SelectionRectLayer.setLocation(0, 0);
 
-        Layers.add(ObjectLayer, new Integer(1));
-        Layers.add(NetLayer, new Integer(2));
-        Layers.add(SelectionRectLayer, new Integer(3));
-        SelectionRectLayer.add(selectionrectangle);
+        JComponent[] layerComponents = {
+            Layers, objectLayerPanel, netLayerPanel,
+            selectionRectLayerPanel, unzoomedLayerPanel,
+            objectLayer, netLayer, selectionRectLayer,
+            unzoomedLayer};
+        for (JComponent c : layerComponents) {
+            c.setLayout(null);
+            c.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
+            c.setLocation(0, 0);
+            c.setOpaque(false);
+        }
+
+        Layers.add(objectLayer, new Integer(1));
+        Layers.add(netLayer, new Integer(2));
+        Layers.add(selectionRectLayer, new Integer(3));
+        Layers.add(unzoomedLayer, new Integer(4));
+
+        objectLayerPanel.setName(Constants.OBJECT_LAYER_PANEL);
+
+        selectionRectLayerPanel.add(selectionrectangle);
         selectionrectangle.setLocation(100, 100);
         selectionrectangle.setSize(100, 100);
         selectionrectangle.setOpaque(false);
         selectionrectangle.setVisible(false);
-        ObjectLayer.setOpaque(false);
-        NetLayer.setOpaque(false);
-        SelectionRectLayer.setOpaque(false);
-        Layers.setSize(5000, 5000);
+
+        Layers.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
         Layers.setVisible(true);
-//        ObjectLayer.setFocusable(true);
         Layers.setBackground(Color.LIGHT_GRAY);
         Layers.setOpaque(true);
         Layers.invalidate();
         Layers.repaint();
         Layers.doLayout();
-        //add(Layers);
-//        SelectionRectLayer.add(cs);
 
         TransferHandler TH = new TransferHandler() {
             @Override
             public int getSourceActions(JComponent c) {
-                System.out.println("COPY_OR_MOVE");
                 return COPY_OR_MOVE;
             }
 
@@ -165,14 +187,12 @@ public class PatchGUI extends Patch {
 
             @Override
             public boolean importData(TransferHandler.TransferSupport support) {
-                //System.out.println("importdata 1" + support.get);
                 return super.importData(support);
             }
 
             @Override
             public boolean importData(JComponent comp, Transferable t) {
                 try {
-                    //System.out.println("importdata 2 " + t.getTransferData(DataFlavor.stringFlavor));
                     if (!locked) {
                         if (t.isDataFlavorSupported(DataFlavor.stringFlavor)) {
 
@@ -189,7 +209,6 @@ public class PatchGUI extends Patch {
 
             @Override
             protected Transferable createTransferable(JComponent c) {
-                System.out.println("createTransferable");
                 return new StringSelection("copy");
             }
 
@@ -200,42 +219,9 @@ public class PatchGUI extends Patch {
             }
 
         };
+
         Layers.setTransferHandler(TH);
-        /*
-         Layers.setDropTarget(new DropTarget(ObjectLayer, new DropTargetListener() {
-         @Override
-         public void dragEnter(DropTargetDragEvent dtde) {
-         }
 
-         @Override
-         public void dragOver(DropTargetDragEvent dtde) {
-         for (Component cmp : SelectionRectLayer.getComponents()) {
-         if (cmp instanceof NetDragging) {
-         NetDragging nd = (NetDragging) cmp;
-         Point ps = SelectionRectLayer.getLocationOnScreen();
-         Point pl = new Point(dtde.getLocation().x - ps.x, dtde.getLocation().y - ps.y);
-         nd.SetDragPoint(dtde.getLocation());
-         SelectionRectLayer.repaint();
-         }
-         }
-         }
-
-         @Override
-         public void dropActionChanged(DropTargetDragEvent dtde) {
-
-         }
-
-         @Override
-         public void dragExit(DropTargetEvent dte) {
-
-         }
-
-         @Override
-         public void drop(DropTargetDropEvent dtde) {
-
-         }
-         }));
-         */
         InputMap inputMap = Layers.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X,
                 Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "cut");
@@ -265,8 +251,8 @@ public class PatchGUI extends Patch {
                 int xsteps = 1;
                 int ysteps = 1;
                 if (!ke.isShiftDown()) {
-                    xsteps = Constants.xgrid;
-                    ysteps = Constants.ygrid;
+                    xsteps = Constants.X_GRID;
+                    ysteps = Constants.Y_GRID;
                 }
                 if ((ke.getKeyCode() == KeyEvent.VK_SPACE)
                         || ((ke.getKeyCode() == KeyEvent.VK_N) && (!ke.isControlDown()) && (!ke.isMetaDown()))
@@ -374,8 +360,16 @@ public class PatchGUI extends Patch {
                     selectionRectStart = me.getPoint();
                     Button1down = true;
                     Layers.requestFocusInWindow();
+                    PatchGUI.this.selectionRectLayer.revalidate();
+                    PatchGUI.this.selectionRectLayer.repaint();
+                } else if (me.getButton() == MouseEvent.BUTTON2) {
+                    PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
+                    panOrigin = me.getPoint();
+                    
+                    Button2down = true;
                 } else {
                     Button1down = false;
+                    Button2down = false;
                 }
             }
 
@@ -387,8 +381,14 @@ public class PatchGUI extends Patch {
                         o.SetSelected(o.getBounds().intersects(r));
                     }
                     selectionrectangle.setVisible(false);
+                    PatchGUI.this.selectionRectLayer.revalidate();
+                    PatchGUI.this.selectionRectLayer.repaint();
                 }
                 Button1down = false;
+                Button2down = false;
+                if(me.getButton() == MouseEvent.BUTTON2) {
+                    PatchGUI.this.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
+                }
             }
 
             @Override
@@ -415,6 +415,21 @@ public class PatchGUI extends Patch {
                     selectionrectangle.setLocation(xmin, ymin);
                     selectionrectangle.setSize(xmax - xmin, ymax - ymin);
                     selectionrectangle.setVisible(true);
+                    PatchGUI.this.selectionRectLayer.revalidate();
+                    PatchGUI.this.selectionRectLayer.repaint();
+                } else if (Button2down) {
+                    int dx = panOrigin.x - ev.getX();
+                    int dy = panOrigin.y - ev.getY();
+                    JScrollBar horizontal = PatchGUI.this.getPatchframe().getScrollPane().getHorizontalScrollBar();
+                    JScrollBar vertical = PatchGUI.this.getPatchframe().getScrollPane().getVerticalScrollBar();
+                    int newHorizontalValue = Math.max(horizontal.getValue() + dx, 0);
+                    int newVerticalValue = Math.max(vertical.getValue() + dy, 0);
+                    if (!(horizontal.getValue() == 0 && newHorizontalValue == 0)) {
+                        horizontal.setValue(newHorizontalValue);
+                    }
+                    if (!(vertical.getValue() == 0 && newVerticalValue == 0)) {
+                        vertical.setValue(newVerticalValue);
+                    }
                 }
             }
         });
@@ -427,11 +442,11 @@ public class PatchGUI extends Patch {
 
             @Override
             public synchronized void dragOver(DropTargetDragEvent dtde) {
-                for (Component cmp : SelectionRectLayer.getComponents()) {
+                for (Component cmp : selectionRectLayerPanel.getComponents()) {
                     if (cmp instanceof NetDragging) {
                         NetDragging nd = (NetDragging) cmp;
                         nd.SetDragPoint(dtde.getLocation());
-                        SelectionRectLayer.repaint();
+                        selectionRectLayerPanel.repaint();
                         break;
                     }
                 }
@@ -474,14 +489,6 @@ public class PatchGUI extends Patch {
                             disconnect(il);
                         }
                     }
-                    /*
-                     AxoObjectAbstract obj = MainFrame.axoObjects.GetAxoObject(s);
-                     if (obj != null) {
-                     AddObjectInstance(obj, dtde.getLocation());
-                     } else {
-                     System.out.println("spilled on patch: " + s);
-                     }
-                     */
                 } catch (UnsupportedFlavorException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
@@ -491,17 +498,76 @@ public class PatchGUI extends Patch {
             }
         ;
         };
+
+
+        Layers.addMouseWheelListener(new MouseWheelListener() {
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                // this method implements zoom to mouse functionality
+                // we perform the scale change
+                // and then translate the viewport such that the point
+                // under the mouse remains the same
+                
+                int notches = e.getWheelRotation();
+
+                double oldScale = zoomUI.getScale();
+                Point p = e.getPoint();
+                double pre_x = p.x / oldScale;
+                double pre_y = p.y / oldScale;
+                
+                JScrollBar horizontalScrollBar = PatchGUI.this.getPatchframe().getScrollPane().getHorizontalScrollBar();
+                JScrollBar verticalScrollBar = PatchGUI.this.getPatchframe().getScrollPane().getVerticalScrollBar();
+
+                int horizOldValue = horizontalScrollBar.getValue();
+                int vertOldValue = verticalScrollBar.getValue();
+
+                if (notches < 0) {
+                    zoomUI.zoomIn();
+                } else {
+                    zoomUI.zoomOut();
+                }
+
+                double newScale = zoomUI.getScale();
+
+                PatchGUI.this.AdjustSize();
+
+                double post_x = p.x / newScale;
+                double post_y = p.y / newScale;
+                double dx = (post_x - pre_x) * newScale;
+                double dy = (post_y - pre_y) * newScale;
+
+                
+                int newHorizontalValue = (int) Math.round(horizOldValue - dx);
+                int newVerticalValue = (int) Math.round(vertOldValue - dy);
+                
+                
+                // adjust scrollbar extent to avoid jitter 
+                // when fully zoomed out
+                if(horizontalScrollBar.getMaximum() == horizontalScrollBar.getVisibleAmount()) {
+                    horizontalScrollBar.setVisibleAmount(horizontalScrollBar.getMaximum() - newHorizontalValue);
+                }
+                
+                if(verticalScrollBar.getMaximum() == verticalScrollBar.getVisibleAmount()) {
+                    verticalScrollBar.setVisibleAmount(verticalScrollBar.getMaximum() - newVerticalValue);
+                }
+
+                horizontalScrollBar.setValue(newHorizontalValue);
+                verticalScrollBar.setValue(newVerticalValue);
+            }
+        });
+
         Layers.setDropTarget(dt);
 
-        Layers.setPreferredSize(new Dimension(5000, 5000));
+        Dimension LayersSize = new Dimension(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
+        Layers.setPreferredSize(LayersSize);
         Layers.setSize(Layers.getPreferredSize());
         Layers.setVisible(true);
         Layers.setLocation(0, 0);
-        Layers.setPreferredSize(new Dimension(5000, 5000));
+        Layers.setPreferredSize(LayersSize);
     }
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         SelectNone();
+        pos = zoomUI.removeZoomFactor(pos);
         if (v.isEmpty()) {
             return;
         }
@@ -567,18 +633,19 @@ public class PatchGUI extends Patch {
                 }
                 o.patch = this;
                 objectinstances.add(o);
-                ObjectLayer.add(o, 0);
+                objectLayerPanel.add(o, 0);
                 o.PostConstructor();
                 int newposx = o.getX();
                 int newposy = o.getY();
+
                 if (pos != null) {
                     // paste at cursor position, with delta snapped to grid
-                    newposx += Constants.xgrid * ((pos.x - minX + Constants.xgrid / 2) / Constants.xgrid);
-                    newposy += Constants.ygrid * ((pos.y - minY + Constants.ygrid / 2) / Constants.ygrid);
+                    newposx += Constants.X_GRID * ((pos.x - minX + Constants.X_GRID / 2) / Constants.X_GRID);
+                    newposy += Constants.Y_GRID * ((pos.y - minY + Constants.Y_GRID / 2) / Constants.Y_GRID);
                 }
                 while (getObjectAtLocation(newposx, newposy) != null) {
-                    newposx += Constants.xgrid;
-                    newposy += Constants.ygrid;
+                    newposx += Constants.X_GRID;
+                    newposy += Constants.Y_GRID;
                 }
                 o.setLocation(newposx, newposy);
                 o.SetSelected(true);
@@ -624,15 +691,6 @@ public class PatchGUI extends Patch {
                                 i.inletname = inletname;
                                 i.objname = on2;
                                 dest2.add(i);
-                            } else {/*
-                                 AxoObjectInstanceAbstract obj = GetObjectInstance(r[0]);
-                                 if ((obj != null) && (connectedInlet == null)) {
-                                 InletInstance ii = obj.GetInletInstance(r[1]);
-                                 if (ii != null) {
-                                 connectedInlet = ii;
-                                 }
-                                 }*/
-
                             }
                         }
                     }
@@ -643,7 +701,7 @@ public class PatchGUI extends Patch {
                         n.patch = this;
                         n.PostConstructor();
                         nets.add(n);
-                        NetLayer.add(n);
+                        netLayerPanel.add(n);
                     } else if (connectedInlet != null) {
                         for (InletInstance o : n.dest) {
                             InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
@@ -664,12 +722,6 @@ public class PatchGUI extends Patch {
                                 AddConnection(o2, connectedOutlet);
                             }
                         }
-//                        for (OutletInstance o : n.source) {
-//                            OutletInstance o2 = getOutletByReference(o.name);
-//                            if ((o2 != null) && (o2 != connectedOutlet)) {
-//                                AddConnection(connectedOutlet, o2);
-//                            }
-//                        }
                     }
                 }
             }
@@ -816,10 +868,10 @@ public class PatchGUI extends Patch {
     public void PostContructor() {
         super.PostContructor();
         for (AxoObjectInstanceAbstract o : objectinstances) {
-            ObjectLayer.add(o);
+            objectLayerPanel.add(o);
         }
         for (Net n : nets) {
-            NetLayer.add(n);
+            netLayerPanel.add(n);
         }
         Layers.setPreferredSize(new Dimension(5000, 5000));
         AdjustSize();
@@ -835,7 +887,7 @@ public class PatchGUI extends Patch {
     public Net AddConnection(InletInstance il, OutletInstance ol) {
         Net n = super.AddConnection(il, ol);
         if (n != null) {
-            NetLayer.add(n);
+            netLayerPanel.add(n);
         }
         return n;
     }
@@ -844,21 +896,14 @@ public class PatchGUI extends Patch {
     public Net AddConnection(InletInstance il, InletInstance ol) {
         Net n = super.AddConnection(il, ol);
         if (n != null) {
-            NetLayer.add(n);
+            netLayerPanel.add(n);
         }
         return n;
     }
 
     @Override
-    public Net disconnect(InletInstance ii) {
-        Net n = super.disconnect(ii);
-        Layers.repaint();
-        return n;
-    }
-
-    @Override
-    public Net disconnect(OutletInstance oi) {
-        Net n = super.disconnect(oi);
+    public Net disconnect(IoletAbstract io) {
+        Net n = super.disconnect(io);
         Layers.repaint();
         return n;
     }
@@ -867,7 +912,7 @@ public class PatchGUI extends Patch {
     public Net delete(Net n) {
         Net nn = super.delete(n);
         if (nn != null) {
-            NetLayer.remove(n);
+            netLayerPanel.remove(n);
             Layers.repaint();
         }
         return nn;
@@ -876,7 +921,7 @@ public class PatchGUI extends Patch {
     @Override
     public void delete(AxoObjectInstanceAbstract o) {
         super.delete(o);
-        ObjectLayer.remove(o);
+        objectLayerPanel.remove(o);
         Layers.repaint();
     }
 
@@ -884,7 +929,7 @@ public class PatchGUI extends Patch {
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         AxoObjectInstanceAbstract objinst = super.AddObjectInstance(obj, loc);
         if (objinst != null) {
-            ObjectLayer.add(objinst);
+            objectLayerPanel.add(objinst);
             SelectNone();
             objinst.SetSelected(true);
             objinst.doLayout();
@@ -897,14 +942,14 @@ public class PatchGUI extends Patch {
     void SetCordsInBackground(boolean b) {
         if (b) {
             Layers.removeAll();
-            Layers.add(ObjectLayer, new Integer(2));
-            Layers.add(NetLayer, new Integer(1));
-            Layers.add(SelectionRectLayer, new Integer(3));
+            Layers.add(objectLayer, new Integer(2));
+            Layers.add(netLayer, new Integer(1));
+            Layers.add(selectionRectLayer, new Integer(3));
         } else {
             Layers.removeAll();
-            Layers.add(ObjectLayer, new Integer(1));
-            Layers.add(NetLayer, new Integer(2));
-            Layers.add(SelectionRectLayer, new Integer(3));
+            Layers.add(objectLayer, new Integer(1));
+            Layers.add(netLayer, new Integer(2));
+            Layers.add(selectionRectLayer, new Integer(3));
         }
     }
 
@@ -965,7 +1010,7 @@ public class PatchGUI extends Patch {
                 my = oy;
             }
         }
-        // adding more, as getPreferredSize is not returning true dimension of 
+        // adding more, as getPreferredSize is not returning true dimension of
         // object
         return new Dimension(mx + 300, my + 300);
     }
@@ -979,6 +1024,9 @@ public class PatchGUI extends Patch {
         if (s.height < Layers.getParent().getHeight()) {
             s.height = Layers.getParent().getHeight();
         }
+        double zoom = zoomUI.getScale();
+        s.height *= zoom;
+        s.width *= zoom;
         Layers.setSize(s);
         Layers.setPreferredSize(s);
     }
@@ -1002,6 +1050,7 @@ public class PatchGUI extends Patch {
     }
 
     public static void OpenPatch(String name, InputStream stream) {
+        System.out.println("OpenPatch");
         Serializer serializer = new Persister();
         try {
             PatchGUI patch1 = serializer.read(PatchGUI.class, stream);
@@ -1016,6 +1065,7 @@ public class PatchGUI extends Patch {
     }
 
     public static PatchFrame OpenPatchInvisible(File f) {
+        System.out.println("OpenPatchInvisible");
         for (DocumentWindow dw : DocumentWindowList.GetList()) {
             if (f.equals(dw.getFile())) {
                 JFrame frame1 = dw.GetFrame();
@@ -1036,10 +1086,10 @@ public class PatchGUI extends Patch {
             patch1.setFileNamePath(f.getPath());
             return pf;
         } catch (java.lang.reflect.InvocationTargetException ite) {
-            if(ite.getTargetException() instanceof Patch.PatchVersionException) {
+            if (ite.getTargetException() instanceof Patch.PatchVersionException) {
                 Patch.PatchVersionException pve = (Patch.PatchVersionException) ite.getTargetException();
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Patch produced with newer version of Axoloti {0} {1}", 
-                                                                new Object[]{f.getAbsoluteFile(), pve.getMessage()});
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Patch produced with newer version of Axoloti {0} {1}",
+                        new Object[]{f.getAbsoluteFile(), pve.getMessage()});
             } else {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ite);
             }

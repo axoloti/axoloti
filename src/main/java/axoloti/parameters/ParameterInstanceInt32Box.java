@@ -66,7 +66,9 @@ public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
 
     @Override
     public NumberBoxComponent CreateControl() {
-        return new NumberBoxComponent(0.0, min, max, 1.0);
+        NumberBoxComponent n = new NumberBoxComponent(0.0, min, max, 1.0);
+        n.setParentAxoObjectInstance(axoObj);
+        return n;
     }
 
     @Override

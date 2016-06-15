@@ -239,7 +239,13 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     AxoObjectAbstract previewObj;
     int patchLocX;
     int patchLocY;
-
+    
+    private Point snapToGrid(Point p) {
+        p.x = Constants.X_GRID * (p.x / Constants.X_GRID);
+        p.y = Constants.Y_GRID * (p.y / Constants.Y_GRID);
+        return p;
+    }
+    
     void Launch(Point patchLoc, AxoObjectInstanceAbstract o, String searchString) {
         if(this.objectTree != MainFrame.axoObjects.ObjectTree) {
             DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
@@ -248,14 +254,20 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             tm = new DefaultTreeModel(this.root);
             jTree1.setModel(tm);
         }
-        
+
         accepted = false;
+        snapToGrid(patchLoc);
         patchLocX = patchLoc.x;
         patchLocY = patchLoc.y;
-        patchLocX = Constants.xgrid * (patchLocX / Constants.xgrid);
-        patchLocY = Constants.ygrid * (patchLocY / Constants.ygrid);
-        Point ps = p.ObjectLayer.getLocationOnScreen();
-        setLocation(patchLocX + ps.x, patchLocY + ps.y);
+        Point ps = p.objectLayerPanel.getLocationOnScreen();
+        
+        double zoom = p.zoomUI.getScale();
+        Point patchLocZoomed = snapToGrid(new Point(
+                (int) Math.round(patchLoc.x * zoom), 
+                (int) Math.round(patchLoc.y * zoom)));
+        
+        setLocation(patchLocZoomed.x + ps.x, patchLocZoomed.y + ps.y);
+        
         target_object = o;
         if (o != null) {
             AxoObjectAbstract oa = o.getType();
@@ -416,7 +428,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 if (target_object == null) {
                     p.AddObjectInstance(x, new Point(patchLocX, patchLocY));
                 } else {
-                    AxoObjectInstanceAbstract oi = p.ChangeObjectInstanceType(target_object, x);
+                    p.ChangeObjectInstanceType(target_object, x);
                 }
             }
             setVisible(false);

@@ -27,6 +27,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -48,12 +50,15 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     JTextField TFFileName;
     JLabel vlabel;
     ButtonComponent ButtonChooseFile;
+    
+    private AxoObjectInstance axoObj;
 
     public AttributeInstanceSDFile() {
     }
 
     public AttributeInstanceSDFile(AxoAttributeSDFile param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
+        this.axoObj = axoObj1;
     }
 
     @Override
@@ -63,12 +68,26 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         Dimension d = TFFileName.getSize();
         d.width = 128;
         d.height = 22;
-        TFFileName.setFont(Constants.font);
+        TFFileName.setFont(Constants.FONT);
         TFFileName.setMaximumSize(d);
         TFFileName.setMinimumSize(d);
         TFFileName.setPreferredSize(d);
         TFFileName.setSize(d);
         add(TFFileName);
+        TFFileName.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent ke) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent ke) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent ke) {
+                axoObj.getParent().repaint();
+            }
+        });
         TFFileName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {

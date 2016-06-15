@@ -20,7 +20,6 @@ package generatedobjects;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.attributedefinition.AxoAttributeObjRef;
 import axoloti.attributedefinition.AxoAttributeSDFile;
-import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
 import axoloti.inlets.InletBool32Rising;
 import axoloti.inlets.InletCharPtr32;

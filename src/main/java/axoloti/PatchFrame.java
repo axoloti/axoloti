@@ -17,8 +17,6 @@
  */
 package axoloti;
 
-import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjects;
 import axoloti.utils.Constants;
 import components.PresetPanel;
@@ -45,6 +43,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
@@ -81,8 +80,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(presetPanel);
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
         jScrollPane1.setViewportView(patch.Layers);
-        jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.ygrid / 2);
-        jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.xgrid / 2);
+        jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
+        jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
+        jScrollPane1.setWheelScrollingEnabled(false);
 
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
@@ -270,6 +270,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }
 
+    public JScrollPane getScrollPane() {
+        return this.jScrollPane1;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -305,6 +309,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jCheckBoxMenuItemCordsInBackground = new javax.swing.JCheckBoxMenuItem();
         jMenuItemAdjScroll = new javax.swing.JMenuItem();
+        jSeparator5 = new javax.swing.JPopupMenu.Separator();
+        zoomInMenuItem = new javax.swing.JMenuItem();
+        zoomDefaultMenuItem = new javax.swing.JMenuItem();
+        zoomOutMenuItem = new javax.swing.JMenuItem();
         jMenuPatch = new javax.swing.JMenu();
         jCheckBoxMenuItemLive = new javax.swing.JCheckBoxMenuItem();
         jMenuItemUploadSD = new javax.swing.JMenuItem();
@@ -507,6 +515,33 @@ jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener() {
         }
     });
     jMenuView.add(jMenuItemAdjScroll);
+    jMenuView.add(jSeparator5);
+
+    zoomInMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS, java.awt.event.InputEvent.CTRL_MASK));
+    zoomInMenuItem.setText("Zoom In");
+    zoomInMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            zoomInMenuItemActionPerformed(evt);
+        }
+    });
+    jMenuView.add(zoomInMenuItem);
+
+    zoomDefaultMenuItem.setText("Zoom to Default");
+    zoomDefaultMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            zoomDefaultMenuItemActionPerformed(evt);
+        }
+    });
+    jMenuView.add(zoomDefaultMenuItem);
+
+    zoomOutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, java.awt.event.InputEvent.CTRL_MASK));
+    zoomOutMenuItem.setText("Zoom Out");
+    zoomOutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            zoomOutMenuItemActionPerformed(evt);
+        }
+    });
+    jMenuView.add(zoomOutMenuItem);
 
     jMenuBar1.add(jMenuView);
 
@@ -928,6 +963,21 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         patch.Compile();
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
+    private void zoomInMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomInMenuItemActionPerformed
+        patch.zoomUI.zoomIn();
+        patch.Layers.repaint();
+    }//GEN-LAST:event_zoomInMenuItemActionPerformed
+
+    private void zoomDefaultMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomDefaultMenuItemActionPerformed
+        patch.zoomUI.zoomToDefault();
+        patch.Layers.repaint();
+    }//GEN-LAST:event_zoomDefaultMenuItemActionPerformed
+
+    private void zoomOutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomOutMenuItemActionPerformed
+        patch.zoomUI.zoomOut();
+        patch.Layers.repaint();
+    }//GEN-LAST:event_zoomOutMenuItemActionPerformed
+
     private boolean GoLive() {
         if (patch.getFileNamePath().endsWith(".axs") || patch.container() != null) {
             Object[] options = {"Yes",
@@ -998,8 +1048,12 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPanel jToolbarPanel;
     private axoloti.menus.WindowMenu windowMenu1;
+    private javax.swing.JMenuItem zoomDefaultMenuItem;
+    private javax.swing.JMenuItem zoomInMenuItem;
+    private javax.swing.JMenuItem zoomOutMenuItem;
     // End of variables declaration//GEN-END:variables
 
     void ShowDSPLoad(int pct) {

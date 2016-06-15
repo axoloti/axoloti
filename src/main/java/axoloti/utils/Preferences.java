@@ -25,15 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementListUnion;
-import org.simpleframework.xml.ElementMap;
-import org.simpleframework.xml.Root;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.*;
+import org.simpleframework.xml.core.Persist;
+import org.simpleframework.xml.core.Persister;
 
 /**
  *

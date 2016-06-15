@@ -114,7 +114,6 @@ public class PulseButtonComponent extends ACtrlComponent {
     public void setValue(double value) {
         if (this.value != value) {
             this.value = value;
-            repaint();
         }
         fireEvent();
     }
@@ -123,5 +122,4 @@ public class PulseButtonComponent extends ACtrlComponent {
     public double getValue() {
         return value;
     }
-
 }

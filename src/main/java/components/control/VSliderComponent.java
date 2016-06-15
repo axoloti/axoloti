@@ -17,17 +17,24 @@
  */
 package components.control;
 
+import axoloti.MainFrame;
+import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
 import java.awt.RenderingHints;
+import java.awt.Robot;
 import java.awt.Stroke;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -44,6 +51,8 @@ public class VSliderComponent extends ACtrlComponent {
     private static final int width = 12;
     private static final Dimension dim = new Dimension(width, height);
     private String keybBuffer = "";
+
+    private Robot robot;
 
     public VSliderComponent(double value, double min, double max, double tick) {
         this.max = max;
@@ -66,23 +75,36 @@ public class VSliderComponent extends ACtrlComponent {
             }
         });
         SetupTransferHandler();
+        try {
+            robot = new Robot(MouseInfo.getPointerInfo().getDevice());
+        } catch (AWTException ex) {
+            Logger.getLogger(NumberBoxComponent.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    int px;
+    private int px;
+    private int py;
 
     @Override
     protected void mouseDragged(MouseEvent e) {
-        setValue(value + (px - e.getY()) * tick);
-        px = e.getY();
+        if (isEnabled()) {
+            double v = value + tick * (py - e.getYOnScreen());
+            robot.mouseMove(px, py);
+            setValue(v);
+        }
     }
 
     @Override
     protected void mousePressed(MouseEvent e) {
         grabFocus();
-        px = e.getY();
+
+        px = e.getXOnScreen();
+        py = e.getYOnScreen();
+        getRootPane().setCursor(MainFrame.transparentCursor);
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
+        getRootPane().setCursor(Cursor.getDefaultCursor());
     }
 
     @Override
@@ -125,17 +147,14 @@ public class VSliderComponent extends ACtrlComponent {
                 }
                 keybBuffer = "";
                 ke.consume();
-                repaint();
                 break;
             case KeyEvent.VK_BACK_SPACE:
                 keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
                 ke.consume();
-                repaint();
                 break;
             case KeyEvent.VK_ESCAPE:
                 keybBuffer = "";
                 ke.consume();
-                repaint();
                 break;
             default:
         }
@@ -154,7 +173,6 @@ public class VSliderComponent extends ACtrlComponent {
             case '.':
                 keybBuffer += ke.getKeyChar();
                 ke.consume();
-                repaint();
                 break;
             default:
         }
@@ -224,7 +242,6 @@ public class VSliderComponent extends ACtrlComponent {
         }
         this.value = value;
         setToolTipText("" + value);
-        repaint();
         fireEvent();
     }
 

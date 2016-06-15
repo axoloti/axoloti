@@ -28,6 +28,6 @@ public class LabelComponent extends JLabel {
 
     public LabelComponent(String text) {
         super(text);
-        setFont(Constants.font);
+        setFont(Constants.FONT);
     }
 }

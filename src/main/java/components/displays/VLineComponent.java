@@ -77,7 +77,8 @@ public class VLineComponent extends ADispComponent {
             value = min;
         }
         this.value = value;
-        repaint();
+        
+        paintObjectLayer();
     }
 
     public void setMinimum(double min) {

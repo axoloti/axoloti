@@ -17,8 +17,6 @@
  */
 package axoloti.displays;
 
-import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueFrac32;
 import components.displays.VBarComponentDB;
 
 /**

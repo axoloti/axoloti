@@ -82,7 +82,8 @@ public class VBarComponent extends ADispComponent {
             value = min;
         }
         this.value = value;
-        repaint();
+        
+        paintObjectLayer();
     }
 
     public void setMinimum(double min) {

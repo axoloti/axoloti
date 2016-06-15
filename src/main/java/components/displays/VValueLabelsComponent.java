@@ -79,7 +79,7 @@ public class VValueLabelsComponent extends JComponent {
             } else {
                 s = String.format("%4.1f", v);
             }
-            g2.setFont(Constants.font);
+            g2.setFont(Constants.FONT);
             g2.drawString(s, 0, y + 4);
         }
     }

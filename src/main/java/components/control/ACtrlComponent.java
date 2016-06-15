@@ -17,6 +17,9 @@
  */
 package components.control;
 
+import axoloti.ZoomUtils;
+import axoloti.object.AxoObjectInstance;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -47,19 +50,10 @@ import javax.swing.TransferHandler;
  */
 public abstract class ACtrlComponent extends JComponent {
 
+    private AxoObjectInstance axoObj;
+
     public ACtrlComponent() {
         setFocusable(true);
-        addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent fe) {
-                repaint();
-            }
-
-            @Override
-            public void focusLost(FocusEvent fe) {
-                repaint();
-            }
-        });
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -90,7 +84,6 @@ public abstract class ACtrlComponent extends JComponent {
 
             @Override
             public void keyReleased(KeyEvent ke) {
-                ACtrlComponent.this.keyReleased(ke);
             }
         });
     }
@@ -185,5 +178,14 @@ public abstract class ACtrlComponent extends JComponent {
         map.put(TransferHandler.getPasteAction().getValue(Action.NAME),
                 TransferHandler.getPasteAction());
 
+    }
+
+    public void setParentAxoObjectInstance(AxoObjectInstance axoObj) {
+        this.axoObj = axoObj;
+    }
+
+    @Override
+    public Point getToolTipLocation(MouseEvent event) {
+        return ZoomUtils.getToolTipLocation(this, event, axoObj);
     }
 }
