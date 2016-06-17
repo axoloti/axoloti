@@ -153,7 +153,7 @@ void PExTransmit(void) {
       exception_checkandreport();
       AckPending = 0;
     }
-    TransmitLCDoverUSB();
+//    TransmitLCDoverUSB(); // broken
     if (!patchStatus) {
       unsigned int i;
       for (i = 0; i < patchMeta.numPEx; i++) {

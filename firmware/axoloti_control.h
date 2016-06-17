@@ -20,7 +20,7 @@
 
 #define LCDWIDTH 128
 #define LCDHEIGHT 64
-#define LCDHEADER 4
+#define LCDHEADER 0
 #define LCDROWS (LCDHEIGHT/8)
 
 extern uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS];

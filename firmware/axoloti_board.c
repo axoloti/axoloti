@@ -22,10 +22,8 @@
 
 //#define ENABLE_SERIAL_DEBUG 1
 
-Mutex Mutex_DMAStream_1_7; // shared: SPI3 (axoloti control) and I2C2 (codec)
 
 void axoloti_board_init(void) {
-  chMtxInit(&Mutex_DMAStream_1_7);
 }
 
 /*

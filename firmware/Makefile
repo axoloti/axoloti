@@ -84,7 +84,7 @@ CMSIS = ${axoloti_release}/CMSIS/
 
 
 # Define linker script file here
-LDSCRIPT= STM32F407xG.ld
+LDSCRIPT= STM32F427xG.ld
 
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
@@ -157,16 +157,21 @@ CSRC = $(PORTSRC) \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_hcd.c \
+       ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c \
        ${FIRMWARE}/usbh_midi_core.c \
        ${FIRMWARE}/usbh_vendor.c \
        ${FIRMWARE}/usbh_conf.c \
        ${FIRMWARE}/serial_midi.c \
        ${FIRMWARE}/bulk_usb.c \
        ${FIRMWARE}/midi_usb.c \
+       ${FIRMWARE}/spilink.c \
+       ${FIRMWARE}/spidb.c \
        ${FIRMWARE}/crc32.c \
        ${FIRMWARE}/exceptions.c \
        ${FIRMWARE}/watchdog.c \
        ${FIRMWARE}/sysmon.c 
+
+
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

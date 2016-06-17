@@ -64,7 +64,7 @@
 #define HAL_CORTEX_MODULE_ENABLED
    //#define HAL_PCD_MODULE_ENABLED
 #define HAL_HCD_MODULE_ENABLED
-
+#define HAL_I2C_MODULE_ENABLED
 
 /* ########################## HSE/HSI Values adaptation ##################### */
 /**
@@ -126,6 +126,8 @@
 #define  PREFETCH_ENABLE              1
 #define  INSTRUCTION_CACHE_ENABLE     1
 #define  DATA_CACHE_ENABLE            1
+
+#define SystemCoreClock 168000000
 
 /* ########################## Assert Selection ############################## */
 /**

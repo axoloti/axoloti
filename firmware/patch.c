@@ -25,6 +25,9 @@
 #include "watchdog.h"
 #include "pconnection.h"
 #include "sysmon.h"
+#include "spilink.h"
+
+#define DEBUG_INT_ON_GPIO 1
 
 patchMeta_t patchMeta;
 
@@ -65,6 +68,10 @@ static msg_t ThreadDSP(void *arg) {
     static unsigned int tStart;
     tStart = hal_lld_get_counter_value();
     watchdog_feed();
+#ifdef DEBUG_INT_ON_GPIO
+	palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL);
+	palSetPad(GPIOA, 2);
+#endif
     if (!patchStatus) { // running
 #if (BOARD_STM32F4DISCOVERY)||(BOARD_AXOLOTI_V03)
     // swap halfwords...
@@ -92,6 +99,7 @@ static msg_t ThreadDSP(void *arg) {
       for (i = 0; i < 32; i++) {
         outbuf[i] = 0;
       }
+      spilink_clear_audio_tx();
     }
     adc_convert();
     DspTime = RTT2US(hal_lld_get_counter_value() - tStart);
@@ -107,6 +115,9 @@ static msg_t ThreadDSP(void *arg) {
 //      LogTextMessage("dsp overrun");
       chThdSleepMilliseconds(1);
     }
+#ifdef DEBUG_INT_ON_GPIO
+	palClearPad(GPIOA, 2);
+#endif
   }
   return (msg_t)0;
 }
@@ -147,7 +158,7 @@ void StartPatch(void) {
 
 void start_dsp_thread(void) {
   if (!pThreadDSP)
-    pThreadDSP = chThdCreateStatic(waThreadDSP, sizeof(waThreadDSP), HIGHPRIO,
+    pThreadDSP = chThdCreateStatic(waThreadDSP, sizeof(waThreadDSP), HIGHPRIO-2,
                                    ThreadDSP, NULL);
 }
 

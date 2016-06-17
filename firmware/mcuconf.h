@@ -115,7 +115,7 @@
  * GPT driver system settings.
  */
 #define STM32_GPT_USE_TIM1                  FALSE
-#define STM32_GPT_USE_TIM2                  TRUE
+#define STM32_GPT_USE_TIM2                  FALSE
 #define STM32_GPT_USE_TIM3                  FALSE
 #define STM32_GPT_USE_TIM4                  FALSE
 #define STM32_GPT_USE_TIM5                  FALSE
@@ -133,7 +133,7 @@
 #ifdef BOARD_AXOLOTI_V05
 #define STM32_I2C_USE_I2C1                  TRUE
 #define STM32_I2C_USE_I2C2                  FALSE
-#define STM32_I2C_USE_I2C3                  TRUE
+#define STM32_I2C_USE_I2C3                  FALSE
 #else
 #define STM32_I2C_USE_I2C1                  TRUE
 #define STM32_I2C_USE_I2C2                  TRUE
