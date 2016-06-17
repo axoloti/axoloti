@@ -27,7 +27,7 @@
 #include "sysmon.h"
 #include "spilink.h"
 
-#define DEBUG_INT_ON_GPIO 1
+//#define DEBUG_INT_ON_GPIO 1
 
 patchMeta_t patchMeta;
 

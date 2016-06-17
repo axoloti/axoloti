@@ -50,7 +50,7 @@ extern void computebufI(int32_t *inp, int32_t *outp);
 #define SPILINK_FSYNC_PORT GPIOA
 #define SPILINK_FSYNC_PAD 15
 
-#define DEBUG_INT_ON_GPIO 1
+//#define DEBUG_INT_ON_GPIO 1
 
 const stm32_dma_stream_t* sai_a_dma;
 const stm32_dma_stream_t* sai_b_dma;

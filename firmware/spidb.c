@@ -14,7 +14,7 @@
 #include "spidb.h"
 #include <stdint.h>
 
-#define DEBUG_INT_ON_GPIO 1
+//#define DEBUG_INT_ON_GPIO 1
 
 void dmastream_slave_start(SPIDriver *spip) {
 	dmaStreamSetMemory0(spip->dmarx, ((SPIDBConfig *) (spip->config))->rxbuf);
