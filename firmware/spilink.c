@@ -34,9 +34,9 @@ int lcd_update_index;
  * SPI configuration (10.5MHz, CPHA=0, CPOL=0, 16 bit).
  */
 static const SPIDBConfig spidbcfg_slave = { { NULL, SPILINK_NSS_PORT, SPILINK_NSS_PAD, SPI_CR1_DFF },
-		(void *)spilink_rx, (void *)spilink_tx, sizeof(spilink_data_t) / 2 };
+		(void *)&spilink_rx, (void *)&spilink_tx, sizeof(spilink_data_t) / 2 };
 static const SPIDBConfig spidbcfg_master = { { NULL, SPILINK_NSS_PORT, SPILINK_NSS_PAD, SPI_CR1_BR_0 | SPI_CR1_DFF },
-		(void *)spilink_rx, (void *)spilink_tx, sizeof(spilink_data_t) / 2 };
+		(void *)&spilink_rx, (void *)&spilink_tx, sizeof(spilink_data_t) / 2 };
 
 static WORKING_AREA(waThreadSpilink, 256);
 //__attribute__ ((section (".ccmramend")));
