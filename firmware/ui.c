@@ -409,17 +409,29 @@ static msg_t ThreadUI(void *arg) {
   chRegSetThreadName("ui");
 #endif
   while (1) {
-//    AxoboardADCConvert();
     PExTransmit();
     PExReceive();
-    if(pControlUpdate != 0L) {
-        pControlUpdate();
-    }
     chThdSleepMilliseconds(2);
   }
   return (msg_t)0;
 }
 #endif
+
+static WORKING_AREA(waThreadUI2, 512);
+static msg_t ThreadUI2(void *arg) {
+  (void)(arg);
+#if CH_USE_REGISTRY
+  chRegSetThreadName("ui2");
+#endif
+  while (1) {
+    if(pControlUpdate != 0L) {
+        pControlUpdate();
+    }
+    chThdSleepMilliseconds(15);
+  }
+  return (msg_t)0;
+}
+
 
 void UIGoSafe(void) {
   KvpsDisplay = &KvpsHead;
@@ -469,6 +481,7 @@ void ui_init(void) {
   ObjectKvpRoot = &p[0];
 
   chThdCreateStatic(waThreadUI, sizeof(waThreadUI), NORMALPRIO, ThreadUI, NULL);
+  chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2, NULL);
 }
 
 void KVP_ClearObjects(void) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2016 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "codec_ADAU1961.h"
 #include "ch.h"
 #include "hal.h"
@@ -25,6 +26,7 @@
 #include "axoloti_board.h"
 #include "sysmon.h"
 #include "spilink.h"
+#include "spilink_lld.h"
 
 extern void computebufI(int32_t *inp, int32_t *outp);
 
@@ -55,7 +57,7 @@ extern void computebufI(int32_t *inp, int32_t *outp);
 const stm32_dma_stream_t* sai_a_dma;
 const stm32_dma_stream_t* sai_b_dma;
 
-int codec_interrupt_timestamp;
+unsigned int codec_interrupt_timestamp;
 
 void codec_ADAU1961_hw_reset(void) {
 }
@@ -439,7 +441,6 @@ static void dma_sai_a_interrupt_spilink_slave(void* dat, uint32_t flags) {
   palClearPad(GPIOA, 0);
 #endif
 }
-
 
 const stm32_dma_stream_t* sai_a_dma;
 const stm32_dma_stream_t* sai_b_dma;
