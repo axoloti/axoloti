@@ -58,7 +58,8 @@ void dmastream_slave_start(SPIDriver *spip) {
 
 static void dma_spidb_slave_interrupt(void* dat, uint32_t flags) {
 	SPIDriver *spip = dat;
-	spidb_interrupt_timestamp = hal_lld_get_counter_value();
+	spidb_interrupt_timestamp = halGetCounterValue();
+
 	if (flags & STM32_DMA_ISR_TCIF) {
 		chSysLockFromIsr();
 #ifdef DEBUG_INT_ON_GPIO

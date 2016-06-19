@@ -411,7 +411,7 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
 static void dma_i2s_interrupt(void* dat, uint32_t flags) {
   (void)dat;
   (void)flags;
-  codec_interrupt_timestamp = hal_lld_get_counter_value();
+  codec_interrupt_timestamp = halGetCounterValue();
   if ((i2sdma_ADAU1961)->stream->CR & STM32_DMA_CR_CT) {
     computebufI(rbuf, buf);
   }

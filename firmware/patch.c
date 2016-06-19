@@ -66,7 +66,7 @@ static msg_t ThreadDSP(void *arg) {
   while (1) {
     chEvtWaitOne((eventmask_t)1);
     static unsigned int tStart;
-    tStart = hal_lld_get_counter_value();
+    tStart = halGetCounterValue();
     watchdog_feed();
 #ifdef DEBUG_INT_ON_GPIO
 	palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL);
@@ -102,7 +102,7 @@ static msg_t ThreadDSP(void *arg) {
       spilink_clear_audio_tx();
     }
     adc_convert();
-    DspTime = RTT2US(hal_lld_get_counter_value() - tStart);
+    DspTime = RTT2US(halGetCounterValue() - tStart);
     dspLoadPct = (100 * DspTime) / (1000000/3000);
     if (dspLoadPct>99) {
       // overload:
