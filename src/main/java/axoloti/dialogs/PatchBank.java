@@ -64,6 +64,8 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
     final String fileExtension = ".axb";
 
+    boolean dirty = false;
+
     ArrayList<File> files;
 
     /**
@@ -119,6 +121,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                             File f = new File(svalue);
                             if (f.exists() && f.isFile() && f.canRead()) {
                                 files.set(rowIndex, f);
+                                setDirty();
                                 refresh();
                             }
                         }
@@ -249,6 +252,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 pw.println(fn);
             }
             pw.close();
+            clearDirty();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PatchBank.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -374,6 +378,14 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
     boolean isDirty() {
         return true;
+    }
+
+    void setDirty() {
+        dirty = true;
+    }
+
+    void clearDirty() {
+        dirty = false;
     }
 
     public void Close() {
@@ -649,6 +661,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         files.add(row - 1, o);
         jTable1.setRowSelectionInterval(row - 1, row - 1);
         refresh();
+        setDirty();
     }//GEN-LAST:event_jButtonUpActionPerformed
 
     private void jButtonDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDownActionPerformed
@@ -663,6 +676,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         files.add(row + 1, o);
         jTable1.setRowSelectionInterval(row + 1, row + 1);
         refresh();
+        setDirty();
     }//GEN-LAST:event_jButtonDownActionPerformed
 
     private void jButtonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveActionPerformed
@@ -672,6 +686,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         }
         files.remove(row);
         refresh();
+        setDirty();        
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
@@ -684,6 +699,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             files.add(fc.getSelectedFile());
             refresh();
         }
+        setDirty();        
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
