@@ -309,7 +309,7 @@ public class USBBulkConnection extends Connection {
             ByteBuffer signature = q.getResult();
             boolean signaturevalid = false;
             if (signature == null) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Cannot obtain signature, upgrade firmware?");
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Can''t obtain signature, upgrade firmware?");
             } else if ((signature.getInt(0) == 0xFFFFFFFF) && (signature.getInt(1) == 0xFFFFFFFF)) {
                 Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Cannot validate authenticity, no signature present.");
             } else {
@@ -324,7 +324,7 @@ public class USBBulkConnection extends Connection {
                     }
                     Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Authentic {0}", s);
                 } else {
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Can't validate authenticity, signature invalid!");
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Can''t validate authenticity, signature invalid!");
                 }
             }
 

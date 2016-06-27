@@ -17,6 +17,7 @@
  */
 package axoloti.object;
 
+import static axoloti.Axoloti.FIRMWARE_DIR;
 import axoloti.Modulator;
 import axoloti.Patch;
 import axoloti.attributedefinition.AxoAttribute;
@@ -479,9 +480,8 @@ public class AxoObject extends AxoObjectAbstract {
                     String s2 = f.getAbsolutePath();
                     s2 = s2.replace('\\', '/');
                     r.add(s2);
-                    //Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "\"../\" prefix in object include not implemented...");
-                } else if (s.startsWith("chibios/")) {
-                    r.add((new File("chibios/")).getAbsolutePath() + s.substring(7));
+                } else if (s.startsWith("chibios/")) {                    
+                    r.add((new File(System.getProperty(FIRMWARE_DIR))).getAbsolutePath() + "../chibios" + s.substring(7));
                 } else {
                     r.add(s);
                 }
