@@ -584,7 +584,7 @@ public class Patch {
                 return n;
             }
         } else {
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
+            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
         }
         return null;
     }
@@ -602,7 +602,7 @@ public class Patch {
                 return n;
             }
         } else {
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
+            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
         }
         return null;
     }
@@ -614,7 +614,7 @@ public class Patch {
             repaint();
             return n;
         } else {
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
+            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
         }
         return null;
     }
@@ -1262,10 +1262,8 @@ public class Patch {
                 } else {
                     c += n.CName() + "+";
                 }
-            } else if (i.GetDataType() instanceof axoloti.datatypes.DataTypeBuffer) {
-                c += "UNCONNECTED_OUTPUT_BUFFER";
             } else {
-                c += "UNCONNECTED_OUTPUT";
+                c += i.GetDataType().UnconnectedSink();
             }
             needsComma = true;
         }

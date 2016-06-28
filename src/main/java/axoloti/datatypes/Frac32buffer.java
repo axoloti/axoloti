@@ -97,9 +97,14 @@ public class Frac32buffer extends DataTypeBuffer {
         int hash = 3;
         return hash;
     }
-    
+
     @Override
     public boolean isPointer() {
         return false;
-    }    
+    }
+
+    @Override
+    public String UnconnectedSink() {
+        return "UNCONNECTED_OUTPUT_BUFFER";
+    }
 }

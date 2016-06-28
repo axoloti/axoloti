@@ -92,4 +92,9 @@ public class Bool32 implements DataType {
     public boolean isPointer() {
         return false;
     }
+
+    @Override
+    public String UnconnectedSink() {
+        return "(bool &)UNCONNECTED_OUTPUT";
+    }
 }

@@ -23,6 +23,7 @@ import java.awt.Color;
  * @author jtaelman
  */
 public class Int32Ptr implements DataType {
+
     public static final Int32Ptr d = new Int32Ptr();
 
     @Override
@@ -70,9 +71,14 @@ public class Int32Ptr implements DataType {
         int hash = 13;
         return hash;
     }
-    
+
     @Override
     public boolean isPointer() {
         return true;
-    }        
+    }
+
+    @Override
+    public String UnconnectedSink() {
+        return "";
+    }
 }
