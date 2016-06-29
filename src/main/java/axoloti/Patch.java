@@ -2319,9 +2319,6 @@ public class Patch {
     }
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType1(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
-        if (obj.getType() == objType) {
-            return obj;
-        }
         if (obj instanceof AxoObjectInstance) {
             String n = obj.getInstanceName();
             obj.setInstanceName(n + "____tmp");
@@ -2356,13 +2353,13 @@ public class Patch {
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
         AxoObjectInstanceAbstract obj1 = ChangeObjectInstanceType1(obj, objType);
-        if (obj1!=obj){
+        if (obj1 != obj) {
             obj1.PostConstructor();
             delete(obj);
         }
         return obj1;
     }
-    
+
     void invalidate() {
     }
 
@@ -2379,7 +2376,7 @@ public class Patch {
     /**
      *
      * @param initial If true, only objects restored from object name reference
-     * (not UUID) will promote to a variant with the same name. 
+     * (not UUID) will promote to a variant with the same name.
      */
     public void PromoteOverloading(boolean initial) {
         refreshIndexes();
@@ -2517,5 +2514,12 @@ public class Patch {
             FileNameNoExt = FileNameNoExt.substring(0, FileNameNoExt.length() - 4);
         }
         return FileNameNoExt;
+    }
+
+    public void Close() {
+        Unlock();
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            o.Close();
+        }
     }
 }

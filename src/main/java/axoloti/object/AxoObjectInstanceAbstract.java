@@ -612,5 +612,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
     public boolean isTypeWasAmbiguous() {
         return typeWasAmbiguous;
-    }       
+    }
+    
+    public void Close() {
+    }
 }

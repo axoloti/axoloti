@@ -432,6 +432,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                             try {
                                 ValueInt32 v = (ValueInt32) f.get(o);
                                 v.setInt(Integer.parseInt((String) value));
+                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (IllegalAccessException ex) {

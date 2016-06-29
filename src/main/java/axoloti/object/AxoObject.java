@@ -308,10 +308,6 @@ public class AxoObject extends AxoObjectAbstract {
         editor = null;
     }
 
-    public boolean isEditorOpen() {
-        return editor != null && editor.isVisible();
-    }
-
     @Override
     public void DeleteInstance(AxoObjectInstanceAbstract o) {
         if ((o != null) && (o instanceof AxoObjectInstance)) {
@@ -480,7 +476,7 @@ public class AxoObject extends AxoObjectAbstract {
                     String s2 = f.getAbsolutePath();
                     s2 = s2.replace('\\', '/');
                     r.add(s2);
-                } else if (s.startsWith("chibios/")) {                    
+                } else if (s.startsWith("chibios/")) {
                     r.add((new File(System.getProperty(FIRMWARE_DIR))).getAbsolutePath() + "../chibios" + s.substring(7));
                 } else {
                     r.add(s);
