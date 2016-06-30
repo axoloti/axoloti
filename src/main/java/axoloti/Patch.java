@@ -416,7 +416,7 @@ public class Patch {
             }
             AxoObjectInstanceAbstract objinst = obj.CreateInstance(this, n + i, loc);
             SetDirty();
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "instance added, type {0}", obj.id);
+//            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "instance added, type {0}", obj.id);
 
             Modulator[] m = obj.getModulators();
             if (m != null) {
@@ -643,7 +643,6 @@ public class Patch {
         repaint();
         objectinstances.remove(o);
         o.getType().DeleteInstance(o);
-        System.out.println("delete " + o.getInstanceName());
     }
 
     public void updateModulation(Modulation n) {
