@@ -77,4 +77,8 @@ public class Int8Array implements DataType {
         return true;
     }
 
+    @Override
+    public String UnconnectedSink() {
+        return "";
+    }
 }

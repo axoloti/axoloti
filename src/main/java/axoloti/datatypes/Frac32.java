@@ -87,9 +87,14 @@ public class Frac32 implements DataType {
         int hash = 5;
         return hash;
     }
-    
+
     @Override
     public boolean isPointer() {
         return false;
-    }    
+    }
+
+    @Override
+    public String UnconnectedSink() {
+        return "UNCONNECTED_OUTPUT";
+    }
 }

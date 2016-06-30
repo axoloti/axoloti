@@ -233,6 +233,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
         USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
+        patch.Close();
         dispose();
     }
 
@@ -928,16 +929,6 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
     private boolean GoLive() {
-        for (AxoObjectInstanceAbstract i : patch.objectinstances) {
-            if(i instanceof AxoObjectInstancePatcherObject) {
-                AxoObjectInstancePatcherObject ao = (AxoObjectInstancePatcherObject) i;
-                if(ao.isEditorOpen() || ao.getType().isEditorOpen()) {
-                    JOptionPane.showMessageDialog(this,"Close objects editors before going live");
-                    return false;
-                }
-            }
-        }
-
         if (patch.getFileNamePath().endsWith(".axs") || patch.container() != null) {
             Object[] options = {"Yes",
                 "No"};

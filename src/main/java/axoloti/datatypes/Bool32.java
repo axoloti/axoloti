@@ -54,7 +54,7 @@ public class Bool32 implements DataType {
 
     @Override
     public String CType() {
-        return "int32_t ";
+        return "bool ";
     }
 
     @Override
@@ -91,5 +91,10 @@ public class Bool32 implements DataType {
     @Override
     public boolean isPointer() {
         return false;
+    }
+
+    @Override
+    public String UnconnectedSink() {
+        return "(bool &)UNCONNECTED_OUTPUT";
     }
 }

@@ -44,6 +44,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         super(type, patch1, InstanceName1, location);
     }
 
+    @Override
     public void updateObj1() {
         if (ao == null) {
             ao = new AxoObject();
@@ -60,6 +61,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
          */
     }
 
+    @Override
     public void updateObj() {
         if (ao != null) {
             ao.id = "patch/object";
@@ -102,11 +104,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     }
 
     @Override
-    public void ObjectModified(Object src) {
-        updateObj();
-    }
-
-    @Override
     public void PostConstructor() {
         super.PostConstructor();
         //updateObj();
@@ -139,6 +136,14 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         super.Lock();
         if (BtnEdit != null) {
             BtnEdit.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void Close() {
+        super.Close();
+        if (aoe != null) {
+            aoe.Close();
         }
     }
 }

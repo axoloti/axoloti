@@ -432,6 +432,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
                             try {
                                 ValueInt32 v = (ValueInt32) f.get(o);
                                 v.setInt(Integer.parseInt((String) value));
+                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (IllegalAccessException ex) {
@@ -515,6 +516,15 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
             }
         }
         ((AbstractTableModel) jTable2.getModel()).fireTableDataChanged();
+    }
+
+    void setEditable(boolean editable) {
+        jTable1.setEnabled(editable);
+        jTable2.setEnabled(editable);
+        jButtonMoveUp.setEnabled(editable);
+        jButtonMoveDown.setEnabled(editable);
+        jButtonRemove.setEnabled(editable);
+        jButtonAdd.setEnabled(editable);
     }
 
     JScrollPane jScrollPane1;

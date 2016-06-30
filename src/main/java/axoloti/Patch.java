@@ -416,7 +416,7 @@ public class Patch {
             }
             AxoObjectInstanceAbstract objinst = obj.CreateInstance(this, n + i, loc);
             SetDirty();
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "instance added, type {0}", obj.id);
+//            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "instance added, type {0}", obj.id);
 
             Modulator[] m = obj.getModulators();
             if (m != null) {
@@ -584,7 +584,7 @@ public class Patch {
                 return n;
             }
         } else {
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
+            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
         }
         return null;
     }
@@ -602,7 +602,7 @@ public class Patch {
                 return n;
             }
         } else {
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
+            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
         }
         return null;
     }
@@ -614,7 +614,7 @@ public class Patch {
             repaint();
             return n;
         } else {
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
+            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
         }
         return null;
     }
@@ -643,7 +643,6 @@ public class Patch {
         repaint();
         objectinstances.remove(o);
         o.getType().DeleteInstance(o);
-        System.out.println("delete " + o.getInstanceName());
     }
 
     public void updateModulation(Modulation n) {
@@ -1262,10 +1261,8 @@ public class Patch {
                 } else {
                     c += n.CName() + "+";
                 }
-            } else if (i.GetDataType() instanceof axoloti.datatypes.DataTypeBuffer) {
-                c += "UNCONNECTED_OUTPUT_BUFFER";
             } else {
-                c += "UNCONNECTED_OUTPUT";
+                c += i.GetDataType().UnconnectedSink();
             }
             needsComma = true;
         }
@@ -2321,9 +2318,6 @@ public class Patch {
     }
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType1(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
-        if (obj.getType() == objType) {
-            return obj;
-        }
         if (obj instanceof AxoObjectInstance) {
             String n = obj.getInstanceName();
             obj.setInstanceName(n + "____tmp");
@@ -2358,13 +2352,13 @@ public class Patch {
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
         AxoObjectInstanceAbstract obj1 = ChangeObjectInstanceType1(obj, objType);
-        if (obj1!=obj){
+        if (obj1 != obj) {
             obj1.PostConstructor();
             delete(obj);
         }
         return obj1;
     }
-    
+
     void invalidate() {
     }
 
@@ -2381,7 +2375,7 @@ public class Patch {
     /**
      *
      * @param initial If true, only objects restored from object name reference
-     * (not UUID) will promote to a variant with the same name. 
+     * (not UUID) will promote to a variant with the same name.
      */
     public void PromoteOverloading(boolean initial) {
         refreshIndexes();
@@ -2519,5 +2513,12 @@ public class Patch {
             FileNameNoExt = FileNameNoExt.substring(0, FileNameNoExt.length() - 4);
         }
         return FileNameNoExt;
+    }
+
+    public void Close() {
+        Unlock();
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            o.Close();
+        }
     }
 }

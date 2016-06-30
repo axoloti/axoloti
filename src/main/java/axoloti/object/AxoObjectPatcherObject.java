@@ -18,11 +18,7 @@
 package axoloti.object;
 
 import axoloti.Patch;
-import axoloti.inlets.Inlet;
 import java.awt.Point;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

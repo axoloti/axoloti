@@ -17,9 +17,12 @@
  */
 package axoloti;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -35,7 +38,7 @@ import java.security.spec.X509EncodedKeySpec;
 public class HWSignature {
 
     public static final String PRIVATE_KEY_FILE = "private_key.der";
-    public static final String PUBLIC_KEY_FILE = "public_key.der";
+    public static final String PUBLIC_KEY_FILE = "/resources/public_key.der";
     public static final int length = 256;
 
     static PrivateKey ReadPrivateKey(String privateKeyPath) throws Exception {
@@ -49,15 +52,27 @@ public class HWSignature {
         return KeyFactory.getInstance("RSA").generatePrivate(pkcs8EncodedKeySpec);
     }
 
-    static PublicKey ReadPublicKey(String publicKeyPath) throws Exception {
-        File f = new File(publicKeyPath);
-        FileInputStream fis = new FileInputStream(f);
-        DataInputStream dis = new DataInputStream(fis);
-        byte[] keyBytes = new byte[(int) f.length()];
-        dis.readFully(keyBytes);
-        dis.close();
+    static PublicKey ReadPublicKey(String publicKeyResourceName) throws Exception {
+        InputStream fis = ClassLoader.class.getResourceAsStream(publicKeyResourceName);
+        byte[] keyBytes = convertSteamToByteArray(fis,1024);
         X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(keyBytes);
         return KeyFactory.getInstance("RSA").generatePublic(x509EncodedKeySpec);
+    }
+
+    private static byte[] convertSteamToByteArray(InputStream stream, long size) throws IOException {
+        byte[] buffer = new byte[(int) size];
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+        int line = 0;
+        // read bytes from stream, and store them in buffer
+        while ((line = stream.read(buffer)) != -1) {
+            // Writes bytes from byte array (buffer) into output stream.
+            os.write(buffer, 0, line);
+        }
+        stream.close();
+        os.flush();
+        os.close();
+        return os.toByteArray();
     }
 
     static public void printByteArray(byte[] b) {

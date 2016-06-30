@@ -46,6 +46,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         super(type, patch1, InstanceName1, location);
     }
 
+    @Override
     public void updateObj1() {
         if (pg == null) {
             pg = new PatchGUI();
@@ -64,6 +65,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         }
     }
 
+    @Override
     public void updateObj() {
         if (pg != null) {
             AxoObject ao = pg.GenerateAxoObj();
@@ -132,5 +134,13 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         });
         add(BtnUpdate);
         resizeToGrid();
+    }
+
+    @Override
+    public void Close() {
+        super.Close();
+        if (pf != null) {
+            pf.Close();
+        }
     }
 }

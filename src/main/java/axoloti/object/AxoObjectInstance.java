@@ -113,14 +113,14 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public JPanel p_params;
     public JPanel p_displays;
 
+    void updateObj1() {
+        getType().addObjectModifiedListener(this);
+    }
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        if (this instanceof AxoObjectInstancePatcher) {
-            ((AxoObjectInstancePatcher) this).updateObj1();
-        } else if (this instanceof AxoObjectInstancePatcherObject) {
-            ((AxoObjectInstancePatcherObject) this).updateObj1();
-        }
+        updateObj1();
         ArrayList<ParameterInstance> pParameterInstances = parameterInstances;
         ArrayList<AttributeInstance> pAttributeInstances = attributeInstances;
         ArrayList<InletInstance> pInletInstances = inletInstances;
@@ -498,6 +498,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         }
     }
 
+    public void updateObj() {
+        getPatch().ChangeObjectInstanceType(this, this.getType());
+    }
+
     @Override
     public void Unlock() {
         super.Unlock();
@@ -505,7 +509,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             a.UnLock();
         }
         if (deferredObjTypeUpdate) {
-            getPatch().ChangeObjectInstanceType(this, this.getType());
+            updateObj();
             deferredObjTypeUpdate = false;
         }
     }
@@ -895,7 +899,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public void ObjectModified(Object src) {
         if (getPatch() != null) {
             if (!getPatch().IsLocked()) {
-                getPatch().ChangeObjectInstanceType(this, this.getType());
+                updateObj();
             } else {
                 deferredObjTypeUpdate = true;
             }
