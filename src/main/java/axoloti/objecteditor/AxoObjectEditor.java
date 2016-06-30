@@ -101,7 +101,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         }
         return s;
     }
-    
+
     void updateReferenceXML() {
         Serializer serializer = new Persister();
         ByteArrayOutputStream origOS = new ByteArrayOutputStream(2048);
@@ -111,6 +111,19 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
         origXML = origOS.toString();
+    }
+
+    void Revert() {
+        try {
+            Serializer serializer = new Persister();
+            AxoObject objrev = serializer.read(AxoObject.class, origXML);
+            editObj.copy(objrev);
+            Close();
+
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public AxoObjectEditor(final AxoObject origObj) {
@@ -222,7 +235,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
                     jLabelLibrary.setText(sellib.getId() + " (readonly)");
                     setTitle(sellib.getId() + ":" + origObj.id + " (readonly)");
                 } else {
-                    jLabelLibrary.setText(sellib.getId());                    
+                    jLabelLibrary.setText(sellib.getId());
                     setTitle(sellib.getId() + ":" + origObj.id);
                 }
             }
@@ -334,19 +347,31 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         // warn if changes, and its not an embedded object
         if (hasChanged()) {
             if (jMenuItemSave.isEnabled()) {
-                int result = JOptionPane.showConfirmDialog(this, "Unsaved changes, do you want to save?",
-                        "Close", JOptionPane.YES_NO_CANCEL_OPTION);
-                switch (result) {
-                    case JOptionPane.CANCEL_OPTION:
-                        return true;
-                    case JOptionPane.YES_OPTION:
+
+                Object[] options = {"Yes", "Revert changes", "Cancel"};
+
+                int n = JOptionPane.showOptionDialog(this,
+                        "Unsaved changes, do you want to save?",
+                        "Axoloti asks:",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
+                switch (n) {
+                    case 0: // yes
                         jMenuItemSaveActionPerformed(null);
-                        return false;
-                    case JOptionPane.NO_OPTION:
-                        initEditFromOrig();
-                    default:
-                        ;
+                        Close();
+                        break;
+                    case 1: // revert
+                        Revert();
+                        Close();
+                        break;
+                    case 2: // cancel
+                    default: // closed
+                        break;
                 }
+
             } else {
                 int result = JOptionPane.showConfirmDialog(this, "Unsaved changes, do you want to add to a library?",
                         "Close", JOptionPane.YES_NO_CANCEL_OPTION);
@@ -432,6 +457,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         fileMenu1 = new axoloti.menus.FileMenu();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItemSave = new javax.swing.JMenuItem();
+        jMenuItemRevert = new javax.swing.JMenuItem();
         jMenuItemCopyToLibrary = new javax.swing.JMenuItem();
         windowMenu1 = new axoloti.menus.WindowMenu();
         helpMenu1 = new axoloti.menus.HelpMenu();
@@ -720,6 +746,14 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         });
         fileMenu1.add(jMenuItemSave);
 
+        jMenuItemRevert.setText("Revert");
+        jMenuItemRevert.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRevertActionPerformed(evt);
+            }
+        });
+        fileMenu1.add(jMenuItemRevert);
+
         jMenuItemCopyToLibrary.setText("Copy to Library...");
         jMenuItemCopyToLibrary.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -756,6 +790,12 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         Close();
     }//GEN-LAST:event_jMenuItemCopyToLibraryActionPerformed
 
+    private void jMenuItemRevertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRevertActionPerformed
+        Revert();
+        AxoObjectEditor axoObjectEditor = new AxoObjectEditor(editObj);
+        axoObjectEditor.setVisible(true);
+    }//GEN-LAST:event_jMenuItemRevertActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.objecteditor.AttributeDefinitionsEditorPanel attributeDefinitionsEditorPanel1;
     private axoloti.objecteditor.DisplayDefinitionsEditorPanel displayDefinitionsEditorPanel1;
@@ -779,6 +819,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     private javax.swing.JList jListIncludes;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemCopyToLibrary;
+    private javax.swing.JMenuItem jMenuItemRevert;
     private javax.swing.JMenuItem jMenuItemSave;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
