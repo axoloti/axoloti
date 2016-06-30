@@ -518,6 +518,15 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
         ((AbstractTableModel) jTable2.getModel()).fireTableDataChanged();
     }
 
+    void setEditable(boolean editable) {
+        jTable1.setEnabled(editable);
+        jTable2.setEnabled(editable);
+        jButtonMoveUp.setEnabled(editable);
+        jButtonMoveDown.setEnabled(editable);
+        jButtonRemove.setEnabled(editable);
+        jButtonAdd.setEnabled(editable);
+    }
+
     JScrollPane jScrollPane1;
     JScrollPane jScrollPane2;
     JTable jTable1;

@@ -51,8 +51,8 @@ import org.simpleframework.xml.core.Persister;
  */
 public final class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectModifiedListener {
 
-//    AxoObject editObj;
     final AxoObject editObj;
+    private String origXML;
     private final RSyntaxTextArea jTextAreaLocalData;
     private final RSyntaxTextArea jTextAreaInitCode;
     private final RSyntaxTextArea jTextAreaKRateCode;
@@ -101,6 +101,17 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         }
         return s;
     }
+    
+    void updateReferenceXML() {
+        Serializer serializer = new Persister();
+        ByteArrayOutputStream origOS = new ByteArrayOutputStream(2048);
+        try {
+            serializer.write(editObj, origOS);
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        origXML = origOS.toString();
+    }
 
     public AxoObjectEditor(final AxoObject origObj) {
         initComponents();
@@ -115,12 +126,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         editObj = origObj;
 
-        if (editObj instanceof AxoObjectPatcherObject) {
-            setTitle(origObj.id);
-        }
-
         initEditFromOrig();
-
+        updateReferenceXML();
         inletDefinitionsEditor1.initComponents(editObj);
         outletDefinitionsEditorPanel1.initComponents(editObj);
         paramDefinitionsEditorPanel1.initComponents(editObj);
@@ -204,17 +211,42 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         if (editObj.sPath == null || editObj.sPath.length() == 0) {
             // embedded object
             jMenuItemSave.setEnabled(false);
-            jMenuItemApply.setEnabled(true);
+            jLabelLibrary.setText("embedded");
+            setTitle("embedded");
         } else {
             // normal objects
             if (sellib != null) {
                 jMenuItemSave.setEnabled(!sellib.isReadOnly());
+                if (sellib.isReadOnly()) {
+                    SetReadOnly(true);
+                    jLabelLibrary.setText(sellib.getId() + " (readonly)");
+                    setTitle(sellib.getId() + ":" + origObj.id + " (readonly)");
+                } else {
+                    jLabelLibrary.setText(sellib.getId());                    
+                    setTitle(sellib.getId() + ":" + origObj.id);
+                }
             }
-            jMenuItemApply.setEnabled(false);
         }
 
         editObj.FireObjectModified(this);
         jTextDesc.requestFocus();
+    }
+
+    void SetReadOnly(boolean readonly) {
+        jTextDesc.setEditable(!readonly);
+        jTextFieldAuthor.setEditable(!readonly);
+        jTextFieldLicense.setEditable(!readonly);
+        jTextAreaLocalData.setEditable(!readonly);
+        jTextAreaInitCode.setEditable(!readonly);
+        jTextAreaKRateCode.setEditable(!readonly);
+        jTextAreaSRateCode.setEditable(!readonly);
+        jTextAreaDisposeCode.setEditable(!readonly);
+        jTextAreaMidiCode.setEditable(!readonly);
+        inletDefinitionsEditor1.setEditable(!readonly);
+        outletDefinitionsEditorPanel1.setEditable(!readonly);
+        paramDefinitionsEditorPanel1.setEditable(!readonly);
+        attributeDefinitionsEditorPanel1.setEditable(!readonly);
+        displayDefinitionsEditorPanel1.setEditable(!readonly);
     }
 
     void initFields() {
@@ -251,12 +283,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
     boolean hasChanged() {
         Serializer serializer = new Persister();
-        ByteArrayOutputStream origOS = new ByteArrayOutputStream(2048);
-        try {
-            serializer.write(editObj, origOS);
-        } catch (Exception ex) {
-            Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
         ByteArrayOutputStream editOS = new ByteArrayOutputStream(2048);
         try {
@@ -264,10 +290,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         } catch (Exception ex) {
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-//        Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.INFO, "orig {0}", origOS.toString());
-//        Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.INFO, "edit {0}", editOS.toString());
-        return !(origOS.toString().equals(editOS.toString()));
+        return !(origXML.equals(editOS.toString()));
     }
 
     @Override
@@ -302,7 +325,12 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         initFields();
     }
 
-    public void Close() {
+    @Override
+    public boolean AskClose() {
+        // if it's an embedded object ("patch/object"), assume the parent patch is saving
+        if (editObj.sPath == null || editObj.sPath.length() == 0) {
+            Close();
+        }
         // warn if changes, and its not an embedded object
         if (hasChanged()) {
             if (jMenuItemSave.isEnabled()) {
@@ -310,25 +338,10 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
                         "Close", JOptionPane.YES_NO_CANCEL_OPTION);
                 switch (result) {
                     case JOptionPane.CANCEL_OPTION:
-                        return;
+                        return true;
                     case JOptionPane.YES_OPTION:
                         jMenuItemSaveActionPerformed(null);
-                        break;
-                    case JOptionPane.NO_OPTION:
-                        initEditFromOrig();
-                    default:
-                        ;
-                }
-            } else if (jMenuItemApply.isEnabled()) {
-                int result = JOptionPane.showConfirmDialog(this, "Unsaved changes, do you want to apply?",
-                        "Close", JOptionPane.YES_NO_CANCEL_OPTION);
-                switch (result) {
-                    case JOptionPane.CANCEL_OPTION:
-                        return;
-                    case JOptionPane.YES_OPTION:
-                        jMenuItemApplyActionPerformed(null);
-                        // fall through to close
-                        break;
+                        return false;
                     case JOptionPane.NO_OPTION:
                         initEditFromOrig();
                     default:
@@ -339,18 +352,24 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
                         "Close", JOptionPane.YES_NO_CANCEL_OPTION);
                 switch (result) {
                     case JOptionPane.CANCEL_OPTION:
-                        return;
+                        return true;
                     case JOptionPane.YES_OPTION:
-                        jMenuItemAddToLibraryActionPerformed(null);
+                        jMenuItemCopyToLibraryActionPerformed(null);
                         // this will currently call close(), but mod = false
-                        return;
+                        return false;
                     case JOptionPane.NO_OPTION:
                         initEditFromOrig();
                     default:
                         ;
                 }
             }
+        } else {
+            Close();
         }
+        return false;
+    }
+
+    public void Close() {
         DocumentWindowList.UnregisterWindow(this);
         editObj.removeObjectModifiedListener(this);
         dispose();
@@ -372,6 +391,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelOverview = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabelLibrary = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabelName = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -411,8 +432,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         fileMenu1 = new axoloti.menus.FileMenu();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItemSave = new javax.swing.JMenuItem();
-        jMenuItemAddToLibrary = new javax.swing.JMenuItem();
-        jMenuItemApply = new javax.swing.JMenuItem();
+        jMenuItemCopyToLibrary = new javax.swing.JMenuItem();
         windowMenu1 = new axoloti.menus.WindowMenu();
         helpMenu1 = new axoloti.menus.HelpMenu();
 
@@ -447,7 +467,13 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
         jPanelOverview.setLayout(new javax.swing.BoxLayout(jPanelOverview, javax.swing.BoxLayout.Y_AXIS));
 
-        jPanel2.setLayout(new java.awt.GridLayout(3, 2));
+        jPanel2.setLayout(new java.awt.GridLayout(4, 2));
+
+        jLabel1.setText("Library:");
+        jPanel2.add(jLabel1);
+
+        jLabelLibrary.setText("library");
+        jPanel2.add(jLabelLibrary);
 
         jLabel7.setText("Name:");
         jPanel2.add(jLabel7);
@@ -694,21 +720,13 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         });
         fileMenu1.add(jMenuItemSave);
 
-        jMenuItemAddToLibrary.setText("Add to Library...");
-        jMenuItemAddToLibrary.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemCopyToLibrary.setText("Copy to Library...");
+        jMenuItemCopyToLibrary.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemAddToLibraryActionPerformed(evt);
+                jMenuItemCopyToLibraryActionPerformed(evt);
             }
         });
-        fileMenu1.add(jMenuItemAddToLibrary);
-
-        jMenuItemApply.setText("Apply");
-        jMenuItemApply.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemApplyActionPerformed(evt);
-            }
-        });
-        fileMenu1.add(jMenuItemApply);
+        fileMenu1.add(jMenuItemCopyToLibrary);
 
         jMenuBar1.add(fileMenu1);
         jMenuBar1.add(windowMenu1);
@@ -722,25 +740,21 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        Close();
+        AskClose();
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
         editObj.FireObjectModified(this);
         MainFrame.axoObjects.WriteAxoObject(editObj.sPath, editObj);
+        updateReferenceXML();
         MainFrame.axoObjects.LoadAxoObjects();
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
-    private void jMenuItemAddToLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddToLibraryActionPerformed
+    private void jMenuItemCopyToLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCopyToLibraryActionPerformed
         AddToLibraryDlg dlg = new AddToLibraryDlg(this, true, editObj);
         dlg.setVisible(true);
         Close();
-    }//GEN-LAST:event_jMenuItemAddToLibraryActionPerformed
-
-    private void jMenuItemApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemApplyActionPerformed
-        editObj.FireObjectModified(this);
-        MainFrame.axoObjects.LoadAxoObjects();
-    }//GEN-LAST:event_jMenuItemApplyActionPerformed
+    }//GEN-LAST:event_jMenuItemCopyToLibraryActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.objecteditor.AttributeDefinitionsEditorPanel attributeDefinitionsEditorPanel1;
@@ -749,6 +763,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     private axoloti.menus.HelpMenu helpMenu1;
     private axoloti.objecteditor.InletDefinitionsEditorPanel inletDefinitionsEditor1;
     private javax.swing.JInternalFrame jInternalFrame1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -757,13 +772,13 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelLibrary;
     private javax.swing.JLabel jLabelMidiPrototype;
     private javax.swing.JLabel jLabelName;
     private javax.swing.JList jListDepends;
     private javax.swing.JList jListIncludes;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItemAddToLibrary;
-    private javax.swing.JMenuItem jMenuItemApply;
+    private javax.swing.JMenuItem jMenuItemCopyToLibrary;
     private javax.swing.JMenuItem jMenuItemSave;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -797,12 +812,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     @Override
     public JFrame GetFrame() {
         return this;
-    }
-
-    @Override
-    public boolean AskClose() {
-        Close();
-        return false; //TBC
     }
 
     @Override
