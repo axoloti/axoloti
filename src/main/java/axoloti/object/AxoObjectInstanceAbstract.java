@@ -370,6 +370,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     o.setLocation(o.x, o.y);
                 }
                 patch.AdjustSize();
+                patch.SetDirty();
             }
         }
     }
