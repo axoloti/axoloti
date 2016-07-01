@@ -379,7 +379,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
                     case 0: // yes
                         jMenuItemSaveActionPerformed(null);
                         Close();
-                        return true;
+                        return false;
                     case 1: // revert
                         Revert();
                         Close();
@@ -394,6 +394,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             }
         } else {
             // no changes
+            Close();
             return false;
         }
     }
