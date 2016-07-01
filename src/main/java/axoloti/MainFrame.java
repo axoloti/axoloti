@@ -982,7 +982,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     public void Quit() {
         while (!DocumentWindowList.GetList().isEmpty()) {
             if (DocumentWindowList.GetList().get(0).AskClose()) {
-                break;
+                return;
             }
         }
         prefs.SavePrefs();

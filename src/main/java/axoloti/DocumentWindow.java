@@ -29,7 +29,7 @@ public interface DocumentWindow {
 
     JFrame GetFrame();
 
-    public boolean AskClose();
+    public boolean AskClose(); // return true when cancelling an unsaved close
 
     public File getFile();
 
