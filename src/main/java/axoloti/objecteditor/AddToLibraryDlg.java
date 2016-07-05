@@ -11,6 +11,8 @@ import axoloti.object.AxoObject;
 import axoloti.object.AxoObjects;
 import axoloti.utils.AxolotiLibrary;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,7 +20,7 @@ import java.io.File;
  */
 public class AddToLibraryDlg extends javax.swing.JDialog {
 
-    private final AxoObject obj_;
+    private final AxoObject obj;
 
     public AddToLibraryDlg(AxoObjectEditor parent, boolean modal, AxoObject obj) {
         super(parent, modal);
@@ -26,7 +28,12 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
         // for later use
         jAxoFile.setVisible(false);
         jAxoFileLabel.setVisible(false);
-        obj_ = obj;
+        this.obj = new AxoObject();
+        try {
+            this.obj.copy(obj);
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(AddToLibraryDlg.class.getName()).log(Level.SEVERE, null, ex);
+        }
         populateFields();
     }
 
@@ -196,21 +203,21 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
         String objname = jObjectName.getText().trim();
         int ididx = objname.lastIndexOf('/');
         if (ididx > 0) {
-            obj_.shortId = objname.substring(ididx + 1);
+            obj.shortId = objname.substring(ididx + 1);
         } else {
-            obj_.shortId = objname;
+            obj.shortId = objname;
         }
-        obj_.id = jObjectName.getText();
-        obj_.sPath = jFileTxt.getText();
-        obj_.setUUID(obj_.GenerateUUID());
-        File f = new File(obj_.sPath);
+        obj.id = jObjectName.getText();
+        obj.sPath = jFileTxt.getText();
+        obj.setUUID(obj.GenerateUUID());
+        File f = new File(obj.sPath);
         if (!f.exists()) {
             File dir = f.getParentFile();
             if (!dir.exists()) {
                 dir.mkdirs();
             }
         }
-        MainFrame.axoObjects.WriteAxoObject(obj_.sPath, obj_);
+        MainFrame.axoObjects.WriteAxoObject(obj.sPath, obj);
         axoObjects.LoadAxoObjects();
 
         setVisible(false);
@@ -252,14 +259,14 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void populateFields() {
-       jObjectName.setText(obj_.id);
+       jObjectName.setText(obj.id);
 
         AxolotiLibrary sellib = null;
         for (AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
             if (!lib.isReadOnly()) {
                 jLibrary.addItem(lib.getId());
             }
-            if (obj_.sPath != null && obj_.sPath.startsWith(lib.getLocalLocation())) {
+            if (obj.sPath != null && obj.sPath.startsWith(lib.getLocalLocation())) {
                if (sellib == null || sellib.getLocalLocation().length() < lib.getLocalLocation().length()) {
                     sellib = lib;
                 }
@@ -277,8 +284,8 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
             if(sellib.getContributorPrefix()!=null) {
                 String cp = sellib.getContributorPrefix();
                 if(cp.length()>0) {
-                    if(obj_.id.startsWith(cp)) {
-                        jObjectName.setText(obj_.id.substring(cp.length()+1));
+                    if(obj.id.startsWith(cp)) {
+                        jObjectName.setText(obj.id.substring(cp.length()+1));
                     }
                 }
             }

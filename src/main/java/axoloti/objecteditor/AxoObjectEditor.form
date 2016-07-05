@@ -138,7 +138,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                     <Property name="columns" type="int" value="2"/>
-                    <Property name="rows" type="int" value="4"/>
+                    <Property name="rows" type="int" value="5"/>
                   </Layout>
                   <SubComponents>
                     <Component class="javax.swing.JLabel" name="jLabel1">
@@ -168,7 +168,7 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextFieldAuthor">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="jTextField1"/>
+                        <Property name="text" type="java.lang.String" value="author"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel9">
@@ -178,7 +178,17 @@
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextFieldLicense">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="jTextField2"/>
+                        <Property name="text" type="java.lang.String" value="license"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JLabel" name="jLabelHelp">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Help patch"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JTextField" name="jTextFieldHelp">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="help"/>
                       </Properties>
                     </Component>
                   </SubComponents>

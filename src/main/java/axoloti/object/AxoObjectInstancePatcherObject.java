@@ -49,7 +49,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         if (ao == null) {
             ao = new AxoObject();
             ao.id = "patch/object";
-            ao.sDescription = "description";
+            ao.sDescription = "";
         }
         setType(ao);
         /*
@@ -85,10 +85,12 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         if (ao == null) {
             ao = new AxoObject();
 //            ao.id = "id";
-            ao.sDescription = "description";
+            ao.sDescription = "";
         }
         if (aoe == null) {
             aoe = new AxoObjectEditor(ao);
+        } else {
+            aoe.updateReferenceXML();
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
