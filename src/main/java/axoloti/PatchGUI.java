@@ -499,7 +499,8 @@ public class PatchGUI extends Patch {
         ;
         };
 
-
+        /* 
+        // zooming by mousewheel is no good 
         Layers.addMouseWheelListener(new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 // this method implements zoom to mouse functionality
@@ -554,6 +555,7 @@ public class PatchGUI extends Patch {
                 verticalScrollBar.setValue(newVerticalValue);
             }
         });
+*/
 
         Layers.setDropTarget(dt);
 
