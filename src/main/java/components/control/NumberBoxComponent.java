@@ -32,6 +32,7 @@ import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Robot;
 import java.awt.Stroke;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -39,7 +40,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.awt.Robot;
 
 /**
  *
@@ -158,11 +158,9 @@ public class NumberBoxComponent extends ACtrlComponent {
     protected void mouseReleased(MouseEvent e) {
         if (hiliteDown) {
             hiliteDown = false;
-            repaint();
         }
         if (hiliteUp) {
             hiliteUp = false;
-            repaint();
         }
         getRootPane().setCursor(Cursor.getDefaultCursor());
         robot = null;
@@ -171,6 +169,7 @@ public class NumberBoxComponent extends ACtrlComponent {
     private boolean isControlDown(KeyEvent ke) {
         return OSDetect.getOS() == OSDetect.OS.MAC ? ke.isAltDown() : ke.isControlDown();
     }
+
     @Override
     public void keyPressed(KeyEvent ke) {
         if (isEnabled()) {
@@ -217,17 +216,14 @@ public class NumberBoxComponent extends ACtrlComponent {
                     }
                     keybBuffer = "";
                     ke.consume();
-                    repaint();
                     break;
                 case KeyEvent.VK_BACK_SPACE:
                     keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
                     ke.consume();
-                    repaint();
                     break;
                 case KeyEvent.VK_ESCAPE:
                     keybBuffer = "";
                     ke.consume();
-                    repaint();
                     break;
                 default:
             }
@@ -246,7 +242,6 @@ public class NumberBoxComponent extends ACtrlComponent {
                 case '.':
                     keybBuffer += ke.getKeyChar();
                     ke.consume();
-                    repaint();
                     break;
                 default:
             }
@@ -295,11 +290,11 @@ public class NumberBoxComponent extends ACtrlComponent {
             v = 2;
         }
         if (keybBuffer.isEmpty()) {
-            g2.setFont(Constants.font);
+            g2.setFont(Constants.FONT);
             g2.drawString(s, h, getSize().height - v);
         } else {
             g2.setColor(Color.red);
-            g2.setFont(Constants.font);
+            g2.setFont(Constants.FONT);
             g2.drawString(keybBuffer, h, getSize().height - v);
         }
 
@@ -349,7 +344,6 @@ public class NumberBoxComponent extends ACtrlComponent {
             this.setToolTipText(s);
         }
 
-        repaint();
         fireEvent();
     }
 

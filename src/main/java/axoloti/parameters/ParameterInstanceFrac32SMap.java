@@ -17,8 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.Modulation;
-import axoloti.Modulator;
 import org.simpleframework.xml.Attribute;
 
 /**

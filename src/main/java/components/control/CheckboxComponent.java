@@ -75,7 +75,6 @@ public class CheckboxComponent extends ACtrlComponent {
             if (i < n) {
                 SetFieldValue(i, dragValue);
                 selIndex = i;
-                repaint();
             }
         }
     }
@@ -114,7 +113,6 @@ public class CheckboxComponent extends ACtrlComponent {
                 if (selIndex < 0) {
                     selIndex = n - 1;
                 }
-                repaint();
                 ke.consume();
                 return;
             }
@@ -123,7 +121,6 @@ public class CheckboxComponent extends ACtrlComponent {
                 if (selIndex >= n) {
                     selIndex = 0;
                 }
-                repaint();
                 ke.consume();
                 return;
             }
@@ -226,7 +223,6 @@ public class CheckboxComponent extends ACtrlComponent {
     public void setValue(double value) {
         if (this.value != value) {
             this.value = value;
-            repaint();
         }
         fireEvent();
     }

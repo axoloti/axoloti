@@ -17,9 +17,9 @@
  */
 package generatedobjects;
 
+import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
-import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletBool32Rising;
 import axoloti.inlets.InletFrac32Bipolar;

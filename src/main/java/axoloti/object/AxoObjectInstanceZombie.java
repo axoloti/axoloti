@@ -27,7 +27,6 @@ import components.LabelComponent;
 import components.PopupIcon;
 import java.awt.Color;
 import static java.awt.Component.LEFT_ALIGNMENT;
-import java.awt.MenuItem;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +34,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
+import javax.swing.JMenuItem;
 import org.simpleframework.xml.Root;
 
 /**
@@ -76,7 +76,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
         Titlebar.add(idlbl);
 
         Titlebar.setToolTipText("<html>" + "Unresolved object!");
-        MenuItem popm_substitute = new MenuItem("replace");
+        JMenuItem popm_substitute = new JMenuItem("replace");
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -84,7 +84,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
             }
         });
         popup.add(popm_substitute);
-        MenuItem popm_editInstanceName = new MenuItem("edit instance name");
+        JMenuItem popm_editInstanceName = new JMenuItem("edit instance name");
         popm_editInstanceName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {

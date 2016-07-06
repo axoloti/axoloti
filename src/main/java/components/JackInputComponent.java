@@ -74,4 +74,8 @@ public class JackInputComponent extends JComponent {
             g2.drawOval(margin, margin, sz - margin - margin, sz - margin - margin);
         }
     }
+    
+    public InletInstance getInlet() {
+        return inlet;
+    }
 }

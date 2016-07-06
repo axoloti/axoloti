@@ -18,6 +18,7 @@
 package axoloti.parameters;
 
 import axoloti.Preset;
+import axoloti.ZoomUtils;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
@@ -31,6 +32,7 @@ import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -129,7 +131,6 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
             valuelbl.setPreferredSize(d);
             valuelbl.setSize(d);
             valuelbl.setMaximumSize(d);
-//            valuelbl.setSize(getWidth(), Constants.font.);
             valuelbl.addMouseListener(new MouseInputAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -413,7 +414,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         @Override
         public void mousePressed(MouseEvent e) {
             if (e.isPopupTrigger()) {
-                doPopup();
+                doPopup(e);
                 e.consume();
             }
         }
@@ -421,7 +422,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         @Override
         public void mouseReleased(MouseEvent e) {
             if (e.isPopupTrigger()) {
-                doPopup();
+                doPopup(e);
                 e.consume();
             }
         }
@@ -435,10 +436,11 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         }
     };
 
-    public void doPopup() {
+    public void doPopup(MouseEvent e) {
         JPopupMenu m = new JPopupMenu();
         populatePopup(m);
-        m.show(this, 0, getHeight());
+        
+        ZoomUtils.showZoomedPopupMenu(this, axoObj, m);
     }
 
     public void populatePopup(JPopupMenu m) {
@@ -512,5 +514,9 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
     }
-
+    
+    @Override
+    public Point getToolTipLocation(MouseEvent event) {
+        return ZoomUtils.getToolTipLocation(this, event, axoObj);
+    }
 }

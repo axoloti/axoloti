@@ -18,7 +18,6 @@
 package axoloti.parameters;
 
 import axoloti.Preset;
-import axoloti.datatypes.Int32;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
 import axoloti.object.AxoObjectInstance;

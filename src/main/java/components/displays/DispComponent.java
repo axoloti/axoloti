@@ -74,7 +74,7 @@ public class DispComponent extends ADispComponent {
         g2.setStroke(strokeThick);
         g2.drawLine(radius, radius, radius + x, radius + y);
         String s = String.format("%5.2f", value);
-        g2.setFont(Constants.font);
+        g2.setFont(Constants.FONT);
         g2.drawString(s, 0, getSize().height);
     }
 
@@ -90,7 +90,7 @@ public class DispComponent extends ADispComponent {
             overflow = true;
         }
         this.value = value;
-        repaint();
+        paintObjectLayer();
     }
 
     public double getMinimum() {

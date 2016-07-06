@@ -17,8 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.Modulation;
-import axoloti.Modulator;
 import axoloti.Preset;
 import axoloti.datatypes.Value;
 import components.AssignMidiCCComponent;
@@ -54,7 +52,9 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
 
     @Override
     public DialComponent CreateControl() {
-        return new DialComponent(0.0, getMin(), getMax(), getTick());
+        DialComponent d = new DialComponent(0.0, getMin(), getMax(), getTick());
+        d.setParentAxoObjectInstance(axoObj);
+        return d;
     }
 
     @Override

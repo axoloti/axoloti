@@ -30,12 +30,15 @@ import components.control.NumberBoxComponent;
 public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeSpinner> {
 
     NumberBoxComponent spinner;
+    
+    private AxoObjectInstance axoObj;
 
     public AttributeInstanceSpinner() {
     }
 
     public AttributeInstanceSpinner(AxoAttributeSpinner param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
+        this.axoObj = axoObj1;
         value = attr.getDefaultValue();
     }
 
@@ -49,6 +52,7 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
             value = attr.getMaxValue();
         }
         spinner = new NumberBoxComponent(value, attr.getMinValue(), attr.getMaxValue(), 1.0);
+        spinner.setParentAxoObjectInstance(this.axoObj);
         add(spinner);
         spinner.addACtrlListener(new ACtrlListener() {
             @Override

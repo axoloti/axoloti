@@ -28,11 +28,11 @@ public class TextFieldComponent extends JTextField {
 
     public TextFieldComponent() {
         super();
-        setFont(Constants.font);
+        setFont(Constants.FONT);
     }
 
     public TextFieldComponent(String text) {
         super(text);
-        setFont(Constants.font);
+        setFont(Constants.FONT);
     }
 }

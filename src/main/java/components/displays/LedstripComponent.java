@@ -79,7 +79,7 @@ public class LedstripComponent extends ADispComponent {
     public void setValue(double value) {
         if (this.value != value) {
             this.value = value;
-            repaint();
+            paintObjectLayer();
         }
     }
 }

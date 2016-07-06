@@ -19,17 +19,14 @@ package generatedobjects;
 
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Bipolar;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Bipolar;
 import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInt32;
-import axoloti.parameters.ParameterBin12;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**

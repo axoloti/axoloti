@@ -17,6 +17,7 @@
  */
 package components;
 
+import axoloti.ZoomUtils;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import axoloti.utils.Constants;
 import java.awt.Color;
@@ -75,7 +76,7 @@ public class AssignMidiCCComponent extends JComponent {
     void doPopup() {
         JPopupMenu sub1 = new JPopupMenu();
         AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(param, sub1);
-        sub1.show(this, 0, getHeight() - 1);
+        ZoomUtils.showZoomedPopupMenu(this, param.GetObjectInstance(), sub1);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class AssignMidiCCComponent extends JComponent {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setFont(Constants.font);
+            g2.setFont(Constants.FONT);
             g2.setColor(getBackground());
             g2.fillRect(1, 1, getWidth(), getHeight());
             if (param.getMidiCC() >= 0) {

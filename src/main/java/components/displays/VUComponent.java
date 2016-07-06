@@ -58,7 +58,7 @@ public class VUComponent extends ADispComponent {
         if (valuesq > peakaccumvalue) {
             peakaccumvalue = valuesq;
         }
-        repaint();
+        paintObjectLayer();
     }
 
     int valueToPos(double v) {

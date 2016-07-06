@@ -170,7 +170,7 @@ public abstract class PianoComponent extends JComponent {
         for (int i = 0; i < 128; i++) {
             if (i % 12 == 0) {
                 int x = keyToX(i);
-                g2.setFont(Constants.font);
+                g2.setFont(Constants.FONT);
                 g2.drawString("" + ((i / 12) - 1), x + 2, height - 2);
             }
         }
@@ -178,7 +178,7 @@ public abstract class PianoComponent extends JComponent {
             int y = keyToY(i);
             int x = keyToX(i);
             if (y == 0) {
-                g2.setFont(Constants.font);
+                g2.setFont(Constants.FONT);
                 AffineTransform t = g2.getTransform();
                 g2.rotate(-3.14159 / 2);
                 g2.drawString(String.format("%d", i - 64), -53, x + 9);

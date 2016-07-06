@@ -18,8 +18,8 @@
 package generatedobjects;
 
 import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.attributedefinition.AxoAttributeObjRef;
+import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;

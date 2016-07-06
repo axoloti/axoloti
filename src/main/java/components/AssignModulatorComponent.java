@@ -17,6 +17,7 @@
  */
 package components;
 
+import axoloti.ZoomUtils;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import axoloti.utils.Constants;
 import java.awt.Color;
@@ -74,7 +75,7 @@ public class AssignModulatorComponent extends JComponent {
     void doPopup() {
         JPopupMenu sub2 = new JPopupMenu();
         AssignModulatorMenuItems mi = new AssignModulatorMenuItems(param, sub2);
-        sub2.show(this, 0, getHeight() - 1);
+        ZoomUtils.showZoomedPopupMenu(this, param.GetObjectInstance(), sub2);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class AssignModulatorComponent extends JComponent {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setFont(Constants.font);
+            g2.setFont(Constants.FONT);
             g2.setColor(getBackground());
             g2.fillRect(1, 1, getWidth(), getHeight());
             if (param.getModulators() != null) {

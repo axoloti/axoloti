@@ -17,6 +17,7 @@
  */
 package components;
 
+import axoloti.ZoomUtils;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import axoloti.utils.Constants;
 import components.control.HSliderComponent;
@@ -53,7 +54,10 @@ public class AssignPresetComponent extends JComponent {
             public void mouseClicked(MouseEvent e) {
                 JPopupMenu pm = new JPopupMenu();
                 AssignPresetMenuItems m = new AssignPresetMenuItems(AssignPresetComponent.this.param, pm);
-                pm.show(AssignPresetComponent.this, 0, getHeight());
+                ZoomUtils.showZoomedPopupMenu(AssignPresetComponent.this,
+                        AssignPresetComponent.this.param.GetObjectInstance(),
+                        pm);
+
                 e.consume();
             }
 
@@ -83,7 +87,7 @@ public class AssignPresetComponent extends JComponent {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setFont(Constants.font);
+            g2.setFont(Constants.FONT);
             g2.setColor(getBackground());
             g2.fillRect(1, 1, getWidth(), getHeight());
             if ((param.getPresets() != null) && (!param.getPresets().isEmpty())) {

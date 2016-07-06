@@ -31,14 +31,17 @@ import java.awt.RenderingHints;
  */
 public class NetDragging extends Net {
 
-    public NetDragging(Patch patch) {
-        super(patch);
+    private PatchGUI patchGUI;
+
+    public NetDragging(PatchGUI patchGUI) {
+        super(patchGUI);
+        this.patchGUI = patchGUI;
     }
 
     Point p0;
 
     public void SetDragPoint(Point p0) {
-        this.p0 = p0;
+        this.p0 = patchGUI.zoomUI.removeZoomFactor(p0);
     }
 
     @Override
@@ -81,16 +84,20 @@ public class NetDragging extends Net {
             }
             Point p1 = i.getJackLocInCanvas();
             g2.setColor(Color.BLACK);
-            DrawWire(g2, p0.x + shadowOffset, p0.y + shadowOffset, p1.x + shadowOffset, p1.y + shadowOffset);
-            g2.setColor(c);
-            DrawWire(g2, p0.x, p0.y, p1.x, p1.y);
+            if (p0 != null && p1 != null) {
+                DrawWire(g2, p0.x + shadowOffset, p0.y + shadowOffset, p1.x + shadowOffset, p1.y + shadowOffset);
+                g2.setColor(c);
+                DrawWire(g2, p0.x, p0.y, p1.x, p1.y);
+            }
         }
         for (InletInstance i : dest) {
             Point p1 = i.getJackLocInCanvas();
             g2.setColor(Color.BLACK);
-            DrawWire(g2, p0.x + shadowOffset, p0.y + shadowOffset, p1.x + shadowOffset, p1.y + shadowOffset);
-            g2.setColor(c);
-            DrawWire(g2, p0.x, p0.y, p1.x, p1.y);
+            if (p0 != null && p1 != null) {
+                DrawWire(g2, p0.x + shadowOffset, p0.y + shadowOffset, p1.x + shadowOffset, p1.y + shadowOffset);
+                g2.setColor(c);
+                DrawWire(g2, p0.x, p0.y, p1.x, p1.y);
+            }
 //  Indicate latched connections
 //            if (false) {
 //                int j = patch.objectinstances.indexOf(i.axoObj);

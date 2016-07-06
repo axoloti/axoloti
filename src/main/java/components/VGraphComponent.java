@@ -17,6 +17,7 @@
  */
 package components;
 
+import axoloti.ZoomUtils;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -99,7 +100,7 @@ public class VGraphComponent extends JComponent {
         for (int i = 0; i < length; i++) {
             this.ypoints[i] = valToPos(value[i]);
         }
-        repaint();
+        ZoomUtils.paintObjectLayer(this);
     }
 
     public double getMinimum() {

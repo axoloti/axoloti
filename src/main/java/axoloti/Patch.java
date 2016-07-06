@@ -18,12 +18,14 @@
 package axoloti;
 
 import axoloti.attributedefinition.AxoAttributeComboBox;
+import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletCharPtr32;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInt32;
+import axoloti.iolet.IoletAbstract;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFile;
@@ -44,7 +46,6 @@ import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.Preferences;
-import axoloti.displays.DisplayInstance;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -435,22 +436,17 @@ public class Patch {
         }
         return null;
     }
-
-    public Net GetNet(InletInstance il) {
+    
+    public Net GetNet(IoletAbstract io) {
         for (Net net : nets) {
             for (InletInstance d : net.dest) {
-                if (d == il) {
+                if (d == io) {
                     return net;
                 }
             }
-        }
-        return null;
-    }
-
-    public Net GetNet(OutletInstance ol) {
-        for (Net net : nets) {
+            
             for (OutletInstance d : net.source) {
-                if (d == ol) {
+                if (d == io) {
                     return net;
                 }
             }
@@ -570,30 +566,17 @@ public class Patch {
         }
         return null;
     }
-
-    public Net disconnect(OutletInstance oi) {
+    
+    public Net disconnect(IoletAbstract io) {
         if (!IsLocked()) {
-            Net n = GetNet(oi);
+            Net n = GetNet(io);
             if (n != null) {
-                n.source.remove(oi);
-                if (n.source.size() + n.dest.size() <= 1) {
-                    delete(n);
+                if(io instanceof OutletInstance) {
+                    n.source.remove((OutletInstance) io);
                 }
-                SetDirty();
-                repaint();
-                return n;
-            }
-        } else {
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
-        }
-        return null;
-    }
-
-    public Net disconnect(InletInstance ii) {
-        if (!IsLocked()) {
-            Net n = GetNet(ii);
-            if (n != null) {
-                n.dest.remove(ii);
+                else if(io instanceof InletInstance) {
+                    n.dest.remove((InletInstance) io);
+                }
                 if (n.source.size() + n.dest.size() <= 1) {
                     delete(n);
                 }

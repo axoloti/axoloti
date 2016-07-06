@@ -84,7 +84,7 @@ public class ButtonComponent extends JComponent implements MouseInputListener, K
         this.label = label;
         FontRenderContext frc = new FontRenderContext(null, true, true);
         int width = 0;
-        TextLayout tl = new TextLayout(label, Constants.font, frc);
+        TextLayout tl = new TextLayout(label, Constants.FONT, frc);
         width = (int) tl.getBounds().getWidth();
         if (width < 20) {
             width = 20;
@@ -143,7 +143,7 @@ public class ButtonComponent extends JComponent implements MouseInputListener, K
             g2.setPaint(getForeground());
             g2.fillRoundRect(2, 2, getWidth() - 4, getHeight() - 4, radius, radius);
             g2.setPaint(Color.WHITE);
-            g2.setFont(Constants.font);
+            g2.setFont(Constants.FONT);
             g2.drawString(label, 8, getHeight() - 5);
         } else {
             if (isEnabled()) {
@@ -154,7 +154,7 @@ public class ButtonComponent extends JComponent implements MouseInputListener, K
             g2.fillRoundRect(2, 2, getWidth() - 4, getHeight() - 4, radius, radius);
             g2.setPaint(getForeground());
             g2.drawRoundRect(2, 2, getWidth() - 4, getHeight() - 4, radius, radius);
-            g2.setFont(Constants.font);
+            g2.setFont(Constants.FONT);
             g2.drawString(label, 8, getHeight() - 5);
         }
     }

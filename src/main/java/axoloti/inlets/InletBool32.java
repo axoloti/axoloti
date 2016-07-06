@@ -17,8 +17,8 @@
  */
 package axoloti.inlets;
 
-import axoloti.datatypes.DataType;
 import axoloti.datatypes.Bool32;
+import axoloti.datatypes.DataType;
 
 /**
  *
