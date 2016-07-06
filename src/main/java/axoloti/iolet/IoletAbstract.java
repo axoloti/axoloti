@@ -99,8 +99,9 @@ public abstract class IoletAbstract extends JPanel {
 
                     patchGui.unzoomedLayerPanel.add(this.dropTargetDummyComponent);
                     patchGui.unzoomedLayerPanel.setComponentZOrder(this.dropTargetDummyComponent, 0);
-
-                    dt.setComponent(this.dropTargetDummyComponent);
+                    if (dt != null){
+                        dt.setComponent(this.dropTargetDummyComponent);
+                    }
 
                     patchGui.zoomUI.addPropertyChangeListener(new PropertyChangeListener() {
                         @Override
