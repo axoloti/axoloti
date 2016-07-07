@@ -379,7 +379,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 }
             }
             for (AxoObjectAbstract o : MainFrame.axoObjects.ObjectList) {
-                if (o.sDescription.contains(s)) {
+                if (o.sDescription != null && o.sDescription.contains(s)) {
                     if (!listData.contains(o)) {
                         listData.add(o);
                     }
