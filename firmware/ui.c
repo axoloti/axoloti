@@ -482,6 +482,8 @@ void ui_init(void) {
 
   chThdCreateStatic(waThreadUI, sizeof(waThreadUI), NORMALPRIO, ThreadUI, NULL);
   chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2, NULL);
+
+  LCD_clearDisplay();
 }
 
 void KVP_ClearObjects(void) {
