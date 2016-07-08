@@ -773,10 +773,43 @@ static void UIPollButtons2(void) {
    Btn_Nav_CurStates.btn_nav_Shift = control_rx_buffer[26];
    Btn_Nav_CurStates.btn_nav_Back  = control_rx_buffer[24];
    */
+    Btn_Nav_CurStates.word = Btn_Nav_CurStates.word | Btn_Nav_Or.word;
+    Btn_Nav_Or.word = 0;
 
-  Btn_Nav_CurStates.word = Btn_Nav_CurStates.word | Btn_Nav_Or.word;
+    // TODO:TEST ONLY: toggle LED's
+	LED_clear();
 
-  Btn_Nav_Or.word = 0;
+	static int button[16];
+	IF_BTN_NAV_DOWN(btn_1) button[0] = ! button[0];
+	IF_BTN_NAV_DOWN(btn_2) button[1] = ! button[1];
+	IF_BTN_NAV_DOWN(btn_3) button[2] = ! button[2];
+	IF_BTN_NAV_DOWN(btn_4) button[3] = ! button[3];
+	IF_BTN_NAV_DOWN(btn_5) button[4] = ! button[4];
+	IF_BTN_NAV_DOWN(btn_6) button[5] = ! button[5];
+	IF_BTN_NAV_DOWN(btn_7) button[6] = ! button[6];
+	IF_BTN_NAV_DOWN(btn_8) button[7] = ! button[7];
+	IF_BTN_NAV_DOWN(btn_9) button[8] = ! button[8];
+	IF_BTN_NAV_DOWN(btn_10) button[9] = ! button[9];
+	IF_BTN_NAV_DOWN(btn_11) button[10] = ! button[10];
+	IF_BTN_NAV_DOWN(btn_12) button[11] = ! button[11];
+	IF_BTN_NAV_DOWN(btn_13) button[12] = ! button[12];
+	IF_BTN_NAV_DOWN(btn_14) button[13] = ! button[13];
+	IF_BTN_NAV_DOWN(btn_15) button[14] = ! button[14];
+	IF_BTN_NAV_DOWN(btn_16) button[15] = ! button[15];
+
+	int i=0;
+	for(i=0;i<16;i++) {
+		LED_setBit(0,i,button[i]);
+	}
+
+	static uint8_t val0;
+	val0 += EncBuffer[0];
+	static uint8_t val1;
+	val1 += EncBuffer[1];
+
+	LED_set(1, 0xffff >> (16 - (val0 >> 4)) );
+	LED_set(2, 0xffff >> (16 - (val1 >> 4)) );
+
 
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
     KeyValuePair_s *cur =
@@ -832,39 +865,6 @@ static void UIPollButtons2(void) {
         KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
   }
 
-// test: toggle LED's
-  IF_BTN_NAV_DOWN(btn_1)
-    led_buffer[LCDHEADER + 0] = led_buffer[LCDHEADER + 0] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_2)
-    led_buffer[LCDHEADER + 1] = led_buffer[LCDHEADER + 1] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_3)
-    led_buffer[LCDHEADER + 2] = led_buffer[LCDHEADER + 2] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_4)
-    led_buffer[LCDHEADER + 3] = led_buffer[LCDHEADER + 3] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_5)
-    led_buffer[LCDHEADER + 4] = led_buffer[LCDHEADER + 4] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_6)
-    led_buffer[LCDHEADER + 5] = led_buffer[LCDHEADER + 5] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_7)
-    led_buffer[LCDHEADER + 6] = led_buffer[LCDHEADER + 6] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_8)
-    led_buffer[LCDHEADER + 7] = led_buffer[LCDHEADER + 7] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_9)
-    led_buffer[LCDHEADER + 8] = led_buffer[LCDHEADER + 8] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_10)
-    led_buffer[LCDHEADER + 9] = led_buffer[LCDHEADER + 9] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_11)
-    led_buffer[LCDHEADER + 10] = led_buffer[LCDHEADER + 10] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_12)
-    led_buffer[LCDHEADER + 11] = led_buffer[LCDHEADER + 11] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_13)
-    led_buffer[LCDHEADER + 12] = led_buffer[LCDHEADER + 12] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_14)
-    led_buffer[LCDHEADER + 13] = led_buffer[LCDHEADER + 13] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_15)
-    led_buffer[LCDHEADER + 14] = led_buffer[LCDHEADER + 14] ? 0 : 255;
-  IF_BTN_NAV_DOWN(btn_16)
-    led_buffer[LCDHEADER + 15] = led_buffer[LCDHEADER + 15] ? 0 : 255;
 
 // process encoder // todo: more than just one encoder...
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
@@ -899,6 +899,8 @@ static void UIPollButtons2(void) {
   Btn_Nav_CurStates.word = Btn_Nav_CurStates.word & Btn_Nav_And.word;
   Btn_Nav_PrevStates = Btn_Nav_CurStates;
   Btn_Nav_And.word = ~0;
+
+
 }
 
 static void UIUpdateLCD(void) {

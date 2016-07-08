@@ -68,6 +68,7 @@ extern bool_t spilink_toggle;
 #define SPILINK_HEADER (('A' << 8) | ('x') | ('o' << 24) | ('<' << 16))
 #define SPILINK_FOOTER (('A' << 8) | ('x') | ('o' << 24) | ('>' << 16))
 
+extern int spilink_update_index;
 extern int lcd_update_index;
 
 #endif /* SPILINK_H_ */

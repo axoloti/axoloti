@@ -49,7 +49,7 @@ typedef union {
     int btn_15 :1;
     int btn_16 :1;
   } fields;
-  int word;
+  int32_t word;
 } Btn_Nav_States_struct;
 
 extern Btn_Nav_States_struct Btn_Nav_Or;

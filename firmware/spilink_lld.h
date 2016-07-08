@@ -20,19 +20,32 @@
 
 
 __STATIC_INLINE void spilink_master_process1(spilink_data_t *tx, spilink_data_t *rx){
-	lcd_update_index = (lcd_update_index+1)&0x3f;
-	tx->control_type = lcd_update_index;
-	int i;
-	for(i=0;i<SPILINK_CTLDATASIZE;i++){
-		tx->control_data[i]=lcd_buffer[i+(lcd_update_index<<4)];
+	spilink_update_index++;
+
+	// every N updates send a led update
+	if((spilink_update_index % 0x020) == 0) {
+		tx->control_type = 0x200;
+		int i;
+		for(i=0;i<SPILINK_CTLDATASIZE && i < (LEDSIZE*2);i++){
+			tx->control_data[i] = led_buffer[i];
+		}
+
+	} else {
+		lcd_update_index = (lcd_update_index+1)&0x3f;
+		tx->control_type = 0x100 + lcd_update_index;
+		int i;
+		for(i=0;i<SPILINK_CTLDATASIZE;i++){
+			tx->control_data[i]=lcd_buffer[i+(lcd_update_index<<4)];
+		}
 	}
+
 	if (rx->control_type == 0x80) {
-	    Btn_Nav_Or.word |= ((int32_t *)rx->control_data)[0];
-	    Btn_Nav_And.word &= ((int32_t *)rx->control_data)[1];
-	    EncBuffer[0] += rx->control_data[8];
-	    EncBuffer[1] += rx->control_data[9];
-	    EncBuffer[2] += rx->control_data[10];
-	    EncBuffer[3] += rx->control_data[11];
+		Btn_Nav_Or.word |= ((int32_t *)rx->control_data)[0];
+		Btn_Nav_And.word &= ((int32_t *)rx->control_data)[1];
+		EncBuffer[0] += rx->control_data[8];
+		EncBuffer[1] += rx->control_data[9];
+		EncBuffer[2] += rx->control_data[10];
+		EncBuffer[3] += rx->control_data[11];
 	}
 }
 

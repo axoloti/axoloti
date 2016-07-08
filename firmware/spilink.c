@@ -39,6 +39,7 @@ uint32_t frameno = 0;
 #define SPILINK_NSS_PAD GPIOA_PIN15
 
 bool_t spilink_master_active = 0;
+int spilink_update_index;
 int lcd_update_index;
 
 /*

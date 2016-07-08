@@ -23,7 +23,7 @@
 #include <string.h>
 
 uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS] __attribute__ ((section (".sram2")));
-uint8_t led_buffer[LCDHEADER + LCDWIDTH] __attribute__ ((section (".sram2")));
+uint8_t led_buffer[LEDSIZE*2] __attribute__ ((section (".sram2")));
 
 
 #if 0
@@ -57,13 +57,40 @@ void axoloti_control_init(void) {
   for (i = 0; i < (LCDHEADER + LCDWIDTH) * LCDROWS; i++)
     lcd_buffer[i] = 0;
 
-  led_buffer[0] = 'A';
-  led_buffer[1] = 'x';
-  led_buffer[2] = 'o';
-  led_buffer[3] = '0' + i;
+  for (i = 0; i < LEDSIZE; i++)
+    led_buffer[i] = 0;
 }
 
 #define _BV(bit) (1 << (bit))
+
+
+
+void LED_clear() {
+	int i;
+	for ( i = 0; i < LEDSIZE; i++)
+		led_buffer[i] = 0;
+}
+
+void LED_set(int c, int v) {
+	if(c<LEDSIZE) {
+		led_buffer[c*2] = v & 0xFF;
+		led_buffer[(c*2) +1] = (v & 0xFF00) >> 8;
+	}
+}
+
+void LED_setBit(int c, int b, unsigned v ) {
+	if(c<LEDSIZE && b<16) {
+		if(b<8) {
+			if(v) led_buffer[c*2] |= ( 1 << b);
+			else led_buffer[c*2] &= ~(1 << b);
+		} else {
+			if(v) led_buffer[c*2+1] |= ( 1 << (b-8));
+			else led_buffer[c*2+1] &= ~(1 << (b-8));
+		}
+	}
+}
+
+
 
 void LCD_updateBoundingBox(int x, int y, int x2, int y2) {
   (void)x;

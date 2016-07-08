@@ -23,12 +23,20 @@
 #define LCDHEADER 0
 #define LCDROWS (LCDHEIGHT/8)
 
+
+// leds, dont exceed SPILINK_CTLDATASIZE
+#define LEDSIZE 3
+
 extern uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS];
-extern uint8_t led_buffer[LCDHEADER + LCDWIDTH];
+extern uint8_t led_buffer[LEDSIZE*2];
 extern uint8_t control_rx_buffer[(LCDHEADER + LCDWIDTH)];
 
 extern void do_axoloti_control(void);
 void axoloti_control_init(void);
+
+void LED_clear(void);
+void LED_set(int c, int v);
+void LED_setBit(int c, int b, unsigned v );
 
 void LCD_clearDisplay(void);
 void LCD_drawPixel(int x, int y, uint16_t color);
