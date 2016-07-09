@@ -39,26 +39,8 @@ uint8_t led_buffer[LEDSIZE*2] __attribute__ ((section (".sram2")));
 #endif
 
 void axoloti_control_init(void) {
-  /*
-   *  Commm to FP test...
-   */
-  palSetPadMode(GPIOA, 15, PAL_MODE_OUTPUT_PUSHPULL);
-  // NSS
-  palSetPadMode(GPIOB, 5, PAL_MODE_ALTERNATE(6));
-  // MOSI
-  palSetPadMode(GPIOB, 4, PAL_MODE_ALTERNATE(6));
-  // MISO
-  palSetPadMode(GPIOB, 3, PAL_MODE_ALTERNATE(6));
-  // SCK
-  palClearPad(GPIOB, 3);
-  // SCK idle/low
-  int i;
-  // clear
-  for (i = 0; i < (LCDHEADER + LCDWIDTH) * LCDROWS; i++)
-    lcd_buffer[i] = 0;
-
-  for (i = 0; i < LEDSIZE; i++)
-    led_buffer[i] = 0;
+  LCD_clearDisplay();
+  LED_clear();
 }
 
 #define _BV(bit) (1 << (bit))

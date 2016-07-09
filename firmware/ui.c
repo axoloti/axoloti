@@ -483,7 +483,11 @@ void ui_init(void) {
   chThdCreateStatic(waThreadUI, sizeof(waThreadUI), NORMALPRIO, ThreadUI, NULL);
   chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2, NULL);
 
-  LCD_clearDisplay();
+  axoloti_control_init();
+
+  for(i=0;i<4;i++) {
+	  EncBuffer[i]=0;
+  }
 }
 
 void KVP_ClearObjects(void) {
@@ -779,6 +783,14 @@ static void UIPollButtons2(void) {
     // TODO:TEST ONLY: toggle LED's
 	LED_clear();
 
+	static uint8_t val0;
+	val0 += EncBuffer[0];
+	static uint8_t val1;
+	val1 += EncBuffer[1];
+
+	LED_set(0, 0xffff >> (16 - (val0 >> 4)) );
+	LED_set(1, 0xffff >> (16 - (val1 >> 4)) );
+
 	static int button[16];
 	IF_BTN_NAV_DOWN(btn_1) button[0] = ! button[0];
 	IF_BTN_NAV_DOWN(btn_2) button[1] = ! button[1];
@@ -799,16 +811,9 @@ static void UIPollButtons2(void) {
 
 	int i=0;
 	for(i=0;i<16;i++) {
-		LED_setBit(0,i,button[i]);
+		LED_setBit(2,i,button[i]);
 	}
 
-	static uint8_t val0;
-	val0 += EncBuffer[0];
-	static uint8_t val1;
-	val1 += EncBuffer[1];
-
-	LED_set(1, 0xffff >> (16 - (val0 >> 4)) );
-	LED_set(2, 0xffff >> (16 - (val1 >> 4)) );
 
 
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
