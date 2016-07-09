@@ -23,7 +23,7 @@
 #include <string.h>
 
 uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS] __attribute__ ((section (".sram2")));
-uint8_t led_buffer[LEDSIZE*2] __attribute__ ((section (".sram2")));
+uint16_t led_buffer[LEDSIZE] __attribute__ ((section (".sram2")));
 
 
 #if 0
@@ -55,23 +55,16 @@ void LED_clear() {
 
 void LED_set(int c, int v) {
 	if(c<LEDSIZE) {
-		led_buffer[c*2] = v & 0xFF;
-		led_buffer[(c*2) +1] = (v & 0xFF00) >> 8;
+		led_buffer[c] = v;
 	}
 }
 
 void LED_setBit(int c, int b, unsigned v ) {
 	if(c<LEDSIZE && b<16) {
-		if(b<8) {
-			if(v) led_buffer[c*2] |= ( 1 << b);
-			else led_buffer[c*2] &= ~(1 << b);
-		} else {
-			if(v) led_buffer[c*2+1] |= ( 1 << (b-8));
-			else led_buffer[c*2+1] &= ~(1 << (b-8));
-		}
+		if(v) led_buffer[c] |= ( 1 << b);
+		else led_buffer[c] &= ~(1 << b);
 	}
 }
-
 
 
 void LCD_updateBoundingBox(int x, int y, int x2, int y2) {

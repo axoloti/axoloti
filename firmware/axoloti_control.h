@@ -28,7 +28,7 @@
 #define LEDSIZE 3
 
 extern uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS];
-extern uint8_t led_buffer[LEDSIZE*2];
+extern uint16_t led_buffer[LEDSIZE];
 extern uint8_t control_rx_buffer[(LCDHEADER + LCDWIDTH)];
 
 extern void do_axoloti_control(void);
