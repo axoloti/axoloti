@@ -51,7 +51,6 @@ public class VSliderComponent extends ACtrlComponent {
     private static final int width = 12;
     private static final Dimension dim = new Dimension(width, height);
     private String keybBuffer = "";
-
     private Robot robot;
 
     public VSliderComponent(double value, double min, double max, double tick) {
@@ -59,6 +58,8 @@ public class VSliderComponent extends ACtrlComponent {
         this.min = min;
         this.value = value;
         this.tick = tick;
+
+
 
         setPreferredSize(dim);
         setMaximumSize(dim);
@@ -87,8 +88,8 @@ public class VSliderComponent extends ACtrlComponent {
     @Override
     protected void mouseDragged(MouseEvent e) {
         if (isEnabled()) {
-            double v = value + tick * (py - e.getYOnScreen());
-            robot.mouseMove(px, py);
+            double v = value + tick * ((int) Math.round((py - e.getYOnScreen()) / getScale()));
+            robotMoveToCenter();
             setValue(v);
         }
     }
@@ -264,5 +265,11 @@ public class VSliderComponent extends ACtrlComponent {
 
     public double getMaximum() {
         return max;
+    }
+    
+    @Override
+    public void robotMoveToCenter() {
+        getRootPane().setCursor(MainFrame.transparentCursor);
+        robot.mouseMove(px, py);
     }
 }

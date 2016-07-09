@@ -17,6 +17,7 @@
  */
 package components.control;
 
+import axoloti.PatchGUI;
 import axoloti.ZoomUtils;
 import axoloti.object.AxoObjectInstance;
 import java.awt.Point;
@@ -27,8 +28,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -50,7 +49,7 @@ import javax.swing.TransferHandler;
  */
 public abstract class ACtrlComponent extends JComponent {
 
-    private AxoObjectInstance axoObj;
+    protected AxoObjectInstance axoObj;
 
     public ACtrlComponent() {
         setFocusable(true);
@@ -187,5 +186,21 @@ public abstract class ACtrlComponent extends JComponent {
     @Override
     public Point getToolTipLocation(MouseEvent event) {
         return ZoomUtils.getToolTipLocation(this, event, axoObj);
+    }
+    
+    public double getScale() {
+        double zoom = 1.0;
+        if (this.axoObj != null && this.axoObj.patch != null) {
+            try {
+                zoom = ((PatchGUI) this.axoObj.patch).zoomUI.getScale();
+            } catch (ClassCastException ex) {
+                
+            }
+        }
+        return zoom;
+    }
+    
+    public void robotMoveToCenter() {
+        
     }
 }

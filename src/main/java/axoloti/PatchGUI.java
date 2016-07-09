@@ -29,6 +29,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -321,10 +322,24 @@ public class PatchGUI extends Patch {
                     MoveSelectedAxoObjInstances(Direction.LEFT, xsteps, ysteps);
                     ke.consume();
                 }
+                else if(ke.getKeyCode() == KeyEvent.VK_ALT) {
+                    panOrigin = Layers.getMousePosition();
+                    if(panOrigin != null) {
+                        zoomUI.removeZoomFactor(panOrigin);
+                        PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
+                        Button2down = true;
+                        zoomUI.startPan();
+                    }
+                }
             }
 
             @Override
             public void keyReleased(KeyEvent ke) {
+                if(ke.getKeyCode() == KeyEvent.VK_ALT) {
+                    PatchGUI.this.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
+                    Button2down = false;
+                    zoomUI.stopPan();
+                }
             }
         });
 
@@ -365,7 +380,6 @@ public class PatchGUI extends Patch {
                 } else if (me.getButton() == MouseEvent.BUTTON2) {
                     PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
                     panOrigin = me.getPoint();
-                    
                     Button2down = true;
                 } else {
                     Button1down = false;
@@ -386,9 +400,11 @@ public class PatchGUI extends Patch {
                 }
                 Button1down = false;
                 Button2down = false;
-                if(me.getButton() == MouseEvent.BUTTON2) {
+                if (me.getButton() == MouseEvent.BUTTON2) {
                     PatchGUI.this.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
                 }
+
+                zoomUI.cancelDrag();
             }
 
             @Override
@@ -418,18 +434,14 @@ public class PatchGUI extends Patch {
                     PatchGUI.this.selectionRectLayer.revalidate();
                     PatchGUI.this.selectionRectLayer.repaint();
                 } else if (Button2down) {
-                    int dx = panOrigin.x - ev.getX();
-                    int dy = panOrigin.y - ev.getY();
-                    JScrollBar horizontal = PatchGUI.this.getPatchframe().getScrollPane().getHorizontalScrollBar();
-                    JScrollBar vertical = PatchGUI.this.getPatchframe().getScrollPane().getVerticalScrollBar();
-                    int newHorizontalValue = Math.max(horizontal.getValue() + dx, 0);
-                    int newVerticalValue = Math.max(vertical.getValue() + dy, 0);
-                    if (!(horizontal.getValue() == 0 && newHorizontalValue == 0)) {
-                        horizontal.setValue(newHorizontalValue);
-                    }
-                    if (!(vertical.getValue() == 0 && newVerticalValue == 0)) {
-                        vertical.setValue(newVerticalValue);
-                    }
+                    handlePan(ev);
+                }
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent ev) {
+                if (ev.isAltDown()) {
+                    handlePan(ev);
                 }
             }
         });
@@ -475,6 +487,7 @@ public class PatchGUI extends Patch {
                     } catch (IOException ex) {
                         Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    zoomUI.cancelDrag();
                     return;
                 }
                 try {
@@ -494,68 +507,23 @@ public class PatchGUI extends Patch {
                 } catch (IOException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
+
+                zoomUI.cancelDrag();
                 super.drop(dtde);
             }
         ;
         };
 
-        /* 
-        // zooming by mousewheel is no good 
         Layers.addMouseWheelListener(new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
-                // this method implements zoom to mouse functionality
-                // we perform the scale change
-                // and then translate the viewport such that the point
-                // under the mouse remains the same
-                
-                int notches = e.getWheelRotation();
-
-                double oldScale = zoomUI.getScale();
-                Point p = e.getPoint();
-                double pre_x = p.x / oldScale;
-                double pre_y = p.y / oldScale;
-                
-                JScrollBar horizontalScrollBar = PatchGUI.this.getPatchframe().getScrollPane().getHorizontalScrollBar();
-                JScrollBar verticalScrollBar = PatchGUI.this.getPatchframe().getScrollPane().getVerticalScrollBar();
-
-                int horizOldValue = horizontalScrollBar.getValue();
-                int vertOldValue = verticalScrollBar.getValue();
-
-                if (notches < 0) {
-                    zoomUI.zoomIn();
-                } else {
-                    zoomUI.zoomOut();
+                if (e.isShiftDown()) {
+                    int notches = e.getWheelRotation();
+                    Point origin = e.getPoint();
+                    Constants.ZOOM_ACTION action = notches < 0 ? Constants.ZOOM_ACTION.IN : Constants.ZOOM_ACTION.OUT;
+                    handleZoom(action, origin);
                 }
-
-                double newScale = zoomUI.getScale();
-
-                PatchGUI.this.AdjustSize();
-
-                double post_x = p.x / newScale;
-                double post_y = p.y / newScale;
-                double dx = (post_x - pre_x) * newScale;
-                double dy = (post_y - pre_y) * newScale;
-
-                
-                int newHorizontalValue = (int) Math.round(horizOldValue - dx);
-                int newVerticalValue = (int) Math.round(vertOldValue - dy);
-                
-                
-                // adjust scrollbar extent to avoid jitter 
-                // when fully zoomed out
-                if(horizontalScrollBar.getMaximum() == horizontalScrollBar.getVisibleAmount()) {
-                    horizontalScrollBar.setVisibleAmount(horizontalScrollBar.getMaximum() - newHorizontalValue);
-                }
-                
-                if(verticalScrollBar.getMaximum() == verticalScrollBar.getVisibleAmount()) {
-                    verticalScrollBar.setVisibleAmount(verticalScrollBar.getMaximum() - newVerticalValue);
-                }
-
-                horizontalScrollBar.setValue(newHorizontalValue);
-                verticalScrollBar.setValue(newVerticalValue);
             }
         });
-*/
 
         Layers.setDropTarget(dt);
 
@@ -565,6 +533,70 @@ public class PatchGUI extends Patch {
         Layers.setVisible(true);
         Layers.setLocation(0, 0);
         Layers.setPreferredSize(LayersSize);
+    }
+
+    public void handlePan(MouseEvent ev) {
+        int dx = panOrigin.x - ev.getX();
+        int dy = panOrigin.y - ev.getY();
+        JScrollBar horizontal = PatchGUI.this.getPatchframe().getScrollPane().getHorizontalScrollBar();
+        JScrollBar vertical = PatchGUI.this.getPatchframe().getScrollPane().getVerticalScrollBar();
+        int newHorizontalValue = Math.max(horizontal.getValue() + dx, 0);
+        int newVerticalValue = Math.max(vertical.getValue() + dy, 0);
+        if (!(horizontal.getValue() == 0 && newHorizontalValue == 0)) {
+            horizontal.setValue(newHorizontalValue);
+        }
+        if (!(vertical.getValue() == 0 && newVerticalValue == 0)) {
+            vertical.setValue(newVerticalValue);
+        }
+    }
+
+    public void handleZoom(Constants.ZOOM_ACTION action, Point origin) {
+        // this method implements zoom to mouse functionality
+        // we perform the scale change
+        // and then translate the viewport such that the point
+        // under the mouse remains the same
+        double oldScale = zoomUI.getScale();
+        double pre_x = origin.x / oldScale;
+        double pre_y = origin.y / oldScale;
+
+        JScrollBar horizontalScrollBar = PatchGUI.this.getPatchframe().getScrollPane().getHorizontalScrollBar();
+        JScrollBar verticalScrollBar = PatchGUI.this.getPatchframe().getScrollPane().getVerticalScrollBar();
+
+        int horizOldValue = horizontalScrollBar.getValue();
+        int vertOldValue = verticalScrollBar.getValue();
+
+        if (action == Constants.ZOOM_ACTION.DEFAULT) {
+            zoomUI.zoomToDefault();
+        } else if (action == Constants.ZOOM_ACTION.IN) {
+            zoomUI.zoomIn();
+        } else if (action == Constants.ZOOM_ACTION.OUT) {
+            zoomUI.zoomOut();
+        }
+
+        double newScale = zoomUI.getScale();
+
+        PatchGUI.this.AdjustSize();
+
+        double post_x = origin.x / newScale;
+        double post_y = origin.y / newScale;
+        double dx = (post_x - pre_x) * newScale;
+        double dy = (post_y - pre_y) * newScale;
+
+        int newHorizontalValue = (int) Math.round(horizOldValue - dx);
+        int newVerticalValue = (int) Math.round(vertOldValue - dy);
+
+        // adjust scrollbar extent to avoid jitter 
+        // when fully zoomed out
+        if (horizontalScrollBar.getMaximum() == horizontalScrollBar.getVisibleAmount()) {
+            horizontalScrollBar.setVisibleAmount(horizontalScrollBar.getMaximum() - newHorizontalValue);
+        }
+
+        if (verticalScrollBar.getMaximum() == verticalScrollBar.getVisibleAmount()) {
+            verticalScrollBar.setVisibleAmount(verticalScrollBar.getMaximum() - newVerticalValue);
+        }
+
+        horizontalScrollBar.setValue(newHorizontalValue);
+        verticalScrollBar.setValue(newVerticalValue);
     }
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
@@ -1016,21 +1048,27 @@ public class PatchGUI extends Patch {
         // object
         return new Dimension(mx + 300, my + 300);
     }
-
-    @Override
-    public void AdjustSize() {
-        Dimension s = GetSize();
+    
+    public void clampLayerSize(Dimension s) {
         if (s.width < Layers.getParent().getWidth()) {
             s.width = Layers.getParent().getWidth();
         }
         if (s.height < Layers.getParent().getHeight()) {
             s.height = Layers.getParent().getHeight();
         }
+    }
+
+    @Override
+    public void AdjustSize() {
+        Dimension s = GetSize();
+        clampLayerSize(s);
         double zoom = zoomUI.getScale();
         s.height *= zoom;
         s.width *= zoom;
+        clampLayerSize(s);
         Layers.setSize(s);
         Layers.setPreferredSize(s);
+        Layers.repaint();
     }
 
     @Override
@@ -1052,7 +1090,6 @@ public class PatchGUI extends Patch {
     }
 
     public static void OpenPatch(String name, InputStream stream) {
-        System.out.println("OpenPatch");
         Serializer serializer = new Persister();
         try {
             PatchGUI patch1 = serializer.read(PatchGUI.class, stream);
@@ -1067,7 +1104,6 @@ public class PatchGUI extends Patch {
     }
 
     public static PatchFrame OpenPatchInvisible(File f) {
-        System.out.println("OpenPatchInvisible");
         for (DocumentWindow dw : DocumentWindowList.GetList()) {
             if (f.equals(dw.getFile())) {
                 JFrame frame1 = dw.GetFrame();

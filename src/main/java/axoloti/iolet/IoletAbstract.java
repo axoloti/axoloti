@@ -77,21 +77,17 @@ public abstract class IoletAbstract extends JPanel {
     }
 
     public void deleteDummyDropTarget() {
-        try {
-            PatchGUI patchGui = (PatchGUI) axoObj.getPatch();
-            if (patchGui != null) {
-                if (this.dropTargetDummyComponent != null) {
-                    patchGui.unzoomedLayerPanel.remove(this.dropTargetDummyComponent);
-                }
+        PatchGUI patchGui = getPatchGui();
+        if (patchGui != null) {
+            if (this.dropTargetDummyComponent != null) {
+                patchGui.unzoomedLayerPanel.remove(this.dropTargetDummyComponent);
             }
-        } catch (ClassCastException e) {
-
         }
     }
 
     public void updateDummyDropTarget() {
         try {
-            PatchGUI patchGui = (PatchGUI) axoObj.getPatch();
+            PatchGUI patchGui = getPatchGui();
             if (patchGui != null) {
                 if (this.dropTargetDummyComponent == null) {
                     this.dropTargetDummyComponent = new JPanel();
@@ -99,7 +95,7 @@ public abstract class IoletAbstract extends JPanel {
 
                     patchGui.unzoomedLayerPanel.add(this.dropTargetDummyComponent);
                     patchGui.unzoomedLayerPanel.setComponentZOrder(this.dropTargetDummyComponent, 0);
-                    if (dt != null){
+                    if (dt != null) {
                         dt.setComponent(this.dropTargetDummyComponent);
                     }
 
@@ -151,7 +147,7 @@ public abstract class IoletAbstract extends JPanel {
         return new DropTarget() {
             @Override
             public synchronized void dragOver(DropTargetDragEvent dtde) {
-                PatchGUI p = (PatchGUI) axoObj.getPatch();
+                PatchGUI p = getPatchGui();
                 for (Component cmp : p.selectionRectLayerPanel.getComponents()) {
                     if (cmp instanceof NetDragging) {
                         NetDragging nd = (NetDragging) cmp;
@@ -162,8 +158,12 @@ public abstract class IoletAbstract extends JPanel {
                         if (nd != drag_net) {
                             nd.SetDragPoint(ps);
                         } else {
-                            Point jp = jack.getLocation();
-                            Point pl = new Point(dtde.getLocation().x + ps.x - 5 - jp.x, dtde.getLocation().y + ps.y - 5 - jp.y);
+                            Point jackLocation = jack.getLocationOnScreen();
+                            SwingUtilities.convertPointFromScreen(jackLocation, p.Layers);
+                            jackLocation.x *= zoom;
+                            jackLocation.y *= zoom;
+                            
+                            Point pl = new Point(dtde.getLocation().x + jackLocation.x, dtde.getLocation().y + jackLocation.y);
                             drag_net.SetDragPoint(pl);
                         }
                         p.selectionRectLayerPanel.repaint();
@@ -216,6 +216,7 @@ public abstract class IoletAbstract extends JPanel {
                 } catch (IOException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                getPatchGui().zoomUI.cancelDrag();
                 super.drop(dtde);
             }
 
@@ -223,6 +224,14 @@ public abstract class IoletAbstract extends JPanel {
     }
 
     abstract public JPopupMenu getPopup();
+
+    public PatchGUI getPatchGui() {
+        try {
+            return (PatchGUI) axoObj.getPatch();
+        } catch (ClassCastException e) {
+            return null;
+        }
+    }
 
     public MouseListener createMouseListener() {
         return new MouseListener() {
@@ -261,7 +270,7 @@ public abstract class IoletAbstract extends JPanel {
         @Override
         public void dragGestureRecognized(DragGestureEvent event) {
             if (!axoObj.IsLocked()) {
-                final PatchGUI patchGUI = (PatchGUI) axoObj.getPatch();
+                final PatchGUI patchGUI = getPatchGui();
                 Transferable t = new StringSelection(dragString());
                 DragSourceListener dsl = new DragSourceListener() {
                     @Override

@@ -32,6 +32,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -83,7 +85,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
         jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
         jScrollPane1.setWheelScrollingEnabled(false);
-
+        
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -964,17 +966,17 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
     private void zoomInMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomInMenuItemActionPerformed
-        patch.zoomUI.zoomIn();
+        patch.handleZoom(Constants.ZOOM_ACTION.IN, new Point(0, 0));
         patch.Layers.repaint();
     }//GEN-LAST:event_zoomInMenuItemActionPerformed
 
     private void zoomDefaultMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomDefaultMenuItemActionPerformed
-        patch.zoomUI.zoomToDefault();
+        patch.handleZoom(Constants.ZOOM_ACTION.DEFAULT, new Point(0, 0));
         patch.Layers.repaint();
     }//GEN-LAST:event_zoomDefaultMenuItemActionPerformed
 
     private void zoomOutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomOutMenuItemActionPerformed
-        patch.zoomUI.zoomOut();
+        patch.handleZoom(Constants.ZOOM_ACTION.OUT, new Point(0, 0));
         patch.Layers.repaint();
     }//GEN-LAST:event_zoomOutMenuItemActionPerformed
 

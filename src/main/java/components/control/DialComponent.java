@@ -18,6 +18,7 @@
 package components.control;
 
 import axoloti.MainFrame;
+import axoloti.PatchGUI;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
@@ -52,6 +53,8 @@ public class DialComponent extends ACtrlComponent {
     private double tick;
     private NativeToReal convs[];
     private String keybBuffer = "";
+    private Robot robot;
+
     public void setNative(NativeToReal convs[]) {
         this.convs = convs;
     }
@@ -79,15 +82,20 @@ public class DialComponent extends ACtrlComponent {
         });
 
         SetupTransferHandler();
+        try {
+            robot = new Robot(MouseInfo.getPointerInfo().getDevice());
+        } catch (AWTException ex) {
+            Logger.getLogger(DialComponent.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     final int layoutTick = 3;
-    Robot robot = null;
 
     @Override
     protected void mouseDragged(MouseEvent e) {
         if (isEnabled()) {
             double v;
             if ((MousePressedBtn == MouseEvent.BUTTON1)) {
+                this.robotMoveToCenter();
                 if (MainFrame.prefs.getMouseDialAngular()) {
                     int y = e.getY();
                     int x = e.getX();
@@ -98,28 +106,12 @@ public class DialComponent extends ACtrlComponent {
                         v = Math.round(v / tick) * tick;
                     }
                 } else {
+
                     double t = tick;
-                    if (e.isShiftDown()) {
+                    if (e.isShiftDown() || e.isControlDown()) {
                         t = t * 0.1;
                     }
-                    if (e.isControlDown()) {
-                        t = t * 0.1;
-                    }
-                    v = value + t * (MousePressedCoordY - e.getYOnScreen());
-                    if (robot == null) {
-                        try {
-                            robot = new Robot(MouseInfo.getPointerInfo().getDevice());
-                        } catch (AWTException ex) {
-                            Logger.getLogger(DialComponent.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
-                }
-                if (v > max) {
-                    v = max;
-                }
-                if (v < min) {
-                    v = min;
+                    v = value + t * ((int) Math.round((MousePressedCoordY - e.getYOnScreen()) / getScale()));
                 }
                 setValue(v);
             }
@@ -143,16 +135,13 @@ public class DialComponent extends ACtrlComponent {
                 if (lastBtn == MouseEvent.BUTTON1) {
                     // now have both mouse buttons pressed...
                     getRootPane().setCursor(Cursor.getDefaultCursor());
-                    robot = null;
                 }
             }
 
             if (MousePressedBtn == MouseEvent.BUTTON1) {
                 getRootPane().setCursor(MainFrame.transparentCursor);
             } else {
-                // now have another button pressed
                 getRootPane().setCursor(Cursor.getDefaultCursor());
-                robot = null;
             }
         }
     }
@@ -161,7 +150,6 @@ public class DialComponent extends ACtrlComponent {
     protected void mouseReleased(MouseEvent e) {
         getRootPane().setCursor(Cursor.getDefaultCursor());
         MousePressedBtn = MouseEvent.NOBUTTON;
-        robot = null;
     }
 
     private boolean isControlDown(KeyEvent ke) {
@@ -343,5 +331,9 @@ public class DialComponent extends ACtrlComponent {
     public void setTick(double tick) {
         this.tick = tick;
     }
-
+    
+    public void robotMoveToCenter() {
+        getRootPane().setCursor(MainFrame.transparentCursor);
+        robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+    }
 }
