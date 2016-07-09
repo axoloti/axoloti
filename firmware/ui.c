@@ -98,6 +98,18 @@ void SetKVP_FNCTN(KeyValuePair_s *kvp, KeyValuePair_s *parent,
   kvp->fnctnvp.fnctn = fnctn;
 }
 
+void SetKVP_CUSTOM(KeyValuePair_s *kvp, KeyValuePair_s *parent,
+                  const char *keyName, DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata) {
+  kvp->kvptype = KVP_TYPE_CUSTOM;
+  kvp->parent = (void *)parent;
+  kvp->keyname = keyName;
+  kvp->custom.displayFunction = dispfnctn;
+  kvp->custom.buttonFunction = btnfnctn;
+  kvp->custom.userdata = userdata;
+}
+
+
+
 inline void KVP_Increment(KeyValuePair_s *kvp) {
   switch (kvp->kvptype) {
   case KVP_TYPE_IVP:
@@ -437,6 +449,16 @@ void UIGoSafe(void) {
   KvpsDisplay = &KvpsHead;
 }
 
+static KeyValuePair_s* userDisplay;
+
+void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata) {
+	if(userDisplay!=0) {
+		userDisplay->custom.displayFunction = dispfnctn;
+		userDisplay->custom.buttonFunction = btnfnctn;
+		userDisplay->custom.userdata = userdata;
+	}
+}
+
 void ui_init(void) {
   Btn_Nav_Or.word = 0;
   Btn_Nav_And.word = ~0;
@@ -445,6 +467,10 @@ void ui_init(void) {
   KeyValuePair_s *q1 = p1;
   SetKVP_FNCTN(q1++, &KvpsHead, "Info", 0);
   SetKVP_FNCTN(q1++, &KvpsHead, "Format", &EnterMenuFormat);
+  if (fs_ready)
+    SetKVP_FNCTN(q1++, &KvpsHead, "Load SD", &EnterMenuLoad);
+  else
+    SetKVP_FNCTN(q1++, &KvpsHead, "No SDCard", NULL);
 
   KeyValuePair_s *p = chCoreAlloc(sizeof(KeyValuePair_s) * 6);
 //  KeyValuePair *q = p;
@@ -452,13 +478,11 @@ void ui_init(void) {
 
   SetKVP_APVP(&p[entries++], &KvpsHead, "Patch", 0, &ObjectKvps[0]);
   SetKVP_IVP(&p[entries++], &KvpsHead, "Running", &patchStatus, 0, 15);
-  if (fs_ready)
-    SetKVP_FNCTN(&p[entries++], &KvpsHead, "Load SD", &EnterMenuLoad);
-  else
-    SetKVP_FNCTN(&p[entries++], &KvpsHead, "No SDCard", NULL);
-  SetKVP_AVP(&p[entries++], &KvpsHead, "SDCard Tools", 2, &p1[0]);
+  SetKVP_AVP(&p[entries++], &KvpsHead, "SDCard Tools", 3, &p1[0]);
   SetKVP_AVP(&p[entries++], &KvpsHead, "ADCs", 3, &ADCkvps[0]);
   SetKVP_IVP(&p[entries++], &KvpsHead, "dsp%", &dspLoadPct, 0, 100);
+  userDisplay = &p[entries++];
+  SetKVP_CUSTOM(userDisplay, &KvpsHead, "User", NULL,NULL,NULL);
 
   SetKVP_AVP(&KvpsHead, NULL, "--- AXOLOTI ---", entries, &p[0]);
 
@@ -723,8 +747,9 @@ static void UIPollButtons(void) {
           (cur->kvptype == KVP_TYPE_APVP)||
           (cur->kvptype == KVP_TYPE_CUSTOM))
       KvpsDisplay = cur;
-      else if (cur->kvptype == KVP_TYPE_FNCTN)
-      if (cur->fnctnvp.fnctn != 0) (cur->fnctnvp.fnctn)();
+      else if (cur->kvptype == KVP_TYPE_FNCTN) {
+    	  if (cur->fnctnvp.fnctn != 0) (cur->fnctnvp.fnctn)();
+      }
     }
     IF_BTN_NAV_DOWN(btn_nav_Back)
     if (KvpsDisplay->parent) KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
@@ -732,7 +757,10 @@ static void UIPollButtons(void) {
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
     IF_BTN_NAV_DOWN(btn_nav_Back)
-    if (KvpsDisplay->parent) KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
+    		if (KvpsDisplay->parent) KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
+
+	  if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata);
+	  if (KvpsDisplay->custom.buttonFunction != 0) (KvpsDisplay->custom.buttonFunction)(KvpsDisplay->custom.userdata);
   }
 
   Btn_Nav_PrevStates = Btn_Nav_CurStates;
@@ -865,9 +893,12 @@ static void UIPollButtons2(void) {
 
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
+    if (KvpsDisplay->custom.buttonFunction != 0) (KvpsDisplay->custom.buttonFunction)(KvpsDisplay->custom.userdata);
+
     IF_BTN_NAV_DOWN(btn_nav_Back)
       if (KvpsDisplay->parent)
         KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
+
   }
 
 
@@ -1081,6 +1112,6 @@ static void UIUpdateLCD(void) {
       LCD_drawString(LCD_COL_ENTER, STATUSROW, "     ");
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
-    (*KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata);
+	  if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata);
   }
 }

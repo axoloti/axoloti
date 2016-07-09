@@ -94,8 +94,8 @@ typedef struct {
   int current;
 } arrayPtrValuePair;
 
-typedef void (*DisplayFunction)(int);
-typedef void (*ButtonFunction)(int, int);
+typedef void (*DisplayFunction)(void*);
+typedef void (*ButtonFunction)(void*);
 
 typedef void (*VoidFunction)(void);
 
@@ -181,6 +181,7 @@ typedef struct KeyValuePair {
 extern struct KeyValuePair *kvps;
 extern struct KeyValuePair *ObjectKvpRoot;
 
+
 void KVP_Display(int x, int y, struct KeyValuePair *kvp);
 void KVP_Increment(struct KeyValuePair *kvp);
 void KVP_Decrement(struct KeyValuePair *kvp);
@@ -210,6 +211,8 @@ void SetKVP_FNCTN(struct KeyValuePair *kvp, struct KeyValuePair *parent,
                   const char *keyName, VoidFunction fnctn);
 
 void UIGoSafe(void);
+
+void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata);
 
 void AxolotiControlUpdate(void);
 extern void (*pControlUpdate)(void);
