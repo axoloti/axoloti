@@ -58,6 +58,8 @@ public class NumberBoxComponent extends ACtrlComponent {
     private boolean hiliteUp = false;
     private boolean hiliteDown = false;
     private boolean dragging = false;
+    
+    private Robot robot;
 
     int rmargin = 5;
     int htick = 3;
@@ -95,7 +97,6 @@ public class NumberBoxComponent extends ACtrlComponent {
     }
 
     final int layoutTick = 3;
-    Robot robot = null;
 
     @Override
     protected void mouseDragged(MouseEvent e) {
@@ -118,7 +119,7 @@ public class NumberBoxComponent extends ACtrlComponent {
                         Logger.getLogger(NumberBoxComponent.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+                this.robotMoveToCenter();
                 if (v > max) {
                     v = max;
                 }
@@ -378,5 +379,11 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     @Override
     void keyReleased(KeyEvent key) {
+    }
+    
+    @Override
+    public void robotMoveToCenter() {
+        getRootPane().setCursor(MainFrame.transparentCursor);
+        robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
     }
 }

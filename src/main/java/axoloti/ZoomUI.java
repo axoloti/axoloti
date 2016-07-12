@@ -6,10 +6,14 @@ import axoloti.utils.Constants;
 import components.JackInputComponent;
 import components.JackOutputComponent;
 import components.LabelComponent;
+import components.control.ACtrlComponent;
+import components.control.DialComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.plaf.LayerUI;
 
@@ -32,6 +36,8 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     private boolean button2down = false;
 
+    private Robot robot;
+
     public ZoomUI(double startingScale, double zoomAmount, double zoomMax, double zoomMin,
             PatchGUI patch) {
         zoom = startingScale;
@@ -40,6 +46,11 @@ public class ZoomUI extends LayerUI<JComponent> {
         this.zoomMax = zoomMax;
         this.zoomMin = zoomMin;
         this.patch = patch;
+        try {
+            robot = new Robot(MouseInfo.getPointerInfo().getDevice());
+        } catch (AWTException ex) {
+            Logger.getLogger(DialComponent.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -90,6 +101,8 @@ public class ZoomUI extends LayerUI<JComponent> {
                 listener.mousePressed(transformedEvent);
             } else if (localEvent.getID() == MouseEvent.MOUSE_RELEASED) {
                 ZoomUI.this.button2down = false;
+                dragging = false;
+                patch.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
                 listener.mouseReleased(transformedEvent);
             } else if (localEvent.getID() == MouseEvent.MOUSE_CLICKED) {
                 listener.mouseClicked(transformedEvent);
@@ -101,6 +114,7 @@ public class ZoomUI extends LayerUI<JComponent> {
     protected void processMouseEvent(MouseEvent e, JLayer<? extends JComponent> l) {
         MouseEvent layerEvent = translateToLayerCoordinates(e, l);
         Component component = getTargetComponent(getComponentClickedOn(layerEvent));
+
         if (component != null) {
             Container axoObjectParent = SwingUtilities.getAncestorOfClass(AxoObjectInstance.class, component);
             MouseEvent localEvent = translateToComponentCoordinates(layerEvent, component);
@@ -137,11 +151,25 @@ public class ZoomUI extends LayerUI<JComponent> {
 
             this.handleEnterExited(component, localEvent);
 
-            dragging = false;
             previous = component;
             e.consume();
-            if(!button2down) {
+            if (!button2down) {
                 l.repaint();
+            }
+        }
+
+        if (component == null) {
+            // avoid transparent cursor if release occurs outside patch bounds
+            if (e.getID() == MouseEvent.MOUSE_RELEASED) {
+                patch.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
+
+            }
+            // avoid escaping patch bounds during robot drag
+            if (dragging
+                    && e.getID() == MouseEvent.MOUSE_EXITED
+                    && dragged != null
+                    && dragged instanceof ACtrlComponent) {
+                ((ACtrlComponent) dragged).robotMoveToCenter();
             }
         }
     }
@@ -202,7 +230,7 @@ public class ZoomUI extends LayerUI<JComponent> {
             previous = component;
 
             e.consume();
-            if(!button2down) {
+            if (!button2down) {
                 l.repaint();
             }
         }
@@ -298,6 +326,10 @@ public class ZoomUI extends LayerUI<JComponent> {
         return zoom - zoomAmount >= zoomMin;
     }
 
+    public void cancelDrag() {
+        dragging = false;
+    }
+
     public void zoomIn() {
         if (canZoomIn()) {
             double old = zoom;
@@ -314,5 +346,13 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     public boolean canZoomIn() {
         return zoom + zoomAmount <= zoomMax;
+    }
+    
+    public void startPan() {
+        this.button2down = true;
+    }
+    
+    public void stopPan() {
+        this.button2down = false;
     }
 }

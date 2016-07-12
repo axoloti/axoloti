@@ -40,4 +40,6 @@ public class Constants {
     public static final int PATCH_SIZE = 5000;
     
     public static final String OBJECT_LAYER_PANEL = "OBJECT_LAYER_PANEL";
+    
+    public static enum ZOOM_ACTION { IN, OUT, DEFAULT };
 }

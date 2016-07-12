@@ -303,10 +303,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                                 o.y = getZoomUI().removeZoomFactor(me.getLocationOnScreen().y) - o.dY;
                                 o.dX = getZoomUI().removeZoomFactor(me.getLocationOnScreen().x) - o.getX();
                                 o.dY = getZoomUI().removeZoomFactor(me.getLocationOnScreen().y) - o.getY();
-                                if (!me.isShiftDown()) {
-                                    o.x = ((o.x + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
-                                    o.y = ((o.y + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
-                                }
                                 o.setLocation(o.x, o.y);
                             }
                         }
@@ -369,6 +365,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             if (patch != null) {
                 for (AxoObjectInstanceAbstract o : patch.objectinstances) {
                     o.dragging = false;
+                    o.x = ((o.x + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
+                    o.y = ((o.y + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
+                    o.setLocation(o.x, o.y);
                 }
                 patch.AdjustSize();
             }
