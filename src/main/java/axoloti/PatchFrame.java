@@ -32,8 +32,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -179,15 +177,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         if (USBBulkConnection.GetConnection().isConnected()) {
             ShowConnect();
         }
-
-        //        jScrollPane1.setAutoscrolls(true);
-        /*
-         patch.setPreferredSize(new Dimension(5000, 5000));
-         jScrollPane1.getViewport().setSize(5000, 5000);
-         patch.setSize(new Dimension(5000, 5000));
-         patch.setMinimumSize(new Dimension(5000, 5000));
-         patch.setBackground(Color.red);
-         patch.invalidate();*/
     }
     QCmdProcessor qcmdprocessor;
 

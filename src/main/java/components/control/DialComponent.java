@@ -18,14 +18,13 @@
 package components.control;
 
 import axoloti.MainFrame;
-import axoloti.PatchGUI;
+import axoloti.Theme;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
 import axoloti.utils.OSDetect;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -258,9 +257,15 @@ public class DialComponent extends ACtrlComponent {
             g2.setStroke(strokeThin);
         }
         if (isEnabled()) {
-            g2.setColor(Color.white);
+            if(this.customBackgroundColor != null) {
+                g2.setColor(this.customBackgroundColor);
+            }
+            else {
+                g2.setColor(Theme.getCurrentTheme().Component_Secondary);
+
+            }
         } else {
-            g2.setColor(getBackground());
+            g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         }
         g2.fillOval(1, 1, radius * 2 - 2, radius * 2 - 2);
         g2.setPaint(getForeground());
@@ -275,7 +280,7 @@ public class DialComponent extends ACtrlComponent {
                 g2.setFont(Constants.FONT);
                 g2.drawString(s, 0, getSize().height);
             } else {
-                g2.setColor(Color.red);
+                g2.setColor(Theme.getCurrentTheme().Error_Text);
                 g2.setFont(Constants.FONT);
                 g2.drawString(keybBuffer, 0, getSize().height);
             }

@@ -17,6 +17,7 @@
  */
 package axoloti.datatypes;
 
+import axoloti.Theme;
 import java.awt.Color;
 
 /**
@@ -52,7 +53,7 @@ public class DTZombie implements DataType {
 
     @Override
     public Color GetColor() {
-        return Color.WHITE;
+        return Theme.getCurrentTheme().Cable_Zombie;
     }
 
     @Override

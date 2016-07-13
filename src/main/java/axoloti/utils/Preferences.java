@@ -72,6 +72,8 @@ public class Preferences {
     String ControllerObject;
     @Element(required = false)
     Boolean ControllerEnabled;
+    @Element(required = false)
+    String themePath;
 
     @ElementMap(required = false, entry = "Boards", key = "cpuid", attribute = true, inline = true)
     HashMap<String, String> BoardNames;
@@ -456,5 +458,14 @@ public class Preferences {
             }
         }
         ObjectPath = objPath.toArray(new String[0]);
+    }
+    
+    public String getThemePath() {
+        return themePath;
+    }
+    
+    public void setThemePath(String themePath) {
+        this.themePath = themePath;
+        SavePrefs();
     }
 }

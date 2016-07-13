@@ -18,9 +18,8 @@
 package axoloti.parameters;
 
 import axoloti.Preset;
+import axoloti.Theme;
 import components.control.VSliderComponent;
-import java.awt.Color;
-import javax.swing.UIManager;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -78,14 +77,14 @@ public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U
         if (i > 0) {
             Preset p = GetPreset(presetEditActive);
             if (p != null) {
-                setBackground(Color.yellow);
+                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
-                setBackground(UIManager.getColor("Panel.background"));
+                setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
                 ctrl.setValue(value.getDouble());
             }
         } else {
-            setBackground(UIManager.getColor("Panel.background"));
+            setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
             ctrl.setValue(value.getDouble());
         }
         if ((presets != null) && (!presets.isEmpty())) {

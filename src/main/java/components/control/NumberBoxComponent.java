@@ -18,13 +18,13 @@
 package components.control;
 
 import axoloti.MainFrame;
+import axoloti.Theme;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
 import axoloti.utils.OSDetect;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -265,9 +265,9 @@ public class NumberBoxComponent extends ACtrlComponent {
             g2.setStroke(strokeThin);
         }
         if (isEnabled()) {
-            g2.setColor(Color.white);
+            g2.setColor(Theme.getCurrentTheme().Component_Secondary);
         } else {
-            g2.setPaint(getBackground());
+            g2.setPaint(Theme.getCurrentTheme().Object_Default_Background);
         }
 
         g2.fillRect(0, 0, getWidth(), getHeight());
@@ -294,7 +294,7 @@ public class NumberBoxComponent extends ACtrlComponent {
             g2.setFont(Constants.FONT);
             g2.drawString(s, h, getSize().height - v);
         } else {
-            g2.setColor(Color.red);
+            g2.setColor(Theme.getCurrentTheme().Error_Text);
             g2.setFont(Constants.FONT);
             g2.drawString(keybBuffer, h, getSize().height - v);
         }

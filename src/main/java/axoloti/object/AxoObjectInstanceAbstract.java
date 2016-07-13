@@ -21,6 +21,7 @@ import axoloti.MainFrame;
 import axoloti.Patch;
 import axoloti.PatchGUI;
 import axoloti.SDFileReference;
+import axoloti.Theme;
 import axoloti.ZoomUI;
 import axoloti.ZoomUtils;
 import axoloti.attribute.AttributeInstance;
@@ -32,7 +33,6 @@ import axoloti.utils.CharEscape;
 import axoloti.utils.Constants;
 import components.LabelComponent;
 import components.TextFieldComponent;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -220,14 +220,19 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 //        setFocusable(true);
         Titlebar = new TitleBarPanel(this);
         Titlebar.setLayout(new BoxLayout(Titlebar, BoxLayout.LINE_AXIS));
-        Titlebar.setBackground(Color.getHSBColor(0.f, 0.0f, 0.6f));
+        Titlebar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
         Titlebar.setMinimumSize(TitleBarMinimumSize);
         Titlebar.setMaximumSize(TitleBarMaximumSize);
-        setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected));
         setOpaque(true);
         resolveType();
+        
+        setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        
+
         setVisible(true);
-//        revalidate();
+        revalidate();
+        repaint();
 
         popup = new JPopupMenu();
 
@@ -527,9 +532,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public void SetSelected(boolean Selected) {
         if (this.Selected != Selected) {
             if (Selected) {
-                setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected));
             } else {
-                setBorder(BorderFactory.createLineBorder(Color.WHITE));
+                setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected));
             }
             repaint();
         }

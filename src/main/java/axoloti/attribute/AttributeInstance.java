@@ -18,6 +18,7 @@
 package axoloti.attribute;
 
 import axoloti.SDFileReference;
+import axoloti.Theme;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
@@ -53,6 +54,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
 
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(new LabelComponent(GetDefinition().getName()));
         doLayout();
         setSize(getPreferredSize());

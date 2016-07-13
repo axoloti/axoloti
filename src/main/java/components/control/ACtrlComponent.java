@@ -20,6 +20,7 @@ package components.control;
 import axoloti.PatchGUI;
 import axoloti.ZoomUtils;
 import axoloti.object.AxoObjectInstance;
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -50,6 +51,7 @@ import javax.swing.TransferHandler;
 public abstract class ACtrlComponent extends JComponent {
 
     protected AxoObjectInstance axoObj;
+    protected Color customBackgroundColor;
 
     public ACtrlComponent() {
         setFocusable(true);
@@ -202,5 +204,9 @@ public abstract class ACtrlComponent extends JComponent {
     
     public void robotMoveToCenter() {
         
+    }
+    
+    public void setCustomBackgroundColor(Color c) {
+        this.customBackgroundColor = c;
     }
 }

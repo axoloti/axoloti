@@ -18,20 +18,28 @@
 package axoloti.parameters;
 
 import axoloti.Preset;
+import axoloti.Theme;
 import axoloti.datatypes.Value;
+import axoloti.utils.ColorConverter;
 import components.AssignMidiCCComponent;
 import components.AssignMidiCCMenuItems;
 import components.AssignModulatorComponent;
 import components.AssignModulatorMenuItems;
 import components.AssignPresetComponent;
+import components.control.ACtrlComponent;
 import components.control.DialComponent;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
+import javax.swing.JColorChooser;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.UIManager;
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.convert.Convert;
 
 /**
  *
@@ -41,7 +49,7 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
  
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
-
+    
     public ParameterInstanceFrac32UMap() {
         super();
     }
@@ -74,6 +82,7 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
     public void PostConstructor() {
         super.PostConstructor();
         JPanel btns = new JPanel();
+        btns.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         btns.setLayout(new BoxLayout(btns, BoxLayout.PAGE_AXIS));
 
         //lblCC = new LabelComponent("C");
@@ -89,15 +98,17 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
 //        setComponentPopupMenu(new ParameterInstanceUInt7MapPopupMenu3(this));
         addMouseListener(popupMouseListener);
         updateV();
+        
+        ctrl.setCustomBackgroundColor(getCustomBackgroundColor());
     }
 
     @Override
     public void setOnParent(Boolean b) {
         super.setOnParent(b);
         if ((b != null) && b) {
-            setForeground(Color.blue);
+            setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         } else {
-            setForeground(Color.black);
+            setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
         }
     }
 
@@ -168,14 +179,14 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
         if (i > 0) {
             Preset p = GetPreset(presetEditActive);
             if (p != null) {
-                setBackground(Color.yellow);
+                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
-                setBackground(UIManager.getColor("Panel.background"));
+                setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
                 ctrl.setValue(value.getDouble());
             }
         } else {
-            setBackground(UIManager.getColor("Panel.background"));
+            setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
             ctrl.setValue(value.getDouble());
         }
         presetAssign.repaint();
@@ -197,6 +208,36 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
         JMenu m2 = new JMenu("Modulation");
         new AssignModulatorMenuItems((ParameterInstanceFrac32UMap<ParameterFrac32>)this, m2);
         m.add(m2);
+        JMenuItem setColorMenuItem = new JMenuItem("Set Custom Color");
+        setColorMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Color c = JColorChooser.showDialog(
+                axoObj,
+                "Choose Color",
+                Theme.getCurrentTheme().Parameter_Default_Background);
+                ACtrlComponent ctrl = ParameterInstanceFrac32UMap.this.ctrl;
+                if(ctrl != null) {
+                    ParameterInstanceFrac32UMap.this.customBackgroundColor = c;
+                    ctrl.setCustomBackgroundColor(c);
+                    axoObj.patch.repaint();
+                }
+            }
+        });
+        m.add(setColorMenuItem);
+        JMenuItem clearColorMenuItem = new JMenuItem("Clear Custom Color");
+        clearColorMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ACtrlComponent ctrl = ParameterInstanceFrac32UMap.this.ctrl;
+                if(ctrl != null) {
+                    ParameterInstanceFrac32UMap.this.customBackgroundColor = null;
+                    ctrl.setCustomBackgroundColor(null);
+                    axoObj.patch.repaint();
+                }
+            }
+        });
+        m.add(clearColorMenuItem);
     }
 
     @Override

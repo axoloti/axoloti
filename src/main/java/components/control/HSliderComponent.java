@@ -17,8 +17,8 @@
  */
 package components.control;
 
+import axoloti.Theme;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -79,7 +79,7 @@ public class HSliderComponent extends ACtrlComponent {
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         int margin = 50;
         int bwidth = getWidth() - margin;
-        g2.setPaint(Color.WHITE);
+        g2.setPaint(Theme.getCurrentTheme().Component_Secondary);
         g2.drawRect(0, 0, bwidth, getHeight() - 1);
         g2.setPaint(getForeground());
         g2.drawRect(0, 0, bwidth, getHeight() - 1);

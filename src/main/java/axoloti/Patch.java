@@ -62,10 +62,12 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
+import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Complete;
 import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.core.Validate;
+import org.simpleframework.xml.strategy.Strategy;
 import qcmds.QCmdChangeWorkingDirectory;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdCreateDirectory;
@@ -678,7 +680,8 @@ public class Patch {
     boolean save(File f) {
         SortByPosition();
         PreSerialize();
-        Serializer serializer = new Persister();
+        Strategy strategy = new AnnotationStrategy();
+        Serializer serializer = new Persister(strategy);
         try {
             serializer.write(this, f);
             MainFrame.prefs.addRecentFile(f.getAbsolutePath());

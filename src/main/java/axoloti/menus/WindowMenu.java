@@ -127,6 +127,11 @@ public class WindowMenu extends JMenu {
             jMenuWindow.add(a);
         }
         {
+            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getThemeEditor(), "Theme");
+            //a.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+            jMenuWindow.add(a);
+        }
+        {
             WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getRemote(), "Remote");
             //a.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             jMenuWindow.add(a);

@@ -17,6 +17,7 @@
  */
 package axoloti.datatypes;
 
+import axoloti.Theme;
 import java.awt.Color;
 
 /**
@@ -50,7 +51,7 @@ public class CharPtr32 implements DataType {
 
     @Override
     public Color GetColor() {
-        return Color.PINK;
+        return Theme.getCurrentTheme().Cable_CharPointer32;
     }
 
     @Override
