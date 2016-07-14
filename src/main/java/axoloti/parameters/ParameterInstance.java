@@ -25,14 +25,12 @@ import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
-import axoloti.utils.ColorConverter;
 import components.AssignMidiCCComponent;
 import components.AssignPresetMenuItems;
 import components.LabelComponent;
 import components.control.ACtrlComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -47,10 +45,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.event.MouseInputAdapter;
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.convert.Convert;
 
 /**
  *
@@ -77,11 +73,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     @Attribute(required = false)
     Integer MidiCC = null;
     AssignMidiCCComponent midiAssign;
-    
-    @Element(required = false)
-    @Convert(ColorConverter.class)
-    Color customBackgroundColor;
-    
+
     public ParameterInstance() {
     }
 
@@ -105,9 +97,6 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public void CopyValueFrom(ParameterInstance p) {
         if (p.onParent != null) {
             setOnParent(p.onParent);
-        }
-        if (p.customBackgroundColor != null) {
-            this.setCustomBackgroundColor(p.customBackgroundColor);
         }
         SetMidiCC(p.MidiCC);
     }
@@ -357,8 +346,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     void SetPresetState(boolean b) { // OBSOLETE
         if (b) {
             setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
-        }
-        else {
+        } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
         }
     }
@@ -412,14 +400,6 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
             onParent = null;
         }
     }
-    
-    public Color getCustomBackgroundColor() {
-        return this.customBackgroundColor;
-    }
-    
-    public void setCustomBackgroundColor(Color c) {
-        this.customBackgroundColor = c;
-    }
 
     public abstract ACtrlComponent CreateControl();
 
@@ -457,7 +437,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public void doPopup(MouseEvent e) {
         JPopupMenu m = new JPopupMenu();
         populatePopup(m);
-        
+
         ZoomUtils.showZoomedPopupMenu(this, axoObj, m);
     }
 
@@ -528,11 +508,11 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public T GetDefinition() {
         return parameter;
     }
-    
+
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
     }
-    
+
     @Override
     public Point getToolTipLocation(MouseEvent event) {
         return ZoomUtils.getToolTipLocation(this, event, axoObj);
