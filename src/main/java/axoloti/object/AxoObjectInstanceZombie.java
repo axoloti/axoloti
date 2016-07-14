@@ -19,13 +19,13 @@ package axoloti.object;
 
 import axoloti.Patch;
 import axoloti.PatchGUI;
+import axoloti.Theme;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceZombie;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceZombie;
 import components.LabelComponent;
 import components.PopupIcon;
-import java.awt.Color;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -59,6 +59,8 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
         super.PostConstructor();
         LabelComponent idlbl = new LabelComponent(typeName);
         idlbl.setAlignmentX(LEFT_ALIGNMENT);
+        idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
+
 
         final PopupIcon popupIcon = new PopupIcon();
         popupIcon.setPopupIconListener(
@@ -96,7 +98,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
         add(Titlebar);
 
         setOpaque(true);
-        setBackground(Color.red);
+        setBackground(Theme.getCurrentTheme().Object_Zombie_Background);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         InstanceLabel = new LabelComponent(getInstanceName());
         InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);

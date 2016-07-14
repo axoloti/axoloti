@@ -115,6 +115,23 @@ public class FileUtils {
             return "Axoloti Object";
         }
     };
+    
+    public final static FileFilter axtFileFilter = new FileFilter() {
+        @Override
+        public boolean accept(File file) {
+            if (file.getName().endsWith(".axt")) {
+                return true;
+            } else if (file.isDirectory()) {
+                return false;
+            }
+            return false;
+        }
+
+        @Override
+        public String getDescription() {
+            return "Axoloti Patcher Theme";
+        }
+    };
 
     public static JFileChooser GetFileChooser() {
         JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());

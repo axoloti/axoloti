@@ -17,6 +17,7 @@
  */
 package axoloti.datatypes;
 
+import axoloti.Theme;
 import java.awt.Color;
 
 /**
@@ -59,7 +60,7 @@ public class Int32 implements DataType {
 
     @Override
     public Color GetColor() {
-        return Color.GREEN;
+        return Theme.getCurrentTheme().Cable_Int32;
     }
 
     @Override

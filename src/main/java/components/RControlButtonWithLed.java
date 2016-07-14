@@ -17,7 +17,7 @@
  */
 package components;
 
-import java.awt.Color;
+import axoloti.Theme;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -80,13 +80,13 @@ public class RControlButtonWithLed extends Component {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setPaint(getBackground());
+        g2.setPaint(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(0, 0, width, height);
         if (illuminated) {
-            g2.setPaint(Color.ORANGE);
+            g2.setPaint(Theme.getCurrentTheme().Component_Illuminated);
             g2.fillRoundRect(0, 0, width, height, arc, arc);
         }
-        g2.setPaint(Color.BLACK);
+        g2.setPaint(Theme.getCurrentTheme().Component_Primary);
         if (pressed) {
             g2.fillRoundRect(inset, inset, width - inset * 2, height - inset * 2, arc, arc);
         } else {

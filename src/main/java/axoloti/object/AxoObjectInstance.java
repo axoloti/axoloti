@@ -24,6 +24,7 @@ import axoloti.PatchFrame;
 import axoloti.PatchGUI;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
+import axoloti.Theme;
 import axoloti.ZoomUtils;
 import axoloti.attribute.*;
 import axoloti.attributedefinition.AxoAttribute;
@@ -150,6 +151,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
         LabelComponent idlbl = new LabelComponent(typeName);
         idlbl.setAlignmentX(LEFT_ALIGNMENT);
+        idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
         Titlebar.add(idlbl);
 
         Titlebar.setToolTipText("<html>" + getType().sDescription
@@ -264,26 +266,35 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         });
         InstanceLabel.addMouseMotionListener(mml);
         add(InstanceLabel);
-
+        
         JPanel p_iolets = new JPanel();
+        p_iolets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+
         p_iolets.setLayout(new BoxLayout(p_iolets, BoxLayout.LINE_AXIS));
         p_iolets.setAlignmentX(LEFT_ALIGNMENT);
         p_iolets.setAlignmentY(TOP_ALIGNMENT);
         p_inlets = new JPanel();
+        p_inlets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+
         p_inlets.setLayout(new BoxLayout(p_inlets, BoxLayout.PAGE_AXIS));
         p_inlets.setAlignmentX(LEFT_ALIGNMENT);
         p_inlets.setAlignmentY(TOP_ALIGNMENT);
         p_outlets = new JPanel();
+        p_outlets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+
         p_outlets.setLayout(new BoxLayout(p_outlets, BoxLayout.PAGE_AXIS));
         p_outlets.setAlignmentX(RIGHT_ALIGNMENT);
         p_outlets.setAlignmentY(TOP_ALIGNMENT);
         p_params = new JPanel();
+        p_params.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         if (getType().getRotatedParams()) {
             p_params.setLayout(new BoxLayout(p_params, BoxLayout.LINE_AXIS));
         } else {
             p_params.setLayout(new BoxLayout(p_params, BoxLayout.PAGE_AXIS));
         }
         p_displays = new JPanel();
+        p_displays.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+
         if (getType().getRotatedParams()) {
             p_displays.setLayout(new BoxLayout(p_displays, BoxLayout.LINE_AXIS));
         } else {
@@ -349,7 +360,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         p_iolets.add(Box.createHorizontalGlue());
         p_iolets.add(p_outlets);
         add(p_iolets);
-//        p_iolets.setBackground(Color.red);
 
         for (AxoAttribute p : getType().attributes) {
             AttributeInstance attrp1 = null;

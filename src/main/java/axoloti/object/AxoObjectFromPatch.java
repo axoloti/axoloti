@@ -25,7 +25,9 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
 
 /**
  *
@@ -87,7 +89,8 @@ public class AxoObjectFromPatch extends AxoObject {
     @Override
     public void OpenEditor() {
         if (pg == null) {
-            Serializer serializer = new Persister();
+            Strategy strategy = new AnnotationStrategy();
+            Serializer serializer = new Persister(strategy);
             try {
                 pg = serializer.read(PatchGUI.class, f);
                 pf = new PatchFrame((PatchGUI) pg, MainFrame.mainframe.getQcmdprocessor());

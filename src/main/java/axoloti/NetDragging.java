@@ -72,7 +72,7 @@ public class NetDragging extends Net {
             if (GetDataType() != null) {
                 c = GetDataType().GetColor();
             } else {
-                c = Color.BLACK;
+                c = Theme.getCurrentTheme().Cable_Shadow;
             }
         }
         int lastSource = 0;
@@ -83,7 +83,7 @@ public class NetDragging extends Net {
                 lastSource = j;
             }
             Point p1 = i.getJackLocInCanvas();
-            g2.setColor(Color.BLACK);
+            g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
             if (p0 != null && p1 != null) {
                 DrawWire(g2, p0.x + shadowOffset, p0.y + shadowOffset, p1.x + shadowOffset, p1.y + shadowOffset);
                 g2.setColor(c);
@@ -92,7 +92,7 @@ public class NetDragging extends Net {
         }
         for (InletInstance i : dest) {
             Point p1 = i.getJackLocInCanvas();
-            g2.setColor(Color.BLACK);
+            g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
             if (p0 != null && p1 != null) {
                 DrawWire(g2, p0.x + shadowOffset, p0.y + shadowOffset, p1.x + shadowOffset, p1.y + shadowOffset);
                 g2.setColor(c);

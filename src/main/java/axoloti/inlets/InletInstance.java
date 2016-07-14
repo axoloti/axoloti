@@ -17,6 +17,7 @@
  */
 package axoloti.inlets;
 
+import axoloti.Theme;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.iolet.IoletAbstract;
@@ -68,6 +69,7 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
     public InletInstance() {
         this.inlet = null;
         this.axoObj = null;
+        this.setBackground(Theme.getCurrentTheme().Object_Default_Background);
     }
 
     public InletInstance(T inlet, final AxoObjectInstance axoObj) {
@@ -98,9 +100,11 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
 
     public final void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        setBackground(Theme.getCurrentTheme().Object_Default_Background);
         setMaximumSize(new Dimension(32767, 14));
         jack = new JackInputComponent(this);
         jack.setForeground(inlet.getDatatype().GetColor());
+        jack.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(jack);
         add(new SignalMetaDataIcon(inlet.GetSignalMetaData()));
         if (axoObj.getType().GetInlets().size() > 1) {

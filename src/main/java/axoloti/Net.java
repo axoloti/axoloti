@@ -163,7 +163,7 @@ public class Net extends JPanel {
     Color GetColor() {
         Color c = GetDataType().GetColor();
         if (c == null) {
-            c = Color.DARK_GRAY;
+            c = Theme.getCurrentTheme().Cable_Default;
         }
         return c;
     }
@@ -210,7 +210,7 @@ public class Net extends JPanel {
             if (GetDataType() != null) {
                 c = GetDataType().GetColor();
             } else {
-                c = Color.BLACK;
+                c = Theme.getCurrentTheme().Cable_Shadow;
             }
             if (!source.isEmpty()) {
                 p0 = source.get(0).getJackLocInCanvas();
@@ -228,14 +228,14 @@ public class Net extends JPanel {
                 lastSource = j;
             }
             Point p1 = i.getJackLocInCanvas();
-            g2.setColor(Color.BLACK);
+            g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
             DrawWire(g2, p0.x + shadowOffset, p0.y + shadowOffset, p1.x + shadowOffset, p1.y + shadowOffset);
             g2.setColor(c);
             DrawWire(g2, p0.x, p0.y, p1.x, p1.y);
         }
         for (InletInstance i : dest) {
             Point p1 = i.getJackLocInCanvas();
-            g2.setColor(Color.BLACK);
+            g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
             DrawWire(g2, p0.x + shadowOffset, p0.y + shadowOffset, p1.x + shadowOffset, p1.y + shadowOffset);
             g2.setColor(c);
             DrawWire(g2, p0.x, p0.y, p1.x, p1.y);

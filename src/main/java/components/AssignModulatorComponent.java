@@ -17,10 +17,10 @@
  */
 package components;
 
+import axoloti.Theme;
 import axoloti.ZoomUtils;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import axoloti.utils.Constants;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -85,17 +85,17 @@ public class AssignModulatorComponent extends JComponent {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setFont(Constants.FONT);
-            g2.setColor(getBackground());
+            g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
             g2.fillRect(1, 1, getWidth(), getHeight());
             if (param.getModulators() != null) {
-                g2.setColor(Color.black);
+                g2.setColor(Theme.getCurrentTheme().Component_Primary);
                 g2.fillRect(1, 1, 8, getHeight());
-                g2.setColor(Color.white);
+                g2.setColor(Theme.getCurrentTheme().Component_Secondary);
             } else {
-                g2.setColor(Color.black);
+                g2.setColor(Theme.getCurrentTheme().Component_Primary);
             }
             g2.drawString("M", 1, getHeight() - 2);
-            g2.setColor(Color.black);
+            g2.setColor(Theme.getCurrentTheme().Component_Primary);
             final int rmargin = 2;
             final int htick = 2;
             int[] xp = new int[]{getWidth() - rmargin - htick * 2, getWidth() - rmargin, getWidth() - rmargin - htick};

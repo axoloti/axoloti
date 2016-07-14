@@ -25,11 +25,9 @@ import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjects;
 import axoloti.outlets.OutletInstance;
 import axoloti.utils.Constants;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -75,7 +73,9 @@ import javax.swing.TransferHandler;
 import javax.swing.plaf.LayerUI;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
 import qcmds.QCmdProcessor;
 
 /**
@@ -152,7 +152,7 @@ public class PatchGUI extends Patch {
 
         Layers.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
         Layers.setVisible(true);
-        Layers.setBackground(Color.LIGHT_GRAY);
+        Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
         Layers.setOpaque(true);
         Layers.invalidate();
         Layers.repaint();
@@ -605,7 +605,8 @@ public class PatchGUI extends Patch {
         if (v.isEmpty()) {
             return;
         }
-        Serializer serializer = new Persister();
+        Strategy strategy = new AnnotationStrategy();
+        Serializer serializer = new Persister(strategy);
         try {
             PatchGUI p = serializer.read(PatchGUI.class, v);
             HashMap<String, String> dict = new HashMap<String, String>();
@@ -1000,14 +1001,14 @@ public class PatchGUI extends Patch {
     public void Lock() {
         super.Lock();
         patchframe.SetLive(true);
-        Layers.setBackground(Color.DARK_GRAY);
+        Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
     }
 
     @Override
     public void Unlock() {
         super.Unlock();
         patchframe.SetLive(false);
-        Layers.setBackground(Color.LIGHT_GRAY);
+        Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
     }
 
     @Override
@@ -1090,7 +1091,8 @@ public class PatchGUI extends Patch {
     }
 
     public static void OpenPatch(String name, InputStream stream) {
-        Serializer serializer = new Persister();
+        Strategy strategy = new AnnotationStrategy();
+        Serializer serializer = new Persister(strategy);
         try {
             PatchGUI patch1 = serializer.read(PatchGUI.class, stream);
             PatchFrame pf = new PatchFrame(patch1, QCmdProcessor.getQCmdProcessor());
@@ -1115,7 +1117,8 @@ public class PatchGUI extends Patch {
             }
         }
 
-        Serializer serializer = new Persister();
+        Strategy strategy = new AnnotationStrategy();
+        Serializer serializer = new Persister(strategy);
         try {
             PatchGUI patch1 = serializer.read(PatchGUI.class, f);
             PatchFrame pf = new PatchFrame(patch1, QCmdProcessor.getQCmdProcessor());
