@@ -20,36 +20,27 @@ package axoloti.parameters;
 import axoloti.Preset;
 import axoloti.Theme;
 import axoloti.datatypes.Value;
-import axoloti.utils.ColorConverter;
 import components.AssignMidiCCComponent;
 import components.AssignMidiCCMenuItems;
 import components.AssignModulatorComponent;
 import components.AssignModulatorMenuItems;
 import components.AssignPresetComponent;
-import components.control.ACtrlComponent;
 import components.control.DialComponent;
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
-import javax.swing.JColorChooser;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.convert.Convert;
 
 /**
  *
  * @author Johannes Taelman
  */
 public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends ParameterInstanceFrac32U<T> {
- 
+
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
-    
+
     public ParameterInstanceFrac32UMap() {
         super();
     }
@@ -98,8 +89,6 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
 //        setComponentPopupMenu(new ParameterInstanceUInt7MapPopupMenu3(this));
         addMouseListener(popupMouseListener);
         updateV();
-        
-        ctrl.setCustomBackgroundColor(getCustomBackgroundColor());
     }
 
     @Override
@@ -116,7 +105,7 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
     public void updateV() {
         super.updateV();
         if (ctrl != null) {
-            ctrl.setValue(value.getDouble());            
+            ctrl.setValue(value.getDouble());
         }
     }
 
@@ -151,7 +140,7 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
                 + "  KVP_RegisterObject(&" + StructAccces + KVPName(vprefix) + ");\n";
         return s;
     }
-    
+
     @Override
     public void updateModulation(int index, double amount) {
         super.updateModulation(index, amount);
@@ -206,38 +195,8 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
         new AssignMidiCCMenuItems(this, m1);
         m.add(m1);
         JMenu m2 = new JMenu("Modulation");
-        new AssignModulatorMenuItems((ParameterInstanceFrac32UMap<ParameterFrac32>)this, m2);
+        new AssignModulatorMenuItems((ParameterInstanceFrac32UMap<ParameterFrac32>) this, m2);
         m.add(m2);
-        JMenuItem setColorMenuItem = new JMenuItem("Set Custom Color");
-        setColorMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Color c = JColorChooser.showDialog(
-                axoObj,
-                "Choose Color",
-                Theme.getCurrentTheme().Parameter_Default_Background);
-                ACtrlComponent ctrl = ParameterInstanceFrac32UMap.this.ctrl;
-                if(ctrl != null) {
-                    ParameterInstanceFrac32UMap.this.customBackgroundColor = c;
-                    ctrl.setCustomBackgroundColor(c);
-                    axoObj.patch.repaint();
-                }
-            }
-        });
-        m.add(setColorMenuItem);
-        JMenuItem clearColorMenuItem = new JMenuItem("Clear Custom Color");
-        clearColorMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ACtrlComponent ctrl = ParameterInstanceFrac32UMap.this.ctrl;
-                if(ctrl != null) {
-                    ParameterInstanceFrac32UMap.this.customBackgroundColor = null;
-                    ctrl.setCustomBackgroundColor(null);
-                    axoObj.patch.repaint();
-                }
-            }
-        });
-        m.add(clearColorMenuItem);
     }
 
     @Override

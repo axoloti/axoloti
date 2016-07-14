@@ -72,6 +72,7 @@ public class Filter extends gentools {
         WriteAxoObject(catName, Create_lpfsvf_tilde());
         WriteAxoObject(catName, Create_hpfsvf_tilde());
         WriteAxoObject(catName, Create_bpfsvf_tilde());
+        WriteAxoObject(catName, Create_notchfsvf_tilde());
         WriteAxoObject(catName, Create_svf_multimode_tilde());
 
 //UNRELEASED        WriteAxoObject(catName, Create_lpfsvf_drive());
@@ -625,6 +626,31 @@ public class Filter extends gentools {
                 + "band = (___SMMUL(freq,high)<<1) + band;// - drive*band*band*band;\n"
                 + "int32_t out1 = band;\n"
                 + "%out% = out1;\n";
+        return o;
+    }
+
+    static AxoObject Create_notchfsvf_tilde() {
+        AxoObject o = new AxoObject("notch svf", "Notch (band reject) filter, state-variable type");
+        o.inlets.add(new InletFrac32Buffer("in", "filter input"));
+        o.params.add(new ParameterFrac32SMapPitch("pitch"));
+        o.params.add(new ParameterFrac32UMapFilterQ("reso"));
+        o.outlets.add(new OutletFrac32Buffer("out", "filter output"));
+        o.sLocalData = "int32_t low;\n"
+                + "int32_t band;\n";
+        o.sInitCode = "low = 0;\n"
+                + "band = 0;\n";
+        o.sKRateCode = "int32_t damp = (0x80<<24) - (param_reso<<4);\n"
+                + "damp = ___SMMUL(damp,damp);\n"
+                + "int32_t alpha;\n"
+                + "int32_t freq;\n"
+                + "MTOFEXTENDED(param_pitch,alpha);\n"
+                + "SINE2TINTERP(alpha,freq);\n";
+        o.sSRateCode = "int32_t in1 = %in%;\n"
+                + "int32_t notch = %in% - (___SMMUL(damp,band)<<1);\n"
+                + "low = low + (___SMMUL(freq,band)<<1);\n"
+                + "int32_t high  = notch - low;\n"
+                + "band = (___SMMUL(freq,high)<<1) + band;// - drive*band*band*band;\n"
+                + "outlet_out = notch;\n";
         return o;
     }
 
