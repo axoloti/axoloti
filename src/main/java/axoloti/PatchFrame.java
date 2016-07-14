@@ -83,7 +83,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
         jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
         jScrollPane1.setWheelScrollingEnabled(false);
-        
+
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
@@ -290,6 +290,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuSaveClip = new javax.swing.JMenuItem();
         jMenuClose = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
+        undoItem = new javax.swing.JMenuItem();
+        redoItem = new javax.swing.JMenuItem();
         jMenuItemDelete = new javax.swing.JMenuItem();
         jMenuItemSelectAll = new javax.swing.JMenuItem();
         jMenuItemAddObj = new javax.swing.JMenuItem();
@@ -440,6 +442,42 @@ jMenuClose.addActionListener(new java.awt.event.ActionListener() {
 
     jMenuEdit.setMnemonic('E');
     jMenuEdit.setText("Edit");
+
+    undoItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
+    undoItem.setText("Undo");
+    undoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
+        public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+            undoItemAncestorAdded(evt);
+        }
+        public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+        }
+        public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+        }
+    });
+    undoItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            undoItemActionPerformed(evt);
+        }
+    });
+    jMenuEdit.add(undoItem);
+
+    redoItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+    redoItem.setText("Redo");
+    redoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
+        public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+            redoItemAncestorAdded(evt);
+        }
+        public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+        }
+        public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+        }
+    });
+    redoItem.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            redoItemActionPerformed(evt);
+        }
+    });
+    jMenuEdit.add(redoItem);
 
     jMenuItemDelete.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, 0));
     jMenuItemDelete.setText("Delete");
@@ -969,6 +1007,22 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
         patch.Layers.repaint();
     }//GEN-LAST:event_zoomOutMenuItemActionPerformed
 
+    private void undoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoItemActionPerformed
+        patch.undo();
+    }//GEN-LAST:event_undoItemActionPerformed
+
+    private void redoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoItemActionPerformed
+        patch.redo();
+    }//GEN-LAST:event_redoItemActionPerformed
+
+    private void undoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_undoItemAncestorAdded
+       undoItem.setEnabled(patch.canUndo());
+    }//GEN-LAST:event_undoItemAncestorAdded
+
+    private void redoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_redoItemAncestorAdded
+       redoItem.setEnabled(patch.canRedo());
+    }//GEN-LAST:event_redoItemAncestorAdded
+
     private boolean GoLive() {
         if (patch.getFileNamePath().endsWith(".axs") || patch.container() != null) {
             Object[] options = {"Yes",
@@ -1041,6 +1095,8 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPanel jToolbarPanel;
+    private javax.swing.JMenuItem redoItem;
+    private javax.swing.JMenuItem undoItem;
     private axoloti.menus.WindowMenu windowMenu1;
     private javax.swing.JMenuItem zoomDefaultMenuItem;
     private javax.swing.JMenuItem zoomInMenuItem;

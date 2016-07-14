@@ -49,6 +49,8 @@ import axoloti.utils.Preferences;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -120,6 +122,9 @@ public class Patch {
     private AxoObjectInstanceAbstract controllerinstance;
 
     public boolean presetUpdatePending = false;
+
+    private List<String> previousStates = new ArrayList<String>();
+    private int currentState = 0;
 
     static public class PatchVersionException
             extends RuntimeException {
@@ -358,6 +363,7 @@ public class Patch {
             settings = new PatchSettings();
         }
         ClearDirty();
+        saveState();
     }
 
     public ArrayList<ParameterInstance> getParameterInstances() {
@@ -378,19 +384,18 @@ public class Patch {
     }
 
     public void SetDirty() {
+        SetDirty(true);
+    }
+
+    public void SetDirty(boolean saveState) {
         dirty = true;
+
         if (container != null) {
             container.SetDirty();
         }
-    }
-
-    @Deprecated
-    public void SetDirty(boolean f) {
-        // use Set and ClearDirty
-        if (f) {
-            SetDirty();
-        } else {
-            ClearDirty();
+        if (saveState) {
+            currentState += 1;
+            saveState();
         }
     }
 
@@ -438,7 +443,7 @@ public class Patch {
         }
         return null;
     }
-    
+
     public Net GetNet(IoletAbstract io) {
         for (Net net : nets) {
             for (InletInstance d : net.dest) {
@@ -446,7 +451,7 @@ public class Patch {
                     return net;
                 }
             }
-            
+
             for (OutletInstance d : net.source) {
                 if (d == io) {
                     return net;
@@ -568,15 +573,14 @@ public class Patch {
         }
         return null;
     }
-    
+
     public Net disconnect(IoletAbstract io) {
         if (!IsLocked()) {
             Net n = GetNet(io);
             if (n != null) {
-                if(io instanceof OutletInstance) {
+                if (io instanceof OutletInstance) {
                     n.source.remove((OutletInstance) io);
-                }
-                else if(io instanceof InletInstance) {
+                } else if (io instanceof InletInstance) {
                     n.dest.remove((InletInstance) io);
                 }
                 if (n.source.size() + n.dest.size() <= 1) {
@@ -675,6 +679,37 @@ public class Patch {
     }
 
     void PreSerialize() {
+    }
+
+    void saveState() {
+        SortByPosition();
+        PreSerialize();
+        Serializer serializer = new Persister();
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        try {
+            serializer.write(this, b);
+            try {
+                previousStates.set(currentState, b.toString());
+            } catch (IndexOutOfBoundsException e) {
+                previousStates.add(b.toString());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    void loadState() {
+        Serializer serializer = new Persister();
+        ByteArrayInputStream b = new ByteArrayInputStream(previousStates.get(currentState).getBytes());
+        try {
+            Patch p = serializer.read(Patch.class, b);
+            this.objectinstances = p.objectinstances;
+            this.nets = p.nets;
+            this.PostContructor();
+            repaint();
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     boolean save(File f) {
@@ -2505,6 +2540,30 @@ public class Patch {
         Unlock();
         for (AxoObjectInstanceAbstract o : objectinstances) {
             o.Close();
+        }
+    }
+
+    public boolean canUndo() {
+        return !this.IsLocked() && (currentState > 0);
+    }
+
+    public boolean canRedo() {
+        return !this.IsLocked() && (currentState < previousStates.size() - 1);
+    }
+
+    public void undo() {
+        if (canUndo()) {
+            currentState -= 1;
+            loadState();
+            SetDirty(false);
+        }
+    }
+
+    public void redo() {
+        if (canRedo()) {
+            currentState += 1;
+            loadState();
+            SetDirty(false);
         }
     }
 }

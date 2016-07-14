@@ -761,6 +761,7 @@ public class PatchGUI extends Patch {
                 }
             }
             AdjustSize();
+            SetDirty();
         } catch (javax.xml.stream.XMLStreamException ex) {
             // silence
         } catch (Exception ex) {
@@ -893,6 +894,7 @@ public class PatchGUI extends Patch {
             if (isUpdate) {
                 AdjustSize();
                 Layers.repaint();
+                SetDirty();
             }
         } else {
             Logger.getLogger(PatchGUI.class.getName()).log(Level.INFO, "can't move: locked");
@@ -902,6 +904,8 @@ public class PatchGUI extends Patch {
     @Override
     public void PostContructor() {
         super.PostContructor();
+        objectLayerPanel.removeAll();
+        netLayerPanel.removeAll();
         for (AxoObjectInstanceAbstract o : objectinstances) {
             objectLayerPanel.add(o);
         }
@@ -910,6 +914,7 @@ public class PatchGUI extends Patch {
         }
         Layers.setPreferredSize(new Dimension(5000, 5000));
         AdjustSize();
+        Layers.revalidate();
     }
 
     @Override
