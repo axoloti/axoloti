@@ -1009,18 +1009,22 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     private void undoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoItemActionPerformed
         patch.undo();
+        redoItem.setEnabled(patch.canRedo());
+        undoItem.setEnabled(patch.canUndo());
     }//GEN-LAST:event_undoItemActionPerformed
 
     private void redoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoItemActionPerformed
         patch.redo();
+        redoItem.setEnabled(patch.canRedo());        
+        undoItem.setEnabled(patch.canUndo());
     }//GEN-LAST:event_redoItemActionPerformed
 
     private void undoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_undoItemAncestorAdded
-       undoItem.setEnabled(patch.canUndo());
+        undoItem.setEnabled(patch.canUndo());
     }//GEN-LAST:event_undoItemAncestorAdded
 
     private void redoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_redoItemAncestorAdded
-       redoItem.setEnabled(patch.canRedo());
+        redoItem.setEnabled(patch.canRedo());
     }//GEN-LAST:event_redoItemAncestorAdded
 
     private boolean GoLive() {

@@ -314,7 +314,7 @@ public class Patch {
     public Patch() {
         super();
     }
-
+    
     public void PostContructor() {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             o.patch = this;
@@ -387,13 +387,13 @@ public class Patch {
         SetDirty(true);
     }
 
-    public void SetDirty(boolean saveState) {
+    public void SetDirty(boolean shouldSaveState) {
         dirty = true;
 
         if (container != null) {
             container.SetDirty();
         }
-        if (saveState) {
+        if (shouldSaveState) {
             currentState += 1;
             saveState();
         }
@@ -690,6 +690,17 @@ public class Patch {
             serializer.write(this, b);
             try {
                 previousStates.set(currentState, b.toString());
+                if(cleanDanglingStates) {
+                    try {
+                        // if we've saved a new edit
+                        // after some undoing,
+                        // cleanup dangling states
+                        previousStates.subList(currentState + 1, previousStates.size()).clear();
+                    }
+                    catch(IndexOutOfBoundsException e) {
+                    }
+                }
+                this.cleanDanglingStates = true;
             } catch (IndexOutOfBoundsException e) {
                 previousStates.add(b.toString());
             }
@@ -697,7 +708,16 @@ public class Patch {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void cleanUpIntermediateChangeStates(int n) {
+        int length = previousStates.size();
+        previousStates.subList(length - n, length).clear();
+        this.currentState -= n - 1;
+        saveState();
+    }
 
+    private boolean cleanDanglingStates = true;
+    
     void loadState() {
         Serializer serializer = new Persister();
         ByteArrayInputStream b = new ByteArrayInputStream(previousStates.get(currentState).getBytes());
@@ -705,6 +725,7 @@ public class Patch {
             Patch p = serializer.read(Patch.class, b);
             this.objectinstances = p.objectinstances;
             this.nets = p.nets;
+            this.cleanDanglingStates = false;
             this.PostContructor();
             repaint();
         } catch (Exception ex) {

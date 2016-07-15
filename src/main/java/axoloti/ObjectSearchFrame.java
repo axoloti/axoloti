@@ -468,6 +468,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                     p.AddObjectInstance(x, new Point(patchLocX, patchLocY));
                 } else {
                     p.ChangeObjectInstanceType(target_object, x);
+                    p.cleanUpIntermediateChangeStates(2);
                 }
             }
             setVisible(false);

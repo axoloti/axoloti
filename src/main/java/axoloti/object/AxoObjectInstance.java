@@ -489,6 +489,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     public void updateObj() {
         getPatch().ChangeObjectInstanceType(this, this.getType());
+        getPatch().cleanUpIntermediateChangeStates(3);
     }
 
     @Override
@@ -874,6 +875,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         if (selected != getType()) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "promoting " + this + " to " + selected);
             patch.ChangeObjectInstanceType(this, selected);
+            patch.cleanUpIntermediateChangeStates(4);
         } else {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "no promotion for {0}", typeName);
         }

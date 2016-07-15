@@ -4,7 +4,6 @@ import static axoloti.FileUtils.axtFileFilter;
 import static axoloti.MainFrame.prefs;
 import axoloti.object.AxoObjects;
 import axoloti.utils.ColorConverter;
-import components.LabelComponent;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -64,7 +63,7 @@ public class Theme {
     @Element
     // UIManager.getColor("Label.foreground") doesn't give the correct value here
     // for some reason
-    public Color Label_Text = (new JLabel()).getForeground();    
+    public Color Label_Text = (new JLabel()).getForeground();
 
 // nets
     @Element
@@ -181,7 +180,6 @@ public class Theme {
             File fileToBeSaved = fc.getSelectedFile();
             ext = "";
             String fname = fileToBeSaved.getAbsolutePath();
-            System.out.println(fname);
             dot = fname.lastIndexOf('.');
             if (dot > 0 && fname.length() > dot + 3) {
                 ext = fname.substring(dot);
