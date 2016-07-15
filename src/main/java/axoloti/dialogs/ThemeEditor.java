@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -84,7 +83,7 @@ public class ThemeEditor extends JFrame {
 
             }
         });
-        
+
         final JButton revertToDefault = new JButton("Load Default");
         revertToDefault.addMouseListener(new MouseListener() {
             public void mouseClicked(MouseEvent e) {
@@ -119,7 +118,6 @@ public class ThemeEditor extends JFrame {
         p.add(new JPanel());
         p.add(new JPanel());
 
-
         for (final Field f : theme.getClass().getFields()) {
             p.add(new JLabel(f.getName().replace("_", " ")));
             try {
@@ -146,7 +144,6 @@ public class ThemeEditor extends JFrame {
                 } else {
                     final JButton t = new JButton();
                     t.setBorder(BorderFactory.createLineBorder(getBackground(), 2));
-                    System.out.println(f);
                     final Color currentColor = (Color) f.get(theme);
                     t.setBackground(currentColor);
                     t.setContentAreaFilled(false);
@@ -155,7 +152,6 @@ public class ThemeEditor extends JFrame {
                         public void mouseClicked(MouseEvent e) {
                             try {
                                 Color newColor = pickColor(e.getComponent().getBackground());
-                                System.out.println("newColor: " + newColor);
                                 if (newColor != null) {
                                     f.set(theme, newColor);
                                     e.getComponent().setBackground(newColor);
@@ -212,12 +208,11 @@ public class ThemeEditor extends JFrame {
             i += 2;
         }
     }
-    
+
     private void updateThemeName(DocumentEvent e) {
         try {
-        theme.Theme_Name = e.getDocument().getText(0, e.getDocument().getLength());
-        }
-        catch(BadLocationException ex) {
+            theme.Theme_Name = e.getDocument().getText(0, e.getDocument().getLength());
+        } catch (BadLocationException ex) {
             Logger.getLogger(ThemeEditor.class.getName()).log(Level.SEVERE, "{0}", new Object[]{e});
         }
     }
