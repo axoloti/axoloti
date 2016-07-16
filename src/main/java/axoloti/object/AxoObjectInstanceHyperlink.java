@@ -107,14 +107,28 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
                 if (e.getClickCount() == 2) {
                     addInstanceNameEditor();
                 }
+                if (patch != null) {
+                    if (e.getClickCount() == 1) {
+                        if (e.isShiftDown()) {
+                            SetSelected(!GetSelected());
+                            ((PatchGUI) patch).repaint();
+                        } else if (Selected == false) {
+                            ((PatchGUI) patch).SelectNone();
+                            SetSelected(true);
+                            ((PatchGUI) patch).repaint();
+                        }
+                    }
+                }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
+                ml.mousePressed(e);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                ml.mouseReleased(e);
             }
 
             @Override
@@ -125,6 +139,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
             public void mouseExited(MouseEvent e) {
             }
         });
+        InstanceLabel.addMouseMotionListener(mml);
         add(InstanceLabel);
 
         resizeToGrid();

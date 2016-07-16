@@ -80,7 +80,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     AxoObjectAbstract type;
     boolean dragging = false;
     int dX, dY;
-    private boolean Selected = false;
+    protected boolean Selected = false;
     private boolean Locked = false;
     private boolean typeWasAmbiguous = false;
     JPanel Titlebar;
