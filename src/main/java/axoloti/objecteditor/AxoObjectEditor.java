@@ -26,6 +26,7 @@ import axoloti.object.ObjectModifiedListener;
 import axoloti.utils.AxolotiLibrary;
 import java.awt.BorderLayout;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
@@ -404,6 +405,14 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         editObj.removeObjectModifiedListener(this);
         dispose();
         editObj.CloseEditor();
+    }
+    
+    public int getActiveTabIndex() {
+        return this.jTabbedPane1.getSelectedIndex();
+    }
+    
+    public void setActiveTabIndex(int n) {
+        this.jTabbedPane1.setSelectedIndex(n);
     }
 
     /**
@@ -804,8 +813,12 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     }//GEN-LAST:event_jMenuItemCopyToLibraryActionPerformed
 
     private void jMenuItemRevertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRevertActionPerformed
+        Rectangle editorBounds = this.getBounds();
+        int activeTabIndex = this.getActiveTabIndex();
         Revert();
         AxoObjectEditor axoObjectEditor = new AxoObjectEditor(editObj);
+        axoObjectEditor.setBounds(editorBounds);
+        axoObjectEditor.setActiveTabIndex(activeTabIndex);
         axoObjectEditor.setVisible(true);
     }//GEN-LAST:event_jMenuItemRevertActionPerformed
 
