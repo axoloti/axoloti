@@ -46,6 +46,7 @@ import qcmds.QCmdProcessor;
 import qcmds.QCmdSerialTask;
 import qcmds.QCmdSerialTaskNull;
 import qcmds.QCmdShowDisconnect;
+import qcmds.QCmdStop;
 import qcmds.QCmdTransmitGetFWVersion;
 import qcmds.QCmdWriteMem;
 
@@ -281,6 +282,9 @@ public class USBBulkConnection extends Connection {
                 Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
             QCmdProcessor qcmdp = MainFrame.mainframe.getQcmdprocessor();
+
+            qcmdp.AppendToQueue(new QCmdStop());
+            qcmdp.WaitQueueFinished();
 
             qcmdp.AppendToQueue(new QCmdTransmitGetFWVersion());
             try {
