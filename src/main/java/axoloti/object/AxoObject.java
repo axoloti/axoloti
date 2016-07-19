@@ -108,6 +108,7 @@ import axoloti.parameters.ParameterInt32BoxSmall;
 import axoloti.parameters.ParameterInt32HRadio;
 import axoloti.parameters.ParameterInt32VRadio;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -293,16 +294,43 @@ public class AxoObject extends AxoObjectAbstract {
 
     ArrayList<ObjectModifiedListener> instances = new ArrayList<ObjectModifiedListener>();
     AxoObjectEditor editor;
-
-    public void OpenEditor() {
+    
+    Rectangle editorBounds;
+    Integer editorActiveTabIndex;
+    
+    private void setEditorBounds(Rectangle editorBounds) {
+        if(editorBounds != null) {
+            editor.setBounds(editorBounds);
+        }
+        else if(this.editorBounds != null) {
+            editor.setBounds(this.editorBounds);
+        }
+        
+    }
+    
+    private void setEditorActiveTabIndex(Integer editorActiveTabIndex) {
+        if(editorActiveTabIndex != null) {
+            editor.setActiveTabIndex(editorActiveTabIndex);
+        }
+        else if(this.editorActiveTabIndex != null) {
+            editor.setActiveTabIndex(this.editorActiveTabIndex);
+        }
+    }
+    
+    public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (editor == null) {
             editor = new AxoObjectEditor(this);
         }
+        
+        setEditorBounds(editorBounds);
+        setEditorActiveTabIndex(editorActiveTabIndex);
+        
         editor.setState(java.awt.Frame.NORMAL);
         editor.setVisible(true);
     }
 
     public void CloseEditor() {
+        FireObjectModified(this);
         editor = null;
     }
 

@@ -21,6 +21,7 @@ import axoloti.MainFrame;
 import axoloti.Patch;
 import axoloti.PatchFrame;
 import axoloti.PatchGUI;
+import java.awt.Rectangle;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,7 +88,7 @@ public class AxoObjectFromPatch extends AxoObject {
     }
 
     @Override
-    public void OpenEditor() {
+    public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (pg == null) {
             Strategy strategy = new AnnotationStrategy();
             Serializer serializer = new Persister(strategy);

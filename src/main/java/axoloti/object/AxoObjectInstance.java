@@ -41,6 +41,7 @@ import components.LabelComponent;
 import components.PopupIcon;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -424,7 +425,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     }
 
     public void OpenEditor() {
-        getType().OpenEditor();
+        getType().OpenEditor(editorBounds, editorActiveTabIndex);
     }
     
     @Override
@@ -885,6 +886,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public ArrayList<DisplayInstance> GetDisplayInstances() {
         return displayInstances;
     }
+    
+
+    Rectangle editorBounds;
+    Integer editorActiveTabIndex;
 
     @Override
     public void ObjectModified(Object src) {
@@ -894,6 +899,18 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             } else {
                 deferredObjTypeUpdate = true;
             }
+        }
+        
+        try {
+            AxoObject o = (AxoObject) src;
+            if(o.editor != null && o.editor.getBounds() != null) {
+                editorBounds = o.editor.getBounds();
+                editorActiveTabIndex = o.editor.getActiveTabIndex();
+                this.getType().editorBounds = editorBounds;
+                this.getType().editorActiveTabIndex = editorActiveTabIndex;
+            }
+        }
+        catch(ClassCastException ex) {
         }
     }
 
