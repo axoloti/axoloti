@@ -22,8 +22,10 @@ import axoloti.outlets.OutletInstance;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.IllegalComponentStateException;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -75,38 +77,68 @@ public class NetDragging extends Net {
                 c = Theme.getCurrentTheme().Cable_Shadow;
             }
         }
-        int lastSource = 0;
-        for (OutletInstance i : source) {
-//  Indicate latched connections
-            int j = patch.objectinstances.indexOf(i.GetObjectInstance());
-            if (j > lastSource) {
-                lastSource = j;
-            }
-            Point p1 = i.getJackLocInCanvas();
-            g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
-            if (p0 != null && p1 != null) {
-                DrawWire(g2, p0.x + shadowOffset, p0.y + shadowOffset, p1.x + shadowOffset, p1.y + shadowOffset);
+        if (p0 != null) {
+            Point from = SwingUtilities.convertPoint(getPatchGui().Layers, p0, this);
+            for (InletInstance i : dest) {
+                Point p1 = i.getJackLocInCanvas();
+
+                Point to = SwingUtilities.convertPoint(getPatchGui().Layers, p1, this);
+                g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
+                DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
                 g2.setColor(c);
-                DrawWire(g2, p0.x, p0.y, p1.x, p1.y);
+                DrawWire(g2, from.x, from.y, to.x, to.y);
+            }
+            for (OutletInstance i : source) {
+                Point p1 = i.getJackLocInCanvas();
+
+                Point to = SwingUtilities.convertPoint(getPatchGui().Layers, p1, this);
+                g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
+                DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
+                g2.setColor(c);
+                DrawWire(g2, from.x, from.y, to.x, to.y);
+
             }
         }
-        for (InletInstance i : dest) {
-            Point p1 = i.getJackLocInCanvas();
-            g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
-            if (p0 != null && p1 != null) {
-                DrawWire(g2, p0.x + shadowOffset, p0.y + shadowOffset, p1.x + shadowOffset, p1.y + shadowOffset);
-                g2.setColor(c);
-                DrawWire(g2, p0.x, p0.y, p1.x, p1.y);
+        updateBounds();
+    }
+
+    @Override
+    protected void updateBounds() {
+        try {
+
+            int min_y = Integer.MAX_VALUE;
+            int min_x = Integer.MAX_VALUE;
+            int max_y = Integer.MIN_VALUE;
+            int max_x = Integer.MIN_VALUE;
+
+            if (p0 != null) {
+                min_x = p0.x;
+                max_x = p0.x;
+                min_y = p0.y;
+                max_y = p0.y;
             }
-//  Indicate latched connections
-//            if (false) {
-//                int j = patch.objectinstances.indexOf(i.axoObj);
-//                if (j <= lastSource) {
-//                    int x = (p0.x + p1.x) / 2;
-//                    int y = (int) (0.5f * (p0.y + p1.y) + Math.abs(p1.y - p0.y) * 0.3f + Math.abs(p1.x - p0.x) * 0.05f);
-//                    g2.fillOval(x - 5, y - 5, 10, 10);
-//                }
-//            }
+
+            for (InletInstance i : dest) {
+                Point p1 = i.getJackLocInCanvas();
+                min_x = Math.min(min_x, p1.x);
+                min_y = Math.min(min_y, p1.y);
+                max_x = Math.max(max_x, p1.x);
+                max_y = Math.max(max_y, p1.y);
+            }
+            for (OutletInstance i : source) {
+                Point p1 = i.getJackLocInCanvas();
+                min_x = Math.min(min_x, p1.x);
+                min_y = Math.min(min_y, p1.y);
+                max_x = Math.max(max_x, p1.x);
+                max_y = Math.max(max_y, p1.y);
+            }
+
+            int fudge = Math.max((max_x - min_x) / 8, (max_y - min_y) / 8);
+            this.setLocation(new Point(min_x - fudge, min_y - fudge));
+            this.setSize(Math.max(1, max_x - min_x + (2 * fudge)), 
+                    Math.max(1, max_y - min_y + (2 * fudge)));
+        } catch (IllegalComponentStateException e) {
+
         }
     }
 

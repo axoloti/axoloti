@@ -13,6 +13,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -130,17 +131,11 @@ public abstract class IoletAbstract extends JPanel {
     }
 
     public Point getJackLocInCanvas() {
-        Point p1 = new Point(5, 5);
-        Component p = (Component) jack;
-        while (p != null) {
-            p1.x = p1.x + p.getX();
-            p1.y = p1.y + p.getY();
-            if (p == axoObj) {
-                break;
-            }
-            p = (Component) p.getParent();
-        }
-        return p1;
+        Point jackLocation = jack.getLocationOnScreen();
+        jackLocation.x += 5;
+        jackLocation.y += 5;
+        SwingUtilities.convertPointFromScreen(jackLocation, getPatchGui().Layers);
+        return jackLocation;
     }
 
     public DropTarget createDropTarget() {
@@ -162,7 +157,7 @@ public abstract class IoletAbstract extends JPanel {
                             SwingUtilities.convertPointFromScreen(jackLocation, p.Layers);
                             jackLocation.x *= zoom;
                             jackLocation.y *= zoom;
-                            
+
                             Point pl = new Point(dtde.getLocation().x + jackLocation.x, dtde.getLocation().y + jackLocation.y);
                             drag_net.SetDragPoint(pl);
                         }
@@ -326,6 +321,11 @@ public abstract class IoletAbstract extends JPanel {
             Net n = axoObj.patch.GetNet(this);
             if (n != null) {
                 n.setSelected(highlighted);
+
+                final PatchGUI patchGUI = getPatchGui();
+                Rectangle bounds = n.getBounds();
+                patchGUI.zoomUI.scale(bounds);
+                patchGUI.netLayerPanel.repaint(bounds);
             }
         }
     }

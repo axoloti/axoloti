@@ -42,4 +42,6 @@ public class Constants {
     public static final String OBJECT_LAYER_PANEL = "OBJECT_LAYER_PANEL";
     
     public static enum ZOOM_ACTION { IN, OUT, DEFAULT };
+    
+    public static final int ANCESTOR_CACHE_SIZE = 1024;
 }

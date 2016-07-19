@@ -157,7 +157,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             if ((o1 != null) && (o1 != this)) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} already exists!", InstanceName);
                 doLayout();
-                repaint();
                 return;
             }
         }
@@ -166,9 +165,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             InstanceLabel.setText(InstanceName);
         }
         doLayout();
-        if (getParent() != null) {
-            getParent().repaint();
-        }
     }
 
     public AxoObjectAbstract getType() {
@@ -226,13 +222,10 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected));
         setOpaque(true);
         resolveType();
-        
+
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        
 
         setVisible(true);
-        revalidate();
-        repaint();
 
         popup = new JPopupMenu();
 
@@ -243,11 +236,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
                             SetSelected(!GetSelected());
-                            ((PatchGUI) patch).repaint();
                         } else if (Selected == false) {
                             ((PatchGUI) patch).SelectNone();
                             SetSelected(true);
-                            ((PatchGUI) patch).repaint();
                         }
                     }
                     if (me.getClickCount() == 2) {
@@ -389,7 +380,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         super.setLocation(x, y);
         this.x = x;
         this.y = y;
-
         if (patch != null) {
             patch.repaint();
         }
@@ -408,7 +398,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public void addInstanceNameEditor() {
         InstanceNameTF = new TextFieldComponent(InstanceName);
         InstanceNameTF.selectAll();
-//        InstanceNameTF.setInputVerifier(new AxoObjectInstanceNameVerifier());
         InstanceNameTF.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -423,7 +412,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                 String s = InstanceNameTF.getText();
                 setInstanceName(s);
                 getParent().remove(InstanceNameTF);
-                patch.repaint();
             }
 
             @Override
@@ -446,7 +434,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     setInstanceName(s);
                     getParent().remove(InstanceNameTF);
                 }
-                getParent().repaint();
             }
         });
 
@@ -455,7 +442,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         InstanceNameTF.setSize(getWidth(), 15);
         InstanceNameTF.setVisible(true);
         InstanceNameTF.requestFocus();
-        //patch.repaint();
     }
 
     /*
@@ -537,7 +523,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             } else {
                 setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected));
             }
-            repaint();
         }
         this.Selected = Selected;
     }

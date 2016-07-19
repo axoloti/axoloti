@@ -629,8 +629,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
         jTextPaneLog.setText("");
-        doLayout();
-        repaint();
     }//GEN-LAST:event_jButtonClearActionPerformed
 
     private void jMenuItemPanicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPanicActionPerformed
