@@ -128,6 +128,10 @@ public class Net extends JPanel {
             i.setHighlighted(selected);
         }
     }
+    
+    public boolean getSelected() {
+        return this.selected;
+    }
 
     public void connectInlet(InletInstance inlet) {
         if (inlet.GetObjectInstance().patch != patch) {
