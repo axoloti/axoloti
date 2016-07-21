@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -50,7 +52,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     JTextField TFFileName;
     JLabel vlabel;
     ButtonComponent ButtonChooseFile;
-    
+
     private AxoObjectInstance axoObj;
 
     public AttributeInstanceSDFile() {
@@ -122,11 +124,14 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
 
     @Override
     public String CValue() {
+        if (fileName.startsWith("/")) {
+            return fileName.replaceAll("\\\\", "\\/");
+        }
         File f = getFile();
-        if (f != null) {
+        if ((f != null) && f.exists()) {
             return f.getName();
         } else {
-            return fileName;
+            return fileName.replaceAll("\\\\", "\\/");
         }
     }
 
