@@ -317,9 +317,11 @@ public abstract class IoletAbstract extends JPanel {
     }
 
     public void setHighlighted(boolean highlighted) {
-        if (axoObj.patch != null) {
+        if (getRootPane().getCursor() != MainFrame.transparentCursor
+                && axoObj.patch != null) {
             Net n = axoObj.patch.GetNet(this);
-            if (n != null) {
+            if (n != null
+                    && n.getSelected() != highlighted) {
                 n.setSelected(highlighted);
 
                 final PatchGUI patchGUI = getPatchGui();
