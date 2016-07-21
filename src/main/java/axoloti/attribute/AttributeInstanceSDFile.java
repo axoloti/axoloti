@@ -124,9 +124,6 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
 
     @Override
     public String CValue() {
-        if (fileName.startsWith("/")) {
-            return fileName.replaceAll("\\\\", "\\/");
-        }
         File f = getFile();
         if ((f != null) && f.exists()) {
             return f.getName();
