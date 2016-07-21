@@ -111,11 +111,9 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
                     if (e.getClickCount() == 1) {
                         if (e.isShiftDown()) {
                             SetSelected(!GetSelected());
-                            ((PatchGUI) patch).repaint();
                         } else if (Selected == false) {
                             ((PatchGUI) patch).SelectNone();
                             SetSelected(true);
-                            ((PatchGUI) patch).repaint();
                         }
                     }
                 }

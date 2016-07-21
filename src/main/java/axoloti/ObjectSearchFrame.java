@@ -22,7 +22,6 @@ import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectTreeNode;
 import axoloti.utils.Constants;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
@@ -86,7 +85,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 if (node.getUserObject() instanceof AxoObjectTreeNode) {
                     AxoObjectTreeNode anode = (AxoObjectTreeNode) node.getUserObject();
                     jPanel1.removeAll();
-                    jPanel1.repaint();
+                    jPanel1.setVisible(false);
                     jTextPane1.setText(anode.description);
                     jTextPane1.setCaretPosition(0);
                     previewObj = null;
@@ -264,8 +263,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             public void componentShown(ComponentEvent e) {
                 if(inst != null) {
                     ObjectSearchFrame.this.scalePreviewPanel(inst.getWidth(), inst.getHeight());
-                    jPanel1.revalidate();
-                    jPanel1.repaint();
                 }
             }
         });
@@ -323,7 +320,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             previewObj = null;
             type = null;
             jPanel1.removeAll();
-            jPanel1.repaint();
+            jPanel1.setVisible(false);
             return;
         }
         if (o != previewObj) {
@@ -336,11 +333,9 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             inst = o.CreateInstance(null, "dummy", new Point(5, 5));
             jPanel1.removeAll();
             jPanel1.add(inst);
+            jPanel1.setVisible(true);
             jPanel1.doLayout();
             scalePreviewPanel(inst.getWidth(), inst.getHeight());
-
-            jPanel1.revalidate();
-            jPanel1.repaint();
 
             jTextPane1.setText(o.sDescription + "\n<p>\nPath: " + o.sPath + "\n<p>\nAuthor: " + o.sAuthor + "\n<p>\nLicense: " + o.sLicense);
             jTextPane1.setCaretPosition(0);
@@ -352,6 +347,8 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         panelSize.width = (int) Math.round(originalWidth * p.zoomUI.getScale());
         panelSize.height = (int) Math.round(originalHeight * p.zoomUI.getScale());
         jPanel1.setPreferredSize(panelSize);
+        jPanel1.revalidate();
+        jPanel1.repaint();
     }
 
     static DefaultMutableTreeNode PopulateJTree(AxoObjectTreeNode anode, DefaultMutableTreeNode root) {
@@ -425,8 +422,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 }
             }
             jList1.setListData(listData.toArray());
-//            jList1.doLayout();
-//            jList1.revalidate();
             if (!listData.isEmpty()) {
                 type = listData.get(0);
                 jList1.setSelectedIndex(0);
@@ -448,7 +443,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     void Cancel() {
         accepted = false;
         setVisible(false);
-        p.repaint();
     }
 
     void Accept() {
@@ -472,7 +466,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 }
             }
             setVisible(false);
-            p.repaint();
         }
     }
 
@@ -521,9 +514,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.PAGE_AXIS));
 
         jTextFieldObjName.setAlignmentX(0.0F);
-        jTextFieldObjName.setMaximumSize(new java.awt.Dimension(10000, 20));
-        jTextFieldObjName.setMinimumSize(new java.awt.Dimension(100, 20));
-        jTextFieldObjName.setPreferredSize(new java.awt.Dimension(100, 20));
         jTextFieldObjName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldObjNameActionPerformed(evt);
@@ -540,7 +530,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.setAlignmentX(0.0F);
         jList1.setMaximumSize(null);
-        jList1.setMinimumSize(new java.awt.Dimension(100, 50));
         jList1.setVisibleRowCount(6);
         jScrollPane3.setViewportView(jList1);
 
@@ -550,7 +539,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
         jTree1.setAlignmentX(0.0F);
         jTree1.setDragEnabled(true);
-        jTree1.setMinimumSize(new java.awt.Dimension(100, 50));
         jTree1.setRootVisible(false);
         jScrollPane1.setViewportView(jTree1);
 
@@ -572,7 +560,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
         jPanel1.setBackground(java.awt.Color.lightGray);
         jPanel1.setEnabled(false);
-        jPanel1.setFocusTraversalKeysEnabled(false);
         jPanel1.setFocusable(false);
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
         jLayeredPane1.add(jPanel1);
@@ -587,7 +574,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
         jTextPane1.setEditable(false);
         jTextPane1.setFocusCycleRoot(false);
-        jTextPane1.setFocusTraversalKeysEnabled(false);
         jTextPane1.setFocusable(false);
         jTextPane1.setRequestFocusEnabled(false);
         jScrollPane4.setViewportView(jTextPane1);

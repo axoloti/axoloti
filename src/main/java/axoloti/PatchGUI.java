@@ -155,7 +155,6 @@ public class PatchGUI extends Patch {
         Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
         Layers.setOpaque(true);
         Layers.invalidate();
-        Layers.repaint();
         Layers.doLayout();
 
         TransferHandler TH = new TransferHandler() {
@@ -429,10 +428,11 @@ public class PatchGUI extends Patch {
                     int ymin = y1 < y2 ? y1 : y2;
                     int ymax = y1 > y2 ? y1 : y2;
                     selectionrectangle.setLocation(xmin, ymin);
-                    selectionrectangle.setSize(xmax - xmin, ymax - ymin);
+                    int width = xmax - xmin;
+                    int height = ymax - ymin;
+                    selectionrectangle.setSize(width, height);
                     selectionrectangle.setVisible(true);
-                    PatchGUI.this.selectionRectLayer.revalidate();
-                    PatchGUI.this.selectionRectLayer.repaint();
+                    selectionRectLayer.repaint(new Rectangle(xmin, ymin, width, height));
                 } else if (Button2down) {
                     handlePan(ev);
                 }
@@ -446,8 +446,6 @@ public class PatchGUI extends Patch {
             }
         });
         Layers.setVisible(true);
-        Layers.invalidate();
-        Layers.repaint();
 
         DropTarget dt;
         dt = new DropTarget() {
@@ -459,6 +457,9 @@ public class PatchGUI extends Patch {
                         NetDragging nd = (NetDragging) cmp;
                         nd.SetDragPoint(dtde.getLocation());
                         selectionRectLayerPanel.repaint();
+                        Rectangle bounds = nd.getBounds();
+                        zoomUI.scale(bounds);
+                        selectionRectLayerPanel.repaint(bounds);
                         break;
                     }
                 }
@@ -549,7 +550,7 @@ public class PatchGUI extends Patch {
             vertical.setValue(newVerticalValue);
         }
     }
-
+    
     public void handleZoom(Constants.ZOOM_ACTION action, Point origin) {
         // this method implements zoom to mouse functionality
         // we perform the scale change
@@ -893,7 +894,6 @@ public class PatchGUI extends Patch {
             }
             if (isUpdate) {
                 AdjustSize();
-                Layers.repaint();
                 SetDirty();
             }
         } else {
@@ -944,7 +944,7 @@ public class PatchGUI extends Patch {
     @Override
     public Net disconnect(IoletAbstract io) {
         Net n = super.disconnect(io);
-        Layers.repaint();
+        netLayerPanel.repaint();
         return n;
     }
 
@@ -953,8 +953,8 @@ public class PatchGUI extends Patch {
         Net nn = super.delete(n);
         if (nn != null) {
             netLayerPanel.remove(n);
-            Layers.repaint();
         }
+        netLayerPanel.repaint();
         return nn;
     }
 
@@ -962,7 +962,8 @@ public class PatchGUI extends Patch {
     public void delete(AxoObjectInstanceAbstract o) {
         super.delete(o);
         objectLayerPanel.remove(o);
-        Layers.repaint();
+        this.repaint();
+        AdjustSize();
     }
 
     @Override
@@ -1024,7 +1025,6 @@ public class PatchGUI extends Patch {
 
     @Override
     public void repaint() {
-        super.repaint();
         Layers.repaint();
     }
 

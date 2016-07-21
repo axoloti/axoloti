@@ -31,7 +31,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -88,11 +87,9 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
                             SetSelected(!GetSelected());
-                            ((PatchGUI) patch).repaint();
                         } else if (Selected == false) {
                             ((PatchGUI) patch).SelectNone();
                             SetSelected(true);
-                            ((PatchGUI) patch).repaint();
                         }
                     }
                 }
@@ -141,7 +138,6 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
                 String s = InstanceNameTF.getText();
                 setInstanceName(s);
                 getParent().remove(InstanceNameTF);
-                patch.repaint();
             }
 
             @Override
@@ -163,7 +159,6 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
                     String s = InstanceNameTF.getText();
                     setInstanceName(s);
                     getParent().remove(InstanceNameTF);
-                    patch.repaint();
                 }
             }
         });
@@ -181,9 +176,6 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
             InstanceLabel.setText(commentText);
         }
         doLayout();
-        if (getParent() != null) {
-            getParent().repaint();
-        }
         resizeToGrid();
     }
 

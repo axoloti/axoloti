@@ -460,7 +460,7 @@ public class Patch {
         }
         return null;
     }
-
+    
     /*
      private boolean CompatType(DataType source, DataType d2){
      if (d1 == d2) return true;
@@ -587,7 +587,6 @@ public class Patch {
                     delete(n);
                 }
                 SetDirty();
-                repaint();
                 return n;
             }
         } else {
@@ -600,7 +599,6 @@ public class Patch {
         if (!IsLocked()) {
             nets.remove(n);
             SetDirty();
-            repaint();
             return n;
         } else {
             Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
@@ -629,7 +627,6 @@ public class Patch {
             }
         }
         SetDirty();
-        repaint();
         objectinstances.remove(o);
         o.getType().DeleteInstance(o);
     }
@@ -672,7 +669,6 @@ public class Patch {
                     }
                 }
             }
-            repaint();
         } else {
             Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't delete: locked!");
         }
@@ -727,6 +723,10 @@ public class Patch {
             this.nets = p.nets;
             this.cleanDanglingStates = false;
             this.PostContructor();
+            repaint();
+            for(Net n : nets) {
+                n.updateBounds();
+            }
             repaint();
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
@@ -2373,7 +2373,6 @@ public class Patch {
                 new_obj.attributeInstances = old_obj.attributeInstances;
             }
             obj1.setName(n);
-            obj1.repaint();
             return obj1;
         } else if (obj instanceof AxoObjectInstanceZombie) {
             String n = obj.getInstanceName();
@@ -2386,7 +2385,6 @@ public class Patch {
                 new_obj.inletInstances = old_obj.inletInstances;
             }
             obj1.setName(n);
-            obj1.repaint();
             return obj1;
         }
         return obj;

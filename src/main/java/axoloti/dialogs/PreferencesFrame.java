@@ -19,7 +19,6 @@ package axoloti.dialogs;
 
 import axoloti.Axoloti;
 import axoloti.MainFrame;
-import axoloti.menus.WindowMenu;
 import axoloti.utils.AxoFileLibrary;
 import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;

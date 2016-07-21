@@ -134,9 +134,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     @Override
     public void setInstanceName(String s) {
         super.setInstanceName(s);
-//        InstanceLabel.doLayout();
         resizeToGrid();
-        repaint();
     }
 
     @Override

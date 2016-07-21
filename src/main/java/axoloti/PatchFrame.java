@@ -177,7 +177,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         if (USBBulkConnection.GetConnection().isConnected()) {
             ShowConnect();
         }
+        createBufferStrategy(2);
     }
+
     QCmdProcessor qcmdprocessor;
 
     public void SetLive(boolean b) {
@@ -994,17 +996,14 @@ jMenuUploadCode.addActionListener(new java.awt.event.ActionListener() {
 
     private void zoomInMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomInMenuItemActionPerformed
         patch.handleZoom(Constants.ZOOM_ACTION.IN, new Point(0, 0));
-        patch.Layers.repaint();
     }//GEN-LAST:event_zoomInMenuItemActionPerformed
 
     private void zoomDefaultMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomDefaultMenuItemActionPerformed
         patch.handleZoom(Constants.ZOOM_ACTION.DEFAULT, new Point(0, 0));
-        patch.Layers.repaint();
     }//GEN-LAST:event_zoomDefaultMenuItemActionPerformed
 
     private void zoomOutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomOutMenuItemActionPerformed
         patch.handleZoom(Constants.ZOOM_ACTION.OUT, new Point(0, 0));
-        patch.Layers.repaint();
     }//GEN-LAST:event_zoomOutMenuItemActionPerformed
 
     private void undoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoItemActionPerformed

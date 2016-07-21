@@ -7,13 +7,12 @@ import components.JackInputComponent;
 import components.JackOutputComponent;
 import components.LabelComponent;
 import components.control.ACtrlComponent;
-import components.control.DialComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.plaf.LayerUI;
 
@@ -36,8 +35,6 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     private boolean button2down = false;
 
-    private Robot robot;
-
     public ZoomUI(double startingScale, double zoomAmount, double zoomMax, double zoomMin,
             PatchGUI patch) {
         zoom = startingScale;
@@ -46,20 +43,17 @@ public class ZoomUI extends LayerUI<JComponent> {
         this.zoomMax = zoomMax;
         this.zoomMin = zoomMin;
         this.patch = patch;
-        try {
-            robot = new Robot(MouseInfo.getPointerInfo().getDevice());
-        } catch (AWTException ex) {
-            Logger.getLogger(DialComponent.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
     }
+    
+    private final Map<RenderingHints.Key, Object> hints = new HashMap<RenderingHints.Key, Object>();
 
     @Override
     public void paint(Graphics g, JComponent c) {
         Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
+        g2.setRenderingHints(hints);
         g2.scale(zoom, zoom);
         super.paint(g2, c);
-        g2.dispose();
     }
 
     private Component getTargetComponent(Component component) {
@@ -144,6 +138,7 @@ public class ZoomUI extends LayerUI<JComponent> {
                 layerEvent = translateToLayerCoordinates(e, l);
                 localEvent = translateToComponentCoordinates(layerEvent, axoObjectParent);
                 transformedEvent = getNewMouseEvent(axoObjectParent, localEvent);
+
                 mouseListeners = axoObjectParent.getListeners(MouseListener.class);
 
                 dispatchMouseEvent(mouseListeners, localEvent, transformedEvent);
@@ -154,7 +149,9 @@ public class ZoomUI extends LayerUI<JComponent> {
             previous = component;
             e.consume();
             if (!button2down) {
-                l.repaint();
+                ZoomUtils.paintObjectLayer(l, 
+                        axoObjectParent != null ? axoObjectParent : component, 
+                        this, false);
             }
         }
 
@@ -231,19 +228,21 @@ public class ZoomUI extends LayerUI<JComponent> {
 
             e.consume();
             if (!button2down) {
-                l.repaint();
+                ZoomUtils.paintObjectLayer(l, 
+                        axoObjectParent != null ? axoObjectParent : component, 
+                        this, false);
             }
         }
     }
 
     protected void processKeyEvent(KeyEvent e,
             JLayer<? extends JComponent> l) {
-        l.repaint();
+        ZoomUtils.paintObjectLayer(l, e.getComponent(), this);
     }
 
     protected void proccesFocusEvent(FocusEvent e,
             JLayer<? extends JComponent> l) {
-        l.repaint();
+        ZoomUtils.paintObjectLayer(l, e.getComponent(), this);
     }
 
     @Override
@@ -287,6 +286,17 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     public int removeZoomFactor(int x) {
         return (int) Math.round(x / zoom);
+    }
+    
+    public void scale(Rectangle r) {
+        r.x = scale(r.x);
+        r.y = scale(r.y);
+        r.width = scale(r.width);
+        r.height = scale(r.height);
+    }
+    
+    public int scale(int x) {
+        return (int) Math.round(x * zoom);
     }
 
     public Point removeZoomFactor(Point p) {
