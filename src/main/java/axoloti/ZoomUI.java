@@ -1,6 +1,7 @@
 package axoloti;
 
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.TitleBarPanel;
 import axoloti.utils.Constants;
 import components.JackInputComponent;
@@ -45,7 +46,7 @@ public class ZoomUI extends LayerUI<JComponent> {
         this.patch = patch;
         hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
     }
-    
+
     private final Map<RenderingHints.Key, Object> hints = new HashMap<RenderingHints.Key, Object>();
 
     @Override
@@ -149,8 +150,8 @@ public class ZoomUI extends LayerUI<JComponent> {
             previous = component;
             e.consume();
             if (!button2down) {
-                ZoomUtils.paintObjectLayer(l, 
-                        axoObjectParent != null ? axoObjectParent : component, 
+                ZoomUtils.paintObjectLayer(l,
+                        axoObjectParent != null ? axoObjectParent : component,
                         this, false);
             }
         }
@@ -228,8 +229,8 @@ public class ZoomUI extends LayerUI<JComponent> {
 
             e.consume();
             if (!button2down) {
-                ZoomUtils.paintObjectLayer(l, 
-                        axoObjectParent != null ? axoObjectParent : component, 
+                ZoomUtils.paintObjectLayer(l,
+                        axoObjectParent != null ? axoObjectParent : component,
                         this, false);
             }
         }
@@ -277,7 +278,13 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     private Component getComponentClickedOn(MouseEvent e) {
         Point coordinates = zoomedXY(e);
-        return patch.objectLayerPanel.findComponentAt(coordinates.x, coordinates.y);
+        Component clickedOn = patch.draggedObjectLayerPanel.findComponentAt(coordinates.x, coordinates.y);
+        if (clickedOn == null
+                || (clickedOn.getName() != null
+                && clickedOn.getName().equals(Constants.DRAGGED_OBJECT_LAYER_PANEL))) {
+            clickedOn = patch.objectLayerPanel.findComponentAt(coordinates.x, coordinates.y);
+        }
+        return clickedOn;
     }
 
     private Point zoomedXY(MouseEvent e) {
@@ -287,14 +294,14 @@ public class ZoomUI extends LayerUI<JComponent> {
     public int removeZoomFactor(int x) {
         return (int) Math.round(x / zoom);
     }
-    
+
     public void scale(Rectangle r) {
         r.x = scale(r.x);
         r.y = scale(r.y);
         r.width = scale(r.width);
         r.height = scale(r.height);
     }
-    
+
     public int scale(int x) {
         return (int) Math.round(x * zoom);
     }
@@ -357,11 +364,11 @@ public class ZoomUI extends LayerUI<JComponent> {
     public boolean canZoomIn() {
         return zoom + zoomAmount <= zoomMax;
     }
-    
+
     public void startPan() {
         this.button2down = true;
     }
-    
+
     public void stopPan() {
         this.button2down = false;
     }
