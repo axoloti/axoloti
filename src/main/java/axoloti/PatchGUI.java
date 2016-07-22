@@ -98,6 +98,7 @@ public class PatchGUI extends Patch {
     public JLayeredPane Layers = new JLayeredPane();
 
     public JPanel objectLayerPanel = new JPanel();
+    public JPanel draggedObjectLayerPanel = new JPanel();
 
     public ZoomUI zoomUI = new ZoomUI(Constants.INITIAL_ZOOM,
             Constants.ZOOM_STEP,
@@ -105,6 +106,7 @@ public class PatchGUI extends Patch {
             Constants.MINIMUM_ZOOM,
             this);
     JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel, zoomUI);
+    JLayer<JComponent> draggedObjectLayer = new JLayer<JComponent>(draggedObjectLayerPanel, zoomUI);
 
     public JPanel netLayerPanel = new JPanel();
     JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel, zoomUI);
@@ -126,9 +128,9 @@ public class PatchGUI extends Patch {
         super();
 
         JComponent[] layerComponents = {
-            Layers, objectLayerPanel, netLayerPanel,
+            Layers, objectLayerPanel, draggedObjectLayerPanel, netLayerPanel,
             selectionRectLayerPanel, unzoomedLayerPanel,
-            objectLayer, netLayer, selectionRectLayer,
+            objectLayer, draggedObjectLayer, netLayer, selectionRectLayer,
             unzoomedLayer};
         for (JComponent c : layerComponents) {
             c.setLayout(null);
@@ -138,11 +140,13 @@ public class PatchGUI extends Patch {
         }
 
         Layers.add(objectLayer, new Integer(1));
-        Layers.add(netLayer, new Integer(2));
-        Layers.add(selectionRectLayer, new Integer(3));
-        Layers.add(unzoomedLayer, new Integer(4));
+        Layers.add(draggedObjectLayer, new Integer(2));
+        Layers.add(netLayer, new Integer(3));
+        Layers.add(selectionRectLayer, new Integer(4));
+        Layers.add(unzoomedLayer, new Integer(5));
 
         objectLayerPanel.setName(Constants.OBJECT_LAYER_PANEL);
+        draggedObjectLayerPanel.setName(Constants.DRAGGED_OBJECT_LAYER_PANEL);
 
         selectionRectLayerPanel.add(selectionrectangle);
         selectionrectangle.setLocation(100, 100);
@@ -320,10 +324,9 @@ public class PatchGUI extends Patch {
                 } else if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
                     MoveSelectedAxoObjInstances(Direction.LEFT, xsteps, ysteps);
                     ke.consume();
-                }
-                else if(ke.getKeyCode() == KeyEvent.VK_ALT) {
+                } else if (ke.getKeyCode() == KeyEvent.VK_ALT) {
                     panOrigin = Layers.getMousePosition();
-                    if(panOrigin != null) {
+                    if (panOrigin != null) {
                         zoomUI.removeZoomFactor(panOrigin);
                         PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
                         Button2down = true;
@@ -334,7 +337,7 @@ public class PatchGUI extends Patch {
 
             @Override
             public void keyReleased(KeyEvent ke) {
-                if(ke.getKeyCode() == KeyEvent.VK_ALT) {
+                if (ke.getKeyCode() == KeyEvent.VK_ALT) {
                     PatchGUI.this.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
                     Button2down = false;
                     zoomUI.stopPan();
@@ -550,7 +553,7 @@ public class PatchGUI extends Patch {
             vertical.setValue(newVerticalValue);
         }
     }
-    
+
     public void handleZoom(Constants.ZOOM_ACTION action, Point origin) {
         // this method implements zoom to mouse functionality
         // we perform the scale change
@@ -983,14 +986,18 @@ public class PatchGUI extends Patch {
     void SetCordsInBackground(boolean b) {
         if (b) {
             Layers.removeAll();
-            Layers.add(objectLayer, new Integer(2));
             Layers.add(netLayer, new Integer(1));
-            Layers.add(selectionRectLayer, new Integer(3));
+            Layers.add(objectLayer, new Integer(2));
+            Layers.add(draggedObjectLayer, new Integer(3));
+            Layers.add(selectionRectLayer, new Integer(4));
+            Layers.add(unzoomedLayer, new Integer(5));
         } else {
             Layers.removeAll();
             Layers.add(objectLayer, new Integer(1));
-            Layers.add(netLayer, new Integer(2));
-            Layers.add(selectionRectLayer, new Integer(3));
+            Layers.add(draggedObjectLayer, new Integer(2));
+            Layers.add(netLayer, new Integer(3));
+            Layers.add(selectionRectLayer, new Integer(4));
+            Layers.add(unzoomedLayer, new Integer(5));
         }
     }
 
@@ -1054,7 +1061,7 @@ public class PatchGUI extends Patch {
         // object
         return new Dimension(mx + 300, my + 300);
     }
-    
+
     public void clampLayerSize(Dimension s) {
         if (s.width < Layers.getParent().getWidth()) {
             s.width = Layers.getParent().getWidth();

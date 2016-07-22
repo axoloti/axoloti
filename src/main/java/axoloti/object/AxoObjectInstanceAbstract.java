@@ -47,6 +47,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -137,6 +139,10 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
     public Patch getPatch() {
         return patch;
+    }
+
+    public PatchGUI getPatchGUI() {
+        return (PatchGUI) patch;
     }
 
     public String getInstanceName() {
@@ -291,7 +297,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             @Override
             public void mouseDragged(MouseEvent me) {
                 if (patch != null) {
-                    double zoom = ((PatchGUI) patch).zoomUI.getScale();
                     if (dragging) {
                         for (AxoObjectInstanceAbstract o : patch.objectinstances) {
                             if (o.dragging) {
@@ -334,17 +339,28 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         });
     }
 
+    private void moveToDraggedLayer(AxoObjectInstanceAbstract o) {
+        if (getPatchGUI().objectLayerPanel.isAncestorOf(o)) {
+            getPatchGUI().draggedObjectLayerPanel.add(o);
+            getPatchGUI().objectLayerPanel.remove(o);
+        }
+    }
+
     protected void handleMousePressed(MouseEvent me) {
         if (patch != null) {
             if (me.isPopupTrigger()) {
 
             } else if (!IsLocked()) {
+                ArrayList<AxoObjectInstanceAbstract> toMove = new ArrayList<AxoObjectInstanceAbstract>();
                 dX = getZoomUI().removeZoomFactor(me.getXOnScreen()) - getX();
                 dY = getZoomUI().removeZoomFactor(me.getYOnScreen()) - getY();
                 dragging = true;
+                moveToDraggedLayer(this);
                 if (IsSelected()) {
                     for (AxoObjectInstanceAbstract o : patch.objectinstances) {
                         if (o.IsSelected()) {
+                            moveToDraggedLayer(o);
+
                             o.dX = getZoomUI().removeZoomFactor(me.getXOnScreen()) - o.getX();
                             o.dY = getZoomUI().removeZoomFactor(me.getYOnScreen()) - o.getY();
                             o.dragging = true;
@@ -355,11 +371,25 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         }
     }
 
+    private void moveToObjectLayer(AxoObjectInstanceAbstract o, int z) {
+        if (getPatchGUI().draggedObjectLayerPanel.isAncestorOf(o)) {
+            getPatchGUI().objectLayerPanel.add(o);
+            getPatchGUI().draggedObjectLayerPanel.remove(o);
+            getPatchGUI().objectLayerPanel.setComponentZOrder(o, z);
+        }
+    }
+
     protected void handleMouseReleased(MouseEvent me) {
+        int maxZIndex = 0;
         if (dragging) {
             dragging = false;
             if (patch != null) {
+
                 for (AxoObjectInstanceAbstract o : patch.objectinstances) {
+                    moveToObjectLayer(o, 0);
+                    if (getPatchGUI().objectLayerPanel.getComponentZOrder(o) > maxZIndex) {
+                        maxZIndex = getPatchGUI().objectLayerPanel.getComponentZOrder(o);
+                    }
                     o.dragging = false;
                     o.x = ((o.x + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
                     o.y = ((o.y + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
@@ -369,6 +399,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                 patch.SetDirty();
             }
         }
+        moveToObjectLayer(this, maxZIndex);
     }
 
     public ZoomUI getZoomUI() {
