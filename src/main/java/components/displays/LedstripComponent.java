@@ -17,6 +17,7 @@
  */
 package components.displays;
 
+import axoloti.Theme;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -44,8 +45,8 @@ public class LedstripComponent extends ADispComponent {
         setSize(d);
     }
 
-    final Color c_off = new Color(0.f, 0.f, 0.f, 0.5f);
-    final Color c_on = new Color(0.f, 1.f, 0.f, 1.0f);
+    final Color c_off = Theme.getCurrentTheme().Led_Strip_Off;
+    final Color c_on = Theme.getCurrentTheme().Led_Strip_On;
 
     @Override
     public void paintComponent(Graphics g) {
@@ -54,7 +55,7 @@ public class LedstripComponent extends ADispComponent {
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.setColor(getBackground());
+        g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(0, 0, bsize * n + 1, bsize + 1);
 //        g2.setPaint(getForeground());
 //        g2.drawRect(0, 0, bsize * n + 1, bsize + 1);
@@ -79,7 +80,7 @@ public class LedstripComponent extends ADispComponent {
     public void setValue(double value) {
         if (this.value != value) {
             this.value = value;
-            repaint();
+            paintObjectLayer();
         }
     }
 }

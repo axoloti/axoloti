@@ -17,8 +17,8 @@
  */
 package components.control;
 
+import axoloti.Theme;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -104,7 +104,6 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
                 if (selIndex < 0) {
                     selIndex = n - 1;
                 }
-                repaint();
                 ke.consume();
                 return;
             }
@@ -113,7 +112,6 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
                 if (selIndex >= n) {
                     selIndex = 0;
                 }
-                repaint();
                 ke.consume();
                 return;
             }
@@ -182,9 +180,9 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         if (isEnabled()) {
-            g2.setColor(Color.white);
+            g2.setColor(Theme.getCurrentTheme().Component_Secondary);
         } else {
-            g2.setColor(getBackground());
+            g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         }
         g2.fillRect(0, 0, bsize * n, bsize + 1);
         g2.setPaint(getForeground());
@@ -208,16 +206,16 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
             for (int i = 0; i < n; i++) {
                 switch (v & 3) {
                     case 0:
-                        g2.setColor(Color.white);
+                        g2.setColor(Theme.getCurrentTheme().Component_Secondary);
                         break;
                     case 1:
-                        g2.setColor(Color.getHSBColor(0.0f, 0.0f, 0.66f));
+                        g2.setColor(Theme.getCurrentTheme().Component_Mid_Dark);
                         break;
                     case 2:
-                        g2.setColor(Color.getHSBColor(0.0f, 0.0f, 0.33f));
+                        g2.setColor(Theme.getCurrentTheme().Component_Mid_Light);
                         break;
                     case 3:
-                        g2.setColor(Color.black);
+                        g2.setColor(Theme.getCurrentTheme().Component_Primary);
                         break;
                 }
                 g2.fillRect(i * bsize + inset, inset, bsize - inset - 1, bsize - inset);
@@ -245,7 +243,6 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
     public void setValue(double value) {
         if (this.value != value) {
             this.value = value;
-            repaint();
         }
         fireEvent();
     }

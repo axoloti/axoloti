@@ -17,7 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Int32;
 import axoloti.datatypes.Value;
 import components.control.CheckboxComponent;
 import org.simpleframework.xml.Attribute;

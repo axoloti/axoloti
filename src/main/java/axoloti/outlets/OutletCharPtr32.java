@@ -17,8 +17,8 @@
  */
 package axoloti.outlets;
 
-import axoloti.datatypes.DataType;
 import axoloti.datatypes.CharPtr32;
+import axoloti.datatypes.DataType;
 
 /**
  *

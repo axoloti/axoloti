@@ -17,17 +17,24 @@
  */
 package components.control;
 
+import axoloti.MainFrame;
+import axoloti.Theme;
+import java.awt.AWTException;
 import java.awt.BasicStroke;
-import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
 import java.awt.RenderingHints;
+import java.awt.Robot;
 import java.awt.Stroke;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -44,12 +51,15 @@ public class VSliderComponent extends ACtrlComponent {
     private static final int width = 12;
     private static final Dimension dim = new Dimension(width, height);
     private String keybBuffer = "";
+    private Robot robot;
 
     public VSliderComponent(double value, double min, double max, double tick) {
         this.max = max;
         this.min = min;
         this.value = value;
         this.tick = tick;
+
+
 
         setPreferredSize(dim);
         setMaximumSize(dim);
@@ -66,23 +76,36 @@ public class VSliderComponent extends ACtrlComponent {
             }
         });
         SetupTransferHandler();
+        try {
+            robot = new Robot(MouseInfo.getPointerInfo().getDevice());
+        } catch (AWTException ex) {
+            Logger.getLogger(NumberBoxComponent.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    int px;
+    private int px;
+    private int py;
 
     @Override
     protected void mouseDragged(MouseEvent e) {
-        setValue(value + (px - e.getY()) * tick);
-        px = e.getY();
+        if (isEnabled()) {
+            double v = value + tick * ((int) Math.round((py - e.getYOnScreen()) / getScale()));
+            robotMoveToCenter();
+            setValue(v);
+        }
     }
 
     @Override
     protected void mousePressed(MouseEvent e) {
         grabFocus();
-        px = e.getY();
+
+        px = e.getXOnScreen();
+        py = e.getYOnScreen();
+        getRootPane().setCursor(MainFrame.transparentCursor);
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
+        getRootPane().setCursor(Cursor.getDefaultCursor());
     }
 
     @Override
@@ -125,17 +148,14 @@ public class VSliderComponent extends ACtrlComponent {
                 }
                 keybBuffer = "";
                 ke.consume();
-                repaint();
                 break;
             case KeyEvent.VK_BACK_SPACE:
                 keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
                 ke.consume();
-                repaint();
                 break;
             case KeyEvent.VK_ESCAPE:
                 keybBuffer = "";
                 ke.consume();
-                repaint();
                 break;
             default:
         }
@@ -154,7 +174,6 @@ public class VSliderComponent extends ACtrlComponent {
             case '.':
                 keybBuffer += ke.getKeyChar();
                 ke.consume();
-                repaint();
                 break;
             default:
         }
@@ -181,7 +200,7 @@ public class VSliderComponent extends ACtrlComponent {
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         if (isEnabled()) {
-            g2.setPaint(Color.WHITE);
+            g2.setPaint(Theme.getCurrentTheme().Component_Secondary);
             g2.fillRect(0, 0, getWidth(), height);
             g2.setPaint(getForeground());
             if (isFocusOwner()) {
@@ -206,7 +225,7 @@ public class VSliderComponent extends ACtrlComponent {
             //Rectangle2D r = g2.getFontMetrics().getStringBounds(s, g);
             //g2.drawString(s, bwidth+(margin/2)-(int)(0.5 + r.getWidth()/2), getHeight());
         } else {
-            g2.setPaint(getBackground());
+            g2.setPaint(Theme.getCurrentTheme().Object_Default_Background);
             g2.fillRect(0, 0, getWidth(), height);
             g2.setPaint(getForeground());
             g2.setStroke(strokeThin);
@@ -224,7 +243,6 @@ public class VSliderComponent extends ACtrlComponent {
         }
         this.value = value;
         setToolTipText("" + value);
-        repaint();
         fireEvent();
     }
 
@@ -247,5 +265,11 @@ public class VSliderComponent extends ACtrlComponent {
 
     public double getMaximum() {
         return max;
+    }
+    
+    @Override
+    public void robotMoveToCenter() {
+        getRootPane().setCursor(MainFrame.transparentCursor);
+        robot.mouseMove(px, py);
     }
 }

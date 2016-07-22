@@ -17,8 +17,8 @@
  */
 package components.control;
 
+import axoloti.Theme;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -75,7 +75,6 @@ public class CheckboxComponent extends ACtrlComponent {
             if (i < n) {
                 SetFieldValue(i, dragValue);
                 selIndex = i;
-                repaint();
             }
         }
     }
@@ -114,7 +113,6 @@ public class CheckboxComponent extends ACtrlComponent {
                 if (selIndex < 0) {
                     selIndex = n - 1;
                 }
-                repaint();
                 ke.consume();
                 return;
             }
@@ -123,7 +121,6 @@ public class CheckboxComponent extends ACtrlComponent {
                 if (selIndex >= n) {
                     selIndex = 0;
                 }
-                repaint();
                 ke.consume();
                 return;
             }
@@ -175,9 +172,9 @@ public class CheckboxComponent extends ACtrlComponent {
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         if (isEnabled()) {
-            g2.setColor(Color.white);
+            g2.setColor(Theme.getCurrentTheme().Component_Secondary);
         } else {
-            g2.setColor(getBackground());
+            g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         }
         g2.fillRect(0, 0, bsize * n, bsize + 1);
         g2.setPaint(getForeground());
@@ -226,7 +223,6 @@ public class CheckboxComponent extends ACtrlComponent {
     public void setValue(double value) {
         if (this.value != value) {
             this.value = value;
-            repaint();
         }
         fireEvent();
     }

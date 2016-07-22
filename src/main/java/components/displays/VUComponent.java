@@ -17,6 +17,7 @@
  */
 package components.displays;
 
+import axoloti.Theme;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -58,7 +59,7 @@ public class VUComponent extends ADispComponent {
         if (valuesq > peakaccumvalue) {
             peakaccumvalue = valuesq;
         }
-        repaint();
+        paintObjectLayer();
     }
 
     int valueToPos(double v) {
@@ -72,13 +73,13 @@ public class VUComponent extends ADispComponent {
         return h - i;
     }
 
-    static Color CDarkGreen = new Color(0.0f, 0.3f, 0.0f);
-    static Color CDarkYellow = new Color(0.4f, 0.4f, 0.0f);
-    static Color CDarkRed = new Color(0.4f, 0.0f, 0.0f);
+    static Color CDarkGreen = Theme.getCurrentTheme().VU_Dark_Green;
+    static Color CDarkYellow = Theme.getCurrentTheme().VU_Dark_Yellow;
+    static Color CDarkRed = Theme.getCurrentTheme().VU_Dark_Red;
 
-    static Color CBrightGreen = new Color(0.0f, 0.8f, 0.0f);
-    static Color CBrightYellow = new Color(0.8f, 0.8f, 0.0f);
-    static Color CBrightRed = new Color(0.8f, 0.0f, 0.0f);
+    static Color CBrightGreen = Theme.getCurrentTheme().VU_Bright_Green;
+    static Color CBrightYellow = Theme.getCurrentTheme().VU_Bright_Yellow;
+    static Color CBrightRed = Theme.getCurrentTheme().VU_Bright_Red;
 
     static int segmentsRed = 2;
     static int segmentsYellow = 3;

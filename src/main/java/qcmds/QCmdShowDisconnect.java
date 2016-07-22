@@ -17,8 +17,6 @@
  */
 package qcmds;
 
-import axoloti.MainFrame;
-
 /**
  *
  * @author Johannes Taelman

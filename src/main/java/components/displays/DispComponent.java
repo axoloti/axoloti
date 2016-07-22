@@ -17,9 +17,9 @@
  */
 package components.displays;
 
+import axoloti.Theme;
 import axoloti.utils.Constants;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -59,22 +59,20 @@ public class DispComponent extends ADispComponent {
         int tick = 1;
         int radius = Math.min(getSize().width, getSize().height) / 2 - tick;
         g2.setStroke(strokeThin);
-        g2.setColor(Color.white);
-//        g2.fillRect(0, 0, radius * 2, radius * 2);
+        g2.setColor(Theme.getCurrentTheme().Component_Secondary);
         g2.setPaint(getForeground());
-//        g2.drawRect(0, 0, radius * 2, radius * 2);
         int b = radius / 2;
         g.drawArc(b, b, 2 * (radius - b), 2 * (radius - b), -45, 270);
         double th = 0.75 * Math.PI + (value - min) * (1.5 * Math.PI) / (max - min);
         int x = (int) (Math.cos(th) * radius);
         int y = (int) (Math.sin(th) * radius);
         if (overflow) {
-            g2.setColor(Color.red);
+            g2.setColor(Theme.getCurrentTheme().Error_Text);
         }
         g2.setStroke(strokeThick);
         g2.drawLine(radius, radius, radius + x, radius + y);
         String s = String.format("%5.2f", value);
-        g2.setFont(Constants.font);
+        g2.setFont(Constants.FONT);
         g2.drawString(s, 0, getSize().height);
     }
 
@@ -90,7 +88,7 @@ public class DispComponent extends ADispComponent {
             overflow = true;
         }
         this.value = value;
-        repaint();
+        paintObjectLayer();
     }
 
     public double getMinimum() {

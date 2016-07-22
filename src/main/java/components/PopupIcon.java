@@ -17,8 +17,7 @@
  */
 package components;
 
-import axoloti.utils.Constants;
-import java.awt.Color;
+import axoloti.Theme;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -58,7 +57,7 @@ public class PopupIcon extends JComponent implements MouseListener {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(Color.BLACK);
+        g2.setColor(Theme.getCurrentTheme().Component_Primary);
         final int rmargin = 3;
         final int htick = 3;
         int[] xp = new int[]{getWidth() - rmargin - htick * 2, getWidth() - rmargin, getWidth() - rmargin - htick};

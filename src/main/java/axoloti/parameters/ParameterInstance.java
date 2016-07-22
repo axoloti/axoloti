@@ -18,6 +18,8 @@
 package axoloti.parameters;
 
 import axoloti.Preset;
+import axoloti.Theme;
+import axoloti.ZoomUtils;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
@@ -29,8 +31,8 @@ import components.LabelComponent;
 import components.control.ACtrlComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -41,7 +43,6 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.UIManager;
 import javax.swing.event.MouseInputAdapter;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -129,7 +130,6 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
             valuelbl.setPreferredSize(d);
             valuelbl.setSize(d);
             valuelbl.setMaximumSize(d);
-//            valuelbl.setSize(getWidth(), Constants.font.);
             valuelbl.addMouseListener(new MouseInputAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -345,10 +345,9 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
 
     void SetPresetState(boolean b) { // OBSOLETE
         if (b) {
-            setBackground(Color.yellow);
-        } //            setBackground(UIManager.getColor ( "Panel.background" ));
-        else {
-            setBackground(UIManager.getColor("Panel.background"));
+            setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
+        } else {
+            setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
         }
     }
 
@@ -413,7 +412,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         @Override
         public void mousePressed(MouseEvent e) {
             if (e.isPopupTrigger()) {
-                doPopup();
+                doPopup(e);
                 e.consume();
             }
         }
@@ -421,7 +420,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         @Override
         public void mouseReleased(MouseEvent e) {
             if (e.isPopupTrigger()) {
-                doPopup();
+                doPopup(e);
                 e.consume();
             }
         }
@@ -435,10 +434,11 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         }
     };
 
-    public void doPopup() {
+    public void doPopup(MouseEvent e) {
         JPopupMenu m = new JPopupMenu();
         populatePopup(m);
-        m.show(this, 0, getHeight());
+
+        ZoomUtils.showZoomedPopupMenu(this, axoObj, m);
     }
 
     public void populatePopup(JPopupMenu m) {
@@ -508,9 +508,13 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public T GetDefinition() {
         return parameter;
     }
-    
+
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
     }
 
+    @Override
+    public Point getToolTipLocation(MouseEvent event) {
+        return ZoomUtils.getToolTipLocation(this, event, axoObj);
+    }
 }

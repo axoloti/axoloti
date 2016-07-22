@@ -17,8 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.FileUtils;
-import axoloti.MainFrame;
 import axoloti.Patch;
 import axoloti.PatchGUI;
 import components.LabelComponent;
@@ -109,14 +107,26 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
                 if (e.getClickCount() == 2) {
                     addInstanceNameEditor();
                 }
+                if (patch != null) {
+                    if (e.getClickCount() == 1) {
+                        if (e.isShiftDown()) {
+                            SetSelected(!GetSelected());
+                        } else if (Selected == false) {
+                            ((PatchGUI) patch).SelectNone();
+                            SetSelected(true);
+                        }
+                    }
+                }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
+                ml.mousePressed(e);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                ml.mouseReleased(e);
             }
 
             @Override
@@ -127,6 +137,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
             public void mouseExited(MouseEvent e) {
             }
         });
+        InstanceLabel.addMouseMotionListener(mml);
         add(InstanceLabel);
 
         resizeToGrid();

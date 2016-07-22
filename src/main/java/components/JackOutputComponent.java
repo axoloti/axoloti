@@ -17,9 +17,9 @@
  */
 package components;
 
+import axoloti.Theme;
 import axoloti.outlets.OutletInstance;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import static java.awt.Component.CENTER_ALIGNMENT;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -58,10 +58,10 @@ public class JackOutputComponent extends JComponent {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setPaint(getBackground());
+        g2.setPaint(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(0, 0, sz, sz);
         g2.setStroke(stroke);
-        g2.setPaint(Color.BLACK);
+        g2.setPaint(Theme.getCurrentTheme().Component_Primary);
         g2.drawRect(margin, margin + 1, sz - margin - margin, sz - margin - margin);
 
         if (outlet.isConnected()) {
@@ -75,5 +75,9 @@ public class JackOutputComponent extends JComponent {
         }
 
         g2.drawRect(margin - 1, margin, sz - margin - margin, sz - margin - margin);
+    }
+    
+    public OutletInstance getOutlet() {
+        return outlet;
     }
 }

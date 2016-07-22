@@ -22,8 +22,8 @@ import java.io.File;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import org.fife.ui.rtextarea.*;
 import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.rtextarea.*;
 
 /**
  *

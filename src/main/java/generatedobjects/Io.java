@@ -18,6 +18,7 @@
 package generatedobjects;
 
 import axoloti.attributedefinition.AxoAttributeComboBox;
+import axoloti.displays.DisplayFrac32VU;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
@@ -26,7 +27,6 @@ import axoloti.object.AxoObject;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletFrac32;
 import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.displays.DisplayFrac32VU;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**

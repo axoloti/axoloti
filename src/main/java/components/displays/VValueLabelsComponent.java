@@ -60,13 +60,6 @@ public class VValueLabelsComponent extends JComponent {
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-//        g2.setColor(getBackground());
-//        g2.fillRect(0, 0, bsize * n + 1, bsize + 1);
-//        g2.setPaint(getForeground());
-//        g2.drawRect(0, 0, bsize * n + 1, bsize + 1);
-//        for (int i = 1; i < n; i++) {
-//            g2.drawLine(bsize * i, 0, bsize * i, bsize + 1);
-//        }
 
         g2.setPaint(getForeground());
         int inset = 3;
@@ -79,7 +72,7 @@ public class VValueLabelsComponent extends JComponent {
             } else {
                 s = String.format("%4.1f", v);
             }
-            g2.setFont(Constants.font);
+            g2.setFont(Constants.FONT);
             g2.drawString(s, 0, y + 4);
         }
     }

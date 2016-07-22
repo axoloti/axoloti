@@ -18,9 +18,9 @@
 package axoloti;
 
 import axoloti.object.AxoObjects;
+import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.OSDetect;
 import axoloti.utils.Preferences;
-import axoloti.utils.AxolotiLibrary;
 import java.awt.EventQueue;
 import java.awt.SplashScreen;
 import java.io.File;
@@ -41,7 +41,7 @@ public class Axoloti {
     public final static String HOME_DIR = "axoloti_home";
     public final static String RELEASE_DIR = "axoloti_release";
     public final static String FIRMWARE_DIR = "axoloti_firmware";
-
+    
     /**
      * @param args the command line arguments
      */
@@ -262,7 +262,6 @@ public class Axoloti {
                 + "Firmware = " + System.getProperty(FIRMWARE_DIR) + "\n"
                 + "AxolotiHome = " + System.getProperty(HOME_DIR)
         );
-
     }
 
     private static void handleCommandLine(final String args[]) {

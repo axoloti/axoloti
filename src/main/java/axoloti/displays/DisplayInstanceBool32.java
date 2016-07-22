@@ -17,7 +17,6 @@
  */
 package axoloti.displays;
 
-import axoloti.object.AxoObjectInstanceAbstract;
 import components.displays.LedstripComponent;
 
 /**

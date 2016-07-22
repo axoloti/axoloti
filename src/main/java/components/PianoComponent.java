@@ -17,8 +17,8 @@
  */
 package components;
 
+import axoloti.Theme;
 import axoloti.utils.Constants;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -121,22 +121,22 @@ public abstract class PianoComponent extends JComponent {
             if (y == 0) {
                 if (selection[i]) {
                     // selected
-                    g2.setColor(Color.gray);
+                    g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
                     g2.fillRect(x, 0, 2 * KeyWidth, height);
                     if (isEnabled()) {
-                        g2.setColor(Color.black);
+                        g2.setColor(Theme.getCurrentTheme().Keyboard_Dark);
                     } else {
-                        g2.setColor(Color.gray);
+                        g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
                     }
                     g2.drawRect(x, 0, 2 * KeyWidth, height);
                 } else {
                     // not selected
-                    g2.setColor(Color.white);
+                    g2.setColor(Theme.getCurrentTheme().Keyboard_Light);
                     g2.fillRect(x, 0, 2 * KeyWidth, height);
                     if (isEnabled()) {
-                        g2.setColor(Color.black);
+                        g2.setColor(Theme.getCurrentTheme().Keyboard_Dark);
                     } else {
-                        g2.setColor(Color.gray);
+                        g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
                     }
                     g2.drawRect(x, 0, 2 * KeyWidth, height);
                 }
@@ -148,19 +148,19 @@ public abstract class PianoComponent extends JComponent {
             int x = keyToX(i);
             if (y == 1) {
                 if (selection[i]) {
-                    g2.setColor(Color.gray);
+                    g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
                     g2.fillRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
                     if (isEnabled()) {
-                        g2.setColor(Color.black);
+                        g2.setColor(Theme.getCurrentTheme().Keyboard_Dark);
                     } else {
-                        g2.setColor(Color.gray);
+                        g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
                     }
                     g2.drawRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
                 } else {
                     if (isEnabled()) {
-                        g2.setColor(Color.black);
+                        g2.setColor(Theme.getCurrentTheme().Keyboard_Dark);
                     } else {
-                        g2.setColor(Color.gray);
+                        g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
                     }
                     g2.fillRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
                     g2.drawRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
@@ -170,7 +170,7 @@ public abstract class PianoComponent extends JComponent {
         for (int i = 0; i < 128; i++) {
             if (i % 12 == 0) {
                 int x = keyToX(i);
-                g2.setFont(Constants.font);
+                g2.setFont(Constants.FONT);
                 g2.drawString("" + ((i / 12) - 1), x + 2, height - 2);
             }
         }
@@ -178,7 +178,7 @@ public abstract class PianoComponent extends JComponent {
             int y = keyToY(i);
             int x = keyToX(i);
             if (y == 0) {
-                g2.setFont(Constants.font);
+                g2.setFont(Constants.FONT);
                 AffineTransform t = g2.getTransform();
                 g2.rotate(-3.14159 / 2);
                 g2.drawString(String.format("%d", i - 64), -53, x + 9);
@@ -187,7 +187,7 @@ public abstract class PianoComponent extends JComponent {
             }
         }
         int x = keyToX(64);
-        g2.setColor(Color.gray);
+        g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
         g2.fillOval(x + 2, height - (KeyWidth + 2), KeyWidth, KeyWidth);
     }
 

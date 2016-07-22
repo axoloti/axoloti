@@ -17,8 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Int32;
-
 /**
  *
  * @author Johannes Taelman

@@ -18,13 +18,13 @@
 package components.control;
 
 import axoloti.MainFrame;
+import axoloti.Theme;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
 import axoloti.utils.OSDetect;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -32,6 +32,7 @@ import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Robot;
 import java.awt.Stroke;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -39,7 +40,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.awt.Robot;
 
 /**
  *
@@ -58,6 +58,8 @@ public class NumberBoxComponent extends ACtrlComponent {
     private boolean hiliteUp = false;
     private boolean hiliteDown = false;
     private boolean dragging = false;
+    
+    private Robot robot;
 
     int rmargin = 5;
     int htick = 3;
@@ -95,7 +97,6 @@ public class NumberBoxComponent extends ACtrlComponent {
     }
 
     final int layoutTick = 3;
-    Robot robot = null;
 
     @Override
     protected void mouseDragged(MouseEvent e) {
@@ -118,7 +119,7 @@ public class NumberBoxComponent extends ACtrlComponent {
                         Logger.getLogger(NumberBoxComponent.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+                this.robotMoveToCenter();
                 if (v > max) {
                     v = max;
                 }
@@ -158,11 +159,9 @@ public class NumberBoxComponent extends ACtrlComponent {
     protected void mouseReleased(MouseEvent e) {
         if (hiliteDown) {
             hiliteDown = false;
-            repaint();
         }
         if (hiliteUp) {
             hiliteUp = false;
-            repaint();
         }
         getRootPane().setCursor(Cursor.getDefaultCursor());
         robot = null;
@@ -171,6 +170,7 @@ public class NumberBoxComponent extends ACtrlComponent {
     private boolean isControlDown(KeyEvent ke) {
         return OSDetect.getOS() == OSDetect.OS.MAC ? ke.isAltDown() : ke.isControlDown();
     }
+
     @Override
     public void keyPressed(KeyEvent ke) {
         if (isEnabled()) {
@@ -217,17 +217,14 @@ public class NumberBoxComponent extends ACtrlComponent {
                     }
                     keybBuffer = "";
                     ke.consume();
-                    repaint();
                     break;
                 case KeyEvent.VK_BACK_SPACE:
                     keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
                     ke.consume();
-                    repaint();
                     break;
                 case KeyEvent.VK_ESCAPE:
                     keybBuffer = "";
                     ke.consume();
-                    repaint();
                     break;
                 default:
             }
@@ -246,7 +243,6 @@ public class NumberBoxComponent extends ACtrlComponent {
                 case '.':
                     keybBuffer += ke.getKeyChar();
                     ke.consume();
-                    repaint();
                     break;
                 default:
             }
@@ -269,9 +265,9 @@ public class NumberBoxComponent extends ACtrlComponent {
             g2.setStroke(strokeThin);
         }
         if (isEnabled()) {
-            g2.setColor(Color.white);
+            g2.setColor(Theme.getCurrentTheme().Component_Secondary);
         } else {
-            g2.setPaint(getBackground());
+            g2.setPaint(Theme.getCurrentTheme().Object_Default_Background);
         }
 
         g2.fillRect(0, 0, getWidth(), getHeight());
@@ -295,11 +291,11 @@ public class NumberBoxComponent extends ACtrlComponent {
             v = 2;
         }
         if (keybBuffer.isEmpty()) {
-            g2.setFont(Constants.font);
+            g2.setFont(Constants.FONT);
             g2.drawString(s, h, getSize().height - v);
         } else {
-            g2.setColor(Color.red);
-            g2.setFont(Constants.font);
+            g2.setColor(Theme.getCurrentTheme().Error_Text);
+            g2.setFont(Constants.FONT);
             g2.drawString(keybBuffer, h, getSize().height - v);
         }
 
@@ -349,7 +345,6 @@ public class NumberBoxComponent extends ACtrlComponent {
             this.setToolTipText(s);
         }
 
-        repaint();
         fireEvent();
     }
 
@@ -384,5 +379,11 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     @Override
     void keyReleased(KeyEvent key) {
+    }
+    
+    @Override
+    public void robotMoveToCenter() {
+        getRootPane().setCursor(MainFrame.transparentCursor);
+        robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
     }
 }

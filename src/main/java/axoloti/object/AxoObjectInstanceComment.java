@@ -18,9 +18,9 @@
 package axoloti.object;
 
 import axoloti.Patch;
+import axoloti.PatchGUI;
 import components.LabelComponent;
 import components.TextFieldComponent;
-import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +30,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.Box;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -74,47 +74,35 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
         }
         setOpaque(true);
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        add(Box.createHorizontalStrut(5));
         InstanceLabel = new LabelComponent(commentText);
-        InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
+        InstanceLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        InstanceLabel.setAlignmentX(CENTER_ALIGNMENT);
         InstanceLabel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
                 if (me.getClickCount() == 2) {
                     addInstanceNameEditor();
                 }
+                if (patch != null) {
+                    if (me.getClickCount() == 1) {
+                        if (me.isShiftDown()) {
+                            SetSelected(!GetSelected());
+                        } else if (Selected == false) {
+                            ((PatchGUI) patch).SelectNone();
+                            SetSelected(true);
+                        }
+                    }
+                }
             }
 
             @Override
             public void mousePressed(MouseEvent me) {
-                if (me.isPopupTrigger()) {
-                } else if (!IsLocked()) {
-                    dX = me.getXOnScreen() - getX();
-                    dY = me.getYOnScreen() - getY();
-                    dragging = true;
-                    if (IsSelected()) {
-                        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
-                            if (o.IsSelected()) {
-                                o.dX = me.getXOnScreen() - o.getX();
-                                o.dY = me.getYOnScreen() - o.getY();
-                                o.dragging = true;
-                            }
-                        }
-                    }
-                }
+                ml.mousePressed(me);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (dragging) {
-                    dragging = false;
-                    if (patch != null) {
-                        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
-                            o.dragging = false;
-                        }
-                        patch.AdjustSize();
-                    }
-                }
+                ml.mouseReleased(e);
             }
 
             @Override
@@ -150,7 +138,6 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
                 String s = InstanceNameTF.getText();
                 setInstanceName(s);
                 getParent().remove(InstanceNameTF);
-                patch.repaint();
             }
 
             @Override
@@ -172,7 +159,6 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
                     String s = InstanceNameTF.getText();
                     setInstanceName(s);
                     getParent().remove(InstanceNameTF);
-                    patch.repaint();
                 }
             }
         });
@@ -190,9 +176,6 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
             InstanceLabel.setText(commentText);
         }
         doLayout();
-        if (getParent() != null) {
-            getParent().repaint();
-        }
         resizeToGrid();
     }
 

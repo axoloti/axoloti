@@ -17,9 +17,8 @@
  */
 package axoloti.parameters;
 
-import axoloti.Modulation;
-import axoloti.Modulator;
 import axoloti.Preset;
+import axoloti.Theme;
 import axoloti.datatypes.Value;
 import components.AssignMidiCCComponent;
 import components.AssignMidiCCMenuItems;
@@ -27,12 +26,10 @@ import components.AssignModulatorComponent;
 import components.AssignModulatorMenuItems;
 import components.AssignPresetComponent;
 import components.control.DialComponent;
-import java.awt.Color;
 import javax.swing.BoxLayout;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.UIManager;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -40,7 +37,7 @@ import org.simpleframework.xml.Attribute;
  * @author Johannes Taelman
  */
 public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends ParameterInstanceFrac32U<T> {
- 
+
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
 
@@ -54,7 +51,9 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
 
     @Override
     public DialComponent CreateControl() {
-        return new DialComponent(0.0, getMin(), getMax(), getTick());
+        DialComponent d = new DialComponent(0.0, getMin(), getMax(), getTick());
+        d.setParentAxoObjectInstance(axoObj);
+        return d;
     }
 
     @Override
@@ -74,6 +73,7 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
     public void PostConstructor() {
         super.PostConstructor();
         JPanel btns = new JPanel();
+        btns.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         btns.setLayout(new BoxLayout(btns, BoxLayout.PAGE_AXIS));
 
         //lblCC = new LabelComponent("C");
@@ -95,9 +95,9 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
     public void setOnParent(Boolean b) {
         super.setOnParent(b);
         if ((b != null) && b) {
-            setForeground(Color.blue);
+            setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         } else {
-            setForeground(Color.black);
+            setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
         }
     }
 
@@ -105,7 +105,7 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
     public void updateV() {
         super.updateV();
         if (ctrl != null) {
-            ctrl.setValue(value.getDouble());            
+            ctrl.setValue(value.getDouble());
         }
     }
 
@@ -140,7 +140,7 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
                 + "  KVP_RegisterObject(&" + StructAccces + KVPName(vprefix) + ");\n";
         return s;
     }
-    
+
     @Override
     public void updateModulation(int index, double amount) {
         super.updateModulation(index, amount);
@@ -168,14 +168,14 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
         if (i > 0) {
             Preset p = GetPreset(presetEditActive);
             if (p != null) {
-                setBackground(Color.yellow);
+                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
-                setBackground(UIManager.getColor("Panel.background"));
+                setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
                 ctrl.setValue(value.getDouble());
             }
         } else {
-            setBackground(UIManager.getColor("Panel.background"));
+            setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
             ctrl.setValue(value.getDouble());
         }
         presetAssign.repaint();
@@ -195,7 +195,7 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
         new AssignMidiCCMenuItems(this, m1);
         m.add(m1);
         JMenu m2 = new JMenu("Modulation");
-        new AssignModulatorMenuItems((ParameterInstanceFrac32UMap<ParameterFrac32>)this, m2);
+        new AssignModulatorMenuItems((ParameterInstanceFrac32UMap<ParameterFrac32>) this, m2);
         m.add(m2);
     }
 

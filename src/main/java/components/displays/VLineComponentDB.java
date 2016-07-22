@@ -17,7 +17,7 @@
  */
 package components.displays;
 
-import java.awt.Color;
+import axoloti.Theme;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -70,18 +70,18 @@ public class VLineComponentDB extends ADispComponent {
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.setPaint(Color.WHITE);
+        g2.setPaint(Theme.getCurrentTheme().Component_Secondary);
         g2.fillRect(0, 0, getWidth(), height);
         int p = ValToPos(value);
         int p1 = ValToPos(0);
-        g2.setPaint(Color.GRAY);
+        g2.setPaint(Theme.getCurrentTheme().Component_Mid);
         g2.drawLine(0, p, 0, p1);
     }
 
     @Override
     public void setValue(double value) {
         this.value = value;
-        repaint();
+        paintObjectLayer();
     }
 
     public void setMinimum(double min) {

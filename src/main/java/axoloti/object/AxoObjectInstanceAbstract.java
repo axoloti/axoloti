@@ -21,7 +21,11 @@ import axoloti.MainFrame;
 import axoloti.Patch;
 import axoloti.PatchGUI;
 import axoloti.SDFileReference;
+import axoloti.Theme;
+import axoloti.ZoomUI;
+import axoloti.ZoomUtils;
 import axoloti.attribute.AttributeInstance;
+import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
@@ -29,13 +33,12 @@ import axoloti.utils.CharEscape;
 import axoloti.utils.Constants;
 import components.LabelComponent;
 import components.TextFieldComponent;
-import axoloti.displays.DisplayInstance;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -44,11 +47,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
@@ -76,7 +82,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     AxoObjectAbstract type;
     boolean dragging = false;
     int dX, dY;
-    private boolean Selected = false;
+    protected boolean Selected = false;
     private boolean Locked = false;
     private boolean typeWasAmbiguous = false;
     JPanel Titlebar;
@@ -135,6 +141,10 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         return patch;
     }
 
+    public PatchGUI getPatchGUI() {
+        return (PatchGUI) patch;
+    }
+
     public String getInstanceName() {
         return InstanceName;
     }
@@ -153,7 +163,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             if ((o1 != null) && (o1 != this)) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} already exists!", InstanceName);
                 doLayout();
-                repaint();
                 return;
             }
         }
@@ -162,9 +171,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             InstanceLabel.setText(InstanceName);
         }
         doLayout();
-        if (getParent() != null) {
-            getParent().repaint();
-        }
     }
 
     public AxoObjectAbstract getType() {
@@ -201,7 +207,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         return type;
     }
 
-    PopupMenu popup;
+    JPopupMenu popup;
 
     private final Dimension TitleBarMinimumSize = new Dimension(40, 12);
     private final Dimension TitleBarMaximumSize = new Dimension(32768, 12);
@@ -211,20 +217,23 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         setMinimumSize(new Dimension(60, 40));
         //setMaximumSize(new Dimension(Short.MAX_VALUE,
         //        Short.MAX_VALUE));
+
         setLocation(x, y);
 //        setFocusable(true);
-        Titlebar = new JPanel();
+        Titlebar = new TitleBarPanel(this);
         Titlebar.setLayout(new BoxLayout(Titlebar, BoxLayout.LINE_AXIS));
-        Titlebar.setBackground(Color.getHSBColor(0.f, 0.0f, 0.6f));
+        Titlebar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
         Titlebar.setMinimumSize(TitleBarMinimumSize);
         Titlebar.setMaximumSize(TitleBarMaximumSize);
-        setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected));
         setOpaque(true);
         resolveType();
-        setVisible(true);
-//        revalidate();
 
-        popup = new PopupMenu();
+        setBackground(Theme.getCurrentTheme().Object_Default_Background);
+
+        setVisible(true);
+
+        popup = new JPopupMenu();
 
         ml = new MouseListener() {
             @Override
@@ -233,11 +242,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
                             SetSelected(!GetSelected());
-                            ((PatchGUI) patch).repaint();
                         } else if (Selected == false) {
                             ((PatchGUI) patch).SelectNone();
                             SetSelected(true);
-                            ((PatchGUI) patch).repaint();
                         }
                     }
                     if (me.getClickCount() == 2) {
@@ -245,6 +252,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     }
                 }
             }
+
             /*
              ClassSelector cs = ((PatchGUI)patch).cs;
              cs.setText(getType().id);
@@ -263,38 +271,14 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
              }
              //patch.invalidate();
              }*/
-
             @Override
             public void mousePressed(MouseEvent me) {
-                if (me.isPopupTrigger()) {
-
-                } else if (!IsLocked()) {
-                    dX = me.getXOnScreen() - getX();
-                    dY = me.getYOnScreen() - getY();
-                    dragging = true;
-                    if (IsSelected()) {
-                        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
-                            if (o.IsSelected()) {
-                                o.dX = me.getXOnScreen() - o.getX();
-                                o.dY = me.getYOnScreen() - o.getY();
-                                o.dragging = true;
-                            }
-                        }
-                    }
-                }
+                handleMousePressed(me);
             }
 
             @Override
             public void mouseReleased(MouseEvent me) {
-                if (dragging) {
-                    dragging = false;
-                    if (patch != null) {
-                        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
-                            o.dragging = false;
-                        }
-                        patch.AdjustSize();
-                    }
-                }
+                handleMouseReleased(me);
             }
 
             @Override
@@ -313,28 +297,16 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             @Override
             public void mouseDragged(MouseEvent me) {
                 if (patch != null) {
-                    if (dragging) {/*
-                         x = me.getLocationOnScreen().x - dX;
-                         y = me.getLocationOnScreen().y - dY;
-                         setLocation(x, y);
-                         dX = me.getLocationOnScreen().x - getX();
-                         dY = me.getLocationOnScreen().y - getY();*/
-
+                    if (dragging) {
                         for (AxoObjectInstanceAbstract o : patch.objectinstances) {
                             if (o.dragging) {
-                                o.x = me.getLocationOnScreen().x - o.dX;
-                                o.y = me.getLocationOnScreen().y - o.dY;
-                                o.dX = me.getLocationOnScreen().x - o.getX();
-                                o.dY = me.getLocationOnScreen().y - o.getY();
-                                if (!me.isShiftDown()) {
-                                    o.x = ((o.x + (Constants.xgrid / 2)) / Constants.xgrid) * Constants.xgrid;
-                                    o.y = ((o.y + (Constants.ygrid / 2)) / Constants.ygrid) * Constants.ygrid;
-                                }
+                                o.x = getZoomUI().removeZoomFactor(me.getLocationOnScreen().x) - o.dX;
+                                o.y = getZoomUI().removeZoomFactor(me.getLocationOnScreen().y) - o.dY;
+                                o.dX = getZoomUI().removeZoomFactor(me.getLocationOnScreen().x) - o.getX();
+                                o.dY = getZoomUI().removeZoomFactor(me.getLocationOnScreen().y) - o.getY();
                                 o.setLocation(o.x, o.y);
                             }
                         }
-                        //patch.invalidate();
-                        patch.repaint();
                     }
                 }
             }
@@ -346,6 +318,92 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
         Titlebar.addMouseMotionListener(mml);
         addMouseMotionListener(mml);
+
+        addComponentListener(
+                new ComponentListener() {
+            public void componentHidden(ComponentEvent e) {
+                updateDummyDropTargets();
+            }
+
+            public void componentMoved(ComponentEvent e) {
+                updateDummyDropTargets();
+            }
+
+            public void componentResized(ComponentEvent e) {
+                updateDummyDropTargets();
+            }
+
+            public void componentShown(ComponentEvent e) {
+                updateDummyDropTargets();
+            }
+        });
+    }
+
+    private void moveToDraggedLayer(AxoObjectInstanceAbstract o) {
+        if (getPatchGUI().objectLayerPanel.isAncestorOf(o)) {
+            getPatchGUI().draggedObjectLayerPanel.add(o);
+            getPatchGUI().objectLayerPanel.remove(o);
+        }
+    }
+
+    protected void handleMousePressed(MouseEvent me) {
+        if (patch != null) {
+            if (me.isPopupTrigger()) {
+
+            } else if (!IsLocked()) {
+                ArrayList<AxoObjectInstanceAbstract> toMove = new ArrayList<AxoObjectInstanceAbstract>();
+                dX = getZoomUI().removeZoomFactor(me.getXOnScreen()) - getX();
+                dY = getZoomUI().removeZoomFactor(me.getYOnScreen()) - getY();
+                dragging = true;
+                moveToDraggedLayer(this);
+                if (IsSelected()) {
+                    for (AxoObjectInstanceAbstract o : patch.objectinstances) {
+                        if (o.IsSelected()) {
+                            moveToDraggedLayer(o);
+
+                            o.dX = getZoomUI().removeZoomFactor(me.getXOnScreen()) - o.getX();
+                            o.dY = getZoomUI().removeZoomFactor(me.getYOnScreen()) - o.getY();
+                            o.dragging = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void moveToObjectLayer(AxoObjectInstanceAbstract o, int z) {
+        if (getPatchGUI().draggedObjectLayerPanel.isAncestorOf(o)) {
+            getPatchGUI().objectLayerPanel.add(o);
+            getPatchGUI().draggedObjectLayerPanel.remove(o);
+            getPatchGUI().objectLayerPanel.setComponentZOrder(o, z);
+        }
+    }
+
+    protected void handleMouseReleased(MouseEvent me) {
+        int maxZIndex = 0;
+        if (dragging) {
+            dragging = false;
+            if (patch != null) {
+
+                for (AxoObjectInstanceAbstract o : patch.objectinstances) {
+                    moveToObjectLayer(o, 0);
+                    if (getPatchGUI().objectLayerPanel.getComponentZOrder(o) > maxZIndex) {
+                        maxZIndex = getPatchGUI().objectLayerPanel.getComponentZOrder(o);
+                    }
+                    o.dragging = false;
+                    o.x = ((o.x + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
+                    o.y = ((o.y + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
+                    o.setLocation(o.x, o.y);
+                }
+                patch.AdjustSize();
+                patch.SetDirty();
+            }
+        }
+        moveToObjectLayer(this, maxZIndex);
+    }
+
+    public ZoomUI getZoomUI() {
+        return ((PatchGUI) patch).zoomUI;
     }
 
     @Override
@@ -371,7 +429,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public void addInstanceNameEditor() {
         InstanceNameTF = new TextFieldComponent(InstanceName);
         InstanceNameTF.selectAll();
-//        InstanceNameTF.setInputVerifier(new AxoObjectInstanceNameVerifier());
         InstanceNameTF.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -386,7 +443,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                 String s = InstanceNameTF.getText();
                 setInstanceName(s);
                 getParent().remove(InstanceNameTF);
-                patch.repaint();
             }
 
             @Override
@@ -408,7 +464,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     String s = InstanceNameTF.getText();
                     setInstanceName(s);
                     getParent().remove(InstanceNameTF);
-                    patch.repaint();
                 }
             }
         });
@@ -418,8 +473,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         InstanceNameTF.setSize(getWidth(), 15);
         InstanceNameTF.setVisible(true);
         InstanceNameTF.requestFocus();
-        //patch.repaint();
     }
+
     /*
      public class AxoObjectInstanceNameVerifier extends InputVerifier {
 
@@ -443,9 +498,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
      }
      return true;
      }
-     }    
+     }
      */
-
     public String GenerateInstanceDataDeclaration2() {
         return null;
     }
@@ -496,11 +550,10 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public void SetSelected(boolean Selected) {
         if (this.Selected != Selected) {
             if (Selected) {
-                setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected));
             } else {
-                setBorder(BorderFactory.createLineBorder(Color.WHITE));
+                setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected));
             }
-            repaint();
         }
         this.Selected = Selected;
     }
@@ -561,18 +614,18 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public void PromoteToOverloadedObj() {
     }
 
-    /*    
+    /*
      public String GenerateStructName() {
      return "";
      }
 
      public String GenerateDoFunctionName(){
      return "";
-     }    
+     }
 
      public String GenerateInitFunctionName(){
      return "";
-     }                
+     }
      */
     public String GenerateInitCodePlusPlus(String vprefix, boolean enableOnParent) {
         return "";
@@ -597,8 +650,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public void resizeToGrid() {
         doLayout();
         Dimension d = getPreferredSize();
-        d.width = ((d.width + Constants.xgrid - 1) / Constants.xgrid) * Constants.xgrid;
-        d.height = ((d.height + Constants.ygrid - 1) / Constants.ygrid) * Constants.ygrid;
+        d.width = ((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID;
+        d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
         setSize(d);
     }
 
@@ -613,7 +666,32 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     public boolean isTypeWasAmbiguous() {
         return typeWasAmbiguous;
     }
-    
+
     public void Close() {
+    }
+
+    @Override
+    public Point getToolTipLocation(MouseEvent event) {
+        return ZoomUtils.getToolTipLocation(this, event, this);
+    }
+
+    public void updateDummyDropTargets() {
+        for (InletInstance i : this.GetInletInstances()) {
+            i.updateDummyDropTarget();
+        }
+
+        for (OutletInstance oi : this.GetOutletInstances()) {
+            oi.updateDummyDropTarget();
+        }
+    }
+
+    public void deleteDummyDropTargets() {
+        for (InletInstance i : this.GetInletInstances()) {
+            i.deleteDummyDropTarget();
+        }
+
+        for (OutletInstance oi : this.GetOutletInstances()) {
+            oi.deleteDummyDropTarget();
+        }
     }
 }

@@ -28,7 +28,26 @@ import axoloti.attributedefinition.AxoAttributeSDFile;
 import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
-import axoloti.objecteditor.AxoObjectEditor;
+import axoloti.displays.Display;
+import axoloti.displays.DisplayBool32;
+import axoloti.displays.DisplayFrac32SChart;
+import axoloti.displays.DisplayFrac32SDial;
+import axoloti.displays.DisplayFrac32UChart;
+import axoloti.displays.DisplayFrac32UDial;
+import axoloti.displays.DisplayFrac32VBar;
+import axoloti.displays.DisplayFrac32VBarDB;
+import axoloti.displays.DisplayFrac32VU;
+import axoloti.displays.DisplayFrac4ByteVBar;
+import axoloti.displays.DisplayFrac4UByteVBar;
+import axoloti.displays.DisplayFrac4UByteVBarDB;
+import axoloti.displays.DisplayFrac8S128VBar;
+import axoloti.displays.DisplayFrac8U128VBar;
+import axoloti.displays.DisplayInt32Bar16;
+import axoloti.displays.DisplayInt32Bar32;
+import axoloti.displays.DisplayInt32HexLabel;
+import axoloti.displays.DisplayInt32Label;
+import axoloti.displays.DisplayNoteLabel;
+import axoloti.displays.DisplayVScale;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletBool32Rising;
@@ -43,6 +62,7 @@ import axoloti.inlets.InletFrac32Pos;
 import axoloti.inlets.InletInt32;
 import axoloti.inlets.InletInt32Bipolar;
 import axoloti.inlets.InletInt32Pos;
+import axoloti.objecteditor.AxoObjectEditor;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletBool32Pulse;
@@ -64,6 +84,7 @@ import axoloti.parameters.ParameterBin16;
 import axoloti.parameters.ParameterBin1Momentary;
 import axoloti.parameters.ParameterBin32;
 import axoloti.parameters.ParameterFrac32SMap;
+import axoloti.parameters.ParameterFrac32SMapKDTimeExp;
 import axoloti.parameters.ParameterFrac32SMapKLineTimeExp;
 import axoloti.parameters.ParameterFrac32SMapKLineTimeExp2;
 import axoloti.parameters.ParameterFrac32SMapKPitch;
@@ -86,28 +107,8 @@ import axoloti.parameters.ParameterInt32Box;
 import axoloti.parameters.ParameterInt32BoxSmall;
 import axoloti.parameters.ParameterInt32HRadio;
 import axoloti.parameters.ParameterInt32VRadio;
-import axoloti.displays.Display;
-import axoloti.displays.DisplayBool32;
-import axoloti.displays.DisplayFrac32SChart;
-import axoloti.displays.DisplayFrac32SDial;
-import axoloti.displays.DisplayFrac32UChart;
-import axoloti.displays.DisplayFrac32UDial;
-import axoloti.displays.DisplayFrac32VBar;
-import axoloti.displays.DisplayFrac32VBarDB;
-import axoloti.displays.DisplayFrac32VU;
-import axoloti.displays.DisplayFrac4ByteVBar;
-import axoloti.displays.DisplayFrac4UByteVBar;
-import axoloti.displays.DisplayFrac4UByteVBarDB;
-import axoloti.displays.DisplayFrac8S128VBar;
-import axoloti.displays.DisplayFrac8U128VBar;
-import axoloti.displays.DisplayInt32Bar16;
-import axoloti.displays.DisplayInt32Bar32;
-import axoloti.displays.DisplayInt32HexLabel;
-import axoloti.displays.DisplayInt32Label;
-import axoloti.displays.DisplayNoteLabel;
-import axoloti.displays.DisplayVScale;
-import axoloti.parameters.ParameterFrac32SMapKDTimeExp;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -116,8 +117,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.core.Complete;
-import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -295,16 +294,43 @@ public class AxoObject extends AxoObjectAbstract {
 
     ArrayList<ObjectModifiedListener> instances = new ArrayList<ObjectModifiedListener>();
     AxoObjectEditor editor;
-
-    public void OpenEditor() {
+    
+    Rectangle editorBounds;
+    Integer editorActiveTabIndex;
+    
+    private void setEditorBounds(Rectangle editorBounds) {
+        if(editorBounds != null) {
+            editor.setBounds(editorBounds);
+        }
+        else if(this.editorBounds != null) {
+            editor.setBounds(this.editorBounds);
+        }
+        
+    }
+    
+    private void setEditorActiveTabIndex(Integer editorActiveTabIndex) {
+        if(editorActiveTabIndex != null) {
+            editor.setActiveTabIndex(editorActiveTabIndex);
+        }
+        else if(this.editorActiveTabIndex != null) {
+            editor.setActiveTabIndex(this.editorActiveTabIndex);
+        }
+    }
+    
+    public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (editor == null) {
             editor = new AxoObjectEditor(this);
         }
+        
+        setEditorBounds(editorBounds);
+        setEditorActiveTabIndex(editorActiveTabIndex);
+        
         editor.setState(java.awt.Frame.NORMAL);
         editor.setVisible(true);
     }
 
     public void CloseEditor() {
+        FireObjectModified(this);
         editor = null;
     }
 
@@ -312,6 +338,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void DeleteInstance(AxoObjectInstanceAbstract o) {
         if ((o != null) && (o instanceof AxoObjectInstance)) {
             instances.remove((AxoObjectInstance) o);
+            o.deleteDummyDropTargets();
         }
     }
 

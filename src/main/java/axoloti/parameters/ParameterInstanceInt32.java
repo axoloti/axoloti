@@ -18,12 +18,10 @@
 package axoloti.parameters;
 
 import axoloti.Preset;
-import axoloti.datatypes.Int32;
+import axoloti.Theme;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
 import axoloti.object.AxoObjectInstance;
-import java.awt.Color;
-import javax.swing.UIManager;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -75,9 +73,9 @@ public abstract class ParameterInstanceInt32<T extends Parameter> extends Parame
     public void setOnParent(Boolean b) {
         super.setOnParent(b);
         if ((b != null) && b) {
-            setForeground(Color.blue);
+            setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         } else {
-            setForeground(Color.black);
+            setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
         }
     }
 
@@ -87,14 +85,14 @@ public abstract class ParameterInstanceInt32<T extends Parameter> extends Parame
         if (i > 0) {
             Preset p = GetPreset(presetEditActive);
             if (p != null) {
-                setBackground(Color.yellow);
+                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
                 getControlComponent().setValue(p.value.getDouble());
             } else {
-                setBackground(UIManager.getColor("Panel.background"));
+                setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
                 getControlComponent().setValue(value.getDouble());
             }
         } else {
-            setBackground(UIManager.getColor("Panel.background"));
+            setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
             getControlComponent().setValue(value.getDouble());
         }
     }

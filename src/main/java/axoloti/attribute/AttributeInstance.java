@@ -18,12 +18,12 @@
 package axoloti.attribute;
 
 import axoloti.SDFileReference;
+import axoloti.Theme;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
-import java.io.File;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -54,6 +54,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
 
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(new LabelComponent(GetDefinition().getName()));
         doLayout();
         setSize(getPreferredSize());

@@ -17,6 +17,11 @@
  */
 package components.control;
 
+import axoloti.PatchGUI;
+import axoloti.ZoomUtils;
+import axoloti.object.AxoObjectInstance;
+import java.awt.Color;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -24,8 +29,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -47,19 +50,11 @@ import javax.swing.TransferHandler;
  */
 public abstract class ACtrlComponent extends JComponent {
 
+    protected AxoObjectInstance axoObj;
+    protected Color customBackgroundColor;
+
     public ACtrlComponent() {
         setFocusable(true);
-        addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent fe) {
-                repaint();
-            }
-
-            @Override
-            public void focusLost(FocusEvent fe) {
-                repaint();
-            }
-        });
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -90,7 +85,6 @@ public abstract class ACtrlComponent extends JComponent {
 
             @Override
             public void keyReleased(KeyEvent ke) {
-                ACtrlComponent.this.keyReleased(ke);
             }
         });
     }
@@ -185,5 +179,34 @@ public abstract class ACtrlComponent extends JComponent {
         map.put(TransferHandler.getPasteAction().getValue(Action.NAME),
                 TransferHandler.getPasteAction());
 
+    }
+
+    public void setParentAxoObjectInstance(AxoObjectInstance axoObj) {
+        this.axoObj = axoObj;
+    }
+
+    @Override
+    public Point getToolTipLocation(MouseEvent event) {
+        return ZoomUtils.getToolTipLocation(this, event, axoObj);
+    }
+    
+    public double getScale() {
+        double zoom = 1.0;
+        if (this.axoObj != null && this.axoObj.patch != null) {
+            try {
+                zoom = ((PatchGUI) this.axoObj.patch).zoomUI.getScale();
+            } catch (ClassCastException ex) {
+                
+            }
+        }
+        return zoom;
+    }
+    
+    public void robotMoveToCenter() {
+        
+    }
+    
+    public void setCustomBackgroundColor(Color c) {
+        this.customBackgroundColor = c;
     }
 }

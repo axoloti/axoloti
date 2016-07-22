@@ -45,8 +45,8 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     public void PostConstructor() {
         super.PostConstructor();
 //        final DefaultComboBoxModel model = new DefaultComboBoxModel(((AxoAttributeComboBox) attr).getMenuEntries().toArray());
-        comboBox = new DropDownComponent(GetDefinition().getMenuEntries());
-        comboBox.setFont(Constants.font);
+        comboBox = new DropDownComponent(GetDefinition().getMenuEntries(), this);
+        comboBox.setFont(Constants.FONT);
         setString(selection);
         comboBox.addItemListener(new DropDownComponent.DDCListener() {
             @Override

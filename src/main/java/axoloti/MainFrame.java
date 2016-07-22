@@ -21,19 +21,17 @@ import static axoloti.Axoloti.FIRMWARE_DIR;
 import static axoloti.Axoloti.HOME_DIR;
 import static axoloti.Axoloti.RELEASE_DIR;
 import static axoloti.Axoloti.RUNTIME_DIR;
-import static axoloti.Version.AXOLOTI_VERSION;
-import static axoloti.Version.AXOLOTI_BUILD_TIME;
 import axoloti.dialogs.AxolotiRemoteControl;
 import axoloti.dialogs.FileManagerFrame;
 import axoloti.dialogs.KeyboardFrame;
 import axoloti.dialogs.PatchBank;
 import axoloti.dialogs.PreferencesFrame;
+import axoloti.dialogs.ThemeEditor;
 import axoloti.object.AxoObjects;
 import axoloti.usb.Usb;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.FirmwareID;
 import axoloti.utils.Preferences;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Point;
@@ -64,7 +62,9 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
 import qcmds.QCmdBringToDFUMode;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdPing;
@@ -89,6 +89,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     String TargetFirmwareID;
     KeyboardFrame keyboard;
     FileManagerFrame filemanager;
+    ThemeEditor themeEditor;
     AxolotiRemoteControl remote;
     QCmdProcessor qcmdprocessor;
     Thread qcmdprocessorThread;
@@ -113,8 +114,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         final Style styleSevere = jTextPaneLog.addStyle("severe", null);
         final Style styleFine = jTextPaneLog.addStyle("fine", null);
-        StyleConstants.setForeground(styleSevere, Color.red);
-        StyleConstants.setForeground(styleFine, Color.black);
+        jTextPaneLog.setBackground(Theme.getCurrentTheme().Console_Background);
+        StyleConstants.setForeground(styleSevere, Theme.getCurrentTheme().Error_Text);
+        StyleConstants.setForeground(styleFine, Theme.getCurrentTheme().Normal_Text);
 
         Handler logHandler = new Handler() {
             @Override
@@ -190,6 +192,10 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         //piano.setAlwaysOnTop(true);
         filemanager.setTitle("File Manager");
         filemanager.setVisible(false);
+        
+        themeEditor = new ThemeEditor();
+        themeEditor.setTitle("Theme Editor");
+        themeEditor.setVisible(false);
 
         remote = new AxolotiRemoteControl();
         remote.setTitle("Remote");
@@ -623,8 +629,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
         jTextPaneLog.setText("");
-        doLayout();
-        repaint();
     }//GEN-LAST:event_jButtonClearActionPerformed
 
     private void jMenuItemPanicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPanicActionPerformed
@@ -728,7 +732,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     private boolean runTestCompile(File f) {
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "testing {0}", f.getPath());
-        Serializer serializer = new Persister();
+                    
+        Strategy strategy = new AnnotationStrategy();
+        Serializer serializer = new Persister(strategy);
         try {
             boolean status;
             PatchGUI patch1 = serializer.read(PatchGUI.class, f);
@@ -792,7 +798,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     private boolean runUpgradeFile(File f) {
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "upgrading {0}", f.getPath());
-        Serializer serializer = new Persister();
+                    
+        Strategy strategy = new AnnotationStrategy();
+        Serializer serializer = new Persister(strategy);
         try {
             boolean status;
             PatchGUI patch1 = serializer.read(PatchGUI.class, f);
@@ -1051,9 +1059,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         }
 
         if (warning) {
-            jLabelVoltages.setForeground(Color.red);
+            jLabelVoltages.setForeground(Theme.getCurrentTheme().Error_Text);
         } else {
-            jLabelVoltages.setForeground(Color.black);
+            jLabelVoltages.setForeground(Theme.getCurrentTheme().Normal_Text);
         }
     }
 
@@ -1094,6 +1102,10 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     public FileManagerFrame getFilemanager() {
         return filemanager;
+    }
+    
+    public ThemeEditor getThemeEditor() {
+        return themeEditor;
     }
 
     public AxolotiRemoteControl getRemote() {

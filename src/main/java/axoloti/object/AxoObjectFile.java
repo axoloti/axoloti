@@ -23,7 +23,6 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Root;
-import org.simpleframework.xml.core.Complete;
 import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Validate;
 

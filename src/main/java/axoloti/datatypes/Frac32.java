@@ -17,6 +17,7 @@
  */
 package axoloti.datatypes;
 
+import axoloti.Theme;
 import java.awt.Color;
 
 /**
@@ -59,7 +60,7 @@ public class Frac32 implements DataType {
 
     @Override
     public Color GetColor() {
-        return Color.BLUE;
+        return Theme.getCurrentTheme().Cable_Frac32;
     }
 
     @Override

@@ -17,7 +17,6 @@
  */
 package axoloti.menus;
 
-import axoloti.Axoloti;
 import static axoloti.MainFrame.prefs;
 import static axoloti.menus.PopulatePatchMenu.PopulatePatchMenu;
 import axoloti.utils.AxolotiLibrary;

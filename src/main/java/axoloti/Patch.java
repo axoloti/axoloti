@@ -18,12 +18,14 @@
 package axoloti;
 
 import axoloti.attributedefinition.AxoAttributeComboBox;
+import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletBool32;
 import axoloti.inlets.InletCharPtr32;
 import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInt32;
+import axoloti.iolet.IoletAbstract;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFile;
@@ -44,10 +46,11 @@ import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.Preferences;
-import axoloti.displays.DisplayInstance;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -61,10 +64,12 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
+import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Complete;
 import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.core.Validate;
+import org.simpleframework.xml.strategy.Strategy;
 import qcmds.QCmdChangeWorkingDirectory;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdCreateDirectory;
@@ -117,6 +122,9 @@ public class Patch {
     private AxoObjectInstanceAbstract controllerinstance;
 
     public boolean presetUpdatePending = false;
+
+    private List<String> previousStates = new ArrayList<String>();
+    private int currentState = 0;
 
     static public class PatchVersionException
             extends RuntimeException {
@@ -306,7 +314,7 @@ public class Patch {
     public Patch() {
         super();
     }
-
+    
     public void PostContructor() {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             o.patch = this;
@@ -355,6 +363,7 @@ public class Patch {
             settings = new PatchSettings();
         }
         ClearDirty();
+        saveState();
     }
 
     public ArrayList<ParameterInstance> getParameterInstances() {
@@ -375,19 +384,18 @@ public class Patch {
     }
 
     public void SetDirty() {
+        SetDirty(true);
+    }
+
+    public void SetDirty(boolean shouldSaveState) {
         dirty = true;
+
         if (container != null) {
             container.SetDirty();
         }
-    }
-
-    @Deprecated
-    public void SetDirty(boolean f) {
-        // use Set and ClearDirty
-        if (f) {
-            SetDirty();
-        } else {
-            ClearDirty();
+        if (shouldSaveState) {
+            currentState += 1;
+            saveState();
         }
     }
 
@@ -436,28 +444,23 @@ public class Patch {
         return null;
     }
 
-    public Net GetNet(InletInstance il) {
+    public Net GetNet(IoletAbstract io) {
         for (Net net : nets) {
             for (InletInstance d : net.dest) {
-                if (d == il) {
+                if (d == io) {
                     return net;
                 }
             }
-        }
-        return null;
-    }
 
-    public Net GetNet(OutletInstance ol) {
-        for (Net net : nets) {
             for (OutletInstance d : net.source) {
-                if (d == ol) {
+                if (d == io) {
                     return net;
                 }
             }
         }
         return null;
     }
-
+    
     /*
      private boolean CompatType(DataType source, DataType d2){
      if (d1 == d2) return true;
@@ -571,34 +574,19 @@ public class Patch {
         return null;
     }
 
-    public Net disconnect(OutletInstance oi) {
+    public Net disconnect(IoletAbstract io) {
         if (!IsLocked()) {
-            Net n = GetNet(oi);
+            Net n = GetNet(io);
             if (n != null) {
-                n.source.remove(oi);
+                if (io instanceof OutletInstance) {
+                    n.source.remove((OutletInstance) io);
+                } else if (io instanceof InletInstance) {
+                    n.dest.remove((InletInstance) io);
+                }
                 if (n.source.size() + n.dest.size() <= 1) {
                     delete(n);
                 }
                 SetDirty();
-                repaint();
-                return n;
-            }
-        } else {
-            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
-        }
-        return null;
-    }
-
-    public Net disconnect(InletInstance ii) {
-        if (!IsLocked()) {
-            Net n = GetNet(ii);
-            if (n != null) {
-                n.dest.remove(ii);
-                if (n.source.size() + n.dest.size() <= 1) {
-                    delete(n);
-                }
-                SetDirty();
-                repaint();
                 return n;
             }
         } else {
@@ -611,7 +599,6 @@ public class Patch {
         if (!IsLocked()) {
             nets.remove(n);
             SetDirty();
-            repaint();
             return n;
         } else {
             Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
@@ -640,7 +627,6 @@ public class Patch {
             }
         }
         SetDirty();
-        repaint();
         objectinstances.remove(o);
         o.getType().DeleteInstance(o);
     }
@@ -683,7 +669,6 @@ public class Patch {
                     }
                 }
             }
-            repaint();
         } else {
             Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't delete: locked!");
         }
@@ -692,10 +677,67 @@ public class Patch {
     void PreSerialize() {
     }
 
-    boolean save(File f) {
+    void saveState() {
         SortByPosition();
         PreSerialize();
         Serializer serializer = new Persister();
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        try {
+            serializer.write(this, b);
+            try {
+                previousStates.set(currentState, b.toString());
+                if(cleanDanglingStates) {
+                    try {
+                        // if we've saved a new edit
+                        // after some undoing,
+                        // cleanup dangling states
+                        previousStates.subList(currentState + 1, previousStates.size()).clear();
+                    }
+                    catch(IndexOutOfBoundsException e) {
+                    }
+                }
+                this.cleanDanglingStates = true;
+            } catch (IndexOutOfBoundsException e) {
+                previousStates.add(b.toString());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void cleanUpIntermediateChangeStates(int n) {
+        int length = previousStates.size();
+        previousStates.subList(length - n, length).clear();
+        this.currentState -= n - 1;
+        saveState();
+    }
+
+    private boolean cleanDanglingStates = true;
+    
+    void loadState() {
+        Serializer serializer = new Persister();
+        ByteArrayInputStream b = new ByteArrayInputStream(previousStates.get(currentState).getBytes());
+        try {
+            Patch p = serializer.read(Patch.class, b);
+            this.objectinstances = p.objectinstances;
+            this.nets = p.nets;
+            this.cleanDanglingStates = false;
+            this.PostContructor();
+            repaint();
+            for(Net n : nets) {
+                n.updateBounds();
+            }
+            repaint();
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    boolean save(File f) {
+        SortByPosition();
+        PreSerialize();
+        Strategy strategy = new AnnotationStrategy();
+        Serializer serializer = new Persister(strategy);
         try {
             serializer.write(this, f);
             MainFrame.prefs.addRecentFile(f.getAbsolutePath());
@@ -2331,7 +2373,6 @@ public class Patch {
                 new_obj.attributeInstances = old_obj.attributeInstances;
             }
             obj1.setName(n);
-            obj1.repaint();
             return obj1;
         } else if (obj instanceof AxoObjectInstanceZombie) {
             String n = obj.getInstanceName();
@@ -2344,7 +2385,6 @@ public class Patch {
                 new_obj.inletInstances = old_obj.inletInstances;
             }
             obj1.setName(n);
-            obj1.repaint();
             return obj1;
         }
         return obj;
@@ -2519,6 +2559,30 @@ public class Patch {
         Unlock();
         for (AxoObjectInstanceAbstract o : objectinstances) {
             o.Close();
+        }
+    }
+
+    public boolean canUndo() {
+        return !this.IsLocked() && (currentState > 0);
+    }
+
+    public boolean canRedo() {
+        return !this.IsLocked() && (currentState < previousStates.size() - 1);
+    }
+
+    public void undo() {
+        if (canUndo()) {
+            currentState -= 1;
+            loadState();
+            SetDirty(false);
+        }
+    }
+
+    public void redo() {
+        if (canRedo()) {
+            currentState += 1;
+            loadState();
+            SetDirty(false);
         }
     }
 }
