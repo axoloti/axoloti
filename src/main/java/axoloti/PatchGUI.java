@@ -140,8 +140,8 @@ public class PatchGUI extends Patch {
         }
 
         Layers.add(objectLayer, new Integer(1));
-        Layers.add(draggedObjectLayer, new Integer(2));
-        Layers.add(netLayer, new Integer(3));
+        Layers.add(netLayer, new Integer(2));
+        Layers.add(draggedObjectLayer, new Integer(3));
         Layers.add(selectionRectLayer, new Integer(4));
         Layers.add(unzoomedLayer, new Integer(5));
 
@@ -994,8 +994,8 @@ public class PatchGUI extends Patch {
         } else {
             Layers.removeAll();
             Layers.add(objectLayer, new Integer(1));
-            Layers.add(draggedObjectLayer, new Integer(2));
-            Layers.add(netLayer, new Integer(3));
+            Layers.add(netLayer, new Integer(2));
+            Layers.add(draggedObjectLayer, new Integer(3));
             Layers.add(selectionRectLayer, new Integer(4));
             Layers.add(unzoomedLayer, new Integer(5));
         }
