@@ -20,6 +20,7 @@ package axoloti;
 import axoloti.object.AxoObjects;
 import axoloti.utils.Constants;
 import components.PresetPanel;
+import components.VisibleCablePanel;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -66,6 +67,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     PatchGUI patch;
 
     private PresetPanel presetPanel;
+    private VisibleCablePanel visibleCablePanel;
 
     public PatchFrame(final PatchGUI patch, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
@@ -77,8 +79,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
 
         presetPanel = new PresetPanel(patch);
+        visibleCablePanel = new VisibleCablePanel(patch);
+        
         jToolbarPanel.add(presetPanel);
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
+        jToolbarPanel.add(visibleCablePanel);
+
         jScrollPane1.setViewportView(patch.Layers);
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
         jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
