@@ -1,13 +1,13 @@
 package axoloti;
 
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.TitleBarPanel;
 import axoloti.utils.Constants;
 import components.JackInputComponent;
 import components.JackOutputComponent;
 import components.LabelComponent;
 import components.control.ACtrlComponent;
+import components.control.DialComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
@@ -28,6 +28,7 @@ public class ZoomUI extends LayerUI<JComponent> {
     protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private double zoom = 1;
     private Component previous = null;
+    private Component previousDial = null;
 
     private boolean dragging = false;
     private Component dragged;
@@ -101,6 +102,18 @@ public class ZoomUI extends LayerUI<JComponent> {
                 listener.mouseReleased(transformedEvent);
             } else if (localEvent.getID() == MouseEvent.MOUSE_CLICKED) {
                 listener.mouseClicked(transformedEvent);
+            }
+        }
+        if (localEvent.getID() == MouseEvent.MOUSE_PRESSED
+                && transformedEvent.getComponent() instanceof DialComponent) {
+            // ensure that dial focus highlights are repainted
+            if (previousDial != null
+                    && previousDial != transformedEvent.getComponent()) {
+                previousDial.repaint();
+                ZoomUtils.paintObjectLayer(previousDial);
+            }
+            if (transformedEvent.getComponent() instanceof DialComponent) {
+                previousDial = transformedEvent.getComponent();
             }
         }
     }
