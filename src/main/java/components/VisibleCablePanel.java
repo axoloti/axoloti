@@ -59,7 +59,6 @@ public class VisibleCablePanel extends javax.swing.JPanel {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel3 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
@@ -69,20 +68,19 @@ public class VisibleCablePanel extends javax.swing.JPanel {
         jCheckBox5 = new javax.swing.JCheckBox();
 
         setAlignmentX(0.0F);
-        setMaximumSize(new java.awt.Dimension(500, 40));
-        setMinimumSize(new java.awt.Dimension(500, 40));
-        setPreferredSize(new java.awt.Dimension(500, 40));
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
         jLabel3.setText("Visible Cables");
+        jLabel3.setAlignmentX(0.5F);
+        jLabel3.setMaximumSize(null);
+        jLabel3.setMinimumSize(null);
+        jLabel3.setPreferredSize(null);
         add(jLabel3);
 
-        jPanel1.setLayout(new java.awt.GridLayout(2, 1));
-        add(jPanel1);
-
-        jPanel2.setMinimumSize(new java.awt.Dimension(275, 38));
-        jPanel2.setPreferredSize(new java.awt.Dimension(275, 38));
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setMaximumSize(null);
+        jPanel2.setMinimumSize(null);
+        jPanel2.setPreferredSize(null);
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
         jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -168,7 +166,6 @@ public class VisibleCablePanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox jCheckBox6;
     private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }
