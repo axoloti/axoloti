@@ -178,7 +178,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     File getFile() {
         Path basePath = FileSystems.getDefault().getPath(GetObjectInstance().getPatch().getFileNamePath());
         Path parent = basePath.getParent();
-        if (parent == null) {
+        if (parent == null || fileName == null || fileName.length() == 0) {
             return null;
         }
         Path resolvedPath = parent.resolve(fileName);
