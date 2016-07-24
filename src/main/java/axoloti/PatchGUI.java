@@ -17,6 +17,7 @@
  */
 package axoloti;
 
+import axoloti.datatypes.DataType;
 import axoloti.inlets.InletInstance;
 import axoloti.iolet.IoletAbstract;
 import axoloti.object.AxoObjectAbstract;
@@ -57,6 +58,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
@@ -1159,5 +1161,30 @@ public class PatchGUI extends Patch {
         pf.setState(java.awt.Frame.NORMAL);
         pf.toFront();
         return pf;
+    }
+    
+    private Map<DataType, Boolean> cableTypeEnabled = new HashMap<DataType, Boolean>();
+    
+    public void setCableTypeEnabled(DataType type, boolean enabled) {
+        cableTypeEnabled.put(type, enabled);
+    }
+    
+    public Boolean isCableTypeEnabled(DataType type) {
+        if(cableTypeEnabled.containsKey(type)) {
+            return cableTypeEnabled.get(type);
+        }
+        else {
+            return true;
+        }
+    }
+    
+    public void updateNetVisibility() {
+        for(Net n : this.nets) {
+            DataType d = n.GetDataType();
+            if(d != null) {
+                n.setVisible(isCableTypeEnabled(d));
+            }
+        }
+        Layers.repaint();
     }
 }
