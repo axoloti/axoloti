@@ -67,9 +67,6 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="undoItem">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+Z"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Undo"/>
               </Properties>
               <Events>
@@ -79,9 +76,6 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="redoItem">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Shift+Ctrl+Z"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Redo"/>
               </Properties>
               <Events>
@@ -167,9 +161,6 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="zoomInMenuItem">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+EQUALS"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Zoom In"/>
               </Properties>
               <Events>
@@ -186,9 +177,6 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="zoomOutMenuItem">
               <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+MINUS"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Zoom Out"/>
               </Properties>
               <Events>
