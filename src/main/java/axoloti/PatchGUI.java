@@ -504,6 +504,37 @@ public class PatchGUI extends Patch {
             }
         });
 
+       Layers.addMouseMotionListener(new MouseMotionAdapter() {       
+            @Override     
+             public void mouseDragged(MouseEvent ev) {     
+                 if (Button1down) {        
+                     int x1 = selectionRectStart.x;        
+                     int y1 = selectionRectStart.y;        
+                     int x2 = ev.getX();       
+                     int y2 = ev.getY();       
+                     int xmin = x1 < x2 ? x1 : x2;     
+                     int xmax = x1 > x2 ? x1 : x2;     
+                     int ymin = y1 < y2 ? y1 : y2;     
+                     int ymax = y1 > y2 ? y1 : y2;     
+                     selectionrectangle.setLocation(xmin, ymin);       
+                     int width = xmax - xmin;      
+                     int height = ymax - ymin;     
+                     selectionrectangle.setSize(width, height);        
+                     selectionrectangle.setVisible(true);      
+                     selectionRectLayer.repaint(new Rectangle(xmin, ymin, width, height));     
+                 } else if (Button2down) {     
+                     handlePan(ev);        
+                 }     
+             }     
+       
+             @Override     
+             public void mouseMoved(MouseEvent ev) {       
+                 if (ev.isAltDown()) {     
+                     handlePan(ev);        
+                 }     
+             }     
+        });
+
         Layers.setDropTarget(dt);
 
         Dimension LayersSize = new Dimension(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
