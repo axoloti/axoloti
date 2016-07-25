@@ -420,36 +420,6 @@ public class PatchGUI extends Patch {
             }
         });
 
-        Layers.addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent ev) {
-                if (Button1down) {
-                    int x1 = selectionRectStart.x;
-                    int y1 = selectionRectStart.y;
-                    int x2 = ev.getX();
-                    int y2 = ev.getY();
-                    int xmin = x1 < x2 ? x1 : x2;
-                    int xmax = x1 > x2 ? x1 : x2;
-                    int ymin = y1 < y2 ? y1 : y2;
-                    int ymax = y1 > y2 ? y1 : y2;
-                    selectionrectangle.setLocation(xmin, ymin);
-                    int width = xmax - xmin;
-                    int height = ymax - ymin;
-                    selectionrectangle.setSize(width, height);
-                    selectionrectangle.setVisible(true);
-                    selectionRectLayer.repaint(new Rectangle(xmin, ymin, width, height));
-                } else if (Button2down) {
-                    handlePan(ev);
-                }
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent ev) {
-                if (ev.isAltDown()) {
-                    handlePan(ev);
-                }
-            }
-        });
         Layers.setVisible(true);
 
         DropTarget dt;
@@ -522,7 +492,7 @@ public class PatchGUI extends Patch {
 
         Layers.addMouseWheelListener(new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
-                if (e.isShiftDown()) {
+                if (e.isAltDown()) {
                     int notches = e.getWheelRotation();
                     Point origin = e.getPoint();
                     Constants.ZOOM_ACTION action = notches < 0 ? Constants.ZOOM_ACTION.IN : Constants.ZOOM_ACTION.OUT;
