@@ -528,6 +528,9 @@ public class PatchGUI extends Patch {
                     Constants.ZOOM_ACTION action = notches < 0 ? Constants.ZOOM_ACTION.IN : Constants.ZOOM_ACTION.OUT;
                     handleZoom(action, origin);
                 }
+                else {
+                    Layers.getParent().dispatchEvent(e);
+                }
             }
         });
 
