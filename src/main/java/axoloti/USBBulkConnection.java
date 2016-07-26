@@ -1233,9 +1233,22 @@ public class USBBulkConnection extends Connection {
                     int size = fileinfoRcvBuffer.getInt();
                     int timestamp = fileinfoRcvBuffer.getInt();
                     CharBuffer cb = Charset.forName("ISO-8859-1").decode(fileinfoRcvBuffer);
-                    SDCardInfo.getInstance().AddFile(cb.toString(), size, timestamp);
-//                    Logger.getLogger(SerialConnection.class.getName()).info("fileinfo: " + cb.toString());
+                    String fname = cb.toString();
+                    // strip trailing null
+                    if (fname.charAt(fname.length() - 1) == (char) 0) {
+                        fname = fname.substring(0, fname.length() - 1);
+                    }
+                    SDCardInfo.getInstance().AddFile(fname, size, timestamp);
+//                    Logger.getLogger(SerialConnection.class.getName()).info("fileinfo: " + cb.toString());                    
                     GoIdleState();
+                    if (fname.equals("/")) {
+                        // end of index
+                        System.out.println("sdfilelist done");
+                        synchronized (readsync) {
+                            readsync.Acked = true;
+                            readsync.notifyAll();
+                        }
+                    }
                 }
                 break;
             case memread:
