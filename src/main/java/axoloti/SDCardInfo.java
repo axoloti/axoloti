@@ -130,12 +130,26 @@ public class SDCardInfo {
         }
     }
 
+    public SDFileInfo find(String name) {
+        synchronized (files) {
+            if (!name.startsWith("/")) {
+                name = "/" + name;
+            }
+            for (SDFileInfo f : files) {
+                if (f.filename.equalsIgnoreCase(name)) {
+                    return f;
+                }
+            }
+        }
+        return null;
+    }
+    
+    
     public boolean exists(String name, long timestampEpoch, long size) {
         synchronized (files) {
             if (!name.startsWith("/")) {
                 name = "/" + name;
             }
-            System.out.println("exists? " + name);
             for (SDFileInfo f : files) {
                 if (f.filename.equalsIgnoreCase(name) && f.size == size && (Math.abs(f.timestamp.getTimeInMillis() - timestampEpoch) < 3000)) {
                     return true;
