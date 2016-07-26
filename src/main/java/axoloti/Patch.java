@@ -314,7 +314,7 @@ public class Patch {
     public Patch() {
         super();
     }
-    
+
     public void PostContructor() {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             o.patch = this;
@@ -460,7 +460,7 @@ public class Patch {
         }
         return null;
     }
-    
+
     /*
      private boolean CompatType(DataType source, DataType d2){
      if (d1 == d2) return true;
@@ -686,14 +686,13 @@ public class Patch {
             serializer.write(this, b);
             try {
                 previousStates.set(currentState, b.toString());
-                if(cleanDanglingStates) {
+                if (cleanDanglingStates) {
                     try {
                         // if we've saved a new edit
                         // after some undoing,
                         // cleanup dangling states
                         previousStates.subList(currentState + 1, previousStates.size()).clear();
-                    }
-                    catch(IndexOutOfBoundsException e) {
+                    } catch (IndexOutOfBoundsException e) {
                     }
                 }
                 this.cleanDanglingStates = true;
@@ -704,7 +703,7 @@ public class Patch {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void cleanUpIntermediateChangeStates(int n) {
         int length = previousStates.size();
         previousStates.subList(length - n, length).clear();
@@ -713,7 +712,7 @@ public class Patch {
     }
 
     private boolean cleanDanglingStates = true;
-    
+
     void loadState() {
         Serializer serializer = new Persister();
         ByteArrayInputStream b = new ByteArrayInputStream(previousStates.get(currentState).getBytes());
@@ -724,7 +723,7 @@ public class Patch {
             this.cleanDanglingStates = false;
             this.PostContructor();
             repaint();
-            for(Net n : nets) {
+            for (Net n : nets) {
                 n.updateBounds();
             }
             repaint();
@@ -2488,6 +2487,10 @@ public class Patch {
 
     public PatchFrame getPatchframe() {
         return patchframe;
+    }
+
+    public String getNotes() {
+        return notes;
     }
 
     public ArrayList<SDFileReference> GetDependendSDFiles() {
