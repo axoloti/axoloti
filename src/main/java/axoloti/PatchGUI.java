@@ -496,43 +496,42 @@ public class PatchGUI extends Patch {
                     Point origin = e.getPoint();
                     Constants.ZOOM_ACTION action = notches < 0 ? Constants.ZOOM_ACTION.IN : Constants.ZOOM_ACTION.OUT;
                     handleZoom(action, origin);
-                }
-                else {
+                } else {
                     Layers.getParent().dispatchEvent(e);
                 }
             }
         });
 
-       Layers.addMouseMotionListener(new MouseMotionAdapter() {       
-            @Override     
-             public void mouseDragged(MouseEvent ev) {     
-                 if (Button1down) {        
-                     int x1 = selectionRectStart.x;        
-                     int y1 = selectionRectStart.y;        
-                     int x2 = ev.getX();       
-                     int y2 = ev.getY();       
-                     int xmin = x1 < x2 ? x1 : x2;     
-                     int xmax = x1 > x2 ? x1 : x2;     
-                     int ymin = y1 < y2 ? y1 : y2;     
-                     int ymax = y1 > y2 ? y1 : y2;     
-                     selectionrectangle.setLocation(xmin, ymin);       
-                     int width = xmax - xmin;      
-                     int height = ymax - ymin;     
-                     selectionrectangle.setSize(width, height);        
-                     selectionrectangle.setVisible(true);      
-                     selectionRectLayer.repaint(new Rectangle(xmin, ymin, width, height));     
-                 } else if (Button2down) {     
-                     handlePan(ev);        
-                 }     
-             }     
-       
-             @Override     
-             public void mouseMoved(MouseEvent ev) {       
-                 if (ev.isAltDown()) {     
-                     PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
-                     handlePan(ev);        
-                 }     
-             }     
+        Layers.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent ev) {
+                if (Button1down) {
+                    int x1 = selectionRectStart.x;
+                    int y1 = selectionRectStart.y;
+                    int x2 = ev.getX();
+                    int y2 = ev.getY();
+                    int xmin = x1 < x2 ? x1 : x2;
+                    int xmax = x1 > x2 ? x1 : x2;
+                    int ymin = y1 < y2 ? y1 : y2;
+                    int ymax = y1 > y2 ? y1 : y2;
+                    selectionrectangle.setLocation(xmin, ymin);
+                    int width = xmax - xmin;
+                    int height = ymax - ymin;
+                    selectionrectangle.setSize(width, height);
+                    selectionrectangle.setVisible(true);
+                    selectionRectLayer.repaint(new Rectangle(xmin, ymin, width, height));
+                } else if (Button2down) {
+                    handlePan(ev);
+                }
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent ev) {
+                if (ev.isAltDown()) {
+                    PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
+                    handlePan(ev);
+                }
+            }
         });
 
         Layers.setDropTarget(dt);
@@ -1166,29 +1165,29 @@ public class PatchGUI extends Patch {
         pf.toFront();
         return pf;
     }
-    
+
     private Map<DataType, Boolean> cableTypeEnabled = new HashMap<DataType, Boolean>();
-    
+
     public void setCableTypeEnabled(DataType type, boolean enabled) {
         cableTypeEnabled.put(type, enabled);
     }
-    
+
     public Boolean isCableTypeEnabled(DataType type) {
-        if(cableTypeEnabled.containsKey(type)) {
+        if (cableTypeEnabled.containsKey(type)) {
             return cableTypeEnabled.get(type);
-        }
-        else {
+        } else {
             return true;
         }
     }
-    
+
     public void updateNetVisibility() {
-        for(Net n : this.nets) {
+        for (Net n : this.nets) {
             DataType d = n.GetDataType();
-            if(d != null) {
+            if (d != null) {
                 n.setVisible(isCableTypeEnabled(d));
             }
         }
         Layers.repaint();
     }
+
 }
