@@ -1,13 +1,13 @@
 package axoloti;
 
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.TitleBarPanel;
 import axoloti.utils.Constants;
 import components.JackInputComponent;
 import components.JackOutputComponent;
 import components.LabelComponent;
 import components.control.ACtrlComponent;
+import components.control.DialComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
@@ -28,6 +28,7 @@ public class ZoomUI extends LayerUI<JComponent> {
     protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private double zoom = 1;
     private Component previous = null;
+    private Component previousDial = null;
 
     private boolean dragging = false;
     private Component dragged;
@@ -101,6 +102,18 @@ public class ZoomUI extends LayerUI<JComponent> {
                 listener.mouseReleased(transformedEvent);
             } else if (localEvent.getID() == MouseEvent.MOUSE_CLICKED) {
                 listener.mouseClicked(transformedEvent);
+            }
+        }
+        if (localEvent.getID() == MouseEvent.MOUSE_PRESSED
+                && transformedEvent.getComponent() instanceof DialComponent) {
+            // ensure that dial focus highlights are repainted
+            if (previousDial != null
+                    && previousDial != transformedEvent.getComponent()) {
+                previousDial.repaint();
+                ZoomUtils.paintObjectLayer(previousDial);
+            }
+            if (transformedEvent.getComponent() instanceof DialComponent) {
+                previousDial = transformedEvent.getComponent();
             }
         }
     }
@@ -236,12 +249,25 @@ public class ZoomUI extends LayerUI<JComponent> {
         }
     }
 
-    protected void processKeyEvent(KeyEvent e,
+    @Override
+    protected void processKeyEvent(KeyEvent ke,
             JLayer<? extends JComponent> l) {
-        ZoomUtils.paintObjectLayer(l, e.getComponent(), this);
+        if(ke.getKeyCode() == KeyEvent.VK_ALT) {
+            KeyListener[] listeners = patch.Layers.getListeners(KeyListener.class);
+            for(KeyListener kl : listeners) {
+                if(ke.getID() == KeyEvent.KEY_PRESSED) {
+                    kl.keyPressed(getNewKeyEvent(ke));
+                }
+                else if(ke.getID() == KeyEvent.KEY_RELEASED) {
+                    kl.keyReleased(getNewKeyEvent(ke));
+                }
+            }
+        }
+        ZoomUtils.paintObjectLayer(l, ke.getComponent(), this);
     }
 
-    protected void proccesFocusEvent(FocusEvent e,
+    @Override
+    protected void processFocusEvent(FocusEvent e,
             JLayer<? extends JComponent> l) {
         ZoomUtils.paintObjectLayer(l, e.getComponent(), this);
     }
@@ -333,6 +359,10 @@ public class ZoomUI extends LayerUI<JComponent> {
         return new MouseEvent(component, eventId, mouseEvent.getWhen(), mouseEvent.getModifiers(),
                 mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getXOnScreen(), mouseEvent.getYOnScreen(), mouseEvent.getClickCount(), mouseEvent.isPopupTrigger(),
                 mouseEvent.getButton());
+    }
+    
+    private KeyEvent getNewKeyEvent(KeyEvent keyEvent) {
+        return new KeyEvent(patch.Layers, keyEvent.getID(), keyEvent.getWhen(), keyEvent.getModifiers(), keyEvent.getKeyCode(), keyEvent.getKeyChar());
     }
 
     public double getScale() {

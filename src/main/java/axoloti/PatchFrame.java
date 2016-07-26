@@ -20,6 +20,7 @@ package axoloti;
 import axoloti.object.AxoObjects;
 import axoloti.utils.Constants;
 import components.PresetPanel;
+import components.VisibleCablePanel;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -66,6 +67,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     PatchGUI patch;
 
     private PresetPanel presetPanel;
+    private VisibleCablePanel visibleCablePanel;
 
     public PatchFrame(final PatchGUI patch, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
@@ -77,12 +79,15 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
 
         presetPanel = new PresetPanel(patch);
+        visibleCablePanel = new VisibleCablePanel(patch);
+        
         jToolbarPanel.add(presetPanel);
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
+        jToolbarPanel.add(visibleCablePanel);
+
         jScrollPane1.setViewportView(patch.Layers);
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
         jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
-        jScrollPane1.setWheelScrollingEnabled(false);
 
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
@@ -177,6 +182,18 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         if (USBBulkConnection.GetConnection().isConnected()) {
             ShowConnect();
         }
+        
+        this.undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, 
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        this.redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, 
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | KeyEvent.SHIFT_DOWN_MASK));
+        this.zoomDefaultMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, 
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        this.zoomInMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, 
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        this.zoomOutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, 
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
         createBufferStrategy(2);
     }
 
@@ -445,7 +462,6 @@ jMenuClose.addActionListener(new java.awt.event.ActionListener() {
     jMenuEdit.setMnemonic('E');
     jMenuEdit.setText("Edit");
 
-    undoItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.CTRL_MASK));
     undoItem.setText("Undo");
     undoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
         public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
@@ -463,7 +479,6 @@ jMenuClose.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuEdit.add(undoItem);
 
-    redoItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
     redoItem.setText("Redo");
     redoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
         public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
@@ -548,7 +563,6 @@ jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener() {
     jMenuView.add(jMenuItemAdjScroll);
     jMenuView.add(jSeparator5);
 
-    zoomInMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_EQUALS, java.awt.event.InputEvent.CTRL_MASK));
     zoomInMenuItem.setText("Zoom In");
     zoomInMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -565,7 +579,6 @@ jMenuItemSelectAll.addActionListener(new java.awt.event.ActionListener() {
     });
     jMenuView.add(zoomDefaultMenuItem);
 
-    zoomOutMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_MINUS, java.awt.event.InputEvent.CTRL_MASK));
     zoomOutMenuItem.setText("Zoom Out");
     zoomOutMenuItem.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {

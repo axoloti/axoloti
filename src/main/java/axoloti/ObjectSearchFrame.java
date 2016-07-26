@@ -514,6 +514,9 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.PAGE_AXIS));
 
         jTextFieldObjName.setAlignmentX(0.0F);
+        jTextFieldObjName.setMaximumSize(new java.awt.Dimension(10000, 20));
+        jTextFieldObjName.setMinimumSize(new java.awt.Dimension(100, 20));
+        jTextFieldObjName.setPreferredSize(new java.awt.Dimension(100, 20));
         jTextFieldObjName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldObjNameActionPerformed(evt);
@@ -530,6 +533,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.setAlignmentX(0.0F);
         jList1.setMaximumSize(null);
+        jList1.setMinimumSize(new java.awt.Dimension(100, 50));
         jList1.setVisibleRowCount(6);
         jScrollPane3.setViewportView(jList1);
 
@@ -539,7 +543,9 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
         jTree1.setAlignmentX(0.0F);
         jTree1.setDragEnabled(true);
+        jTree1.setMinimumSize(new java.awt.Dimension(100, 50));
         jTree1.setRootVisible(false);
+        jTree1.setShowsRootHandles(true);
         jScrollPane1.setViewportView(jTree1);
 
         jSplitPane3.setBottomComponent(jScrollPane1);

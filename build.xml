@@ -280,6 +280,7 @@
 			 <include name="firmware/flasher/flasher_build/*.bin" />
 			 <include name="firmware/flasher/flasher_build/*.elf" />
 			 <include name="firmware/mounter/*" />
+			 <include name="firmware/mounter/mass_storage/*" />
 			 <include name="firmware/mounter/mounter_build/*.bin" />
 			 <include name="firmware/mounter/mounter_build/*.elf" />
 			 <include name="chibios/*"/>

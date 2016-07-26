@@ -43,7 +43,9 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import qcmds.QCmdCreateDirectory;
 import qcmds.QCmdDeleteFile;
+import qcmds.QCmdGetFileList;
 import qcmds.QCmdProcessor;
+import qcmds.QCmdStop;
 import qcmds.QCmdUploadFile;
 
 /**
@@ -324,8 +326,9 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
     void RequestRefresh() {
         if (USBBulkConnection.GetConnection().isConnected()) {
-            USBBulkConnection.GetConnection().TransmitStop();
-            USBBulkConnection.GetConnection().TransmitGetFileList();
+            USBBulkConnection.GetConnection().AppendToQueue(new QCmdStop());
+            USBBulkConnection.GetConnection().WaitSync();
+            USBBulkConnection.GetConnection().AppendToQueue(new QCmdGetFileList());
         }
     }
 
