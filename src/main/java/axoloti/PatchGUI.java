@@ -330,7 +330,6 @@ public class PatchGUI extends Patch {
                     panOrigin = Layers.getMousePosition();
                     if (panOrigin != null) {
                         zoomUI.removeZoomFactor(panOrigin);
-                        PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
                         Button2down = true;
                         zoomUI.startPan();
                     }
@@ -530,6 +529,7 @@ public class PatchGUI extends Patch {
              @Override     
              public void mouseMoved(MouseEvent ev) {       
                  if (ev.isAltDown()) {     
+                     PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
                      handlePan(ev);        
                  }     
              }     

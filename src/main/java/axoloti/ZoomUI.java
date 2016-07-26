@@ -249,12 +249,25 @@ public class ZoomUI extends LayerUI<JComponent> {
         }
     }
 
-    protected void processKeyEvent(KeyEvent e,
+    @Override
+    protected void processKeyEvent(KeyEvent ke,
             JLayer<? extends JComponent> l) {
-        ZoomUtils.paintObjectLayer(l, e.getComponent(), this);
+        if(ke.getKeyCode() == KeyEvent.VK_ALT) {
+            KeyListener[] listeners = patch.Layers.getListeners(KeyListener.class);
+            for(KeyListener kl : listeners) {
+                if(ke.getID() == KeyEvent.KEY_PRESSED) {
+                    kl.keyPressed(getNewKeyEvent(ke));
+                }
+                else if(ke.getID() == KeyEvent.KEY_RELEASED) {
+                    kl.keyReleased(getNewKeyEvent(ke));
+                }
+            }
+        }
+        ZoomUtils.paintObjectLayer(l, ke.getComponent(), this);
     }
 
-    protected void proccesFocusEvent(FocusEvent e,
+    @Override
+    protected void processFocusEvent(FocusEvent e,
             JLayer<? extends JComponent> l) {
         ZoomUtils.paintObjectLayer(l, e.getComponent(), this);
     }
@@ -346,6 +359,10 @@ public class ZoomUI extends LayerUI<JComponent> {
         return new MouseEvent(component, eventId, mouseEvent.getWhen(), mouseEvent.getModifiers(),
                 mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getXOnScreen(), mouseEvent.getYOnScreen(), mouseEvent.getClickCount(), mouseEvent.isPopupTrigger(),
                 mouseEvent.getButton());
+    }
+    
+    private KeyEvent getNewKeyEvent(KeyEvent keyEvent) {
+        return new KeyEvent(patch.Layers, keyEvent.getID(), keyEvent.getWhen(), keyEvent.getModifiers(), keyEvent.getKeyCode(), keyEvent.getKeyChar());
     }
 
     public double getScale() {
