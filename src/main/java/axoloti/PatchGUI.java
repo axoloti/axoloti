@@ -1190,4 +1190,14 @@ public class PatchGUI extends Patch {
         Layers.repaint();
     }
 
+    @Override
+    public void Close() {
+        super.Close();
+        if (NotesFrame != null) {
+            NotesFrame.dispose();
+        }
+        if ((settings != null) && (settings.editor != null)) {
+            settings.editor.dispose();
+        }
+    }
 }
