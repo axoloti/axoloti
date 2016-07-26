@@ -591,30 +591,32 @@ static void LEDTest(void) {
 	static uint8_t val1;
 	val1 += EncBuffer[1];
 
-	LED_set(0, 0xffff >> (16 - (val0 >> 4)) );
-	LED_set(1, 0xffff >> (16 - (val1 >> 4)) );
+	LED_setAll(0,0);
+	LED_setAll(1,0);
+	LED_setOne(0, val0 % 16 ,1 );
+	LED_setOne(1, val1 % 16 ,1);
 
 	static int button[16];
-	IF_BTN_NAV_DOWN(btn_1) button[0] = ! button[0];
-	IF_BTN_NAV_DOWN(btn_2) button[1] = ! button[1];
-	IF_BTN_NAV_DOWN(btn_3) button[2] = ! button[2];
-	IF_BTN_NAV_DOWN(btn_4) button[3] = ! button[3];
-	IF_BTN_NAV_DOWN(btn_5) button[4] = ! button[4];
-	IF_BTN_NAV_DOWN(btn_6) button[5] = ! button[5];
-	IF_BTN_NAV_DOWN(btn_7) button[6] = ! button[6];
-	IF_BTN_NAV_DOWN(btn_8) button[7] = ! button[7];
-	IF_BTN_NAV_DOWN(btn_9) button[8] = ! button[8];
-	IF_BTN_NAV_DOWN(btn_10) button[9] = ! button[9];
-	IF_BTN_NAV_DOWN(btn_11) button[10] = ! button[10];
-	IF_BTN_NAV_DOWN(btn_12) button[11] = ! button[11];
-	IF_BTN_NAV_DOWN(btn_13) button[12] = ! button[12];
-	IF_BTN_NAV_DOWN(btn_14) button[13] = ! button[13];
-	IF_BTN_NAV_DOWN(btn_15) button[14] = ! button[14];
-	IF_BTN_NAV_DOWN(btn_16) button[15] = ! button[15];
+	IF_BTN_NAV_DOWN(btn_1)  button[0] =   (button[0]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_2)  button[1] =   (button[1]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_3)  button[2] =   (button[2]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_4)  button[3] =   (button[3]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_5)  button[4] =   (button[4]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_6)  button[5] =   (button[5]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_7)  button[6] =   (button[6]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_8)  button[7] =   (button[7]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_9)  button[8] =   (button[8]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_10) button[9] =   (button[9]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_11) button[10] =  (button[10] + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_12) button[11] =  (button[11] + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_13) button[12] =  (button[12] + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_14) button[13] =  (button[13] + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_15) button[14] =  (button[14] + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_16) button[15] =  (button[15] + 1) % 4;
 
 	int i=0;
 	for(i=0;i<16;i++) {
-		LED_setBit(2,i,button[i]);
+		LED_setOne(2,i,button[i]);
 	}
 }
 

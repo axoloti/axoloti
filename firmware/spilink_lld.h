@@ -27,9 +27,8 @@ __STATIC_INLINE void spilink_master_process1(spilink_data_t *tx, spilink_data_t 
 		tx->control_type = 0x200;
 		int i;
 		for(i=0;i < LEDSIZE;i++){
-			((int16_t*) tx->control_data)[i] = led_buffer[i];
+			((int32_t*) tx->control_data)[i] = leds[i].led_32b;
 		}
-
 	} else {
 		lcd_update_index = (lcd_update_index+1)&0x3f;
 		tx->control_type = 0x100 + lcd_update_index;

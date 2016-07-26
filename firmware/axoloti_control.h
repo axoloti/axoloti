@@ -28,15 +28,41 @@
 #define LEDSIZE 3
 
 extern uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS];
-extern uint16_t led_buffer[LEDSIZE];
+
+typedef struct led_outputs {
+	union {
+		struct {
+		  unsigned int led1 :2;
+		  unsigned int led2 :2;
+		  unsigned int led3 :2;
+		  unsigned int led4 :2;
+		  unsigned int led5 :2;
+		  unsigned int led6 :2;
+		  unsigned int led7 :2;
+		  unsigned int led8 :2;
+		  unsigned int led9 :2;
+		  unsigned int led10 :2;
+		  unsigned int led11 :2;
+		  unsigned int led12 :2;
+		  unsigned int led13 :2;
+		  unsigned int led14 :2;
+		  unsigned int led15 :2;
+		  unsigned int led16 :2;
+		};
+		uint32_t led_32b;
+	};
+} led_outputs_t;
+
+extern led_outputs_t leds[LEDSIZE];
+
 extern uint8_t control_rx_buffer[(LCDHEADER + LCDWIDTH)];
 
 extern void do_axoloti_control(void);
 void axoloti_control_init(void);
 
 void LED_clear(void);
-void LED_set(int c, int v);
-void LED_setBit(int c, int b, unsigned v );
+void LED_setAll(unsigned c, int32_t v);
+void LED_setOne(unsigned c, unsigned b, unsigned v );
 
 void LCD_clearDisplay(void);
 void LCD_drawPixel(int x, int y, uint16_t color);

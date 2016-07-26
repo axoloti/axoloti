@@ -23,7 +23,8 @@
 #include <string.h>
 
 uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS] __attribute__ ((section (".sram2")));
-uint16_t led_buffer[LEDSIZE] __attribute__ ((section (".sram2")));
+
+led_outputs_t leds[LEDSIZE] __attribute__ ((section (".sram2")));
 
 
 #if 0
@@ -48,21 +49,22 @@ void axoloti_control_init(void) {
 
 
 void LED_clear() {
-	int i;
-	for ( i = 0; i < LEDSIZE; i++)
-		led_buffer[i] = 0;
-}
-
-void LED_set(int c, int v) {
-	if(c<LEDSIZE) {
-		led_buffer[c] = v;
+	int c;
+	for(c=0;c<LEDSIZE;c++) {
+		leds[c].led_32b = 0;
 	}
 }
 
-void LED_setBit(int c, int b, unsigned v ) {
+void LED_setAll(unsigned c, int32_t v) {
+	if(c<LEDSIZE) {
+		leds[c].led_32b = v;
+	}
+}
+
+void LED_setOne(unsigned c, unsigned b, unsigned v ) {
 	if(c<LEDSIZE && b<16) {
-		if(v) led_buffer[c] |= ( 1 << b);
-		else led_buffer[c] &= ~(1 << b);
+		leds[c].led_32b &= ~ (0x3 << (b*2) );
+		leds[c].led_32b |= ( (v & 0x3)  << (b*2) );
 	}
 }
 

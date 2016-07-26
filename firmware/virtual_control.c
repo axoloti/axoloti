@@ -22,23 +22,23 @@
 
 void TransmitLCDoverUSB(void) {
 
-  static int r = 0;
-  r++;
-  if (r == (LCDROWS + 1))
-    r = 0;
-
-  // TODO: update protocol
-  // there is no longer a header in the buffer, so a header needs to be prefixed, for client to recognise msg types
-  if (r < LCDROWS) {
-    chSequentialStreamWrite(
-        (BaseSequentialStream *)&BDU1,
-        (const unsigned char*)&lcd_buffer[r * (LCDHEADER + LCDWIDTH)],
-        LCDHEADER + LCDWIDTH);
-  }
-  else {
-    chSequentialStreamWrite((BaseSequentialStream *)&BDU1,
-                            (const unsigned char*)&led_buffer[0],
-                            LCDHEADER + LEDSIZE);
-  }
+	  // TODO: update protocol
+	  // there is no longer a header in the buffer, so a header needs to be prefixed, for client to recognise msg types
+//  static int r = 0;
+//  r++;
+//  if (r == (LCDROWS + 1))
+//    r = 0;
+//
+//  if (r < LCDROWS) {
+//    chSequentialStreamWrite(
+//        (BaseSequentialStream *)&BDU1,
+//        (const unsigned char*)&lcd_buffer[r * (LCDHEADER + LCDWIDTH)],
+//        LCDHEADER + LCDWIDTH);
+//  }
+//  else {
+//    chSequentialStreamWrite((BaseSequentialStream *)&BDU1,
+//                            (const unsigned char*)&led_buffer[0],
+//                            LCDHEADER + LEDSIZE);
+//  }
 
 }
