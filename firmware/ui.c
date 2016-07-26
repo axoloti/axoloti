@@ -30,6 +30,13 @@
 #include "ff.h"
 #include <string.h>
 
+#define LCD_COL_INDENT 5
+#define LCD_COL_RIGHT 0
+#define LCD_COL_LEFT 97
+#define STATUSROW 7
+
+
+
 Btn_Nav_States_struct Btn_Nav_CurStates;
 Btn_Nav_States_struct Btn_Nav_PrevStates;
 Btn_Nav_States_struct Btn_Nav_Or;
@@ -176,91 +183,6 @@ inline void KVP_Decrement(KeyValuePair_s *kvp) {
   }
 }
 
-void k_scope_DisplayFunction(void * userdata) {
-// userdata  int32_t[64], one sample per column
-  int i;
-  LCD_clearDisplay();
-  for (i = 0; i < 48; i++) {
-    LCD_setPixel(14, i);
-  }
-  LCD_drawString(5, 0, "1");
-  LCD_drawString(5, 2, "0");
-  LCD_drawString(0, 4, "-1");
-  LCD_setPixel(13, 21);
-  LCD_setPixel(12, 21);
-  LCD_setPixel(13, 21 + 16);
-  LCD_setPixel(12, 21 + 16);
-  LCD_setPixel(13, 21 - 16);
-  LCD_setPixel(12, 21 - 16);
-  LCD_drawStringInv(0, 5, "BACK");
-  LCD_drawStringInv(58, 5, "HOLD");
-  for (i = 0; i < 64; i++) {
-    int y = ((int *)userdata)[i];
-    y = 21 - (y >> 23);
-    if (y < 1)
-      y = 1;
-    if (y > 47)
-      y = 47;
-    LCD_setPixel(i + 15, y);
-  }
-}
-
-void k_scope_DisplayFunction2(void * userdata) {
-// userdata  int32_t[64][2], minimum and maximum per column
-  int i;
-  LCD_clearDisplay();
-  for (i = 0; i < 48; i++) {
-    LCD_setPixel(14, i);
-  }
-  LCD_drawString(5, 0, "1");
-  LCD_drawString(5, 2, "0");
-  LCD_drawString(0, 4, "-1");
-  LCD_setPixel(13, 21);
-  LCD_setPixel(12, 21);
-  LCD_setPixel(13, 21 + 16);
-  LCD_setPixel(12, 21 + 16);
-  LCD_setPixel(13, 21 - 16);
-  LCD_setPixel(12, 21 - 16);
-  LCD_drawStringInv(0, 5, "BACK");
-  LCD_drawStringInv(58, 5, "HOLD");
-
-  LCD_drawString(27, 5, "-.ms");
-
-  for (i = 0; i < 64; i++) {
-    int y = ((int *)userdata)[i * 2 + 1];
-    y = 21 - (y >> 23);
-    if (y < 1)
-      y = 1;
-    if (y > 47)
-      y = 47;
-    int y2 = ((int *)userdata)[i * 2];
-    y2 = 21 - (y2 >> 23);
-    if (y2 < 1)
-      y2 = 1;
-    if (y2 > 47)
-      y2 = 47;
-    int j;
-//			LCD_setPixel(i,y);
-//			LCD_setPixel(i,y2);
-
-    if (y2 <= (y))
-      y2 = y + 1;
-    for (j = y; j < y2; j++)
-      LCD_setPixel(i + 15, j);
-  }
-}
-
-void k_scope_DisplayFunction3(void * userdata) {
-  (void)userdata;
-}
-
-void k_scope_DisplayFunction4(void * userdata) {
-  (void)userdata;
-}
-
-void k_value_DisplayFunction(void * userdata) {
-  (void)userdata;
-}
 
 #define POLLENC(NAME, INCREMENT_FUNCTION, DECREMENT_FUNCTION)  \
       if (!expander_PrevStates.NAME##A) {                 \
@@ -402,12 +324,12 @@ static msg_t ThreadUI(void *arg) {
 }
 #else
 static void UIUpdateLCD(void);
-static void UIPollButtons2(void);
+static void UIPollButtons(void);
 
 void AxolotiControlUpdate(void) {
 #if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
 //    do_axoloti_control();
-    UIPollButtons2();
+    UIPollButtons();
     UIUpdateLCD();
 #endif
 }
@@ -525,11 +447,9 @@ void KVP_RegisterObject(KeyValuePair_s *kvp) {
   ObjectKvpRoot->apvp.length++;
 }
 
-#define LCD_COL_INDENT 5
 #define LCD_COL_EQ 91
-#define LCD_COL_VAL 97
-#define LCD_COL_ENTER 97
-#define STATUSROW 7
+#define LCD_COL_VAL LCD_COL_LEFT
+#define LCD_COL_ENTER LCD_COL_LEFT
 
 void KVP_DisplayInv(int x, int y, KeyValuePair_s *kvp) {
   LCD_drawStringInvN(x, y, kvp->keyname, LCD_COL_EQ);
@@ -635,139 +555,7 @@ void KVP_Display(int x, int y, KeyValuePair_s *kvp) {
   }
 }
 
-static void UIPollButtons(void) {
-#if 0
-  expander_CurStates.i = ~read_ioexpander();
 
-  IF_EXPANDER_BTN_DOWN(S1)
-  MidiInNoteOn(0,30,20+80*Btn_Nav_CurStates.btn_nav_Shift);
-  IF_EXPANDER_BTN_UP(S1)
-  MidiInNoteOff(0,30,20+80*Btn_Nav_CurStates.btn_nav_Shift);
-
-  IF_EXPANDER_BTN_DOWN(S2)
-  MidiInNoteOn(0,42,20+80*Btn_Nav_CurStates.btn_nav_Shift);
-  IF_EXPANDER_BTN_UP(S2)
-  MidiInNoteOff(0,42,20+80*Btn_Nav_CurStates.btn_nav_Shift);
-
-  IF_EXPANDER_BTN_DOWN(S3)
-  MidiInNoteOn(0,54,20+80*Btn_Nav_CurStates.btn_nav_Shift);
-  IF_EXPANDER_BTN_UP(S3)
-  MidiInNoteOff(0,54,20+80*Btn_Nav_CurStates.btn_nav_Shift);
-
-  IF_EXPANDER_BTN_DOWN(S4)
-  MidiInNoteOn(0,66,20+80*Btn_Nav_CurStates.btn_nav_Shift);
-  IF_EXPANDER_BTN_UP(S4)
-  MidiInNoteOff(0,66,20+80*Btn_Nav_CurStates.btn_nav_Shift);
-
-  IF_EXPANDER_BTN_DOWN(S5)
-  ApplyPreset(0);
-
-  IF_EXPANDER_BTN_DOWN(S6)
-  ApplyPreset(1);
-
-  IF_EXPANDER_BTN_DOWN(S7)
-  ApplyPreset(2);
-
-  IF_EXPANDER_BTN_DOWN(S8)
-  ApplyPreset(3);
-
-  if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
-    KeyValuePair_s *cur = &((KeyValuePair_s *)(KvpsDisplay->avp.array))[KvpsDisplay->avp.current];
-    if ((cur->kvptype == KVP_TYPE_IVP)||(cur->kvptype == KVP_TYPE_IPVP)) {
-      POLLENC(ENC1, KVP_Increment(cur);,KVP_Decrement(cur););
-    }
-    else {
-      //POLLENC(ENC1, controller[0]++;,if(controller[0]>0)controller[0]--;);
-    }
-  }
-  else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
-    KeyValuePair_s *cur = (KeyValuePair_s *)( KvpsDisplay->apvp.array[KvpsDisplay->apvp.current]);
-    if ((cur->kvptype == KVP_TYPE_IVP)||(cur->kvptype == KVP_TYPE_IPVP)) {
-      POLLENC(ENC1, KVP_Increment(cur);,KVP_Decrement(cur););
-    }
-    else {
-      //POLLENC(ENC1, controller[0]++;,if(controller[0]>0)controller[0]--;);
-    }
-  } //else
-    //POLLENC(ENC1, controller[0]++;,if(controller[0]>0)controller[0]--;);
-
-  expander_PrevStates.S1 = expander_CurStates.S1;
-  expander_PrevStates.S2 = expander_CurStates.S2;
-  expander_PrevStates.S3 = expander_CurStates.S3;
-  expander_PrevStates.S4 = expander_CurStates.S4;
-  expander_PrevStates.S5 = expander_CurStates.S5;
-  expander_PrevStates.S6 = expander_CurStates.S6;
-  expander_PrevStates.S7 = expander_CurStates.S7;
-  expander_PrevStates.S8 = expander_CurStates.S8;
-//  expander_PrevStates = expander_CurStates;
-
-  Btn_Nav_CurStates.btn_nav_Up = !palReadPad(PORT_BTN_NAV_UP, PAD_BTN_NAV_UP);
-  Btn_Nav_CurStates.btn_nav_Down = !palReadPad(PORT_BTN_NAV_DOWN, PAD_BTN_NAV_DOWN);
-  Btn_Nav_CurStates.btn_nav_Left = !palReadPad(PORT_BTN_NAV_LEFT, PAD_BTN_NAV_LEFT);
-  Btn_Nav_CurStates.btn_nav_Right = !palReadPad(PORT_BTN_NAV_RIGHT,PAD_BTN_NAV_RIGHT);
-  Btn_Nav_CurStates.btn_nav_Enter = !palReadPad(PORT_BTN_NAV_ENTER, PAD_BTN_NAV_ENTER);
-  Btn_Nav_CurStates.btn_nav_Shift = !palReadPad(PORT_BTN_NAV_SHIFT, PAD_BTN_NAV_SHIFT);
-  Btn_Nav_CurStates.btn_nav_Back = !palReadPad(PORT_BTN_NAV_BACK, PAD_BTN_NAV_BACK);
-
-#if 1
-  if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
-    KeyValuePair_s *cur = &((KeyValuePair_s *)(KvpsDisplay->avp.array))[KvpsDisplay->avp.current];
-    IF_BTN_NAV_DOWN(btn_nav_Up)
-    KVP_Increment(KvpsDisplay);
-    IF_BTN_NAV_DOWN(btn_nav_Down)
-    KVP_Decrement(KvpsDisplay);
-    IF_BTN_NAV_DOWN(btn_nav_Left)
-    KVP_Decrement(cur);
-    IF_BTN_NAV_DOWN(btn_nav_Right)
-    KVP_Increment(cur);
-    IF_BTN_NAV_DOWN(btn_nav_Enter) {
-      if ((cur->kvptype == KVP_TYPE_AVP)||
-          (cur->kvptype == KVP_TYPE_APVP)||
-          (cur->kvptype == KVP_TYPE_CUSTOM))
-      KvpsDisplay = cur;
-      else if (cur->kvptype == KVP_TYPE_FNCTN)
-      if (cur->fnctnvp.fnctn != 0) (cur->fnctnvp.fnctn)();
-    }
-    IF_BTN_NAV_DOWN(btn_nav_Back)
-    if (KvpsDisplay->parent) KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
-
-  }
-  else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
-    KeyValuePair_s *cur = (KeyValuePair_s *)( KvpsDisplay->apvp.array[KvpsDisplay->apvp.current]);
-    IF_BTN_NAV_DOWN(btn_nav_Up)
-    KVP_Increment(KvpsDisplay);
-    IF_BTN_NAV_DOWN(btn_nav_Down)
-    KVP_Decrement(KvpsDisplay);
-    IF_BTN_NAV_DOWN(btn_nav_Left)
-    KVP_Decrement(cur);
-    IF_BTN_NAV_DOWN(btn_nav_Right)
-    KVP_Increment(cur);
-    IF_BTN_NAV_DOWN(btn_nav_Enter) {
-      if ((cur->kvptype == KVP_TYPE_AVP)||
-          (cur->kvptype == KVP_TYPE_APVP)||
-          (cur->kvptype == KVP_TYPE_CUSTOM))
-      KvpsDisplay = cur;
-      else if (cur->kvptype == KVP_TYPE_FNCTN) {
-    	  if (cur->fnctnvp.fnctn != 0) (cur->fnctnvp.fnctn)();
-      }
-    }
-    IF_BTN_NAV_DOWN(btn_nav_Back)
-    if (KvpsDisplay->parent) KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
-
-  }
-  else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
-    IF_BTN_NAV_DOWN(btn_nav_Back)
-    		if (KvpsDisplay->parent) KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
-
-	  if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata);
-	  if (KvpsDisplay->custom.buttonFunction != 0) (KvpsDisplay->custom.buttonFunction)(KvpsDisplay->custom.userdata);
-  }
-
-  Btn_Nav_PrevStates = Btn_Nav_CurStates;
-
-#endif
-#endif
-}
 
 /*
  * We need one uniform state for the buttons, whether controlled from the GUI or from Axoloti Control.
@@ -783,7 +571,7 @@ static void UIPollButtons(void) {
  *
  *
  * a click within a time interval is transmitted as btn_or = 1, btn_and = 0
- * It is desireable that the current state is true during a whole process interval.
+ * It is desirable that the current state is true during a whole process interval.
  *
  *
  *
@@ -795,20 +583,7 @@ static void UIPollButtons(void) {
  *                 no up_evt detectable from cur/prev!
  */
 
-static void UIPollButtons2(void) {
-  /*
-   Btn_Nav_CurStates.btn_nav_Up    = (control_rx_buffer[4]&0x01)>0;
-   Btn_Nav_CurStates.btn_nav_Down  = (control_rx_buffer[4]&0x08)>0;
-   Btn_Nav_CurStates.btn_nav_Left  = (control_rx_buffer[4]&0x04)>0;
-   Btn_Nav_CurStates.btn_nav_Right = (control_rx_buffer[4]&0x02)>0;
-   Btn_Nav_CurStates.btn_nav_Enter = control_rx_buffer[25];
-   Btn_Nav_CurStates.btn_nav_Shift = control_rx_buffer[26];
-   Btn_Nav_CurStates.btn_nav_Back  = control_rx_buffer[24];
-   */
-    Btn_Nav_CurStates.word = Btn_Nav_CurStates.word | Btn_Nav_Or.word;
-    Btn_Nav_Or.word = 0;
-
-    // TODO:TEST ONLY: toggle LED's
+static void LEDTest(void) {
 	LED_clear();
 
 	static uint8_t val0;
@@ -841,8 +616,13 @@ static void UIPollButtons2(void) {
 	for(i=0;i<16;i++) {
 		LED_setBit(2,i,button[i]);
 	}
+}
 
+static void UIPollButtons(void) {
+  Btn_Nav_CurStates.word = Btn_Nav_CurStates.word | Btn_Nav_Or.word;
+  Btn_Nav_Or.word = 0;
 
+  LEDTest();
 
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
     KeyValuePair_s *cur =
@@ -1115,3 +895,84 @@ static void UIUpdateLCD(void) {
 	  if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata);
   }
 }
+
+
+void k_scope_disp_frac32_64(void * userdata) {
+// userdata  int32_t[64], one sample per column
+  const int indent = (128 - (15 + 64)) / 2 ;
+  int i;
+  LCD_clearDisplay();
+  for (i = 0; i < 48; i++) {
+    LCD_setPixel(index + 14, i);
+  }
+  LCD_drawString(indent + 5, 0, "1");
+  LCD_drawString(indent + 5, 2, "0");
+  LCD_drawString(indent +0, 4, "-1");
+  LCD_setPixel(indent + 13, 21);
+  LCD_setPixel(indent + 12, 21);
+  LCD_setPixel(indent + 13, 21 + 16);
+  LCD_setPixel(indent + 12, 21 + 16);
+  LCD_setPixel(indent + 13, 21 - 16);
+  LCD_setPixel(indent + 12, 21 - 16);
+  LCD_drawStringInv(0, STATUSROW, "BACK");
+  LCD_drawStringInv(LCD_COL_LEFT, STATUSROW, "HOLD");
+  for (i = 0; i < 64; i++) {
+    int y = ((int *)userdata)[i];
+    y = 21 - (y >> 23);
+    if (y < 1)
+      y = 1;
+    if (y > 47)
+      y = 47;
+    LCD_setPixel(indent + i + 15, y);
+  }
+}
+
+void k_scope_disp_frac32_minmax_64(void * userdata) {
+// userdata  int32_t[64][2], minimum and maximum per column
+  const int indent = (128 - (15 + 64)) / 2 ;
+  int i;
+  LCD_clearDisplay();
+  for (i = 0; i < 48; i++) {
+    LCD_setPixel(indent + 14, i);
+  }
+  LCD_drawString(indent + 5, 0, "1");
+  LCD_drawString(indent + 5, 2, "0");
+  LCD_drawString(indent + 0, 4, "-1");
+  LCD_setPixel(indent + 13, 21);
+  LCD_setPixel(indent + 12, 21);
+  LCD_setPixel(indent + 13, 21 + 16);
+  LCD_setPixel(indent + 12, 21 + 16);
+  LCD_setPixel(indent + 13, 21 - 16);
+  LCD_setPixel(indent + 12, 21 - 16);
+  LCD_drawStringInv(0, STATUSROW, "BACK");
+  LCD_drawStringInv(LCD_COL_LEFT, STATUSROW, "HOLD");
+
+  for (i = 0; i < 64; i++) {
+    int y = ((int *)userdata)[i * 2 + 1];
+    y = 21 - (y >> 23);
+    if (y < 1)
+      y = 1;
+    if (y > 47)
+      y = 47;
+    int y2 = ((int *)userdata)[i * 2];
+    y2 = 21 - (y2 >> 23);
+    if (y2 < 1)
+      y2 = 1;
+    if (y2 > 47)
+      y2 = 47;
+    int j;
+
+    if (y2 <= (y))
+      y2 = y + 1;
+    for (j = y; j < y2; j++)
+      LCD_setPixel(indent + i + 15, j);
+  }
+}
+
+void k_scope_disp_frac32buffer_64(void * userdata) {
+	k_scope_disp_frac32_64(userdata);
+}
+
+
+
+
