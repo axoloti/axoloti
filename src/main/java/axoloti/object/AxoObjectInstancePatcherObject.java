@@ -126,22 +126,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     }
 
     @Override
-    public void Unlock() {
-        super.Unlock();
-        if (BtnEdit != null) {
-            BtnEdit.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void Lock() {
-        super.Lock();
-        if (BtnEdit != null) {
-            BtnEdit.setEnabled(false);
-        }
-    }
-
-    @Override
     public void Close() {
         super.Close();
         if (aoe != null) {
