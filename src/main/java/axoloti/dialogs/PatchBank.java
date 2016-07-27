@@ -407,7 +407,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }
 
     boolean isDirty() {
-        return true;
+        return dirty;
     }
 
     void setDirty() {
@@ -727,9 +727,9 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             files.add(fc.getSelectedFile());
+            setDirty();
             refresh();
         }
-        setDirty();
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
