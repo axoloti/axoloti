@@ -3,6 +3,7 @@ package axoloti;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.TitleBarPanel;
 import axoloti.utils.Constants;
+import axoloti.utils.KeyUtils;
 import components.JackInputComponent;
 import components.JackOutputComponent;
 import components.LabelComponent;
@@ -35,6 +36,7 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     private final PatchGUI patch;
 
+    private boolean anyMouseDown = false;
     private boolean button2down = false;
 
     public ZoomUI(double startingScale, double zoomAmount, double zoomMax, double zoomMin,
@@ -95,8 +97,10 @@ public class ZoomUI extends LayerUI<JComponent> {
         for (MouseListener listener : mouseListeners) {
             if (localEvent.getID() == MouseEvent.MOUSE_PRESSED) {
                 listener.mousePressed(transformedEvent);
+                anyMouseDown = true;
             } else if (localEvent.getID() == MouseEvent.MOUSE_RELEASED) {
                 ZoomUI.this.button2down = false;
+                anyMouseDown = false;
                 dragging = false;
                 patch.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
                 listener.mouseReleased(transformedEvent);
@@ -106,6 +110,7 @@ public class ZoomUI extends LayerUI<JComponent> {
         }
         if (localEvent.getID() == MouseEvent.MOUSE_PRESSED
                 && transformedEvent.getComponent() instanceof DialComponent) {
+            anyMouseDown = true;
             // ensure that dial focus highlights are repainted
             if (previousDial != null
                     && previousDial != transformedEvent.getComponent()) {
@@ -172,6 +177,7 @@ public class ZoomUI extends LayerUI<JComponent> {
         if (component == null) {
             // avoid transparent cursor if release occurs outside patch bounds
             if (e.getID() == MouseEvent.MOUSE_RELEASED) {
+                anyMouseDown = false;
                 patch.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
 
             }
@@ -252,7 +258,8 @@ public class ZoomUI extends LayerUI<JComponent> {
     @Override
     protected void processKeyEvent(KeyEvent ke,
             JLayer<? extends JComponent> l) {
-        if(ke.getKeyCode() == KeyEvent.VK_ALT) {
+        if(KeyUtils.isKeyCodeControlOrCommand(ke) && 
+                !anyMouseDown) {
             KeyListener[] listeners = patch.Layers.getListeners(KeyListener.class);
             for(KeyListener kl : listeners) {
                 if(ke.getID() == KeyEvent.KEY_PRESSED) {

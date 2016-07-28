@@ -26,6 +26,7 @@ import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjects;
 import axoloti.outlets.OutletInstance;
 import axoloti.utils.Constants;
+import axoloti.utils.KeyUtils;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -230,11 +231,11 @@ public class PatchGUI extends Patch {
 
         InputMap inputMap = Layers.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "cut");
+                KeyUtils.CONTROL_OR_CMD_MASK), "cut");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "copy");
+                KeyUtils.CONTROL_OR_CMD_MASK), "copy");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "paste");
+                KeyUtils.CONTROL_OR_CMD_MASK), "paste");
 
         ActionMap map = Layers.getActionMap();
         map.put(TransferHandler.getCutAction().getValue(Action.NAME),
@@ -261,37 +262,37 @@ public class PatchGUI extends Patch {
                     ysteps = Constants.Y_GRID;
                 }
                 if ((ke.getKeyCode() == KeyEvent.VK_SPACE)
-                        || ((ke.getKeyCode() == KeyEvent.VK_N) && (!ke.isControlDown()) && (!ke.isMetaDown()))
-                        || ((ke.getKeyCode() == KeyEvent.VK_1) && (ke.isControlDown()))) {
+                        || ((ke.getKeyCode() == KeyEvent.VK_N) && !KeyUtils.isControlOrCommandDown(ke))
+                        || ((ke.getKeyCode() == KeyEvent.VK_1) && KeyUtils.isControlOrCommandDown(ke))) {
                     Point p = Layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
                         ShowClassSelector(p, null, null);
                     }
-                } else if (((ke.getKeyCode() == KeyEvent.VK_C) && (!ke.isControlDown()) && (!ke.isMetaDown()))
-                        || ((ke.getKeyCode() == KeyEvent.VK_5) && (ke.isControlDown()))) {
+                } else if (((ke.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(ke))
+                        || ((ke.getKeyCode() == KeyEvent.VK_5) &&  KeyUtils.isControlOrCommandDown(ke))) {
                     AxoObjectInstanceAbstract ao = AddObjectInstance(MainFrame.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
                     ao.addInstanceNameEditor();
                     ke.consume();
-                } else if ((ke.getKeyCode() == KeyEvent.VK_I) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                } else if ((ke.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = Layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
                         ShowClassSelector(p, null, patchInlet);
                     }
-                } else if ((ke.getKeyCode() == KeyEvent.VK_O) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                } else if ((ke.getKeyCode() == KeyEvent.VK_O) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = Layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
                         ShowClassSelector(p, null, patchOutlet);
                     }
-                } else if ((ke.getKeyCode() == KeyEvent.VK_D) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                } else if ((ke.getKeyCode() == KeyEvent.VK_D) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = Layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
                         ShowClassSelector(p, null, patchDisplay);
                     }
-                } else if ((ke.getKeyCode() == KeyEvent.VK_M) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                } else if ((ke.getKeyCode() == KeyEvent.VK_M) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = Layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
@@ -301,7 +302,7 @@ public class PatchGUI extends Patch {
                             ShowClassSelector(p, null, patchMidi);
                         }
                     }
-                } else if ((ke.getKeyCode() == KeyEvent.VK_A) && (!ke.isControlDown()) && (!ke.isMetaDown())) {
+                } else if ((ke.getKeyCode() == KeyEvent.VK_A) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = Layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
@@ -326,7 +327,7 @@ public class PatchGUI extends Patch {
                 } else if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
                     MoveSelectedAxoObjInstances(Direction.LEFT, xsteps, ysteps);
                     ke.consume();
-                } else if (ke.getKeyCode() == KeyEvent.VK_ALT) {
+                } else if (KeyUtils.isKeyCodeControlOrCommand(ke)) {
                     panOrigin = Layers.getMousePosition();
                     if (panOrigin != null) {
                         zoomUI.removeZoomFactor(panOrigin);
@@ -338,7 +339,7 @@ public class PatchGUI extends Patch {
 
             @Override
             public void keyReleased(KeyEvent ke) {
-                if (ke.getKeyCode() == KeyEvent.VK_ALT) {
+                if (KeyUtils.isKeyCodeControlOrCommand(ke)) {
                     PatchGUI.this.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
                     Button2down = false;
                     zoomUI.stopPan();
@@ -490,8 +491,8 @@ public class PatchGUI extends Patch {
         };
 
         Layers.addMouseWheelListener(new MouseWheelListener() {
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                if (e.isAltDown()) {
+            public void mouseWheelMoved(MouseWheelEvent e) {                
+                if (KeyUtils.isControlOrCommandDown(e)) {
                     int notches = e.getWheelRotation();
                     Point origin = e.getPoint();
                     Constants.ZOOM_ACTION action = notches < 0 ? Constants.ZOOM_ACTION.IN : Constants.ZOOM_ACTION.OUT;
@@ -527,7 +528,7 @@ public class PatchGUI extends Patch {
 
             @Override
             public void mouseMoved(MouseEvent ev) {
-                if (ev.isAltDown()) {
+                if (KeyUtils.isControlOrCommandDown(ev)) {
                     PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
                     handlePan(ev);
                 }

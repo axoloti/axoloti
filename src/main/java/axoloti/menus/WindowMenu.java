@@ -113,27 +113,22 @@ public class WindowMenu extends JMenu {
         jMenuWindow.removeAll();
         {
             WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe, "Axoloti");
-            //a.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             jMenuWindow.add(a);
         }
         {
             WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getKeyboard(), "Keyboard");
-            //a.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             jMenuWindow.add(a);
         }
         {
             WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getFilemanager(), "File Manager");
-            //a.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             jMenuWindow.add(a);
         }
         {
             WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getRemote(), "Remote");
-            //a.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
             jMenuWindow.add(a);
         }
 
         jMenuWindow.add(new JSeparator());
         PopulateDocuments(jMenuWindow, "", DocumentWindowList.GetList());
     }
-
 }

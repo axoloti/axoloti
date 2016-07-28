@@ -14,7 +14,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuSave">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_S,&#xa;    Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
+                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyUtils.CONTROL_OR_CMD_MASK)" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Save"/>
               </Properties>
@@ -49,7 +49,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuClose">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_W,&#xa;    Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
+                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyUtils.CONTROL_OR_CMD_MASK)" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Close"/>
               </Properties>
@@ -97,7 +97,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSelectAll">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_A,&#xa;    Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
+                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyUtils.CONTROL_OR_CMD_MASK)" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Select All"/>
               </Properties>
@@ -194,7 +194,7 @@
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItemLive">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_E,&#xa;    Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
+                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyUtils.CONTROL_OR_CMD_MASK)" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Live"/>
               </Properties>
@@ -239,7 +239,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuGenerateCode">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_G,&#xa;    Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
+                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyUtils.CONTROL_OR_CMD_MASK)" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Generate code"/>
               </Properties>
@@ -250,7 +250,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuCompileCode">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_H,&#xa;    Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
+                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyUtils.CONTROL_OR_CMD_MASK)" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Compile code"/>
               </Properties>
@@ -261,7 +261,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuUploadCode">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_J,&#xa;    Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
+                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyUtils.CONTROL_OR_CMD_MASK)" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Upload code"/>
               </Properties>
