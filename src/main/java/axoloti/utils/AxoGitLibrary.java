@@ -167,7 +167,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
             }
             try {
                 Git git=cmd.call();
-		git.getRepository().close();
+                git.getRepository().close();
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Repo initialised Successfully : {0}", logDetails());
             } catch (Exception ex) {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "init repo FAILED : {0}", getId());
@@ -408,10 +408,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
     }
 
     private boolean usingSubmodule() {
-        // are we in developer mode, and not pointing elsewhere
-        return (Axoloti.isDeveloper()
-                && getLocalLocation().startsWith(System.getProperty(Axoloti.RELEASE_DIR))
-                && (getId().equals(AxolotiLibrary.FACTORY_ID) ));
+        return false;
     }
 
     private boolean isAuth() {
