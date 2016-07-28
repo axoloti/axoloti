@@ -56,7 +56,7 @@
 /*===========================================================================*/
 
 
-#define ENABLE_SERIAL_DEBUG 1
+//#define ENABLE_SERIAL_DEBUG 1
 
 #ifdef ENABLE_USB_HOST
 #if (BOARD_AXOLOTI_V03)
