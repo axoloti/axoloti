@@ -57,6 +57,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -2560,7 +2561,8 @@ public class Patch {
 
     public void Close() {
         Unlock();
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>)objectinstances.clone();
+        for (AxoObjectInstanceAbstract o : c) {
             o.Close();
         }
     }
