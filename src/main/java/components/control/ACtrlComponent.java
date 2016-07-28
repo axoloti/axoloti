@@ -20,6 +20,7 @@ package components.control;
 import axoloti.PatchGUI;
 import axoloti.ZoomUtils;
 import axoloti.object.AxoObjectInstance;
+import axoloti.utils.KeyUtils;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -165,11 +166,11 @@ public abstract class ACtrlComponent extends JComponent {
         setTransferHandler(TH);
         InputMap inputMap = getInputMap(JComponent.WHEN_FOCUSED);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "cut");
+                KeyUtils.CONTROL_OR_CMD_MASK), "cut");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "copy");
+                KeyUtils.CONTROL_OR_CMD_MASK), "copy");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "paste");
+                KeyUtils.CONTROL_OR_CMD_MASK), "paste");
 
         ActionMap map = getActionMap();
         map.put(TransferHandler.getCutAction().getValue(Action.NAME),

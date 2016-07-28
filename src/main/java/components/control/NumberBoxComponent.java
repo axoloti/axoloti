@@ -22,6 +22,7 @@ import axoloti.Theme;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
+import axoloti.utils.KeyUtils;
 import axoloti.utils.OSDetect;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
@@ -108,7 +109,7 @@ public class NumberBoxComponent extends ACtrlComponent {
                 if (e.isShiftDown()) {
                     t = t * 0.1;
                 }
-                if (e.isControlDown()) {
+                if (KeyUtils.isControlOrCommandDown(e)) {
                     t = t * 0.1;
                 }
                 v = value + t * (MousePressedCoordY - e.getYOnScreen());
@@ -167,20 +168,16 @@ public class NumberBoxComponent extends ACtrlComponent {
         robot = null;
     }
 
-    private boolean isControlDown(KeyEvent ke) {
-        return OSDetect.getOS() == OSDetect.OS.MAC ? ke.isAltDown() : ke.isControlDown();
-    }
-
     @Override
     public void keyPressed(KeyEvent ke) {
         if (isEnabled()) {
             double steps = tick;
             if (ke.isShiftDown()) {
                 steps = steps * 0.1; // mini steps!
-                if (isControlDown(ke)) {
+                if (KeyUtils.isControlOrCommandDown(ke)) {
                     steps = steps * 0.1; // micro steps!                
                 }
-            } else if (isControlDown(ke)) {
+            } else if (KeyUtils.isControlOrCommandDown(ke)) {
                 steps = steps * 10.0; //accelerate!
             }
             switch (ke.getKeyCode()) {

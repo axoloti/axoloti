@@ -18,6 +18,7 @@
 package components.control;
 
 import axoloti.Theme;
+import axoloti.utils.KeyUtils;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -104,7 +105,7 @@ public class CheckboxComponent extends ACtrlComponent {
 
     @Override
     public void keyPressed(KeyEvent ke) {
-        if (ke.isAltDown() || ke.isAltGraphDown() || ke.isControlDown() || ke.isMetaDown()) {
+        if (KeyUtils.isIgnoreModifierDown(ke)) {
             return;
         }
         switch (ke.getKeyCode()) {

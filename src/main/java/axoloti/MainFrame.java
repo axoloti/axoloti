@@ -31,11 +31,11 @@ import axoloti.object.AxoObjects;
 import axoloti.usb.Usb;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.FirmwareID;
+import axoloti.utils.KeyUtils;
 import axoloti.utils.Preferences;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -449,7 +449,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabelCPUID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jCheckBoxConnect, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+            .addComponent(jCheckBoxConnect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabelVoltages)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -474,157 +474,156 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         jMenuEdit.setText("Edit");
 
-        jMenuItemCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
-            Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-    jMenuItemCopy.setText("Copy");
-    jMenuEdit.add(jMenuItemCopy);
+        jMenuItemCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyUtils.CONTROL_OR_CMD_MASK));
+        jMenuItemCopy.setText("Copy");
+        jMenuEdit.add(jMenuItemCopy);
 
-    jMenuBar1.add(jMenuEdit);
+        jMenuBar1.add(jMenuEdit);
 
-    jMenuBoard.setText("Board");
+        jMenuBoard.setText("Board");
 
-    jMenuItemSelectCom.setText("Select Device...");
-    jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemSelectComActionPerformed(evt);
-        }
-    });
-    jMenuBoard.add(jMenuItemSelectCom);
+        jMenuItemSelectCom.setText("Select Device...");
+        jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSelectComActionPerformed(evt);
+            }
+        });
+        jMenuBoard.add(jMenuItemSelectCom);
 
-    jMenuItemFConnect.setText("Connect");
-    jMenuItemFConnect.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemFConnectActionPerformed(evt);
-        }
-    });
-    jMenuBoard.add(jMenuItemFConnect);
+        jMenuItemFConnect.setText("Connect");
+        jMenuItemFConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFConnectActionPerformed(evt);
+            }
+        });
+        jMenuBoard.add(jMenuItemFConnect);
 
-    jMenuItemFDisconnect.setText("Disconnect");
-    jMenuItemFDisconnect.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemFDisconnectActionPerformed(evt);
-        }
-    });
-    jMenuBoard.add(jMenuItemFDisconnect);
+        jMenuItemFDisconnect.setText("Disconnect");
+        jMenuItemFDisconnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFDisconnectActionPerformed(evt);
+            }
+        });
+        jMenuBoard.add(jMenuItemFDisconnect);
 
-    jMenuItemPing.setText("Ping");
-    jMenuItemPing.setEnabled(false);
-    jMenuItemPing.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemPingActionPerformed(evt);
-        }
-    });
-    jMenuBoard.add(jMenuItemPing);
+        jMenuItemPing.setText("Ping");
+        jMenuItemPing.setEnabled(false);
+        jMenuItemPing.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemPingActionPerformed(evt);
+            }
+        });
+        jMenuBoard.add(jMenuItemPing);
 
-    jMenuItemPanic.setText("Panic");
-    jMenuItemPanic.setEnabled(false);
-    jMenuItemPanic.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemPanicActionPerformed(evt);
-        }
-    });
-    jMenuBoard.add(jMenuItemPanic);
+        jMenuItemPanic.setText("Panic");
+        jMenuItemPanic.setEnabled(false);
+        jMenuItemPanic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemPanicActionPerformed(evt);
+            }
+        });
+        jMenuBoard.add(jMenuItemPanic);
 
-    jMenuItemMount.setText("Enter card reader mode (disconnects editor)");
-    jMenuItemMount.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemMountActionPerformed(evt);
-        }
-    });
-    jMenuBoard.add(jMenuItemMount);
+        jMenuItemMount.setText("Enter card reader mode (disconnects editor)");
+        jMenuItemMount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemMountActionPerformed(evt);
+            }
+        });
+        jMenuBoard.add(jMenuItemMount);
 
-    jMenuFirmware.setText("Firmware");
+        jMenuFirmware.setText("Firmware");
 
-    jMenuItemFlashDefault.setText("Flash");
-    jMenuItemFlashDefault.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemFlashDefaultActionPerformed(evt);
-        }
-    });
-    jMenuFirmware.add(jMenuItemFlashDefault);
+        jMenuItemFlashDefault.setText("Flash");
+        jMenuItemFlashDefault.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFlashDefaultActionPerformed(evt);
+            }
+        });
+        jMenuFirmware.add(jMenuItemFlashDefault);
 
-    jMenuItemFlashDFU.setText("Flash (Rescue)");
-    jMenuItemFlashDFU.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemFlashDFUActionPerformed(evt);
-        }
-    });
-    jMenuFirmware.add(jMenuItemFlashDFU);
+        jMenuItemFlashDFU.setText("Flash (Rescue)");
+        jMenuItemFlashDFU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFlashDFUActionPerformed(evt);
+            }
+        });
+        jMenuFirmware.add(jMenuItemFlashDFU);
 
-    jMenuItemRefreshFWID.setText("Refresh Firmware ID");
-    jMenuItemRefreshFWID.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemRefreshFWIDActionPerformed(evt);
-        }
-    });
-    jMenuFirmware.add(jMenuItemRefreshFWID);
-    jMenuFirmware.add(jDevSeparator);
+        jMenuItemRefreshFWID.setText("Refresh Firmware ID");
+        jMenuItemRefreshFWID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemRefreshFWIDActionPerformed(evt);
+            }
+        });
+        jMenuFirmware.add(jMenuItemRefreshFWID);
+        jMenuFirmware.add(jDevSeparator);
 
-    jMenuItemFCompile.setText("Compile");
-    jMenuItemFCompile.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemFCompileActionPerformed(evt);
-        }
-    });
-    jMenuFirmware.add(jMenuItemFCompile);
+        jMenuItemFCompile.setText("Compile");
+        jMenuItemFCompile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFCompileActionPerformed(evt);
+            }
+        });
+        jMenuFirmware.add(jMenuItemFCompile);
 
-    jMenuItemEnterDFU.setText("Enter Rescue mode");
-    jMenuItemEnterDFU.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemEnterDFUActionPerformed(evt);
-        }
-    });
-    jMenuFirmware.add(jMenuItemEnterDFU);
+        jMenuItemEnterDFU.setText("Enter Rescue mode");
+        jMenuItemEnterDFU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEnterDFUActionPerformed(evt);
+            }
+        });
+        jMenuFirmware.add(jMenuItemEnterDFU);
 
-    jMenuItemFlashSDR.setText("Flash (User)");
-    jMenuItemFlashSDR.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemFlashSDRActionPerformed(evt);
-        }
-    });
-    jMenuFirmware.add(jMenuItemFlashSDR);
+        jMenuItemFlashSDR.setText("Flash (User)");
+        jMenuItemFlashSDR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFlashSDRActionPerformed(evt);
+            }
+        });
+        jMenuFirmware.add(jMenuItemFlashSDR);
 
-    jMenuBoard.add(jMenuFirmware);
+        jMenuBoard.add(jMenuFirmware);
 
-    jMenuBar1.add(jMenuBoard);
-    jMenuBar1.add(windowMenu1);
+        jMenuBar1.add(jMenuBoard);
+        jMenuBar1.add(windowMenu1);
 
-    helpMenu1.setText("Help");
-    jMenuBar1.add(helpMenu1);
+        helpMenu1.setText("Help");
+        jMenuBar1.add(helpMenu1);
 
-    setJMenuBar(jMenuBar1);
+        setJMenuBar(jMenuBar1);
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-    getContentPane().setLayout(layout);
-    layout.setHorizontalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addComponent(jScrollPaneLog)
-        .addComponent(jPanelProgress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addGroup(layout.createSequentialGroup()
-            .addContainerGap()
-            .addComponent(jLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGap(18, 88, Short.MAX_VALUE)
-            .addComponent(jButtonClear)
-            .addContainerGap())
-    );
-    layout.setVerticalGroup(
-        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jButtonClear))
-                .addComponent(jLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jScrollPaneLog, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
-            .addGap(0, 0, 0)
-            .addComponent(jPanelProgress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-    );
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPaneLog)
+            .addComponent(jPanelProgress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 88, Short.MAX_VALUE)
+                .addComponent(jButtonClear)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButtonClear))
+                    .addComponent(jLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneLog, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanelProgress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
-    pack();
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed

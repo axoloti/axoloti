@@ -22,7 +22,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemCopy">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_C,&#xa;    Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())" type="code"/>
+                  <Connection code="KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyUtils.CONTROL_OR_CMD_MASK)" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Copy"/>
               </Properties>
@@ -296,7 +296,7 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jLabelCPUID" max="32767" attributes="0"/>
-              <Component id="jCheckBoxConnect" alignment="0" pref="151" max="32767" attributes="0"/>
+              <Component id="jCheckBoxConnect" alignment="0" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jLabelVoltages" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
