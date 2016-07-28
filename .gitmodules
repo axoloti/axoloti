@@ -1,9 +1,0 @@
-[submodule "axoloti-factory"]
-	path = axoloti-factory
-	url = https://github.com/axoloti/axoloti-factory.git
-    branch = master
-[submodule "axoloti-contrib"]
-	path = axoloti-contrib
-	url = https://github.com/axoloti/axoloti-contrib.git
-    branch = master
-

@@ -561,14 +561,12 @@ public class PreferencesFrame extends javax.swing.JFrame {
     private void jResetLibActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jResetLibActionPerformed
         boolean delete = false;
 
-        if (!Axoloti.isDeveloper()) {
-            int options = JOptionPane.OK_CANCEL_OPTION;
-            int res = JOptionPane.showConfirmDialog(this, "Reset will delete existing factory and contrib directories\n Continue?", "Warning", options);
-            if (res == JOptionPane.CANCEL_OPTION) {
-                return;
-            }
-            delete = (res == JOptionPane.OK_OPTION);
+        int options = JOptionPane.OK_CANCEL_OPTION;
+        int res = JOptionPane.showConfirmDialog(this, "Reset will delete existing factory and contrib directories\n Continue?", "Warning", options);
+        if (res == JOptionPane.CANCEL_OPTION) {
+            return;
         }
+        delete = (res == JOptionPane.OK_OPTION);
 
         Preferences.LoadPreferences().ResetLibraries(delete);
         PopulateLibrary();

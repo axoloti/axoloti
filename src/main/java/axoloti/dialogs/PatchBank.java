@@ -25,6 +25,8 @@ import axoloti.MainFrame;
 import static axoloti.MainFrame.prefs;
 import axoloti.PatchFrame;
 import axoloti.PatchGUI;
+import axoloti.SDCardInfo;
+import axoloti.SDFileInfo;
 import axoloti.USBBulkConnection;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -139,16 +141,41 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                     case 0:
                         returnValue = Integer.toString(rowIndex);
                         break;
-                    case 1:
-                        if (files.get(rowIndex) != null) {
-                            returnValue = toRelative(files.get(rowIndex));
+                    case 1: {
+                        File f = files.get(rowIndex);
+                        if (f != null) {
+                            returnValue = toRelative(f);
                         } else {
                             returnValue = "";
                         }
                         break;
-                    case 2:
-                        returnValue = "";
+                    }
+                    case 2: {
+                        File f = files.get(rowIndex);
+                        if (f != null) {
+                            boolean en = f.exists();
+                            String fn = f.getName();
+                            int i = fn.lastIndexOf('.');
+                            if (i > 0) {
+                                fn = fn.substring(0, i);
+                            }
+                            SDFileInfo sdfi = SDCardInfo.getInstance().find("/" + fn + "/patch.bin");
+                            if (sdfi != null) {
+                                if (en) {
+                                    returnValue = "resolved locally, and exists on sdcard";
+                                } else {
+                                    returnValue = "UNresolved locally, but exists on sdcard";
+                                }
+                            } else {
+                                if (en) {
+                                    returnValue = "resolved locally, not on sdcard";
+                                } else {
+                                    returnValue = "UNresolved locally, not on sdcard";
+                                }
+                            }
+                        }
                         break;
+                    }
                 }
 
                 return returnValue;
@@ -174,7 +201,10 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 } else {
                     jButtonUp.setEnabled(row > 0);
                     jButtonDown.setEnabled(row < files.size() - 1);
-                    jButtonOpen.setEnabled(true);
+                    File f = files.get(row);
+                    boolean en = (f != null) && (f.exists());
+                    jButtonOpen.setEnabled(en);
+                    jButtonUpload.setEnabled(en);
                 }
             }
         });
@@ -377,7 +407,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }
 
     boolean isDirty() {
-        return true;
+        return dirty;
     }
 
     void setDirty() {
@@ -520,7 +550,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setColumnSelectionAllowed(true);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -686,7 +716,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         }
         files.remove(row);
         refresh();
-        setDirty();        
+        setDirty();
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
@@ -697,9 +727,9 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             files.add(fc.getSelectedFile());
+            setDirty();
             refresh();
         }
-        setDirty();        
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed

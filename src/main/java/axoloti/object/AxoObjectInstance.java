@@ -117,7 +117,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public JPanel p_inlets;
     public JPanel p_outlets;
 
-
     void updateObj1() {
         getType().addObjectModifiedListener(this);
     }
@@ -140,14 +139,14 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
         final PopupIcon popupIcon = new PopupIcon();
         popupIcon.setPopupIconListener(new PopupIcon.PopupIconListener() {
-                    @Override
-                    public void ShowPopup() {
-                        if (popup.getParent() == null) {
-                            popupIcon.add(popup);
-                        }
-                        ZoomUtils.showZoomedPopupMenu(popupIcon, AxoObjectInstance.this, popup);
-                    }
-                });
+            @Override
+            public void ShowPopup() {
+                if (popup.getParent() == null) {
+                    popupIcon.add(popup);
+                }
+                ZoomUtils.showZoomedPopupMenu(popupIcon, AxoObjectInstance.this, popup);
+            }
+        });
         Titlebar.add(popupIcon);
 
         LabelComponent idlbl = new LabelComponent(typeName);
@@ -155,10 +154,20 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
         Titlebar.add(idlbl);
 
-        Titlebar.setToolTipText("<html>" + getType().sDescription
-                + "<p>Author: " + getType().sAuthor
-                + "<p>License: " + getType().sLicense
-                + "<p>Path: " + getType().sPath);
+        String tooltiptxt = "<html>";
+        if ((getType().sDescription != null) && (!getType().sDescription.isEmpty())) {
+            tooltiptxt += getType().sDescription;
+        }
+        if ((getType().sAuthor != null) && (!getType().sAuthor.isEmpty())) {
+            tooltiptxt += "<p>Author: " + getType().sAuthor;
+        }
+        if ((getType().sLicense != null) && (!getType().sLicense.isEmpty())) {
+            tooltiptxt += "<p>License: " + getType().sLicense;
+        }
+        if ((getType().sPath != null) && (!getType().sPath.isEmpty())) {
+            tooltiptxt += "<p>Path: " + getType().sPath;
+        }
+        Titlebar.setToolTipText(tooltiptxt);
         JMenuItem popm_edit = new JMenuItem("edit object definition");
         popm_edit.addActionListener(new ActionListener() {
             @Override
@@ -267,7 +276,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         });
         InstanceLabel.addMouseMotionListener(mml);
         add(InstanceLabel);
-        
+
         JPanel p_iolets = new JPanel();
         p_iolets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
@@ -427,7 +436,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public void OpenEditor() {
         getType().OpenEditor(editorBounds, editorActiveTabIndex);
     }
-    
+
     @Override
     public void setInstanceName(String s) {
         super.setInstanceName(s);
@@ -886,7 +895,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public ArrayList<DisplayInstance> GetDisplayInstances() {
         return displayInstances;
     }
-    
 
     Rectangle editorBounds;
     Integer editorActiveTabIndex;
@@ -900,17 +908,16 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 deferredObjTypeUpdate = true;
             }
         }
-        
+
         try {
             AxoObject o = (AxoObject) src;
-            if(o.editor != null && o.editor.getBounds() != null) {
+            if (o.editor != null && o.editor.getBounds() != null) {
                 editorBounds = o.editor.getBounds();
                 editorActiveTabIndex = o.editor.getActiveTabIndex();
                 this.getType().editorBounds = editorBounds;
                 this.getType().editorActiveTabIndex = editorActiveTabIndex;
             }
-        }
-        catch(ClassCastException ex) {
+        } catch (ClassCastException ex) {
         }
     }
 

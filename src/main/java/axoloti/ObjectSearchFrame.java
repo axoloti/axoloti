@@ -254,14 +254,13 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jLayeredPane1.setOpaque(true);
         jPanel1.setBackground(Color.DARK_GRAY);
 
-
         this.addComponentListener(new ComponentAdapter() {
             public void componentHidden(ComponentEvent e) {
                 /* code run when component hidden*/
             }
 
             public void componentShown(ComponentEvent e) {
-                if(inst != null) {
+                if (inst != null) {
                     ObjectSearchFrame.this.scalePreviewPanel(inst.getWidth(), inst.getHeight());
                 }
             }
@@ -336,8 +335,24 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             jPanel1.setVisible(true);
             jPanel1.doLayout();
             scalePreviewPanel(inst.getWidth(), inst.getHeight());
-
-            jTextPane1.setText(o.sDescription + "\n<p>\nPath: " + o.sPath + "\n<p>\nAuthor: " + o.sAuthor + "\n<p>\nLicense: " + o.sLicense);
+            AxoObjectAbstract t = inst.getType();
+            if (t != null) {
+                String description = t.sDescription == null || t.sDescription.isEmpty() ? o.sDescription : t.sDescription;
+                String path = t.sPath == null ? o.sPath : t.sPath;
+                String author = t.sAuthor == null ? o.sAuthor : t.sAuthor;
+                String license = t.sLicense == null ? o.sLicense : t.sLicense;
+                String txt = description;
+                if ((path != null) && (!path.isEmpty())) {
+                    txt += "\n<p>\nPath: " + path;
+                }
+                if ((author != null) && (!author.isEmpty())) {
+                    txt += "\n<p>\nAuthor: " + author;
+                }
+                if ((license != null) && (!license.isEmpty())) {
+                    txt += "\n<p>\nLicense: " + license;
+                }
+                jTextPane1.setText(txt);
+            }
             jTextPane1.setCaretPosition(0);
         }
     }
