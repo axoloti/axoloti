@@ -118,12 +118,11 @@ public abstract class IoletAbstract extends JPanel {
                 int y = (int) (p.y * zoom);
                 this.dropTargetDummyComponent.setLocation(x, y);
                 this.dropTargetDummyComponent.setVisible(true);
-                int width = (int) (this.getWidth() * zoom);
-                int height = (int) (this.getHeight() * zoom);
-                Dimension size = new Dimension(width, height);
+                int height = (int) (this.jack.getHeight() * zoom);
+                Dimension size = new Dimension(height, height);
                 this.dropTargetDummyComponent.setPreferredSize(size);
                 this.dropTargetDummyComponent.setMinimumSize(size);
-                this.dropTargetDummyComponent.setBounds(x, y, width, height);
+                this.dropTargetDummyComponent.setBounds(x, y, height, height);
             }
         } catch (ClassCastException e) {
 
@@ -317,7 +316,9 @@ public abstract class IoletAbstract extends JPanel {
     }
 
     public void setHighlighted(boolean highlighted) {
-        if (getRootPane().getCursor() != MainFrame.transparentCursor
+        if ((getRootPane() == null
+                || getRootPane().getCursor() != MainFrame.transparentCursor)
+                && axoObj != null
                 && axoObj.patch != null) {
             Net n = axoObj.patch.GetNet(this);
             if (n != null
