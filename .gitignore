@@ -31,8 +31,12 @@ hs_err_*.log
 axoloti_osx.zip
 private_key.*
 axoloti.prefs
+
+#libraries
 patches
 objects
+axoloti-contrib
+
 
 #Version file
 src/main/java/axoloti/Version.java

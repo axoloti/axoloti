@@ -411,7 +411,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
         // are we in developer mode, and not pointing elsewhere
         return (Axoloti.isDeveloper()
                 && getLocalLocation().startsWith(System.getProperty(Axoloti.RELEASE_DIR))
-                && (getId().equals(AxolotiLibrary.FACTORY_ID) || getId().equals(AxolotiLibrary.USER_LIBRARY_ID)));
+                && (getId().equals(AxolotiLibrary.FACTORY_ID) ));
     }
 
     private boolean isAuth() {
