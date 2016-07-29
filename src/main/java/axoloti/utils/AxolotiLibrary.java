@@ -197,4 +197,12 @@ public class AxolotiLibrary {
     public void setContributorPrefix(String ContributorPrefix) {
         this.ContributorPrefix = ContributorPrefix;
     }
+    
+    public boolean stashChanges(String ref) {
+        return true;
+    }
+
+    public boolean applyStashedChanges(String ref) {
+        return true;
+    }
 }
