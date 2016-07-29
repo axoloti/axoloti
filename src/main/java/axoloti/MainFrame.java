@@ -192,7 +192,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         //piano.setAlwaysOnTop(true);
         filemanager.setTitle("File Manager");
         filemanager.setVisible(false);
-        
+
         themeEditor = new ThemeEditor();
         themeEditor.setTitle("Theme Editor");
         themeEditor.setVisible(false);
@@ -247,7 +247,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                     if (tsuf.length() > 0) {
                         MainFrame.this.setTitle(MainFrame.this.getTitle() + " (" + tsuf + ")");
                     }
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Axoloti version : {0}  build time : {1}", new Object[] {Version.AXOLOTI_VERSION, Version.AXOLOTI_BUILD_TIME});
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Axoloti version : {0}  build time : {1}", new Object[]{Version.AXOLOTI_VERSION, Version.AXOLOTI_BUILD_TIME});
 
                     updateLinkFirmwareID();
 
@@ -256,6 +256,36 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                     qcmdprocessorThread.setName("QCmdProcessor");
                     qcmdprocessorThread.start();
                     USBBulkConnection.GetConnection().addConnectionStatusListener(MainFrame.this);
+
+                    // user library, ask user if they wish to upgrade, or do manuall
+                    // this allows them the opportunity to manually backup their files!
+                    AxolotiLibrary ulib = prefs.getLibrary(AxolotiLibrary.USER_LIBRARY_ID);
+                    if (ulib != null) {
+                        String cb = ulib.getCurrentBranch();
+                        if (!cb.equalsIgnoreCase(ulib.getBranch())) {
+                            Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Current user library does not match correct version {0} -> {1}", new Object[]{cb, ulib.getBranch()});
+                            int s = JOptionPane.showConfirmDialog(MainFrame.this,
+                                    "User Library version mismatch, do you want to upgrade?\n"
+                                    + "this will stash any changes, and then reapply to new version\n"
+                                    + "if not, then you will need to manually backup changes, and then sync libraries",
+                                    "User Library mismatch",
+                                    JOptionPane.YES_NO_OPTION);
+                            if (s == JOptionPane.YES_OPTION) {
+                                ulib.upgrade();
+                            }
+                        }
+                    }
+
+                    // factory library force and upgrade
+                    // Im stashing changes here, just in case, but in reality users should not be altering factory 
+                    ulib = prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+                    if (ulib != null) {
+                        String cb = ulib.getCurrentBranch();
+                        if (!cb.equalsIgnoreCase(ulib.getBranch())) {
+                            Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Current factory library does not match correct version, upgrading {0} -> {1}", new Object[]{cb, ulib.getBranch()});
+                            ulib.upgrade();
+                        }
+                    }
 
                     if (!Axoloti.isFailSafeMode()) {
                         for (AxolotiLibrary lib : prefs.getLibraries()) {
@@ -682,14 +712,18 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     }
 
     public boolean runPatchTests() {
-        AxolotiLibrary fLib= prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
-        if(fLib == null) return false;
+        AxolotiLibrary fLib = prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+        if (fLib == null) {
+            return false;
+        }
         return runTestDir(new File(fLib.getLocalLocation() + "patches"));
     }
 
     public boolean runObjectTests() {
-        AxolotiLibrary fLib= prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
-        if(fLib == null) return false;
+        AxolotiLibrary fLib = prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+        if (fLib == null) {
+            return false;
+        }
         return runTestDir(new File(fLib.getLocalLocation() + "objects"));
     }
 
@@ -731,7 +765,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     private boolean runTestCompile(File f) {
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "testing {0}", f.getPath());
-                    
+
         Strategy strategy = new AnnotationStrategy();
         Serializer serializer = new Persister(strategy);
         try {
@@ -797,7 +831,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     private boolean runUpgradeFile(File f) {
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "upgrading {0}", f.getPath());
-                    
+
         Strategy strategy = new AnnotationStrategy();
         Serializer serializer = new Persister(strategy);
         try {
@@ -1102,7 +1136,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     public FileManagerFrame getFilemanager() {
         return filemanager;
     }
-    
+
     public ThemeEditor getThemeEditor() {
         return themeEditor;
     }

@@ -13,7 +13,6 @@ import org.simpleframework.xml.Root;
  */
 // this will become abstract
 // (currently this is used to hold the data, so that the library editor is is typeless)
-
 @Root(name = "library")
 public class AxolotiLibrary {
 
@@ -66,7 +65,7 @@ public class AxolotiLibrary {
         Password = "";
         AutoSync = auto;
     }
-    
+
     public void clone(AxolotiLibrary lib) {
         Id = lib.Id;
         Type = lib.Type;
@@ -77,10 +76,10 @@ public class AxolotiLibrary {
         Password = lib.Password;
         AutoSync = lib.AutoSync;
         Revision = lib.Revision;
-        ContributorPrefix = lib.ContributorPrefix;  
+        ContributorPrefix = lib.ContributorPrefix;
     }
-    
-    public boolean isReadOnly () {
+
+    public boolean isReadOnly() {
         // tmp, will be adding read-only property
         return Id.equals(FACTORY_ID);
     }
@@ -155,6 +154,7 @@ public class AxolotiLibrary {
 
     public void init(boolean delete) {
     }
+
     public void reportStatus() {
     }
 
@@ -168,18 +168,21 @@ public class AxolotiLibrary {
             throw new FileNotFoundException("Failed to delete file: " + f);
         }
     }
-    
-    
+
     public String getBranch() {
         String branch = getRevision();
         if (branch == null || branch.length() == 0) {
-            if((getId().equals(FACTORY_ID) || getId().equals(USER_LIBRARY_ID)) && !Axoloti.isDeveloper()) {
+            if ((getId().equals(FACTORY_ID) || getId().equals(USER_LIBRARY_ID)) && !Axoloti.isDeveloper()) {
                 branch = Version.AXOLOTI_SHORT_VERSION;
             } else {
                 branch = "master";
             }
         }
         return branch;
+    }
+
+    public String getCurrentBranch() {
+        return getBranch();
     }
 
     public String getRevision() {
@@ -196,5 +199,16 @@ public class AxolotiLibrary {
 
     public void setContributorPrefix(String ContributorPrefix) {
         this.ContributorPrefix = ContributorPrefix;
+    }
+
+    public boolean stashChanges(String ref) {
+        return true;
+    }
+
+    public boolean applyStashedChanges(String ref) {
+        return true;
+    }
+
+    public void upgrade() {
     }
 }

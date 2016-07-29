@@ -3,6 +3,7 @@ package axoloti.utils;
 import axoloti.Axoloti;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +17,10 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.StashApplyCommand;
+import org.eclipse.jgit.api.StashCreateCommand;
+import org.eclipse.jgit.api.StashDropCommand;
+import org.eclipse.jgit.api.StashListCommand;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.StatusCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -46,60 +51,19 @@ public class AxoGitLibrary extends AxolotiLibrary {
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Status : {0} : local directory missing ", logDetails());
         }
 
-        // get repository
-        Git git;
-        try {
-            Repository repository;
-            if (usingSubmodule()) {
-                // special case, in developer mode, we have the repos as sub modules, these need to be accessed via the parent repo
-                String relDir = System.getProperty(Axoloti.RELEASE_DIR);
-                Git parent = Git.open(new File(relDir));
-                File ldir = new File(getLocalLocation());
-                String ldirstr = ldir.getName();
-                repository = SubmoduleWalk.getSubmoduleRepository(parent.getRepository(), ldirstr);
-                if (repository == null) {
-                    Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "status FAILED cannot find submodule : {0}", logDetails());
-                    return;
-                }
-            } else {
-                repository = Git.open(new File(getLocalLocation())).getRepository();
-            }
-            git = new Git(repository);
+        Git git = getGit();
+        if (git != null) {
             reportStatus(git);
             git.getRepository().close();
-
-        } catch (IOException ex) {
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Status: exception {0}", logDetails());
+        } else {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "status FAILED cannot find submodule : {0}", logDetails());
         }
     }
 
     @Override
     public void sync() {
-
         // get repository
-        Git git = null;
-        try {
-            Repository repository;
-            if (usingSubmodule()) {
-                // special case, in developer mode, we have the repos as sub modules, these need to be accessed via the parent repo
-                String relDir = System.getProperty(Axoloti.RELEASE_DIR);
-                Git parent = Git.open(new File(relDir));
-                File ldir = new File(getLocalLocation());
-                String ldirstr = ldir.getName();
-                repository = SubmoduleWalk.getSubmoduleRepository(parent.getRepository(), ldirstr);
-                if (repository == null) {
-                    Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "sync repo FAILED cannot find submodule : {0}", logDetails());
-                    return;
-                }
-            } else {
-                repository = Git.open(new File(getLocalLocation())).getRepository();
-            }
-            git = new Git(repository);
-
-        } catch (IOException ex) {
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Git git = getGit();
 
         if (git != null) {
             if (!pull(git)) {
@@ -126,12 +90,14 @@ public class AxoGitLibrary extends AxolotiLibrary {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications uploaded : {0}", logDetails());
                 reportStatus(git);
             }
-            if (!checkout(git)) {
+            if (!checkout(git, false)) {
                 git.getRepository().close();
                 return;
             }
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Sync Successful : {0}", logDetails());
-	    git.getRepository().close();
+            git.getRepository().close();
+        } else {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "sync repo FAILED cannot find submodule : {0}", logDetails());
         }
     }
 
@@ -166,7 +132,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
                 cmd.setCredentialsProvider(new UsernamePasswordCredentialsProvider(getUserId(), getPassword()));
             }
             try {
-                Git git=cmd.call();
+                Git git = cmd.call();
                 git.getRepository().close();
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Repo initialised Successfully : {0}", logDetails());
             } catch (Exception ex) {
@@ -179,6 +145,176 @@ public class AxoGitLibrary extends AxolotiLibrary {
         }
         // sync afterwards to ensure on correct branch
         sync();
+    }
+
+    @Override
+    public boolean stashChanges(String ref) {
+        Git git = getGit();
+        if (git != null) {
+            boolean ret = createStash(git, ref);
+            git.getRepository().close();
+            return ret;
+        }
+        Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, "stashChanges cannot find repo FAILED : {0}", getId());
+        return false;
+    }
+
+    @Override
+    public boolean applyStashedChanges(String ref) {
+        Git git = getGit();
+        if (git != null) {
+            boolean ret = applyStash(git, ref);
+
+            if (ret) {
+                ret = dropStash(git, ref);
+            }
+            git.getRepository().close();
+            return ret;
+        }
+        Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, "applyStashedChanges cannot find repo FAILED : {0}", getId());
+        return false;
+    }
+
+    @Override
+    public String getCurrentBranch() {
+        Git git = getGit();
+        if (git != null) {
+            try {
+                return git.getRepository().getBranch();
+            } catch (IOException ex) {
+                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+                return getBranch();
+            }
+        }
+        Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, "getCurrentBranch cannot find repo FAILED : {0}", getId());
+        return getBranch();
+    }
+
+    @Override
+    public void upgrade() {
+        String ref = "AxolotiUpgrade";
+        Git git = getGit();
+        if (git != null) {
+            boolean ret = createStash(git, ref);
+            if (ret) {
+                checkout(git, true);
+                ret = applyStash(git, ref);
+                if (ret) {
+                    dropStash(git, ref);
+                }
+            }
+            git.getRepository().close();
+        }
+        Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, "upgrade cannot find repo FAILED : {0}", getId());
+    }
+
+    private Git getGit() {
+        Git git = null;
+        try {
+            Repository repository;
+            if (usingSubmodule()) {
+                // special case, in developer mode, we have the repos as sub modules, these need to be accessed via the parent repo
+                String relDir = System.getProperty(Axoloti.RELEASE_DIR);
+                Git parent = Git.open(new File(relDir));
+                File ldir = new File(getLocalLocation());
+                String ldirstr = ldir.getName();
+                repository = SubmoduleWalk.getSubmoduleRepository(parent.getRepository(), ldirstr);
+                if (repository == null) {
+                    Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "getGit FAILED cannot find submodule : {0}", logDetails());
+                    return null;
+                }
+            } else {
+                repository = Git.open(new File(getLocalLocation())).getRepository();
+            }
+            git = new Git(repository);
+
+        } catch (IOException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return git;
+    }
+
+    private boolean createStash(Git git, String ref) {
+        StashCreateCommand cmd = git.stashCreate();
+        cmd.setIncludeUntracked(true);
+        try {
+            cmd.setWorkingDirectoryMessage(ref);
+            RevCommit rev = cmd.call();
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Changes stashed successfully: {0}", new Object[]{logDetails(), ref});
+
+            return true;
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "Stash (stash) FAILED : {0}", logDetails());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+
+    }
+
+    private int findStash(Git git, String ref) {
+        try {
+            StashListCommand stashList = git.stashList();
+            Collection<RevCommit> stashedRefs = stashList.call();
+            if (stashedRefs.isEmpty()) {
+                return -1;
+            }
+
+            int idx = 0;
+            for (RevCommit i : stashedRefs) {
+                if (i.getShortMessage().equals(ref)) {
+                    return idx;
+                }
+                idx++;
+            }
+            return -1;
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "applyStash (findStash) FAILED : {0}", logDetails());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
+
+    private boolean applyStash(Git git, String ref) {
+        int idx = findStash(git, ref);
+        if (idx < 0) {
+            return false;
+        }
+
+        String sref = "stash@{" + Integer.toString(idx) + "}";
+
+        try {
+            StashApplyCommand cmd = git.stashApply();
+            cmd.setStashRef(sref);
+            cmd.setApplyUntracked(true);
+            cmd.call();
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Changes applied successfully: {0}", new Object[]{logDetails(), ref});
+            return true;
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "applyStash (stashApply) FAILED : {0}", logDetails());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    private boolean dropStash(Git git, String ref) {
+        int idx = findStash(git, ref);
+        if (idx < 0) {
+            return false;
+        }
+
+        try {
+            StashDropCommand cmd = git.stashDrop();
+            cmd.setStashRef(idx);
+            cmd.call();
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Drop stash successfully: {0}", new Object[]{logDetails(), ref});
+            return true;
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "applyStash (dropStash) FAILED : {0}", logDetails());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
     }
 
     private boolean pull(Git git) {
@@ -201,7 +337,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
         return false;
     }
 
-    private boolean checkout(Git git) {
+    private boolean checkout(Git git, boolean force) {
         String branch = getBranch();
 
         // check to see if already checked out
@@ -209,9 +345,10 @@ public class AxoGitLibrary extends AxolotiLibrary {
             if (branch.equals(git.getRepository().getBranch())) {
                 // has the user changed a brannch, that they are not authorised to change
                 boolean isDirty = isDirty(git);
-                if(isDirty && !isAuth()) {
+                if (isDirty && !isAuth()) {
                     Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "unauthorised changes, resetting : {0}", logDetails());
                     CheckoutCommand cmd = git.checkout();
+                    cmd.setForce(force);
                     cmd.setAllPaths(true);
                     //cmd.setName(branch);
                     try {
@@ -365,7 +502,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Status: exception  {0}", logDetails());
         } catch (NoWorkTreeException ex) {
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);            
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Status: exception  {0}", logDetails());
         }
         return false;
