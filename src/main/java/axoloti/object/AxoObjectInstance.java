@@ -949,6 +949,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         oi.setInstanceName(iname);
         oi.updateObj();
         getPatch().delete(this);
+        getPatch().SetDirty();
     }
 
     void ConvertToEmbeddedObj() {
@@ -970,6 +971,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             oi.setInstanceName(iname);
             oi.updateObj();
             getPatch().delete(this);
+            getPatch().SetDirty();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
         }

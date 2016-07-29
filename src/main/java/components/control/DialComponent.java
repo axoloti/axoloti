@@ -23,7 +23,6 @@ import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
-import axoloti.utils.OSDetect;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Cursor;

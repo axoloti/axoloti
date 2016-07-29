@@ -1018,14 +1018,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private void undoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoItemActionPerformed
         patch.undo();
-        redoItem.setEnabled(patch.canRedo());
-        undoItem.setEnabled(patch.canUndo());
+        this.updateUndoRedoEnabled();
     }//GEN-LAST:event_undoItemActionPerformed
 
     private void redoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoItemActionPerformed
         patch.redo();
-        redoItem.setEnabled(patch.canRedo());        
-        undoItem.setEnabled(patch.canUndo());
+        this.updateUndoRedoEnabled();
     }//GEN-LAST:event_redoItemActionPerformed
 
     private void undoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_undoItemAncestorAdded
@@ -1150,5 +1148,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     @Override
     public ArrayList<DocumentWindow> GetChildDocuments() {
         return dwl;
+    }
+    
+    public void updateUndoRedoEnabled() {
+        redoItem.setEnabled(patch.canRedo());
+        undoItem.setEnabled(patch.canUndo());
     }
 }

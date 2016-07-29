@@ -12,6 +12,7 @@ import axoloti.utils.Constants;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.IllegalComponentStateException;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
@@ -130,11 +131,25 @@ public abstract class IoletAbstract extends JPanel {
     }
 
     public Point getJackLocInCanvas() {
-        Point jackLocation = jack.getLocationOnScreen();
-        jackLocation.x += 5;
-        jackLocation.y += 5;
-        SwingUtilities.convertPointFromScreen(jackLocation, getPatchGui().Layers);
-        return jackLocation;
+        try {
+            Point jackLocation = jack.getLocationOnScreen();
+            jackLocation.x += 5;
+            jackLocation.y += 5;
+            SwingUtilities.convertPointFromScreen(jackLocation, getPatchGui().Layers);
+            return jackLocation;
+        } catch (IllegalComponentStateException e) {
+            Point p1 = new Point(5, 5);
+            Component p = (Component) jack;
+            while (p != null) {
+                p1.x = p1.x + p.getX();
+                p1.y = p1.y + p.getY();
+                if (p == axoObj) {
+                    break;
+                }
+                p = (Component) p.getParent();
+            }
+            return p1;
+        }
     }
 
     public DropTarget createDropTarget() {
@@ -335,11 +350,13 @@ public abstract class IoletAbstract extends JPanel {
 
     public void disconnect() {
         axoObj.patch.disconnect(this);
+        axoObj.patch.SetDirty();
     }
 
     public void deleteNet() {
         Net n = axoObj.patch.GetNet(this);
         axoObj.patch.delete(n);
+        axoObj.patch.SetDirty();
     }
 
     @Override

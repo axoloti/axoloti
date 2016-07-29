@@ -25,7 +25,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.IllegalComponentStateException;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
@@ -128,7 +127,7 @@ public class Net extends JPanel {
             i.setHighlighted(selected);
         }
     }
-    
+
     public boolean getSelected() {
         return this.selected;
     }
@@ -186,34 +185,30 @@ public class Net extends JPanel {
     }
 
     protected void updateBounds() {
-        try {
-            int min_y = Integer.MAX_VALUE;
-            int min_x = Integer.MAX_VALUE;
-            int max_y = Integer.MIN_VALUE;
-            int max_x = Integer.MIN_VALUE;
+        int min_y = Integer.MAX_VALUE;
+        int min_x = Integer.MAX_VALUE;
+        int max_y = Integer.MIN_VALUE;
+        int max_x = Integer.MIN_VALUE;
 
-            for (InletInstance i : dest) {
-                Point p1 = i.getJackLocInCanvas();
-                min_x = Math.min(min_x, p1.x);
-                min_y = Math.min(min_y, p1.y);
-                max_x = Math.max(max_x, p1.x);
-                max_y = Math.max(max_y, p1.y);
-            }
-            for (OutletInstance i : source) {
-                Point p1 = i.getJackLocInCanvas();
-                min_x = Math.min(min_x, p1.x);
-                min_y = Math.min(min_y, p1.y);
-                max_x = Math.max(max_x, p1.x);
-                max_y = Math.max(max_y, p1.y);
-            }
-
-            int fudge = Math.max((max_x - min_x) / 8, (max_y - min_y) / 8);
-            this.setLocation(new Point(min_x - fudge, min_y - fudge));
-            this.setSize(Math.max(1, max_x - min_x + (2 * fudge)), 
-                    Math.max(1, max_y - min_y + (2 * fudge)));
-        } catch (IllegalComponentStateException e) {
-
+        for (InletInstance i : dest) {
+            Point p1 = i.getJackLocInCanvas();
+            min_x = Math.min(min_x, p1.x);
+            min_y = Math.min(min_y, p1.y);
+            max_x = Math.max(max_x, p1.x);
+            max_y = Math.max(max_y, p1.y);
         }
+        for (OutletInstance i : source) {
+            Point p1 = i.getJackLocInCanvas();
+            min_x = Math.min(min_x, p1.x);
+            min_y = Math.min(min_y, p1.y);
+            max_x = Math.max(max_x, p1.x);
+            max_y = Math.max(max_y, p1.y);
+        }
+
+        int fudge = Math.max((max_x - min_x) / 8, (max_y - min_y) / 8);
+        this.setLocation(new Point(min_x - fudge, min_y - fudge));
+        this.setSize(Math.max(1, max_x - min_x + (2 * fudge)),
+                Math.max(1, max_y - min_y + (2 * fudge)));
     }
 
     @Override

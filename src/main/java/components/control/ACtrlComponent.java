@@ -23,7 +23,6 @@ import axoloti.object.AxoObjectInstance;
 import axoloti.utils.KeyUtils;
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
