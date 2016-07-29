@@ -32,7 +32,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
@@ -189,6 +188,7 @@ public class PatchGUI extends Patch {
                 }
                 if (action == MOVE) {
                     deleteSelectedAxoObjInstances();
+                    cleanUpObjectLayer();
                 }
             }
 
@@ -314,6 +314,9 @@ public class PatchGUI extends Patch {
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
                     deleteSelectedAxoObjInstances();
+                    cleanUpObjectLayer();
+                    Layers.revalidate();
+
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_UP) {
                     MoveSelectedAxoObjInstances(Direction.UP, xsteps, ysteps);
@@ -920,6 +923,7 @@ public class PatchGUI extends Patch {
         }
         for (Net n : nets) {
             netLayerPanel.add(n);
+            n.updateBounds();
         }
         Layers.setPreferredSize(new Dimension(5000, 5000));
         AdjustSize();
@@ -1200,5 +1204,16 @@ public class PatchGUI extends Patch {
         if ((settings != null) && (settings.editor != null)) {
             settings.editor.dispose();
         }
+    }
+    
+    void cleanUpObjectLayer() {
+        if (!IsLocked()) {
+            for(Component c : this.objectLayerPanel.getComponents()) {
+                if(!objectinstances.contains(c)) {
+                    this.objectLayerPanel.remove(c);
+                }
+            }
+        }
+        repaint();
     }
 }

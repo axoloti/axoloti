@@ -47,8 +47,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -384,19 +382,26 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         if (dragging) {
             dragging = false;
             if (patch != null) {
-
+                boolean setDirty = false;
                 for (AxoObjectInstanceAbstract o : patch.objectinstances) {
                     moveToObjectLayer(o, 0);
                     if (getPatchGUI().objectLayerPanel.getComponentZOrder(o) > maxZIndex) {
                         maxZIndex = getPatchGUI().objectLayerPanel.getComponentZOrder(o);
                     }
                     o.dragging = false;
+                    int original_x = o.x;
+                    int original_y = o.y;
                     o.x = ((o.x + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
                     o.y = ((o.y + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
                     o.setLocation(o.x, o.y);
+                    if(o.x != original_x || o.y != original_y) {
+                        setDirty = true;                        
+                    }
                 }
-                patch.AdjustSize();
-                patch.SetDirty();
+                if (setDirty) {
+                    patch.AdjustSize();
+                    patch.SetDirty();
+                }
             }
         }
         moveToObjectLayer(this, maxZIndex);

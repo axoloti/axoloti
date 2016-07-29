@@ -28,7 +28,6 @@ import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.KeyUtils;
 import axoloti.utils.Preferences;
 import generatedobjects.GeneratedObjects;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;

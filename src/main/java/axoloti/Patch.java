@@ -321,9 +321,7 @@ public class Patch {
             o.patch = this;
             AxoObjectAbstract t = o.resolveType();
             if ((t != null) && (t.providesModulationSource())) {
-//                o.patch = this;
                 o.PostConstructor();
-                //System.out.println("Modulator restored " + o.getInstanceName());
 
                 Modulator[] m = t.getModulators();
                 if (Modulators == null) {
@@ -392,11 +390,14 @@ public class Patch {
         dirty = true;
 
         if (container != null) {
-            container.SetDirty();
+            container.SetDirty(shouldSaveState);
         }
         if (shouldSaveState) {
             currentState += 1;
             saveState();
+        }
+        if(patchframe != null) {
+            patchframe.updateUndoRedoEnabled();
         }
     }
 
@@ -425,7 +426,6 @@ public class Patch {
             }
             AxoObjectInstanceAbstract objinst = obj.CreateInstance(this, n + i, loc);
             SetDirty();
-//            Logger.getLogger(Patch.class.getName()).log(Level.INFO, "instance added, type {0}", obj.id);
 
             Modulator[] m = obj.getModulators();
             if (m != null) {
@@ -497,6 +497,7 @@ public class Patch {
                 if (n1.source.isEmpty()) {
                     Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: adding outlet to inlet net");
                     n1.connectOutlet(ol);
+                    SetDirty();
                     return n1;
                 } else {
                     disconnect(il);
@@ -574,7 +575,7 @@ public class Patch {
         }
         return null;
     }
-
+    
     public Net disconnect(IoletAbstract io) {
         if (!IsLocked()) {
             Net n = GetNet(io);
@@ -587,7 +588,6 @@ public class Patch {
                 if (n.source.size() + n.dest.size() <= 1) {
                     delete(n);
                 }
-                SetDirty();
                 return n;
             }
         } else {
@@ -595,18 +595,17 @@ public class Patch {
         }
         return null;
     }
-
+    
     public Net delete(Net n) {
         if (!IsLocked()) {
             nets.remove(n);
-            SetDirty();
             return n;
         } else {
             Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can''t disconnect: locked!");
         }
         return null;
     }
-
+    
     public void delete(AxoObjectInstanceAbstract o) {
         if (o == null) {
             return;
@@ -627,7 +626,6 @@ public class Patch {
                 }
             }
         }
-        SetDirty();
         objectinstances.remove(o);
         o.getType().DeleteInstance(o);
     }
@@ -664,12 +662,12 @@ public class Patch {
                 for (AxoObjectInstanceAbstract o : objectinstances) {
                     if (o.IsSelected()) {
                         this.delete(o);
-                        SetDirty();
                         cont = true;
                         break;
                     }
                 }
             }
+            SetDirty();
         } else {
             Logger.getLogger(Patch.class.getName()).log(Level.INFO, "Can't delete: locked!");
         }
@@ -707,9 +705,11 @@ public class Patch {
 
     public void cleanUpIntermediateChangeStates(int n) {
         int length = previousStates.size();
-        previousStates.subList(length - n, length).clear();
-        this.currentState -= n - 1;
-        saveState();
+        if(length >= n) {
+            previousStates.subList(length - n, length).clear();
+            this.currentState -= n - 1;
+            saveState();
+        }
     }
 
     private boolean cleanDanglingStates = true;
@@ -723,11 +723,6 @@ public class Patch {
             this.nets = p.nets;
             this.cleanDanglingStates = false;
             this.PostContructor();
-            repaint();
-            for (Net n : nets) {
-                n.updateBounds();
-            }
-            repaint();
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -2395,6 +2390,7 @@ public class Patch {
         if (obj1 != obj) {
             obj1.PostConstructor();
             delete(obj);
+            SetDirty();
         }
         return obj1;
     }
@@ -2580,6 +2576,7 @@ public class Patch {
             currentState -= 1;
             loadState();
             SetDirty(false);
+            patchframe.updateUndoRedoEnabled();
         }
     }
 
@@ -2588,6 +2585,7 @@ public class Patch {
             currentState += 1;
             loadState();
             SetDirty(false);
+            patchframe.updateUndoRedoEnabled();
         }
     }
 }
