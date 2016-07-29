@@ -17,6 +17,8 @@
  */
 package axoloti;
 
+import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjects;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
@@ -466,12 +468,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         undoItem.setText("Undo");
         undoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 undoItemAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         undoItem.addActionListener(new java.awt.event.ActionListener() {
@@ -483,12 +485,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         redoItem.setText("Redo");
         redoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 redoItemAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         redoItem.addActionListener(new java.awt.event.ActionListener() {
@@ -538,6 +540,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         });
         jMenuView.add(jMenuItemNotes);
 
+        jMenuItemSettings.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.META_MASK));
         jMenuItemSettings.setText("Settings");
         jMenuItemSettings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -918,10 +921,24 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuItemNotesActionPerformed
 
     private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
-        if (patch.settings == null) {
-            patch.settings = new PatchSettings();
+        AxoObjectInstanceAbstract selObj = null;
+        ArrayList<AxoObjectInstanceAbstract> oi = patch.objectinstances;
+        if(oi != null) {
+            for(AxoObjectInstanceAbstract i : oi) {
+                if(i.IsSelected() && i instanceof AxoObjectInstance) {
+                    selObj = i;
+                }
+            }
         }
-        patch.settings.showEditor(patch);
+        
+        if(selObj!=null) {
+            ((AxoObjectInstance) selObj).OpenEditor();
+        } else {
+            if (patch.settings == null) {
+                patch.settings = new PatchSettings();
+            }
+            patch.settings.showEditor(patch);
+        }
     }//GEN-LAST:event_jMenuItemSettingsActionPerformed
 
     private void jCheckBoxMenuItemLiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemLiveActionPerformed
