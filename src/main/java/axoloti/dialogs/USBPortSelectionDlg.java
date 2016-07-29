@@ -340,8 +340,8 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
         int selRow = 0;
         if (jTable1.getSelectedRowCount() > 0 ) {
             selRow = jTable1.getSelectedRow();
+            cpuid = (String) model.getValueAt(selRow, 3);
         }
-        cpuid = (String) model.getValueAt(selRow, 3);
         setVisible(false);        
     }
     
