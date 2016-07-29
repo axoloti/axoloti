@@ -52,11 +52,10 @@ public class AxoGitLibrary extends AxolotiLibrary {
         }
 
         Git git = getGit();
-        if(git!=null) {
+        if (git != null) {
             reportStatus(git);
             git.getRepository().close();
-        }
-        else {
+        } else {
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "status FAILED cannot find submodule : {0}", logDetails());
         }
     }
@@ -91,7 +90,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
                 Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Modifications uploaded : {0}", logDetails());
                 reportStatus(git);
             }
-            if (!checkout(git)) {
+            if (!checkout(git, false)) {
                 git.getRepository().close();
                 return;
             }
@@ -147,11 +146,11 @@ public class AxoGitLibrary extends AxolotiLibrary {
         // sync afterwards to ensure on correct branch
         sync();
     }
-    
+
     @Override
     public boolean stashChanges(String ref) {
         Git git = getGit();
-        if(git!=null) {
+        if (git != null) {
             boolean ret = createStash(git, ref);
             git.getRepository().close();
             return ret;
@@ -163,9 +162,9 @@ public class AxoGitLibrary extends AxolotiLibrary {
     @Override
     public boolean applyStashedChanges(String ref) {
         Git git = getGit();
-        if(git!=null) {
-            boolean ret = applyStash(git,ref);
-            
+        if (git != null) {
+            boolean ret = applyStash(git, ref);
+
             if (ret) {
                 ret = dropStash(git, ref);
             }
@@ -175,7 +174,40 @@ public class AxoGitLibrary extends AxolotiLibrary {
         Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, "applyStashedChanges cannot find repo FAILED : {0}", getId());
         return false;
     }
-    
+
+    @Override
+    public String getCurrentBranch() {
+        Git git = getGit();
+        if (git != null) {
+            try {
+                return git.getRepository().getBranch();
+            } catch (IOException ex) {
+                Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+                return getBranch();
+            }
+        }
+        Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, "getCurrentBranch cannot find repo FAILED : {0}", getId());
+        return getBranch();
+    }
+
+    @Override
+    public void upgrade() {
+        String ref = "AxolotiUpgrade";
+        Git git = getGit();
+        if (git != null) {
+            boolean ret = createStash(git, ref);
+            if (ret) {
+                checkout(git, true);
+                ret = applyStash(git, ref);
+                if (ret) {
+                    dropStash(git, ref);
+                }
+            }
+            git.getRepository().close();
+        }
+        Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, "upgrade cannot find repo FAILED : {0}", getId());
+    }
+
     private Git getGit() {
         Git git = null;
         try {
@@ -202,14 +234,13 @@ public class AxoGitLibrary extends AxolotiLibrary {
         return git;
     }
 
-
-    private boolean createStash(Git git,String ref) {
+    private boolean createStash(Git git, String ref) {
         StashCreateCommand cmd = git.stashCreate();
         cmd.setIncludeUntracked(true);
         try {
             cmd.setWorkingDirectoryMessage(ref);
             RevCommit rev = cmd.call();
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Changes stashed successfully: {0}", new Object[] {logDetails(), ref});
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Changes stashed successfully: {0}", new Object[]{logDetails(), ref});
 
             return true;
         } catch (GitAPIException ex) {
@@ -227,13 +258,13 @@ public class AxoGitLibrary extends AxolotiLibrary {
             if (stashedRefs.isEmpty()) {
                 return -1;
             }
-            
-            int idx=0;
-            for(RevCommit i : stashedRefs) {
-                if(i.getShortMessage().equals(ref)) {
+
+            int idx = 0;
+            for (RevCommit i : stashedRefs) {
+                if (i.getShortMessage().equals(ref)) {
                     return idx;
-                 }
-                 idx++;
+                }
+                idx++;
             }
             return -1;
         } catch (GitAPIException ex) {
@@ -244,30 +275,30 @@ public class AxoGitLibrary extends AxolotiLibrary {
     }
 
     private boolean applyStash(Git git, String ref) {
-        int idx = findStash(git,ref);
+        int idx = findStash(git, ref);
         if (idx < 0) {
             return false;
         }
-        
-        String sref = "stash@{"+Integer.toString(idx)+"}";
+
+        String sref = "stash@{" + Integer.toString(idx) + "}";
 
         try {
             StashApplyCommand cmd = git.stashApply();
             cmd.setStashRef(sref);
             cmd.setApplyUntracked(true);
             cmd.call();
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Changes applied successfully: {0}", new Object[] {logDetails(), ref});
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Changes applied successfully: {0}", new Object[]{logDetails(), ref});
             return true;
         } catch (GitAPIException ex) {
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "applyStash (stashApply) FAILED : {0}", logDetails());
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return false;
     }
-    
+
     private boolean dropStash(Git git, String ref) {
-        int idx = findStash(git,ref);
+        int idx = findStash(git, ref);
         if (idx < 0) {
             return false;
         }
@@ -276,18 +307,16 @@ public class AxoGitLibrary extends AxolotiLibrary {
             StashDropCommand cmd = git.stashDrop();
             cmd.setStashRef(idx);
             cmd.call();
-            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Drop stash successfully: {0}", new Object[] {logDetails(), ref});
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "Drop stash successfully: {0}", new Object[]{logDetails(), ref});
             return true;
         } catch (GitAPIException ex) {
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "applyStash (dropStash) FAILED : {0}", logDetails());
             Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return false;
     }
 
-    
-    
     private boolean pull(Git git) {
         PullCommand cmd = git.pull();
         if (isAuth()) {
@@ -308,7 +337,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
         return false;
     }
 
-    private boolean checkout(Git git) {
+    private boolean checkout(Git git, boolean force) {
         String branch = getBranch();
 
         // check to see if already checked out
@@ -319,6 +348,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
                 if (isDirty && !isAuth()) {
                     Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.INFO, "unauthorised changes, resetting : {0}", logDetails());
                     CheckoutCommand cmd = git.checkout();
+                    cmd.setForce(force);
                     cmd.setAllPaths(true);
                     //cmd.setName(branch);
                     try {
