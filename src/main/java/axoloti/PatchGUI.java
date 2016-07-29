@@ -549,6 +549,8 @@ public class PatchGUI extends Patch {
     }
 
     public void handlePan(MouseEvent ev) {
+        if(panOrigin == null) return;
+        
         int dx = panOrigin.x - ev.getX();
         int dy = panOrigin.y - ev.getY();
         JScrollBar horizontal = PatchGUI.this.getPatchframe().getScrollPane().getHorizontalScrollBar();
