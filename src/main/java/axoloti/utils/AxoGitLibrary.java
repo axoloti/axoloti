@@ -13,6 +13,7 @@ import org.eclipse.jgit.api.CheckoutResult;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
+import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PullResult;
@@ -197,6 +198,9 @@ public class AxoGitLibrary extends AxolotiLibrary {
         if (git != null) {
             boolean ret = createStash(git, ref);
             if (ret) {
+                // update remote branches
+                fetch(git);
+                // switch to branch
                 checkout(git, true);
                 ret = applyStash(git, ref);
                 if (ret) {
@@ -204,6 +208,7 @@ public class AxoGitLibrary extends AxolotiLibrary {
                 }
             }
             git.getRepository().close();
+            return;
         }
         Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, "upgrade cannot find repo FAILED : {0}", getId());
     }
@@ -429,6 +434,16 @@ public class AxoGitLibrary extends AxolotiLibrary {
         }
         return false;
 
+    }
+
+    private void fetch(Git git) {
+        FetchCommand cmd = git.fetch();
+        try {
+            cmd.call();
+        } catch (GitAPIException ex) {
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.WARNING, "upgrade (fetch) FAILED : {0}", logDetails());
+            Logger.getLogger(AxoGitLibrary.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private boolean commit(Git git) {
