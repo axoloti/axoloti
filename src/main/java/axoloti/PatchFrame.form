@@ -133,6 +133,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSettings">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Meta+I"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Settings"/>
               </Properties>
               <Events>
