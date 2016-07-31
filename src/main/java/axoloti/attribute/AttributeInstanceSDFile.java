@@ -124,7 +124,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     public String CValue() {
         File f = getFile();
         if ((f != null) && f.exists()) {
-            return f.getName();
+            return f.getName().replaceAll("\\\\", "\\/");
         } else {
             return fileName.replaceAll("\\\\", "\\/");
         }
@@ -176,7 +176,9 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     File getFile() {
         Path basePath = FileSystems.getDefault().getPath(GetObjectInstance().getPatch().getFileNamePath());
         Path parent = basePath.getParent();
-        if (parent == null || fileName == null || fileName.length() == 0) {
+        if (parent == null) {
+            return new File(fileName);
+        } else if (fileName == null || fileName.length() == 0) {
             return null;
         }
         Path resolvedPath = parent.resolve(fileName);
@@ -187,10 +189,17 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
 
     String toRelative(File f) {
+        if (f == null) {
+            return "";
+        }
         String FilenamePath = GetObjectInstance().getPatch().getFileNamePath();
         if (FilenamePath != null && !FilenamePath.isEmpty()) {
             Path pathAbsolute = Paths.get(f.getPath());
-            Path pathBase = Paths.get(new File(FilenamePath).getParent());
+            String parent = new File(FilenamePath).getParent();
+            if (parent == null) {
+                return f.getPath();
+            }
+            Path pathBase = Paths.get(parent);
             Path pathRelative = pathBase.relativize(pathAbsolute);
             return pathRelative.toString();
         } else {
