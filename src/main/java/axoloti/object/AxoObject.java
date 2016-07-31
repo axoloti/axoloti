@@ -504,7 +504,7 @@ public class AxoObject extends AxoObjectAbstract {
                     s2 = s2.replace('\\', '/');
                     r.add(s2);
                 } else if (s.startsWith("chibios/")) {
-                    r.add((new File(System.getProperty(FIRMWARE_DIR))).getAbsolutePath() + "../chibios" + s.substring(7));
+                    r.add((new File(System.getProperty(FIRMWARE_DIR))).getAbsolutePath() + "/../chibios" + s.substring(7));
                 } else {
                     r.add(s);
                 }
