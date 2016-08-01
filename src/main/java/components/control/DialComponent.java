@@ -226,6 +226,7 @@ public class DialComponent extends ACtrlComponent {
                     break;
                 default:
             }
+            repaint();
         }
     }
 

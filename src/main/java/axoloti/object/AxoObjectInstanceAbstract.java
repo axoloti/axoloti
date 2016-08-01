@@ -18,6 +18,7 @@
 package axoloti.object;
 
 import axoloti.MainFrame;
+import axoloti.Net;
 import axoloti.Patch;
 import axoloti.PatchGUI;
 import axoloti.SDFileReference;
@@ -394,8 +395,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     o.x = ((o.x + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
                     o.y = ((o.y + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
                     o.setLocation(o.x, o.y);
-                    if(o.x != original_x || o.y != original_y) {
-                        setDirty = true;                        
+                    if (o.x != original_x || o.y != original_y) {
+                        setDirty = true;
                     }
                 }
                 if (setDirty) {
@@ -418,6 +419,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         this.y = y;
         if (patch != null) {
             patch.repaint();
+            for (Net n : patch.nets) {
+                n.updateBounds();
+            }
         }
     }
 
@@ -583,6 +587,12 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         super.setLocation(x1, y1);
         x = x1;
         y = y1;
+        
+        if (patch != null) {
+            for (Net n : patch.nets) {
+                n.updateBounds();
+            }
+        }
     }
 
     public boolean providesModulationSource() {

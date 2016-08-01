@@ -130,6 +130,20 @@ public abstract class IoletAbstract extends JPanel {
         }
     }
 
+    private Point getJackLocInCanvasHidden() {
+        Point p1 = new Point(5, 5);
+        Component p = (Component) jack;
+        while (p != null) {
+            p1.x = p1.x + p.getX();
+            p1.y = p1.y + p.getY();
+            if (p == axoObj) {
+                break;
+            }
+            p = (Component) p.getParent();
+        }
+        return p1;
+    }
+
     public Point getJackLocInCanvas() {
         try {
             Point jackLocation = jack.getLocationOnScreen();
@@ -138,17 +152,10 @@ public abstract class IoletAbstract extends JPanel {
             SwingUtilities.convertPointFromScreen(jackLocation, getPatchGui().Layers);
             return jackLocation;
         } catch (IllegalComponentStateException e) {
-            Point p1 = new Point(5, 5);
-            Component p = (Component) jack;
-            while (p != null) {
-                p1.x = p1.x + p.getX();
-                p1.y = p1.y + p.getY();
-                if (p == axoObj) {
-                    break;
-                }
-                p = (Component) p.getParent();
-            }
-            return p1;
+            return getJackLocInCanvasHidden();
+        }
+        catch (NullPointerException e) {
+            return getJackLocInCanvasHidden();
         }
     }
 

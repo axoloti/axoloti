@@ -102,7 +102,7 @@ public class NetDragging extends Net {
     }
 
     @Override
-    protected void updateBounds() {
+    public void updateBounds() {
         int min_y = Integer.MAX_VALUE;
         int min_x = Integer.MAX_VALUE;
         int max_y = Integer.MIN_VALUE;
