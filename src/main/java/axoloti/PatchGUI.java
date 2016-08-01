@@ -909,6 +909,7 @@ public class PatchGUI extends Patch {
             if (isUpdate) {
                 AdjustSize();
                 SetDirty();
+                Layers.repaint();
             }
         } else {
             Logger.getLogger(PatchGUI.class.getName()).log(Level.INFO, "can't move: locked");
@@ -925,11 +926,17 @@ public class PatchGUI extends Patch {
         }
         for (Net n : nets) {
             netLayerPanel.add(n);
-            n.updateBounds();
         }
+        objectLayerPanel.validate();
+        netLayerPanel.validate();
+        
         Layers.setPreferredSize(new Dimension(5000, 5000));
         AdjustSize();
         Layers.revalidate();
+        
+        for (Net n : nets) {
+            n.updateBounds();
+        }
     }
 
     @Override

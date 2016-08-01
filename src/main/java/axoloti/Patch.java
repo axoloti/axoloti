@@ -100,7 +100,7 @@ public class Patch {
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true, required = false)})
     ArrayList<AxoObjectInstanceAbstract> objectinstances = new ArrayList<AxoObjectInstanceAbstract>();
     @ElementList(name = "nets")
-    ArrayList<Net> nets = new ArrayList<Net>();
+    public ArrayList<Net> nets = new ArrayList<Net>();
     @Element(required = false)
     PatchSettings settings;
     @Element(required = false, data = true)
