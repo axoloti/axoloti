@@ -109,19 +109,6 @@ public class ZoomUI extends LayerUI<JComponent> {
                 listener.mouseClicked(transformedEvent);
             }
         }
-        if (localEvent.getID() == MouseEvent.MOUSE_PRESSED
-                && transformedEvent.getComponent() instanceof DialComponent) {
-            anyMouseDown = true;
-            // ensure that dial focus highlights are repainted
-            if (previousDial != null
-                    && previousDial != transformedEvent.getComponent()) {
-                previousDial.repaint();
-                ZoomUtils.paintObjectLayer(previousDial);
-            }
-            if (transformedEvent.getComponent() instanceof DialComponent) {
-                previousDial = transformedEvent.getComponent();
-            }
-        }
     }
 
     @Override
@@ -277,7 +264,7 @@ public class ZoomUI extends LayerUI<JComponent> {
     @Override
     protected void processFocusEvent(FocusEvent e,
             JLayer<? extends JComponent> l) {
-        ZoomUtils.paintObjectLayer(l, e.getComponent(), this);
+        patch.Layers.repaint();
     }
 
     @Override
