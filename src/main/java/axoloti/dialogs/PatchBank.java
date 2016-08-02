@@ -252,25 +252,21 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }
 
     void Open(File f) throws IOException {
-        try {
-            FilenamePath = f.getPath();
-            InputStream fs = new FileInputStream(f);
-            BufferedReader fbs = new BufferedReader(new InputStreamReader(fs));
-            String s;
-            files = new ArrayList<File>();
-            while ((s = fbs.readLine())
-                    != null) {
-                File ff = fromRelative(s);
-                if (ff != null) {
-                    files.add(ff);
-                }
+        FilenamePath = f.getPath();
+        InputStream fs = new FileInputStream(f);
+        BufferedReader fbs = new BufferedReader(new InputStreamReader(fs));
+        String s;
+        files = new ArrayList<File>();
+        while ((s = fbs.readLine())
+                != null) {
+            File ff = fromRelative(s);
+            if (ff != null) {
+                files.add(ff);
             }
-            fs.close();
-            refresh();
-            setTitle(FilenamePath);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
         }
+        fs.close();
+        refresh();
+        setTitle(FilenamePath);
     }
 
     void Save(File f) {
@@ -773,8 +769,8 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (USBBulkConnection.GetConnection().isConnected()) {
             processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "/index.axb"));
         }
-        
-        for(File f : files) {
+
+        for (File f : files) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f.getName());
             PatchFrame pf = PatchGUI.OpenPatchInvisible(f);
             PatchGUI p = pf.getPatch();
@@ -833,7 +829,8 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             pb.Open(f);
             pb.setVisible(true);
         } catch (IOException ex) {
-            Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
+            pb.Close();
+            Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, "Patchbank file not found or not accessable:{0}", f.getName());
         }
     }
 
