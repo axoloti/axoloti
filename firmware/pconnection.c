@@ -137,7 +137,11 @@ void PExTransmit(void) {
       ack[2] = dspLoadPct;
       ack[3] = patchMeta.patchID;
       ack[4] = sysmon_getVoltage10() + (sysmon_getVoltage50()<<16);
-      ack[5] = 0; // reserved
+      if (patchStatus) {
+        ack[5] = UNINITIALIZED;
+      } else {
+        ack[5] = loadPatchIndex;
+      }
       ack[6] = 0; // reserved
       chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                               (const unsigned char* )&ack[0], 7 * 4);
@@ -539,6 +543,7 @@ void PExReceiveByte(unsigned char c) {
       else if (c == 's') { // start patch
         state = 0;
         header = 0;
+        loadPatchIndex = LIVE;
         StartPatch();
         AckPending = 1;
       }

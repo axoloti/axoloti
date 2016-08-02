@@ -59,6 +59,17 @@ extern patchMeta_t patchMeta;
 
 extern int dspLoadPct; // DSP load in percent
 
+typedef enum {
+  START_SD = -1,
+  START_FLASH = -2,
+  BY_FILENAME = -3,
+  LIVE = -4,
+  UNINITIALIZED = -5
+// and positive numbers are index in patch bank
+} loadPatchIndex_t;
+
+extern loadPatchIndex_t loadPatchIndex;
+
 extern volatile int patchStatus;
 // 0-> running
 // 1-> stopped
@@ -69,7 +80,7 @@ extern int8_t hid_mouse_x;
 extern int8_t hid_mouse_y;
 
 void InitPatch0(void);
-void StartPatch(void);
+int StartPatch(void);
 void StopPatch(void);
 
 void start_dsp_thread(void);
@@ -82,6 +93,11 @@ void start_dsp_thread(void);
 
 void StartLoadPatchTread(void);
 void LoadPatch(const char *name);
+void LoadPatchStartSD(void);
+void LoadPatchStartFlash(void);
 void LoadPatchIndexed(uint32_t index);
+loadPatchIndex_t GetIndexOfCurrentPatch(void);
 
+int get_USBH_LL_GetURBState(void);
+int get_USBH_LL_SubmitURB(void);
 #endif //__PATCH_H

@@ -167,13 +167,8 @@ int main(void) {
     // if no patch booting or running yet
     // try loading from flash
     if (patchStatus) {
-      // patch in flash sector 11
-      memcpy((uint8_t *)PATCHMAINLOC, (uint8_t *)PATCHFLASHLOC, PATCHFLASHSIZE);
-      if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
-          && (*(uint32_t *)PATCHMAINLOC != 0)) {
-        if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
-          StartPatch();
-      }
+      if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
+        LoadPatchStartFlash();
     }
   }
 

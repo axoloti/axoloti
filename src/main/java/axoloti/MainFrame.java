@@ -388,19 +388,23 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabelIcon = new javax.swing.JLabel();
         jButtonClear = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jCheckBoxConnect = new javax.swing.JCheckBox();
+        jLabelCPUID = new javax.swing.JLabel();
+        jLabelFirmwareID = new javax.swing.JLabel();
+        jLabelVoltages = new javax.swing.JLabel();
+        jLabelPatch = new javax.swing.JLabel();
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jScrollPaneLog = new javax.swing.JScrollPane();
         jTextPaneLog = new javax.swing.JTextPane();
         jPanelProgress = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
         jLabelProgress = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jCheckBoxConnect = new javax.swing.JCheckBox();
-        jLabelCPUID = new javax.swing.JLabel();
-        jLabelFirmwareID = new javax.swing.JLabel();
-        jLabelVoltages = new javax.swing.JLabel();
-        jLabelIcon = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new axoloti.menus.FileMenu();
         jMenuEdit = new javax.swing.JMenu();
@@ -428,11 +432,21 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Axoloti");
         setMinimumSize(new java.awt.Dimension(200, 200));
+        setPreferredSize(new java.awt.Dimension(355, 325));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
+
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.PAGE_AXIS));
+
+        jLabelIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/axoloti_icon.png"))); // NOI18N
+        jPanel3.add(jLabelIcon);
 
         jButtonClear.setText("Clear");
         jButtonClear.addActionListener(new java.awt.event.ActionListener() {
@@ -440,11 +454,44 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 jButtonClearActionPerformed(evt);
             }
         });
+        jPanel3.add(jButtonClear);
+
+        jPanel2.add(jPanel3);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
+
+        jCheckBoxConnect.setText("Connect");
+        jCheckBoxConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxConnectActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jCheckBoxConnect);
+
+        jLabelCPUID.setText("CPUID");
+        jPanel1.add(jLabelCPUID);
+
+        jLabelFirmwareID.setText("FirmwareID");
+        jPanel1.add(jLabelFirmwareID);
+
+        jLabelVoltages.setText("volt");
+        jPanel1.add(jLabelVoltages);
+
+        jLabelPatch.setText("patch");
+        jPanel1.add(jLabelPatch);
+
+        jPanel2.add(jPanel1);
+        jPanel2.add(filler3);
+
+        getContentPane().add(jPanel2);
 
         jScrollPaneLog.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         jTextPaneLog.setEditable(false);
         jScrollPaneLog.setViewportView(jTextPaneLog);
+
+        getContentPane().add(jScrollPaneLog);
 
         jPanelProgress.setMaximumSize(new java.awt.Dimension(605, 16));
         jPanelProgress.setLayout(new javax.swing.BoxLayout(jPanelProgress, javax.swing.BoxLayout.LINE_AXIS));
@@ -461,43 +508,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jLabelProgress.setPreferredSize(new java.awt.Dimension(150, 14));
         jPanelProgress.add(jLabelProgress);
 
-        jCheckBoxConnect.setText("Connect");
-        jCheckBoxConnect.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxConnectActionPerformed(evt);
-            }
-        });
-
-        jLabelCPUID.setText("CPUID");
-
-        jLabelFirmwareID.setText("FirmwareID");
-
-        jLabelVoltages.setText("jLabel2");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabelCPUID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jCheckBoxConnect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabelVoltages)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jLabelFirmwareID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jCheckBoxConnect)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelCPUID)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelFirmwareID)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelVoltages))
-        );
-
-        jLabelIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/axoloti_icon.png"))); // NOI18N
+        getContentPane().add(jPanelProgress);
 
         fileMenu.setText("File");
         jMenuBar1.add(fileMenu);
@@ -622,36 +633,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jMenuBar1.add(helpMenu1);
 
         setJMenuBar(jMenuBar1);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPaneLog)
-            .addComponent(jPanelProgress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 88, Short.MAX_VALUE)
-                .addComponent(jButtonClear)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButtonClear))
-                    .addComponent(jLabelIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneLog, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanelProgress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -947,6 +928,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.menus.FileMenu fileMenu;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler3;
     private axoloti.menus.HelpMenu helpMenu1;
     private javax.swing.JButton jButtonClear;
     private javax.swing.JCheckBox jCheckBoxConnect;
@@ -955,6 +937,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     private javax.swing.JLabel jLabelCPUID;
     private javax.swing.JLabel jLabelFirmwareID;
     private javax.swing.JLabel jLabelIcon;
+    private javax.swing.JLabel jLabelPatch;
     private javax.swing.JLabel jLabelProgress;
     private javax.swing.JLabel jLabelVoltages;
     private javax.swing.JMenuBar jMenuBar1;
@@ -975,6 +958,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     private javax.swing.JMenuItem jMenuItemRefreshFWID;
     private javax.swing.JMenuItem jMenuItemSelectCom;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelProgress;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPaneLog;
@@ -1015,8 +1000,10 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         if (!connect) {
             setCpuID(null);
             jLabelVoltages.setText(" ");
+            jLabelPatch.setText(" ");
             v5000c = 0;
             vdd00c = 0;
+            patchIndex = -4;
         }
     }
 
@@ -1069,6 +1056,35 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                     }
                 });
             }
+        }
+    }
+
+    private int patchIndex = -3;
+
+    public void showPatchIndex(int index) {
+        if (patchIndex != index) {
+            patchIndex = index;
+            String s;
+            switch (patchIndex) {
+                case -1:
+                    s = "running /start.bin";
+                    break;
+                case -2:
+                    s = "running flash patch";
+                    break;
+                case -3:
+                    s = "running sdcard .bin file";
+                    break;
+                case -4:
+                    s = "running live patch";
+                    break;
+                case -5:
+                    s = " ";
+                    break;
+                default:
+                    s = "running #" + patchIndex;
+            }
+            jLabelPatch.setText(s);
         }
     }
 

@@ -192,7 +192,7 @@ void sdcard_unmount(void){
 /* Generic large buffer.*/
 uint32_t fbuff[256] __attribute__ ((section (".sram2")));
 
-void sdcard_loadPatch(char *fname) {
+int sdcard_loadPatch(char *fname) {
   FIL FileObject;
   FRESULT err;
   uint32_t bytes_read;
@@ -214,7 +214,7 @@ void sdcard_loadPatch(char *fname) {
     err = f_chdir(fname);
     if (err != FR_OK) {
       report_fatfs_error(err,fname);
-      return;
+      return -1;
     }
     fname = &fname[i+1];
   } else {
@@ -225,19 +225,19 @@ void sdcard_loadPatch(char *fname) {
   chThdSleepMilliseconds(10);
   if (err != FR_OK) {
 	report_fatfs_error(err,fname);
-    return;
+    return -1;
   }
   err = f_read(&FileObject, (uint8_t *)PATCHMAINLOC, 0xE000,
                (void *)&bytes_read);
   if (err != FR_OK) {
     report_fatfs_error(err,fname);
-    return;
+    return -1;
   }
   err = f_close(&FileObject);
   if (err != FR_OK) {
     report_fatfs_error(err,fname);
-    return;
+    return -1;
   }
   chThdSleepMilliseconds(10);
-  StartPatch();
+  return StartPatch();
 }
