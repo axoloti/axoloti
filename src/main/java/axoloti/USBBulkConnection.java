@@ -874,7 +874,7 @@ public class USBBulkConnection extends Connection {
     int CpuId2 = 0;
     int fwcrc = -1;
 
-    void Acknowledge(int DSPLoad, int PatchID, int Voltages, int CpuId1, int CpuId2) {
+    void Acknowledge(int DSPLoad, int PatchID, int Voltages, int patchIndex, int reserved) {
         synchronized (sync) {
             sync.Acked = true;
             sync.notifyAll();
@@ -886,6 +886,7 @@ public class USBBulkConnection extends Connection {
                 patch.SetDSPLoad(DSPLoad);
             }
         }
+        MainFrame.mainframe.showPatchIndex(patchIndex);
         targetProfile.setVoltages(Voltages);
     }
 
