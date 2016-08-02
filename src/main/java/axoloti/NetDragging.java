@@ -47,6 +47,7 @@ public class NetDragging extends Net {
 
     @Override
     protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
         float shadowOffset = 0.5f;
 
         Graphics2D g2 = (Graphics2D) g;

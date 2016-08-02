@@ -59,6 +59,7 @@ public class DialComponent extends ACtrlComponent {
     }
 
     public DialComponent(double value, double min, double max, double tick) {
+        super();
         setInheritsPopupMenu(true);
         this.value = value;
         this.min = min;
@@ -239,6 +240,7 @@ public class DialComponent extends ACtrlComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);

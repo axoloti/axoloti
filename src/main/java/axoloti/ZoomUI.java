@@ -58,6 +58,7 @@ public class ZoomUI extends LayerUI<JComponent> {
         g2.setRenderingHints(hints);
         g2.scale(zoom, zoom);
         super.paint(g2, c);
+        g2.dispose();
     }
 
     private Component getTargetComponent(Component component) {

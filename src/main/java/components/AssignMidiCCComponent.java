@@ -81,6 +81,7 @@ public class AssignMidiCCComponent extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         if (param.getMidiCC() >= 0) {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

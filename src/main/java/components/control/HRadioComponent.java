@@ -39,6 +39,7 @@ public class HRadioComponent extends ACtrlComponent {
     private final int bsize = 12;
 
     public HRadioComponent(int value, int n) {
+        super();
         //setInheritsPopupMenu(true);
         this.value = 0;//value;
         this.n = n;
@@ -136,6 +137,7 @@ public class HRadioComponent extends ACtrlComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
