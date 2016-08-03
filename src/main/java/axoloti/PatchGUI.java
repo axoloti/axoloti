@@ -434,10 +434,8 @@ public class PatchGUI extends Patch {
                     if (cmp instanceof NetDragging) {
                         NetDragging nd = (NetDragging) cmp;
                         nd.SetDragPoint(dtde.getLocation());
+                        nd.updateBounds();
                         selectionRectLayerPanel.repaint();
-                        Rectangle bounds = nd.getBounds();
-                        zoomUI.scale(bounds);
-                        selectionRectLayerPanel.repaint(bounds);
                         break;
                     }
                 }
