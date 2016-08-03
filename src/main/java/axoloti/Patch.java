@@ -2174,11 +2174,14 @@ public class Patch {
 
     public void ShowPreset(int i) {
         presetNo = i;
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        
+        Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>) objectinstances.clone();
+        for (AxoObjectInstanceAbstract o : c) {
             for (ParameterInstance p : o.getParameterInstances()) {
                 p.ShowPreset(i);
             }
         }
+        repaint();
     }
 
     /*

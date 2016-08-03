@@ -8,7 +8,6 @@ import components.JackInputComponent;
 import components.JackOutputComponent;
 import components.LabelComponent;
 import components.control.ACtrlComponent;
-import components.control.DialComponent;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeListener;
@@ -29,7 +28,6 @@ public class ZoomUI extends LayerUI<JComponent> {
     protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private double zoom = 1;
     private Component previous = null;
-    private Component previousDial = null;
 
     private boolean dragging = false;
     private Component dragged;
@@ -38,7 +36,7 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     private boolean anyMouseDown = false;
     private boolean button2down = false;
-
+    
     public ZoomUI(double startingScale, double zoomAmount, double zoomMax, double zoomMin,
             PatchGUI patch) {
         zoom = startingScale;
@@ -62,6 +60,9 @@ public class ZoomUI extends LayerUI<JComponent> {
     }
 
     private Component getTargetComponent(Component component) {
+        if(this.presetComponent != null) {
+            return presetComponent;
+        }
         if (component instanceof JackOutputComponent) {
             component = ((JackOutputComponent) component).getOutlet();
         }
@@ -396,5 +397,11 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     public void stopPan() {
         this.button2down = false;
+    }
+    
+    private JComponent presetComponent;
+
+    public void setPresetComponent(JComponent presetComponent) {
+        this.presetComponent = presetComponent;
     }
 }
