@@ -77,7 +77,7 @@ public class ZoomUtils {
         if (layer != null) {
             Rectangle bounds = component.getBounds();
             if(convert) {
-                bounds = SwingUtilities.convertRectangle(component, bounds, layer);
+                bounds = SwingUtilities.convertRectangle(component.getParent(), bounds, layer);
                 layer.repaint(bounds.x,
                         bounds.y,
                         bounds.width,

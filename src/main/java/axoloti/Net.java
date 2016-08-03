@@ -108,6 +108,7 @@ public class Net extends JPanel {
         }
         source = source2;
         dest = dest2;
+        updateBounds();
     }
 
     public boolean isSelected() {
@@ -213,7 +214,6 @@ public class Net extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        updateBounds();
         float shadowOffset = 0.5f;
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -273,6 +273,7 @@ public class Net extends JPanel {
             DrawWire(g2, from.x, from.y, to.x, to.y);
 
         }
+        updateBounds();
     }
 
     public PatchGUI getPatchGui() {
