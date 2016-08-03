@@ -25,13 +25,14 @@
 #include "watchdog.h"
 #include "pconnection.h"
 #include "sysmon.h"
+#include "codec.h"
 
 patchMeta_t patchMeta;
 
-volatile int patchStatus;
+volatile patchStatus_t patchStatus;
 
 void InitPatch0(void) {
-  patchStatus = 2;
+  patchStatus = STOPPED;
   patchMeta.fptr_patch_init = 0;
   patchMeta.fptr_patch_dispose = 0;
   patchMeta.fptr_dsp_process = 0;
@@ -57,57 +58,192 @@ static int32_t *outbuf;
 
 static WORKING_AREA(waThreadDSP, 7200) __attribute__ ((section (".ccmramend")));
 static Thread *pThreadDSP = 0;
+static const char *index_fn = "/index.axb";
+
+static void StopPatch1(void) {
+  if (patchMeta.fptr_patch_dispose != 0)
+    (patchMeta.fptr_patch_dispose)();
+  UIGoSafe();
+  InitPatch0();
+  sysmon_enable_blinker();
+  patchStatus = STOPPED;
+}
+
+static int StartPatch1(void) {
+  KVP_ClearObjects();
+  sdcard_attemptMountIfUnmounted();
+  // reinit pin configuration for adc
+  adc_configpads();
+  int32_t *ccm; // clear ccmram area declared in ramlink.ld
+  for (ccm = (int32_t *)0x10000000; ccm < (int32_t *)(0x10000000 + 0x0000C000);
+      ccm++)
+    *ccm = 0;
+  patchMeta.fptr_dsp_process = 0;
+  patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
+  (patchMeta.fptr_patch_init)(GetFirmwareID());
+  if (patchMeta.fptr_dsp_process == 0) {
+    report_patchLoadFail((const char *)&loadFName[0]);
+    patchStatus = STARTFAILED;
+    return -1;
+  }
+  patchStatus = RUNNING;
+  return 0;
+}
+
 static msg_t ThreadDSP(void *arg) {
   (void)(arg);
 #if CH_USE_REGISTRY
   chRegSetThreadName("dsp");
 #endif
+  codec_clearbuffer();
   while (1) {
-    chEvtWaitOne((eventmask_t)1);
-    static unsigned int tStart;
-    tStart = hal_lld_get_counter_value();
-    watchdog_feed();
-    if (!patchStatus) { // running
+    // codec dsp cycle
+    eventmask_t evt = chEvtWaitOne((eventmask_t)7);
+    if (evt == 1) {
+      static unsigned int tStart;
+      tStart = hal_lld_get_counter_value();
+      watchdog_feed();
+      if (patchStatus == RUNNING) { // running
 #if (BOARD_STM32F4DISCOVERY)||(BOARD_AXOLOTI_V03)
-    // swap halfwords...
-    int i;
-    int32_t *p = inbuf;
-    for (i = 0; i < 32; i++) {
-      __ASM
-      volatile ("ror %0, %1, #16" : "=r" (*p) : "r" (*p));
-      p++;
-    }
+          // swap halfwords...
+          int i;
+          int32_t *p = inbuf;
+          for (i = 0; i < 32; i++) {
+            __ASM
+            volatile ("ror %0, %1, #16" : "=r" (*p) : "r" (*p));
+            p++;
+          }
 #endif
-      (patchMeta.fptr_dsp_process)(inbuf, outbuf);
+        (patchMeta.fptr_dsp_process)(inbuf, outbuf);
 #if (BOARD_STM32F4DISCOVERY)||(BOARD_AXOLOTI_V03)
-      p = outbuf;
-      for (i = 0; i < 32; i++) {
-        __ASM
-        volatile ("ror %0, %1, #16" : "=r" (*p) : "r" (*p));
-        p++;
-      }
+        p = outbuf;
+        for (i = 0; i < 32; i++) {
+          __ASM
+          volatile ("ror %0, %1, #16" : "=r" (*p) : "r" (*p));
+          p++;
+        }
 #endif
-    }
-    else { // stopping or stopped
-      patchStatus = 1;
-      int i;
-      for (i = 0; i < 32; i++) {
-        outbuf[i] = 0;
+      }
+      else { // stopping or stopped
+        StopPatch1();
+        patchStatus = STOPPED;
+        codec_clearbuffer();
+      }
+      adc_convert();
+      DspTime = RTT2US(hal_lld_get_counter_value() - tStart);
+      dspLoadPct = (100 * DspTime) / (1000000 / 3000);
+      if (dspLoadPct > 99) {
+        // overload:
+        // clear output buffers
+        // and give other processes a chance
+        codec_clearbuffer();
+        //      LogTextMessage("dsp overrun");
+        chThdSleepMilliseconds(1);
       }
     }
-    adc_convert();
-    DspTime = RTT2US(hal_lld_get_counter_value() - tStart);
-    dspLoadPct = (100 * DspTime) / (1000000/3000);
-    if (dspLoadPct>99) {
-      // overload:
-      // clear output buffers
-      // and give other processes a chance
-      int i;
-      for (i = 0; i < 32; i++) {
-        outbuf[i] = 0;
+    else if (evt == 2) {
+      // load patch event
+      codec_clearbuffer();
+      StopPatch1();
+      if (loadFName[0]) {
+        int res = sdcard_loadPatch1(loadFName);
+        if (!res) StartPatch1();
       }
-//      LogTextMessage("dsp overrun");
-      chThdSleepMilliseconds(1);
+      else if (loadPatchIndex == START_FLASH) {
+        // patch in flash sector 11
+        memcpy((uint8_t *)PATCHMAINLOC, (uint8_t *)PATCHFLASHLOC,
+               PATCHFLASHSIZE);
+        if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
+            && (*(uint32_t *)PATCHMAINLOC != 0)) {
+          StartPatch1();
+        }
+      } else
+      if (loadPatchIndex == START_SD) {
+        strcpy(&loadFName[0], "/start.bin");
+        int res = sdcard_loadPatch1(loadFName);
+        if (!res) StartPatch1();
+      }
+      else {
+        FRESULT err;
+        FIL f;
+        uint32_t bytes_read;
+        err = f_open(&f, index_fn, FA_READ | FA_OPEN_EXISTING);
+        if (err)
+          report_fatfs_error(err, index_fn);
+        err = f_read(&f, (uint8_t *)PATCHMAINLOC, 0xE000, (void *)&bytes_read);
+        if (err != FR_OK) {
+          report_fatfs_error(err, index_fn);
+          continue;
+        }
+        err = f_close(&f);
+        if (err != FR_OK) {
+          report_fatfs_error(err, index_fn);
+          continue;
+        }
+        char *t;
+        t = (char *)PATCHMAINLOC;
+        int32_t cindex = 0;
+
+        //LogTextMessage("load %d %d %x",index, bytes_read, t);
+        while (bytes_read) {
+          //LogTextMessage("scan %d",*t);
+          if (cindex == loadPatchIndex) {
+            //LogTextMessage("match %d",index);
+            char *p, *e;
+            p = t;
+            e = t;
+            while ((*e != '\n') && bytes_read) {
+              e++;
+              bytes_read--;
+            }
+            if (bytes_read) {
+              e = e - 4;
+              *e++ = '/';
+              *e++ = 'p';
+              *e++ = 'a';
+              *e++ = 't';
+              *e++ = 'c';
+              *e++ = 'h';
+              *e++ = '.';
+              *e++ = 'b';
+              *e++ = 'i';
+              *e++ = 'n';
+              *e = 0;
+              loadFName[0] = '/';
+              strcpy(&loadFName[1], p);
+              int res = sdcard_loadPatch1(loadFName);
+              if (!res) {
+                StartPatch1();
+              }
+              if (patchStatus != RUNNING) {
+                loadPatchIndex = START_SD;
+                strcpy(&loadFName[0], "/start.bin");
+                res = sdcard_loadPatch1(loadFName);
+                if (!res) StartPatch1();
+              }
+            }
+            goto cont;
+          }
+          if (*t == '\n') {
+            cindex++;
+          }
+          t++;
+          bytes_read--;
+        }
+        if (!bytes_read) {
+          LogTextMessage("patch load out-of-range %d", loadPatchIndex);
+          loadPatchIndex = START_SD;
+          strcpy(&loadFName[0], "/start.bin");
+          int res = sdcard_loadPatch1(loadFName);
+          if (!res) StartPatch1();
+        }
+        cont: ;
+      }
+    }
+    else if (evt == 4) {
+      // start patch
+      codec_clearbuffer();
+      StartPatch1();
     }
   }
   return (msg_t)0;
@@ -115,36 +251,21 @@ static msg_t ThreadDSP(void *arg) {
 
 void StopPatch(void) {
   if (!patchStatus) {
-    patchStatus = 2;
-    while (pThreadDSP) {
+    patchStatus = STOPPING;
+    while (1) {
       chThdSleepMilliseconds(1);
-      if (patchStatus == 1)
+      if (patchStatus == STOPPED)
         break;
     }
-    if (patchMeta.fptr_patch_dispose != 0)
-      (patchMeta.fptr_patch_dispose)();
-    UIGoSafe();
-    InitPatch0();
-    sysmon_enable_blinker();
+    StopPatch1();
   }
 }
 
-
 int StartPatch(void) {
-  KVP_ClearObjects();
-  sdcard_attemptMountIfUnmounted();
-  // reinit pin configuration for adc
-  adc_configpads();
-  int *ccm; // clear ccmram area declared in ramlink.ld
-  for(ccm = 0x10000000;ccm<0x10000000+0x0000C000;ccm++) *ccm=0;
-  patchMeta.fptr_dsp_process = 0;
-  patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
-  (patchMeta.fptr_patch_init)(GetFirmwareID());
-  if (patchMeta.fptr_dsp_process == 0) {
-    report_patchLoadFail((const char *)&loadFName[0]);
-    return -1;
+  chEvtSignal(pThreadDSP, (eventmask_t)4);
+  while ((patchStatus != RUNNING) && (patchStatus != STARTFAILED)) {
+    chThdSleepMilliseconds(1);
   }
-  patchStatus = 0;
   return 0;
 }
 
@@ -160,153 +281,40 @@ void computebufI(int32_t *inp, int32_t *outp) {
     inbuf[i] = inp[i];
   }
   outbuf = outp;
-  if (pThreadDSP) {
-    chSysLockFromIsr()
-    ;
-    chEvtSignalI(pThreadDSP, (eventmask_t)1);
-    chSysUnlockFromIsr()
-    ;
-  }
-  else
-    for (i = 0; i < 32; i++) {
-      outp[i] = 0;
-    }
+  chSysLockFromIsr()
+  ;
+  chEvtSignalI(pThreadDSP, (eventmask_t)1);
+  chSysUnlockFromIsr();
 }
 
 void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t status,
                       uint8_t data1, uint8_t data2) {
-  if (!patchStatus) {
+  if (patchStatus == RUNNING) {
     (patchMeta.fptr_MidiInHandler)(dev, port, status, data1, data2);
   }
-}
-
-// Thread to load a new patch from within a patch
-
-static const char *index_fn = "/index.axb";
-
-static WORKING_AREA(waThreadLoader, 1024);
-static Thread *pThreadLoader;
-static msg_t ThreadLoader(void *arg) {
-  (void)arg;
-#if CH_USE_REGISTRY
-  chRegSetThreadName("loader");
-#endif
-  while (1) {
-    chEvtWaitOne((eventmask_t)1);
-    StopPatch();
-    if (loadFName[0]) {
-      sdcard_loadPatch(loadFName);
-    } else if (loadPatchIndex == START_FLASH) {
-      // patch in flash sector 11
-      memcpy((uint8_t *)PATCHMAINLOC, (uint8_t *)PATCHFLASHLOC, PATCHFLASHSIZE);
-      if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
-          && (*(uint32_t *)PATCHMAINLOC != 0)) {
-          StartPatch();
-      }
-    } if (loadPatchIndex == START_SD) {
-      strcpy(&loadFName[0],"/start.bin");
-      sdcard_loadPatch(loadFName);
-    } else {
-      FRESULT err;
-      FIL f;
-      uint32_t bytes_read;
-      err = f_open(&f,index_fn,FA_READ | FA_OPEN_EXISTING);
-      if (err) report_fatfs_error(err,index_fn);
-      err = f_read(&f, (uint8_t *)PATCHMAINLOC, 0xE000,
-                   (void *)&bytes_read);
-      if (err != FR_OK) {
-        report_fatfs_error(err,index_fn);
-        continue;
-      }
-      err = f_close(&f);
-      if (err != FR_OK) {
-        report_fatfs_error(err,index_fn);
-        continue;
-      }
-      char *t;
-      t = (char *)PATCHMAINLOC;
-      uint32_t cindex = 0;
-
-      //LogTextMessage("load %d %d %x",index, bytes_read, t);
-      while (bytes_read) {
-        //LogTextMessage("scan %d",*t);
-        if (cindex == loadPatchIndex) {
-          //LogTextMessage("match %d",index);
-          char *p, *e;
-          p = t; e = t;
-          while((*e != '\n') && bytes_read){
-            e++;
-            bytes_read--;
-          }
-          if (bytes_read) {
-            e = e - 4;
-            *e++ = '/';
-            *e++ = 'p';
-            *e++ = 'a';
-            *e++ = 't';
-            *e++ = 'c';
-            *e++ = 'h';
-            *e++ = '.';
-            *e++ = 'b';
-            *e++ = 'i';
-            *e++ = 'n';
-            *e = 0;
-            loadFName[0] = '/';
-            strcpy(&loadFName[1],p);
-            int res = sdcard_loadPatch(loadFName);
-            if (res) {
-              loadPatchIndex = START_SD;
-              strcpy(&loadFName[0],"/start.bin");
-              sdcard_loadPatch(loadFName);
-            }
-          }
-          goto cont;
-        }
-        if (*t == '\n'){
-          cindex++;
-        }
-        t++;
-        bytes_read--;
-      }
-      if (!bytes_read) {
-        LogTextMessage("patch load out-of-range %d",index);
-        loadPatchIndex = START_SD;
-        strcpy(&loadFName[0],"/start.bin");
-        sdcard_loadPatch(loadFName);
-      }
-cont:
-      ;
-    }
-  }
-  return (msg_t)0;
-}
-
-void StartLoadPatchTread(void) {
-  pThreadLoader = chThdCreateStatic(waThreadLoader, sizeof(waThreadLoader),
-  NORMALPRIO, ThreadLoader, NULL);
 }
 
 void LoadPatch(const char *name) {
   strcpy(loadFName, name);
   loadPatchIndex = BY_FILENAME;
-  chEvtSignal(pThreadLoader, (eventmask_t)1);
+  chEvtSignal(pThreadDSP, (eventmask_t)2);
 }
 
 void LoadPatchStartSD(void) {
   strcpy(loadFName, "/START.BIN");
   loadPatchIndex = START_SD;
-  chEvtSignal(pThreadLoader, (eventmask_t)1);
+  chEvtSignal(pThreadDSP, (eventmask_t)2);
 }
 
 void LoadPatchStartFlash(void) {
   loadPatchIndex = START_FLASH;
-  chEvtSignal(pThreadLoader, (eventmask_t)1);
+  chEvtSignal(pThreadDSP, (eventmask_t)2);
 }
 
 void LoadPatchIndexed(uint32_t index) {
   loadPatchIndex = index;
   loadFName[0] = 0;
-  chEvtSignal(pThreadLoader, (eventmask_t)1);
+  chEvtSignal(pThreadDSP, (eventmask_t)2);
 }
 
 loadPatchIndex_t GetIndexOfCurrentPatch(void) {

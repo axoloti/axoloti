@@ -21,7 +21,7 @@
 #include "ch.h"
 
 void sdcard_init(void);
-int sdcard_loadPatch(char *fname);
+int sdcard_loadPatch1(char *fname);
 void sdcard_attemptMountIfUnmounted(void);
 void sdcard_unmount(void);
 

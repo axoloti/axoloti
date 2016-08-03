@@ -192,7 +192,7 @@ void sdcard_unmount(void){
 /* Generic large buffer.*/
 uint32_t fbuff[256] __attribute__ ((section (".sram2")));
 
-int sdcard_loadPatch(char *fname) {
+int sdcard_loadPatch1(char *fname) {
   FIL FileObject;
   FRESULT err;
   uint32_t bytes_read;
@@ -239,5 +239,5 @@ int sdcard_loadPatch(char *fname) {
     return -1;
   }
   chThdSleepMilliseconds(10);
-  return StartPatch();
+  return 0;
 }

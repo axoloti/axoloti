@@ -124,21 +124,20 @@ int main(void) {
   palSetPadMode(SW2_PORT, SW2_PIN, PAL_MODE_INPUT_PULLDOWN);
 
   axoloti_board_init();
+  adc_init();
+  axoloti_math_init();
+  midi_init();
+  start_dsp_thread();
   codec_init();
   if (!palReadPad(SW2_PORT, SW2_PIN)) { // button S2 not pressed
 //    watchdog_init();
     chThdSleepMilliseconds(1);
   }
-  start_dsp_thread();
-  adc_init();
-  axoloti_math_init();
-  midi_init();
 
 #if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
   axoloti_control_init();
 #endif
   ui_init();
-  StartLoadPatchTread();
 
 #if (BOARD_AXOLOTI_V05)
   configSDRAM();
@@ -166,7 +165,7 @@ int main(void) {
 
     // if no patch booting or running yet
     // try loading from flash
-    if (patchStatus) {
+    if (patchStatus != RUNNING) {
       if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
         LoadPatchStartFlash();
     }

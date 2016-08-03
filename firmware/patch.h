@@ -67,13 +67,16 @@ typedef enum {
   UNINITIALIZED = -5
 // and positive numbers are index in patch bank
 } loadPatchIndex_t;
-
 extern loadPatchIndex_t loadPatchIndex;
 
-extern volatile int patchStatus;
-// 0-> running
-// 1-> stopped
-// >1-> stopping
+typedef enum {
+  RUNNING = 0,
+  STOPPED = 1,
+  STOPPING = 2,
+// and positive numbers are index in patch bank
+} patchStatus_t;
+
+extern volatile patchStatus_t patchStatus;
 
 extern int8_t hid_buttons[8];
 extern int8_t hid_mouse_x;
