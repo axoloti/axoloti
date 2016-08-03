@@ -58,7 +58,7 @@ public class NumberBoxComponent extends ACtrlComponent {
     private boolean hiliteUp = false;
     private boolean hiliteDown = false;
     private boolean dragging = false;
-    
+
     private Robot robot;
 
     int rmargin = 5;
@@ -215,7 +215,9 @@ public class NumberBoxComponent extends ACtrlComponent {
                     ke.consume();
                     break;
                 case KeyEvent.VK_BACK_SPACE:
-                    keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
+                    if (keybBuffer.length() > 0) {
+                        keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
+                    }
                     ke.consume();
                     break;
                 case KeyEvent.VK_ESCAPE:
@@ -377,7 +379,7 @@ public class NumberBoxComponent extends ACtrlComponent {
     @Override
     void keyReleased(KeyEvent key) {
     }
-    
+
     @Override
     public void robotMoveToCenter() {
         getRootPane().setCursor(MainFrame.transparentCursor);

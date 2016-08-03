@@ -200,7 +200,9 @@ public class DialComponent extends ACtrlComponent {
                     ke.consume();
                     break;
                 case KeyEvent.VK_BACK_SPACE:
-                    keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
+                    if (keybBuffer.length() > 0) {
+                        keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
+                    }
                     ke.consume();
                     break;
                 case KeyEvent.VK_ESCAPE:
@@ -256,10 +258,9 @@ public class DialComponent extends ACtrlComponent {
             g2.setStroke(strokeThin);
         }
         if (isEnabled()) {
-            if(this.customBackgroundColor != null) {
+            if (this.customBackgroundColor != null) {
                 g2.setColor(this.customBackgroundColor);
-            }
-            else {
+            } else {
                 g2.setColor(Theme.getCurrentTheme().Component_Secondary);
 
             }
@@ -335,7 +336,7 @@ public class DialComponent extends ACtrlComponent {
     public void setTick(double tick) {
         this.tick = tick;
     }
-    
+
     public void robotMoveToCenter() {
         getRootPane().setCursor(MainFrame.transparentCursor);
         robot.mouseMove(MousePressedCoordX, MousePressedCoordY);

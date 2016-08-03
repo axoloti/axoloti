@@ -148,7 +148,9 @@ public class VSliderComponent extends ACtrlComponent {
                 ke.consume();
                 break;
             case KeyEvent.VK_BACK_SPACE:
-                keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
+                if (keybBuffer.length() > 0) {
+                    keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
+                }
                 ke.consume();
                 break;
             case KeyEvent.VK_ESCAPE:
@@ -192,7 +194,7 @@ public class VSliderComponent extends ACtrlComponent {
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);        
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -265,7 +267,7 @@ public class VSliderComponent extends ACtrlComponent {
     public double getMaximum() {
         return max;
     }
-    
+
     @Override
     public void robotMoveToCenter() {
         getRootPane().setCursor(MainFrame.transparentCursor);
