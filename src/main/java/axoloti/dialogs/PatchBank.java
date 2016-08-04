@@ -749,21 +749,28 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         }
     }//GEN-LAST:event_jButtonOpenActionPerformed
 
-    private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
-        File f = files.get(jTable1.getSelectedRow());
+    void UploadOneFile(File f) {
         if (!f.isFile() || !f.canRead()) {
             return;
         }
         PatchFrame pf = PatchGUI.OpenPatchInvisible(f);
-        boolean isVisible = pf.isVisible();
-        PatchGUI p = pf.getPatch();
-        p.WriteCode();
-        p.Compile();
-        p.UploadToSDCard();
-        if (!isVisible) {
-            pf.Close();
+        if (pf != null) {
+            boolean isVisible = pf.isVisible();
+            PatchGUI p = pf.getPatch();
+            p.WriteCode();
+            p.Compile();
+            p.UploadToSDCard();
+            if (!isVisible) {
+                pf.Close();
+            }
+            QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
         }
-        QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
+    }
+
+
+    private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
+        File f = files.get(jTable1.getSelectedRow());
+        UploadOneFile(f);
     }//GEN-LAST:event_jButtonUploadActionPerformed
 
     private void jUploadAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadAllActionPerformed
@@ -775,16 +782,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
         for (File f : files) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f.getName());
-            PatchFrame pf = PatchGUI.OpenPatchInvisible(f);
-            boolean isVisible = pf.isVisible();
-            PatchGUI p = pf.getPatch();
-            p.WriteCode();
-            p.Compile();
-            p.UploadToSDCard();
-            if (!isVisible) {
-                pf.Close();
-            }
-            QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
+            UploadOneFile(f);
         }
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Patch bank uploaded");
     }//GEN-LAST:event_jUploadAllActionPerformed
