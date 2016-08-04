@@ -755,11 +755,14 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             return;
         }
         PatchFrame pf = PatchGUI.OpenPatchInvisible(f);
+        boolean isVisible = pf.isVisible();
         PatchGUI p = pf.getPatch();
         p.WriteCode();
         p.Compile();
         p.UploadToSDCard();
-        pf.Close();
+        if (!isVisible) {
+            pf.Close();
+        }
         QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
     }//GEN-LAST:event_jButtonUploadActionPerformed
 
@@ -773,11 +776,15 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         for (File f : files) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f.getName());
             PatchFrame pf = PatchGUI.OpenPatchInvisible(f);
+            boolean isVisible = pf.isVisible();
             PatchGUI p = pf.getPatch();
             p.WriteCode();
             p.Compile();
             p.UploadToSDCard();
-            pf.Close();
+            if (!isVisible) {
+                pf.Close();
+            }
+            QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
         }
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Patch bank uploaded");
     }//GEN-LAST:event_jUploadAllActionPerformed
