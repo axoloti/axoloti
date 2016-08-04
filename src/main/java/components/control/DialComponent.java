@@ -304,7 +304,7 @@ public class DialComponent extends ACtrlComponent {
             }
             this.setToolTipText(s);
         }
-
+        repaint();
         fireEvent();
     }
 
@@ -338,7 +338,7 @@ public class DialComponent extends ACtrlComponent {
     }
 
     public void robotMoveToCenter() {
-        getRootPane().setCursor(MainFrame.transparentCursor);
+        //getRootPane().setCursor(MainFrame.transparentCursor);
         robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
     }
 }

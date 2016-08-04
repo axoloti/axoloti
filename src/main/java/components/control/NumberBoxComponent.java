@@ -344,6 +344,7 @@ public class NumberBoxComponent extends ACtrlComponent {
             this.setToolTipText(s);
         }
 
+        repaint();
         fireEvent();
     }
 

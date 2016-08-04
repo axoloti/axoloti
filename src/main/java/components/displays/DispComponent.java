@@ -88,8 +88,10 @@ public class DispComponent extends ADispComponent {
             value = max;
             overflow = true;
         }
-        this.value = value;
-        paintObjectLayer();
+        if (this.value != value) {
+            this.value = value;
+            repaint();
+        }
     }
 
     public double getMinimum() {

@@ -145,7 +145,7 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
                 return;
             }
         }
-        
+
         switch (ke.getKeyChar()) {
             case '0':
                 SetFieldValue(selIndex, 0);
@@ -246,6 +246,7 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
         if (this.value != value) {
             this.value = value;
         }
+        repaint();
         fireEvent();
     }
 

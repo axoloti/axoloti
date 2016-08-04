@@ -82,7 +82,10 @@ public class VLineComponentDB extends ADispComponent {
     @Override
     public void setValue(double value) {
         this.value = value;
-        paintObjectLayer();
+        if (this.value != value) {
+            this.value = value;
+            repaint();
+        }
     }
 
     public void setMinimum(double min) {

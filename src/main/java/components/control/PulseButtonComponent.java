@@ -117,6 +117,7 @@ public class PulseButtonComponent extends ACtrlComponent {
             this.value = value;
         }
         fireEvent();
+        repaint();
     }
 
     @Override

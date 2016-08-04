@@ -184,6 +184,7 @@ public class VRadioComponent extends ACtrlComponent {
         if (this.value != value) {
             this.value = value;
         }
+        repaint();
         fireEvent();
     }
 

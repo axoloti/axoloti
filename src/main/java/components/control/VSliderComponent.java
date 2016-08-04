@@ -244,6 +244,7 @@ public class VSliderComponent extends ACtrlComponent {
         }
         this.value = value;
         setToolTipText("" + value);
+        repaint();
         fireEvent();
     }
 

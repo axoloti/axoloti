@@ -156,11 +156,6 @@ public class ZoomUI extends LayerUI<JComponent> {
 
             previous = component;
             e.consume();
-            if (!button2down) {
-                ZoomUtils.paintObjectLayer(l,
-                        axoObjectParent != null ? axoObjectParent : component,
-                        this, false);
-            }
         }
 
         if (component == null) {
@@ -236,11 +231,6 @@ public class ZoomUI extends LayerUI<JComponent> {
             previous = component;
 
             e.consume();
-            if (!button2down) {
-                ZoomUtils.paintObjectLayer(l,
-                        axoObjectParent != null ? axoObjectParent : component,
-                        this, false);
-            }
         }
     }
 
@@ -259,7 +249,6 @@ public class ZoomUI extends LayerUI<JComponent> {
                 }
             }
         }
-        ZoomUtils.paintObjectLayer(l, ke.getComponent(), this);
     }
 
     @Override

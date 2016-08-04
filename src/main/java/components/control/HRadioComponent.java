@@ -112,7 +112,7 @@ public class HRadioComponent extends ACtrlComponent {
                 return;
             }
         }
-        
+
         switch (ke.getKeyChar()) {
             case '0':
             case '1':
@@ -187,6 +187,7 @@ public class HRadioComponent extends ACtrlComponent {
         if (this.value != value) {
             this.value = value;
         }
+        repaint();
         fireEvent();
     }
 

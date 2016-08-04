@@ -91,7 +91,7 @@ public class ScopeComponent extends ADispComponent {
         if (index >= length) {
             index = 0;
         }
-        paintObjectLayer();
+        repaint();
     }
 
     double Project(double value) {
