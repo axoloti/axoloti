@@ -73,6 +73,7 @@ typedef enum {
   RUNNING = 0,
   STOPPED = 1,
   STOPPING = 2,
+  	STARTFAILED = 3,
 // and positive numbers are index in patch bank
 } patchStatus_t;
 
