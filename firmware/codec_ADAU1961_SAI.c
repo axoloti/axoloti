@@ -45,9 +45,9 @@ int codec_interrupt_timestamp;
 void codec_ADAU1961_hw_reset(void) {
 }
 
-/* I2C interface #2 */
-/* SDA : PB11
- * SCL : PB10
+/* I2C interface #3 */
+/* SDA : PH8
+ * SCL : PH7
  */
 static const I2CConfig i2cfg2 = {OPMODE_I2C, 100000, STD_DUTY_CYCLE, };
 
