@@ -63,6 +63,9 @@ public class ZoomUI extends LayerUI<JComponent> {
         if(this.presetComponent != null) {
             return presetComponent;
         }
+        if(component == null && dragging) {
+            component = dragged;
+        }
         if (component instanceof JackOutputComponent) {
             component = ((JackOutputComponent) component).getOutlet();
         }
@@ -116,7 +119,6 @@ public class ZoomUI extends LayerUI<JComponent> {
     protected void processMouseEvent(MouseEvent e, JLayer<? extends JComponent> l) {
         MouseEvent layerEvent = translateToLayerCoordinates(e, l);
         Component component = getTargetComponent(getComponentClickedOn(layerEvent));
-
         if (component != null) {
             Container axoObjectParent = SwingUtilities.getAncestorOfClass(AxoObjectInstance.class, component);
             MouseEvent localEvent = translateToComponentCoordinates(layerEvent, component);

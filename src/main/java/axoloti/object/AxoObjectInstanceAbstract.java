@@ -400,9 +400,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     }
                 }
                 if (setDirty) {
-                    patch.AdjustSize();
                     patch.SetDirty();
                 }
+                patch.AdjustSize();
             }
         }
         moveToObjectLayer(this, maxZIndex);
