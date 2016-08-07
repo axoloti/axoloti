@@ -76,7 +76,7 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
 
             @Override
             public void keyPressed(KeyEvent ke) {
-                axoObj.getParent().repaint();
+                repaint();
             }
         });
         TFtableName.addActionListener(new ActionListener() {

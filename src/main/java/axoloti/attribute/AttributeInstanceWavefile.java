@@ -84,7 +84,7 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
 
             @Override
             public void keyPressed(KeyEvent ke) {
-                axoObj.getParent().repaint();
+                repaint();
             }
         });
         TFwaveFilename.addActionListener(new ActionListener() {

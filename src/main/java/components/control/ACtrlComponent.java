@@ -29,6 +29,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -55,6 +57,17 @@ public abstract class ACtrlComponent extends JComponent {
 
     public ACtrlComponent() {
         setFocusable(true);
+        addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent fe) {
+                repaint();
+            }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+                repaint();
+            }
+        });
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

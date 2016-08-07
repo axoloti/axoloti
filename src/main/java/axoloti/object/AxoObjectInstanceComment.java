@@ -138,6 +138,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
                 String s = InstanceNameTF.getText();
                 setInstanceName(s);
                 getParent().remove(InstanceNameTF);
+                getParent().repaint();
             }
 
             @Override
@@ -159,6 +160,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
                     String s = InstanceNameTF.getText();
                     setInstanceName(s);
                     getParent().remove(InstanceNameTF);
+                    getParent().repaint();
                 }
             }
         });
@@ -176,6 +178,9 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
             InstanceLabel.setText(commentText);
         }
         doLayout();
+        if (getParent() != null) {
+            getParent().repaint();
+        }
         resizeToGrid();
     }
 

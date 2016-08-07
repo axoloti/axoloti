@@ -77,7 +77,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
 
             @Override
             public void keyPressed(KeyEvent ke) {
-                axoObj.getParent().repaint();
+                repaint();
             }
         });
         TFObjName.addActionListener(new ActionListener() {

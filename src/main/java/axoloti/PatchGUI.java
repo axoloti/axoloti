@@ -71,6 +71,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
+import javax.swing.RepaintManager;
 import javax.swing.TransferHandler;
 import javax.swing.plaf.LayerUI;
 import org.simpleframework.xml.Root;
@@ -270,7 +271,7 @@ public class PatchGUI extends Patch {
                         ShowClassSelector(p, null, null);
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(ke))
-                        || ((ke.getKeyCode() == KeyEvent.VK_5) &&  KeyUtils.isControlOrCommandDown(ke))) {
+                        || ((ke.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(ke))) {
                     AxoObjectInstanceAbstract ao = AddObjectInstance(MainFrame.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
                     ao.addInstanceNameEditor();
                     ke.consume();
@@ -492,7 +493,7 @@ public class PatchGUI extends Patch {
         };
 
         Layers.addMouseWheelListener(new MouseWheelListener() {
-            public void mouseWheelMoved(MouseWheelEvent e) {                
+            public void mouseWheelMoved(MouseWheelEvent e) {
                 if (KeyUtils.isControlOrCommandDown(e)) {
                     int notches = e.getWheelRotation();
                     Point origin = e.getPoint();
@@ -544,11 +545,15 @@ public class PatchGUI extends Patch {
         Layers.setVisible(true);
         Layers.setLocation(0, 0);
         Layers.setPreferredSize(LayersSize);
+
+        RepaintManager.setCurrentManager(new ZoomRepaintManager(zoomUI));
     }
 
     public void handlePan(MouseEvent ev) {
-        if(panOrigin == null) return;
-        
+        if (panOrigin == null) {
+            return;
+        }
+
         int dx = panOrigin.x - ev.getX();
         int dy = panOrigin.y - ev.getY();
         JScrollBar horizontal = PatchGUI.this.getPatchframe().getScrollPane().getHorizontalScrollBar();
@@ -927,11 +932,11 @@ public class PatchGUI extends Patch {
         }
         objectLayerPanel.validate();
         netLayerPanel.validate();
-        
+
         Layers.setPreferredSize(new Dimension(5000, 5000));
         AdjustSize();
         Layers.revalidate();
-        
+
         for (Net n : nets) {
             n.updateBounds();
         }
@@ -1212,11 +1217,11 @@ public class PatchGUI extends Patch {
             settings.editor.dispose();
         }
     }
-    
+
     void cleanUpObjectLayer() {
         if (!IsLocked()) {
-            for(Component c : this.objectLayerPanel.getComponents()) {
-                if(!objectinstances.contains(c)) {
+            for (Component c : this.objectLayerPanel.getComponents()) {
+                if (!objectinstances.contains(c)) {
                     this.objectLayerPanel.remove(c);
                 }
             }

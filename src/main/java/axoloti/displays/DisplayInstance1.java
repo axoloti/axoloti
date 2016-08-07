@@ -17,7 +17,6 @@
  */
 package axoloti.displays;
 
-import axoloti.ZoomUtils;
 import axoloti.datatypes.Value;
 import java.nio.ByteBuffer;
 
@@ -46,15 +45,7 @@ public abstract class DisplayInstance1<T extends Display> extends DisplayInstanc
 
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {
-        boolean shouldPaint = false;
-        int newValue = bb.getInt();
-        if(getValueRef().getInt() != newValue) {
-            shouldPaint = true;
-        }
-        getValueRef().setRaw(newValue);
+        getValueRef().setRaw(bb.getInt());
         updateV();
-        if(shouldPaint) {
-            ZoomUtils.paintObjectLayer(this);
-        }
     }
 }
