@@ -159,9 +159,11 @@ public class NumberBoxComponent extends ACtrlComponent {
     protected void mouseReleased(MouseEvent e) {
         if (hiliteDown) {
             hiliteDown = false;
+            repaint();
         }
         if (hiliteUp) {
             hiliteUp = false;
+            repaint();            
         }
         getRootPane().setCursor(Cursor.getDefaultCursor());
         robot = null;
@@ -213,16 +215,19 @@ public class NumberBoxComponent extends ACtrlComponent {
                     }
                     keybBuffer = "";
                     ke.consume();
+                    repaint();
                     break;
                 case KeyEvent.VK_BACK_SPACE:
                     if (keybBuffer.length() > 0) {
                         keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
                     }
                     ke.consume();
+                    repaint();
                     break;
                 case KeyEvent.VK_ESCAPE:
                     keybBuffer = "";
                     ke.consume();
+                    repaint();
                     break;
                 default:
             }
@@ -241,6 +246,7 @@ public class NumberBoxComponent extends ACtrlComponent {
                 case '.':
                     keybBuffer += ke.getKeyChar();
                     ke.consume();
+                    repaint();
                     break;
                 default:
             }

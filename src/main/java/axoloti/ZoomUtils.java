@@ -5,7 +5,6 @@ import axoloti.utils.Constants;
 import axoloti.utils.LRUCache;
 import java.awt.Component;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import javax.swing.JLayer;
 import javax.swing.JPopupMenu;
@@ -48,48 +47,12 @@ public class ZoomUtils {
 
     private static final LRUCache<Component, JLayer> ANCESTOR_CACHE = new LRUCache<Component, JLayer>(Constants.ANCESTOR_CACHE_SIZE);
 
-    private static JLayer getAncestorLayer(Component c) {
+    public static JLayer getAncestorLayer(Component c) {
         JLayer ancestor = ANCESTOR_CACHE.get(c);
         if (ancestor == null) {
             ancestor = (JLayer) SwingUtilities.getAncestorOfClass(JLayer.class, c);
             ANCESTOR_CACHE.put(c, ancestor);
         }
         return ancestor;
-    }
-
-    public static void paintObjectLayer(Component component) {
-        JLayer layer = getAncestorLayer(component);
-        if (layer != null) {
-            ZoomUI zoomUI = ((ZoomUI) layer.getUI());
-            paintObjectLayer(layer, component, zoomUI);
-        }
-    }
-
-    public static void paintObjectLayer(JLayer layer, Component component, ZoomUI zoomUI) {
-        paintObjectLayer(layer, component, zoomUI, true);
-    }
-    
-    public static void paintObjectLayer(JLayer layer, Component component, ZoomUI zoomUI, boolean convert) {
-        if(layer == null) {
-            layer = getAncestorLayer(component);
-        }
-        
-        if (layer != null) {
-            Rectangle bounds = component.getBounds();
-            if(convert) {
-                bounds = SwingUtilities.convertRectangle(component.getParent(), bounds, layer);
-                layer.repaint(bounds.x,
-                        bounds.y,
-                        bounds.width,
-                        bounds.height);
-            }
-            
-            zoomUI.scale(bounds);
-            
-            layer.repaint(bounds.x,
-                    bounds.y,
-                    bounds.width,
-                    bounds.height);
-        }
     }
 }

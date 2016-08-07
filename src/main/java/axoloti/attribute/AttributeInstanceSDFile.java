@@ -85,7 +85,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
 
             @Override
             public void keyPressed(KeyEvent ke) {
-                axoObj.getParent().repaint();
+                repaint();
             }
         });
         TFFileName.addActionListener(new ActionListener() {

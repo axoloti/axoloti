@@ -126,6 +126,9 @@ public class Net extends JPanel {
         for (InletInstance i : dest) {
             i.setHighlighted(selected);
         }
+        if (patch != null) {
+            this.repaint();
+        }
     }
 
     public boolean getSelected() {

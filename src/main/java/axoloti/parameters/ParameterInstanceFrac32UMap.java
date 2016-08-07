@@ -19,7 +19,6 @@ package axoloti.parameters;
 
 import axoloti.Preset;
 import axoloti.Theme;
-import axoloti.ZoomUtils;
 import axoloti.datatypes.Value;
 import components.AssignMidiCCComponent;
 import components.AssignMidiCCMenuItems;
@@ -61,7 +60,6 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
     public Preset AddPreset(int index, Value value) {
         Preset p = super.AddPreset(index, value);
         presetAssign.repaint();
-        ZoomUtils.paintObjectLayer(axoObj);
         return p;
     }
 
@@ -69,7 +67,6 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
     public void RemovePreset(int index) {
         super.RemovePreset(index);
         presetAssign.repaint();
-        ZoomUtils.paintObjectLayer(axoObj);
     }
 
     @Override
@@ -149,7 +146,6 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
         super.updateModulation(index, amount);
         if (modulationAssign != null) {
             modulationAssign.repaint();
-            ZoomUtils.paintObjectLayer(axoObj);
         }
     }
 

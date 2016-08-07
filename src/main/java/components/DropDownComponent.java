@@ -115,6 +115,7 @@ public class DropDownComponent extends JComponent implements MouseListener {
             for (DDCListener il : ddcListeners) {
                 il.SelectionChanged();
             }
+            repaint();
         }
     }
     

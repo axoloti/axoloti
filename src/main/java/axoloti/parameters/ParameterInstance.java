@@ -478,10 +478,6 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
                 midiAssign.setCC(-1);
             }
         }
-        if (midiAssign != null) {
-            midiAssign.repaint();
-            ZoomUtils.paintObjectLayer(axoObj);
-        }
     }
 
     public int getMidiCC() {

@@ -198,16 +198,19 @@ public class DialComponent extends ACtrlComponent {
                     }
                     keybBuffer = "";
                     ke.consume();
+                    repaint();
                     break;
                 case KeyEvent.VK_BACK_SPACE:
                     if (keybBuffer.length() > 0) {
                         keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
                     }
                     ke.consume();
+                    repaint();
                     break;
                 case KeyEvent.VK_ESCAPE:
                     keybBuffer = "";
                     ke.consume();
+                    repaint();
                     break;
                 default:
             }
