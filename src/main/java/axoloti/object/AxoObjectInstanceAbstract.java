@@ -171,9 +171,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             InstanceLabel.setText(InstanceName);
         }
         doLayout();
-        if (getParent() != null) {
-            getParent().repaint();
-        }
     }
 
     public AxoObjectAbstract getType() {
@@ -470,7 +467,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                 String s = InstanceNameTF.getText();
                 setInstanceName(s);
                 getParent().remove(InstanceNameTF);
-                patch.repaint();
             }
 
             @Override

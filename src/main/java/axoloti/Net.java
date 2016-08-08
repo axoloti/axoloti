@@ -126,9 +126,7 @@ public class Net extends JComponent {
         for (InletInstance i : dest) {
             i.setHighlighted(selected);
         }
-        if (patch != null) {
-            this.repaint();
-        }
+        repaint();
     }
 
     public boolean getSelected() {

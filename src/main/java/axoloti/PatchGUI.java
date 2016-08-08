@@ -165,8 +165,8 @@ public class PatchGUI extends Patch {
         Layers.setVisible(true);
         Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
         Layers.setOpaque(true);
-        Layers.invalidate();
-        Layers.doLayout();
+        Layers.revalidate();
+//        Layers.doLayout();
 
         TransferHandler TH = new TransferHandler() {
             @Override
@@ -961,17 +961,20 @@ public class PatchGUI extends Patch {
     @Override
     public Net disconnect(IoletAbstract io) {
         Net n = super.disconnect(io);
-        netLayerPanel.repaint();
+        if (n != null) {
+            n.updateBounds();
+            n.repaint();
+        }
         return n;
     }
 
     @Override
     public Net delete(Net n) {
-        Net nn = super.delete(n);
-        if (nn != null) {
+        if (n != null) {
+            n.repaint();
             netLayerPanel.remove(n);
         }
-        netLayerPanel.repaint();
+        Net nn = super.delete(n);
         return nn;
     }
 

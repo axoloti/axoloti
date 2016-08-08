@@ -307,8 +307,8 @@ public abstract class IoletAbstract extends JPanel {
                     @Override
                     public void dragDropEnd(DragSourceDropEvent dsde) {
                         setHighlighted(false);
+                        drag_net.repaint();
                         patchGUI.selectionRectLayerPanel.remove(drag_net);
-                        patchGUI.selectionRectLayerPanel.repaint();
                     }
                 };
                 event.startDrag(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR), t, dsl);
@@ -345,11 +345,6 @@ public abstract class IoletAbstract extends JPanel {
             if (n != null
                     && n.getSelected() != highlighted) {
                 n.setSelected(highlighted);
-
-                final PatchGUI patchGUI = getPatchGui();
-                Rectangle bounds = n.getBounds();
-                patchGUI.zoomUI.scale(bounds);
-                patchGUI.netLayerPanel.repaint(bounds);
             }
         }
     }
