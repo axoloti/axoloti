@@ -26,8 +26,6 @@ import components.JackInputComponent;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
 import java.awt.Dimension;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragSource;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
@@ -59,11 +57,6 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
     @Override
     public T GetDefinition() {
         return inlet;
-    }
-
-    @Override
-    public String dragString() {
-        return axoObj.getInstanceName() + "::" + inlet.name;
     }
 
     public InletInstance() {
@@ -115,16 +108,7 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
         setComponentPopupMenu(popup);
         setToolTipText(inlet.description);
 
-        DragSource ds = new DragSource();
-
-        ds.createDefaultDragGestureRecognizer(this,
-                DnDConstants.ACTION_LINK, new DragGestureListImp());
-
-        dt = createDropTarget();
-
-        addMouseListener(createMouseListener());
-        
-        addComponentListener(createComponentListener());
+        addMouseListeners();
     }
 
     public Inlet getInlet() {

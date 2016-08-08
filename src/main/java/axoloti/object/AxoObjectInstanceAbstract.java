@@ -321,25 +321,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
         Titlebar.addMouseMotionListener(mml);
         addMouseMotionListener(mml);
-
-        addComponentListener(
-                new ComponentListener() {
-                    public void componentHidden(ComponentEvent e) {
-                        updateDummyDropTargets();
-                    }
-
-                    public void componentMoved(ComponentEvent e) {
-                        updateDummyDropTargets();
-                    }
-
-                    public void componentResized(ComponentEvent e) {
-                        updateDummyDropTargets();
-                    }
-
-                    public void componentShown(ComponentEvent e) {
-                        updateDummyDropTargets();
-                    }
-                });
+        
     }
 
     private void moveToDraggedLayer(AxoObjectInstanceAbstract o) {
@@ -707,23 +689,4 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         return ZoomUtils.getToolTipLocation(this, event, this);
     }
 
-    public void updateDummyDropTargets() {
-        for (InletInstance i : this.GetInletInstances()) {
-            i.updateDummyDropTarget();
-        }
-
-        for (OutletInstance oi : this.GetOutletInstances()) {
-            oi.updateDummyDropTarget();
-        }
-    }
-
-    public void deleteDummyDropTargets() {
-        for (InletInstance i : this.GetInletInstances()) {
-            i.deleteDummyDropTarget();
-        }
-
-        for (OutletInstance oi : this.GetOutletInstances()) {
-            oi.deleteDummyDropTarget();
-        }
-    }
 }

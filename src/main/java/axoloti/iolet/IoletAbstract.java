@@ -8,35 +8,13 @@ import axoloti.ZoomUtils;
 import axoloti.inlets.InletInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.outlets.OutletInstance;
-import axoloti.utils.Constants;
 import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.IllegalComponentStateException;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DragGestureEvent;
-import java.awt.dnd.DragGestureListener;
-import java.awt.dnd.DragSourceDragEvent;
-import java.awt.dnd.DragSourceDropEvent;
-import java.awt.dnd.DragSourceEvent;
-import java.awt.dnd.DragSourceListener;
 import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.event.MouseMotionListener;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -55,9 +33,7 @@ public abstract class IoletAbstract extends JPanel {
     public AxoObjectInstanceAbstract axoObj;
     public JLabel lbl;
     public JComponent jack;
-    public NetDragging drag_net;
 
-    public JPanel dropTargetDummyComponent;
     protected DropTarget dt;
 
     @Deprecated
@@ -77,59 +53,7 @@ public abstract class IoletAbstract extends JPanel {
     public AxoObjectInstanceAbstract GetObjectInstance() {
         return axoObj;
     }
-
-    public void deleteDummyDropTarget() {
-        PatchGUI patchGui = getPatchGui();
-        if (patchGui != null) {
-            if (this.dropTargetDummyComponent != null) {
-                patchGui.unzoomedLayerPanel.remove(this.dropTargetDummyComponent);
-            }
-        }
-    }
-
-    public void updateDummyDropTarget() {
-        try {
-            PatchGUI patchGui = getPatchGui();
-            if (patchGui != null) {
-                if (this.dropTargetDummyComponent == null) {
-                    this.dropTargetDummyComponent = new JPanel();
-                    this.dropTargetDummyComponent.setBackground(Constants.TRANSPARENT);
-
-                    patchGui.unzoomedLayerPanel.add(this.dropTargetDummyComponent);
-                    patchGui.unzoomedLayerPanel.setComponentZOrder(this.dropTargetDummyComponent, 0);
-                    if (dt != null) {
-                        dt.setComponent(this.dropTargetDummyComponent);
-                    }
-
-                    patchGui.zoomUI.addPropertyChangeListener(new PropertyChangeListener() {
-                        @Override
-                        public void propertyChange(PropertyChangeEvent evt) {
-                            String propertyName = evt.getPropertyName();
-                            if (propertyName.equals(axoloti.ZoomUI.ZOOM_IN_CHANGE_MESSAGE)
-                                    || propertyName.equals(axoloti.ZoomUI.ZOOM_OUT_CHANGE_MESSAGE)) {
-                                IoletAbstract.this.updateDummyDropTarget();
-                            }
-                        }
-                    });
-                }
-                Point p = SwingUtilities.convertPoint(this.jack.getParent(), this.jack.getLocation(), patchGui.unzoomedLayerPanel);
-                double zoom = patchGui.zoomUI.getScale();
-
-                int x = (int) (p.x * zoom);
-                int y = (int) (p.y * zoom);
-                this.dropTargetDummyComponent.setLocation(x, y);
-                this.dropTargetDummyComponent.setVisible(true);
-                int height = (int) (this.jack.getHeight() * zoom);
-                Dimension size = new Dimension(height, height);
-                this.dropTargetDummyComponent.setPreferredSize(size);
-                this.dropTargetDummyComponent.setMinimumSize(size);
-                this.dropTargetDummyComponent.setBounds(x, y, height, height);
-            }
-        } catch (ClassCastException e) {
-
-        }
-    }
-
+    
     private Point getJackLocInCanvasHidden() {
         Point p1 = new Point(5, 5);
         Component p = (Component) jack;
@@ -153,89 +77,9 @@ public abstract class IoletAbstract extends JPanel {
             return jackLocation;
         } catch (IllegalComponentStateException e) {
             return getJackLocInCanvasHidden();
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return getJackLocInCanvasHidden();
         }
-    }
-
-    public DropTarget createDropTarget() {
-        return new DropTarget() {
-            @Override
-            public synchronized void dragOver(DropTargetDragEvent dtde) {
-                PatchGUI p = getPatchGui();
-                for (Component cmp : p.selectionRectLayerPanel.getComponents()) {
-                    if (cmp instanceof NetDragging) {
-                        NetDragging nd = (NetDragging) cmp;
-                        Point ps = getJackLocInCanvas();
-                        double zoom = p.zoomUI.getScale();
-                        ps.x = (int) (ps.x * zoom);
-                        ps.y = (int) (ps.y * zoom);
-                        if (nd != drag_net) {
-                            nd.SetDragPoint(ps);
-                        } else {
-                            Point jackLocation = jack.getLocationOnScreen();
-                            SwingUtilities.convertPointFromScreen(jackLocation, p.Layers);
-                            jackLocation.x *= zoom;
-                            jackLocation.y *= zoom;
-
-                            Point pl = new Point(dtde.getLocation().x + jackLocation.x, dtde.getLocation().y + jackLocation.y);
-                            drag_net.SetDragPoint(pl);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public synchronized void drop(DropTargetDropEvent dtde) {
-                Transferable t = dtde.getTransferable();
-                try {
-                    if (axoObj.patch == null) {
-                        return;
-                    }
-                    String s = (String) t.getTransferData(DataFlavor.stringFlavor);
-                    String ss[] = s.split("::");
-                    if (ss.length == 2) {
-                        OutletInstance ol;
-                        InletInstance il;
-                        if (IoletAbstract.this instanceof InletInstance) {
-
-                            if ((ol = axoObj.patch.getOutletByReference(ss[0], ss[1])) != null) {
-                                Net n1 = axoObj.patch.AddConnection((InletInstance) IoletAbstract.this, ol);
-                                axoObj.patch.PromoteOverloading(false);
-                                if (n1 != null) {
-                                    n1.setSelected(false);
-                                    n1.repaint();
-                                }
-                            } else if ((il = axoObj.patch.getInletByReference(ss[0], ss[1])) != null) {
-                                Net n1 = axoObj.patch.AddConnection((InletInstance) IoletAbstract.this, il);
-                                axoObj.patch.PromoteOverloading(false);
-                                if (n1 != null) {
-                                    n1.setSelected(false);
-                                    n1.repaint();
-                                }
-                            }
-                        } else if ((il = axoObj.patch.getInletByReference(ss[0], ss[1])) != null) {
-                            Net n = axoObj.patch.AddConnection(il, (OutletInstance) IoletAbstract.this);
-                            axoObj.patch.PromoteOverloading(false);
-                            if (n != null) {
-                                n.setSelected(false);
-                                n.repaint();
-                            }
-                        }
-                    } else {
-                        System.out.println("spilled on inlet: " + s);
-                    }
-                } catch (UnsupportedFlavorException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                getPatchGui().zoomUI.cancelDrag();
-                super.drop(dtde);
-            }
-
-        };
     }
 
     abstract public JPopupMenu getPopup();
@@ -248,22 +92,62 @@ public abstract class IoletAbstract extends JPanel {
         }
     }
 
-    public MouseListener createMouseListener() {
-        return new MouseListener() {
+    NetDragging dragnet = null;
+    IoletAbstract dragtarget = null;
+
+    public void addMouseListeners() {
+        addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
+                if (e.isPopupTrigger()) {
                     ZoomUtils.showZoomedPopupMenu(IoletAbstract.this, axoObj, getPopup());
+                    e.consume();
+                } else {
+                    setHighlighted(true);
+                    if (!axoObj.IsLocked()) {
+                        if (dragnet == null) {
+                            dragnet = new NetDragging(getPatchGui());
+                            dragtarget = null;
+                            if (IoletAbstract.this instanceof InletInstance) {
+                                dragnet.connectInlet((InletInstance) IoletAbstract.this);
+                            } else {
+                                dragnet.connectOutlet((OutletInstance) IoletAbstract.this);
+                            }
+                        }
+                        dragnet.setVisible(true);
+                        getPatchGui().selectionRectLayerPanel.add(dragnet);
+                    }
                 }
-                setHighlighted(true);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (dragnet != null) {
+                    dragnet.repaint();
+                    getPatchGui().selectionRectLayerPanel.remove(dragnet);
+                    dragnet = null;
+                    if (dragtarget == null) {
+                        getPatchGui().disconnect(IoletAbstract.this);
+                    } else {
+                        if (IoletAbstract.this instanceof InletInstance) {
+                            if (dragtarget instanceof InletInstance) {
+                                getPatchGui().AddConnection((InletInstance) IoletAbstract.this, (InletInstance) dragtarget);
+                            } else if (dragtarget instanceof OutletInstance) {
+                                getPatchGui().AddConnection((InletInstance) IoletAbstract.this, (OutletInstance) dragtarget);
+                            }
+                        } else if (IoletAbstract.this instanceof OutletInstance) {
+                            if (dragtarget instanceof InletInstance) {
+                                getPatchGui().AddConnection((InletInstance) dragtarget, (OutletInstance) IoletAbstract.this);
+                            }
+                        }
+                        axoObj.patch.PromoteOverloading(false);
+                    }
+                    getPatchGui().selectionRectLayerPanel.repaint();
+                }
             }
 
             @Override
@@ -275,55 +159,41 @@ public abstract class IoletAbstract extends JPanel {
             public void mouseExited(MouseEvent e) {
                 setHighlighted(false);
             }
-        };
-    }
-
-    public abstract String dragString();
-
-    public class DragGestureListImp implements DragGestureListener {
-
-        @Override
-        public void dragGestureRecognized(DragGestureEvent event) {
-            if (!axoObj.IsLocked()) {
-                final PatchGUI patchGUI = getPatchGui();
-                Transferable t = new StringSelection(dragString());
-                DragSourceListener dsl = new DragSourceListener() {
-                    @Override
-                    public void dragEnter(DragSourceDragEvent dsde) {
-                    }
-
-                    @Override
-                    public void dragOver(DragSourceDragEvent dsde) {
-                    }
-
-                    @Override
-                    public void dropActionChanged(DragSourceDragEvent dsde) {
-                    }
-
-                    @Override
-                    public void dragExit(DragSourceEvent dse) {
-                    }
-
-                    @Override
-                    public void dragDropEnd(DragSourceDropEvent dsde) {
-                        setHighlighted(false);
-                        drag_net.repaint();
-                        patchGUI.selectionRectLayerPanel.remove(drag_net);
-                    }
-                };
-                event.startDrag(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR), t, dsl);
-                drag_net = new NetDragging(patchGUI);
-                if (IoletAbstract.this instanceof InletInstance) {
-                    drag_net.connectInlet((InletInstance) IoletAbstract.this);
-                } else {
-                    drag_net.connectOutlet((OutletInstance) IoletAbstract.this);
-                }
-
-                patchGUI.selectionRectLayerPanel.add(drag_net);
-                patchGUI.selectionRectLayerPanel.setVisible(true);
-                setHighlighted(true);
-            }
         }
+        );
+        addMouseMotionListener(
+                new MouseMotionListener() {
+
+                    @Override
+                    public void mouseDragged(MouseEvent e
+                    ) {
+                        if (!axoObj.IsLocked()) {
+                            final PatchGUI patchGUI = getPatchGui();
+                            Point p = SwingUtilities.convertPoint(IoletAbstract.this, e.getPoint(), patchGUI.selectionRectLayerPanel);
+
+                            Component c = patchGUI.objectLayerPanel.findComponentAt(p);
+                            while ((c != null) && !(c instanceof IoletAbstract)) {
+                                c = c.getParent();
+                            }
+                            if (c instanceof IoletAbstract) {
+                                if ((c != dragtarget) && (c != IoletAbstract.this)) {
+                                    // new target
+                                    dragtarget = (IoletAbstract) c;
+                                    dragnet.SetDragPoint(dragtarget.getJackLocInCanvas());
+                                }
+                            } else {
+                                // floating
+                                dragnet.SetDragPoint(p);
+                                dragtarget = null;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void mouseMoved(MouseEvent e
+                    ) {
+                    }
+                });
     }
 
     public boolean isConnected() {
@@ -363,30 +233,5 @@ public abstract class IoletAbstract extends JPanel {
     @Override
     public Point getToolTipLocation(MouseEvent event) {
         return ZoomUtils.getToolTipLocation(this, event, axoObj);
-    }
-
-    public ComponentListener createComponentListener() {
-        return new ComponentListener() {
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                IoletAbstract.this.updateDummyDropTarget();
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-                IoletAbstract.this.updateDummyDropTarget();
-
-            }
-
-            @Override
-            public void componentResized(ComponentEvent e) {
-                IoletAbstract.this.updateDummyDropTarget();
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-                IoletAbstract.this.updateDummyDropTarget();
-            }
-        };
     }
 }

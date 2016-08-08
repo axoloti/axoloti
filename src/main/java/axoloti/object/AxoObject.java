@@ -338,7 +338,6 @@ public class AxoObject extends AxoObjectAbstract {
     public void DeleteInstance(AxoObjectInstanceAbstract o) {
         if ((o != null) && (o instanceof AxoObjectInstance)) {
             instances.remove((AxoObjectInstance) o);
-            o.deleteDummyDropTargets();
         }
     }
 

@@ -25,8 +25,6 @@ import axoloti.object.AxoObjectInstance;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
 import java.awt.Dimension;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragSource;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
@@ -58,11 +56,6 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
     @Override
     public T GetDefinition() {
         return outlet;
-    }
-
-    @Override
-    public String dragString() {
-        return axoObj.getInstanceName() + "::" + outlet.name;
     }
 
     public OutletInstance() {
@@ -111,15 +104,8 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
         add(jack);
         setComponentPopupMenu(popup);
         setToolTipText(outlet.description);
-        DragSource ds = new DragSource();
-        ds.createDefaultDragGestureRecognizer(this,
-                DnDConstants.ACTION_LINK, new DragGestureListImp());
 
-        dt = createDropTarget();
-
-        addMouseListener(createMouseListener());
-        
-        addComponentListener(createComponentListener());
+        addMouseListeners();
     }
 
     @Override

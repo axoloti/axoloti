@@ -42,6 +42,7 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -73,7 +74,6 @@ import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
 import javax.swing.RepaintManager;
 import javax.swing.TransferHandler;
-import javax.swing.plaf.LayerUI;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
@@ -102,24 +102,26 @@ public class PatchGUI extends Patch {
 
     public JPanel objectLayerPanel = new JPanel();
     public JPanel draggedObjectLayerPanel = new JPanel();
+    public JPanel netLayerPanel = new JPanel();
+    public JPanel selectionRectLayerPanel = new JPanel();
 
     public ZoomUI zoomUI = new ZoomUI(Constants.INITIAL_ZOOM,
             Constants.ZOOM_STEP,
             Constants.MAXIMUM_ZOOM,
             Constants.MINIMUM_ZOOM,
             this);
+/* --- zoomUI enabled does not work ---
     JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel, zoomUI);
     JLayer<JComponent> draggedObjectLayer = new JLayer<JComponent>(draggedObjectLayerPanel, zoomUI);
-
-    public JPanel netLayerPanel = new JPanel();
     JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel, zoomUI);
-
-    public JPanel selectionRectLayerPanel = new JPanel();
     JLayer<JComponent> selectionRectLayer = new JLayer<JComponent>(selectionRectLayerPanel, zoomUI);
-
-    public JPanel unzoomedLayerPanel = new JPanel();
-    JLayer<JComponent> unzoomedLayer = new JLayer<JComponent>(unzoomedLayerPanel, new LayerUI<JComponent>());
-
+*/
+/* ---zoomUI disabled works ---*/
+    JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel);
+    JLayer<JComponent> draggedObjectLayer = new JLayer<JComponent>(draggedObjectLayerPanel);
+    JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel);
+    JLayer<JComponent> selectionRectLayer = new JLayer<JComponent>(selectionRectLayerPanel);
+    
     SelectionRectangle selectionrectangle = new SelectionRectangle();
     Point selectionRectStart;
     Point panOrigin;
@@ -136,9 +138,7 @@ public class PatchGUI extends Patch {
 
         JComponent[] layerComponents = {
             objectLayer, objectLayerPanel, draggedObjectLayerPanel, netLayerPanel,
-            selectionRectLayerPanel, unzoomedLayerPanel,
-            draggedObjectLayer, netLayer, selectionRectLayer,
-            unzoomedLayer};
+            selectionRectLayerPanel, draggedObjectLayer, netLayer, selectionRectLayer};
         for (JComponent c : layerComponents) {
             c.setLayout(null);
             c.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
@@ -150,7 +150,13 @@ public class PatchGUI extends Patch {
         Layers.add(netLayer, new Integer(2));
         Layers.add(draggedObjectLayer, new Integer(3));
         Layers.add(selectionRectLayer, new Integer(4));
-        Layers.add(unzoomedLayer, new Integer(5));
+
+        objectLayer.setName("objectLayer");
+        draggedObjectLayer.setName("draggedObjectLayer");
+        netLayer.setName("netLayer");
+        netLayerPanel.setName("netLayerPanel");
+        selectionRectLayerPanel.setName("selectionRectLayerPanel");
+        selectionRectLayer.setName("selectionRectLayer");
 
         objectLayerPanel.setName(Constants.OBJECT_LAYER_PANEL);
         draggedObjectLayerPanel.setName(Constants.DRAGGED_OBJECT_LAYER_PANEL);
@@ -431,14 +437,6 @@ public class PatchGUI extends Patch {
 
             @Override
             public synchronized void dragOver(DropTargetDragEvent dtde) {
-                for (Component cmp : selectionRectLayerPanel.getComponents()) {
-                    if (cmp instanceof NetDragging) {
-                        NetDragging nd = (NetDragging) cmp;
-                        nd.SetDragPoint(dtde.getLocation());
-                        nd.updateBounds();
-                        break;
-                    }
-                }
             }
 
             @Override
@@ -467,25 +465,6 @@ public class PatchGUI extends Patch {
                     zoomUI.cancelDrag();
                     return;
                 }
-                try {
-                    String s = (String) t.getTransferData(DataFlavor.stringFlavor);
-                    String ss[] = s.split("::");
-                    if (ss.length == 2) {
-                        OutletInstance ol;
-                        InletInstance il;
-                        if ((ol = getOutletByReference(ss[0], ss[1])) != null) {
-                            disconnect(ol);
-                        } else if ((il = getInletByReference(ss[0], ss[1])) != null) {
-                            disconnect(il);
-                        }
-                    }
-                } catch (UnsupportedFlavorException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                zoomUI.cancelDrag();
                 super.drop(dtde);
             }
         ;
@@ -971,8 +950,10 @@ public class PatchGUI extends Patch {
     @Override
     public Net delete(Net n) {
         if (n != null) {
+            n.updateBounds();
             n.repaint();
             netLayerPanel.remove(n);
+            netLayerPanel.revalidate();
         }
         Net nn = super.delete(n);
         return nn;
@@ -982,6 +963,7 @@ public class PatchGUI extends Patch {
     public void delete(AxoObjectInstanceAbstract o) {
         super.delete(o);
         objectLayerPanel.remove(o);
+        objectLayerPanel.validate();
         AdjustSize();
     }
 
@@ -1005,14 +987,12 @@ public class PatchGUI extends Patch {
             Layers.add(objectLayer, new Integer(2));
             Layers.add(draggedObjectLayer, new Integer(3));
             Layers.add(selectionRectLayer, new Integer(4));
-            Layers.add(unzoomedLayer, new Integer(5));
         } else {
             Layers.removeAll();
             Layers.add(objectLayer, new Integer(1));
             Layers.add(netLayer, new Integer(2));
             Layers.add(draggedObjectLayer, new Integer(3));
             Layers.add(selectionRectLayer, new Integer(4));
-            Layers.add(unzoomedLayer, new Integer(5));
         }
     }
 
