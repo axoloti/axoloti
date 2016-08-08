@@ -96,7 +96,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     static public Cursor transparentCursor;
     private final String[] args;
     JMenu favouriteMenu;
-
+    boolean bGrabFocusOnSevereErrors = true;
     /**
      * Creates new form MainFrame
      *
@@ -154,7 +154,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
                             jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
                                     txt + "\n", styleSevere);
-                            MainFrame.this.toFront();
+                            if (bGrabFocusOnSevereErrors) {
+                                MainFrame.this.toFront();
+                            }
                         } else {
                             jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
                                     txt + "\n", styleFine);
@@ -1165,4 +1167,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         return keyboard;
     }
 
+    public void SetGrabFocusOnSevereErrors(boolean b){
+        bGrabFocusOnSevereErrors = b;
+    }    
 }

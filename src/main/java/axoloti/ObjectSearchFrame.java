@@ -281,7 +281,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             tm = new DefaultTreeModel(this.root);
             jTree1.setModel(tm);
         }
-
+        MainFrame.mainframe.SetGrabFocusOnSevereErrors(false);
         accepted = false;
         snapToGrid(patchLoc);
         patchLocX = patchLoc.x;
@@ -457,12 +457,14 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
     void Cancel() {
         accepted = false;
+        MainFrame.mainframe.SetGrabFocusOnSevereErrors(true);
         setVisible(false);
     }
 
     void Accept() {
         if (!accepted) {
             accepted = true;
+            MainFrame.mainframe.SetGrabFocusOnSevereErrors(true);
             setVisible(false);
             AxoObjectAbstract x = type;
             if (x == null) {
@@ -610,7 +612,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
 //        System.out.println("Source = " + evt.getSource());
-//        Accept();
+//        Accept();        
     }//GEN-LAST:event_formWindowLostFocus
 
     private void jTextFieldObjNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldObjNameActionPerformed
