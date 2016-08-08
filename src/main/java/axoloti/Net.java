@@ -32,7 +32,7 @@ import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import org.simpleframework.xml.*;
 
@@ -41,7 +41,7 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "net")
-public class Net extends JPanel {
+public class Net extends JComponent {
 
     @ElementList(inline = true, required = false)
     ArrayList<OutletInstance> source;
@@ -209,8 +209,8 @@ public class Net extends JPanel {
         }
 
         int fudge = Math.max((max_x - min_x) / 8, (max_y - min_y) / 8);
-        this.setLocation(new Point(min_x - fudge, min_y - fudge));
-        this.setSize(Math.max(1, max_x - min_x + (2 * fudge)),
+        this.setBounds(min_x - fudge, min_y - fudge,
+                Math.max(1, max_x - min_x + (2 * fudge)),
                 Math.max(1, max_y - min_y + (2 * fudge)));
     }
 
@@ -276,7 +276,6 @@ public class Net extends JPanel {
             DrawWire(g2, from.x, from.y, to.x, to.y);
 
         }
-        updateBounds();
     }
 
     public PatchGUI getPatchGui() {

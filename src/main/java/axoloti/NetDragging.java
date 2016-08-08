@@ -99,7 +99,6 @@ public class NetDragging extends Net {
 
             }
         }
-        updateBounds();
     }
 
     @Override
@@ -132,8 +131,8 @@ public class NetDragging extends Net {
         }
 
         int fudge = Math.max((max_x - min_x) / 8, (max_y - min_y) / 8);
-        this.setLocation(new Point(min_x - fudge, min_y - fudge));
-        this.setSize(Math.max(1, max_x - min_x + (2 * fudge)),
+        setBounds(min_x - fudge, min_y - fudge,
+                Math.max(1, max_x - min_x + (2 * fudge)),
                 Math.max(1, max_y - min_y + (2 * fudge)));
     }
 

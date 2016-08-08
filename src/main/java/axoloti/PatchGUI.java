@@ -130,10 +130,14 @@ public class PatchGUI extends Patch {
     public PatchGUI() {
         super();
 
+        Layers.setLayout(null);
+        Layers.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
+        Layers.setLocation(0, 0);
+
         JComponent[] layerComponents = {
-            Layers, objectLayerPanel, draggedObjectLayerPanel, netLayerPanel,
+            objectLayer, objectLayerPanel, draggedObjectLayerPanel, netLayerPanel,
             selectionRectLayerPanel, unzoomedLayerPanel,
-            objectLayer, draggedObjectLayer, netLayer, selectionRectLayer,
+            draggedObjectLayer, netLayer, selectionRectLayer,
             unzoomedLayer};
         for (JComponent c : layerComponents) {
             c.setLayout(null);
@@ -383,8 +387,6 @@ public class PatchGUI extends Patch {
                     selectionRectStart = me.getPoint();
                     Button1down = true;
                     Layers.requestFocusInWindow();
-                    PatchGUI.this.selectionRectLayer.revalidate();
-                    PatchGUI.this.selectionRectLayer.repaint();
                 } else if (me.getButton() == MouseEvent.BUTTON2) {
                     PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
                     panOrigin = me.getPoint();
@@ -403,8 +405,6 @@ public class PatchGUI extends Patch {
                         o.SetSelected(o.getBounds().intersects(r));
                     }
                     selectionrectangle.setVisible(false);
-                    PatchGUI.this.selectionRectLayer.revalidate();
-                    PatchGUI.this.selectionRectLayer.repaint();
                 }
                 Button1down = false;
                 Button2down = false;
@@ -436,7 +436,6 @@ public class PatchGUI extends Patch {
                         NetDragging nd = (NetDragging) cmp;
                         nd.SetDragPoint(dtde.getLocation());
                         nd.updateBounds();
-                        selectionRectLayerPanel.repaint();
                         break;
                     }
                 }
@@ -517,12 +516,11 @@ public class PatchGUI extends Patch {
                     int xmax = x1 > x2 ? x1 : x2;
                     int ymin = y1 < y2 ? y1 : y2;
                     int ymax = y1 > y2 ? y1 : y2;
-                    selectionrectangle.setLocation(xmin, ymin);
                     int width = xmax - xmin;
                     int height = ymax - ymin;
-                    selectionrectangle.setSize(width, height);
+                    selectionrectangle.setBounds(xmin, ymin, width, height);
                     selectionrectangle.setVisible(true);
-                    selectionRectLayer.repaint(new Rectangle(xmin, ymin, width, height));
+                    ev.consume();
                 } else if (Button2down) {
                     handlePan(ev);
                 }
@@ -538,13 +536,7 @@ public class PatchGUI extends Patch {
         });
 
         Layers.setDropTarget(dt);
-
-        Dimension LayersSize = new Dimension(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
-        Layers.setPreferredSize(LayersSize);
-        Layers.setSize(Layers.getPreferredSize());
         Layers.setVisible(true);
-        Layers.setLocation(0, 0);
-        Layers.setPreferredSize(LayersSize);
 
         RepaintManager.setCurrentManager(new ZoomRepaintManager(zoomUI));
     }
@@ -907,12 +899,12 @@ public class PatchGUI extends Patch {
                     p.x = xgrid * (p.x / xgrid);
                     p.y = ygrid * (p.y / ygrid);
                     o.SetLocation(p.x, p.y);
+                    o.repaint();
                 }
             }
             if (isUpdate) {
                 AdjustSize();
                 SetDirty();
-                Layers.repaint();
             }
         } else {
             Logger.getLogger(PatchGUI.class.getName()).log(Level.INFO, "can't move: locked");
@@ -987,7 +979,6 @@ public class PatchGUI extends Patch {
     public void delete(AxoObjectInstanceAbstract o) {
         super.delete(o);
         objectLayerPanel.remove(o);
-        this.repaint();
         AdjustSize();
     }
 
@@ -995,12 +986,11 @@ public class PatchGUI extends Patch {
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         AxoObjectInstanceAbstract objinst = super.AddObjectInstance(obj, loc);
         if (objinst != null) {
-            objectLayerPanel.add(objinst);
             SelectNone();
+            objectLayerPanel.add(objinst);
             objinst.SetSelected(true);
-            objinst.doLayout();
+            objinst.revalidate();
             AdjustSize();
-            Layers.revalidate();
         }
         return objinst;
     }
@@ -1101,9 +1091,12 @@ public class PatchGUI extends Patch {
         s.height *= zoom;
         s.width *= zoom;
         clampLayerSize(s);
+        Dimension s2 = Layers.getSize();
+        if (s2.equals(s)) {
+            return;
+        }
         Layers.setSize(s);
         Layers.setPreferredSize(s);
-        Layers.repaint();
     }
 
     @Override

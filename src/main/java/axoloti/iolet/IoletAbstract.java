@@ -182,7 +182,6 @@ public abstract class IoletAbstract extends JPanel {
                             Point pl = new Point(dtde.getLocation().x + jackLocation.x, dtde.getLocation().y + jackLocation.y);
                             drag_net.SetDragPoint(pl);
                         }
-                        p.selectionRectLayerPanel.repaint();
                     }
                 }
             }
