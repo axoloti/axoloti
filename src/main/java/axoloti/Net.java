@@ -180,8 +180,12 @@ public class Net extends JComponent {
     final static Stroke strokeBrokenDeselected = new BasicStroke(2.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0, dash, 0.f);
     final QuadCurve2D.Float curve = new QuadCurve2D.Float();
 
+    float CtrlPointY(float x1, float y1, float x2, float y2) {
+        return Math.max(y1, y2) + Math.abs(y2 - y1) * 0.1f + Math.abs(x2 - x1) * 0.1f;
+    }
+
     void DrawWire(Graphics2D g2, float x1, float y1, float x2, float y2) {
-        curve.setCurve(x1, y1, (x1 + x2) / 2, Math.max(y1, y2) + Math.abs(y2 - y1) * 0.1f + Math.abs(x2 - x1) * 0.1f, x2, y2);
+        curve.setCurve(x1, y1, (x1 + x2) / 2, CtrlPointY(x1, y1, x2, y2), x2, y2);
         g2.draw(curve);
     }
 
@@ -205,11 +209,10 @@ public class Net extends JComponent {
             max_x = Math.max(max_x, p1.x);
             max_y = Math.max(max_y, p1.y);
         }
-
-        int fudge = Math.max((max_x - min_x) / 8, (max_y - min_y) / 8);
+        int fudge = 8;
         this.setBounds(min_x - fudge, min_y - fudge,
                 Math.max(1, max_x - min_x + (2 * fudge)),
-                Math.max(1, max_y - min_y + (2 * fudge)));
+                (int)CtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * fudge));
     }
 
     @Override

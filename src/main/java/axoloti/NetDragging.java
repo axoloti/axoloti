@@ -132,10 +132,10 @@ public class NetDragging extends Net {
             max_y = Math.max(max_y, p1.y);
         }
 
-        int fudge = Math.max((max_x - min_x) / 8, (max_y - min_y) / 8);
-        setBounds(min_x - fudge, min_y - fudge,
+        int fudge = 8;
+        this.setBounds(min_x - fudge, min_y - fudge,
                 Math.max(1, max_x - min_x + (2 * fudge)),
-                Math.max(1, max_y - min_y + (2 * fudge)));
+                (int)CtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * fudge));
     }
 
 }
