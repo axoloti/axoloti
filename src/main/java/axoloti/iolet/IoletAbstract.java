@@ -132,7 +132,15 @@ public abstract class IoletAbstract extends JPanel {
                     getPatchGui().selectionRectLayerPanel.remove(dragnet);
                     dragnet = null;
                     if (dragtarget == null) {
-                        getPatchGui().disconnect(IoletAbstract.this);
+                        final PatchGUI patchGUI = getPatchGui();
+                        Point p = SwingUtilities.convertPoint(IoletAbstract.this, e.getPoint(), patchGUI.selectionRectLayerPanel);
+                        Component c = patchGUI.objectLayerPanel.findComponentAt(p);
+                        while ((c != null) && !(c instanceof IoletAbstract)) {
+                            c = c.getParent();
+                        }
+                        if (IoletAbstract.this != c) {
+                            patchGUI.disconnect(IoletAbstract.this);
+                        }
                     } else {
                         if (IoletAbstract.this instanceof InletInstance) {
                             if (dragtarget instanceof InletInstance) {
@@ -171,13 +179,15 @@ public abstract class IoletAbstract extends JPanel {
                         if (!axoObj.IsLocked()) {
                             final PatchGUI patchGUI = getPatchGui();
                             Point p = SwingUtilities.convertPoint(IoletAbstract.this, e.getPoint(), patchGUI.selectionRectLayerPanel);
-
                             Component c = patchGUI.objectLayerPanel.findComponentAt(p);
                             while ((c != null) && !(c instanceof IoletAbstract)) {
                                 c = c.getParent();
                             }
-                            if (c instanceof IoletAbstract) {
-                                if ((c != dragtarget) && (c != IoletAbstract.this)) {
+                            if ((c != null)
+                            && (c != IoletAbstract.this)
+                            && (!((IoletAbstract.this instanceof OutletInstance) && (c instanceof OutletInstance)))) {
+                                // different target and not myself?
+                                if (c != dragtarget) {
                                     // new target
                                     dragtarget = (IoletAbstract) c;
                                     dragnet.SetDragPoint(dragtarget.getJackLocInCanvas());
