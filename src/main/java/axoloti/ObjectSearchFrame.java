@@ -611,8 +611,12 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
-//        System.out.println("Source = " + evt.getSource());
-//        Accept();        
+        if ((evt.getOppositeWindow() == null)
+                || !(evt.getOppositeWindow() instanceof axoloti.PatchFrame)) {
+            Cancel();
+        } else {
+            Accept();
+        }
     }//GEN-LAST:event_formWindowLostFocus
 
     private void jTextFieldObjNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldObjNameActionPerformed
