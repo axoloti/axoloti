@@ -35,6 +35,7 @@ import axoloti.utils.KeyUtils;
 import axoloti.utils.Preferences;
 import java.awt.Cursor;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -113,9 +114,12 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         mainframe = this;
 
-        final Style styleSevere = jTextPaneLog.addStyle("severe", null);
-        final Style styleInfo = jTextPaneLog.addStyle("info", null);
-        final Style styleWarning = jTextPaneLog.addStyle("warning", null);
+        final Style styleParent = jTextPaneLog.addStyle(null, null);
+        StyleConstants.setFontFamily(styleParent, Font.MONOSPACED);
+
+        final Style styleSevere = jTextPaneLog.addStyle("severe", styleParent);
+        final Style styleInfo = jTextPaneLog.addStyle("info", styleParent);
+        final Style styleWarning = jTextPaneLog.addStyle("warning", styleParent);
         jTextPaneLog.setBackground(Theme.getCurrentTheme().Console_Background);
         StyleConstants.setForeground(styleSevere, Theme.getCurrentTheme().Error_Text);
         StyleConstants.setForeground(styleInfo, Theme.getCurrentTheme().Normal_Text);
