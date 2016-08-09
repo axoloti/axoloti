@@ -191,24 +191,29 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                int row = jTable1.getSelectedRow();
-                if (row < 0) {
-                    jButtonUp.setEnabled(false);
-                    jButtonDown.setEnabled(false);
-                    jButtonOpen.setEnabled(false);
-                } else {
-                    jButtonUp.setEnabled(row > 0);
-                    jButtonDown.setEnabled(row < files.size() - 1);
-                    File f = files.get(row);
-                    boolean en = (f != null) && (f.exists());
-                    jButtonOpen.setEnabled(en);
-                    jButtonUpload.setEnabled(en);
-                }
+                reflectSelection(jTable1.getSelectedRow());
             }
         });
-
+        reflectSelection(-1);
     }
 
+    final void reflectSelection(int row){
+        if (row < 0) {
+            jButtonUp.setEnabled(false);
+            jButtonDown.setEnabled(false);
+            jButtonOpen.setEnabled(false);
+            jButtonRemove.setEnabled(false);
+        } else {
+            jButtonUp.setEnabled(row > 0);
+            jButtonDown.setEnabled(row < files.size() - 1);
+            File f = files.get(row);
+            boolean en = (f != null) && (f.exists());
+            jButtonOpen.setEnabled(en);
+            jButtonUpload.setEnabled(en);
+            jButtonRemove.setEnabled(true);
+        }        
+    }
+    
     public void refresh() {
         jTable1.revalidate();
         jTable1.repaint();
@@ -816,16 +821,20 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         return this;
     }
 
+    public void ShowConnect1(boolean status){
+        jButtonUploadBank.setEnabled(status);
+        jButtonUpload.setEnabled(status);
+        jUploadAll.setEnabled(status);
+    }
+    
     @Override
     public void ShowConnect() {
-        jButtonUploadBank.setEnabled(true);
-        jButtonUpload.setEnabled(true);
+        ShowConnect1(true);
     }
 
     @Override
     public void ShowDisconnect() {
-        jButtonUploadBank.setEnabled(false);
-        jButtonUpload.setEnabled(false);
+        ShowConnect1(false);
     }
 
     static public void OpenBank(File f) {

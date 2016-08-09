@@ -79,7 +79,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         fileMenu1.initComponents();
         this.patch = patch;
         this.patch.patchframe = this;
-        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
 
         presetPanel = new PresetPanel(patch);
         visibleCablePanel = new VisibleCablePanel(patch);
@@ -201,6 +200,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                 KeyUtils.CONTROL_OR_CMD_MASK));
 
         createBufferStrategy(2);
+        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
     }
 
     QCmdProcessor qcmdprocessor;
@@ -221,24 +221,30 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }
 
+    void ShowConnect1(boolean status){
+        jCheckBoxLive.setEnabled(status);
+        jCheckBoxMenuItemLive.setEnabled(status);
+        jMenuItemUploadInternalFlash.setEnabled(status);
+        jMenuItemUploadSD.setEnabled(status);
+        jMenuItemUploadSDStart.setEnabled(status);
+    }
+    
     @Override
     public void ShowDisconnect() {
         if (patch.IsLocked()) {
             patch.Unlock();
         }
-        jCheckBoxLive.setEnabled(false);
         jCheckBoxLive.setSelected(false);
-        jCheckBoxMenuItemLive.setEnabled(false);
         jCheckBoxMenuItemLive.setSelected(false);
+        ShowConnect1(false);
     }
 
     @Override
     public void ShowConnect() {
         patch.Unlock();
         jCheckBoxLive.setSelected(false);
-        jCheckBoxLive.setEnabled(true);
         jCheckBoxMenuItemLive.setSelected(false);
-        jCheckBoxMenuItemLive.setEnabled(true);
+        ShowConnect1(true);
     }
 
     public void ShowCompileFail() {

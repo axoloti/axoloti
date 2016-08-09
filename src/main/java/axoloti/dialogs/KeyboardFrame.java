@@ -43,7 +43,6 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
 
     public KeyboardFrame() {
         initComponents();
-        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         piano = new PianoComponent() {
             @Override
@@ -73,6 +72,7 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
         });
         jPanel1.add(new JLabel("bend"));
         jPanel1.add(pbenddial);
+        USBBulkConnection.GetConnection().addConnectionStatusListener(this);        
     }
 
     /**
