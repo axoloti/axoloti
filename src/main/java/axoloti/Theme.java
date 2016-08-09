@@ -59,6 +59,8 @@ public class Theme {
     @Element
     public Color Normal_Text = Color.BLACK;
     @Element
+    public Color Warning_Text = Color.BLUE;
+    @Element
     public Color Console_Background = Color.WHITE;
     @Element
     // UIManager.getColor("Label.foreground") doesn't give the correct value here

@@ -1201,7 +1201,7 @@ public class USBBulkConnection extends Connection {
                     //textRcvBuffer.append((char) cc);
                     textRcvBuffer.limit(textRcvBuffer.position());
                     textRcvBuffer.rewind();
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Axoloti says: {0}", textRcvBuffer.toString());
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
                     GoIdleState();
                 }
                 break;
