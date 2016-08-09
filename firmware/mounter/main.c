@@ -220,26 +220,19 @@ static const USBMassStorageConfig msdConfig =
     "0.1"
 };
 
-extern int _vectors;
-
 int main(void)
 {
-  // copy vector table
-  memcpy((char *)0x20000000, (const char *)&_vectors, 0x200);
-  // remap SRAM1 to 0x00000000
-  SYSCFG->MEMRMP |= 0x03;
-
     /* system & hardware initialization */
     halInit();
 
     // float usb inputs, hope the host notices detach...
     palSetPadMode(GPIOA, 11, PAL_MODE_INPUT);
     palSetPadMode(GPIOA, 12, PAL_MODE_INPUT);
-    // setup LEDs
-    palSetPadMode(LED1_PORT,LED1_PIN,PAL_MODE_OUTPUT_PUSHPULL);
+    // setup LEDs, red+green on
+    palSetPadMode(LED1_PORT, LED1_PIN, PAL_MODE_OUTPUT_PUSHPULL);
     palSetPadMode(LED2_PORT, LED2_PIN, PAL_MODE_OUTPUT_PUSHPULL);
     palClearPad(LED1_PORT,LED1_PIN);
-    palSetPad(LED2_PORT,LED2_PIN);
+    palClearPad(LED2_PORT,LED2_PIN);
 
     chSysInit();
 
@@ -262,9 +255,7 @@ int main(void)
     msdInit(&UMSD1);
 
     /* turn off green LED, turn on red LED */
-    palSetPadMode(LED1_PORT, LED1_PIN, PAL_MODE_OUTPUT_PUSHPULL);
     palClearPad(LED1_PORT, LED1_PIN);
-    palSetPadMode(LED2_PORT, LED2_PIN, PAL_MODE_OUTPUT_PUSHPULL);
     palSetPad(LED2_PORT, LED2_PIN);
 
     /* start the USB mass storage service */
