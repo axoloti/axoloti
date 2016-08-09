@@ -248,6 +248,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         }
 
         jButton1Refresh.setText("Refresh");
+        jButton1Refresh.setEnabled(false);
         jButton1Refresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1RefreshActionPerformed(evt);
@@ -257,6 +258,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         jLabelSDInfo.setText("jLabel1");
 
         jButtonUpload.setText("Upload...");
+        jButtonUpload.setEnabled(false);
         jButtonUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonUploadActionPerformed(evt);
@@ -264,6 +266,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         });
 
         jButtonDelete.setText("Delete");
+        jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
@@ -271,6 +274,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         });
 
         jButtonCreateDir.setText("Create directory...");
+        jButtonCreateDir.setEnabled(false);
         jButtonCreateDir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCreateDirActionPerformed(evt);
