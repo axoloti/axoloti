@@ -110,18 +110,12 @@ public class PatchGUI extends Patch {
             Constants.MAXIMUM_ZOOM,
             Constants.MINIMUM_ZOOM,
             this);
-/* --- zoomUI enabled does not work ---
+    
     JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel, zoomUI);
     JLayer<JComponent> draggedObjectLayer = new JLayer<JComponent>(draggedObjectLayerPanel, zoomUI);
     JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel, zoomUI);
     JLayer<JComponent> selectionRectLayer = new JLayer<JComponent>(selectionRectLayerPanel, zoomUI);
-*/
-/* ---zoomUI disabled works ---*/
-    JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel);
-    JLayer<JComponent> draggedObjectLayer = new JLayer<JComponent>(draggedObjectLayerPanel);
-    JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel);
-    JLayer<JComponent> selectionRectLayer = new JLayer<JComponent>(selectionRectLayerPanel);
-    
+
     SelectionRectangle selectionrectangle = new SelectionRectangle();
     Point selectionRectStart;
     Point panOrigin;

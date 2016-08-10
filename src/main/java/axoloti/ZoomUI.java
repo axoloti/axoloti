@@ -1,12 +1,7 @@
 package axoloti;
 
-import axoloti.object.AxoObjectInstance;
-import axoloti.object.TitleBarPanel;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
-import components.JackInputComponent;
-import components.JackOutputComponent;
-import components.LabelComponent;
 import components.control.ACtrlComponent;
 import java.awt.*;
 import java.awt.event.*;
@@ -18,7 +13,6 @@ import javax.swing.*;
 import javax.swing.plaf.LayerUI;
 
 public class ZoomUI extends LayerUI<JComponent> {
-
     public static final String ZOOM_OUT_CHANGE_MESSAGE = "zoomOut";
     public static final String ZOOM_IN_CHANGE_MESSAGE = "zoomIn";
     private final double zoomAmount;
@@ -36,7 +30,7 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     private boolean anyMouseDown = false;
     private boolean button2down = false;
-    
+
     public ZoomUI(double startingScale, double zoomAmount, double zoomMax, double zoomMin,
             PatchGUI patch) {
         zoom = startingScale;
@@ -59,32 +53,6 @@ public class ZoomUI extends LayerUI<JComponent> {
         g2.dispose();
     }
 
-    private Component getTargetComponent(Component component) {
-        if(this.presetComponent != null) {
-            return presetComponent;
-        }
-        if(component == null && dragging) {
-            component = dragged;
-        }
-        if (component instanceof JackOutputComponent) {
-            component = ((JackOutputComponent) component).getOutlet();
-        }
-        if (component instanceof JackInputComponent) {
-            component = ((JackInputComponent) component).getInlet();
-        }
-        if ((component != null
-                && component.getName() != null
-                && component.getName().equals(Constants.OBJECT_LAYER_PANEL))
-                || patch.selectionrectangle.isVisible()
-                || button2down) {
-            component = patch.Layers;
-        }
-        if (component instanceof LabelComponent && component.getParent() instanceof TitleBarPanel) {
-            component = component.getParent();
-        }
-        return component;
-    }
-
     private void handleEnterExited(Component component, MouseEvent localEvent) {
         if (component != previous) {
             if (previous != null) {
@@ -98,13 +66,17 @@ public class ZoomUI extends LayerUI<JComponent> {
         }
     }
 
-    private void dispatchMouseEvent(MouseListener[] mouseListeners, MouseEvent localEvent, MouseEvent transformedEvent) {
+    private void dispatchMouseEvent(MouseListener[] mouseListeners, MouseEvent localEvent, Component component) {
+        MouseEvent transformedEvent = getNewMouseEvent(component, localEvent);
         for (MouseListener listener : mouseListeners) {
             if (localEvent.getID() == MouseEvent.MOUSE_PRESSED) {
                 listener.mousePressed(transformedEvent);
                 anyMouseDown = true;
+                if (localEvent.getButton() == MouseEvent.BUTTON2) {
+                    button2down = true;
+                }
             } else if (localEvent.getID() == MouseEvent.MOUSE_RELEASED) {
-                ZoomUI.this.button2down = false;
+                button2down = false;
                 anyMouseDown = false;
                 dragging = false;
                 patch.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
@@ -117,80 +89,67 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     @Override
     protected void processMouseEvent(MouseEvent e, JLayer<? extends JComponent> l) {
-        MouseEvent layerEvent = translateToLayerCoordinates(e, l);
-        Component component = getTargetComponent(getComponentClickedOn(layerEvent));
+        MouseEvent localEvent = translateToLayerCoordinates(e, l);
+        Component component = getComponentClickedOn(localEvent);
+        
         if (component != null) {
-            Container axoObjectParent = SwingUtilities.getAncestorOfClass(AxoObjectInstance.class, component);
-            MouseEvent localEvent = translateToComponentCoordinates(layerEvent, component);
+            if (dragging) {
+                component = dragged;
+            }
+            
+            localEvent = translateToComponentCoordinates(localEvent, component);
+            if (!dragging && localEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
+                dragging = true;
+                dragged = component;
+            }
+            MouseListener[] listeners = component.getListeners(MouseListener.class);
 
-            MouseListener[] mouseListeners = component.getListeners(MouseListener.class);
-            MouseEvent transformedEvent = getNewMouseEvent(component, localEvent);
-
-            if (localEvent.getID() == MouseEvent.MOUSE_PRESSED) {
-                if (localEvent.getButton() == MouseEvent.BUTTON2) {
-                    ZoomUI.this.button2down = true;
-                    layerEvent = translateToLayerCoordinates(e, l);
-                    component = getTargetComponent(getComponentClickedOn(layerEvent));
-                    localEvent = translateToComponentCoordinates(layerEvent, component);
-                    mouseListeners = component.getListeners(MouseListener.class);
-                    transformedEvent = getNewMouseEvent(component, localEvent);
-                }
-
-                for (ActionListener listener : component.getListeners(ActionListener.class)) {
-                    ActionEvent actionEvent = new ActionEvent(component, localEvent.getID(), "CLICK");
-                    listener.actionPerformed(actionEvent);
+            while (listeners.length == 0) {
+                Container c = component.getParent();
+                if (c != null) {
+                    listeners = c.getListeners(MouseListener.class);
+                    localEvent = translateToLayerCoordinates(e, l);
+                    localEvent = translateToComponentCoordinates(localEvent, c);
+                    component = c;
+                    if (dragging) {
+                        dragged = component;
+                    }
+                } else {
+                    return;
                 }
             }
 
-            dispatchMouseEvent(mouseListeners, localEvent, transformedEvent);
-
-            if (mouseListeners.length == 0 && axoObjectParent != null) {
-                layerEvent = translateToLayerCoordinates(e, l);
-                localEvent = translateToComponentCoordinates(layerEvent, axoObjectParent);
-                transformedEvent = getNewMouseEvent(axoObjectParent, localEvent);
-
-                mouseListeners = axoObjectParent.getListeners(MouseListener.class);
-
-                dispatchMouseEvent(mouseListeners, localEvent, transformedEvent);
-            }
-
+            dispatchMouseEvent(listeners, localEvent, component);
+            
             this.handleEnterExited(component, localEvent);
 
             previous = component;
             e.consume();
         }
+        else {
+            handlePatchBounds(e);
+        }
+    }
+    
+    private void handlePatchBounds(MouseEvent e) {
+        // avoid transparent cursor if release occurs outside patch bounds
+        if (e.getID() == MouseEvent.MOUSE_RELEASED) {
+            anyMouseDown = false;
+            patch.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
 
-        if (component == null) {
-            // avoid transparent cursor if release occurs outside patch bounds
-            if (e.getID() == MouseEvent.MOUSE_RELEASED) {
-                anyMouseDown = false;
-                patch.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
-
-            }
-            // avoid escaping patch bounds during robot drag
-            if (dragging
-                    && e.getID() == MouseEvent.MOUSE_EXITED
-                    && dragged != null
-                    && dragged instanceof ACtrlComponent) {
-                ((ACtrlComponent) dragged).robotMoveToCenter();
-            }
+        }
+        // avoid escaping patch bounds during robot drag
+        if (dragging
+                && e.getID() == MouseEvent.MOUSE_EXITED
+                && dragged != null
+                && dragged instanceof ACtrlComponent) {
+            ((ACtrlComponent) dragged).robotMoveToCenter();
         }
     }
 
-    private void dispatchMotionToAxoObjectParent(Container axoObjectParent, MouseEvent localEvent) {
-        MouseMotionListener[] listeners = axoObjectParent.getListeners(MouseMotionListener.class);
-        localEvent = translateToComponentCoordinates(localEvent, axoObjectParent);
-        for (MouseMotionListener listener : listeners) {
-            if (localEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
-                listener.mouseDragged(getNewMouseEvent(axoObjectParent, localEvent));
-            } else if (localEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
-                listener.mouseMoved(getNewMouseEvent(axoObjectParent, localEvent));
-
-            }
-        }
-    }
-
-    private void dispatchMouseMotionEvent(MouseMotionListener[] motionListeners, MouseEvent localEvent, Component component) {
+    private void dispatchMouseMotionEvent(MouseMotionListener[] motionListeners,
+            MouseEvent localEvent,
+            Component component) {
         for (MouseMotionListener listener : motionListeners) {
             if (localEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
                 listener.mouseDragged(getNewMouseEvent(component, localEvent));
@@ -203,9 +162,12 @@ public class ZoomUI extends LayerUI<JComponent> {
     @Override
     protected void processMouseMotionEvent(MouseEvent e, JLayer<? extends JComponent> l) {
         MouseEvent localEvent = translateToLayerCoordinates(e, l);
-        Component component = getTargetComponent(getComponentClickedOn(localEvent));
+        Component component = getComponentClickedOn(localEvent);
+
         if (component != null) {
-            Container axoObjectParent = SwingUtilities.getAncestorOfClass(AxoObjectInstance.class, component);
+            if (dragging) {
+                component = dragged;
+            }
 
             localEvent = translateToComponentCoordinates(localEvent, component);
             if (!dragging && localEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
@@ -213,40 +175,46 @@ public class ZoomUI extends LayerUI<JComponent> {
                 dragged = component;
             }
 
-            Component listenerComponent = component;
-            if (dragging) {
-                listenerComponent = dragged;
-            }
-            MouseMotionListener[] listeners = listenerComponent.getListeners(MouseMotionListener.class);
+            MouseMotionListener[] listeners = component.getListeners(MouseMotionListener.class);
 
-            dispatchMouseMotionEvent(listeners, localEvent, listenerComponent);
-
-            if (listeners.length == 0 && axoObjectParent != null) {
-                localEvent = translateToLayerCoordinates(e, l);
-                dispatchMotionToAxoObjectParent(axoObjectParent, localEvent);
-                if (dragging) {
-                    dragged = axoObjectParent;
+            while (listeners.length == 0) {
+                Container c = component.getParent();
+                if (c != null) {
+                    listeners = c.getListeners(MouseMotionListener.class);
+                    localEvent = translateToLayerCoordinates(e, l);
+                    localEvent = translateToComponentCoordinates(localEvent, c);
+                    component = c;
+                    if (localEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
+                        dragging = true;
+                        dragged = component;
+                    }
+                } else {
+                    return;
                 }
             }
+
+            dispatchMouseMotionEvent(listeners, localEvent, component);
 
             this.handleEnterExited(component, localEvent);
             previous = component;
 
             e.consume();
         }
+        else {
+            handlePatchBounds(e);
+        }
     }
 
     @Override
     protected void processKeyEvent(KeyEvent ke,
             JLayer<? extends JComponent> l) {
-        if(KeyUtils.isKeyCodeControlOrCommand(ke) && 
-                !anyMouseDown) {
+        if (KeyUtils.isKeyCodeControlOrCommand(ke)
+                && !anyMouseDown) {
             KeyListener[] listeners = patch.Layers.getListeners(KeyListener.class);
-            for(KeyListener kl : listeners) {
-                if(ke.getID() == KeyEvent.KEY_PRESSED) {
+            for (KeyListener kl : listeners) {
+                if (ke.getID() == KeyEvent.KEY_PRESSED) {
                     kl.keyPressed(getNewKeyEvent(ke));
-                }
-                else if(ke.getID() == KeyEvent.KEY_RELEASED) {
+                } else if (ke.getID() == KeyEvent.KEY_RELEASED) {
                     kl.keyReleased(getNewKeyEvent(ke));
                 }
             }
@@ -290,6 +258,15 @@ public class ZoomUI extends LayerUI<JComponent> {
                 && clickedOn.getName().equals(Constants.DRAGGED_OBJECT_LAYER_PANEL))) {
             clickedOn = patch.objectLayerPanel.findComponentAt(coordinates.x, coordinates.y);
         }
+
+        if (button2down) {
+            clickedOn = patch.Layers;
+        }
+        
+        if(presetComponent != null) {
+            clickedOn = presetComponent;
+        }
+
         return clickedOn;
     }
 
@@ -306,6 +283,11 @@ public class ZoomUI extends LayerUI<JComponent> {
         r.y = scale(r.y);
         r.width = scale(r.width);
         r.height = scale(r.height);
+    }
+
+    public void scale(Point p) {
+        p.x = scale(p.x);
+        p.y = scale(p.y);
     }
 
     public int scale(int x) {
@@ -340,7 +322,7 @@ public class ZoomUI extends LayerUI<JComponent> {
                 mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getXOnScreen(), mouseEvent.getYOnScreen(), mouseEvent.getClickCount(), mouseEvent.isPopupTrigger(),
                 mouseEvent.getButton());
     }
-    
+
     private KeyEvent getNewKeyEvent(KeyEvent keyEvent) {
         return new KeyEvent(patch.Layers, keyEvent.getID(), keyEvent.getWhen(), keyEvent.getModifiers(), keyEvent.getKeyCode(), keyEvent.getKeyChar());
     }
@@ -382,7 +364,7 @@ public class ZoomUI extends LayerUI<JComponent> {
     public void stopPan() {
         this.button2down = false;
     }
-    
+
     private JComponent presetComponent;
 
     public void setPresetComponent(JComponent presetComponent) {
