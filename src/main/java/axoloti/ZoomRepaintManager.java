@@ -18,10 +18,8 @@ public class ZoomRepaintManager extends RepaintManager {
     public void addDirtyRegion(JComponent c, int x, int y, int w, int h) {
         JLayer layer = ZoomUtils.getAncestorLayer(c);
         if (layer != null) {
-            Rectangle bounds = c.getBounds();
-            bounds = SwingUtilities.convertRectangle(c.getParent(), bounds, layer);
+            Rectangle bounds = SwingUtilities.convertRectangle(c, new Rectangle(x, y, w, h), layer);
             zoomUI.scale(bounds);
-
             super.addDirtyRegion(layer, bounds.x, bounds.y, bounds.width, bounds.height);
         }
         super.addDirtyRegion(c, x, y, w, h);
