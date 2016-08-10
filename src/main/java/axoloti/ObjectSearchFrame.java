@@ -272,6 +272,20 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         p.y = Constants.Y_GRID * (p.y / Constants.Y_GRID);
         return p;
     }
+    
+    private Point clipToStayWithinScreen(Point patchLoc) {
+        Point patchLocOnScreen = p.getPatchframe().patch.objectLayerPanel.getLocationOnScreen();
+        Dimension screen = getToolkit().getScreenSize();
+
+        if(patchLocOnScreen.getX() + patchLoc.getX() + getWidth() > screen.getWidth()) {
+            patchLoc.x = (int) screen.getWidth() - (int) patchLocOnScreen.getX() - getWidth();
+        }
+        if(patchLocOnScreen.getY() + patchLoc.getY() + getHeight() > screen.getHeight()) {
+            patchLoc.y = (int) screen.getHeight() - (int) patchLocOnScreen.getY() - getHeight();
+        }
+
+        return patchLoc;
+    }
 
     void Launch(Point patchLoc, AxoObjectInstanceAbstract o, String searchString) {
         if (this.objectTree != MainFrame.axoObjects.ObjectTree) {
@@ -292,6 +306,8 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         Point patchLocZoomed = snapToGrid(new Point(
                 (int) Math.round(patchLoc.x * zoom),
                 (int) Math.round(patchLoc.y * zoom)));
+        
+        patchLocZoomed = clipToStayWithinScreen(patchLocZoomed);
 
         setLocation(patchLocZoomed.x + ps.x, patchLocZoomed.y + ps.y);
 
