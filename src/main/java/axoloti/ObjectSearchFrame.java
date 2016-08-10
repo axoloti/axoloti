@@ -30,6 +30,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import javax.swing.JComponent;
@@ -42,6 +46,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+
 
 /**
  *
@@ -274,14 +279,28 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     }
     
     private Point clipToStayWithinScreen(Point patchLoc) {
-        Point patchLocOnScreen = p.getPatchframe().patch.objectLayerPanel.getLocationOnScreen();
-        Dimension screen = getToolkit().getScreenSize();
 
-        if(patchLocOnScreen.getX() + patchLoc.getX() + getWidth() > screen.getWidth()) {
-            patchLoc.x = (int) screen.getWidth() - (int) patchLocOnScreen.getX() - getWidth();
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
+        Rectangle allScreenBounds = new Rectangle();
+
+        for(GraphicsDevice curGs : gs)
+        {
+            GraphicsConfiguration[] gc = curGs.getConfigurations();
+            for(GraphicsConfiguration curGc : gc)
+            {
+                Rectangle bounds = curGc.getBounds();
+                allScreenBounds = allScreenBounds.union(bounds);
+            }
         }
-        if(patchLocOnScreen.getY() + patchLoc.getY() + getHeight() > screen.getHeight()) {
-            patchLoc.y = (int) screen.getHeight() - (int) patchLocOnScreen.getY() - getHeight();
+
+        Point patchFrameOnScreen = p.getPatchframe().patch.objectLayerPanel.getLocationOnScreen();
+
+        if(patchFrameOnScreen.getX() + patchLoc.getX() + getWidth() > allScreenBounds.getWidth() + allScreenBounds.getX()) {
+            patchLoc.x = (int) (allScreenBounds.getWidth() + allScreenBounds.getX() - patchFrameOnScreen.getX() - getWidth());
+        }
+        if(patchFrameOnScreen.getY() + patchLoc.getY() + getHeight() > allScreenBounds.getHeight() + allScreenBounds.getY()) {
+            patchLoc.y = (int) (allScreenBounds.getHeight() + allScreenBounds.getY() - patchFrameOnScreen.getY() - getHeight());
         }
 
         return patchLoc;
