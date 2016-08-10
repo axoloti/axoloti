@@ -178,7 +178,7 @@ public abstract class IoletAbstract extends JPanel {
                     public void mouseDragged(MouseEvent e) {
                         if (!axoObj.IsLocked()) {
                             final PatchGUI patchGUI = getPatchGui();
-                            Point p = SwingUtilities.convertPoint(IoletAbstract.this, e.getPoint(), patchGUI.selectionRectLayerPanel);
+                            Point p = SwingUtilities.convertPoint(IoletAbstract.this, e.getPoint(), patchGUI.objectLayerPanel);
                             Component c = patchGUI.objectLayerPanel.findComponentAt(p);
                             while ((c != null) && !(c instanceof IoletAbstract)) {
                                 c = c.getParent();
@@ -190,12 +190,17 @@ public abstract class IoletAbstract extends JPanel {
                                 if (c != dragtarget) {
                                     // new target
                                     dragtarget = (IoletAbstract) c;
-                                    dragnet.SetDragPoint(dragtarget.getJackLocInCanvas());
+                                    Point jackLocation = dragtarget.getJackLocInCanvas();
+                                    patchGUI.zoomUI.scale(jackLocation);
+                                    dragnet.SetDragPoint(jackLocation);
                                 }
                             } else {
                                 // floating
-                                dragnet.SetDragPoint(p);
-                                dragtarget = null;
+                                if(dragnet != null) {
+                                    patchGUI.zoomUI.scale(p);
+                                    dragnet.SetDragPoint(p);
+                                    dragtarget = null;
+                                }
                             }
                         }
                         e.consume();
@@ -240,10 +245,4 @@ public abstract class IoletAbstract extends JPanel {
         axoObj.patch.delete(n);
         axoObj.patch.SetDirty();
     }
-
-    /*
-    @Override
-    public Point getToolTipLocation(MouseEvent event) {
-        return ZoomUtils.getToolTipLocation(this, event, axoObj);
-    }*/
 }
