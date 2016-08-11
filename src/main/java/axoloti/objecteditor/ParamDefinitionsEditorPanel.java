@@ -38,6 +38,6 @@ public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter
 
     @Override
     String getDefaultName() {
-        return "parameter";
+        return "p";
     }
 }

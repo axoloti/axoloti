@@ -38,6 +38,6 @@ public class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAt
 
     @Override
     String getDefaultName() {
-        return "attribute";
+        return "a";
     }
 }
