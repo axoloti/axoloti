@@ -25,7 +25,6 @@ import axoloti.PatchGUI;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.Theme;
-import axoloti.ZoomUtils;
 import axoloti.attribute.*;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.datatypes.DataType;
@@ -144,7 +143,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 if (popup.getParent() == null) {
                     popupIcon.add(popup);
                 }
-                ZoomUtils.showZoomedPopupMenu(popupIcon, AxoObjectInstance.this, popup);
+                popup.show(popupIcon,
+                        0, popupIcon.getHeight());
             }
         });
         Titlebar.add(popupIcon);

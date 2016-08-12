@@ -18,7 +18,6 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.ZoomUtils;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
@@ -75,7 +74,7 @@ public class AssignModulatorComponent extends JComponent {
     void doPopup() {
         JPopupMenu sub2 = new JPopupMenu();
         AssignModulatorMenuItems mi = new AssignModulatorMenuItems(param, sub2);
-        ZoomUtils.showZoomedPopupMenu(this, param.GetObjectInstance(), sub2);
+        sub2.show(this, 0, getHeight() - 1);
     }
 
     @Override

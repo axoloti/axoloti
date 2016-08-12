@@ -23,8 +23,6 @@ import axoloti.Patch;
 import axoloti.PatchGUI;
 import axoloti.SDFileReference;
 import axoloti.Theme;
-import axoloti.ZoomUI;
-import axoloti.ZoomUtils;
 import axoloti.attribute.AttributeInstance;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
@@ -38,8 +36,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -303,10 +299,10 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                     if (dragging) {
                         for (AxoObjectInstanceAbstract o : patch.objectinstances) {
                             if (o.dragging) {
-                                o.x = getZoomUI().removeZoomFactor(me.getLocationOnScreen().x) - o.dX;
-                                o.y = getZoomUI().removeZoomFactor(me.getLocationOnScreen().y) - o.dY;
-                                o.dX = getZoomUI().removeZoomFactor(me.getLocationOnScreen().x) - o.getX();
-                                o.dY = getZoomUI().removeZoomFactor(me.getLocationOnScreen().y) - o.getY();
+                                o.x = me.getLocationOnScreen().x - o.dX;
+                                o.y = me.getLocationOnScreen().y - o.dY;
+                                o.dX = me.getLocationOnScreen().x - o.getX();
+                                o.dY = me.getLocationOnScreen().y - o.getY();
                                 o.setLocation(o.x, o.y);
                             }
                         }
@@ -337,8 +333,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
             } else if (!IsLocked()) {
                 ArrayList<AxoObjectInstanceAbstract> toMove = new ArrayList<AxoObjectInstanceAbstract>();
-                dX = getZoomUI().removeZoomFactor(me.getXOnScreen()) - getX();
-                dY = getZoomUI().removeZoomFactor(me.getYOnScreen()) - getY();
+                dX = me.getXOnScreen() - getX();
+                dY = me.getYOnScreen() - getY();
                 dragging = true;
                 moveToDraggedLayer(this);
                 if (IsSelected()) {
@@ -346,8 +342,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                         if (o.IsSelected()) {
                             moveToDraggedLayer(o);
 
-                            o.dX = getZoomUI().removeZoomFactor(me.getXOnScreen()) - o.getX();
-                            o.dY = getZoomUI().removeZoomFactor(me.getYOnScreen()) - o.getY();
+                            o.dX = me.getXOnScreen() - o.getX();
+                            o.dY = me.getYOnScreen() - o.getY();
                             o.dragging = true;
                         }
                     }
@@ -392,10 +388,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             }
         }
         moveToObjectLayer(this, maxZIndex);
-    }
-
-    public ZoomUI getZoomUI() {
-        return ((PatchGUI) patch).zoomUI;
     }
 
     @Override
@@ -687,10 +679,4 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
     public void Close() {
     }
-
-    @Override
-    public Point getToolTipLocation(MouseEvent event) {
-        return ZoomUtils.getToolTipLocation(this, event, this);
-    }
-
 }

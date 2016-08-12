@@ -17,12 +17,9 @@
  */
 package components.control;
 
-import axoloti.PatchGUI;
-import axoloti.ZoomUtils;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.KeyUtils;
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
@@ -196,23 +193,6 @@ public abstract class ACtrlComponent extends JComponent {
 
     public void setParentAxoObjectInstance(AxoObjectInstance axoObj) {
         this.axoObj = axoObj;
-    }
-
-    @Override
-    public Point getToolTipLocation(MouseEvent event) {
-        return ZoomUtils.getToolTipLocation(this, event, axoObj);
-    }
-    
-    public double getScale() {
-        double zoom = 1.0;
-        if (this.axoObj != null && this.axoObj.patch != null) {
-            try {
-                zoom = ((PatchGUI) this.axoObj.patch).zoomUI.getScale();
-            } catch (ClassCastException ex) {
-                
-            }
-        }
-        return zoom;
     }
     
     public void robotMoveToCenter() {

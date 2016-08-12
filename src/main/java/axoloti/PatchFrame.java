@@ -192,12 +192,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                 KeyUtils.CONTROL_OR_CMD_MASK));
         this.redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, 
                 KeyUtils.CONTROL_OR_CMD_MASK | KeyEvent.SHIFT_DOWN_MASK));
-        this.zoomDefaultMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, 
-                KeyUtils.CONTROL_OR_CMD_MASK));
-        this.zoomInMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, 
-                KeyUtils.CONTROL_OR_CMD_MASK));
-        this.zoomOutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, 
-                KeyUtils.CONTROL_OR_CMD_MASK));
 
         createBufferStrategy(2);
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
@@ -334,9 +328,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jCheckBoxMenuItemCordsInBackground = new javax.swing.JCheckBoxMenuItem();
         jMenuItemAdjScroll = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JPopupMenu.Separator();
-        zoomInMenuItem = new javax.swing.JMenuItem();
-        zoomDefaultMenuItem = new javax.swing.JMenuItem();
-        zoomOutMenuItem = new javax.swing.JMenuItem();
         jMenuPatch = new javax.swing.JMenu();
         jCheckBoxMenuItemLive = new javax.swing.JCheckBoxMenuItem();
         jMenuItemUploadSD = new javax.swing.JMenuItem();
@@ -572,30 +563,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         });
         jMenuView.add(jMenuItemAdjScroll);
         jMenuView.add(jSeparator5);
-
-        zoomInMenuItem.setText("Zoom In");
-        zoomInMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                zoomInMenuItemActionPerformed(evt);
-            }
-        });
-        jMenuView.add(zoomInMenuItem);
-
-        zoomDefaultMenuItem.setText("Zoom to Default");
-        zoomDefaultMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                zoomDefaultMenuItemActionPerformed(evt);
-            }
-        });
-        jMenuView.add(zoomDefaultMenuItem);
-
-        zoomOutMenuItem.setText("Zoom Out");
-        zoomOutMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                zoomOutMenuItemActionPerformed(evt);
-            }
-        });
-        jMenuView.add(zoomOutMenuItem);
 
         jMenuBar1.add(jMenuView);
 
@@ -1027,18 +994,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         patch.Compile();
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
-    private void zoomInMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomInMenuItemActionPerformed
-        patch.handleZoom(Constants.ZOOM_ACTION.IN, new Point(0, 0));
-    }//GEN-LAST:event_zoomInMenuItemActionPerformed
-
-    private void zoomDefaultMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomDefaultMenuItemActionPerformed
-        patch.handleZoom(Constants.ZOOM_ACTION.DEFAULT, new Point(0, 0));
-    }//GEN-LAST:event_zoomDefaultMenuItemActionPerformed
-
-    private void zoomOutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomOutMenuItemActionPerformed
-        patch.handleZoom(Constants.ZOOM_ACTION.OUT, new Point(0, 0));
-    }//GEN-LAST:event_zoomOutMenuItemActionPerformed
-
     private void undoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoItemActionPerformed
         patch.undo();
         this.updateUndoRedoEnabled();
@@ -1132,9 +1087,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private javax.swing.JMenuItem redoItem;
     private javax.swing.JMenuItem undoItem;
     private axoloti.menus.WindowMenu windowMenu1;
-    private javax.swing.JMenuItem zoomDefaultMenuItem;
-    private javax.swing.JMenuItem zoomInMenuItem;
-    private javax.swing.JMenuItem zoomOutMenuItem;
     // End of variables declaration//GEN-END:variables
 
     void ShowDSPLoad(int pct) {

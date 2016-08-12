@@ -19,7 +19,6 @@ package axoloti.parameters;
 
 import axoloti.Preset;
 import axoloti.Theme;
-import axoloti.ZoomUtils;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
@@ -32,7 +31,6 @@ import components.control.ACtrlComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -437,8 +435,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public void doPopup(MouseEvent e) {
         JPopupMenu m = new JPopupMenu();
         populatePopup(m);
-
-        ZoomUtils.showZoomedPopupMenu(this, axoObj, m);
+        m.show(this, 0, getHeight());
     }
 
     public void populatePopup(JPopupMenu m) {
@@ -511,10 +508,5 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
 
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
-    }
-
-    @Override
-    public Point getToolTipLocation(MouseEvent event) {
-        return ZoomUtils.getToolTipLocation(this, event, axoObj);
     }
 }

@@ -42,7 +42,6 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -50,8 +49,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +69,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
-import javax.swing.RepaintManager;
 import javax.swing.TransferHandler;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
@@ -104,23 +100,16 @@ public class PatchGUI extends Patch {
     public JPanel draggedObjectLayerPanel = new JPanel();
     public JPanel netLayerPanel = new JPanel();
     public JPanel selectionRectLayerPanel = new JPanel();
-
-    public ZoomUI zoomUI = new ZoomUI(Constants.INITIAL_ZOOM,
-            Constants.ZOOM_STEP,
-            Constants.MAXIMUM_ZOOM,
-            Constants.MINIMUM_ZOOM,
-            this);
     
-    JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel, zoomUI);
-    JLayer<JComponent> draggedObjectLayer = new JLayer<JComponent>(draggedObjectLayerPanel, zoomUI);
-    JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel, zoomUI);
-    JLayer<JComponent> selectionRectLayer = new JLayer<JComponent>(selectionRectLayerPanel, zoomUI);
+    JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel);
+    JLayer<JComponent> draggedObjectLayer = new JLayer<JComponent>(draggedObjectLayerPanel);
+    JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel);
+    JLayer<JComponent> selectionRectLayer = new JLayer<JComponent>(selectionRectLayerPanel);
 
     SelectionRectangle selectionrectangle = new SelectionRectangle();
     Point selectionRectStart;
     Point panOrigin;
     Boolean Button1down = false;
-    Boolean Button2down = false;
     public AxoObjectFromPatch ObjEditor;
 
     public PatchGUI() {
@@ -335,23 +324,11 @@ public class PatchGUI extends Patch {
                 } else if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
                     MoveSelectedAxoObjInstances(Direction.LEFT, xsteps, ysteps);
                     ke.consume();
-                } else if (KeyUtils.isKeyCodeControlOrCommand(ke)) {
-                    panOrigin = Layers.getMousePosition();
-                    if (panOrigin != null) {
-                        zoomUI.removeZoomFactor(panOrigin);
-                        Button2down = true;
-                        zoomUI.startPan();
-                    }
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent ke) {
-                if (KeyUtils.isKeyCodeControlOrCommand(ke)) {
-                    PatchGUI.this.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
-                    Button2down = false;
-                    zoomUI.stopPan();
-                }
             }
         });
 
@@ -387,13 +364,8 @@ public class PatchGUI extends Patch {
                     selectionRectStart = me.getPoint();
                     Button1down = true;
                     Layers.requestFocusInWindow();
-                } else if (me.getButton() == MouseEvent.BUTTON2) {
-                    PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
-                    panOrigin = me.getPoint();
-                    Button2down = true;
                 } else {
                     Button1down = false;
-                    Button2down = false;
                 }
             }
 
@@ -407,10 +379,6 @@ public class PatchGUI extends Patch {
                     selectionrectangle.setVisible(false);
                 }
                 Button1down = false;
-                Button2down = false;
-                if (me.getButton() == MouseEvent.BUTTON2) {
-                    PatchGUI.this.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
-                }
             }
 
             @Override
@@ -461,19 +429,6 @@ public class PatchGUI extends Patch {
         ;
         };
 
-        Layers.addMouseWheelListener(new MouseWheelListener() {
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                if (KeyUtils.isControlOrCommandDown(e)) {
-                    int notches = e.getWheelRotation();
-                    Point origin = e.getPoint();
-                    Constants.ZOOM_ACTION action = notches < 0 ? Constants.ZOOM_ACTION.IN : Constants.ZOOM_ACTION.OUT;
-                    handleZoom(action, origin);
-                } else {
-                    Layers.getParent().dispatchEvent(e);
-                }
-            }
-        });
-
         Layers.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent ev) {
@@ -491,97 +446,16 @@ public class PatchGUI extends Patch {
                     selectionrectangle.setBounds(xmin, ymin, width, height);
                     selectionrectangle.setVisible(true);
                     ev.consume();
-                } else if (Button2down) {
-                    handlePan(ev);
-                }
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent ev) {
-                if (KeyUtils.isControlOrCommandDown(ev)) {
-                    PatchGUI.this.patchframe.getRootPane().setCursor(new Cursor(Cursor.MOVE_CURSOR));
-                    handlePan(ev);
                 }
             }
         });
 
         Layers.setDropTarget(dt);
         Layers.setVisible(true);
-
-        RepaintManager.setCurrentManager(new ZoomRepaintManager(zoomUI));
-    }
-
-    public void handlePan(MouseEvent ev) {
-        if (panOrigin == null) {
-            return;
-        }
-
-        int dx = panOrigin.x - ev.getX();
-        int dy = panOrigin.y - ev.getY();
-        JScrollBar horizontal = PatchGUI.this.getPatchframe().getScrollPane().getHorizontalScrollBar();
-        JScrollBar vertical = PatchGUI.this.getPatchframe().getScrollPane().getVerticalScrollBar();
-        int newHorizontalValue = Math.max(horizontal.getValue() + dx, 0);
-        int newVerticalValue = Math.max(vertical.getValue() + dy, 0);
-        if (!(horizontal.getValue() == 0 && newHorizontalValue == 0)) {
-            horizontal.setValue(newHorizontalValue);
-        }
-        if (!(vertical.getValue() == 0 && newVerticalValue == 0)) {
-            vertical.setValue(newVerticalValue);
-        }
-    }
-
-    public void handleZoom(Constants.ZOOM_ACTION action, Point origin) {
-        // this method implements zoom to mouse functionality
-        // we perform the scale change
-        // and then translate the viewport such that the point
-        // under the mouse remains the same
-        double oldScale = zoomUI.getScale();
-        double pre_x = origin.x / oldScale;
-        double pre_y = origin.y / oldScale;
-
-        JScrollBar horizontalScrollBar = PatchGUI.this.getPatchframe().getScrollPane().getHorizontalScrollBar();
-        JScrollBar verticalScrollBar = PatchGUI.this.getPatchframe().getScrollPane().getVerticalScrollBar();
-
-        int horizOldValue = horizontalScrollBar.getValue();
-        int vertOldValue = verticalScrollBar.getValue();
-
-        if (action == Constants.ZOOM_ACTION.DEFAULT) {
-            zoomUI.zoomToDefault();
-        } else if (action == Constants.ZOOM_ACTION.IN) {
-            zoomUI.zoomIn();
-        } else if (action == Constants.ZOOM_ACTION.OUT) {
-            zoomUI.zoomOut();
-        }
-
-        double newScale = zoomUI.getScale();
-
-        PatchGUI.this.AdjustSize();
-
-        double post_x = origin.x / newScale;
-        double post_y = origin.y / newScale;
-        double dx = (post_x - pre_x) * newScale;
-        double dy = (post_y - pre_y) * newScale;
-
-        int newHorizontalValue = (int) Math.round(horizOldValue - dx);
-        int newVerticalValue = (int) Math.round(vertOldValue - dy);
-
-        // adjust scrollbar extent to avoid jitter 
-        // when fully zoomed out
-        if (horizontalScrollBar.getMaximum() == horizontalScrollBar.getVisibleAmount()) {
-            horizontalScrollBar.setVisibleAmount(horizontalScrollBar.getMaximum() - newHorizontalValue);
-        }
-
-        if (verticalScrollBar.getMaximum() == verticalScrollBar.getVisibleAmount()) {
-            verticalScrollBar.setVisibleAmount(verticalScrollBar.getMaximum() - newVerticalValue);
-        }
-
-        horizontalScrollBar.setValue(newHorizontalValue);
-        verticalScrollBar.setValue(newVerticalValue);
     }
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         SelectNone();
-        pos = zoomUI.removeZoomFactor(pos);
         if (v.isEmpty()) {
             return;
         }
@@ -1061,10 +935,6 @@ public class PatchGUI extends Patch {
     @Override
     public void AdjustSize() {
         Dimension s = GetSize();
-        clampLayerSize(s);
-        double zoom = zoomUI.getScale();
-        s.height *= zoom;
-        s.width *= zoom;
         clampLayerSize(s);
         Dimension s2 = Layers.getSize();
         if (s2.equals(s)) {
