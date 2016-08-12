@@ -965,6 +965,7 @@ public class PatchGUI extends Patch {
             SelectNone();
             objectLayerPanel.add(objinst);
             objinst.SetSelected(true);
+            objinst.moveToFront();
             objinst.revalidate();
             AdjustSize();
         }
