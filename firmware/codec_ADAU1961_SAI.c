@@ -443,7 +443,6 @@ void codec_ADAU1961_i2s_init(uint16_t sampleRate) {
   SAI1_Block_A->CR1 |= SAI_xCR1_SAIEN;
   SAI1_Block_B->CR1 |= SAI_xCR1_SAIEN;
 
-  codec_ADAU1961_hw_init(sampleRate);
 }
 
 void codec_ADAU1961_Stop(void) {
