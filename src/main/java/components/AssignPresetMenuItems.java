@@ -17,7 +17,7 @@
  */
 package components;
 
-import axoloti.parameters.ParameterInstance;
+import axoloti.parameterviews.ParameterInstanceView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComponent;
@@ -30,10 +30,10 @@ import javax.swing.JPanel;
  */
 public class AssignPresetMenuItems {
 
-    final ParameterInstance param;
+    final ParameterInstanceView param;
     final JComponent parent;
 
-    public AssignPresetMenuItems(ParameterInstance param, JComponent parent) {
+    public AssignPresetMenuItems(ParameterInstanceView param, JComponent parent) {
         this.param = param;
         this.parent = parent;
 
@@ -63,8 +63,8 @@ public class AssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (AssignPresetMenuItems.this.param.getPresets() != null) {
-                        AssignPresetMenuItems.this.param.getPresets().clear();
+                    if (AssignPresetMenuItems.this.param.getParameterInstance().getPresets() != null) {
+                        AssignPresetMenuItems.this.param.getParameterInstance().getPresets().clear();
                     }
                 }
             });

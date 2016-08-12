@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Patch;
+import axoloti.PatchController;
 import axoloti.utils.OSDetect;
 import java.io.File;
 import java.util.logging.Level;
@@ -29,10 +29,10 @@ import java.util.logging.Logger;
  */
 public class QCmdCompilePatch extends QCmdShellTask {
 
-    Patch p;
+    PatchController patchController;
 
-    public QCmdCompilePatch(Patch p) {
-        this.p = p;
+    public QCmdCompilePatch(PatchController patchController) {
+        this.patchController = patchController;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class QCmdCompilePatch extends QCmdShellTask {
         if (success) {
             return "Done compiling patch";
         } else {
-            return "Compiling patch failed ( " + p.getFileNamePath() + " ) ";
+            return "Compiling patch failed ( " + patchController.getFileNamePath() + " ) ";
         }
     }
     
@@ -70,6 +70,6 @@ public class QCmdCompilePatch extends QCmdShellTask {
 
     @Override
     QCmd err() {
-        return new QCmdShowCompileFail(p);
+        return new QCmdShowCompileFail(patchController);
     }
 }

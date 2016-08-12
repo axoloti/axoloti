@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import components.displays.VValueLabelsComponent;
+import axoloti.displayviews.DisplayInstanceViewVScale;
 import java.nio.ByteBuffer;
 
 /**
@@ -26,18 +26,8 @@ import java.nio.ByteBuffer;
  */
 public class DisplayInstanceVScale extends DisplayInstance<DisplayVScale> {
 
-    private VValueLabelsComponent vlabels;
-
     public DisplayInstanceVScale() {
         super();
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        vlabels = new VValueLabelsComponent(-60, 10, 10);
-        add(vlabels);
     }
 
     @Override
@@ -52,10 +42,11 @@ public class DisplayInstanceVScale extends DisplayInstance<DisplayVScale> {
 
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {
+        super.ProcessByteBuffer(bb);
     }
 
     @Override
-    public void updateV() {
+    public DisplayInstanceViewVScale ViewFactory() {
+        return new DisplayInstanceViewVScale(this);
     }
-
 }

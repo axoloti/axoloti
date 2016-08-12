@@ -17,18 +17,13 @@
  */
 package axoloti.inlets;
 
-import axoloti.Theme;
+import axoloti.Net;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
-import axoloti.iolet.IoletAbstract;
 import axoloti.object.AxoObjectInstance;
-import components.JackInputComponent;
-import components.LabelComponent;
-import components.SignalMetaDataIcon;
-import java.awt.Dimension;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JPopupMenu;
+import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import org.simpleframework.xml.*;
 
 /**
@@ -36,45 +31,43 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "dest")
-public class InletInstance<T extends Inlet> extends IoletAbstract implements AtomInstance<T> {
+public class InletInstance<T extends Inlet> implements AtomInstance<T> {
 
     @Attribute(name = "inlet", required = false)
     public String inletname;
+    @Deprecated
+    @Attribute(required = false)
+    public String name;
+    @Attribute(name = "obj", required = false)
+    public String objname;
 
     private final T inlet;
 
+    protected AxoObjectInstanceAbstract axoObj;
+
     public String getInletname() {
-        if (inletname != null) {
-            return inletname;
-        } else {
-            int sepIndex = name.lastIndexOf(' ');
-            return name.substring(sepIndex + 1);
-        }
+        return inletname;
     }
 
     @Override
-    public T GetDefinition() {
+    public AxoObjectInstanceAbstract getObjectInstance() {
+        return this.axoObj;
+    }
+
+    @Override
+    public T getDefinition() {
         return inlet;
     }
 
     public InletInstance() {
         this.inlet = null;
         this.axoObj = null;
-        this.setBackground(Theme.getCurrentTheme().Object_Default_Background);
     }
 
     public InletInstance(T inlet, final AxoObjectInstance axoObj) {
         this.inlet = inlet;
         this.axoObj = axoObj;
         RefreshName();
-        PostConstructor();
-    }
-
-    public final void RefreshName() {
-        name = axoObj.getInstanceName() + " " + inlet.name;
-        objname = axoObj.getInstanceName();
-        inletname = inlet.name;
-        name = null;
     }
 
     public DataType GetDataType() {
@@ -89,32 +82,57 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
         return inlet.name;
     }
 
-    public final void PostConstructor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        setMaximumSize(new Dimension(32767, 14));
-        jack = new JackInputComponent(this);
-        jack.setForeground(inlet.getDatatype().GetColor());
-        jack.setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        add(jack);
-        add(new SignalMetaDataIcon(inlet.GetSignalMetaData()));
-        if (axoObj.getType().GetInlets().size() > 1) {
-            add(Box.createHorizontalStrut(3));
-            add(new LabelComponent(inlet.name));
-        }
-        add(Box.createHorizontalGlue());
-        setToolTipText(inlet.description);
-
-        addMouseListener(this);
-        addMouseMotionListener(this);
-    }
-
     public Inlet getInlet() {
         return inlet;
     }
 
-    @Override
-    public JPopupMenu getPopup() {
-        return new InletInstancePopupMenu(this);
+    public void RefreshName() {
+        name = axoObj.getInstanceName() + " " + inlet.name;
+        objname = axoObj.getInstanceName();
+        inletname = inlet.name;
+        name = null;
+    }
+
+    public String getObjname() {
+        return this.objname;
+    }
+
+    public boolean isConnected() {
+        if (axoObj == null) {
+            return false;
+        }
+        if (axoObj.getPatchModel() == null) {
+            return false;
+        }
+
+        return (axoObj.getPatchModel().GetNet(this) != null);
+    }
+
+    public Net disconnect() {
+        Net n = axoObj.getPatchModel().disconnect(this);
+        if (n != null) {
+            axoObj.getPatchModel().SetDirty();
+        }
+        return n;
+    }
+
+    public void deleteNet() {
+        Net n = axoObj.getPatchModel().GetNet(this);
+        axoObj.getPatchModel().delete(n);
+        if (n != null) {
+            axoObj.getPatchModel().SetDirty();
+        }
+    }
+
+    public InletInstanceView ViewFactory(AxoObjectInstanceViewAbstract o) {
+        return new InletInstanceView(this, o);
+    }
+
+    public InletInstanceView CreateView(AxoObjectInstanceViewAbstract o) {
+        InletInstanceView inletInstanceView = ViewFactory(o);
+        AxoObjectInstanceView ov = (AxoObjectInstanceView) o;
+        ov.p_inletViews.add(inletInstanceView);
+        inletInstanceView.PostConstructor();
+        return inletInstanceView;
     }
 }

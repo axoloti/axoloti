@@ -17,7 +17,7 @@
  */
 package axoloti.object;
 
-import axoloti.Patch;
+import axoloti.PatchModel;
 import java.awt.Point;
 
 /**
@@ -35,12 +35,11 @@ public class AxoObjectHyperlink extends AxoObjectAbstract {
     }
 
     @Override
-    public AxoObjectInstanceHyperlink CreateInstance(Patch patch, String InstanceName1, Point location) {
+    public AxoObjectInstanceHyperlink CreateInstance(PatchModel patch, String InstanceName1, Point location) {
         AxoObjectInstanceHyperlink o = new AxoObjectInstanceHyperlink(this, patch, InstanceName1, location);
         if (patch != null) {
             patch.objectinstances.add(o);
         }
-        o.PostConstructor();
         return o;
     }
  

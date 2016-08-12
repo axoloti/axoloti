@@ -18,7 +18,7 @@
 package components;
 
 import axoloti.dialogs.MidiAssignments;
-import axoloti.parameters.ParameterInstance;
+import axoloti.parameterviews.ParameterInstanceView;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,17 +34,17 @@ import javax.swing.JRadioButton;
  */
 public class AssignMidiCCMenuItems {
 
-    public AssignMidiCCMenuItems(final ParameterInstance param, JComponent parent) {
+    public AssignMidiCCMenuItems(final ParameterInstanceView parameterInstanceView, JComponent parent) {
         JMenuItem m = new JMenuItem("Assign...");
         m.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MidiAssignments ma = new MidiAssignments(null, true, param);
+                MidiAssignments ma = new MidiAssignments(null, true, parameterInstanceView);
                 int v = ma.getResult();
                 if (v>=0) {
-                    param.actionPerformed(new ActionEvent(this, 0, "CC" + v));
+                    parameterInstanceView.actionPerformed(new ActionEvent(this, 0, "CC" + v));
                 } else {
-                    param.actionPerformed(new ActionEvent(this, 0, "none"));                    
+                    parameterInstanceView.actionPerformed(new ActionEvent(this, 0, "none"));                    
                 }
             }
         });
@@ -52,7 +52,7 @@ public class AssignMidiCCMenuItems {
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(16, 0));
         ButtonGroup group = new ButtonGroup();
-        int cc = param.getMidiCC();
+        int cc = parameterInstanceView.getParameterInstance().getMidiCC();
         parent.add(p);
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 8; j++) {
@@ -60,7 +60,7 @@ public class AssignMidiCCMenuItems {
                 if (k != 0) {
                     JRadioButton rbMenuItem = new JRadioButton("CC" + k);
                     rbMenuItem.setActionCommand("CC" + k);
-                    rbMenuItem.addActionListener(param);
+                    rbMenuItem.addActionListener(parameterInstanceView);
                     group.add(rbMenuItem);
                     if (cc == k) {
                         rbMenuItem.setSelected(true);
@@ -73,7 +73,7 @@ public class AssignMidiCCMenuItems {
                     if (cc < 0) {
                         rbMenuItem.setSelected(true);
                     }
-                    rbMenuItem.addActionListener(param);
+                    rbMenuItem.addActionListener(parameterInstanceView);
                     p.add(rbMenuItem);
                 }
             }

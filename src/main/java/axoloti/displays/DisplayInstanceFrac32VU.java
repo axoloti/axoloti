@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import components.displays.VUComponent;
+import axoloti.displayviews.DisplayInstanceViewFrac32VU;
 
 /**
  *
@@ -25,22 +25,12 @@ import components.displays.VUComponent;
  */
 public class DisplayInstanceFrac32VU extends DisplayInstanceFrac32<DisplayFrac32VU> {
 
-    private VUComponent vu;
-
     public DisplayInstanceFrac32VU() {
+        super();
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        vu = new VUComponent();
-        vu.setValue(0);
-        add(vu);
-    }
-
-    @Override
-    public void updateV() {
-        vu.setValue(value.getDouble());
+    public DisplayInstanceViewFrac32VU ViewFactory() {
+        return new DisplayInstanceViewFrac32VU(this);
     }
 }

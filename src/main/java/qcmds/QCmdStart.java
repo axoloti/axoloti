@@ -18,7 +18,7 @@
 package qcmds;
 
 import axoloti.Connection;
-import axoloti.Patch;
+import axoloti.PatchController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,12 +28,12 @@ import java.util.logging.Logger;
  */
 public class QCmdStart implements QCmdSerialTask {
 
-    Patch p;
+    PatchController patchController;
 
     static int patch_start_timeout = 10000; //msec
 
-    public QCmdStart(Patch p) {
-        this.p = p;
+    public QCmdStart(PatchController patchController) {
+        this.patchController = patchController;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class QCmdStart implements QCmdSerialTask {
     public QCmd Do(Connection connection) {
         connection.ClearSync();
 
-        connection.setPatch(p);
+        connection.setPatchController(patchController);
 
         connection.TransmitStart();
         if (connection.WaitSync(patch_start_timeout)) {

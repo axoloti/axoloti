@@ -17,11 +17,11 @@
  */
 package components;
 
-import axoloti.Patch;
+import axoloti.PatchModel;
 import axoloti.Preset;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
-import axoloti.parameters.ParameterInstance;
+import axoloti.parameterviews.ParameterInstanceView;
 import components.control.ACtrlComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
@@ -39,12 +39,12 @@ import javax.swing.JPanel;
  */
 public class AssignPresetPanel extends JPanel {
 
-    final ParameterInstance param;
+    final ParameterInstanceView parameterInstanceView;
     final ArrayList<ACtrlComponent> ctrls;
 
-    public AssignPresetPanel(ParameterInstance param) {
-        this.param = param;
-        int n = param.GetObjectInstance().getPatch().getSettings().GetNPresets();
+    public AssignPresetPanel(ParameterInstanceView parameterInstanceView) {
+        this.parameterInstanceView = parameterInstanceView;
+        int n = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel().getSettings().GetNPresets();
         ctrls = new ArrayList<ACtrlComponent>(n);
 
         setLayout(new GridBagLayout());
@@ -56,16 +56,16 @@ public class AssignPresetPanel extends JPanel {
             cb.addActionListener(cbActionListener);
             add(cb, c);
             c.gridx = 1;
-            ACtrlComponent ctrl = param.CreateControl();
+            ACtrlComponent ctrl = parameterInstanceView.CreateControl();
             ctrls.add(ctrl);
             ctrl.addACtrlListener(ctrlListener);
-            Preset p = param.GetPreset(i + 1);
+            Preset p = parameterInstanceView.getParameterInstance().GetPreset(i + 1);
             if (p != null) {
                 cb.setSelected(true);
                 ctrl.setValue(p.value.getDouble());
             } else {
                 ctrl.setEnabled(false);
-                ctrl.setValue(param.getValue().getDouble());
+                ctrl.setValue(parameterInstanceView.getParameterInstance().getValue().getDouble());
             }
             add(ctrl, c);
         }
@@ -78,22 +78,22 @@ public class AssignPresetPanel extends JPanel {
             String[] s = e.getActionCommand().split(" ");
             int i = Integer.parseInt(s[1]) - 1;
             if (((JCheckBox) e.getSource()).isSelected()) {
-                param.AddPreset(i + 1, param.getValue());
+                parameterInstanceView.AddPreset(i + 1, parameterInstanceView.getParameterInstance().getValue());
                 ctrls.get(i).setEnabled(true);
-                ctrls.get(i).setValue(param.GetPreset(i + 1).value.getDouble()); // TBC!!!
+                ctrls.get(i).setValue(parameterInstanceView.getParameterInstance().GetPreset(i + 1).value.getDouble()); // TBC!!!
             } else {
                 ctrls.get(i).setEnabled(false);
-                param.RemovePreset(i + 1);
+                parameterInstanceView.RemovePreset(i + 1);
             }
-            Patch p = param.GetObjectInstance().getPatch();
-            if (p!=null){
-                p.SetDirty();
+            PatchModel patchModel = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel();
+            if (patchModel != null) {
+                patchModel.SetDirty();
             }
-            param.GetObjectInstance().patch.presetUpdatePending = true;
+            patchModel.presetUpdatePending = true;
         }
 
     };
-    
+
     double valueBeforeAdjustment;
 
     ACtrlListener ctrlListener = new ACtrlListener() {
@@ -103,14 +103,14 @@ public class AssignPresetPanel extends JPanel {
             int i = ctrls.indexOf(e.getSource());
             if (i >= 0) {
                 if (ctrls.get(i).isEnabled()) {
-                    if (param.getValue() instanceof ValueInt32) {
-                        param.AddPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
-                    } else if (param.getValue() instanceof ValueFrac32) {
-                        param.AddPreset(i + 1, new ValueFrac32(ctrls.get(i).getValue()));
+                    if (parameterInstanceView.getParameterInstance().getValue() instanceof ValueInt32) {
+                        parameterInstanceView.getParameterInstance().AddPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
+                    } else if (parameterInstanceView.getParameterInstance().getValue() instanceof ValueFrac32) {
+                        parameterInstanceView.AddPreset(i + 1, new ValueFrac32(ctrls.get(i).getValue()));
                     }
                 }
             }
-            param.GetObjectInstance().patch.presetUpdatePending = true;
+            parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel().presetUpdatePending = true;
         }
 
         @Override
@@ -126,9 +126,9 @@ public class AssignPresetPanel extends JPanel {
             int i = ctrls.indexOf(e.getSource());
             if (i >= 0) {
                 if (valueBeforeAdjustment != ctrls.get(i).getValue()) {
-                    Patch p = param.GetObjectInstance().getPatch();
-                    if (p!=null){
-                        p.SetDirty();
+                    PatchModel patchModel = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel();
+                    if (patchModel != null) {
+                        patchModel.SetDirty();
                     }
                 }
             }

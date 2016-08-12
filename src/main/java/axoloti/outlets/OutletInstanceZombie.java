@@ -19,9 +19,7 @@ package axoloti.outlets;
 
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstanceZombie;
-import components.LabelComponent;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 
 /**
  *
@@ -36,12 +34,6 @@ public class OutletInstanceZombie extends OutletInstance {
         this.axoObj = obj;
         this.outletname = name;
         this.objname = obj.getInstanceName();
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        add(Box.createHorizontalGlue());
-        add(new LabelComponent(this.outletname));
-        add(Box.createHorizontalStrut(2));
-        jack = new components.JackOutputComponent(this);
-        add(jack);
     }
 
     @Override
@@ -54,4 +46,16 @@ public class OutletInstanceZombie extends OutletInstance {
         return outletname;
     }
 
+    @Override
+    public OutletInstanceView ViewFactory(AxoObjectInstanceViewAbstract o) {
+        return new OutletInstanceZombieView(this, o);
+    }
+
+    @Override
+    public OutletInstanceView CreateView(AxoObjectInstanceViewAbstract o) {
+        OutletInstanceView outletInstanceView = ViewFactory(o);
+        o.add(outletInstanceView);
+        o.resizeToGrid();
+        return outletInstanceView;
+    }
 }

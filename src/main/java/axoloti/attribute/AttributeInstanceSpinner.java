@@ -18,10 +18,9 @@
 package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttributeSpinner;
+import axoloti.attributeviews.AttributeInstanceViewSpinner;
 import axoloti.object.AxoObjectInstance;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
-import components.control.NumberBoxComponent;
+import axoloti.objectviews.AxoObjectInstanceView;
 
 /**
  *
@@ -29,7 +28,7 @@ import components.control.NumberBoxComponent;
  */
 public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeSpinner> {
 
-    NumberBoxComponent spinner;
+    private AxoObjectInstance axoObj;
 
     public AttributeInstanceSpinner() {
     }
@@ -40,57 +39,9 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
         value = attr.getDefaultValue();
     }
 
-    int valueBeforeAdjustment;
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        if (value < attr.getMinValue()) {
-            value = attr.getMinValue();
-        }
-        if (value > attr.getMaxValue()) {
-            value = attr.getMaxValue();
-        }
-        spinner = new NumberBoxComponent(value, attr.getMinValue(), attr.getMaxValue(), 1.0);
-        spinner.setParentAxoObjectInstance(this.axoObj);
-        add(spinner);
-        spinner.addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                value = (int) spinner.getValue();
-            }
-
-            @Override
-            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
-                valueBeforeAdjustment = value;
-            }
-
-            @Override
-            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
-                if (value != valueBeforeAdjustment) {
-                    SetDirty();
-                }
-            }
-        });
-    }
-
     @Override
     public String CValue() {
         return "" + value;
-    }
-
-    @Override
-    public void Lock() {
-        if (spinner != null) {
-            spinner.setEnabled(false);
-        }
-    }
-
-    @Override
-    public void UnLock() {
-        if (spinner != null) {
-            spinner.setEnabled(true);
-        }
     }
 
     public int getValue() {
@@ -99,5 +50,10 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    @Override
+    public AttributeInstanceViewSpinner ViewFactory(AxoObjectInstanceView o) {
+        return new AttributeInstanceViewSpinner(this, o);
     }
 }

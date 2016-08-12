@@ -17,8 +17,8 @@
  */
 package axoloti;
 
-import axoloti.inlets.InletInstance;
-import axoloti.outlets.OutletInstance;
+import axoloti.inlets.InletInstanceView;
+import axoloti.outlets.OutletInstanceView;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -30,13 +30,15 @@ import javax.swing.SwingUtilities;
  *
  * @author Johannes Taelman
  */
-public class NetDragging extends Net {
+public class NetDragging extends NetView {
 
-    private PatchGUI patchGUI;
-
-    public NetDragging(PatchGUI patchGUI) {
-        super(patchGUI);
-        this.patchGUI = patchGUI;
+    public NetDragging(PatchView patchView) {
+        this(new Net(), patchView);
+    }
+    
+    public NetDragging(Net n, PatchView patchView) {
+        super(n, patchView);
+        this.net = n;
     }
 
     Point p0;
@@ -58,14 +60,14 @@ public class NetDragging extends Net {
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         Color c;
-        if (isValidNet()) {
+        if (net.isValidNet()) {
             if (selected) {
                 g2.setStroke(strokeValidSelected);
             } else {
                 g2.setStroke(strokeValidDeselected);
             }
 
-            c = GetDataType().GetColor();
+            c = net.getDataType().GetColor();
         } else {
             if (selected) {
                 g2.setStroke(strokeBrokenSelected);
@@ -73,27 +75,27 @@ public class NetDragging extends Net {
                 g2.setStroke(strokeBrokenDeselected);
             }
 
-            if (GetDataType() != null) {
-                c = GetDataType().GetColor();
+            if (net.getDataType() != null) {
+                c = net.getDataType().GetColor();
             } else {
                 c = Theme.getCurrentTheme().Cable_Shadow;
             }
         }
         if (p0 != null) {
-            Point from = SwingUtilities.convertPoint(getPatchGui().Layers, p0, this);
-            for (InletInstance i : dest) {
+            Point from = SwingUtilities.convertPoint(patchView.Layers, p0, this);
+            for (InletInstanceView i : dest) {
                 Point p1 = i.getJackLocInCanvas();
 
-                Point to = SwingUtilities.convertPoint(getPatchGui().Layers, p1, this);
+                Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
                 g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
                 DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
                 g2.setColor(c);
                 DrawWire(g2, from.x, from.y, to.x, to.y);
             }
-            for (OutletInstance i : source) {
+            for (OutletInstanceView i : source) {
                 Point p1 = i.getJackLocInCanvas();
 
-                Point to = SwingUtilities.convertPoint(getPatchGui().Layers, p1, this);
+                Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
                 g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
                 DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
                 g2.setColor(c);
@@ -117,14 +119,14 @@ public class NetDragging extends Net {
             max_y = p0.y;
         }
 
-        for (InletInstance i : dest) {
+        for (InletInstanceView i : dest) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);
             max_x = Math.max(max_x, p1.x);
             max_y = Math.max(max_y, p1.y);
         }
-        for (OutletInstance i : source) {
+        for (OutletInstanceView i : source) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);
@@ -135,7 +137,7 @@ public class NetDragging extends Net {
         int fudge = 8;
         this.setBounds(min_x - fudge, min_y - fudge,
                 Math.max(1, max_x - min_x + (2 * fudge)),
-                (int)CtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * fudge));
+                (int) CtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * fudge));
     }
 
 }

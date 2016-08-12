@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import components.LabelComponent;
+import axoloti.displayviews.DisplayInstanceViewInt32Label;
 
 /**
  *
@@ -25,23 +25,12 @@ import components.LabelComponent;
  */
 public class DisplayInstanceInt32Label extends DisplayInstanceInt32<DisplayInt32Label> {
 
-    private LabelComponent readout;
-
     public DisplayInstanceInt32Label() {
         super();
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        readout = new LabelComponent("xxxxxx");
-        add(readout);
-        readout.setSize(80, 18);
-    }
-
-    @Override
-    public void updateV() {
-        readout.setText(":"+Integer.toString(value.getInt()));
+    public DisplayInstanceViewInt32Label ViewFactory() {
+        return new DisplayInstanceViewInt32Label(this);
     }
 }

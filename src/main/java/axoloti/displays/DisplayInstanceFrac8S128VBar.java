@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import components.VGraphComponent;
+import axoloti.displayviews.DisplayInstanceViewFrac8S128VBar;
 import java.nio.ByteBuffer;
 
 /**
@@ -30,15 +30,6 @@ public class DisplayInstanceFrac8S128VBar extends DisplayInstance<DisplayFrac8S1
 
     public DisplayInstanceFrac8S128VBar() {
         super();
-    }
-
-    private VGraphComponent vgraph;
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        vgraph = new VGraphComponent(n, 128, -64, 64);
-        add(vgraph);
     }
 
     @Override
@@ -61,16 +52,11 @@ public class DisplayInstanceFrac8S128VBar extends DisplayInstance<DisplayFrac8S1
 
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {
+        super.ProcessByteBuffer(bb);
         bb.get(dst);
         for (int i = 0; i < n; i++) {
             idst[i] = dst[i];
         }
-        vgraph.setValue(idst);
-    }
-
-    @Override
-    public void updateV() {
-
     }
 
     @Override
@@ -78,4 +64,16 @@ public class DisplayInstanceFrac8S128VBar extends DisplayInstance<DisplayFrac8S1
         return n / 4;
     }
 
+    public int[] getIDst() {
+        return idst;
+    }
+
+    public int getN() {
+        return n;
+    }
+
+    @Override
+    public DisplayInstanceViewFrac8S128VBar ViewFactory() {
+        return new DisplayInstanceViewFrac8S128VBar(this);
+    }
 }

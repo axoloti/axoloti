@@ -18,7 +18,9 @@
 package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttribute;
+import axoloti.attributeviews.AttributeInstanceViewInt;
 import axoloti.object.AxoObjectInstance;
+import axoloti.objectviews.AxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -29,6 +31,8 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
 
     @Attribute
     int value;
+    
+    private int valueBeforeAdjustment;
 
     public AttributeInstanceInt() {
     }
@@ -43,5 +47,18 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
             AttributeInstanceInt a1 = (AttributeInstanceInt) a;
             value = a1.value;
         }
+    }
+    
+    @Override
+    public AttributeInstanceViewInt ViewFactory(AxoObjectInstanceView o) {
+        throw new RuntimeException("Cannot instantiate AttributeInstanceIntView");
+    }
+    
+    public int getValueBeforeAdjustment() {
+        return this.valueBeforeAdjustment;
+    }
+    
+    public void setValueBeforeAdjustment(int valueBeforeAdjustment) {
+        this.valueBeforeAdjustment = valueBeforeAdjustment;
     }
 }

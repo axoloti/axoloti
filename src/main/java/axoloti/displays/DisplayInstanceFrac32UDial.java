@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import components.displays.DispComponent;
+import axoloti.displayviews.DisplayInstanceViewFrac32UDial;
 
 /**
  *
@@ -25,22 +25,12 @@ import components.displays.DispComponent;
  */
 public class DisplayInstanceFrac32UDial extends DisplayInstanceFrac32<DisplayFrac32UDial> {
 
-    private DispComponent dial;
-
     public DisplayInstanceFrac32UDial() {
         super();
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        dial = new DispComponent(0.0, 0.0, 64.0);
-        add(dial);
-    }
-
-    @Override
-    public void updateV() {
-        dial.setValue(value.getDouble());
+    public DisplayInstanceViewFrac32UDial ViewFactory() {
+        return new DisplayInstanceViewFrac32UDial(this);
     }
 }

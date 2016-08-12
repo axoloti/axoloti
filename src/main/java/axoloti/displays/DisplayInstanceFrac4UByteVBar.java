@@ -17,35 +17,19 @@
  */
 package axoloti.displays;
 
-import components.displays.VLineComponent;
+import axoloti.displayviews.DisplayInstanceViewFrac4UByteVBar;
 
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceFrac4UByteVBar extends DisplayInstanceFrac32<DisplayFrac4UByteVBar> {
-
-    private VLineComponent vbar[];
-
     public DisplayInstanceFrac4UByteVBar() {
+        super();
     }
-
+    
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        vbar = new VLineComponent[4];
-        for (int i = 0; i < 4; i++) {
-            vbar[i] = new VLineComponent(0, 0, 64);
-            vbar[i].setValue(0);
-            add(vbar[i]);
-        }
-    }
-
-    @Override
-    public void updateV() {
-        vbar[0].setValue((byte) ((value.getRaw() & 0x000000FF)));
-        vbar[1].setValue((byte) ((value.getRaw() & 0x0000FF00) >> 8));
-        vbar[2].setValue((byte) ((value.getRaw() & 0x00FF0000) >> 16));
-        vbar[3].setValue((byte) ((value.getRaw() & 0xFF000000) >> 24));
+    public DisplayInstanceViewFrac4UByteVBar ViewFactory() {
+        return new DisplayInstanceViewFrac4UByteVBar(this);
     }
 }

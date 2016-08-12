@@ -18,17 +18,16 @@
 package axoloti.object;
 
 import axoloti.MainFrame;
-import axoloti.Patch;
+import axoloti.PatchController;
 import axoloti.PatchFrame;
-import axoloti.PatchGUI;
+import axoloti.PatchModel;
+import axoloti.PatchView;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Strategy;
 
 /**
  *
@@ -36,8 +35,9 @@ import org.simpleframework.xml.strategy.Strategy;
  */
 public class AxoObjectFromPatch extends AxoObject {
 
-    Patch p;
-    PatchGUI pg;
+    PatchModel patchModel;
+    PatchView patchView;
+    PatchController patchController;
     PatchFrame pf;
     File f;
 
@@ -45,9 +45,15 @@ public class AxoObjectFromPatch extends AxoObject {
         this.f = f;
         Serializer serializer = new Persister();
         try {
-            p = serializer.read(Patch.class, f);
-            p.setFileNamePath(f.getAbsolutePath());
-            p.PostContructor();
+            patchModel = serializer.read(PatchModel.class, f);
+            patchController = new PatchController();
+            patchView = new PatchView(patchController);
+            patchModel.addModelChangedListener(patchView);
+            patchController.setPatchModel(patchModel);
+            patchController.setPatchView(patchView);
+            patchView.setFileNamePath(f.getAbsolutePath());
+            patchView.PostConstructor();
+            patchView.ObjEditor = this;
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -59,12 +65,7 @@ public class AxoObjectFromPatch extends AxoObject {
     }
 
     final public void UpdateObject() {
-        AxoObject o;
-        if (pg == null) {
-            o = p.GenerateAxoObj(new AxoObject());
-        } else {
-            o = pg.GenerateAxoObj(new AxoObject());
-        }
+        AxoObject o = patchModel.GenerateAxoObj(new AxoObject());
         attributes = o.attributes;
         depends = o.depends;
         displays = o.displays;
@@ -89,23 +90,8 @@ public class AxoObjectFromPatch extends AxoObject {
 
     @Override
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
-        if (pg == null) {
-            Strategy strategy = new AnnotationStrategy();
-            Serializer serializer = new Persister(strategy);
-            try {
-                pg = serializer.read(PatchGUI.class, f);
-                pf = new PatchFrame((PatchGUI) pg, MainFrame.mainframe.getQcmdprocessor());
-                pg.setFileNamePath(f.getPath());
-                pg.PostContructor();
-                pg.ObjEditor = this;
-            } catch (Exception ex) {
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         if (pf == null) {
-            pf = new PatchFrame((PatchGUI) pg, MainFrame.mainframe.getQcmdprocessor());
-            pg.setFileNamePath(id);
-            pg.PostContructor();
+            pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);

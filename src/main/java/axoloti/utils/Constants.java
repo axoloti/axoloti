@@ -37,5 +37,5 @@ public class Constants {
     public static final String OBJECT_LAYER_PANEL = "OBJECT_LAYER_PANEL";
     public static final String DRAGGED_OBJECT_LAYER_PANEL = "DRAGGED_OBJECT_LAYER_PANEL";
 
-    public static final int ANCESTOR_CACHE_SIZE = 1024;
+    public static final String TEMP_OBJECT_SUFFIX = "____tmp";
 }

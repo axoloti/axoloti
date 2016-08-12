@@ -245,19 +245,18 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             jTextFieldHelp.setVisible(false);
             jLabelHelp.setVisible(false);
         } else // normal objects
-        if (sellib != null) {
-            jMenuItemSave.setEnabled(!sellib.isReadOnly());
-            if (sellib.isReadOnly()) {
-                SetReadOnly(true);
-                jLabelLibrary.setText(sellib.getId() + " (readonly)");
-                setTitle(sellib.getId() + ":" + origObj.id + " (readonly)");
-            } else {
-                jLabelLibrary.setText(sellib.getId());
-                setTitle(sellib.getId() + ":" + origObj.id);
+         if (sellib != null) {
+                jMenuItemSave.setEnabled(!sellib.isReadOnly());
+                if (sellib.isReadOnly()) {
+                    SetReadOnly(true);
+                    jLabelLibrary.setText(sellib.getId() + " (readonly)");
+                    setTitle(sellib.getId() + ":" + origObj.id + " (readonly)");
+                } else {
+                    jLabelLibrary.setText(sellib.getId());
+                    setTitle(sellib.getId() + ":" + origObj.id);
+                }
             }
-        }
 
-        editObj.FireObjectModified(this);
         jTextDesc.requestFocus();
     }
 
@@ -355,7 +354,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
     public void initEditFromOrig() {
         editObj.addObjectModifiedListener(this);
-        editObj.FireObjectModified(this);
         initFields();
     }
 

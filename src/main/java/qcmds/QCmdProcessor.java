@@ -19,7 +19,7 @@ package qcmds;
 
 import axoloti.Connection;
 import axoloti.MainFrame;
-import axoloti.Patch;
+import axoloti.PatchController;
 import axoloti.USBBulkConnection;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -36,7 +36,7 @@ public class QCmdProcessor implements Runnable {
     private final BlockingQueue<QCmd> queue;
     private final BlockingQueue<QCmd> queueResponse;
     protected Connection serialconnection;
-    private Patch patch;
+    private PatchController patchController;
     private final PeriodicPinger pinger;
     private final Thread pingerThread;
     private final PeriodicDialTransmitter dialTransmitter;
@@ -94,8 +94,8 @@ public class QCmdProcessor implements Runnable {
         return singleton;
     }
     
-    public Patch getPatch() {
-        return patch;
+    public PatchController getPatchController() {
+        return patchController;
     }
 
     public boolean AppendToQueue(QCmd cmd) {
@@ -229,11 +229,11 @@ public class QCmdProcessor implements Runnable {
         });
     }
 
-    public void SetPatch(Patch patch) {
-        if (this.patch != null) {
-            this.patch.Unlock();
+    public void setPatchController(PatchController patchController) {
+        if (this.patchController != null) {
+            this.patchController.patchView.Unlock();
         }
-        this.patch = patch;
+        this.patchController = patchController;
     }
 
     public BlockingQueue<QCmd> getQueueResponse() {

@@ -163,7 +163,7 @@ public class FileUtils {
             if (axpFileFilter.accept(f)
                     || axsFileFilter.accept(f)
                     || axhFileFilter.accept(f)) {
-                PatchGUI.OpenPatch(f);
+                PatchView.OpenPatch(f);
                 MainFrame.prefs.addRecentFile(f.getAbsolutePath());
             } else if (axbFileFilter.accept(f)) {
                 PatchBank.OpenBank(f);

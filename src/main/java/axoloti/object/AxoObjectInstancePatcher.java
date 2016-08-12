@@ -18,12 +18,11 @@
 package axoloti.object;
 
 import axoloti.MainFrame;
-import axoloti.Patch;
+import axoloti.PatchController;
 import axoloti.PatchFrame;
-import axoloti.PatchGUI;
-import components.ButtonComponent;
-import components.ButtonComponent.ActListener;
-import java.awt.Component;
+import axoloti.PatchModel;
+import axoloti.PatchView;
+import axoloti.objectviews.AxoObjectInstanceViewPatcher;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
 
@@ -33,104 +32,70 @@ import org.simpleframework.xml.Element;
  */
 public class AxoObjectInstancePatcher extends AxoObjectInstance {
 
-    PatchFrame pf;
-    @Element(name = "subpatch")
-    PatchGUI pg;
+    public PatchFrame pf;
 
-    private ButtonComponent BtnUpdate;
+    @Element(name = "subpatch")
+    PatchModel subPatchModel;
 
     public AxoObjectInstancePatcher() {
     }
 
-    public AxoObjectInstancePatcher(AxoObject type, Patch patch1, String InstanceName1, Point location) {
+    public AxoObjectInstancePatcher(AxoObject type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
     }
 
     @Override
+    public AxoObjectInstanceViewPatcher ViewFactory(PatchView patchView) {
+        return new AxoObjectInstanceViewPatcher(this, patchView);
+    }
+
+    public PatchModel getSubPatchModel() {
+        return subPatchModel;
+    }
+
+    public void setSubPatchModel(PatchModel subPatchModel) {
+        this.subPatchModel = subPatchModel;
+    }
+
+    @Override
     public void updateObj1() {
-        if (pg == null) {
-            pg = new PatchGUI();
-        }
-        if (pf == null) {
-            pf = new PatchFrame((PatchGUI) pg, MainFrame.mainframe.getQcmdprocessor());
-            pg.setFileNamePath(getInstanceName());
-            pg.PostContructor();
-        }
-        if (pg != null) {
-            AxoObject ao = pg.GenerateAxoObj(new AxoObjectPatcher());
+        init();
+        if (getSubPatchModel() != null) {
+            AxoObject ao = getSubPatchModel().GenerateAxoObj(new AxoObjectPatcher());
             setType(ao);
             ao.id = "patch/patcher";
-            ao.sDescription = pg.getNotes();
-            ao.sLicense = pg.getSettings().getLicense();
-            ao.sAuthor = pg.getSettings().getAuthor();
-            pg.container(patch);
+            ao.sDescription = getSubPatchModel().getNotes();
+            ao.sLicense = getSubPatchModel().getSettings().getLicense();
+            ao.sAuthor = getSubPatchModel().getSettings().getAuthor();
+            getSubPatchModel().setContainer(getPatchModel());
+        }
+    }
+
+    public void init() {
+        if (getSubPatchModel() == null) {
+            setSubPatchModel(new PatchModel());
+        }
+        if (pf == null) {
+            PatchController patchController = new PatchController();
+            PatchView patchView = new PatchView(patchController);
+            patchController.setPatchView(patchView);
+            patchController.setPatchModel(getSubPatchModel());
+            getSubPatchModel().addModelChangedListener(patchView);
+            pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
+            patchController.patchView.setFileNamePath(getInstanceName());
+            patchController.patchView.PostConstructor();
         }
     }
 
     @Override
     public void updateObj() {
-        if (pg != null) {
-            AxoObject ao = pg.GenerateAxoObj(new AxoObjectPatcher());
+        if (getSubPatchModel() != null) {
+            AxoObject ao = getSubPatchModel().GenerateAxoObj(new AxoObjectPatcher());
             setType(ao);
-            PostConstructor();
+            this.setDirty(true);
+            getPatchModel().SetDirty();
+            getPatchModel().cleanUpIntermediateChangeStates(2);
         }
-        validate();
-    }
-
-    @Override
-    public void Unlock() {
-        super.Unlock();
-        if (BtnUpdate != null) {
-            BtnUpdate.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void Lock() {
-        super.Lock();
-        if (BtnUpdate != null) {
-            BtnUpdate.setEnabled(false);
-        }
-    }
-
-    public void edit() {
-        if (pg == null) {
-            pg = new PatchGUI();
-        }
-        if (pf == null) {
-            pf = new PatchFrame((PatchGUI) pg, MainFrame.mainframe.getQcmdprocessor());
-            pg.setFileNamePath(getInstanceName());
-            pg.PostContructor();
-        }
-        pf.setState(java.awt.Frame.NORMAL);
-        pf.setVisible(true);
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        //updateObj();
-        ButtonComponent BtnEdit = new ButtonComponent("edit");
-        BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
-        BtnEdit.setAlignmentY(TOP_ALIGNMENT);
-        BtnEdit.addActListener(new ActListener() {
-            @Override
-            public void OnPushed() {
-                edit();
-            }
-        });
-        add(BtnEdit);
-        BtnUpdate = new ButtonComponent("update");
-        BtnUpdate.setAlignmentX(LEFT_ALIGNMENT);
-        BtnUpdate.setAlignmentY(TOP_ALIGNMENT);
-        BtnUpdate.addActListener(new ActListener() {
-            @Override
-            public void OnPushed() {
-                updateObj();
-            }
-        });
-        add(BtnUpdate);
-        resizeToGrid();
     }
 
     @Override

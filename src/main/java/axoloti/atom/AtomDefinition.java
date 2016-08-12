@@ -26,12 +26,18 @@ import java.util.List;
  */
 /**
  * An Axoloti Object Definition is composed out of AtomDefinition
-**/
+*
+ */
 public interface AtomDefinition {
+
     abstract public String getName();
+
     abstract public void setName(String name);
+
     abstract public AtomInstance CreateInstance(AxoObjectInstance o);
+
     abstract public String getDescription();
+
     abstract public void setDescription(String description);
 
     abstract public String getTypeName();

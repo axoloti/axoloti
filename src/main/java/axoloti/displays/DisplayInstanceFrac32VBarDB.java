@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import components.displays.VBarComponentDB;
+import axoloti.displayviews.DisplayInstanceViewFrac32VBarDB;
 
 /**
  *
@@ -25,21 +25,12 @@ import components.displays.VBarComponentDB;
  */
 public class DisplayInstanceFrac32VBarDB extends DisplayInstanceFrac32<DisplayFrac32VBarDB> {
 
-    private VBarComponentDB vbar;
-
     public DisplayInstanceFrac32VBarDB() {
+        super();
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        vbar = new VBarComponentDB(-200, -60, 10);
-        vbar.setValue(0);
-        add(vbar);
-    }
-
-    @Override
-    public void updateV() {
-        vbar.setValue(value.getDouble());
+    public DisplayInstanceViewFrac32VBarDB ViewFactory() {
+        return new DisplayInstanceViewFrac32VBarDB(this);
     }
 }

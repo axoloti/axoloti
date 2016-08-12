@@ -17,25 +17,18 @@
  */
 package axoloti.object;
 
-import axoloti.Patch;
-import axoloti.PatchGUI;
-import components.LabelComponent;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
-import components.control.PulseButtonComponent;
-import static java.awt.Component.LEFT_ALIGNMENT;
+import axoloti.PatchModel;
+import axoloti.PatchView;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.AxoObjectInstanceViewHyperlink;
 import java.awt.Desktop;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import org.simpleframework.xml.Root;
 
 /**
@@ -48,18 +41,11 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     public AxoObjectInstanceHyperlink() {
     }
 
-    public AxoObjectInstanceHyperlink(AxoObjectAbstract type, Patch patch1, String InstanceName1, Point location) {
+    public AxoObjectInstanceHyperlink(AxoObjectAbstract type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
     }
 
-    @Override
-    public boolean IsLocked() {
-        return false;
-    }
-
-    private PulseButtonComponent button;
-
-    void Lauch() {
+    public void Launch() {
         String link = getInstanceName();
         if (link.startsWith("www.")
                 || link.startsWith("http://")
@@ -72,11 +58,11 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (link.endsWith(".axp") || link.endsWith(".axh") || link.endsWith(".axs")) {
-            String s = getPatch().getFileNamePath();
+            String s = getPatchModel().getFileNamePath();
             s = s.substring(0, s.lastIndexOf(File.separatorChar));
             File f = new File(s + File.separatorChar + link);
             if (f.canRead()) {
-                PatchGUI.OpenPatch(f);
+                PatchView.OpenPatch(f);
             } else {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, "can''t read file {0}", f.getAbsolutePath());
             }
@@ -84,73 +70,19 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        setOpaque(true);
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        button = new PulseButtonComponent();
-        button.addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                if (e.getValue() == 1.0) {
-                    Lauch();
-                }
-            }
-
-            @Override
-            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
-            }
-
-            @Override
-            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
-            }
-        });
-        add(button);
-        add(Box.createHorizontalStrut(5));
-        InstanceLabel = new LabelComponent(getInstanceName());
-        InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
-        InstanceLabel.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    addInstanceNameEditor();
-                    e.consume();
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                AxoObjectInstanceHyperlink.this.mousePressed(e);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                AxoObjectInstanceHyperlink.this.mouseReleased(e);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        });
-        InstanceLabel.addMouseMotionListener(this);
-        add(InstanceLabel);
-        setLocation(x, y);
-
-        resizeToGrid();
-    }
-
-    @Override
-    public void setInstanceName(String s) {
-        super.setInstanceName(s);
-        resizeToGrid();
-    }
-
-    @Override
     public String getCInstanceName() {
         return "";
+    }
+
+    @Override
+    public AxoObjectInstanceViewHyperlink ViewFactory(PatchView patchView) {
+        return new AxoObjectInstanceViewHyperlink(this, patchView);
+    }
+
+    @Override
+    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
+        AxoObjectInstanceViewHyperlink pi = ViewFactory(patchView);
+        pi.PostConstructor();
+        return pi;
     }
 }

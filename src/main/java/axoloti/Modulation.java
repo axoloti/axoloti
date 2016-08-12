@@ -56,14 +56,14 @@ public class Modulation {
     public void PostConstructor(ParameterInstanceFrac32 p) {
         System.out.println("Modulation postconstructor");
         destination = p;
-        source = p.GetObjectInstance().patch.GetObjectInstance(sourceName);
+        source = p.getObjectInstance().getPatchModel().GetObjectInstance(sourceName);
         if (source == null) {
             System.out.println("modulation source missing!");
         } else {
             System.out.println("modulation source found " + source.getInstanceName());
         }
         Modulator m = null;
-        for (Modulator m1 : p.GetObjectInstance().patch.Modulators) {
+        for (Modulator m1 : p.getObjectInstance().getPatchModel().getModulators()) {
             System.out.println("modulator match? " + m1.objinst.getInstanceName());
             if (m1.objinst == source) {
                 if ((m1.name != null) && (!m1.name.isEmpty())) {

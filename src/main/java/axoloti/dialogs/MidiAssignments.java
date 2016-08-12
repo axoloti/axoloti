@@ -17,9 +17,10 @@
  */
 package axoloti.dialogs;
 
-import axoloti.Patch;
+import axoloti.PatchModel;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.parameters.ParameterInstance;
+import axoloti.parameterviews.ParameterInstanceView;
 import java.util.Collection;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
@@ -33,12 +34,12 @@ public class MidiAssignments extends javax.swing.JDialog {
     /**
      * Creates new form MidiAssignments
      */
-    public MidiAssignments(java.awt.Frame parent, boolean modal, ParameterInstance param) {
+    public MidiAssignments(java.awt.Frame parent, boolean modal, ParameterInstanceView parameterInstanceView) {
         super(parent, modal);
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        Patch patch = param.GetObjectInstance().patch;
+        PatchModel patch = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel();
         String CCObj[] = new String[128];
         String CCParam[] = new String[128];
         for (AxoObjectInstanceAbstract obj : patch.objectinstances) {
@@ -53,7 +54,7 @@ public class MidiAssignments extends javax.swing.JDialog {
                 }
             }
         }
-        result = param.getMidiCC();
+        result = parameterInstanceView.getParameterInstance().getMidiCC();
         for (int i = 0; i < 128; i++) {
             String name = "";
             if (i < MidiCCToName.length) {

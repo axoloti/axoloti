@@ -43,7 +43,7 @@ public abstract class Connection {
     abstract public boolean WaitSync();
     abstract public void ClearReadSync();
     abstract public boolean WaitReadSync();
-    abstract public void setPatch(Patch patch);
+    abstract public void setPatchController(PatchController patchController);
     abstract public axoloti_core getTargetProfile();
     abstract public ByteBuffer getMemReadBuffer();
     abstract public int getMemRead1Word();

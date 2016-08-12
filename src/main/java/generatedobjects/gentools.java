@@ -101,17 +101,17 @@ public class gentools {
         s = s.replaceAll("default", "");
         for (Parameter p : o.params) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
             }
         }
         for (Inlet p : o.inlets) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
             }
         }
         for (Outlet p : o.outlets) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
             }
         }
 

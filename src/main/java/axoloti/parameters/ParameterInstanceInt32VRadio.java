@@ -17,10 +17,7 @@
  */
 package axoloti.parameters;
 
-import components.AssignMidiCCMenuItems;
-import components.control.VRadioComponent;
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
+import axoloti.parameterviews.ParameterInstanceViewInt32VRadio;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -34,11 +31,6 @@ public class ParameterInstanceInt32VRadio extends ParameterInstanceInt32 {
 
     public ParameterInstanceInt32VRadio(@Attribute(name = "value") int v) {
         super(v);
-    }
-
-    @Override
-    public void updateV() {
-        ctrl.setValue(value.getInt());
     }
 
     @Override
@@ -63,25 +55,10 @@ public class ParameterInstanceInt32VRadio extends ParameterInstanceInt32 {
     public String GenerateCodeMidiHandler(String vprefix) {
         // hmm this is only one possible behavior - could also map to full MIDI range...
         int max = ((ParameterInt32VRadio) parameter).MaxValue.getInt();
-        return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max-1));
+        return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max - 1));
     }
 
-    @Override
-    public VRadioComponent CreateControl() {
-        return new VRadioComponent(0, ((ParameterInt32VRadio) parameter).MaxValue.getInt());
-    }
-
-    @Override
-    public VRadioComponent getControlComponent() {
-        return (VRadioComponent) ctrl;
-    }
-
-    @Override
-    public void populatePopup(JPopupMenu m) {
-        super.populatePopup(m);
-        JMenu m1 = new JMenu("Midi CC");
-        // AssignMidiCCMenuItems, does stuff in ctor
-        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(this, m1);
-        m.add(m1);
+    public ParameterInstanceViewInt32VRadio ViewFactory() {
+        return new ParameterInstanceViewInt32VRadio(this);
     }
 }

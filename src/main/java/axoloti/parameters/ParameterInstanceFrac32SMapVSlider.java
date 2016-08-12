@@ -17,9 +17,7 @@
  */
 package axoloti.parameters;
 
-import axoloti.Preset;
-import axoloti.Theme;
-import components.control.VSliderComponent;
+import axoloti.parameterviews.ParameterInstanceViewFrac32SMapVSlider;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -34,18 +32,6 @@ public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S
 
     public ParameterInstanceFrac32SMapVSlider(@Attribute(name = "value") double v) {
         super(v);
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-    }
-
-    @Override
-    public void updateV() {
-        if (ctrl != null) {
-            ctrl.setValue(value.getDouble());
-        }
     }
 
     @Override
@@ -68,41 +54,7 @@ public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S
         return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
     }
 
-    /*
-     *  Preset logic
-     */
-    @Override
-    public void ShowPreset(int i) {
-        this.presetEditActive = i;
-        if (i > 0) {
-            Preset p = GetPreset(presetEditActive);
-            if (p != null) {
-                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
-                ctrl.setValue(p.value.getDouble());
-            } else {
-                setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(value.getDouble());
-            }
-        } else {
-            setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(value.getDouble());
-        }
-        if ((presets != null) && (!presets.isEmpty())) {
-//            lblPreset.setVisible(true);
-        } else {
-//            lblPreset.setVisible(false);
-        }
-    }
-
-    @Override
-    public VSliderComponent CreateControl() {
-        VSliderComponent v = new VSliderComponent(0.0, getMin(), getMax(), getTick());
-        v.setParentAxoObjectInstance(axoObj);
-        return v;
-    }
-
-    @Override
-    public VSliderComponent getControlComponent() {
-        return (VSliderComponent) ctrl;
+    public ParameterInstanceViewFrac32SMapVSlider ViewFactory() {
+        return new ParameterInstanceViewFrac32SMapVSlider(this);
     }
 }

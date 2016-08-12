@@ -1,6 +1,6 @@
 package components;
 
-import axoloti.PatchGUI;
+import axoloti.PatchView;
 import axoloti.Theme;
 import axoloti.datatypes.Bool32;
 import axoloti.datatypes.CharPtr32;
@@ -11,9 +11,9 @@ import axoloti.datatypes.Int32Ptr;
 
 public class VisibleCablePanel extends javax.swing.JPanel {
 
-    PatchGUI p;
+    PatchView p;
 
-    public VisibleCablePanel(PatchGUI p) {
+    public VisibleCablePanel(PatchView p) {
         this.p = p;
         initComponents();
 

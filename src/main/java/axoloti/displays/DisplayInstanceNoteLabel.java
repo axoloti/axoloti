@@ -17,9 +17,9 @@
  */
 package axoloti.displays;
 
+import axoloti.displayviews.DisplayInstanceViewNoteLabel;
 import axoloti.realunits.NativeToReal;
 import axoloti.realunits.PitchToNote;
-import components.LabelComponent;
 
 /**
  *
@@ -27,7 +27,6 @@ import components.LabelComponent;
  */
 public class DisplayInstanceNoteLabel extends DisplayInstanceFrac32<DisplayNoteLabel> {
 
-    private LabelComponent readout;
     private final NativeToReal conv;
 
     public DisplayInstanceNoteLabel() {
@@ -35,18 +34,12 @@ public class DisplayInstanceNoteLabel extends DisplayInstanceFrac32<DisplayNoteL
         conv = new PitchToNote();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        readout = new LabelComponent("xxxxx");
-        add(readout);
-        readout.setSize(40, 18);
+    public NativeToReal getConv() {
+        return conv;
     }
 
     @Override
-    public void updateV() {
-        readout.setText(conv.ToReal(value));
+    public DisplayInstanceViewNoteLabel ViewFactory() {
+        return new DisplayInstanceViewNoteLabel(this);
     }
 }
-
