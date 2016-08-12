@@ -34,6 +34,7 @@ import java.awt.image.DataBufferByte;
 import java.nio.ByteBuffer;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdVirtualButton;
 
@@ -476,31 +477,36 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
     private final BufferedImage bImageScaled = new BufferedImage(256, 128, BufferedImage.TYPE_BYTE_BINARY);
     private final Graphics2D g2d = (Graphics2D) bImageScaled.createGraphics();
 
-    public void updateRow(int LCDPacketRow, ByteBuffer lcdRcvBuffer) {
-        if (LCDPacketRow < 8) {
-            byte[] pixels = ((DataBufferByte) bImage.getRaster().getDataBuffer()).getData();
-            for (int i = 0; i < (128); i++) {
-                //int j = 1<<(i%8);
-                int k = i - (i % 8);
-                int y = i / 16;
-                int j = 1 << y;
-                int x = 8 * (i % 16);
-                pixels[i + (LCDPacketRow * 128)] = (byte) ((((lcdRcvBuffer.get(x) & j) > 0) ? 0 : 128)
-                        + (((lcdRcvBuffer.get(x + 1) & j) > 0) ? 0 : 64)
-                        + (((lcdRcvBuffer.get(x + 2) & j) > 0) ? 0 : 32)
-                        + (((lcdRcvBuffer.get(x + 3) & j) > 0) ? 0 : 16)
-                        + (((lcdRcvBuffer.get(x + 4) & j) > 0) ? 0 : 8)
-                        + (((lcdRcvBuffer.get(x + 5) & j) > 0) ? 0 : 4)
-                        + (((lcdRcvBuffer.get(x + 6) & j) > 0) ? 0 : 2)
-                        + (((lcdRcvBuffer.get(x + 7) & j) > 0) ? 0 : 1));
+    public void updateRow(final int LCDPacketRow, final ByteBuffer lcdRcvBuffer) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (LCDPacketRow < 8) {
+                    byte[] pixels = ((DataBufferByte) bImage.getRaster().getDataBuffer()).getData();
+                    for (int i = 0; i < (128); i++) {
+                        //int j = 1<<(i%8);
+                        int k = i - (i % 8);
+                        int y = i / 16;
+                        int j = 1 << y;
+                        int x = 8 * (i % 16);
+                        pixels[i + (LCDPacketRow * 128)] = (byte) ((((lcdRcvBuffer.get(x) & j) > 0) ? 0 : 128)
+                                + (((lcdRcvBuffer.get(x + 1) & j) > 0) ? 0 : 64)
+                                + (((lcdRcvBuffer.get(x + 2) & j) > 0) ? 0 : 32)
+                                + (((lcdRcvBuffer.get(x + 3) & j) > 0) ? 0 : 16)
+                                + (((lcdRcvBuffer.get(x + 4) & j) > 0) ? 0 : 8)
+                                + (((lcdRcvBuffer.get(x + 5) & j) > 0) ? 0 : 4)
+                                + (((lcdRcvBuffer.get(x + 6) & j) > 0) ? 0 : 2)
+                                + (((lcdRcvBuffer.get(x + 7) & j) > 0) ? 0 : 1));
+                    }
+                    g2d.drawImage(bImage, 0, 0, 256, 128, null);
+                    jPanelLCD.repaint();
+                } else {
+                    // row 8 is for all the leds
+                    for (int i = 0; i < 16; i++) {
+                        buttonsWithLeds[i].setIlluminated(lcdRcvBuffer.get(i) != 0);
+                    }
+                }
             }
-            g2d.drawImage(bImage, 0, 0, 256, 128, null);
-            jPanelLCD.repaint();
-        } else {
-            // row 8 is for all the leds
-            for (int i = 0; i < 16; i++) {
-                buttonsWithLeds[i].setIlluminated(lcdRcvBuffer.get(i) != 0);
-            }
-        }
+        });
     }
 }
