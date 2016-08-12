@@ -411,8 +411,6 @@ public class PatchGUI extends Patch {
                 if (me.getButton() == MouseEvent.BUTTON2) {
                     PatchGUI.this.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
                 }
-
-                zoomUI.cancelDrag();
             }
 
             @Override
@@ -456,7 +454,6 @@ public class PatchGUI extends Patch {
                     } catch (IOException ex) {
                         Logger.getLogger(PatchGUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    zoomUI.cancelDrag();
                     return;
                 }
                 super.drop(dtde);

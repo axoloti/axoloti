@@ -78,7 +78,6 @@ public class ZoomUI extends LayerUI<JComponent> {
             } else if (localEvent.getID() == MouseEvent.MOUSE_RELEASED) {
                 button2down = false;
                 anyMouseDown = false;
-                dragging = false;
                 patch.patchframe.getRootPane().setCursor(Cursor.getDefaultCursor());
                 listener.mouseReleased(transformedEvent);
             } else if (localEvent.getID() == MouseEvent.MOUSE_CLICKED) {
@@ -90,18 +89,29 @@ public class ZoomUI extends LayerUI<JComponent> {
     @Override
     protected void processMouseEvent(MouseEvent e, JLayer<? extends JComponent> l) {
         MouseEvent localEvent = translateToLayerCoordinates(e, l);
+
+        if (dragging && localEvent.getID() == MouseEvent.MOUSE_RELEASED) {
+            MouseEvent m= new MouseEvent(localEvent.getComponent(), 
+                    localEvent.getID(), 
+                    localEvent.getWhen(), 
+                    localEvent.getModifiers(), 
+                    localEvent.getX(), 
+                    localEvent.getX(), 
+                    localEvent.getXOnScreen(), 
+                    localEvent.getYOnScreen(), 
+                    localEvent.getClickCount(), 
+                    localEvent.isPopupTrigger(), 
+                    localEvent.getButton());
+            dispatchMouseEvent(dragged.getMouseListeners(),m,dragged);
+            dragging = false;
+            dragged = null;            
+        }
+
         Component component = getComponentClickedOn(localEvent);
         
         if (component != null) {
-            if (dragging) {
-                component = dragged;
-            }
             
             localEvent = translateToComponentCoordinates(localEvent, component);
-            if (!dragging && localEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
-                dragging = true;
-                dragged = component;
-            }
             MouseListener[] listeners = component.getListeners(MouseListener.class);
 
             while (listeners.length == 0) {
@@ -111,15 +121,18 @@ public class ZoomUI extends LayerUI<JComponent> {
                     localEvent = translateToLayerCoordinates(e, l);
                     localEvent = translateToComponentCoordinates(localEvent, c);
                     component = c;
-                    if (dragging) {
-                        dragged = component;
-                    }
                 } else {
                     return;
                 }
             }
 
             dispatchMouseEvent(listeners, localEvent, component);
+
+            if (!dragging && localEvent.getID() == MouseEvent.MOUSE_PRESSED) {
+                dragging = true;
+                dragged = component;
+            }
+            
             
             this.handleEnterExited(component, localEvent);
 
@@ -127,7 +140,7 @@ public class ZoomUI extends LayerUI<JComponent> {
             e.consume();
         }
         else {
-            handlePatchBounds(e);
+//            handlePatchBounds(e);
         }
     }
     
@@ -163,17 +176,12 @@ public class ZoomUI extends LayerUI<JComponent> {
     protected void processMouseMotionEvent(MouseEvent e, JLayer<? extends JComponent> l) {
         MouseEvent localEvent = translateToLayerCoordinates(e, l);
         Component component = getComponentClickedOn(localEvent);
+        if (dragging) {
+            component = dragged;
+        }
 
         if (component != null) {
-            if (dragging) {
-                component = dragged;
-            }
-
             localEvent = translateToComponentCoordinates(localEvent, component);
-            if (!dragging && localEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
-                dragging = true;
-                dragged = component;
-            }
 
             MouseMotionListener[] listeners = component.getListeners(MouseMotionListener.class);
 
@@ -184,10 +192,6 @@ public class ZoomUI extends LayerUI<JComponent> {
                     localEvent = translateToLayerCoordinates(e, l);
                     localEvent = translateToComponentCoordinates(localEvent, c);
                     component = c;
-                    if (localEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
-                        dragging = true;
-                        dragged = component;
-                    }
                 } else {
                     return;
                 }
@@ -201,7 +205,7 @@ public class ZoomUI extends LayerUI<JComponent> {
             e.consume();
         }
         else {
-            handlePatchBounds(e);
+            //handlePatchBounds(e);
         }
     }
 
@@ -333,10 +337,6 @@ public class ZoomUI extends LayerUI<JComponent> {
 
     public boolean canZoomOut() {
         return zoom - zoomAmount >= zoomMin;
-    }
-
-    public void cancelDrag() {
-        dragging = false;
     }
 
     public void zoomIn() {

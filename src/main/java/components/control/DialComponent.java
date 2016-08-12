@@ -144,6 +144,7 @@ public class DialComponent extends ACtrlComponent {
                 getRootPane().setCursor(Cursor.getDefaultCursor());
             }
         }
+        e.consume();
     }
 
     @Override
