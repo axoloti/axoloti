@@ -86,7 +86,7 @@ public class VSliderComponent extends ACtrlComponent {
     @Override
     protected void mouseDragged(MouseEvent e) {
         if (isEnabled()) {
-            double v = value + tick * ((int) Math.round((py - e.getYOnScreen()) / getScale()));
+            double v = value + tick * ((int) Math.round((py - e.getYOnScreen())));
             robotMoveToCenter();
             setValue(v);
         }

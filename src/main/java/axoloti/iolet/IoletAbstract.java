@@ -4,7 +4,6 @@ import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.NetDragging;
 import axoloti.PatchGUI;
-import axoloti.ZoomUtils;
 import axoloti.inlets.InletInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.outlets.OutletInstance;
@@ -104,7 +103,7 @@ public abstract class IoletAbstract extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.isPopupTrigger()) {
-                    ZoomUtils.showZoomedPopupMenu(IoletAbstract.this, axoObj, getPopup());
+                    getPopup().show(IoletAbstract.this, 0, getHeight() - 1);
                     e.consume();
                 } else {
                     setHighlighted(true);
@@ -191,13 +190,11 @@ public abstract class IoletAbstract extends JPanel {
                                     // new target
                                     dragtarget = (IoletAbstract) c;
                                     Point jackLocation = dragtarget.getJackLocInCanvas();
-                                    patchGUI.zoomUI.scale(jackLocation);
                                     dragnet.SetDragPoint(jackLocation);
                                 }
                             } else {
                                 // floating
                                 if(dragnet != null) {
-                                    patchGUI.zoomUI.scale(p);
                                     dragnet.SetDragPoint(p);
                                     dragtarget = null;
                                 }

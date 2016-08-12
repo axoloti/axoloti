@@ -18,7 +18,6 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.ZoomUtils;
 import axoloti.attribute.AttributeInstanceComboBox;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
@@ -147,8 +146,7 @@ public class DropDownComponent extends JComponent implements MouseListener {
                 });
             }
             this.add(p);
-            
-            ZoomUtils.showZoomedPopupMenu(this, parent.GetObjectInstance(), p);
+            p.show(this, 0, getHeight() - 1);
         }
     }
     

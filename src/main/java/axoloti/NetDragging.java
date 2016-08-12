@@ -42,7 +42,7 @@ public class NetDragging extends Net {
     Point p0;
 
     public void SetDragPoint(Point p0) {
-        this.p0 = patchGUI.zoomUI.removeZoomFactor(p0);
+        this.p0 = p0;
         updateBounds();
         repaint();
     }

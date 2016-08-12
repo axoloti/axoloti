@@ -21,23 +21,17 @@ import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectTreeNode;
 import axoloti.utils.Constants;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Point;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import javax.swing.JComponent;
-import javax.swing.JLayer;
 import javax.swing.JRootPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -46,7 +40,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-
 
 /**
  *
@@ -60,11 +53,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     private final PatchGUI p;
     public AxoObjectInstanceAbstract target_object;
     private AxoObjectTreeNode objectTree;
-
-    private AxoObjectAbstract previewObj;
-    private AxoObjectInstanceAbstract inst;
-    private int patchLocX;
-    private int patchLocY;
 
     /**
      * Creates new form ObjectSearchFrame
@@ -90,7 +78,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 if (node.getUserObject() instanceof AxoObjectTreeNode) {
                     AxoObjectTreeNode anode = (AxoObjectTreeNode) node.getUserObject();
                     jPanel1.removeAll();
-                    jPanel1.setVisible(false);
+                    jPanel1.repaint();
                     jTextPane1.setText(anode.description);
                     jTextPane1.setCaretPosition(0);
                     previewObj = null;
@@ -251,33 +239,17 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 Search(jTextFieldObjName.getText());
             }
         });
-
-        JLayer<JComponent> objectPreviewLayer = new JLayer<JComponent>(jPanel1, p.zoomUI);
-        jLayeredPane1.remove(jPanel1);
-        jLayeredPane1.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
-        jLayeredPane1.add(objectPreviewLayer, new Integer(1));
-        jLayeredPane1.setOpaque(true);
-        jPanel1.setBackground(Color.DARK_GRAY);
-
-        this.addComponentListener(new ComponentAdapter() {
-            public void componentHidden(ComponentEvent e) {
-                /* code run when component hidden*/
-            }
-
-            public void componentShown(ComponentEvent e) {
-                if (inst != null) {
-                    ObjectSearchFrame.this.scalePreviewPanel(inst.getWidth(), inst.getHeight());
-                }
-            }
-        });
     }
-
+    AxoObjectAbstract previewObj;
+    int patchLocX;
+    int patchLocY;
+    
     private Point snapToGrid(Point p) {
         p.x = Constants.X_GRID * (p.x / Constants.X_GRID);
         p.y = Constants.Y_GRID * (p.y / Constants.Y_GRID);
         return p;
     }
-    
+
     private Point clipToStayWithinScreen(Point patchLoc) {
 
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -314,22 +286,16 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             tm = new DefaultTreeModel(this.root);
             jTree1.setModel(tm);
         }
+
         MainFrame.mainframe.SetGrabFocusOnSevereErrors(false);
         accepted = false;
         snapToGrid(patchLoc);
         patchLocX = patchLoc.x;
         patchLocY = patchLoc.y;
         Point ps = p.objectLayerPanel.getLocationOnScreen();
+        Point patchLocClipped = clipToStayWithinScreen(patchLoc);
 
-        double zoom = p.zoomUI.getScale();
-        Point patchLocZoomed = snapToGrid(new Point(
-                (int) Math.round(patchLoc.x * zoom),
-                (int) Math.round(patchLoc.y * zoom)));
-        
-        patchLocZoomed = clipToStayWithinScreen(patchLocZoomed);
-
-        setLocation(patchLocZoomed.x + ps.x, patchLocZoomed.y + ps.y);
-
+        setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
         target_object = o;
         if (o != null) {
             AxoObjectAbstract oa = o.getType();
@@ -354,7 +320,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             previewObj = null;
             type = null;
             jPanel1.removeAll();
-            jPanel1.setVisible(false);
+            jPanel1.repaint();
             return;
         }
         if (o != previewObj) {
@@ -364,12 +330,14 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             jList1.setSelectedValue(o, true);
             if (jList1.getSelectedValue() != o) {
             }
-            inst = o.CreateInstance(null, "dummy", new Point(5, 5));
+            AxoObjectInstanceAbstract inst = o.CreateInstance(null, "dummy", new Point(5, 5));
             jPanel1.removeAll();
             jPanel1.add(inst);
-            jPanel1.setVisible(true);
-            jPanel1.doLayout();
-            scalePreviewPanel(inst.getWidth(), inst.getHeight());
+            inst.invalidate();
+            inst.repaint();
+            inst.revalidate();
+            jPanel1.revalidate();
+            jPanel1.repaint();
             AxoObjectAbstract t = inst.getType();
             if (t != null) {
                 String description = t.sDescription == null || t.sDescription.isEmpty() ? o.sDescription : t.sDescription;
@@ -390,15 +358,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             }
             jTextPane1.setCaretPosition(0);
         }
-    }
-
-    private void scalePreviewPanel(int originalWidth, int originalHeight) {
-        Dimension panelSize = new Dimension();
-        panelSize.width = (int) Math.round(originalWidth * p.zoomUI.getScale());
-        panelSize.height = (int) Math.round(originalHeight * p.zoomUI.getScale());
-        jPanel1.setPreferredSize(panelSize);
-        jPanel1.revalidate();
-        jPanel1.repaint();
     }
 
     static DefaultMutableTreeNode PopulateJTree(AxoObjectTreeNode anode, DefaultMutableTreeNode root) {
@@ -472,6 +431,8 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 }
             }
             jList1.setListData(listData.toArray());
+//            jList1.doLayout();
+//            jList1.revalidate();
             if (!listData.isEmpty()) {
                 type = listData.get(0);
                 jList1.setSelectedIndex(0);
@@ -494,6 +455,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         accepted = false;
         MainFrame.mainframe.SetGrabFocusOnSevereErrors(true);
         setVisible(false);
+        p.repaint();
     }
 
     void Accept() {
@@ -513,11 +475,12 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 if (target_object == null) {
                     p.AddObjectInstance(x, new Point(patchLocX, patchLocY));
                 } else {
-                    p.ChangeObjectInstanceType(target_object, x);
+                    AxoObjectInstanceAbstract oi = p.ChangeObjectInstanceType(target_object, x);
                     p.cleanUpIntermediateChangeStates(2);
                 }
             }
             setVisible(false);
+            p.repaint();
         }
     }
 
@@ -539,11 +502,9 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
         jSplitPane2 = new javax.swing.JSplitPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jLayeredPane1 = new javax.swing.JLayeredPane();
-        jPanel1 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
+        jPanel1 = new javax.swing.JPanel();
 
         setForeground(java.awt.SystemColor.control);
         setIconImages(null);
@@ -611,32 +572,36 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jSplitPane2.setResizeWeight(0.5);
         jSplitPane2.setPreferredSize(new java.awt.Dimension(350, 271));
 
-        jScrollPane2.setBackground(java.awt.Color.lightGray);
-
-        jLayeredPane1.setBackground(java.awt.Color.lightGray);
-        jLayeredPane1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
-
-        jPanel1.setBackground(java.awt.Color.lightGray);
-        jPanel1.setEnabled(false);
-        jPanel1.setFocusable(false);
-        jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
-        jLayeredPane1.add(jPanel1);
-
-        jScrollPane2.setViewportView(jLayeredPane1);
-
-        jSplitPane2.setRightComponent(jScrollPane2);
-
         jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane4.setMinimumSize(new java.awt.Dimension(6, 63));
 
         jTextPane1.setEditable(false);
         jTextPane1.setFocusCycleRoot(false);
+        jTextPane1.setFocusTraversalKeysEnabled(false);
         jTextPane1.setFocusable(false);
         jTextPane1.setRequestFocusEnabled(false);
         jScrollPane4.setViewportView(jTextPane1);
 
         jSplitPane2.setTopComponent(jScrollPane4);
+
+        jPanel1.setBackground(new java.awt.Color(153, 153, 153));
+        jPanel1.setEnabled(false);
+        jPanel1.setFocusTraversalKeysEnabled(false);
+        jPanel1.setFocusable(false);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 349, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 247, Short.MAX_VALUE)
+        );
+
+        jSplitPane2.setRightComponent(jPanel1);
 
         jSplitPane1.setRightComponent(jSplitPane2);
 
@@ -658,12 +623,10 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldObjNameActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
