@@ -100,7 +100,7 @@ public class PatchGUI extends Patch {
     public JPanel draggedObjectLayerPanel = new JPanel();
     public JPanel netLayerPanel = new JPanel();
     public JPanel selectionRectLayerPanel = new JPanel();
-    
+
     JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel);
     JLayer<JComponent> draggedObjectLayer = new JLayer<JComponent>(draggedObjectLayerPanel);
     JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel);
@@ -109,7 +109,6 @@ public class PatchGUI extends Patch {
     SelectionRectangle selectionrectangle = new SelectionRectangle();
     Point selectionRectStart;
     Point panOrigin;
-    Boolean Button1down = false;
     public AxoObjectFromPatch ObjEditor;
 
     public PatchGUI() {
@@ -341,20 +340,19 @@ public class PatchGUI extends Patch {
                     }
                     if (me.getClickCount() == 2) {
                         ShowClassSelector(me.getPoint(), null, null);
-                        me.consume();
                     } else {
-                        me.consume();
                         if ((osf != null) && osf.isVisible()) {
                             osf.Accept();
                         }
                         Layers.requestFocusInWindow();
                     }
-                } else {
                     me.consume();
+                } else {
                     if ((osf != null) && osf.isVisible()) {
                         osf.Cancel();
                     }
                     Layers.requestFocusInWindow();
+                    me.consume();
                 }
             }
 
@@ -362,23 +360,23 @@ public class PatchGUI extends Patch {
             public void mousePressed(MouseEvent me) {
                 if (me.getButton() == MouseEvent.BUTTON1) {
                     selectionRectStart = me.getPoint();
-                    Button1down = true;
+                    selectionrectangle.setVisible(false);
                     Layers.requestFocusInWindow();
+                    me.consume();
                 } else {
-                    Button1down = false;
                 }
             }
 
             @Override
             public void mouseReleased(MouseEvent me) {
-                if (me.getButton() == MouseEvent.BUTTON1) {
+                if (selectionrectangle.isVisible() | me.getButton() == MouseEvent.BUTTON1) {
                     Rectangle r = selectionrectangle.getBounds();
                     for (AxoObjectInstanceAbstract o : objectinstances) {
                         o.SetSelected(o.getBounds().intersects(r));
                     }
                     selectionrectangle.setVisible(false);
+                    me.consume();
                 }
-                Button1down = false;
             }
 
             @Override
@@ -432,7 +430,7 @@ public class PatchGUI extends Patch {
         Layers.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent ev) {
-                if (Button1down) {
+                if (selectionrectangle.isVisible() | ev.getButton() == MouseEvent.BUTTON1) {
                     int x1 = selectionRectStart.x;
                     int y1 = selectionRectStart.y;
                     int x2 = ev.getX();
@@ -815,10 +813,8 @@ public class PatchGUI extends Patch {
     @Override
     public Net delete(Net n) {
         if (n != null) {
-            n.updateBounds();
-            n.repaint();
             netLayerPanel.remove(n);
-            netLayerPanel.revalidate();
+            netLayer.repaint(n.getBounds());
         }
         Net nn = super.delete(n);
         return nn;
