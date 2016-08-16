@@ -123,7 +123,7 @@ public class WindowMenu extends JMenu {
             WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getFilemanager(), "File Manager");
             jMenuWindow.add(a);
         }
-        {
+        if (false) {
             WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getRemote(), "Remote");
             jMenuWindow.add(a);
         }
