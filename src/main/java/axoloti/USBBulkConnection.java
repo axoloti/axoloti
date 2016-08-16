@@ -250,8 +250,6 @@ public class USBBulkConnection extends Connection {
             }
 
             GoIdleState();
-            TransmitPing();
-            TransmitPing();
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "creating rx and tx thread...");
             transmitterThread = new Thread(new Transmitter());
             transmitterThread.setName("Transmitter");
@@ -283,9 +281,6 @@ public class USBBulkConnection extends Connection {
                 Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
             QCmdProcessor qcmdp = MainFrame.mainframe.getQcmdprocessor();
-
-            qcmdp.AppendToQueue(new QCmdStop());
-            qcmdp.WaitQueueFinished();
 
             qcmdp.AppendToQueue(new QCmdTransmitGetFWVersion());
             try {

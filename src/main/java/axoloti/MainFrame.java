@@ -315,7 +315,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                     if (!Axoloti.isFailSafeMode()) {
                         boolean success = USBBulkConnection.GetConnection().connect();
                         if (success) {
-                            qcmdprocessor.AppendToQueue(new QCmdStop());
                             ShowConnect();
                         }
                     }
@@ -680,8 +679,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             boolean success = USBBulkConnection.GetConnection().connect();
             if (!success) {
                 ShowDisconnect();
-            } else {
-                qcmdprocessor.AppendToQueue(new QCmdStop());
             }
         }
     }//GEN-LAST:event_jCheckBoxConnectActionPerformed
