@@ -130,6 +130,15 @@ public class USBBulkConnection extends Connection {
                 sync.notifyAll();
             }
 
+            if (receiverThread.isAlive()){
+                receiverThread.interrupt();
+                try {
+                    receiverThread.join();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
             int result = LibUsb.releaseInterface(handle, interfaceNumber);
             if (result != LibUsb.SUCCESS) {
                 throw new LibUsbException("Unable to release interface", result);
