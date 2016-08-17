@@ -377,6 +377,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         File p = new File(pname);
         if (f.canRead()) {
             if (p.canRead()) {
+                qcmdprocessor.AppendToQueue(new QCmdStop());
                 qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam(p));
                 qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
                 qcmdprocessor.AppendToQueue(new QCmdStartFlasher());
