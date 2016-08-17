@@ -182,11 +182,22 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                 int row = jFileTable.getSelectedRow();
                 if (row < 0) {
                     jButtonDelete.setEnabled(false);
+                    ButtonUploadDefaultName();
                 } else {
                     jButtonDelete.setEnabled(true);
+                    SDFileInfo f = SDCardInfo.getInstance().getFiles().get(row);
+                    if (f != null && f.isDirectory()) {
+                        jButtonUpload.setText("Upload to " + f.getFilename());
+                    } else {
+                        ButtonUploadDefaultName();
+                    }
                 }
             }
         });
+    }
+
+    void ButtonUploadDefaultName() {
+        jButtonUpload.setText("Upload");
     }
 
     /**
@@ -343,6 +354,14 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
         QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
+        String dir = "/";
+        int rowIndex = jFileTable.getSelectedRow();
+        if (rowIndex >= 0) {
+            SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+            if (f != null && f.isDirectory()) {
+                dir = f.getFilename();
+            }
+        }
         if (USBBulkConnection.GetConnection().isConnected()) {
             final JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
             int returnVal = fc.showOpenDialog(this);
@@ -354,7 +373,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                         Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, "Can't read file");
                         return;
                     }
-                    processor.AppendToQueue(new QCmdUploadFile(f, f.getName()));
+                    processor.AppendToQueue(new QCmdUploadFile(f, dir + f.getName()));
                 }
             }
         }
@@ -417,15 +436,15 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     private axoloti.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
 
-    void ShowConnect(boolean status){
+    void ShowConnect(boolean status) {
         jButton1Refresh.setEnabled(status);
         jButtonUpload.setEnabled(status);
         jFileTable.setEnabled(status);
         jLabelSDInfo.setText("");
         jButtonDelete.setEnabled(status);
-        jButtonCreateDir.setEnabled(status);        
+        jButtonCreateDir.setEnabled(status);
     }
-    
+
     @Override
     public void ShowConnect() {
         ShowConnect(true);
