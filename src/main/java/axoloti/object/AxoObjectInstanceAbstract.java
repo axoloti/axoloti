@@ -50,6 +50,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.border.Border;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
@@ -157,7 +158,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
             AxoObjectInstanceAbstract o1 = patch.GetObjectInstance(InstanceName);
             if ((o1 != null) && (o1 != this)) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} already exists!", InstanceName);
-                doLayout();
                 repaint();
                 return;
             }
@@ -166,7 +166,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         if (InstanceLabel != null) {
             InstanceLabel.setText(InstanceName);
         }
-        doLayout();
     }
 
     public AxoObjectAbstract getType() {
@@ -214,14 +213,13 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         //setMaximumSize(new Dimension(Short.MAX_VALUE,
         //        Short.MAX_VALUE));
 
-        setLocation(x, y);
 //        setFocusable(true);
         Titlebar = new TitleBarPanel(this);
         Titlebar.setLayout(new BoxLayout(Titlebar, BoxLayout.LINE_AXIS));
         Titlebar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
         Titlebar.setMinimumSize(TitleBarMinimumSize);
         Titlebar.setMaximumSize(TitleBarMaximumSize);
-        setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected));
+        setBorder(borderUnselected);
         setOpaque(true);
         resolveType();
 
@@ -317,7 +315,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
         Titlebar.addMouseMotionListener(mml);
         addMouseMotionListener(mml);
-        
     }
 
     private void moveToDraggedLayer(AxoObjectInstanceAbstract o) {
@@ -546,12 +543,15 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         return Selected;
     }
 
+    static Border borderSelected = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected);
+    static Border borderUnselected = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected);
+    
     public void SetSelected(boolean Selected) {
         if (this.Selected != Selected) {
             if (Selected) {
-                setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected));
+                setBorder(borderSelected);
             } else {
-                setBorder(BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected));
+                setBorder(borderUnselected);
             }
             repaint();
         }
@@ -658,7 +658,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     }
 
     public void resizeToGrid() {
-        doLayout();
+        validate();
         Dimension d = getPreferredSize();
         d.width = ((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID;
         d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
