@@ -74,11 +74,6 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
             setType(ao);
             PostConstructor();
         }
-        for (Component cmp : getComponents()) {
-            cmp.doLayout();
-        }
-        doLayout();
-        invalidate();
         validate();
     }
 

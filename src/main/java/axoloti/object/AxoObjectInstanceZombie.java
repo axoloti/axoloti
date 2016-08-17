@@ -127,6 +127,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
             }
         });
         add(InstanceLabel);
+        setLocation(x, y);
 
         resizeToGrid();
     }

@@ -139,6 +139,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
         });
         InstanceLabel.addMouseMotionListener(mml);
         add(InstanceLabel);
+        setLocation(x, y);
 
         resizeToGrid();
     }

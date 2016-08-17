@@ -68,11 +68,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
             setType(ao);
             PostConstructor();
         }
-        for (Component cmp : getComponents()) {
-            cmp.doLayout();
-        }
-        doLayout();
-        invalidate();
         validate();
     }
 
@@ -119,9 +114,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
             }
         });
         add(BtnEdit);
-        for (Component cmp : getComponents()) {
-            cmp.doLayout();
-        }
         resizeToGrid();
     }
 

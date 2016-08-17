@@ -244,7 +244,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         //IndexLabel.setAlignmentX(RIGHT_ALIGNMENT);
         Titlebar.setAlignmentX(LEFT_ALIGNMENT);
         add(Titlebar);
-        Titlebar.doLayout();
         InstanceLabel = new LabelComponent(getInstanceName());
         InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
         InstanceLabel.addMouseListener(new MouseListener() {
@@ -381,7 +380,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             AttributeInstance attri = p.CreateInstance(this, attrp1);
             attri.setAlignmentX(LEFT_ALIGNMENT);
             add(attri);
-            attri.doLayout();
             attributeInstances.add(attri);
         }
 
@@ -394,14 +392,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             }
             pin.PostConstructor();
             pin.setAlignmentX(RIGHT_ALIGNMENT);
-            pin.doLayout();
             parameterInstances.add(pin);
         }
 
         for (Display p : getType().displays) {
             DisplayInstance pin = p.CreateInstance(this);
             pin.setAlignmentX(RIGHT_ALIGNMENT);
-            pin.doLayout();
             displayInstances.add(pin);
         }
 //        p_displays.add(Box.createHorizontalGlue());
@@ -413,6 +409,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
         getType().addObjectModifiedListener(this);
 
+        synchronized (getTreeLock()) {
+            validateTree();
+        }
+        setLocation(x, y);
         resizeToGrid();
     }
 

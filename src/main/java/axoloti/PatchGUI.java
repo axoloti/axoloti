@@ -67,9 +67,10 @@ import javax.swing.JFrame;
 import javax.swing.JLayer;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.KeyStroke;
 import javax.swing.TransferHandler;
+import static javax.swing.TransferHandler.COPY_OR_MOVE;
+import static javax.swing.TransferHandler.MOVE;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
@@ -126,6 +127,7 @@ public class PatchGUI extends Patch {
             c.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
             c.setLocation(0, 0);
             c.setOpaque(false);
+            c.validate();
         }
 
         Layers.add(objectLayer, new Integer(1));
@@ -154,7 +156,6 @@ public class PatchGUI extends Patch {
         Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
         Layers.setOpaque(true);
         Layers.revalidate();
-//        Layers.doLayout();
 
         TransferHandler TH = new TransferHandler() {
             @Override
@@ -181,7 +182,6 @@ public class PatchGUI extends Patch {
                 }
                 if (action == MOVE) {
                     deleteSelectedAxoObjInstances();
-                    cleanUpObjectLayer();
                 }
             }
 
@@ -307,8 +307,6 @@ public class PatchGUI extends Patch {
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
                     deleteSelectedAxoObjInstances();
-                    cleanUpObjectLayer();
-                    Layers.revalidate();
 
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_UP) {
@@ -539,6 +537,7 @@ public class PatchGUI extends Patch {
                 o.setLocation(newposx, newposy);
                 o.SetSelected(true);
             }
+            objectLayerPanel.validate();
             for (Net n : p.nets) {
                 InletInstance connectedInlet = null;
                 OutletInstance connectedOutlet = null;
@@ -771,7 +770,7 @@ public class PatchGUI extends Patch {
 
         Layers.setPreferredSize(new Dimension(5000, 5000));
         AdjustSize();
-        Layers.revalidate();
+        Layers.validate();
 
         for (Net n : nets) {
             n.updateBounds();
@@ -789,6 +788,7 @@ public class PatchGUI extends Patch {
         Net n = super.AddConnection(il, ol);
         if (n != null) {
             netLayerPanel.add(n);
+            n.updateBounds();
         }
         return n;
     }
@@ -798,6 +798,7 @@ public class PatchGUI extends Patch {
         Net n = super.AddConnection(il, ol);
         if (n != null) {
             netLayerPanel.add(n);
+            n.updateBounds();
         }
         return n;
     }
@@ -826,6 +827,7 @@ public class PatchGUI extends Patch {
     public void delete(AxoObjectInstanceAbstract o) {
         super.delete(o);
         objectLayerPanel.remove(o);
+        objectLayerPanel.repaint(o.getBounds());
         objectLayerPanel.validate();
         AdjustSize();
     }
@@ -884,14 +886,10 @@ public class PatchGUI extends Patch {
     }
 
     @Override
-    void invalidate() {
-        super.invalidate();
-        Layers.invalidate();
-    }
-
-    @Override
     public void repaint() {
-        Layers.repaint();
+        if (Layers != null) {
+            Layers.repaint();
+        }
     }
 
     @Override
@@ -1052,16 +1050,5 @@ public class PatchGUI extends Patch {
         if ((settings != null) && (settings.editor != null)) {
             settings.editor.dispose();
         }
-    }
-
-    void cleanUpObjectLayer() {
-        if (!IsLocked()) {
-            for (Component c : this.objectLayerPanel.getComponents()) {
-                if (!objectinstances.contains(c)) {
-                    this.objectLayerPanel.remove(c);
-                }
-            }
-        }
-        repaint();
     }
 }
