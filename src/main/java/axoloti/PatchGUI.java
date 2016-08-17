@@ -360,7 +360,9 @@ public class PatchGUI extends Patch {
             public void mousePressed(MouseEvent me) {
                 if (me.getButton() == MouseEvent.BUTTON1) {
                     selectionRectStart = me.getPoint();
-                    selectionrectangle.setVisible(false);
+                    selectionrectangle.setBounds(me.getX(), me.getY(), 1, 1);
+                    selectionrectangle.setVisible(true);
+
                     Layers.requestFocusInWindow();
                     me.consume();
                 } else {
@@ -430,7 +432,7 @@ public class PatchGUI extends Patch {
         Layers.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent ev) {
-                if (selectionrectangle.isVisible() | ev.getButton() == MouseEvent.BUTTON1) {
+                if (selectionrectangle.isVisible()) {
                     int x1 = selectionRectStart.x;
                     int y1 = selectionRectStart.y;
                     int x2 = ev.getX();
