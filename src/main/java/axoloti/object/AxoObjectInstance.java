@@ -97,7 +97,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     @Override
     public void refreshIndex() {
-        if (patch != null) {
+        if (patch != null && IndexLabel != null) {
             IndexLabel.setText(" " + patch.objectinstances.indexOf(this));
         }
     }
@@ -237,9 +237,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
          h.add(Box.createHorizontalStrut(3));
          h.add(Box.createHorizontalGlue());
          h.add(new JSeparator(SwingConstants.VERTICAL));*/
-//        IndexLabel.setSize(IndexLabel.getMinimumSize());
-        IndexLabel = new LabelComponent("");
-        refreshIndex();
+        
+        ////IndexLabel not shown, maybe useful later...
+        //IndexLabel.setSize(IndexLabel.getMinimumSize());
+        //IndexLabel = new LabelComponent("");
+        //refreshIndex();
         //h.add(IndexLabel);
         //IndexLabel.setAlignmentX(RIGHT_ALIGNMENT);
         Titlebar.setAlignmentX(LEFT_ALIGNMENT);
