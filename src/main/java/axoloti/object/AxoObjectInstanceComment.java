@@ -97,12 +97,12 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
 
             @Override
             public void mousePressed(MouseEvent me) {
-                ml.mousePressed(me);
+                AxoObjectInstanceComment.this.mousePressed(me);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                ml.mouseReleased(e);
+                AxoObjectInstanceComment.this.mouseReleased(e);
             }
 
             @Override
@@ -113,7 +113,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
             public void mouseExited(MouseEvent e) {
             }
         });
-        InstanceLabel.addMouseMotionListener(mml);
+        InstanceLabel.addMouseMotionListener(this);
         add(InstanceLabel);
         setLocation(x, y);
 

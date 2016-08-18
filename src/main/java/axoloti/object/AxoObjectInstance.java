@@ -259,12 +259,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
             @Override
             public void mousePressed(MouseEvent e) {
-                AxoObjectInstance.this.handleMousePressed(e);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                AxoObjectInstance.this.handleMouseReleased(e);
             }
 
             @Override
@@ -275,7 +273,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             public void mouseExited(MouseEvent e) {
             }
         });
-        InstanceLabel.addMouseMotionListener(mml);
         add(InstanceLabel);
 
         JPanel p_iolets = new JPanel();
