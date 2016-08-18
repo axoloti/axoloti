@@ -200,8 +200,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         return type;
     }
 
-    JPopupMenu popup;
-
     private final Dimension TitleBarMinimumSize = new Dimension(40, 12);
     private final Dimension TitleBarMaximumSize = new Dimension(32768, 12);
 
@@ -225,13 +223,16 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
         setVisible(true);
 
-        popup = new JPopupMenu();
-
         Titlebar.addMouseListener(this);
         addMouseListener(this);
 
         Titlebar.addMouseMotionListener(this);
         addMouseMotionListener(this);
+    }
+    
+    JPopupMenu CreatePopupMenu() {
+        JPopupMenu popup = new JPopupMenu();
+        return popup;
     }
 
     @Override

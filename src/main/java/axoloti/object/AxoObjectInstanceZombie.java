@@ -35,6 +35,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import org.simpleframework.xml.Root;
 
 /**
@@ -61,15 +62,13 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
         idlbl.setAlignmentX(LEFT_ALIGNMENT);
         idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
 
-
         final PopupIcon popupIcon = new PopupIcon();
         popupIcon.setPopupIconListener(
                 new PopupIcon.PopupIconListener() {
                     @Override
                     public void ShowPopup() {
-                        if (popup.getParent() == null) {
-                            popupIcon.add(popup);
-                        }
+                        JPopupMenu popup = CreatePopupMenu();
+                        popupIcon.add(popup);
                         popup.show(popupIcon,
                                 0, popupIcon.getHeight());
                     }
@@ -78,22 +77,6 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
         Titlebar.add(idlbl);
 
         Titlebar.setToolTipText("<html>" + "Unresolved object!");
-        JMenuItem popm_substitute = new JMenuItem("replace");
-        popm_substitute.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceZombie.this.getLocation(), AxoObjectInstanceZombie.this, null);
-            }
-        });
-        popup.add(popm_substitute);
-        JMenuItem popm_editInstanceName = new JMenuItem("edit instance name");
-        popm_editInstanceName.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                addInstanceNameEditor();
-            }
-        });
-        popup.add(popm_editInstanceName);
         Titlebar.setAlignmentX(LEFT_ALIGNMENT);
         add(Titlebar);
 
@@ -130,6 +113,28 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
         setLocation(x, y);
 
         resizeToGrid();
+    }
+
+    @Override
+    JPopupMenu CreatePopupMenu() {
+        JPopupMenu popup = super.CreatePopupMenu();
+        JMenuItem popm_substitute = new JMenuItem("replace");
+        popm_substitute.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceZombie.this.getLocation(), AxoObjectInstanceZombie.this, null);
+            }
+        });
+        popup.add(popm_substitute);
+        JMenuItem popm_editInstanceName = new JMenuItem("edit instance name");
+        popm_editInstanceName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                addInstanceNameEditor();
+            }
+        });
+        popup.add(popm_editInstanceName);
+        return popup;
     }
 
     @Override
