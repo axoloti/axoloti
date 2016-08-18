@@ -65,7 +65,11 @@ public class QCmdMemRead implements QCmdSerialTask {
             } catch (InterruptedException ex) {
             }
         }
-        return null;
+        if (sync.ready) {
+            return result;
+        } else {
+            return null;
+        }
     }
 
     @Override

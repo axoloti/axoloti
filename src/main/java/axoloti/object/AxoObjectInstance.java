@@ -53,6 +53,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import org.simpleframework.xml.*;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -237,7 +238,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
          h.add(Box.createHorizontalStrut(3));
          h.add(Box.createHorizontalGlue());
          h.add(new JSeparator(SwingConstants.VERTICAL));*/
-        
         ////IndexLabel not shown, maybe useful later...
         //IndexLabel.setSize(IndexLabel.getMinimumSize());
         //IndexLabel = new LabelComponent("");
@@ -976,6 +976,17 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             getPatch().SetDirty();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Persist
+    public void Persist() {
+        AxoObject o = getType();
+        if (o != null) {
+            if (o.uuid != null && !o.uuid.isEmpty()) {
+                typeUUID = o.uuid;
+                typeSHA = null;
+            }
         }
     }
 }
