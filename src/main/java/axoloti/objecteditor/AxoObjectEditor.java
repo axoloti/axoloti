@@ -347,7 +347,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         rSyntaxTextAreaXML.setCodeFoldingEnabled(true);
 
         AxoObjectInstance obji = editObj.CreateInstance(null, "test", new Point(0, 0));
-        jPanelKRateCode1.setText(obji.GenerateDoFunctionPlusPlus("", "", false));
+//        jPanelKRateCode1.setText(obji.GenerateDoFunctionPlusPlus("", "", false));
         jPanelKRateCode1.setFont(jTextAreaKRateCode.getFont());
     }
 
@@ -403,14 +403,19 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
         editObj.removeObjectModifiedListener(this);
+        editObj.removeObjectModifiedListener(attributeDefinitionsEditorPanel1);
+        editObj.removeObjectModifiedListener(displayDefinitionsEditorPanel1);
+        editObj.removeObjectModifiedListener(inletDefinitionsEditor1);
+        editObj.removeObjectModifiedListener(outletDefinitionsEditorPanel1);
+        editObj.removeObjectModifiedListener(paramDefinitionsEditorPanel1);
         dispose();
         editObj.CloseEditor();
     }
-    
+
     public int getActiveTabIndex() {
         return this.jTabbedPane1.getSelectedIndex();
     }
-    
+
     public void setActiveTabIndex(int n) {
         this.jTabbedPane1.setSelectedIndex(n);
     }

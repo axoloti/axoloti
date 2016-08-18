@@ -46,7 +46,7 @@ import javax.swing.table.AbstractTableModel;
  * @author jtaelman
  * @param <T>
  */
-abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
+abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel implements ObjectModifiedListener {
 
     final T[] AtomDefinitionsList;
     AxoObject obj;
@@ -60,18 +60,11 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
 
     abstract String getDefaultName();
 
-    final ObjectModifiedListener oml = new ObjectModifiedListener() {
-        @Override
-        public void ObjectModified(Object src
-        ) {
-            jTable1.revalidate();
-            jTable1.repaint();
-        }
-
-        public void removeNotify() {
-            obj.removeObjectModifiedListener(this);
-        }
-    };
+    @Override
+    public void ObjectModified(Object src) {
+        jTable1.revalidate();
+        jTable1.repaint();
+    }
 
     static String StringArrayToString(ArrayList<String> va) {
         // items quoted, separated by comma
@@ -152,7 +145,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel {
 
     void initComponents(AxoObject obj) {
         this.obj = obj;
-        obj.addObjectModifiedListener(oml);
+        obj.addObjectModifiedListener(this);
         jScrollPane1 = new JScrollPane();
         jTable1 = new JTable();
         jTable1.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

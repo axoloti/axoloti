@@ -627,7 +627,11 @@ public class Patch {
             }
         }
         objectinstances.remove(o);
-        o.getType().DeleteInstance(o);
+        AxoObjectAbstract t = o.getType();
+        if (o!=null){
+            t.DeleteInstance(o);
+            t.removeObjectModifiedListener(o);
+        }
     }
 
     public void updateModulation(Modulation n) {

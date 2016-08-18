@@ -84,8 +84,6 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     JPanel Titlebar;
     TextFieldComponent InstanceNameTF;
     LabelComponent InstanceLabel;
-    MouseListener ml;
-    MouseMotionListener mml;
 
     public AxoObjectInstanceAbstract() {
     }
@@ -656,5 +654,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     }
 
     public void Close() {
+        AxoObjectAbstract t = getType();
+        if (t != null) {
+            t.removeObjectModifiedListener(this);
+        }
     }
 }
