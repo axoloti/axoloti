@@ -59,7 +59,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "obj_abstr")
-public abstract class AxoObjectInstanceAbstract extends JPanel implements Comparable<AxoObjectInstanceAbstract>, ObjectModifiedListener {
+public abstract class AxoObjectInstanceAbstract extends JPanel implements Comparable<AxoObjectInstanceAbstract>, ObjectModifiedListener, MouseListener, MouseMotionListener {
 
     @Attribute(name = "type")
     public String typeName;
@@ -220,7 +220,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         Titlebar.setMinimumSize(TitleBarMinimumSize);
         Titlebar.setMaximumSize(TitleBarMaximumSize);
         setBorder(borderUnselected);
-        setOpaque(true);
+//        setOpaque(true);
         resolveType();
 
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
@@ -229,92 +229,70 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
         popup = new JPopupMenu();
 
-        ml = new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent me) {
-                if (patch != null) {
-                    if (me.getClickCount() == 1) {
-                        if (me.isShiftDown()) {
-                            SetSelected(!GetSelected());
-                            me.consume();
-                        } else if (Selected == false) {
-                            ((PatchGUI) patch).SelectNone();
-                            SetSelected(true);
-                            me.consume();
-                        }
-                    }
-                    if (me.getClickCount() == 2) {
-                        ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceAbstract.this.getLocation(), AxoObjectInstanceAbstract.this, null);
-                        me.consume();
+        Titlebar.addMouseListener(this);
+        addMouseListener(this);
+
+        Titlebar.addMouseMotionListener(this);
+        addMouseMotionListener(this);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        if (patch != null) {
+            if (me.getClickCount() == 1) {
+                if (me.isShiftDown()) {
+                    SetSelected(!GetSelected());
+                    me.consume();
+                } else if (Selected == false) {
+                    ((PatchGUI) patch).SelectNone();
+                    SetSelected(true);
+                    me.consume();
+                }
+            }
+            if (me.getClickCount() == 2) {
+                ((PatchGUI) patch).ShowClassSelector(AxoObjectInstanceAbstract.this.getLocation(), AxoObjectInstanceAbstract.this, null);
+                me.consume();
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+        handleMousePressed(me);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
+        handleMouseReleased(me);
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent me) {
+        if (patch != null) {
+            if (dragging) {
+                for (AxoObjectInstanceAbstract o : patch.objectinstances) {
+                    if (o.dragging) {
+                        o.x = me.getLocationOnScreen().x - o.dX;
+                        o.y = me.getLocationOnScreen().y - o.dY;
+                        o.dX = me.getLocationOnScreen().x - o.getX();
+                        o.dY = me.getLocationOnScreen().y - o.getY();
+                        o.setLocation(o.x, o.y);
                     }
                 }
             }
+        }
+    }
 
-            /*
-             ClassSelector cs = ((PatchGUI)patch).cs;
-             cs.setText(getType().id);
-             //                        getParent().add(cs, 0);
-             cs.setLocation(getLocation());
-             //                        newObjTF.setSize(400,300);
-             cs.setVisible(true);
-             cs.requestFocus();
-             * /
-             }
-             } else {
-             for (AxoObjectInstanceAbstract o : patch.objectinstances) {
-             o.SetSelected(false);
-             }
-             SetSelected(true);
-             }
-             //patch.invalidate();
-             }*/
-            @Override
-            public void mousePressed(MouseEvent me) {
-                handleMousePressed(me);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent me) {
-                handleMouseReleased(me);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent me) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent me) {
-            }
-        };
-
-        Titlebar.addMouseListener(ml);
-        addMouseListener(ml);
-
-        mml = new MouseMotionListener() {
-            @Override
-            public void mouseDragged(MouseEvent me) {
-                if (patch != null) {
-                    if (dragging) {
-                        for (AxoObjectInstanceAbstract o : patch.objectinstances) {
-                            if (o.dragging) {
-                                o.x = me.getLocationOnScreen().x - o.dX;
-                                o.y = me.getLocationOnScreen().y - o.dY;
-                                o.dX = me.getLocationOnScreen().x - o.getX();
-                                o.dY = me.getLocationOnScreen().y - o.getY();
-                                o.setLocation(o.x, o.y);
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent me) {
-            }
-        };
-
-        Titlebar.addMouseMotionListener(mml);
-        addMouseMotionListener(mml);
+    @Override
+    public void mouseMoved(MouseEvent me) {
     }
 
     private void moveToDraggedLayer(AxoObjectInstanceAbstract o) {
@@ -545,7 +523,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
     static Border borderSelected = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected);
     static Border borderUnselected = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected);
-    
+
     public void SetSelected(boolean Selected) {
         if (this.Selected != Selected) {
             if (Selected) {
