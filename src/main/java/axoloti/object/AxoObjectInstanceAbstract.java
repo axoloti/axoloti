@@ -414,6 +414,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                 String s = InstanceNameTF.getText();
                 setInstanceName(s);
                 getParent().remove(InstanceNameTF);
+                repaint();
             }
 
             @Override
