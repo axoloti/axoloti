@@ -42,7 +42,6 @@ public class InletInstanceZombie extends InletInstance {
         add(Box.createHorizontalStrut(2));
         add(new LabelComponent(this.inletname));
         add(Box.createHorizontalGlue());
-        setComponentPopupMenu(popup);
     }
 
     @Override

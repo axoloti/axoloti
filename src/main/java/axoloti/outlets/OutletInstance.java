@@ -42,8 +42,6 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
 
     private final T outlet;
 
-    OutletInstancePopupMenu popup = new OutletInstancePopupMenu(this);
-
     public String getOutletname() {
         if (outletname != null) {
             return outletname;
@@ -70,7 +68,7 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
         PostConstructor();
     }
 
-    public void RefreshName() {
+    public final void RefreshName() {
         name = axoObj.getInstanceName() + " " + outlet.name;
         objname = axoObj.getInstanceName();
         outletname = outlet.name;
@@ -102,15 +100,15 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
         jack = new components.JackOutputComponent(this);
         jack.setForeground(outlet.getDatatype().GetColor());
         add(jack);
-        setComponentPopupMenu(popup);
         setToolTipText(outlet.description);
 
-        addMouseListeners();
+        addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
     @Override
     public JPopupMenu getPopup() {
-        return popup;
+        return new OutletInstancePopupMenu(this);
     }
 
     @Override

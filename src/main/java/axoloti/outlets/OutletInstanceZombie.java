@@ -42,7 +42,6 @@ public class OutletInstanceZombie extends OutletInstance {
         add(Box.createHorizontalStrut(2));
         jack = new components.JackOutputComponent(this);
         add(jack);
-        setComponentPopupMenu(popup);
     }
 
     @Override

@@ -41,17 +41,14 @@ public class JackOutputComponent extends JComponent {
     final OutletInstance outlet;
 
     public JackOutputComponent(OutletInstance outlet) {
-        setInheritsPopupMenu(true);
         setMinimumSize(dim);
-        setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
         setAlignmentY(CENTER_ALIGNMENT);
         setAlignmentX(RIGHT_ALIGNMENT);
-        setOpaque(true);
         this.outlet = outlet;
     }
-    private final Stroke stroke = new BasicStroke(1.5f);
+    private final static Stroke stroke = new BasicStroke(1.5f);
 
     @Override
     public void paintComponent(Graphics g) {
@@ -59,8 +56,6 @@ public class JackOutputComponent extends JComponent {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setPaint(Theme.getCurrentTheme().Object_Default_Background);
-        g2.fillRect(0, 0, sz, sz);
         g2.setStroke(stroke);
         g2.setPaint(Theme.getCurrentTheme().Component_Primary);
         g2.drawRect(margin, margin + 1, sz - margin - margin, sz - margin - margin);

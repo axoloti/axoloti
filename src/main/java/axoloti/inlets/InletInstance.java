@@ -43,8 +43,6 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
 
     private final T inlet;
 
-    InletInstancePopupMenu popup = new InletInstancePopupMenu(this);
-
     public String getInletname() {
         if (inletname != null) {
             return inletname;
@@ -72,7 +70,7 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
         PostConstructor();
     }
 
-    public void RefreshName() {
+    public final void RefreshName() {
         name = axoObj.getInstanceName() + " " + inlet.name;
         objname = axoObj.getInstanceName();
         inletname = inlet.name;
@@ -105,10 +103,10 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
             add(new LabelComponent(inlet.name));
         }
         add(Box.createHorizontalGlue());
-        setComponentPopupMenu(popup);
         setToolTipText(inlet.description);
 
-        addMouseListeners();
+        addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
     public Inlet getInlet() {
@@ -117,6 +115,6 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
 
     @Override
     public JPopupMenu getPopup() {
-        return popup;
+        return new InletInstancePopupMenu(this);
     }
 }
