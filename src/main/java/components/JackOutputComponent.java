@@ -42,6 +42,7 @@ public class JackOutputComponent extends JComponent {
 
     public JackOutputComponent(OutletInstance outlet) {
         setMinimumSize(dim);
+        setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
         setAlignmentY(CENTER_ALIGNMENT);

@@ -42,6 +42,7 @@ public class JackInputComponent extends JComponent {
 
     public JackInputComponent(InletInstance inlet) {
         setMinimumSize(dim);
+        setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
         setAlignmentY(CENTER_ALIGNMENT);
