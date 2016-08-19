@@ -23,6 +23,8 @@ elif [ -f /etc/arch-release ]; then
     OS=Archlinux
 elif [ -f /etc/gentoo-release ]; then
     OS=Gentoo
+elif [ -f /etc/fedora-release ]; then
+    OS=Fedora
 else
     OS=$(uname -s)
 fi
@@ -54,6 +56,12 @@ case $OS in
     Gentoo)
 	echo "detected Gentoo"
 	;;
+    Fedora)
+        echo "detected Fedora"
+        sudo dnf group install "Development Tools"
+        sudo dnf -y install libusb dfu-util libtool libudev-devel automake autoconf \
+        ant curl ncurses-libs bzip2
+        ;;
     *)
         echo "Cannot handle dist: $OS"
         exit
