@@ -349,17 +349,19 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         helpMenu1 = new axoloti.menus.HelpMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                formFocusLost(evt);
-            }
-        });
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
                 formComponentHidden(evt);
             }
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
+            }
+        });
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                formWindowLostFocus(evt);
             }
         });
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -964,10 +966,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         AskClose();
     }//GEN-LAST:event_jMenuCloseActionPerformed
 
-    private void formFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusLost
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_formFocusLost
-
     private void jMenuItemDumpModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDumpModActionPerformed
         String s = patch.GenerateModulationCode3();
         Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "modmatrix \n{0}", s);
@@ -1011,6 +1009,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void redoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_redoItemAncestorAdded
         redoItem.setEnabled(patch.canRedo());
     }//GEN-LAST:event_redoItemAncestorAdded
+
+    private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
+        getRootPane().setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_formWindowLostFocus
 
     private boolean GoLive() {
         if (patch.getFileNamePath().endsWith(".axs") || patch.container() != null) {
