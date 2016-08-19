@@ -80,7 +80,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     protected boolean Selected = false;
     private boolean Locked = false;
     private boolean typeWasAmbiguous = false;
-    JPanel Titlebar;
+    final JPanel Titlebar = new JPanel();
     TextFieldComponent InstanceNameTF;
     LabelComponent InstanceLabel;
 
@@ -209,13 +209,13 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         //        Short.MAX_VALUE));
 
 //        setFocusable(true);
-        Titlebar = new TitleBarPanel(this);
+        Titlebar.removeAll();
         Titlebar.setLayout(new BoxLayout(Titlebar, BoxLayout.LINE_AXIS));
         Titlebar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
         Titlebar.setMinimumSize(TitleBarMinimumSize);
         Titlebar.setMaximumSize(TitleBarMaximumSize);
+
         setBorder(borderUnselected);
-//        setOpaque(true);
         resolveType();
 
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
@@ -305,7 +305,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     protected void handleMousePressed(MouseEvent me) {
         if (patch != null) {
             if (me.isPopupTrigger()) {
-
+                JPopupMenu p = CreatePopupMenu();
+                p.show(Titlebar, 0, Titlebar.getHeight());
+                me.consume();
             } else if (!IsLocked()) {
                 draggingObjects = new ArrayList<AxoObjectInstanceAbstract>();
                 dX = me.getXOnScreen() - getX();
@@ -336,6 +338,12 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     }
 
     protected void handleMouseReleased(MouseEvent me) {
+        if (me.isPopupTrigger()) {
+            JPopupMenu p = CreatePopupMenu();
+            p.show(Titlebar, 0, Titlebar.getHeight());
+            me.consume();
+            return;
+        }
         int maxZIndex = 0;
         if (draggingObjects != null) {
             if (patch != null) {

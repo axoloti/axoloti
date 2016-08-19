@@ -45,7 +45,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -114,10 +113,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public ArrayList<AttributeInstance> getAttributeInstances() {
         return attributeInstances;
     }
-    public JPanel p_params;
-    public JPanel p_displays;
-    public JPanel p_inlets;
-    public JPanel p_outlets;
+
+    public final JPanel p_params = new JPanel();
+    public final JPanel p_displays = new JPanel();
+    public final JPanel p_iolets = new JPanel();
+    public final JPanel p_inlets = new JPanel();
+    public final JPanel p_outlets = new JPanel();
 
     void updateObj1() {
         getType().addObjectModifiedListener(this);
@@ -138,7 +139,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         outletInstances = new ArrayList<OutletInstance>();
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
         final PopupIcon popupIcon = new PopupIcon();
         popupIcon.setPopupIconListener(new PopupIcon.PopupIconListener() {
             @Override
@@ -149,11 +149,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                         0, popupIcon.getHeight());
             }
         });
+        popupIcon.setAlignmentX(LEFT_ALIGNMENT);
         Titlebar.add(popupIcon);
-
         LabelComponent idlbl = new LabelComponent(typeName);
-        idlbl.setAlignmentX(LEFT_ALIGNMENT);
         idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
+        idlbl.setAlignmentX(LEFT_ALIGNMENT);
         Titlebar.add(idlbl);
 
         String tooltiptxt = "<html>";
@@ -213,33 +213,18 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         });
         add(InstanceLabel);
 
-        JPanel p_iolets = new JPanel();
-        p_iolets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_iolets.removeAll();
+        p_inlets.removeAll();
+        p_outlets.removeAll();
+        p_params.removeAll();
 
-        p_iolets.setLayout(new BoxLayout(p_iolets, BoxLayout.LINE_AXIS));
-        p_iolets.setAlignmentX(LEFT_ALIGNMENT);
-        p_iolets.setAlignmentY(TOP_ALIGNMENT);
-        p_inlets = new JPanel();
-        p_inlets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
-
-        p_inlets.setLayout(new BoxLayout(p_inlets, BoxLayout.PAGE_AXIS));
-        p_inlets.setAlignmentX(LEFT_ALIGNMENT);
-        p_inlets.setAlignmentY(TOP_ALIGNMENT);
-        p_outlets = new JPanel();
-        p_outlets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
-
-        p_outlets.setLayout(new BoxLayout(p_outlets, BoxLayout.PAGE_AXIS));
-        p_outlets.setAlignmentX(RIGHT_ALIGNMENT);
-        p_outlets.setAlignmentY(TOP_ALIGNMENT);
-        p_params = new JPanel();
-        p_params.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         if (getType().getRotatedParams()) {
             p_params.setLayout(new BoxLayout(p_params, BoxLayout.LINE_AXIS));
         } else {
             p_params.setLayout(new BoxLayout(p_params, BoxLayout.PAGE_AXIS));
         }
-        p_displays = new JPanel();
-        p_displays.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+
+        p_displays.removeAll();
 
         if (getType().getRotatedParams()) {
             p_displays.setLayout(new BoxLayout(p_displays, BoxLayout.LINE_AXIS));
@@ -341,8 +326,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 //        p_params.add(Box.createHorizontalGlue());
         add(p_params);
         add(p_displays);
-        p_params.setAlignmentX(LEFT_ALIGNMENT);
-        p_displays.setAlignmentX(LEFT_ALIGNMENT);
 
         getType().addObjectModifiedListener(this);
 
@@ -423,21 +406,43 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         return popup;
     }
 
-    public AxoObjectInstance() {
+    final void init1() {
         inletInstances = new ArrayList<InletInstance>();
         outletInstances = new ArrayList<OutletInstance>();
         displayInstances = new ArrayList<DisplayInstance>();
         parameterInstances = new ArrayList<ParameterInstance>();
         attributeInstances = new ArrayList<AttributeInstance>();
+
+        p_iolets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_iolets.setLayout(new BoxLayout(p_iolets, BoxLayout.LINE_AXIS));
+        p_iolets.setAlignmentX(LEFT_ALIGNMENT);
+        p_iolets.setAlignmentY(TOP_ALIGNMENT);
+
+        p_inlets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_inlets.setLayout(new BoxLayout(p_inlets, BoxLayout.PAGE_AXIS));
+        p_inlets.setAlignmentX(LEFT_ALIGNMENT);
+        p_inlets.setAlignmentY(TOP_ALIGNMENT);
+
+        p_outlets.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_outlets.setLayout(new BoxLayout(p_outlets, BoxLayout.PAGE_AXIS));
+        p_outlets.setAlignmentX(RIGHT_ALIGNMENT);
+        p_outlets.setAlignmentY(TOP_ALIGNMENT);
+
+        p_params.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_params.setAlignmentX(LEFT_ALIGNMENT);
+
+        p_displays.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_displays.setAlignmentX(LEFT_ALIGNMENT);
+    }
+
+    public AxoObjectInstance() {
+        super();
+        init1();
     }
 
     public AxoObjectInstance(AxoObject type, Patch patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
-        inletInstances = new ArrayList<InletInstance>();
-        outletInstances = new ArrayList<OutletInstance>();
-        displayInstances = new ArrayList<DisplayInstance>();
-        parameterInstances = new ArrayList<ParameterInstance>();
-        attributeInstances = new ArrayList<AttributeInstance>();
+        init1();
     }
 
     public void OpenEditor() {

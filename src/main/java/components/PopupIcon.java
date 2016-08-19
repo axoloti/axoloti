@@ -44,7 +44,9 @@ public class PopupIcon extends JComponent implements MouseListener {
 
     public PopupIcon() {
         setMinimumSize(minsize);
+        setPreferredSize(maxsize);
         setMaximumSize(maxsize);
+        setSize(minsize);
         addMouseListener(this);
     }
 
