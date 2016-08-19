@@ -274,7 +274,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
 
     @Override
     public void mouseDragged(MouseEvent me) {
-        if (patch != null) {
+        if ((patch != null) && (draggingObjects != null)) {
             for (AxoObjectInstanceAbstract o : draggingObjects) {
                 o.x = me.getLocationOnScreen().x - o.dX;
                 o.y = me.getLocationOnScreen().y - o.dY;
