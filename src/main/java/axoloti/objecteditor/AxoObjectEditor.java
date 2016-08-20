@@ -24,6 +24,7 @@ import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.ObjectModifiedListener;
 import axoloti.utils.AxolotiLibrary;
+import axoloti.utils.OSDetect;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -130,6 +131,10 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
     public AxoObjectEditor(final AxoObject origObj) {
         initComponents();
+        if (OSDetect.getOS() == OSDetect.OS.MAC) {
+            jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.TOP);
+        }
+
         fileMenu1.initComponents();
         DocumentWindowList.RegisterWindow(this);
         jTextAreaLocalData = initCodeEditor(jPanelLocalData);
@@ -238,18 +243,16 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             // embedded objects have no use for help patches
             jTextFieldHelp.setVisible(false);
             jLabelHelp.setVisible(false);
-        } else {
-            // normal objects
-            if (sellib != null) {
-                jMenuItemSave.setEnabled(!sellib.isReadOnly());
-                if (sellib.isReadOnly()) {
-                    SetReadOnly(true);
-                    jLabelLibrary.setText(sellib.getId() + " (readonly)");
-                    setTitle(sellib.getId() + ":" + origObj.id + " (readonly)");
-                } else {
-                    jLabelLibrary.setText(sellib.getId());
-                    setTitle(sellib.getId() + ":" + origObj.id);
-                }
+        } else // normal objects
+        if (sellib != null) {
+            jMenuItemSave.setEnabled(!sellib.isReadOnly());
+            if (sellib.isReadOnly()) {
+                SetReadOnly(true);
+                jLabelLibrary.setText(sellib.getId() + " (readonly)");
+                setTitle(sellib.getId() + ":" + origObj.id + " (readonly)");
+            } else {
+                jLabelLibrary.setText(sellib.getId());
+                setTitle(sellib.getId() + ":" + origObj.id);
             }
         }
 
