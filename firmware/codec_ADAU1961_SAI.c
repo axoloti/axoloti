@@ -226,7 +226,7 @@ void codec_ADAU1961_hw_init(uint16_t samplerate) {
     while(i) {
       // wait for PLL
       ADAU1961_ReadRegister6(ADAU1961_REG_R1_PLLC);
-      if (i2ctxbuf[5] & 0x02)
+      if (i2crxbuf[5] & 0x02)
         break;
       chThdSleepMilliseconds(1);
       i--;
