@@ -69,6 +69,14 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
             public void ACtrlAdjusted(ACtrlEvent e) {
                 USBBulkConnection.GetConnection().SendMidi(0xE0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
             }
+
+            @Override
+            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+            }
+
+            @Override
+            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+            }
         });
         jPanel1.add(new JLabel("bend"));
         jPanel1.add(pbenddial);

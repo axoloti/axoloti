@@ -96,6 +96,14 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
                     Lauch();
                 }
             }
+
+            @Override
+            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+            }
+
+            @Override
+            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+            }
         });
         add(button);
         add(Box.createHorizontalStrut(5));

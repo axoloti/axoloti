@@ -136,34 +136,46 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     @Override
     protected void mousePressed(MouseEvent e) {
-        grabFocus();
-        if (isEnabled() && (e.getX() >= getWidth() - rmargin - htick * 2)) {
-            dragging = false;
-            if (e.getY() > getHeight() / 2) {
-                hiliteDown = true;
-                setValue(value - tick);
+        if (!e.isPopupTrigger()) {
+            grabFocus();
+            if (isEnabled() && (e.getX() >= getWidth() - rmargin - htick * 2)) {
+                dragging = false;
+                if (e.getY() > getHeight() / 2) {
+                    hiliteDown = true;
+                    fireEventAdjustmentBegin();
+                    setValue(value - tick);
+                    fireEventAdjustmentFinished();
+                } else {
+                    hiliteUp = true;
+                    fireEventAdjustmentBegin();
+                    setValue(value + tick);
+                    fireEventAdjustmentFinished();
+                }
             } else {
-                hiliteUp = true;
-                setValue(value + tick);
+                dragging = true;
+                MousePressedCoordX = e.getXOnScreen();
+                MousePressedCoordY = e.getYOnScreen();
+                MousePressedBtn = e.getButton();
+                getRootPane().setCursor(MainFrame.transparentCursor);
+                fireEventAdjustmentBegin();
             }
-        } else {
-            dragging = true;
-            MousePressedCoordX = e.getXOnScreen();
-            MousePressedCoordY = e.getYOnScreen();
-            MousePressedBtn = e.getButton();
-            getRootPane().setCursor(MainFrame.transparentCursor);
+            e.consume();
         }
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
-        if (hiliteDown) {
-            hiliteDown = false;
-            repaint();
-        }
-        if (hiliteUp) {
-            hiliteUp = false;
-            repaint();            
+        if (!e.isPopupTrigger()) {
+            if (hiliteDown) {
+                hiliteDown = false;
+                repaint();
+            } else if (hiliteUp) {
+                hiliteUp = false;
+                repaint();
+            } else {
+                fireEventAdjustmentFinished();
+            }
+            e.consume();
         }
         getRootPane().setCursor(Cursor.getDefaultCursor());
         robot = null;
@@ -184,35 +196,45 @@ public class NumberBoxComponent extends ACtrlComponent {
             switch (ke.getKeyCode()) {
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_RIGHT:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() + steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_DOWN:
                 case KeyEvent.VK_LEFT:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() - steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_PAGE_UP:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() + 5 * steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_PAGE_DOWN:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() - 5 * steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_HOME:
+                    fireEventAdjustmentBegin();
                     setValue(getMin());
+                    fireEventAdjustmentFinished();
                     ke.consume();
                     break;
                 case KeyEvent.VK_END:
+                    fireEventAdjustmentBegin();
                     setValue(getMax());
+                    fireEventAdjustmentFinished();
                     ke.consume();
                     break;
                 case KeyEvent.VK_ENTER:
+                    fireEventAdjustmentBegin();
                     try {
                         setValue(Float.parseFloat(keybBuffer));
                     } catch (java.lang.NumberFormatException ex) {
                     }
+                    fireEventAdjustmentFinished();
                     keybBuffer = "";
                     ke.consume();
                     repaint();
@@ -384,7 +406,21 @@ public class NumberBoxComponent extends ACtrlComponent {
     }
 
     @Override
-    void keyReleased(KeyEvent key) {
+    void keyReleased(KeyEvent ke) {
+        if (isEnabled()) {
+            switch (ke.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_PAGE_UP:
+                case KeyEvent.VK_PAGE_DOWN:
+                    fireEventAdjustmentFinished();
+                    ke.consume();
+                    break;
+                default:
+            }
+        }
     }
 
     @Override

@@ -23,5 +23,9 @@ package components.control;
  */
 public interface ACtrlListener extends java.util.EventListener {
 
+    void ACtrlAdjustmentBegin(ACtrlEvent e);
+
     void ACtrlAdjusted(ACtrlEvent e);
+
+    void ACtrlAdjustmentFinished(ACtrlEvent e);
 }

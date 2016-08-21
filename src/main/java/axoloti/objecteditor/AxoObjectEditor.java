@@ -364,7 +364,10 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     public boolean AskClose() {
         // if it's an embedded object ("patch/object"), assume the parent patch is saving
         if (IsEmbeddedObj()) {
-            Close();
+            if (hasChanged()) {
+                
+            }
+            Close();            
             return false;
         }
         // warn if changes, and its not an embedded object
@@ -501,6 +504,13 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(540, 400));
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                formWindowLostFocus(evt);
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -829,6 +839,10 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         axoObjectEditor.setActiveTabIndex(activeTabIndex);
         axoObjectEditor.setVisible(true);
     }//GEN-LAST:event_jMenuItemRevertActionPerformed
+
+    private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowLostFocus
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.objecteditor.AttributeDefinitionsEditorPanel attributeDefinitionsEditorPanel1;

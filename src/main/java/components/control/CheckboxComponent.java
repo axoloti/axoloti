@@ -78,29 +78,38 @@ public class CheckboxComponent extends ACtrlComponent {
                 selIndex = i;
                 repaint();
             }
+            e.consume();
         }
     }
 
     @Override
     protected void mousePressed(MouseEvent e) {
-        grabFocus();
-        if (e.getButton() == 1) {
-            int i = e.getX() / bsize;
-            if (i < n) {
-                dragAction = true;
-                if (e.isShiftDown()) {
-                    dragValue = GetFieldValue(i);
-                } else {
-                    dragValue = !GetFieldValue(i);
+        if (!e.isPopupTrigger()) {
+            grabFocus();
+            if (e.getButton() == 1) {
+                int i = e.getX() / bsize;
+                if (i < n) {
+                    fireEventAdjustmentBegin();
+                    dragAction = true;
+                    if (e.isShiftDown()) {
+                        dragValue = GetFieldValue(i);
+                    } else {
+                        dragValue = !GetFieldValue(i);
+                    }
+                    SetFieldValue(i, dragValue);
+                    selIndex = i;
                 }
-                SetFieldValue(i, dragValue);
-                selIndex = i;
             }
+            e.consume();
         }
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
+        if (!e.isPopupTrigger()) {
+            fireEventAdjustmentFinished();
+            e.consume();
+        }
         dragAction = false;
     }
 
@@ -129,37 +138,51 @@ public class CheckboxComponent extends ACtrlComponent {
                 return;
             }
             case KeyEvent.VK_UP: {
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, true);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_DOWN: {
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, false);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_PAGE_UP: {
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, true);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_PAGE_DOWN: {
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, false);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
         }
         switch (ke.getKeyChar()) {
             case '0':
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, false);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case '1':
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, true);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case ' ':
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, !GetFieldValue(selIndex));
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
         }

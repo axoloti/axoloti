@@ -73,24 +73,32 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
 
     @Override
     protected void mousePressed(MouseEvent e) {
-        grabFocus();
-        if (e.getButton() == 1) {
-            int i = e.getX() / bsize;
-            if ((i >= 0) && (i < n)) {
-                if (e.isShiftDown()) {
-                    dragValue = GetFieldValue(i);
-                } else {
-                    dragValue = (GetFieldValue(i) + 1) & 3;
+        if (!e.isPopupTrigger()) {
+            grabFocus();
+            if (e.getButton() == 1) {
+                int i = e.getX() / bsize;
+                if ((i >= 0) && (i < n)) {
+                    fireEventAdjustmentBegin();
+                    if (e.isShiftDown()) {
+                        dragValue = GetFieldValue(i);
+                    } else {
+                        dragValue = (GetFieldValue(i) + 1) & 3;
+                    }
+                    SetFieldValue(i, dragValue);
+                    selIndex = i;
+                    dragAction = true;
                 }
-                SetFieldValue(i, dragValue);
-                selIndex = i;
-                dragAction = true;
+                e.consume();
             }
         }
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
+        if (!e.isPopupTrigger()) {
+            fireEventAdjustmentFinished();
+            e.consume();
+        }
         dragAction = false;
     }
 
@@ -123,7 +131,9 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
                 if (v > 3) {
                     v = 3;
                 }
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, v);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
@@ -132,17 +142,23 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
                 if (v < 0) {
                     v = 0;
                 }
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, v);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_PAGE_UP: {
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, 3);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_PAGE_DOWN: {
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, 0);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
@@ -150,23 +166,33 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
 
         switch (ke.getKeyChar()) {
             case '0':
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, 0);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case '1':
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, 1);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case '2':
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, 2);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case '3':
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, 3);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case ' ':
+                fireEventAdjustmentBegin();
                 SetFieldValue(selIndex, (GetFieldValue(selIndex) + 1) & 3);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
         }

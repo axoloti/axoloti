@@ -114,6 +114,7 @@ public class DialComponent extends ACtrlComponent {
                     v = value + t * ((int) Math.round((MousePressedCoordY - e.getYOnScreen())));
                 }
                 setValue(v);
+                e.consume();
             }
         }
     }
@@ -123,34 +124,41 @@ public class DialComponent extends ACtrlComponent {
 
     @Override
     protected void mousePressed(MouseEvent e) {
-        if (isEnabled()) {
-            grabFocus();
-            MousePressedCoordX = e.getXOnScreen();
-            MousePressedCoordY = e.getYOnScreen();
+        if (!e.isPopupTrigger()) {
+            if (isEnabled()) {
+                grabFocus();
+                MousePressedCoordX = e.getXOnScreen();
+                MousePressedCoordY = e.getYOnScreen();
 
-            int lastBtn = MousePressedBtn;
-            MousePressedBtn = e.getButton();
+                int lastBtn = MousePressedBtn;
+                MousePressedBtn = e.getButton();
 
-            if (lastBtn != MouseEvent.NOBUTTON) {
-                if (lastBtn == MouseEvent.BUTTON1) {
-                    // now have both mouse buttons pressed...
+                if (lastBtn != MouseEvent.NOBUTTON) {
+                    if (lastBtn == MouseEvent.BUTTON1) {
+                        // now have both mouse buttons pressed...
+                        getRootPane().setCursor(Cursor.getDefaultCursor());
+                    }
+                }
+
+                if (MousePressedBtn == MouseEvent.BUTTON1) {
+                    getRootPane().setCursor(MainFrame.transparentCursor);
+                    fireEventAdjustmentBegin();
+                } else {
                     getRootPane().setCursor(Cursor.getDefaultCursor());
                 }
             }
-
-            if (MousePressedBtn == MouseEvent.BUTTON1) {
-                getRootPane().setCursor(MainFrame.transparentCursor);
-            } else {
-                getRootPane().setCursor(Cursor.getDefaultCursor());
-            }
+            e.consume();
         }
-        e.consume();
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
-        getRootPane().setCursor(Cursor.getDefaultCursor());
-        MousePressedBtn = MouseEvent.NOBUTTON;
+        if (isEnabled() && !e.isPopupTrigger()) {
+            getRootPane().setCursor(Cursor.getDefaultCursor());
+            MousePressedBtn = MouseEvent.NOBUTTON;
+            fireEventAdjustmentFinished();
+            e.consume();
+        }
     }
 
     @Override
@@ -168,35 +176,45 @@ public class DialComponent extends ACtrlComponent {
             switch (ke.getKeyCode()) {
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_RIGHT:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() + steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_DOWN:
                 case KeyEvent.VK_LEFT:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() - steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_PAGE_UP:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() + 5 * steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_PAGE_DOWN:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() - 5 * steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_HOME:
+                    fireEventAdjustmentBegin();
                     setValue(getMin());
+                    fireEventAdjustmentFinished();
                     ke.consume();
                     break;
                 case KeyEvent.VK_END:
+                    fireEventAdjustmentBegin();
                     setValue(getMax());
+                    fireEventAdjustmentFinished();
                     ke.consume();
                     break;
                 case KeyEvent.VK_ENTER:
+                    fireEventAdjustmentBegin();
                     try {
                         setValue(Float.parseFloat(keybBuffer));
                     } catch (java.lang.NumberFormatException ex) {
                     }
+                    fireEventAdjustmentFinished();
                     keybBuffer = "";
                     ke.consume();
                     repaint();
@@ -239,6 +257,20 @@ public class DialComponent extends ACtrlComponent {
 
     @Override
     void keyReleased(KeyEvent ke) {
+        if (isEnabled()) {
+            switch (ke.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_PAGE_UP:
+                case KeyEvent.VK_PAGE_DOWN:
+                    fireEventAdjustmentFinished();
+                    ke.consume();
+                    break;
+                default:
+            }
+        }
     }
 
     private static final Stroke strokeThin = new BasicStroke(1);

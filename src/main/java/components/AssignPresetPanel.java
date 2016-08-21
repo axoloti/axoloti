@@ -105,5 +105,13 @@ public class AssignPresetPanel extends JPanel {
             }
             param.GetObjectInstance().patch.presetUpdatePending = true;
         }
+
+        @Override
+        public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+        }
+
+        @Override
+        public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+        }
     };
 }

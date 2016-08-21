@@ -94,15 +94,21 @@ public class VSliderComponent extends ACtrlComponent {
 
     @Override
     protected void mousePressed(MouseEvent e) {
-        grabFocus();
-
-        px = e.getXOnScreen();
-        py = e.getYOnScreen();
-        getRootPane().setCursor(MainFrame.transparentCursor);
+        if (!e.isPopupTrigger()) {
+            grabFocus();
+            px = e.getXOnScreen();
+            py = e.getYOnScreen();
+            getRootPane().setCursor(MainFrame.transparentCursor);
+            e.consume();
+            fireEventAdjustmentBegin();
+        }
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
+        if (!e.isPopupTrigger()) {
+            fireEventAdjustmentFinished();
+        }
         getRootPane().setCursor(Cursor.getDefaultCursor());
     }
 
@@ -115,35 +121,45 @@ public class VSliderComponent extends ACtrlComponent {
         switch (ke.getKeyCode()) {
             case KeyEvent.VK_UP:
             case KeyEvent.VK_RIGHT:
+                fireEventAdjustmentBegin();
                 setValue(getValue() + steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_LEFT:
+                fireEventAdjustmentBegin();
                 setValue(getValue() - steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_PAGE_UP:
+                fireEventAdjustmentBegin();
                 setValue(getValue() + 5 * steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_PAGE_DOWN:
+                fireEventAdjustmentBegin();
                 setValue(getValue() - 5 * steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_HOME:
+                fireEventAdjustmentBegin();
                 setValue(max);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case KeyEvent.VK_END:
+                fireEventAdjustmentBegin();
                 setValue(min);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case KeyEvent.VK_ENTER:
+                fireEventAdjustmentBegin();
                 try {
                     setValue(Float.parseFloat(keybBuffer));
                 } catch (java.lang.NumberFormatException ex) {
                 }
+                fireEventAdjustmentFinished();
                 keybBuffer = "";
                 ke.consume();
                 repaint();
@@ -185,6 +201,20 @@ public class VSliderComponent extends ACtrlComponent {
 
     @Override
     void keyReleased(KeyEvent ke) {
+        if (isEnabled()) {
+            switch (ke.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_PAGE_UP:
+                case KeyEvent.VK_PAGE_DOWN:
+                    fireEventAdjustmentFinished();
+                    ke.consume();
+                    break;
+                default:
+            }
+        }
     }
 
     final int margin = 2;

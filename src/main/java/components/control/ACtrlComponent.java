@@ -95,6 +95,7 @@ public abstract class ACtrlComponent extends JComponent {
 
             @Override
             public void keyReleased(KeyEvent ke) {
+                ACtrlComponent.this.keyReleased(ke);
             }
         });
     }
@@ -126,6 +127,26 @@ public abstract class ACtrlComponent extends JComponent {
         for (int i = 0; i < listeners.length; i += 2) {
             if (listeners[i] == ACtrlListener.class) {
                 ((ACtrlListener) listeners[i + 1]).ACtrlAdjusted(
+                        new ACtrlEvent(this, getValue()));
+            }
+        }
+    }
+
+    void fireEventAdjustmentBegin() {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = 0; i < listeners.length; i += 2) {
+            if (listeners[i] == ACtrlListener.class) {
+                ((ACtrlListener) listeners[i + 1]).ACtrlAdjustmentBegin(
+                        new ACtrlEvent(this, getValue()));
+            }
+        }
+    }
+
+    void fireEventAdjustmentFinished() {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = 0; i < listeners.length; i += 2) {
+            if (listeners[i] == ACtrlListener.class) {
+                ((ACtrlListener) listeners[i + 1]).ACtrlAdjustmentFinished(
                         new ACtrlEvent(this, getValue()));
             }
         }
@@ -194,11 +215,11 @@ public abstract class ACtrlComponent extends JComponent {
     public void setParentAxoObjectInstance(AxoObjectInstance axoObj) {
         this.axoObj = axoObj;
     }
-    
+
     public void robotMoveToCenter() {
-        
+
     }
-    
+
     public void setCustomBackgroundColor(Color c) {
         this.customBackgroundColor = c;
     }

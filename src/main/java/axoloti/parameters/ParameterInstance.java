@@ -155,16 +155,29 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
                 boolean changed = handleAdjustment();
-                if (axoObj != null && changed) {
-                    if (axoObj.getPatch() != null) {
-                        axoObj.getPatch().SetDirty();
-                    }
+            }
+
+            @Override
+            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+                valueBeforeAdjustment = getControlComponent().getValue();
+                //System.out.println("begin "+value_before);
+            }
+
+            @Override
+            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+                if ((valueBeforeAdjustment != getControlComponent().getValue())
+                        && (axoObj != null)
+                        && (axoObj.getPatch() != null)) {
+                    //System.out.println("finished" +getControlComponent().getValue());
+                    axoObj.getPatch().SetDirty();
                 }
             }
         });
         updateV();
         SetMidiCC(MidiCC);
     }
+
+    double valueBeforeAdjustment;
 
     public void applyDefaultValue() {
     }

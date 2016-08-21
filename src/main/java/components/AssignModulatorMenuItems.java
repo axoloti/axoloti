@@ -71,6 +71,14 @@ public class AssignModulatorMenuItems {
                     ValueFrac32 v = new ValueFrac32(((HSliderComponent) e.getSource()).getValue());
                     param.updateModulation(i, v.getDouble());
                 }
+
+                @Override
+                public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+                }
+
+                @Override
+                public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+                }
             });
             hsls.add(hsl);
             p.add(hsl);
