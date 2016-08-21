@@ -67,11 +67,12 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
 
     public Point getJackLocInCanvas() {
         try {
-            Point jackLocation = jack.getLocationOnScreen();
-            jackLocation.x += 5;
-            jackLocation.y += 5;
-            SwingUtilities.convertPointFromScreen(jackLocation, getPatchGui().Layers);
-            return jackLocation;
+            PatchGUI p = getPatchGui();
+            if (p != null) {
+                return SwingUtilities.convertPoint(jack, 5, 5, getPatchGui().Layers);
+            } else {
+                return getJackLocInCanvasHidden();
+            }
         } catch (IllegalComponentStateException e) {
             return getJackLocInCanvasHidden();
         } catch (NullPointerException e) {
