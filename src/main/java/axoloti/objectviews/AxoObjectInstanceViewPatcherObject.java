@@ -1,6 +1,6 @@
 package axoloti.objectviews;
 
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectPatcherObject;
 import axoloti.objecteditor.AxoObjectEditor;
@@ -12,7 +12,7 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     AxoObjectInstancePatcherObject model;
     ButtonComponent BtnEdit;
 
-    public AxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject model, PatchView patchView) {
+    public AxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject model, PatchViewSwing patchView) {
         super(model, patchView);
         this.model = model;
     }
@@ -20,7 +20,6 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        //updateObj();
         BtnEdit = new ButtonComponent("edit");
         BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
         BtnEdit.setAlignmentY(TOP_ALIGNMENT);
@@ -62,5 +61,4 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     public boolean isEditorOpen() {
         return model.aoe != null && model.aoe.isVisible();
     }
-
 }

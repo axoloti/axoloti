@@ -17,8 +17,8 @@
  */
 package axoloti;
 
-import axoloti.inlets.InletInstanceView;
-import axoloti.outlets.OutletInstanceView;
+import axoloti.inlets.IInletInstanceView;
+import axoloti.outlets.IOutletInstanceView;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -32,11 +32,11 @@ import javax.swing.SwingUtilities;
  */
 public class NetDragging extends NetView {
 
-    public NetDragging(PatchView patchView) {
-        this(new Net(), patchView);
+    public NetDragging(PatchViewSwing patchView) {
+        this(patchView.getPatchController().getNetDraggingModel(), patchView);
     }
-    
-    public NetDragging(Net n, PatchView patchView) {
+
+    public NetDragging(Net n, PatchViewSwing patchView) {
         super(n, patchView);
         this.net = n;
     }
@@ -83,7 +83,7 @@ public class NetDragging extends NetView {
         }
         if (p0 != null) {
             Point from = SwingUtilities.convertPoint(patchView.Layers, p0, this);
-            for (InletInstanceView i : dest) {
+            for (IInletInstanceView i : getDestinationViews()) {
                 Point p1 = i.getJackLocInCanvas();
 
                 Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
@@ -92,7 +92,7 @@ public class NetDragging extends NetView {
                 g2.setColor(c);
                 DrawWire(g2, from.x, from.y, to.x, to.y);
             }
-            for (OutletInstanceView i : source) {
+            for (IOutletInstanceView i : getSourceViews()) {
                 Point p1 = i.getJackLocInCanvas();
 
                 Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
@@ -119,14 +119,14 @@ public class NetDragging extends NetView {
             max_y = p0.y;
         }
 
-        for (InletInstanceView i : dest) {
+        for (IInletInstanceView i : getDestinationViews()) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);
             max_x = Math.max(max_x, p1.x);
             max_y = Math.max(max_y, p1.y);
         }
-        for (OutletInstanceView i : source) {
+        for (IOutletInstanceView i : getSourceViews()) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);
@@ -134,10 +134,27 @@ public class NetDragging extends NetView {
             max_y = Math.max(max_y, p1.y);
         }
 
-        int fudge = 8;
-        this.setBounds(min_x - fudge, min_y - fudge,
-                Math.max(1, max_x - min_x + (2 * fudge)),
-                (int) CtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * fudge));
+        int padding = 8;
+        setBounds(min_x - padding, min_y - padding,
+                Math.max(1, max_x - min_x + (2 * padding)),
+                (int) CtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * padding));
     }
 
+    @Override
+    public void connectInlet(IInletInstanceView inlet) {
+        if (inlet == null) {
+            throw new RuntimeException("Cannot connect a null InletInstanceView to a NetView.");
+        }
+        dest.add(inlet);
+        net.connectInlet(inlet.getInletInstance());
+    }
+
+    @Override
+    public void connectOutlet(IOutletInstanceView outlet) {
+        if (outlet == null) {
+            throw new RuntimeException("Cannot connect a null OutInstanceView to a NetView.");
+        }
+        source.add(outlet);
+        net.connectOutlet(outlet.getOutletInstance());
+    }
 }

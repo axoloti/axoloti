@@ -29,15 +29,19 @@ public class Theme {
         super();
         Color labelForeground = (new JLabel()).getForeground();
         Color panelBackground = (new JPanel()).getBackground();
+        Color panelForeground = (new JPanel()).getForeground();
+
         // ensure we don't have ColorUIResource instances
-        labelForeground = new Color(labelForeground.getRed(), labelForeground.getGreen(), 
+        labelForeground = new Color(labelForeground.getRed(), labelForeground.getGreen(),
                 labelForeground.getBlue(), labelForeground.getAlpha());
-        panelBackground= new Color(panelBackground.getRed(), panelBackground.getGreen(), 
+        panelBackground = new Color(panelBackground.getRed(), panelBackground.getGreen(),
                 panelBackground.getBlue(), panelBackground.getAlpha());
         this.Label_Text = labelForeground;
         this.Object_TitleBar_Foreground = labelForeground;
         this.Object_Default_Background = panelBackground;
+        this.Object_Default_Foreground = panelForeground;
         this.Parameter_Default_Background = panelBackground;
+        this.Parameter_Default_Foreground = panelForeground;
     }
 
     private static final Registry REGISTRY = new Registry();
@@ -63,7 +67,7 @@ public class Theme {
     @Element
     public Color Patch_Locked_Background = Color.DARK_GRAY;
 
-// text    
+// text
     @Element
     public Color Error_Text = Color.RED;
     @Element
@@ -83,7 +87,7 @@ public class Theme {
     @Element
     public Color Cable_Bool32 = Color.YELLOW;
     @Element
-    public Color Cable_CharPointer32 = Color.PINK;
+    public Color Cable_CharPointer32 = new Color(201, 114, 114);
     @Element
     public Color Cable_Zombie = Color.WHITE;
     @Element
@@ -91,7 +95,7 @@ public class Theme {
     @Element
     public Color Cable_Frac32Buffer = Color.RED;
     @Element
-    public Color Cable_Int32 = Color.GREEN;
+    public Color Cable_Int32 = new Color(0, 214, 0);
     @Element
     public Color Cable_Int32Pointer = Color.MAGENTA;
     @Element
@@ -102,6 +106,8 @@ public class Theme {
     // objects
     @Element
     public Color Object_Default_Background;
+    @Element
+    public Color Object_Default_Foreground;
     @Element
     public Color Object_TitleBar_Background = Color.getHSBColor(0.f, 0.0f, 0.6f);
     @Element
@@ -116,11 +122,11 @@ public class Theme {
     @Element
     public Color Parameter_Default_Background;
     @Element
-    public Color Parameter_Default_Foreground = Color.BLACK;
+    public Color Parameter_Default_Foreground;
     @Element
     public Color Parameter_On_Parent_Highlight = Color.BLUE;
     @Element
-    public Color Paramete_Preset_Highlight = Color.YELLOW;
+    public Color Parameter_Preset_Highlight = Color.YELLOW;
 
     @Element
     public Color Component_Primary = Color.BLACK;
@@ -161,12 +167,15 @@ public class Theme {
     @Element
     public Color VU_Bright_Red = new Color(0.8f, 0.0f, 0.0f);
 
+    @Element
+    public Color Patch_Border = new Color(0.0f, 0.0f, 0.0f, 0.1f);
+
     private File FileChooserSave(JFrame frame) {
         final JFileChooser fc = new JFileChooser(MainFrame.prefs.getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(FileUtils.axtFileFilter);
 
-        String fn = this.Theme_Name;
+        String fn = Theme_Name;
 
         File f = new File(fn);
         fc.setSelectedFile(f);

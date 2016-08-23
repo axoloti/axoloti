@@ -24,9 +24,9 @@ public class DisplayInstanceViewFrac4UByteVBar extends DisplayInstanceViewFrac32
             add(vbar[i]);
         }
     }
-    
+
     public Value getValue() {
-        return this.displayInstance.getValueRef();
+        return displayInstance.getValueRef();
     }
 
     @Override

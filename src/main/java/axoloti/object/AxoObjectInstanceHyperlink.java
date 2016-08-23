@@ -19,8 +19,11 @@ package axoloti.object;
 
 import axoloti.PatchModel;
 import axoloti.PatchView;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.PatchViewPiccolo;
+import axoloti.PatchViewSwing;
 import axoloti.objectviews.AxoObjectInstanceViewHyperlink;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewHyperlink;
 import java.awt.Desktop;
 import java.awt.Point;
 import java.io.File;
@@ -62,7 +65,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
             s = s.substring(0, s.lastIndexOf(File.separatorChar));
             File f = new File(s + File.separatorChar + link);
             if (f.canRead()) {
-                PatchView.OpenPatch(f);
+                PatchViewSwing.OpenPatch(f);
             } else {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, "can''t read file {0}", f.getAbsolutePath());
             }
@@ -75,14 +78,11 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public AxoObjectInstanceViewHyperlink ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceViewHyperlink(this, patchView);
-    }
-
-    @Override
-    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
-        AxoObjectInstanceViewHyperlink pi = ViewFactory(patchView);
-        pi.PostConstructor();
-        return pi;
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if (patchView instanceof PatchViewPiccolo) {
+            return new PAxoObjectInstanceViewHyperlink(this, (PatchViewPiccolo) patchView);
+        } else {
+            return new AxoObjectInstanceViewHyperlink(this, (PatchViewSwing) patchView);
+        }
     }
 }

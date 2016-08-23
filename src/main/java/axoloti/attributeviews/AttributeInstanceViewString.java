@@ -4,6 +4,7 @@ import axoloti.attribute.AttributeInstanceString;
 import axoloti.objectviews.AxoObjectInstanceView;
 
 public abstract class AttributeInstanceViewString extends AttributeInstanceView {
+
     AttributeInstanceString attributeInstance;
 
     public AttributeInstanceViewString(AttributeInstanceString attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
@@ -11,7 +12,7 @@ public abstract class AttributeInstanceViewString extends AttributeInstanceView 
         this.attributeInstance = attributeInstance;
 
     }
-    
+
     public abstract String getString();
 
     public abstract void setString(String s);

@@ -68,7 +68,7 @@ public class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
             @Override
             public void focusLost(FocusEvent e) {
                 if (!TFFileName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().SetDirty();
+                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }
         });
@@ -83,7 +83,7 @@ public class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
                     TFFileName.setText(f);
                     if (!f.equals(attributeInstance.getString())) {
                         attributeInstance.setString(f);
-                        attributeInstance.getObjectInstance().getPatchModel().SetDirty();
+                        attributeInstance.getObjectInstance().getPatchModel().setDirty();
                     }
                 }
             }

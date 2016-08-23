@@ -17,10 +17,12 @@
  */
 package axoloti;
 
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.InletInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.outlets.OutletInstance;
+import axoloti.piccolo.PNetView;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -37,16 +39,16 @@ public class Net {
     @ElementList(inline = true, required = false)
     ArrayList<OutletInstance> source;
     @ElementList(inline = true, required = false)
-    ArrayList<InletInstance> dest = new ArrayList<InletInstance>();
+    ArrayList<InletInstance> dest = new ArrayList<>();
     public PatchModel patchModel;
     boolean selected = false;
 
     public Net() {
         if (source == null) {
-            source = new ArrayList<OutletInstance>();
+            source = new ArrayList<>();
         }
         if (dest == null) {
-            dest = new ArrayList<InletInstance>();
+            dest = new ArrayList<>();
         }
     }
 
@@ -54,10 +56,10 @@ public class Net {
         this();
         this.patchModel = patchModel;
     }
-    
+
     public void PostConstructor() {
         // InletInstances and OutletInstances actually already exist, need to replace dummies with the real ones
-        ArrayList<OutletInstance> source2 = new ArrayList<OutletInstance>();
+        ArrayList<OutletInstance> source2 = new ArrayList<>();
         for (OutletInstance i : source) {
             String objname = i.getObjname();
             String outletname = i.getOutletname();
@@ -76,7 +78,7 @@ public class Net {
             }
             source2.add(r);
         }
-        ArrayList<InletInstance> dest2 = new ArrayList<InletInstance>();
+        ArrayList<InletInstance> dest2 = new ArrayList<>();
         for (InletInstance i : dest) {
             String objname = i.getObjname();
             String inletname = i.getInletname();
@@ -122,7 +124,7 @@ public class Net {
             return false;
         }
         for (InletInstance s : dest) {
-            if (!getDataType().IsConvertableToType(s.GetDataType())) {
+            if (!getDataType().IsConvertableToType(s.getDataType())) {
                 return false;
             }
         }
@@ -161,7 +163,7 @@ public class Net {
             return true;
         }
         for (AxoObjectInstanceAbstract o : patchModel.objectinstances) {
-            for (OutletInstance i : o.GetOutletInstances()) {
+            for (OutletInstance i : o.getOutletInstances()) {
                 if (source.contains(i)) {
                     // o is first objectinstance connected to this net
                     return oi == i;
@@ -177,10 +179,10 @@ public class Net {
             return null;
         }
         if (source.size() == 1) {
-            return source.get(0).GetDataType();
+            return source.get(0).getDataType();
         }
         java.util.Collections.sort(source);
-        DataType t = source.get(0).GetDataType();
+        DataType t = source.get(0).getDataType();
         return t;
     }
     
@@ -201,13 +203,19 @@ public class Net {
         int i = patchModel.nets.indexOf(this);
         return "net" + i;
     }
-    
-    public NetView CreateView(PatchView patchView) {
-        NetView n =  new NetView(this, patchView);
-        n.PostConstructor();
-        return n;
+
+    public INetView createView(PatchView patchView) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            INetView n = new PNetView(this, (PatchViewPiccolo) patchView);
+            n.PostConstructor();
+            return n;
+        } else {
+            INetView n = new NetView(this, (PatchViewSwing) patchView);
+            n.PostConstructor();
+            return n;
+        }
     }
-    
+
     public void setPatchModel(PatchModel patchModel) {
         this.patchModel = patchModel;
     }

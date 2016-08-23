@@ -21,6 +21,8 @@ import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewPiccolo;
+import axoloti.PatchViewSwing;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.attribute.*;
@@ -30,9 +32,10 @@ import axoloti.displays.DisplayInstance;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
 import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
@@ -83,16 +86,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public ArrayList<AttributeInstance> attributeInstances = new ArrayList<AttributeInstance>();
     public ArrayList<DisplayInstance> displayInstances = new ArrayList<DisplayInstance>();
 
-    @Override
-    public ArrayList<ParameterInstance> getParameterInstances() {
-        return parameterInstances;
-    }
-
-    @Override
-    public ArrayList<AttributeInstance> getAttributeInstances() {
-        return attributeInstances;
-    }
-
     public AxoObjectInstance() {
         super();
     }
@@ -102,14 +95,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     }
 
     @Override
-    public void setInstanceName(String s) {
-        super.setInstanceName(s);
+    public boolean setInstanceName(String s) {
+        boolean result = super.setInstanceName(s);
         for (InletInstance i : inletInstances) {
             i.RefreshName();
         }
         for (OutletInstance i : outletInstances) {
             i.RefreshName();
         }
+        return result;
     }
 
     @Override
@@ -151,16 +145,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             }
         }
         return null;
-    }
-
-    @Override
-    public ArrayList<InletInstance> GetInletInstances() {
-        return inletInstances;
-    }
-
-    @Override
-    public ArrayList<OutletInstance> GetOutletInstances() {
-        return outletInstances;
     }
 
     @Override
@@ -310,12 +294,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
                 s = s.replaceAll(p.GetCName(), p.CValue());
             }
             for (InletInstance i : inletInstances) {
-                if (i.GetDataType() instanceof Frac32buffer) {
+                if (i.getDataType() instanceof Frac32buffer) {
                     s = s.replaceAll(i.GetCName(), i.GetCName() + "[buffer_index]");
                 }
             }
             for (OutletInstance i : outletInstances) {
-                if (i.GetDataType() instanceof Frac32buffer) {
+                if (i.getDataType() instanceof Frac32buffer) {
                     s = s.replaceAll(i.GetCName(), i.GetCName() + "[buffer_index]");
                 }
             }
@@ -336,14 +320,14 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             if (comma) {
                 s += ",\n";
             }
-            s += "const " + i.GetDataType().CType() + " " + i.GetCName();
+            s += "const " + i.getDataType().CType() + " " + i.GetCName();
             comma = true;
         }
         for (OutletInstance i : outletInstances) {
             if (comma) {
                 s += ",\n";
             }
-            s += i.GetDataType().CType() + " & " + i.GetCName();
+            s += i.getDataType().CType() + " & " + i.GetCName();
             comma = true;
         }
         for (ParameterInstance i : parameterInstances) {
@@ -477,7 +461,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         // auto-choose depending on 1st connected inlet
 
         //      InletInstance i = null;// = GetInletInstances().get(0);
-        for (InletInstance j : GetInletInstances()) {
+        for (InletInstance j : getInletInstances()) {
             Net n = getPatchModel().GetNet(j);
             if (n == null) {
                 continue;
@@ -524,34 +508,28 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         if (selected != getType()) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.FINE, "promoting " + this + " to " + selected);
             getPatchModel().ChangeObjectInstanceType(this, selected);
-            getPatchModel().cleanUpIntermediateChangeStates(2);
             return true;
         }
         return false;
     }
 
     @Override
-    public ArrayList<DisplayInstance> GetDisplayInstances() {
-        return displayInstances;
-    }
-
-    @Override
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         ArrayList<SDFileReference> files = getType().filedepends;
-        if (files == null){
+        if (files == null) {
             files = new ArrayList<SDFileReference>();
         } else {
             String p1 = getType().sPath;
-            if (p1==null) {
+            if (p1 == null) {
                 // embedded object, reference path is of the patch
-                p1 = getPatch().getFileNamePath();
+                p1 = getPatchModel().getFileNamePath();
                 if (p1 == null) {
                     p1 = "";
                 }
             }
             File f1 = new File(p1);
             java.nio.file.Path p = f1.toPath().getParent();
-            for (SDFileReference f: files){
+            for (SDFileReference f : files) {
                 f.Resolve(p);
             }
         }
@@ -569,18 +547,17 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/patcher", null);
             assert (!ol.isEmpty());
             AxoObjectAbstract o = ol.get(0);
-            String iname = getInstanceName();
-            AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatchModel().ChangeObjectInstanceType1(this, o, false);
+            AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatchModel().AddObjectInstance(o, new Point(x, y));
             AxoObjectFromPatch ao = (AxoObjectFromPatch) getType();
             Strategy strategy = new AnnotationStrategy();
             Serializer serializer = new Persister(strategy);
-            oi.subPatchModel = serializer.read(PatchModel.class, new File(ao.patchModel.getFileNamePath()));
-            oi.setInstanceName(iname);
-            getPatchModel().SetDirty();
-            getPatchModel().transferObjectConnections(this, oi);
+            oi.setSubPatchModel(serializer.read(PatchModel.class, new File(ao.patchModel.getFileNamePath())));
+            oi.initSubpatchFrame();
+            oi.updateObj();
+            getPatchModel().transferState(this, oi);
             getPatchModel().delete(this);
-            getPatchModel().SetDirty();
-            getPatchModel().cleanUpIntermediateChangeStates(2);
+            getPatchModel().setDirty();
+            oi.setInstanceName(getInstanceName());
         } catch (Exception ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Failed to convert to patch/patcher", ex);
         }
@@ -592,7 +569,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             assert (!ol.isEmpty());
             AxoObjectAbstract o = ol.get(0);
             String iname = getInstanceName();
-            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatchModel().ChangeObjectInstanceType1(this, o, false);
+            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatchModel().ChangeObjectInstanceType1(this, o);
             AxoObject ao = getType();
             oi.ao = new AxoObjectPatcherObject(ao.id, ao.sDescription);
             oi.ao.copy(ao);
@@ -600,11 +577,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             oi.ao.upgradeSha = null;
             oi.ao.CloseEditor();
             oi.setInstanceName(iname);
-            getPatchModel().SetDirty();
-            getPatchModel().transferObjectConnections(this, oi);
+            getPatchModel().setDirty();
+            getPatchModel().transferState(this, oi);
             getPatchModel().delete(this);
-            getPatchModel().SetDirty();
-            getPatchModel().cleanUpIntermediateChangeStates(2);
+            getPatchModel().setDirty();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -622,13 +598,17 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     }
 
     @Override
-    public AxoObjectInstanceView ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceView(this, patchView);
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if (patchView instanceof PatchViewSwing) {
+            return new AxoObjectInstanceView(this, (PatchViewSwing) patchView);
+        } else {
+            return new PAxoObjectInstanceView(this, (PatchViewPiccolo) patchView);
+        }
     }
 
     @Override
-    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
-        AxoObjectInstanceView pi = ViewFactory(patchView);
+    public IAxoObjectInstanceView createView(PatchView patchView) {
+        IAxoObjectInstanceView pi = getViewInstance(patchView);
         pi.PostConstructor();
         return pi;
     }
@@ -644,7 +624,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     public void updateObj() {
         getPatchModel().ChangeObjectInstanceType(this, this.getType());
-        getPatchModel().cleanUpIntermediateChangeStates(3);
     }
 
     @Override
@@ -677,4 +656,52 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         }
     }
 
+    public ArrayList<InletInstance> getInletInstances() {
+        return this.inletInstances;
+    }
+
+    @Override
+    public ArrayList<OutletInstance> getOutletInstances() {
+        return this.outletInstances;
+    }
+
+    @Override
+    public ArrayList<ParameterInstance> getParameterInstances() {
+        return this.parameterInstances;
+    }
+
+    @Override
+    public ArrayList<AttributeInstance> getAttributeInstances() {
+        return this.attributeInstances;
+    }
+
+    @Override
+    public ArrayList<DisplayInstance> getDisplayInstances() {
+        return this.displayInstances;
+    }
+
+    @Override
+    public void setInletInstances(ArrayList<InletInstance> inletInstances) {
+        this.inletInstances = inletInstances;
+    }
+
+    @Override
+    public void setOutletInstances(ArrayList<OutletInstance> outletInstances) {
+        this.outletInstances = outletInstances;
+    }
+
+    @Override
+    public void setParameterInstances(ArrayList<ParameterInstance> parameterInstances) {
+        this.parameterInstances = parameterInstances;
+    }
+
+    @Override
+    public void setAttributeInstances(ArrayList<AttributeInstance> attributeInstances) {
+        this.attributeInstances = attributeInstances;
+    }
+
+    @Override
+    public void setDisplayInstances(ArrayList<DisplayInstance> displayInstances) {
+        this.displayInstances = displayInstances;
+    }
 }

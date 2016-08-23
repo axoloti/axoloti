@@ -330,7 +330,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                     }
 
                     // factory library force and upgrade
-                    // Im stashing changes here, just in case, but in reality users should not be altering factory 
+                    // Im stashing changes here, just in case, but in reality users should not be altering factory
                     ulib = prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
                     if (ulib != null) {
                         String cb = ulib.getCurrentBranch();
@@ -381,7 +381,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                                     if (axoObjects.LoaderThread.isAlive()) {
                                         EventQueue.invokeLater(this);
                                     } else {
-                                        PatchView.OpenPatch(f);
+                                        PatchViewSwing.OpenPatch(f);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -809,13 +809,13 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
             PatchController patchController = new PatchController();
-            PatchView patchView = new PatchView(patchController);
+            PatchView patchView = prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchView(patchView);
             patchController.setPatchModel(patchModel);
             PatchFrame pf = new PatchFrame(patchController, qcmdprocessor);
             patchView.setFileNamePath(f.getPath());
-            patchView.PostConstructor();            
+            patchView.PostConstructor();
             patchModel.WriteCode();
             qcmdprocessor.WaitQueueFinished();
             Thread.sleep(500);
@@ -880,7 +880,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
             PatchController patchController = new PatchController();
-            PatchView patchView = new PatchView(patchController);
+            PatchView patchView = prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchModel(patchModel);
             patchController.setPatchView(patchView);
@@ -897,7 +897,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             return false;
         }
     }
-
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         Quit();
@@ -970,7 +969,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         try {
             InputStream input = new URL(url).openStream();
             String name = url.substring(url.lastIndexOf("/") + 1, url.length());
-            PatchView.OpenPatch(name, input);
+            PatchViewSwing.OpenPatch(name, input);
         } catch (MalformedURLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Invalid URL {0}\n{1}", new Object[]{url, ex});
         } catch (IOException ex) {
@@ -981,7 +980,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     public void NewPatch() {
         PatchModel patchModel = new PatchModel();
         PatchController patchController = new PatchController();
-        PatchView patchView = new PatchView(patchController);
+        PatchView patchView = prefs.getPatchView(patchController);
         patchModel.addModelChangedListener(patchView);
         patchController.setPatchModel(patchModel);
         patchController.setPatchView(patchView);
@@ -995,7 +994,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         PatchBank b = new PatchBank();
         b.setVisible(true);
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.menus.FileMenu fileMenu;
@@ -1218,7 +1216,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             if (fn.endsWith(".axb")) {
                 PatchBank.OpenBank(new File(fn));
             } else if (fn.endsWith(".axp") || fn.endsWith(".axs") || fn.endsWith(".axh")) {
-                PatchView.OpenPatch(new File(fn));
+                PatchViewSwing.OpenPatch(new File(fn));
             }
         }
     }

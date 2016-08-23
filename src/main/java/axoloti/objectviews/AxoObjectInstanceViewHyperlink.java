@@ -1,6 +1,6 @@
 package axoloti.objectviews;
 
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstanceHyperlink;
 import components.LabelComponent;
 import components.control.ACtrlEvent;
@@ -17,7 +17,7 @@ public class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstrac
     AxoObjectInstanceHyperlink model;
     private PulseButtonComponent button;
 
-    public AxoObjectInstanceViewHyperlink(AxoObjectInstanceHyperlink model, PatchView patchView) {
+    public AxoObjectInstanceViewHyperlink(AxoObjectInstanceHyperlink model, PatchViewSwing patchView) {
         super(model, patchView);
         this.model = model;
     }

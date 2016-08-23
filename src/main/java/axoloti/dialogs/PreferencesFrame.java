@@ -81,6 +81,9 @@ public class PreferencesFrame extends javax.swing.JFrame {
             }
         });
 
+        mouseWheelComboBox.setSelectedItem(
+                mouseWheelComboBox.getModel().getElementAt(prefs.getMouseWheelPan() ? 1 : 0));
+
 //        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 //            @Override
 //            public void valueChanged(ListSelectionEvent e) {
@@ -99,7 +102,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
 //                }
 //            }
 //        });
-//        
+//
 //        jTable1.getModel().addTableModelListener(new TableModelListener() {
 //
 //            @Override
@@ -107,7 +110,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
 //                int row = e.getFirstRow();
 //                int column = e.getColumn();
 //                if(column!=0) return;
-//                
+//
 //                TableModel model = (TableModel)e.getSource();
 //                String name = (String) model.getValueAt(row, column);
 //                String cpuid = (String) ((DefaultTableModel) jTable1.getModel()).getValueAt(row, 3);
@@ -125,6 +128,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
         prefs.setFavouriteDir(txtFavDir.getText());
         prefs.setControllerObject(jTextFieldController.getText().trim());
         prefs.setControllerEnabled(jControllerEnabled.isSelected());
+        prefs.setMouseWheelPan(mouseWheelComboBox.getSelectedItem().equals("Pan"));
     }
 
     final void PopulateLibrary() {
@@ -177,6 +181,8 @@ public class PreferencesFrame extends javax.swing.JFrame {
         jLibStatus = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         themeEditButton = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        mouseWheelComboBox = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -335,6 +341,15 @@ public class PreferencesFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setText("Mouse Wheel behavior");
+
+        mouseWheelComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Zoom", "Pan" }));
+        mouseWheelComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mouseWheelComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -392,20 +407,25 @@ public class PreferencesFrame extends javax.swing.JFrame {
                             .addComponent(jEditLib, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(14, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonSave, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldPollInterval, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addGap(191, 191, 191)
-                                .addComponent(themeEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(mouseWheelComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jTextFieldPollInterval, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel8)
+                                    .addGap(191, 191, 191)
+                                    .addComponent(themeEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonSave, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -458,9 +478,13 @@ public class PreferencesFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(themeEditButton)
                     .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(mouseWheelComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jButtonSave)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -594,6 +618,10 @@ public class PreferencesFrame extends javax.swing.JFrame {
         frame.toFront();
     }//GEN-LAST:event_themeEditButtonActionPerformed
 
+    private void mouseWheelComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mouseWheelComboBoxActionPerformed
+
+    }//GEN-LAST:event_mouseWheelComboBoxActionPerformed
+
     private void editLibraryRow(int idx) {
         if (idx >= 0) {
             DefaultTableModel model = (DefaultTableModel) jLibraryTable.getModel();
@@ -603,20 +631,19 @@ public class PreferencesFrame extends javax.swing.JFrame {
                 String type = lib.getType();
                 AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true, lib);
                 AxolotiLibrary updlib = lib;
-                if(!lib.getType().equals(type)) {
-                  if (AxoGitLibrary.TYPE.equals(lib.getType())) {
-                       updlib = new AxoGitLibrary();
-                   } else {
-                       updlib = new AxoFileLibrary();
-                   }
-                  updlib.clone(lib);
+                if (!lib.getType().equals(type)) {
+                    if (AxoGitLibrary.TYPE.equals(lib.getType())) {
+                        updlib = new AxoGitLibrary();
+                    } else {
+                        updlib = new AxoFileLibrary();
+                    }
+                    updlib.clone(lib);
                 }
                 Preferences.LoadPreferences().updateLibrary(lib.getId(), updlib);
                 PopulateLibrary();
             }
         }
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFavDir;
@@ -636,12 +663,14 @@ public class PreferencesFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JButton jLibStatus;
     private javax.swing.JTable jLibraryTable;
     private javax.swing.JButton jResetLib;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextFieldController;
     private javax.swing.JTextField jTextFieldPollInterval;
+    private javax.swing.JComboBox mouseWheelComboBox;
     private javax.swing.JButton themeEditButton;
     private javax.swing.JLabel txtFavDir;
     private javax.swing.JLabel txtFirmwareDir;

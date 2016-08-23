@@ -38,6 +38,7 @@ import javax.swing.JPanel;
  * @author Johannes Taelman
  */
 public class AssignModulatorMenuItems {
+
     double valueBeforeAdjustment;
 
     public AssignModulatorMenuItems(final ParameterInstanceViewFrac32UMap parameterInstanceView, JComponent parent) {
@@ -84,6 +85,7 @@ public class AssignModulatorMenuItems {
                 public void ACtrlAdjustmentFinished(ACtrlEvent e) {
                     double vnew = ((HSliderComponent) e.getSource()).getValue();
                     if (vnew != valueBeforeAdjustment) {
+                        parameterInstanceView.getAxoObjectInstanceView().getPatchView().getPatchController().pushUndoState();
                         parameterInstanceView.getParameterInstance().SetDirty();
                     }
                 }

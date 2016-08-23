@@ -17,10 +17,16 @@
  */
 package axoloti.attribute;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.attributedefinition.AxoAttributeWavefile;
 import axoloti.attributeviews.AttributeInstanceViewWavefile;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
 import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.attributeviews.PAttributeInstanceViewWavefile;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -102,10 +108,14 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
     }
 
     @Override
-    public AttributeInstanceViewWavefile ViewFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceViewWavefile(this, o);
+    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PAttributeInstanceViewWavefile(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new AttributeInstanceViewWavefile(this, (AxoObjectInstanceView) o);
+        }
     }
-    
+
     private String valueBeforeAdjustment;
 
     public void setValueBeforeAdjustment(String valueBeforeAdjustment) {

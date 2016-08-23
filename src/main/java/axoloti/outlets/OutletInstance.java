@@ -17,13 +17,17 @@
  */
 package axoloti.outlets;
 
+import axoloti.MainFrame;
 import axoloti.Net;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
+import axoloti.piccolo.outlets.POutletInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -71,7 +75,7 @@ public class OutletInstance<T extends Outlet> implements Comparable<OutletInstan
         RefreshName();
     }
 
-    public DataType GetDataType() {
+    public DataType getDataType() {
         return outlet.getDatatype();
     }
 
@@ -115,29 +119,24 @@ public class OutletInstance<T extends Outlet> implements Comparable<OutletInstan
     }
 
     public Net disconnect() {
-        Net n = axoObj.getPatchModel().disconnect(this);
-        if (n != null) {
-            axoObj.getPatchModel().SetDirty();
+        return axoObj.getPatchModel().disconnect(this);
+    }
+
+    public Net deleteNet() {
+        return axoObj.getPatchModel().delete(axoObj.getPatchModel().GetNet(this));
+    }
+
+    public IOutletInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new POutletInstanceView(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new OutletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
         }
-        return n;
     }
 
-    public void deleteNet() {
-        Net n = axoObj.getPatchModel().GetNet(this);
-        axoObj.getPatchModel().delete(n);
-        if (n != null) {
-            axoObj.getPatchModel().SetDirty();
-        }
-    }
-
-    public OutletInstanceView ViewFactory(AxoObjectInstanceViewAbstract o) {
-        return new OutletInstanceView(this, o);
-    }
-
-    public OutletInstanceView CreateView(AxoObjectInstanceViewAbstract o) {
-        OutletInstanceView outletInstanceView = ViewFactory(o);
-        AxoObjectInstanceView ov = (AxoObjectInstanceView) o;
-        ov.p_outletViews.add(outletInstanceView);
+    public IOutletInstanceView createView(IAxoObjectInstanceView o) {
+        IOutletInstanceView outletInstanceView = getViewInstance(o);
+        o.addOutletInstanceView(outletInstanceView);
         outletInstanceView.PostConstructor();
         return outletInstanceView;
     }

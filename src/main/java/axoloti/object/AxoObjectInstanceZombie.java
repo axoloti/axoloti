@@ -19,11 +19,15 @@ package axoloti.object;
 
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewPiccolo;
+import axoloti.PatchViewSwing;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceZombie;
 import axoloti.objectviews.AxoObjectInstanceViewZombie;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceZombie;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewZombie;
 import java.awt.Point;
 import java.util.ArrayList;
 import org.simpleframework.xml.Root;
@@ -83,22 +87,21 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public ArrayList<InletInstance> GetInletInstances() {
+    public ArrayList<InletInstance> getInletInstances() {
         return inletInstances;
     }
 
     @Override
-    public ArrayList<OutletInstance> GetOutletInstances() {
+    public ArrayList<OutletInstance> getOutletInstances() {
         return outletInstances;
     }
 
     @Override
-    public AxoObjectInstanceViewZombie ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceViewZombie(this, patchView);
-    }
-
-    @Override
-    public boolean isDirty() {
-        return true;
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if (patchView instanceof PatchViewPiccolo) {
+            return new PAxoObjectInstanceViewZombie(this, (PatchViewPiccolo) patchView);
+        } else {
+            return new AxoObjectInstanceViewZombie(this, (PatchViewSwing) patchView);
+        }
     }
 }

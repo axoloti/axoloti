@@ -28,9 +28,9 @@ import javax.swing.JPopupMenu;
  */
 public class OutletInstancePopupMenu extends JPopupMenu {
 
-    OutletInstanceView outletInstanceView;
+    IOutletInstanceView outletInstanceView;
 
-    public OutletInstancePopupMenu(OutletInstanceView outletInstanceView) {
+    public OutletInstancePopupMenu(IOutletInstanceView outletInstanceView) {
         super();
         this.outletInstanceView = outletInstanceView;
         JMenuItem itemDisconnect = new JMenuItem("Disconnect outlet");
@@ -47,7 +47,7 @@ public class OutletInstancePopupMenu extends JPopupMenu {
                 OutletInstancePopupMenu.this.outletInstanceView.deleteNet();
             }
         });
-        this.add(itemDisconnect);
-        this.add(itemDelete);
+        add(itemDisconnect);
+        add(itemDelete);
     }
 }

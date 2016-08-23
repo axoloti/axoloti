@@ -3,6 +3,7 @@ package axoloti.parameterviews;
 import axoloti.Preset;
 import axoloti.Theme;
 import axoloti.datatypes.Value;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import components.AssignMidiCCComponent;
 import components.AssignMidiCCMenuItems;
@@ -21,24 +22,23 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
 
-    public ParameterInstanceViewFrac32UMap(ParameterInstanceFrac32UMap parameterInstance) {
-        super(parameterInstance);
+    public ParameterInstanceViewFrac32UMap(ParameterInstanceFrac32UMap parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
     public ParameterInstanceFrac32UMap getParameterInstance() {
-        return (ParameterInstanceFrac32UMap) this.parameterInstance;
+        return (ParameterInstanceFrac32UMap) parameterInstance;
     }
 
     @Override
     public DialComponent CreateControl() {
         DialComponent d = new DialComponent(
-	    0.0,
-	    getParameterInstance().getMin(),
-	    getParameterInstance().getMax(),
-	    getParameterInstance().getTick());
-        d.setParentAxoObjectInstance(axoObj);
-        d.setNative(convs);
+                0.0,
+                getParameterInstance().getMin(),
+                getParameterInstance().getMax(),
+                getParameterInstance().getTick());
+        d.setNative(getParameterInstance().getConvs());
         return d;
     }
 
@@ -82,7 +82,7 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
         if (i > 0) {
             Preset p = getParameterInstance().GetPreset(presetEditActive);
             if (p != null) {
-                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
+                setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);

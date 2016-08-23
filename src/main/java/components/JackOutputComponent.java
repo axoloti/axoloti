@@ -73,8 +73,4 @@ public class JackOutputComponent extends JComponent {
 
         g2.drawRect(margin - 1, margin, sz - margin - margin, sz - margin - margin);
     }
-
-    public OutletInstanceView getOutletInstanceView() {
-        return outletInstanceView;
-    }
 }

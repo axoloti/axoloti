@@ -19,8 +19,12 @@ package axoloti.object;
 
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewPiccolo;
+import axoloti.PatchViewSwing;
 import axoloti.objecteditor.AxoObjectEditor;
 import axoloti.objectviews.AxoObjectInstanceViewPatcherObject;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewPatcherObject;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
 
@@ -40,11 +44,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
 
     public AxoObjectInstancePatcherObject(AxoObject type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
-    }
-
-    @Override
-    public AxoObjectInstanceViewPatcherObject ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceViewPatcherObject(this, patchView);
     }
 
     public AxoObject getAxoObject() {
@@ -78,7 +77,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
             getAxoObject().id = "patch/object";
             setType(getAxoObject());
             this.setDirty(true);
-            getPatchModel().SetDirty();
+            getPatchModel().setDirty();
         }
     }
 
@@ -87,6 +86,14 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         super.Close();
         if (aoe != null) {
             aoe.Close();
+        }
+    }
+
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if (patchView instanceof PatchViewPiccolo) {
+            return new PAxoObjectInstanceViewPatcherObject(this, (PatchViewPiccolo) patchView);
+        } else {
+            return new AxoObjectInstanceViewPatcherObject(this, (PatchViewSwing) patchView);
         }
     }
 }

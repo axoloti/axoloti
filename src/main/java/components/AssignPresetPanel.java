@@ -87,7 +87,7 @@ public class AssignPresetPanel extends JPanel {
             }
             PatchModel patchModel = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel();
             if (patchModel != null) {
-                patchModel.SetDirty();
+                patchModel.setDirty();
             }
             patchModel.presetUpdatePending = true;
         }
@@ -128,7 +128,8 @@ public class AssignPresetPanel extends JPanel {
                 if (valueBeforeAdjustment != ctrls.get(i).getValue()) {
                     PatchModel patchModel = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel();
                     if (patchModel != null) {
-                        patchModel.SetDirty();
+                        parameterInstanceView.getAxoObjectInstanceView().getPatchView().getPatchController().pushUndoState();
+                        patchModel.setDirty();
                     }
                 }
             }

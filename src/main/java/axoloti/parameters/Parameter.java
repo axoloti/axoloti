@@ -96,7 +96,7 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     public ParameterInstance CreateInstance(AxoObjectInstance o) {
         ParameterInstance pi = InstanceFactory();
         pi.axoObjectInstance = o;
-        pi.name = this.name;
+        pi.name = name;
         pi.parameter = this;
         pi.applyDefaultValue();
         return pi;
@@ -110,7 +110,7 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
         Parameter p = null;
         try {
             serializer.write(this, os);
-            p = serializer.read(this.getClass(), new ByteArrayInputStream(os.toByteArray()));
+            p = serializer.read(getClass(), new ByteArrayInputStream(os.toByteArray()));
         } catch (Exception ex) {
             Logger.getLogger(GeneratedObjects.class.getName()).log(Level.SEVERE, null, ex);
         }

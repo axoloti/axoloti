@@ -17,9 +17,14 @@
  */
 package axoloti.inlets;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstanceZombie;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.AxoObjectInstanceViewZombie;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.inlets.PInletInstanceZombieView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewZombie;
 
 /**
  *
@@ -37,7 +42,7 @@ public class InletInstanceZombie extends InletInstance {
     }
 
     @Override
-    public DataType GetDataType() {
+    public DataType getDataType() {
         return new axoloti.datatypes.DTZombie();
     }
 
@@ -47,14 +52,19 @@ public class InletInstanceZombie extends InletInstance {
     }
 
     @Override
-    public InletInstanceView ViewFactory(AxoObjectInstanceViewAbstract o) {
-        return new InletInstanceZombieView(this, o);
+    public IInletInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PInletInstanceZombieView(this, (PAxoObjectInstanceViewZombie) o);
+        } else {
+            return new InletInstanceZombieView(this, (AxoObjectInstanceViewZombie) o);
+        }
     }
 
     @Override
-    public InletInstanceView CreateView(AxoObjectInstanceViewAbstract o) {
-        InletInstanceView inletInstanceView = ViewFactory(o);
-        o.add(inletInstanceView);
+    public IInletInstanceView createView(IAxoObjectInstanceView o) {
+        IInletInstanceView inletInstanceView = getViewInstance(o);
+        o.addInletInstanceView(inletInstanceView);
+        inletInstanceView.PostConstructor();
         o.resizeToGrid();
         return inletInstanceView;
     }

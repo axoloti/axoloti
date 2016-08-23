@@ -17,10 +17,10 @@
  */
 package axoloti;
 
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.object.AxoObjects;
 import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.utils.Constants;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.KeyUtils;
 import components.PresetPanel;
 import components.VisibleCablePanel;
@@ -36,10 +36,13 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -72,13 +75,19 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private PresetPanel presetPanel;
     private VisibleCablePanel visibleCablePanel;
 
+    private static List<PatchFrame> instances = new ArrayList<>();
+    private static PatchFrame topFrame;
+
+    private JScrollPane jScrollPane1;
+
     public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
+        this.patchController = patchController;
+        patchController.setPatchFrame(this);
+
         initComponents();
         fileMenu1.initComponents();
-        this.patchController = patchController;
-        this.patchController.setPatchFrame(this);
 
         presetPanel = new PresetPanel(patchController);
         visibleCablePanel = new VisibleCablePanel(getPatchView());
@@ -87,9 +96,13 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
         jToolbarPanel.add(visibleCablePanel);
 
-        jScrollPane1.setViewportView(getPatchView().Layers);
-        jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
-        jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
+        jScrollPane1 = getPatchView().getViewportView().getScrollPane();
+        jScrollPane1.setViewportView(getPatchView().getViewportView().getComponent());
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setAutoscrolls(true);
+        getContentPane().add(jScrollPane1);
 
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
@@ -104,7 +117,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     getToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
                     return;
                 }
-                p.PreSerialize();
                 Serializer serializer = new Persister();
                 try {
                     Clipboard clip = getToolkit().getSystemClipboard();
@@ -131,7 +143,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     getToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
                     return;
                 }
-                p.PreSerialize();
                 Serializer serializer = new Persister();
                 try {
                     Clipboard clip = getToolkit().getSystemClipboard();
@@ -182,23 +193,76 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
         jMenuPreset.setVisible(false);
         jMenuItemAdjScroll.setVisible(false);
-        getPatchView().Layers.requestFocus();
+
         if (USBBulkConnection.GetConnection().isConnected()) {
             ShowConnect();
         }
 
-        this.undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
+        undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
                 KeyUtils.CONTROL_OR_CMD_MASK));
-        this.redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
+        redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
                 KeyUtils.CONTROL_OR_CMD_MASK | KeyEvent.SHIFT_DOWN_MASK));
 
-        createBufferStrategy(2);
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
         USBBulkConnection.GetConnection().addSDCardMountStatusListener(this);
+
+        getPatchView().getViewportView().getComponent().requestFocusInWindow();
+
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            initializeZoomMenuItems();
+        }
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                jScrollPane1.setWheelScrollingEnabled(MainFrame.prefs.getMouseWheelPan());
+            }
+
+            @Override
+            public void windowClosing(WindowEvent ev) {
+                AskClose();
+            }
+        });
+    }
+
+    private void initializeZoomMenuItems() {
+        JMenuItem zoomInMenuItem = new JMenuItem();
+        zoomInMenuItem.setText("Zoom in");
+        zoomInMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS,
+                KeyUtils.CONTROL_OR_CMD_MASK));
+        zoomInMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getPatchView().getViewportView().zoomIn();
+            }
+        });
+        JMenuItem zoomOutMenuItem = new JMenuItem();
+        zoomOutMenuItem.setText("Zoom out");
+        zoomOutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
+                KeyUtils.CONTROL_OR_CMD_MASK));
+        zoomOutMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getPatchView().getViewportView().zoomOut();
+            }
+        });
+        JMenuItem zoomDefaultMenuItem = new JMenuItem();
+        zoomDefaultMenuItem.setText("Zoom to default");
+        zoomDefaultMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0,
+                KeyUtils.CONTROL_OR_CMD_MASK));
+        zoomDefaultMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getPatchView().getViewportView().zoomDefault();
+            }
+        });
+        jMenuView.add(zoomInMenuItem);
+        jMenuView.add(zoomOutMenuItem);
+        jMenuView.add(zoomDefaultMenuItem);
     }
 
     private PatchView getPatchView() {
-        return this.patchController.patchView;
+        return patchController.getPatchView();
     }
 
     public PatchModel getPatchModel() {
@@ -295,10 +359,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }
 
-    public JScrollPane getScrollPane() {
-        return this.jScrollPane1;
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -314,7 +374,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jLabel1 = new javax.swing.JLabel();
         jProgressBarDSPLoad = new javax.swing.JProgressBar();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
-        jScrollPane1 = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu1 = new axoloti.menus.FileMenu();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -358,11 +417,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                formComponentHidden(evt);
-            }
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
+            }
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                formComponentHidden(evt);
             }
         });
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -402,6 +461,15 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(filler2);
 
         jLabel1.setText("DSP load ");
+        jLabel1.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jLabel1AncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
         jToolbarPanel.add(jLabel1);
 
         jProgressBarDSPLoad.setToolTipText("");
@@ -417,11 +485,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(filler3);
 
         getContentPane().add(jToolbarPanel);
-
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setAutoscrolls(true);
-        getContentPane().add(jScrollPane1);
 
         fileMenu1.setText("File");
         fileMenu1.add(jSeparator1);
@@ -840,7 +903,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuItemAdjScrollActionPerformed
 
     private void jCheckBoxMenuItemCordsInBackgroundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemCordsInBackgroundActionPerformed
-        getPatchView().SetCordsInBackground(jCheckBoxMenuItemCordsInBackground.isSelected());
+        getPatchView().setCordsInBackground(jCheckBoxMenuItemCordsInBackground.isSelected());
     }//GEN-LAST:event_jCheckBoxMenuItemCordsInBackgroundActionPerformed
 
     private void jMenuGenerateCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGenerateCodeActionPerformed
@@ -880,7 +943,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuItemDifferenceToPresetActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        AskClose();
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDeleteActionPerformed
@@ -896,11 +958,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuItemNotesActionPerformed
 
     private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
-        AxoObjectInstanceViewAbstract selObj = null;
-        ArrayList<AxoObjectInstanceViewAbstract> oi = getPatchView().getObjectInstanceViews();
+        IAxoObjectInstanceView selObj = null;
+        List<IAxoObjectInstanceView> oi = getPatchView().getObjectInstanceViews();
         if (oi != null) {
-            // need a view here
-            for (AxoObjectInstanceViewAbstract i : oi) {
+            for (IAxoObjectInstanceView i : oi) {
                 if (i.isSelected() && i instanceof AxoObjectInstanceView) {
                     selObj = i;
                 }
@@ -990,12 +1051,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private void undoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoItemActionPerformed
         patchController.undo();
-        this.updateUndoRedoEnabled();
+        updateUndoRedoEnabled();
     }//GEN-LAST:event_undoItemActionPerformed
 
     private void redoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoItemActionPerformed
         patchController.redo();
-        this.updateUndoRedoEnabled();
+        updateUndoRedoEnabled();
     }//GEN-LAST:event_redoItemActionPerformed
 
     private void undoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_undoItemAncestorAdded
@@ -1009,6 +1070,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
         getRootPane().setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_formWindowLostFocus
+
+    private void jLabel1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabel1AncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel1AncestorAdded
 
     private boolean GoLive() {
         if (getPatchModel().getFileNamePath().endsWith(".axs")
@@ -1075,7 +1140,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private javax.swing.JMenuItem jMenuUploadCode;
     private javax.swing.JMenu jMenuView;
     private javax.swing.JProgressBar jProgressBarDSPLoad;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;

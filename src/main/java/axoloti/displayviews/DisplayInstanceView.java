@@ -6,7 +6,7 @@ import components.LabelComponent;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-public abstract class DisplayInstanceView extends JPanel implements ModelChangedListener {
+public abstract class DisplayInstanceView extends JPanel implements ModelChangedListener, IDisplayInstanceView {
 
     DisplayInstance displayInstance;
 

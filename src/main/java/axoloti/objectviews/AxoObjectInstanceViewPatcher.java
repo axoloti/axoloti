@@ -1,6 +1,6 @@
 package axoloti.objectviews;
 
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstancePatcher;
 import components.ButtonComponent;
 
@@ -9,7 +9,7 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
     AxoObjectInstancePatcher model;
     private ButtonComponent BtnUpdate;
 
-    public AxoObjectInstanceViewPatcher(AxoObjectInstancePatcher model, PatchView patchView) {
+    public AxoObjectInstanceViewPatcher(AxoObjectInstancePatcher model, PatchViewSwing patchView) {
         super(model, patchView);
         this.model = model;
     }
@@ -41,6 +41,7 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
             @Override
             public void OnPushed() {
                 model.updateObj();
+                getPatchView().getPatchController().pushUndoState();
             }
         });
         add(BtnUpdate);

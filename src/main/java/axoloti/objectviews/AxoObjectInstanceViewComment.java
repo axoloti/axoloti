@@ -1,6 +1,6 @@
 package axoloti.objectviews;
 
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstanceComment;
 import components.LabelComponent;
 import components.TextFieldComponent;
@@ -19,7 +19,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
 
     AxoObjectInstanceComment model;
 
-    public AxoObjectInstanceViewComment(AxoObjectInstanceComment model, PatchView patchView) {
+    public AxoObjectInstanceViewComment(AxoObjectInstanceComment model, PatchViewSwing patchView) {
         super(model, patchView);
         this.model = model;
     }
@@ -27,10 +27,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        if (InstanceName != null) {
-            model.setCommentText(InstanceName);
-            InstanceName = null;
-        }
+
         setOpaque(true);
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         InstanceLabel = new LabelComponent(model.getCommentText());
@@ -87,18 +84,13 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
         InstanceNameTF.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                String s = InstanceNameTF.getText();
-                setInstanceName(s);
-                getParent().remove(InstanceNameTF);
+                handleInstanceNameEditorAction();
             }
         });
         InstanceNameTF.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                String s = InstanceNameTF.getText();
-                setInstanceName(s);
-                getParent().remove(InstanceNameTF);
-                getParent().repaint();
+                handleInstanceNameEditorAction();
             }
 
             @Override
@@ -117,10 +109,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
             @Override
             public void keyPressed(KeyEvent ke) {
                 if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String s = InstanceNameTF.getText();
-                    setInstanceName(s);
-                    getParent().remove(InstanceNameTF);
-                    getParent().repaint();
+                    handleInstanceNameEditorAction();
                 }
             }
         });
@@ -133,14 +122,11 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
 
     @Override
     public void setInstanceName(String s) {
-        model.setCommentText(s);
-        if (InstanceLabel != null) {
-            InstanceLabel.setText(model.getCommentText());
+        if (!model.getCommentText().equals(s)) {
+            model.setCommentText(s);
+            model.setDirty(true);
+            getPatchModel().setDirty();
+            getPatchView().getPatchController().pushUndoState();
         }
-        doLayout();
-        if (getParent() != null) {
-            getParent().repaint();
-        }
-        resizeToGrid();
     }
 }

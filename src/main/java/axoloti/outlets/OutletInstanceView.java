@@ -1,7 +1,7 @@
 package axoloti.outlets;
 
+import axoloti.INetView;
 import axoloti.MainFrame;
-import axoloti.NetView;
 import axoloti.Theme;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
@@ -12,7 +12,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
 
-public class OutletInstanceView extends IoletAbstract {
+public class OutletInstanceView extends IoletAbstract implements IOutletInstanceView {
 
     OutletInstancePopupMenu popup = new OutletInstancePopupMenu(this);
 
@@ -21,10 +21,10 @@ public class OutletInstanceView extends IoletAbstract {
     public OutletInstanceView(OutletInstance outletInstance, AxoObjectInstanceViewAbstract axoObj) {
         this.outletInstance = outletInstance;
         this.axoObj = axoObj;
-        this.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        setBackground(Theme.getCurrentTheme().Object_Default_Background);
     }
 
-    public final void PostConstructor() {
+    public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setMaximumSize(new Dimension(32767, 14));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
@@ -49,23 +49,22 @@ public class OutletInstanceView extends IoletAbstract {
     }
 
     public OutletInstance getOutletInstance() {
-        return this.outletInstance;
+        return outletInstance;
     }
-    
-    @Override
+
     public void setHighlighted(boolean highlighted) {
         if ((getRootPane() == null
                 || getRootPane().getCursor() != MainFrame.transparentCursor)
                 && axoObj != null
                 && axoObj.getPatchView() != null) {
-            NetView netView = axoObj.getPatchView().GetNetView(this);
+            INetView netView = axoObj.getPatchView().GetNetView((IOutletInstanceView) this);
             if (netView != null
                     && netView.getSelected() != highlighted) {
                 netView.setSelected(highlighted);
             }
         }
     }
-    
+
     public void disconnect() {
         getPatchView().getPatchController().disconnect(this);
     }

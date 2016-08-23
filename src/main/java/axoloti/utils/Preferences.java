@@ -18,6 +18,12 @@
 package axoloti.utils;
 
 import axoloti.Axoloti;
+import axoloti.PatchController;
+import axoloti.PatchView;
+import axoloti.PatchViewPiccolo;
+import axoloti.PatchViewSwing;
+import axoloti.PatchViewType;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.Version;
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +48,7 @@ public class Preferences {
     @Element(required = false)
     String CurrentFileDirectory;
 
-    // search path will be removed from persistance, 
+    // search path will be removed from persistance,
     // here for compatibility only
     @Deprecated
     @Element(required = false)
@@ -74,6 +80,10 @@ public class Preferences {
     Boolean ControllerEnabled;
     @Element(required = false)
     String themePath;
+    @Element(required = false)
+    PatchViewType patchViewType;
+    @Element(required = false)
+    Boolean mouseWheelPanEnabled;
 
     @ElementMap(required = false, entry = "Boards", key = "cpuid", attribute = true, inline = true)
     HashMap<String, String> BoardNames;
@@ -144,7 +154,9 @@ public class Preferences {
     }
 
     public AxolotiLibrary getLibrary(String id) {
-        if(libraries == null) return null;
+        if (libraries == null) {
+            return null;
+        }
         for (AxolotiLibrary lib : libraries) {
             if (lib.getId().equals(id)) {
                 return lib;
@@ -243,13 +255,13 @@ public class Preferences {
                         Logger.getLogger(Preferences.class
                                 .getName()).log(Level.SEVERE, null, ex);
                         Logger.getLogger(Preferences.class
-                                .getName()).log(Level.INFO,"Attempt to load preferenced in relaxed mode");
-                        prefs = serializer.read(Preferences.class, p,false);
+                                .getName()).log(Level.INFO, "Attempt to load preferenced in relaxed mode");
+                        prefs = serializer.read(Preferences.class, p, false);
                     } catch (Exception ex1) {
                         Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex1);
                     }
                 }
-                if (prefs == null){
+                if (prefs == null) {
                     prefs = new Preferences();
                 }
                 singleton = prefs;
@@ -429,7 +441,7 @@ public class Preferences {
                     "https://github.com/axoloti/axoloti-contrib.git",
                     false
             ));
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -459,13 +471,41 @@ public class Preferences {
         }
         ObjectPath = objPath.toArray(new String[0]);
     }
-    
+
     public String getThemePath() {
         return themePath;
     }
-    
+
     public void setThemePath(String themePath) {
         this.themePath = themePath;
         SavePrefs();
+    }
+
+    public void setPatchViewType(PatchViewType patchViewType) {
+        this.patchViewType = patchViewType;
+    }
+
+    public PatchViewType getPatchViewType() {
+        patchViewType = PICCOLO;
+        return patchViewType;
+    }
+
+    public PatchView getPatchView(PatchController patchController) {
+        if (getPatchViewType() == PICCOLO) {
+            return new PatchViewPiccolo(patchController);
+        } else {
+            return new PatchViewSwing(patchController);
+        }
+    }
+
+    public void setMouseWheelPan(Boolean mouseWheelPan) {
+        this.mouseWheelPanEnabled = mouseWheelPan;
+    }
+
+    public Boolean getMouseWheelPan() {
+        if (mouseWheelPanEnabled == null) {
+            mouseWheelPanEnabled = false;
+        }
+        return mouseWheelPanEnabled;
     }
 }

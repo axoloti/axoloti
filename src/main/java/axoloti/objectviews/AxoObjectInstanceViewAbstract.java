@@ -1,13 +1,19 @@
 package axoloti.objectviews;
 
-import axoloti.NetView;
+import axoloti.INetView;
 import axoloti.PatchModel;
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.Theme;
+import axoloti.attributeviews.IAttributeInstanceView;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.inlets.IInletInstanceView;
+import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.outlets.IOutletInstanceView;
+import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
-import axoloti.parameterviews.ParameterInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.utils.Constants;
 import components.LabelComponent;
 import components.TextFieldComponent;
@@ -23,21 +29,20 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Collection;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.Border;
 
-public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListener, MouseMotionListener {
+public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListener, MouseMotionListener, IAxoObjectInstanceView {
 
     protected AxoObjectInstanceAbstract model;
     protected MouseListener ml;
     protected MouseMotionListener mml;
     protected boolean dragging = false;
-    protected String InstanceName;
     private Point dragLocation = null;
     private Point dragAnchor = null;
     protected boolean selected = false;
@@ -46,32 +51,37 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     LabelComponent InstanceLabel;
     private boolean Locked = false;
 
-    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchView patchView) {
+    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchViewSwing patchView) {
         this.model = model;
         this.patchView = patchView;
     }
 
+    @Override
     public AxoObjectInstanceAbstract getModel() {
         return model;
     }
 
+    @Override
     public void Lock() {
         Locked = true;
     }
 
+    @Override
     public void Unlock() {
         Locked = false;
     }
 
+    @Override
     public boolean isLocked() {
         return Locked;
     }
 
     JPopupMenu popup;
 
-    private final Dimension TitleBarMinimumSize = new Dimension(40, 12);
-    private final Dimension TitleBarMaximumSize = new Dimension(32768, 12);
+    private static final Dimension TITLEBAR_MINIMUM_SIZE = new Dimension(40, 12);
+    private static final Dimension TITLEBAR_MAXIMUM_SIZE = new Dimension(32768, 12);
 
+    @Override
     public void PostConstructor() {
         removeAll();
         setMinimumSize(new Dimension(60, 40));
@@ -82,10 +92,10 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         Titlebar.removeAll();
         Titlebar.setLayout(new BoxLayout(Titlebar, BoxLayout.LINE_AXIS));
         Titlebar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
-        Titlebar.setMinimumSize(TitleBarMinimumSize);
-        Titlebar.setMaximumSize(TitleBarMaximumSize);
+        Titlebar.setMinimumSize(TITLEBAR_MINIMUM_SIZE);
+        Titlebar.setMaximumSize(TITLEBAR_MAXIMUM_SIZE);
 
-        setBorder(borderUnselected);
+        setBorder(BORDER_UNSELECTED);
         model.resolveType();
 
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
@@ -188,11 +198,12 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                 draggingObjects.add(this);
                 dragLocation = getLocation();
                 if (isSelected()) {
-                    for (AxoObjectInstanceViewAbstract o : getPatchView().getObjectInstanceViews()) {
+                    for (IAxoObjectInstanceView o : getPatchView().getObjectInstanceViews()) {
                         if (o.isSelected()) {
-                            moveToDraggedLayer(o);
-                            draggingObjects.add(o);
-                            o.dragLocation = o.getLocation();
+                            AxoObjectInstanceViewAbstract oa = (AxoObjectInstanceViewAbstract) o;
+                            moveToDraggedLayer(oa);
+                            draggingObjects.add(oa);
+                            oa.dragLocation = oa.getLocation();
                         }
                     }
                 }
@@ -232,7 +243,8 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                 }
                 draggingObjects = null;
                 if (dirtyOnRelease) {
-                    getPatchModel().SetDirty();
+                    getPatchView().getPatchController().pushUndoState();
+                    getPatchModel().setDirty();
                 }
                 getPatchView().AdjustSize();
             }
@@ -240,26 +252,31 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         }
     }
 
-    private PatchView patchView;
+    private final PatchViewSwing patchView;
 
-    public PatchView getPatchView() {
-        return this.patchView;
+    @Override
+    public PatchViewSwing getPatchView() {
+        return patchView;
     }
 
+    @Override
     public PatchModel getPatchModel() {
-        return this.patchView.getPatchController().patchModel;
+        return patchView.getPatchController().patchModel;
     }
 
-    public ArrayList<InletInstanceView> getInletInstanceViews() {
-        return new ArrayList<InletInstanceView>();
+    @Override
+    public Collection<IInletInstanceView> getInletInstanceViews() {
+        return new ArrayList<>();
     }
 
-    public ArrayList<OutletInstanceView> getOutletInstanceViews() {
-        return new ArrayList<OutletInstanceView>();
+    @Override
+    public Collection<IOutletInstanceView> getOutletInstanceViews() {
+        return new ArrayList<>();
     }
 
-    public ArrayList<ParameterInstanceView> getParameterInstanceViews() {
-        return new ArrayList<ParameterInstanceView>();
+    @Override
+    public ArrayList<IParameterInstanceView> getParameterInstanceViews() {
+        return new ArrayList<>();
     }
 
     @Override
@@ -271,15 +288,15 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         model.setY(y);
         if (getPatchView() != null) {
             repaint();
-            for (InletInstanceView i : getInletInstanceViews()) {
-                NetView n = getPatchView().GetNetView(i);
+            for (IInletInstanceView i : getInletInstanceViews()) {
+                INetView n = getPatchView().GetNetView(i);
                 if (n != null) {
                     n.updateBounds();
                     n.repaint();
                 }
             }
-            for (OutletInstanceView i : getOutletInstanceViews()) {
-                NetView n = getPatchView().GetNetView(i);
+            for (IOutletInstanceView i : getOutletInstanceViews()) {
+                INetView n = getPatchView().GetNetView(i);
                 if (n != null) {
                     n.updateBounds();
                     n.repaint();
@@ -288,24 +305,27 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         }
     }
 
+    protected void handleInstanceNameEditorAction() {
+        String s = InstanceNameTF.getText();
+        setInstanceName(s);
+        if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
+            InstanceNameTF.getParent().remove(InstanceNameTF);
+        }
+    }
+
     public void addInstanceNameEditor() {
-        InstanceNameTF = new TextFieldComponent(InstanceName);
+        InstanceNameTF = new TextFieldComponent(model.getInstanceName());
         InstanceNameTF.selectAll();
         InstanceNameTF.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                String s = InstanceNameTF.getText();
-                setInstanceName(s);
-                getParent().remove(InstanceNameTF);
+                handleInstanceNameEditorAction();
             }
         });
         InstanceNameTF.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                String s = InstanceNameTF.getText();
-                setInstanceName(s);
-                getParent().remove(InstanceNameTF);
-                repaint();
+                handleInstanceNameEditorAction();
             }
 
             @Override
@@ -324,10 +344,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
             @Override
             public void keyPressed(KeyEvent ke) {
                 if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-                    String s = InstanceNameTF.getText();
-                    setInstanceName(s);
-                    getParent().remove(InstanceNameTF);
-                    repaint();
+                    handleInstanceNameEditorAction();
                 }
             }
         });
@@ -340,39 +357,22 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     }
 
     public void setInstanceName(String InstanceName) {
-        if (this.InstanceName != null && this.InstanceName.equals(InstanceName)) {
-            return;
+        if (model.setInstanceName(InstanceName)) {
+            doLayout();
+            getPatchView().getPatchController().pushUndoState();
+            repaint();
         }
-
-        if (getPatchModel() != null) {
-            AxoObjectInstanceAbstract o1 = getPatchModel().GetObjectInstance(InstanceName);
-            if ((o1 != null) && (o1 != this.getObjectInstance())) {
-                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} already exists!", InstanceName);
-                repaint();
-                return;
-            }
-        }
-        this.InstanceName = InstanceName;
-        model.setInstanceName(InstanceName);
-        if (InstanceLabel != null) {
-            InstanceLabel.setText(InstanceName);
-        }
-        doLayout();
     }
 
-    public boolean IsSelected() {
-        return selected;
-    }
-
-    static Border borderSelected = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected);
-    static Border borderUnselected = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected);
+    public static final Border BORDER_SELECTED = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected);
+    public static final Border BORDER_UNSELECTED = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected);
 
     public void setSelected(boolean Selected) {
         if (this.selected != Selected) {
             if (Selected) {
-                setBorder(borderSelected);
+                setBorder(BORDER_SELECTED);
             } else {
-                setBorder(borderUnselected);
+                setBorder(BORDER_UNSELECTED);
             }
             repaint();
         }
@@ -380,19 +380,20 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     }
 
     public Boolean isSelected() {
-        return this.selected;
+        return selected;
     }
 
     public void SetLocation(int x1, int y1) {
         super.setLocation(x1, y1);
         model.setLocation(x1, y1);
         if (getPatchView() != null) {
-            for (NetView n : getPatchView().getNetViews()) {
+            for (INetView n : getPatchView().getNetViews()) {
                 n.updateBounds();
             }
         }
     }
 
+    @Override
     public void moveToFront() {
         getPatchView().objectLayerPanel.setComponentZOrder(this, 0);
     }
@@ -407,5 +408,50 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
 
     public AxoObjectInstanceAbstract getObjectInstance() {
         return model;
+    }
+
+    @Override
+    public void addParameterInstanceView(IParameterInstanceView view) {
+    }
+
+    @Override
+    public void addAttributeInstanceView(IAttributeInstanceView view) {
+
+    }
+
+    @Override
+    public void addDisplayInstanceView(IDisplayInstanceView view) {
+
+    }
+
+    @Override
+    public void addOutletInstanceView(IOutletInstanceView view) {
+        add((OutletInstanceView) view);
+
+    }
+
+    @Override
+    public void addInletInstanceView(IInletInstanceView view) {
+        add((InletInstanceView) view);
+    }
+
+    @Override
+    public JComponent getCanvas() {
+        return patchView.getViewportView().getComponent();
+    }
+
+    @Override
+    public boolean isZombie() {
+        return false;
+    }
+
+    @Override
+    public IInletInstanceView getInletInstanceView(InletInstance inletInstance) {
+        return null;
+    }
+
+    @Override
+    public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
+        return null;
     }
 }

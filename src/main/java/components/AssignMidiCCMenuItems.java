@@ -41,10 +41,10 @@ public class AssignMidiCCMenuItems {
             public void actionPerformed(ActionEvent e) {
                 MidiAssignments ma = new MidiAssignments(null, true, parameterInstanceView);
                 int v = ma.getResult();
-                if (v>=0) {
+                if (v >= 0) {
                     parameterInstanceView.actionPerformed(new ActionEvent(this, 0, "CC" + v));
                 } else {
-                    parameterInstanceView.actionPerformed(new ActionEvent(this, 0, "none"));                    
+                    parameterInstanceView.actionPerformed(new ActionEvent(this, 0, "none"));
                 }
             }
         });

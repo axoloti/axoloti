@@ -17,9 +17,14 @@
  */
 package axoloti.parameters;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.Preset;
 import axoloti.datatypes.Value;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewFrac32UMap;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewFrac32UMap;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -79,11 +84,6 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
     }
 
     @Override
-    public void updateModulation(int index, double amount) {
-        super.updateModulation(index, amount);
-    }
-
-    @Override
     public String GenerateCodeDeclaration(String vprefix) {
         return "KeyValuePair " + KVPName(vprefix) + ";\n";
     }
@@ -93,7 +93,12 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
         return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?data2<<20:0x07FFFFFF");
     }
 
-    public ParameterInstanceViewFrac32UMap ViewFactory() {
-        return new ParameterInstanceViewFrac32UMap(this);
+    @Override
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewFrac32UMap(this, o);
+        } else {
+            return new ParameterInstanceViewFrac32UMap(this, o);
+        }
     }
 }

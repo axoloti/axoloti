@@ -17,8 +17,13 @@
  */
 package axoloti.parameters;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.Value;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewBin1Momentary;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewBin1Momentary;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -56,7 +61,7 @@ public class ParameterInstanceBin1Momentary extends ParameterInstanceInt32 {
     public String GenerateCodeMidiHandler(String vprefix) {
         // Hmmm how to deal with this?
         // Normal behavious would be generating a pulse triggered by any incoming CC value > 0 ?
-        // 
+        //
         // Hi, MIDI specialists, how common is this needed, how well is it supported in sequencers etc?
         //
         // Do we need to extend the parameter model to objects writing a new parameter value themselves?
@@ -67,8 +72,14 @@ public class ParameterInstanceBin1Momentary extends ParameterInstanceInt32 {
     public void setValue(Value value) {
         super.setValue(value);
     }
-    
-    public ParameterInstanceViewBin1Momentary ViewFactory() {
-        return new ParameterInstanceViewBin1Momentary(this);
+
+    @Override
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewBin1Momentary(this, o);
+
+        } else {
+            return new ParameterInstanceViewBin1Momentary(this, o);
+        }
     }
 }

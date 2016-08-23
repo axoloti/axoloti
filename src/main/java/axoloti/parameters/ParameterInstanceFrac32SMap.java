@@ -17,7 +17,12 @@
  */
 package axoloti.parameters;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewFrac32SMap;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewFrac32SMap;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -81,7 +86,11 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
     }
 
     @Override
-    public ParameterInstanceViewFrac32SMap ViewFactory() {
-        return new ParameterInstanceViewFrac32SMap(this);
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewFrac32SMap(this, o);
+        } else {
+            return new ParameterInstanceViewFrac32SMap(this, o);
+        }
     }
 }

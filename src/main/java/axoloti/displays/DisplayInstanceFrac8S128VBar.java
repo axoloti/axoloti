@@ -17,7 +17,12 @@
  */
 package axoloti.displays;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.displayviews.DisplayInstanceViewFrac8S128VBar;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewFrac8S128VBar;
 import java.nio.ByteBuffer;
 
 /**
@@ -73,7 +78,11 @@ public class DisplayInstanceFrac8S128VBar extends DisplayInstance<DisplayFrac8S1
     }
 
     @Override
-    public DisplayInstanceViewFrac8S128VBar ViewFactory() {
-        return new DisplayInstanceViewFrac8S128VBar(this);
+    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewFrac8S128VBar(this, view);
+        } else {
+            return new DisplayInstanceViewFrac8S128VBar(this);
+        }
     }
 }

@@ -17,19 +17,29 @@
  */
 package axoloti.displays;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.displayviews.DisplayInstanceViewFrac4UByteVBar;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewFrac4UByteVBar;
 
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceFrac4UByteVBar extends DisplayInstanceFrac32<DisplayFrac4UByteVBar> {
+
     public DisplayInstanceFrac4UByteVBar() {
         super();
     }
-    
+
     @Override
-    public DisplayInstanceViewFrac4UByteVBar ViewFactory() {
-        return new DisplayInstanceViewFrac4UByteVBar(this);
+    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewFrac4UByteVBar(this, view);
+        } else {
+            return new DisplayInstanceViewFrac4UByteVBar(this);
+        }
     }
 }

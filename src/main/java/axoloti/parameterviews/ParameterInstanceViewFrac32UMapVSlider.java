@@ -2,13 +2,14 @@ package axoloti.parameterviews;
 
 import axoloti.Preset;
 import axoloti.Theme;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceFrac32UMapVSlider;
 import components.control.VSliderComponent;
 
 public class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32U {
 
-    public ParameterInstanceViewFrac32UMapVSlider(ParameterInstanceFrac32UMapVSlider parameterInstance) {
-        super(parameterInstance);
+    public ParameterInstanceViewFrac32UMapVSlider(ParameterInstanceFrac32UMapVSlider parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceVie
         if (i > 0) {
             Preset p = parameterInstance.GetPreset(presetEditActive);
             if (p != null) {
-                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
+                setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);

@@ -17,19 +17,29 @@
  */
 package axoloti.displays;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.displayviews.DisplayInstanceViewInt32Bar32;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewInt32Bar32;
 
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceInt32Bar32 extends DisplayInstanceInt32<DisplayInt32Bar32> {
+
     public DisplayInstanceInt32Bar32() {
         super();
     }
-    
+
     @Override
-    public DisplayInstanceViewInt32Bar32 ViewFactory() {
-        return new DisplayInstanceViewInt32Bar32(this);
+    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewInt32Bar32(this, view);
+        } else {
+            return new DisplayInstanceViewInt32Bar32(this);
+        }
     }
 }

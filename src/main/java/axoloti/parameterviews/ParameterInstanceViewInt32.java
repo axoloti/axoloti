@@ -4,15 +4,14 @@ import axoloti.Preset;
 import axoloti.Theme;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceInt32;
 import java.awt.Graphics;
 
 public abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
-    ParameterInstanceViewInt32(ParameterInstanceInt32 parameterInstance) {
-        super(parameterInstance);
-        
-
+    ParameterInstanceViewInt32(ParameterInstanceInt32 parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
@@ -27,7 +26,7 @@ public abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
         if (i > 0) {
             Preset p = parameterInstance.GetPreset(presetEditActive);
             if (p != null) {
-                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
+                setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 getControlComponent().setValue(p.value.getDouble());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
@@ -38,32 +37,22 @@ public abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
             getControlComponent().setValue(parameterInstance.getValue().getDouble());
         }
     }
-    
+
     @Override
     public boolean handleAdjustment() {
         Preset p = parameterInstance.GetPreset(presetEditActive);
         if (p != null) {
             p.value = new ValueInt32((int) getControlComponent().getValue());
+        } else if (parameterInstance.getValue().getInt() != (int) getControlComponent().getValue()) {
+            parameterInstance.getValue().setInt((int) getControlComponent().getValue());
+            parameterInstance.setNeedsTransmit(true);
+            UpdateUnit();
         } else {
-            if (parameterInstance.getValue().getInt() != (int) getControlComponent().getValue()) {
-                parameterInstance.getValue().setInt((int) getControlComponent().getValue());
-                parameterInstance.setNeedsTransmit(true);
-                UpdateUnit();
-            }
-            else {
-                return false;
-            }
+            return false;
         }
         return true;
     }
-    
-    @Override
-    public void CopyValueFrom(ParameterInstanceView p) {
-        if (p instanceof ParameterInstanceViewInt32) {
-            parameterInstance.CopyValueFrom(((ParameterInstanceViewInt32) p).parameterInstance);
-        }
-    }
-    
+
     @Override
     public void paintComponent(Graphics g) {
         if (parameterInstance.isOnParent()) {

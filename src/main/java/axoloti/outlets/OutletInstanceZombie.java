@@ -17,9 +17,14 @@
  */
 package axoloti.outlets;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstanceZombie;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.AxoObjectInstanceViewZombie;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewZombie;
+import axoloti.piccolo.outlets.POutletInstanceZombieView;
 
 /**
  *
@@ -37,7 +42,7 @@ public class OutletInstanceZombie extends OutletInstance {
     }
 
     @Override
-    public DataType GetDataType() {
+    public DataType getDataType() {
         return new axoloti.datatypes.DTZombie();
     }
 
@@ -47,15 +52,19 @@ public class OutletInstanceZombie extends OutletInstance {
     }
 
     @Override
-    public OutletInstanceView ViewFactory(AxoObjectInstanceViewAbstract o) {
-        return new OutletInstanceZombieView(this, o);
+    public IOutletInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new POutletInstanceZombieView(this, (PAxoObjectInstanceViewZombie) o);
+        } else {
+            return new OutletInstanceZombieView(this, (AxoObjectInstanceViewZombie) o);
+        }
     }
 
     @Override
-    public OutletInstanceView CreateView(AxoObjectInstanceViewAbstract o) {
-        OutletInstanceView outletInstanceView = ViewFactory(o);
-        o.add(outletInstanceView);
-        o.resizeToGrid();
+    public IOutletInstanceView createView(IAxoObjectInstanceView o) {
+        IOutletInstanceView outletInstanceView = getViewInstance(o);
+        o.addOutletInstanceView(outletInstanceView);
+        outletInstanceView.PostConstructor();
         return outletInstanceView;
     }
 }

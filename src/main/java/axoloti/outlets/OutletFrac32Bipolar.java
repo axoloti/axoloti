@@ -34,7 +34,7 @@ public class OutletFrac32Bipolar extends OutletFrac32 {
     }
 
     @Override
-    SignalMetaData GetSignalMetaData() {
+    public SignalMetaData GetSignalMetaData() {
         return SignalMetaData.bipolar;
     }
 

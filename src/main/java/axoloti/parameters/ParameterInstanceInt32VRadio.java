@@ -17,7 +17,12 @@
  */
 package axoloti.parameters;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewInt32VRadio;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewInt32VRadio;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -58,7 +63,12 @@ public class ParameterInstanceInt32VRadio extends ParameterInstanceInt32 {
         return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max - 1));
     }
 
-    public ParameterInstanceViewInt32VRadio ViewFactory() {
-        return new ParameterInstanceViewInt32VRadio(this);
+    @Override
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewInt32VRadio(this, o);
+        } else {
+            return new ParameterInstanceViewInt32VRadio(this, o);
+        }
     }
 }

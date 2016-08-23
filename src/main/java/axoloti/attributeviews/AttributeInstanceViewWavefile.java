@@ -79,7 +79,7 @@ public class AttributeInstanceViewWavefile extends AttributeInstanceView {
             @Override
             public void focusLost(FocusEvent e) {
                 if (!TFwaveFilename.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().SetDirty();
+                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }
         });

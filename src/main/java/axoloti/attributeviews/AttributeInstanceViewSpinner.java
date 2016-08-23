@@ -28,7 +28,6 @@ public class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
             attributeInstance.setValue(attributeInstance.getDefinition().getMaxValue());
         }
         spinner = new NumberBoxComponent(value, attributeInstance.getDefinition().getMinValue(), attributeInstance.getDefinition().getMaxValue(), 1.0);
-        spinner.setParentAxoObjectInstanceView(axoObjectInstanceView);
         add(spinner);
         spinner.addACtrlListener(new ACtrlListener() {
             @Override
@@ -44,7 +43,8 @@ public class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
             @Override
             public void ACtrlAdjustmentFinished(ACtrlEvent e) {
                 if (attributeInstance.getValue() != attributeInstance.getValueBeforeAdjustment()) {
-                    attributeInstance.getObjectInstance().getPatchModel().SetDirty();
+                    axoObjectInstanceView.getPatchView().getPatchController().pushUndoState();
+                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }
         });

@@ -17,8 +17,13 @@
  */
 package axoloti.parameters;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.Value;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewBin32;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewBin32;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -63,7 +68,11 @@ public class ParameterInstanceBin32 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public ParameterInstanceViewBin32 ViewFactory() {
-        return new ParameterInstanceViewBin32(this);
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewBin32(this, o);
+        } else {
+            return new ParameterInstanceViewBin32(this, o);
+        }
     }
 }

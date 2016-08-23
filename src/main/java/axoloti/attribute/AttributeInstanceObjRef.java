@@ -17,16 +17,22 @@
  */
 package axoloti.attribute;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.SubPatchMode;
 import axoloti.attributedefinition.AxoAttributeObjRef;
 import axoloti.attributeviews.AttributeInstanceViewObjRef;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
 import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.attributeviews.PAttributeInstanceViewObjRef;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import axoloti.utils.CharEscape;
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Persist;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -54,7 +60,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
             o = "";
         }
         if (o.isEmpty()) {
-            Logger.getLogger(AttributeInstanceObjRef.class.getName()).log(Level.SEVERE, "incomplete object reference attribute in {0}", GetObjectInstance().getInstanceName());
+            Logger.getLogger(AttributeInstanceObjRef.class.getName()).log(Level.SEVERE, "incomplete object reference attribute in {0}", getObjectInstance().getInstanceName());
         }
         String o2 = "parent->";
 
@@ -89,8 +95,12 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
-    public AttributeInstanceViewObjRef ViewFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceViewObjRef(this, o);
+    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PAttributeInstanceViewObjRef(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new AttributeInstanceViewObjRef(this, (AxoObjectInstanceView) o);
+        }
     }
 
     @Persist

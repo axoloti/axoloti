@@ -19,8 +19,11 @@ package axoloti.object;
 
 import axoloti.PatchModel;
 import axoloti.PatchView;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.PatchViewPiccolo;
+import axoloti.PatchViewSwing;
 import axoloti.objectviews.AxoObjectInstanceViewComment;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewComment;
 import java.awt.Point;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -76,15 +79,12 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public AxoObjectInstanceViewComment ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceViewComment(this, patchView);
-    }
-
-    @Override
-    public AxoObjectInstanceViewAbstract CreateView(PatchView patchView) {
-        AxoObjectInstanceViewComment pi = ViewFactory(patchView);
-        pi.PostConstructor();
-        return pi;
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if (patchView instanceof PatchViewPiccolo) {
+            return new PAxoObjectInstanceViewComment(this, (PatchViewPiccolo) patchView);
+        } else {
+            return new AxoObjectInstanceViewComment(this, (PatchViewSwing) patchView);
+        }
     }
 
     @Override

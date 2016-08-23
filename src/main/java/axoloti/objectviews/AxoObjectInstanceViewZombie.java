@@ -1,9 +1,13 @@
 package axoloti.objectviews;
 
-import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.Theme;
+import axoloti.inlets.IInletInstanceView;
+import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObjectInstanceZombie;
+import axoloti.outlets.IOutletInstanceView;
+import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
 import components.LabelComponent;
 import components.PopupIcon;
@@ -12,7 +16,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -21,7 +27,7 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
 
     AxoObjectInstanceZombie model;
 
-    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, PatchView patchView) {
+    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, PatchViewSwing patchView) {
         super(model, patchView);
         this.model = model;
     }
@@ -115,24 +121,43 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
         repaint();
     }
 
-    private ArrayList<InletInstanceView> inletInstanceViews = new ArrayList<InletInstanceView>();
-    private ArrayList<OutletInstanceView> outletInstanceViews = new ArrayList<OutletInstanceView>();
+    private Map<InletInstance, IInletInstanceView> inletInstanceViews = new HashMap<>();
+    private Map<OutletInstance, IOutletInstanceView> outletInstanceViews = new HashMap<>();
 
     @Override
-    public ArrayList<InletInstanceView> getInletInstanceViews() {
-        return inletInstanceViews;
+    public Collection<IInletInstanceView> getInletInstanceViews() {
+        return inletInstanceViews.values();
     }
 
     @Override
-    public ArrayList<OutletInstanceView> getOutletInstanceViews() {
-        return outletInstanceViews;
+    public Collection<IOutletInstanceView> getOutletInstanceViews() {
+        return outletInstanceViews.values();
     }
 
-    public void addInletInstanceView(InletInstanceView view) {
-        inletInstanceViews.add(view);
+    @Override
+    public void addInletInstanceView(IInletInstanceView view) {
+        inletInstanceViews.put(view.getInletInstance(), view);
+        add((InletInstanceView) view);
     }
 
-    public void addOutletInstanceView(OutletInstanceView view) {
-        outletInstanceViews.add(view);
+    @Override
+    public void addOutletInstanceView(IOutletInstanceView view) {
+        outletInstanceViews.put(view.getOutletInstance(), view);
+        add((OutletInstanceView) view);
+    }
+
+    @Override
+    public boolean isZombie() {
+        return true;
+    }
+
+    @Override
+    public IInletInstanceView getInletInstanceView(InletInstance inletInstance) {
+        return inletInstanceViews.get(inletInstance);
+    }
+
+    @Override
+    public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
+        return outletInstanceViews.get(outletInstance);
     }
 }

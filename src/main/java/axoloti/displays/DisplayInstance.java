@@ -19,10 +19,10 @@ package axoloti.displays;
 
 import axoloti.ModelChangedListener;
 import axoloti.atom.AtomInstance;
-import axoloti.displayviews.DisplayInstanceView;
+import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
@@ -75,14 +75,14 @@ public abstract class DisplayInstance<T extends Display> implements AtomInstance
         notifyModelChangedListeners();
     }
 
-    public abstract DisplayInstanceView ViewFactory();
+    public abstract IDisplayInstanceView getViewInstance(IAxoObjectInstanceView o);
 
-    public DisplayInstanceView CreateView(AxoObjectInstanceView o) {
-        DisplayInstanceView pi = ViewFactory();
-        addModelChangedListener(pi);
-        pi.PostConstructor();
-        o.p_displayViews.add(pi);
-        return pi;
+    public IDisplayInstanceView createView(IAxoObjectInstanceView o) {
+        IDisplayInstanceView displayInstanceView = getViewInstance(o);
+        addModelChangedListener((ModelChangedListener) displayInstanceView);
+        displayInstanceView.PostConstructor();
+        o.addDisplayInstanceView(displayInstanceView);
+        return displayInstanceView;
     }
 
     ArrayList<ModelChangedListener> modelChangedListeners = new ArrayList<ModelChangedListener>();
@@ -92,7 +92,7 @@ public abstract class DisplayInstance<T extends Display> implements AtomInstance
     }
 
     protected void notifyModelChangedListeners() {
-        for(ModelChangedListener l : modelChangedListeners) {
+        for (ModelChangedListener l : modelChangedListeners) {
             l.modelChanged();
         }
     }

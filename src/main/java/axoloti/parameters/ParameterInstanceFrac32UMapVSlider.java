@@ -17,7 +17,12 @@
  */
 package axoloti.parameters;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewFrac32UMapVSlider;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewFrac32UMapVSlider;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -54,7 +59,12 @@ public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U
         return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?data2<<20:0x07FFFFFF");
     }
 
-    public ParameterInstanceViewFrac32UMapVSlider ViewFactory() {
-        return new ParameterInstanceViewFrac32UMapVSlider(this);
+    @Override
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewFrac32UMapVSlider(this, o);
+        } else {
+            return new ParameterInstanceViewFrac32UMapVSlider(this, o);
+        }
     }
 }

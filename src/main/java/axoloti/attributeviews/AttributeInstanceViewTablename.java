@@ -67,7 +67,7 @@ public class AttributeInstanceViewTablename extends AttributeInstanceViewString 
             @Override
             public void focusLost(FocusEvent e) {
                 if (!TFtableName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().SetDirty();
+                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }
         });

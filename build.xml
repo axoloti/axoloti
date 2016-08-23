@@ -7,15 +7,15 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="Axoloti" default="default" basedir="." 
+<project name="Axoloti" default="default" basedir="."
  xmlns:fx="javafx:com.sun.javafx.tools.ant">
     <description>Builds, tests, and runs the project Axoloti.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
-    There exist several targets which are by default empty and which can be 
-    used for execution of your tasks. These targets are usually executed 
-    before and after some main targets. They are: 
+    There exist several targets which are by default empty and which can be
+    used for execution of your tasks. These targets are usually executed
+    before and after some main targets. They are:
 
       -pre-init:                 called before initialization of project properties
       -post-init:                called after initialization of project properties
@@ -41,19 +41,19 @@
             </obfuscate>
         </target>
 
-    For list of available properties check the imported 
-    nbproject/build-impl.xml file. 
+    For list of available properties check the imported
+    nbproject/build-impl.xml file.
 
 
     Another way to customize the build is by overriding existing main targets.
-    The targets of interest are: 
+    The targets of interest are:
 
       -init-macrodef-javac:     defines macro for javac compilation
       -init-macrodef-junit:     defines macro for junit execution
       -init-macrodef-debug:     defines macro for class debugging
       -init-macrodef-java:      defines macro for class execution
       -do-jar:                  JAR building
-      run:                      execution of project 
+      run:                      execution of project
       -javadoc-build:           Javadoc generation
       test-report:              JUnit report generation
 
@@ -65,28 +65,28 @@
             </exec>
         </target>
 
-    Notice that the overridden target depends on the jar target and not only on 
-    the compile target as the regular run target does. Again, for a list of available 
+    Notice that the overridden target depends on the jar target and not only on
+    the compile target as the regular run target does. Again, for a list of available
     properties which you can use, check the target you are overriding in the
-    nbproject/build-impl.xml file. 
+    nbproject/build-impl.xml file.
     -->
-    
+
   <property name="built_by"  value="${user.name}"/>
 
   <!-- run the ant timestamp task -->
   <tstamp/>
 
   <target name="-post-init" depends="create.build.version">
-  </target>  
+  </target>
   <!-- Overrides -do-jar-->
 
   <target name="-javadoc-build">
-  </target> 
+  </target>
 
   <target name="-do-jar">
-
     <!-- With included source files -->
     <jar destfile="dist/Axoloti.jar" filesetmanifest="mergewithoutmain" duplicate="preserve">
+
       <manifest>
         <attribute name="Main-Class" value="axoloti.Axoloti"/>
         <attribute name="Built-By" value="${built_by}"/>
@@ -114,12 +114,16 @@
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86_64.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/piccolo2d-core-3.1.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/piccolo2d-extras-3.1.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/marlin-0.7.4.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/marlin-0.7.4-sun-java2d.jar"/>
 
+    </jar>
       <!-- include source files -->
       <fileset dir="src">
         <include name="**/*.java"/>
       </fileset>
-    </jar>
   </target>
 
   <target name="-post-jar" depends="bundle, runtime">
@@ -220,7 +224,7 @@
 		</exec>
 		<exec dir="." executable="rm" osfamily="Windows">
 			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv6-m build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/tmp_win/armv7-ar build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv7-m "/>
-		</exec>                
+		</exec>
 		<exec dir="." executable="rm" osfamily="Windows">
 			<arg line="-rf build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv6-m build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv7-ar build/runtime/tmp_win/axoloti_runtime/platform_win/arm-none-eabi/lib/armv7-m "/>
 		</exec>
@@ -245,9 +249,10 @@
 	<exec dir="." executable="rm" >
 		<arg line="-rf build/bundles/"/>
 	</exec>
-	<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"      
+	<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"
 			uri="javafx:com.sun.javafx.tools.ant"
-			classpath=".:${java.home}/../lib/ant-javafx.jar"/>    
+			classpath=".:${java.home}/../lib/ant-javafx.jar"/>
+        
 	<fx:resources id="appRes">
 		 <fx:fileset type="license" dir="." includes="license.txt"/>
 		 <fx:fileset dir="dist">
@@ -258,16 +263,20 @@
              <include name="jsch-0.1.53.jar"/>
              <include name="slf4j-api-1.7.13.jar"/>
              <include name="slf4j-simple-1.7.13.jar"/>
-			 <include name="simple-xml-2.7.1.jar"/>
+             <include name="simple-xml-2.7.1.jar"/>
              <include name="rsyntaxtextarea-2.5.8.jar"/>
-			 <include name="usb4java-1.2.0/lib/usb4java-1.2.0.jar"/>
-			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-arm.jar"/>
-			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-x86.jar"/>
-			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-x86_64.jar"/>
-			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86.jar"/>
-			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86_64.jar"/>
-			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86.jar"/>
-			 <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
+             <include name="usb4java-1.2.0/lib/usb4java-1.2.0.jar"/>
+             <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-arm.jar"/>
+             <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-x86.jar"/>
+             <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-linux-x86_64.jar"/>
+             <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86.jar"/>
+             <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86_64.jar"/>
+             <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86.jar"/>
+             <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
+             <include name="piccolo2d-extras-3.1.jar"/>
+             <include name="piccolo2d-core-3.1.jar"/>
+             <include name="marlin-0.7.4.jar"/>
+             <include name="marlin-0.7.4-sun-java2d.jar"/>
 		 </fx:fileset>
 		 <fx:fileset dir=".">
 			 <include name="doc/*"/>
@@ -298,14 +307,14 @@
 	<fx:jar destfile="dist/axoloti-app.jar">
 		<!-- Details about application -->
 		<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="${build.version}"/>
-	 
+
 		<!-- Define what auxilary resources are needed -->
 		<fx:resources refid="appRes"/>
-				
+
 		<!-- What to include into result jar file?
 			 Everything in the build tree -->
 		<fileset dir="build/classes"/>
-	 
+
 		<!-- Customize jar manifest (optional) -->
 		<manifest>
 			<attribute name="Implementation-Vendor" value="Axoloti"/>
@@ -316,11 +325,11 @@
 			<attribute name="Built-Date" value="${TODAY}"/>
 			<attribute name="SplashScreen-Image" value="resources/splash.png"/>
 		</manifest>
-	</fx:jar> 
+	</fx:jar>
 
     	<fx:deploy os="Linux" nativeBundles="deb" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version}">
-            <fx:info title="Axoloti" 
-		     vendor="axoloti" 
+            <fx:info title="Axoloti"
+		     vendor="axoloti"
 		     description="Axoloti application"
 		     license="GPL"
 		     copyright="Axoloti.com" >
@@ -330,11 +339,16 @@
 	      	</fx:info>
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="${short.version}"/>
 	    	<fx:resources refid="appRes"/>
+                <fx:platform>
+                    <fx:jvmarg value="-Xbootclasspath/a:marlin-0.7.4.jar"/>
+                    <fx:jvmarg value="-Xbootclasspath/p:marlin-0.7.4-sun-java2d.jar"/>
+                    <fx:jvmarg value="-Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine" />
+                </fx:platform>
     	</fx:deploy>
 
     	<fx:deploy os="Mac OS X" nativeBundles="dmg" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version}">
-            <fx:info title="Axoloti" 
-		     vendor="axoloti" 
+            <fx:info title="Axoloti"
+		     vendor="axoloti"
 		     description="Axoloti application"
 		     license="GPL"
 		     copyright="Axoloti.com" >
@@ -344,6 +358,11 @@
 	      	</fx:info>
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="${short.version}"/>
 	    	<fx:resources refid="appRes"/>
+                <fx:platform>
+                    <fx:jvmarg value="-Xbootclasspath/a:marlin-0.7.4.jar"/>
+                    <fx:jvmarg value="-Xbootclasspath/p:marlin-0.7.4-sun-java2d.jar"/>
+                    <fx:jvmarg value="-Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine" />
+                </fx:platform>
     	</fx:deploy>
 
 	<exec dir="." executable="mv" os="Mac OS X">
@@ -355,8 +374,8 @@
 	</exec>
 
     	<fx:deploy os="Windows" nativeBundles="msi" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version}">
-            <fx:info title="Axoloti" 
-		     vendor="axoloti" 
+            <fx:info title="Axoloti"
+		     vendor="axoloti"
 		     description="Axoloti application"
 		     license="GPL"
 		     copyright="Axoloti.com" >
@@ -366,6 +385,11 @@
 	      	</fx:info>
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="${short.version}"/>
 	    <fx:resources refid="appRes"/>
+            <fx:platform>
+                <fx:jvmarg value="-Xbootclasspath/a:marlin-0.7.4.jar"/>
+                <fx:jvmarg value="-Xbootclasspath/p:marlin-0.7.4-sun-java2d.jar"/>
+                <fx:jvmarg value="-Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine" />
+            </fx:platform>
     	</fx:deploy>
 
 	<exec dir="." executable="mv" osfamily="Windows">
@@ -406,5 +430,5 @@
         <echo output="src/main/java/axoloti/Version.java" append="true">public final static String AXOLOTI_BUILD_TIME = "${build.time}";${line.separator}</echo>
         <echo output="src/main/java/axoloti/Version.java" append="true">};${line.separator}</echo>
     </target>
-      
+
 </project>

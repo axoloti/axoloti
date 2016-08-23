@@ -32,7 +32,7 @@ public class AttributeInstanceViewTextEditor extends AttributeInstanceViewString
                 @Override
                 public void windowLostFocus(WindowEvent e) {
                     if (!attributeInstance.getValueBeforeAdjustment().equals(attributeInstance.getStringRef().s)) {
-                        attributeInstance.getObjectInstance().getPatchModel().SetDirty();
+                        attributeInstance.getObjectInstance().getPatchModel().setDirty();
                     }
                 }
             });

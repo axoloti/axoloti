@@ -27,7 +27,7 @@ public class DisplayInstanceViewFrac4UByteVBarDB extends DisplayInstanceViewFrac
     }
 
     private Value getValue() {
-        return this.displayInstance.getValueRef();
+        return displayInstance.getValueRef();
     }
 
     @Override

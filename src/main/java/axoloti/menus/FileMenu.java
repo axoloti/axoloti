@@ -24,6 +24,7 @@ import axoloti.PatchController;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewSwing;
 import axoloti.dialogs.PatchBank;
 import axoloti.dialogs.PreferencesFrame;
 import axoloti.utils.AxolotiLibrary;
@@ -245,7 +246,7 @@ public class FileMenu extends JMenu {
         try {
             InputStream input = new URL(url).openStream();
             String name = url.substring(url.lastIndexOf("/") + 1, url.length());
-            PatchView.OpenPatch(name, input);
+            PatchViewSwing.OpenPatch(name, input);
         } catch (MalformedURLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Invalid URL {0}\n{1}", new Object[]{url, ex});
         } catch (IOException ex) {
@@ -275,7 +276,7 @@ public class FileMenu extends JMenu {
     public void NewPatch() {
         PatchController patchController = new PatchController();
         PatchModel patchModel = new PatchModel();
-        PatchView patchView = new PatchView(patchController);
+        PatchView patchView = MainFrame.prefs.getPatchView(patchController);
         patchModel.addModelChangedListener(patchView);
         patchController.setPatchModel(patchModel);
         patchController.setPatchView(patchView);

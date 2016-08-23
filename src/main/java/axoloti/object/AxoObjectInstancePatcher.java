@@ -22,7 +22,11 @@ import axoloti.PatchController;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewPiccolo;
+import axoloti.PatchViewSwing;
 import axoloti.objectviews.AxoObjectInstanceViewPatcher;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewPatcher;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
 
@@ -42,11 +46,6 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
 
     public AxoObjectInstancePatcher(AxoObject type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
-    }
-
-    @Override
-    public AxoObjectInstanceViewPatcher ViewFactory(PatchView patchView) {
-        return new AxoObjectInstanceViewPatcher(this, patchView);
     }
 
     public PatchModel getSubPatchModel() {
@@ -71,19 +70,23 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         }
     }
 
+    public void initSubpatchFrame() {
+        PatchController patchController = new PatchController();
+        PatchView patchView = MainFrame.prefs.getPatchView(patchController);
+        patchController.setPatchView(patchView);
+        patchController.setPatchModel(getSubPatchModel());
+        getSubPatchModel().addModelChangedListener(patchView);
+        pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
+        patchController.patchView.setFileNamePath(getInstanceName());
+        patchController.patchView.PostConstructor();
+    }
+
     public void init() {
         if (getSubPatchModel() == null) {
             setSubPatchModel(new PatchModel());
         }
         if (pf == null) {
-            PatchController patchController = new PatchController();
-            PatchView patchView = new PatchView(patchController);
-            patchController.setPatchView(patchView);
-            patchController.setPatchModel(getSubPatchModel());
-            getSubPatchModel().addModelChangedListener(patchView);
-            pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
-            patchController.patchView.setFileNamePath(getInstanceName());
-            patchController.patchView.PostConstructor();
+            initSubpatchFrame();
         }
     }
 
@@ -92,9 +95,8 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (getSubPatchModel() != null) {
             AxoObject ao = getSubPatchModel().GenerateAxoObj(new AxoObjectPatcher());
             setType(ao);
-            this.setDirty(true);
-            getPatchModel().SetDirty();
-            getPatchModel().cleanUpIntermediateChangeStates(2);
+            setDirty(true);
+            getPatchModel().setDirty();
         }
     }
 
@@ -104,5 +106,18 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (pf != null) {
             pf.Close();
         }
+    }
+
+    @Override
+    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
+        if (patchView instanceof PatchViewPiccolo) {
+            return new PAxoObjectInstanceViewPatcher(this, (PatchViewPiccolo) patchView);
+        } else {
+            return new AxoObjectInstanceViewPatcher(this, (PatchViewSwing) patchView);
+        }
+    }
+
+    public PatchFrame getPatchFrame() {
+        return pf;
     }
 }

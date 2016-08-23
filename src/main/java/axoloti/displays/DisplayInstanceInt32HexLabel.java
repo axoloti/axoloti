@@ -17,7 +17,12 @@
  */
 package axoloti.displays;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.displayviews.DisplayInstanceViewInt32HexLabel;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewInt32HexLabel;
 
 /**
  *
@@ -30,7 +35,11 @@ public class DisplayInstanceInt32HexLabel extends DisplayInstanceInt32<DisplayIn
     }
 
     @Override
-    public DisplayInstanceViewInt32HexLabel ViewFactory() {
-        return new DisplayInstanceViewInt32HexLabel(this);
+    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewInt32HexLabel(this, view);
+        } else {
+            return new DisplayInstanceViewInt32HexLabel(this);
+        }
     }
 }

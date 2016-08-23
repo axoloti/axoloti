@@ -130,7 +130,7 @@ public class USBBulkConnection extends Connection {
                 sync.notifyAll();
             }
 
-            if (receiverThread.isAlive()){
+            if (receiverThread.isAlive()) {
                 receiverThread.interrupt();
                 try {
                     receiverThread.join();
@@ -898,7 +898,9 @@ public class USBBulkConnection extends Connection {
     private Boolean isSDCardPresent = null;
 
     public void SetSDCardPresent(boolean i) {
-        if ((isSDCardPresent != null) && (i == isSDCardPresent)) return;
+        if ((isSDCardPresent != null) && (i == isSDCardPresent)) {
+            return;
+        }
         isSDCardPresent = i;
         if (isSDCardPresent) {
             ShowSDCardMounted();
@@ -909,7 +911,9 @@ public class USBBulkConnection extends Connection {
 
     @Override
     public boolean GetSDCardPresent() {
-        if (isSDCardPresent == null) return false;
+        if (isSDCardPresent == null) {
+            return false;
+        }
         return isSDCardPresent;
     }
 
@@ -935,7 +939,7 @@ public class USBBulkConnection extends Connection {
                 }
                 MainFrame.mainframe.showPatchIndex(patchIndex);
                 targetProfile.setVoltages(Voltages);
-                SetSDCardPresent(sdcardPresent!=0);
+                SetSDCardPresent(sdcardPresent != 0);
             }
         });
     }
@@ -943,8 +947,7 @@ public class USBBulkConnection extends Connection {
     void RPacketParamChange(final int index, final int value, final int patchID) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public
-                    void run() {
+            public void run() {
                 if (patchController == null) {
                     //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange patch null {0} {1}", new Object[]{index, value});
                     return;
@@ -973,7 +976,9 @@ public class USBBulkConnection extends Connection {
 
                 if (!pi.getNeedsTransmit()) {
                     pi.SetValueRaw(value);
+                    getPatchView().updateParameterView(pi);
                 }
+
 //                System.out.println("rcv ppc objname:" + pi.axoObj.getInstanceName() + " pname:"+ pi.name);
             }
         });
@@ -1469,10 +1474,10 @@ public class USBBulkConnection extends Connection {
     }
 
     public PatchView getPatchView() {
-        return this.patchController.patchView;
+        return patchController.patchView;
     }
 
     public PatchModel getPatchModel() {
-        return this.patchController.patchModel;
+        return patchController.patchModel;
     }
 }

@@ -17,18 +17,22 @@
  */
 package axoloti.attribute;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.attributedefinition.AxoAttributeInt32;
 import axoloti.attributeviews.AttributeInstanceViewInt32;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
 import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.attributeviews.PAttributeInstanceViewInt32;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 
 /**
  *
  * @author Johannes Taelman
  */
 public class AttributeInstanceInt32 extends AttributeInstanceInt<AxoAttributeInt32> {
-
-
 
     public AttributeInstanceInt32() {
     }
@@ -49,9 +53,13 @@ public class AttributeInstanceInt32 extends AttributeInstanceInt<AxoAttributeInt
     public void setValue(int value) {
         this.value = value;
     }
-    
+
     @Override
-    public AttributeInstanceViewInt32 ViewFactory(AxoObjectInstanceView o) {
-        return new AttributeInstanceViewInt32(this, o);
+    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PAttributeInstanceViewInt32(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new AttributeInstanceViewInt32(this, (AxoObjectInstanceView) o);
+        }
     }
 }
