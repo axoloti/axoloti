@@ -975,7 +975,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             String iname = getInstanceName();
             AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatch().ChangeObjectInstanceType1(this, o);
             AxoObject ao = getType();
-            oi.ao = new AxoObject(ao.id, ao.sDescription);
+            oi.ao = new AxoObjectPatcherObject(ao.id, ao.sDescription);
             oi.ao.copy(ao);
             oi.ao.sPath = "";
             oi.ao.upgradeSha = null;

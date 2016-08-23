@@ -57,7 +57,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
             pg.PostContructor();
         }
         if (pg != null) {
-            AxoObject ao = pg.GenerateAxoObj();
+            AxoObject ao = pg.GenerateAxoObj(new AxoObjectPatcher());
             setType(ao);
             ao.id = "patch/patcher";
             ao.sDescription = pg.getNotes();
@@ -70,7 +70,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     @Override
     public void updateObj() {
         if (pg != null) {
-            AxoObject ao = pg.GenerateAxoObj();
+            AxoObject ao = pg.GenerateAxoObj(new AxoObjectPatcher());
             setType(ao);
             PostConstructor();
         }

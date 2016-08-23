@@ -61,9 +61,9 @@ public class AxoObjectFromPatch extends AxoObject {
     final public void UpdateObject() {
         AxoObject o;
         if (pg == null) {
-            o = p.GenerateAxoObj();
+            o = p.GenerateAxoObj(new AxoObject());
         } else {
-            o = pg.GenerateAxoObj();
+            o = pg.GenerateAxoObj(new AxoObject());
         }
         attributes = o.attributes;
         depends = o.depends;

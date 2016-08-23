@@ -36,7 +36,7 @@ public class AxoObjectPatcher extends AxoObject {
     }
 
     @Override
-    public AxoObjectInstance CreateInstance(Patch patch, String InstanceName1, Point location) {
+    public AxoObjectInstancePatcher CreateInstance(Patch patch, String InstanceName1, Point location) {
         if ((sMidiCCCode != null)
                 || (sMidiAllNotesOffCode != null)
                 || (sMidiCCCode != null)
@@ -48,7 +48,7 @@ public class AxoObjectPatcher extends AxoObject {
             Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object {0} uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!", InstanceName1);
         }
 
-        AxoObjectInstance o = new AxoObjectInstancePatcher(this, patch, InstanceName1, location);
+        AxoObjectInstancePatcher o = new AxoObjectInstancePatcher(this, patch, InstanceName1, location);
         if (patch != null) {
             patch.objectinstances.add(o);
         }
