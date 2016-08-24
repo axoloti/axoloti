@@ -342,7 +342,7 @@ public class Patch {
             if ((t != null) && (!t.providesModulationSource())) {
                 o.patch = this;
                 o.PostConstructor();
-                System.out.println("Obj added " + o.getInstanceName());
+                //System.out.println("Obj added " + o.getInstanceName());
             } else if (t == null) {
                 //o.patch = this;
                 objectinstances.remove(o);
@@ -489,7 +489,7 @@ public class Patch {
                 nets.add(n);
                 n.connectInlet(il);
                 n.connectOutlet(ol);
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: new net added");
+                Logger.getLogger(Patch.class.getName()).log(Level.FINE, "connect: new net added");
                 SetDirty();
                 return n;
             } else if (n1 == n2) {
@@ -497,7 +497,7 @@ public class Patch {
                 return null;
             } else if ((n1 != null) && (n2 == null)) {
                 if (n1.source.isEmpty()) {
-                    Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: adding outlet to inlet net");
+                    Logger.getLogger(Patch.class.getName()).log(Level.FINE, "connect: adding outlet to inlet net");
                     n1.connectOutlet(ol);
                     SetDirty();
                     return n1;
@@ -508,13 +508,13 @@ public class Patch {
                     n.connectInlet(il);
                     n.connectOutlet(ol);
                     SetDirty();
-                    Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: replace inlet with new net");
+                    Logger.getLogger(Patch.class.getName()).log(Level.FINE, "connect: replace inlet with new net");
                     return n;
                 }
             } else if ((n1 == null) && (n2 != null)) {
                 n2.connectInlet(il);
                 SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: add additional outlet");
+                Logger.getLogger(Patch.class.getName()).log(Level.FINE, "connect: add additional outlet");
                 return n2;
             } else if ((n1 != null) && (n2 != null)) {
                 // inlet already has connect, and outlet has another
@@ -522,7 +522,7 @@ public class Patch {
                 disconnect(il);
                 n2.connectInlet(il);
                 SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: replace inlet with existing net");
+                Logger.getLogger(Patch.class.getName()).log(Level.FINE, "connect: replace inlet with existing net");
                 return n2;
             }
         } else {
@@ -554,19 +554,19 @@ public class Patch {
                 n.connectInlet(il);
                 n.connectInlet(ol);
                 SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: new net added");
+                Logger.getLogger(Patch.class.getName()).log(Level.FINE, "connect: new net added");
                 return n;
             } else if (n1 == n2) {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: already connected");
             } else if ((n1 != null) && (n2 == null)) {
                 n1.connectInlet(ol);
                 SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: inlet added");
+                Logger.getLogger(Patch.class.getName()).log(Level.FINE, "connect: inlet added");
                 return n1;
             } else if ((n1 == null) && (n2 != null)) {
                 n2.connectInlet(il);
                 SetDirty();
-                Logger.getLogger(Patch.class.getName()).log(Level.INFO, "connect: inlet added");
+                Logger.getLogger(Patch.class.getName()).log(Level.FINE, "connect: inlet added");
                 return n2;
             } else if ((n1 != null) && (n2 != null)) {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "can't connect: both inlets included in net");
@@ -661,7 +661,7 @@ public class Patch {
     }
 
     void deleteSelectedAxoObjInstances() {
-        Logger.getLogger(Patch.class.getName()).log(Level.INFO, "deleteSelectedAxoObjInstances()");
+        Logger.getLogger(Patch.class.getName()).log(Level.FINE, "deleteSelectedAxoObjInstances()");
         if (!IsLocked()) {
             boolean cont = true;
             while (cont) {

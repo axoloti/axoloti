@@ -895,7 +895,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             return;
         }
         if (selected != getType()) {
-            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO, "promoting " + this + " to " + selected);
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.FINE, "promoting " + this + " to " + selected);
             patch.ChangeObjectInstanceType(this, selected);
             patch.cleanUpIntermediateChangeStates(4);
         } else {
