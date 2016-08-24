@@ -23,8 +23,6 @@ import axoloti.object.AxoObjectInstance;
 import axoloti.utils.Constants;
 import components.ButtonComponent;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -37,6 +35,8 @@ import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -51,8 +51,6 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     JLabel vlabel;
     ButtonComponent ButtonChooseFile;
 
-    private AxoObjectInstance axoObj;
-
     public AttributeInstanceSDFile() {
     }
 
@@ -60,6 +58,8 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         super(param, axoObj1);
         this.axoObj = axoObj1;
     }
+
+    String valueBeforeAdjustment = "";
 
     @Override
     public void PostConstructor() {
@@ -74,34 +74,37 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         TFFileName.setPreferredSize(d);
         TFFileName.setSize(d);
         add(TFFileName);
-        TFFileName.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent ke) {
-                repaint();
-            }
-        });
-        TFFileName.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
+        TFFileName.getDocument().addDocumentListener(new DocumentListener() {
+            void update() {
                 fileName = TFFileName.getText();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                update();
             }
         });
         TFFileName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
+                valueBeforeAdjustment = TFFileName.getText();
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                fileName = TFFileName.getText();
+                if (!TFFileName.getText().equals(valueBeforeAdjustment)) {
+                    axoObj.getPatch().SetDirty();
+                }
             }
         });
         ButtonChooseFile = new ButtonComponent("choose");
@@ -113,7 +116,10 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String f = toRelative(fc.getSelectedFile());
                     TFFileName.setText(f);
-                    fileName = f;
+                    if (!f.equals(fileName)) {
+                        fileName = f;
+                        axoObj.getPatch().SetDirty();
+                    }
                 }
             }
         });

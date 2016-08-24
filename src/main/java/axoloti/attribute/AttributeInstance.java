@@ -40,7 +40,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
 
     T attr;
 
-    private AxoObjectInstance axoObj;
+    AxoObjectInstance axoObj;
     LabelComponent lbl;
 
     public AttributeInstance() {

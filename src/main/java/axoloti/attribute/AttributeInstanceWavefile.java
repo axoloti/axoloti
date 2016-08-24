@@ -22,6 +22,8 @@ import axoloti.object.AxoObjectInstance;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -37,6 +39,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -50,8 +54,6 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
     String waveFilename;
     JTextField TFwaveFilename;
     JLabel vlabel;
-    
-    private AxoObjectInstance axoObj;
 
     public AttributeInstanceWavefile() {
     }
@@ -60,6 +62,8 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
         super(param, axoObj1);
         this.axoObj = axoObj1;
     }
+
+    String valueBeforeAdjustment = "";
 
     @Override
     public void PostConstructor() {
@@ -87,10 +91,38 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
                 repaint();
             }
         });
-        TFwaveFilename.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
+        TFwaveFilename.getDocument().addDocumentListener(new DocumentListener() {
+
+            void update() {
                 waveFilename = TFwaveFilename.getText();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                update();
+            }
+        });
+        TFwaveFilename.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                valueBeforeAdjustment = TFwaveFilename.getText();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!TFwaveFilename.getText().equals(valueBeforeAdjustment)) {
+                    axoObj.getPatch().SetDirty();
+                }
             }
         });
     }

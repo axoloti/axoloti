@@ -23,14 +23,14 @@ import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -43,7 +43,6 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     String objName = "";
     JTextField TFObjName;
     JLabel vlabel;
-    private AxoObjectInstance axoObj;
 
     public AttributeInstanceObjRef() {
     }
@@ -52,6 +51,8 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
         super(param, axoObj1);
         this.axoObj = axoObj1;
     }
+
+    String valueBeforeAdjustment = "";
 
     @Override
     public void PostConstructor() {
@@ -69,6 +70,9 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
         TFObjName.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent ke) {
+                if (ke.getKeyChar() == KeyEvent.VK_ENTER){
+                    transferFocus();
+                }
             }
 
             @Override
@@ -77,25 +81,40 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
 
             @Override
             public void keyPressed(KeyEvent ke) {
-                repaint();
             }
         });
-        TFObjName.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
+        TFObjName.getDocument().addDocumentListener(new DocumentListener() {
+
+            void update() {
                 objName = TFObjName.getText();
-                System.out.println("objref change " + objName);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                update();
             }
         });
         TFObjName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
+                valueBeforeAdjustment = TFObjName.getText();
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                objName = TFObjName.getText();
-                System.out.println("objref change " + objName);
+                if (!TFObjName.getText().equals(valueBeforeAdjustment)) {
+                    axoObj.getPatch().SetDirty();
+                }
             }
         });
     }

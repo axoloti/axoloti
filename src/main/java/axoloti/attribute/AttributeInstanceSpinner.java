@@ -30,7 +30,6 @@ import components.control.NumberBoxComponent;
 public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeSpinner> {
 
     NumberBoxComponent spinner;
-    private AxoObjectInstance axoObj;
 
     public AttributeInstanceSpinner() {
     }
@@ -40,6 +39,8 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
         this.axoObj = axoObj1;
         value = attr.getDefaultValue();
     }
+
+    int valueBeforeAdjustment;
 
     @Override
     public void PostConstructor() {
@@ -61,10 +62,14 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
 
             @Override
             public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+                valueBeforeAdjustment = value;
             }
 
             @Override
             public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+                if (value != valueBeforeAdjustment) {
+                    axoObj.getPatch().SetDirty();
+                }
             }
         });
     }
