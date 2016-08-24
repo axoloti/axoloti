@@ -726,6 +726,8 @@ public class Patch {
         ByteArrayInputStream b = new ByteArrayInputStream(previousStates.get(currentState).getBytes());
         try {
             Patch p = serializer.read(Patch.class, b);
+            // prevent detached sub-windows
+            Close();
             this.objectinstances = p.objectinstances;
             this.nets = p.nets;
             this.cleanDanglingStates = false;

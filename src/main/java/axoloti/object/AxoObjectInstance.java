@@ -999,4 +999,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             }
         }
     }
+
+    @Override
+    public void Close() {
+        super.Close();
+        for (AttributeInstance a : attributeInstances) {
+            a.Close();
+        }
+    }
 }
