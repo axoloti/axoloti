@@ -1021,6 +1021,9 @@ public class USBBulkConnection extends Connection {
             if (patch == null) {
                 return;
             }
+            if (!patch.IsLocked()) {
+                return;
+            }
             if (patch.DisplayInstances == null) {
                 return;
             }
