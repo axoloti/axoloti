@@ -179,7 +179,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             jMenuUploadCode.setVisible(false);
             jMenuItemLock.setVisible(false);
             jMenuItemUnlock.setVisible(false);
-            jMenuItemDumpMod.setVisible(false);
         }
         jMenuPreset.setVisible(false);
         jMenuItemAdjScroll.setVisible(false);
@@ -340,7 +339,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuUploadCode = new javax.swing.JMenuItem();
         jMenuItemLock = new javax.swing.JMenuItem();
         jMenuItemUnlock = new javax.swing.JMenuItem();
-        jMenuItemDumpMod = new javax.swing.JMenuItem();
         jMenuPreset = new javax.swing.JMenu();
         jMenuItemClearPreset = new javax.swing.JMenuItem();
         jMenuItemPresetCurrentToInit = new javax.swing.JMenuItem();
@@ -467,12 +465,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         undoItem.setText("Undo");
         undoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 undoItemAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         undoItem.addActionListener(new java.awt.event.ActionListener() {
@@ -484,12 +482,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         redoItem.setText("Redo");
         redoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 redoItemAncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         redoItem.addActionListener(new java.awt.event.ActionListener() {
@@ -655,14 +653,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             }
         });
         jMenuPatch.add(jMenuItemUnlock);
-
-        jMenuItemDumpMod.setText("Dump modulation matrix");
-        jMenuItemDumpMod.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemDumpModActionPerformed(evt);
-            }
-        });
-        jMenuPatch.add(jMenuItemDumpMod);
 
         jMenuBar1.add(jMenuPatch);
 
@@ -966,11 +956,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         AskClose();
     }//GEN-LAST:event_jMenuCloseActionPerformed
 
-    private void jMenuItemDumpModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDumpModActionPerformed
-        String s = patch.GenerateModulationCode3();
-        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "modmatrix \n{0}", s);
-    }//GEN-LAST:event_jMenuItemDumpModActionPerformed
-
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         DocumentWindowList.RegisterWindow(this);
     }//GEN-LAST:event_formComponentShown
@@ -1060,7 +1045,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private javax.swing.JMenuItem jMenuItemClearPreset;
     private javax.swing.JMenuItem jMenuItemDelete;
     private javax.swing.JMenuItem jMenuItemDifferenceToPreset;
-    private javax.swing.JMenuItem jMenuItemDumpMod;
     private javax.swing.JMenuItem jMenuItemLock;
     private javax.swing.JMenuItem jMenuItemNotes;
     private javax.swing.JMenuItem jMenuItemPresetCurrentToInit;
