@@ -277,9 +277,9 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     @Override
     public void mouseDragged(MouseEvent me) {
         if ((patch != null) && (draggingObjects != null)) {
-            Point pParent = SwingUtilities.convertPoint(this, me.getPoint(), getParent());
-            int dx = pParent.x - dragAnchor.x;
-            int dy = pParent.y - dragAnchor.y;
+            Point locOnScreen = me.getLocationOnScreen();
+            int dx = locOnScreen.x - dragAnchor.x;
+            int dy = locOnScreen.y - dragAnchor.y;
             for (AxoObjectInstanceAbstract o : draggingObjects) {
                 int nx = o.dragLocation.x + dx;
                 int ny = o.dragLocation.y + dy;
@@ -315,7 +315,7 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                 me.consume();
             } else if (!IsLocked()) {
                 draggingObjects = new ArrayList<AxoObjectInstanceAbstract>();
-                dragAnchor = SwingUtilities.convertPoint(this, me.getPoint(), getParent());
+                dragAnchor = me.getLocationOnScreen();
                 moveToDraggedLayer(this);
                 draggingObjects.add(this);
                 dragLocation = getLocation();
