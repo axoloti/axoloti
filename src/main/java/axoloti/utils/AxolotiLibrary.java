@@ -81,7 +81,7 @@ public class AxolotiLibrary {
 
     public boolean isReadOnly() {
         // tmp, will be adding read-only property
-        return Id.equals(FACTORY_ID);
+        return Id.equals(FACTORY_ID) && !Axoloti.isDeveloper();
     }
 
     public void setId(String Id) {
