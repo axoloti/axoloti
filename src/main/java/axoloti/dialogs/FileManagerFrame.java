@@ -187,7 +187,8 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                     jButtonDelete.setEnabled(true);
                     SDFileInfo f = SDCardInfo.getInstance().getFiles().get(row);
                     if (f != null && f.isDirectory()) {
-                        jButtonUpload.setText("Upload to " + f.getFilename());
+                        jButtonUpload.setText("Upload to " + f.getFilename() + " ...");
+                        jButtonCreateDir.setText("Create directory in " + f.getFilename() + " ...");
                     } else {
                         ButtonUploadDefaultName();
                     }
@@ -197,7 +198,8 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     }
 
     void ButtonUploadDefaultName() {
-        jButtonUpload.setText("Upload");
+        jButtonUpload.setText("Upload ...");
+        jButtonCreateDir.setText("Create directory ...");
     }
 
     /**
@@ -405,10 +407,18 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jButtonCreateDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateDirActionPerformed
+        String dir = "/";
+        int rowIndex = jFileTable.getSelectedRow();
+        if (rowIndex >= 0) {
+            SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+            if (f != null && f.isDirectory()) {
+                dir = f.getFilename();
+            }
+        }
         String fn = JOptionPane.showInputDialog(this, "Directory name?");
         if (fn != null && !fn.isEmpty()) {
             QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-            processor.AppendToQueue(new QCmdCreateDirectory(fn));
+            processor.AppendToQueue(new QCmdCreateDirectory(dir + fn));
         }
 
     }//GEN-LAST:event_jButtonCreateDirActionPerformed
