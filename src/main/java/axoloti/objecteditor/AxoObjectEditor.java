@@ -350,8 +350,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         rSyntaxTextAreaXML.setCodeFoldingEnabled(true);
 
         AxoObjectInstance obji = editObj.CreateInstance(null, "test", new Point(0, 0));
-//        jPanelKRateCode1.setText(obji.GenerateDoFunctionPlusPlus("", "", false));
-        jPanelKRateCode1.setFont(jTextAreaKRateCode.getFont());
     }
 
     public void initEditFromOrig() {
@@ -469,7 +467,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         jPanelLocalData = new javax.swing.JPanel();
         jPanelInitCode = new javax.swing.JPanel();
         jPanelKRateCode = new javax.swing.JPanel();
-        jPanelKRateCode1 = new javax.swing.JLabel();
         jPanelKRateCode2 = new javax.swing.JPanel();
         jPanelSRateCode = new javax.swing.JPanel();
         jPanelDisposeCode = new javax.swing.JPanel();
@@ -687,9 +684,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
         jPanelKRateCode.setLayout(new javax.swing.BoxLayout(jPanelKRateCode, javax.swing.BoxLayout.Y_AXIS));
 
-        jPanelKRateCode1.setText("jLabel11");
-        jPanelKRateCode.add(jPanelKRateCode1);
-
         javax.swing.GroupLayout jPanelKRateCode2Layout = new javax.swing.GroupLayout(jPanelKRateCode2);
         jPanelKRateCode2.setLayout(jPanelKRateCode2Layout);
         jPanelKRateCode2Layout.setHorizontalGroup(
@@ -698,7 +692,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         );
         jPanelKRateCode2Layout.setVerticalGroup(
             jPanelKRateCode2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 288, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jPanelKRateCode.add(jPanelKRateCode2);
@@ -876,7 +870,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     private javax.swing.JPanel jPanelDisposeCode;
     private javax.swing.JPanel jPanelInitCode;
     private javax.swing.JPanel jPanelKRateCode;
-    private javax.swing.JLabel jPanelKRateCode1;
     private javax.swing.JPanel jPanelKRateCode2;
     private javax.swing.JPanel jPanelLocalData;
     private javax.swing.JPanel jPanelMidiCode;
