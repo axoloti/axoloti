@@ -50,6 +50,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -76,7 +77,8 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     int y;
     public Patch patch;
     AxoObjectAbstract type;
-    int dX, dY;
+    private Point dragLocation = null;
+    private Point dragAnchor = null;
     protected boolean Selected = false;
     private boolean Locked = false;
     private boolean typeWasAmbiguous = false;
@@ -275,16 +277,19 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
     @Override
     public void mouseDragged(MouseEvent me) {
         if ((patch != null) && (draggingObjects != null)) {
+            Point pParent = SwingUtilities.convertPoint(this, me.getPoint(), getParent());
+            int dx = pParent.x - dragAnchor.x;
+            int dy = pParent.y - dragAnchor.y;
             for (AxoObjectInstanceAbstract o : draggingObjects) {
-                o.x = me.getLocationOnScreen().x - o.dX;
-                o.y = me.getLocationOnScreen().y - o.dY;
-                o.dX = me.getLocationOnScreen().x - o.getX();
-                o.dY = me.getLocationOnScreen().y - o.getY();
+                int nx = o.dragLocation.x + dx;
+                int ny = o.dragLocation.y + dy;
                 if (!me.isShiftDown()) {
-                    o.x = ((o.x + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
-                    o.y = ((o.y + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
+                    nx = ((nx + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
+                    ny = ((ny + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
                 }
-                o.setLocation(o.x, o.y);
+                if (o.x != nx || o.y != ny) {
+                    o.setLocation(nx, ny);
+                }
             }
         }
     }
@@ -310,17 +315,16 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
                 me.consume();
             } else if (!IsLocked()) {
                 draggingObjects = new ArrayList<AxoObjectInstanceAbstract>();
-                dX = me.getXOnScreen() - getX();
-                dY = me.getYOnScreen() - getY();
+                dragAnchor = SwingUtilities.convertPoint(this, me.getPoint(), getParent());
                 moveToDraggedLayer(this);
                 draggingObjects.add(this);
+                dragLocation = getLocation();
                 if (IsSelected()) {
                     for (AxoObjectInstanceAbstract o : patch.objectinstances) {
                         if (o.IsSelected()) {
                             moveToDraggedLayer(o);
                             draggingObjects.add(o);
-                            o.dX = me.getXOnScreen() - o.getX();
-                            o.dY = me.getYOnScreen() - o.getY();
+                            o.dragLocation = o.getLocation();
                         }
                     }
                 }
@@ -347,22 +351,19 @@ public abstract class AxoObjectInstanceAbstract extends JPanel implements Compar
         int maxZIndex = 0;
         if (draggingObjects != null) {
             if (patch != null) {
-                boolean setDirty = false;
+                boolean dirtyOnRelease = false;
                 for (AxoObjectInstanceAbstract o : draggingObjects) {
                     moveToObjectLayer(o, 0);
                     if (getPatchGUI().objectLayerPanel.getComponentZOrder(o) > maxZIndex) {
                         maxZIndex = getPatchGUI().objectLayerPanel.getComponentZOrder(o);
                     }
-                    int nx = ((o.x + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
-                    int ny = ((o.y + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
-                    if (o.x != nx || o.y != ny) {
-                        o.setLocation(nx, ny);
-                        setDirty = true;
+                    if (o.x != dragLocation.x || o.y != dragLocation.y) {
+                        dirtyOnRelease = true;
                     }
                     o.repaint();
                 }
                 draggingObjects = null;
-                if (setDirty) {
+                if (dirtyOnRelease) {
                     patch.SetDirty();
                 }
                 patch.AdjustSize();

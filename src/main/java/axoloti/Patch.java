@@ -724,6 +724,7 @@ public class Patch {
             this.nets = p.nets;
             this.cleanDanglingStates = false;
             this.PostContructor();
+            AdjustSize();
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
