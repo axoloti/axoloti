@@ -169,7 +169,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
                         && (axoObj != null)
                         && (axoObj.getPatch() != null)) {
                     //System.out.println("finished" +getControlComponent().getValue());
-                    axoObj.getPatch().SetDirty();
+                    SetDirty();
                 }
             }
         });
@@ -277,9 +277,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
 
     public void setValue(Value value) {
         if (axoObj != null) {
-            if (axoObj.getPatch() != null) {
-                axoObj.getPatch().SetDirty();
-            }
+            SetDirty();
         }
     }
 
@@ -504,9 +502,15 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         String s = e.getActionCommand();
         if (s.startsWith("CC")) {
             int i = Integer.parseInt(s.substring(2));
-            SetMidiCC(i);
+            if (i != getMidiCC()) {
+                SetMidiCC(i);
+                SetDirty();
+            }
         } else if (s.equals("none")) {
-            SetMidiCC(-1);
+            if (-1 != getMidiCC()) {
+                SetMidiCC(-1);
+                SetDirty();
+            }
         }
     }
 
@@ -522,5 +526,12 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
 
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
+    }
+
+    void SetDirty() {
+        // propagate dirty flag to patch if there is one
+        if (axoObj.getPatch() != null) {
+            axoObj.getPatch().SetDirty();
+        }
     }
 }
