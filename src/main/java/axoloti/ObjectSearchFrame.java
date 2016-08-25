@@ -21,6 +21,7 @@ import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectTreeNode;
 import axoloti.utils.Constants;
+import java.awt.Cursor;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -611,6 +612,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
+        getRootPane().setCursor(Cursor.getDefaultCursor());
         if ((evt.getOppositeWindow() == null)
                 || !(evt.getOppositeWindow() instanceof axoloti.PatchFrame)) {
             Cancel();
