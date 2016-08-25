@@ -113,7 +113,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
             @Override
             public void focusLost(FocusEvent e) {
                 if (!TFObjName.getText().equals(valueBeforeAdjustment)) {
-                    axoObj.getPatch().SetDirty();
+                    SetDirty();
                 }
             }
         });

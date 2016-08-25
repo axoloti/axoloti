@@ -74,7 +74,7 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
                 @Override
                 public void windowLostFocus(WindowEvent e) {
                     if (!valueBeforeAdjustment.equals(sRef.s)) {
-                        axoObj.getPatch().SetDirty();
+                        SetDirty();
                     }
                 }
             });

@@ -92,4 +92,11 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
 
     public void Close() {
     }
+
+    void SetDirty() {
+        // propagate dirty flag to patch if there is one
+        if (axoObj.getPatch() != null) {
+            axoObj.getPatch().SetDirty();
+        }
+    }
 }

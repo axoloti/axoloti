@@ -52,7 +52,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
             public void SelectionChanged() {
                 if (!selection.equals((String) comboBox.getSelectedItem())) {
                     selection = (String) comboBox.getSelectedItem();
-                    GetObjectInstance().getPatch().SetDirty();
+                    SetDirty();
                 }
             }
         });

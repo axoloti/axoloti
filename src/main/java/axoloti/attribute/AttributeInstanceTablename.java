@@ -98,7 +98,7 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
             @Override
             public void focusLost(FocusEvent e) {
                 if (!TFtableName.getText().equals(valueBeforeAdjustment)) {
-                    axoObj.getPatch().SetDirty();
+                    SetDirty();
                 }
             }
         });

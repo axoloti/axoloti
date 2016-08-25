@@ -103,7 +103,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
             @Override
             public void focusLost(FocusEvent e) {
                 if (!TFFileName.getText().equals(valueBeforeAdjustment)) {
-                    axoObj.getPatch().SetDirty();
+                    SetDirty();
                 }
             }
         });
@@ -118,7 +118,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
                     TFFileName.setText(f);
                     if (!f.equals(fileName)) {
                         fileName = f;
-                        axoObj.getPatch().SetDirty();
+                        SetDirty();
                     }
                 }
             }

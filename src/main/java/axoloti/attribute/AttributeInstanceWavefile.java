@@ -121,7 +121,7 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
             @Override
             public void focusLost(FocusEvent e) {
                 if (!TFwaveFilename.getText().equals(valueBeforeAdjustment)) {
-                    axoObj.getPatch().SetDirty();
+                    SetDirty();
                 }
             }
         });

@@ -461,11 +461,12 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
                 setOnParent(m_onParent.isSelected());
             }
         });
-
-        JMenu m_preset = new JMenu("Preset");
-        // AssignPresetMenuItems, does stuff in ctor
-        AssignPresetMenuItems assignPresetMenuItems = new AssignPresetMenuItems(this, m_preset);
-        m.add(m_preset);
+        if (GetObjectInstance().getPatch() != null) {
+            JMenu m_preset = new JMenu("Preset");
+            // AssignPresetMenuItems, does stuff in ctor
+            AssignPresetMenuItems assignPresetMenuItems = new AssignPresetMenuItems(this, m_preset);
+            m.add(m_preset);
+        }
     }
 
     /**

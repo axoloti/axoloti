@@ -68,7 +68,7 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
             @Override
             public void ACtrlAdjustmentFinished(ACtrlEvent e) {
                 if (value != valueBeforeAdjustment) {
-                    axoObj.getPatch().SetDirty();
+                    SetDirty();
                 }
             }
         });
@@ -100,5 +100,4 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
     public void setValue(int value) {
         this.value = value;
     }
-
 }
