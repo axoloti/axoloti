@@ -33,12 +33,12 @@ public class HelpLibraryMenu extends JMenu {
         addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                String dir = "objects/";
-                AxolotiLibrary lib = prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
-                if (lib != null) {
-                    dir = lib.getLocalLocation() + dir;
+                for (AxolotiLibrary lib : prefs.getLibraries()) {
+                    JMenu mi = new JMenu(lib.getId());
+                    String dir = lib.getLocalLocation() + "objects/";
+                    PopulatePatchMenu.PopulatePatchMenu(mi, dir, ".axh");
+                    HelpLibraryMenu.this.add(mi);
                 }
-                PopulatePatchMenu.PopulatePatchMenu(HelpLibraryMenu.this, dir, ".axh");
             }
 
             @Override

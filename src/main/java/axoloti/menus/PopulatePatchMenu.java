@@ -31,6 +31,12 @@ public class PopulatePatchMenu {
 
     static void PopulatePatchMenu(JMenu parent, String path, String ext) {
         File dir = new File(path);
+        if (!dir.isDirectory()) {
+            JMenuItem mi = new JMenuItem("no help patches found");
+            mi.setEnabled(false);
+            parent.add(mi);
+            return;
+        }
         final String extension = ext;
         for (File subdir : dir.listFiles(new java.io.FileFilter() {
             @Override
