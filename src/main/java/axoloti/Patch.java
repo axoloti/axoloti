@@ -722,6 +722,7 @@ public class Patch {
             Close();
             this.objectinstances = p.objectinstances;
             this.nets = p.nets;
+            this.Modulators = p.Modulators;
             this.cleanDanglingStates = false;
             this.PostContructor();
             AdjustSize();
