@@ -237,18 +237,22 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
 
     public void disconnect() {
         // only called from GUI action
-        Net n = axoObj.patch.disconnect(this);
-        if (n != null) {
-            axoObj.patch.SetDirty();
+        if (axoObj.patch != null) {
+            Net n = axoObj.patch.disconnect(this);
+            if (n != null) {
+                axoObj.patch.SetDirty();
+            }
         }
     }
 
     public void deleteNet() {
         // only called from GUI action
-        Net n = axoObj.patch.GetNet(this);
-        n = axoObj.patch.delete(n);
-        if (n != null) {
-            axoObj.patch.SetDirty();
+        if (axoObj.patch != null) {
+            Net n = axoObj.patch.GetNet(this);
+            n = axoObj.patch.delete(n);
+            if (n != null) {
+                axoObj.patch.SetDirty();
+            }
         }
     }
 }
