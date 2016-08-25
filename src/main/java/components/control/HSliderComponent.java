@@ -56,6 +56,8 @@ public class HSliderComponent extends ACtrlComponent {
     @Override
     protected void mousePressed(MouseEvent e) {
         px = e.getX();
+        e.consume();
+        fireEventAdjustmentBegin();
     }
 
     @Override
@@ -68,6 +70,10 @@ public class HSliderComponent extends ACtrlComponent {
 
     @Override
     protected void mouseReleased(MouseEvent e) {
+        if (!e.isPopupTrigger()) {
+            fireEventAdjustmentFinished();
+            e.consume();
+        }
     }
 
     @Override

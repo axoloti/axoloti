@@ -528,7 +528,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         return "";
     }
 
-    void SetDirty() {
+    public void SetDirty() {
         // propagate dirty flag to patch if there is one
         if (axoObj.getPatch() != null) {
             axoObj.getPatch().SetDirty();

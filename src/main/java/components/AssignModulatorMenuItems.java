@@ -38,6 +38,8 @@ import javax.swing.JPanel;
  */
 public class AssignModulatorMenuItems {
 
+    double valueBeforeAdjustment;
+
     public AssignModulatorMenuItems(final ParameterInstanceFrac32UMap<ParameterFrac32> param, JComponent parent) {
         final ArrayList<HSliderComponent> hsls = new ArrayList<HSliderComponent>();
 
@@ -74,10 +76,15 @@ public class AssignModulatorMenuItems {
 
                 @Override
                 public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+                    valueBeforeAdjustment = ((HSliderComponent) e.getSource()).getValue();
                 }
 
                 @Override
                 public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+                    double vnew = ((HSliderComponent) e.getSource()).getValue();
+                    if (vnew != valueBeforeAdjustment) {
+                        param.SetDirty();
+                    }
                 }
             });
             hsls.add(hsl);
