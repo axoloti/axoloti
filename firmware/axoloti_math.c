@@ -27,30 +27,6 @@ uint32_t pitcht[PITCHTSIZE];
 uint16_t expt[EXPTSIZE];
 uint16_t logt[LOGTSIZE];
 
-uint32_t fexp(uint32_t i) {
-  // 16.16 bit 
-  //  j.k
-  // useful max is 31.0000 0x001F0000
-  uint32_t j, k, m;
-  i = __USAT(i, 21);
-  j = 31 - (i >> 16);
-  k = i & 0xFFFF;
-  m = expt[k >> 8]; // 8bit exptable
-  return m >> j;
-}
-
-int32_t fsini(uint32_t p) {
-  uint32_t pi = p >> 19;
-  int32_t y1 = sine2t[pi];
-  int32_t y2 = sine2t[1 + pi];
-  int32_t pf = (p & 0xFFFFF) << 12;
-  int32_t pfc = INT32_MAX - pf;
-  int32_t r;
-  r = ___SMMUL(y1, pfc);
-  r = ___SMMLA(y2, pf, r);
-  return (r << 1);
-}
-
 void axoloti_math_init(void) {
   volatile short *p;
   volatile uint32_t i;
