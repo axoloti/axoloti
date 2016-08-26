@@ -74,13 +74,10 @@ void axoloti_math_init(void) {
     double e = 0.5 * log(1.0 + ((double)i / (double)LOGTSIZE)) / log(2.0);
     *q16++ = (uint32_t)(e * (1 + INT16_MAX));
   }
-}
 
-uint32_t GenerateRandomNumber(void) {
-  /* Change this for different random sequences. */
-  static uint32_t randSeed = 22222;
-  randSeed = (randSeed * 196314165) + 907633515;
-  return randSeed;
+  // initialize the hardware random number generator
+  RCC->AHB2ENR |= RCC_AHB2ENR_RNGEN;
+  RNG->CR = RNG_CR_RNGEN;
 }
 
 uint32_t FastLog(uint32_t i) {

@@ -58,12 +58,6 @@ typedef union {
 
 void axoloti_math_init(void);
 
-/* Calculate pseudo-random 32 bit number based on linear congruential method. */
-uint32_t GenerateRandomNumber(void);
-
-uint32_t FastLog(uint32_t f);
-
-
 __attribute__( ( always_inline ) ) __STATIC_INLINE int32_t ___SMMUL (int32_t op1, int32_t op2)
 {
   int32_t result;
@@ -172,6 +166,23 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t ConvertFloatToFrac(f
   return (int32_t)(f*(1<<21));
 }
 
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t rand_s32() {
+  // This function differs from the standard C rand() definition, standard C
+  // rand() only returns positive numbers, while rand_s32() returns the full
+  // signed 32 bit range.
+  // The hardware random generator can't provide new data as quick as desireable
+  // but rather than waiting for a new true random number,
+  // we multiply/add the seed with the latest hardware-generated number.
+  static uint32_t randSeed = 22222;
+  return randSeed = (randSeed * 196314165) + RNG->DR;
+}
+
+#define RAND_MAX INT32_MAX
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE int rand() {
+  return ((uint32_t)rand_s32())>>1;
+}
+
+uint32_t FastLog(uint32_t f);
 
 // deprecated macro's
 #define MTOF(pitch, frequency) \
@@ -185,5 +196,10 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t ConvertFloatToFrac(f
 
 #define HANNING2TINTERP(phase, output) \
   output = hann_q31(phase);
+
+// deprecated functions
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t GenerateRandomNumber(){
+  return rand_s32();
+}
 
 #endif
