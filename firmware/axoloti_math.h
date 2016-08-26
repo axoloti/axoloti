@@ -166,7 +166,7 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t ConvertFloatToFrac(f
   return (int32_t)(f*(1<<21));
 }
 
-__attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t rand_s32() {
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t rand_s32(void) {
   // This function differs from the standard C rand() definition, standard C
   // rand() only returns positive numbers, while rand_s32() returns the full
   // signed 32 bit range.
@@ -178,7 +178,8 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t rand_s32() {
 }
 
 #define RAND_MAX INT32_MAX
-__attribute__ ( ( always_inline ) ) __STATIC_INLINE int rand() {
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE int rand(void) {
+  // standard C rand()
   return ((uint32_t)rand_s32())>>1;
 }
 
@@ -198,7 +199,7 @@ uint32_t FastLog(uint32_t f);
   output = hann_q31(phase);
 
 // deprecated functions
-__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t GenerateRandomNumber(){
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t GenerateRandomNumber(void){
   return rand_s32();
 }
 
