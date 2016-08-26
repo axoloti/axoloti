@@ -94,7 +94,7 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE float _VSQRTF(float op1) {
   return(result);
 }
 
-__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t mtof_q31(int32_t pitch) {
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t mtof48k_q31(int32_t pitch) {
   int32_t p=__SSAT(pitch,28);
   uint32_t pi = p>>21;
   int32_t y1 = pitcht[128+pi];
@@ -108,7 +108,7 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t mtof_q31(int32_t pi
   return frequency;
 }
 
-__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t mtof_ext_q31(int32_t pitch) {
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t mtof48k_ext_q31(int32_t pitch) {
   int32_t p=__SSAT(pitch,29);
   uint32_t pi = p>>21;
   int32_t y1 = pitcht[128+pi];
@@ -175,10 +175,10 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t ConvertFloatToFrac(f
 
 // deprecated macro's
 #define MTOF(pitch, frequency) \
-  frequency = mtof_q31(pitch);
+  frequency = mtof48k_q31(pitch);
 
 #define MTOFEXTENDED(pitch, frequency) \
-  frequency = mtof_ext_q31(pitch);
+  frequency = mtof48k_ext_q31(pitch);
 
 #define SINE2TINTERP(phase, output) \
   output = sin_q31(phase);
