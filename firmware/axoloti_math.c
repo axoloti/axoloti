@@ -58,7 +58,7 @@ void axoloti_math_init(void) {
     double f = 440.0 * powf(2.0, (i - 69.0 - 64.0) / 12.0);
     double phi = 4.0 * (double)(1 << 30) * f / (SAMPLERATE * 1.0);
     if (phi > ((unsigned int)1 << 31))
-      phi = 0;
+      phi = 0x7FFFFFFF;
     *q++ = (uint32_t)phi;
   }
 
