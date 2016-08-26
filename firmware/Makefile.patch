@@ -50,7 +50,7 @@ LLIBDIR   = $(patsubst %,-L%,$(DLIBDIR) $(ULIBDIR))
            
 all: ${BDIR}/xpatch.bin
 
-${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axoloti.h ${FIRMWARE}/parameter_functions.h
+${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axoloti.h ${FIRMWARE}/parameter_functions.h ${FIRMWARE}/axoloti_math.h ${FIRMWARE}/axoloti_filters.h
 	@echo "Build precompiled header"
 	$(CPP) $(CCFLAGS11) $(IINCDIR) -Winvalid-pch -MD -MP -c ${FIRMWARE}/xpatch.h  -o ${BDIR}/xpatch.h.gch
 
