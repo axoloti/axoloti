@@ -75,9 +75,14 @@ void axoloti_math_init(void) {
     *q16++ = (uint32_t)(e * (1 + INT16_MAX));
   }
 
-  // initialize the hardware random number generator
+  // reset & initialize the hardware random number generator
+  RCC->AHB2RSTR |= RCC_AHB2RSTR_RNGRST;
+  RCC->AHB2RSTR &= ~RCC_AHB2RSTR_RNGRST;
   RCC->AHB2ENR |= RCC_AHB2ENR_RNGEN;
+  chThdSleepMilliseconds(1);
   RNG->CR = RNG_CR_RNGEN;
+  while(!(RNG->SR & RNG_SR_DRDY)) {
+  }
 }
 
 uint32_t FastLog(uint32_t i) {
