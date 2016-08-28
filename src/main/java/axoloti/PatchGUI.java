@@ -944,12 +944,12 @@ public class PatchGUI extends Patch {
     public void AdjustSize() {
         Dimension s = GetSize();
         clampLayerSize(s);
-        Dimension s2 = Layers.getSize();
-        if (s2.equals(s)) {
-            return;
+        if (!Layers.getSize().equals(s)) {
+            Layers.setSize(s);
         }
-        Layers.setSize(s);
-        Layers.setPreferredSize(s);
+        if (!Layers.getPreferredSize().equals(s)) {
+            Layers.setPreferredSize(s);
+        }
     }
 
     @Override
