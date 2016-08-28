@@ -73,15 +73,7 @@ void f_filter_biquad_A(data_filter_biquad_A *v, const int32_t *sourcebuf,
                        int32_t *destbuf, uint32_t filter_W0, uint32_t q_inv) {
 // reference http://www.musicdsp.org/files/Audio-EQ-Cookbook.txt
 // LPF
-  if (filter_W0 > (INT32_MAX / 4))
-    filter_W0 = INT32_MAX / 4;
-//    filter_W0 = filter_W0<<2;
-  /*
-   int32_t sinW0 = arm_sin_q31(filter_W0);
-   int32_t cosW0 = arm_cos_q31(filter_W0);
-   int32_t sinW0 = fsini(filter_W0);
-   int32_t cosW0 = fsini(filter_W0+(INT32_MAX>>2));
-   */
+// warning: filter_W0 values above 0x50000000 produce unstable results
 
   int32_t sinW0; // = arm_sin_q31(filter_W0);
   int32_t cosW0; // = arm_cos_q31(filter_W0);
