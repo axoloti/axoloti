@@ -325,8 +325,10 @@ public class PreferencesFrame extends javax.swing.JFrame {
         });
 
         jLabel8.setText("Theme");
+        jLabel8.setEnabled(false);
 
         themeEditButton.setText("Edit");
+        themeEditButton.setEnabled(false);
         themeEditButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 themeEditButtonActionPerformed(evt);
