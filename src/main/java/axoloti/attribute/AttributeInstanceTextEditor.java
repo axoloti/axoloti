@@ -130,7 +130,9 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
 
     @Override
     public void Close() {
-        editor.Close();
+        if (editor != null) {
+            editor.Close();
+        }
         editor = null;
     }
 }
