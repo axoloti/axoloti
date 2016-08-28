@@ -14,7 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
@@ -28,6 +27,17 @@ public class Theme {
 
     public Theme() {
         super();
+        Color labelForeground = (new JLabel()).getForeground();
+        Color panelBackground = (new JPanel()).getBackground();
+        // ensure we don't have ColorUIResource instances
+        labelForeground = new Color(labelForeground.getRed(), labelForeground.getGreen(), 
+                labelForeground.getBlue(), labelForeground.getAlpha());
+        panelBackground= new Color(panelBackground.getRed(), panelBackground.getGreen(), 
+                panelBackground.getBlue(), panelBackground.getAlpha());
+        this.Label_Text = labelForeground;
+        this.Object_TitleBar_Foreground = labelForeground;
+        this.Object_Default_Background = panelBackground;
+        this.Parameter_Default_Background = panelBackground;
     }
 
     private static final Registry REGISTRY = new Registry();
@@ -37,7 +47,6 @@ public class Theme {
     static {
         try {
             REGISTRY.bind(Color.class, ColorConverter.class);
-            REGISTRY.bind(javax.swing.plaf.ColorUIResource.class, ColorConverter.class);
         } catch (Exception e) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -64,9 +73,7 @@ public class Theme {
     @Element
     public Color Console_Background = Color.WHITE;
     @Element
-    // UIManager.getColor("Label.foreground") doesn't give the correct value here
-    // for some reason
-    public Color Label_Text = (new JLabel()).getForeground();
+    public Color Label_Text;
 
 // nets
     @Element
@@ -94,11 +101,11 @@ public class Theme {
 
     // objects
     @Element
-    public Color Object_Default_Background = (new JPanel()).getBackground();
+    public Color Object_Default_Background;
     @Element
     public Color Object_TitleBar_Background = Color.getHSBColor(0.f, 0.0f, 0.6f);
     @Element
-    public Color Object_TitleBar_Foreground = (new JLabel()).getForeground();
+    public Color Object_TitleBar_Foreground;
     @Element
     public Color Object_Border_Unselected = Color.WHITE;
     @Element
@@ -107,7 +114,7 @@ public class Theme {
     public Color Object_Zombie_Background = Color.RED;
 
     @Element
-    public Color Parameter_Default_Background = (new JPanel()).getBackground();
+    public Color Parameter_Default_Background;
     @Element
     public Color Parameter_Default_Foreground = Color.BLACK;
     @Element
