@@ -20,8 +20,6 @@
 
 #include "axoloti_defines.h"
 
-void InitPWM(void);
-
 #define ADC_CHANNELS 16
 extern unsigned short adcvalues[ADC_CHANNELS];
 

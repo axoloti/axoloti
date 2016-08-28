@@ -28,30 +28,6 @@ void axoloti_board_init(void) {
   chMtxInit(&Mutex_DMAStream_1_7);
 }
 
-/*
- * PWM configuration structure.
- * Cyclic callback enabled, channels 1 and 4 enabled without callbacks,
- * the active state is a logic one.
- */
-static const PWMConfig pwmcfg = {400000, /* 400kHz PWM clock frequency.  */
-                                 4096, /* PWM period is 128 cycles.    */
-                                 NULL, { {PWM_OUTPUT_ACTIVE_HIGH, NULL}, {
-                                     PWM_OUTPUT_ACTIVE_HIGH, NULL},
-                                        {PWM_OUTPUT_ACTIVE_HIGH, NULL}, {
-                                            PWM_OUTPUT_ACTIVE_HIGH, NULL}},
-                                 /* HW dependent part.*/
-                                 0};
-
-void InitPWM(void) {
-  /*
-   * Initializes the PWM drivers
-   */
-  pwmStart(&PWMD3, &pwmcfg);
-  pwmStart(&PWMD4, &pwmcfg);
-  pwmStart(&PWMD5, &pwmcfg);
-//  pwmStart(&PWMD8, &pwmcfg);
-}
-
 /* Total number of channels to be sampled by a single ADC operation.*/
 #define ADC_GRP1_NUM_CHANNELS   16
 

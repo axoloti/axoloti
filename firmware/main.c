@@ -113,8 +113,6 @@ int main(void) {
 
   InitPConnection();
 
-  InitPWM();
-
   // display SPI CS?
   palSetPadMode(GPIOC, 1, PAL_MODE_OUTPUT_PUSHPULL);
   palSetPad(GPIOC, 1);
