@@ -13,6 +13,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -93,7 +94,7 @@ public class Theme {
 
     // objects
     @Element
-    public Color Object_Default_Background = UIManager.getColor("Panel.background");
+    public Color Object_Default_Background = (new JPanel()).getBackground();
     @Element
     public Color Object_TitleBar_Background = Color.getHSBColor(0.f, 0.0f, 0.6f);
     @Element
@@ -106,7 +107,7 @@ public class Theme {
     public Color Object_Zombie_Background = Color.RED;
 
     @Element
-    public Color Parameter_Default_Background = UIManager.getColor("Panel.background");
+    public Color Parameter_Default_Background = (new JPanel()).getBackground();
     @Element
     public Color Parameter_Default_Foreground = Color.BLACK;
     @Element
