@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fno-math-errno
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fno-math-errno -Wno-unused-parameter
 endif
 
 # C specific options here (added to USE_OPT).
@@ -117,17 +117,29 @@ CSRC = $(PORTSRC) \
        ${FIRMWARE}/virtual_control.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_q31.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_q31.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_q15.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_q15.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_dct4_q31.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_dct4_init_q31.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_dct4_q15.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_dct4_init_q15.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_q31.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_q31.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_q15.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_q15.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_bitreversal.c \
        ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_mult_q31.c \
+       ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_mult_q15.c \
        ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_shift_q31.c \
+       ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_shift_q15.c \
        ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mult_cmplx_q31.c \
        ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mag_q31.c \
+       ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mult_cmplx_q15.c \
+       ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mag_q15.c \
        ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_cos_q31.c \
        ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sin_q31.c \
        ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q31.c \
+       ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q15.c \
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_init_q31.c \
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_fast_q31.c \
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_init_q31.c \
@@ -170,8 +182,8 @@ CSRC = $(PORTSRC) \
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CPPSRC =
-
+CPPSRC = 
+	   
 # C sources to be compiled in ARM mode regardless of the global setting.
 # NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
 #       option that results in lower performance and larger code size.
@@ -286,14 +298,7 @@ UINCDIR =
 ULIBDIR = .
 
 # List all user libraries here
-ULIBS = -lm \
-	${FIRMWARE}/samples/808bd.o \
-	${FIRMWARE}/samples/808hatclose.o \
-	${FIRMWARE}/samples/808hatopen.o \
-	${FIRMWARE}/samples/808hitom.o \
-	${FIRMWARE}/samples/808midtom.o \
-	${FIRMWARE}/samples/808lotom.o \
-	${FIRMWARE}/samples/808snare.o 
+ULIBS = -lm 
 
 #
 # End of user defines
