@@ -38,6 +38,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -213,4 +214,10 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         }
     }
 
+    @Persist
+    public void Persist() {
+        if (fileName == null) {
+            fileName = "";
+        }
+    }
 }

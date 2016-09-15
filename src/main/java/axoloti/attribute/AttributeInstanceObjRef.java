@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -70,7 +71,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
         TFObjName.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent ke) {
-                if (ke.getKeyChar() == KeyEvent.VK_ENTER){
+                if (ke.getKeyChar() == KeyEvent.VK_ENTER) {
                     transferFocus();
                 }
             }
@@ -168,6 +169,13 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
         this.objName = objName;
         if (TFObjName != null) {
             TFObjName.setText(objName);
+        }
+    }
+
+    @Persist
+    public void Persist() {
+        if (objName == null) {
+            objName = "";
         }
     }
 }

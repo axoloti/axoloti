@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -136,4 +137,10 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
         }
     }
 
+    @Persist
+    public void Persist() {
+        if (tableName == null) {
+            tableName = "";
+        }
+    }
 }
