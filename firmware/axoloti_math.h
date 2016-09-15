@@ -116,7 +116,7 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t mtof48k_ext_q31(int
   return frequency;
 }
 
-__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t sin_q31(int32_t phase) {
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t sin_q31(int32_t phase) {
   uint32_t p = (uint32_t)(phase);
   uint32_t pi = p>>20;
   int32_t y1 = sine2t[pi];
