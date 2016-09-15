@@ -18,6 +18,7 @@
 package axoloti.atom;
 
 import axoloti.object.AxoObjectInstance;
+import java.util.List;
 
 /**
  *
@@ -35,5 +36,7 @@ public interface AtomDefinition {
 
     abstract public String getTypeName();
 
+    abstract public List<String> getEditableFields();
+    
 //    abstract public AtomDefinition Factory(String name);    
 }
