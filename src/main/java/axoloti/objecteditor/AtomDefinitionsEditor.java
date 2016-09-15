@@ -18,6 +18,7 @@
 package axoloti.objecteditor;
 
 import axoloti.atom.AtomDefinition;
+import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.ObjectModifiedListener;
@@ -207,7 +208,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
                 if (row < 0) {
                     return;
                 }
-                GetAtomDefinitions().remove(row);
+                if (jTable1.getRowCount() >= row) {
+                    GetAtomDefinitions().remove(row);
+                }
                 if (row > 0) {
                     jTable1.setRowSelectionInterval(row - 1, row - 1);
                 }
@@ -283,6 +286,10 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
 
             @Override
             public void setValueAt(Object value, int rowIndex, int columnIndex) {
+                AtomDefinition ad = GetAtomDefinition(rowIndex);
+                if (ad == null) {
+                    return;
+                }
 
                 switch (columnIndex) {
                     case 0:
@@ -312,7 +319,11 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
             }
 
             T GetAtomDefinition(int rowIndex) {
-                return GetAtomDefinitions().get(rowIndex);
+                if (rowIndex < GetAtomDefinitions().size()) {
+                    return GetAtomDefinitions().get(rowIndex);
+                } else {
+                    return null;
+                }
             }
 
             @Override
@@ -349,10 +360,14 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
                 if (row < 0) {
                     jButtonMoveUp.setEnabled(false);
                     jButtonMoveDown.setEnabled(false);
+                    jButtonRemove.setEnabled(false);
+                    jTable2.removeEditor();
                     UpdateTable2();
                 } else {
                     jButtonMoveUp.setEnabled(row > 0);
                     jButtonMoveDown.setEnabled(row < GetAtomDefinitions().size() - 1);
+                    jButtonRemove.setEnabled(true);
+                    jTable2.removeEditor();
                     UpdateTable2();
                 }
             }
@@ -422,8 +437,45 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
                             }
                         } else if (f.getType() == ValueInt32.class) {
                             try {
-                                ValueInt32 v = (ValueInt32) f.get(o);
+                                ValueInt32 v;
+                                v = (ValueInt32) f.get(o);
+                                if (v == null) {
+                                    v = new ValueInt32();
+                                    f.set(o, v);
+                                }
                                 v.setInt(Integer.parseInt((String) value));
+                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
+                            } catch (IllegalArgumentException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IllegalAccessException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else if (f.getType() == ValueFrac32.class) {
+                            try {
+                                if (value == null || ((String) value).isEmpty()) {
+                                    f.set(o, null);
+                                } else {
+                                    try {
+                                        Double d = Double.parseDouble((String) value);
+                                        ValueFrac32 v;
+                                        v = (ValueFrac32) f.get(o);
+                                        if (v == null) {
+                                            v = new ValueFrac32();
+                                            f.set(o, v);
+                                        }
+                                        v.setDouble(d);
+                                    } catch (java.lang.NumberFormatException e) {
+                                    }
+                                }
+                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
+                            } catch (IllegalArgumentException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IllegalAccessException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else if (f.getType() == String.class) {
+                            try {
+                                f.set(o, (String) value);
                                 AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -457,6 +509,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
                             } else if (v instanceof ValueInt32) {
                                 ValueInt32 vi = (ValueInt32) v;
                                 returnValue = String.valueOf(vi.getInt());
+                            } else if (v instanceof ValueFrac32) {
+                                ValueFrac32 vi = (ValueFrac32) v;
+                                returnValue = String.valueOf(vi.getDouble());
                             } else {
                                 returnValue = v.toString();
                             }
@@ -486,24 +541,20 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
     ArrayList<Field> fields = new ArrayList<Field>();
 
     void UpdateTable2() {
+        jButtonRemove.setEnabled(jTable1.getRowCount() > 0);
         fields.clear();
         int row = jTable1.getSelectedRow();
         if (row != -1 && (row < GetAtomDefinitions().size())) {
             o = GetAtomDefinitions().get(row);
             Class c = o.getClass();
-            Field fs[] = c.getDeclaredFields();
-            for (Field f : fs) {
-                Annotation annotations[] = f.getAnnotations();
-                for (Annotation a : annotations) {
-                    if (a.annotationType().getCanonicalName().equals("@java.lang.Deprecated")) {
-                        break;
-                    } else if (a.annotationType().getCanonicalName().equals("org.simpleframework.xml.Attribute")) {
-                        fields.add(f);
-                    } else if (a.annotationType().getCanonicalName().equals("org.simpleframework.xml.ElementList")) {
-                        fields.add(f);
-                    } else if (a.annotationType().getCanonicalName().equals("org.simpleframework.xml.Element")) {
-                        fields.add(f);
-                    }
+            for (String fn : o.getEditableFields()) {
+                try {
+                    Field f = c.getField(fn);
+                    fields.add(f);
+                } catch (NoSuchFieldException ex) {
+                    Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

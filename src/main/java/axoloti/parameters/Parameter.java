@@ -25,6 +25,8 @@ import generatedobjects.GeneratedObjects;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Attribute;
@@ -128,5 +130,10 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     @Override
     public Parameter clone() throws CloneNotSupportedException {
         return (Parameter) super.clone();
+    }
+
+    @Override
+    public List<String> getEditableFields() {
+        return new ArrayList<String>();
     }
 }

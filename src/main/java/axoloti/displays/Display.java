@@ -21,6 +21,8 @@ import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -99,5 +101,10 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     @Override
     public Display clone() throws CloneNotSupportedException {
         return (Display) super.clone();
-    }    
+    }
+
+    @Override
+    public List<String> getEditableFields() {
+        return new ArrayList<String>();
+    }
 }

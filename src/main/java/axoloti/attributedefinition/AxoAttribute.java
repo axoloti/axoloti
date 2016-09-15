@@ -26,6 +26,8 @@ import axoloti.attribute.AttributeInstance;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 
 public abstract class AxoAttribute implements AtomDefinition, Cloneable {
@@ -98,5 +100,10 @@ public abstract class AxoAttribute implements AtomDefinition, Cloneable {
     @Override
     public AxoAttribute clone() throws CloneNotSupportedException {
         return (AxoAttribute) super.clone();
+    }
+
+    @Override
+    public List<String> getEditableFields() {
+        return new ArrayList<String>();
     }
 }

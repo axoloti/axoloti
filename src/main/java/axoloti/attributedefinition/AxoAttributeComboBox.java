@@ -21,6 +21,7 @@ import axoloti.attribute.AttributeInstanceComboBox;
 import axoloti.object.AxoObjectInstance;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.simpleframework.xml.ElementList;
 
 /**
@@ -70,4 +71,13 @@ public class AxoAttributeComboBox extends AxoAttribute {
     public String getTypeName() {
         return TypeName;
     }
+
+    @Override
+    public List<String> getEditableFields() {
+        List l = super.getEditableFields();
+        l.add("MenuEntries");
+        l.add("CEntries");
+        return l;
+    }
+
 }

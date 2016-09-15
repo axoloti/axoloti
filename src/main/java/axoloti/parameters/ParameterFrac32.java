@@ -18,6 +18,7 @@
 package axoloti.parameters;
 
 import axoloti.datatypes.ValueFrac32;
+import java.util.List;
 import org.simpleframework.xml.Element;
 
 /**
@@ -40,5 +41,11 @@ public abstract class ParameterFrac32<T extends ParameterInstanceFrac32> extends
         super(name);
         this.DefaultValue = DefaultValue;
     }
-    
+
+    @Override
+    public List<String> getEditableFields() {
+        List l = super.getEditableFields();
+        l.add("DefaultValue");
+        return l;
+    }
 }

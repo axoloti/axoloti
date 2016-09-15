@@ -24,6 +24,8 @@ import axoloti.datatypes.SignalMetaData;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -98,5 +100,10 @@ public abstract class Outlet implements AtomDefinition, Cloneable {
     @Override
     public Outlet clone() throws CloneNotSupportedException {
         return (Outlet) super.clone();
+    }
+
+    @Override
+    public List<String> getEditableFields() {
+        return new ArrayList<String>();
     }
 }

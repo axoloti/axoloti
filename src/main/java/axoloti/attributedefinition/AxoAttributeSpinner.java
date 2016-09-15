@@ -19,6 +19,7 @@ package axoloti.attributedefinition;
 
 import axoloti.attribute.AttributeInstanceSpinner;
 import axoloti.object.AxoObjectInstance;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -67,4 +68,14 @@ public class AxoAttributeSpinner extends AxoAttribute {
     public String getTypeName() {
         return TypeName;
     }
+    
+    @Override
+    public List<String> getEditableFields(){
+        List l = super.getEditableFields();
+        l.add("MinValue");
+        l.add("MaxValue");
+        l.add("DefaultValue");
+        return l;
+    }
+    
 }
