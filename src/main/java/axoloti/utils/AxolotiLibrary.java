@@ -172,7 +172,7 @@ public class AxolotiLibrary {
     public String getBranch() {
         String branch = getRevision();
         if (branch == null || branch.length() == 0) {
-            if ((getId().equals(FACTORY_ID) || getId().equals(USER_LIBRARY_ID)) && !Axoloti.isDeveloper()) {
+            if ((getId().equals(FACTORY_ID) || getId().equals(USER_LIBRARY_ID))) {
                 branch = Version.AXOLOTI_SHORT_VERSION;
             } else {
                 branch = "master";
