@@ -39,7 +39,11 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -54,12 +58,14 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import javax.swing.BoundedRangeModel;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import org.simpleframework.xml.Serializer;
@@ -99,6 +105,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     JMenu favouriteMenu;
     boolean bGrabFocusOnSevereErrors = true;
 
+    private boolean doAutoScroll = true;
+
     /**
      * Creates new form MainFrame
      *
@@ -124,6 +132,41 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         StyleConstants.setForeground(styleSevere, Theme.getCurrentTheme().Error_Text);
         StyleConstants.setForeground(styleInfo, Theme.getCurrentTheme().Normal_Text);
         StyleConstants.setForeground(styleWarning, Theme.getCurrentTheme().Warning_Text);
+
+        DefaultCaret caret = (DefaultCaret) jTextPaneLog.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+        jScrollPaneLog.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+            BoundedRangeModel brm = jScrollPaneLog.getVerticalScrollBar().getModel();
+
+            @Override
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                // Invoked when user select and move the cursor of scroll by mouse explicitly.
+                if (!brm.getValueIsAdjusting()) {
+                    if (doAutoScroll) {
+                        brm.setValue(brm.getMaximum());
+                    }
+                } else {
+                    // doAutoScroll will be set to true when user reaches at the bottom of document.
+                    doAutoScroll = ((brm.getValue() + brm.getExtent()) == brm.getMaximum());
+                }
+            }
+        });
+
+        jScrollPaneLog.addMouseWheelListener(new MouseWheelListener() {
+            BoundedRangeModel brm = jScrollPaneLog.getVerticalScrollBar().getModel();
+
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                // Invoked when user use mouse wheel to scroll
+                if (e.getWheelRotation() < 0) {
+                    // If user trying to scroll up, doAutoScroll should be false.
+                    doAutoScroll = false;
+                } else {
+                    // doAutoScroll will be set to true when user reaches at the bottom of document.
+                    doAutoScroll = ((brm.getValue() + brm.getExtent()) == brm.getMaximum());
+                }
+            }
+        });
 
         Handler logHandler = new Handler() {
             @Override
@@ -158,7 +201,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                             }
                         }
                         if (lr.getLevel() == Level.SEVERE) {
-
+                            doAutoScroll = true;
                             jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
                                     txt + "\n", styleSevere);
                             if (bGrabFocusOnSevereErrors) {
@@ -175,8 +218,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (UnsupportedEncodingException ex) {
                     }
-                    jTextPaneLog.setCaretPosition(jTextPaneLog.getText().length());
-                    jTextPaneLog.validate();
                 }
             }
 
@@ -497,6 +538,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         getContentPane().add(jPanel2);
 
+        jScrollPaneLog.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         jScrollPaneLog.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         jTextPaneLog.setEditable(false);
