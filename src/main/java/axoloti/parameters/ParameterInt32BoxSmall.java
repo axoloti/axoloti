@@ -19,6 +19,7 @@ package axoloti.parameters;
 
 import axoloti.datatypes.ValueInt32;
 import java.security.MessageDigest;
+import java.util.List;
 import org.simpleframework.xml.Element;
 
 /**
@@ -62,5 +63,13 @@ public class ParameterInt32BoxSmall extends Parameter<ParameterInstanceInt32BoxS
     @Override
     public String getTypeName() {
         return TypeName;
+    }
+
+    @Override
+    public List<String> getEditableFields() {
+        List l = super.getEditableFields();
+        l.add("MinValue");
+        l.add("MaxValue");
+        return l;
     }
 }

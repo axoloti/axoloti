@@ -19,6 +19,7 @@ package axoloti.parameters;
 
 import axoloti.datatypes.ValueInt32;
 import java.security.MessageDigest;
+import java.util.List;
 import org.simpleframework.xml.Element;
 
 /**
@@ -56,5 +57,12 @@ public class ParameterInt32VRadio extends Parameter<ParameterInstanceInt32VRadio
     @Override
     public String getTypeName() {
         return TypeName;
+    }
+
+    @Override
+    public List<String> getEditableFields() {
+        List l = super.getEditableFields();
+        l.add("MaxValue");
+        return l;
     }
 }
