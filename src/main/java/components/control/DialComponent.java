@@ -108,7 +108,10 @@ public class DialComponent extends ACtrlComponent {
                 } else {
 
                     double t = tick;
-                    if (e.isShiftDown() || KeyUtils.isControlOrCommandDown(e)) {
+                    if (KeyUtils.isControlOrCommandDown(e)) {
+                        t = t * 0.1;
+                    }
+                    if (e.isShiftDown()) {
                         t = t * 0.1;
                     }
                     v = value + t * ((int) Math.round((MousePressedCoordY - e.getYOnScreen())));
