@@ -93,7 +93,11 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     public void applyDefaultValue() {
         if (((ParameterFrac32) parameter).DefaultValue != null) {
             value.setRaw(((ParameterFrac32) parameter).DefaultValue.getRaw());
+        } else {
+            value.setRaw(0);
         }
+        updateV();
+        needsTransmit = true;
     }
 
     @Override
