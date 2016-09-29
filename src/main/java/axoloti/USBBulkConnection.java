@@ -26,6 +26,7 @@ import static axoloti.dialogs.USBPortSelectionDlg.ErrorString;
 import axoloti.displays.DisplayInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.targetprofile.axoloti_core;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
@@ -129,17 +130,15 @@ public class USBBulkConnection extends Connection {
                 sync.notifyAll();
             }
 
-            try {
-                if (receiverThread.isAlive()) {
+            if (receiverThread.isAlive()){
+                receiverThread.interrupt();
+                try {
                     receiverThread.join();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                if (transmitterThread.isAlive()) {
-                    transmitterThread.join();
-                }
-            } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
             int result = LibUsb.releaseInterface(handle, interfaceNumber);
             if (result != LibUsb.SUCCESS) {
                 throw new LibUsbException("Unable to release interface", result);
@@ -249,8 +248,6 @@ public class USBBulkConnection extends Connection {
             }
 
             GoIdleState();
-            TransmitPing();
-            TransmitPing();
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "creating rx and tx thread...");
             transmitterThread = new Thread(new Transmitter());
             transmitterThread.setName("Transmitter");
@@ -282,9 +279,6 @@ public class USBBulkConnection extends Connection {
                 Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
             QCmdProcessor qcmdp = MainFrame.mainframe.getQcmdprocessor();
-
-            qcmdp.AppendToQueue(new QCmdStop());
-            qcmdp.WaitQueueFinished();
 
             qcmdp.AppendToQueue(new QCmdTransmitGetFWVersion());
             try {
@@ -388,12 +382,16 @@ public class USBBulkConnection extends Connection {
         }
     }
 
+    static final byte OUT_ENDPOINT = 0x02;
+    static final byte IN_ENDPOINT = (byte) 0x82;
+    static final int TIMEOUT = 1000;
+
     @Override
     public void writeBytes(byte[] data) {
         ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
         buffer.put(data);
         IntBuffer transfered = IntBuffer.allocate(1);
-        int result = LibUsb.bulkTransfer(handle, (byte) 0x02, buffer, transfered, 1000);
+        int result = LibUsb.bulkTransfer(handle, (byte) OUT_ENDPOINT, buffer, transfered, 1000);
         if (result != LibUsb.SUCCESS) {
             Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Control transfer failed: {0}", result);
         }
@@ -829,7 +827,7 @@ public class USBBulkConnection extends Connection {
             ByteBuffer recvbuffer = ByteBuffer.allocateDirect(32768);
             IntBuffer transfered = IntBuffer.allocate(1);
             while (!disconnectRequested) {
-                int result = LibUsb.bulkTransfer(handle, (byte) 0x82, recvbuffer, transfered, 1000);
+                int result = LibUsb.bulkTransfer(handle, (byte) IN_ENDPOINT, recvbuffer, transfered, 1000);
                 if (result != LibUsb.SUCCESS) {
                     //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receive: " + result);
                 }
@@ -874,19 +872,25 @@ public class USBBulkConnection extends Connection {
     int CpuId2 = 0;
     int fwcrc = -1;
 
-    void Acknowledge(int DSPLoad, int PatchID, int Voltages, int CpuId1, int CpuId2) {
+    void Acknowledge(final int DSPLoad, final int PatchID, final int Voltages, final int patchIndex, int reserved) {
         synchronized (sync) {
             sync.Acked = true;
             sync.notifyAll();
         }
-        if (patch != null) {
-            if ((patch.GetIID() != PatchID) && patch.IsLocked()) {
-                patch.Unlock();
-            } else {
-                patch.SetDSPLoad(DSPLoad);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (patch != null) {
+                    if ((patch.GetIID() != PatchID) && patch.IsLocked()) {
+                        patch.Unlock();
+                    } else {
+                        patch.SetDSPLoad(DSPLoad);
+                    }
+                }
+                MainFrame.mainframe.showPatchIndex(patchIndex);
+                targetProfile.setVoltages(Voltages);
             }
-        }
-        targetProfile.setVoltages(Voltages);
+        });
     }
 
     void RPacketParamChange(final int index, final int value, final int patchID) {
@@ -1011,18 +1015,32 @@ public class USBBulkConnection extends Connection {
         }
     }
 
-    void DistributeToDisplays() {
+    void DistributeToDisplays(final ByteBuffer dispData) {
 //        Logger.getLogger(SerialConnection.class.getName()).info("Distr1");
-        if (patch == null) {
-            return;
-        }
-        if (patch.DisplayInstances == null) {
-            return;
-        }
-//        Logger.getLogger(SerialConnection.class.getName()).info("Distr2");
-        dispData.rewind();
-        for (DisplayInstance d : patch.DisplayInstances) {
-            d.ProcessByteBuffer(dispData);
+        try {
+            if (patch == null) {
+                return;
+            }
+            if (!patch.IsLocked()) {
+                return;
+            }
+            if (patch.DisplayInstances == null) {
+                return;
+            }
+            //        Logger.getLogger(SerialConnection.class.getName()).info("Distr2");
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    dispData.rewind();
+                    for (DisplayInstance d : patch.DisplayInstances) {
+                        d.ProcessByteBuffer(dispData);
+                    }
+                }
+            });
+        } catch (InterruptedException ex) {
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1189,7 +1207,7 @@ public class USBBulkConnection extends Connection {
                     dataIndex++;
                 }
                 if (dataIndex == dataLength) {
-                    DistributeToDisplays();
+                    DistributeToDisplays(dispData);
                     GoIdleState();
                 }
                 break;
@@ -1200,7 +1218,7 @@ public class USBBulkConnection extends Connection {
                     //textRcvBuffer.append((char) cc);
                     textRcvBuffer.limit(textRcvBuffer.position());
                     textRcvBuffer.rewind();
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Axoloti says: {0}", textRcvBuffer.toString());
+                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
                     GoIdleState();
                 }
                 break;

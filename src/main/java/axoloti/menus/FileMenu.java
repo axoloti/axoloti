@@ -25,9 +25,9 @@ import axoloti.PatchGUI;
 import axoloti.dialogs.PatchBank;
 import axoloti.dialogs.PreferencesFrame;
 import axoloti.utils.AxolotiLibrary;
+import axoloti.utils.KeyUtils;
 import axoloti.utils.Preferences;
 import generatedobjects.GeneratedObjects;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
@@ -79,7 +79,7 @@ public class FileMenu extends JMenu {
         jMenuAutoTest = new JMenuItem();
 
         jMenuNewPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+                KeyUtils.CONTROL_OR_CMD_MASK));
         jMenuNewPatch.setText("New patch");
         jMenuNewPatch.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -99,7 +99,7 @@ public class FileMenu extends JMenu {
         insert(jMenuNewBank, pos++);
 
         jMenuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+                KeyUtils.CONTROL_OR_CMD_MASK));
         jMenuOpen.setText("Open...");
         jMenuOpen.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -177,7 +177,7 @@ public class FileMenu extends JMenu {
         add(jSeparator1);
 
         jMenuQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
-                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+                KeyUtils.CONTROL_OR_CMD_MASK));
         jMenuQuit.setText("Quit");
         jMenuQuit.addActionListener(new java.awt.event.ActionListener() {
             @Override

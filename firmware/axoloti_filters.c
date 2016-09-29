@@ -73,15 +73,7 @@ void f_filter_biquad_A(data_filter_biquad_A *v, const int32_t *sourcebuf,
                        int32_t *destbuf, uint32_t filter_W0, uint32_t q_inv) {
 // reference http://www.musicdsp.org/files/Audio-EQ-Cookbook.txt
 // LPF
-  if (filter_W0 > (INT32_MAX / 4))
-    filter_W0 = INT32_MAX / 4;
-//    filter_W0 = filter_W0<<2;
-  /*
-   int32_t sinW0 = arm_sin_q31(filter_W0);
-   int32_t cosW0 = arm_cos_q31(filter_W0);
-   int32_t sinW0 = fsini(filter_W0);
-   int32_t cosW0 = fsini(filter_W0+(INT32_MAX>>2));
-   */
+// warning: filter_W0 values above 0x50000000 produce unstable results
 
   int32_t sinW0; // = arm_sin_q31(filter_W0);
   int32_t cosW0; // = arm_cos_q31(filter_W0);
@@ -126,57 +118,4 @@ void f_filter_biquad_A(data_filter_biquad_A *v, const int32_t *sourcebuf,
   v->filter_y_n2 = filter_y_n2;
 }
 
-void init_filter_biquad_S(data_filter_biquad_S *d, uint32_t filter_W0,
-                          uint32_t q_inv) {
-  if (filter_W0 > (INT32_MAX / 4))
-    filter_W0 = INT32_MAX / 4;
-//    filter_W0 = filter_W0<<2;
 
-  int32_t sinW0 = arm_sin_q31(filter_W0);
-  int32_t cosW0 = arm_cos_q31(filter_W0);
-//    int32_t sinW0 = fsini(filter_W0);
-//    int32_t cosW0 = fsini(filter_W0+(INT32_MAX>>2));
-  int32_t alpha = ___SMMUL(sinW0, q_inv);
-//    int32_t alpha = sinW0>>8;
-  float filter_a0 = (HALFQ31 + alpha);
-  float filter_a0_inv = ((INT32_MAX >> 2) / filter_a0);
-  int32_t a0_inv_q31 = (int32_t)(INT32_MAX * filter_a0_inv);
-  d->filter_a1 = ___SMMUL(-(-cosW0), a0_inv_q31); // negated
-  d->filter_a2 = ___SMMUL(-(HALFQ31 - alpha), a0_inv_q31); // negated
-  d->filter_b0 = ___SMMUL(HALFQ31 - (cosW0 >> 1), a0_inv_q31);
-  d->filter_b1 = (d->filter_b0 >> 1);
-}
-
-void f_filter_biquad_S(data_filter_biquad_S *v, int32_t *sourcebuf,
-                       int32_t *destbuf) {
-// reference http://www.musicdsp.org/files/Audio-EQ-Cookbook.txt
-// LPF
-  register int32_t filter_x_n1 = v->filter_x_n1;
-  register int32_t filter_x_n2 = v->filter_x_n2;
-  register int32_t filter_y_n1 = v->filter_y_n1;
-  register int32_t filter_y_n2 = v->filter_y_n2;
-  register int32_t filter_a1 = v->filter_a1;
-  register int32_t filter_a2 = v->filter_a2;
-  register int32_t filter_b0 = v->filter_b0;
-  register int32_t filter_b1 = v->filter_b1;
-  int i;
-  for (i = 0; i < BUFSIZE; i++) {
-    int32_t filterinput = *(sourcebuf++);
-    int32_t accu = ___SMMUL(filter_b0, filterinput);
-    accu = ___SMMLA(filter_b0, filter_x_n2, accu);
-    accu = ___SMMLA(filter_b1, filter_x_n1, accu);
-    accu = ___SMMLA(filter_a1, filter_y_n1, accu);
-    accu = ___SMMLA(filter_a2, filter_y_n2, accu);
-    int32_t filteroutput;
-    filteroutput = __SSAT(accu, 28) << 4;
-    filter_x_n2 = filter_x_n1;
-    filter_x_n1 = filterinput;
-    filter_y_n2 = filter_y_n1;
-    filter_y_n1 = filteroutput;
-    *(destbuf++) = filteroutput;
-  }
-  v->filter_x_n1 = filter_x_n1;
-  v->filter_x_n2 = filter_x_n2;
-  v->filter_y_n1 = filter_y_n1;
-  v->filter_y_n2 = filter_y_n2;
-}

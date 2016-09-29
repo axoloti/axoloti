@@ -18,7 +18,6 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.ZoomUtils;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -68,6 +67,7 @@ public class VGraphComponent extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -100,7 +100,7 @@ public class VGraphComponent extends JComponent {
         for (int i = 0; i < length; i++) {
             this.ypoints[i] = valToPos(value[i]);
         }
-        ZoomUtils.paintObjectLayer(this);
+        repaint();
     }
 
     public double getMinimum() {

@@ -26,8 +26,6 @@ import components.JackInputComponent;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
 import java.awt.Dimension;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragSource;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
@@ -45,8 +43,6 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
 
     private final T inlet;
 
-    InletInstancePopupMenu popup = new InletInstancePopupMenu(this);
-
     public String getInletname() {
         if (inletname != null) {
             return inletname;
@@ -59,11 +55,6 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
     @Override
     public T GetDefinition() {
         return inlet;
-    }
-
-    @Override
-    public String dragString() {
-        return axoObj.getInstanceName() + "::" + inlet.name;
     }
 
     public InletInstance() {
@@ -79,7 +70,7 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
         PostConstructor();
     }
 
-    public void RefreshName() {
+    public final void RefreshName() {
         name = axoObj.getInstanceName() + " " + inlet.name;
         objname = axoObj.getInstanceName();
         inletname = inlet.name;
@@ -112,19 +103,10 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
             add(new LabelComponent(inlet.name));
         }
         add(Box.createHorizontalGlue());
-        setComponentPopupMenu(popup);
         setToolTipText(inlet.description);
 
-        DragSource ds = new DragSource();
-
-        ds.createDefaultDragGestureRecognizer(this,
-                DnDConstants.ACTION_LINK, new DragGestureListImp());
-
-        dt = createDropTarget();
-
-        addMouseListener(createMouseListener());
-        
-        addComponentListener(createComponentListener());
+        addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
     public Inlet getInlet() {
@@ -133,6 +115,6 @@ public class InletInstance<T extends Inlet> extends IoletAbstract implements Ato
 
     @Override
     public JPopupMenu getPopup() {
-        return popup;
+        return new InletInstancePopupMenu(this);
     }
 }

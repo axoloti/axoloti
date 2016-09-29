@@ -25,8 +25,6 @@ import axoloti.object.AxoObjectInstance;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
 import java.awt.Dimension;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragSource;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
@@ -44,8 +42,6 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
 
     private final T outlet;
 
-    OutletInstancePopupMenu popup = new OutletInstancePopupMenu(this);
-
     public String getOutletname() {
         if (outletname != null) {
             return outletname;
@@ -60,11 +56,6 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
         return outlet;
     }
 
-    @Override
-    public String dragString() {
-        return axoObj.getInstanceName() + "::" + outlet.name;
-    }
-
     public OutletInstance() {
         this.outlet = null;
         this.axoObj = null;
@@ -77,7 +68,7 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
         PostConstructor();
     }
 
-    public void RefreshName() {
+    public final void RefreshName() {
         name = axoObj.getInstanceName() + " " + outlet.name;
         objname = axoObj.getInstanceName();
         outletname = outlet.name;
@@ -109,22 +100,15 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
         jack = new components.JackOutputComponent(this);
         jack.setForeground(outlet.getDatatype().GetColor());
         add(jack);
-        setComponentPopupMenu(popup);
         setToolTipText(outlet.description);
-        DragSource ds = new DragSource();
-        ds.createDefaultDragGestureRecognizer(this,
-                DnDConstants.ACTION_LINK, new DragGestureListImp());
 
-        dt = createDropTarget();
-
-        addMouseListener(createMouseListener());
-        
-        addComponentListener(createComponentListener());
+        addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
     @Override
     public JPopupMenu getPopup() {
-        return popup;
+        return new OutletInstancePopupMenu(this);
     }
 
     @Override

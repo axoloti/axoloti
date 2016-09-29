@@ -4,7 +4,7 @@
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="axoloti.menus.FileMenu" name="fileMenu1">
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
           </Properties>
@@ -133,6 +133,7 @@
     <Component class="javax.swing.JButton" name="jButton1Refresh">
       <Properties>
         <Property name="text" type="java.lang.String" value="Refresh"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1RefreshActionPerformed"/>
@@ -146,6 +147,7 @@
     <Component class="javax.swing.JButton" name="jButtonUpload">
       <Properties>
         <Property name="text" type="java.lang.String" value="Upload..."/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonUploadActionPerformed"/>
@@ -154,6 +156,7 @@
     <Component class="javax.swing.JButton" name="jButtonDelete">
       <Properties>
         <Property name="text" type="java.lang.String" value="Delete"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonDeleteActionPerformed"/>
@@ -162,6 +165,7 @@
     <Component class="javax.swing.JButton" name="jButtonCreateDir">
       <Properties>
         <Property name="text" type="java.lang.String" value="Create directory..."/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonCreateDirActionPerformed"/>

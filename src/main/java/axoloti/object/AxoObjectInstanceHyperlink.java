@@ -78,7 +78,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
             if (f.canRead()) {
                 PatchGUI.OpenPatch(f);
             } else {
-                Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, "can''t read file {0}", f.getAbsolutePath());                
+                Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, "can''t read file {0}", f.getAbsolutePath());
             }
         }
     }
@@ -96,6 +96,14 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
                     Lauch();
                 }
             }
+
+            @Override
+            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+            }
+
+            @Override
+            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+            }
         });
         add(button);
         add(Box.createHorizontalStrut(5));
@@ -106,27 +114,18 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     addInstanceNameEditor();
-                }
-                if (patch != null) {
-                    if (e.getClickCount() == 1) {
-                        if (e.isShiftDown()) {
-                            SetSelected(!GetSelected());
-                        } else if (Selected == false) {
-                            ((PatchGUI) patch).SelectNone();
-                            SetSelected(true);
-                        }
-                    }
+                    e.consume();
                 }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                ml.mousePressed(e);
+                AxoObjectInstanceHyperlink.this.mousePressed(e);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                ml.mouseReleased(e);
+                AxoObjectInstanceHyperlink.this.mouseReleased(e);
             }
 
             @Override
@@ -137,8 +136,9 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
             public void mouseExited(MouseEvent e) {
             }
         });
-        InstanceLabel.addMouseMotionListener(mml);
+        InstanceLabel.addMouseMotionListener(this);
         add(InstanceLabel);
+        setLocation(x, y);
 
         resizeToGrid();
     }

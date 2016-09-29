@@ -44,7 +44,9 @@ public class PopupIcon extends JComponent implements MouseListener {
 
     public PopupIcon() {
         setMinimumSize(minsize);
+        setPreferredSize(maxsize);
         setMaximumSize(maxsize);
+        setSize(minsize);
         addMouseListener(this);
     }
 
@@ -54,6 +56,7 @@ public class PopupIcon extends JComponent implements MouseListener {
 
     @Override
     protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);

@@ -55,6 +55,7 @@ public class VLineComponent extends ADispComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -76,9 +77,10 @@ public class VLineComponent extends ADispComponent {
         if (value < min) {
             value = min;
         }
-        this.value = value;
-        
-        paintObjectLayer();
+        if (this.value != value) {
+            this.value = value;
+            repaint();
+        }
     }
 
     public void setMinimum(double min) {

@@ -40,7 +40,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
 
     T attr;
 
-    private AxoObjectInstance axoObj;
+    AxoObjectInstance axoObj;
     LabelComponent lbl;
 
     public AttributeInstance() {
@@ -56,9 +56,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(new LabelComponent(GetDefinition().getName()));
-        doLayout();
         setSize(getPreferredSize());
-        doLayout();
     }
 
     @Override
@@ -90,5 +88,15 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
 
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         return null;
+    }
+
+    public void Close() {
+    }
+
+    void SetDirty() {
+        // propagate dirty flag to patch if there is one
+        if (axoObj.getPatch() != null) {
+            axoObj.getPatch().SetDirty();
+        }
     }
 }

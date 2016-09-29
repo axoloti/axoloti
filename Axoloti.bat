@@ -46,7 +46,7 @@ if not defined JAVAHOME (
 echo JavaHome: %JAVAHOME%
 
 set PATH=%JAVAHOME%\bin
-java -jar dist/axoloti.jar
+java -jar dist/axoloti.jar %*
 
 :end
 endlocal

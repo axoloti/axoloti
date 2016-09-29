@@ -19,7 +19,6 @@ package axoloti.parameters;
 
 import axoloti.Preset;
 import axoloti.Theme;
-import axoloti.ZoomUtils;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
@@ -32,7 +31,6 @@ import components.control.ACtrlComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -157,16 +155,29 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
                 boolean changed = handleAdjustment();
-                if (axoObj != null && changed) {
-                    if (axoObj.getPatch() != null) {
-                        axoObj.getPatch().SetDirty();
-                    }
+            }
+
+            @Override
+            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+                valueBeforeAdjustment = getControlComponent().getValue();
+                //System.out.println("begin "+value_before);
+            }
+
+            @Override
+            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+                if ((valueBeforeAdjustment != getControlComponent().getValue())
+                        && (axoObj != null)
+                        && (axoObj.getPatch() != null)) {
+                    //System.out.println("finished" +getControlComponent().getValue());
+                    SetDirty();
                 }
             }
         });
         updateV();
         SetMidiCC(MidiCC);
     }
+
+    double valueBeforeAdjustment;
 
     public void applyDefaultValue() {
     }
@@ -266,9 +277,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
 
     public void setValue(Value value) {
         if (axoObj != null) {
-            if (axoObj.getPatch() != null) {
-                axoObj.getPatch().SetDirty();
-            }
+            SetDirty();
         }
     }
 
@@ -437,8 +446,7 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public void doPopup(MouseEvent e) {
         JPopupMenu m = new JPopupMenu();
         populatePopup(m);
-
-        ZoomUtils.showZoomedPopupMenu(this, axoObj, m);
+        m.show(this, 0, getHeight());
     }
 
     public void populatePopup(JPopupMenu m) {
@@ -451,11 +459,12 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
                 setOnParent(m_onParent.isSelected());
             }
         });
-
-        JMenu m_preset = new JMenu("Preset");
-        // AssignPresetMenuItems, does stuff in ctor
-        AssignPresetMenuItems assignPresetMenuItems = new AssignPresetMenuItems(this, m_preset);
-        m.add(m_preset);
+        if (GetObjectInstance().getPatch() != null) {
+            JMenu m_preset = new JMenu("Preset");
+            // AssignPresetMenuItems, does stuff in ctor
+            AssignPresetMenuItems assignPresetMenuItems = new AssignPresetMenuItems(this, m_preset);
+            m.add(m_preset);
+        }
     }
 
     /**
@@ -493,9 +502,15 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         String s = e.getActionCommand();
         if (s.startsWith("CC")) {
             int i = Integer.parseInt(s.substring(2));
-            SetMidiCC(i);
+            if (i != getMidiCC()) {
+                SetMidiCC(i);
+                SetDirty();
+            }
         } else if (s.equals("none")) {
-            SetMidiCC(-1);
+            if (-1 != getMidiCC()) {
+                SetMidiCC(-1);
+                SetDirty();
+            }
         }
     }
 
@@ -513,8 +528,10 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
         return "";
     }
 
-    @Override
-    public Point getToolTipLocation(MouseEvent event) {
-        return ZoomUtils.getToolTipLocation(this, event, axoObj);
+    public void SetDirty() {
+        // propagate dirty flag to patch if there is one
+        if (axoObj.getPatch() != null) {
+            axoObj.getPatch().SetDirty();
+        }
     }
 }

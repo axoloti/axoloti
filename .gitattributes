@@ -1,4 +1,4 @@
-*Makefile binary
+Makefile eol=lf
 
 * text=auto
 *.c text 

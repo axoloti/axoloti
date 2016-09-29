@@ -19,8 +19,6 @@
 #include "ch.h"
 #include "hal.h"
 #include "chprintf.h"
-#include "shell.h"
-#include "string.h"
 #include "ui.h"
 #include "axoloti_control.h"
 #include "axoloti_board.h"
@@ -109,39 +107,6 @@ void DispayAbortErr(int err) {
 }
 
 int main(void) {
-
-  DMA1_Stream0->CR=0;
-  DMA1_Stream1->CR=0;
-  DMA1_Stream2->CR=0;
-  DMA1_Stream3->CR=0;
-  DMA1_Stream4->CR=0;
-  DMA1_Stream5->CR=0;
-  DMA1_Stream6->CR=0;
-  DMA1_Stream7->CR=0;
-
-  DMA2_Stream0->CR=0;
-  DMA2_Stream1->CR=0;
-  DMA2_Stream2->CR=0;
-  DMA2_Stream3->CR=0;
-  DMA2_Stream4->CR=0;
-  DMA2_Stream5->CR=0;
-  DMA2_Stream6->CR=0;
-  DMA2_Stream7->CR=0;
-
-  palClearPad(GPIOD,7); // disable USBH power
-
-  // copy vector table
-  memcpy((char *)0x20000000, (const char *)&_vectors, 0x200);
-  // remap SRAM1 to 0x00000000
-  SYSCFG->MEMRMP |= 0x03;
-
-//  FMC_SDRAMDeInit(0);
-//  RCC->AHB3RSTR |= 1; //RCC_AHB3RSTR_FMCRST
-  RCC->AHB3ENR |= 1; //RCC_AHB3ENR_FMCEN;
-
-//  HAL_DeInit();
-//  HAL_Init();
-
   watchdog_feed();
   halInit();
 

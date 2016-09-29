@@ -57,7 +57,7 @@
 /*===========================================================================*/
 
 
-#define ENABLE_SERIAL_DEBUG 1
+//#define ENABLE_SERIAL_DEBUG 1
 
 #ifdef ENABLE_USB_HOST
 #if (BOARD_AXOLOTI_V03)
@@ -115,8 +115,6 @@ int main(void) {
 
   InitPConnection();
 
-  InitPWM();
-
   // display SPI CS?
   palSetPadMode(GPIOC, 1, PAL_MODE_OUTPUT_PUSHPULL);
   palSetPad(GPIOC, 1);
@@ -133,22 +131,21 @@ int main(void) {
    is_master = palReadPad(GPIOB, GPIOB_PIN10);
 #endif
   codec_init(is_master);
+  adc_init();
+  axoloti_math_init();
+  midi_init();
+  start_dsp_thread();
 
   if (!palReadPad(SW2_PORT, SW2_PIN)) { // button S2 not pressed
 //    watchdog_init();
     chThdSleepMilliseconds(1);
   }
-  start_dsp_thread();
-  adc_init();
-  axoloti_math_init();
-  midi_init();
 
 #if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
-//  axoloti_control_init();
+  axoloti_control_init();
   spilink_init(is_master);
 #endif
   ui_init();
-  StartLoadPatchTread();
 
 #if (BOARD_AXOLOTI_V05)
   configSDRAM();
@@ -176,14 +173,9 @@ int main(void) {
 
     // if no patch booting or running yet
     // try loading from flash
-    if (patchStatus) {
-      // patch in flash sector 11
-      memcpy((uint8_t *)PATCHMAINLOC, (uint8_t *)PATCHFLASHLOC, PATCHFLASHSIZE);
-      if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
-          && (*(uint32_t *)PATCHMAINLOC != 0)) {
-        if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
-          StartPatch();
-      }
+    if (patchStatus != RUNNING) {
+      if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
+        LoadPatchStartFlash();
     }
   }
 

@@ -59,8 +59,6 @@ public class VSliderComponent extends ACtrlComponent {
         this.value = value;
         this.tick = tick;
 
-
-
         setPreferredSize(dim);
         setMaximumSize(dim);
         setMinimumSize(dim);
@@ -88,7 +86,7 @@ public class VSliderComponent extends ACtrlComponent {
     @Override
     protected void mouseDragged(MouseEvent e) {
         if (isEnabled()) {
-            double v = value + tick * ((int) Math.round((py - e.getYOnScreen()) / getScale()));
+            double v = value + tick * ((int) Math.round((py - e.getYOnScreen())));
             robotMoveToCenter();
             setValue(v);
         }
@@ -96,15 +94,21 @@ public class VSliderComponent extends ACtrlComponent {
 
     @Override
     protected void mousePressed(MouseEvent e) {
-        grabFocus();
-
-        px = e.getXOnScreen();
-        py = e.getYOnScreen();
-        getRootPane().setCursor(MainFrame.transparentCursor);
+        if (!e.isPopupTrigger()) {
+            grabFocus();
+            px = e.getXOnScreen();
+            py = e.getYOnScreen();
+            getRootPane().setCursor(MainFrame.transparentCursor);
+            e.consume();
+            fireEventAdjustmentBegin();
+        }
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
+        if (!e.isPopupTrigger()) {
+            fireEventAdjustmentFinished();
+        }
         getRootPane().setCursor(Cursor.getDefaultCursor());
     }
 
@@ -117,45 +121,60 @@ public class VSliderComponent extends ACtrlComponent {
         switch (ke.getKeyCode()) {
             case KeyEvent.VK_UP:
             case KeyEvent.VK_RIGHT:
+                fireEventAdjustmentBegin();
                 setValue(getValue() + steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_LEFT:
+                fireEventAdjustmentBegin();
                 setValue(getValue() - steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_PAGE_UP:
+                fireEventAdjustmentBegin();
                 setValue(getValue() + 5 * steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_PAGE_DOWN:
+                fireEventAdjustmentBegin();
                 setValue(getValue() - 5 * steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_HOME:
+                fireEventAdjustmentBegin();
                 setValue(max);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case KeyEvent.VK_END:
+                fireEventAdjustmentBegin();
                 setValue(min);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case KeyEvent.VK_ENTER:
+                fireEventAdjustmentBegin();
                 try {
                     setValue(Float.parseFloat(keybBuffer));
                 } catch (java.lang.NumberFormatException ex) {
                 }
+                fireEventAdjustmentFinished();
                 keybBuffer = "";
                 ke.consume();
+                repaint();
                 break;
             case KeyEvent.VK_BACK_SPACE:
-                keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
+                if (keybBuffer.length() > 0) {
+                    keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
+                }
                 ke.consume();
+                repaint();
                 break;
             case KeyEvent.VK_ESCAPE:
                 keybBuffer = "";
                 ke.consume();
+                repaint();
                 break;
             default:
         }
@@ -174,6 +193,7 @@ public class VSliderComponent extends ACtrlComponent {
             case '.':
                 keybBuffer += ke.getKeyChar();
                 ke.consume();
+                repaint();
                 break;
             default:
         }
@@ -181,6 +201,20 @@ public class VSliderComponent extends ACtrlComponent {
 
     @Override
     void keyReleased(KeyEvent ke) {
+        if (isEnabled()) {
+            switch (ke.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_PAGE_UP:
+                case KeyEvent.VK_PAGE_DOWN:
+                    fireEventAdjustmentFinished();
+                    ke.consume();
+                    break;
+                default:
+            }
+        }
     }
 
     final int margin = 2;
@@ -194,6 +228,7 @@ public class VSliderComponent extends ACtrlComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -243,6 +278,7 @@ public class VSliderComponent extends ACtrlComponent {
         }
         this.value = value;
         setToolTipText("" + value);
+        repaint();
         fireEvent();
     }
 
@@ -266,7 +302,7 @@ public class VSliderComponent extends ACtrlComponent {
     public double getMaximum() {
         return max;
     }
-    
+
     @Override
     public void robotMoveToCenter() {
         getRootPane().setCursor(MainFrame.transparentCursor);

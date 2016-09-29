@@ -127,9 +127,9 @@ public class ButtonComponent extends JComponent implements MouseInputListener, K
 
     @Override
     public void paintComponent(Graphics g) {
-        final int radius = 12;
-
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        final int radius = 12;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,

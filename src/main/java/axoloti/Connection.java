@@ -50,6 +50,11 @@ public abstract class Connection {
     private ArrayList<ConnectionStatusListener> csls = new ArrayList<ConnectionStatusListener>();
 
     public void addConnectionStatusListener(ConnectionStatusListener csl) {
+        if (isConnected()) {
+            csl.ShowConnect();
+        } else {
+            csl.ShowDisconnect();            
+        }
         csls.add(csl);
     }
 

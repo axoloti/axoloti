@@ -18,7 +18,6 @@
 #ifndef _AXOLOTI_FILTERS_H
 #define _AXOLOTI_FILTERS_H
 
-#define ONEQ31 (1<<31)
 #define HALFQ31 (1<<30)
 #include "axoloti_defines.h"
 #include "axoloti_math.h"
@@ -37,28 +36,6 @@ void init_filter_biquad_A(data_filter_biquad_A *d);
 void f_filter_biquad_A(data_filter_biquad_A *v, const int32_t *sourcebuf,
                        int32_t *destbuf, uint32_t filter_W0, uint32_t q_inv);
 
-// biquad_S : static biquad
-
-typedef struct {
-  int32_t filter_x_n1;
-  int32_t filter_x_n2;
-  int32_t filter_y_n1;
-  int32_t filter_y_n2;
-  int32_t filter_a1;
-  int32_t filter_a2;
-  int32_t filter_b0;
-  int32_t filter_b1;
-} data_filter_biquad_S;
-
-#define process_filter_biquad_S(name, sourcebuf, destbuf) \
-  f_filter_biquad_S(name,sourcebuf,destbuf);
-
-void init_filter_biquad_S(data_filter_biquad_S *d, uint32_t filter_W0,
-                          uint32_t q_inv);
-void f_filter_biquad_S(data_filter_biquad_S *v, int32_t *sourcebuf,
-                       int32_t *destbuf);
-
-//// new filter
 typedef struct {
   int32_t filter_x_n1;
   int32_t filter_x_n2;
@@ -120,9 +97,6 @@ static __attribute__ ((noinline)) void biquad_dsp(biquad_state *state,
 static __attribute__ ((noinline)) void biquad_lp_coefs(
     biquad_coefficients *coefs, uint32_t filter_W0, uint32_t q_inv) {
   filter_W0 = filter_W0 >> 1;
-  if (filter_W0 > (INT32_MAX / 4))
-    filter_W0 = INT32_MAX / 4;
-//    filter_W0 = filter_W0<<2;
   int32_t sinW0 = arm_sin_q31(filter_W0);
   int32_t cosW0 = arm_cos_q31(filter_W0);
 //    int32_t sinW0 = fsini(filter_W0);
@@ -153,15 +127,11 @@ static __attribute__ ((noinline)) void biquad_lp_coefs(
  } biquad_coefficients;
  */
 
-void __attribute__ ((noinline)) biquad_bp_coefs(biquad_coefficients *coefs,
+static void __attribute__ ((noinline)) biquad_bp_coefs(biquad_coefficients *coefs,
                                                 uint32_t filter_W0,
                                                 uint32_t q_inv) {
 //  (constant 0 dB peak gain)
   filter_W0 = filter_W0 >> 1;
-  if (filter_W0 > (INT32_MAX / 4))
-    filter_W0 = INT32_MAX / 4;
-//    filter_W0 = filter_W0<<2;
-
   int32_t sinW0 = arm_sin_q31(filter_W0);
   int32_t cosW0 = arm_cos_q31(filter_W0);
 //    int32_t sinW0 = fsini(filter_W0);
@@ -178,14 +148,10 @@ void __attribute__ ((noinline)) biquad_bp_coefs(biquad_coefficients *coefs,
   coefs->cxn_2 = -coefs->cxn_0;
 }
 
-void __attribute__ ((noinline)) biquad_hp_coefs(biquad_coefficients *coefs,
+static void __attribute__ ((noinline)) biquad_hp_coefs(biquad_coefficients *coefs,
                                                 uint32_t filter_W0,
                                                 uint32_t q_inv) {
   filter_W0 = filter_W0 >> 1;
-  if (filter_W0 > (INT32_MAX / 4))
-    filter_W0 = INT32_MAX / 4;
-//    filter_W0 = filter_W0<<2;
-
   int32_t sinW0 = arm_sin_q31(filter_W0);
   int32_t cosW0 = arm_cos_q31(filter_W0);
 //    int32_t sinW0 = fsini(filter_W0);

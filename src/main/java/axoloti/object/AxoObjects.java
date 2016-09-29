@@ -116,7 +116,8 @@ public class AxoObjects {
             }
         }
         ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
-        for (AxoObjectAbstract o : ObjectList) {
+        // need to clone ObjectList to avoid a ConcurrentModificationException?
+        for (AxoObjectAbstract o : (ArrayList<AxoObjectAbstract>)ObjectList.clone()) {
             if (o.id.equals(n)) {
                 set.add(o);
             }

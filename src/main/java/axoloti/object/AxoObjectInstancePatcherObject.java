@@ -34,7 +34,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
 
     AxoObjectEditor aoe;
     @Element(name = "object")
-    AxoObject ao;
+    AxoObjectPatcherObject ao;
     ButtonComponent BtnEdit;
 
     public AxoObjectInstancePatcherObject() {
@@ -47,7 +47,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     @Override
     public void updateObj1() {
         if (ao == null) {
-            ao = new AxoObject();
+            ao = new AxoObjectPatcherObject();
             ao.id = "patch/object";
             ao.sDescription = "";
         }
@@ -68,11 +68,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
             setType(ao);
             PostConstructor();
         }
-        for (Component cmp : getComponents()) {
-            cmp.doLayout();
-        }
-        doLayout();
-        invalidate();
         validate();
     }
 
@@ -83,7 +78,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
 
     public void edit() {
         if (ao == null) {
-            ao = new AxoObject();
+            ao = new AxoObjectPatcherObject();
 //            ao.id = "id";
             ao.sDescription = "";
         }
@@ -119,9 +114,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
             }
         });
         add(BtnEdit);
-        for (Component cmp : getComponents()) {
-            cmp.doLayout();
-        }
         resizeToGrid();
     }
 

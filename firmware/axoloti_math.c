@@ -27,30 +27,6 @@ uint32_t pitcht[PITCHTSIZE];
 uint16_t expt[EXPTSIZE];
 uint16_t logt[LOGTSIZE];
 
-uint32_t fexp(uint32_t i) {
-  // 16.16 bit 
-  //  j.k
-  // useful max is 31.0000 0x001F0000
-  uint32_t j, k, m;
-  i = __USAT(i, 21);
-  j = 31 - (i >> 16);
-  k = i & 0xFFFF;
-  m = expt[k >> 8]; // 8bit exptable
-  return m >> j;
-}
-
-int32_t fsini(uint32_t p) {
-  uint32_t pi = p >> 19;
-  int32_t y1 = sine2t[pi];
-  int32_t y2 = sine2t[1 + pi];
-  int32_t pf = (p & 0xFFFFF) << 12;
-  int32_t pfc = INT32_MAX - pf;
-  int32_t r;
-  r = ___SMMUL(y1, pfc);
-  r = ___SMMLA(y2, pf, r);
-  return (r << 1);
-}
-
 void axoloti_math_init(void) {
   volatile short *p;
   volatile uint32_t i;
@@ -82,7 +58,7 @@ void axoloti_math_init(void) {
     double f = 440.0 * powf(2.0, (i - 69.0 - 64.0) / 12.0);
     double phi = 4.0 * (double)(1 << 30) * f / (SAMPLERATE * 1.0);
     if (phi > ((unsigned int)1 << 31))
-      phi = 0;
+      phi = 0x7FFFFFFF;
     *q++ = (uint32_t)phi;
   }
 
@@ -98,13 +74,15 @@ void axoloti_math_init(void) {
     double e = 0.5 * log(1.0 + ((double)i / (double)LOGTSIZE)) / log(2.0);
     *q16++ = (uint32_t)(e * (1 + INT16_MAX));
   }
-}
 
-uint32_t GenerateRandomNumber(void) {
-  /* Change this for different random sequences. */
-  static uint32_t randSeed = 22222;
-  randSeed = (randSeed * 196314165) + 907633515;
-  return randSeed;
+  // reset & initialize the hardware random number generator
+  RCC->AHB2RSTR |= RCC_AHB2RSTR_RNGRST;
+  RCC->AHB2RSTR &= ~RCC_AHB2RSTR_RNGRST;
+  RCC->AHB2ENR |= RCC_AHB2ENR_RNGEN;
+  chThdSleepMilliseconds(1);
+  RNG->CR = RNG_CR_RNGEN;
+  while(!(RNG->SR & RNG_SR_DRDY)) {
+  }
 }
 
 uint32_t FastLog(uint32_t i) {

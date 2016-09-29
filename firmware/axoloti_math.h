@@ -58,14 +58,6 @@ typedef union {
 
 void axoloti_math_init(void);
 
-/* Calculate pseudo-random 32 bit number based on linear congruential method. */
-uint32_t GenerateRandomNumber(void);
-
-uint32_t FastLog(uint32_t f);
-
-//int32_t ___SMMUL (int32_t op1, int32_t op2);
-//int32_t ___SMMLA (int32_t op1, int32_t op2, int32_t op3);
-
 __attribute__( ( always_inline ) ) __STATIC_INLINE int32_t ___SMMUL (int32_t op1, int32_t op2)
 {
   int32_t result;
@@ -96,61 +88,70 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE float _VSQRTF(float op1) {
   return(result);
 }
 
-#define MTOF(pitch, frequency)    \
-{                                 \
-  int32_t p1 = (int32_t)(pitch);  \
-  int32_t p=__SSAT(p1,28);        \
-  uint32_t pi = p>>21;            \
-  int32_t y1 = pitcht[128+pi];    \
-  int32_t y2 = pitcht[128+1+pi];  \
-  int32_t pf= (p&0x1fffff)<<10;   \
-  int32_t pfc = INT32_MAX - pf;   \
-  uint32_t r;                     \
-  r = ___SMMUL(y1,pfc);           \
-  r = ___SMMLA(y2,pf,r);          \
-  frequency= (r<<1);              \
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t mtof48k_q31(int32_t pitch) {
+  int32_t p=__SSAT(pitch,28);
+  uint32_t pi = p>>21;
+  int32_t y1 = pitcht[128+pi];
+  int32_t y2 = pitcht[128+1+pi];
+  int32_t pf= (p&0x1fffff)<<10;
+  int32_t pfc = INT32_MAX - pf;
+  uint32_t r;
+  r = ___SMMUL(y1,pfc);
+  r = ___SMMLA(y2,pf,r);
+  uint32_t frequency = r<<1;
+  return frequency;
 }
 
-#define MTOFEXTENDED(pitch, frequency)\
-{                                 \
-  int32_t p1 = (int32_t)(pitch);  \
-  int32_t p=__SSAT(p1,29);        \
-  uint32_t pi = p>>21;            \
-  int32_t y1 = pitcht[128+pi];    \
-  int32_t y2 = pitcht[128+1+pi];  \
-  int32_t pf= (p&0x1fffff)<<10;   \
-  int32_t pfc = INT32_MAX - pf;   \
-  uint32_t r;                     \
-  r = ___SMMUL(y1,pfc);           \
-  r = ___SMMLA(y2,pf,r);          \
-  frequency= (r<<1);              \
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t mtof48k_ext_q31(int32_t pitch) {
+  int32_t p=__SSAT(pitch,29);
+  uint32_t pi = p>>21;
+  int32_t y1 = pitcht[128+pi];
+  int32_t y2 = pitcht[128+1+pi];
+  int32_t pf= (p&0x1fffff)<<10;
+  int32_t pfc = INT32_MAX - pf;
+  uint32_t r;
+  r = ___SMMUL(y1,pfc);
+  r = ___SMMLA(y2,pf,r);
+  uint32_t frequency = r<<1;
+  return frequency;
 }
 
-#define SINE2TINTERP(phase, output) \
-{                                   \
-  uint32_t p = (uint32_t)(phase);   \
-  uint32_t pi = p>>20;              \
-  int32_t y1 = sine2t[pi];          \
-  int32_t y2 = sine2t[1+pi];        \
-  int32_t pf= (p&0xfffff)<<11;      \
-  int32_t pfc = INT32_MAX - pf;     \
-  int32_t rr;                       \
-  rr = ___SMMUL(y1,pfc);            \
-  rr = ___SMMLA(y2,pf,rr);          \
-  output = (rr<<1);                 \
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t sin_q31(int32_t phase) {
+  uint32_t p = (uint32_t)(phase);
+  uint32_t pi = p>>20;
+  int32_t y1 = sine2t[pi];
+  int32_t y2 = sine2t[1+pi];
+  int32_t pf= (p&0xfffff)<<11;
+  int32_t pfc = INT32_MAX - pf;
+  int32_t rr;
+  rr = ___SMMUL(y1,pfc);
+  rr = ___SMMLA(y2,pf,rr);
+  return rr<<1;
 }
 
-#define HANNING2TINTERP(phase, output) \
-{ uint32_t p = phase;               \
-  uint32_t pi = p>>22;              \
-  int32_t y1 = windowt[pi];         \
-  int32_t y2 = windowt[1+pi];       \
-  int32_t pf= (p&0x3fffff)<<9;      \
-  int32_t pfc = INT32_MAX - pf;     \
-  int32_t rr;                       \
-  rr = ___SMMUL(y1<<16,pfc);        \
-  rr = ___SMMLA(y2<<16,pf,rr);      \
-  output = (rr<<1);                 \
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t hann_q31(int32_t phase) {
+  uint32_t p = phase;
+  uint32_t pi = p>>22;
+  int32_t y1 = windowt[pi];
+  int32_t y2 = windowt[1+pi];
+  int32_t pf= (p&0x3fffff)<<9;
+  int32_t pfc = INT32_MAX - pf;
+  int32_t rr;
+  rr = ___SMMUL(y1<<16,pfc);
+  rr = ___SMMLA(y2<<16,pf,rr);
+  return rr<<1;
+}
+
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE float q27_to_float(int32_t op1) {
+  float fop1 = *(float*)(&op1);
+  __ASM volatile ("VCVT.F32.S32 %0, %0, 27" : "+w" (fop1) );
+  return(fop1);
+}
+
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t float_to_q27(float fop1) {
+  __ASM volatile ("VCVT.S32.F32 %0, %0, 27" : "+w" (fop1) );
+  int32_t r = *(int32_t*)(&fop1);
+  return(r);
 }
 
 __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t ConvertIntToFrac(int i) {
@@ -163,6 +164,43 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t ConvertFracToInt(int
 
 __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t ConvertFloatToFrac(float f) {
   return (int32_t)(f*(1<<21));
+}
+
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t rand_s32(void) {
+  // This function differs from the standard C rand() definition, standard C
+  // rand() only returns positive numbers, while rand_s32() returns the full
+  // signed 32 bit range.
+  // The hardware random generator can't provide new data as quick as desireable
+  // but rather than waiting for a new true random number,
+  // we multiply/add the seed with the latest hardware-generated number.
+  static uint32_t randSeed = 22222;
+  return randSeed = (randSeed * 196314165) + RNG->DR;
+}
+
+#define RAND_MAX INT32_MAX
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE int rand(void) {
+  // standard C rand()
+  return ((uint32_t)rand_s32())>>1;
+}
+
+uint32_t FastLog(uint32_t f);
+
+// deprecated macro's
+#define MTOF(pitch, frequency) \
+  frequency = mtof48k_q31(pitch);
+
+#define MTOFEXTENDED(pitch, frequency) \
+  frequency = mtof48k_ext_q31(pitch);
+
+#define SINE2TINTERP(phase, output) \
+  output = sin_q31(phase);
+
+#define HANNING2TINTERP(phase, output) \
+  output = hann_q31(phase);
+
+// deprecated functions
+__attribute__ ( ( always_inline ) ) __STATIC_INLINE uint32_t GenerateRandomNumber(void){
+  return rand_s32();
 }
 
 #endif

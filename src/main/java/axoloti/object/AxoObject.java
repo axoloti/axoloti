@@ -338,7 +338,6 @@ public class AxoObject extends AxoObjectAbstract {
     public void DeleteInstance(AxoObjectInstanceAbstract o) {
         if ((o != null) && (o instanceof AxoObjectInstance)) {
             instances.remove((AxoObjectInstance) o);
-            o.deleteDummyDropTargets();
         }
     }
 
@@ -504,7 +503,7 @@ public class AxoObject extends AxoObjectAbstract {
                     s2 = s2.replace('\\', '/');
                     r.add(s2);
                 } else if (s.startsWith("chibios/")) {
-                    r.add((new File(System.getProperty(FIRMWARE_DIR))).getAbsolutePath() + "../chibios" + s.substring(7));
+                    r.add((new File(System.getProperty(FIRMWARE_DIR))).getAbsolutePath() + "/../chibios" + s.substring(7));
                 } else {
                     r.add(s);
                 }

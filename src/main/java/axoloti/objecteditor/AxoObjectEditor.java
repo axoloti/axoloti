@@ -24,6 +24,7 @@ import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.ObjectModifiedListener;
 import axoloti.utils.AxolotiLibrary;
+import axoloti.utils.OSDetect;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -130,6 +131,10 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
     public AxoObjectEditor(final AxoObject origObj) {
         initComponents();
+        if (OSDetect.getOS() == OSDetect.OS.MAC) {
+            jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.TOP);
+        }
+
         fileMenu1.initComponents();
         DocumentWindowList.RegisterWindow(this);
         jTextAreaLocalData = initCodeEditor(jPanelLocalData);
@@ -238,18 +243,16 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             // embedded objects have no use for help patches
             jTextFieldHelp.setVisible(false);
             jLabelHelp.setVisible(false);
-        } else {
-            // normal objects
-            if (sellib != null) {
-                jMenuItemSave.setEnabled(!sellib.isReadOnly());
-                if (sellib.isReadOnly()) {
-                    SetReadOnly(true);
-                    jLabelLibrary.setText(sellib.getId() + " (readonly)");
-                    setTitle(sellib.getId() + ":" + origObj.id + " (readonly)");
-                } else {
-                    jLabelLibrary.setText(sellib.getId());
-                    setTitle(sellib.getId() + ":" + origObj.id);
-                }
+        } else // normal objects
+        if (sellib != null) {
+            jMenuItemSave.setEnabled(!sellib.isReadOnly());
+            if (sellib.isReadOnly()) {
+                SetReadOnly(true);
+                jLabelLibrary.setText(sellib.getId() + " (readonly)");
+                setTitle(sellib.getId() + ":" + origObj.id + " (readonly)");
+            } else {
+                jLabelLibrary.setText(sellib.getId());
+                setTitle(sellib.getId() + ":" + origObj.id);
             }
         }
 
@@ -347,8 +350,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         rSyntaxTextAreaXML.setCodeFoldingEnabled(true);
 
         AxoObjectInstance obji = editObj.CreateInstance(null, "test", new Point(0, 0));
-        jPanelKRateCode1.setText(obji.GenerateDoFunctionPlusPlus("", "", false));
-        jPanelKRateCode1.setFont(jTextAreaKRateCode.getFont());
     }
 
     public void initEditFromOrig() {
@@ -361,7 +362,10 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     public boolean AskClose() {
         // if it's an embedded object ("patch/object"), assume the parent patch is saving
         if (IsEmbeddedObj()) {
-            Close();
+            if (hasChanged()) {
+                
+            }
+            Close();            
             return false;
         }
         // warn if changes, and its not an embedded object
@@ -403,14 +407,19 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
         editObj.removeObjectModifiedListener(this);
+        editObj.removeObjectModifiedListener(attributeDefinitionsEditorPanel1);
+        editObj.removeObjectModifiedListener(displayDefinitionsEditorPanel1);
+        editObj.removeObjectModifiedListener(inletDefinitionsEditor1);
+        editObj.removeObjectModifiedListener(outletDefinitionsEditorPanel1);
+        editObj.removeObjectModifiedListener(paramDefinitionsEditorPanel1);
         dispose();
         editObj.CloseEditor();
     }
-    
+
     public int getActiveTabIndex() {
         return this.jTabbedPane1.getSelectedIndex();
     }
-    
+
     public void setActiveTabIndex(int n) {
         this.jTabbedPane1.setSelectedIndex(n);
     }
@@ -458,7 +467,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         jPanelLocalData = new javax.swing.JPanel();
         jPanelInitCode = new javax.swing.JPanel();
         jPanelKRateCode = new javax.swing.JPanel();
-        jPanelKRateCode1 = new javax.swing.JLabel();
         jPanelKRateCode2 = new javax.swing.JPanel();
         jPanelSRateCode = new javax.swing.JPanel();
         jPanelDisposeCode = new javax.swing.JPanel();
@@ -493,6 +501,13 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(540, 400));
+        addWindowFocusListener(new java.awt.event.WindowFocusListener() {
+            public void windowGainedFocus(java.awt.event.WindowEvent evt) {
+            }
+            public void windowLostFocus(java.awt.event.WindowEvent evt) {
+                formWindowLostFocus(evt);
+            }
+        });
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -669,9 +684,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
         jPanelKRateCode.setLayout(new javax.swing.BoxLayout(jPanelKRateCode, javax.swing.BoxLayout.Y_AXIS));
 
-        jPanelKRateCode1.setText("jLabel11");
-        jPanelKRateCode.add(jPanelKRateCode1);
-
         javax.swing.GroupLayout jPanelKRateCode2Layout = new javax.swing.GroupLayout(jPanelKRateCode2);
         jPanelKRateCode2.setLayout(jPanelKRateCode2Layout);
         jPanelKRateCode2Layout.setHorizontalGroup(
@@ -680,7 +692,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         );
         jPanelKRateCode2Layout.setVerticalGroup(
             jPanelKRateCode2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 288, Short.MAX_VALUE)
+            .addGap(0, 302, Short.MAX_VALUE)
         );
 
         jPanelKRateCode.add(jPanelKRateCode2);
@@ -822,6 +834,10 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         axoObjectEditor.setVisible(true);
     }//GEN-LAST:event_jMenuItemRevertActionPerformed
 
+    private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowLostFocus
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.objecteditor.AttributeDefinitionsEditorPanel attributeDefinitionsEditorPanel1;
     private axoloti.objecteditor.DisplayDefinitionsEditorPanel displayDefinitionsEditorPanel1;
@@ -854,7 +870,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     private javax.swing.JPanel jPanelDisposeCode;
     private javax.swing.JPanel jPanelInitCode;
     private javax.swing.JPanel jPanelKRateCode;
-    private javax.swing.JLabel jPanelKRateCode1;
     private javax.swing.JPanel jPanelKRateCode2;
     private javax.swing.JPanel jPanelLocalData;
     private javax.swing.JPanel jPanelMidiCode;

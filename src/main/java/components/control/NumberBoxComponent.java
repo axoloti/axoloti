@@ -22,7 +22,7 @@ import axoloti.Theme;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
-import axoloti.utils.OSDetect;
+import axoloti.utils.KeyUtils;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Cursor;
@@ -58,7 +58,7 @@ public class NumberBoxComponent extends ACtrlComponent {
     private boolean hiliteUp = false;
     private boolean hiliteDown = false;
     private boolean dragging = false;
-    
+
     private Robot robot;
 
     int rmargin = 5;
@@ -108,7 +108,7 @@ public class NumberBoxComponent extends ACtrlComponent {
                 if (e.isShiftDown()) {
                     t = t * 0.1;
                 }
-                if (e.isControlDown()) {
+                if (KeyUtils.isControlOrCommandDown(e)) {
                     t = t * 0.1;
                 }
                 v = value + t * (MousePressedCoordY - e.getYOnScreen());
@@ -136,39 +136,49 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     @Override
     protected void mousePressed(MouseEvent e) {
-        grabFocus();
-        if (isEnabled() && (e.getX() >= getWidth() - rmargin - htick * 2)) {
-            dragging = false;
-            if (e.getY() > getHeight() / 2) {
-                hiliteDown = true;
-                setValue(value - tick);
+        if (!e.isPopupTrigger()) {
+            grabFocus();
+            if (isEnabled() && (e.getX() >= getWidth() - rmargin - htick * 2)) {
+                dragging = false;
+                if (e.getY() > getHeight() / 2) {
+                    hiliteDown = true;
+                    fireEventAdjustmentBegin();
+                    setValue(value - tick);
+                    fireEventAdjustmentFinished();
+                } else {
+                    hiliteUp = true;
+                    fireEventAdjustmentBegin();
+                    setValue(value + tick);
+                    fireEventAdjustmentFinished();
+                }
             } else {
-                hiliteUp = true;
-                setValue(value + tick);
+                dragging = true;
+                MousePressedCoordX = e.getXOnScreen();
+                MousePressedCoordY = e.getYOnScreen();
+                MousePressedBtn = e.getButton();
+                getRootPane().setCursor(MainFrame.transparentCursor);
+                fireEventAdjustmentBegin();
             }
-        } else {
-            dragging = true;
-            MousePressedCoordX = e.getXOnScreen();
-            MousePressedCoordY = e.getYOnScreen();
-            MousePressedBtn = e.getButton();
-            getRootPane().setCursor(MainFrame.transparentCursor);
+            e.consume();
         }
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
-        if (hiliteDown) {
-            hiliteDown = false;
-        }
-        if (hiliteUp) {
-            hiliteUp = false;
+        if (!e.isPopupTrigger()) {
+            if (hiliteDown) {
+                hiliteDown = false;
+                repaint();
+            } else if (hiliteUp) {
+                hiliteUp = false;
+                repaint();
+            } else {
+                fireEventAdjustmentFinished();
+            }
+            e.consume();
         }
         getRootPane().setCursor(Cursor.getDefaultCursor());
         robot = null;
-    }
-
-    private boolean isControlDown(KeyEvent ke) {
-        return OSDetect.getOS() == OSDetect.OS.MAC ? ke.isAltDown() : ke.isControlDown();
     }
 
     @Override
@@ -177,54 +187,69 @@ public class NumberBoxComponent extends ACtrlComponent {
             double steps = tick;
             if (ke.isShiftDown()) {
                 steps = steps * 0.1; // mini steps!
-                if (isControlDown(ke)) {
+                if (KeyUtils.isControlOrCommandDown(ke)) {
                     steps = steps * 0.1; // micro steps!                
                 }
-            } else if (isControlDown(ke)) {
+            } else if (KeyUtils.isControlOrCommandDown(ke)) {
                 steps = steps * 10.0; //accelerate!
             }
             switch (ke.getKeyCode()) {
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_RIGHT:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() + steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_DOWN:
                 case KeyEvent.VK_LEFT:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() - steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_PAGE_UP:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() + 5 * steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_PAGE_DOWN:
+                    fireEventAdjustmentBegin();
                     setValue(getValue() - 5 * steps);
                     ke.consume();
                     break;
                 case KeyEvent.VK_HOME:
+                    fireEventAdjustmentBegin();
                     setValue(getMin());
+                    fireEventAdjustmentFinished();
                     ke.consume();
                     break;
                 case KeyEvent.VK_END:
+                    fireEventAdjustmentBegin();
                     setValue(getMax());
+                    fireEventAdjustmentFinished();
                     ke.consume();
                     break;
                 case KeyEvent.VK_ENTER:
+                    fireEventAdjustmentBegin();
                     try {
                         setValue(Float.parseFloat(keybBuffer));
                     } catch (java.lang.NumberFormatException ex) {
                     }
+                    fireEventAdjustmentFinished();
                     keybBuffer = "";
                     ke.consume();
+                    repaint();
                     break;
                 case KeyEvent.VK_BACK_SPACE:
-                    keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
+                    if (keybBuffer.length() > 0) {
+                        keybBuffer = keybBuffer.substring(0, keybBuffer.length() - 1);
+                    }
                     ke.consume();
+                    repaint();
                     break;
                 case KeyEvent.VK_ESCAPE:
                     keybBuffer = "";
                     ke.consume();
+                    repaint();
                     break;
                 default:
             }
@@ -243,6 +268,7 @@ public class NumberBoxComponent extends ACtrlComponent {
                 case '.':
                     keybBuffer += ke.getKeyChar();
                     ke.consume();
+                    repaint();
                     break;
                 default:
             }
@@ -253,6 +279,7 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -345,6 +372,7 @@ public class NumberBoxComponent extends ACtrlComponent {
             this.setToolTipText(s);
         }
 
+        repaint();
         fireEvent();
     }
 
@@ -378,9 +406,23 @@ public class NumberBoxComponent extends ACtrlComponent {
     }
 
     @Override
-    void keyReleased(KeyEvent key) {
+    void keyReleased(KeyEvent ke) {
+        if (isEnabled()) {
+            switch (ke.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_PAGE_UP:
+                case KeyEvent.VK_PAGE_DOWN:
+                    fireEventAdjustmentFinished();
+                    ke.consume();
+                    break;
+                default:
+            }
+        }
     }
-    
+
     @Override
     public void robotMoveToCenter() {
         getRootPane().setCursor(MainFrame.transparentCursor);

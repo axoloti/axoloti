@@ -17,7 +17,6 @@
  */
 package components.displays;
 
-import axoloti.ZoomUtils;
 import javax.swing.JComponent;
 
 /**
@@ -27,8 +26,5 @@ import javax.swing.JComponent;
 public abstract class ADispComponent extends JComponent {
 
     abstract public void setValue(double value);
-    
-    public void paintObjectLayer() {
-        ZoomUtils.paintObjectLayer(this);
-    }
+
 }

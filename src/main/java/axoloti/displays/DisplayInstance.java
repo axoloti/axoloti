@@ -75,9 +75,7 @@ public abstract class DisplayInstance<T extends Display> extends JPanel implemen
         if ((display.noLabel == null) || (display.noLabel == false)) {
             add(new LabelComponent(display.name));
         }
-        doLayout();
         setSize(getPreferredSize());
-        doLayout();
     }
 
     public abstract void ProcessByteBuffer(ByteBuffer bb);

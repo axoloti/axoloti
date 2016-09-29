@@ -22,6 +22,8 @@ import axoloti.TextEditor;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
 import axoloti.object.AxoObjectInstance;
 import components.ButtonComponent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import javax.swing.JLabel;
 import org.simpleframework.xml.Element;
 
@@ -31,7 +33,7 @@ import org.simpleframework.xml.Element;
  */
 public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttributeTextEditor> {
 
-    StringRef sRef = new StringRef();
+    final StringRef sRef = new StringRef();
 
     @Element(data = true, name = "sText", required = false)
     String getSText() {
@@ -56,6 +58,31 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
         super(param, axoObj1);
     }
 
+    String valueBeforeAdjustment = "";
+
+    void showEditor() {
+        if (editor == null) {
+            editor = new TextEditor(sRef, GetObjectInstance().getPatch().getPatchframe());
+            editor.setTitle(GetObjectInstance().getInstanceName() + "/" + attr.getName());
+            editor.addWindowFocusListener(new WindowFocusListener() {
+
+                @Override
+                public void windowGainedFocus(WindowEvent e) {
+                    valueBeforeAdjustment = sRef.s;
+                }
+
+                @Override
+                public void windowLostFocus(WindowEvent e) {
+                    if (!valueBeforeAdjustment.equals(sRef.s)) {
+                        SetDirty();
+                    }
+                }
+            });
+        }
+        editor.setState(java.awt.Frame.NORMAL);
+        editor.setVisible(true);
+    }
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();
@@ -64,13 +91,7 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
         bEdit.addActListener(new ButtonComponent.ActListener() {
             @Override
             public void OnPushed() {
-                if (editor == null) {
-                    editor = new TextEditor(sRef, GetObjectInstance().getPatch().getPatchframe());
-                    editor.setTitle(GetObjectInstance().getInstanceName() + "/" + attr.getName());
-                }
-                editor.setState(java.awt.Frame.NORMAL);
-                editor.setVisible(true);
-
+                showEditor();
             }
         });
     }
@@ -101,12 +122,17 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
 
     @Override
     public void setString(String sText) {
-        if (sRef == null) {
-            sRef = new StringRef();
-        }
         sRef.s = sText;
         if (editor != null) {
             editor.SetText(sText);
         }
+    }
+
+    @Override
+    public void Close() {
+        if (editor != null) {
+            editor.Close();
+        }
+        editor = null;
     }
 }

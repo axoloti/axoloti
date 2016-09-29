@@ -18,6 +18,7 @@
 package components.control;
 
 import axoloti.Theme;
+import axoloti.utils.KeyUtils;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -33,49 +34,60 @@ import java.awt.event.MouseEvent;
  */
 public class HRadioComponent extends ACtrlComponent {
 
-    private double value;
-    private final int n;
-    private final int bsize = 12;
+    double value;
+    final int n;
+    int bsize = 12;
 
     public HRadioComponent(int value, int n) {
+        super();
         //setInheritsPopupMenu(true);
         this.value = 0;//value;
         this.n = n;
+        bsize = 12;
         SetupTransferHandler();
     }
 
     private boolean dragAction = false;
 
+    int mousePosToVal(int x, int y){
+        int i = x / bsize;
+        if (i<0) return 0;
+        if (i>n-1) return n-1;
+        return i;
+    }
+    
     @Override
     protected void mouseDragged(MouseEvent e) {
         if (dragAction) {
-            int i = e.getX() / bsize;
-            if ((i >= 0) && (i < n)) {
-                setValue(i);
-            }
+            setValue(mousePosToVal(e.getX(),e.getY()));
         }
     }
 
     @Override
     protected void mousePressed(MouseEvent e) {
-        grabFocus();
-        if (e.getButton() == 1) {
-            int i = e.getX() / bsize;
-            if ((i >= 0) && (i < n)) {
-                setValue(i);
+        if (!e.isPopupTrigger()) {
+            grabFocus();
+            if (e.getButton() == 1) {
+                fireEventAdjustmentBegin();
+                setValue(mousePosToVal(e.getX(),e.getY()));
                 dragAction = true;
             }
+            e.consume();
         }
     }
 
     @Override
     protected void mouseReleased(MouseEvent e) {
-        dragAction = false;
+        if (!e.isPopupTrigger()) {
+            fireEventAdjustmentFinished();
+            dragAction = false;
+            e.consume();
+        }
     }
 
     @Override
     public void keyPressed(KeyEvent ke) {
-        if (ke.isAltDown() || ke.isAltGraphDown() || ke.isControlDown() || ke.isMetaDown()) {
+        if (KeyUtils.isIgnoreModifierDown(ke)) {
             return;
         }
         switch (ke.getKeyCode()) {
@@ -85,6 +97,7 @@ public class HRadioComponent extends ACtrlComponent {
                 if (v < 0) {
                     v = 0;
                 }
+                fireEventAdjustmentBegin();
                 setValue(v);
                 ke.consume();
                 return;
@@ -95,22 +108,27 @@ public class HRadioComponent extends ACtrlComponent {
                 if (v >= n) {
                     v = n - 1;
                 }
+                fireEventAdjustmentBegin();
                 setValue(v);
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_HOME: {
+                fireEventAdjustmentBegin();
                 setValue(0);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_END: {
+                fireEventAdjustmentBegin();
                 setValue(n - 1);
+                fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
         }
-        
+
         switch (ke.getKeyChar()) {
             case '0':
             case '1':
@@ -124,17 +142,20 @@ public class HRadioComponent extends ACtrlComponent {
             case '9':
                 int i = ke.getKeyChar() - '0';
                 if (i < n) {
+                    fireEventAdjustmentBegin();
                     setValue(i);
+                    fireEventAdjustmentFinished();
                 }
                 ke.consume();
         }
     }
 
-    private static final Stroke strokeThin = new BasicStroke(1);
-    private static final Stroke strokeThick = new BasicStroke(2);
+    static final Stroke strokeThin = new BasicStroke(1);
+    static final Stroke strokeThick = new BasicStroke(2);
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -184,6 +205,7 @@ public class HRadioComponent extends ACtrlComponent {
         if (this.value != value) {
             this.value = value;
         }
+        repaint();
         fireEvent();
     }
 
@@ -192,7 +214,20 @@ public class HRadioComponent extends ACtrlComponent {
         return value;
     }
 
+
     @Override
     void keyReleased(KeyEvent ke) {
+        if (isEnabled()) {
+            switch (ke.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_LEFT:
+                    fireEventAdjustmentFinished();
+                    ke.consume();
+                    break;
+                default:
+            }
+        }
     }
 }

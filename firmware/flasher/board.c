@@ -1,5 +1,7 @@
 #include "ch.h"
 #include "hal.h"
+#include <string.h>
+#include "stm32_otg.h"
 
 #if HAL_USE_PAL || defined(__DOXYGEN__)
 /**
@@ -36,7 +38,17 @@ const PALConfig pal_default_config =
  *          and before any other initialization.
  */
 void __early_init(void) {
-
+  /* Reset of all peripherals.*/
+  rccResetAHB1(~0);
+  rccResetAHB2(~0);
+  rccResetAPB1(~0);
+  rccResetAPB2(~0x10000000); //RCC_APB1RSTR_PWRRST
+  OTG_HS->GINTMSK = 0; // disable OTG_HS interrupts!
+  // copy vector table
+  extern int _vectors;
+  memcpy((char *)0x20000000, (const char *)&_vectors, 0x200);
+  // remap SRAM1 to 0x00000000
+  SYSCFG->MEMRMP |= 0x03;
   stm32_clock_init();
 }
 
@@ -68,5 +80,9 @@ bool_t sdc_lld_is_write_protected(SDCDriver *sdcp) {
  * @todo    Add your board-specific code, if any.
  */
 void boardInit(void) {
+}
+
+void STM32_OTG2_HANDLER(void) {
+  // catch spurious interrupts...
 }
 

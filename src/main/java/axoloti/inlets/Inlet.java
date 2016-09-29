@@ -24,6 +24,8 @@ import axoloti.datatypes.SignalMetaData;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -93,5 +95,10 @@ public abstract class Inlet implements AtomDefinition, Cloneable {
     @Override
     public Inlet clone() throws CloneNotSupportedException {
         return (Inlet)super.clone();
+    }
+
+    @Override
+    public List<String> getEditableFields(){
+        return new ArrayList<String>();
     }
 }

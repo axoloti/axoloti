@@ -29,7 +29,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -41,8 +44,6 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
     String tableName = "";
     JTextField TFtableName;
     JLabel vlabel;
-    
-    private AxoObjectInstance axoObj;
 
     public AttributeInstanceTablename() {
     }
@@ -51,6 +52,8 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
         super(param, axoObj1);
         this.axoObj = axoObj1;
     }
+
+    String valueBeforeAdjustment = "";
 
     @Override
     public void PostConstructor() {
@@ -65,36 +68,39 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
         TFtableName.setPreferredSize(d);
         TFtableName.setSize(d);
         add(TFtableName);
-        TFtableName.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent ke) {
-            }
 
-            @Override
-            public void keyReleased(KeyEvent ke) {
-            }
+        TFtableName.getDocument().addDocumentListener(new DocumentListener() {
 
-            @Override
-            public void keyPressed(KeyEvent ke) {
-                axoObj.getParent().repaint();
-            }
-        });
-        TFtableName.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
+            void update() {
                 tableName = TFtableName.getText();
-                System.out.println("tablename change " + tableName);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                update();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                update();
             }
         });
         TFtableName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
+                valueBeforeAdjustment = TFtableName.getText();
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                tableName = TFtableName.getText();
-                System.out.println("tablename change " + tableName);
+                if (!TFtableName.getText().equals(valueBeforeAdjustment)) {
+                    SetDirty();
+                }
             }
         });
     }
@@ -131,4 +137,10 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
         }
     }
 
+    @Persist
+    public void Persist() {
+        if (tableName == null) {
+            tableName = "";
+        }
+    }
 }

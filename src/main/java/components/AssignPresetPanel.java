@@ -17,6 +17,7 @@
  */
 package components;
 
+import axoloti.Patch;
 import axoloti.Preset;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
@@ -84,10 +85,16 @@ public class AssignPresetPanel extends JPanel {
                 ctrls.get(i).setEnabled(false);
                 param.RemovePreset(i + 1);
             }
+            Patch p = param.GetObjectInstance().getPatch();
+            if (p!=null){
+                p.SetDirty();
+            }
             param.GetObjectInstance().patch.presetUpdatePending = true;
         }
 
     };
+    
+    double valueBeforeAdjustment;
 
     ACtrlListener ctrlListener = new ACtrlListener() {
 
@@ -104,6 +111,27 @@ public class AssignPresetPanel extends JPanel {
                 }
             }
             param.GetObjectInstance().patch.presetUpdatePending = true;
+        }
+
+        @Override
+        public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+            int i = ctrls.indexOf(e.getSource());
+            if (i >= 0) {
+                valueBeforeAdjustment = ctrls.get(i).getValue();
+            }
+        }
+
+        @Override
+        public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+            int i = ctrls.indexOf(e.getSource());
+            if (i >= 0) {
+                if (valueBeforeAdjustment != ctrls.get(i).getValue()) {
+                    Patch p = param.GetObjectInstance().getPatch();
+                    if (p!=null){
+                        p.SetDirty();
+                    }
+                }
+            }
         }
     };
 }

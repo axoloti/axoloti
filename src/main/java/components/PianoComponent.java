@@ -113,7 +113,8 @@ public abstract class PianoComponent extends JComponent {
 
     @Override
     public void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g.create();
         // white keys first
         for (int i = 0; i < 128; i++) {
             int y = keyToY(i);
@@ -189,6 +190,7 @@ public abstract class PianoComponent extends JComponent {
         int x = keyToX(64);
         g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
         g2.fillOval(x + 2, height - (KeyWidth + 2), KeyWidth, KeyWidth);
+        g2.dispose();
     }
 
     int HitTest(int x, int y) {
