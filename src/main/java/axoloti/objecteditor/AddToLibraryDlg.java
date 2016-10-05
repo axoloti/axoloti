@@ -1,8 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Copyright (C) 2013-2016 Johannes Taelman
+ *
+ * This file is part of Axoloti.
+ *
+ * Axoloti is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ *
+ * Axoloti is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package axoloti.objecteditor;
 
 import axoloti.MainFrame;
@@ -13,6 +26,12 @@ import axoloti.utils.AxolotiLibrary;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 /**
  *
@@ -35,6 +54,55 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
             Logger.getLogger(AddToLibraryDlg.class.getName()).log(Level.SEVERE, null, ex);
         }
         populateFields();
+        jObjectName.getDocument().addDocumentListener(new DocumentListener() {
+            void Update() {
+                modifiedData();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                Update();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                Update();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                Update();
+            }
+        });
+        ((AbstractDocument) jObjectName.getDocument()).setDocumentFilter(new DocumentFilter() {
+
+            @Override
+            public void insertString(DocumentFilter.FilterBypass fb, int offset,
+                    String string, AttributeSet attr)
+                    throws BadLocationException {
+                string = string.replaceAll("\\\\", "/");
+                if (offset == 0) {
+                    while (string.length() > 0) {
+                        if (string.charAt(0) <= 0x20) {
+                            string = string.substring(1);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                super.insertString(fb, offset, string, attr);
+            }
+
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb,
+                    int offset, int length, String string, AttributeSet attr) throws BadLocationException {
+                if (length > 0) {
+                    fb.remove(offset, length);
+                }
+                insertString(fb, offset, string, attr);
+            }
+        });
+
     }
 
     /**
@@ -293,15 +361,7 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
         modifiedData();
     }
 
-    private void modifiedData() {
-        jObjectName.setText(jObjectName.getText().trim());
-        
-        // in case windows users get the wrong idea ;)
-        if(jObjectName.getText().contains("\\")) { 
-            jObjectName.setText(jObjectName.getText().replace("\\", "/"));
-        }
-        
-        
+    String GetDestinationPath() {
         if (jLibrary.getSelectedIndex() >= 0) {
             AxolotiLibrary lib = MainFrame.prefs.getLibrary((String) jLibrary.getSelectedObjects()[0]);
             StringBuilder file = new StringBuilder();
@@ -327,7 +387,11 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
             
             file.append(objpath).append(File.separator);
             file.append(objid);
-            jFileTxt.setText(file.toString() + ".axo");
-        }
+            return file.toString() + ".axo";
+        } else return "";
+    }
+
+    private void modifiedData() {
+        jFileTxt.setText(GetDestinationPath());
     }
 }
