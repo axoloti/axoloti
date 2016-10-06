@@ -72,6 +72,9 @@ CHIBIOS = ${axoloti_release}/chibios
 #FIRMWARE=$(subst $(SPACE),\ ,${axoloti_firmware})
 FIRMWARE=.
 
+MUTABLE_INSTRUMENTS = ${FIRMWARE}/mutable_instruments
+
+
 include board.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/hal.mk
@@ -182,7 +185,31 @@ CSRC = $(PORTSRC) \
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CPPSRC = 
+CPPSRC = ${MUTABLE_INSTRUMENTS}/braids/analog_oscillator.cpp \
+       ${MUTABLE_INSTRUMENTS}/braids/digital_oscillator.cpp \
+       ${MUTABLE_INSTRUMENTS}/braids/macro_oscillator.cpp \
+       ${MUTABLE_INSTRUMENTS}/warps/dsp/filter_bank.cpp \
+       ${MUTABLE_INSTRUMENTS}/warps/dsp/modulator.cpp \
+       ${MUTABLE_INSTRUMENTS}/warps/dsp/oscillator.cpp \
+       ${MUTABLE_INSTRUMENTS}/warps/dsp/vocoder.cpp \
+       ${MUTABLE_INSTRUMENTS}/elements/dsp/multistage_envelope.cpp \
+       ${MUTABLE_INSTRUMENTS}/elements/dsp/ominous_voice.cpp \
+       ${MUTABLE_INSTRUMENTS}/elements/dsp/resonator.cpp \
+       ${MUTABLE_INSTRUMENTS}/elements/dsp/string.cpp \
+       ${MUTABLE_INSTRUMENTS}/elements/dsp/tube.cpp \
+       ${MUTABLE_INSTRUMENTS}/stmlib/dsp/units.cpp \
+       ${MUTABLE_INSTRUMENTS}/stmlib/utils/random.cpp \
+	   ${MUTABLE_INSTRUMENTS}/braids/braids_resources.cpp \
+	   ${MUTABLE_INSTRUMENTS}/warps/warps_resources.cpp \
+	   ${MUTABLE_INSTRUMENTS}/rings/rings_resources.cpp \
+	   ${MUTABLE_INSTRUMENTS}/elements/elements_resources.cpp \
+	   ${MUTABLE_INSTRUMENTS}/mutable_resources.cpp 
+ 
+#       ${MUTABLE_INSTRUMENTS}/elements/dsp/voice.cpp \ 
+#       ${MUTABLE_INSTRUMENTS}/elements/dsp/part.cpp \
+#       ${MUTABLE_INSTRUMENTS}/elements/dsp/exciter.cpp \
+#       ${MUTABLE_INSTRUMENTS}/rings/dsp/resonator.cpp \
+#       ${MUTABLE_INSTRUMENTS}/rings/dsp/string.cpp \
 	   
 # C sources to be compiled in ARM mode regardless of the global setting.
 # NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
@@ -214,7 +241,12 @@ INCDIR = ${CMSIS}/Include \
          $(CHIBIOS)/os/various \
          ${FIRMWARE}/STM32_USB_Host_Library/Core/Inc \
          ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Inc \
-         ${FIRMWARE}/STM32F4xx_HAL_Driver/Inc
+         ${FIRMWARE}/STM32F4xx_HAL_Driver/Inc \
+         ${MUTABLE_INSTRUMENTS} \
+         ${MUTABLE_INSTRUMENTS}/warps \
+         ${MUTABLE_INSTRUMENTS}/braids \
+         ${MUTABLE_INSTRUMENTS}/rings \
+         ${MUTABLE_INSTRUMENTS}/stmlib
 
 #
 # Project, sources and paths
