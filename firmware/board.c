@@ -105,3 +105,7 @@ bool_t sdc_lld_is_write_protected(SDCDriver *sdcp) {
 void boardInit(void) {
 }
 
+int _getpid(void){ return -1;}
+int _kill(int pid, int sig){ (void)pid; (void)sig; return -1; }
+int _write(void){return -1;}
+void _exit(int i){(void)i; while(1);}
