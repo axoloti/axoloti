@@ -176,7 +176,7 @@ void PExTransmit(void) {
   }
 }
 
-char FileName[64];
+char FileName[256];
 
 static FRESULT scan_files(char *path) {
   FRESULT res;
