@@ -206,7 +206,8 @@ static FRESULT scan_files(char *path) {
       if (fno.fattrib & AM_HID)
         continue;
       if (fno.fattrib & AM_DIR) {
-        sprintf(&path[i], "/%s", fn);
+        path[i] = '/';
+        strcpy(&path[i+1], fn);
         msg[0] = 'A';
         msg[1] = 'x';
         msg[2] = 'o';
