@@ -185,6 +185,10 @@ public abstract class ParameterInstance<T extends Parameter> extends JPanel impl
     public boolean GetNeedsTransmit() {
         return needsTransmit;
     }
+    
+    public void ClearNeedsTransmit() {
+        needsTransmit = false;
+    }
 
     public void IncludeInPreset() {
         if (presetEditActive > 0) {

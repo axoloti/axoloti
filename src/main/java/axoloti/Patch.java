@@ -281,8 +281,13 @@ public class Patch {
 //        GetQCmdProcessor().AppendToQueue(new QCmdStop());
         UploadDependentFiles();
         ShowPreset(0);
-        WriteCode();
         presetUpdatePending = false;
+        for(AxoObjectInstanceAbstract o:objectinstances){
+            for(ParameterInstance pi:o.getParameterInstances()){
+                pi.ClearNeedsTransmit();
+            }
+        }
+        WriteCode();
         GetQCmdProcessor().SetPatch(null);
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
         GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
