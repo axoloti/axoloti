@@ -67,10 +67,6 @@ public class QCmdWriteMem implements QCmdSerialTask {
             offset += l;
             remaining -= l;
         } while (remaining > 0);
-        if (connection.WaitSync()) {
-            return this;
-        }
-        return new QCmdDisconnect();
+        return this;
     }
-
 }

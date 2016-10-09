@@ -117,9 +117,7 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
                 offset += nRead;
             } while (tlength > 0);
             inputStream.close();
-            if (connection.WaitSync()) {
-                return this;
-            }
+            return this;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
         } catch (IOException ex) {
