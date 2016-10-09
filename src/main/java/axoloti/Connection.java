@@ -78,7 +78,7 @@ public abstract class Connection {
     private ArrayList<SDCardMountStatusListener> sdcmls = new ArrayList<SDCardMountStatusListener>();
 
     public void addSDCardMountStatusListener(SDCardMountStatusListener sdcml) {
-        if (isConnected()) {
+        if (GetSDCardPresent()) {
             sdcml.ShowSDCardMounted();
         } else {
             sdcml.ShowSDCardUnmounted();
