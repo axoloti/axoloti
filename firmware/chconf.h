@@ -420,7 +420,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_FILL_THREADS) || defined(__DOXYGEN__)
-#define CH_DBG_FILL_THREADS             FALSE
+#define CH_DBG_FILL_THREADS             TRUE
 #endif
 
 /**

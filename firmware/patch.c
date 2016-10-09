@@ -56,13 +56,76 @@ loadPatchIndex_t loadPatchIndex = UNINITIALIZED;
 static int32_t inbuf[32];
 static int32_t *outbuf;
 
+static int nThreadsBeforePatch;
+#define STACKSPACE_MARGIN 32
+
 static WORKING_AREA(waThreadDSP, 7200) __attribute__ ((section (".ccmramend")));
 static Thread *pThreadDSP = 0;
 static const char *index_fn = "/index.axb";
 
+static int GetNumberOfThreads(void){
+#ifdef CH_USE_REGISTRY
+  int i=1;
+  Thread *thd1 = chRegFirstThread();
+  while(thd1){
+    i++;
+    thd1 = chRegNextThread (thd1);
+  }
+  return i;
+#else
+  return -1;
+#endif
+}
+
+void CheckStackOverflow(void) {
+#ifdef CH_USE_REGISTRY
+#ifdef CH_DBG_FILL_THREADS
+  Thread *thd = chRegFirstThread();
+  // skip 1st thread, main thread
+  thd = chRegNextThread (thd);
+  int critical = 0;
+  int nfree = 0;
+  while(thd){
+    char *stk = (char *)(thd+1);
+    nfree = 0;
+    while(*stk == CH_STACK_FILL_VALUE) {
+      nfree++;
+      stk++;
+      if (nfree>=STACKSPACE_MARGIN) break;
+    }    
+    if (nfree<STACKSPACE_MARGIN) {
+       critical = 1;
+       break;
+    }
+    thd = chRegNextThread(thd);
+  }
+  if (critical) {
+    const char *name = chRegGetThreadName(thd);
+    if (name!=0)
+      if (nfree)
+        LogTextMessage("Thread %s : stack critical %d",name,nfree);
+      else
+        LogTextMessage("Thread %s : stack overflow",name);
+    else
+      if (nfree)
+        LogTextMessage("Thread ?? : stack critical %d",nfree);
+      else
+        LogTextMessage("Thread ?? : stack overflow");
+  }
+#endif
+#endif
+}
+
 static void StopPatch1(void) {
-  if (patchMeta.fptr_patch_dispose != 0)
+  if (patchMeta.fptr_patch_dispose != 0) {
+    CheckStackOverflow();
     (patchMeta.fptr_patch_dispose)();
+    // check if the number of threads after patch disposal is the same as before
+    int i = GetNumberOfThreads();
+    if (i!=nThreadsBeforePatch) {
+       LogTextMessage("error: patch stopped but did not terminate its thread(s)");
+    }
+  }
   UIGoSafe();
   InitPatch0();
   sysmon_enable_blinker();
@@ -79,6 +142,7 @@ static int StartPatch1(void) {
       ccm++)
     *ccm = 0;
   patchMeta.fptr_dsp_process = 0;
+  nThreadsBeforePatch = GetNumberOfThreads();
   patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
   (patchMeta.fptr_patch_init)(GetFirmwareID());
   if (patchMeta.fptr_dsp_process == 0) {
