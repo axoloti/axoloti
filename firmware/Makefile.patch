@@ -55,17 +55,17 @@ ${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axolo
 
 ${BDIR}/xpatch.bin: ${BDIR}/xpatch.cpp ${BDIR}/xpatch.h.gch
 	@echo RM
-	rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
+	@rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
 	@echo APP
-	$(CPP) $(CCFLAGS) -H $(IINCDIR) -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o 
+	@$(CPP) $(CCFLAGS) -H $(IINCDIR) -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o 
 	@echo LINK
-	$(LD) $(LDFLAGS) ${BDIR}/xpatch.o -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${FIRMWARE}/build/axoloti.elf -o ${BDIR}/xpatch.elf
+	@$(LD) $(LDFLAGS) ${BDIR}/xpatch.o -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${FIRMWARE}/build/axoloti.elf -o ${BDIR}/xpatch.elf
 	@echo BIN
 #	$(CP) -O binary -j .text  -j .init_array -j .rodata -j .rodata\* xpatch.elf xpatch.bin
 #   -j .text.startup -j .text.memcpy  
-	$(CP) -O binary ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin
+	@$(CP) -O binary ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin
 
 clean:
-	rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst ${BDIR}/xpatch.h.gch
+	@rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst ${BDIR}/xpatch.h.gch
 
 	
