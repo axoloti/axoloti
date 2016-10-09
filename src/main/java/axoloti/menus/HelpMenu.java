@@ -28,6 +28,8 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenu;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 /**
  *
@@ -42,6 +44,25 @@ public class HelpMenu extends JMenu {
     private axoloti.menus.HelpLibraryMenu helpLibraryMenu1;
 
     public HelpMenu() {
+        addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                Populate();
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent e) {
+                removeAll();
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+                removeAll();
+            }
+        });        
+    }
+    
+    private void Populate() {
         jMenuHelpContents = new javax.swing.JMenuItem();
         jMenuAbout = new javax.swing.JMenuItem();
         jMenuUpdates = new javax.swing.JMenuItem();
