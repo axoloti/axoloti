@@ -32,7 +32,7 @@ public class QCmdCopyPatchToFlash implements QCmdSerialTask {
     public QCmd Do(Connection connection) {
         connection.ClearSync();
         connection.TransmitCopyToFlash();
-        if (connection.WaitSync()) {
+        if (connection.WaitSync(5000)) {
             return this;
         } else {
             return new QCmdDisconnect();
