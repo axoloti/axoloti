@@ -26,6 +26,7 @@ import static axoloti.MainFrame.prefs;
 import axoloti.PatchFrame;
 import axoloti.PatchGUI;
 import axoloti.SDCardInfo;
+import axoloti.SDCardMountStatusListener;
 import axoloti.SDFileInfo;
 import axoloti.USBBulkConnection;
 import java.io.BufferedReader;
@@ -60,7 +61,7 @@ import qcmds.QCmdUploadFile;
  *
  * @author jtaelman
  */
-public class PatchBank extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener {
+public class PatchBank extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener {
 
     String FilenamePath = null;
 
@@ -197,7 +198,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         reflectSelection(-1);
     }
 
-    final void reflectSelection(int row){
+    final void reflectSelection(int row) {
         if (row < 0) {
             jButtonUp.setEnabled(false);
             jButtonDown.setEnabled(false);
@@ -211,9 +212,9 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             jButtonOpen.setEnabled(en);
             jButtonUpload.setEnabled(en);
             jButtonRemove.setEnabled(true);
-        }        
+        }
     }
-    
+
     public void refresh() {
         jTable1.revalidate();
         jTable1.repaint();
@@ -821,12 +822,12 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         return this;
     }
 
-    public void ShowConnect1(boolean status){
+    public void ShowConnect1(boolean status) {
         jButtonUploadBank.setEnabled(status);
         jButtonUpload.setEnabled(status);
         jUploadAll.setEnabled(status);
     }
-    
+
     @Override
     public void ShowConnect() {
         ShowConnect1(true);
@@ -860,5 +861,15 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     @Override
     public ArrayList<DocumentWindow> GetChildDocuments() {
         return null;
+    }
+
+    @Override
+    public void ShowSDCardMounted() {
+        ShowConnect1(true);
+    }
+
+    @Override
+    public void ShowSDCardUnmounted() {
+        ShowConnect1(false);
     }
 }

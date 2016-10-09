@@ -263,6 +263,11 @@
                 <Property name="text" type="java.lang.String" value="patch"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JLabel" name="jLabelSDCardPresent">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="no SDCard"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Component class="javax.swing.Box$Filler" name="filler3">

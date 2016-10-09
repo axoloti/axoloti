@@ -62,7 +62,7 @@ import qcmds.QCmdUploadPatch;
  *
  * @author Johannes Taelman
  */
-public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener {
+public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener {
 
     /**
      * Creates new form PatchFrame
@@ -194,6 +194,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         createBufferStrategy(2);
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().addSDCardMountStatusListener(this);
     }
 
     QCmdProcessor qcmdprocessor;
@@ -248,6 +249,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
         USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().removeSDCardMountStatusListener(this);
         patch.Close();
         dispose();
     }
@@ -1114,5 +1116,17 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public void updateUndoRedoEnabled() {
         redoItem.setEnabled(patch.canRedo());
         undoItem.setEnabled(patch.canUndo());
+    }
+
+    @Override
+    public void ShowSDCardMounted() {
+        jMenuItemUploadSD.setEnabled(true);
+        jMenuItemUploadSDStart.setEnabled(true);
+    }
+
+    @Override
+    public void ShowSDCardUnmounted() {
+        jMenuItemUploadSD.setEnabled(false);
+        jMenuItemUploadSDStart.setEnabled(false);
     }
 }

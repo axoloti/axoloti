@@ -46,6 +46,7 @@ public abstract class Connection {
     abstract public axoloti_core getTargetProfile();
     abstract public ByteBuffer getMemReadBuffer();
     abstract public int getMemRead1Word();
+    abstract public boolean GetSDCardPresent();
 
     private ArrayList<ConnectionStatusListener> csls = new ArrayList<ConnectionStatusListener>();
 
@@ -73,7 +74,34 @@ public abstract class Connection {
             csl.ShowConnect();
         }
     }
-    
+
+    private ArrayList<SDCardMountStatusListener> sdcmls = new ArrayList<SDCardMountStatusListener>();
+
+    public void addSDCardMountStatusListener(SDCardMountStatusListener sdcml) {
+        if (isConnected()) {
+            sdcml.ShowSDCardMounted();
+        } else {
+            sdcml.ShowSDCardUnmounted();
+        }
+        sdcmls.add(sdcml);
+    }
+
+    public void removeSDCardMountStatusListener(SDCardMountStatusListener sdcml) {
+        sdcmls.remove(sdcml);
+    }
+
+    public void ShowSDCardMounted() {
+        for (SDCardMountStatusListener sdcml : sdcmls) {
+            sdcml.ShowSDCardMounted();
+        }
+    }
+
+    public void ShowSDCardUnmounted() {
+        for (SDCardMountStatusListener sdcml : sdcmls) {
+            sdcml.ShowSDCardUnmounted();
+        }
+    }
+
     @Deprecated
     abstract public void writeBytes(byte[] data);
 

@@ -142,7 +142,7 @@ void PExTransmit(void) {
       } else {
         ack[5] = loadPatchIndex;
       }
-      ack[6] = 0; // reserved
+      ack[6] = fs_ready;
       chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                               (const unsigned char* )&ack[0], 7 * 4);
 

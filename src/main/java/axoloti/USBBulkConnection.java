@@ -110,6 +110,7 @@ public class USBBulkConnection extends Connection {
         if (connected) {
             disconnectRequested = true;
             connected = false;
+            isSDCardPresent = null;
             ShowDisconnect();
             queueSerialTask.clear();
             try {
@@ -867,12 +868,31 @@ public class USBBulkConnection extends Connection {
             MainFrame.mainframe.qcmdprocessor.AppendToQueue(new QCmdShowDisconnect());
         }
     }
+
+    private Boolean isSDCardPresent = null;
+    
+    public void SetSDCardPresent(boolean i) {
+        if ((isSDCardPresent != null) && (i == isSDCardPresent)) return;
+        isSDCardPresent = i;
+        if (isSDCardPresent) {
+            ShowSDCardMounted();
+        } else {
+            ShowSDCardUnmounted();            
+        }
+    }
+
+    @Override
+    public boolean GetSDCardPresent() {
+        if (isSDCardPresent == null) return false;
+        return isSDCardPresent;
+    }
+
     int CpuId0 = 0;
     int CpuId1 = 0;
     int CpuId2 = 0;
     int fwcrc = -1;
 
-    void Acknowledge(final int DSPLoad, final int PatchID, final int Voltages, final int patchIndex, int reserved) {
+    void Acknowledge(final int DSPLoad, final int PatchID, final int Voltages, final int patchIndex, final int sdcardPresent) {
         synchronized (sync) {
             sync.Acked = true;
             sync.notifyAll();
@@ -889,6 +909,7 @@ public class USBBulkConnection extends Connection {
                 }
                 MainFrame.mainframe.showPatchIndex(patchIndex);
                 targetProfile.setVoltages(Voltages);
+                SetSDCardPresent(sdcardPresent!=0);
             }
         });
     }

@@ -47,12 +47,13 @@ import qcmds.QCmdGetFileList;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadFile;
+import axoloti.SDCardMountStatusListener;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class FileManagerFrame extends javax.swing.JFrame implements ConnectionStatusListener {
+public class FileManagerFrame extends javax.swing.JFrame implements ConnectionStatusListener, SDCardMountStatusListener {
 
     /**
      * Creates new form FileManagerFrame
@@ -61,6 +62,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         initComponents();
         fileMenu1.initComponents();
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().addSDCardMountStatusListener(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jLabelSDInfo.setText("");
 
@@ -387,6 +389,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().removeSDCardMountStatusListener(this);
     }//GEN-LAST:event_formWindowClosing
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -462,6 +465,16 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
     @Override
     public void ShowDisconnect() {
+        ShowConnect(false);
+    }
+
+    @Override
+    public void ShowSDCardMounted() {
+        ShowConnect(true);
+    }
+
+    @Override
+    public void ShowSDCardUnmounted() {
         ShowConnect(false);
     }
 }

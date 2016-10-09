@@ -274,12 +274,20 @@ public class Patch {
 
     void GoLive() {
         GetQCmdProcessor().AppendToQueue(new QCmdStop());
-        String f = "/" + getSDCardPath();
-        System.out.println("pathf" + f);
-        GetQCmdProcessor().AppendToQueue(new QCmdCreateDirectory(f));
-        GetQCmdProcessor().AppendToQueue(new QCmdChangeWorkingDirectory(f));
-//        GetQCmdProcessor().AppendToQueue(new QCmdStop());
-        UploadDependentFiles();
+        if (USBBulkConnection.GetConnection().GetSDCardPresent()) {
+            String f = "/" + getSDCardPath();
+            System.out.println("pathf" + f);
+            GetQCmdProcessor().AppendToQueue(new QCmdCreateDirectory(f));
+            GetQCmdProcessor().AppendToQueue(new QCmdChangeWorkingDirectory(f));
+    //        GetQCmdProcessor().AppendToQueue(new QCmdStop());
+            UploadDependentFiles();
+        } else {
+            // issue warning when there are dependent files
+            ArrayList<SDFileReference> files = GetDependendSDFiles();
+            if (files.size()>0) {
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Patch requires file {0} on SDCard, but no SDCard mounted", files.get(0).targetPath);
+            }
+        }
         ShowPreset(0);
         presetUpdatePending = false;
         for(AxoObjectInstanceAbstract o:objectinstances){
