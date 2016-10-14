@@ -18,18 +18,49 @@
 package axoloti;
 
 import java.io.File;
+import java.nio.file.Path;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
  * @author jtaelman
  */
 public class SDFileReference {
-    File localfile;
-    String targetPath;
+
+    @Attribute
+    public String localFilename;
+
+    @Attribute
+    public String targetPath;
+
+    public File localfile;
+
+    public SDFileReference() {
+    }
 
     public SDFileReference(File localfile, String targetPath) {
         this.localfile = localfile;
         this.targetPath = targetPath;
     }
-    
+
+    @Persist
+    public void Persist() {
+        if (localFilename == null) {
+            if (localfile != null) {
+                localFilename = localfile.getName();
+            } else {
+                localFilename = "";
+            }
+        }
+    }
+
+    public void Resolve(Path p) {
+        if (localfile != null) {
+            return;
+        }
+        if (p != null) {
+            localfile = p.resolve(localFilename).toFile();
+        }
+    }
 }

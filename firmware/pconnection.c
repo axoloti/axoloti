@@ -375,6 +375,26 @@ void ManipulateFile(void) {
       if (err != FR_OK) {
         report_fatfs_error(err,&FileName[6]);
       }
+    } else if (FileName[1]=='I') {
+      // get file info
+      FRESULT err;
+      FILINFO fno;
+      fno.lfname = &((char*)fbuff)[0];
+      fno.lfsize = 256;
+      err =  f_stat(&FileName[6],&fno);
+      if (err == FR_OK) {
+        char *msg = &((char*)fbuff)[0];
+        msg[0] = 'A';
+        msg[1] = 'x';
+        msg[2] = 'o';
+        msg[3] = 'f';
+        *(int32_t *)(&msg[4]) = fno.fsize;
+        *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
+        strcpy(&msg[12], &FileName[6]);
+        int l = strlen(&msg[12]);
+        chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
+                                (const unsigned char* )msg, l+13);
+      }
     }
   }
 }

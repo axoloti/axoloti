@@ -252,20 +252,46 @@ public class Patch {
         ArrayList<SDFileReference> files = GetDependendSDFiles();
         for (SDFileReference fref : files) {
             File f = fref.localfile;
+            if (f == null) {
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "File not resolved: {0}", fref.targetPath);
+                continue;
+            }
             if (!f.exists()) {
-                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "File reference unresolved: {0}", f.getName());
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "File does not exist: {0}", f.getName());
                 continue;
             }
             if (!f.canRead()) {
                 Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Can't read file {0}", f.getName());
                 continue;
             }
-            if (!SDCardInfo.getInstance().exists("/" + sdpath + "/" + fref.targetPath, f.lastModified(), f.length())) {
-                if (f.length() > 8 * 1024 * 1024) {
-                    Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
-                    continue;
+            String targetfn = fref.targetPath;
+            if (targetfn.isEmpty()) {
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Target filename empty {0}", f.getName());
+                continue;
+            }
+            if (targetfn.charAt(0) != '/') {
+                targetfn = "/" + sdpath + "/" + fref.targetPath;
+            }
+            if (!SDCardInfo.getInstance().exists(targetfn, f.lastModified(), f.length())) {
+                GetQCmdProcessor().AppendToQueue(new qcmds.QCmdGetFileInfo(targetfn));
+                GetQCmdProcessor().WaitQueueFinished();
+                GetQCmdProcessor().AppendToQueue(new qcmds.QCmdPing());
+                GetQCmdProcessor().WaitQueueFinished();
+                if (!SDCardInfo.getInstance().exists(targetfn, f.lastModified(), f.length())) {
+                    if (f.length() > 8 * 1024 * 1024) {
+                        Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
+                        continue;
+                    }
+                    for (int i = 1; i < targetfn.length(); i++) {
+                        if (targetfn.charAt(i) == '/') {
+                            GetQCmdProcessor().AppendToQueue(new qcmds.QCmdCreateDirectory(targetfn.substring(0, i)));
+                            GetQCmdProcessor().WaitQueueFinished();
+                        }
+                    }
+                    GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, targetfn));
+                } else {
+                    Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
                 }
-                GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, "/" + sdpath + "/" + fref.targetPath));
             } else {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
             }
@@ -276,22 +302,23 @@ public class Patch {
         GetQCmdProcessor().AppendToQueue(new QCmdStop());
         if (USBBulkConnection.GetConnection().GetSDCardPresent()) {
             String f = "/" + getSDCardPath();
-            System.out.println("pathf" + f);
-            GetQCmdProcessor().AppendToQueue(new QCmdCreateDirectory(f));
+            //System.out.println("pathf" + f);
+            if (SDCardInfo.getInstance().find(f) == null) {
+                GetQCmdProcessor().AppendToQueue(new QCmdCreateDirectory(f));
+            }
             GetQCmdProcessor().AppendToQueue(new QCmdChangeWorkingDirectory(f));
-    //        GetQCmdProcessor().AppendToQueue(new QCmdStop());
             UploadDependentFiles();
         } else {
             // issue warning when there are dependent files
             ArrayList<SDFileReference> files = GetDependendSDFiles();
-            if (files.size()>0) {
+            if (files.size() > 0) {
                 Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Patch requires file {0} on SDCard, but no SDCard mounted", files.get(0).targetPath);
             }
         }
         ShowPreset(0);
         presetUpdatePending = false;
-        for(AxoObjectInstanceAbstract o:objectinstances){
-            for(ParameterInstance pi:o.getParameterInstances()){
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            for (ParameterInstance pi : o.getParameterInstances()) {
                 pi.ClearNeedsTransmit();
             }
         }
@@ -411,7 +438,7 @@ public class Patch {
             currentState += 1;
             saveState();
         }
-        if(patchframe != null) {
+        if (patchframe != null) {
             patchframe.updateUndoRedoEnabled();
         }
     }
@@ -582,7 +609,7 @@ public class Patch {
         }
         return null;
     }
-    
+
     public Net disconnect(IoletAbstract io) {
         if (!IsLocked()) {
             Net n = GetNet(io);
@@ -602,7 +629,7 @@ public class Patch {
         }
         return null;
     }
-    
+
     public Net delete(Net n) {
         if (!IsLocked()) {
             nets.remove(n);
@@ -612,7 +639,7 @@ public class Patch {
         }
         return null;
     }
-    
+
     public void delete(AxoObjectInstanceAbstract o) {
         if (o == null) {
             return;
@@ -635,7 +662,7 @@ public class Patch {
         }
         objectinstances.remove(o);
         AxoObjectAbstract t = o.getType();
-        if (o!=null){
+        if (o != null) {
             o.Close();
             t.DeleteInstance(o);
             t.removeObjectModifiedListener(o);
@@ -717,7 +744,7 @@ public class Patch {
 
     public void cleanUpIntermediateChangeStates(int n) {
         int length = previousStates.size();
-        if(length >= n) {
+        if (length >= n) {
             previousStates.subList(length - n, length).clear();
             this.currentState -= n - 1;
             saveState();
@@ -2192,7 +2219,7 @@ public class Patch {
 
     public void ShowPreset(int i) {
         presetNo = i;
-        
+
         Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>) objectinstances.clone();
         for (AxoObjectInstanceAbstract o : c) {
             for (ParameterInstance p : o.getParameterInstances()) {
@@ -2353,6 +2380,8 @@ public class Patch {
     }
 
     void Upload() {
+        UploadDependentFiles();
+        GetQCmdProcessor().WaitQueueFinished();
         GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
     }
 
@@ -2582,7 +2611,7 @@ public class Patch {
 
     public void Close() {
         Unlock();
-        Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>)objectinstances.clone();
+        Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>) objectinstances.clone();
         for (AxoObjectInstanceAbstract o : c) {
             o.Close();
         }

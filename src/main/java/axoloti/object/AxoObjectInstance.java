@@ -45,6 +45,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -935,7 +936,24 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     @Override
     public ArrayList<SDFileReference> GetDependendSDFiles() {
-        ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
+        ArrayList<SDFileReference> files = getType().filedepends;
+        if (files == null){
+            files = new ArrayList<SDFileReference>();
+        } else {
+            String p1 = getType().sPath;
+            if (p1==null) {
+                // embedded object, reference path is of the patch
+                p1 = getPatch().getFileNamePath();
+                if (p1 == null) {
+                    p1 = "";
+                }
+            }
+            File f1 = new File(p1);
+            java.nio.file.Path p = f1.toPath().getParent();
+            for (SDFileReference f: files){                
+                f.Resolve(p);
+            }
+        }
         for (AttributeInstance a : attributeInstances) {
             ArrayList<SDFileReference> f2 = a.GetDependendSDFiles();
             if (f2 != null) {

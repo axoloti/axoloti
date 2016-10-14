@@ -483,6 +483,33 @@ public class USBBulkConnection extends Connection {
         return conn;
     }
 
+    @Override
+    public void TransmitGetFileInfo(String filename) {
+        byte[] data = new byte[15 + filename.length()];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'C';
+        data[4] = 0;
+        data[5] = 0;
+        data[6] = 0;
+        data[7] = 0;
+        data[8] = 0;
+        data[9] = 'I';
+        data[10] = 0;
+        data[11] = 0;
+        data[12] = 0;
+        data[13] = 0;
+        int i = 14;
+        for (int j = 0; j < filename.length(); j++) {
+            data[i++] = (byte) filename.charAt(j);
+        }
+        data[i] = 0;
+        ClearSync();
+        writeBytes(data);
+        WaitSync();
+    }
+
     class Sync {
 
         boolean Acked = false;
@@ -1278,11 +1305,11 @@ public class USBBulkConnection extends Connection {
                         fname = fname.substring(0, fname.length() - 1);
                     }
                     SDCardInfo.getInstance().AddFile(fname, size, timestamp);
-//                    Logger.getLogger(SerialConnection.class.getName()).info("fileinfo: " + cb.toString());                    
+//                    Logger.getLogger(USBBulkConnection.class.getName()).info("fileinfo: " + cb.toString());                    
                     GoIdleState();
                     if (fname.equals("/")) {
                         // end of index
-                        System.out.println("sdfilelist done");
+//                        System.out.println("sdfilelist done");
                         synchronized (readsync) {
                             readsync.Acked = true;
                             readsync.notifyAll();
