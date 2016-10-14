@@ -942,6 +942,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/mounter.bin";
         File f = new File(fname);
         if (f.canRead()) {
+            qcmdprocessor.AppendToQueue(new QCmdStop());
             qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
             qcmdprocessor.AppendToQueue(new QCmdStartMounter());
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "will disconnect, unmount sdcard to go back to normal mode (required to connect)");
