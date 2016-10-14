@@ -189,6 +189,7 @@ static msg_t ThreadDSP(void *arg) {
 #endif
       }
       else { // stopping or stopped
+        codec_clearbuffer();
         StopPatch1();
         patchStatus = STOPPED;
         codec_clearbuffer();
