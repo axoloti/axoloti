@@ -4,3 +4,4 @@ extern "C" {
 #include <parameter_functions.h>
 }
 
+#include "arm_intrinsics.hpp"
