@@ -88,6 +88,9 @@ void Exciter::ProcessGranularSamplePlayer(
   const uint32_t restart_point = uint32_t(parameter_ * 32767.0f) << 17;
   const uint32_t phase_increment = static_cast<uint32_t>(
       131072.0f * SemitonesToRatio(72.0f * timbre_ - 60.0f));
+
+  const int16_t* smp_noise_sample = sample_table[1];
+
   const int16_t* base = &smp_noise_sample[static_cast<size_t>(
       signature_ * 8192.0f)];
   
@@ -134,6 +137,8 @@ void Exciter::ProcessSamplePlayer(
     damp = 1.0f - 0.95f * (1.0f - damp);
   }
   
+  const int16_t *smp_sample_data = sample_table[0];
+
   while (size--) {
     uint32_t phase_integral = phase >> 16;
     float phase_fractional = static_cast<float>(phase & 0xffff) / 65536.0f;

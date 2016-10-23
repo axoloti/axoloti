@@ -43373,10 +43373,11 @@ const int16_t smp_noise_sample[] = {
     4608,   5376,   4534,
 };
 
+#endif
 
 const int16_t* sample_table[] = {
-  smp_sample_data,
-  smp_noise_sample,
+  0, // smp_sample_data
+  0, // smp_noise_sample
 };
 
 const size_t smp_boundaries[] = {
@@ -43389,6 +43390,5 @@ const size_t smp_boundaries[] = {
 const size_t* sample_boundary_table[] = {
   smp_boundaries,
 };
-#endif
 
 }  // namespace elements
