@@ -185,7 +185,9 @@ CSRC = $(PORTSRC) \
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CPPSRC = ${MUTABLE_INSTRUMENTS}/braids/analog_oscillator.cpp \
+CPPSRC = \
+       ${FIRMWARE}/axoloti_mi.cpp \
+       ${MUTABLE_INSTRUMENTS}/braids/analog_oscillator.cpp \
        ${MUTABLE_INSTRUMENTS}/braids/digital_oscillator.cpp \
        ${MUTABLE_INSTRUMENTS}/braids/macro_oscillator.cpp \
        ${MUTABLE_INSTRUMENTS}/warps/dsp/filter_bank.cpp \

@@ -43375,7 +43375,8 @@ const int16_t smp_noise_sample[] = {
 
 #endif
 
-const int16_t* sample_table[] = {
+//const int16_t* sample_table[] = {
+int16_t* sample_table[] = {  //Axoloti
   0, // smp_sample_data
   0, // smp_noise_sample
 };

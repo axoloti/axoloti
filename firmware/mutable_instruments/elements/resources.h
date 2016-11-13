@@ -48,7 +48,8 @@ extern const uint32_t* lookup_table_uint32_table[];
 
 extern const float* lookup_table_table[];
 
-extern const int16_t* sample_table[];
+//extern const int16_t* sample_table[];
+extern int16_t* sample_table[]; //Axoloti
 
 extern const size_t* sample_boundary_table[];
 
