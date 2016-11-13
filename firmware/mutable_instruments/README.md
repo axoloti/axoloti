@@ -20,6 +20,8 @@ before initial commit:
 	Note that lut_sine in Elements is 360 degrees, while Rings uses 450 degrees, element 4096 changed from 0 to -2.449293598e-16
 * define M_PI in stmlib/dsp/filter.h
 * changed "#define xxx y" to "const int xxx=y;" in */resources.h 
+* sample_data in elements/resources.h made non-const to allow dynamic loading
+* sample_data initialised with new call loadElementsData in axoloti_mi.h/cpp
 
 Original README
 ===============
