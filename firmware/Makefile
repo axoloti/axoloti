@@ -207,6 +207,8 @@ CPPSRC = \
        ${MUTABLE_INSTRUMENTS}/warps/warps_resources.cpp \
        ${MUTABLE_INSTRUMENTS}/rings/rings_resources.cpp \
        ${MUTABLE_INSTRUMENTS}/mutable_resources.cpp 
+       #${MUTABLE_INSTRUMENTS}/elements/part.cpp \
+       #${MUTABLE_INSTRUMENTS}/elements/voice.cpp \
  
 	   
 # C sources to be compiled in ARM mode regardless of the global setting.
@@ -244,6 +246,7 @@ INCDIR = ${CMSIS}/Include \
          ${MUTABLE_INSTRUMENTS}/warps \
          ${MUTABLE_INSTRUMENTS}/braids \
          ${MUTABLE_INSTRUMENTS}/rings \
+         ${MUTABLE_INSTRUMENTS}/elements \
          ${MUTABLE_INSTRUMENTS}/stmlib
 
 #
