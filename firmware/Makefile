@@ -202,10 +202,18 @@ CPPSRC = \
        ${MUTABLE_INSTRUMENTS}/elements/dsp/exciter.cpp \
        ${MUTABLE_INSTRUMENTS}/elements/elements_resources.cpp \
        ${MUTABLE_INSTRUMENTS}/stmlib/dsp/units.cpp \
+       ${MUTABLE_INSTRUMENTS}/stmlib/dsp/atan.cpp \
        ${MUTABLE_INSTRUMENTS}/stmlib/utils/random.cpp \
        ${MUTABLE_INSTRUMENTS}/braids/braids_resources.cpp \
        ${MUTABLE_INSTRUMENTS}/warps/warps_resources.cpp \
        ${MUTABLE_INSTRUMENTS}/rings/rings_resources.cpp \
+       ${MUTABLE_INSTRUMENTS}/clouds/clouds_resources.cpp \
+       ${MUTABLE_INSTRUMENTS}/clouds/dsp/correlator.cpp \
+       ${MUTABLE_INSTRUMENTS}/clouds/dsp/mu_law.cpp \
+       ${MUTABLE_INSTRUMENTS}/clouds/dsp/granular_processor.cpp \
+       ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/frame_transformation.cpp \
+       ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/phase_vocoder.cpp \
+       ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/stft.cpp \
        ${MUTABLE_INSTRUMENTS}/mutable_resources.cpp 
        #${MUTABLE_INSTRUMENTS}/elements/part.cpp \
        #${MUTABLE_INSTRUMENTS}/elements/voice.cpp \
