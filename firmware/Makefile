@@ -181,7 +181,8 @@ CSRC = $(PORTSRC) \
        ${FIRMWARE}/crc32.c \
        ${FIRMWARE}/exceptions.c \
        ${FIRMWARE}/watchdog.c \
-       ${FIRMWARE}/sysmon.c 
+       ${FIRMWARE}/sysmon.c \
+       ${FIRMWARE}/axoloti_memory.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

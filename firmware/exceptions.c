@@ -50,7 +50,8 @@ typedef enum {
   brownout,
   goto_DFU,
   fatfs_error,
-  patch_load_crc_fail
+  patch_load_crc_fail,
+  patch_load_sdram_overflow
 } faulttype;
 
 typedef struct {
@@ -248,6 +249,9 @@ void exception_checkandreport(void) {
     else if (exceptiondump->type == patch_load_crc_fail) {
       LogTextMessage("failed to load patch, firmware version mismatch? filename:\"%s\"",(char *)(BKPSRAM_BASE)+12);
     }
+    else if (exceptiondump->type == patch_load_sdram_overflow) {
+      LogTextMessage("sdram overflow by %d bytes",exceptiondump->r0);
+    }
     else
     {
       LogTextMessage("unknown exception?");
@@ -304,6 +308,29 @@ void report_patchLoadFail(const char *fn) {
     return;
   exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
   exceptiondump->type = patch_load_crc_fail;
+  char *p;
+  p = (char *)(BKPSRAM_BASE)+12;
+  if (fn!=0) {
+    if (*fn != '/') {
+      // prepend CWD
+      f_getcwd(p,40);
+      while(*p!=0) p++;
+      *p++ = '/';
+    }
+    int i = 20;
+    while(i-- && *fn){
+      *p++ = *fn++;
+    }
+  }
+  *p = 0;
+}
+
+void report_patchLoadSDRamOverflow(const char *fn, int amount) {
+  if (exceptiondump->magicnumber == ERROR_MAGIC_NUMBER)
+    return;
+  exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
+  exceptiondump->r0 = amount;
+  exceptiondump->type = patch_load_sdram_overflow;
   char *p;
   p = (char *)(BKPSRAM_BASE)+12;
   if (fn!=0) {

@@ -26,6 +26,7 @@
 #include "pconnection.h"
 #include "sysmon.h"
 #include "codec.h"
+#include "axoloti_memory.h"
 
 patchMeta_t patchMeta;
 
@@ -129,7 +130,6 @@ static void StopPatch1(void) {
   UIGoSafe();
   InitPatch0();
   sysmon_enable_blinker();
-  patchStatus = STOPPED;
 }
 
 static int StartPatch1(void) {
@@ -148,6 +148,14 @@ static int StartPatch1(void) {
   if (patchMeta.fptr_dsp_process == 0) {
     report_patchLoadFail((const char *)&loadFName[0]);
     patchStatus = STARTFAILED;
+    return -1;
+  }
+  int32_t sdrem = sdram_get_free();
+  if (sdrem<0) {
+    StopPatch1();
+    patchStatus = STARTFAILED;
+    patchMeta.patchID = 0;
+    report_patchLoadSDRamOverflow((const char *)&loadFName[0],-sdrem);
     return -1;
   }
   patchStatus = RUNNING;
@@ -188,10 +196,13 @@ static msg_t ThreadDSP(void *arg) {
         }
 #endif
       }
-      else { // stopping or stopped
+      else if (patchStatus == STOPPING){
         codec_clearbuffer();
         StopPatch1();
         patchStatus = STOPPED;
+        codec_clearbuffer();
+      }
+      else if (patchStatus == STOPPED){
         codec_clearbuffer();
       }
       adc_convert();
@@ -210,6 +221,7 @@ static msg_t ThreadDSP(void *arg) {
       // load patch event
       codec_clearbuffer();
       StopPatch1();
+      patchStatus = STOPPED;
       if (loadFName[0]) {
         int res = sdcard_loadPatch1(loadFName);
         if (!res) StartPatch1();
@@ -323,13 +335,19 @@ void StopPatch(void) {
         break;
     }
     StopPatch1();
+    patchStatus = STOPPED;
   }
 }
 
 int StartPatch(void) {
   chEvtSignal(pThreadDSP, (eventmask_t)4);
+  int i = 0;
   while ((patchStatus != RUNNING) && (patchStatus != STARTFAILED)) {
     chThdSleepMilliseconds(1);
+  }
+  if (patchStatus == STARTFAILED) {
+    patchStatus = STOPPED;
+    LogTextMessage("patch start failed",patchStatus);
   }
   return 0;
 }

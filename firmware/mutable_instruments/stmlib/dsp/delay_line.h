@@ -31,6 +31,7 @@
 
 #include "stmlib/stmlib.h"
 #include "stmlib/dsp/dsp.h"
+#include "axoloti_memory.h"
 
 #include <algorithm>
 
@@ -43,7 +44,8 @@ class DelayLine {
   ~DelayLine() { }
   
   void Init() {
-    Reset();
+    line_ = (T *)sdram_malloc(sizeof(T[max_delay]));
+    if (line_) Reset();
   }
 
   void Reset() {
@@ -107,7 +109,7 @@ class DelayLine {
  private:
   size_t write_ptr_;
   size_t delay_;
-  T line_[max_delay];
+  T *line_;
   
   DISALLOW_COPY_AND_ASSIGN(DelayLine);
 };
