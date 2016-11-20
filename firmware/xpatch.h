@@ -20,5 +20,5 @@ extern "C" {
 #include "elements/dsp/fx/diffuser.h"
 #include "elements/dsp/fx/reverb.h"
 #include "clouds/dsp/fx/pitch_shifter.h"
-//#include "elements/dsp/part.h"
-//#include "elements/dsp/patch.h"
+#include "elements/dsp/part.h"
+#include "elements/dsp/patch.h"

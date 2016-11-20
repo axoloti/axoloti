@@ -202,6 +202,8 @@ CPPSRC = \
        ${MUTABLE_INSTRUMENTS}/elements/dsp/tube.cpp \
        ${MUTABLE_INSTRUMENTS}/elements/dsp/exciter.cpp \
        ${MUTABLE_INSTRUMENTS}/elements/elements_resources.cpp \
+       ${MUTABLE_INSTRUMENTS}/elements/part.cpp \
+       ${MUTABLE_INSTRUMENTS}/elements/voice.cpp \
        ${MUTABLE_INSTRUMENTS}/stmlib/dsp/units.cpp \
        ${MUTABLE_INSTRUMENTS}/stmlib/dsp/atan.cpp \
        ${MUTABLE_INSTRUMENTS}/stmlib/utils/random.cpp \
@@ -216,8 +218,6 @@ CPPSRC = \
        ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/phase_vocoder.cpp \
        ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/stft.cpp \
        ${MUTABLE_INSTRUMENTS}/mutable_resources.cpp 
-       #${MUTABLE_INSTRUMENTS}/elements/part.cpp \
-       #${MUTABLE_INSTRUMENTS}/elements/voice.cpp \
  
 	   
 # C sources to be compiled in ARM mode regardless of the global setting.
