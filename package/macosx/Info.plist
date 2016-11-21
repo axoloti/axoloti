@@ -1,0 +1,95 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+ <dict>
+  <key>LSMinimumSystemVersion</key>
+  <string>10.7.4</string>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>English</string>
+  <key>CFBundleAllowMixedLocalizations</key>
+  <true/>
+  <key>CFBundleExecutable</key>
+  <string>Axoloti</string>
+  <key>CFBundleIconFile</key>
+  <string>Axoloti.icns</string>
+  <key>CFBundleIdentifier</key>
+  <string>axoloti</string>
+  <key>CFBundleInfoDictionaryVersion</key>
+  <string>6.0</string>
+  <key>CFBundleName</key>
+  <string>Axoloti</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>CFBundleShortVersionString</key>
+  <string>1.0.11</string>
+  <key>CFBundleSignature</key>
+  <string>????</string>
+  <!-- See http://developer.apple.com/library/mac/#releasenotes/General/SubmittingToMacAppStore/_index.html
+       for list of AppStore categories -->
+  <key>LSApplicationCategoryType</key>
+  <string>Unknown</string>
+  <key>CFBundleVersion</key>
+  <string>1.0.11</string>
+  <key>NSHumanReadableCopyright</key>
+  <string>Axoloti.com</string>
+  <key>CFBundleDocumentTypes</key>
+  <array>
+    <dict>
+      <key>LSItemContentTypes</key>
+      <array>
+        <string>axoloti.axp</string>
+      </array>
+
+      <key>CFBundleTypeName</key>
+      <string>null File</string>
+
+      <key>LSHandlerRank</key>
+      <string>Owner</string>
+
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+
+      <key>LSIsAppleDefaultForType</key>
+      <true/>
+
+    </dict>
+  </array>
+
+  <key>UTExportedTypeDeclarations</key>
+  <array>
+    <dict>
+      <key>UTTypeIdentifier</key>
+      <string>axoloti.axp</string>
+
+      <key>UTTypeDescription</key>
+      <string>null File</string>
+      <key>UTTypeConformsTo</key>
+      <array>
+          <string>public.data</string>
+      </array>
+
+
+      <key>UTTypeTagSpecification</key>
+      <dict>
+
+        <key>public.filename-extension</key>
+        <array>
+          <string>axp</string>
+          <string>axs</string>
+          <string>axh</string>
+          <string>axo</string>
+        </array>
+        <key>public.mime-type</key>
+        <array>
+          <string>application/xml</string>
+        </array>
+      </dict>
+    </dict>
+  </array>
+
+  <key>NSSupportsAutomaticGraphicsSwitching</key>
+  <string>true</string>
+  <key>NSHighResolutionCapable</key>
+  <string>true</string>
+ </dict>
+</plist>

@@ -13,6 +13,7 @@ extern "C" {
 #include "rings/dsp/fx/chorus.h"
 #include "rings/dsp/fx/ensemble.h"
 #include "rings/dsp/fx/reverb.h"
+#include "warps/dsp/modulator.h"
 #include "warps/dsp/vocoder.h"
 #include "elements/dsp/exciter.h"
 #include "elements/dsp/tube.h"
