@@ -43,7 +43,7 @@ const int32_t kNumBands = 20;
 const int32_t kLowFactor = 4;
 const int32_t kMidFactor = 3;
 const int32_t kDelayLineSize = 6144;
-const int32_t kMaxFilterBankBlockSize = 96;
+const int32_t kMaxFilterBankBlockSize = 16;
 const int32_t kSampleMemorySize = kMaxFilterBankBlockSize * kNumBands / 2;
 
 class PooledDelayLine {
@@ -104,7 +104,7 @@ class FilterBank {
   
   float tmp_[2][kMaxFilterBankBlockSize];
   float samples_[kSampleMemorySize];
-  float delay_buffer_[kDelayLineSize];
+  float *delay_buffer_;
   
   Band band_[kNumBands + 1];
   

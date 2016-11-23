@@ -43,7 +43,7 @@
 
 namespace warps {
 
-const size_t kMaxBlockSize = 96;
+const size_t kMaxBlockSize = 16;
 const size_t kOversampling = 6;
 const size_t kNumOscillators = 1;
 

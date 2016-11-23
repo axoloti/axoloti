@@ -32,12 +32,15 @@
 
 #include "warps/resources.h"
 
+#include "axoloti_memory.h"
+
 namespace warps {
 
 using namespace std;
 using namespace stmlib;
 
 void FilterBank::Init(float sample_rate) {
+  delay_buffer_ = (float *)sdram_malloc(sizeof(float[kDelayLineSize]));
   low_src_down_.Init();
   low_src_up_.Init();
   mid_src_down_.Init();
