@@ -251,7 +251,7 @@ void DigitalOscillator::RenderComb(
   filtered_pitch = (15 * filtered_pitch + pitch) >> 4;
   state_.ffm.previous_sample = filtered_pitch;
   
-  int16_t* dl = delay_lines_.comb;
+  int16_t* dl = delay_lines_->comb;
   uint32_t delay = ComputeDelay(filtered_pitch);
   if (delay > (kCombDelayLength << 16)) {
     delay = kCombDelayLength << 16;
@@ -1142,7 +1142,7 @@ void DigitalOscillator::RenderPlucked(
     int32_t sample = 0;
     for (size_t i = 0; i < kNumPluckVoices; ++i) {
       PluckState* p = &state_.plk[i];
-      int16_t* dl = delay_lines_.ks + i * 1025;
+      int16_t* dl = delay_lines_->ks + i * 1025;
       // Initialization: Just use a white noise sample and fill the delay
       // line.
       if (p->initialization_ptr) {
@@ -1198,12 +1198,12 @@ void DigitalOscillator::RenderBowed(
     const uint8_t* sync,
     int16_t* buffer,
     size_t size) {
-  int8_t* dl_b = delay_lines_.bowed.bridge;
-  int8_t* dl_n = delay_lines_.bowed.neck;
+  int8_t* dl_b = delay_lines_->bowed.bridge;
+  int8_t* dl_n = delay_lines_->bowed.neck;
   
   if (strike_) {
-    memset(dl_b, 0, sizeof(delay_lines_.bowed.bridge));
-    memset(dl_n, 0, sizeof(delay_lines_.bowed.neck));
+    memset(dl_b, 0, sizeof(delay_lines_->bowed.bridge));
+    memset(dl_n, 0, sizeof(delay_lines_->bowed.neck));
     memset(&state_, 0, sizeof(state_));
     strike_ = false;
   }
@@ -1308,9 +1308,9 @@ void DigitalOscillator::RenderBlown(
   uint16_t delay_ptr = state_.phy.delay_ptr;
   int32_t lp_state = state_.phy.lp_state;
   
-  int16_t* dl = delay_lines_.bore;
+  int16_t* dl = delay_lines_->bore;
   if (strike_) {
-    memset(dl, 0, sizeof(delay_lines_.bore));
+    memset(dl, 0, sizeof(delay_lines_->bore));
     strike_ = false;
   }
 
@@ -1376,13 +1376,13 @@ void DigitalOscillator::RenderFluted(
   int32_t dc_blocking_x0 = state_.phy.filter_state[0];
   int32_t dc_blocking_y0 = state_.phy.filter_state[1];
 
-  int8_t* dl_b = delay_lines_.fluted.bore;
-  int8_t* dl_j = delay_lines_.fluted.jet;
+  int8_t* dl_b = delay_lines_->fluted.bore;
+  int8_t* dl_j = delay_lines_->fluted.jet;
   
   if (strike_) {
     excitation_ptr = 0;
-    memset(dl_b, 0, sizeof(delay_lines_.fluted.bore));
-    memset(dl_j, 0, sizeof(delay_lines_.fluted.jet));
+    memset(dl_b, 0, sizeof(delay_lines_->fluted.bore));
+    memset(dl_j, 0, sizeof(delay_lines_->fluted.jet));
     lp_state = 0;
     strike_ = false;
   }

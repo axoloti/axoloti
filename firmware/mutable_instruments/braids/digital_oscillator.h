@@ -34,6 +34,8 @@
 #include "braids/excitation.h"
 #include "braids/svf.h"
 
+#include "axoloti_memory.h"
+
 #include <cstring>
 
 namespace braids {
@@ -236,6 +238,20 @@ union DigitalOscillatorState {
   uint32_t modulator_phase;
 };
 
+typedef union {
+  int16_t comb[kCombDelayLength];
+  int16_t ks[1025 * 4];
+  struct {
+    int8_t bridge[kWGBridgeLength];
+    int8_t neck[kWGNeckLength];
+  } bowed;
+  int16_t bore[kWGBoreLength];
+  struct {
+    int8_t jet[kWGJetLength];
+    int8_t bore[kWGFBoreLength];
+  } fluted;
+} delay_lines_t;
+
 class DigitalOscillator {
  public:
   typedef void (DigitalOscillator::*RenderFn)(const uint8_t*, int16_t*, size_t);
@@ -244,6 +260,7 @@ class DigitalOscillator {
   ~DigitalOscillator() { }
   
   inline void Init() {
+    delay_lines_ = (delay_lines_t *)sdram_malloc(1025 * 8);
     memset(&state_, 0, sizeof(state_));
     pulse_[0].Init();
     pulse_[1].Init();
@@ -358,20 +375,8 @@ class DigitalOscillator {
   
   Excitation pulse_[4];
   Svf svf_[3];
-  
-  union {
-    int16_t comb[kCombDelayLength];
-    int16_t ks[1025 * 4];
-    struct {
-      int8_t bridge[kWGBridgeLength];
-      int8_t neck[kWGNeckLength];
-    } bowed;
-    int16_t bore[kWGBoreLength];
-    struct {
-      int8_t jet[kWGJetLength];
-      int8_t bore[kWGFBoreLength];
-    } fluted;
-  } delay_lines_;
+
+  delay_lines_t * delay_lines_;
   
   static RenderFn fn_table_[];
   
