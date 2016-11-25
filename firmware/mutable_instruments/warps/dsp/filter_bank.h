@@ -41,7 +41,7 @@ namespace warps {
 
 const int32_t kNumBands = 20;
 const int32_t kLowFactor = 4;
-const int32_t kMidFactor = 3;
+const int32_t kMidFactor = 4;
 const int32_t kDelayLineSize = 6144;
 const int32_t kMaxFilterBankBlockSize = 16;
 const int32_t kSampleMemorySize = kMaxFilterBankBlockSize * kNumBands / 2;
@@ -97,8 +97,8 @@ class FilterBank {
   }
   
  private:
-  SampleRateConverter<SRC_DOWN, kMidFactor, 36> mid_src_down_;
-  SampleRateConverter<SRC_UP, kMidFactor, 36> mid_src_up_;
+  SampleRateConverter<SRC_DOWN, kMidFactor, 48> mid_src_down_;
+  SampleRateConverter<SRC_UP, kMidFactor, 48> mid_src_up_;
   SampleRateConverter<SRC_DOWN, kLowFactor, 48> low_src_down_;
   SampleRateConverter<SRC_UP, kLowFactor, 48> low_src_up_;
   

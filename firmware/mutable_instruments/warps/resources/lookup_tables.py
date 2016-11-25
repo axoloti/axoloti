@@ -100,7 +100,7 @@ lookup_tables += [('bipolar_fold', bipolar_fold)]
 MIDI to normalized frequency table.
 ----------------------------------------------------------------------------"""
 
-SAMPLE_RATE = 96000
+SAMPLE_RATE = 48000
 
 TABLE_SIZE = 256
 

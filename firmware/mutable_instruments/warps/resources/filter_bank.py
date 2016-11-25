@@ -59,19 +59,29 @@ def modified_chamberlin(f, fq, x, mode='bp'):
   return y
 
 
+if True:
+  # new parameters
+  SAMPLE_RATE = 48000
+  IR_SIZE = 2048
+  sample_rates = [SAMPLE_RATE / 16] * 9
+  sample_rates += [SAMPLE_RATE / 4] * 6
+  sample_rates += [SAMPLE_RATE] * 5
+else:
+  # original parameters
+  SAMPLE_RATE = 96000
+  IR_SIZE = 2048
+  sample_rates = [SAMPLE_RATE / 12] * 13
+  sample_rates += [SAMPLE_RATE / 3] * 6
+  sample_rates += [SAMPLE_RATE] * 1
 
-SAMPLE_RATE = 96000
-IR_SIZE = 2048
 
-
-sample_rates = [SAMPLE_RATE / 12] * 13
-sample_rates += [SAMPLE_RATE / 3] * 6
-sample_rates += [SAMPLE_RATE] * 1
 num_bands = len(sample_rates)
 
 interval = 2 ** (1 / 3.0)
 first_frequency = 110 / interval
 frequencies = first_frequency * (interval ** numpy.arange(0, num_bands))
+
+print(frequencies)
 
 filters = []
 
@@ -81,6 +91,7 @@ reconstruction = {}
 generate_figures = __name__ == '__main__'
 
 for index, (frequency, sr) in enumerate(zip(frequencies, sample_rates)):
+  print "%2d: f=%5.2f Hz ; sr= %5.2f ; f/sr=%.4f" %(index, frequency,sr,frequency/sr)
   if not sr in reconstruction:
     reconstruction[sr] = [0.0, 0.0]
     responses[sr] = []
@@ -127,6 +138,7 @@ for index, (frequency, sr) in enumerate(zip(frequencies, sample_rates)):
   # total impulse response.
   if index == num_bands - 1:
     delay += 4
+  print '    d=',delay/sr
   
   coefficients[0] = SAMPLE_RATE / sr
   coefficients[1] = numpy.floor(delay)
@@ -135,16 +147,17 @@ for index, (frequency, sr) in enumerate(zip(frequencies, sample_rates)):
   filters += [('%3.0f_%d' % (frequency * 0.5 * sr, sr), coefficients)]
   
   reconstruction[sr][1] += out
+  # numpy.roll(out, numpy.int_(numpy.floor(delay)))
 
 
 
-if generate_figures:
+if True:
   pylab.figure(figsize=(20,8))
   n = len(responses.keys())
   for row, sr in enumerate(sorted(responses.keys())):
     f = numpy.arange(IR_SIZE / 2 + 1) / float(IR_SIZE) * sr
     for column, plots in enumerate([reconstruction[sr], responses[sr]]):
-      pylab.subplot(2, n, column * n + row + 1)
+      pylab.subplot(4, n, column * n + row + 1)
       for r in plots:
         sy = numpy.log10(numpy.abs(numpy.fft.rfft(r)) + 1e-20) * 20.0
         pylab.semilogx(f, sy)
@@ -152,6 +165,17 @@ if generate_figures:
       pylab.ylim(-36, 12)
       pylab.xlabel('Frequency (Hz)')
       pylab.ylabel('Gain (dB)')
+      if len(plots) == 2:
+        pylab.ylim(-4, 3)
+        #pylab.legend(['Direct form', 'Chamberlin'])
+    for column, plots in enumerate([reconstruction[sr], responses[sr]]):
+      pylab.subplot(4, n, 2 * n + column * n + row + 1)
+      for r in plots:
+        pylab.plot(r)
+      pylab.xlim(0, 200)
+#      pylab.ylim(-36, 12)
+      pylab.xlabel('t')
+      pylab.ylabel('amp')
       if len(plots) == 2:
         pylab.ylim(-4, 3)
         #pylab.legend(['Direct form', 'Chamberlin'])
