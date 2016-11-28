@@ -763,12 +763,18 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (pf != null) {
             boolean isVisible = pf.isVisible();
             PatchGUI p = pf.getPatch();
-            p.WriteCode();
-            p.Compile();
             p.UploadToSDCard();
             if (!isVisible) {
                 pf.Close();
             }
+
+            //FIXME: workaround waitQueueFinished bug
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                ;
+            }
+
             QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
         }
     }
