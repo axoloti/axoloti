@@ -24,3 +24,4 @@ extern "C" {
 #include "clouds/dsp//granular_processor.h"
 #include "elements/dsp/part.h"
 #include "elements/dsp/patch.h"
+#include "streams/processor.h"
