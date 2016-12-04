@@ -46,6 +46,7 @@ ifeq ($(USE_FPU),)
   USE_FPU = hard
 endif
 
+#Axoloti optional modules, here we define defaults if none supplied
 ifeq ($(AXO_OPT_MODULES),)
 	AXO_OPT_MODULES = BRAIDS RINGS CLOUDS STREAMS ELEMENTS WARPS
 endif
@@ -189,11 +190,9 @@ CSRC = $(PORTSRC) \
        ${FIRMWARE}/sysmon.c \
        ${FIRMWARE}/axoloti_memory.c
 
-# C++ sources that can be compiled in ARM or THUMB mode depending on the global
-# setting.
-
+#optional modules
 ifneq (,$(findstring BRAIDS,$(AXO_OPT_MODULES)))
-$(info including BRAIDS)
+#$(info including BRAIDS)
 BRAIDS_SRC = \
        ${MUTABLE_INSTRUMENTS}/braids/braids_resources.cpp \
        ${MUTABLE_INSTRUMENTS}/braids/analog_oscillator.cpp \
@@ -202,7 +201,7 @@ BRAIDS_SRC = \
 endif
 
 ifneq (,$(findstring WARPS,$(AXO_OPT_MODULES)))
-$(info including WARPS)
+#$(info including WARPS)
 WARPS_SRC = \
        ${MUTABLE_INSTRUMENTS}/warps/warps_resources.cpp \
        ${MUTABLE_INSTRUMENTS}/warps/dsp/filter_bank.cpp \
@@ -212,7 +211,7 @@ WARPS_SRC = \
 endif
 
 ifneq (,$(findstring ELEMENTS,$(AXO_OPT_MODULES)))
-$(info including ELEMENTS)
+#$(info including ELEMENTS)
 ELEMENTS_SRC = \
        ${FIRMWARE}/axoloti_mi.cpp \
        ${MUTABLE_INSTRUMENTS}/elements/dsp/multistage_envelope.cpp \
@@ -227,7 +226,7 @@ ELEMENTS_SRC = \
 endif
 
 ifneq (,$(findstring CLOUDS,$(AXO_OPT_MODULES)))
-$(info including CLOUDS)
+#$(info including CLOUDS)
 CLOUDS_SRC = \
        ${MUTABLE_INSTRUMENTS}/clouds/clouds_resources.cpp \
        ${MUTABLE_INSTRUMENTS}/clouds/dsp/correlator.cpp \
@@ -239,13 +238,13 @@ CLOUDS_SRC = \
 endif
 
 ifneq (,$(findstring RINGS,$(AXO_OPT_MODULES)))
-$(info  including RINGS)
+#$(info  including RINGS)
 RINGS_SRC = \
        ${MUTABLE_INSTRUMENTS}/rings/rings_resources.cpp 
 endif
 
 ifneq (,$(findstring STREAMS,$(AXO_OPT_MODULES)))
-$(info including STREAMS)
+#$(info including STREAMS)
 STREAMS_SRC = \
        ${MUTABLE_INSTRUMENTS}/streams/streams_resources.cpp \
        ${MUTABLE_INSTRUMENTS}/streams/compressor.cpp \
@@ -257,8 +256,10 @@ STREAMS_SRC = \
        ${MUTABLE_INSTRUMENTS}/streams/vactrol.cpp 
 endif
 
-$(info including base MI)
+#$(info including base MI)
 
+# C++ sources that can be compiled in ARM or THUMB mode depending on the global
+# setting.
 CPPSRC = \
        ${MUTABLE_INSTRUMENTS}/stmlib/dsp/units.cpp \
        ${MUTABLE_INSTRUMENTS}/stmlib/dsp/atan.cpp \
