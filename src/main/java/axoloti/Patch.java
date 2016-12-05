@@ -1542,9 +1542,8 @@ public class Patch {
 
         CreateIID();
         SortByPosition();
-        String c = "extern \"C\" { \n";
-        c += generateIncludes();
-        c += "}\n"
+        String c = generateIncludes();
+        c += "\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-parameter\"\n";
         if (settings == null) {
