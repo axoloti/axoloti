@@ -43,9 +43,11 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
 
     @Override
     public String GenerateCodeInit(String vprefix) {
-        String s = "   int _i;\n"
+        String s = "{\n"
+                + "   int _i;\n"
                 + "   for(_i=0;_i<" + n + ";_i++)\n"
-                + "   " + GetCName()+ "[_i] = 0;\n";
+                + "   " + GetCName()+ "[_i] = 0;\n"
+                + "}\n";
         return s;
     }
 
