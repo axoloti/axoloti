@@ -76,6 +76,9 @@ public abstract class DisplayInstance<T extends Display> extends JPanel implemen
             add(new LabelComponent(display.name));
         }
         setSize(getPreferredSize());
+        if (display.getDescription() != null) {
+            setToolTipText(display.getDescription());
+        }
     }
 
     public abstract void ProcessByteBuffer(ByteBuffer bb);

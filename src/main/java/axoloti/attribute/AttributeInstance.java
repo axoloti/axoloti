@@ -57,6 +57,9 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(new LabelComponent(GetDefinition().getName()));
         setSize(getPreferredSize());
+        if (attr.getDescription() != null) {
+            setToolTipText(attr.getDescription());
+        }
     }
 
     @Override
