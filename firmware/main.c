@@ -153,17 +153,13 @@ int main(void) {
     sdcard_attemptMountIfUnmounted();
     if (fs_ready && !palReadPad(SW2_PORT, SW2_PIN)){
       // button S2 not pressed
-      FRESULT res;
-//      res = f_stat("/start.bin", NULL);
-//      if (res == FR_OK) {
-        LoadPatch("/start.bin");
-//      }
+      LoadPatchStartSD();
     }
 #endif
 
     // if no patch booting or running yet
     // try loading from flash
-    if (patchStatus != RUNNING) {
+    if (patchStatus == STOPPED) {
       if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
         LoadPatchStartFlash();
     }

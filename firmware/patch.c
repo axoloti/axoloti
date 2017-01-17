@@ -387,6 +387,7 @@ void LoadPatchStartSD(void) {
   strcpy(loadFName, "/START.BIN");
   loadPatchIndex = START_SD;
   chEvtSignal(pThreadDSP, (eventmask_t)2);
+  chThdSleepMilliseconds(50);
 }
 
 void LoadPatchStartFlash(void) {
