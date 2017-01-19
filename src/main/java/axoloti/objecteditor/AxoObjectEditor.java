@@ -21,6 +21,7 @@ import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
 import axoloti.MainFrame;
 import axoloti.object.AxoObject;
+import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.ObjectModifiedListener;
 import axoloti.utils.AxolotiLibrary;
@@ -363,9 +364,9 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         // if it's an embedded object ("patch/object"), assume the parent patch is saving
         if (IsEmbeddedObj()) {
             if (hasChanged()) {
-                
+
             }
-            Close();            
+            Close();
             return false;
         }
         // warn if changes, and its not an embedded object
@@ -422,6 +423,19 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
     public void setActiveTabIndex(int n) {
         this.jTabbedPane1.setSelectedIndex(n);
+    }
+
+    boolean isCompositeObject() {
+        if (editObj.sPath == null) {
+            return false;
+        }
+        int count = 0;
+        for (AxoObjectAbstract o : MainFrame.axoObjects.ObjectList) {
+            if (editObj.sPath.equalsIgnoreCase(o.sPath)) {
+                count++;
+            }
+        }
+        return (count > 1);
     }
 
     /**
@@ -813,9 +827,14 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
         editObj.FireObjectModified(this);
-        MainFrame.axoObjects.WriteAxoObject(editObj.sPath, editObj);
-        updateReferenceXML();
-        MainFrame.axoObjects.LoadAxoObjects();
+        if (!isCompositeObject()) {
+            MainFrame.axoObjects.WriteAxoObject(editObj.sPath, editObj);
+            updateReferenceXML();
+            MainFrame.axoObjects.LoadAxoObjects();
+        } else {
+            JOptionPane.showMessageDialog(null, "The original object file " + editObj.sPath + " contains multiple objects, the object editor does not support this.\n"
+                    + "Your changes are NOT saved!");
+        }
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void jMenuItemCopyToLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCopyToLibraryActionPerformed
