@@ -53,6 +53,7 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
     public DialComponent CreateControl() {
         DialComponent d = new DialComponent(0.0, getMin(), getMax(), getTick());
         d.setParentAxoObjectInstance(axoObj);
+        d.setNative(convs);
         return d;
     }
 
