@@ -62,6 +62,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -875,6 +876,66 @@ public class Patch {
         Collections.sort(this.objectinstances);
         refreshIndexes();
     }
+    
+    void SortParentsByExecution(AxoObjectInstanceAbstract o, LinkedList<AxoObjectInstanceAbstract> result)
+    {
+        LinkedList<AxoObjectInstanceAbstract> before = new LinkedList<AxoObjectInstanceAbstract>(result);
+        LinkedList<AxoObjectInstanceAbstract> parents = new LinkedList<AxoObjectInstanceAbstract>();
+        // get the parents
+        for (InletInstance il : o.GetInletInstances()) {
+            Net n = GetNet(il);
+            if (n != null) {
+                for (OutletInstance ol: n.GetSource()) {
+                    AxoObjectInstanceAbstract i = ol.GetObjectInstance();
+                    if (!parents.contains(i)) {    
+                        parents.add(i);
+                    }
+                }
+            }
+        }
+        // sort the parents
+        Collections.sort(parents);
+        // prepend any we haven't seen before
+        for (AxoObjectInstanceAbstract c: parents) {
+            if (!result.contains(c))
+                result.addFirst(c);
+        }
+        // prepend their parents 
+        for (AxoObjectInstanceAbstract c: parents) {
+            if (!before.contains(c))
+                SortParentsByExecution(c, result);
+        }
+    }
+
+    void SortByExecution() {
+        LinkedList<AxoObjectInstanceAbstract> endpoints = new LinkedList<AxoObjectInstanceAbstract>();
+        LinkedList<AxoObjectInstanceAbstract> result = new LinkedList<AxoObjectInstanceAbstract>();
+        // start with all objects without outlets (end points)
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            if (o.GetOutletInstances().isEmpty()) {
+                endpoints.add(o);
+            } else {
+                int count = 0;
+                for (OutletInstance ol : o.GetOutletInstances()) {
+                    if (GetNet(ol) != null)
+                        count++;
+                }
+                if (count == 0)
+                    endpoints.add(o);
+            }
+        }
+        // sort them by position
+        Collections.sort(endpoints);
+        // walk their inlets
+        for (AxoObjectInstanceAbstract o : endpoints) {
+            SortParentsByExecution(o, result);
+        }
+        // add the end points
+        result.addAll(endpoints);
+        // turn it back into a freshly sorted array
+        objectinstances = new ArrayList<AxoObjectInstanceAbstract>(result);
+        refreshIndexes();
+    }
 
     public Modulator GetModulatorOfModulation(Modulation modulation) {
         if (Modulators == null) {
@@ -1541,7 +1602,7 @@ public class Patch {
         }
 
         CreateIID();
-        SortByPosition();
+        SortByExecution();
         String c = generateIncludes();
         c += "\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
