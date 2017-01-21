@@ -18,6 +18,7 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
+import java.text.ParseException;
 
 /**
  *
@@ -26,4 +27,5 @@ import axoloti.datatypes.Value;
 public interface NativeToReal {
 
     String ToReal(Value v);
+    double FromReal(String s) throws ParseException;
 }
