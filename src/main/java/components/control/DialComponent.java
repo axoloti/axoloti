@@ -39,6 +39,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.text.ParseException;
 
 /**
  *
@@ -213,9 +214,24 @@ public class DialComponent extends ACtrlComponent {
                     break;
                 case KeyEvent.VK_ENTER:
                     fireEventAdjustmentBegin();
-                    try {
-                        setValue(Float.parseFloat(keybBuffer));
-                    } catch (java.lang.NumberFormatException ex) {
+                    boolean converted = false;
+                    // parseFloat accepts d & f - try the convs first
+                    if (convs != null) {
+                        for (NativeToReal c : convs) {
+                            try {
+                                setValue(c.FromReal(keybBuffer));
+                                converted = true;
+                                break;
+                            } catch (ParseException ex2) {
+                            }
+                        }
+                    }
+                    if (!converted) {
+                        // otherwise, try parsing
+                        try {
+                            setValue(Float.parseFloat(keybBuffer));
+                        } catch (java.lang.NumberFormatException ex) {
+                        }
                     }
                     fireEventAdjustmentFinished();
                     keybBuffer = "";
@@ -249,6 +265,43 @@ public class DialComponent extends ACtrlComponent {
                 case '9':
                 case '0':
                 case '.':
+                case ' ':
+                case '+':
+                case '*':
+                case '/':
+                case '#':
+                case 'a':
+                case 'A':
+                case 'b':
+                case 'B':
+                case 'c':
+                case 'C':
+                case 'd':
+                case 'D':
+                case 'e':
+                case 'E':
+                case 'f':
+                case 'F':
+                case 'g':
+                case 'G':
+                case 'h':
+                case 'H':
+                case 'i':
+                case 'I':
+                case 'k':
+                case 'K':
+                case 'm':
+                case 'M':
+                case 'n':
+                case 'N':
+                case 'q':
+                case 'Q':
+                case 's':
+                case 'S':
+                case 'x':
+                case 'X':
+                case 'z':
+                case 'Z':
                     keybBuffer += ke.getKeyChar();
                     ke.consume();
                     break;
