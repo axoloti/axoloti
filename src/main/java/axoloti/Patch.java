@@ -1602,7 +1602,7 @@ public class Patch {
         }
 
         CreateIID();
-        SortByExecution();
+        SortByPosition();
         String c = generateIncludes();
         c += "\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
