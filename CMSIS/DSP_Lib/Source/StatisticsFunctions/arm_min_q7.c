@@ -1,24 +1,24 @@
-/* ----------------------------------------------------------------------    
-* Copyright (C) 2010-2014 ARM Limited. All rights reserved.    
-*    
-* $Date:        12. March 2014
-* $Revision: 	V1.4.3  
-*    
-* Project: 	    CMSIS DSP Library    
-* Title:		arm_min_q7.c    
-*    
-* Description:	Minimum value of a Q7 vector.    
-*    
+/* ----------------------------------------------------------------------
+* Copyright (C) 2010-2014 ARM Limited. All rights reserved.
+*
+* $Date:        03. January 2017
+* $Revision:    V.1.5.0
+*
+* Project:      CMSIS DSP Library
+* Title:        arm_min_q7.c
+*
+* Description:  Minimum value of a Q7 vector.
+*
 * Target Processor: Cortex-M4/Cortex-M3/Cortex-M0
-*  
-* Redistribution and use in source and binary forms, with or without 
+*
+* Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions
 * are met:
 *   - Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
 *   - Redistributions in binary form must reproduce the above copyright
 *     notice, this list of conditions and the following disclaimer in
-*     the documentation and/or other materials provided with the 
+*     the documentation and/or other materials provided with the
 *     distribution.
 *   - Neither the name of ARM LIMITED nor the names of its contributors
 *     may be used to endorse or promote products derived from this
@@ -27,7 +27,7 @@
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-* FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
+* FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
 * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
@@ -35,29 +35,29 @@
 * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-* POSSIBILITY OF SUCH DAMAGE.     
+* POSSIBILITY OF SUCH DAMAGE.
 * ---------------------------------------------------------------------------- */
 
 #include "arm_math.h"
 
-/**    
- * @ingroup groupStats    
- */
-
-/**    
- * @addtogroup Min    
- * @{    
+/**
+ * @ingroup groupStats
  */
 
 
-/**    
- * @brief Minimum value of a Q7 vector.    
- * @param[in]       *pSrc points to the input vector    
- * @param[in]       blockSize length of the input vector    
- * @param[out]      *pResult minimum value returned here    
- * @param[out]      *pIndex index of minimum value returned here    
- * @return none.    
- *    
+/**
+ * @addtogroup Min
+ * @{
+ */
+
+
+/**
+ * @brief Minimum value of a Q7 vector.
+ * @param[in]       *pSrc points to the input vector
+ * @param[in]       blockSize length of the input vector
+ * @param[out]      *pResult minimum value returned here
+ * @param[out]      *pIndex index of minimum value returned here
+ * @return none.
  */
 
 void arm_min_q7(
@@ -66,8 +66,7 @@ void arm_min_q7(
   q7_t * pResult,
   uint32_t * pIndex)
 {
-#ifndef ARM_MATH_CM0_FAMILY
-
+#if defined (ARM_MATH_DSP)
   /* Run the below code for Cortex-M4 and Cortex-M3 */
 
   q7_t minVal1, minVal2, out;                    /* Temporary variables to store the output value. */
@@ -83,34 +82,34 @@ void arm_min_q7(
   /* Loop unrolling */
   blkCnt = (blockSize - 1u) >> 2u;
 
-  while(blkCnt > 0)
+  while (blkCnt > 0u)
   {
     /* Initialize minVal to the next consecutive values one by one */
     minVal1 = *pSrc++;
     minVal2 = *pSrc++;
 
     /* compare for the minimum value */
-    if(out > minVal1)
+    if (out > minVal1)
     {
       /* Update the minimum value and its index */
       out = minVal1;
       outIndex = count + 1u;
     }
 
-    minVal1 = *pSrc++;
-
     /* compare for the minimum value */
-    if(out > minVal2)
+    if (out > minVal2)
     {
       /* Update the minimum value and its index */
       out = minVal2;
       outIndex = count + 2u;
     }
 
+    /* Initialize minVal to the next consecutive values one by one */
+    minVal1 = *pSrc++;
     minVal2 = *pSrc++;
 
     /* compare for the minimum value */
-    if(out > minVal1)
+    if (out > minVal1)
     {
       /* Update the minimum value and its index */
       out = minVal1;
@@ -118,7 +117,7 @@ void arm_min_q7(
     }
 
     /* compare for the minimum value */
-    if(out > minVal2)
+    if (out > minVal2)
     {
       /* Update the minimum value and its index */
       out = minVal2;
@@ -127,14 +126,14 @@ void arm_min_q7(
 
     count += 4u;
 
+    /* Decrement the loop counter */
     blkCnt--;
   }
 
-  /* if (blockSize - 1u ) is not multiple of 4 */
+  /* if (blockSize - 1u) is not multiple of 4 */
   blkCnt = (blockSize - 1u) % 4u;
 
 #else
-
   /* Run the below code for Cortex-M0 */
 
   q7_t minVal1, out;                             /* Temporary variables to store the output value. */
@@ -147,32 +146,30 @@ void arm_min_q7(
 
   blkCnt = (blockSize - 1u);
 
-#endif //      #ifndef ARM_MATH_CM0_FAMILY
+#endif /* #if defined (ARM_MATH_DSP) */
 
-  while(blkCnt > 0)
+  while (blkCnt > 0u)
   {
     /* Initialize minVal to the next consecutive values one by one */
     minVal1 = *pSrc++;
 
     /* compare for the minimum value */
-    if(out > minVal1)
+    if (out > minVal1)
     {
       /* Update the minimum value and it's index */
       out = minVal1;
       outIndex = blockSize - blkCnt;
     }
 
+    /* Decrement the loop counter */
     blkCnt--;
-
   }
 
-  /* Store the minimum value and its index into destination pointers */
+  /* Store the minimum value and it's index into destination pointers */
   *pResult = out;
   *pIndex = outIndex;
-
-
 }
 
-/**    
- * @} end of Min group    
+/**
+ * @} end of Min group
  */

@@ -124,24 +124,39 @@ CSRC = $(PORTSRC) \
        ${FIRMWARE}/patch.c \
        ${FIRMWARE}/flash.c \
        ${FIRMWARE}/virtual_control.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_dct4_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_dct4_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_dct4_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_dct4_init_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_q15.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_bitreversal.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_f32.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_q15.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_q31.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_f32.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_init_f32.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_init_q15.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_init_q31.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_q15.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_q31.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_f32.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_f32.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_q15.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_q31.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_q15.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_q31.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix8_f32.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_f32.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_fast_f32.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_fast_init_f32.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_f32.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_q15.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_q31.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_q15.c \
+       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_q31.c \
        ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_mult_q31.c \
        ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_mult_q15.c \
+       ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_mult_f32.c \
        ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_shift_q31.c \
        ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_shift_q15.c \
+       ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_scale_f32.c \
        ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mult_cmplx_q31.c \
+	   ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mult_cmplx_f32.c \
        ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mag_q31.c \
        ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mult_cmplx_q15.c \
        ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mag_q15.c \
@@ -166,6 +181,7 @@ CSRC = $(PORTSRC) \
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_iir_lattice_init_q31.c\
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_iir_lattice_q31.c\
        ${CMSIS}/DSP_Lib/Source/CommonTables/arm_common_tables.c \
+       ${CMSIS}/DSP_Lib/Source/CommonTables/arm_const_structs.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_core.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ioreq.c \
@@ -295,9 +311,11 @@ TCSRC =
 TCPPSRC =
 
 # List ASM source files here
-ASMSRC = $(PORTASM)
+ASMSRC = $(PORTASM) \
+         ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_bitreversal2.s
 
 INCDIR = ${CMSIS}/Include \
+         ${CMSIS}/DSP_Lib/Include \
 		 $(PORTINC) $(KERNINC) $(TESTINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) \
          $(FATFSINC) \
