@@ -1,3 +1,11 @@
+/* IMPORTANT NOTE: this file is modified by JT 
+*    the macro's
+*       multAcc_32x32_keep32_R, multSub_32x32_keep32_R, mult_32x32_keep32_R, 
+*       multAcc_32x32_keep32, multSub_32x32_keep32, mult_32x32_keep32
+*    do not seem to convince the gcc compiler to emit
+*       SMMLAR, SMMLSR, SMMULR
+*       SMMLA, SMMLS, SMMUL
+*    instructions but less efficient code, so replaced with inline assembly...
 */
 
 /* ----------------------------------------------------------------------
