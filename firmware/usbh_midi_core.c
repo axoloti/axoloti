@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
  * @file    usbh_midi_core.c
- * @author	Johannes Taelman (based on work by Xavier Halgand)
+ * @author  Johannes Taelman (based on work by Xavier Halgand)
  * @version
  * @date
  * @brief   Very basic driver for USB Host MIDI class.
@@ -42,6 +42,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "axoloti_board.h"
+#include "exceptions.h"
 
 USB_Setup_TypeDef MIDI_Setup;
 
@@ -60,17 +61,26 @@ typedef struct
 // Note: this should be moved into main midi structure. (hub support will need this) 
 static struct {
     MIDIEvent_t event[RING_BUFFER_SIZE];
-    volatile uint8_t read_ptr;
-    volatile uint8_t write_ptr;
+    volatile int8_t read_ptr;
+    volatile int8_t write_ptr;
 } send_ring_buffer;
 
+
+void usbh_midi_init_buffer(void) {
+  // make no bytes available for output, initialise will reset
+  send_ring_buffer.read_ptr  = 0;
+  send_ring_buffer.write_ptr = RING_BUFFER_SIZE - 1;
+}
+
+void usbh_midi_deinit_buffer(void) {
+  send_ring_buffer.read_ptr  = 0;
+  send_ring_buffer.write_ptr = -1;
+}
 
 
 void usbh_midi_init(void)
 {
-    // make no bytes available for output, initialise will reset
-    send_ring_buffer.read_ptr  = 0;
-    send_ring_buffer.write_ptr = RING_BUFFER_SIZE - 1;
+  usbh_midi_deinit_buffer();
 }
 
 void usbh_midi_reset_buffer(void) {
@@ -93,11 +103,12 @@ inline uint8_t calcPH(uint8_t port, uint8_t b0) {
 
 
 void usbh_MidiSend1(uint8_t port, uint8_t b0) {
+    if (send_ring_buffer.write_ptr + 1 == 0) return;
     USBH_DbgLog("usbh_MidiSend1");
     uint8_t next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
     
     if(next == send_ring_buffer.read_ptr) {
-        USBH_ErrLog("usbh_MidiSend1 : ring buffer overflow");
+        report_usbh_midi_ringbuffer_overflow();
         return;
     }
     
@@ -109,11 +120,12 @@ void usbh_MidiSend1(uint8_t port, uint8_t b0) {
 }
 
 void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1) {
+    if (send_ring_buffer.write_ptr + 1 == 0) return;
     USBH_DbgLog("usbh_MidiSend2");
     uint8_t next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
     
     if(next == send_ring_buffer.read_ptr) {
-        USBH_ErrLog("usbh_MidiSend2 : ring buffer overflow");
+        report_usbh_midi_ringbuffer_overflow();
         return;
     }
     
@@ -125,11 +137,12 @@ void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1) {
 }
 
 void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
+    if (send_ring_buffer.write_ptr + 1 == 0) return;
     USBH_DbgLog("usbh_MidiSend3");
     uint8_t next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
     
     if(next == send_ring_buffer.read_ptr) {
-        USBH_ErrLog("usbh_MidiSend3 : ring buffer overflow");
+        report_usbh_midi_ringbuffer_overflow();
         return;
     }
     
@@ -146,76 +159,78 @@ void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
 #define CIN_SYSEX_END_3 0x07
 
 void usbh_MidiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len) {
+    if (send_ring_buffer.write_ptr + 1 == 0) return;
     USBH_DbgLog("usbh_MidiSysEx %i",len);
     uint8_t next = send_ring_buffer.write_ptr;
 
     uint8_t cn = ((( port - 1) & 0x0F) << 4);
     uint8_t cin = CIN_SYSEX_START;
     uint8_t ph = cin | cn;
-	int i = 0;
-	for(i = 0; i< (len - 3); i += 3) {
-		next = (next + 1) % RING_BUFFER_SIZE;
-		// later do this up front... but read_ptr may be changing
-		if(next == send_ring_buffer.read_ptr) {
-			USBH_ErrLog("usbh_MidiSysEx : ring buffer overflow");
+    int i = 0;
+    for(i = 0; i< (len - 3); i += 3) {
+        next = (next + 1) % RING_BUFFER_SIZE;
+        // later do this up front... but read_ptr may be changing
+        if(next == send_ring_buffer.read_ptr) {
+            report_usbh_midi_ringbuffer_overflow();
             return;
-		}
+        }
 
-    	USBH_DbgLog("usbh_MidiSysEx start %i,%i", next,i);
-		send_ring_buffer.event[next].data[0] = ph;
-		send_ring_buffer.event[next].data[1] = bytes[i];
-		send_ring_buffer.event[next].data[2] = bytes[i + 1];
-		send_ring_buffer.event[next].data[3] = bytes[i + 2];
-	}
+        USBH_DbgLog("usbh_MidiSysEx start %i,%i", next,i);
+        send_ring_buffer.event[next].data[0] = ph;
+        send_ring_buffer.event[next].data[1] = bytes[i];
+        send_ring_buffer.event[next].data[2] = bytes[i + 1];
+        send_ring_buffer.event[next].data[3] = bytes[i + 2];
+    }
 
-	int res = len - i;
-	
-	// end the sysex message, also handles special cases 2/3 bytes
-	next = (next + 1) % RING_BUFFER_SIZE;
-	if(next == send_ring_buffer.read_ptr) {
-		USBH_ErrLog("usbh_MidiSysEx : ring buffer overflow");
+    int res = len - i;
+
+    // end the sysex message, also handles special cases 2/3 bytes
+    next = (next + 1) % RING_BUFFER_SIZE;
+    if(next == send_ring_buffer.read_ptr) {
+        report_usbh_midi_ringbuffer_overflow();
         return;
-	}
+    }
 
-	if (res == 1) {
-		cin = CIN_SYSEX_END_1;
-		ph = cin | cn;
-    	USBH_DbgLog("usbh_MidiSysEx end 1 %i,%i", next,i);
-		send_ring_buffer.event[next].data[0] = ph;
-		send_ring_buffer.event[next].data[1] = bytes[i];
-		send_ring_buffer.event[next].data[2] = 0;
-		send_ring_buffer.event[next].data[3] = 0;
-	} else if (res == 2) {
-		cin = CIN_SYSEX_END_2;
-		ph = cin | cn;
-    	USBH_DbgLog("usbh_MidiSysEx end 2 %i,%i", next,i);
-		send_ring_buffer.event[next].data[0] = ph;
-		send_ring_buffer.event[next].data[1] = bytes[i];
-		send_ring_buffer.event[next].data[2] = bytes[i + 1];
-		send_ring_buffer.event[next].data[3] = 0;
-	} else if (res == 3) {
-		cin = CIN_SYSEX_END_3;
-		ph = cin | cn;
-    	USBH_DbgLog("usbh_MidiSysEx end 3 %i, %i", next,i);
-		send_ring_buffer.event[next].data[0] = ph;
-		send_ring_buffer.event[next].data[1] = bytes[i];
-		send_ring_buffer.event[next].data[2] = bytes[i + 1];
-		send_ring_buffer.event[next].data[3] = bytes[i + 2];
-	}
+    if (res == 1) {
+        cin = CIN_SYSEX_END_1;
+        ph = cin | cn;
+        USBH_DbgLog("usbh_MidiSysEx end 1 %i,%i", next,i);
+        send_ring_buffer.event[next].data[0] = ph;
+        send_ring_buffer.event[next].data[1] = bytes[i];
+        send_ring_buffer.event[next].data[2] = 0;
+        send_ring_buffer.event[next].data[3] = 0;
+    } else if (res == 2) {
+        cin = CIN_SYSEX_END_2;
+        ph = cin | cn;
+        USBH_DbgLog("usbh_MidiSysEx end 2 %i,%i", next,i);
+        send_ring_buffer.event[next].data[0] = ph;
+        send_ring_buffer.event[next].data[1] = bytes[i];
+        send_ring_buffer.event[next].data[2] = bytes[i + 1];
+        send_ring_buffer.event[next].data[3] = 0;
+    } else if (res == 3) {
+        cin = CIN_SYSEX_END_3;
+        ph = cin | cn;
+        USBH_DbgLog("usbh_MidiSysEx end 3 %i, %i", next,i);
+        send_ring_buffer.event[next].data[0] = ph;
+        send_ring_buffer.event[next].data[1] = bytes[i];
+        send_ring_buffer.event[next].data[2] = bytes[i + 1];
+        send_ring_buffer.event[next].data[3] = bytes[i + 2];
+    }
 
-	send_ring_buffer.write_ptr=next;
+    send_ring_buffer.write_ptr=next;
 }
 
 int  usbh_MidiGetOutputBufferPending(void) {
-	if(send_ring_buffer.write_ptr >= send_ring_buffer.read_ptr) {
-		return send_ring_buffer.write_ptr - send_ring_buffer.read_ptr;
-	}
-	
+
+    if(send_ring_buffer.write_ptr >= send_ring_buffer.read_ptr) {
+        return send_ring_buffer.write_ptr - send_ring_buffer.read_ptr;
+    }
+
     return send_ring_buffer.write_ptr + RING_BUFFER_SIZE - send_ring_buffer.read_ptr;
 }
 
 int  usbh_MidiGetOutputBufferAvailable(void) {
-	return RING_BUFFER_SIZE - usbh_MidiGetOutputBufferPending() - 1;
+    return RING_BUFFER_SIZE - usbh_MidiGetOutputBufferPending() - 1;
 }
 
 /** @defgroup USBH_MIDI_CORE_Private_Variables
@@ -264,7 +279,7 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
     MIDI_HandleTypeDef *MIDI_Handle;
 
     uint8_t interface;
-    usbh_midi_init();
+    usbh_midi_init_buffer();
 //    sysmon_disable_blinker();
 
     // this is limited to one midi interface, and also currently only 1 input and 1 output endpoint on that interface
@@ -298,20 +313,20 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
                 if(!isValidInput(MIDI_Handle) && bInput) {
                     MIDI_Handle->InEp = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bEndpointAddress;
                     MIDI_Handle->InEpSize  = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].wMaxPacketSize;
-                	USBH_UsrLog("USB Host Input size requests : %x", MIDI_Handle->InEpSize );
+                    USBH_UsrLog("USB Host Input size requests : %x", MIDI_Handle->InEpSize );
                     MIDI_Handle->InEpSize = USBH_MIDI_EPS_IN_SIZE; // why bother reducing the size? Some devices will lie about the max ep size...
 //                    MIDI_Handle->read_poll = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bInterval;
-//                	USBH_UsrLog("USB Host Input interval : %i", MIDI_Handle->read_poll);
+//                  USBH_UsrLog("USB Host Input interval : %i", MIDI_Handle->read_poll);
 //                    if(MIDI_Handle->read_poll<MIDI_MIN_READ_POLL) MIDI_Handle->read_poll = MIDI_MIN_READ_POLL;
                     MIDI_Handle->input_valid = true;
                 }
                 if(!isValidOutput(MIDI_Handle) && !bInput) {
                     MIDI_Handle->OutEp = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bEndpointAddress;
                     MIDI_Handle->OutEpSize  = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].wMaxPacketSize;
-                	USBH_UsrLog("USB Host Output size requests : %x", MIDI_Handle->OutEpSize );
+                    USBH_UsrLog("USB Host Output size requests : %x", MIDI_Handle->OutEpSize );
                     if(MIDI_Handle->OutEpSize >USBH_MIDI_EPS_OUT_SIZE) MIDI_Handle->OutEpSize = USBH_MIDI_EPS_OUT_SIZE;
 //                    MIDI_Handle->write_poll = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bInterval;
-//                	USBH_UsrLog("USB Host Output interval : %i", MIDI_Handle->write_poll);
+//                  USBH_UsrLog("USB Host Output interval : %i", MIDI_Handle->write_poll);
 //                    if(MIDI_Handle->write_poll<MIDI_MIN_WRITE_POLL) MIDI_Handle->write_poll = MIDI_MIN_WRITE_POLL;
                     MIDI_Handle->output_valid = true;
                 }
@@ -371,7 +386,7 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
  * @retval None
  */
 USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (__attribute__((__unused__))  USBH_HandleTypeDef *phost) {
-   	USBH_UsrLog("USB Host : device disconnected");
+    USBH_UsrLog("USB Host : device disconnected");
     MIDI_HandleTypeDef *MIDI_Handle = phost->pActiveClass->pData;
     if (isValidOutput(MIDI_Handle)) {
         USBH_ClosePipe(phost, MIDI_Handle->OutPipe);
@@ -392,9 +407,7 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (__attribute__((__unused__))  USBH
         phost->pActiveClass->pData = NULL;
     }
 
-    // make no bytes available for output
-    send_ring_buffer.read_ptr  = 0;
-    send_ring_buffer.write_ptr = RING_BUFFER_SIZE - 1;
+    usbh_midi_deinit_buffer();
 
     return USBH_OK;
 }
@@ -463,8 +476,8 @@ USBH_StatusTypeDef USBH_MIDI_ProcessInput(USBH_HandleTypeDef *phost) {
                 for (i=0; i<n; i+=4) {
                     if (MIDI_Handle->buff_in[0+i]) {
                         MIDI_CB(MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
-                //	USBH_DbgLog("USB Host Input recv data : %x, %x, %x %x",
-				//				MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
+                //  USBH_DbgLog("USB Host Input recv data : %x, %x, %x %x",
+                //              MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
                     }
                 }
                 MIDI_Handle->state_in = MIDI_POLL;

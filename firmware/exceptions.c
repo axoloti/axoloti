@@ -51,7 +51,8 @@ typedef enum {
   goto_DFU,
   fatfs_error,
   patch_load_crc_fail,
-  patch_load_sdram_overflow
+  patch_load_sdram_overflow,
+  usbh_midi_ringbuffer_overflow
 } faulttype;
 
 typedef struct {
@@ -252,6 +253,9 @@ void exception_checkandreport(void) {
     else if (exceptiondump->type == patch_load_sdram_overflow) {
       LogTextMessage("sdram overflow by %d bytes",exceptiondump->r0);
     }
+    else if (exceptiondump->type == usbh_midi_ringbuffer_overflow) {
+      LogTextMessage("usb host midi output ringbuffer overflow");
+    }
     else
     {
       LogTextMessage("unknown exception?");
@@ -346,6 +350,13 @@ void report_patchLoadSDRamOverflow(const char *fn, int amount) {
     }
   }
   *p = 0;
+}
+
+void report_usbh_midi_ringbuffer_overflow(void) {
+  if (exceptiondump->magicnumber == ERROR_MAGIC_NUMBER)
+    return;
+  exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
+  exceptiondump->type = usbh_midi_ringbuffer_overflow;
 }
 
 void dbg_set_i(int i) {
