@@ -12,6 +12,16 @@ You can find more information about the hardware in another post in this "User G
 More topics from the user guide can be found in the [Axoloti User Guide Forum][1]
 
 
+#Learning Axoloti
+Axoloti is fairly simple to use, especially if you are used to graphical patching languages.
+This topic covers the basic of how to use the computer side of axoloti 'the GUI', and an introduction into some of the aspects you will encounter.
+
+After reading this, we would recommend you open each of the tutorial patches ( File -> Library-> Factory -> Tutorials)  to get an understanding of how to patch your own objects. From there, you can start looking at the factory demo which are more complex. 
+This should give you a basic understanding of how to get started creating your own patches, from there you can look at community patches, and of course ask questions here on the forum.
+
+Many users like to have a more 'tutorial book' approach, and we are lucky that such a book has been independently produced by a community member @janvantomme , which many users have commented is a great place to start - you can read more about this book, and feed back from users here [Getting started with Axoloti book](http://community.axoloti.com/t/getting-started-with-axoloti-the-book) . 
+ 
+
 # Axoloti GUI
 The main focus of the Axoloti GUI is to allow the user to connect to the Axoloti hardware, build patches and upload these patches to the hardware.
 To do this there are two main windows, the console window and the patch window. 
@@ -209,7 +219,7 @@ tip: remember you can rename the patch/patcher object to a more meaningful name.
 
 using embedded patchers makes creating voices trivial, and keeps all of the patch in one file, which means its easy to share. you can even cut and paste embedded patchers to other patches to re-use them.
 
-unless you have a particular reason to use sub-patch files, you should use embedded patches.
+unless you have a particular reason to use sub-patch files, e.g. sharing in a library, you should use embedded patches.
 
 ##Sub patch files (AXS)
 
@@ -231,7 +241,7 @@ to create a sub-patch:
 - Bring up the object search window ( space/N)
 - Enter the patch filename in the object selector (without .axs extension), prefixed by "./"
 
-If you want to modify the sub patch
+If you want to modify the sub patch:
 
 - In the main patch, select the sub patch object
 - select "edit object definition" in the object popup menu
@@ -267,7 +277,7 @@ Patch settiings include:
 - Number of presets - how many presets can be store on the patch
 - Entries per presets - the number of parameters that can be store on the preset
 - Number of modulation source - number of modulation source on the patch (patch/modsource*)
-- Numer of modulation targets - number of targets for sources
+- Number of modulation targets - number of targets for sources
 - Sub patch mode, how voices are handled, see 'more on sub patches'
 - Has midi channel attribute - the midi channel is exposed on the parent patch, when used as a subpatch
 - saturate audio - is the the audio output from this patch saturated
@@ -284,21 +294,42 @@ AXS  - subpatch, a patch used by a main patch (see below)
 AXH - help patch, shows how to use an object.
 all except AXO, can be created by saving the patch with Save As...
 
-#Object and Sub-patch search patch
+#Object and Sub-patch libraries
 By default axoloti will look in the objects sub-directory for objects files and sub-patches.
 (if you start with ./ (as suggested in sub-patch section) this will also look in the same directory as the patch)
 
-If you develop your own sub-patches that you wish to see as objects, or your own custom objects (axo) or third party objects, then these can be placed in their own directory (do NOT mix with the ones supplied with Axoloti). we would recommend you place this in the axoloti documents directory.
-to do this:
+If you develop your own sub-patches that you wish to see as objects, or your own custom objects (axo) or third party objects, then this is possible, simply add them into a Library. 
+if you want them privately then you can add then to the 'home' library,  or you can share them with the community by placing in the community library.
 
-- File -> Preferences
-- Add a path to the object search patch e.g.
+objects all have a unique id, that is allocated by the object editor.
+however, currently (subject to change!) subpatches are uniquely identified by their name.
+e.g midi/in/keyb
+so what happens if you have multiple sub-patches with the same name?
+axoloti will search using the following rules
 
-      objects 
-      /Users/bob/Documents/axoloti/objects
+- if it full path is given it will use this
+- if a relative path is given , it will use this relative to the location the patch is saved (so you need to save your parent patch first) 
+- the order of libraries, listed in the preferences dialog
 
-Its important to note, that an objects identity (name) is not only its filename but also its path 
-e.g. midi/in/cc.axo    needs to be in the directory /Users/bob/Documents/axoloti/objects/midi/in
+Our recommendation is to use embedded patches and embedded objects as much as possible, or to place sub-patches/objects in library.
+
+#Custom objects
+Creating custom objects is beyond the scope of this user guide.
+however, a few notes are useful...
+a) axoloti features an object editor which can be used to create your own objects
+b) you can either embed custom objects or save objects in the a share library (as an axo file) 
+generally custom objects are useful where a graphical UI becomes cumbersome, i.e. its simpler to right an algorithm in lines of code, or where some structure are not available in patch e.g. looping.
+
+will custom objects be more efficient? this depends, only if you can express your 'intent' in a simpler/more concise efficeint way. custom objects  are **not** par se quicker (as both custom objects and patching both generate C code, which is subject to the optimiser). a badly written custom object is likely to perform worst/have more unwanted side effects than a patch!
+
+if you want to create custom objects , axoloti provides all the tools 'out of the box', 
+but you will need a few additional skills, depending on what you want to achieve.
+- some programming experience
+- some C coding experience (not too much , just the basics)*
+- some DSP knowledge if you want to do audio
+- some understanding of axoloti (id recommend deep patching experience , before object coding!)
+ 
+*personally, Id recommend you do some C programming on the desktop first, as you lack things like debuggers in axoloti, and even getting trace output is more cumbersome.
 
 
   [1]: http://community.axoloti.com/c/user-guide
