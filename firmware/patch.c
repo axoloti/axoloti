@@ -122,7 +122,13 @@ static void StopPatch1(void) {
     CheckStackOverflow();
     (patchMeta.fptr_patch_dispose)();
     // check if the number of threads after patch disposal is the same as before
+    int j=20;
     int i = GetNumberOfThreads();
+    // try sleeping up to 1 second so threads can terminate
+    while( (j--) && (i!=nThreadsBeforePatch)) {
+      chThdSleepMilliseconds(50);
+      i = GetNumberOfThreads();
+    }
     if (i!=nThreadsBeforePatch) {
        LogTextMessage("error: patch stopped but did not terminate its thread(s)");
     }
@@ -341,7 +347,6 @@ void StopPatch(void) {
 
 int StartPatch(void) {
   chEvtSignal(pThreadDSP, (eventmask_t)4);
-  int i = 0;
   while ((patchStatus != RUNNING) && (patchStatus != STARTFAILED)) {
     chThdSleepMilliseconds(1);
   }
