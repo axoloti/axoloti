@@ -13,11 +13,7 @@ before_install:
       ./platform_linux/build.sh
       ;;
     osx)
-      brew update --quiet
-      brew tap caskroom/cask --quiet 
-      brew install brew-cask 
-      brew cask install java 
-      brew install ant 
+      brew install ant
       ./platform_osx/build.sh
       ;;
     esac;
