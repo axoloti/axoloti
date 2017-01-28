@@ -2,6 +2,7 @@ os:
   - linux
   - osx
 language: java
+osx_image: xcode8.2
 before_install:
   - >
     case "${TRAVIS_OS_NAME:-linux}" in
