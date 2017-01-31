@@ -2,6 +2,7 @@ os:
   - linux
   - osx
 language: java
+osx_image: xcode8.2
 before_install:
   - >
     case "${TRAVIS_OS_NAME:-linux}" in
@@ -12,11 +13,7 @@ before_install:
       ./platform_linux/build.sh
       ;;
     osx)
-      brew update --quiet
-      brew tap caskroom/cask --quiet 
-      brew install brew-cask 
-      brew cask install java 
-      brew install ant 
+      brew install ant
       ./platform_osx/build.sh
       ;;
     esac;
