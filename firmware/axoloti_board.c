@@ -25,6 +25,14 @@
 Mutex Mutex_DMAStream_1_7; // shared: SPI3 (axoloti control) and I2C2 (codec)
 
 void axoloti_board_init(void) {
+
+#ifdef BOARD_AXOLOTI_V05
+  // initialize DMA2D engine
+  RCC->AHB1ENR |= RCC_AHB1ENR_DMA2DEN;
+  RCC->AHB1RSTR |= RCC_AHB1RSTR_DMA2DRST;
+  RCC->AHB1RSTR &= ~RCC_AHB1RSTR_DMA2DRST;
+#endif
+
   chMtxInit(&Mutex_DMAStream_1_7);
 }
 
