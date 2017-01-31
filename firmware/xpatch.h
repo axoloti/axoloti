@@ -7,7 +7,8 @@ extern "C" {
 
 #include "arm_intrinsics.hpp"
 
-#include "braids/macro_oscillator.h"
+#include "braids/parameter_interpolation.h"
+#include "braids/resources.h"
 #include "rings/dsp/string.h"
 #include "rings/dsp/resonator.h"
 #include "warps/dsp/modulator.h"
@@ -17,8 +18,7 @@ extern "C" {
 #include "elements/dsp/string.h"
 #include "elements/dsp/fx/diffuser.h"
 #include "elements/dsp/fx/reverb.h"
-#include "clouds/dsp/fx/pitch_shifter.h"
-#include "clouds/dsp//granular_processor.h"
+#include "clouds/dsp/granular_processor.h"
 #include "elements/dsp/part.h"
 #include "elements/dsp/patch.h"
 #include "streams/processor.h"
