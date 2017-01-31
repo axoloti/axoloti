@@ -216,6 +216,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
                 }
                 UpdateTable2();
                 AtomDefinitionsEditor.this.obj.FireObjectModified(this);
+                AtomDefinitionsEditor.this.revalidate();
             }
         });
         jPanel1.add(jButtonRemove);
