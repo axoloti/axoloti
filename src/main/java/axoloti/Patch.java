@@ -248,8 +248,7 @@ public class Patch {
         return settings;
     }
 
-    void UploadDependentFiles() {
-        String sdpath = getSDCardPath();
+    void UploadDependentFiles(String sdpath) {
         ArrayList<SDFileReference> files = GetDependendSDFiles();
         for (SDFileReference fref : files) {
             File f = fref.localfile;
@@ -271,7 +270,7 @@ public class Patch {
                 continue;
             }
             if (targetfn.charAt(0) != '/') {
-                targetfn = "/" + sdpath + "/" + fref.targetPath;
+                targetfn = sdpath + "/" + fref.targetPath;
             }
             if (!SDCardInfo.getInstance().exists(targetfn, f.lastModified(), f.length())) {
                 GetQCmdProcessor().AppendToQueue(new qcmds.QCmdGetFileInfo(targetfn));
@@ -308,7 +307,7 @@ public class Patch {
                 GetQCmdProcessor().AppendToQueue(new QCmdCreateDirectory(f));
             }
             GetQCmdProcessor().AppendToQueue(new QCmdChangeWorkingDirectory(f));
-            UploadDependentFiles();
+            UploadDependentFiles("/" + getSDCardPath());
         } else {
             // issue warning when there are dependent files
             ArrayList<SDFileReference> files = GetDependendSDFiles();
@@ -2442,12 +2441,6 @@ public class Patch {
         return pdata;
     }
 
-    void Upload() {
-        UploadDependentFiles();
-        GetQCmdProcessor().WaitQueueFinished();
-        GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
-    }
-
     public void Lock() {
         locked = true;
         for (AxoObjectInstanceAbstract o : objectinstances) {
@@ -2652,6 +2645,15 @@ public class Patch {
             }
         }
         qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(getBinFile(), sdfilename, cal));
+        
+        String dir;
+        int i = sdfilename.lastIndexOf("/");
+        if (i > 0) {
+            dir = sdfilename.substring(0, i);
+        } else {
+            dir = "";
+        }
+        UploadDependentFiles(dir);
     }
 
     public void UploadToSDCard() {
