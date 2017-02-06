@@ -302,8 +302,10 @@ public class DialComponent extends ACtrlComponent {
                 case 'X':
                 case 'z':
                 case 'Z':
-                    keybBuffer += ke.getKeyChar();
-                    ke.consume();
+                    if (!KeyUtils.isControlOrCommandDown(ke)) {
+                        keybBuffer += ke.getKeyChar();
+                        ke.consume();
+                    }
                     break;
                 default:
             }
