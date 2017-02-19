@@ -70,9 +70,12 @@ struct PersistentBlock {
   void* data;
 };
 
+#define DEFAUlT_SR 48000.0f 
+// #define DEFAUlT_SR 32000.0f 
+
 class GranularProcessor {
  public:
-  GranularProcessor() { }
+  GranularProcessor() : sample_rate_(DEFAUlT_SR) { }
   ~GranularProcessor() { }
   
   void Init(
@@ -153,8 +156,13 @@ class GranularProcessor {
     return low_fidelity_ ? 8 : 16;
   }
 
+  inline void sample_rate(float sr) {
+    sample_rate_ = sr;
+    reset_buffers_ = true;  
+  }
+
   inline float sample_rate() const {
-    return 32000.0f / \
+    return sample_rate_ / \
         (low_fidelity_ ? kDownsamplingFactor : 1);
   }
      
@@ -171,6 +179,7 @@ class GranularProcessor {
   bool reset_buffers_;
   float freeze_lp_;
   float dry_wet_;
+  float sample_rate_;
   
   void* buffer_[2];
   size_t buffer_size_[2];

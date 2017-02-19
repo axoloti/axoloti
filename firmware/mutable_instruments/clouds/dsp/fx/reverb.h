@@ -35,15 +35,18 @@
 
 namespace clouds {
 
+#define REVERB_DEPTH FORMAT_16_BIT
+// #define REVERB_DEPTH FORMAT_12_BIT
+
 class Reverb {
  public:
   Reverb() { }
   ~Reverb() { }
   
-  void Init(uint16_t* buffer) {
+  void Init(uint16_t* buffer, float sr) {
     engine_.Init(buffer);
-    engine_.SetLFOFrequency(LFO_1, 0.5f / 32000.0f);
-    engine_.SetLFOFrequency(LFO_2, 0.3f / 32000.0f);
+    engine_.SetLFOFrequency(LFO_1, 0.5f / sr);
+    engine_.SetLFOFrequency(LFO_2, 0.3f / sr);
     lp_ = 0.7f;
     diffusion_ = 0.625f;
   }
@@ -160,7 +163,7 @@ class Reverb {
   }
   
  private:
-  typedef FxEngine<16384, FORMAT_12_BIT> E;
+  typedef FxEngine<16384, REVERB_DEPTH> E;
   E engine_;
   
   float amount_;
