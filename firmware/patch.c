@@ -27,6 +27,7 @@
 #include "sysmon.h"
 #include "spilink.h"
 #include "codec.h"
+#include "axoloti_memory.h"
 
 //#define DEBUG_INT_ON_GPIO 1
 
@@ -59,17 +60,85 @@ loadPatchIndex_t loadPatchIndex = UNINITIALIZED;
 static int32_t inbuf[32];
 static int32_t *outbuf;
 
+static int nThreadsBeforePatch;
+#define STACKSPACE_MARGIN 32
+
 static WORKING_AREA(waThreadDSP, 7200) __attribute__ ((section (".ccmramend")));
 static Thread *pThreadDSP = 0;
 static const char *index_fn = "/index.axb";
 
+static int GetNumberOfThreads(void){
+#ifdef CH_USE_REGISTRY
+  int i=1;
+  Thread *thd1 = chRegFirstThread();
+  while(thd1){
+    i++;
+    thd1 = chRegNextThread (thd1);
+  }
+  return i;
+#else
+  return -1;
+#endif
+}
+
+void CheckStackOverflow(void) {
+#ifdef CH_USE_REGISTRY
+#ifdef CH_DBG_FILL_THREADS
+  Thread *thd = chRegFirstThread();
+  // skip 1st thread, main thread
+  thd = chRegNextThread (thd);
+  int critical = 0;
+  int nfree = 0;
+  while(thd){
+    char *stk = (char *)(thd+1);
+    nfree = 0;
+    while(*stk == CH_STACK_FILL_VALUE) {
+      nfree++;
+      stk++;
+      if (nfree>=STACKSPACE_MARGIN) break;
+    }    
+    if (nfree<STACKSPACE_MARGIN) {
+       critical = 1;
+       break;
+    }
+    thd = chRegNextThread(thd);
+  }
+  if (critical) {
+    const char *name = chRegGetThreadName(thd);
+    if (name!=0)
+      if (nfree)
+        LogTextMessage("Thread %s : stack critical %d",name,nfree);
+      else
+        LogTextMessage("Thread %s : stack overflow",name);
+    else
+      if (nfree)
+        LogTextMessage("Thread ?? : stack critical %d",nfree);
+      else
+        LogTextMessage("Thread ?? : stack overflow");
+  }
+#endif
+#endif
+}
+
 static void StopPatch1(void) {
-  if (patchMeta.fptr_patch_dispose != 0)
+  if (patchMeta.fptr_patch_dispose != 0) {
+    CheckStackOverflow();
     (patchMeta.fptr_patch_dispose)();
+    // check if the number of threads after patch disposal is the same as before
+    int j=20;
+    int i = GetNumberOfThreads();
+    // try sleeping up to 1 second so threads can terminate
+    while( (j--) && (i!=nThreadsBeforePatch)) {
+      chThdSleepMilliseconds(50);
+      i = GetNumberOfThreads();
+    }
+    if (i!=nThreadsBeforePatch) {
+       LogTextMessage("error: patch stopped but did not terminate its thread(s)");
+    }
+  }
   UIGoSafe();
   InitPatch0();
   sysmon_enable_blinker();
-  patchStatus = STOPPED;
 }
 
 static int StartPatch1(void) {
@@ -82,11 +151,20 @@ static int StartPatch1(void) {
       ccm++)
     *ccm = 0;
   patchMeta.fptr_dsp_process = 0;
+  nThreadsBeforePatch = GetNumberOfThreads();
   patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
   (patchMeta.fptr_patch_init)(GetFirmwareID());
   if (patchMeta.fptr_dsp_process == 0) {
     report_patchLoadFail((const char *)&loadFName[0]);
     patchStatus = STARTFAILED;
+    return -1;
+  }
+  int32_t sdrem = sdram_get_free();
+  if (sdrem<0) {
+    StopPatch1();
+    patchStatus = STARTFAILED;
+    patchMeta.patchID = 0;
+    report_patchLoadSDRamOverflow((const char *)&loadFName[0],-sdrem);
     return -1;
   }
   patchStatus = RUNNING;
@@ -127,9 +205,13 @@ static msg_t ThreadDSP(void *arg) {
         }
 #endif
       }
-      else { // stopping or stopped
+      else if (patchStatus == STOPPING){
+        codec_clearbuffer();
         StopPatch1();
         patchStatus = STOPPED;
+        codec_clearbuffer();
+      }
+      else if (patchStatus == STOPPED){
         codec_clearbuffer();
       }
       adc_convert();
@@ -149,6 +231,7 @@ static msg_t ThreadDSP(void *arg) {
       // load patch event
       codec_clearbuffer();
       StopPatch1();
+      patchStatus = STOPPED;
       if (loadFName[0]) {
         int res = sdcard_loadPatch1(loadFName);
         if (!res) StartPatch1();
@@ -265,6 +348,7 @@ void StopPatch(void) {
         break;
     }
     StopPatch1();
+    patchStatus = STOPPED;
   }
 }
 
@@ -272,6 +356,10 @@ int StartPatch(void) {
   chEvtSignal(pThreadDSP, (eventmask_t)4);
   while ((patchStatus != RUNNING) && (patchStatus != STARTFAILED)) {
     chThdSleepMilliseconds(1);
+  }
+  if (patchStatus == STARTFAILED) {
+    patchStatus = STOPPED;
+    LogTextMessage("patch start failed",patchStatus);
   }
   return 0;
 }
@@ -311,6 +399,7 @@ void LoadPatchStartSD(void) {
   strcpy(loadFName, "/START.BIN");
   loadPatchIndex = START_SD;
   chEvtSignal(pThreadDSP, (eventmask_t)2);
+  chThdSleepMilliseconds(50);
 }
 
 void LoadPatchStartFlash(void) {

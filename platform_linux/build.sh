@@ -19,6 +19,10 @@ if [ -f /etc/lsb-release ]; then
     OS=$DISTRIB_ID
 elif [ -f /etc/debian_version ]; then
     OS=Debian  # XXX or Ubuntu??
+    if [ -n "`grep 8.6 /etc/debian_version`" ] && [ -z "`uname -m | grep x86_64`" ]; then
+      OS=DebianJessie32bit
+    fi
+    
 elif [ -f /etc/arch-release ]; then
     OS=Archlinux
 elif [ -f /etc/gentoo-release ]; then
@@ -30,10 +34,15 @@ else
 fi
 
 case $OS in
-    Ubuntu|Debian)
+    Ubuntu|Debian|DebianJessie32bit)
         echo "apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0"
-        sudo apt-get install -y libtool libudev-dev automake autoconf \
-        ant curl lib32z1 lib32ncurses5
+      if [ $OS==DebianJessie32bit ]; then
+            sudo apt-get install -y libtool libudev-dev automake autoconf \
+               ant curl
+      else
+            sudo apt-get install -y libtool libudev-dev automake autoconf \
+               ant curl lib32z1 lib32ncurses5
+      fi
 
         # On more recent versions of Ubuntu
         # the libbz2 package is multi-arch

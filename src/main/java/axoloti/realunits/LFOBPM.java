@@ -18,6 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.text.ParseException;
 
 /**
  *
@@ -36,5 +39,26 @@ public class LFOBPM implements NativeToReal {
         } else {
             return (String.format("%.1f/min", bpm));
         }
+    }
+
+    @Override
+    public double FromReal(String s) throws ParseException {
+        Pattern pattern = Pattern.compile("(?<num>[\\d\\.\\-\\+]*)\\p{Space}*/[mM]?[iI]?[nN]?");
+        Matcher matcher = pattern.matcher(s);
+
+        if (matcher.matches()) {
+            double num, mul = 1.0;
+
+            try {
+                num = Float.parseFloat(matcher.group("num"));
+            } catch (java.lang.NumberFormatException ex) {
+                throw new ParseException("Not LFOBPM", 0);
+            }
+
+            double hz = num / 60.0;
+            return ((Math.log((hz * 64) / 440.0) / Math.log(2)) * 12.0) - 64 + 69;
+        }
+
+        throw new ParseException("Not LFOBPM", 0);
     }
 }

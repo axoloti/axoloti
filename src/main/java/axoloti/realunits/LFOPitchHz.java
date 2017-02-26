@@ -18,6 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.text.ParseException;
 
 /**
  *
@@ -37,4 +40,30 @@ public class LFOPitchHz implements NativeToReal {
         }
     }
 
+    @Override
+    public double FromReal(String s) throws ParseException {
+        Pattern pattern = Pattern.compile("(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit>[kKmM]?)[hH][zZ]?");
+        Matcher matcher = pattern.matcher(s);
+
+        if (matcher.matches()) {
+            double num, mul = 1.0;
+
+            try {
+                num = Float.parseFloat(matcher.group("num"));
+            } catch (java.lang.NumberFormatException ex) {
+                throw new ParseException("Not LFOPitchHz", 0);
+            }
+
+            String units = matcher.group("unit");
+            if (units.contains("m") || units.contains("M"))
+                mul = 0.001;
+            if (units.contains("k") || units.contains("K"))
+                mul = 1000;
+
+            double hz = num * mul;
+            return ((Math.log((hz * 64) / 440.0) / Math.log(2)) * 12.0) - 64 + 69;
+        }
+
+        throw new ParseException("Not LFOPitchHz", 0);
+    }
 }

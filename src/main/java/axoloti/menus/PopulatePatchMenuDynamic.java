@@ -19,6 +19,7 @@ package axoloti.menus;
 
 import axoloti.MainFrame;
 import java.io.File;
+import java.util.Arrays;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.event.MenuEvent;
@@ -54,12 +55,14 @@ public class PopulatePatchMenuDynamic extends JMenu implements MenuListener {
                 add(fm);
                 bEmpty = false;
             }
-            for (File f : PopulatePatchMenuDynamic.this.dir.listFiles(new java.io.FileFilter() {
+            File[] files = PopulatePatchMenuDynamic.this.dir.listFiles(new java.io.FileFilter() {
                 @Override
                 public boolean accept(File f) {
                     return f.isFile() && f.canRead() && f.getName().endsWith(ext);
                 }
-            })) {
+            });
+            Arrays.sort(files);
+            for (File f : files) {
                 String fn = f.getName();
                 String fn2 = fn.substring(0, fn.length() - 4);
                 JMenuItem fm = new JMenuItem(fn2);

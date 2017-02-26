@@ -142,7 +142,7 @@ void PExTransmit(void) {
       } else {
         ack[5] = loadPatchIndex;
       }
-      ack[6] = 0; // reserved
+      ack[6] = fs_ready;
       chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
                               (const unsigned char* )&ack[0], 7 * 4);
 
@@ -177,7 +177,7 @@ void PExTransmit(void) {
   }
 }
 
-char FileName[64];
+char FileName[256];
 
 static FRESULT scan_files(char *path) {
   FRESULT res;
@@ -207,7 +207,8 @@ static FRESULT scan_files(char *path) {
       if (fno.fattrib & AM_HID)
         continue;
       if (fno.fattrib & AM_DIR) {
-        sprintf(&path[i], "/%s", fn);
+        path[i] = '/';
+        strcpy(&path[i+1], fn);
         msg[0] = 'A';
         msg[1] = 'x';
         msg[2] = 'o';
@@ -374,6 +375,26 @@ void ManipulateFile(void) {
       err = f_chdir(&FileName[6]);
       if (err != FR_OK) {
         report_fatfs_error(err,&FileName[6]);
+      }
+    } else if (FileName[1]=='I') {
+      // get file info
+      FRESULT err;
+      FILINFO fno;
+      fno.lfname = &((char*)fbuff)[0];
+      fno.lfsize = 256;
+      err =  f_stat(&FileName[6],&fno);
+      if (err == FR_OK) {
+        char *msg = &((char*)fbuff)[0];
+        msg[0] = 'A';
+        msg[1] = 'x';
+        msg[2] = 'o';
+        msg[3] = 'f';
+        *(int32_t *)(&msg[4]) = fno.fsize;
+        *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
+        strcpy(&msg[12], &FileName[6]);
+        int l = strlen(&msg[12]);
+        chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
+                                (const unsigned char* )msg, l+13);
       }
     }
   }

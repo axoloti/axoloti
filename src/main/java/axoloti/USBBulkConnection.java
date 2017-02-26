@@ -110,6 +110,7 @@ public class USBBulkConnection extends Connection {
         if (connected) {
             disconnectRequested = true;
             connected = false;
+            isSDCardPresent = null;
             ShowDisconnect();
             queueSerialTask.clear();
             try {
@@ -480,6 +481,33 @@ public class USBBulkConnection extends Connection {
             conn = new USBBulkConnection();
         }
         return conn;
+    }
+
+    @Override
+    public void TransmitGetFileInfo(String filename) {
+        byte[] data = new byte[15 + filename.length()];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'C';
+        data[4] = 0;
+        data[5] = 0;
+        data[6] = 0;
+        data[7] = 0;
+        data[8] = 0;
+        data[9] = 'I';
+        data[10] = 0;
+        data[11] = 0;
+        data[12] = 0;
+        data[13] = 0;
+        int i = 14;
+        for (int j = 0; j < filename.length(); j++) {
+            data[i++] = (byte) filename.charAt(j);
+        }
+        data[i] = 0;
+        ClearSync();
+        writeBytes(data);
+        WaitSync();
     }
 
     class Sync {
@@ -867,12 +895,31 @@ public class USBBulkConnection extends Connection {
             MainFrame.mainframe.qcmdprocessor.AppendToQueue(new QCmdShowDisconnect());
         }
     }
+
+    private Boolean isSDCardPresent = null;
+    
+    public void SetSDCardPresent(boolean i) {
+        if ((isSDCardPresent != null) && (i == isSDCardPresent)) return;
+        isSDCardPresent = i;
+        if (isSDCardPresent) {
+            ShowSDCardMounted();
+        } else {
+            ShowSDCardUnmounted();            
+        }
+    }
+
+    @Override
+    public boolean GetSDCardPresent() {
+        if (isSDCardPresent == null) return false;
+        return isSDCardPresent;
+    }
+
     int CpuId0 = 0;
     int CpuId1 = 0;
     int CpuId2 = 0;
     int fwcrc = -1;
 
-    void Acknowledge(final int DSPLoad, final int PatchID, final int Voltages, final int patchIndex, int reserved) {
+    void Acknowledge(final int DSPLoad, final int PatchID, final int Voltages, final int patchIndex, final int sdcardPresent) {
         synchronized (sync) {
             sync.Acked = true;
             sync.notifyAll();
@@ -889,6 +936,7 @@ public class USBBulkConnection extends Connection {
                 }
                 MainFrame.mainframe.showPatchIndex(patchIndex);
                 targetProfile.setVoltages(Voltages);
+                SetSDCardPresent(sdcardPresent!=0);
             }
         });
     }
@@ -1257,11 +1305,11 @@ public class USBBulkConnection extends Connection {
                         fname = fname.substring(0, fname.length() - 1);
                     }
                     SDCardInfo.getInstance().AddFile(fname, size, timestamp);
-//                    Logger.getLogger(SerialConnection.class.getName()).info("fileinfo: " + cb.toString());                    
+//                    Logger.getLogger(USBBulkConnection.class.getName()).info("fileinfo: " + cb.toString());                    
                     GoIdleState();
                     if (fname.equals("/")) {
                         // end of index
-                        System.out.println("sdfilelist done");
+//                        System.out.println("sdfilelist done");
                         synchronized (readsync) {
                             readsync.Acked = true;
                             readsync.notifyAll();

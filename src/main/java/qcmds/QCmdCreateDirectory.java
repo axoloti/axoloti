@@ -44,7 +44,7 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
 
     @Override
     public String GetStartMessage() {
-        return "Start creating directory on sdcard : " + filename;
+        return "Creating directory on sdcard : " + filename;
     }
 
     @Override
@@ -55,7 +55,6 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
     @Override
     public QCmd Do(Connection connection) {
         connection.ClearSync();
-        Logger.getLogger(QCmdCreateDirectory.class.getName()).log(Level.INFO, "creating dir: {0}", filename);
         connection.TransmitCreateDirectory(filename, date);
         String fn = filename;
         if (!fn.endsWith("/")) {

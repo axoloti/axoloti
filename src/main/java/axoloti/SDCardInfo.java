@@ -26,7 +26,7 @@ import java.util.Calendar;
  */
 public class SDCardInfo {
 
-    final ArrayList<SDFileInfo> files = new ArrayList<SDFileInfo>();
+    private final ArrayList<SDFileInfo> files = new ArrayList<SDFileInfo>();
     boolean available = false;
     int clusters = 0;
     int clustersize = 0;
@@ -39,24 +39,26 @@ public class SDCardInfo {
     protected SDCardInfo() {
     }
 
-    public static SDCardInfo getInstance() {
+    public synchronized static SDCardInfo getInstance() {
         if (instance == null) {
             instance = new SDCardInfo();
         }
         return instance;
     }
 
-    public void SetInfo(int clusters, int clustersize, int sectorsize) {
+    public synchronized void SetInfo(int clusters, int clustersize, int sectorsize) {
         this.clusters = clusters;
         this.clustersize = clustersize;
         this.sectorsize = sectorsize;
         files.clear();
         busy = true;
-        MainFrame.mainframe.filemanager.refresh();
+        if ((MainFrame.mainframe != null) && (MainFrame.mainframe.filemanager != null)) {
+            MainFrame.mainframe.filemanager.refresh();
+        }
     }
 
-    public ArrayList<SDFileInfo> getFiles() {
-        return files;
+    public synchronized ArrayList<SDFileInfo> getFiles() {
+        return (ArrayList<SDFileInfo>) files.clone();
     }
 
     public int getClusters() {
@@ -83,7 +85,7 @@ public class SDCardInfo {
         AddFile(fname, size, date);
     }
 
-    public void AddFile(String fname, int size, Calendar date) {
+    public synchronized void AddFile(String fname, int size, Calendar date) {
         if (fname.lastIndexOf(0) > 0) {
             fname = fname.substring(0, fname.lastIndexOf(0));
         }
@@ -92,68 +94,60 @@ public class SDCardInfo {
             return;
         }
         SDFileInfo sdf = null;
-        synchronized (files) {
-            for (SDFileInfo f:files){
-                if (f.filename.equalsIgnoreCase(fname)) {
-                    // already present
-                    sdf = f;
-                }
+        for (SDFileInfo f : files) {
+            if (f.filename.equalsIgnoreCase(fname)) {
+                // already present
+                sdf = f;
             }
         }
-        if (sdf != null){
+        if (sdf != null) {
             sdf.size = size;
             sdf.timestamp = date;
             MainFrame.mainframe.filemanager.refresh();
             return;
         }
         sdf = new SDFileInfo(fname, date, size);
-        synchronized (files) {
-            files.add(sdf);
-        }
+        files.add(sdf);
+//        Logger.getLogger(SDCardInfo.class.getName()).log(Level.SEVERE, "file added " + files.size() + ":" + fname);
         MainFrame.mainframe.filemanager.refresh();
     }
 
-    public void Delete(String fname) {
-        synchronized (files) {
-            SDFileInfo f1 = null;
-            for (SDFileInfo f : files) {
-                if (f.filename.equalsIgnoreCase(fname)
-                        || f.filename.equalsIgnoreCase(fname + "/")) {
-                    f1 = f;
-                    break;
-                }
+    public synchronized void Delete(String fname) {
+        SDFileInfo f1 = null;
+        for (SDFileInfo f : files) {
+            if (f.filename.equalsIgnoreCase(fname)
+                    || f.filename.equalsIgnoreCase(fname + "/")) {
+                f1 = f;
+                break;
             }
-            if (f1 != null) {
-                files.remove(f1);
-                MainFrame.mainframe.filemanager.refresh();
-            }
+        }
+        if (f1 != null) {
+            files.remove(f1);
+            MainFrame.mainframe.filemanager.refresh();
         }
     }
 
-    public SDFileInfo find(String name) {
-        synchronized (files) {
-            if (!name.startsWith("/")) {
-                name = "/" + name;
-            }
-            for (SDFileInfo f : files) {
-                if (f.filename.equalsIgnoreCase(name)) {
-                    return f;
-                }
+    public synchronized SDFileInfo find(String name) {
+        if (!name.startsWith("/")) {
+            name = "/" + name;
+        }
+        for (SDFileInfo f : files) {
+            if (f.filename.equalsIgnoreCase(name)) {
+                return f;
             }
         }
         return null;
     }
-    
-    
-    public boolean exists(String name, long timestampEpoch, long size) {
-        synchronized (files) {
-            if (!name.startsWith("/")) {
-                name = "/" + name;
-            }
-            for (SDFileInfo f : files) {
-                if (f.filename.equalsIgnoreCase(name) && f.size == size && (Math.abs(f.timestamp.getTimeInMillis() - timestampEpoch) < 3000)) {
-                    return true;
-                }
+
+    public synchronized boolean exists(String name, long timestampEpoch, long size) {
+        //Logger.getLogger(SDCardInfo.class.getName()).log(Level.SEVERE, "exists? " + name);
+        if (!name.startsWith("/")) {
+            name = "/" + name;
+        }
+        for (SDFileInfo f : files) {
+            //Logger.getLogger(SDCardInfo.class.getName()).log(Level.SEVERE, "file compare " + name + ":" + f.filename);
+            if (f.filename.equalsIgnoreCase(name) && f.size == size && (Math.abs(f.timestamp.getTimeInMillis() - timestampEpoch) < 3000)) {
+                return true;
             }
         }
         return false;

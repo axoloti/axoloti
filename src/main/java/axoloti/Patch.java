@@ -62,6 +62,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -247,25 +248,50 @@ public class Patch {
         return settings;
     }
 
-    void UploadDependentFiles() {
-        String sdpath = getSDCardPath();
+    void UploadDependentFiles(String sdpath) {
         ArrayList<SDFileReference> files = GetDependendSDFiles();
         for (SDFileReference fref : files) {
             File f = fref.localfile;
+            if (f == null) {
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "File not resolved: {0}", fref.targetPath);
+                continue;
+            }
             if (!f.exists()) {
-                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "File reference unresolved: {0}", f.getName());
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "File does not exist: {0}", f.getName());
                 continue;
             }
             if (!f.canRead()) {
                 Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Can't read file {0}", f.getName());
                 continue;
             }
-            if (!SDCardInfo.getInstance().exists("/" + sdpath + "/" + fref.targetPath, f.lastModified(), f.length())) {
-                if (f.length() > 8 * 1024 * 1024) {
-                    Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
-                    continue;
+            String targetfn = fref.targetPath;
+            if (targetfn.isEmpty()) {
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Target filename empty {0}", f.getName());
+                continue;
+            }
+            if (targetfn.charAt(0) != '/') {
+                targetfn = sdpath + "/" + fref.targetPath;
+            }
+            if (!SDCardInfo.getInstance().exists(targetfn, f.lastModified(), f.length())) {
+                GetQCmdProcessor().AppendToQueue(new qcmds.QCmdGetFileInfo(targetfn));
+                GetQCmdProcessor().WaitQueueFinished();
+                GetQCmdProcessor().AppendToQueue(new qcmds.QCmdPing());
+                GetQCmdProcessor().WaitQueueFinished();
+                if (!SDCardInfo.getInstance().exists(targetfn, f.lastModified(), f.length())) {
+                    if (f.length() > 8 * 1024 * 1024) {
+                        Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
+                        continue;
+                    }
+                    for (int i = 1; i < targetfn.length(); i++) {
+                        if (targetfn.charAt(i) == '/') {
+                            GetQCmdProcessor().AppendToQueue(new qcmds.QCmdCreateDirectory(targetfn.substring(0, i)));
+                            GetQCmdProcessor().WaitQueueFinished();
+                        }
+                    }
+                    GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, targetfn));
+                } else {
+                    Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
                 }
-                GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, "/" + sdpath + "/" + fref.targetPath));
             } else {
                 Logger.getLogger(Patch.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
             }
@@ -274,15 +300,29 @@ public class Patch {
 
     void GoLive() {
         GetQCmdProcessor().AppendToQueue(new QCmdStop());
-        String f = "/" + getSDCardPath();
-        System.out.println("pathf" + f);
-        GetQCmdProcessor().AppendToQueue(new QCmdCreateDirectory(f));
-        GetQCmdProcessor().AppendToQueue(new QCmdChangeWorkingDirectory(f));
-//        GetQCmdProcessor().AppendToQueue(new QCmdStop());
-        UploadDependentFiles();
+        if (USBBulkConnection.GetConnection().GetSDCardPresent()) {
+            String f = "/" + getSDCardPath();
+            //System.out.println("pathf" + f);
+            if (SDCardInfo.getInstance().find(f) == null) {
+                GetQCmdProcessor().AppendToQueue(new QCmdCreateDirectory(f));
+            }
+            GetQCmdProcessor().AppendToQueue(new QCmdChangeWorkingDirectory(f));
+            UploadDependentFiles("/" + getSDCardPath());
+        } else {
+            // issue warning when there are dependent files
+            ArrayList<SDFileReference> files = GetDependendSDFiles();
+            if (files.size() > 0) {
+                Logger.getLogger(Patch.class.getName()).log(Level.SEVERE, "Patch requires file {0} on SDCard, but no SDCard mounted", files.get(0).targetPath);
+            }
+        }
         ShowPreset(0);
-        WriteCode();
         presetUpdatePending = false;
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            for (ParameterInstance pi : o.getParameterInstances()) {
+                pi.ClearNeedsTransmit();
+            }
+        }
+        WriteCode();
         GetQCmdProcessor().SetPatch(null);
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
         GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
@@ -398,7 +438,7 @@ public class Patch {
             currentState += 1;
             saveState();
         }
-        if(patchframe != null) {
+        if (patchframe != null) {
             patchframe.updateUndoRedoEnabled();
         }
     }
@@ -569,7 +609,7 @@ public class Patch {
         }
         return null;
     }
-    
+
     public Net disconnect(IoletAbstract io) {
         if (!IsLocked()) {
             Net n = GetNet(io);
@@ -589,7 +629,7 @@ public class Patch {
         }
         return null;
     }
-    
+
     public Net delete(Net n) {
         if (!IsLocked()) {
             nets.remove(n);
@@ -599,7 +639,7 @@ public class Patch {
         }
         return null;
     }
-    
+
     public void delete(AxoObjectInstanceAbstract o) {
         if (o == null) {
             return;
@@ -622,7 +662,7 @@ public class Patch {
         }
         objectinstances.remove(o);
         AxoObjectAbstract t = o.getType();
-        if (o!=null){
+        if (o != null) {
             o.Close();
             t.DeleteInstance(o);
             t.removeObjectModifiedListener(o);
@@ -704,7 +744,7 @@ public class Patch {
 
     public void cleanUpIntermediateChangeStates(int n) {
         int length = previousStates.size();
-        if(length >= n) {
+        if (length >= n) {
             previousStates.subList(length - n, length).clear();
             this.currentState -= n - 1;
             saveState();
@@ -833,6 +873,66 @@ public class Patch {
 
     void SortByPosition() {
         Collections.sort(this.objectinstances);
+        refreshIndexes();
+    }
+    
+    void SortParentsByExecution(AxoObjectInstanceAbstract o, LinkedList<AxoObjectInstanceAbstract> result)
+    {
+        LinkedList<AxoObjectInstanceAbstract> before = new LinkedList<AxoObjectInstanceAbstract>(result);
+        LinkedList<AxoObjectInstanceAbstract> parents = new LinkedList<AxoObjectInstanceAbstract>();
+        // get the parents
+        for (InletInstance il : o.GetInletInstances()) {
+            Net n = GetNet(il);
+            if (n != null) {
+                for (OutletInstance ol: n.GetSource()) {
+                    AxoObjectInstanceAbstract i = ol.GetObjectInstance();
+                    if (!parents.contains(i)) {    
+                        parents.add(i);
+                    }
+                }
+            }
+        }
+        // sort the parents
+        Collections.sort(parents);
+        // prepend any we haven't seen before
+        for (AxoObjectInstanceAbstract c: parents) {
+            if (!result.contains(c))
+                result.addFirst(c);
+        }
+        // prepend their parents 
+        for (AxoObjectInstanceAbstract c: parents) {
+            if (!before.contains(c))
+                SortParentsByExecution(c, result);
+        }
+    }
+
+    void SortByExecution() {
+        LinkedList<AxoObjectInstanceAbstract> endpoints = new LinkedList<AxoObjectInstanceAbstract>();
+        LinkedList<AxoObjectInstanceAbstract> result = new LinkedList<AxoObjectInstanceAbstract>();
+        // start with all objects without outlets (end points)
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            if (o.GetOutletInstances().isEmpty()) {
+                endpoints.add(o);
+            } else {
+                int count = 0;
+                for (OutletInstance ol : o.GetOutletInstances()) {
+                    if (GetNet(ol) != null)
+                        count++;
+                }
+                if (count == 0)
+                    endpoints.add(o);
+            }
+        }
+        // sort them by position
+        Collections.sort(endpoints);
+        // walk their inlets
+        for (AxoObjectInstanceAbstract o : endpoints) {
+            SortParentsByExecution(o, result);
+        }
+        // add the end points
+        result.addAll(endpoints);
+        // turn it back into a freshly sorted array
+        objectinstances = new ArrayList<AxoObjectInstanceAbstract>(result);
         refreshIndexes();
     }
 
@@ -1459,6 +1559,9 @@ public class Patch {
                 + "  patchMeta.pDisplayVector = &root.displayVector[0];\n"
                 + "  patchMeta.numPEx = " + ParameterInstances.size() + ";\n"
                 + "  patchMeta.patchID = " + GetIID() + ";\n"
+                + "  extern char _sdram_dyn_start;\n"
+                + "  extern char _sdram_dyn_end;\n"
+                + "  sdram_init(&_sdram_dyn_start,&_sdram_dyn_end);\n"
                 + "  root.Init();\n"
                 + "  patchMeta.fptr_applyPreset = ApplyPreset;\n"
                 + "  patchMeta.fptr_patch_dispose = PatchDispose;\n"
@@ -1499,9 +1602,8 @@ public class Patch {
 
         CreateIID();
         SortByPosition();
-        String c = "extern \"C\" { \n";
-        c += generateIncludes();
-        c += "}\n"
+        String c = generateIncludes();
+        c += "\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-parameter\"\n";
         if (settings == null) {
@@ -2179,7 +2281,7 @@ public class Patch {
 
     public void ShowPreset(int i) {
         presetNo = i;
-        
+
         Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>) objectinstances.clone();
         for (AxoObjectInstanceAbstract o : c) {
             for (ParameterInstance p : o.getParameterInstances()) {
@@ -2337,10 +2439,6 @@ public class Patch {
          }
          */
         return pdata;
-    }
-
-    void Upload() {
-        GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
     }
 
     public void Lock() {
@@ -2547,6 +2645,15 @@ public class Patch {
             }
         }
         qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(getBinFile(), sdfilename, cal));
+        
+        String dir;
+        int i = sdfilename.lastIndexOf("/");
+        if (i > 0) {
+            dir = sdfilename.substring(0, i);
+        } else {
+            dir = "";
+        }
+        UploadDependentFiles(dir);
     }
 
     public void UploadToSDCard() {
@@ -2569,7 +2676,7 @@ public class Patch {
 
     public void Close() {
         Unlock();
-        Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>)objectinstances.clone();
+        Collection<AxoObjectInstanceAbstract> c = (Collection<AxoObjectInstanceAbstract>) objectinstances.clone();
         for (AxoObjectInstanceAbstract o : c) {
             o.Close();
         }

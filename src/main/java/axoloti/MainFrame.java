@@ -86,7 +86,7 @@ import qcmds.QCmdUploadPatch;
  *
  * @author Johannes Taelman
  */
-public final class MainFrame extends javax.swing.JFrame implements ActionListener, ConnectionStatusListener {
+public final class MainFrame extends javax.swing.JFrame implements ActionListener, ConnectionStatusListener, SDCardMountStatusListener {
 
     static public Preferences prefs = Preferences.LoadPreferences();
     static public AxoObjects axoObjects;
@@ -308,6 +308,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                     qcmdprocessorThread.setName("QCmdProcessor");
                     qcmdprocessorThread.start();
                     USBBulkConnection.GetConnection().addConnectionStatusListener(MainFrame.this);
+                    USBBulkConnection.GetConnection().addSDCardMountStatusListener(MainFrame.this);
 
                     // user library, ask user if they wish to upgrade, or do manuall
                     // this allows them the opportunity to manually backup their files!
@@ -450,6 +451,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jLabelFirmwareID = new javax.swing.JLabel();
         jLabelVoltages = new javax.swing.JLabel();
         jLabelPatch = new javax.swing.JLabel();
+        jLabelSDCardPresent = new javax.swing.JLabel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         jScrollPaneLog = new javax.swing.JScrollPane();
         jTextPaneLog = new javax.swing.JTextPane();
@@ -532,6 +534,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         jLabelPatch.setText("patch");
         jPanel1.add(jLabelPatch);
+
+        jLabelSDCardPresent.setText("no SDCard");
+        jPanel1.add(jLabelSDCardPresent);
 
         jPanel2.add(jPanel1);
         jPanel2.add(filler3);
@@ -937,6 +942,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/mounter.bin";
         File f = new File(fname);
         if (f.canRead()) {
+            qcmdprocessor.AppendToQueue(new QCmdStop());
             qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
             qcmdprocessor.AppendToQueue(new QCmdStartMounter());
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "will disconnect, unmount sdcard to go back to normal mode (required to connect)");
@@ -990,6 +996,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     private javax.swing.JLabel jLabelIcon;
     private javax.swing.JLabel jLabelPatch;
     private javax.swing.JLabel jLabelProgress;
+    private javax.swing.JLabel jLabelSDCardPresent;
     private javax.swing.JLabel jLabelVoltages;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuBoard;
@@ -1055,6 +1062,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             v5000c = 0;
             vdd00c = 0;
             patchIndex = -4;
+            jLabelSDCardPresent.setText(" ");
         }
     }
 
@@ -1218,5 +1226,17 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     public void SetGrabFocusOnSevereErrors(boolean b) {
         bGrabFocusOnSevereErrors = b;
+    }
+
+    @Override
+    public void ShowSDCardMounted() {
+        jLabelSDCardPresent.setText("SDCard mounted");
+        jMenuItemMount.setEnabled(true);
+    }
+
+    @Override
+    public void ShowSDCardUnmounted() {
+        jLabelSDCardPresent.setText("no SDCard");
+        jMenuItemMount.setEnabled(false);
     }
 }

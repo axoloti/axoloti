@@ -273,7 +273,7 @@
 			 <include name="doc/*"/>
 			 <include name="firmware/*" />
 			 <include name="firmware/STM*/**/*" />
-			 <include name="firmware/samples/*" />
+			 <include name="firmware/mutable_instruments/**/*" />
 			 <include name="firmware/build/*.bin" />
 			 <include name="firmware/build/*.elf" />
 			 <include name="firmware/flasher/*" />

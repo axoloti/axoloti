@@ -46,7 +46,6 @@ public class QCmdChangeWorkingDirectory implements QCmdSerialTask {
     @Override
     public QCmd Do(Connection connection) {
         connection.ClearSync();
-        Logger.getLogger(QCmdChangeWorkingDirectory.class.getName()).log(Level.INFO, "Change working directory: {0}", filename);
         connection.TransmitChangeWorkingDirectory(filename);
         return this;
     }

@@ -24,6 +24,12 @@
 
 
 void axoloti_board_init(void) {
+#ifdef BOARD_AXOLOTI_V05
+  // initialize DMA2D engine
+  RCC->AHB1ENR |= RCC_AHB1ENR_DMA2DEN;
+  RCC->AHB1RSTR |= RCC_AHB1RSTR_DMA2DRST;
+  RCC->AHB1RSTR &= ~RCC_AHB1RSTR_DMA2DRST;
+#endif
 }
 
 /* Total number of channels to be sampled by a single ADC operation.*/

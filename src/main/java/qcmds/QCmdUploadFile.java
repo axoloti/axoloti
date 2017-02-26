@@ -39,6 +39,7 @@ public class QCmdUploadFile implements QCmdSerialTask {
     File file;
     long size;
     long tsEpoch;
+    boolean success = false;
 
     public QCmdUploadFile(InputStream inputStream, String filename) {
         this.inputStream = inputStream;
@@ -67,7 +68,11 @@ public class QCmdUploadFile implements QCmdSerialTask {
 
     @Override
     public String GetDoneMessage() {
-        return "Done uploading file";
+        if (success) {
+            return "Done uploading file";
+        } else {
+            return "Failed uploading file";
+        }
     }
 
     @Override
@@ -75,6 +80,16 @@ public class QCmdUploadFile implements QCmdSerialTask {
         connection.ClearSync();
         try {
             if (inputStream == null) {
+                if (!file.isFile()) {
+                    Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "file does not exist: {0}", filename);
+                    success = false;
+                    return this;
+                }
+                if (!file.canRead()) {
+                    Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "can''t read file: {0}", filename);
+                    success = false;
+                    return this;
+                }
                 inputStream = new FileInputStream(file);
             }
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading: {0}", filename);
@@ -120,12 +135,13 @@ public class QCmdUploadFile implements QCmdSerialTask {
             connection.TransmitCloseFile();
 
             SDCardInfo.getInstance().AddFile(filename, (int) size, ts);
-
+            success = true;
             return this;
         } catch (IOException ex) {
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "IOException", ex);
         }
-        return new QCmdDisconnect();
+        success = false;
+        return this;
     }
 
 }

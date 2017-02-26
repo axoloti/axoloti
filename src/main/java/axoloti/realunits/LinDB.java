@@ -18,6 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.text.ParseException;
 
 /**
  *
@@ -38,5 +41,25 @@ public class LinDB implements NativeToReal {
         } else {
             return "-infdB";
         }
+    }
+
+    @Override
+    public double FromReal(String s) throws ParseException {
+        Pattern pattern = Pattern.compile("(?<num>[\\d\\.\\-\\+]*)\\p{Space}*[dD][bB]?");
+        Matcher matcher = pattern.matcher(s);
+
+        if (matcher.matches()) {
+            double num;
+
+            try {
+                num = Float.parseFloat(matcher.group("num"));
+            } catch (java.lang.NumberFormatException ex) {
+                throw new ParseException("Not LinDB", 0);
+            }
+
+            return Math.pow(10.0, (num - maxGain) / 20) * 64.0;
+        }
+
+        throw new ParseException("Not LinDB", 0);
     }
 }

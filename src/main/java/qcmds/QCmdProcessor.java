@@ -246,6 +246,10 @@ public class QCmdProcessor implements Runnable {
 
     public boolean isQueueEmpty() {
         return queue.isEmpty();
-    }    
+    }
+    
+    public boolean hasQueueSpaceLeft() {
+        return (queue.remainingCapacity()>3);
+    }
 
 }

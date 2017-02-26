@@ -18,6 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.text.ParseException;
 
 /**
  *
@@ -29,5 +32,31 @@ public class FilterQ implements NativeToReal {
     public String ToReal(Value v) {
         double q = 32 / (64 - v.getDouble());
         return (String.format("Q=%.1f", q));
+    }
+
+    @Override
+    public double FromReal(String s) throws ParseException {
+        Pattern pattern = Pattern.compile("(?<unit1>[qQ]?)(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit2>[qQ]?)");
+        Matcher matcher = pattern.matcher(s);
+
+        if (matcher.matches()) {
+            double num;
+
+            try {
+                num = Float.parseFloat(matcher.group("num"));
+            } catch (java.lang.NumberFormatException ex) {
+                throw new ParseException("Not DecayTime", 0);
+            }
+
+            String units1 = matcher.group("unit1");
+            String units2 = matcher.group("unit2");
+            if (!(units1.contains("q") || units1.contains("Q") || units2.contains("q") || units2.contains("Q")))
+                throw new ParseException("Not FilterQ", 0);
+
+            double q = num;
+            return -((32 / q) - 64);
+        }
+
+        throw new ParseException("Not FilterQ", 0);
     }
 }

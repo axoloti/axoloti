@@ -329,6 +329,10 @@ public class Net extends JComponent {
         DataType t = source.get(0).GetDataType();
         return t;
     }
+    
+    public ArrayList<OutletInstance> GetSource() {
+        return source;
+    }
 
     public String CType() {
         DataType d = GetDataType();

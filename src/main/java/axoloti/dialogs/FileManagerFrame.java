@@ -47,12 +47,14 @@ import qcmds.QCmdGetFileList;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadFile;
+import axoloti.SDCardMountStatusListener;
+import javax.swing.SwingUtilities;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class FileManagerFrame extends javax.swing.JFrame implements ConnectionStatusListener {
+public class FileManagerFrame extends javax.swing.JFrame implements ConnectionStatusListener, SDCardMountStatusListener {
 
     /**
      * Creates new form FileManagerFrame
@@ -61,6 +63,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         initComponents();
         fileMenu1.initComponents();
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().addSDCardMountStatusListener(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jLabelSDInfo.setText("");
 
@@ -179,22 +182,26 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
         jFileTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                int row = jFileTable.getSelectedRow();
-                if (row < 0) {
-                    jButtonDelete.setEnabled(false);
-                    ButtonUploadDefaultName();
-                } else {
-                    jButtonDelete.setEnabled(true);
-                    SDFileInfo f = SDCardInfo.getInstance().getFiles().get(row);
-                    if (f != null && f.isDirectory()) {
-                        jButtonUpload.setText("Upload to " + f.getFilename() + " ...");
-                        jButtonCreateDir.setText("Create directory in " + f.getFilename() + " ...");
-                    } else {
-                        ButtonUploadDefaultName();
-                    }
-                }
+                UpdateButtons();
             }
         });
+    }
+    
+    void UpdateButtons(){
+        int row = jFileTable.getSelectedRow();
+        if (row < 0) {
+            jButtonDelete.setEnabled(false);
+            ButtonUploadDefaultName();
+        } else {
+            jButtonDelete.setEnabled(true);
+            SDFileInfo f = SDCardInfo.getInstance().getFiles().get(row);
+            if (f != null && f.isDirectory()) {
+                jButtonUpload.setText("Upload to " + f.getFilename() + " ...");
+                jButtonCreateDir.setText("Create directory in " + f.getFilename() + " ...");
+            } else {
+                ButtonUploadDefaultName();
+            }
+        }        
     }
 
     void ButtonUploadDefaultName() {
@@ -387,6 +394,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
+        USBBulkConnection.GetConnection().removeSDCardMountStatusListener(this);
     }//GEN-LAST:event_formWindowClosing
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -404,6 +412,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                 processor.AppendToQueue(new QCmdDeleteFile(ff));
             }
         }
+        jFileTable.clearSelection();
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jButtonCreateDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateDirActionPerformed
@@ -420,16 +429,26 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
             QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
             processor.AppendToQueue(new QCmdCreateDirectory(dir + fn));
         }
-
+        UpdateButtons();
     }//GEN-LAST:event_jButtonCreateDirActionPerformed
 
     public void refresh() {
-        int clusters = SDCardInfo.getInstance().getClusters();
-        int clustersize = SDCardInfo.getInstance().getClustersize();
-        int sectorsize = SDCardInfo.getInstance().getSectorsize();
-        jLabelSDInfo.setText("Free : " + ((long) clusters * (long) clustersize * (long) sectorsize / (1024 * 1024)) + "MB, Cluster size = " + clustersize * sectorsize);
-        jFileTable.revalidate();
-        jFileTable.repaint();
+        if (!SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    refresh();
+                }
+            });
+        } else {
+            jFileTable.clearSelection();
+            int clusters = SDCardInfo.getInstance().getClusters();
+            int clustersize = SDCardInfo.getInstance().getClustersize();
+            int sectorsize = SDCardInfo.getInstance().getSectorsize();
+            jLabelSDInfo.setText("Free : " + ((long) clusters * (long) clustersize * (long) sectorsize / (1024 * 1024)) + "MB, Cluster size = " + clustersize * sectorsize);
+            jFileTable.revalidate();
+            jFileTable.repaint();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -463,5 +482,17 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     @Override
     public void ShowDisconnect() {
         ShowConnect(false);
+        SDCardInfo.getInstance().SetInfo(0, 0, 0);
+    }
+
+    @Override
+    public void ShowSDCardMounted() {
+        ShowConnect(true);
+    }
+
+    @Override
+    public void ShowSDCardUnmounted() {
+        ShowConnect(false);
+        SDCardInfo.getInstance().SetInfo(0, 0, 0);        
     }
 }

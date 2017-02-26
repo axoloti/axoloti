@@ -78,6 +78,8 @@ SECTIONS {
     {
         KEEP(*(.sdram))
         KEEP(*(.sdram.*))
+        PROVIDE(_sdram_dyn_start = .);
+        PROVIDE(_sdram_dyn_end = ORIGIN(sdram) + LENGTH(sdram));
     } > sdram
 
 

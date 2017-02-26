@@ -20,6 +20,7 @@ package axoloti.object;
 import static axoloti.Axoloti.FIRMWARE_DIR;
 import axoloti.Modulator;
 import axoloti.Patch;
+import axoloti.SDFileReference;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.attributedefinition.AxoAttributeInt32;
@@ -233,6 +234,8 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = AxoAttributeSDFile.TypeName, type = AxoAttributeSDFile.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeTextEditor.TypeName, type = AxoAttributeTextEditor.class, inline = true, required = false)})
     public ArrayList<AxoAttribute> attributes; // literal constants
+    @ElementList(name = "file-depends", entry = "file-depend", type = SDFileReference.class, required = false)
+    public ArrayList<SDFileReference> filedepends;
     @ElementList(name = "includes", entry = "include", type = String.class, required = false)
     public HashSet<String> includes;
     @ElementList(name = "depends", entry = "depend", type = String.class, required = false)
@@ -357,6 +360,8 @@ public class AxoObject extends AxoObjectAbstract {
         }
 
         AxoObjectInstance o = new AxoObjectInstance(this, patch, InstanceName1, location);
+//        System.out.println("object " + o);
+//        Thread.dumpStack();
         if (patch != null) {
             patch.objectinstances.add(o);
         }

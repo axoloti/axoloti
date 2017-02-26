@@ -18,6 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.text.ParseException;
 
 /**
  *
@@ -30,4 +33,28 @@ public class LFORatio implements NativeToReal {
         return (String.format("x%.3f", Math.pow(2.0, (v.getDouble()) / 12.0)));
     }
 
+    @Override
+    public double FromReal(String s) throws ParseException {
+        Pattern pattern = Pattern.compile("(?<unit1>[xX\\*]?)\\p{Space}*(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit2>[xX\\*]?)");
+        Matcher matcher = pattern.matcher(s);
+
+        if (matcher.matches()) {
+            double num;
+
+            try {
+                num = Float.parseFloat(matcher.group("num"));
+            } catch (java.lang.NumberFormatException ex) {
+                throw new ParseException("Not LFORatio", 0);
+            }
+
+            String units1 = matcher.group("unit1");
+            String units2 = matcher.group("unit2");
+            if (!(units1.contains("x") || units1.contains("X") || units1.contains("*") || units2.contains("x") || units2.contains("X") || units2.contains("*")))
+                throw new ParseException("Not LFORatio", 0);
+
+            return (Math.log(num) / Math.log(2)) * 12.0;
+        }
+
+        throw new ParseException("Not LFORatio", 0);
+    }
 }

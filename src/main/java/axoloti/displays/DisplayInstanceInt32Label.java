@@ -42,6 +42,6 @@ public class DisplayInstanceInt32Label extends DisplayInstanceInt32<DisplayInt32
 
     @Override
     public void updateV() {
-        readout.setText(Integer.toString(value.getInt()));
+        readout.setText(":"+Integer.toString(value.getInt()));
     }
 }
