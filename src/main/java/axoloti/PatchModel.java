@@ -75,12 +75,17 @@ import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.core.Validate;
 import org.simpleframework.xml.strategy.Strategy;
 
+
+
 /**
  *
  * @author Johannes Taelman
  */
 @Root
 public class PatchModel {
+
+    //TODO - use execution order, rather than UI ordering
+    static final boolean USE_EXECUTION_ORDER = false;
 
     @Attribute(required = false)
     String appVersion;
@@ -707,9 +712,10 @@ public class PatchModel {
         Collections.sort(parents);
         // prepend any we haven't seen before
         for (AxoObjectInstanceAbstract c : parents) {
-            if (!result.contains(c)) {
-                result.addFirst(c);
+            if (result.contains(c)) {
+                result.remove(c);
             }
+            result.addFirst(c);
         }
         // prepend their parents
         for (AxoObjectInstanceAbstract c : parents) {
@@ -1413,7 +1419,13 @@ public class PatchModel {
         }
 
         CreateIID();
-        SortByPosition();
+
+        //TODO - use execution order, rather than UI ordering
+        if (USE_EXECUTION_ORDER)
+             SortByExecution();
+         else
+             SortByPosition();
+
         String c = generateIncludes();
         c += "\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
