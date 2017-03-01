@@ -45,6 +45,7 @@
 #include "chprintf.h"
 #include "usbcfg.h"
 #include "sysmon.h"
+#include "spilink.h"
 
 #if (BOARD_AXOLOTI_V05)
 #include "sdram.c"
@@ -91,6 +92,7 @@ int main(void) {
 
   halInit();
   chSysInit();
+  pThreadSpilink = 0;
 
   sdcard_init();
   sysmon_init();
@@ -122,11 +124,18 @@ int main(void) {
   palSetPadMode(SW2_PORT, SW2_PIN, PAL_MODE_INPUT_PULLDOWN);
 
   axoloti_board_init();
+
+  bool_t is_master = 1;
+#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
+// connect PB10 to ground to enable slave mode
+   is_master = palReadPad(GPIOB, GPIOB_PIN10);
+#endif
+  codec_init(is_master);
   adc_init();
   axoloti_math_init();
   midi_init();
   start_dsp_thread();
-  codec_init();
+
   if (!palReadPad(SW2_PORT, SW2_PIN)) { // button S2 not pressed
 //    watchdog_init();
     chThdSleepMilliseconds(1);
@@ -134,6 +143,7 @@ int main(void) {
 
 #if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
   axoloti_control_init();
+  spilink_init(is_master);
 #endif
   ui_init();
 

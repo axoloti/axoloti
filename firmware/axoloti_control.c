@@ -23,40 +23,11 @@
 #include <string.h>
 
 uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS] __attribute__ ((section (".sram2")));
-uint8_t led_buffer[LCDHEADER + LCDWIDTH] __attribute__ ((section (".sram2")));
-uint8_t control_rx_buffer[LCDHEADER + LCDWIDTH] __attribute__ ((section (".sram2")));
 
-/*
- * Low speed SPI configuration (328.125kHz, CPHA=0, CPOL=0, MSb first).
- */
-static const SPIConfig ls_spicfg =
-    {NULL, GPIOA, 15, SPI_CR1_BR_0 | SPI_CR1_BR_1};
+led_outputs_t leds[LEDSIZE] __attribute__ ((section (".sram2")));
 
-uint8_t row_update_index;
-uint8_t k;
 
-void do_axoloti_control(void) {
-  row_update_index++;
-  if (row_update_index == ((LCDROWS) + 1)) {
-    row_update_index = 0;
-    k++;
-  }
-  chMtxLock(&Mutex_DMAStream_1_7);
-  spiAcquireBus(&SPID3); /* Acquire ownership of the bus.    */
-  spiStart(&SPID3, &ls_spicfg); /* Setup transfer parameters.       */
-  spiSelect(&SPID3); /* Slave Select assertion.          */
-  chThdSleepMilliseconds(2);
-  if (row_update_index != (LCDROWS))
-    spiExchange(&SPID3, LCDHEADER + LCDWIDTH,
-                &lcd_buffer[(LCDHEADER + LCDWIDTH) * row_update_index],
-                control_rx_buffer);
-  else
-    spiExchange(&SPID3, LCDHEADER + LCDWIDTH, &led_buffer[0],
-                control_rx_buffer);
-  spiUnselect(&SPID3); /* Slave Select de-assertion.       */
-  spiReleaseBus(&SPID3); /* Ownership release.               */
-  spiStop(&SPID3);
-  chMtxUnlock();
+#if 0
   if ((control_rx_buffer[0] == 'B') && (control_rx_buffer[1] == 'T')
       && (control_rx_buffer[2] == 'N')) {
     Btn_Nav_Or.word |= ((int32_t *)control_rx_buffer)[1];
@@ -66,45 +37,37 @@ void do_axoloti_control(void) {
     EncBuffer[2] += control_rx_buffer[14];
     EncBuffer[3] += control_rx_buffer[15];
   }
-}
+#endif
 
 void axoloti_control_init(void) {
-  /*
-   *  Commm to FP test...
-   */
-  row_update_index = 0;
-  palSetPadMode(GPIOA, 15, PAL_MODE_OUTPUT_PUSHPULL);
-  // NSS
-  palSetPadMode(GPIOB, 5, PAL_MODE_ALTERNATE(6));
-  // MOSI
-  palSetPadMode(GPIOB, 4, PAL_MODE_ALTERNATE(6));
-  // MISO
-  palSetPadMode(GPIOB, 3, PAL_MODE_ALTERNATE(6));
-  // SCK
-  int i;
-  // clear
-  for (i = 0; i < (LCDHEADER + LCDWIDTH) * LCDROWS; i++)
-    lcd_buffer[i] = 0;
-  // fill header
-  for (i = 0; i < LCDROWS; i++) {
-    lcd_buffer[i * (LCDHEADER + LCDWIDTH) + 0] = 'A';
-    lcd_buffer[i * (LCDHEADER + LCDWIDTH) + 1] = 'x';
-    lcd_buffer[i * (LCDHEADER + LCDWIDTH) + 2] = 'o';
-    lcd_buffer[i * (LCDHEADER + LCDWIDTH) + 3] = '0' + i;
-  }
-  led_buffer[0] = 'A';
-  led_buffer[1] = 'x';
-  led_buffer[2] = 'o';
-  led_buffer[3] = '0' + i;
-
-  for (i = 0; i < LCDWIDTH; i++)
-    led_buffer[LCDHEADER + i] = 0; //i;
-
-  for (i = 0; i < LCDWIDTH; i++)
-    control_rx_buffer[i] = 0;
+  LCD_clearDisplay();
+  LED_clear();
 }
 
 #define _BV(bit) (1 << (bit))
+
+
+
+void LED_clear() {
+	int c;
+	for(c=0;c<LEDSIZE;c++) {
+		leds[c].led_32b = 0;
+	}
+}
+
+void LED_setAll(unsigned c, int32_t v) {
+	if(c<LEDSIZE) {
+		leds[c].led_32b = v;
+	}
+}
+
+void LED_setOne(unsigned c, unsigned b, unsigned v ) {
+	if(c<LEDSIZE && b<16) {
+		leds[c].led_32b &= ~ (0x3 << (b*2) );
+		leds[c].led_32b |= ( (v & 0x3)  << (b*2) );
+	}
+}
+
 
 void LCD_updateBoundingBox(int x, int y, int x2, int y2) {
   (void)x;

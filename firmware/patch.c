@@ -25,8 +25,11 @@
 #include "watchdog.h"
 #include "pconnection.h"
 #include "sysmon.h"
+#include "spilink.h"
 #include "codec.h"
 #include "axoloti_memory.h"
+
+//#define DEBUG_INT_ON_GPIO 1
 
 patchMeta_t patchMeta;
 
@@ -222,6 +225,7 @@ static msg_t ThreadDSP(void *arg) {
         //      LogTextMessage("dsp overrun");
         chThdSleepMilliseconds(1);
       }
+      spilink_clear_audio_tx();
     }
     else if (evt == 2) {
       // load patch event
@@ -328,6 +332,9 @@ static msg_t ThreadDSP(void *arg) {
       codec_clearbuffer();
       StartPatch1();
     }
+#ifdef DEBUG_INT_ON_GPIO
+	palClearPad(GPIOA, 2);
+#endif
   }
   return (msg_t)0;
 }
@@ -359,7 +366,7 @@ int StartPatch(void) {
 
 void start_dsp_thread(void) {
   if (!pThreadDSP)
-    pThreadDSP = chThdCreateStatic(waThreadDSP, sizeof(waThreadDSP), HIGHPRIO,
+    pThreadDSP = chThdCreateStatic(waThreadDSP, sizeof(waThreadDSP), HIGHPRIO-2,
                                    ThreadDSP, NULL);
 }
 

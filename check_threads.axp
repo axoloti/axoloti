@@ -1,0 +1,66 @@
+<patch-1.0 appVersion="1.0.10">
+   <patchobj type="patch/object" uuid="c5562263-0aba-4ecd-b3b6-f31f06b63364" name="object_1" x="28" y="28">
+      <params>
+         <bool32.mom name="dump" value="0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="c5562263-0aba-4ecd-b3b6-f31f06b63364">
+         <sDescription>description</sDescription>
+         <inlets/>
+         <outlets/>
+         <displays/>
+         <params>
+            <bool32.mom name="dump"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[bool p;
+]]></code.declaration>
+         <code.krate><![CDATA[static const char *states[] = {THD_STATE_NAMES};
+
+if (param_dump & !p){
+	p=1;
+	Thread *thd1 = chRegFirstThread();
+	Thread *thd = thd1;
+#if CH_DBG_FILL_THREADS	
+	LogTextMessage("Thread Name Status StkUnused");
+#else
+	LogTextMessage("Thread Name Status");
+#endif
+	while(thd){
+		const char *name = "????";
+		if (chRegGetThreadName(thd)){
+			name = chRegGetThreadName(thd);
+		}
+#if CH_DBG_FILL_THREADS	
+		char *stk = (char *)(thd->p_stklimit);
+		int nfree = 0;
+		while(*stk == 0x55){
+			nfree++;
+			stk++;
+		}
+		LogTextMessage("%-16s %-16s %6d",name,states[thd->p_state],nfree);
+#else
+		LogTextMessage("%-16s %-16s",name,states[thd->p_state]);
+#endif		
+		thd = chRegNextThread(thd);
+		if (thd == thd1) break;
+	}
+} else if (!param_dump) {
+	p=0;	
+}
+]]></code.krate>
+      </object>
+   </patchobj>
+   <nets/>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>370</x>
+      <y>24</y>
+      <width>400</width>
+      <height>400</height>
+   </windowPos>
+</patch-1.0>

@@ -1,0 +1,232 @@
+<patch-1.0 appVersion="1.0.10">
+   <obj type="ctrl/i" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_1" x="238" y="0">
+      <params>
+         <int32 name="value" value="2977"/>
+      </params>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="71c179bd-456c-4990-925b-b8e1ab15eb12" name="object_2" x="322" y="0">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="71c179bd-456c-4990-925b-b8e1ab15eb12">
+         <sDescription>description</sDescription>
+         <inlets>
+            <int32 name="count"/>
+         </inlets>
+         <outlets/>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[volatile int i = inlet_count;
+while(i--){
+}
+]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="14" y="56">
+      <params>
+         <frac32.s.map name="pitch" value="-6.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_1" x="112" y="56">
+      <params>
+         <frac32.u.map name="amp" value="27.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="patch/cyclecounter" uuid="6b9e9c2187a0e07fb56029aef6ccaaf1f9621e35" name="cyclecounter_1" x="280" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="14" y="182">
+      <params>
+         <frac32.s.map name="pitch" value="11.100000381469727"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_3" x="112" y="182">
+      <params>
+         <frac32.u.map name="amp" value="14.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_1" x="42" y="336">
+      <params>
+         <frac32.u.map name="value" value="10.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/nointerp" uuid="5e7389d61f8cd8945790bb71f1670b3a0904c15b" name="nointerp_1" x="126" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="675c9cb5-3e4e-49a3-bd4f-d0dd95ed746b" name="object_1" x="238" y="336">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="675c9cb5-3e4e-49a3-bd4f-d0dd95ed746b">
+         <sDescription>description</sDescription>
+         <inlets>
+            <frac32buffer name="ch1" description="channel 1"/>
+            <frac32buffer name="ch2" description="channel 2"/>
+            <frac32buffer name="ch3" description="channel 3"/>
+            <frac32buffer name="ch4" description="channel 4"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="ch1"/>
+            <frac32buffer name="ch2"/>
+            <frac32buffer name="ch3"/>
+            <frac32buffer name="ch4"/>
+         </outlets>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[int i;
+for(i=0;i<BUFSIZE;i++){
+	outlet_ch1[i] = spilink_rx_samples->channel[0].samples[i];
+	outlet_ch2[i] = spilink_rx_samples->channel[1].samples[i];
+	outlet_ch3[i] = spilink_rx_samples->channel[2].samples[i];
+	outlet_ch4[i] = spilink_rx_samples->channel[3].samples[i];
+	spilink_tx_samples->channel[0].samples[i] = inlet_ch1[i];
+	spilink_tx_samples->channel[1].samples[i] = inlet_ch2[i];
+	spilink_tx_samples->channel[2].samples[i] = inlet_ch3[i];
+	spilink_tx_samples->channel[3].samples[i] = inlet_ch4[i];
+}
+
+]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_2" x="350" y="336">
+      <params>
+         <frac32.u.map name="value" value="1.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/hex" uuid="87617898f70d90033f8add921438bf0d11721fdd" name="hex_1" x="476" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/kscope 128 p" uuid="664f9317a38a6910ae9bc020e00ca2dd2ee692fa" name="kscope_1" x="588" y="392">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/&lt;&lt;" uuid="3c89a8ac22f44350a3366284704535e257aea35f" name="&lt;&lt;_1" x="476" y="406">
+      <params/>
+      <attribs>
+         <spinner attributeName="shift" value="25"/>
+      </attribs>
+   </obj>
+   <obj type="math/*" uuid="c16a625a661f40e4b359db604dcd00b3befcdbe3" name="*_1" x="350" y="434">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="196" y="462">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_1" x="420" y="476">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="math/*" uuid="c16a625a661f40e4b359db604dcd00b3befcdbe3" name="*_2" x="350" y="490">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="112" y="686">
+      <params>
+         <frac32.s.map name="pitch" value="-20.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_2" x="210" y="686">
+      <params>
+         <frac32.u.map name="amp" value="12.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_2" x="392" y="700">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="dial_1" outlet="out"/>
+         <dest obj="nointerp_1" inlet="i"/>
+      </net>
+      <net>
+         <source obj="object_1" outlet="ch1"/>
+         <dest obj="hex_1" inlet="in"/>
+         <dest obj="&lt;&lt;_1" inlet="a"/>
+      </net>
+      <net>
+         <source obj="&lt;&lt;_1" outlet="result"/>
+         <dest obj="kscope_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="nointerp_1" outlet="o"/>
+         <dest obj="object_1" inlet="ch1"/>
+      </net>
+      <net>
+         <source obj="object_1" outlet="ch3"/>
+         <dest obj="scope_1" inlet="in"/>
+         <dest obj="*_1" inlet="a"/>
+      </net>
+      <net>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="*c_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="object_1" inlet="ch3"/>
+      </net>
+      <net>
+         <source obj="sine_2" outlet="wave"/>
+         <dest obj="*c_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="*c_2" outlet="out"/>
+         <dest obj="out_2" inlet="right"/>
+      </net>
+      <net>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="object_2" inlet="count"/>
+      </net>
+      <net>
+         <source obj="sine_3" outlet="wave"/>
+         <dest obj="*c_3" inlet="in"/>
+      </net>
+      <net>
+         <source obj="*c_3" outlet="out"/>
+         <dest obj="object_1" inlet="ch4"/>
+      </net>
+      <net>
+         <source obj="*_1" outlet="result"/>
+         <dest obj="out_1" inlet="left"/>
+      </net>
+      <net>
+         <source obj="object_1" outlet="ch4"/>
+         <dest obj="*_2" inlet="a"/>
+      </net>
+      <net>
+         <source obj="*_2" outlet="result"/>
+         <dest obj="out_1" inlet="right"/>
+      </net>
+      <net>
+         <source obj="dial_2" outlet="out"/>
+         <dest obj="*_1" inlet="b"/>
+         <dest obj="*_2" inlet="b"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>350</x>
+      <y>23</y>
+      <width>904</width>
+      <height>674</height>
+   </windowPos>
+</patch-1.0>
