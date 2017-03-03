@@ -1,2 +1,4 @@
 #pragma once
-long func(int a);
+namespace foo {
+    long func(int a);
+};

@@ -1,4 +1,4 @@
 #include "test.h"
-long func(int a) {
+long foo::func(int a) {
     return a;
 }
