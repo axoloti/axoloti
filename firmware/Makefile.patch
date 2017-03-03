@@ -18,7 +18,7 @@ axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
 
 
-CHIBIOS = ${axoloti_release}/chibios
+CHIBIOS = ${axoloti_release}/ChibiOS_16.1.7
 CMSIS = ${axoloti_release}/CMSIS
 
 SPACE := 
