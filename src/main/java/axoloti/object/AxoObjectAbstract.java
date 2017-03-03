@@ -160,6 +160,10 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
         return null;
     }
 
+    public Set<String> GetModules() {
+        return null;
+    }
+
     public String getDefaultInstanceName() {
         if (shortId == null) {
             return "obj";

@@ -20,6 +20,10 @@ package qcmds;
 import axoloti.PatchController;
 import axoloti.utils.OSDetect;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,6 +51,25 @@ public class QCmdCompilePatch extends QCmdShellTask {
         } else {
             return "Compiling patch failed ( " + patchController.getFileNamePath() + " ) ";
         }
+    }
+    
+    @Override
+    public String[] GetEnv() {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(Arrays.asList(super.GetEnv()));
+        
+        Set<String> moduleSet = this.patchController.patchModel.getModules();
+        if(moduleSet!=null) {
+            String modules = "";
+            for(String m : this.patchController.patchModel.getModules()) {
+                modules += m + " ";
+            }
+            list.add("MODULES=" + modules);
+        }
+        
+        String vars[] = new String[list.size()];
+        list.toArray(vars);
+        return vars;
     }
     
     @Override
