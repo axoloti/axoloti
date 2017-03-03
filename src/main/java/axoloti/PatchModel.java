@@ -821,6 +821,17 @@ public class PatchModel {
         return depends;
     }
 
+    public HashSet<String> getModules() {
+        HashSet<String> modules = new HashSet<String>();
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            Set<String> i = o.getType().GetModules();
+            if (i != null) {
+                modules.addAll(i);
+            }
+        }
+        return modules;
+    }
+
     public String generateIncludes() {
         String inc = "";
         Set<String> includes = getIncludes();
@@ -833,6 +844,18 @@ public class PatchModel {
         }
         return inc;
     }
+
+    public String generateModules() {
+        String inc = "";
+        Set<String> modules = getModules();
+        for (String s : modules) {
+            inc += "namespace " + s + "{\n";
+            inc += "    #include \"" + s + ".h\"\n";
+            inc += "};\n";
+        }
+        return inc;
+    }
+
 
     /* the c++ code generator */
     String GeneratePexchAndDisplayCode() {
@@ -1425,8 +1448,12 @@ public class PatchModel {
              SortByExecution();
          else
              SortByPosition();
+        
+        String c="";
 
-        String c = generateIncludes();
+        c += generateIncludes();
+        c += "\n";
+        c += generateModules();
         c += "\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-parameter\"\n";
@@ -1524,6 +1551,7 @@ public class PatchModel {
         ao.sDisposeCode = GenerateDisposeCodePlusPlusSub("attr_parent");
         ao.includes = getIncludes();
         ao.depends = getDepends();
+        ao.modules = getModules();
         if ((notes != null) && (!notes.isEmpty())) {
             ao.sDescription = notes;
         } else {
@@ -1631,6 +1659,7 @@ public class PatchModel {
         ao.sDescription = FileNamePath;
         ao.includes = getIncludes();
         ao.depends = getDepends();
+        ao.modules = getModules();
         if ((notes != null) && (!notes.isEmpty())) {
             ao.sDescription = notes;
         } else {
