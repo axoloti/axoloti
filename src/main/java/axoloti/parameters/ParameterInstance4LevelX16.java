@@ -17,8 +17,15 @@
  */
 package axoloti.parameters;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.Value;
-import components.control.Checkbox4StatesComponent;
+import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
+import axoloti.parameterviews.ParameterInstanceView4LevelX16;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
+import axoloti.piccolo.parameterviews.PParameterInstanceView4LevelX16;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -32,11 +39,6 @@ public class ParameterInstance4LevelX16 extends ParameterInstanceInt32 {
 
     public ParameterInstance4LevelX16(@Attribute(name = "value") int v) {
         super(v);
-    }
-
-    @Override
-    public Checkbox4StatesComponent CreateControl() {
-        return new Checkbox4StatesComponent(0, 16);
     }
 
     @Override
@@ -63,22 +65,16 @@ public class ParameterInstance4LevelX16 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void ShowPreset(int i) {
-    }
-
-    @Override
-    public void updateV() {
-        ctrl.setValue(value.getInt());
-    }
-
-    @Override
     public void setValue(Value value) {
         super.setValue(value);
-        updateV();
     }
 
     @Override
-    public Checkbox4StatesComponent getControlComponent() {
-        return (Checkbox4StatesComponent) ctrl;
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceView4LevelX16(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new ParameterInstanceView4LevelX16(this, (AxoObjectInstanceView) o);
+        }
     }
 }

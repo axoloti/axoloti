@@ -28,7 +28,7 @@ public class ThemeEditor extends JFrame {
     private JPanel p;
 
     public ThemeEditor() {
-        this.setPreferredSize(new Dimension(1000, 1000));
+        setPreferredSize(new Dimension(1000, 1000));
         theme = Theme.getCurrentTheme();
         p = new JPanel();
         JScrollPane s = new JScrollPane(p,
@@ -185,8 +185,8 @@ public class ThemeEditor extends JFrame {
                 Logger.getLogger(ThemeEditor.class.getName()).log(Level.SEVERE, "{0}", new Object[]{ex});
             }
         }
-        this.setContentPane(s);
-        this.pack();
+        setContentPane(s);
+        pack();
     }
 
     private void update() {

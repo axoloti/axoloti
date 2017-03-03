@@ -17,7 +17,12 @@
  */
 package axoloti.displays;
 
-import components.displays.LedstripComponent;
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.displayviews.DisplayInstanceViewInt32Bar32;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewInt32Bar32;
 
 /**
  *
@@ -25,28 +30,16 @@ import components.displays.LedstripComponent;
  */
 public class DisplayInstanceInt32Bar32 extends DisplayInstanceInt32<DisplayInt32Bar32> {
 
-    private LedstripComponent readout;
-
     public DisplayInstanceInt32Bar32() {
         super();
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        readout = new LedstripComponent(0, 32);
-        add(readout);
-        readout.setSize(readout.getHeight(), 80);
-    }
-
-    @Override
-    public void updateV() {
-        int i = value.getInt();
-        if ((i >= 0) && (i < 32)) {
-            readout.setValue(1 << i);
+    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewInt32Bar32(this, view);
         } else {
-            readout.setValue(0);
+            return new DisplayInstanceViewInt32Bar32(this);
         }
     }
 }

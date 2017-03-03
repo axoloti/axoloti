@@ -45,7 +45,7 @@ public abstract class DisplayInstance1<T extends Display> extends DisplayInstanc
 
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {
+        super.ProcessByteBuffer(bb);
         getValueRef().setRaw(bb.getInt());
-        updateV();
     }
 }

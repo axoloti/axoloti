@@ -28,26 +28,26 @@ import javax.swing.JPopupMenu;
  */
 public class OutletInstancePopupMenu extends JPopupMenu {
 
-    OutletInstance outletinstance;
+    IOutletInstanceView outletInstanceView;
 
-    public OutletInstancePopupMenu(OutletInstance outletinstance1) {
+    public OutletInstancePopupMenu(IOutletInstanceView outletInstanceView) {
         super();
-        this.outletinstance = outletinstance1;
+        this.outletInstanceView = outletInstanceView;
         JMenuItem itemDisconnect = new JMenuItem("Disconnect outlet");
         JMenuItem itemDelete = new JMenuItem("Delete net");
         itemDisconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                outletinstance.disconnect();
+                OutletInstancePopupMenu.this.outletInstanceView.disconnect();
             }
         });
         itemDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                outletinstance.deleteNet();
+                OutletInstancePopupMenu.this.outletInstanceView.deleteNet();
             }
         });
-        this.add(itemDisconnect);
-        this.add(itemDelete);
+        add(itemDisconnect);
+        add(itemDelete);
     }
 }

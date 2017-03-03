@@ -17,10 +17,10 @@
  */
 package axoloti;
 
-import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.object.AxoObjects;
-import axoloti.utils.Constants;
+import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.KeyUtils;
 import components.PresetPanel;
 import components.VisibleCablePanel;
@@ -36,10 +36,13 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -67,44 +70,53 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     /**
      * Creates new form PatchFrame
      */
-    PatchGUI patch;
+    PatchController patchController;
 
     private PresetPanel presetPanel;
     private VisibleCablePanel visibleCablePanel;
 
-    public PatchFrame(final PatchGUI patch, QCmdProcessor qcmdprocessor) {
+    private static List<PatchFrame> instances = new ArrayList<>();
+    private static PatchFrame topFrame;
+
+    private JScrollPane jScrollPane1;
+
+    public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
+        this.patchController = patchController;
+        patchController.setPatchFrame(this);
+
         initComponents();
         fileMenu1.initComponents();
-        this.patch = patch;
-        this.patch.patchframe = this;
 
-        presetPanel = new PresetPanel(patch);
-        visibleCablePanel = new VisibleCablePanel(patch);
-        
+        presetPanel = new PresetPanel(patchController);
+        visibleCablePanel = new VisibleCablePanel(getPatchView());
+
         jToolbarPanel.add(presetPanel);
         jToolbarPanel.add(new javax.swing.Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(32767, 32767)));
         jToolbarPanel.add(visibleCablePanel);
 
-        jScrollPane1.setViewportView(patch.Layers);
-        jScrollPane1.getVerticalScrollBar().setUnitIncrement(Constants.Y_GRID / 2);
-        jScrollPane1.getHorizontalScrollBar().setUnitIncrement(Constants.X_GRID / 2);
+        jScrollPane1 = getPatchView().getViewportView().getScrollPane();
+        jScrollPane1.setViewportView(getPatchView().getViewportView().getComponent());
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setAutoscrolls(true);
+        getContentPane().add(jScrollPane1);
 
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, 
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
                 KeyUtils.CONTROL_OR_CMD_MASK));
         jMenuEdit.add(menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Patch p = patch.GetSelectedObjects();
-                if (p.objectinstances.isEmpty()) {
+                PatchModel p = getPatchView().getSelectedObjects();
+                if (p.getObjectInstances().isEmpty()) {
                     getToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
                     return;
                 }
-                p.PreSerialize();
                 Serializer serializer = new Persister();
                 try {
                     Clipboard clip = getToolkit().getSystemClipboard();
@@ -112,7 +124,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     serializer.write(p, baos);
                     StringSelection s = new StringSelection(baos.toString());
                     clip.setContents(s, (ClipboardOwner) null);
-                    patch.deleteSelectedAxoObjInstances();
+                    getPatchView().deleteSelectedAxoObjectInstanceViews();
                 } catch (Exception ex) {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -120,18 +132,17 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         });
         menuItem = new JMenuItem(new DefaultEditorKit.CopyAction());
         menuItem.setText("Copy");
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, 
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
                 KeyUtils.CONTROL_OR_CMD_MASK));
         jMenuEdit.add(menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Patch p = patch.GetSelectedObjects();
-                if (p.objectinstances.isEmpty()) {
+                PatchModel p = getPatchView().getSelectedObjects();
+                if (p.getObjectInstances().isEmpty()) {
                     getToolkit().getSystemClipboard().setContents(new StringSelection(""), null);
                     return;
                 }
-                p.PreSerialize();
                 Serializer serializer = new Persister();
                 try {
                     Clipboard clip = getToolkit().getSystemClipboard();
@@ -146,7 +157,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         });
         menuItem = new JMenuItem(new DefaultEditorKit.PasteAction());
         menuItem.setText("Paste");
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, 
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V,
                 KeyUtils.CONTROL_OR_CMD_MASK));
         jMenuEdit.add(menuItem);
         menuItem.addActionListener(new ActionListener() {
@@ -154,7 +165,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             public void actionPerformed(ActionEvent e) {
                 Clipboard clip = getToolkit().getSystemClipboard();
                 try {
-                    patch.paste((String) clip.getData(DataFlavor.stringFlavor), null, false);
+                    getPatchView().paste((String) clip.getData(DataFlavor.stringFlavor), null, false);
                 } catch (UnsupportedFlavorException ex) {
                     Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
@@ -163,10 +174,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             }
         });
 
-        if (patch.getWindowPos() != null) {
-            setBounds(patch.getWindowPos());
+        if (getPatchModel().getWindowPos() != null) {
+            setBounds(getPatchModel().getWindowPos());
         } else {
-            Dimension d = patch.GetInitialSize();
+            Dimension d = getPatchView().GetInitialSize();
             setSize(d);
         }
 
@@ -182,19 +193,80 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
         jMenuPreset.setVisible(false);
         jMenuItemAdjScroll.setVisible(false);
-        patch.Layers.requestFocus();
+
         if (USBBulkConnection.GetConnection().isConnected()) {
             ShowConnect();
         }
-        
-        this.undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, 
+
+        undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
                 KeyUtils.CONTROL_OR_CMD_MASK));
-        this.redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, 
+        redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
                 KeyUtils.CONTROL_OR_CMD_MASK | KeyEvent.SHIFT_DOWN_MASK));
 
-        createBufferStrategy(2);
         USBBulkConnection.GetConnection().addConnectionStatusListener(this);
         USBBulkConnection.GetConnection().addSDCardMountStatusListener(this);
+
+        getPatchView().getViewportView().getComponent().requestFocusInWindow();
+
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            initializeZoomMenuItems();
+        }
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                jScrollPane1.setWheelScrollingEnabled(MainFrame.prefs.getMouseWheelPan());
+            }
+
+            @Override
+            public void windowClosing(WindowEvent ev) {
+                AskClose();
+            }
+        });
+    }
+
+    private void initializeZoomMenuItems() {
+        JMenuItem zoomInMenuItem = new JMenuItem();
+        zoomInMenuItem.setText("Zoom in");
+        zoomInMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS,
+                KeyUtils.CONTROL_OR_CMD_MASK));
+        zoomInMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getPatchView().getViewportView().zoomIn();
+            }
+        });
+        JMenuItem zoomOutMenuItem = new JMenuItem();
+        zoomOutMenuItem.setText("Zoom out");
+        zoomOutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS,
+                KeyUtils.CONTROL_OR_CMD_MASK));
+        zoomOutMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getPatchView().getViewportView().zoomOut();
+            }
+        });
+        JMenuItem zoomDefaultMenuItem = new JMenuItem();
+        zoomDefaultMenuItem.setText("Zoom to default");
+        zoomDefaultMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0,
+                KeyUtils.CONTROL_OR_CMD_MASK));
+        zoomDefaultMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getPatchView().getViewportView().zoomDefault();
+            }
+        });
+        jMenuView.add(zoomInMenuItem);
+        jMenuView.add(zoomOutMenuItem);
+        jMenuView.add(zoomDefaultMenuItem);
+    }
+
+    private PatchView getPatchView() {
+        return patchController.getPatchView();
+    }
+
+    public PatchModel getPatchModel() {
+        return patchController.patchModel;
     }
 
     QCmdProcessor qcmdprocessor;
@@ -215,18 +287,18 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }
 
-    void ShowConnect1(boolean status){
+    void ShowConnect1(boolean status) {
         jCheckBoxLive.setEnabled(status);
         jCheckBoxMenuItemLive.setEnabled(status);
         jMenuItemUploadInternalFlash.setEnabled(status);
         jMenuItemUploadSD.setEnabled(status);
         jMenuItemUploadSDStart.setEnabled(status);
     }
-    
+
     @Override
     public void ShowDisconnect() {
-        if (patch.IsLocked()) {
-            patch.Unlock();
+        if (getPatchView().isLocked()) {
+            getPatchView().Unlock();
         }
         jCheckBoxLive.setSelected(false);
         jCheckBoxMenuItemLive.setSelected(false);
@@ -235,7 +307,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public void ShowConnect() {
-        patch.Unlock();
+        getPatchView().Unlock();
         jCheckBoxLive.setSelected(false);
         jCheckBoxMenuItemLive.setSelected(false);
         ShowConnect1(true);
@@ -250,18 +322,18 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         DocumentWindowList.UnregisterWindow(this);
         USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
         USBBulkConnection.GetConnection().removeSDCardMountStatusListener(this);
-        patch.Close();
+        getPatchView().Close();
         dispose();
     }
 
     @Override
     public boolean AskClose() {
-        if (patch.isDirty() && patch.container() == null) {
+        if (getPatchModel().isDirty() && getPatchModel().container() == null) {
             Object[] options = {"Save",
                 "Don't save",
                 "Cancel"};
             int n = JOptionPane.showOptionDialog(this,
-                    "Do you want to save changes to " + patch.getFileNamePath() + " ?",
+                    "Do you want to save changes to " + getPatchModel().getFileNamePath() + " ?",
                     "Axoloti asks:",
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
@@ -287,10 +359,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }
 
-    public JScrollPane getScrollPane() {
-        return this.jScrollPane1;
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -306,7 +374,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jLabel1 = new javax.swing.JLabel();
         jProgressBarDSPLoad = new javax.swing.JProgressBar();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
-        jScrollPane1 = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu1 = new axoloti.menus.FileMenu();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -350,11 +417,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                formComponentHidden(evt);
-            }
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
+            }
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                formComponentHidden(evt);
             }
         });
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -394,6 +461,15 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(filler2);
 
         jLabel1.setText("DSP load ");
+        jLabel1.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jLabel1AncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
         jToolbarPanel.add(jLabel1);
 
         jProgressBarDSPLoad.setToolTipText("");
@@ -409,11 +485,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel.add(filler3);
 
         getContentPane().add(jToolbarPanel);
-
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setAutoscrolls(true);
-        getContentPane().add(jScrollPane1);
 
         fileMenu1.setText("File");
         fileMenu1.add(jSeparator1);
@@ -705,16 +776,16 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             }
         } else {
             qcmdprocessor.AppendToQueue(new QCmdStop());
-            patch.Unlock();
+            getPatchView().Unlock();
         }
     }//GEN-LAST:event_jCheckBoxLiveActionPerformed
 
     private void jMenuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveActionPerformed
-        String fn = patch.getFileNamePath();
+        String fn = getPatchModel().getFileNamePath();
         if ((fn != null) && (!fn.equals("untitled"))) {
             File f = new File(fn);
-            patch.setFileNamePath(f.getPath());
-            patch.save(f);
+            getPatchView().setFileNamePath(f.getPath());
+            getPatchView().save(f);
         } else {
             jMenuSaveAsActionPerformed(evt);
         }
@@ -726,7 +797,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         fc.addChoosableFileFilter(FileUtils.axpFileFilter);
         fc.addChoosableFileFilter(FileUtils.axsFileFilter);
         fc.addChoosableFileFilter(FileUtils.axhFileFilter);
-        String fn = patch.getFileNamePath();
+        String fn = getPatchModel().getFileNamePath();
         if (fn == null) {
             fn = "untitled";
         }
@@ -820,91 +891,90 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
         File fileToBeSaved = FileChooserSave();
         if (fileToBeSaved != null) {
-            patch.setFileNamePath(fileToBeSaved.getPath());
+            getPatchView().setFileNamePath(fileToBeSaved.getPath());
             MainFrame.prefs.setCurrentFileDirectory(fileToBeSaved.getPath());
-            patch.save(fileToBeSaved);
+            getPatchView().save(fileToBeSaved);
         }
     }//GEN-LAST:event_jMenuSaveAsActionPerformed
 
     private void jMenuItemAdjScrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAdjScrollActionPerformed
         jScrollPane1.setAutoscrolls(true);
-        patch.AdjustSize();
+        getPatchView().AdjustSize();
     }//GEN-LAST:event_jMenuItemAdjScrollActionPerformed
 
     private void jCheckBoxMenuItemCordsInBackgroundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemCordsInBackgroundActionPerformed
-        patch.SetCordsInBackground(jCheckBoxMenuItemCordsInBackground.isSelected());
+        getPatchView().setCordsInBackground(jCheckBoxMenuItemCordsInBackground.isSelected());
     }//GEN-LAST:event_jCheckBoxMenuItemCordsInBackgroundActionPerformed
 
     private void jMenuGenerateCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGenerateCodeActionPerformed
-        patch.WriteCode();
+        getPatchModel().WriteCode();
     }//GEN-LAST:event_jMenuGenerateCodeActionPerformed
 
     private void jMenuCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCompileCodeActionPerformed
-        patch.Compile();
+        patchController.Compile();
     }//GEN-LAST:event_jMenuCompileCodeActionPerformed
 
     private void jMenuUploadCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUploadCodeActionPerformed
-        patch.GetQCmdProcessor().SetPatch(null);
-        patch.GetQCmdProcessor().AppendToQueue(new QCmdStop());
-        patch.GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
-        patch.GetQCmdProcessor().AppendToQueue(new QCmdStart(patch));
-        patch.GetQCmdProcessor().AppendToQueue(new QCmdLock(patch));
+        patchController.GetQCmdProcessor().setPatchController(null);
+        patchController.GetQCmdProcessor().AppendToQueue(new QCmdStop());
+        patchController.GetQCmdProcessor().AppendToQueue(new QCmdUploadPatch());
+        patchController.GetQCmdProcessor().AppendToQueue(new QCmdStart(patchController));
+        patchController.GetQCmdProcessor().AppendToQueue(new QCmdLock(patchController));
     }//GEN-LAST:event_jMenuUploadCodeActionPerformed
 
     private void jMenuItemLockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLockActionPerformed
-        patch.Lock();
+        getPatchView().Lock();
     }//GEN-LAST:event_jMenuItemLockActionPerformed
 
     private void jMenuItemUnlockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUnlockActionPerformed
-        patch.Unlock();
+        getPatchView().Unlock();
     }//GEN-LAST:event_jMenuItemUnlockActionPerformed
 
     private void jMenuItemClearPresetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemClearPresetActionPerformed
-        patch.ClearCurrentPreset();
+        getPatchModel().ClearCurrentPreset();
     }//GEN-LAST:event_jMenuItemClearPresetActionPerformed
 
     private void jMenuItemPresetCurrentToInitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPresetCurrentToInitActionPerformed
-        patch.CopyCurrentToInit();
+        getPatchModel().CopyCurrentToInit();
     }//GEN-LAST:event_jMenuItemPresetCurrentToInitActionPerformed
 
     private void jMenuItemDifferenceToPresetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDifferenceToPresetActionPerformed
-        patch.DifferenceToPreset();
+        getPatchModel().DifferenceToPreset();
     }//GEN-LAST:event_jMenuItemDifferenceToPresetActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        AskClose();
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDeleteActionPerformed
-        patch.deleteSelectedAxoObjInstances();
+        getPatchView().deleteSelectedAxoObjectInstanceViews();
     }//GEN-LAST:event_jMenuItemDeleteActionPerformed
 
     private void jMenuItemSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectAllActionPerformed
-        patch.SelectAll();
+        getPatchView().SelectAll();
     }//GEN-LAST:event_jMenuItemSelectAllActionPerformed
 
     private void jMenuItemNotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNotesActionPerformed
-        patch.ShowNotesFrame();
+        getPatchView().ShowNotesFrame();
     }//GEN-LAST:event_jMenuItemNotesActionPerformed
 
     private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
-        AxoObjectInstanceAbstract selObj = null;
-        ArrayList<AxoObjectInstanceAbstract> oi = patch.objectinstances;
-        if(oi != null) {
-            for(AxoObjectInstanceAbstract i : oi) {
-                if(i.IsSelected() && i instanceof AxoObjectInstance) {
+        IAxoObjectInstanceView selObj = null;
+        List<IAxoObjectInstanceView> oi = getPatchView().getObjectInstanceViews();
+        if (oi != null) {
+            for (IAxoObjectInstanceView i : oi) {
+                if (i.isSelected() && i instanceof AxoObjectInstanceView) {
                     selObj = i;
                 }
             }
         }
-        
-        if(selObj!=null) {
-            ((AxoObjectInstance) selObj).OpenEditor();
+
+        if (selObj != null) {
+            ((AxoObjectInstanceView) selObj).OpenEditor();
         } else {
-            if (patch.settings == null) {
-                patch.settings = new PatchSettings();
+            if (getPatchModel().settings == null) {
+                getPatchModel().settings = new PatchSettings();
             }
-            patch.settings.showEditor(patch);
+            getPatchModel().settings.showEditor(patchController);
         }
     }//GEN-LAST:event_jMenuItemSettingsActionPerformed
 
@@ -918,23 +988,23 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             }
         } else {
             qcmdprocessor.AppendToQueue(new QCmdStop());
-            patch.Unlock();
+            getPatchView().Unlock();
         }
     }//GEN-LAST:event_jCheckBoxMenuItemLiveActionPerformed
 
     private void jMenuItemUploadSDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDActionPerformed
-        patch.UploadToSDCard();
+        patchController.UploadToSDCard();
     }//GEN-LAST:event_jMenuItemUploadSDActionPerformed
 
     private void jMenuItemUploadSDStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDStartActionPerformed
-        patch.UploadToSDCard("/start.bin");
+        patchController.UploadToSDCard("/start.bin");
     }//GEN-LAST:event_jMenuItemUploadSDStartActionPerformed
 
     private void jMenuSaveClipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveClipActionPerformed
         Serializer serializer = new Persister();
         ByteArrayOutputStream baos = new ByteArrayOutputStream(2048);
         try {
-            serializer.write(patch, baos);
+            serializer.write(getPatchModel(), baos);
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -943,15 +1013,15 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuSaveClipActionPerformed
 
     private void jMenuItemUploadInternalFlashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadInternalFlashActionPerformed
-        patch.WriteCode();
+        getPatchModel().WriteCode();
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patch));
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patchController));
         qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadPatch());
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCopyPatchToFlash());
     }//GEN-LAST:event_jMenuItemUploadInternalFlashActionPerformed
 
     private void jMenuItemAddObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddObjActionPerformed
-        patch.ShowClassSelector(new Point(20, 20), null, null);
+        getPatchView().ShowClassSelector(new Point(20, 20), null, null);
     }//GEN-LAST:event_jMenuItemAddObjActionPerformed
 
     private void jMenuCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCloseActionPerformed
@@ -970,39 +1040,44 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         File fileToBeSaved = FileChooserSave();
         if (fileToBeSaved != null) {
             MainFrame.prefs.setCurrentFileDirectory(fileToBeSaved.getPath());
-            patch.save(fileToBeSaved);
+            getPatchView().save(fileToBeSaved);
         }
     }//GEN-LAST:event_jMenuSaveCopyActionPerformed
 
     private void jMenuGenerateAndCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGenerateAndCompileCodeActionPerformed
-        patch.WriteCode();
-        patch.Compile();
+        getPatchModel().WriteCode();
+        patchController.Compile();
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
     private void undoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoItemActionPerformed
-        patch.undo();
-        this.updateUndoRedoEnabled();
+        patchController.undo();
+        updateUndoRedoEnabled();
     }//GEN-LAST:event_undoItemActionPerformed
 
     private void redoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoItemActionPerformed
-        patch.redo();
-        this.updateUndoRedoEnabled();
+        patchController.redo();
+        updateUndoRedoEnabled();
     }//GEN-LAST:event_redoItemActionPerformed
 
     private void undoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_undoItemAncestorAdded
-        undoItem.setEnabled(patch.canUndo());
+        undoItem.setEnabled(patchController.canUndo());
     }//GEN-LAST:event_undoItemAncestorAdded
 
     private void redoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_redoItemAncestorAdded
-        redoItem.setEnabled(patch.canRedo());
+        redoItem.setEnabled(patchController.canRedo());
     }//GEN-LAST:event_redoItemAncestorAdded
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
         getRootPane().setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_formWindowLostFocus
 
+    private void jLabel1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabel1AncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabel1AncestorAdded
+
     private boolean GoLive() {
-        if (patch.getFileNamePath().endsWith(".axs") || patch.container() != null) {
+        if (getPatchModel().getFileNamePath().endsWith(".axs")
+                || getPatchModel().container() != null) {
             Object[] options = {"Yes",
                 "No"};
 
@@ -1021,7 +1096,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     ; // fall thru
             }
         }
-        patch.GoLive();
+        getPatchView().GoLive();
         return true;
     }
 
@@ -1065,7 +1140,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private javax.swing.JMenuItem jMenuUploadCode;
     private javax.swing.JMenu jMenuView;
     private javax.swing.JProgressBar jProgressBarDSPLoad;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -1095,15 +1169,15 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public File getFile() {
-        if (patch.getFileNamePath() == null) {
+        if (getPatchModel().getFileNamePath() == null) {
             return null;
         } else {
-            return new File(patch.getFileNamePath());
+            return new File(getPatchModel().getFileNamePath());
         }
     }
 
-    public PatchGUI getPatch() {
-        return patch;
+    public PatchController getPatchController() {
+        return patchController;
     }
 
     ArrayList<DocumentWindow> dwl = new ArrayList<DocumentWindow>();
@@ -1112,10 +1186,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public ArrayList<DocumentWindow> GetChildDocuments() {
         return dwl;
     }
-    
+
     public void updateUndoRedoEnabled() {
-        redoItem.setEnabled(patch.canRedo());
-        undoItem.setEnabled(patch.canUndo());
+        redoItem.setEnabled(getPatchModel().canRedo());
+        undoItem.setEnabled(getPatchModel().canUndo());
     }
 
     @Override

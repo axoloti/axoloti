@@ -47,8 +47,8 @@ public class ParameterInt32Box extends Parameter<ParameterInstanceInt32Box> {
     @Override
     public ParameterInstanceInt32Box InstanceFactory() {
         ParameterInstanceInt32Box b = new ParameterInstanceInt32Box();
-        b.min = MinValue.getInt();
-        b.max = MaxValue.getInt();
+        b.setMin(MinValue.getInt());
+        b.setMax(MaxValue.getInt());
         return b;
     }
 

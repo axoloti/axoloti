@@ -17,20 +17,21 @@
  */
 package axoloti.displays;
 
+import axoloti.ModelChangedListener;
 import axoloti.atom.AtomInstance;
+import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import components.LabelComponent;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import java.nio.ByteBuffer;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
+import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class DisplayInstance<T extends Display> extends JPanel implements AtomInstance<T> {
+public abstract class DisplayInstance<T extends Display> implements AtomInstance<T> {
 
     @Attribute
     String name;
@@ -38,22 +39,22 @@ public abstract class DisplayInstance<T extends Display> extends JPanel implemen
     Boolean onParent;
     protected int index;
     public T display;
-    AxoObjectInstance axoObj;
+    AxoObjectInstance axoObjectInstance;
     protected int offset;
 
     public DisplayInstance() {
     }
 
     @Override
-    public AxoObjectInstanceAbstract GetObjectInstance() {
-        return axoObj;
+    public AxoObjectInstanceAbstract getObjectInstance() {
+        return axoObjectInstance;
     }
 
     @Override
-    public T GetDefinition() {
+    public T getDefinition() {
         return display;
-    }    
-    
+    }
+
     public String GetCName() {
         return display.GetCName();
     }
@@ -70,18 +71,29 @@ public abstract class DisplayInstance<T extends Display> extends JPanel implemen
 
     public abstract String GenerateCodeInit(String vprefix);
 
-    public void PostConstructor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        if ((display.noLabel == null) || (display.noLabel == false)) {
-            add(new LabelComponent(display.name));
-        }
-        setSize(getPreferredSize());
-        if (display.getDescription() != null) {
-            setToolTipText(display.getDescription());
-        }
+    public void ProcessByteBuffer(ByteBuffer bb) {
+        notifyModelChangedListeners();
     }
 
-    public abstract void ProcessByteBuffer(ByteBuffer bb);
+    public abstract IDisplayInstanceView getViewInstance(IAxoObjectInstanceView o);
 
-    public abstract void updateV();
+    public IDisplayInstanceView createView(IAxoObjectInstanceView o) {
+        IDisplayInstanceView displayInstanceView = getViewInstance(o);
+        addModelChangedListener((ModelChangedListener) displayInstanceView);
+        displayInstanceView.PostConstructor();
+        o.addDisplayInstanceView(displayInstanceView);
+        return displayInstanceView;
+    }
+
+    ArrayList<ModelChangedListener> modelChangedListeners = new ArrayList<ModelChangedListener>();
+
+    public void addModelChangedListener(ModelChangedListener l) {
+        modelChangedListeners.add(l);
+    }
+
+    protected void notifyModelChangedListeners() {
+        for (ModelChangedListener l : modelChangedListeners) {
+            l.modelChanged();
+        }
+    }
 }

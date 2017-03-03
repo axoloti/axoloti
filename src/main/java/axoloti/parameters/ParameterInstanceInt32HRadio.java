@@ -17,10 +17,12 @@
  */
 package axoloti.parameters;
 
-import components.AssignMidiCCMenuItems;
-import components.control.HRadioComponent;
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
+import axoloti.parameterviews.ParameterInstanceViewInt32HRadio;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewInt32HRadio;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -34,11 +36,6 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
 
     public ParameterInstanceInt32HRadio(@Attribute(name = "value") int v) {
         super(v);
-    }
-
-    @Override
-    public void updateV() {
-        ctrl.setValue(value.getInt());
     }
 
     @Override
@@ -63,24 +60,15 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
     public String GenerateCodeMidiHandler(String vprefix) {
         // hmm this is only one possible behavior - could also map to full MIDI range...
         int max = ((ParameterInt32HRadio) parameter).MaxValue.getInt();
-        return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max-1));
+        return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max - 1));
     }
 
     @Override
-    public HRadioComponent CreateControl() {
-        return new HRadioComponent(0, ((ParameterInt32HRadio) parameter).MaxValue.getInt());
-    }
-
-    @Override
-    public HRadioComponent getControlComponent() {
-        return (HRadioComponent) ctrl;
-    }
-
-    @Override
-    public void populatePopup(JPopupMenu m) {
-        super.populatePopup(m);
-        JMenu m1 = new JMenu("Midi CC");
-        new AssignMidiCCMenuItems(this, m1);
-        m.add(m1);
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewInt32HRadio(this, o);
+        } else {
+            return new ParameterInstanceViewInt32HRadio(this, o);
+        }
     }
 }

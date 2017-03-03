@@ -24,7 +24,8 @@ import static axoloti.FileUtils.axpFileFilter;
 import axoloti.MainFrame;
 import static axoloti.MainFrame.prefs;
 import axoloti.PatchFrame;
-import axoloti.PatchGUI;
+import axoloti.PatchModel;
+import axoloti.PatchViewSwing;
 import axoloti.SDCardInfo;
 import axoloti.SDCardMountStatusListener;
 import axoloti.SDFileInfo;
@@ -286,9 +287,6 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             pw.close();
             clearDirty();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(PatchBank.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
             Logger.getLogger(PatchBank.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
@@ -750,7 +748,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (row >= 0) {
             File f = files.get(jTable1.getSelectedRow());
             if (f.isFile() && f.canRead()) {
-                PatchGUI.OpenPatch(f);
+                PatchViewSwing.OpenPatch(f);
             }
         }
     }//GEN-LAST:event_jButtonOpenActionPerformed
@@ -759,11 +757,10 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (!f.isFile() || !f.canRead()) {
             return;
         }
-        PatchFrame pf = PatchGUI.OpenPatchInvisible(f);
+        PatchFrame pf = PatchViewSwing.OpenPatchInvisible(f);
         if (pf != null) {
             boolean isVisible = pf.isVisible();
-            PatchGUI p = pf.getPatch();
-            p.UploadToSDCard();
+            pf.getPatchController().UploadToSDCard();
             if (!isVisible) {
                 pf.Close();
             }
@@ -778,7 +775,6 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
         }
     }
-
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
         File f = files.get(jTable1.getSelectedRow());
@@ -798,7 +794,6 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         }
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Patch bank uploaded");
     }//GEN-LAST:event_jUploadAllActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.menus.FileMenu fileMenu1;

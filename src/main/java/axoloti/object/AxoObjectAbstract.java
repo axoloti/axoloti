@@ -18,7 +18,7 @@
 package axoloti.object;
 
 import axoloti.Modulator;
-import axoloti.Patch;
+import axoloti.PatchModel;
 import axoloti.inlets.Inlet;
 import axoloti.outlets.Outlet;
 import java.awt.Point;
@@ -110,7 +110,7 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
         return null;
     }
 
-    public AxoObjectInstanceAbstract CreateInstance(Patch patch, String InstanceName1, Point location) {
+    public AxoObjectInstanceAbstract CreateInstance(PatchModel patchModel, String InstanceName1, Point location) {
         return null;
     }
 

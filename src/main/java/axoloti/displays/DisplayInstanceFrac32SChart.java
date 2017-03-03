@@ -17,7 +17,12 @@
  */
 package axoloti.displays;
 
-import components.displays.ScopeComponent;
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.displayviews.DisplayInstanceViewFrac32SChart;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewFrac32SChart;
 
 /**
  *
@@ -25,22 +30,15 @@ import components.displays.ScopeComponent;
  */
 public class DisplayInstanceFrac32SChart extends DisplayInstanceFrac32<DisplayFrac32SChart> {
 
-    private ScopeComponent scope;
-
     public DisplayInstanceFrac32SChart() {
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        scope = new ScopeComponent(-64.0, 64.0);
-        scope.setValue(0);
-        add(scope);
-    }
-
-    @Override
-    public void updateV() {
-        scope.setValue(value.getDouble());
+    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewFrac32SChart(this, view);
+        } else {
+            return new DisplayInstanceViewFrac32SChart(this);
+        }
     }
 }

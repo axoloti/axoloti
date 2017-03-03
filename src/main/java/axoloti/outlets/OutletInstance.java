@@ -17,17 +17,17 @@
  */
 package axoloti.outlets;
 
-import axoloti.Theme;
+import axoloti.MainFrame;
+import axoloti.Net;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
-import axoloti.iolet.IoletAbstract;
 import axoloti.object.AxoObjectInstance;
-import components.LabelComponent;
-import components.SignalMetaDataIcon;
-import java.awt.Dimension;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JPopupMenu;
+import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
+import axoloti.piccolo.outlets.POutletInstanceView;
 import org.simpleframework.xml.*;
 
 /**
@@ -35,24 +35,32 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "source")
-public class OutletInstance<T extends Outlet> extends IoletAbstract implements Comparable<OutletInstance>, AtomInstance<T> {
+public class OutletInstance<T extends Outlet> implements Comparable<OutletInstance>, AtomInstance<T> {
 
     @Attribute(name = "outlet", required = false)
     public String outletname;
+    @Deprecated
+    @Attribute(required = false)
+    public String name;
+    @Attribute(name = "obj", required = false)
+    public String objname;
 
     private final T outlet;
 
+    protected AxoObjectInstanceAbstract axoObj;
+
+    @Override
+    public AxoObjectInstanceAbstract getObjectInstance() {
+        return this.axoObj;
+    }
+
     public String getOutletname() {
-        if (outletname != null) {
-            return outletname;
-        } else {
-            int sepIndex = name.lastIndexOf(' ');
-            return name.substring(sepIndex + 1);
-        }
+        return outletname;
+
     }
 
     @Override
-    public T GetDefinition() {
+    public T getDefinition() {
         return outlet;
     }
 
@@ -65,17 +73,9 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
         this.outlet = outlet;
         this.axoObj = axoObj;
         RefreshName();
-        PostConstructor();
     }
 
-    public final void RefreshName() {
-        name = axoObj.getInstanceName() + " " + outlet.name;
-        objname = axoObj.getInstanceName();
-        outletname = outlet.name;
-        name = null;
-    }
-
-    public DataType GetDataType() {
+    public DataType getDataType() {
         return outlet.getDatatype();
     }
 
@@ -87,32 +87,57 @@ public class OutletInstance<T extends Outlet> extends IoletAbstract implements C
         return outlet.GetCName();
     }
 
-    public final void PostConstructor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        setMaximumSize(new Dimension(32767, 14));
-        setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        add(Box.createHorizontalGlue());
-        if (axoObj.getType().GetOutlets().size() > 1) {
-            add(new LabelComponent(outlet.name));
-            add(Box.createHorizontalStrut(2));
-        }
-        add(new SignalMetaDataIcon(outlet.GetSignalMetaData()));
-        jack = new components.JackOutputComponent(this);
-        jack.setForeground(outlet.getDatatype().GetColor());
-        add(jack);
-        setToolTipText(outlet.description);
-
-        addMouseListener(this);
-        addMouseMotionListener(this);
-    }
-
-    @Override
-    public JPopupMenu getPopup() {
-        return new OutletInstancePopupMenu(this);
-    }
-
     @Override
     public int compareTo(OutletInstance t) {
         return axoObj.compareTo(t.axoObj);
+    }
+
+    public Outlet getOutlet() {
+        return outlet;
+    }
+
+    public void RefreshName() {
+        name = axoObj.getInstanceName() + " " + outlet.name;
+        objname = axoObj.getInstanceName();
+        outletname = outlet.name;
+        name = null;
+    }
+
+    public String getObjname() {
+        return this.objname;
+    }
+
+    public boolean isConnected() {
+        if (axoObj == null) {
+            return false;
+        }
+        if (axoObj.getPatchModel() == null) {
+            return false;
+        }
+
+        return (axoObj.getPatchModel().GetNet(this) != null);
+    }
+
+    public Net disconnect() {
+        return axoObj.getPatchModel().disconnect(this);
+    }
+
+    public Net deleteNet() {
+        return axoObj.getPatchModel().delete(axoObj.getPatchModel().GetNet(this));
+    }
+
+    public IOutletInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new POutletInstanceView(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new OutletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
+        }
+    }
+
+    public IOutletInstanceView createView(IAxoObjectInstanceView o) {
+        IOutletInstanceView outletInstanceView = getViewInstance(o);
+        o.addOutletInstanceView(outletInstanceView);
+        outletInstanceView.PostConstructor();
+        return outletInstanceView;
     }
 }

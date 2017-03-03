@@ -56,7 +56,7 @@ public class AxoAttributeInt32 extends AxoAttribute {
     public int getDefaultValue() {
         return DefaultValue;
     }
-
+    
     @Override
     public AttributeInstanceInt32 InstanceFactory(AxoObjectInstance o) {
         return new AttributeInstanceInt32(this, o);

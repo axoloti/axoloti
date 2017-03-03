@@ -17,22 +17,20 @@
  */
 package axoloti.attribute;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.SubPatchMode;
 import axoloti.attributedefinition.AxoAttributeObjRef;
+import axoloti.attributeviews.AttributeInstanceViewObjRef;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
+import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.attributeviews.PAttributeInstanceViewObjRef;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import axoloti.utils.CharEscape;
-import axoloti.utils.Constants;
-import java.awt.Dimension;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.core.Persist;
 
@@ -44,8 +42,8 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
 
     @Attribute(name = "obj")
     String objName = "";
-    JTextField TFObjName;
-    JLabel vlabel;
+
+    private AxoObjectInstance axoObj;
 
     public AttributeInstanceObjRef() {
     }
@@ -55,73 +53,6 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
         this.axoObj = axoObj1;
     }
 
-    String valueBeforeAdjustment = "";
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        TFObjName = new JTextField(objName);
-        Dimension d = TFObjName.getSize();
-        d.width = 92;
-        d.height = 22;
-        TFObjName.setFont(Constants.FONT);
-        TFObjName.setMaximumSize(d);
-        TFObjName.setMinimumSize(d);
-        TFObjName.setPreferredSize(d);
-        TFObjName.setSize(d);
-        add(TFObjName);
-        TFObjName.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent ke) {
-                if (ke.getKeyChar() == KeyEvent.VK_ENTER) {
-                    transferFocus();
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent ke) {
-            }
-        });
-        TFObjName.getDocument().addDocumentListener(new DocumentListener() {
-
-            void update() {
-                objName = TFObjName.getText();
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                update();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                update();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                update();
-            }
-        });
-        TFObjName.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                valueBeforeAdjustment = TFObjName.getText();
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (!TFObjName.getText().equals(valueBeforeAdjustment)) {
-                    SetDirty();
-                }
-            }
-        });
-    }
-
     @Override
     public String CValue() {
         String o = objName;
@@ -129,14 +60,14 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
             o = "";
         }
         if (o.isEmpty()) {
-            Logger.getLogger(AttributeInstanceObjRef.class.getName()).log(Level.SEVERE, "incomplete object reference attribute in {0}", GetObjectInstance().getInstanceName());
+            Logger.getLogger(AttributeInstanceObjRef.class.getName()).log(Level.SEVERE, "incomplete object reference attribute in {0}", getObjectInstance().getInstanceName());
         }
         String o2 = "parent->";
 
         if ((o.length() > 3) && (o.substring(0, 3).equals("../"))
-                && ((GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polyphonic)
-                || (GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polychannel)
-                || (GetObjectInstance().patch.getSettings().subpatchmode == SubPatchMode.polyexpression))) {
+                && ((getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyphonic)
+                || (getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polychannel)
+                || (getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyexpression))) {
             o2 = o2 + "common->";
         }
 
@@ -154,20 +85,6 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
-    public void Lock() {
-        if (TFObjName != null) {
-            TFObjName.setEnabled(false);
-        }
-    }
-
-    @Override
-    public void UnLock() {
-        if (TFObjName != null) {
-            TFObjName.setEnabled(true);
-        }
-    }
-
-    @Override
     public String getString() {
         return objName;
     }
@@ -175,8 +92,14 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     @Override
     public void setString(String objName) {
         this.objName = objName;
-        if (TFObjName != null) {
-            TFObjName.setText(objName);
+    }
+
+    @Override
+    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PAttributeInstanceViewObjRef(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new AttributeInstanceViewObjRef(this, (AxoObjectInstanceView) o);
         }
     }
 

@@ -28,6 +28,6 @@ import axoloti.object.AxoObjectInstanceAbstract;
  * An Axoloti Object Instance is composed out of AtomInstances
 */
 public interface AtomInstance<T extends AtomDefinition> {
-    public AxoObjectInstanceAbstract GetObjectInstance();
-    public T GetDefinition();
+    public AxoObjectInstanceAbstract getObjectInstance();
+    public T getDefinition();
 }

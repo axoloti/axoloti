@@ -17,7 +17,7 @@
  */
 package components;
 
-import axoloti.Patch;
+import axoloti.PatchController;
 
 /**
  *
@@ -25,15 +25,15 @@ import axoloti.Patch;
  */
 public class PresetPanel extends javax.swing.JPanel {
 
-    Patch p;
+    PatchController patchController;
 
     /**
      * Creates new form PresetPanel
      *
      * @param p patch to recall preset
      */
-    public PresetPanel(Patch p) {
-        this.p = p;
+    public PresetPanel(PatchController patchController) {
+        this.patchController = patchController;
         initComponents();
     }
 
@@ -275,39 +275,39 @@ public class PresetPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonRIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRIActionPerformed
-        p.RecallPreset(0);
+        patchController.RecallPreset(0);
     }//GEN-LAST:event_jButtonRIActionPerformed
 
     private void jButtonR1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonR1ActionPerformed
-        p.RecallPreset(1);
+        patchController.RecallPreset(1);
     }//GEN-LAST:event_jButtonR1ActionPerformed
 
     private void jButtonR2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonR2ActionPerformed
-        p.RecallPreset(2);
+        patchController.RecallPreset(2);
     }//GEN-LAST:event_jButtonR2ActionPerformed
 
     private void jButtonR3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonR3ActionPerformed
-        p.RecallPreset(3);
+        patchController.RecallPreset(3);
     }//GEN-LAST:event_jButtonR3ActionPerformed
 
     private void jButtonR4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonR4ActionPerformed
-        p.RecallPreset(4);
+        patchController.RecallPreset(4);
     }//GEN-LAST:event_jButtonR4ActionPerformed
 
     private void jButtonR5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonR5ActionPerformed
-        p.RecallPreset(5);
+        patchController.RecallPreset(5);
     }//GEN-LAST:event_jButtonR5ActionPerformed
 
     private void jButtonR6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonR6ActionPerformed
-        p.RecallPreset(6);
+        patchController.RecallPreset(6);
     }//GEN-LAST:event_jButtonR6ActionPerformed
 
     private void jButtonR7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonR7ActionPerformed
-        p.RecallPreset(7);
+        patchController.RecallPreset(7);
     }//GEN-LAST:event_jButtonR7ActionPerformed
 
     private void jButtonR8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonR8ActionPerformed
-        p.RecallPreset(8);
+        patchController.RecallPreset(8);
     }//GEN-LAST:event_jButtonR8ActionPerformed
 
     private void jToggleButtonEIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonEIActionPerformed
@@ -320,7 +320,7 @@ public class PresetPanel extends javax.swing.JPanel {
         jToggleButtonE6.setSelected(false);
         jToggleButtonE7.setSelected(false);
         jToggleButtonE8.setSelected(false);
-        p.ShowPreset(0);
+        patchController.ShowPreset(0);
     }//GEN-LAST:event_jToggleButtonEIActionPerformed
 
     private void jToggleButtonE1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonE1ActionPerformed
@@ -333,7 +333,7 @@ public class PresetPanel extends javax.swing.JPanel {
         jToggleButtonE6.setSelected(false);
         jToggleButtonE7.setSelected(false);
         jToggleButtonE8.setSelected(false);
-        p.ShowPreset(1);
+        patchController.ShowPreset(1);
     }//GEN-LAST:event_jToggleButtonE1ActionPerformed
 
     private void jToggleButtonE2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonE2ActionPerformed
@@ -346,7 +346,7 @@ public class PresetPanel extends javax.swing.JPanel {
         jToggleButtonE6.setSelected(false);
         jToggleButtonE7.setSelected(false);
         jToggleButtonE8.setSelected(false);
-        p.ShowPreset(2);
+        patchController.ShowPreset(2);
     }//GEN-LAST:event_jToggleButtonE2ActionPerformed
 
     private void jToggleButtonE3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonE3ActionPerformed
@@ -359,7 +359,7 @@ public class PresetPanel extends javax.swing.JPanel {
         jToggleButtonE6.setSelected(false);
         jToggleButtonE7.setSelected(false);
         jToggleButtonE8.setSelected(false);
-        p.ShowPreset(3);
+        patchController.ShowPreset(3);
     }//GEN-LAST:event_jToggleButtonE3ActionPerformed
 
     private void jToggleButtonE4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonE4ActionPerformed
@@ -372,7 +372,7 @@ public class PresetPanel extends javax.swing.JPanel {
         jToggleButtonE6.setSelected(false);
         jToggleButtonE7.setSelected(false);
         jToggleButtonE8.setSelected(false);
-        p.ShowPreset(4);
+        patchController.ShowPreset(4);
     }//GEN-LAST:event_jToggleButtonE4ActionPerformed
 
     private void jToggleButtonE5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonE5ActionPerformed
@@ -385,7 +385,7 @@ public class PresetPanel extends javax.swing.JPanel {
         jToggleButtonE6.setSelected(false);
         jToggleButtonE7.setSelected(false);
         jToggleButtonE8.setSelected(false);
-        p.ShowPreset(5);
+        patchController.ShowPreset(5);
     }//GEN-LAST:event_jToggleButtonE5ActionPerformed
 
     private void jToggleButtonE6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonE6ActionPerformed
@@ -398,7 +398,7 @@ public class PresetPanel extends javax.swing.JPanel {
         jToggleButtonE6.setSelected(true);
         jToggleButtonE7.setSelected(false);
         jToggleButtonE8.setSelected(false);
-        p.ShowPreset(6);
+        patchController.ShowPreset(6);
     }//GEN-LAST:event_jToggleButtonE6ActionPerformed
 
     private void jToggleButtonE7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonE7ActionPerformed
@@ -411,7 +411,7 @@ public class PresetPanel extends javax.swing.JPanel {
         jToggleButtonE6.setSelected(false);
         jToggleButtonE7.setSelected(true);
         jToggleButtonE8.setSelected(false);
-        p.ShowPreset(7);
+        patchController.ShowPreset(7);
     }//GEN-LAST:event_jToggleButtonE7ActionPerformed
 
     private void jToggleButtonE8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonE8ActionPerformed
@@ -424,7 +424,7 @@ public class PresetPanel extends javax.swing.JPanel {
         jToggleButtonE6.setSelected(false);
         jToggleButtonE7.setSelected(false);
         jToggleButtonE8.setSelected(true);
-        p.ShowPreset(8);
+        patchController.ShowPreset(8);
     }//GEN-LAST:event_jToggleButtonE8ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;

@@ -17,7 +17,12 @@
  */
 package axoloti.displays;
 
-import components.LabelComponent;
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.displayviews.DisplayInstanceViewInt32HexLabel;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewInt32HexLabel;
 
 /**
  *
@@ -25,23 +30,16 @@ import components.LabelComponent;
  */
 public class DisplayInstanceInt32HexLabel extends DisplayInstanceInt32<DisplayInt32HexLabel> {
 
-    private LabelComponent readout;
-
     public DisplayInstanceInt32HexLabel() {
         super();
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        readout = new LabelComponent("0xxxxxxxxx");
-        add(readout);
-        readout.setSize(80, 18);
-    }
-
-    @Override
-    public void updateV() {
-        readout.setText(String.format("0x%08X", value.getInt()));
+    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewInt32HexLabel(this, view);
+        } else {
+            return new DisplayInstanceViewInt32HexLabel(this);
+        }
     }
 }

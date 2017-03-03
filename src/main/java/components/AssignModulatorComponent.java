@@ -18,7 +18,7 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.parameters.ParameterInstanceFrac32UMap;
+import axoloti.parameterviews.ParameterInstanceViewFrac32UMap;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -37,14 +37,14 @@ public class AssignModulatorComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    final ParameterInstanceFrac32UMap param;
+    final ParameterInstanceViewFrac32UMap parameterInstanceView;
 
-    public AssignModulatorComponent(ParameterInstanceFrac32UMap param) {
+    public AssignModulatorComponent(ParameterInstanceViewFrac32UMap parameterInstanceView) {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
-        this.param = param;
+        this.parameterInstanceView = parameterInstanceView;
 
         addMouseListener(new MouseListener() {
             @Override
@@ -73,21 +73,21 @@ public class AssignModulatorComponent extends JComponent {
 
     void doPopup() {
         JPopupMenu sub2 = new JPopupMenu();
-        AssignModulatorMenuItems mi = new AssignModulatorMenuItems(param, sub2);
+        AssignModulatorMenuItems mi = new AssignModulatorMenuItems(parameterInstanceView, sub2);
         sub2.show(this, 0, getHeight() - 1);
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (param.getModulators() != null) {
+        if (parameterInstanceView.getParameterInstance().getModulators() != null) {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setFont(Constants.FONT);
             g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
             g2.fillRect(1, 1, getWidth(), getHeight());
-            if (param.getModulators() != null) {
+            if (parameterInstanceView.getParameterInstance().getModulators() != null) {
                 g2.setColor(Theme.getCurrentTheme().Component_Primary);
                 g2.fillRect(1, 1, 8, getHeight());
                 g2.setColor(Theme.getCurrentTheme().Component_Secondary);
@@ -104,5 +104,4 @@ public class AssignModulatorComponent extends JComponent {
             g2.fillPolygon(xp, yp, 3);
         }
     }
-
 }

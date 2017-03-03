@@ -72,8 +72,8 @@ public abstract class AxoAttribute implements AtomDefinition, Cloneable {
     @Override
     public AttributeInstance CreateInstance(AxoObjectInstance o) {
         AttributeInstance pi = InstanceFactory(o);
-        o.add(pi);
-        pi.PostConstructor();
+//        o.add(pi);
+//        pi.PostConstructor();
         return pi;
     }
 
@@ -82,8 +82,8 @@ public abstract class AxoAttribute implements AtomDefinition, Cloneable {
         if (a != null) {
             pi.CopyValueFrom(a);
         }
-        o.add(pi);
-        pi.PostConstructor();
+//        o.add(pi);
+//        pi.PostConstructor();
         return pi;
     }
 

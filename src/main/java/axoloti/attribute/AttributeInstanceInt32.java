@@ -17,13 +17,16 @@
  */
 package axoloti.attribute;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.attributedefinition.AxoAttributeInt32;
+import axoloti.attributeviews.AttributeInstanceViewInt32;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import java.awt.Dimension;
-import javax.swing.JLabel;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.attributeviews.PAttributeInstanceViewInt32;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 
 /**
  *
@@ -31,67 +34,16 @@ import javax.swing.event.ChangeListener;
  */
 public class AttributeInstanceInt32 extends AttributeInstanceInt<AxoAttributeInt32> {
 
-    JSlider slider;
-    JLabel vlabel;
-
     public AttributeInstanceInt32() {
     }
 
     public AttributeInstanceInt32(AxoAttributeInt32 param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
-//        PostConstructor();
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        slider = new JSlider();
-        Dimension d = slider.getSize();
-        d.width = 128;
-        d.height = 22;
-        if (value < (attr).getMinValue()) {
-            value = (attr).getMinValue();
-        }
-        if (value > (attr).getMaxValue()) {
-            value = (attr).getMaxValue();
-        }
-        slider.setMinimum((attr).getMinValue());
-        slider.setMaximum((attr).getMaxValue());
-        slider.setValue(value);
-        slider.setMaximumSize(d);
-        slider.setMinimumSize(d);
-        slider.setPreferredSize(d);
-        slider.setSize(d);
-        add(slider);
-        vlabel = new JLabel();
-        vlabel.setText("       " + value);
-        add(vlabel);
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent ce) {
-                value = slider.getValue();
-                vlabel.setText("" + value);
-            }
-        });
     }
 
     @Override
     public String CValue() {
         return "" + value;
-    }
-
-    @Override
-    public void Lock() {
-        if (slider != null) {
-            slider.setEnabled(false);
-        }
-    }
-
-    @Override
-    public void UnLock() {
-        if (slider != null) {
-            slider.setEnabled(true);
-        }
     }
 
     public int getValue() {
@@ -100,5 +52,14 @@ public class AttributeInstanceInt32 extends AttributeInstanceInt<AxoAttributeInt
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    @Override
+    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PAttributeInstanceViewInt32(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new AttributeInstanceViewInt32(this, (AxoObjectInstanceView) o);
+        }
     }
 }

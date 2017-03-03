@@ -28,26 +28,26 @@ import javax.swing.JPopupMenu;
  */
 public class InletInstancePopupMenu extends JPopupMenu {
 
-    InletInstance inletinstance;
+    IInletInstanceView inletInstanceView;
 
-    public InletInstancePopupMenu(InletInstance inletinstance1) {
+    public InletInstancePopupMenu(IInletInstanceView inletInstanceView) {
         super();
-        this.inletinstance = inletinstance1;
+        this.inletInstanceView = inletInstanceView;
         JMenuItem itemDisconnect = new JMenuItem("Disconnect inlet");
         JMenuItem itemDelete = new JMenuItem("Delete net");
         itemDisconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                inletinstance.disconnect();
+                InletInstancePopupMenu.this.inletInstanceView.disconnect();
             }
         });
         itemDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                inletinstance.deleteNet();
+                InletInstancePopupMenu.this.inletInstanceView.deleteNet();
             }
         });
-        this.add(itemDisconnect);
-        this.add(itemDelete);
+        add(itemDisconnect);
+        add(itemDelete);
     }
 }

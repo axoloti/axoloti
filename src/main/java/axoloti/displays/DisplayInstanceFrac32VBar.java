@@ -17,7 +17,12 @@
  */
 package axoloti.displays;
 
-import components.displays.VBarComponent;
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.displayviews.DisplayInstanceViewFrac32VBar;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewFrac32VBar;
 
 /**
  *
@@ -25,22 +30,16 @@ import components.displays.VBarComponent;
  */
 public class DisplayInstanceFrac32VBar extends DisplayInstanceFrac32<DisplayFrac32VBar> {
 
-    private VBarComponent vbar;
-
     public DisplayInstanceFrac32VBar() {
+        super();
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        vbar = new VBarComponent(0, 0, 64);
-        vbar.setValue(0);
-        add(vbar);
-    }
-
-    @Override
-    public void updateV() {
-        vbar.setValue(value.getDouble());
+    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewFrac32VBar(this, view);
+        } else {
+            return new DisplayInstanceViewFrac32VBar(this);
+        }
     }
 }

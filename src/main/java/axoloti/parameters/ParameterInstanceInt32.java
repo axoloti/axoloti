@@ -17,8 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.Preset;
-import axoloti.Theme;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
 import axoloti.object.AxoObjectInstance;
@@ -29,7 +27,7 @@ import org.simpleframework.xml.Attribute;
  * @author Johannes Taelman
  */
 public abstract class ParameterInstanceInt32<T extends Parameter> extends ParameterInstance<T> {
-    
+
     final ValueInt32 value = new ValueInt32();
 
     @Attribute(name = "value", required = false)
@@ -56,7 +54,6 @@ public abstract class ParameterInstanceInt32<T extends Parameter> extends Parame
     @Override
     public void setValue(Value value) {
         this.value.setInt(value.getInt());
-        updateV();
     }
 
     @Override
@@ -68,51 +65,4 @@ public abstract class ParameterInstanceInt32<T extends Parameter> extends Parame
             value.setRaw(p1.value.getRaw());
         }
     }
-
-    @Override
-    public void setOnParent(Boolean b) {
-        super.setOnParent(b);
-        if ((b != null) && b) {
-            setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
-        } else {
-            setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
-        }
-    }
-
-    @Override
-    public void ShowPreset(int i) {
-        this.presetEditActive = i;
-        if (i > 0) {
-            Preset p = GetPreset(presetEditActive);
-            if (p != null) {
-                setBackground(Theme.getCurrentTheme().Paramete_Preset_Highlight);
-                getControlComponent().setValue(p.value.getDouble());
-            } else {
-                setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                getControlComponent().setValue(value.getDouble());
-            }
-        } else {
-            setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            getControlComponent().setValue(value.getDouble());
-        }
-    }
-
-    @Override
-    public boolean handleAdjustment() {
-        Preset p = GetPreset(presetEditActive);
-        if (p != null) {
-            p.value = new ValueInt32((int) getControlComponent().getValue());
-        } else {
-            if (value.getInt() != (int) getControlComponent().getValue()) {
-                value.setInt((int) getControlComponent().getValue());
-                needsTransmit = true;
-                UpdateUnit();
-            }
-            else {
-                return false;
-            }
-        }
-        return true;
-    }
-
 }

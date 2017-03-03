@@ -17,11 +17,14 @@
  */
 package axoloti.outlets;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstanceZombie;
-import components.LabelComponent;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import axoloti.objectviews.AxoObjectInstanceViewZombie;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceViewZombie;
+import axoloti.piccolo.outlets.POutletInstanceZombieView;
 
 /**
  *
@@ -36,16 +39,10 @@ public class OutletInstanceZombie extends OutletInstance {
         this.axoObj = obj;
         this.outletname = name;
         this.objname = obj.getInstanceName();
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        add(Box.createHorizontalGlue());
-        add(new LabelComponent(this.outletname));
-        add(Box.createHorizontalStrut(2));
-        jack = new components.JackOutputComponent(this);
-        add(jack);
     }
 
     @Override
-    public DataType GetDataType() {
+    public DataType getDataType() {
         return new axoloti.datatypes.DTZombie();
     }
 
@@ -54,4 +51,20 @@ public class OutletInstanceZombie extends OutletInstance {
         return outletname;
     }
 
+    @Override
+    public IOutletInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new POutletInstanceZombieView(this, (PAxoObjectInstanceViewZombie) o);
+        } else {
+            return new OutletInstanceZombieView(this, (AxoObjectInstanceViewZombie) o);
+        }
+    }
+
+    @Override
+    public IOutletInstanceView createView(IAxoObjectInstanceView o) {
+        IOutletInstanceView outletInstanceView = getViewInstance(o);
+        o.addOutletInstanceView(outletInstanceView);
+        outletInstanceView.PostConstructor();
+        return outletInstanceView;
+    }
 }

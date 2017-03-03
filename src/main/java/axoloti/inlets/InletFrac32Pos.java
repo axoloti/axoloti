@@ -33,7 +33,7 @@ public class InletFrac32Pos extends InletFrac32 {
     }
 
     @Override
-    SignalMetaData GetSignalMetaData() {
+    public SignalMetaData GetSignalMetaData() {
         return SignalMetaData.positive;
     }
 
@@ -43,5 +43,5 @@ public class InletFrac32Pos extends InletFrac32 {
     public String getTypeName() {
         return TypeName;
     }
-    
+
 }

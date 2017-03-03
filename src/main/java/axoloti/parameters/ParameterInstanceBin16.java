@@ -17,8 +17,13 @@
  */
 package axoloti.parameters;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.Value;
-import components.control.CheckboxComponent;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
+import axoloti.parameterviews.ParameterInstanceViewBin16;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewBin16;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -32,11 +37,6 @@ public class ParameterInstanceBin16 extends ParameterInstanceInt32 {
 
     public ParameterInstanceBin16(@Attribute(name = "value") int v) {
         super(v);
-    }
-
-    @Override
-    public CheckboxComponent CreateControl() {
-        return new CheckboxComponent(0, 16);
     }
 
     @Override
@@ -63,18 +63,16 @@ public class ParameterInstanceBin16 extends ParameterInstanceInt32 {
     }
 
     @Override
-    public void updateV() {
-        ctrl.setValue(value.getInt());
-    }
-
-    @Override
     public void setValue(Value value) {
         super.setValue(value);
-        updateV();
     }
 
     @Override
-    public CheckboxComponent getControlComponent() {
-        return (CheckboxComponent) ctrl;
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewBin16(this, o);
+        } else {
+            return new ParameterInstanceViewBin16(this, o);
+        }
     }
 }

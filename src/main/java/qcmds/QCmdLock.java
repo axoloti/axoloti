@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Patch;
+import axoloti.PatchController;
 
 /**
  *
@@ -25,10 +25,10 @@ import axoloti.Patch;
  */
 public class QCmdLock implements QCmdGUITask {
 
-    Patch p;
+    PatchController patchController;
 
-    public QCmdLock(Patch p) {
-        this.p = p;
+    public QCmdLock(PatchController patchController) {
+        this.patchController = patchController;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class QCmdLock implements QCmdGUITask {
 
     @Override
     public void DoGUI(QCmdProcessor processor) {
-        processor.SetPatch(p);
-        p.Lock();
+        processor.setPatchController(patchController);
+        patchController.patchView.Lock();
     }
 }

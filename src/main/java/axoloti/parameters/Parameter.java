@@ -95,11 +95,10 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     @Override
     public ParameterInstance CreateInstance(AxoObjectInstance o) {
         ParameterInstance pi = InstanceFactory();
-        pi.axoObj = o;
-        pi.name = this.name;
+        pi.axoObjectInstance = o;
+        pi.name = name;
         pi.parameter = this;
         pi.applyDefaultValue();
-        o.p_params.add(pi);
         return pi;
     }
 
@@ -111,7 +110,7 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
         Parameter p = null;
         try {
             serializer.write(this, os);
-            p = serializer.read(this.getClass(), new ByteArrayInputStream(os.toByteArray()));
+            p = serializer.read(getClass(), new ByteArrayInputStream(os.toByteArray()));
         } catch (Exception ex) {
             Logger.getLogger(GeneratedObjects.class.getName()).log(Level.SEVERE, null, ex);
         }

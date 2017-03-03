@@ -18,7 +18,7 @@
 package axoloti.dialogs;
 
 import axoloti.DocumentWindow;
-import axoloti.Patch;
+import axoloti.PatchController;
 import axoloti.PatchSettings;
 import axoloti.SubPatchMode;
 import java.io.File;
@@ -37,16 +37,16 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
 
     PatchSettings settings;
 
-    final Patch patch;
+    final PatchController patchController;
 
     /**
      * Creates new form PatchSettingsFrame
      *
      * @param settings settings to load/save
      */
-    public PatchSettingsFrame(PatchSettings settings, Patch patch) {
+    public PatchSettingsFrame(PatchSettings settings, PatchController patchController) {
         initComponents();
-        this.patch = patch;
+        this.patchController = patchController;
         setTitle("settings");
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.settings = settings;
@@ -419,11 +419,11 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
     }//GEN-LAST:event_jTextFieldAttributionsFocusLost
 
     private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
-        patch.getPatchframe().GetChildDocuments().remove(this);
+        patchController.getPatchFrame().GetChildDocuments().remove(this);
     }//GEN-LAST:event_formComponentHidden
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        patch.getPatchframe().GetChildDocuments().add(this);
+        patchController.getPatchFrame().GetChildDocuments().add(this);
     }//GEN-LAST:event_formComponentShown
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

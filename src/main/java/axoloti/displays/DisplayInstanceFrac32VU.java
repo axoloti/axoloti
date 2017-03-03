@@ -17,7 +17,12 @@
  */
 package axoloti.displays;
 
-import components.displays.VUComponent;
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.displayviews.DisplayInstanceViewFrac32VU;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewFrac32VU;
 
 /**
  *
@@ -25,22 +30,16 @@ import components.displays.VUComponent;
  */
 public class DisplayInstanceFrac32VU extends DisplayInstanceFrac32<DisplayFrac32VU> {
 
-    private VUComponent vu;
-
     public DisplayInstanceFrac32VU() {
+        super();
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        vu = new VUComponent();
-        vu.setValue(0);
-        add(vu);
-    }
-
-    @Override
-    public void updateV() {
-        vu.setValue(value.getDouble());
+    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewFrac32VU(this, view);
+        } else {
+            return new DisplayInstanceViewFrac32VU(this);
+        }
     }
 }

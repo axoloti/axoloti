@@ -17,6 +17,12 @@
  */
 package axoloti.parameters;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
+import axoloti.parameterviews.ParameterInstanceViewFrac32SMap;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewFrac32SMap;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -34,17 +40,17 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
     }
 
     @Override
-    double getMin() {
+    public double getMin() {
         return -64.0;
     }
 
     @Override
-    double getMax() {
+    public double getMax() {
         return 64.0;
     }
 
     @Override
-    double getTick() {
+    public double getTick() {
         return 1.0;
     }
 
@@ -60,10 +66,10 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
     @Override
     public String GenerateCodeInit(String vprefix, String StructAccces) {
         String n;
-        if (axoObj.parameterInstances.size() == 1) {
-            n = axoObj.getInstanceName();
+        if (axoObjectInstance.parameterInstances.size() == 1) {
+            n = axoObjectInstance.getInstanceName();
         } else {
-            n = axoObj.getInstanceName() + ":" + name;
+            n = axoObjectInstance.getInstanceName() + ":" + name;
         }
         String s = PExName(vprefix) + ".pfunction = " + GetPFunction() + ";\n"
                 + "  SetKVP_IPVP(&" + StructAccces + KVPName(vprefix) + ",ObjectKvpRoot, \"" + n + "\" ,"
@@ -77,5 +83,14 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
         return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
+    }
+
+    @Override
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewFrac32SMap(this, o);
+        } else {
+            return new ParameterInstanceViewFrac32SMap(this, o);
+        }
     }
 }

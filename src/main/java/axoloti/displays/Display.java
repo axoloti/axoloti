@@ -81,11 +81,9 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     @Override
     public DisplayInstance CreateInstance(AxoObjectInstance o) {
         DisplayInstance pi = InstanceFactory();
-        pi.axoObj = o;
+        pi.axoObjectInstance = o;
         pi.name = this.name;
         pi.display = this;
-        o.p_displays.add(pi);
-        pi.PostConstructor();
         return pi;
     }
 

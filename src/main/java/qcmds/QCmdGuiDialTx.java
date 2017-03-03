@@ -17,7 +17,8 @@
  */
 package qcmds;
 
-import axoloti.Patch;
+import axoloti.PatchController;
+import axoloti.PatchModel;
 import axoloti.parameters.ParameterInstance;
 
 /**
@@ -29,24 +30,29 @@ public class QCmdGuiDialTx implements QCmdGUITask {
     @Override
     public void DoGUI(QCmdProcessor processor) {
         if (processor.isQueueEmpty()) {
-            Patch patch = processor.getPatch();
-            if (patch != null) {
-                for (ParameterInstance p : patch.getParameterInstances()) {
-                    if (p.GetNeedsTransmit()) {
+            PatchController patchController = processor.getPatchController();
+            PatchModel patchModel = null;
+            if (patchController != null) {
+                patchModel = processor.getPatchController().patchModel;
+            }
+            if (patchModel != null) {
+                for (ParameterInstance p : patchModel.getParameterInstances()) {
+                    if (p.getNeedsTransmit()) {
                         if (processor.hasQueueSpaceLeft()) {
                             processor.AppendToQueue(new QCmdSerialDialTX(p.TXData()));
-                           //processor.println("tx dial " + p.getName());
+                            //processor.println("tx dial " + p.getName());
                         } else {
                             break;
                         }
+
                     }
                 }
-                if (patch.presetUpdatePending && processor.hasQueueSpaceLeft()) {
-                    byte pb[] = new byte[patch.getSettings().GetNPresets() * patch.getSettings().GetNPresetEntries() * 8];
+                if (patchController.isPresetUpdatePending() && processor.hasQueueSpaceLeft()) {
+                    byte pb[] = new byte[patchModel.getSettings().GetNPresets() * patchModel.getSettings().GetNPresetEntries() * 8];
                     int p = 0;
-                    for (int i = 0; i < patch.getSettings().GetNPresets(); i++) {
-                        int pi[] = patch.DistillPreset(i + 1);
-                        for (int j = 0; j < patch.getSettings().GetNPresetEntries() * 2; j++) {
+                    for (int i = 0; i < patchModel.getSettings().GetNPresets(); i++) {
+                        int pi[] = patchModel.DistillPreset(i + 1);
+                        for (int j = 0; j < patchModel.getSettings().GetNPresetEntries() * 2; j++) {
                             pb[p++] = (byte) (pi[j]);
                             pb[p++] = (byte) (pi[j] >> 8);
                             pb[p++] = (byte) (pi[j] >> 16);
@@ -54,7 +60,7 @@ public class QCmdGuiDialTx implements QCmdGUITask {
                         }
                     }
                     processor.AppendToQueue(new QCmdUpdatePreset(pb));
-                    patch.presetUpdatePending = false;
+                    patchController.setPresetUpdatePending(false);
                 }
             }
         }

@@ -19,8 +19,8 @@ package axoloti.object;
 
 import static axoloti.Axoloti.FIRMWARE_DIR;
 import axoloti.Modulator;
-import axoloti.Patch;
 import axoloti.SDFileReference;
+import axoloti.PatchModel;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.attributedefinition.AxoAttributeInt32;
@@ -297,43 +297,40 @@ public class AxoObject extends AxoObjectAbstract {
 
     ArrayList<ObjectModifiedListener> instances = new ArrayList<ObjectModifiedListener>();
     AxoObjectEditor editor;
-    
+
     Rectangle editorBounds;
     Integer editorActiveTabIndex;
-    
-    private void setEditorBounds(Rectangle editorBounds) {
-        if(editorBounds != null) {
+
+    public void setEditorBounds(Rectangle editorBounds) {
+        if (editorBounds != null) {
             editor.setBounds(editorBounds);
-        }
-        else if(this.editorBounds != null) {
+        } else if (this.editorBounds != null) {
             editor.setBounds(this.editorBounds);
         }
-        
+
     }
-    
-    private void setEditorActiveTabIndex(Integer editorActiveTabIndex) {
-        if(editorActiveTabIndex != null) {
+
+    public void setEditorActiveTabIndex(Integer editorActiveTabIndex) {
+        if (editorActiveTabIndex != null) {
             editor.setActiveTabIndex(editorActiveTabIndex);
-        }
-        else if(this.editorActiveTabIndex != null) {
+        } else if (this.editorActiveTabIndex != null) {
             editor.setActiveTabIndex(this.editorActiveTabIndex);
         }
     }
-    
+
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (editor == null) {
             editor = new AxoObjectEditor(this);
         }
-        
+
         setEditorBounds(editorBounds);
         setEditorActiveTabIndex(editorActiveTabIndex);
-        
+
         editor.setState(java.awt.Frame.NORMAL);
         editor.setVisible(true);
     }
 
     public void CloseEditor() {
-        FireObjectModified(this);
         editor = null;
     }
 
@@ -345,8 +342,8 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public AxoObjectInstance CreateInstance(Patch patch, String InstanceName1, Point location) {
-        if (patch != null) {
+    public AxoObjectInstance CreateInstance(PatchModel patchModel, String InstanceName1, Point location) {
+        if (patchModel != null) {
             if ((sMidiCCCode != null)
                     || (sMidiAllNotesOffCode != null)
                     || (sMidiCCCode != null)
@@ -359,13 +356,11 @@ public class AxoObject extends AxoObjectAbstract {
             }
         }
 
-        AxoObjectInstance o = new AxoObjectInstance(this, patch, InstanceName1, location);
-//        System.out.println("object " + o);
-//        Thread.dumpStack();
-        if (patch != null) {
-            patch.objectinstances.add(o);
+        AxoObjectInstance o = new AxoObjectInstance(this, patchModel, InstanceName1, location);
+        if (patchModel != null) {
+            patchModel.getObjectInstances().add(o);
         }
-        o.PostConstructor();
+
         return o;
     }
 
@@ -642,5 +637,9 @@ public class AxoObject extends AxoObjectAbstract {
         sAuthor = o.sAuthor;
         sLicense = o.sLicense;
         sDescription = o.sDescription;
+    }
+
+    public AxoObjectEditor getEditor() {
+        return editor;
     }
 }

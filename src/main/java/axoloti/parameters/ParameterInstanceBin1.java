@@ -17,11 +17,13 @@
  */
 package axoloti.parameters;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.Value;
-import components.AssignMidiCCMenuItems;
-import components.control.CheckboxComponent;
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
+import axoloti.parameterviews.ParameterInstanceViewBin1;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewBin1;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -35,11 +37,6 @@ public class ParameterInstanceBin1 extends ParameterInstanceInt32<ParameterBin1>
 
     public ParameterInstanceBin1(@Attribute(name = "value") int v) {
         super(v);
-    }
-
-    @Override
-    public CheckboxComponent CreateControl() {
-        return new CheckboxComponent(0, 1);
     }
 
     @Override
@@ -66,28 +63,16 @@ public class ParameterInstanceBin1 extends ParameterInstanceInt32<ParameterBin1>
     }
 
     @Override
-    public void updateV() {
-        ctrl.setValue(value.getInt());
-    }
-
-    @Override
     public void setValue(Value value) {
         super.setValue(value);
-        updateV();
     }
 
     @Override
-    public CheckboxComponent getControlComponent() {
-        return (CheckboxComponent) ctrl;
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewBin1(this, o);
+        } else {
+            return new ParameterInstanceViewBin1(this, o);
+        }
     }
-
-    @Override
-    public void populatePopup(JPopupMenu m) {
-        super.populatePopup(m);
-        JMenu m1 = new JMenu("Midi CC");
-        // assignMidiCCMenuItems, does stuff in ctor
-        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(this, m1);
-        m.add(m1);
-    }
-
 }

@@ -18,22 +18,21 @@
 package axoloti.attribute;
 
 import axoloti.SDFileReference;
-import axoloti.Theme;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
 import java.util.ArrayList;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import org.simpleframework.xml.Attribute;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel implements AtomInstance<T> {
+public abstract class AttributeInstance<T extends AxoAttribute> implements AtomInstance<T> {
 
     @Attribute
     String attributeName;
@@ -52,25 +51,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
         attributeName = attr.getName();
     }
 
-    public void PostConstructor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        add(new LabelComponent(GetDefinition().getName()));
-        setSize(getPreferredSize());
-        if (attr.getDescription() != null) {
-            setToolTipText(attr.getDescription());
-        }
-    }
-
-    @Override
-    public String getName() {
-        return attributeName;
-    }
-
-    public abstract void Lock();
-
-    public abstract void UnLock();
-
     public abstract String CValue();
 
     public abstract void CopyValueFrom(AttributeInstance a1);
@@ -80,12 +60,12 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
     }
 
     @Override
-    public AxoObjectInstance GetObjectInstance() {
+    public AxoObjectInstance getObjectInstance() {
         return axoObj;
     }
 
     @Override
-    public T GetDefinition() {
+    public T getDefinition() {
         return attr;
     }
 
@@ -96,10 +76,23 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends JPanel i
     public void Close() {
     }
 
+    public abstract IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o);
+
+    public IAttributeInstanceView createView(IAxoObjectInstanceView o) {
+        IAttributeInstanceView pi = getViewInstance(o);
+        o.addAttributeInstanceView(pi);
+        pi.PostConstructor();
+        return pi;
+    }
+
+    public String getAttributeName() {
+        return attributeName;
+    }
+
     void SetDirty() {
         // propagate dirty flag to patch if there is one
-        if (axoObj.getPatch() != null) {
-            axoObj.getPatch().SetDirty();
+        if (getObjectInstance().getPatchModel() != null) {
+            getObjectInstance().getPatchModel().setDirty();
         }
     }
 }

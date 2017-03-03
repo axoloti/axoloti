@@ -32,5 +32,4 @@ public abstract class DisplayInstanceInt32<T extends Display> extends DisplayIns
     public Value getValueRef() {
         return value;
     }
-
 }

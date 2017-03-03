@@ -17,7 +17,12 @@
  */
 package axoloti.displays;
 
-import components.displays.DispComponent;
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.displayviews.DisplayInstanceViewFrac32UDial;
+import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.displayviews.PDisplayInstanceViewFrac32UDial;
 
 /**
  *
@@ -25,22 +30,16 @@ import components.displays.DispComponent;
  */
 public class DisplayInstanceFrac32UDial extends DisplayInstanceFrac32<DisplayFrac32UDial> {
 
-    private DispComponent dial;
-
     public DisplayInstanceFrac32UDial() {
         super();
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        dial = new DispComponent(0.0, 0.0, 64.0);
-        add(dial);
-    }
-
-    @Override
-    public void updateV() {
-        dial.setValue(value.getDouble());
+    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PDisplayInstanceViewFrac32UDial(this, view);
+        } else {
+            return new DisplayInstanceViewFrac32UDial(this);
+        }
     }
 }

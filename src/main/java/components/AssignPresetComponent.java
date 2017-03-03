@@ -18,7 +18,7 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.parameters.ParameterInstanceFrac32UMap;
+import axoloti.parameterviews.ParameterInstanceViewFrac32UMap;
 import axoloti.utils.Constants;
 import components.control.HSliderComponent;
 import java.awt.Dimension;
@@ -39,20 +39,20 @@ public class AssignPresetComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    final ParameterInstanceFrac32UMap param;
+    final ParameterInstanceViewFrac32UMap parameterInstanceView;
 
-    public AssignPresetComponent(ParameterInstanceFrac32UMap param) {
+    public AssignPresetComponent(ParameterInstanceViewFrac32UMap parameterInstanceView) {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
-        this.param = param;
+        this.parameterInstanceView = parameterInstanceView;
 
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JPopupMenu pm = new JPopupMenu();
-                AssignPresetMenuItems m = new AssignPresetMenuItems(AssignPresetComponent.this.param, pm);
+                AssignPresetMenuItems m = new AssignPresetMenuItems(AssignPresetComponent.this.parameterInstanceView, pm);
                 pm.show(AssignPresetComponent.this, 0, getHeight());
 
                 e.consume();
@@ -81,14 +81,14 @@ public class AssignPresetComponent extends JComponent {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if ((param.getPresets() != null) && (!param.getPresets().isEmpty())) {
+        if ((parameterInstanceView.getParameterInstance().getPresets() != null) && (!parameterInstanceView.getParameterInstance().getPresets().isEmpty())) {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setFont(Constants.FONT);
             g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
             g2.fillRect(1, 1, getWidth(), getHeight());
-            if ((param.getPresets() != null) && (!param.getPresets().isEmpty())) {
+            if ((parameterInstanceView.getParameterInstance().getPresets() != null) && (!parameterInstanceView.getParameterInstance().getPresets().isEmpty())) {
                 g2.setColor(Theme.getCurrentTheme().Component_Primary);
                 g2.fillRect(1, 1, 8, getHeight());
                 g2.setColor(Theme.getCurrentTheme().Component_Secondary);
@@ -105,5 +105,4 @@ public class AssignPresetComponent extends JComponent {
             g2.fillPolygon(xp, yp, 3);
         }
     }
-
 }

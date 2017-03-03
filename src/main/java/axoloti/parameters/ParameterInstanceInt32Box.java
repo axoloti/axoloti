@@ -17,7 +17,12 @@
  */
 package axoloti.parameters;
 
-import components.control.NumberBoxComponent;
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameterviews.IParameterInstanceView;
+import axoloti.parameterviews.ParameterInstanceViewInt32Box;
+import axoloti.piccolo.parameterviews.PParameterInstanceViewInt32Box;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -26,6 +31,9 @@ import org.simpleframework.xml.Attribute;
  */
 public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
 
+    private int min = 0;
+    private int max = 64;
+
     public ParameterInstanceInt32Box() {
     }
 
@@ -33,12 +41,20 @@ public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
         super(v);
     }
 
-    int min = 0;
-    int max = 64;
+    public int getMin() {
+        return min;
+    }
 
-    @Override
-    public void updateV() {
-        ctrl.setValue(value.getInt());
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
     }
 
     @Override
@@ -65,14 +81,11 @@ public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
     }
 
     @Override
-    public NumberBoxComponent CreateControl() {
-        NumberBoxComponent n = new NumberBoxComponent(0.0, min, max, 1.0);
-        n.setParentAxoObjectInstance(axoObj);
-        return n;
-    }
-
-    @Override
-    public NumberBoxComponent getControlComponent() {
-        return (NumberBoxComponent) ctrl;
+    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PParameterInstanceViewInt32Box(this, o);
+        } else {
+            return new ParameterInstanceViewInt32Box(this, o);
+        }
     }
 }

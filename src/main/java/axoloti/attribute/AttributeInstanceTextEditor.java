@@ -17,14 +17,18 @@
  */
 package axoloti.attribute;
 
+import axoloti.MainFrame;
+import static axoloti.PatchViewType.PICCOLO;
 import axoloti.StringRef;
 import axoloti.TextEditor;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
+import axoloti.attributeviews.AttributeInstanceViewTextEditor;
+import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import components.ButtonComponent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import javax.swing.JLabel;
+import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.piccolo.attributeviews.PAttributeInstanceViewTextEditor;
+import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import org.simpleframework.xml.Element;
 
 /**
@@ -33,15 +37,14 @@ import org.simpleframework.xml.Element;
  */
 public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttributeTextEditor> {
 
+    public TextEditor editor;
+
     final StringRef sRef = new StringRef();
 
     @Element(data = true, name = "sText", required = false)
     String getSText() {
         return sRef.s;
     }
-    ButtonComponent bEdit;
-    JLabel vlabel;
-    TextEditor editor;
 
     public AttributeInstanceTextEditor() {
     }
@@ -58,61 +61,9 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
         super(param, axoObj1);
     }
 
-    String valueBeforeAdjustment = "";
-
-    void showEditor() {
-        if (editor == null) {
-            editor = new TextEditor(sRef, GetObjectInstance().getPatch().getPatchframe());
-            editor.setTitle(GetObjectInstance().getInstanceName() + "/" + attr.getName());
-            editor.addWindowFocusListener(new WindowFocusListener() {
-
-                @Override
-                public void windowGainedFocus(WindowEvent e) {
-                    valueBeforeAdjustment = sRef.s;
-                }
-
-                @Override
-                public void windowLostFocus(WindowEvent e) {
-                    if (!valueBeforeAdjustment.equals(sRef.s)) {
-                        SetDirty();
-                    }
-                }
-            });
-        }
-        editor.setState(java.awt.Frame.NORMAL);
-        editor.setVisible(true);
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        bEdit = new ButtonComponent("Edit");
-        add(bEdit);
-        bEdit.addActListener(new ButtonComponent.ActListener() {
-            @Override
-            public void OnPushed() {
-                showEditor();
-            }
-        });
-    }
-
     @Override
     public String CValue() {
         return sRef.s;
-    }
-
-    @Override
-    public void Lock() {
-        if (bEdit != null) {
-            bEdit.setEnabled(false);
-        }
-    }
-
-    @Override
-    public void UnLock() {
-        if (bEdit != null) {
-            bEdit.setEnabled(true);
-        }
     }
 
     @Override
@@ -123,9 +74,19 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     @Override
     public void setString(String sText) {
         sRef.s = sText;
-        if (editor != null) {
-            editor.SetText(sText);
+    }
+
+    @Override
+    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
+        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
+            return new PAttributeInstanceViewTextEditor(this, (PAxoObjectInstanceView) o);
+        } else {
+            return new AttributeInstanceViewTextEditor(this, (AxoObjectInstanceView) o);
         }
+    }
+
+    public StringRef getStringRef() {
+        return sRef;
     }
 
     @Override

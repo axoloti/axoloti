@@ -34,7 +34,7 @@ public class OutletBool32Pulse extends OutletBool32 {
     }
 
     @Override
-    SignalMetaData GetSignalMetaData() {
+    public SignalMetaData GetSignalMetaData() {
         return SignalMetaData.pulse;
     }
 
