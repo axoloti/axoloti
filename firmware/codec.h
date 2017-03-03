@@ -20,6 +20,7 @@
 #define __CODEC_H
 #include <stdint.h>
 #include "axoloti_defines.h"
+#include "chibios_migration.h"
 
 // double buffers for DMA, interleaved stereo
 extern int32_t buf[BUFSIZE * 2]; // *2 for stereo

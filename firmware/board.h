@@ -23,23 +23,23 @@
  * NOTE: LSE not fitted.
  */
 #if !defined(STM32_LSECLK)
-#define STM32_LSECLK                0
+#define STM32_LSECLK                0U
 #endif
 
 #if !defined(STM32_HSECLK)
-#define STM32_HSECLK                8000000
+#define STM32_HSECLK                8000000U
 #endif
 
 /*
  * Board voltages.
  * Required for performance limits calculation.
  */
-#define STM32_VDD                   300
+#define STM32_VDD                   300U
 
 /*
  * MCU type as defined in the ST header.
  */
-#define STM32F40_41xxx
+#define STM32F427xx
 
 /*
  * IO pins assignments.

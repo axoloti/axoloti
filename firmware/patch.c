@@ -63,7 +63,7 @@ static int32_t *outbuf;
 static int nThreadsBeforePatch;
 #define STACKSPACE_MARGIN 32
 
-static WORKING_AREA(waThreadDSP, 7200) __attribute__ ((section (".ccmramend")));
+static WORKING_AREA(waThreadDSP, 7200) __attribute__ ((section (".ram4")));
 static Thread *pThreadDSP = 0;
 static const char *index_fn = "/index.axb";
 
@@ -182,7 +182,7 @@ static msg_t ThreadDSP(void *arg) {
     eventmask_t evt = chEvtWaitOne((eventmask_t)7);
     if (evt == 1) {
       static unsigned int tStart;
-      tStart = hal_lld_get_counter_value();
+      tStart = stGetCounter();
       watchdog_feed();
       if (patchStatus == RUNNING) { // running
 #if (BOARD_STM32F4DISCOVERY)||(BOARD_AXOLOTI_V03)
@@ -215,8 +215,8 @@ static msg_t ThreadDSP(void *arg) {
         codec_clearbuffer();
       }
       adc_convert();
-      DspTime = RTT2US(hal_lld_get_counter_value() - tStart);
-      dspLoadPct = (100 * DspTime) / (1000000 / 3000);
+      DspTime = (stGetCounter() - tStart);
+      dspLoadPct = (DspTime) / (STM32_SYSCLK / 300000);
       if (dspLoadPct > 99) {
         // overload:
         // clear output buffers

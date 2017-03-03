@@ -3,6 +3,8 @@
 #include "stm32_rcc.h"
 #include <string.h>
 
+#include "chibios_migration.h"
+
 #if HAL_USE_PAL || defined(__DOXYGEN__)
 /**
  * @brief   PAL setup.

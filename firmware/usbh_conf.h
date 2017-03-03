@@ -29,7 +29,7 @@
 #ifndef __USBH_CONF__H__
 #define __USBH_CONF__H__
 
-#define STM32F40_41xxx
+#define STM32F427xx
 
 #include "stm32f4xx.h"
 #include <stdio.h>
@@ -39,6 +39,7 @@
 #include "ch.h"
 #include "chprintf.h"
 
+#include "chibios_migration.h"
 
 /* Includes ------------------------------------------------------------------*/
 

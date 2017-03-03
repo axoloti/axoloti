@@ -22,9 +22,9 @@
 #include "ui.h"
 #include <string.h>
 
-uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS] __attribute__ ((section (".sram2")));
+uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS] __attribute__ ((section (".ram2")));
 
-led_outputs_t leds[LEDSIZE] __attribute__ ((section (".sram2")));
+led_outputs_t leds[LEDSIZE] __attribute__ ((section (".ram2")));
 
 
 #if 0

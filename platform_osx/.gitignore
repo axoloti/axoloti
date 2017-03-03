@@ -9,7 +9,7 @@ src/make-3.82.tar.gz
 src/dfu-util-0.8
 src/libusb-1.0.19
 src/make-3.82
-src/ChibiOS_2.*.zip
+src/ChibiOS_*.zip
 x86_64/
 i386/
 gcc-arm-none-eabi-*.tar.bz2

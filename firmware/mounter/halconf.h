@@ -340,6 +340,25 @@
 #define SPI_USE_MUTUAL_EXCLUSION    TRUE
 #endif
 
+
+/*===========================================================================*/
+/* USB driver related settings.                                              */
+/*===========================================================================*/
+
+/**
+ * @brief   Enables synchronous APIs.
+ * @note    Disabling this option saves both code and data space.
+ */
+#if !defined(USB_USE_WAIT) || defined(__DOXYGEN__)
+#define USB_USE_WAIT                TRUE
+#endif
+
+/*===========================================================================*/
+/* Community drivers's includes                                              */
+/*===========================================================================*/
+
+#include "halconf_community.h"
+
 #endif /* _HALCONF_H_ */
 
 /** @} */

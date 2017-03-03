@@ -19,6 +19,8 @@
 #ifndef SPIDB_H_
 #define SPIDB_H_
 
+#include "chibios_migration.h"
+
 /*
  *
  * Double buffered periodic spi exchange

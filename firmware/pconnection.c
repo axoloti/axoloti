@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014, 2015 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -44,140 +44,152 @@
 
 //#define DEBUG_SERIAL 1
 
-void BootLoaderInit(void);
-
 uint32_t fwid;
 
-static WORKING_AREA(waThreadUSBDMidi, 256);
+thread_t * thd_bulk_Writer;
+thread_t * thd_bulk_Reader;
 
-__attribute__((noreturn))
-    static msg_t ThreadUSBDMidi(void *arg) {
-  (void)arg;
-#if CH_USE_REGISTRY
-  chRegSetThreadName("usbdmidi");
-#endif
-  uint8_t r[4];
-  while (1) {
-    chnReadTimeout(&MDU1, &r[0], 4, TIME_INFINITE);
-    MidiInMsgHandler(MIDI_DEVICE_USB_DEVICE, ((r[0] & 0xF0) >> 4) + 1, r[1],
-                     r[2], r[3]);
-  }
-}
-
-void InitPConnection(void) {
-
-  extern int32_t _flash_end;
-  fwid = CalcCRC32((uint8_t *)(FLASH_BASE_ADDR),
-                   (uint32_t)(&_flash_end) & 0x07FFFFF);
-
-  /*
-   * Initializes a serial-over-USB CDC driver.
-   */
-  mduObjectInit(&MDU1);
-  mduStart(&MDU1, &midiusbcfg);
-  bduObjectInit(&BDU1);
-  bduStart(&BDU1, &bulkusbcfg);
-
-  /*
-   * Activates the USB driver and then the USB bus pull-up on D+.
-   * Note, a delay is inserted in order to not have to disconnect the cable
-   * after a reset.
-   */
-  usbDisconnectBus(midiusbcfg.usbp);
-  chThdSleepMilliseconds(1000);
-  usbStart(midiusbcfg.usbp, &usbcfg);
-  usbConnectBus(midiusbcfg.usbp);
-
-  chThdCreateStatic(waThreadUSBDMidi, sizeof(waThreadUSBDMidi), NORMALPRIO,
-                    ThreadUSBDMidi, NULL);
-}
-
-int AckPending = 0;
-bool connected = 0;
-
-int GetFirmwareID(void) {
-  return fwid;
-}
-
-void TransmitDisplayPckt(void) {
-  if (patchMeta.pDisplayVector == 0)
-    return;
-  unsigned int length = 12 + (patchMeta.pDisplayVector[2] * 4);
-  if (length > 2048)
-    return; // FIXME
-  chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                          (const unsigned char* )&patchMeta.pDisplayVector[0],
-                          length);
-}
-
-void LogTextMessage(const char* format, ...) {
-  if ((usbGetDriverStateI(BDU1.config->usbp) == USB_ACTIVE) && (connected)) {
-    int h = 0x546F7841; // "AxoT"
-    chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                            (const unsigned char* )&h, 4);
-
-    va_list ap;
-    va_start(ap, format);
-    chvprintf((BaseSequentialStream *)&BDU1, format, ap);
-    va_end(ap);
-    chSequentialStreamPut((BaseSequentialStream * )&BDU1, 0);
-  }
-}
-
-void PExTransmit(void) {
-  if (!chOQIsEmptyI(&BDU1.oqueue)) {
-    chThdSleepMilliseconds(1);
-    BDU1.oqueue.q_notify(&BDU1.oqueue);
-  }
-  else {
-    if (AckPending) {
-      int ack[7];
-      ack[0] = 0x416F7841; // "AxoA"
-      ack[1] = 0; // reserved
-      ack[2] = dspLoadPct;
-      ack[3] = patchMeta.patchID;
-      ack[4] = sysmon_getVoltage10() + (sysmon_getVoltage50()<<16);
-      if (patchStatus) {
-        ack[5] = UNINITIALIZED;
-      } else {
-        ack[5] = loadPatchIndex;
-      }
-      ack[6] = fs_ready;
-      chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                              (const unsigned char* )&ack[0], 7 * 4);
-
-#ifdef DEBUG_SERIAL
-      chprintf((BaseSequentialStream * )&SD2,"ack!\r\n");
-#endif
-
-      if (!patchStatus)
-        TransmitDisplayPckt();
-
-      connected = 1;
-      exception_checkandreport();
-      AckPending = 0;
-    }
-//    TransmitLCDoverUSB(); // broken
-    if (!patchStatus) {
-      unsigned int i;
-      for (i = 0; i < patchMeta.numPEx; i++) {
-        if (patchMeta.pPExch[i].signals & 0x01) {
-          int v = (patchMeta.pPExch)[i].value;
-          patchMeta.pPExch[i].signals &= ~0x01;
-          PExMessage msg;
-          msg.header = 0x516F7841; //"AxoQ"
-          msg.patchID = patchMeta.patchID;
-          msg.index = i;
-          msg.value = v;
-          chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                                  (const unsigned char* )&msg, sizeof(msg));
-        }
-      }
-    }
-  }
-}
 
 char FileName[256];
+FIL pFile;
+int pFileSize;
+FILINFO fno;
+
+void CloseFile(void) {
+  FRESULT err;
+  err = f_close(&pFile);
+  if (err != FR_OK) {
+    report_fatfs_error(err,&FileName[0]);
+  }
+  if (!FileName[0]) {
+    // and set timestamp
+    FILINFO fno;
+    fno.fdate = FileName[2] + (FileName[3]<<8);
+    fno.ftime = FileName[4] + (FileName[5]<<8);
+    err = f_utime(&FileName[6],&fno);
+    if (err != FR_OK) {
+      report_fatfs_error(err,&FileName[6]);
+    }
+  }
+}
+
+static uint8_t bulk_rxbuf[64];
+
+#define BulkUsbTransmit(data,size) usbTransmit(&USBD1, USBD2_DATA_REQUEST_EP, data, size);
+
+uint32_t offset;
+uint32_t value;
+
+#define evt_bulk_tx_ack  (1<<0)
+#define evt_bulk_fw_ver  (1<<1)
+#define evt_bulk_memrd32 (1<<2)
+#define evt_bulk_memrdx  (1<<3)
+#define evt_bulk_tx_disp (1<<4)
+#define evt_bulk_tx_fileinfo (1<<5)
+#define evt_bulk_tx_logmessage (1<<6)
+#define evt_bulk_tx_dirlist (1<<7)
+#define evt_bulk_tx_paramchange (1<<8)
+
+const uint32_t tx_hdr_acknowledge = 0x416F7841; // "AxoA"
+const uint32_t tx_hdr_fwid = 0x566f7841; // "AxoV"
+const uint32_t tx_hdr_ = 0x566f7841; // "AxoV"
+const uint32_t tx_hdr_memrd32 = 0x796f7841; // "Axoy"
+const uint32_t tx_hdr_memrdx = 0x726f7841; // "Axor"
+
+msg_t bulk_tx_ack(void) {
+	int ack[7];
+	ack[0] = tx_hdr_acknowledge;
+	ack[1] = 0; // reserved
+	ack[2] = dspLoadPct;
+	ack[3] = patchMeta.patchID;
+	ack[4] = sysmon_getVoltage10() + (sysmon_getVoltage50() << 16);
+	if (patchStatus) {
+		ack[5] = UNINITIALIZED;
+	} else {
+		ack[5] = loadPatchIndex;
+	}
+	ack[6] = fs_ready;
+	return BulkUsbTransmit((const unsigned char* )&ack[0], 7 * 4);
+}
+
+typedef struct {
+	uint32_t header;
+	uint8_t version[4];
+	uint8_t fwid[4];
+	uint8_t patch_mainloc[4];
+} tx_pckt_fwversion_t;
+
+msg_t bulk_tx_fw_version(void) {
+	tx_pckt_fwversion_t pckt;
+    pckt.header = tx_hdr_fwid;
+	pckt.version[0] = FWVERSION1; // major
+	pckt.version[1] = FWVERSION2; // minor
+	pckt.version[2] = FWVERSION3;
+	pckt.version[3] = FWVERSION4;
+	uint32_t fwid = GetFirmwareID();
+	pckt.fwid[0] = (uint8_t) (fwid >> 24);
+	pckt.fwid[1] = (uint8_t) (fwid >> 16);
+	pckt.fwid[2] = (uint8_t) (fwid >> 8);
+	pckt.fwid[3] = (uint8_t) (fwid);
+	pckt.patch_mainloc[0] = (uint8_t) (PATCHMAINLOC >> 24);
+	pckt.patch_mainloc[1] = (uint8_t) (PATCHMAINLOC >> 16);
+	pckt.patch_mainloc[2] = (uint8_t) (PATCHMAINLOC >> 8);
+	pckt.patch_mainloc[3] = (uint8_t) (PATCHMAINLOC);
+	return BulkUsbTransmit((const unsigned char* )(&pckt), sizeof(pckt));
+}
+
+typedef struct {
+	uint32_t header;
+	uint32_t offset;
+	uint32_t value;
+} tx_pckt_memrd32_t;
+
+msg_t bulk_tx_memrd32(void) {
+    tx_pckt_memrd32_t pckt;
+    pckt.header = tx_hdr_memrd32;
+    pckt.offset = offset;
+    pckt.value = *((uint32_t*)offset);;
+    return BulkUsbTransmit((const unsigned char* )(&pckt), sizeof(pckt));
+}
+
+typedef struct {
+	uint32_t header;
+	uint32_t offset;
+	uint32_t size;
+} tx_pckt_memrdx_t;
+
+msg_t bulk_tx_memrdx(void) {
+    tx_pckt_memrdx_t pckt;
+    pckt.header = tx_hdr_memrdx;
+    pckt.offset = offset;
+    pckt.size = value;
+    msg_t m = BulkUsbTransmit((const unsigned char* )(&pckt), sizeof(pckt));
+    if (m!=MSG_OK) return m;
+    return BulkUsbTransmit((const unsigned char* )(offset), value);
+}
+
+msg_t bulk_tx_disp(void) {
+  if (patchMeta.pDisplayVector == 0)
+	return 0;
+  unsigned int length = 12 + (patchMeta.pDisplayVector[2] * 4);
+  if (length > 2048)
+	return 0; // excessive size?
+  return BulkUsbTransmit((const unsigned char* )&patchMeta.pDisplayVector[0],
+						  length);
+}
+
+msg_t bulk_tx_fileinfo(void) {
+    char *msg = &((char*)fbuff)[0];
+    msg[0] = 'A';
+    msg[1] = 'x';
+    msg[2] = 'o';
+    msg[3] = 'f';
+    *(int32_t *)(&msg[4]) = fno.fsize;
+    *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
+    strcpy(&msg[12], &FileName[6]);
+    int l = strlen(&msg[12]);
+    return BulkUsbTransmit((const unsigned char* )msg, l+13);
+}
 
 static FRESULT scan_files(char *path) {
   FRESULT res;
@@ -219,9 +231,10 @@ static FRESULT scan_files(char *path) {
         int l = strlen(&msg[12]);
         msg[12+l] = '/';
         msg[13+l] = 0;
-        chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                                (const unsigned char* )msg, l+14);
+        BulkUsbTransmit((const unsigned char* )msg, l+14);
+#if 0        // do not travel into subdirectories
         res = scan_files(path);
+#endif
         path[i] = 0;
         if (res != FR_OK) break;
       } else {
@@ -235,8 +248,7 @@ static FRESULT scan_files(char *path) {
         msg[12+i-1] = '/';
         strcpy(&msg[12+i], fn);
         int l = strlen(&msg[12]);
-        chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                                (const unsigned char* )msg, l+13);
+        BulkUsbTransmit((const unsigned char* )msg, l+13);
       }
     }
   } else {
@@ -245,7 +257,7 @@ static FRESULT scan_files(char *path) {
   return res;
 }
 
-void ReadDirectoryListing(void) {
+void bulk_tx_dirlist(void) {
   FATFS *fsp;
   uint32_t clusters;
   FRESULT err;
@@ -268,8 +280,7 @@ void ReadDirectoryListing(void) {
   fbuff[1] = clusters;
   fbuff[2] = fsp->csize;
   fbuff[3] = MMCSD_BLOCK_SIZE;
-  chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                          (const unsigned char* )(&fbuff[0]), 16);
+  BulkUsbTransmit((const unsigned char* )(&fbuff[0]), 16);
   chThdSleepMilliseconds(10);
   fbuff[0] = '/';
   fbuff[1] = 0;
@@ -284,34 +295,167 @@ void ReadDirectoryListing(void) {
   *(int32_t *)(&msg[8]) = 0;
   msg[12] = '/';
   msg[13] = 0;
-  chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                          (const unsigned char* )msg, 14);
+  BulkUsbTransmit((const unsigned char* )msg, 14);
 }
 
-/* input data decoder state machine
- *
- * "AxoP" (int value, int16 index) -> parameter set
- * "AxoR" (int length, data) -> preset data set
- * "AxoW" (int length, int addr, char[length] data) -> generic memory write
- * "Axow" (int length, int offset, char[12] filename, char[length] data) -> data write to sdcard
- * "Axor" (int offset, int length) -> generic memory read
- * "Axoy" (int offset) -> generic memory read, single 32bit aligned
- * "AxoS" -> start patch
- * "Axos" -> stop patch
- * "AxoT" (char number) -> apply preset
- * "AxoM" (char char char) -> 3 byte midi message
- * "AxoD" go to DFU mode
- * "AxoV" reply FW version number (4 bytes)
- * "AxoF" copy patch code to flash (assumes patch is stopped)
- * "Axod" read directory listing
- * "AxoC (int length) (char[] filename)" create and open file on sdcard
- * "Axoc" close file on sdcard
- * "AxoA (int length) (byte[] data)" append data on open file on sdcard
- * "AxoB (int or) (int and)" buttons for virtual Axoloti Control
- */
+typedef struct bulk_tx_logmessage_pckt {
+	int header;
+	char str[64];
+} bulk_tx_logmessage_pckt_t;
 
-FIL pFile;
-int pFileSize;
+bulk_tx_logmessage_pckt_t logmessage;
+
+msg_t bulk_tx_logmessage(void) {
+    int l = strlen(logmessage.str);
+    return BulkUsbTransmit((const unsigned char* )&logmessage, l+5);
+}
+
+typedef struct {
+  int32_t header;
+  uint32_t patchID;
+  int32_t value;
+  int32_t index;
+} tx_pckt_paramchange;
+
+msg_t bulk_tx_paramchange(void) {
+	msg_t r = 0;
+	if (!patchStatus) {
+		unsigned int i;
+		for (i = 0; i < patchMeta.numPEx; i++) {
+			if (patchMeta.pPExch[i].signals & 0x01) {
+				int v = (patchMeta.pPExch)[i].value;
+				patchMeta.pPExch[i].signals &= ~0x01;
+				tx_pckt_paramchange pch;
+				pch.header = 0x516F7841; //"AxoQ"
+				pch.patchID = patchMeta.patchID;
+				pch.index = i;
+				pch.value = v;
+				r = BulkUsbTransmit((const unsigned char* )&pch, sizeof(pch));
+				if (r<0) break;
+			}
+		}
+	}
+	return r;
+}
+
+static THD_WORKING_AREA(waBulkWriter, 1024);
+static THD_FUNCTION(BulkWriter, arg) {
+
+	(void) arg;
+	chRegSetThreadName("bulksend");
+	while (true) {
+		eventmask_t evt = chEvtWaitOne(0xFFFFFFFF);
+		msg_t msg=0;
+		switch (evt) {
+		case 1:
+			msg = bulk_tx_ack();
+			exception_checkandreport();
+			break;
+		case evt_bulk_fw_ver:
+			msg = bulk_tx_fw_version();
+			if (msg == MSG_RESET) break;
+			msg = bulk_tx_ack();
+			break;
+		case evt_bulk_memrd32:
+			msg = bulk_tx_memrd32();
+			if (msg == MSG_RESET) break;
+			msg = bulk_tx_ack();
+			break;
+		case evt_bulk_memrdx:
+			msg = bulk_tx_memrdx();
+			if (msg == MSG_RESET) break;
+			msg = bulk_tx_ack();
+			break;
+		case evt_bulk_tx_disp:
+			msg = bulk_tx_disp();
+			break;
+		case evt_bulk_tx_fileinfo:
+			msg = bulk_tx_fileinfo();
+			break;
+		case evt_bulk_tx_logmessage:
+			msg = bulk_tx_logmessage();
+			break;
+		case evt_bulk_tx_dirlist:
+			bulk_tx_dirlist();
+			break;
+		case evt_bulk_tx_paramchange:
+			msg = bulk_tx_paramchange();
+			break;
+		default:
+			;
+		}
+		if (msg == MSG_RESET)
+			chThdSleepMilliseconds(500);
+	}
+}
+
+uint32_t header;
+
+typedef struct {
+   uint32_t header;
+   uint32_t offset;
+} rcv_pckt_memrd32_t;
+
+typedef struct rcv_pckt_offset_value {
+   uint32_t header;
+   uint32_t offset;
+   uint32_t size;
+   // uint8_t data[size];
+} rcv_pckt_memrdx_t;
+
+typedef struct rcv_pckt_offset_value rcv_pckt_memwrx_t;
+
+typedef struct {
+   uint32_t header;
+   uint32_t patch_id;
+   int32_t value;
+   uint16_t index;
+} rcv_pckt_paramchange_t;
+
+typedef struct {
+   uint32_t header;
+   uint8_t midi[3];
+} rcv_pckt_midi_t;
+
+typedef struct {
+   uint32_t header;
+   uint32_t fsize;
+   char fn[4];
+} rcv_pckt_fs_create_t;
+
+typedef struct {
+   uint32_t header;
+   uint32_t fsize;
+} rcv_pckt_fs_append_t;
+
+typedef struct {
+   uint32_t header;
+   uint8_t index;
+} rcv_pckt_preset_apply_t;
+
+typedef struct {
+   uint32_t header;
+   uint32_t size;
+   // uint8_t data[size];
+} rcv_pckt_preset_write_t;
+
+const uint32_t rcv_hdr_ping = 0x706f7841; // "Axop"
+const uint32_t rcv_hdr_getfwid = 0x566f7841; // "AxoV"
+const uint32_t rcv_hdr_memrd32 = 0x796f7841; // "Axoy"
+const uint32_t rcv_hdr_memrdx = 0x726f7841; // "Axor"
+const uint32_t rcv_hdr_stop = 0x536f7841; // "AxoS"
+const uint32_t rcv_hdr_start = 0x736f7841; // "Axos"
+const uint32_t rcv_hdr_memwr = 0x576f7841; // "AxoW"
+const uint32_t rcv_hdr_paramchange = 0x506f7841; // "AxoP"
+const uint32_t rcv_hdr_midi = 0x4D6f7841; // "AxoM"
+const uint32_t rcv_hdr_fs_create = 0x436f7841; // "AxoC"
+const uint32_t rcv_hdr_fs_dirlist = 0x646f7841; // "Axod"
+const uint32_t rcv_hdr_copy_to_flash = 0x466f7841; // "AxoF"
+const uint32_t rcv_hdr_activate_dfu = 0x446f7841; // "AxoD"
+const uint32_t rcv_hdr_fs_close = 0x636f7841; // "Axoc"
+const uint32_t rcv_hdr_fs_append = 0x416f7841; // "AxoA"
+const uint32_t rcv_hdr_preset_apply = 0x546f7841; // "AxoT"
+const uint32_t rcv_hdr_preset_write = 0x526f7841; // "AxoR"
 
 void ManipulateFile(void) {
   sdcard_attemptMountIfUnmounted();
@@ -340,7 +484,6 @@ void ManipulateFile(void) {
         report_fatfs_error(err,&FileName[6]);
       }
       // and set timestamp
-      FILINFO fno;
       fno.fdate = FileName[2] + (FileName[3]<<8);
       fno.ftime = FileName[4] + (FileName[5]<<8);
       err = f_utime(&FileName[6],&fno);
@@ -383,37 +526,9 @@ void ManipulateFile(void) {
       fno.lfname = &((char*)fbuff)[0];
       fno.lfsize = 256;
       err =  f_stat(&FileName[6],&fno);
-      if (err == FR_OK) {
-        char *msg = &((char*)fbuff)[0];
-        msg[0] = 'A';
-        msg[1] = 'x';
-        msg[2] = 'o';
-        msg[3] = 'f';
-        *(int32_t *)(&msg[4]) = fno.fsize;
-        *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
-        strcpy(&msg[12], &FileName[6]);
-        int l = strlen(&msg[12]);
-        chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                                (const unsigned char* )msg, l+13);
+      if (err == FR_OK) { // condition?
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_fileinfo);
       }
-    }
-  }
-}
-
-void CloseFile(void) {
-  FRESULT err;
-  err = f_close(&pFile);
-  if (err != FR_OK) {
-    report_fatfs_error(err,&FileName[0]);
-  }
-  if (!FileName[0]) {
-    // and set timestamp
-    FILINFO fno;
-    fno.fdate = FileName[2] + (FileName[3]<<8);
-    fno.ftime = FileName[4] + (FileName[5]<<8);
-    err = f_utime(&FileName[6],&fno);
-    if (err != FR_OK) {
-      report_fatfs_error(err,&FileName[6]);
     }
   }
 }
@@ -446,640 +561,259 @@ void CopyPatchToFlash(void) {
       // flash verify fail
     }
   }
-  AckPending = 1;
 }
 
-void ReplyFWVersion(void) {
-  uint8_t reply[16];
-  reply[0] = 'A';
-  reply[1] = 'x';
-  reply[2] = 'o';
-  reply[3] = 'V';
-  reply[4] = FWVERSION1; // major
-  reply[5] = FWVERSION2; // minor
-  reply[6] = FWVERSION3;
-  reply[7] = FWVERSION4;
-  uint32_t fwid = GetFirmwareID();
-  reply[8] = (uint8_t)(fwid>>24);
-  reply[9] = (uint8_t)(fwid>>16);
-  reply[10] = (uint8_t)(fwid>>8);
-  reply[11] = (uint8_t)(fwid);
-  reply[12] = (uint8_t)(PATCHMAINLOC>>24);
-  reply[13] = (uint8_t)(PATCHMAINLOC>>16);
-  reply[14] = (uint8_t)(PATCHMAINLOC>>8);
-  reply[15] = (uint8_t)(PATCHMAINLOC);
-  chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                          (const unsigned char* )(&reply[0]), 16);
-}
+/*
+ * USB reader thread
+ */
+static THD_WORKING_AREA(waBulkReader, 1024);
+static THD_FUNCTION(BulkReader, arg) {
 
-void PExReceiveByte(unsigned char c) {
-  static char header = 0;
-  static int state = 0;
-  static unsigned int index;
-  static int value;
-  static int position;
-  static int offset;
-  static int length;
-  static int a;
-  static int b;
-  static uint32_t patchid;
-
-  if (!header) {
-    switch (state) {
-    case 0:
-      if (c == 'A')
-        state++;
-      break;
-    case 1:
-      if (c == 'x')
-        state++;
-      else
-        state = 0;
-      break;
-    case 2:
-      if (c == 'o')
-        state++;
-      else
-        state = 0;
-      break;
-    case 3:
-      header = c;
-      if (c == 'P') { // param change
-        state = 4;
-      }
-      else if (c == 'R') { // preset change
-        state = 4;
-      }
-      else if (c == 'W') { // write
-        state = 4;
-      }
-      else if (c == 'w') { // write file to SD
-        state = 4;
-      }
-      else if (c == 'T') { // change preset
-        state = 4;
-      }
-      else if (c == 'M') { // midi command
-        state = 4;
-      }
-      else if (c == 'B') { // virtual Axoloti Control buttons
-        state = 4;
-      }
-      else if (c == 'C') { // create sdcard file
-        state = 4;
-      }
-      else if (c == 'A') { // append data to sdcard file
-        state = 4;
-      }
-      else if (c == 'r') { // generic read
-        state = 4;
-      }
-      else if (c == 'y') { // generic read
-        state = 4;
-      }
-      else if (c == 'S') { // stop patch
-        state = 0;
-        header = 0;
-        StopPatch();
-        AckPending = 1;
-      }
-      else if (c == 'D') { // go to DFU mode
-        state = 0;
-        header = 0;
-        StopPatch();
-        exception_initiate_dfu();
-      }
-      else if (c == 'F') { // copy to flash
-        state = 0;
-        header = 0;
-        StopPatch();
-        CopyPatchToFlash();
-      }
-      else if (c == 'd') { // read directory listing
-        state = 0;
-        header = 0;
-        StopPatch();
-        ReadDirectoryListing();
-      }
-      else if (c == 's') { // start patch
-        state = 0;
-        header = 0;
-        loadPatchIndex = LIVE;
-        StartPatch();
-        AckPending = 1;
-      }
-      else if (c == 'V') { // FW version number
-        state = 0;
-        header = 0;
-        ReplyFWVersion();
-        AckPending = 1;
-      }
-      else if (c == 'p') { // ping
-        state = 0;
-        header = 0;
-#ifdef DEBUG_SERIAL
-        chprintf((BaseSequentialStream * )&SD2,"ping\r\n");
-#endif
-        AckPending = 1;
-      }
-      else if (c == 'c') { // close sdcard file
-        state = 0;
-        header = 0;
-        CloseFile();
-        AckPending = 1;
-      }
-      else
-        state = 0;
-      break;
-    }
-  }
-  else if (header == 'P') { // param change
-    switch (state) {
-    case 4:
-      patchid = c;
-      state++;
-      break;
-    case 5:
-      patchid += c << 8;
-      state++;
-      break;
-    case 6:
-      patchid += c << 16;
-      state++;
-      break;
-    case 7:
-      patchid += c << 24;
-      state++;
-      break;
-    case 8:
-      value = c;
-      state++;
-      break;
-    case 9:
-      value += c << 8;
-      state++;
-      break;
-    case 10:
-      value += c << 16;
-      state++;
-      break;
-    case 11:
-      value += c << 24;
-      state++;
-      break;
-    case 12:
-      index = c;
-      state++;
-      break;
-    case 13:
-      index += c << 8;
-      state = 0;
-      header = 0;
-      if ((patchid == patchMeta.patchID) &&
-          (index < patchMeta.numPEx)) {
-        PExParameterChange(&(patchMeta.pPExch)[index], value, 0xFFFFFFEE);
-      }
-      break;
-    default:
-      state = 0;
-      header = 0;
-    }
-  }
-  else if (header == 'W') {
-    switch (state) {
-    case 4:
-      offset = c;
-      state++;
-      break;
-    case 5:
-      offset += c << 8;
-      state++;
-      break;
-    case 6:
-      offset += c << 16;
-      state++;
-      break;
-    case 7:
-      offset += c << 24;
-      state++;
-      break;
-    case 8:
-      value = c;
-      state++;
-      break;
-    case 9:
-      value += c << 8;
-      state++;
-      break;
-    case 10:
-      value += c << 16;
-      state++;
-      break;
-    case 11:
-      value += c << 24;
-      state++;
-      break;
-    default:
-      if (value > 0) {
-        value--;
-        *((unsigned char *)offset) = c;
-        offset++;
-        if (value == 0) {
-          header = 0;
-          state = 0;
-          AckPending = 1;
-        }
-      }
-      else {
-        header = 0;
-        state = 0;
-        AckPending = 1;
-      }
-    }
-  }
-  else if (header == 'w') {
-    switch (state) {
-    case 4:
-      offset = c;
-      state++;
-      break;
-    case 5:
-      offset += c << 8;
-      state++;
-      break;
-    case 6:
-      offset += c << 16;
-      state++;
-      break;
-    case 7:
-      offset += c << 24;
-      state++;
-      break;
-    case 8:
-      value = c;
-      state++;
-      break;
-    case 9:
-      value += c << 8;
-      state++;
-      break;
-    case 10:
-      value += c << 16;
-      state++;
-      break;
-    case 11:
-      value += c << 24;
-      length = value;
-      position = offset;
-      state++;
-      break;
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-    case 16:
-    case 17:
-    case 18:
-    case 19:
-    case 20:
-    case 21:
-    case 22:
-    case 23:
-      FileName[state - 12] = c;
-      state++;
-      break;
-    default:
-      if (value > 0) {
-        value--;
-        *((unsigned char *)position) = c;
-        position++;
-        if (value == 0) {
-          FRESULT err;
-          header = 0;
-          state = 0;
-          sdcard_attemptMountIfUnmounted();
-          err = f_open(&pFile, &FileName[0], FA_WRITE | FA_CREATE_ALWAYS);
-          if (err != FR_OK) {
-            LogTextMessage("File open failed");
+  (void)arg;
+  chRegSetThreadName("reader");
+  while (true) {
+    msg_t msg = usbReceive(&USBD1, USBD2_DATA_AVAILABLE_EP,
+    		bulk_rxbuf, sizeof (bulk_rxbuf));
+    if (msg == MSG_RESET)
+      chThdSleepMilliseconds(500);
+    else {
+      header = *(int *)bulk_rxbuf;
+      if (header == rcv_hdr_ping) {
+    	  // AxoP : ping
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+    	  if (!patchStatus) {
+        	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_disp);
+        	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_paramchange);
+    	  }
+      } else if (header == rcv_hdr_getfwid) {
+    	  // AxoV : get firmware version
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_fw_ver);
+      } else if (header == rcv_hdr_memrd32) {
+    	  // Axoy : read memory single 32bit
+    	  rcv_pckt_memrd32_t * b = (rcv_pckt_memrd32_t *)bulk_rxbuf;
+    	  offset = b->offset;
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_memrd32);
+      } else if (header == rcv_hdr_memrdx) {
+    	  // Axor : read memory
+    	  rcv_pckt_memrdx_t *p = (rcv_pckt_memrdx_t *)bulk_rxbuf;
+    	  offset = p->offset;
+    	  value = p->size;
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_memrdx);
+      } else if (header == rcv_hdr_stop) {
+    	  // AxoS : stop patch
+          StopPatch();
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+      } else if (header == rcv_hdr_start) {
+    	  // Axos : start patch
+          loadPatchIndex = LIVE;
+          StartPatch();
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+      } else if (header == rcv_hdr_memwr) {
+    	  // AxoW : write memory
+    	  rcv_pckt_memwrx_t *p = (rcv_pckt_memwrx_t *)bulk_rxbuf;
+    	  int rem_length = p->size;
+    	  uint8_t * offset = (uint8_t * )p->offset;
+    	  if (msg > (int)sizeof(rcv_pckt_memwrx_t)) {
+    		  int s = msg - sizeof(rcv_pckt_memwrx_t);
+    		  if (s>rem_length) s = rem_length;
+    		  int i;
+    		  for(i=0;i<s;i++) {
+    			  *offset++ = bulk_rxbuf[i+sizeof(rcv_pckt_memwrx_t)];
+    		  }
+    	  	  rem_length -= s;
+    	  }
+      	  while (rem_length>0) {
+        	  msg = usbReceive(&USBD1, USBD2_DATA_AVAILABLE_EP,
+        	      		(uint8_t *)offset, rem_length);
+        	  if (msg<0) break;
+        	  rem_length -= msg;
+        	  offset +=msg;
+      	  }
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+      } else if (header == rcv_hdr_paramchange) {
+    	  // AxoP : parameter change
+    	  rcv_pckt_paramchange_t *p = (rcv_pckt_paramchange_t *)bulk_rxbuf;
+          if ((p->patch_id == patchMeta.patchID) &&
+              (p->index < patchMeta.numPEx)) {
+            PExParameterChange(&(patchMeta.pPExch)[p->index], p->value, 0xFFFFFFEE);
           }
+      } else if (header == rcv_hdr_midi) {
+    	  // AxoM : midi injection
+    	  rcv_pckt_midi_t *p = (rcv_pckt_midi_t *)bulk_rxbuf;
+          MidiInMsgHandler(MIDI_DEVICE_INTERNAL, 1, p->midi[0], p->midi[1],
+                           p->midi[2]);
+      } else if (header == rcv_hdr_fs_create) {
+    	  rcv_pckt_fs_create_t *p = (rcv_pckt_fs_create_t *)bulk_rxbuf;
+    	  if (p->fn[0]) {
+			  FileName[0] = p->fn[0];
+			  int i=1;
+			  char c = p->fn[i];
+			  while(c && (i<(msg-8))) {
+				  c = p->fn[i];
+				  FileName[i] = c;
+				  i++;
+			  }
+	    	  FileName[i] = 0;
+			  // FIXME: filename/path length limited to ~50 characters,
+			  // need to read another buffer if terminating null was not found
+    	  } else {
+    		  // extended mode
+    		  int i;
+    		  for (i=0;i<14;i++)
+    			  FileName[i] = p->fn[i];
+			  char c = p->fn[i];
+			  while(c && (i<(msg-8))) {
+				  c = p->fn[i];
+				  FileName[i] = c;
+				  i++;
+			  }
+	    	  FileName[i] = 0;
+			  // FIXME: filename/path length limited to ~50 characters,
+			  // need to read another buffer if terminating null was not found
+    	  }
+    	  ManipulateFile();
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+      } else if (header == rcv_hdr_fs_dirlist) {
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_dirlist);
+      } else if (header == rcv_hdr_copy_to_flash) {
+          StopPatch();
+    	  CopyPatchToFlash();
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+      } else if (header == rcv_hdr_activate_dfu) {
+    	  StopPatch();
+    	  exception_initiate_dfu();
+      } else if (header == rcv_hdr_fs_close) {
+    	  CloseFile();
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+      } else if (header == rcv_hdr_fs_append) {
+          StopPatch();
+          rcv_pckt_fs_append_t *p = (rcv_pckt_fs_append_t *)bulk_rxbuf;
+    	  int length = p->fsize;
+    	  unsigned char *pos = (unsigned char *)PATCHMAINLOC;
+    	  int i;
+    	  for (i=8;i<msg;i++) {
+    		  pos[i] = bulk_rxbuf[i];
+    	  }
+    	  int rem_length = length - (msg - 8);
+    	  while (rem_length > 0){
+    		  msg = usbReceive(&USBD1, USBD2_DATA_AVAILABLE_EP,
+    		      		pos, rem_length);
+    		  if (msg<0) {
+    			  break;
+    		  }
+    		  pos += msg;
+    		  rem_length -= msg;
+    	  }
           int bytes_written;
-          err = f_write(&pFile, (char *)offset, length, (void *)&bytes_written);
-          if (err != FR_OK) {
-            LogTextMessage("File write failed");
-          }
-          err = f_close(&pFile);
-          if (err != FR_OK) {
-            LogTextMessage("File close failed");
-          }
-          AckPending = 1;
-        }
-      }
-      else {
-        header = 0;
-        state = 0;
-      }
-    }
-  }
-  else if (header == 'T') { // Apply Preset
-    ApplyPreset(c);
-    AckPending = 1;
-    header = 0;
-    state = 0;
-  }
-  else if (header == 'M') { // Midi message
-    static uint8_t midi_r[3];
-    switch (state) {
-    case 4:
-      midi_r[0] = c;
-      state++;
-      break;
-    case 5:
-      midi_r[1] = c;
-      state++;
-      break;
-    case 6:
-      midi_r[2] = c;
-      MidiInMsgHandler(MIDI_DEVICE_INTERNAL, 1, midi_r[0], midi_r[1],
-                       midi_r[2]);
-      header = 0;
-      state = 0;
-      break;
-    default:
-      header = 0;
-      state = 0;
-    }
-  }
-  else if (header == 'C') {
-    switch (state) {
-    case 4:
-      pFileSize = c;
-      state++;
-      break;
-    case 5:
-      pFileSize += c << 8;
-      state++;
-      break;
-    case 6:
-      pFileSize += c << 16;
-      state++;
-      break;
-    case 7:
-      pFileSize += c << 24;
-      state++;
-      break;
-    case 8:
-      FileName[state - 8] = c;
-      // filename starting with null means there are attributes present
-      state++;
-      break;
-    default:
-      if (c || ((!FileName[0])&&(state<14))) {
-        FileName[state - 8] = c;
-        state++;
-      }
-      else {
-        FileName[state - 8] = 0;
-        ManipulateFile();
-        header = 0;
-        state = 0;
-        AckPending = 1;
-      }
-    }
-  }
-  else if (header == 'A') {
-    switch (state) {
-    case 4:
-      value = c;
-      state++;
-      break;
-    case 5:
-      value += c << 8;
-      state++;
-      break;
-    case 6:
-      value += c << 16;
-      state++;
-      break;
-    case 7:
-      value += c << 24;
-      length = value;
-      position = PATCHMAINLOC;
-      state++;
-      break;
-    default:
-      if (value > 0) {
-        value--;
-        *((unsigned char *)position) = c;
-        position++;
-        if (value == 0) {
-          FRESULT err;
-          header = 0;
-          state = 0;
-          int bytes_written;
-          err = f_write(&pFile, (char *)PATCHMAINLOC, length,
+          FRESULT err = f_write(&pFile, (char *)PATCHMAINLOC, length,
                         (void *)&bytes_written);
           if (err != FR_OK) {
             report_fatfs_error(err,0);
           }
-          AckPending = 1;
-        }
-      }
-      else {
-        header = 0;
-        state = 0;
-      }
-    }
-  }
-  else if (header == 'B') {
-    switch (state) {
-    case 4:
-      a = c;
-      state++;
-      break;
-    case 5:
-      a += c << 8;
-      state++;
-      break;
-    case 6:
-      a += c << 16;
-      state++;
-      break;
-    case 7:
-      a += c << 24;
-      state++;
-      break;
-    case 8:
-      b = c;
-      state++;
-      break;
-    case 9:
-      b += c << 8;
-      state++;
-      break;
-    case 10:
-      b += c << 16;
-      state++;
-      break;
-    case 11:
-      b += c << 24;
-      state++;
-      break;
-    case 12:
-      EncBuffer[0] += c;
-      state++;
-      break;
-    case 13:
-      EncBuffer[1] += c;
-      state++;
-      break;
-    case 14:
-      EncBuffer[2] += c;
-      state++;
-      break;
-    case 15:
-      EncBuffer[3] += c;
-      header = 0;
-      state = 0;
-      Btn_Nav_Or.word = Btn_Nav_Or.word | a;
-      Btn_Nav_And.word = Btn_Nav_And.word & b;
-      break;
-    }
-  }
-  else if (header == 'R') {
-    switch (state) {
-    case 4:
-      length = c;
-      state++;
-      break;
-    case 5:
-      length += c << 8;
-      state++;
-      break;
-    case 6:
-      length += c << 16;
-      state++;
-      break;
-    case 7:
-      length += c << 24;
-      state++;
-      offset = (int)patchMeta.pPresets;
-      break;
-    default:
-      if (length > 0) {
-        length--;
-        if (offset) {
-          *((unsigned char *)offset) = c;
-          offset++;
-        }
-        if (length == 0) {
-          header = 0;
-          state = 0;
-          AckPending = 1;
-        }
-      }
-      else {
-        header = 0;
-        state = 0;
-        AckPending = 1;
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+      } else if (header == rcv_hdr_preset_apply) {
+    	  rcv_pckt_preset_apply_t *p = (rcv_pckt_preset_apply_t *)bulk_rxbuf;
+    	  ApplyPreset(p->index);
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_paramchange);
+      } else if (header == rcv_hdr_preset_write) {
+    	  if (patchMeta.pPresets) {
+			  rcv_pckt_preset_write_t *p = (rcv_pckt_preset_write_t *)bulk_rxbuf;
+			  int rem_length = p->size;
+			  uint8_t * offset = (uint8_t *)patchMeta.pPresets;
+			  if (msg > (int)sizeof(rcv_pckt_memwrx_t)) {
+				  int s = msg - sizeof(rcv_pckt_memwrx_t);
+				  if (s>rem_length) s = rem_length;
+				  int i;
+				  for(i=0;i<s;i++) {
+					  *offset++ = bulk_rxbuf[i+sizeof(rcv_pckt_memwrx_t)];
+				  }
+				  rem_length -= s;
+			  }
+			  while (rem_length>0) {
+				  msg = usbReceive(&USBD1, USBD2_DATA_AVAILABLE_EP,
+							(uint8_t *)offset, rem_length);
+				  if (msg<0) break;
+				  rem_length -= msg;
+				  offset +=msg;
+			  }
+    	  }
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+      } else {
+    	  // unidentified header!
+    	  int i=100;
+    	  while(i--){
+    	  }
       }
     }
-  }
-  else if (header == 'r') { // generic read
-    switch (state) {
-    case 4:
-      offset = c;
-      state++;
-      break;
-    case 5:
-      offset += c << 8;
-      state++;
-      break;
-    case 6:
-      offset += c << 16;
-      state++;
-      break;
-    case 7:
-      offset += c << 24;
-      state++;
-      break;
-    case 8:
-      value = c;
-      state++;
-      break;
-    case 9:
-      value += c << 8;
-      state++;
-      break;
-    case 10:
-      value += c << 16;
-      state++;
-      break;
-    case 11:
-      value += c << 24;
-
-      uint32_t read_repy_header[3];
-      ((char*)read_repy_header)[0] = 'A';
-      ((char*)read_repy_header)[1] = 'x';
-      ((char*)read_repy_header)[2] = 'o';
-      ((char*)read_repy_header)[3] = 'r';
-      read_repy_header[1] = offset;
-      read_repy_header[2] = value;
-      chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                              (const unsigned char* )(&read_repy_header[0]), 3 * 4);
-      chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                              (const unsigned char* )(offset), value);
-
-      AckPending = true;
-      header = 0;
-      state = 0;
-      break;
-    }
-  }
-  else if (header == 'y') { // generic read, 32bit
-    switch (state) {
-    case 4:
-      offset = c;
-      state++;
-      break;
-    case 5:
-      offset += c << 8;
-      state++;
-      break;
-    case 6:
-      offset += c << 16;
-      state++;
-      break;
-    case 7:
-      offset += c << 24;
-
-      uint32_t read_repy_header[3];
-      ((char*)read_repy_header)[0] = 'A';
-      ((char*)read_repy_header)[1] = 'x';
-      ((char*)read_repy_header)[2] = 'o';
-      ((char*)read_repy_header)[3] = 'y';
-      read_repy_header[1] = offset;
-      read_repy_header[2] = *((uint32_t*)offset);
-      chSequentialStreamWrite((BaseSequentialStream * )&BDU1,
-                              (const unsigned char* )(&read_repy_header[0]), 3 * 4);
-
-      AckPending = true;
-      header = 0;
-      state = 0;
-      break;
-    }
-  }  else {
-    header = 0;
-    state = 0;
   }
 }
 
+void InitPConnection(void) {
+
+  extern int32_t _flash_end;
+  fwid = CalcCRC32((uint8_t *)(FLASH_BASE_ADDR),
+                   (uint32_t)(&_flash_end) & 0x07FFFFF);
+
+  /*
+   * Activates the USB driver and then the USB bus pull-up on D+.
+   * Note, a delay is inserted in order to not have to disconnect the cable
+   * after a reset.
+   */
+  usbDisconnectBus(&USBD1);
+  chThdSleepMilliseconds(1000);
+  usbStart(&USBD1, &usbcfg);
+  usbConnectBus(&USBD1);
+
+  thd_bulk_Writer = chThdCreateStatic(waBulkWriter, sizeof(waBulkWriter), NORMALPRIO, BulkWriter, NULL);
+  thd_bulk_Reader =  chThdCreateStatic(waBulkReader, sizeof(waBulkReader), NORMALPRIO, BulkReader, NULL);
+
+}
+
+int GetFirmwareID(void) {
+  return fwid;
+}
+
+void LogTextMessage(const char* format, ...) {
+	// FIXME: use output_queue?
+	// current implementation discards multiple LogTextMessage calls
+	logmessage.header =  0x546F7841; // "AxoT"
+    va_list ap;
+    va_start(ap, format);
+    chsnprintf(logmessage.str, sizeof(logmessage.str), format, ap);
+    va_end(ap);
+    chEvtSignal(thd_bulk_Writer,evt_bulk_tx_logmessage);
+}
+
+void PExTransmit(void) {
+}
+
+
+/* input data decoder state machine
+ *
+ * "AxoP" (int value, int16 index) -> parameter set
+ * "AxoR" (int length, data) -> preset data set
+ * "AxoW" (int length, int addr, char[length] data) -> generic memory write
+ * "Axow" (int length, int offset, char[12] filename, char[length] data) -> data write to sdcard
+ *        (obsolete)
+ * "Axor" (int offset, int length) -> generic memory read
+ * "Axoy" (int offset) -> generic memory read, single 32bit aligned
+ * "AxoS" -> start patch
+ * "Axos" -> stop patch
+ * "AxoT" (char number) -> apply preset
+ * "AxoM" (char char char) -> 3 byte midi message
+ * "AxoD" go to DFU mode
+ * "AxoV" reply FW version number (4 bytes)
+ * "AxoF" copy patch code to flash (assumes patch is stopped)
+ * "Axod" read directory listing
+ * "AxoC (int length) (char[] filename)" create and open file on sdcard
+ * "Axoc" close file on sdcard
+ * "AxoA (int length) (byte[] data)" append data on open file on sdcard
+ * "AxoB (int or) (int and)" buttons for virtual Axoloti Control
+ */
+
+
 void PExReceive(void) {
-  if (!AckPending) {
-    unsigned char received;
-    while (chnReadTimeout(&BDU1, &received, 1, TIME_IMMEDIATE)) {
-      PExReceiveByte(received);
-    }
-  }
 }
 
 /*
@@ -1089,5 +823,5 @@ void PExReceive(void) {
  MidiInMsgHandler(MIDI_DEVICE_USB_DEVICE, (( r[0] & 0xF0) >> 4)+ 1, r[1], r[2], r[3]);
  }
  }
- */
+*/
 

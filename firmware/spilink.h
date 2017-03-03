@@ -29,6 +29,9 @@
 #include "axoloti_control.h"
 #include "ui.h"
 
+#include "chibios_migration.h"
+
+
 #define SPILINK_BUFSIZE 16
 #define SPILINK_CHANNELS 4
 #define SPILINK_CTLDATASIZE 16

@@ -24,13 +24,13 @@ then
     mkdir "${PLATFORM_ROOT}/src"
 fi
 
-if [ ! -d "${PLATFORM_ROOT}/../chibios" ]; 
+CH_VERSION=16.1.7
+if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ]; 
 then
     cd "${PLATFORM_ROOT}/src"
-    CH_VERSION=2.6.9
     ARDIR=ChibiOS_${CH_VERSION}
     ARCHIVE=${ARDIR}.zip
-    if [ ! -f ${ARCHIVE} ]; 
+    if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
         curl -L http://sourceforge.net/projects/chibios/files/ChibiOS_RT%20stable/Version%20${CH_VERSION}/${ARCHIVE} > ${ARCHIVE}
@@ -38,11 +38,11 @@ then
         echo "${ARCHIVE} already downloaded"
     fi
     unzip -q -o ${ARCHIVE}
-    mv ${ARDIR} chibios
-    cd chibios/ext
-    unzip -q -o ./fatfs-0.9-patched.zip
+#    mv ${ARDIR} chibios
+    cd ${ARDIR}/ext
+    7z x ./fatfs-0.10b-patched.7z
     cd ../../
-    mv chibios ../..
+    mv ${ARDIR} ../..
 else
     echo "chibios directory already present, skipping..."
 fi

@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,20 +14,15 @@
     limitations under the License.
 */
 
-#ifndef _USBCFG_H_
-#define _USBCFG_H_
+#ifndef USBCFG_H
+#define USBCFG_H
 
-
-/*
- * Endpoints to be used for USBD1.
- */
 #define USBD1_DATA_REQUEST_EP           1
 #define USBD1_DATA_AVAILABLE_EP         1
-#define USBD2_DATA_REQUEST_EP           2
-#define USBD2_DATA_AVAILABLE_EP         2
+#define USBD1_INTERRUPT_REQUEST_EP      2
 
 extern const USBConfig usbcfg;
 
-#endif  /* _USBCFG_H_ */
+#endif  /* USBCFG_H */
 
 /** @} */

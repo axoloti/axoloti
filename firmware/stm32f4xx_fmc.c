@@ -37,7 +37,7 @@
 #include "ch.h"
 //#include "stm32f4xx_rcc.h"
 
-#define assert_param(expr) chDbgAssert(expr,"STPeriph FMC","")
+#define assert_param(expr) chDbgAssert(expr,"STPeriph FMC")
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{

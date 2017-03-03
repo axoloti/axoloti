@@ -80,7 +80,7 @@ void __late_init(void) {
 /**
  * @brief   SDC card detection.
  */
-bool_t sdc_lld_is_card_inserted(SDCDriver *sdcp) {
+bool sdc_lld_is_card_inserted(SDCDriver *sdcp) {
 
   (void)sdcp;
   /* TODO: Fill the implementation.*/
@@ -90,7 +90,7 @@ bool_t sdc_lld_is_card_inserted(SDCDriver *sdcp) {
 /**
  * @brief   SDC card write protection detection.
  */
-bool_t sdc_lld_is_write_protected(SDCDriver *sdcp) {
+bool sdc_lld_is_write_protected(SDCDriver *sdcp) {
 
   (void)sdcp;
   /* TODO: Fill the implementation.*/

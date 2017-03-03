@@ -22,6 +22,8 @@
 #include "serial_midi.h"
 #include "patch.h"
 
+#include "chibios_migration.h"
+
 static unsigned char StatusLengthLookup[16] = {0, 0, 0, 0, 0, 0, 0, 0, 3, // 0x80=note off, 3 bytes
                                                3, // 0x90=note on, 3 bytes
                                                3, // 0xa0=poly pressure, 3 bytes
@@ -132,7 +134,7 @@ int serial_MidiGetOutputBufferPending(void) {
 static const SerialConfig sdMidiCfg = {31250, // baud
     0, 0, 0};
 
-static WORKING_AREA(waThreadMidi, 256) __attribute__ ((section (".ccmramend")));
+static WORKING_AREA(waThreadMidi, 256) __attribute__ ((section (".ram4")));
 
 __attribute__((noreturn))
   static msg_t ThreadMidi(void *arg) {

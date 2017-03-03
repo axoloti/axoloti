@@ -88,7 +88,7 @@ void BootLoaderInit() {
   psp = 0;
   asm volatile ("cpsie   i");
   asm volatile ("msr     PSP, %0" : : "r" (psp));
-  SCB_FPCCR = 0;
+  FPU->FPCCR = 0;
   asm volatile ("LDR     R0, =0x40023844 ;");
   // RCC_APB2ENR (+0x18)
   asm volatile ("LDR     R1, =0x4000 ;");
@@ -437,10 +437,10 @@ void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress) {
   terminator();
 }
 
-void HardFaultVector(void) __attribute__((alias("report_exception")));
-void MemManageVector(void) __attribute__((alias("report_exception")));
-void BusFaultVector(void) __attribute__((alias("report_exception")));
-void UsageFaultVector(void) __attribute__((alias("report_exception")));
+void HardFault_Handler(void) __attribute__((alias("report_exception")));
+void MemManage_Handler(void) __attribute__((alias("report_exception")));
+void BusFault_Handler(void) __attribute__((alias("report_exception")));
+void UsageFault_Handler(void) __attribute__((alias("report_exception")));
 
 __attribute__ ((naked))
 CH_IRQ_HANDLER(WWDG_IRQHandler){

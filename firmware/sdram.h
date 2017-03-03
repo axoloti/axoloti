@@ -53,11 +53,12 @@
 extern "C" {
 #endif
 
-//FIXME this should not be needed
-#define STM32F429_439xx
+#define STM32F427xx
 
   /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
+
+extern void configSDRAM(void);
 
   /**
    * @brief  FMC SDRAM Bank address
@@ -68,24 +69,24 @@ extern "C" {
    * @brief  FMC SDRAM Memory Width
    */
   /* #define SDRAM_MEMORY_WIDTH   FMC_SDMemory_Width_8b  */
-#define SDRAM_MEMORY_WIDTH    FMC_SDMemory_Width_16b 
+#define SDRAM_MEMORY_WIDTH    FMC_SDRAM_MEM_BUS_WIDTH_16
 
   /**
    * @brief  FMC SDRAM CAS Latency
    */
   /* #define SDRAM_CAS_LATENCY   FMC_CAS_Latency_2  */
-#define SDRAM_CAS_LATENCY    FMC_CAS_Latency_2
+#define SDRAM_CAS_LATENCY    FMC_SDRAM_CAS_LATENCY_2
 
   /**
    * @brief  FMC SDRAM Memory clock period
    */
-#define SDCLOCK_PERIOD    FMC_SDClock_Period_2        /* Default configuration used with LCD */
+#define SDCLOCK_PERIOD    FMC_SDRAM_CLOCK_PERIOD_2        /* Default configuration used with LCD */
   /* #define SDCLOCK_PERIOD    FMC_SDClock_Period_3 */
 
   /**
    * @brief  FMC SDRAM Memory Read Burst feature
    */
-#define SDRAM_READBURST    FMC_Read_Burst_Enable
+#define SDRAM_READBURST    FMC_SDRAM_RBURST_ENABLE
 /*#define SDRAM_READBURST    FMC_Read_Burst_Disable*/    /* Default configuration used with LCD */
 
   /**

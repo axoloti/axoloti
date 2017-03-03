@@ -23,7 +23,7 @@
 #define ADC_CHANNELS 16
 extern unsigned short adcvalues[ADC_CHANNELS];
 
-extern Mutex Mutex_DMAStream_1_7;
+//extern Mutex Mutex_DMAStream_1_7;
 
 void axoloti_board_init(void);
 void adc_init(void);

@@ -45,12 +45,12 @@
  extern "C" {
 #endif
 
-#define STM32F427xx 1
+#define STM32F427xx
 #include <stdint.h>
-//#include <stm32f4xx.h>
+#include <stm32f4xx.h>
 //#define __STM32F4xx_H
 //#include "stm32f427xx.h"
-#include "stm32f4xxc.h"
+//#include "stm32f4xxc.h"
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
@@ -63,8 +63,11 @@
 #define HAL_GPIO_MODULE_ENABLED
 #define HAL_CORTEX_MODULE_ENABLED
    //#define HAL_PCD_MODULE_ENABLED
+#define HAL_DMA_MODULE_ENABLED
 #define HAL_HCD_MODULE_ENABLED
 #define HAL_I2C_MODULE_ENABLED
+#define HAL_SDRAM_MODULE_ENABLED
+
 
 /* ########################## HSE/HSI Values adaptation ##################### */
 /**

@@ -123,7 +123,7 @@ static void InsertHandler(eventid_t id) {
   if (sdcConnect(&SDCD1))
     return;
 
-  err = f_mount(0, &SDC_FS);
+  err = f_mount(&SDC_FS, "/", 1);
   if (err != FR_OK) {
     sdcDisconnect(&SDCD1);
     return;
@@ -156,7 +156,7 @@ void sdcard_init(void) {
   palSetPadMode(GPIOC, 11, PAL_MODE_ALTERNATE(12) | PAL_STM32_OSPEED_HIGHEST);
   palSetPadMode(GPIOC, 12, PAL_MODE_ALTERNATE(12) | PAL_STM32_OSPEED_HIGHEST);
   palSetPadMode(GPIOD, 2, PAL_MODE_ALTERNATE(12) | PAL_STM32_OSPEED_HIGHEST);
-  chThdSleepMilliseconds(50);
+  chThdSleepMicroseconds(1);
   sdcStart(&SDCD1, NULL);
   chThdSleepMilliseconds(50);
 
@@ -190,7 +190,7 @@ void sdcard_unmount(void){
 }
 
 /* Generic large buffer.*/
-uint32_t fbuff[256] __attribute__ ((section (".sram2")));
+uint32_t fbuff[256] __attribute__ ((section (".ram2")));
 
 int sdcard_loadPatch1(char *fname) {
   FIL FileObject;

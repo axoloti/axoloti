@@ -20,12 +20,12 @@
 #include "hal.h"
 #include "usbcfg.h"
 
+#include "chibios_migration.h"
+
 
 /*
- * Serial over USB Driver structure.
+ * USB Driver structure.
  */
-MidiUSBDriver MDU1;
-BulkUSBDriver BDU1;
 
 /*
  * USB Device Descriptor.
@@ -298,8 +298,8 @@ static USBOutEndpointState ep1outstate;
 static const USBEndpointConfig ep1config = {
   USB_EP_MODE_TYPE_BULK,
   NULL,
-  mduDataTransmitted,
-  mduDataReceived,
+  NULL,
+  NULL,
   0x0040,
   0x0040,
   &ep1instate,
@@ -324,8 +324,8 @@ static USBOutEndpointState ep2outstate;
 static const USBEndpointConfig ep2config = {
   USB_EP_MODE_TYPE_BULK,
   NULL,
-  bduDataTransmitted,
-  bduDataReceived,
+  NULL,
+  NULL,
   0x0040,
   0x0040,
   &ep2instate,
@@ -354,8 +354,8 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
     usbInitEndpointI(usbp, USBD2_DATA_REQUEST_EP, &ep2config);
 
     /* Resetting the state of the Bulk driver subsystem.*/
-    bduConfigureHookI(&BDU1);
-    mduConfigureHookI(&MDU1);
+//    bduConfigureHookI(&BDU1);
+//    mduConfigureHookI(&MDU1);
 
     chSysUnlockFromIsr();
     return;
@@ -463,23 +463,5 @@ const USBConfig usbcfg = {
   get_descriptor,
   specialRequestsHook,
   NULL
-};
-
-/*
- * Midi USB driver configuration.
- */
-const MidiUSBConfig midiusbcfg = {
-  &USBD1,
-  USBD1_DATA_REQUEST_EP,
-  USBD1_DATA_AVAILABLE_EP
-};
-
-/*
- * Bulk USB driver configuration.
- */
-const BulkUSBConfig bulkusbcfg = {
-  &USBD1,
-  USBD2_DATA_REQUEST_EP,
-  USBD2_DATA_AVAILABLE_EP
 };
 

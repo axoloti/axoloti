@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -33,72 +33,39 @@
 
 /*===========================================================================*/
 /**
- * @name Kernel parameters and options
+ * @name System timers settings
  * @{
  */
 /*===========================================================================*/
+
+/**
+ * @brief   System time counter resolution.
+ * @note    Allowed values are 16 or 32 bits.
+ */
+#define CH_CFG_ST_RESOLUTION                32
 
 /**
  * @brief   System tick frequency.
  * @details Frequency of the system timer that drives the system ticks. This
  *          setting also defines the system tick time unit.
  */
-#if !defined(CH_FREQUENCY) || defined(__DOXYGEN__)
-#define CH_FREQUENCY                    1000
-#endif
+#define CH_CFG_ST_FREQUENCY                 1000
 
 /**
- * @brief   Round robin interval.
- * @details This constant is the number of system ticks allowed for the
- *          threads before preemption occurs. Setting this value to zero
- *          disables the preemption for threads with equal priority and the
- *          round robin becomes cooperative. Note that higher priority
- *          threads can still preempt, the kernel is always preemptive.
- *
- * @note    Disabling the round robin preemption makes the kernel more compact
- *          and generally faster.
+ * @brief   Time delta constant for the tick-less mode.
+ * @note    If this value is zero then the system uses the classic
+ *          periodic tick. This value represents the minimum number
+ *          of ticks that is safe to specify in a timeout directive.
+ *          The value one is not valid, timeouts are rounded up to
+ *          this value.
  */
-#if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define CH_TIME_QUANTUM                 20
-#endif
-
-/**
- * @brief   Managed RAM size.
- * @details Size of the RAM area to be managed by the OS. If set to zero
- *          then the whole available RAM is used. The core memory is made
- *          available to the heap allocator and/or can be used directly through
- *          the simplified core memory allocator.
- *
- * @note    In order to let the OS manage the whole RAM the linker script must
- *          provide the @p __heap_base__ and @p __heap_end__ symbols.
- * @note    Requires @p CH_USE_MEMCORE.
- */
-#if !defined(CH_MEMCORE_SIZE) || defined(__DOXYGEN__)
-#define CH_MEMCORE_SIZE                 0
-#endif
-
-/**
- * @brief   Idle thread automatic spawn suppression.
- * @details When this option is activated the function @p chSysInit()
- *          does not spawn the idle thread automatically. The application has
- *          then the responsibility to do one of the following:
- *          - Spawn a custom idle thread at priority @p IDLEPRIO.
- *          - Change the main() thread priority to @p IDLEPRIO then enter
- *            an endless loop. In this scenario the @p main() thread acts as
- *            the idle thread.
- *          .
- * @note    Unless an idle thread is spawned the @p main() thread must not
- *          enter a sleep state.
- */
-#if !defined(CH_NO_IDLE_THREAD) || defined(__DOXYGEN__)
-#define CH_NO_IDLE_THREAD               FALSE
-#endif
+#define CH_CFG_ST_TIMEDELTA                 0
 
 /** @} */
 
 /*===========================================================================*/
 /**
- * @name Performance options
+ * @name Kernel parameters and options
  * @{
  */
 /*===========================================================================*/

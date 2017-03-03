@@ -61,8 +61,8 @@
 /*===========================================================================*/
 
 #if !HAL_USE_USB || !CH_USE_QUEUES || !CH_USE_EVENTS
-#error "Bulk USB Driver requires HAL_USE_USB, CH_USE_QUEUES, "
-       "CH_USE_EVENTS"
+//#error "Bulk USB Driver requires HAL_USE_USB, CH_USE_QUEUES, "
+//       "CH_USE_EVENTS"
 #endif
 
 /*===========================================================================*/
@@ -111,9 +111,9 @@ typedef struct {
   /* Driver state.*/                                                        \
   bdustate_t                state;                                          \
   /* Input queue.*/                                                         \
-  InputQueue                iqueue;                                         \
+		input_queue_t                iqueue;                                         \
   /* Output queue.*/                                                        \
-  OutputQueue               oqueue;                                         \
+		output_queue_t               oqueue;                                         \
   /* Input buffer.*/                                                        \
   uint8_t                   ib[BULK_USB_BUFFERS_SIZE];                    \
   /* Output buffer.*/                                                       \

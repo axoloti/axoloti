@@ -933,7 +933,7 @@ static void USBH_Process_OS(void const * argument)
   
   for(;;)
   {
-    event = osMessageGet(((USBH_HandleTypeDef *)argument)->os_event, 0 );
+    event = osMessageGet(((USBH_HandleTypeDef *)argument)->os_event, 1 );
     
 //    if( event.status == osEventMessage )
     {

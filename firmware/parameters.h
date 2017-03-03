@@ -19,12 +19,6 @@
 #define __PARAMETERS_H
 #include <stdint.h>
 
-typedef struct {
-  int32_t header;
-  uint32_t patchID;
-  int32_t value;
-  int32_t index;
-} PExMessage;
 
 //typedef int32_t (*ParameterExchangeFn_t)(int32_t, int32_t);
 // param 1: modvalue

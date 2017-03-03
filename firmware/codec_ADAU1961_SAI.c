@@ -141,7 +141,7 @@ static void ADAU_I2C_Init(void)
 }
 
 unsigned int HAL_GetTick(void) {
-	return halGetCounterValue();
+	return stGetCounter();
 }
 
 int HAL_RCC_GetPCLK1Freq(void) {
@@ -408,7 +408,7 @@ static void dma_sai_a_interrupt_spilink_master(void* dat, uint32_t flags) {
 	palSetPad(GPIOA, 0);
 #endif
 	chSysLockFromIsr();
-	codec_interrupt_timestamp = halGetCounterValue();
+	codec_interrupt_timestamp = stGetCounter();
 	spilink_master_process();
 	chSysUnlockFromIsr();
 	if ((sai_a_dma)->stream->CR & STM32_DMA_CR_CT) {
@@ -428,7 +428,7 @@ static void dma_sai_a_interrupt_spilink_slave(void* dat, uint32_t flags) {
   palSetPadMode(GPIOA, 0, PAL_MODE_OUTPUT_PUSHPULL);
   palSetPad(GPIOA, 0);
 #endif
-  codec_interrupt_timestamp = halGetCounterValue();
+  codec_interrupt_timestamp = stGetCounter();
   spilink_slave_process();
 
   if ((sai_a_dma)->stream->CR & STM32_DMA_CR_CT) {

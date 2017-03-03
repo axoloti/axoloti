@@ -23,6 +23,16 @@ ifeq ($(USE_LINK_GC),)
   USE_LINK_GC = no
 endif
 
+# Linker extra options here.
+ifeq ($(USE_LDOPT),)
+  USE_LDOPT = 
+endif
+
+# Enable this if you want link time optimizations (LTO)
+ifeq ($(USE_LTO),)
+  USE_LTO = no
+endif
+
 # If enabled, this option allows to compile the application in THUMB mode.
 ifeq ($(USE_THUMB),)
   USE_THUMB = yes
@@ -30,7 +40,13 @@ endif
 
 # Enable this if you want to see the full log while compiling.
 ifeq ($(USE_VERBOSE_COMPILE),)
-  USE_VERBOSE_COMPILE = yes
+  USE_VERBOSE_COMPILE = no
+endif
+
+# If enabled, this option makes the build process faster by not compiling
+# modules not used in the current configuration.
+ifeq ($(USE_SMART_BUILD),)
+  USE_SMART_BUILD = yes
 endif
 
 #
@@ -41,14 +57,27 @@ endif
 # Architecture or project specific options
 #
 
+# Stack size to be allocated to the Cortex-M process stack. This stack is
+# the stack used by the main() thread.
+ifeq ($(USE_PROCESS_STACKSIZE),)
+  USE_PROCESS_STACKSIZE = 0x400
+endif
+
+# Stack size to the allocated to the Cortex-M main/exceptions stack. This
+# stack is used for processing interrupts and exceptions.
+ifeq ($(USE_EXCEPTIONS_STACKSIZE),)
+  USE_EXCEPTIONS_STACKSIZE = 0x400
+endif
+
 # Enables the use of FPU on Cortex-M4 (no, softfp, hard).
 ifeq ($(USE_FPU),)
   USE_FPU = hard
 endif
+AXO_OPT_MODULES =
 
 #Axoloti optional modules, here we define defaults if none supplied
 ifeq ($(AXO_OPT_MODULES),)
-	AXO_OPT_MODULES = BRAIDS RINGS CLOUDS STREAMS ELEMENTS WARPS
+#	AXO_OPT_MODULES = BRAIDS RINGS CLOUDS STREAMS ELEMENTS WARPS
 endif
 
 
@@ -69,7 +98,7 @@ axoloti_release ?= ..
 axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
 
-CHIBIOS = ${axoloti_release}/chibios
+CHIBIOS = ${axoloti_release}/ChibiOS_16.1.7
 
 
 # theoretically should be this...., but CSRC expansion cannot cope with escape spaces
@@ -82,10 +111,14 @@ MUTABLE_INSTRUMENTS = ${FIRMWARE}/mutable_instruments
 
 
 include board.mk
-include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
+include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
+# HAL-OSAL files (optional).
 include $(CHIBIOS)/os/hal/hal.mk
-include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
-include $(CHIBIOS)/os/kernel/kernel.mk
+include $(CHIBIOS)/os/hal/ports/STM32/STM32F4xx/platform.mk
+include $(CHIBIOS)/os/hal/osal/rt/osal.mk
+# RTOS files (optional).
+include $(CHIBIOS)/os/rt/rt.mk
+include $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 	
 include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 
@@ -95,35 +128,7 @@ CMSIS = ${axoloti_release}/CMSIS/
 # Define linker script file here
 LDSCRIPT= STM32F427xG.ld
 
-
-# C sources that can be compiled in ARM or THUMB mode depending on the global
-# setting.
-CSRC = $(PORTSRC) \
-       $(KERNSRC) \
-       $(HALSRC) \
-       $(PLATFORMSRC) \
-       $(BOARDSRC) \
-       $(FATFSSRC) \
-       $(CHIBIOS)/os/various/chprintf.c \
-       $(CHIBIOS)/os/various/memstreams.c \
-       ${FIRMWARE}/axoloti_control.c \
-       ${FIRMWARE}/codec.c \
-       ${FIRMWARE}/axoloti.c \
-       ${FIRMWARE}/axoloti_filters.c \
-       ${FIRMWARE}/axoloti_math.c \
-       ${FIRMWARE}/axoloti_oscs.c \
-       ${FIRMWARE}/axoloti_board.c \
-       ${FIRMWARE}/midi.c \
-       ${FIRMWARE}/ui.c \
-       ${FIRMWARE}/glcdfont.c \
-       ${FIRMWARE}/usbcfg.c \
-       ${FIRMWARE}/sdcard.c \
-       ${FIRMWARE}/pconnection.c \
-       ${FIRMWARE}/parameters.c \
-       ${FIRMWARE}/main.c \
-       ${FIRMWARE}/patch.c \
-       ${FIRMWARE}/flash.c \
-       ${FIRMWARE}/virtual_control.c \
+CMSIS_SRC = \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_bitreversal.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_f32.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_q15.c \
@@ -160,8 +165,6 @@ CSRC = $(PORTSRC) \
        ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mag_q31.c \
        ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mult_cmplx_q15.c \
        ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mag_q15.c \
-       ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_cos_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sin_q31.c \
        ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q31.c \
        ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q15.c \
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_init_q31.c \
@@ -180,8 +183,43 @@ CSRC = $(PORTSRC) \
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_lattice_q31.c\
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_iir_lattice_init_q31.c\
        ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_iir_lattice_q31.c\
+       ${CMSIS}/DSP_Lib/Source/CommonTables/arm_const_structs.c
+
+# C sources that can be compiled in ARM or THUMB mode depending on the global
+# setting.
+CSRC = $(STARTUPSRC) \
+       $(KERNSRC) \
+       $(PORTSRC) \
+       $(OSALSRC) \
+       $(HALSRC) \
+       $(PLATFORMSRC) \
+       $(BOARDSRC) \
+       $(FATFSSRC) \
+       $(CHIBIOS)/os/hal/lib/streams/chprintf.c \
+       $(CHIBIOS)/os/hal/lib/streams/memstreams.c \
+       ${FIRMWARE}/axoloti_control.c \
+       ${FIRMWARE}/codec.c \
+       ${FIRMWARE}/axoloti.c \
+       ${FIRMWARE}/axoloti_filters.c \
+       ${FIRMWARE}/axoloti_math.c \
+       ${FIRMWARE}/axoloti_oscs.c \
+       ${FIRMWARE}/axoloti_board.c \
+       ${FIRMWARE}/midi.c \
+       ${FIRMWARE}/midi_usb.c \
+       ${FIRMWARE}/ui.c \
+       ${FIRMWARE}/glcdfont.c \
+       ${FIRMWARE}/usbcfg.c \
+       ${FIRMWARE}/sdcard.c \
+       ${FIRMWARE}/sdram.c \
+       ${FIRMWARE}/pconnection.c \
+       ${FIRMWARE}/parameters.c \
+       ${FIRMWARE}/main.c \
+       ${FIRMWARE}/patch.c \
+       ${FIRMWARE}/flash.c \
+       ${FIRMWARE}/virtual_control.c \
+       ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_cos_q31.c \
+       ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sin_q31.c \
        ${CMSIS}/DSP_Lib/Source/CommonTables/arm_common_tables.c \
-       ${CMSIS}/DSP_Lib/Source/CommonTables/arm_const_structs.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_core.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ioreq.c \
@@ -195,12 +233,11 @@ CSRC = $(PORTSRC) \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_hcd.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c \
+       ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fmc.c \
        ${FIRMWARE}/usbh_midi_core.c \
        ${FIRMWARE}/usbh_vendor.c \
        ${FIRMWARE}/usbh_conf.c \
        ${FIRMWARE}/serial_midi.c \
-       ${FIRMWARE}/bulk_usb.c \
-       ${FIRMWARE}/midi_usb.c \
        ${FIRMWARE}/spilink.c \
        ${FIRMWARE}/spidb.c \
        ${FIRMWARE}/crc32.c \
@@ -208,6 +245,9 @@ CSRC = $(PORTSRC) \
        ${FIRMWARE}/watchdog.c \
        ${FIRMWARE}/sysmon.c \
        ${FIRMWARE}/axoloti_memory.c
+
+
+
 
 #optional modules
 ifneq (,$(findstring BRAIDS,$(AXO_OPT_MODULES)))
@@ -316,15 +356,16 @@ TCSRC =
 TCPPSRC =
 
 # List ASM source files here
-ASMSRC = $(PORTASM) \
+ASMSRC = $(STARTUPASM) $(PORTASM) $(OSALASM) \
          ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_bitreversal2.s
 
 INCDIR = ${CMSIS}/Include \
          ${CMSIS}/DSP_Lib/Include \
-		 $(PORTINC) $(KERNINC) $(TESTINC) \
-         $(HALINC) $(PLATFORMINC) $(BOARDINC) \
+		 $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
+         $(HALINC) $(PLATFORMINC) $(BOARDINC) $(TESTINC) \
          $(FATFSINC) \
          $(CHIBIOS)/os/various \
+         $(CHIBIOS)/os/hal/lib/streams \
          ${FIRMWARE}/STM32_USB_Host_Library/Core/Inc \
          ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Inc \
          ${FIRMWARE}/STM32F4xx_HAL_Driver/Inc \
@@ -423,5 +464,5 @@ ULIBS = -lm
 # End of user defines
 ##############################################################################
 
-RULESPATH = $(CHIBIOS)/os/ports/GCC/ARMCMx
+RULESPATH = $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC
 include $(RULESPATH)/rules.mk

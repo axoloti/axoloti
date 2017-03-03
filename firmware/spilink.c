@@ -25,8 +25,8 @@
 bool_t spilink_toggle;
 Thread *pThreadSpilink = 0;
 
-spilink_data_t spilink_tx[2] __attribute__ ((section (".sram3")));
-spilink_data_t spilink_rx[2] __attribute__ ((section (".sram3")));
+spilink_data_t spilink_tx[2] __attribute__ ((section (".ram3")));
+spilink_data_t spilink_rx[2] __attribute__ ((section (".ram3")));
 
 spilink_channels_t *spilink_rx_samples;
 spilink_channels_t *spilink_tx_samples;

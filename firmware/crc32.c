@@ -31,7 +31,7 @@ uint32_t revbit(uint32_t data) {
 
 uint32_t CalcCRC32(uint8_t *buffer, uint32_t size) {
   uint32_t i, j;
-  uint32_t ui32;
+  uint32_t ui32x;
 
   RCC->AHB1ENR |= RCC_AHB1ENR_CRCEN;
   CRC->CR = 1;
@@ -43,26 +43,26 @@ uint32_t CalcCRC32(uint8_t *buffer, uint32_t size) {
   i = size >> 2;
 
   while (i--) {
-    ui32 = *((uint32_t *)buffer);
+    ui32x = *((uint32_t *)buffer);
     buffer += 4;
-    ui32 = revbit(ui32); //reverse the bit order of input data
-    CRC->DR = ui32;
+    ui32x = revbit(ui32x); //reverse the bit order of input data
+    CRC->DR = ui32x;
     if ((i && 0xFFF) == 0)
       watchdog_feed();
   }
-  ui32 = CRC->DR;
+  ui32x = CRC->DR;
 
-  ui32 = revbit(ui32); //reverse the bit order of output data
+  ui32x = revbit(ui32x); //reverse the bit order of output data
   i = size & 3;
   while (i--) {
-    ui32 ^= (u32) * buffer++;
+    ui32x ^= (uint32_t) * buffer++;
 
     for (j = 0; j < 8; j++)
-      if (ui32 & 1)
-        ui32 = (ui32 >> 1) ^ 0xEDB88320;
+      if (ui32x & 1)
+        ui32x = (ui32x >> 1) ^ 0xEDB88320;
       else
-        ui32 >>= 1;
+        ui32x >>= 1;
   }
-  ui32 ^= 0xffffffff; //xor with 0xffffffff
-  return ui32; //now the output is compatible with windows/winzip/winrar
+  ui32x ^= 0xffffffff; //xor with 0xffffffff
+  return ui32x; //now the output is compatible with windows/winzip/winrar
 }

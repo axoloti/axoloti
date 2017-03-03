@@ -19,179 +19,73 @@
 /*
  * ST32F427xG memory setup.
  */
-
+ 
+/*
 __main_stack_size__     = 0x400;
 __process_stack_size__  = 0x400;
-
 MEMORY
 {
-    flash (rx): org = 0x08000000, len = 896k /* last 128kB for patch storage*/
-    ram : org = 0x20000200, len = 0x0AE00 /* 44k - first 0x200 for vector table */
-    SRAM2  : org = 0x2001E000, len = 0x00002000 /* second half (8kB) of SRAM2 for DMA*/      
+    flash (rx): org = 0x08000000, len = 896k 
+    ram : org = 0x20000200, len = 0x0AE00 
+    SRAM2  : org = 0x2001E000, len = 0x00002000  
     SRAM3  : org = 0x20020000, len = 0x00010000
-    CCMRAMEND  : org = 0x1000C000, len = 10k /* for stacks */    
+    CCMRAMEND  : org = 0x1000C000, len = 10k 
     sdram : org = 0xC0000000, len = 0x400000
 }
+*/
 
-__ram_start__           = ORIGIN(ram);
-__ram_size__            = LENGTH(ram);
-__ram_end__             = __ram_start__ + __ram_size__;
 
-__sdram_start__ = ORIGIN(sdram);
-__sdram_size__ = LENGTH(sdram);
-__sdram_end__ = __sdram_start__ + __sdram_size__;
+/*
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
 
-ENTRY(ResetHandler)
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-SECTIONS
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+/*
+ * ST32F429xI memory setup.
+ * Note: Use of ram1, ram2 and ram3 is mutually exclusive with use of ram0.
+ */
+MEMORY
 {
-    . = 0;
-    _text = .;
-
-    startup : ALIGN(16) SUBALIGN(16)
-    {
-        KEEP(*(vectors))
-    } > flash
-
-    constructors : ALIGN(4) SUBALIGN(4)
-    {
-        PROVIDE(__init_array_start = .);
-        KEEP(*(SORT(.init_array.*)))
-        KEEP(*(.init_array))
-        PROVIDE(__init_array_end = .);
-    } > flash
-
-    destructors : ALIGN(4) SUBALIGN(4)
-    {
-        PROVIDE(__fini_array_start = .);
-        KEEP(*(.fini_array))
-        KEEP(*(SORT(.fini_array.*)))
-        PROVIDE(__fini_array_end = .);
-    } > flash
-
-    .text : ALIGN(16) SUBALIGN(16)
-    {
-        *(.text.startup.*)
-        *(.text)
-        *(.text.*)
-        *(.rodata)
-        *(.rodata.*)
-        *(.glue_7t)
-        *(.glue_7)
-        *(.gcc*)
-    } > flash
-
-    .ARM.extab :
-    {
-        *(.ARM.extab* .gnu.linkonce.armextab.*)
-    } > flash
-
-    .ARM.exidx : {
-        PROVIDE(__exidx_start = .);
-        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-        PROVIDE(__exidx_end = .);
-     } > flash
-
-    .eh_frame_hdr :
-    {
-        *(.eh_frame_hdr)
-    } > flash
-
-    .eh_frame : ONLY_IF_RO
-    {
-        *(.eh_frame)
-    } > flash
-    
-    .textalign : ONLY_IF_RO
-    {
-        . = ALIGN(8);
-    } > flash
-
-    .samples :  ONLY_IF_RO
-    {
-        . = ALIGN(8);
-    } > flash
-
-
-    _etext = .;
-    _textdata = _etext;
-
-    .stacks :
-    {
-        . = ALIGN(8);
-        __main_stack_base__ = .;
-        . += __main_stack_size__;
-        . = ALIGN(8);
-        __main_stack_end__ = .;
-        __process_stack_base__ = .;
-        __main_thread_stack_base__ = .;
-        . += __process_stack_size__;
-        . = ALIGN(8);
-        __process_stack_end__ = .;
-        __main_thread_stack_end__ = .;
-    } > CCMRAMEND
-
-    .data :
-    {
-        . = ALIGN(4);
-        PROVIDE(_data = .);
-        *(.data)
-        . = ALIGN(4);
-        *(.data.*)
-        . = ALIGN(4);
-        *(.ramtext)
-        . = ALIGN(4);
-        PROVIDE(_edata = .);
-    } > ram AT > flash
-
-
-    .flashend :
-    {
-        . = ALIGN(4);
-        LONG(0x12345678)
-        PROVIDE(_flash_end = .);
-    } > flash
-
-    .bss :
-    {
-        . = ALIGN(4);
-        PROVIDE(_bss_start = .);
-        *(.bss)
-        . = ALIGN(4);
-        *(.bss.*)
-        . = ALIGN(4);
-        *(COMMON)
-        . = ALIGN(4);
-        PROVIDE(_bss_end = .);
-    } > ram
-    
-    .sram2 (NOLOAD): ALIGN(4) SUBALIGN(4) 
-    {
-        * (.sram2);
-        * (.sram2.*);
-    } > SRAM2    
-
-    .sram3 (NOLOAD): ALIGN(4) SUBALIGN(4) 
-    {
-        * (.sram3);
-        * (.sram3.*);
-    } > SRAM3
-
-    .ccmramend (NOLOAD): ALIGN(4) SUBALIGN(4)  
-    {
-        * (.ccmramend);
-        * (.ccmramend.*);
-    } > CCMRAMEND
-
-    .sdram (NOLOAD) : ALIGN(4) SUBALIGN(4)
-    {
-        KEEP(*(.sdram))
-        KEEP(*(.sdram.*))
-    } > sdram
+    flash : org = 0x08000000, len = 896k    /* last 128kB reserved for patch storage*/
+    ram0  : org = 0x20000000, len = 192k    /* SRAM1 + SRAM2 + SRAM3 */
+    ram1  : org = 0x20000200, len = 0x0AE00 /* SRAM1 */
+    ram2  : org = 0x2001E000, len = 8k      /* 2nd half of SRAM2 */
+    ram3  : org = 0x20020000, len = 64k     /* SRAM3 */
+    ram4  : org = 0x1000C000, len = 10k     /* CCM SRAM */
+    ram5  : org = 0x40024000, len = 4k      /* BCKP SRAM */
+    ram6  : org = 0x00000000, len = 0
+    ram7  : org = 0x00000000, len = 0
 }
 
-PROVIDE(end = .);
-_end            = .;
+/* RAM region to be used for Main stack. This stack accommodates the processing
+   of all exceptions and interrupts*/
+REGION_ALIAS("MAIN_STACK_RAM", ram4);
 
-__heap_base__   = _end;
-__heap_end__    = __ram_end__;
+/* RAM region to be used for the process stack. This is the stack used by
+   the main() function.*/
+REGION_ALIAS("PROCESS_STACK_RAM", ram4);
+
+/* RAM region to be used for data segment.*/
+REGION_ALIAS("DATA_RAM", ram1);
+
+/* RAM region to be used for BSS segment.*/
+REGION_ALIAS("BSS_RAM", ram1);
+
+/* RAM region to be used for the default heap.*/
+REGION_ALIAS("HEAP_RAM", ram3);
+
+INCLUDE rules.ld
+
+PROVIDE(_flash_end = _etext);
+

@@ -19,6 +19,7 @@
 #define __SDCARD_H
 
 #include "ch.h"
+#include "chibios_migration.h"
 
 void sdcard_init(void);
 int sdcard_loadPatch1(char *fname);

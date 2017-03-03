@@ -18,13 +18,16 @@
 
 #include "axoloti_defines.h"
 
+
+#include "ch.h"
+#include "hal.h"
+
+
 #if (BOARD_AXOLOTI_V05)
 #include "sdram.h"
 #include "stm32f4xx_fmc.h"
 #endif
 
-#include "ch.h"
-#include "hal.h"
 #include "chprintf.h"
 #include "shell.h"
 #include "string.h"
@@ -48,9 +51,9 @@
 #include "spilink.h"
 
 #if (BOARD_AXOLOTI_V05)
-#include "sdram.c"
-#include "stm32f4xx_fmc.c"
-#define ENABLE_USB_HOST
+//#include "sdram.c"
+//#include "stm32f4xx_fmc.c"
+//#define ENABLE_USB_HOST
 #endif
 /*===========================================================================*/
 /* Initialization and main thread.                                           */
@@ -114,6 +117,7 @@ int main(void) {
   InitPatch0();
 
   InitPConnection();
+  midi_usb_init();
 
   // display SPI CS?
   palSetPadMode(GPIOC, 1, PAL_MODE_OUTPUT_PUSHPULL);
@@ -130,11 +134,11 @@ int main(void) {
 // connect PB10 to ground to enable slave mode
    is_master = palReadPad(GPIOB, GPIOB_PIN10);
 #endif
+  start_dsp_thread();
   codec_init(is_master);
   adc_init();
   axoloti_math_init();
   midi_init();
-  start_dsp_thread();
 
   if (!palReadPad(SW2_PORT, SW2_PIN)) { // button S2 not pressed
 //    watchdog_init();

@@ -45,8 +45,12 @@
  ******************************************************************************
  */
 
+#define STM32F427xx
+
 #include "sdram.h"
-#include "stm32f4xx_fmc.h"
+#include "stm32f4xx_ll_fmc.h"
+#include "stm32f4xx_hal_dma.h"
+#include "stm32f4xx_hal_sdram.h"
 #include "ch.h"
 #include "hal.h"
 #include "axoloti_board.h"
@@ -59,8 +63,8 @@
  * @retval None
  */
 void SDRAM_Init(void) {
-  FMC_SDRAMInitTypeDef FMC_SDRAMInitStructure;
-  FMC_SDRAMTimingInitTypeDef FMC_SDRAMTimingInitStructure;
+  FMC_SDRAM_InitTypeDef FMC_SDRAMInitStructure;
+  FMC_SDRAM_TimingTypeDef FMC_SDRAMTimingInitStructure;
 
   /* Enable FMC clock */
   rccEnableAHB3(RCC_AHB3ENR_FMCEN, FALSE);
@@ -69,40 +73,40 @@ void SDRAM_Init(void) {
   /* FMC SDRAM Bank configuration */
   /* Timing configuration for 84 Mhz of SD clock frequency (168Mhz/2) */
   /* TMRD: 2 Clock cycles */
-  FMC_SDRAMTimingInitStructure.FMC_LoadToActiveDelay = 2;
+  FMC_SDRAMTimingInitStructure.LoadToActiveDelay = 2;
   /* TXSR: min=70ns (6x11.90ns) */
-  FMC_SDRAMTimingInitStructure.FMC_ExitSelfRefreshDelay = 7;
+  FMC_SDRAMTimingInitStructure.ExitSelfRefreshDelay = 7;
   /* TRAS: min=42ns (4x11.90ns) max=120k (ns) */
-  FMC_SDRAMTimingInitStructure.FMC_SelfRefreshTime = 4;
+  FMC_SDRAMTimingInitStructure.SelfRefreshTime = 4;
   /* TRC:  min=63 (6x11.90ns) */
-  FMC_SDRAMTimingInitStructure.FMC_RowCycleDelay = 7;
+  FMC_SDRAMTimingInitStructure.RowCycleDelay = 7;
   /* TWR:  2 Clock cycles */
-  FMC_SDRAMTimingInitStructure.FMC_WriteRecoveryTime = 2;
+  FMC_SDRAMTimingInitStructure.WriteRecoveryTime = 2;
   /* TRP:  15ns => 2x11.90ns */
-  FMC_SDRAMTimingInitStructure.FMC_RPDelay = 2;
+  FMC_SDRAMTimingInitStructure.RPDelay = 2;
   /* TRCD: 15ns => 2x11.90ns */
-  FMC_SDRAMTimingInitStructure.FMC_RCDDelay = 2;
+  FMC_SDRAMTimingInitStructure.RCDDelay = 2;
 
   /* FMC SDRAM control configuration */
-  FMC_SDRAMInitStructure.FMC_Bank = FMC_Bank1_SDRAM;
+  FMC_SDRAMInitStructure.SDBank = FMC_SDRAM_BANK1;
   /* Row addressing: [7:0] */
-  FMC_SDRAMInitStructure.FMC_ColumnBitsNumber = FMC_ColumnBits_Number_8b;
+  FMC_SDRAMInitStructure.ColumnBitsNumber = FMC_SDRAM_COLUMN_BITS_NUM_8;
   /* Column addressing: [11:0] */
-  FMC_SDRAMInitStructure.FMC_RowBitsNumber = FMC_RowBits_Number_12b;
-  FMC_SDRAMInitStructure.FMC_SDMemoryDataWidth = SDRAM_MEMORY_WIDTH;
-  FMC_SDRAMInitStructure.FMC_InternalBankNumber = FMC_InternalBank_Number_4;
-  FMC_SDRAMInitStructure.FMC_CASLatency = SDRAM_CAS_LATENCY;
-  FMC_SDRAMInitStructure.FMC_WriteProtection = FMC_Write_Protection_Disable;
-  FMC_SDRAMInitStructure.FMC_SDClockPeriod = SDCLOCK_PERIOD;
-  FMC_SDRAMInitStructure.FMC_ReadBurst = SDRAM_READBURST;
-  FMC_SDRAMInitStructure.FMC_ReadPipeDelay = FMC_ReadPipe_Delay_1;
-  FMC_SDRAMInitStructure.FMC_SDRAMTimingStruct = &FMC_SDRAMTimingInitStructure;
+  FMC_SDRAMInitStructure.RowBitsNumber = FMC_SDRAM_ROW_BITS_NUM_12;
+  FMC_SDRAMInitStructure.MemoryDataWidth = SDRAM_MEMORY_WIDTH;
+  FMC_SDRAMInitStructure.InternalBankNumber = FMC_SDRAM_INTERN_BANKS_NUM_4;
+  FMC_SDRAMInitStructure.CASLatency = SDRAM_CAS_LATENCY;
+  FMC_SDRAMInitStructure.WriteProtection = FMC_SDRAM_WRITE_PROTECTION_DISABLE;
+  FMC_SDRAMInitStructure.SDClockPeriod = SDCLOCK_PERIOD;
+  FMC_SDRAMInitStructure.ReadBurst = SDRAM_READBURST;
+  FMC_SDRAMInitStructure.ReadPipeDelay = FMC_SDRAM_RPIPE_DELAY_1;
 
   /* FMC SDRAM bank initialization */
-  FMC_SDRAMInit(&FMC_SDRAMInitStructure);
+  FMC_SDRAM_Init(FMC_Bank5_6,&FMC_SDRAMInitStructure);
+  FMC_SDRAM_Timing_Init(FMC_Bank5_6, &FMC_SDRAMTimingInitStructure, FMC_SDRAMInitStructure.SDBank);
 
   /* FMC SDRAM device initialization sequence */
-  SDRAM_InitSequence();
+//  SDRAM_InitSequence();
 
 }
 
@@ -184,6 +188,7 @@ void memTest(void) {
   }
 }
 
+#if 0
 /**
  * @brief  Executes the SDRAM memory initialization sequence.
  * @param  None.
@@ -332,3 +337,4 @@ void SDRAM_ReadBuffer(uint32_t* pBuffer, uint32_t uwReadAddress,
   }
 }
 
+#endif
