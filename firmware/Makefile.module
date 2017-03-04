@@ -1,0 +1,20 @@
+$(info building ${MODULE})
+
+BUILDDIR := ${BDIR}/${MODULE}
+MODLIB := lib${MODULE}.a
+MODDIR := ../modules/${MODULE}
+MODOBJS := $(addprefix $(BUILDDIR)/, $(MOD_OBJS))  
+
+$(BUILDDIR)/%.o: $(MODDIR)/%.cpp
+	@echo $(MODULE) : $(MODDIR) $(BUILDDIR) building $< $@
+	@rm -rf ${BUILDDIR}
+	@mkdir -p ${BUILDDIR}
+	@$(CPP) $(CCFLAGS) -H $(IINCDIR) -I ${MODDIR} -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
+
+${BDIR}/${MODLIB}: $(MODOBJS)
+	@echo $(MODULE) : building $< 
+	@$(AR) rcs ${BDIR}/${MODLIB} $(MODOBJS)
+	@$(NM) -g ${BDIR}/${MODLIB} > ${BUILDDIR}/defines.sym
+	@$(AWK) -v nspace="${MODULE}" -f ../firmware/createSym.awk < ${BUILDDIR}/defines.sym > ${BUILDDIR}/redefines.sym
+	@$(CP) --redefine-syms ${BUILDDIR}/redefines.sym ${BDIR}/${MODLIB} ${BDIR}/${MODLIB}
+	

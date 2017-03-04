@@ -13,6 +13,7 @@ CP=arm-none-eabi-objcopy
 DMP=arm-none-eabi-objdump
 AR=arm-none-eabi-ar
 NM=arm-none-eabi-nm
+AWK=awk
 
 
 axoloti_runtime ?= ..
