@@ -62,7 +62,7 @@ MEMORY
     ram1  : org = 0x20000200, len = 0x0AE00 /* SRAM1 */
     ram2  : org = 0x2001E000, len = 8k      /* 2nd half of SRAM2 */
     ram3  : org = 0x20020000, len = 64k     /* SRAM3 */
-    ram4  : org = 0x1000C000, len = 10k     /* CCM SRAM */
+    ram4  : org = 0x1000C000, len = 10k     /* CCM SRAM end*/
     ram5  : org = 0x40024000, len = 4k      /* BCKP SRAM */
     ram6  : org = 0x00000000, len = 0
     ram7  : org = 0x00000000, len = 0
@@ -87,5 +87,11 @@ REGION_ALIAS("HEAP_RAM", ram3);
 
 INCLUDE rules.ld
 
-PROVIDE(_flash_end = _etext);
-
+SECTIONS {
+    .flashend :
+    {
+        . = ALIGN(4);
+        LONG(0x12345678)
+        PROVIDE(_flash_end = .);
+    } > flash
+}
