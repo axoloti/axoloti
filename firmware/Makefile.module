@@ -1,20 +1,82 @@
-$(info building ${MODULE})
+CCFLAGS = -nostdlib -fno-exceptions -fno-rtti -mcpu=cortex-m4 -O3 -fomit-frame-pointer -falign-functions=16 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wunused-parameter -DCORTEX_USE_FPU=TRUE -DTHUMB_PRESENT -mno-thumb-interwork -DTHUMB_NO_INTERWORKING -mthumb -DTHUMB -std=c++11 -DARM_MATH_CM4 -D__FPU_PRESENT -fno-math-errno -fno-threadsafe-statics -fno-use-cxa-atexit -Wno-unused-parameter
+LDFLAGS = -nostartfiles -Tramlink.ld -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb  -mno-thumb-interwork
+
+#-mcpu=cortex-m4   
+#-mno-thumb-interwork 
+#-mthumb
+#-Wl,-Map=build/ch.map,--cref,--no-warn-mismatch,--gc-sections 
+ 
+CC=arm-none-eabi-gcc
+CPP=arm-none-eabi-g++
+LD=arm-none-eabi-gcc
+CP=arm-none-eabi-objcopy
+DMP=arm-none-eabi-objdump
+AR=arm-none-eabi-ar
+NM=arm-none-eabi-nm
+AWK=awk
+
+
+axoloti_runtime ?= ..
+axoloti_release ?= ..
+axoloti_home ?= ..
+axoloti_firmware ?= ../firmware
+
+
+CHIBIOS = ${axoloti_release}/chibios
+CMSIS = ${axoloti_release}/CMSIS
+
+SPACE := 
+SPACE += 
+BDIR=$(subst $(SPACE),\ ,${axoloti_home}/build)
+# theoretically should be this...., but CSRC expansion cannot cope with escape spaces
+#FIRMWARE=$(subst $(SPACE),\ ,${axoloti_firmware})
+FIRMWARE=.
+
+$(info BDIR = ${BDIR})
+$(info FIRMWARE = ${FIRMWARE})
+
+include $(CHIBIOS)/boards/ST_STM32F4_DISCOVERY/board.mk
+include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
+include $(CHIBIOS)/os/hal/hal.mk
+include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
+include $(CHIBIOS)/os/kernel/kernel.mk
+include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
+
+INCDIR = $(CMSIS)/Include $(CMSIS)/DSP_Lib/Include \
+         $(PORTINC) $(KERNINC) $(TESTINC) \
+         $(HALINC) $(PLATFORMINC) $(BOARDINC) $(FATFSINC) \
+         ${FIRMWARE} $(CHIBIOS) ${FIRMWARE}/mutable_instruments
+
+# Paths
+IINCDIR   = $(patsubst %,-I%,$(INCDIR) $(DINCDIR) $(UINCDIR))
+LLIBDIR   = $(patsubst %,-L%,$(DLIBDIR) $(ULIBDIR))
+ 
+
+# above from Makefile.patch, we can possible remove/and make common after tests
+
+
+$(info building module ${MODULE})
+
+include ../modules/$(MODULE)/Makefile
 
 BUILDDIR := ${BDIR}/${MODULE}
 MODLIB := lib${MODULE}.a
 MODDIR := ../modules/${MODULE}
 MODOBJS := $(addprefix $(BUILDDIR)/, $(MOD_OBJS))  
 
-$(BUILDDIR)/%.o: $(MODDIR)/%.cpp
-	@echo $(MODULE) : $(MODDIR) $(BUILDDIR) building $< $@
-	@rm -rf ${BUILDDIR}
+$(BUILDDIR)/%.o: $(MODDIR)/%.cpp ${BDIR}/xpatch.h.gch
 	@mkdir -p ${BUILDDIR}
 	@$(CPP) $(CCFLAGS) -H $(IINCDIR) -I ${MODDIR} -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
 
-${BDIR}/${MODLIB}: $(MODOBJS)
-	@echo $(MODULE) : building $< 
-	@$(AR) rcs ${BDIR}/${MODLIB} $(MODOBJS)
-	@$(NM) -g ${BDIR}/${MODLIB} > ${BUILDDIR}/defines.sym
+${BUILDDIR}/${MODLIB}: $(MODOBJS)
+	@$(AR) rcs ${BUILDDIR}/${MODLIB} $(MODOBJS)
+	@$(NM) -g ${BUILDDIR}/${MODLIB} > ${BUILDDIR}/defines.sym
 	@$(AWK) -v nspace="${MODULE}" -f ../firmware/createSym.awk < ${BUILDDIR}/defines.sym > ${BUILDDIR}/redefines.sym
-	@$(CP) --redefine-syms ${BUILDDIR}/redefines.sym ${BDIR}/${MODLIB} ${BDIR}/${MODLIB}
+	@$(CP) --redefine-syms ${BUILDDIR}/redefines.sym ${BUILDDIR}/${MODLIB} ${BUILDDIR}/${MODLIB}
+
+${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axoloti.h ${FIRMWARE}/parameter_functions.h ${FIRMWARE}/axoloti_math.h ${FIRMWARE}/axoloti_filters.h
+	@echo "Build precompiled header"
+	$(CPP) $(CCFLAGS) $(IINCDIR) -Winvalid-pch -MD -MP -c ${FIRMWARE}/xpatch.h  -o ${BDIR}/xpatch.h.gch
+
 	
+all: ${BUILDDIR}/${MODLIB} ${BDIR}/xpatch.h.gch

@@ -1,4 +1,4 @@
-#include "test.h"
+#include "testb.h"
 float foo::func(int a) {
     return a;
 }

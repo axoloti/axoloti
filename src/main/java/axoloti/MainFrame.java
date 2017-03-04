@@ -73,6 +73,7 @@ import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
 import qcmds.QCmdBringToDFUMode;
+import qcmds.QCmdCompileModule;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdPing;
 import qcmds.QCmdProcessor;
@@ -819,6 +820,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             patchModel.WriteCode();
             qcmdprocessor.WaitQueueFinished();
             Thread.sleep(500);
+            for(String module : patchController.patchModel.getModules()) {
+                qcmdprocessor.AppendToQueue(new QCmdCompileModule(patchController,module));
+             }
             QCmdCompilePatch cp = new QCmdCompilePatch(patchController);
             patchController.GetQCmdProcessor().AppendToQueue(cp);
             qcmdprocessor.WaitQueueFinished();

@@ -60,20 +60,17 @@ all: ${BDIR}/xpatch.bin
 # MODULES (optionally) defined by Axo UI
 # MODULES = test
 
-$(info build modules MODULES = ${MODULES})
-
-MODULE_MAKEFILES := $(patsubst %,../modules/%/Makefile,$(MODULES))
-
-include $(MODULE_MAKEFILES)
+$(info using MODULES = ${MODULES})
 
 MODULE_INC = $(patsubst %,-I../modules/%,$(MODULES))
-MODULE_LIBS = $(patsubst %,${BDIR}/lib%.a,$(MODULES))
-#MODULE_LINKDIR = $(patsubst %,-L {BDIR}/% ,$(MODULES))
-MODULE_LINKDIR = -L$(BDIR)
+MODULE_LIBS = $(foreach MODULE, ${MODULES}, ${BDIR}/$(MODULE)/lib$(MODULE).a)
+#MODULE_LIBS = $(patsubst %,${BDIR}/%/lib%.a,$(MODULES))
+MODULE_LINKDIR = $(patsubst %,-L ${BDIR}/% ,$(MODULES))
 MODULE_LINKLIB = $(patsubst %,-l%,$(MODULES))
 
 $(info MODULE_INC  = ${MODULE_INC})
 $(info MODULE_LIBS = ${MODULE_LIBS})
+$(info MODULE_LINKDIR = ${MODULE_LINKDIR})
 
 ${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axoloti.h ${FIRMWARE}/parameter_functions.h ${FIRMWARE}/axoloti_math.h ${FIRMWARE}/axoloti_filters.h
 	@echo "Build precompiled header"
