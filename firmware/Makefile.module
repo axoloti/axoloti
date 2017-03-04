@@ -43,53 +43,40 @@ include $(CHIBIOS)/os/kernel/kernel.mk
 include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 
 INCDIR = $(CMSIS)/Include $(CMSIS)/DSP_Lib/Include \
-		 $(PORTINC) $(KERNINC) $(TESTINC) \
+         $(PORTINC) $(KERNINC) $(TESTINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(FATFSINC) \
          ${FIRMWARE} $(CHIBIOS) ${FIRMWARE}/mutable_instruments
 
 # Paths
 IINCDIR   = $(patsubst %,-I%,$(INCDIR) $(DINCDIR) $(UINCDIR))
 LLIBDIR   = $(patsubst %,-L%,$(DLIBDIR) $(ULIBDIR))
-           
-all: ${BDIR}/xpatch.bin
+ 
 
-#generate modules dependancy and link parameters
-#MODULE_LIBS = ${BDIR}/libtest.a
-#MODULE_LINK = -L{BDIR}/test -l ${BDIR}/libtest.a
+# above from Makefile.patch, we can possible remove/and make common after tests
 
-# MODULES (optionally) defined by Axo UI
-# MODULES = test
 
-$(info using MODULES = ${MODULES})
+$(info building module ${MODULE})
 
-MODULE_INC = $(patsubst %,-I../modules/%,$(MODULES))
-MODULE_LIBS = $(foreach MODULE, ${MODULES}, ${BDIR}/$(MODULE)/lib$(MODULE).a)
-#MODULE_LIBS = $(patsubst %,${BDIR}/%/lib%.a,$(MODULES))
-MODULE_LINKDIR = $(patsubst %,-L ${BDIR}/% ,$(MODULES))
-MODULE_LINKLIB = $(patsubst %,-l%,$(MODULES))
+include ../modules/$(MODULE)/Makefile
 
-$(info MODULE_INC  = ${MODULE_INC})
-$(info MODULE_LIBS = ${MODULE_LIBS})
-$(info MODULE_LINKDIR = ${MODULE_LINKDIR})
+BUILDDIR := ${BDIR}/${MODULE}
+MODLIB := lib${MODULE}.a
+MODDIR := ../modules/${MODULE}
+MODOBJS := $(addprefix $(BUILDDIR)/, $(MOD_OBJS))  
+
+$(BUILDDIR)/%.o: $(MODDIR)/%.cpp ${BDIR}/xpatch.h.gch
+	@mkdir -p ${BUILDDIR}
+	@$(CPP) $(CCFLAGS) -H $(IINCDIR) -I ${MODDIR} -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
+
+${BUILDDIR}/${MODLIB}: $(MODOBJS)
+	@$(AR) rcs ${BUILDDIR}/${MODLIB} $(MODOBJS)
+	@$(NM) -g ${BUILDDIR}/${MODLIB} > ${BUILDDIR}/defines.sym
+	@$(AWK) -v nspace="${MODULE}" -f ../firmware/createSym.awk < ${BUILDDIR}/defines.sym > ${BUILDDIR}/redefines.sym
+	@$(CP) --redefine-syms ${BUILDDIR}/redefines.sym ${BUILDDIR}/${MODLIB} ${BUILDDIR}/${MODLIB}
 
 ${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axoloti.h ${FIRMWARE}/parameter_functions.h ${FIRMWARE}/axoloti_math.h ${FIRMWARE}/axoloti_filters.h
 	@echo "Build precompiled header"
 	$(CPP) $(CCFLAGS) $(IINCDIR) -Winvalid-pch -MD -MP -c ${FIRMWARE}/xpatch.h  -o ${BDIR}/xpatch.h.gch
 
-
-${BDIR}/xpatch.bin: ${BDIR}/xpatch.cpp ${MODULE_LIBS} ${BDIR}/xpatch.h.gch
-	@echo RM
-	@rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
-	@echo APP
-	@$(CPP) $(CCFLAGS) -H $(IINCDIR) $(MODULE_INC) -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o 
-	@echo LINK
-	@$(LD) $(LDFLAGS) ${BDIR}/xpatch.o ${MODULE_LINKDIR} ${MODULE_LINKLIB} -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${FIRMWARE}/build/axoloti.elf -o ${BDIR}/xpatch.elf
-	@echo BIN
-#	$(CP) -O binary -j .text  -j .init_array -j .rodata -j .rodata\* xpatch.elf xpatch.bin
-#   -j .text.startup -j .text.memcpy  
-	@$(CP) -O binary ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin
-
-clean:
-	@rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst ${BDIR}/xpatch.h.gch
-
 	
+all: ${BUILDDIR}/${MODLIB} ${BDIR}/xpatch.h.gch

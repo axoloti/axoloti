@@ -55,6 +55,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+import qcmds.QCmdCompileModule;
 import qcmds.QCmdLock;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStart;
@@ -1015,6 +1016,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void jMenuItemUploadInternalFlashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadInternalFlashActionPerformed
         getPatchModel().WriteCode();
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
+        for(String module : getPatchModel().getModules()) {
+           qcmdprocessor.AppendToQueue(new QCmdCompileModule(patchController,module));
+        }
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(patchController));
         qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadPatch());
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCopyPatchToFlash());

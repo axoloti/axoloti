@@ -47,6 +47,7 @@ import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
 import qcmds.QCmdChangeWorkingDirectory;
+import qcmds.QCmdCompileModule;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdCreateDirectory;
 import qcmds.QCmdLock;
@@ -298,6 +299,9 @@ public abstract class PatchView implements ModelChangedListener {
         }
         getPatchController().WriteCode();
         qCmdProcessor.setPatchController(null);
+        for(String module : getPatchController().patchModel.getModules()) {
+           qCmdProcessor.AppendToQueue(new QCmdCompileModule(getPatchController(),module));
+        }
         qCmdProcessor.AppendToQueue(new QCmdCompilePatch(getPatchController()));
         qCmdProcessor.AppendToQueue(new QCmdUploadPatch());
         qCmdProcessor.AppendToQueue(new QCmdStart(getPatchController()));

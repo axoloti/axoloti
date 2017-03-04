@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import qcmds.QCmdCompileModule;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
@@ -66,6 +67,9 @@ public class PatchController {
     }
 
     public void Compile() {
+        for(String module : patchModel.getModules()) {
+           GetQCmdProcessor().AppendToQueue(new QCmdCompileModule(this,module));
+        }
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
     }
 
@@ -124,6 +128,9 @@ public class PatchController {
         Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
         QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
+        for(String module : patchModel.getModules()) {
+           qcmdprocessor.AppendToQueue(new QCmdCompileModule(this,module));
+        }
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
         // create subdirs...
 
