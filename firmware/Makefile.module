@@ -45,7 +45,7 @@ include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 INCDIR = $(CMSIS)/Include $(CMSIS)/DSP_Lib/Include \
          $(PORTINC) $(KERNINC) $(TESTINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(FATFSINC) \
-         ${FIRMWARE} $(CHIBIOS) ${FIRMWARE}/mutable_instruments
+         ${FIRMWARE} $(CHIBIOS)
 
 # Paths
 IINCDIR   = $(patsubst %,-I%,$(INCDIR) $(DINCDIR) $(UINCDIR))
@@ -59,14 +59,16 @@ $(info building module ${MODULE})
 
 include ../modules/$(MODULE)/Makefile
 
-BUILDDIR := ${BDIR}/${MODULE}
+BUILDDIR := ${BDIR}/modules/${MODULE}
 MODLIB := lib${MODULE}.a
 MODDIR := ../modules/${MODULE}
 MODOBJS := $(addprefix $(BUILDDIR)/, $(MOD_OBJS))  
 
 $(BUILDDIR)/%.o: $(MODDIR)/%.cpp ${BDIR}/xpatch.h.gch
-	@mkdir -p ${BUILDDIR}
-	@$(CPP) $(CCFLAGS) -H $(IINCDIR) -I ${MODDIR} -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
+	echo @mkdir -p ${BDIR}/build/$(dir $<)
+	@mkdir -p ${BDIR}/build/$(dir $<)
+	@$(CPP) $(CCFLAGS) -H $(IINCDIR) -I ${MODDIR} -Winvalid-pch  --include ${BDIR}/xpatch.h -c  $< -o $@
+	#@$(CPP) $(CCFLAGS) -H $(IINCDIR) -I ${MODDIR} -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
 
 ${BUILDDIR}/${MODLIB}: $(MODOBJS)
 	@$(AR) rcs ${BUILDDIR}/${MODLIB} $(MODOBJS)
