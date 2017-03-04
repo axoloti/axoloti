@@ -785,9 +785,6 @@ void LogTextMessage(const char* format, ...) {
     chEvtSignal(thd_bulk_Writer,evt_bulk_tx_logmessage);
 }
 
-void PExTransmit(void) {
-}
-
 
 /* input data decoder state machine
  *
@@ -809,10 +806,6 @@ void PExTransmit(void) {
  * "AxoC (int length) (char[] filename)" create and open file on sdcard
  * "Axoc" close file on sdcard
  * "AxoA (int length) (byte[] data)" append data on open file on sdcard
- * "AxoB (int or) (int and)" buttons for virtual Axoloti Control
+ * "AxoB (int or) (int and)" buttons for virtual Axoloti Control -> currently not implemented
  */
-
-
-void PExReceive(void) {
-}
 

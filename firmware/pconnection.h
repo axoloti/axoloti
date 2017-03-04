@@ -18,9 +18,6 @@
 #ifndef __PCONNECTION_H
 #define __PCONNECTION_H
 
-void USBDMidiPoll(void);
-void PExTransmit(void);
-void PExReceive(void);
 void InitPConnection(void);
 extern void BootLoaderInit(void);
 void LogTextMessage(const char* format, ...);

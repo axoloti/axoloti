@@ -197,7 +197,7 @@ void SDRAM_Init(void) {
 
 void configSDRAM(void) {
   SDRAM_Init();
-  memTest();
+//  memTest();
 #if 0
   int qsource[16];
   int qdest[16];

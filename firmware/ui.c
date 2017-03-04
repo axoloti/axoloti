@@ -317,8 +317,6 @@ static msg_t ThreadUI(void *arg) {
     }
     AxoboardADCConvert();
     PollMidiIn();
-    PExTransmit();
-    PExReceive();
     chThdSleepMilliseconds(2);
   }
 }
@@ -335,20 +333,6 @@ void AxolotiControlUpdate(void) {
 }
 
 void (*pControlUpdate)(void) = AxolotiControlUpdate;
-
-static WORKING_AREA(waThreadUI, 1172);
-static msg_t ThreadUI(void *arg) {
-  (void)(arg);
-#if CH_USE_REGISTRY
-  chRegSetThreadName("ui");
-#endif
-  while (1) {
-    PExTransmit();
-    PExReceive();
-    chThdSleepMilliseconds(2);
-  }
-  return (msg_t)0;
-}
 #endif
 
 static WORKING_AREA(waThreadUI2, 512);
@@ -426,7 +410,6 @@ void ui_init(void) {
 
   ObjectKvpRoot = &p[0];
 
-  chThdCreateStatic(waThreadUI, sizeof(waThreadUI), NORMALPRIO, ThreadUI, NULL);
   chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2, NULL);
 
   axoloti_control_init();
