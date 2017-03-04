@@ -134,7 +134,7 @@ int serial_MidiGetOutputBufferPending(void) {
 static const SerialConfig sdMidiCfg = {31250, // baud
     0, 0, 0};
 
-static WORKING_AREA(waThreadMidi, 256) __attribute__ ((section (".ram4")));
+static WORKING_AREA(waThreadMidi, 256) CCM;
 
 __attribute__((noreturn))
   static msg_t ThreadMidi(void *arg) {

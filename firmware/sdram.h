@@ -60,50 +60,6 @@ extern "C" {
 
 extern void configSDRAM(void);
 
-  /**
-   * @brief  FMC SDRAM Bank address
-   */
-#define SDRAM_BANK_ADDR     ((uint32_t)0xC0000000)
-
-  /**
-   * @brief  FMC SDRAM Memory Width
-   */
-  /* #define SDRAM_MEMORY_WIDTH   FMC_SDMemory_Width_8b  */
-#define SDRAM_MEMORY_WIDTH    FMC_SDRAM_MEM_BUS_WIDTH_16
-
-  /**
-   * @brief  FMC SDRAM CAS Latency
-   */
-  /* #define SDRAM_CAS_LATENCY   FMC_CAS_Latency_2  */
-#define SDRAM_CAS_LATENCY    FMC_SDRAM_CAS_LATENCY_2
-
-  /**
-   * @brief  FMC SDRAM Memory clock period
-   */
-#define SDCLOCK_PERIOD    FMC_SDRAM_CLOCK_PERIOD_2        /* Default configuration used with LCD */
-  /* #define SDCLOCK_PERIOD    FMC_SDClock_Period_3 */
-
-  /**
-   * @brief  FMC SDRAM Memory Read Burst feature
-   */
-#define SDRAM_READBURST    FMC_SDRAM_RBURST_ENABLE
-/*#define SDRAM_READBURST    FMC_Read_Burst_Disable*/    /* Default configuration used with LCD */
-
-  /**
-   * @brief  FMC SDRAM Mode definition register defines
-   */
-#define SDRAM_MODEREG_BURST_LENGTH_1             ((uint16_t)0x0000)
-#define SDRAM_MODEREG_BURST_LENGTH_2             ((uint16_t)0x0001)
-#define SDRAM_MODEREG_BURST_LENGTH_4             ((uint16_t)0x0002)
-#define SDRAM_MODEREG_BURST_LENGTH_8             ((uint16_t)0x0004)
-#define SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL      ((uint16_t)0x0000)
-#define SDRAM_MODEREG_BURST_TYPE_INTERLEAVED     ((uint16_t)0x0008)
-#define SDRAM_MODEREG_CAS_LATENCY_2              ((uint16_t)0x0020)
-#define SDRAM_MODEREG_CAS_LATENCY_3              ((uint16_t)0x0030)
-#define SDRAM_MODEREG_OPERATING_MODE_STANDARD    ((uint16_t)0x0000)
-#define SDRAM_MODEREG_WRITEBURST_MODE_PROGRAMMED ((uint16_t)0x0000) 
-#define SDRAM_MODEREG_WRITEBURST_MODE_SINGLE     ((uint16_t)0x0200)      
-
   void SDRAM_Init(void);
   void SDRAM_InitSequence(void);
   void SDRAM_WriteBuffer(uint32_t* pBuffer, uint32_t uwWriteAddress,

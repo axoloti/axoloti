@@ -6,7 +6,6 @@ This heavily impacts the usb device stack, moving from byte queues to the synchr
 * a microcontroller reset or crash causes a flood of "Control transfer failed: -9/-4/-99" in the GUI messages rather disconnecting
 * implement usb device midi
 * fix LogTextMessage, without sleeping in between, current implementation will just discard everything but the last string
-* verify/fix sdram initalization
 * fix flasher/sdcard mounter
 * remove "chibios_migration.h" dependencies in firmware (in a separate commit)
   objects/patches probably still need it.

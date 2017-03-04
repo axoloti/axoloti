@@ -288,3 +288,14 @@
  */
 #define STM32_SDC_SDIO_DMA_STREAM           STM32_DMA_STREAM_ID(2, 6)
 
+/*
+ * Header for community drivers.
+ */
+#include "mcuconf_community.h"
+
+#define SRAM1 __attribute__ ((section (".ram1")))
+#define SRAM2 __attribute__ ((section (".ram2")))
+#define SRAM3 __attribute__ ((section (".ram3")))
+#define CCM __attribute__ ((section (".ram4")))
+#define BKPSRAM __attribute__ ((section (".ram5")))
+

@@ -34,8 +34,8 @@ static const I2CConfig i2cfg = {OPMODE_I2C, 100000, STD_DUTY_CYCLE, };
 STM32_DMA_GETCHANNEL(STM32_SPI_SPI3_TX_DMA_STREAM, \
 STM32_SPI3_TX_DMA_CHN)
 
-static uint8_t txbuf[2] __attribute__ ((section (".sram2")));
-static uint8_t rxbuf[2] __attribute__ ((section (".sram2")));
+static uint8_t txbuf[2] SRAM2;
+static uint8_t rxbuf[2] SRAM2;
 
 void codec_CS43L22_hw_init(void) {
   palSetPadMode(GPIOB, 6, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN);

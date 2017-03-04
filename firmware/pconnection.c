@@ -816,12 +816,3 @@ void PExTransmit(void) {
 void PExReceive(void) {
 }
 
-/*
- void USBDMidiPoll(void) {
- uint8_t r[4];
- while (chnReadTimeout(&MDU1, &r, 4, TIME_IMMEDIATE)) {
- MidiInMsgHandler(MIDI_DEVICE_USB_DEVICE, (( r[0] & 0xF0) >> 4)+ 1, r[1], r[2], r[3]);
- }
- }
-*/
-

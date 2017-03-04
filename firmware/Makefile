@@ -99,6 +99,7 @@ axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
 
 CHIBIOS = ${axoloti_release}/ChibiOS_16.1.7
+CHIBIOS_CONTRIB = $(CHIBIOS)/community
 
 
 # theoretically should be this...., but CSRC expansion cannot cope with escape spaces
@@ -113,8 +114,8 @@ MUTABLE_INSTRUMENTS = ${FIRMWARE}/mutable_instruments
 include board.mk
 include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
 # HAL-OSAL files (optional).
-include $(CHIBIOS)/os/hal/hal.mk
-include $(CHIBIOS)/os/hal/ports/STM32/STM32F4xx/platform.mk
+include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
+include $(CHIBIOS_CONTRIB)/os/hal/ports/STM32/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/osal/rt/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
@@ -233,7 +234,6 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_hcd.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c \
-       ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_fmc.c \
        ${FIRMWARE}/usbh_midi_core.c \
        ${FIRMWARE}/usbh_vendor.c \
        ${FIRMWARE}/usbh_conf.c \

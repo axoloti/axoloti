@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -25,7 +25,6 @@
 
 #if (BOARD_AXOLOTI_V05)
 #include "sdram.h"
-#include "stm32f4xx_fmc.h"
 #endif
 
 #include "chprintf.h"

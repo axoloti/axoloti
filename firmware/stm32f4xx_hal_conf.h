@@ -63,10 +63,8 @@
 #define HAL_GPIO_MODULE_ENABLED
 #define HAL_CORTEX_MODULE_ENABLED
    //#define HAL_PCD_MODULE_ENABLED
-#define HAL_DMA_MODULE_ENABLED
 #define HAL_HCD_MODULE_ENABLED
 #define HAL_I2C_MODULE_ENABLED
-#define HAL_SDRAM_MODULE_ENABLED
 
 
 /* ########################## HSE/HSI Values adaptation ##################### */

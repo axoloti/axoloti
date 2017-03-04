@@ -63,7 +63,7 @@ static int32_t *outbuf;
 static int nThreadsBeforePatch;
 #define STACKSPACE_MARGIN 32
 
-static WORKING_AREA(waThreadDSP, 7200) __attribute__ ((section (".ram4")));
+static WORKING_AREA(waThreadDSP, 7200) CCM;
 static Thread *pThreadDSP = 0;
 static const char *index_fn = "/index.axb";
 

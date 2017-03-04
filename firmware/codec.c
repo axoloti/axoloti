@@ -31,10 +31,10 @@
 #include "codec_WM8731.h"
 #endif
 
-int32_t buf[BUFSIZE*2] __attribute__ ((section (".ram2")));
-int32_t buf2[BUFSIZE*2] __attribute__ ((section (".ram2")));
-int32_t rbuf[BUFSIZE*2] __attribute__ ((section (".ram2")));
-int32_t rbuf2[BUFSIZE*2] __attribute__ ((section (".ram2")));
+int32_t buf[BUFSIZE*2] SRAM2;
+int32_t buf2[BUFSIZE*2] SRAM2;
+int32_t rbuf[BUFSIZE*2] SRAM2;
+int32_t rbuf2[BUFSIZE*2] SRAM2;
 
 void codec_init(bool_t isMaster) {
 #if (BOARD_STM32F4DISCOVERY)
