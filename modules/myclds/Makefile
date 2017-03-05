@@ -1,5 +1,7 @@
 #define object files in the module
 
+MOD_PRE = header_pre.h
+
 MOD_OBJS = \
        stmlib/dsp/units.o \
        stmlib/dsp/atan.o \

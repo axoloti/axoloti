@@ -62,7 +62,7 @@ all: ${BDIR}/xpatch.bin
 
 $(info using MODULES = ${MODULES})
 
-MODULE_INC = $(patsubst %,-I../modules/%,$(MODULES))
+MODULE_INC = $(foreach MODULE, ${MODULES}, -I../modules/$(MODULE) -I${BDIR}/modules/$(MODULE))
 MODULE_LIBS = $(foreach MODULE, ${MODULES}, ${BDIR}/modules/$(MODULE)/lib$(MODULE).a)
 MODULE_LINKDIR = $(patsubst %,-L ${BDIR}/modules/% ,$(MODULES))
 MODULE_LINKLIB = $(patsubst %,-l%,$(MODULES))

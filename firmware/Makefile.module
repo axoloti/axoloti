@@ -70,7 +70,12 @@ $(BUILDDIR)/%.o: $(MODDIR)/%.cpp ${BDIR}/xpatch.h.gch
 	@$(CPP) $(CCFLAGS) -H $(IINCDIR) -I ${MODDIR} -Winvalid-pch  --include ${BDIR}/xpatch.h -c  $< -o $@
 	#@$(CPP) $(CCFLAGS) -H $(IINCDIR) -I ${MODDIR} -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
 
-${BUILDDIR}/${MODLIB}: $(MODOBJS)
+${BUILDDIR}/${MODLIB}: $(MODOBJS) $(BDIR)/createSym
+	@echo \#pragma once  > $(BUILDDIR)/$(MODULE)_wrapper.h 
+	@cat $(MODDIR)/$(MOD_PRE) >> $(BUILDDIR)/$(MODULE)_wrapper.h 
+	@echo namespace "$(MODULE)" { >> $(BUILDDIR)/$(MODULE)_wrapper.h 
+	@echo \#include  \"$(MODULE).h\"  >> $(BUILDDIR)/$(MODULE)_wrapper.h 
+	@echo } >> $(BUILDDIR)/$(MODULE)_wrapper.h 
 	@$(AR) rcs ${BUILDDIR}/${MODLIB} $(MODOBJS)
 	@$(NM) -g ${BUILDDIR}/${MODLIB} > ${BUILDDIR}/defines.sym
 	@$(BDIR)/createSym "${MODULE}" ${BUILDDIR}/defines.sym  ${BUILDDIR}/redefines.sym
