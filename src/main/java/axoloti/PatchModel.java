@@ -849,9 +849,7 @@ public class PatchModel {
         String inc = "";
         Set<String> modules = getModules();
         for (String s : modules) {
-            inc += "namespace " + s + "{\n";
-            inc += "    #include \"" + s + ".h\"\n";
-            inc += "};\n";
+            inc += "#include \"" + s + "_wrapper.h\"\n";
         }
         return inc;
     }

@@ -1,4 +1,12 @@
 #include "test.h"
-long foo::funcb(int a) {
+
+namespace foo {
+// int B::process(A* pB) {
+//     return pB->a;
+// }
+
+float func(int a) {
     return a;
 }
+};
+

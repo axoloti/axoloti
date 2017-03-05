@@ -18,7 +18,7 @@ extern "C" {
 #include "elements/dsp/string.h"
 #include "elements/dsp/fx/diffuser.h"
 #include "elements/dsp/fx/reverb.h"
-#include "clouds/dsp/granular_processor.h"
 #include "elements/dsp/part.h"
 #include "elements/dsp/patch.h"
 #include "streams/processor.h"
+// #include "clouds/dsp/granular_processor.h"

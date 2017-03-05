@@ -14,7 +14,7 @@ DMP=arm-none-eabi-objdump
 AR=arm-none-eabi-ar
 NM=arm-none-eabi-nm
 AWK=awk
-
+LCPP=g++
 
 axoloti_runtime ?= ..
 axoloti_release ?= ..
@@ -59,24 +59,33 @@ $(info building module ${MODULE})
 
 include ../modules/$(MODULE)/Makefile
 
-BUILDDIR := ${BDIR}/${MODULE}
+BUILDDIR := ${BDIR}/modules/${MODULE}
 MODLIB := lib${MODULE}.a
 MODDIR := ../modules/${MODULE}
 MODOBJS := $(addprefix $(BUILDDIR)/, $(MOD_OBJS))  
 
 $(BUILDDIR)/%.o: $(MODDIR)/%.cpp ${BDIR}/xpatch.h.gch
-	@mkdir -p ${BUILDDIR}
-	@$(CPP) $(CCFLAGS) -H $(IINCDIR) -I ${MODDIR} -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
+	echo @mkdir -p ${BDIR}/build/$(dir $<)
+	@mkdir -p ${BDIR}/build/$(dir $<)
+	@$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch  --include ${BDIR}/xpatch.h -c  $< -o $@
+	#@$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
 
-${BUILDDIR}/${MODLIB}: $(MODOBJS)
+${BUILDDIR}/${MODLIB}: $(MODOBJS) $(BDIR)/createSym
+	@echo \#pragma once  > $(BUILDDIR)/$(MODULE)_wrapper.h 
+	@cat $(MODDIR)/$(MOD_PRE) >> $(BUILDDIR)/$(MODULE)_wrapper.h 
+	@echo namespace "$(MODULE)" { >> $(BUILDDIR)/$(MODULE)_wrapper.h 
+	@echo \#include  \"$(MODULE).h\"  >> $(BUILDDIR)/$(MODULE)_wrapper.h 
+	@echo } >> $(BUILDDIR)/$(MODULE)_wrapper.h 
 	@$(AR) rcs ${BUILDDIR}/${MODLIB} $(MODOBJS)
 	@$(NM) -g ${BUILDDIR}/${MODLIB} > ${BUILDDIR}/defines.sym
-	@$(AWK) -v nspace="${MODULE}" -f ../firmware/createSym.awk < ${BUILDDIR}/defines.sym > ${BUILDDIR}/redefines.sym
+	@$(BDIR)/createSym "${MODULE}" ${BUILDDIR}/defines.sym  ${BUILDDIR}/redefines.sym
 	@$(CP) --redefine-syms ${BUILDDIR}/redefines.sym ${BUILDDIR}/${MODLIB} ${BUILDDIR}/${MODLIB}
 
 ${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axoloti.h ${FIRMWARE}/parameter_functions.h ${FIRMWARE}/axoloti_math.h ${FIRMWARE}/axoloti_filters.h
 	@echo "Build precompiled header"
 	$(CPP) $(CCFLAGS) $(IINCDIR) -Winvalid-pch -MD -MP -c ${FIRMWARE}/xpatch.h  -o ${BDIR}/xpatch.h.gch
 
+$(BDIR)/createSym: ../tools/createSym/createSym.cpp
+	@$(LCPP) ../tools/createSym/createSym.cpp -o $(BDIR)/createSym
 	
-all: ${BUILDDIR}/${MODLIB} ${BDIR}/xpatch.h.gch
+all: $(BDIR)/createSym ${BUILDDIR}/${MODLIB} ${BDIR}/xpatch.h.gch 
