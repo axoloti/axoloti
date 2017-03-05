@@ -3,10 +3,6 @@
 MOD_PRE = header_pre.h
 
 MOD_OBJS = \
-       stmlib/dsp/units.o \
-       stmlib/dsp/atan.o \
-       stmlib/utils/random.o \
-       mutable_resources.o \
        clouds/clouds_resources.o \
        clouds/dsp/correlator.o \
        clouds/dsp/mu_law.o \

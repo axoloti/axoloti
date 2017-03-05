@@ -20,9 +20,10 @@ int process(const std::string& ns,const std::string& in, std::string& out) {
     std::string newsym;
     if(in.length()==0) return -1;
 
-    size_t pos = in.find("_ZN");
+    size_t pos = in.find("T _ZN");
     if( pos == std::string::npos) return -2;
 
+    pos = in.find("_ZN");
     oldsym = in.substr(pos,in.length()-pos);
 
     // duplicate symbol
