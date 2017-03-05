@@ -22,8 +22,7 @@
 // 
 // See http://creativecommons.org/licenses/MIT/ for more information.
 
-#ifndef STMLIB_STMLIB_H_
-#define STMLIB_STMLIB_H_
+#pragma once
 
 #include <inttypes.h>
 #include <stddef.h>
@@ -111,4 +110,3 @@ struct FourCC {
 
 }  // namespace stmlib
 
-#endif   // STMLIB_STMLIB_H_

@@ -14,7 +14,7 @@ DMP=arm-none-eabi-objdump
 AR=arm-none-eabi-ar
 NM=arm-none-eabi-nm
 AWK=awk
-
+LCPP=g++
 
 axoloti_runtime ?= ..
 axoloti_release ?= ..
@@ -73,12 +73,14 @@ $(BUILDDIR)/%.o: $(MODDIR)/%.cpp ${BDIR}/xpatch.h.gch
 ${BUILDDIR}/${MODLIB}: $(MODOBJS)
 	@$(AR) rcs ${BUILDDIR}/${MODLIB} $(MODOBJS)
 	@$(NM) -g ${BUILDDIR}/${MODLIB} > ${BUILDDIR}/defines.sym
-	@$(AWK) -v nspace="${MODULE}" -f ../firmware/createSym.awk < ${BUILDDIR}/defines.sym > ${BUILDDIR}/redefines.sym
+	@$(BDIR)/createSym "${MODULE}" ${BUILDDIR}/defines.sym  ${BUILDDIR}/redefines.sym
 	@$(CP) --redefine-syms ${BUILDDIR}/redefines.sym ${BUILDDIR}/${MODLIB} ${BUILDDIR}/${MODLIB}
 
 ${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axoloti.h ${FIRMWARE}/parameter_functions.h ${FIRMWARE}/axoloti_math.h ${FIRMWARE}/axoloti_filters.h
 	@echo "Build precompiled header"
 	$(CPP) $(CCFLAGS) $(IINCDIR) -Winvalid-pch -MD -MP -c ${FIRMWARE}/xpatch.h  -o ${BDIR}/xpatch.h.gch
 
+$(BDIR)/createSym: ../tools/createSym/createSym.cpp
+	@$(LCPP) ../tools/createSym/createSym.cpp -o $(BDIR)/createSym
 	
-all: ${BUILDDIR}/${MODLIB} ${BDIR}/xpatch.h.gch
+all: $(BDIR)/createSym ${BUILDDIR}/${MODLIB} ${BDIR}/xpatch.h.gch 

@@ -1,5 +1,16 @@
 #pragma once
+
+
 namespace foo {
-    long func(int a);
-    long funcb(int a);
+    // struct A {
+    //     int a;
+    //     int b;
+    // };
+    // class B {
+    // public:
+    //     int process(void* pB);
+    // };
+
+    float func(int);
 };
+
