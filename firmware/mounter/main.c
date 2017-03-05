@@ -1,3 +1,4 @@
+// adapted from :
 /*
     ChibiOS/HAL - Copyright (C) 2016 Uladzimir Pylinsky aka barthess
 
@@ -26,6 +27,7 @@
 
 static uint8_t blkbuf[512];
 
+#if 0
 /* Turns on a LED when there is I/O activity on the USB port */
 static void usbActivity(bool active)
 {
@@ -34,6 +36,7 @@ static void usbActivity(bool active)
     else
         palClearPad(LED1_PORT, LED1_PIN);
 }
+#endif
 
 int main(void)
 {
@@ -48,6 +51,12 @@ int main(void)
     palSetPadMode(LED2_PORT, LED2_PIN, PAL_MODE_OUTPUT_PUSHPULL);
     palClearPad(LED1_PORT,LED1_PIN);
     palClearPad(LED2_PORT,LED2_PIN);
+
+#if (CH_DBG_SYSTEM_STATE_CHECK == TRUE)
+  // avoid trapping into _dbg_check_enable
+  ch.dbg.isr_cnt = 0;
+  ch.dbg.lock_cnt = 0;
+#endif
 
     chSysInit();
 
@@ -64,28 +73,14 @@ int main(void)
 
     /* initialize the SD card */
     sdcStart(&SDCD1, NULL);
-    sdcConnect(&SDCD1);
-
+    bool ret = sdcConnect(&SDCD1);
+    if (ret == HAL_FAILED) {
+        NVIC_SystemReset();
+    }
     /* turn off green LED, turn on red LED */
     palClearPad(LED1_PORT, LED1_PIN);
     palSetPad(LED2_PORT, LED2_PIN);
 
-#if 0
-    /* start the USB mass storage service */
-    int ret = msdStart(&UMSD1, &msdConfig);
-    if (ret != 0) {
-        /* no media found : bye bye !*/
-        usbDisconnectBus(&USBD1);
-        chThdSleepMilliseconds(1000);
-        NVIC_SystemReset();
-    }
-
-    /* watch the mass storage events */
-    EventListener connected;
-    EventListener ejected;
-    chEvtRegisterMask(&UMSD1.evt_connected, &connected, EVENT_MASK(1));
-    chEvtRegisterMask(&UMSD1.evt_ejected, &ejected, EVENT_MASK(2));
-#endif
 
   /* start the USB driver */
   usbDisconnectBus(&USBD1);
@@ -97,24 +92,38 @@ int main(void)
    */
   msdObjectInit(&USBMSD1);
   msdStart(&USBMSD1, &USBD1, (BaseBlockDevice*)&SDCD1, blkbuf, NULL);
-
   /*
    *
    */
   usbConnectBus(&USBD1);
 
   /*
-   * Starting threads.
-   */
-  // chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
-
-  /*
    * Normal main() thread activity, in this demo it does nothing except
    * sleeping in a loop and check the button state.
    */
   while (true) {
-    chThdSleepMilliseconds(1000);
+    chThdSleepMilliseconds(100);
+    // Todo: reset when card is unmounted by host...
+    /*
+    if (USBMSD1.state == USB_MSD_STOP) {
+        chThdSleepMilliseconds(100);
+        NVIC_SystemReset();
+    }
+    if (USBMSD1.scsi_target.state == SCSI_TRGT_STOP) {
+        chThdSleepMilliseconds(1);
+        NVIC_SystemReset();
+    }
+    */
   }
 
   msdStop(&USBMSD1);
 }
+
+extern void Reset_Handler(void);
+
+__attribute__ ((section (".entry_section"))) void entryfn (int fwid) {
+	(void)fwid;
+	SCB->VTOR = CORTEX_VTOR_INIT;
+	Reset_Handler();
+}
+

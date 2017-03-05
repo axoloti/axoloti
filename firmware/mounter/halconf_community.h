@@ -28,7 +28,7 @@
  * @brief   Enables the FSMC subsystem.
  */
 #if !defined(HAL_USE_FSMC) || defined(__DOXYGEN__)
-#define HAL_USE_FSMC                FALSE
+#define HAL_USE_FSMC                TRUE
 #endif
 
 /**
@@ -98,7 +98,7 @@
  * @brief   Enables search ROM feature.
  * @note    Disabling this option saves both code and data space.
  */
-#define ONEWIRE_USE_SEARCH_ROM      TRUE
+#define ONEWIRE_USE_SEARCH_ROM      FALSE
 
 #endif /* _HALCONF_COMMUNITY_H_ */
 
