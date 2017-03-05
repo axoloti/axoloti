@@ -42,13 +42,16 @@ void __early_init(void) {
   rccResetAHB1(~0);
   rccResetAHB2(~0);
   rccResetAPB1(~0);
+  NVIC->ICER[0] = 0xFFFFFFFF;
+  NVIC->ICER[1] = 0xFFFFFFFF;
+  NVIC->ICER[2] = 0xFFFFFFFF;
+  NVIC->ICER[3] = 0xFFFFFFFF;
+  NVIC->ICER[4] = 0xFFFFFFFF;
+  NVIC->ICER[5] = 0xFFFFFFFF;
+  NVIC->ICER[6] = 0xFFFFFFFF;
+  NVIC->ICER[7] = 0xFFFFFFFF;
   rccResetAPB2(~0x10000000); //RCC_APB1RSTR_PWRRST
   OTG_HS->GINTMSK = 0; // disable OTG_HS interrupts!
-  // copy vector table
-  extern int _vectors;
-  memcpy((char *)0x20000000, (const char *)&_vectors, 0x200);
-  // remap SRAM1 to 0x00000000
-  SYSCFG->MEMRMP |= 0x03;
   stm32_clock_init();
 }
 

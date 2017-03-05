@@ -20,7 +20,7 @@ endif
 
 # Enable this if you want the linker to remove unused code and data
 ifeq ($(USE_LINK_GC),)
-  USE_LINK_GC = yes
+  USE_LINK_GC = no
 endif
 
 # If enabled, this option allows to compile the application in THUMB mode.
@@ -30,7 +30,7 @@ endif
 
 # Enable this if you want to see the full log while compiling.
 ifeq ($(USE_VERBOSE_COMPILE),)
-  USE_VERBOSE_COMPILE = yes
+  USE_VERBOSE_COMPILE = no
 endif
 
 #
@@ -66,18 +66,19 @@ BUILDDIR = flasher_build
 
 # Imported source files and paths
 CHIBIOS = ${axoloti_release}/ChibiOS_16.1.7
+CHIBIOS_CONTRIB = $(CHIBIOS)/community
 
 include board.mk
 include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
-include $(CHIBIOS)/os/hal/hal.mk
-include $(CHIBIOS)/os/hal/ports/STM32/STM32F4xx/platform.mk
+include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
+include $(CHIBIOS_CONTRIB)/os/hal/ports/STM32/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/osal/rt/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
 include $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 	
 # Define linker script file here
-LDSCRIPT= STM32F407xG.ld
+LDSCRIPT = ../STM32F427trojan.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -89,7 +90,6 @@ CSRC = $(STARTUPSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
        $(STREAMSSRC) \
-      ../STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
        ../glcdfont.c \
        ../axoloti_control.c \
        ../axoloti_board.c \
@@ -97,7 +97,6 @@ CSRC = $(STARTUPSRC) \
        ../crc32.c \
        ../flash.c \
        ../watchdog.c \
-       ../stm32f4xx_fmc.c \
        main.c  
 
        

@@ -16,47 +16,20 @@
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- *  Adapted from:
- ******************************************************************************
- * @file    stm32f429i_discovery_sdram.h
- * @author  MCD Application Team
- * @version V1.0.0
- * @date    20-September-2013
- * @brief   This file contains all the functions prototypes for the
- *          stm324x9i_disco_sdram.c driver.
- ******************************************************************************
- * @attention
- *
- * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
- *
- * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *        http://www.st.com/software_license_agreement_liberty_v2
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- ******************************************************************************
- */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32429I_DISCO_SDRAM_H
-#define __STM32429I_DISCO_SDRAM_H
+#ifndef SDRAM_H
+#define SDRAM_H
+
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define STM32F427xx
+#define SDRAM_BANK_ADDR     ((uint32_t)0xC0000000)
 
   /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx.h"
 
 extern void configSDRAM(void);
 

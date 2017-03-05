@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014, 2015 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -17,16 +17,22 @@
  */
 
 /*
+ * FRANKENSTEIN ST32F427 memory setup, bootloading into patch
+ * 
+ */
+
+/*
  * Note: Use of ram1, ram2 and ram3 is mutually exclusive with use of ram0.
  */
 MEMORY
 {
-    flash : org = 0x08000000, len = 896k    /* last 128kB reserved for patch storage*/
+/* make SRAM1 pretending to be flash memory */
+    flash : org = 0x20011000, LENGTH = 0x0000B000
     ram0  : org = 0x20000000, len = 192k    /* SRAM1 + SRAM2 + SRAM3 */
-    ram1  : org = 0x20000200, len = 0x0AE00 /* SRAM1 */
+    ram1  : org = 0x20000000, len = 0 
     ram2  : org = 0x2001E000, len = 8k      /* 2nd half of SRAM2 */
     ram3  : org = 0x20020000, len = 64k     /* SRAM3 */
-    ram4  : org = 0x1000C000, len = 10k     /* CCM SRAM end*/
+    ram4  : org = 0x10000000, LENGTH = 0x0000C000 /* CCM - ccmramend */
     ram5  : org = 0x40024000, len = 4k      /* BCKP SRAM */
     ram6  : org = 0x00000000, len = 0
     ram7  : org = 0x00000000, len = 0
@@ -41,21 +47,26 @@ REGION_ALIAS("MAIN_STACK_RAM", ram4);
 REGION_ALIAS("PROCESS_STACK_RAM", ram4);
 
 /* RAM region to be used for data segment.*/
-REGION_ALIAS("DATA_RAM", ram1);
+REGION_ALIAS("DATA_RAM", ram3);
 
 /* RAM region to be used for BSS segment.*/
-REGION_ALIAS("BSS_RAM", ram1);
+REGION_ALIAS("BSS_RAM", ram3);
 
 /* RAM region to be used for the default heap.*/
 REGION_ALIAS("HEAP_RAM", ram3);
 
-INCLUDE rules.ld
 
-SECTIONS {
-    .flashend :
+SECTIONS
+{
+    .entry_section : 
     {
-        . = ALIGN(4);
+        *(.entry_section)
+        *(.entry_section.*)
+        LONG(0)
         LONG(0x12345678)
-        PROVIDE(_flash_end = .);
+        . = 0x0200;
     } > flash
 }
+
+INCLUDE rules.ld
+

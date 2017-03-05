@@ -31,8 +31,6 @@
 #include "exceptions.h"
 #include "flash.h"
 
-extern int _vectors;
-
 #define AXOLOTICONTROL FALSE
 #define SERIALDEBUG TRUE
 
@@ -106,6 +104,12 @@ void DispayAbortErr(int err) {
   NVIC_SystemReset();
 }
 
+void setErrorFlag(int error){
+	(void)error;
+	while(1){
+	}
+}
+
 int main(void) {
   watchdog_feed();
   halInit();
@@ -119,6 +123,11 @@ int main(void) {
   palSetPadMode(LED2_PORT,LED2_PIN,PAL_MODE_OUTPUT_PUSHPULL);
 #endif
 
+#if (CH_DBG_SYSTEM_STATE_CHECK == TRUE)
+  // avoid trapping into _dbg_check_enable
+  ch.dbg.isr_cnt = 0;
+  ch.dbg.lock_cnt = 0;
+#endif
   chSysInit();
   watchdog_feed();
   configSDRAM();
@@ -134,10 +143,6 @@ int main(void) {
 #endif
 
   DBGPRINTCHAR('a');
-
-  uint32_t pbuf[16];
-  SDRAM_ReadBuffer(&pbuf[0], 0 + 0x050000, 16);
-  DBGPRINTCHAR('x');
 
   watchdog_feed();
 
@@ -262,3 +267,9 @@ int main(void) {
   return 0;
 }
 
+extern void Reset_Handler(void);
+
+__attribute__ ((section (".entry_section"))) void entryfn (int fwid) {
+	(void)fwid;
+	Reset_Handler();
+}
