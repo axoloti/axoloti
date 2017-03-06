@@ -73,8 +73,7 @@ typedef enum {
   RUNNING = 0,
   STOPPED = 1,
   STOPPING = 2,
-  	STARTFAILED = 3,
-// and positive numbers are index in patch bank
+  STARTFAILED = 3,
 } patchStatus_t;
 
 extern volatile patchStatus_t patchStatus;
@@ -89,7 +88,7 @@ void StopPatch(void);
 
 void start_dsp_thread(void);
 
-#define PATCHMAINLOC 0x20011000
+#define PATCHMAINLOC 0x00011000
 
 // patch is located in sector 11
 #define PATCHFLASHLOC 0x080E0000

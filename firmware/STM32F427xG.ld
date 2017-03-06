@@ -18,12 +18,13 @@
 
 /*
  * Note: Use of ram1, ram2 and ram3 is mutually exclusive with use of ram0.
+ * This memory is partitioned with gaps for the patch
  */
 MEMORY
 {
     flash : org = 0x08000000, len = 896k    /* last 128kB reserved for patch storage*/
     ram0  : org = 0x20000000, len = 192k    /* SRAM1 + SRAM2 + SRAM3 */
-    ram1  : org = 0x20000200, len = 0x0AE00 /* SRAM1 */
+    ram1  : org = 0x20000000, len = 0x0B000 /* SRAM1 */
     ram2  : org = 0x2001E000, len = 8k      /* 2nd half of SRAM2 */
     ram3  : org = 0x20020000, len = 64k     /* SRAM3 */
     ram4  : org = 0x1000C000, len = 10k     /* CCM SRAM end*/

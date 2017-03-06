@@ -82,7 +82,7 @@
  * @note    The round robin preemption is not supported in tickless mode and
  *          must be set to zero in that case.
  */
-#define CH_CFG_TIME_QUANTUM                 20
+#define CH_CFG_TIME_QUANTUM                 0
 
 /**
  * @brief   Managed RAM size.
@@ -523,7 +523,7 @@
 
 #define CHPRINTF_USE_FLOAT  TRUE
 
-//#define CORTEX_VTOR_INIT                    0x20000000U
+#define CORTEX_VTOR_INIT    0x08000000
 
 #endif  /* _CHCONF_H_ */
 
