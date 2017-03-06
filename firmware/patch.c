@@ -171,7 +171,7 @@ static int StartPatch1(void) {
   return 0;
 }
 
-static msg_t ThreadDSP(void *arg) {
+static THD_FUNCTION(ThreadDSP, arg) {
   (void)(arg);
 #if CH_USE_REGISTRY
   chRegSetThreadName("dsp");

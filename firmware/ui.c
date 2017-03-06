@@ -301,7 +301,7 @@ void AxolotiControlUpdate(void) {
 void (*pControlUpdate)(void) = AxolotiControlUpdate;
 
 static WORKING_AREA(waThreadUI2, 512);
-static msg_t ThreadUI2(void *arg) {
+static THD_FUNCTION(ThreadUI2, arg) {
   (void)(arg);
 #if CH_USE_REGISTRY
   chRegSetThreadName("ui2");

@@ -37,10 +37,9 @@ uint16_t v50_max;
 bool sdcsw_prev = FALSE;
 
 volatile uint8_t pattern_index;
-static WORKING_AREA(waThreadSysmon, 256);
 
-__attribute__((noreturn))
-      static msg_t ThreadSysmon(void *arg) {
+static WORKING_AREA(waThreadSysmon, 256);
+static THD_FUNCTION(ThreadSysmon, arg) {
   (void)arg;
 #if CH_USE_REGISTRY
   chRegSetThreadName("sysmon");

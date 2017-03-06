@@ -135,9 +135,7 @@ static const SerialConfig sdMidiCfg = {31250, // baud
     0, 0, 0};
 
 static WORKING_AREA(waThreadMidi, 256) CCM;
-
-__attribute__((noreturn))
-  static msg_t ThreadMidi(void *arg) {
+static THD_FUNCTION(ThreadMidi, arg) {
   (void)arg;
 #if CH_USE_REGISTRY
   chRegSetThreadName("midi");

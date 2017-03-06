@@ -53,8 +53,7 @@ static const SPIDBConfig spidbcfg_master = { { NULL, SPILINK_NSS_PORT, SPILINK_N
 static WORKING_AREA(waThreadSpilink, 256);
 //__attribute__ ((section (".ccmramend")));
 
-__attribute__((noreturn))
-         static msg_t ThreadSpilinkSlave(void *arg) {
+static THD_FUNCTION(ThreadSpilinkSlave, arg) {
 	(void) arg;
 #if CH_USE_REGISTRY
 	chRegSetThreadName("spilink");
