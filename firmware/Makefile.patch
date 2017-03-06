@@ -59,10 +59,12 @@ all: ${BDIR}/xpatch.bin
 
 # MODULES (optionally) defined by Axo UI
 # MODULES = test
+# MODULE_DIRS = ../module
 
 $(info using MODULES = ${MODULES})
 
-MODULE_INC = $(foreach MODULE, ${MODULES}, -I../modules/$(MODULE) -I${BDIR}/modules/$(MODULE))
+MODULE_INC = $(foreach MODULE_DIR, ${MODULE_DIRS}, -I$(MODULE_DIR))
+MODULE_BINC = $(foreach MODULE, ${MODULES}, -I${BDIR}/modules/$(MODULE))
 MODULE_LIBS = $(foreach MODULE, ${MODULES}, ${BDIR}/modules/$(MODULE)/lib$(MODULE).a)
 MODULE_LINKDIR = $(patsubst %,-L ${BDIR}/modules/% ,$(MODULES))
 MODULE_LINKLIB = $(patsubst %,-l%,$(MODULES))
@@ -80,7 +82,7 @@ ${BDIR}/xpatch.bin: ${BDIR}/xpatch.cpp ${MODULE_LIBS} ${BDIR}/xpatch.h.gch
 	@echo RM
 	@rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
 	@echo APP
-	@$(CPP) $(CCFLAGS) -H $(MODULE_INC) $(IINCDIR) -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o 
+	@$(CPP) $(CCFLAGS) -H $(MODULE_BINC) $(MODULE_INC) $(IINCDIR) -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o 
 	@echo LINK
 	@$(LD) $(LDFLAGS) ${BDIR}/xpatch.o ${MODULE_LINKDIR} ${MODULE_LINKLIB} -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${FIRMWARE}/build/axoloti.elf -o ${BDIR}/xpatch.elf
 	@echo BIN

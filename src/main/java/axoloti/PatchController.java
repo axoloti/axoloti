@@ -68,7 +68,9 @@ public class PatchController {
 
     public void Compile() {
         for(String module : patchModel.getModules()) {
-           GetQCmdProcessor().AppendToQueue(new QCmdCompileModule(this,module));
+           GetQCmdProcessor().AppendToQueue(new QCmdCompileModule(this,
+                   module, 
+                   patchModel.getModuleDir(module)));
         }
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
     }
@@ -129,7 +131,10 @@ public class PatchController {
         QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
         for(String module : patchModel.getModules()) {
-           qcmdprocessor.AppendToQueue(new QCmdCompileModule(this,module));
+           qcmdprocessor.AppendToQueue(new QCmdCompileModule(this,
+                   module,
+                   patchModel.getModuleDir(module)
+           ));
         }
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
         // create subdirs...

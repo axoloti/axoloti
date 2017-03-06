@@ -55,19 +55,19 @@ LLIBDIR   = $(patsubst %,-L%,$(DLIBDIR) $(ULIBDIR))
 # above from Makefile.patch, we can possible remove/and make common after tests
 
 
-$(info building module ${MODULE})
+$(info building module ${MODULE} ${MODULE_DIR})
 
-include ../modules/$(MODULE)/Makefile
+include ${MODULE_DIR}/Makefile
 
 BUILDDIR := ${BDIR}/modules/${MODULE}
 MODLIB := lib${MODULE}.a
-MODDIR := ../modules/${MODULE}
+MODDIR := ${MODULE_DIR}
 MODOBJS := $(addprefix $(BUILDDIR)/, $(MOD_OBJS))  
 
+
 $(BUILDDIR)/%.o: $(MODDIR)/%.cpp ${BDIR}/xpatch.h.gch
-	echo @mkdir -p ${BDIR}/build/$(dir $<)
-	@mkdir -p ${BDIR}/build/$(dir $<)
-	#@$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch  --include ${BDIR}/xpatch.h -c  $< -o $@
+	@echo $< $@ $*
+	@mkdir -p $(BUILDDIR)/$*
 	@$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
 
 ${BUILDDIR}/${MODLIB}: $(MODOBJS) $(BDIR)/createSym
