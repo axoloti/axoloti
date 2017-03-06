@@ -57,7 +57,7 @@ LLIBDIR   = $(patsubst %,-L%,$(DLIBDIR) $(ULIBDIR))
 
 $(info building module ${MODULE} ${MODULE_DIR})
 
-include ../modules/$(MODULE)/Makefile
+include ${MODULE_DIR}/Makefile
 
 BUILDDIR := ${BDIR}/modules/${MODULE}
 MODLIB := lib${MODULE}.a
