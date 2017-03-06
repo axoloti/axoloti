@@ -361,3 +361,16 @@ void LCD_drawIBARadd(int x, int y, int v) {
   }
 }
 
+void LCD_drawHex32(int x, int y, uint32_t i) {
+  if ((y < 0) || (y >= (LCDHEIGHT)) || (x < 0) || (x > (LCDWIDTH-48)))
+	return;
+  char d;
+  d = (i>>28)&0xF; LCD_drawChar(x, y, d<10?'0'+d:'A'-10+d); x+=6;
+  d = (i>>24)&0xF; LCD_drawChar(x, y, d<10?'0'+d:'A'-10+d); x+=6;
+  d = (i>>20)&0xF; LCD_drawChar(x, y, d<10?'0'+d:'A'-10+d); x+=6;
+  d = (i>>16)&0xF; LCD_drawChar(x, y, d<10?'0'+d:'A'-10+d); x+=6;
+  d = (i>>12)&0xF; LCD_drawChar(x, y, d<10?'0'+d:'A'-10+d); x+=6;
+  d = (i>>8)&0xF; LCD_drawChar(x, y, d<10?'0'+d:'A'-10+d); x+=6;
+  d = (i>>4)&0xF; LCD_drawChar(x, y, d<10?'0'+d:'A'-10+d); x+=6;
+  d = (i)&0xF; LCD_drawChar(x, y, d<10?'0'+d:'A'-10+d);
+}

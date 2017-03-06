@@ -156,15 +156,11 @@ void ADAU1961_WriteRegister(uint16_t RegisterAddr, uint8_t RegisterValue) {
   i2ctxbuf[2] = RegisterValue;
   chThdSleepMilliseconds(10);
   HAL_StatusTypeDef r = HAL_I2C_Master_Transmit(&ADAU1961_i2c_handle,ADAU1961_I2C_ADDR<<1,i2ctxbuf,3,TIMEOUT);
-  if (r != HAL_OK) {
-	  volatile int i = r;
-	  while(1){
-	  }
-  }
+  if (r != HAL_OK) chSysHalt("CodecI2CWrite");
   chThdSleepMilliseconds(10);
 }
 
-void ADAU1961_WriteRegister6(uint16_t RegisterAddr, uint8_t * RegisterValues) {
+void ADAU1961_WriteRegister6(uint16_t RegisterAddr, const uint8_t * RegisterValues) {
   i2ctxbuf[0] = RegisterAddr >> 8;
   i2ctxbuf[1] = RegisterAddr;
   i2ctxbuf[2] = RegisterValues[0];
@@ -174,11 +170,7 @@ void ADAU1961_WriteRegister6(uint16_t RegisterAddr, uint8_t * RegisterValues) {
   i2ctxbuf[6] = RegisterValues[4];
   i2ctxbuf[7] = RegisterValues[5];
   HAL_StatusTypeDef r = HAL_I2C_Master_Transmit(&ADAU1961_i2c_handle,ADAU1961_I2C_ADDR<<1,i2ctxbuf,8,TIMEOUT);
-  if (r != HAL_OK) {
-	  volatile int i = r;
-	  while(1){
-	  }
-  }
+  if (r != HAL_OK) chSysHalt("CodecI2CWrite6");
   chThdSleepMilliseconds(10);
 }
 
@@ -189,11 +181,7 @@ void ADAU1961_ReadRegister6(uint16_t RegisterAddr) {
   HAL_I2C_Master_Transmit(&ADAU1961_i2c_handle,ADAU1961_I2C_ADDR<<1,i2ctxbuf,2,TIMEOUT);
   chThdSleepMilliseconds(1);
   HAL_StatusTypeDef r = HAL_I2C_Master_Receive(&ADAU1961_i2c_handle,(ADAU1961_I2C_ADDR<<1)+1,i2crxbuf,6,TIMEOUT);
-  if (r != HAL_OK) {
-	  volatile int i = r;
-	  while(1){
-	  }
-  }
+  if (r != HAL_OK) chSysHalt("CodecI2CRead6");
 }
 
 void picosleep(void)
@@ -287,7 +275,6 @@ void codec_ADAU1961_hw_init(uint16_t samplerate, bool_t isMaster) {
     	palSetPadMode(SAI1_FS_PORT, SAI1_FS_PAD, PAL_MODE_INPUT);
         ADAU1961_WriteRegister6(ADAU1961_REG_R1_PLLC, &pll48k_pulldown[0]);
     	chThdSleepMilliseconds(100);
-    	volatile int j=0;
     	chSysLock();
         while(1){
         	// wait for spi frame
@@ -297,7 +284,6 @@ void codec_ADAU1961_hw_init(uint16_t samplerate, bool_t isMaster) {
         	while(palReadPad(SAI1_FS_PORT, SAI1_FS_PAD)){
         		i++;
         	}
-        	j=i;
         	if ((i>1) && (i<5)) {
         		// lock found
         		break;
@@ -472,9 +458,7 @@ void check_clock_is_present(void) {
 		chSysUnlock();
 		if ((j == 0) || (i == 0)) {
 			// no pulse edge found, fail
-			LogTextMessage("Slave mode, but reference clock not connected");
-			sysmon_blink_pattern(SLAVE_ERROR);
-			chThdSleepMilliseconds(1000);
+			chSysHalt("CodecSyncFail");
 		} else
 			break; // clock found
 	}

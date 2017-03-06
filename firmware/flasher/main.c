@@ -67,13 +67,6 @@ void dbgPrintHexDigit(uint8_t b) {
 
 #define FLASH_BASE_ADDR 0x08000000
 
-// dummy ui hooks...
-
-Btn_Nav_States_struct Btn_Nav_CurStates;
-Btn_Nav_States_struct Btn_Nav_PrevStates;
-Btn_Nav_States_struct Btn_Nav_Or;
-Btn_Nav_States_struct Btn_Nav_And;
-int8_t EncBuffer[4];
 
 void refresh_LCD(void) {
 #if AXOLOTICONTROL

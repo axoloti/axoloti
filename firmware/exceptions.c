@@ -52,7 +52,8 @@ typedef enum {
   fatfs_error,
   patch_load_crc_fail,
   patch_load_sdram_overflow,
-  usbh_midi_ringbuffer_overflow
+  usbh_midi_ringbuffer_overflow,
+  halt
 } faulttype;
 
 typedef struct {
@@ -245,6 +246,7 @@ void exception_checkandreport(void) {
       LogTextMessage("exception: brownout");
     }
     else if (exceptiondump->type == fatfs_error) {
+   	  LogTextMessage("file error?");
       LogTextMessage("file error: %s, filename:\"%s\"",fs_err_name[exceptiondump->r0],(char *)(BKPSRAM_BASE)+12);
     }
     else if (exceptiondump->type == patch_load_crc_fail) {
@@ -454,4 +456,18 @@ __asm volatile
     " ldr r2, handler2_address_const                            \n"
     " bx r2                                                     \n"
 );
+}
+
+void report_halt(const char *reason) {
+  /* Pointing to the passed message.*/
+  ch.dbg.panic_msg = reason;
+
+  exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
+  exceptiondump->type = halt;
+  exceptiondump->r0 = (uint32_t)reason;
+  NVIC_SystemReset();
+
+  /* Harmless infinite loop.*/
+  while (true) {
+  }
 }

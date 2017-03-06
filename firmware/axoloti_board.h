@@ -31,7 +31,6 @@ void adc_configpads(void);
 void adc_convert(void);
 
 
-#if (BOARD_AXOLOTI_V05)
 #define LED1_PORT GPIOG
 #define LED1_PIN 6
 #define LED2_PORT GPIOC
@@ -46,28 +45,7 @@ void adc_convert(void);
 #define SDCSW_PORT GPIOD
 #define SDCSW_PIN 13
 
-#elif (BOARD_AXOLOTI_V03)
-#define LED1_PORT GPIOA
-#define LED1_PIN 8
-#define SW2_PORT GPIOB
-#define SW2_PIN 2
-#elif (BOARD_STM32F4DISCOVERY)
-// led 1 : green
-#define LED1_PORT GPIOD
-#define LED1_PIN 12
-// led 2 : red
-#define LED2_PORT GPIOD
-#define LED2_PIN 14
-#define SW2_PORT GPIOA
-#define SW2_PIN 0
-#endif
-
-
-#ifdef BOARD_AXOLOTI_V05
 #define SDMIDI SD6
-#else
-#define SDMIDI SD1
-#endif
 
 
 #endif

@@ -39,7 +39,7 @@ HCD_HandleTypeDef hHCD;
 #include "core_cm4.h"
 #include "usbh_hid.h"
 #include "usbh_hid_parser.h"
-#include "usbh_midi_core.h"
+#include "usbh_midi_core_lld.h"
 #include "ch.h"
 
 

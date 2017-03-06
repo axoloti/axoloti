@@ -318,7 +318,6 @@ static THD_FUNCTION(ThreadDSP, arg) {
 	palClearPad(GPIOA, 2);
 #endif
   }
-  return (msg_t)0;
 }
 
 void StopPatch(void) {

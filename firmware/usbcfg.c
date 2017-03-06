@@ -353,10 +353,6 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
     usbInitEndpointI(usbp, USBD1_DATA_REQUEST_EP, &ep1config);
     usbInitEndpointI(usbp, USBD2_DATA_REQUEST_EP, &ep2config);
 
-    /* Resetting the state of the Bulk driver subsystem.*/
-//    bduConfigureHookI(&BDU1);
-//    mduConfigureHookI(&MDU1);
-
     chSysUnlockFromIsr();
     return;
   case USB_EVENT_SUSPEND:
@@ -365,6 +361,8 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
     return;
   case USB_EVENT_STALLED:
     return;
+  case USB_EVENT_UNCONFIGURED:
+	  return;
   }
   return;
 }

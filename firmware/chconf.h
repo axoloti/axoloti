@@ -507,8 +507,12 @@
  * @details This hook is invoked in case to a system halting error before
  *          the system is halted.
  */
+#ifndef __ASSEMBLER__
+void report_halt(const char *reason);
+#endif
+
 #define CH_CFG_SYSTEM_HALT_HOOK(reason) {                                   \
-  /* System halt code here.*/                                               \
+		report_halt(reason);                                                 \
 }
 
 /** @} */

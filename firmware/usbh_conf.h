@@ -29,12 +29,12 @@
 #ifndef __USBH_CONF__H__
 #define __USBH_CONF__H__
 
-#define STM32F427xx
 
-#include "stm32f4xx.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "stm32f4xx_hal_conf.h"
 
 #include "ch.h"
 #include "chprintf.h"
@@ -83,24 +83,15 @@ extern void fakefree(void * p);
 
 #define osThreadDef(name, fn, prio, instances, stacksz) \
   static WORKING_AREA(wa##name, 640); \
-  Thread *name = chThdCreateStatic(wa##name, sizeof(wa##name), HIGHPRIO-5, fn, phost); \
+  Thread *name = chThdCreateStatic(wa##name, sizeof(wa##name), HIGHPRIO-5, (tfunc_t)fn, phost); \
   phost->os_event = name;
 #define osThreadCreate(x,y) x
 #define osThread(x) x
 
-#if 0
-#define osMessageQId InputQueue *
-//#define osMessagePut(q,val,time) chSysLockFromIsr(); chIQPutI (q,val); chSysUnlockFromIsr();
-#define osMessagePut(q,val,time) chIQPutI (q,val);
-#define osMessageGet(q,to) \
-   (osEvent)chIQGetTimeout(q, TIME_INFINITE)
-
-#else
 #define osMessageQId Thread *
 #define osMessagePutI(q,val,time) chEvtSignalI (q,1<<val);
 #define osMessagePut(q,val,time) chEvtSignal (q,1<<val);
 #define osMessageGet(q,to) chEvtWaitOneTimeout(0xFF, MS2ST(to))
-#endif
 
 // osThreadId
 #define osMessageQDef(name, queue_sz, type) \
@@ -204,7 +195,7 @@ extern void LogTextMessage(const char* format, ...);
  *            @arg URB_STALL
  */
 
-static USBH_URBStateTypeDef USBH_LL_GetURBState(USBH_HandleTypeDef *phost,
+__STATIC_INLINE USBH_URBStateTypeDef USBH_LL_GetURBState(USBH_HandleTypeDef *phost,
                                         uint8_t pipe) {
   return (USBH_URBStateTypeDef)HAL_HCD_HC_GetURBState(phost->pData, pipe);
 }
@@ -239,7 +230,7 @@ static USBH_URBStateTypeDef USBH_LL_GetURBState(USBH_HandleTypeDef *phost,
  * @retval Status
  */
 
-static USBH_StatusTypeDef USBH_LL_SubmitURB(USBH_HandleTypeDef *phost, uint8_t pipe,
+__STATIC_INLINE USBH_StatusTypeDef USBH_LL_SubmitURB(USBH_HandleTypeDef *phost, uint8_t pipe,
                                         uint8_t direction, uint8_t ep_type,
                                         uint8_t token, uint8_t* pbuff,
                                         uint16_t length, uint8_t do_ping) {

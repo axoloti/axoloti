@@ -55,7 +55,7 @@ typedef union {
 
 extern Btn_Nav_States_struct Btn_Nav_Or;
 extern Btn_Nav_States_struct Btn_Nav_And;
-extern int8_t EncBuffer[4];
+extern int8_t EncBuffer[2];
 
 extern Btn_Nav_States_struct Btn_Nav_CurStates;
 extern Btn_Nav_States_struct Btn_Nav_PrevStates;
@@ -97,7 +97,6 @@ typedef struct {
 
 typedef void (*DisplayFunction)(void*);
 typedef void (*ButtonFunction)(void*);
-
 typedef void (*VoidFunction)(void);
 
 typedef struct {
@@ -175,9 +174,7 @@ typedef struct KeyValuePair {
     u7ValuePair u7vp;
     fnctnValuePair fnctnvp;
   };
-} KeyValuePair_s;
-
-//typedef struct KeyValuePair KeyValuePair_s;
+} KeyValuePair_t;
 
 extern struct KeyValuePair *kvps;
 extern struct KeyValuePair *ObjectKvpRoot;
@@ -194,17 +191,13 @@ void KVP_ReceiveDataUSB(char *data);
 void KVP_ClearObjects(void);
 void KVP_RegisterObject(struct KeyValuePair *kvp);
 
-void k_scope_disp_frac32_64(void * userdata);
-void k_scope_disp_frac32_minmax_64(void * userdata);
-void k_scope_disp_frac32buffer_64(void * userdata);
-
-void SetKVP_APVP(struct KeyValuePair *kvp, struct KeyValuePair *parent,
-                 const char *keyName, int length, struct KeyValuePair *array);
-void SetKVP_AVP(struct KeyValuePair *kvp, struct KeyValuePair *parent,
-                const char *keyName, int length, struct KeyValuePair *array);
-void SetKVP_IVP(struct KeyValuePair *kvp, struct KeyValuePair *parent,
+void SetKVP_APVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,
+                 const char *keyName, int length, KeyValuePair_t **array);
+void SetKVP_AVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,
+                const char *keyName, int length, KeyValuePair_t *array);
+void SetKVP_IVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,
                 const char *keyName, int *value, int min, int max);
-void SetKVP_IPVP(struct KeyValuePair *kvp, struct KeyValuePair *parent,
+void SetKVP_IPVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,
                  const char *keyName, ParameterExchange_t *PEx, int min,
                  int max);
 void SetKVP_FNCTN(struct KeyValuePair *kvp, struct KeyValuePair *parent,

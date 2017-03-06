@@ -34,13 +34,12 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
+#include "usbh_midi_core_lld.h"
 #include "usbh_midi_core.h"
-
 
 
 #define _USB_H_
 #include "ch.h"
-#include "hal.h"
 #include "axoloti_board.h"
 #include "exceptions.h"
 

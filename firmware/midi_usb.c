@@ -42,6 +42,7 @@ static THD_FUNCTION(MidiWriter, arg) {
   // TODO: implement...
 	while (true) {
 		eventmask_t evt = chEvtWaitOne(1);
+		(void)evt;
 		// read from queue, transmit
 		// usbTransmit(&USBD1, USBD1_DATA_REQUEST_EP, data, size);
 	}
@@ -58,6 +59,7 @@ static THD_FUNCTION(MidiReader, arg) {
 	while (true) {
 	    msg_t msg = usbReceive(&USBD1, USBD1_DATA_AVAILABLE_EP,
 	    		midi_usbd_rxbuf, sizeof (midi_usbd_rxbuf));
+	    (void)msg;
 	}
 }
 

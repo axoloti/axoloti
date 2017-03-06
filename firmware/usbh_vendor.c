@@ -2,9 +2,9 @@
 // https://lkml.org/lkml/2010/2/10/25
 
 
+#include "usbh_midi_core_lld.h"
 #include "usbh_midi_core.h"
 
-#define _USB_H_
 #include "ch.h"
 
 USB_Setup_TypeDef MIDI_Setup;

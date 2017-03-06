@@ -45,7 +45,6 @@ void adc_init(void) {
 }
 
 void adc_configpads(void) {
-#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
   palSetPadMode(GPIOA, 0, PAL_MODE_INPUT_ANALOG);
   palSetPadMode(GPIOA, 1, PAL_MODE_INPUT_ANALOG);
 #ifndef ENABLE_SERIAL_DEBUG
@@ -66,28 +65,6 @@ void adc_configpads(void) {
   palSetPadMode(GPIOC, 3, PAL_MODE_INPUT_ANALOG);
   palSetPadMode(GPIOC, 4, PAL_MODE_INPUT_ANALOG);
   palSetPadMode(GPIOC, 5, PAL_MODE_INPUT_ANALOG);
-#elif (BOARD_STM32F4DISCOVERY)
-
-  palSetPadMode(GPIOA, 0, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOA, 1, PAL_MODE_INPUT_ANALOG);
-#ifdef ENABLE_SERIAL_DEBUG
-  palSetPadMode(GPIOA, 2, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOA, 3, PAL_MODE_INPUT_ANALOG);
-#endif
-  // skip GPIOA4: LRCLK
-  // skip GPIOA5,GPIOA6,GPIOA7: accelerometer
-  palSetPadMode(GPIOB, 0, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOB, 1, PAL_MODE_INPUT_ANALOG);
-  //skip GPIOPC0: USB PowerOn
-  palSetPadMode(GPIOC, 1, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOC, 2, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOC, 3, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOC, 4, PAL_MODE_INPUT_ANALOG);
-  palSetPadMode(GPIOC, 5, PAL_MODE_INPUT_ANALOG);
-  adcStart(&ADCD1, NULL);
-#else
-#error "ADC: No board defined?"
-#endif
 }
 
 /*

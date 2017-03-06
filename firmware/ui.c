@@ -29,34 +29,193 @@
 #include "axoloti_control.h"
 #include "ff.h"
 #include <string.h>
+#include "spilink.h"
 
-#define LCD_COL_INDENT 5
+#define LCD_COL_INDENT 0
 #define LCD_COL_RIGHT 0
 #define LCD_COL_LEFT 97
 #define STATUSROW 7
-
-
 
 Btn_Nav_States_struct Btn_Nav_CurStates;
 Btn_Nav_States_struct Btn_Nav_PrevStates;
 Btn_Nav_States_struct Btn_Nav_Or;
 Btn_Nav_States_struct Btn_Nav_And;
 
-int8_t EncBuffer[4];
+int8_t EncBuffer[2];
 
-struct KeyValuePair KvpsHead;
-struct KeyValuePair *KvpsDisplay;
-struct KeyValuePair *ObjectKvpRoot;
+KeyValuePair_t *KvpsDisplay;
+KeyValuePair_t *ObjectKvpRoot;
 #define MAXOBJECTS 256
-struct KeyValuePair *ObjectKvps[MAXOBJECTS];
+KeyValuePair_t *ObjectKvps[MAXOBJECTS];
 #define MAXTMPMENUITEMS 15
-KeyValuePair_s TmpMenuKvps[MAXTMPMENUITEMS];
-KeyValuePair_s ADCkvps[3];
+KeyValuePair_t TmpMenuKvps[MAXTMPMENUITEMS];
 
-//const char stat = 2;
 
-void SetKVP_APVP(KeyValuePair_s *kvp, KeyValuePair_s *parent,
-                 const char *keyName, int length, KeyValuePair_s *array) {
+#define MainMenu_length 5
+#define SdcMenu_length 2
+#define ADCMenu_length 15
+
+extern KeyValuePair_t MainMenu[MainMenu_length];
+extern KeyValuePair_t SdcMenu[SdcMenu_length];
+extern KeyValuePair_t ADCMenu[ADCMenu_length];
+extern KeyValuePair_t RootMenu;
+
+
+void EnterMenuLoad(void) {
+#if 0
+  memp = (uint8_t *)&fbuff[0];
+  FRESULT res;
+  FILINFO fno;
+  DIR dir;
+  int index = 0;
+  char *fn;
+#if _USE_LFN
+  fno.lfname = 0;
+  fno.lfsize = 0;
+#endif
+  res = f_opendir(&dir, "");
+  if (res == FR_OK) {
+    for (;;) {
+      res = f_readdir(&dir, &fno);
+      if (res != FR_OK || fno.fname[0] == 0)
+        break;
+      if (fno.fname[0] == '.')
+        continue;
+      fn = fno.fname;
+      if (fno.fattrib & AM_DIR) {
+        // ignore subdirectories for now
+      }
+      else {
+        int l = strlen(fn);
+        if ((fn[l - 4] == '.') && (fn[l - 3] == 'B') && (fn[l - 2] == 'I')
+            && (fn[l - 1] == 'N')) {
+          char *s;
+          s = (char *)memp;
+          strcpy(s, fn);
+          memp += l + 1;
+          SetKVP_FNCTN(&TmpMenuKvps[index], NULL, s, &EnterMenuLoadFile);
+          index++;
+        }
+      }
+    }
+    SetKVP_AVP(&LoadMenu, &KvpsHead, "Load SD", index, &TmpMenuKvps[0]);
+    KvpsDisplay = &LoadMenu;
+  }
+  // TBC: error messaging
+#endif
+}
+
+void EnterMenuFormat(void) {
+  FRESULT err;
+  err = f_mkfs(0, 0, 0);
+  if (err != FR_OK) {
+    SetKVP_AVP(&TmpMenuKvps[0], &RootMenu, "Format failed", 0, 0);
+    KvpsDisplay = &TmpMenuKvps[0];
+  }
+  else {
+    SetKVP_AVP(&TmpMenuKvps[0], &RootMenu, "Format OK", 0, 0);
+    KvpsDisplay = &TmpMenuKvps[0];
+  }
+}
+
+void DemoDisplayFunction(void *x) {
+
+}
+
+void DemoButtonFunction(void *x) {
+	LED_clear();
+
+	static uint8_t val0;
+	val0 += EncBuffer[0];
+	static uint8_t val1;
+	val1 += EncBuffer[1];
+	EncBuffer[0] = 0;
+	EncBuffer[1] = 0;
+
+	LED_setAll(0,0);
+	LED_setAll(1,0);
+	LED_setOne(0, val0 % 16 ,1 );
+	LED_setOne(1, val1 % 16 ,1);
+
+	static int button[16];
+	IF_BTN_NAV_DOWN(btn_1)  button[0] =   (button[0]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_2)  button[1] =   (button[1]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_3)  button[2] =   (button[2]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_4)  button[3] =   (button[3]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_5)  button[4] =   (button[4]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_6)  button[5] =   (button[5]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_7)  button[6] =   (button[6]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_8)  button[7] =   (button[7]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_9)  button[8] =   (button[8]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_10) button[9] =   (button[9]  + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_11) button[10] =  (button[10] + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_12) button[11] =  (button[11] + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_13) button[12] =  (button[12] + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_14) button[13] =  (button[13] + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_15) button[14] =  (button[14] + 1) % 4;
+	IF_BTN_NAV_DOWN(btn_16) button[15] =  (button[15] + 1) % 4;
+
+	int i=0;
+	for(i=0;i<16;i++) {
+		LED_setOne(2,i,button[i]);
+	}
+
+    LCD_drawStringN(60, 1, "DEMO", LCDWIDTH);
+    LCD_drawStringN(60, 2, "", LCDWIDTH);
+    LCD_drawNumber3D(60,3, spilink_rx[0].control_data[3]);
+    LCD_drawNumber3D(60,4, spilink_rx[0].control_data[4]);
+    LCD_drawNumber3D(60,5, spilink_rx[0].control_data[5]);
+
+    if (Btn_Nav_CurStates.fields.btn_nav_Up) LCD_drawStringN(0, 3, "Up", LCDWIDTH);
+    if (Btn_Nav_CurStates.fields.btn_nav_Down) LCD_drawStringN(0, 3, "Down", LCDWIDTH);
+    if (Btn_Nav_CurStates.fields.btn_nav_Enter) LCD_drawStringN(0, 3, "Enter", LCDWIDTH);
+    if (Btn_Nav_CurStates.fields.btn_nav_Back) LCD_drawStringN(0, 3, "Back", LCDWIDTH);
+    if (Btn_Nav_CurStates.fields.btn_nav_Home) LCD_drawStringN(0, 3, "Home", LCDWIDTH);
+    if (Btn_Nav_CurStates.fields.btn_nav_Left) LCD_drawStringN(0, 3, "Left", LCDWIDTH);
+    if (Btn_Nav_CurStates.fields.btn_nav_Right) LCD_drawStringN(0, 3, "Right", LCDWIDTH);
+    if (Btn_Nav_CurStates.fields.btn_nav_Shift) LCD_drawStringN(0, 3, "Shift", LCDWIDTH);
+}
+
+
+KeyValuePair_t RootMenu = {
+  KVP_TYPE_AVP, NULL, "--- AXOLOTI ---", .avp = {MainMenu, MainMenu_length, 0}
+};
+
+KeyValuePair_t MainMenu[MainMenu_length] = {
+  { KVP_TYPE_APVP, &RootMenu, "Patch", .apvp = {(int *)ObjectKvps, 0, 0}},
+  { KVP_TYPE_AVP, &RootMenu, "SDCard", .avp = {SdcMenu, SdcMenu_length, 0}},
+  { KVP_TYPE_AVP, &RootMenu, "ADCs", .avp = {ADCMenu, ADCMenu_length, 0}},
+  { KVP_TYPE_IVP, &RootMenu, "dsp%", .ivp = {&dspLoadPct, 0, 100}},
+  { KVP_TYPE_CUSTOM, &RootMenu, "Demo", .custom = {&DemoDisplayFunction, DemoButtonFunction, 0}}
+};
+
+#define sdcmenu_item 1
+KeyValuePair_t SdcMenu[SdcMenu_length] = {
+  { KVP_TYPE_FNCTN, &MainMenu[sdcmenu_item], "Load patch", .fnctnvp = {&EnterMenuLoad}},
+  { KVP_TYPE_FNCTN, &MainMenu[sdcmenu_item], "Format", .fnctnvp = {&EnterMenuFormat}}
+};
+
+#define adcmenu_item 3
+KeyValuePair_t ADCMenu[ADCMenu_length] = {
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC0", .svp = {(int16_t *)&adcvalues[0]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC1", .svp = {(int16_t *)&adcvalues[1]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC2", .svp = {(int16_t *)&adcvalues[2]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC3", .svp = {(int16_t *)&adcvalues[3]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC4", .svp = {(int16_t *)&adcvalues[4]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC5", .svp = {(int16_t *)&adcvalues[5]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC6", .svp = {(int16_t *)&adcvalues[6]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC7", .svp = {(int16_t *)&adcvalues[7]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC8", .svp = {(int16_t *)&adcvalues[8]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC9", .svp = {(int16_t *)&adcvalues[9]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC10", .svp = {(int16_t *)&adcvalues[10]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC11", .svp = {(int16_t *)&adcvalues[11]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC12", .svp = {(int16_t *)&adcvalues[12]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC13", .svp = {(int16_t *)&adcvalues[13]}},
+  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC14", .svp = {(int16_t *)&adcvalues[14]}}
+};
+
+void SetKVP_APVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
+                 const char *keyName, int length, KeyValuePair_t **array) {
   kvp->kvptype = KVP_TYPE_APVP;
   kvp->parent = (void *)parent;
   kvp->keyname = keyName;
@@ -65,8 +224,8 @@ void SetKVP_APVP(KeyValuePair_s *kvp, KeyValuePair_s *parent,
   kvp->apvp.array = (void *)array;
 }
 
-void SetKVP_AVP(KeyValuePair_s *kvp, KeyValuePair_s *parent,
-                const char *keyName, int length, KeyValuePair_s *array) {
+void SetKVP_AVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
+                const char *keyName, int length, KeyValuePair_t *array) {
   kvp->kvptype = KVP_TYPE_AVP;
   kvp->parent = (void *)parent;
   kvp->keyname = keyName;
@@ -75,7 +234,7 @@ void SetKVP_AVP(KeyValuePair_s *kvp, KeyValuePair_s *parent,
   kvp->avp.array = array;
 }
 
-void SetKVP_IVP(KeyValuePair_s *kvp, KeyValuePair_s *parent,
+void SetKVP_IVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
                 const char *keyName, int *value, int min, int max) {
   kvp->kvptype = KVP_TYPE_IVP;
   kvp->parent = (void *)parent;
@@ -85,7 +244,7 @@ void SetKVP_IVP(KeyValuePair_s *kvp, KeyValuePair_s *parent,
   kvp->ivp.maxvalue = max;
 }
 
-void SetKVP_IPVP(KeyValuePair_s *kvp, KeyValuePair_s *parent,
+void SetKVP_IPVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
                  const char *keyName, ParameterExchange_t *PEx, int min,
                  int max) {
   PEx->signals = 0x0F;
@@ -97,7 +256,7 @@ void SetKVP_IPVP(KeyValuePair_s *kvp, KeyValuePair_s *parent,
   kvp->ipvp.maxvalue = max;
 }
 
-void SetKVP_FNCTN(KeyValuePair_s *kvp, KeyValuePair_s *parent,
+void SetKVP_FNCTN(KeyValuePair_t *kvp, KeyValuePair_t *parent,
                   const char *keyName, VoidFunction fnctn) {
   kvp->kvptype = KVP_TYPE_FNCTN;
   kvp->parent = (void *)parent;
@@ -105,7 +264,7 @@ void SetKVP_FNCTN(KeyValuePair_s *kvp, KeyValuePair_s *parent,
   kvp->fnctnvp.fnctn = fnctn;
 }
 
-void SetKVP_CUSTOM(KeyValuePair_s *kvp, KeyValuePair_s *parent,
+void SetKVP_CUSTOM(KeyValuePair_t *kvp, KeyValuePair_t *parent,
                   const char *keyName, DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata) {
   kvp->kvptype = KVP_TYPE_CUSTOM;
   kvp->parent = (void *)parent;
@@ -117,7 +276,7 @@ void SetKVP_CUSTOM(KeyValuePair_s *kvp, KeyValuePair_s *parent,
 
 
 
-inline void KVP_Increment(KeyValuePair_s *kvp) {
+inline void KVP_Increment(KeyValuePair_t *kvp) {
   switch (kvp->kvptype) {
   case KVP_TYPE_IVP:
     if (*kvp->ivp.value < kvp->ivp.maxvalue)
@@ -150,7 +309,7 @@ inline void KVP_Increment(KeyValuePair_s *kvp) {
   }
 }
 
-inline void KVP_Decrement(KeyValuePair_s *kvp) {
+inline void KVP_Decrement(KeyValuePair_t *kvp) {
   switch (kvp->kvptype) {
   case KVP_TYPE_IVP:
     if (*kvp->ivp.value > kvp->ivp.minvalue)
@@ -222,11 +381,11 @@ inline void KVP_Decrement(KeyValuePair_s *kvp) {
  */
 
 uint8_t *memp;
-KeyValuePair_s LoadMenu;
+KeyValuePair_t LoadMenu;
 
 void EnterMenuLoadFile(void) {
-  KeyValuePair_s *F =
-      &((KeyValuePair_s *)(LoadMenu.avp.array))[LoadMenu.avp.current];
+  KeyValuePair_t *F =
+      &((KeyValuePair_t *)(LoadMenu.avp.array))[LoadMenu.avp.current];
 
   char str[20] = "0:";
   strcat(str, F->keyname);
@@ -234,60 +393,6 @@ void EnterMenuLoadFile(void) {
   LoadPatch(str);
 }
 
-void EnterMenuLoad(void) {
-  memp = (uint8_t *)&fbuff[0];
-  FRESULT res;
-  FILINFO fno;
-  DIR dir;
-  int index = 0;
-  char *fn;
-#if _USE_LFN
-  fno.lfname = 0;
-  fno.lfsize = 0;
-#endif
-  res = f_opendir(&dir, "");
-  if (res == FR_OK) {
-    for (;;) {
-      res = f_readdir(&dir, &fno);
-      if (res != FR_OK || fno.fname[0] == 0)
-        break;
-      if (fno.fname[0] == '.')
-        continue;
-      fn = fno.fname;
-      if (fno.fattrib & AM_DIR) {
-        // ignore subdirectories for now
-      }
-      else {
-        int l = strlen(fn);
-        if ((fn[l - 4] == '.') && (fn[l - 3] == 'B') && (fn[l - 2] == 'I')
-            && (fn[l - 1] == 'N')) {
-          char *s;
-          s = (char *)memp;
-          strcpy(s, fn);
-          memp += l + 1;
-          SetKVP_FNCTN(&TmpMenuKvps[index], NULL, s, &EnterMenuLoadFile);
-          index++;
-        }
-      }
-    }
-    SetKVP_AVP(&LoadMenu, &KvpsHead, "Load SD", index, &TmpMenuKvps[0]);
-    KvpsDisplay = &LoadMenu;
-  }
-  // TBC: error messaging
-}
-
-void EnterMenuFormat(void) {
-  FRESULT err;
-  err = f_mkfs(0, 0, 0);
-  if (err != FR_OK) {
-    SetKVP_AVP(&TmpMenuKvps[0], &KvpsHead, "Format failed", 0, 0);
-    KvpsDisplay = &TmpMenuKvps[0];
-  }
-  else {
-    SetKVP_AVP(&TmpMenuKvps[0], &KvpsHead, "Format OK", 0, 0);
-    KvpsDisplay = &TmpMenuKvps[0];
-  }
-}
 
 
 static void UIUpdateLCD(void);
@@ -312,15 +417,14 @@ static THD_FUNCTION(ThreadUI2, arg) {
     }
     chThdSleepMilliseconds(15);
   }
-  return (msg_t)0;
 }
 
 
 void UIGoSafe(void) {
-  KvpsDisplay = &KvpsHead;
+	  KvpsDisplay = &RootMenu;
 }
 
-static KeyValuePair_s* userDisplay;
+static KeyValuePair_t* userDisplay;
 
 void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata) {
 	if(userDisplay!=0) {
@@ -334,62 +438,22 @@ void ui_init(void) {
   Btn_Nav_Or.word = 0;
   Btn_Nav_And.word = ~0;
 
-  KeyValuePair_s *p1 = chCoreAlloc(sizeof(KeyValuePair_s) * 6);
-  KeyValuePair_s *q1 = p1;
-  SetKVP_FNCTN(q1++, &KvpsHead, "Info", 0);
-  SetKVP_FNCTN(q1++, &KvpsHead, "Format", &EnterMenuFormat);
-  if (fs_ready)
-    SetKVP_FNCTN(q1++, &KvpsHead, "Load SD", &EnterMenuLoad);
-  else
-    SetKVP_FNCTN(q1++, &KvpsHead, "No SDCard", NULL);
-
-  KeyValuePair_s *p = chCoreAlloc(sizeof(KeyValuePair_s) * 6);
-//  KeyValuePair *q = p;
-  int entries = 0;
-
-  SetKVP_APVP(&p[entries++], &KvpsHead, "Patch", 0, &ObjectKvps[0]);
-  SetKVP_IVP(&p[entries++], &KvpsHead, "Running", &patchStatus, 0, 15);
-  SetKVP_AVP(&p[entries++], &KvpsHead, "SDCard Tools", 3, &p1[0]);
-  SetKVP_AVP(&p[entries++], &KvpsHead, "ADCs", 3, &ADCkvps[0]);
-  SetKVP_IVP(&p[entries++], &KvpsHead, "dsp%", &dspLoadPct, 0, 100);
-  userDisplay = &p[entries++];
-  SetKVP_CUSTOM(userDisplay, &KvpsHead, "User", NULL,NULL,NULL);
-
-  SetKVP_AVP(&KvpsHead, NULL, "--- AXOLOTI ---", entries, &p[0]);
-
-  KvpsDisplay = &KvpsHead;
-
-  int i;
-  for (i = 0; i < 3; i++) {
-    ADCkvps[i].kvptype = KVP_TYPE_SVP;
-    ADCkvps[i].svp.value = (int16_t *)&adcvalues[i];
-    char *str = chCoreAlloc(6);
-    str[0] = 'A';
-    str[1] = 'D';
-    str[2] = 'C';
-    str[3] = '0' + i;
-    str[4] = 0;
-//    sprintf(str,"CC%i",i);
-    ADCkvps[i].keyname = str;    //(char *)i;
-  }
-
-  ObjectKvpRoot = &p[0];
-
+  KvpsDisplay = &RootMenu;
   chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2, NULL);
-
   axoloti_control_init();
 
-  for(i=0;i<4;i++) {
+  int i;
+  for(i=0;i<2;i++) {
 	  EncBuffer[i]=0;
   }
 }
 
 void KVP_ClearObjects(void) {
   ObjectKvpRoot->apvp.length = 0;
-  KvpsDisplay = &KvpsHead;
+  KvpsDisplay = &RootMenu;
 }
 
-void KVP_RegisterObject(KeyValuePair_s *kvp) {
+void KVP_RegisterObject(KeyValuePair_t *kvp) {
   ObjectKvps[ObjectKvpRoot->apvp.length] = kvp;
 //	kvp->parent = ObjectKvpRoot;
   ObjectKvpRoot->apvp.length++;
@@ -399,7 +463,7 @@ void KVP_RegisterObject(KeyValuePair_s *kvp) {
 #define LCD_COL_VAL LCD_COL_LEFT
 #define LCD_COL_ENTER LCD_COL_LEFT
 
-void KVP_DisplayInv(int x, int y, KeyValuePair_s *kvp) {
+void KVP_DisplayInv(int x, int y, KeyValuePair_t *kvp) {
   LCD_drawStringInvN(x, y, kvp->keyname, LCD_COL_EQ);
   switch (kvp->kvptype) {
   case KVP_TYPE_U7VP:
@@ -438,7 +502,7 @@ void KVP_DisplayInv(int x, int y, KeyValuePair_s *kvp) {
   }
 }
 
-void KVP_Display(int x, int y, KeyValuePair_s *kvp) {
+void KVP_Display(int x, int y, KeyValuePair_t *kvp) {
   LCD_drawStringN(x, y, kvp->keyname, LCD_COL_EQ);
   switch (kvp->kvptype) {
   case KVP_TYPE_U7VP:
@@ -531,52 +595,14 @@ void KVP_Display(int x, int y, KeyValuePair_s *kvp) {
  *                 no up_evt detectable from cur/prev!
  */
 
-static void LEDTest(void) {
-	LED_clear();
-
-	static uint8_t val0;
-	val0 += EncBuffer[0];
-	static uint8_t val1;
-	val1 += EncBuffer[1];
-
-	LED_setAll(0,0);
-	LED_setAll(1,0);
-	LED_setOne(0, val0 % 16 ,1 );
-	LED_setOne(1, val1 % 16 ,1);
-
-	static int button[16];
-	IF_BTN_NAV_DOWN(btn_1)  button[0] =   (button[0]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_2)  button[1] =   (button[1]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_3)  button[2] =   (button[2]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_4)  button[3] =   (button[3]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_5)  button[4] =   (button[4]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_6)  button[5] =   (button[5]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_7)  button[6] =   (button[6]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_8)  button[7] =   (button[7]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_9)  button[8] =   (button[8]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_10) button[9] =   (button[9]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_11) button[10] =  (button[10] + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_12) button[11] =  (button[11] + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_13) button[12] =  (button[12] + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_14) button[13] =  (button[13] + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_15) button[14] =  (button[14] + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_16) button[15] =  (button[15] + 1) % 4;
-
-	int i=0;
-	for(i=0;i<16;i++) {
-		LED_setOne(2,i,button[i]);
-	}
-}
 
 static void UIPollButtons(void) {
   Btn_Nav_CurStates.word = Btn_Nav_CurStates.word | Btn_Nav_Or.word;
   Btn_Nav_Or.word = 0;
 
-  LEDTest();
-
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
-    KeyValuePair_s *cur =
-        &((KeyValuePair_s *)(KvpsDisplay->avp.array))[KvpsDisplay->avp.current];
+    KeyValuePair_t *cur =
+        &((KeyValuePair_t *)(KvpsDisplay->avp.array))[KvpsDisplay->avp.current];
     IF_BTN_NAV_DOWN(btn_nav_Down)
       KVP_Increment(KvpsDisplay);
     IF_BTN_NAV_DOWN(btn_nav_Up)
@@ -587,20 +613,21 @@ static void UIPollButtons(void) {
       KVP_Increment(cur);
     IF_BTN_NAV_DOWN(btn_nav_Enter) {
       if ((cur->kvptype == KVP_TYPE_AVP) || (cur->kvptype == KVP_TYPE_APVP)
-          || (cur->kvptype == KVP_TYPE_CUSTOM))
+          || (cur->kvptype == KVP_TYPE_CUSTOM)) {
+    	LCD_clearDisplay();
         KvpsDisplay = cur;
-      else if (cur->kvptype == KVP_TYPE_FNCTN)
+      } else if (cur->kvptype == KVP_TYPE_FNCTN)
         if (cur->fnctnvp.fnctn != 0)
           (cur->fnctnvp.fnctn)();
     }
     IF_BTN_NAV_DOWN(btn_nav_Back)
       if (KvpsDisplay->parent)
-        KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
+        KvpsDisplay = (KeyValuePair_t *)KvpsDisplay->parent;
 
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
-    KeyValuePair_s *cur =
-        (KeyValuePair_s *)(KvpsDisplay->apvp.array[KvpsDisplay->apvp.current]);
+    KeyValuePair_t *cur =
+        (KeyValuePair_t *)(KvpsDisplay->apvp.array[KvpsDisplay->apvp.current]);
     IF_BTN_NAV_DOWN(btn_nav_Down)
       KVP_Increment(KvpsDisplay);
     IF_BTN_NAV_DOWN(btn_nav_Up)
@@ -619,7 +646,7 @@ static void UIPollButtons(void) {
     }
     IF_BTN_NAV_DOWN(btn_nav_Back)
       if (KvpsDisplay->parent)
-        KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
+        KvpsDisplay = (KeyValuePair_t *)KvpsDisplay->parent;
 
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
@@ -627,15 +654,15 @@ static void UIPollButtons(void) {
 
     IF_BTN_NAV_DOWN(btn_nav_Back)
       if (KvpsDisplay->parent)
-        KvpsDisplay = (KeyValuePair_s *)KvpsDisplay->parent;
+        KvpsDisplay = (KeyValuePair_t *)KvpsDisplay->parent;
 
   }
 
 
 // process encoder // todo: more than just one encoder...
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
-    KeyValuePair_s *cur =
-        &((KeyValuePair_s *)(KvpsDisplay->avp.array))[KvpsDisplay->avp.current];
+    KeyValuePair_t *cur =
+        &((KeyValuePair_t *)(KvpsDisplay->avp.array))[KvpsDisplay->avp.current];
     if ((cur->kvptype == KVP_TYPE_IVP) || (cur->kvptype == KVP_TYPE_IPVP)) {
       while (EncBuffer[0] > 0) {
         KVP_Increment(cur);
@@ -648,8 +675,8 @@ static void UIPollButtons(void) {
     }
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
-    KeyValuePair_s *cur =
-        (KeyValuePair_s *)(KvpsDisplay->apvp.array[KvpsDisplay->apvp.current]);
+    KeyValuePair_t *cur =
+        (KeyValuePair_t *)(KvpsDisplay->apvp.array[KvpsDisplay->apvp.current]);
     if ((cur->kvptype == KVP_TYPE_IVP) || (cur->kvptype == KVP_TYPE_IPVP)) {
       while (EncBuffer[0] > 0) {
         KVP_Increment(cur);
@@ -662,11 +689,9 @@ static void UIPollButtons(void) {
     }
   }
 
-  Btn_Nav_CurStates.word = Btn_Nav_CurStates.word & Btn_Nav_And.word;
+  Btn_Nav_CurStates.word = Btn_Nav_CurStates.word & ~Btn_Nav_And.word;
   Btn_Nav_PrevStates = Btn_Nav_CurStates;
-  Btn_Nav_And.word = ~0;
-
-
+  Btn_Nav_And.word = 0;
 }
 
 static void UIUpdateLCD(void) {
@@ -674,8 +699,9 @@ static void UIUpdateLCD(void) {
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
     int c = KvpsDisplay->avp.current;
     int l = KvpsDisplay->avp.length;
-    KeyValuePair_s *k = (KeyValuePair_s *)KvpsDisplay->avp.array;
+    KeyValuePair_t *k = (KeyValuePair_t *)KvpsDisplay->avp.array;
     if (l < STATUSROW) {
+      // they all fit on the screen
       int i;
       for (i = 0; i < l; i++) {
         if (c == i)
@@ -687,60 +713,23 @@ static void UIUpdateLCD(void) {
         LCD_drawStringN(LCD_COL_INDENT, 1 + i, " ", 78);
       }
     }
-    else if (c == 0) {
-      if (c < l)
-        KVP_DisplayInv(LCD_COL_INDENT, 1, &k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 1, " ", LCDWIDTH);
-      int line;
-      for (line = 2; line < STATUSROW; line++) {
-        if (c < l)
-          KVP_Display(LCD_COL_INDENT, line, &k[c++]);
-        else
-          LCD_drawStringN(LCD_COL_INDENT, line, " ", LCDWIDTH);
-      }
-    }
-    else if (c == 1) {
-      c--;
-      if (c < l)
-        KVP_Display(LCD_COL_INDENT, 1, &k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 1, " ", LCDWIDTH);
-      if (c < l)
-        KVP_DisplayInv(LCD_COL_INDENT, 2, &k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 2, " ", LCDWIDTH);
-      int line;
-      for (line = 3; line < STATUSROW; line++) {
-        if (c < l)
-          KVP_Display(LCD_COL_INDENT, line, &k[c++]);
-        else
-          LCD_drawStringN(LCD_COL_INDENT, line, " ", LCDWIDTH);
-      }
-    }
     else {
-      c--;
-      c--;
-      if (c < l)
-        KVP_Display(LCD_COL_INDENT, 1, &k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 1, " ", LCDWIDTH);
-      if (c < l)
-        KVP_Display(LCD_COL_INDENT, 2, &k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 2, " ", LCDWIDTH);
-      if (c < l)
-        KVP_DisplayInv(LCD_COL_INDENT, 3, &k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 3, " ", LCDWIDTH);
+      int offset = 0;
+      if (c > 3) offset = c - 3;
+      if ((l-c) < 3) offset = l - 6;
+
       int line;
-      for (line = 3; line < STATUSROW; line++) {
-        if (c < l)
-          KVP_Display(LCD_COL_INDENT, line, &k[c++]);
-        else
-          LCD_drawStringN(LCD_COL_INDENT, line, " ", LCDWIDTH);
+      for (line = 0; line < (STATUSROW-1); line++) {
+        if (offset+line < l) {
+        	if (offset+line == c)
+         	   KVP_DisplayInv(LCD_COL_INDENT, line+1, &k[offset+line]);
+        	else
+               KVP_Display(LCD_COL_INDENT, line+1, &k[offset+line]);
+        } else // blank
+          LCD_drawStringN(LCD_COL_INDENT, line+1, " ", LCDWIDTH);
       }
     }
+
     if (KvpsDisplay->parent) {
       LCD_drawStringInv(0, STATUSROW, "BACK");
       LCD_drawString(24, STATUSROW, "     ");
@@ -759,7 +748,7 @@ static void UIUpdateLCD(void) {
   else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
     int c = KvpsDisplay->apvp.current;
     int l = KvpsDisplay->apvp.length;
-    KeyValuePair_s **k = (KeyValuePair_s **)KvpsDisplay->apvp.array;
+    KeyValuePair_t **k = (KeyValuePair_t **)KvpsDisplay->apvp.array;
     if (l < 7) {
       int i;
       for (i = 0; i < l; i++) {
@@ -844,8 +833,19 @@ static void UIUpdateLCD(void) {
   else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
 	  if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata);
   }
+
+#if 0
+  static int dfgdfg = 0;
+  dfgdfg++;
+  LCD_drawHex32(0, 0, spilink_rx[0].control_type);
+  LCD_drawHex32(0, 1, Btn_Nav_CurStates.word);
+  LCD_drawHex32(0, 2, Btn_Nav_And.word);
+  LCD_drawHex32(0, 3, Btn_Nav_Or.word);
+  LCD_drawHex32(0, 4, dfgdfg);
+#endif
 }
 
+#if 0 // obsolete
 
 void k_scope_disp_frac32_64(void * userdata) {
 // userdata  int32_t[64], one sample per column
@@ -923,6 +923,4 @@ void k_scope_disp_frac32buffer_64(void * userdata) {
 	k_scope_disp_frac32_64(userdata);
 }
 
-
-
-
+#endif

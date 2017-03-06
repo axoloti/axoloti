@@ -57,14 +57,14 @@ typedef struct {
   int32_t cxn_2; // coefficient of x[n-2]
 } biquad_coefficients;
 
-static __attribute__ ((noinline)) void biquad_clearstate(biquad_state *state) {
+NOINLINE void biquad_clearstate(biquad_state *state) {
   state->filter_x_n1 = 0;
   state->filter_x_n2 = 0;
   state->filter_y_n1 = 0;
   state->filter_y_n2 = 0;
 }
 
-static __attribute__ ((noinline)) void biquad_dsp(biquad_state *state,
+NOINLINE void biquad_dsp(biquad_state *state,
                                                   biquad_coefficients *coefs,
                                                   const int32buffer inbuffer,
                                                   int32buffer outbuffer) {
@@ -94,7 +94,7 @@ static __attribute__ ((noinline)) void biquad_dsp(biquad_state *state,
   state->filter_y_n2 = filter_y_n2;
 }
 
-static __attribute__ ((noinline)) void biquad_lp_coefs(
+NOINLINE void biquad_lp_coefs(
     biquad_coefficients *coefs, uint32_t filter_W0, uint32_t q_inv) {
   filter_W0 = filter_W0 >> 1;
   int32_t sinW0 = arm_sin_q31(filter_W0);
@@ -127,7 +127,7 @@ static __attribute__ ((noinline)) void biquad_lp_coefs(
  } biquad_coefficients;
  */
 
-static void __attribute__ ((noinline)) biquad_bp_coefs(biquad_coefficients *coefs,
+NOINLINE void biquad_bp_coefs(biquad_coefficients *coefs,
                                                 uint32_t filter_W0,
                                                 uint32_t q_inv) {
 //  (constant 0 dB peak gain)
@@ -148,7 +148,7 @@ static void __attribute__ ((noinline)) biquad_bp_coefs(biquad_coefficients *coef
   coefs->cxn_2 = -coefs->cxn_0;
 }
 
-static void __attribute__ ((noinline)) biquad_hp_coefs(biquad_coefficients *coefs,
+NOINLINE void biquad_hp_coefs(biquad_coefficients *coefs,
                                                 uint32_t filter_W0,
                                                 uint32_t q_inv) {
   filter_W0 = filter_W0 >> 1;

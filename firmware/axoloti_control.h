@@ -82,5 +82,5 @@ void LCD_drawStringInvN(int x, int y, const char *str, int N);
 void LCD_drawIBAR(int x, int y, int v, int N);
 void LCD_drawIBARInv(int x, int y, int v, int N);
 void LCD_drawIBARadd(int x, int y, int v);
-
+void LCD_drawHex32(int x, int y, uint32_t i);
 #endif
