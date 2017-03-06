@@ -393,7 +393,14 @@ public class USBBulkConnection extends Connection {
         IntBuffer transfered = IntBuffer.allocate(1);
         int result = LibUsb.bulkTransfer(handle, (byte) OUT_ENDPOINT, buffer, transfered, 1000);
         if (result != LibUsb.SUCCESS) {
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Control transfer failed: {0}", result);
+            if (result == LibUsb.ERROR_NO_DEVICE) {
+                disconnect();
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Device disconnected");
+            } else if (result == LibUsb.ERROR_TIMEOUT) {
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "USB transmit timeout");
+            } else {
+                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Control transfer failed: {0}", result);
+            }
         }
         //System.out.println(transfered.get() + " bytes sent");
     }
