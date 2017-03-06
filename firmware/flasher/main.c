@@ -271,5 +271,6 @@ extern void Reset_Handler(void);
 
 __attribute__ ((section (".entry_section"))) void entryfn (int fwid) {
 	(void)fwid;
+	SCB->VTOR = CORTEX_VTOR_INIT;
 	Reset_Handler();
 }
