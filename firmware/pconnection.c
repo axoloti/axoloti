@@ -338,7 +338,7 @@ msg_t bulk_tx_paramchange(void) {
 	return r;
 }
 
-static THD_WORKING_AREA(waBulkWriter, 1024);
+static THD_WORKING_AREA(waBulkWriter, 1536);
 static THD_FUNCTION(BulkWriter, arg) {
 
 	(void) arg;
@@ -349,7 +349,7 @@ static THD_FUNCTION(BulkWriter, arg) {
 		switch (evt) {
 		case 1:
 			msg = bulk_tx_ack();
-			exception_checkandreport();
+			//exception_checkandreport();
 			break;
 		case evt_bulk_fw_ver:
 			msg = bulk_tx_fw_version();
@@ -389,7 +389,9 @@ static THD_FUNCTION(BulkWriter, arg) {
 	}
 }
 
-uint32_t header;
+typedef struct {
+   uint32_t header;
+} rcv_pckt_header_t;
 
 typedef struct {
    uint32_t header;
@@ -420,7 +422,7 @@ typedef struct {
 typedef struct {
    uint32_t header;
    uint32_t fsize;
-   char fn[4];
+   char fn[58];
 } rcv_pckt_fs_create_t;
 
 typedef struct {
@@ -577,7 +579,7 @@ static THD_FUNCTION(BulkReader, arg) {
     if (msg == MSG_RESET)
       chThdSleepMilliseconds(500);
     else {
-      header = *(int *)bulk_rxbuf;
+      uint32_t header = ((rcv_pckt_header_t *)bulk_rxbuf)->header;
       if (header == rcv_hdr_ping) {
     	  // AxoP : ping
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
