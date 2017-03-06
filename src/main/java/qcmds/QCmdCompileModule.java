@@ -35,10 +35,12 @@ public class QCmdCompileModule extends QCmdShellTask {
 
     PatchController patchController;
     String module;
+    String moduleDir;
 
-    public QCmdCompileModule(PatchController patchController, String module) {
+    public QCmdCompileModule(PatchController patchController, String module, String moduleDir) {
         this.patchController = patchController;
         this.module = module;
+        this.moduleDir = moduleDir;
     }
 
     @Override
@@ -61,6 +63,7 @@ public class QCmdCompileModule extends QCmdShellTask {
         list.addAll(Arrays.asList(super.GetEnv()));
         
         list.add("MODULE=" + module);
+        list.add("MODULE_DIR=" + moduleDir);
         
         String vars[] = new String[list.size()];
         list.toArray(vars);

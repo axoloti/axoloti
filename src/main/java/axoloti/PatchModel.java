@@ -47,6 +47,7 @@ import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
+import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.Constants;
 import axoloti.utils.Preferences;
 import java.awt.Point;
@@ -822,7 +823,7 @@ public class PatchModel {
     }
 
     public HashSet<String> getModules() {
-        HashSet<String> modules = new HashSet<String>();
+        HashSet<String> modules = new HashSet<>();
         for (AxoObjectInstanceAbstract o : objectinstances) {
             Set<String> i = o.getType().GetModules();
             if (i != null) {
@@ -830,6 +831,16 @@ public class PatchModel {
             }
         }
         return modules;
+    }
+
+    public String getModuleDir(String module){
+        for (AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
+            File f = new File(lib.getLocalLocation() + "modules/" + module);
+            if(f.exists() && f.isDirectory()) {
+                return lib.getLocalLocation() + "modules/" +module;
+            }
+        }
+        return null;
     }
 
     public String generateIncludes() {

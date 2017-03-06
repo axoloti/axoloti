@@ -300,7 +300,10 @@ public abstract class PatchView implements ModelChangedListener {
         getPatchController().WriteCode();
         qCmdProcessor.setPatchController(null);
         for(String module : getPatchController().patchModel.getModules()) {
-           qCmdProcessor.AppendToQueue(new QCmdCompileModule(getPatchController(),module));
+           qCmdProcessor.AppendToQueue(
+                   new QCmdCompileModule(getPatchController(),
+                           module, 
+                           getPatchController().patchModel.getModuleDir(module)));
         }
         qCmdProcessor.AppendToQueue(new QCmdCompilePatch(getPatchController()));
         qCmdProcessor.AppendToQueue(new QCmdUploadPatch());
