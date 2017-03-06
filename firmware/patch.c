@@ -182,28 +182,10 @@ static msg_t ThreadDSP(void *arg) {
     eventmask_t evt = chEvtWaitOne((eventmask_t)7);
     if (evt == 1) {
       static unsigned int tStart;
-      tStart = stGetCounter();
+      tStart = port_rt_get_counter_value();
       watchdog_feed();
       if (patchStatus == RUNNING) { // running
-#if (BOARD_STM32F4DISCOVERY)||(BOARD_AXOLOTI_V03)
-          // swap halfwords...
-          int i;
-          int32_t *p = inbuf;
-          for (i = 0; i < 32; i++) {
-            __ASM
-            volatile ("ror %0, %1, #16" : "=r" (*p) : "r" (*p));
-            p++;
-          }
-#endif
         (patchMeta.fptr_dsp_process)(inbuf, outbuf);
-#if (BOARD_STM32F4DISCOVERY)||(BOARD_AXOLOTI_V03)
-        p = outbuf;
-        for (i = 0; i < 32; i++) {
-          __ASM
-          volatile ("ror %0, %1, #16" : "=r" (*p) : "r" (*p));
-          p++;
-        }
-#endif
       }
       else if (patchStatus == STOPPING){
         codec_clearbuffer();
@@ -215,7 +197,7 @@ static msg_t ThreadDSP(void *arg) {
         codec_clearbuffer();
       }
       adc_convert();
-      DspTime = (stGetCounter() - tStart);
+      DspTime = (port_rt_get_counter_value() - tStart);
       dspLoadPct = (DspTime) / (STM32_SYSCLK / 300000);
       if (dspLoadPct > 99) {
         // overload:
