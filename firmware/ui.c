@@ -289,51 +289,16 @@ void EnterMenuFormat(void) {
   }
 }
 
-#define NEWBOARD 1
-#ifndef NEWBOARD
-/*
- * This is a periodic thread that handles display/buttons
- */
-static void UIPollButtons(void);
-static void UIUpdateLCD(void);
 
-void AxolotiControlUpdate(void) {
-  static int refreshLCD=0;
-    UIPollButtons();
-    if (!(0x0F & refreshLCD++)) {
-      UIUpdateLCD();
-      LCD_display();
-    }
-}
-
-
-void (*pControlUpdate)(void) = AxolotiControlUpdate;
-
-static WORKING_AREA(waThreadUI, 2048);
-static msg_t ThreadUI(void *arg) {
-  while(1) {
-    if(pControlUpdate != 0L) {
-        pControlUpdate();
-    }
-    AxoboardADCConvert();
-    PollMidiIn();
-    chThdSleepMilliseconds(2);
-  }
-}
-#else
 static void UIUpdateLCD(void);
 static void UIPollButtons(void);
 
 void AxolotiControlUpdate(void) {
-#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
-//    do_axoloti_control();
     UIPollButtons();
     UIUpdateLCD();
-#endif
 }
 
 void (*pControlUpdate)(void) = AxolotiControlUpdate;
-#endif
 
 static WORKING_AREA(waThreadUI2, 512);
 static msg_t ThreadUI2(void *arg) {

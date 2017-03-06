@@ -565,8 +565,12 @@ void fakefree(void * p){
   memused = 0;
 }
 
-//STM32_OTG2_HANDLER
-CH_IRQ_HANDLER(Vector174) {
+#define STM32_OTG2_HANDLER          Vector174
+#define STM32_OTG2_EP1OUT_HANDLER   Vector168
+#define STM32_OTG2_EP1IN_HANDLER    Vector16C
+
+
+CH_IRQ_HANDLER(STM32_OTG2_HANDLER) {
   CH_IRQ_PROLOGUE();
   chSysLockFromIsr();
   HAL_HCD_IRQHandler(&hHCD);
@@ -578,17 +582,12 @@ CH_IRQ_HANDLER(Vector174) {
 }
 
 
-//#define STM32_OTG1_HANDLER          Vector14C
-//#define STM32_OTG2_HANDLER          Vector174
-//#define STM32_OTG2_EP1OUT_HANDLER   Vector168
-//#define STM32_OTG2_EP1IN_HANDLER    Vector16C
-
-CH_IRQ_HANDLER(Vector168) {
+CH_IRQ_HANDLER(STM32_OTG2_EP1OUT_HANDLER) {
   while (1) {
   }
 }
 
-CH_IRQ_HANDLER(Vector16C) {
+CH_IRQ_HANDLER(STM32_OTG2_EP1IN_HANDLER) {
   while (1) {
   }
 }
