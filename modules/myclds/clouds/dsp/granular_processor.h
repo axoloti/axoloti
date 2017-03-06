@@ -210,8 +210,8 @@ class GranularProcessor {
   
   Parameters parameters_;
   
-  SampleRateConverter<-kDownsamplingFactor, 45, src_filter_1x_2_45> src_down_;
-  SampleRateConverter<+kDownsamplingFactor, 45, src_filter_1x_2_45> src_up_;
+  SampleRateConverter<-kDownsamplingFactor, 45, ::clouds::src_filter_1x_2_45> src_down_;
+  SampleRateConverter<+kDownsamplingFactor, 45, ::clouds::src_filter_1x_2_45> src_up_;
   
   PersistentState persistent_state_;
   

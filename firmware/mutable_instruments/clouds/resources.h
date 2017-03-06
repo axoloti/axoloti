@@ -40,6 +40,9 @@
 
 namespace clouds {
 
+
+extern const int16_t lut_ulaw[256];
+
 typedef uint8_t ResourceId;
 
 extern const float* src_filter_table[];

@@ -67,8 +67,8 @@ MODOBJS := $(addprefix $(BUILDDIR)/, $(MOD_OBJS))
 $(BUILDDIR)/%.o: $(MODDIR)/%.cpp ${BDIR}/xpatch.h.gch
 	echo @mkdir -p ${BDIR}/build/$(dir $<)
 	@mkdir -p ${BDIR}/build/$(dir $<)
-	@$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch  --include ${BDIR}/xpatch.h -c  $< -o $@
-	#@$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
+	#@$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch  --include ${BDIR}/xpatch.h -c  $< -o $@
+	@$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
 
 ${BUILDDIR}/${MODLIB}: $(MODOBJS) $(BDIR)/createSym
 	@echo \#pragma once  > $(BUILDDIR)/$(MODULE)_wrapper.h 

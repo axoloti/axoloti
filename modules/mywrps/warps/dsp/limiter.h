@@ -1,4 +1,4 @@
-// Copyright 2014 Olivier Gillet.
+// Copyright 2015 Olivier Gillet.
 //
 // Author: Olivier Gillet (ol.gillet@gmail.com)
 //
@@ -24,11 +24,47 @@
 //
 // -----------------------------------------------------------------------------
 //
-// Mu-law encoding.
+// Limiter.
 
-#include "clouds/dsp/mu_law.h"
+#ifndef WARPS_DSP_LIMITER_H_
+#define WARPS_DSP_LIMITER_H_
 
-namespace clouds {
+#include "stmlib/stmlib.h"
 
+#include <algorithm>
 
-}  // namespace clouds
+#include "stmlib/dsp/dsp.h"
+#include "stmlib/dsp/filter.h"
+
+namespace warps {
+
+class Limiter {
+ public:
+  Limiter() { }
+  ~Limiter() { }
+
+  void Init() {
+    peak_ = 0.5f;
+  }
+
+  void Process(
+      float* in_out,
+      float pre_gain,
+      size_t size) {
+    while (size--) {
+      float s = *in_out * pre_gain;
+      SLOPE(peak_, fabs(s), 0.05f, 0.00002f);
+      float gain = (peak_ <= 1.0f ? 1.0f : 1.0f / peak_);
+      *in_out++ = stmlib::SoftLimit(s * gain * 0.8f);
+    }
+  }
+
+ private:
+  float peak_;
+
+  DISALLOW_COPY_AND_ASSIGN(Limiter);
+};
+
+}  // namespace warps
+
+#endif  // WARPS_DSP_LIMITER_H_
