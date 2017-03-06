@@ -48,7 +48,7 @@ endif
 
 #Axoloti optional modules, here we define defaults if none supplied
 ifeq ($(AXO_OPT_MODULES),)
-	AXO_OPT_MODULES = BRAIDS RINGS CLOUDS STREAMS ELEMENTS WARPS
+	AXO_OPT_MODULES = BRAIDS RINGS  STREAMS ELEMENTS 
 endif
 
 
