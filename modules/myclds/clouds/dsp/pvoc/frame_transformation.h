@@ -75,8 +75,8 @@ class FrameTransformation {
   
   inline void fast_p2r(float magnitude, uint16_t angle, float* re, float* im) {
     angle >>= 6;
-    *re = magnitude * lut_sin[angle + 256];
-    *im = magnitude * lut_sin[angle];
+    *re = magnitude * ::clouds::lut_sin[angle + 256];
+    *im = magnitude * ::clouds::lut_sin[angle];
   }
   
   int32_t fft_size_;

@@ -48,7 +48,7 @@ endif
 
 #Axoloti optional modules, here we define defaults if none supplied
 ifeq ($(AXO_OPT_MODULES),)
-	AXO_OPT_MODULES = BRAIDS RINGS  STREAMS ELEMENTS 
+	AXO_OPT_MODULES = BRAIDS RINGS STREAMS ELEMENTS CLOUDS WARPS 
 endif
 
 
@@ -220,13 +220,14 @@ BRAIDS_SRC = \
 endif
 
 ifneq (,$(findstring WARPS,$(AXO_OPT_MODULES)))
-#$(info including WARPS)
+# $(info including WARPS)
 WARPS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/warps/warps_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/warps/dsp/filter_bank.cpp \
-       ${MUTABLE_INSTRUMENTS}/warps/dsp/modulator.cpp \
-       ${MUTABLE_INSTRUMENTS}/warps/dsp/oscillator.cpp \
-       ${MUTABLE_INSTRUMENTS}/warps/dsp/vocoder.cpp 
+       ${MUTABLE_INSTRUMENTS}/warps/warps_resources.cpp 
+
+       # ${MUTABLE_INSTRUMENTS}/warps/dsp/filter_bank.cpp \
+       # ${MUTABLE_INSTRUMENTS}/warps/dsp/modulator.cpp \
+       # ${MUTABLE_INSTRUMENTS}/warps/dsp/oscillator.cpp \
+       # ${MUTABLE_INSTRUMENTS}/warps/dsp/vocoder.cpp 
 endif
 
 ifneq (,$(findstring ELEMENTS,$(AXO_OPT_MODULES)))
@@ -245,15 +246,16 @@ ELEMENTS_SRC = \
 endif
 
 ifneq (,$(findstring CLOUDS,$(AXO_OPT_MODULES)))
-#$(info including CLOUDS)
+# $(info including CLOUDS)
 CLOUDS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/clouds/clouds_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/correlator.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/mu_law.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/granular_processor.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/frame_transformation.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/phase_vocoder.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/stft.cpp 
+       ${MUTABLE_INSTRUMENTS}/clouds/clouds_resources.cpp 
+
+       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/correlator.cpp \
+       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/mu_law.cpp \
+       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/granular_processor.cpp \
+       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/frame_transformation.cpp \
+       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/phase_vocoder.cpp \
+       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/stft.cpp 
 endif
 
 ifneq (,$(findstring RINGS,$(AXO_OPT_MODULES)))
@@ -287,7 +289,7 @@ CPPSRC = \
        ${MUTABLE_INSTRUMENTS}/stmlib/utils/random.cpp \
        ${MUTABLE_INSTRUMENTS}/mutable_resources.cpp \
        ${BRAIDS_SRC} \
-       ${WARPSS_SRC} \
+       ${WARPS_SRC} \
        ${ELEMENTS_SRC} \
        ${CLOUDS_SRC} \
        ${RINGS_SRC} \
@@ -329,7 +331,6 @@ INCDIR = ${CMSIS}/Include \
          ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Inc \
          ${FIRMWARE}/STM32F4xx_HAL_Driver/Inc \
          ${MUTABLE_INSTRUMENTS} \
-         ${MUTABLE_INSTRUMENTS}/warps \
          ${MUTABLE_INSTRUMENTS}/braids \
          ${MUTABLE_INSTRUMENTS}/rings \
          ${MUTABLE_INSTRUMENTS}/elements \

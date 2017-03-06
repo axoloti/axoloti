@@ -57,8 +57,8 @@ class Oscillator {
   inline float midi_to_increment(float midi_pitch) const {
     int32_t pitch = static_cast<int32_t>(midi_pitch * 256.0f);
     pitch = 32768 + stmlib::Clip16(pitch - 20480);
-    float increment = lut_midi_to_f_high[pitch >> 8] * \
-        lut_midi_to_f_low[pitch & 0xff];
+    float increment = ::warps::lut_midi_to_f_high[pitch >> 8] * \
+        ::warps::lut_midi_to_f_low[pitch & 0xff];
     return increment;
   }
   

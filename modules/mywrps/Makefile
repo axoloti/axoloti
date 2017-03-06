@@ -3,7 +3,6 @@
 MOD_PRE = header_pre.h
 
 MOD_OBJS = \
-       warps/warps_resources.o \
        warps/dsp/filter_bank.o \
        warps/dsp/modulator.o \
        warps/dsp/oscillator.o \

@@ -20,5 +20,6 @@
 #include "stmlib/utils/buffer_allocator.h"
 #include "stmlib/utils/dsp.h"
 #include "stmlib/utils/random.h"
+#include "clouds/resources.h"
 
 

@@ -17,5 +17,6 @@
 #include "stmlib/dsp/units.h"
 #include "stmlib/stmlib.h"
 #include "stmlib/utils/random.h"
+#include "warps/resources.h"
 
 

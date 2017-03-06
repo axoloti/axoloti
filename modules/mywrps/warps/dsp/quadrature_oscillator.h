@@ -81,12 +81,12 @@ class QuadratureOscillator {
       float iq[2];
       for (int32_t component = 0; component < 2; ++component) {
         float a = stmlib::Interpolate(
-            wav_table[2 * shape_integral + component],
+            ::warps::wav_table[2 * shape_integral + component],
             phase,
             1024);
         
         float b = stmlib::Interpolate(
-            wav_table[2 * shape_integral + 2 + component],
+            ::warps::wav_table[2 * shape_integral + 2 + component],
             phase,
             1024);
         

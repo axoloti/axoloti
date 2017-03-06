@@ -184,14 +184,14 @@ class GranularSamplePlayer {
     float position = parameters.position;
     float pitch = parameters.pitch;
     float window_shape = parameters.granular.window_shape;
-    float grain_size = Interpolate(lut_grain_size, parameters.size, 256.0f);
+    float grain_size = Interpolate(::clouds::lut_grain_size, parameters.size, 256.0f);
     float pitch_ratio = SemitonesToRatio(pitch);
     float inv_pitch_ratio = SemitonesToRatio(-pitch);
     float pan = 0.5f + parameters.stereo_spread * (Random::GetFloat() - 0.5f);
     float gain_l, gain_r;
     if (num_channels_ == 1) {
-      gain_l = Interpolate(lut_sin, pan, 256.0f);
-      gain_r = Interpolate(lut_sin + 256, pan, 256.0f);
+      gain_l = Interpolate(::clouds::lut_sin, pan, 256.0f);
+      gain_r = Interpolate(::clouds::lut_sin + 256, pan, 256.0f);
     } else {
       if (pan < 0.5f) {
         gain_l = 1.0f;

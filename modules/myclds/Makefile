@@ -3,7 +3,6 @@
 MOD_PRE = header_pre.h
 
 MOD_OBJS = \
-       clouds/clouds_resources.o \
        clouds/dsp/correlator.o \
        clouds/dsp/mu_law.o \
        clouds/dsp/granular_processor.o \
