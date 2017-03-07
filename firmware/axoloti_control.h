@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -69,18 +69,20 @@ void LCD_drawPixel(int x, int y, uint16_t color);
 void LCD_setPixel(int x, int y);
 void LCD_clearPixel(int x, int y);
 uint8_t LCD_getPixel(int x, int y);
-void LCD_drawChar(int x, int y, unsigned char c);
-void LCD_drawCharInv(int x, int y, unsigned char c);
-void LCD_drawNumber3D(int x, int y, int i);
-void LCD_drawNumber3DInv(int x, int y, int i);
-void LCD_drawNumber5D(int x, int y, int i);
-void LCD_drawNumber5DInv(int x, int y, int i);
-void LCD_drawString(int x, int y, const char *str);
-void LCD_drawStringInv(int x, int y, const char *str);
-void LCD_drawStringN(int x, int y, const char *str, int N);
-void LCD_drawStringInvN(int x, int y, const char *str, int N);
+
+void LCD_drawChar(int x, int line, unsigned char c);
+void LCD_drawCharInv(int x, int line, unsigned char c);
+
+void LCD_drawNumber3D(int x, int line, int i);
+void LCD_drawNumber3DInv(int x, int line, int i);
+void LCD_drawNumber5D(int x, int line, int i);
+void LCD_drawNumber5DInv(int x, int line, int i);
+void LCD_drawNumberHex32(int x, int line, uint32_t i);
+void LCD_drawString(int x, int line, const char *str);
+void LCD_drawStringInv(int x, int line, const char *str);
+void LCD_drawStringN(int x, int line, const char *str, int N);
+void LCD_drawStringInvN(int x, int line, const char *str, int N);
 void LCD_drawIBAR(int x, int y, int v, int N);
 void LCD_drawIBARInv(int x, int y, int v, int N);
 void LCD_drawIBARadd(int x, int y, int v);
-void LCD_drawHex32(int x, int y, uint32_t i);
 #endif

@@ -76,9 +76,8 @@ typedef struct {
 } fValuePair;
 
 typedef struct {
-  void *array; // pointer to KeyValuePair array
+  const void *array; // pointer to KeyValuePair array
   int length;
-  int current;
 } arrayValuePair;
 
 typedef struct {
@@ -92,7 +91,6 @@ typedef struct {
 typedef struct {
   int *array; // pointer to array of KeyValuePair pointers
   int length;
-  int current;
 } arrayPtrValuePair;
 
 typedef void (*DisplayFunction)(void*);
@@ -156,7 +154,6 @@ typedef enum {
 
 typedef struct KeyValuePair {
   KVP_type kvptype;
-  struct KeyValuePair *parent;
   const char *keyname;
   union {
     iValuePair ivp;
@@ -180,9 +177,9 @@ extern struct KeyValuePair *kvps;
 extern struct KeyValuePair *ObjectKvpRoot;
 
 
-void KVP_Display(int x, int y, struct KeyValuePair *kvp);
-void KVP_Increment(struct KeyValuePair *kvp);
-void KVP_Decrement(struct KeyValuePair *kvp);
+void KVP_Display(int x, int y, const KeyValuePair_t *kvp);
+void KVP_Increment(const KeyValuePair_t *kvp);
+void KVP_Decrement(const KeyValuePair_t *kvp);
 
 void KVP_SendMetaDataUSB(struct KeyValuePair *kvp);
 void KVP_SendDataUSB(struct KeyValuePair *kvp);
@@ -193,8 +190,8 @@ void KVP_RegisterObject(struct KeyValuePair *kvp);
 
 void SetKVP_APVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,
                  const char *keyName, int length, KeyValuePair_t **array);
-void SetKVP_AVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,
-                const char *keyName, int length, KeyValuePair_t *array);
+void SetKVP_AVP(struct KeyValuePair *kvp, const KeyValuePair_t *parent,
+                const char *keyName, int length, const KeyValuePair_t *array);
 void SetKVP_IVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,
                 const char *keyName, int *value, int min, int max);
 void SetKVP_IPVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,

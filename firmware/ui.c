@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -43,23 +43,44 @@ Btn_Nav_States_struct Btn_Nav_And;
 
 int8_t EncBuffer[2];
 
-KeyValuePair_t *KvpsDisplay;
 KeyValuePair_t *ObjectKvpRoot;
 #define MAXOBJECTS 256
 KeyValuePair_t *ObjectKvps[MAXOBJECTS];
 #define MAXTMPMENUITEMS 15
 KeyValuePair_t TmpMenuKvps[MAXTMPMENUITEMS];
 
-
-#define MainMenu_length 5
+#define MainMenu_length 6
 #define SdcMenu_length 2
 #define ADCMenu_length 15
+#define FoodMenu_length 3
 
-extern KeyValuePair_t MainMenu[MainMenu_length];
-extern KeyValuePair_t SdcMenu[SdcMenu_length];
-extern KeyValuePair_t ADCMenu[ADCMenu_length];
-extern KeyValuePair_t RootMenu;
+extern const KeyValuePair_t MainMenu[MainMenu_length];
+extern const KeyValuePair_t SdcMenu[SdcMenu_length];
+extern const KeyValuePair_t ADCMenu[ADCMenu_length];
+extern const KeyValuePair_t RootMenu;
+extern const KeyValuePair_t FoodMenu[FoodMenu_length];
 
+typedef struct {
+	const KeyValuePair_t *parent;
+	int currentpos;
+} menu_stack_t;
+
+#define menu_stack_size 10
+
+menu_stack_t menu_stack[menu_stack_size] = {
+	{&RootMenu, 0},
+	{&RootMenu, 0},
+	{&RootMenu, 0},
+	{&RootMenu, 0},
+	{&RootMenu, 0},
+	{&RootMenu, 0},
+	{&RootMenu, 0},
+	{&RootMenu, 0},
+	{&RootMenu, 0},
+	{&RootMenu, 0}
+};
+
+int menu_stack_position = 0;
 
 void EnterMenuLoad(void) {
 #if 0
@@ -110,19 +131,19 @@ void EnterMenuFormat(void) {
   err = f_mkfs(0, 0, 0);
   if (err != FR_OK) {
     SetKVP_AVP(&TmpMenuKvps[0], &RootMenu, "Format failed", 0, 0);
-    KvpsDisplay = &TmpMenuKvps[0];
+//    KvpsDisplay = &TmpMenuKvps[0];
   }
   else {
     SetKVP_AVP(&TmpMenuKvps[0], &RootMenu, "Format OK", 0, 0);
-    KvpsDisplay = &TmpMenuKvps[0];
+//    KvpsDisplay = &TmpMenuKvps[0];
   }
 }
 
-void DemoDisplayFunction(void *x) {
+void TestDisplayFunction(void *x) {
 
 }
 
-void DemoButtonFunction(void *x) {
+void TestButtonFunction(void *x) {
 	LED_clear();
 
 	static uint8_t val0;
@@ -160,84 +181,154 @@ void DemoButtonFunction(void *x) {
 		LED_setOne(2,i,button[i]);
 	}
 
-    LCD_drawStringN(60, 1, "DEMO", LCDWIDTH);
-    LCD_drawStringN(60, 2, "", LCDWIDTH);
-    LCD_drawNumber3D(60,3, spilink_rx[0].control_data[3]);
-    LCD_drawNumber3D(60,4, spilink_rx[0].control_data[4]);
-    LCD_drawNumber3D(60,5, spilink_rx[0].control_data[5]);
+	const int lmid = 50;
+	const int rmid = 86;
+    LCD_drawStringN(lmid, 1, "TEST", LCDWIDTH);
+    LCD_drawStringN(lmid, 2, "", rmid);
+    LCD_drawNumber3D(20,4, val0);
+    LCD_drawNumber3D(rmid,4, val1);
 
-    if (Btn_Nav_CurStates.fields.btn_nav_Up) LCD_drawStringN(0, 3, "Up", LCDWIDTH);
-    if (Btn_Nav_CurStates.fields.btn_nav_Down) LCD_drawStringN(0, 3, "Down", LCDWIDTH);
-    if (Btn_Nav_CurStates.fields.btn_nav_Enter) LCD_drawStringN(0, 3, "Enter", LCDWIDTH);
-    if (Btn_Nav_CurStates.fields.btn_nav_Back) LCD_drawStringN(0, 3, "Back", LCDWIDTH);
-    if (Btn_Nav_CurStates.fields.btn_nav_Home) LCD_drawStringN(0, 3, "Home", LCDWIDTH);
-    if (Btn_Nav_CurStates.fields.btn_nav_Left) LCD_drawStringN(0, 3, "Left", LCDWIDTH);
-    if (Btn_Nav_CurStates.fields.btn_nav_Right) LCD_drawStringN(0, 3, "Right", LCDWIDTH);
-    if (Btn_Nav_CurStates.fields.btn_nav_Shift) LCD_drawStringN(0, 3, "Shift", LCDWIDTH);
+    if (Btn_Nav_CurStates.fields.btn_nav_Up) {
+    	LCD_drawStringN(lmid, 3, "Up", rmid);
+    	LCD_drawStringInv(0,3," ");
+    } else {
+    	LCD_drawString(0,3,"-");
+    }
+    if (Btn_Nav_CurStates.fields.btn_nav_Down) {
+    	LCD_drawStringN(lmid, 3, "Down", rmid);
+    	LCD_drawStringInv(0,5," ");
+    } else {
+    	LCD_drawString(0,5,"-");
+    }
+    if (Btn_Nav_CurStates.fields.btn_nav_Enter) {
+    	LCD_drawStringN(lmid, 3, "Enter", rmid);
+		LCD_drawStringInv(121,7," ");
+	} else {
+		LCD_drawString(121,7,"-");
+	}
+    if (Btn_Nav_CurStates.fields.btn_nav_Back) {
+    	LCD_drawStringN(lmid, 3, "Back", rmid);
+    	LCD_drawStringInv(0,7," ");
+    } else {
+    	LCD_drawString(0,7,"-");
+    }
+    if (Btn_Nav_CurStates.fields.btn_nav_Home) {
+    	LCD_drawStringN(lmid, 3, "Home", rmid);
+    }
+    if (Btn_Nav_CurStates.fields.btn_nav_Left) {
+    	LCD_drawStringN(lmid, 3, "Left", rmid);
+		LCD_drawStringInv(121,3," ");
+	} else {
+		LCD_drawString(121,3,"-");
+	}
+    if (Btn_Nav_CurStates.fields.btn_nav_Right) {
+    	LCD_drawStringN(lmid, 3, "Right", rmid);
+		LCD_drawStringInv(121,5," ");
+	} else {
+		LCD_drawString(121,5,"-");
+	}
+    if (Btn_Nav_CurStates.fields.btn_nav_Shift) {
+    	LCD_drawStringN(lmid, 3, "Shift", rmid);
+    }
 }
 
-
-KeyValuePair_t RootMenu = {
-  KVP_TYPE_AVP, NULL, "--- AXOLOTI ---", .avp = {MainMenu, MainMenu_length, 0}
+const KeyValuePair_t RootMenu = {
+  KVP_TYPE_AVP, "--- AXOLOTI ---", .avp = {MainMenu, MainMenu_length}
 };
 
-KeyValuePair_t MainMenu[MainMenu_length] = {
-  { KVP_TYPE_APVP, &RootMenu, "Patch", .apvp = {(int *)ObjectKvps, 0, 0}},
-  { KVP_TYPE_AVP, &RootMenu, "SDCard", .avp = {SdcMenu, SdcMenu_length, 0}},
-  { KVP_TYPE_AVP, &RootMenu, "ADCs", .avp = {ADCMenu, ADCMenu_length, 0}},
-  { KVP_TYPE_IVP, &RootMenu, "dsp%", .ivp = {&dspLoadPct, 0, 100}},
-  { KVP_TYPE_CUSTOM, &RootMenu, "Demo", .custom = {&DemoDisplayFunction, DemoButtonFunction, 0}}
+const KeyValuePair_t MainMenu[MainMenu_length] = {
+  { KVP_TYPE_APVP, "Patch", .apvp = {(int *)ObjectKvps, 0}},
+  { KVP_TYPE_AVP, "SDCard", .avp = {SdcMenu, SdcMenu_length}},
+  { KVP_TYPE_AVP, "ADCs", .avp = {ADCMenu, ADCMenu_length}},
+  { KVP_TYPE_IVP, "dsp%", .ivp = {&dspLoadPct, 0, 100}},
+  { KVP_TYPE_CUSTOM, "Test", .custom = {&TestDisplayFunction, TestButtonFunction, 0}},
+  { KVP_TYPE_AVP, "Food", .avp = {FoodMenu, FoodMenu_length}}
 };
 
-#define sdcmenu_item 1
-KeyValuePair_t SdcMenu[SdcMenu_length] = {
-  { KVP_TYPE_FNCTN, &MainMenu[sdcmenu_item], "Load patch", .fnctnvp = {&EnterMenuLoad}},
-  { KVP_TYPE_FNCTN, &MainMenu[sdcmenu_item], "Format", .fnctnvp = {&EnterMenuFormat}}
+const KeyValuePair_t SdcMenu[SdcMenu_length] = {
+  { KVP_TYPE_FNCTN, "Load patch", .fnctnvp = {&EnterMenuLoad}},
+  { KVP_TYPE_FNCTN, "Format", .fnctnvp = {&EnterMenuFormat}}
 };
 
-#define adcmenu_item 3
-KeyValuePair_t ADCMenu[ADCMenu_length] = {
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC0", .svp = {(int16_t *)&adcvalues[0]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC1", .svp = {(int16_t *)&adcvalues[1]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC2", .svp = {(int16_t *)&adcvalues[2]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC3", .svp = {(int16_t *)&adcvalues[3]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC4", .svp = {(int16_t *)&adcvalues[4]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC5", .svp = {(int16_t *)&adcvalues[5]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC6", .svp = {(int16_t *)&adcvalues[6]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC7", .svp = {(int16_t *)&adcvalues[7]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC8", .svp = {(int16_t *)&adcvalues[8]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC9", .svp = {(int16_t *)&adcvalues[9]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC10", .svp = {(int16_t *)&adcvalues[10]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC11", .svp = {(int16_t *)&adcvalues[11]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC12", .svp = {(int16_t *)&adcvalues[12]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC13", .svp = {(int16_t *)&adcvalues[13]}},
-  { KVP_TYPE_SVP, &MainMenu[adcmenu_item], "ADC14", .svp = {(int16_t *)&adcvalues[14]}}
+const KeyValuePair_t ADCMenu[ADCMenu_length] = {
+  { KVP_TYPE_SVP, "ADC0", .svp = {(int16_t *)&adcvalues[0]}},
+  { KVP_TYPE_SVP, "ADC1", .svp = {(int16_t *)&adcvalues[1]}},
+  { KVP_TYPE_SVP, "ADC2", .svp = {(int16_t *)&adcvalues[2]}},
+  { KVP_TYPE_SVP, "ADC3", .svp = {(int16_t *)&adcvalues[3]}},
+  { KVP_TYPE_SVP, "ADC4", .svp = {(int16_t *)&adcvalues[4]}},
+  { KVP_TYPE_SVP, "ADC5", .svp = {(int16_t *)&adcvalues[5]}},
+  { KVP_TYPE_SVP, "ADC6", .svp = {(int16_t *)&adcvalues[6]}},
+  { KVP_TYPE_SVP, "ADC7", .svp = {(int16_t *)&adcvalues[7]}},
+  { KVP_TYPE_SVP, "ADC8", .svp = {(int16_t *)&adcvalues[8]}},
+  { KVP_TYPE_SVP, "ADC9", .svp = {(int16_t *)&adcvalues[9]}},
+  { KVP_TYPE_SVP, "ADC10", .svp = {(int16_t *)&adcvalues[10]}},
+  { KVP_TYPE_SVP, "ADC11", .svp = {(int16_t *)&adcvalues[11]}},
+  { KVP_TYPE_SVP, "ADC12", .svp = {(int16_t *)&adcvalues[12]}},
+  { KVP_TYPE_SVP, "ADC13", .svp = {(int16_t *)&adcvalues[13]}},
+  { KVP_TYPE_SVP, "ADC14", .svp = {(int16_t *)&adcvalues[14]}}
 };
+
+#define AppleMenu_length 4
+const KeyValuePair_t AppleMenu[AppleMenu_length] = {
+  { KVP_TYPE_FNCTN, "JamesGrieve", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "GrannySmith", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Jonagold", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Cox", .fnctnvp = {NULL}},
+};
+
+#define NutsMenu_length 10
+const KeyValuePair_t NutsMenu[NutsMenu_length] = {
+  { KVP_TYPE_FNCTN, "Cashew", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Peanut", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Pecan", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Walnut", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Pistachio", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Hazelnut", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Coconut", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Brazil nut", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Macadamia", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Almond", .fnctnvp = {NULL}}
+};
+
+#define DishMenu_length 8
+const KeyValuePair_t DishMenu[DishMenu_length] = {
+  { KVP_TYPE_FNCTN, "Cake", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Salad", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Soup", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Waffle", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Ice cream", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Rice", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Spaghetti", .fnctnvp = {NULL}},
+  { KVP_TYPE_FNCTN, "Pizza", .fnctnvp = {NULL}}
+};
+
+const KeyValuePair_t FoodMenu[FoodMenu_length] = {
+  { KVP_TYPE_AVP, "Nuts", .avp = {NutsMenu, NutsMenu_length}},
+  { KVP_TYPE_AVP, "Apple", .avp = {AppleMenu, AppleMenu_length}},
+  { KVP_TYPE_AVP, "Dish", .avp = {DishMenu, DishMenu_length}}
+};
+
+
 
 void SetKVP_APVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
                  const char *keyName, int length, KeyValuePair_t **array) {
   kvp->kvptype = KVP_TYPE_APVP;
-  kvp->parent = (void *)parent;
   kvp->keyname = keyName;
   kvp->apvp.length = length;
-  kvp->apvp.current = 0;
   kvp->apvp.array = (void *)array;
 }
 
-void SetKVP_AVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
-                const char *keyName, int length, KeyValuePair_t *array) {
+void SetKVP_AVP(KeyValuePair_t *kvp, const KeyValuePair_t *parent,
+                const char *keyName, int length, const KeyValuePair_t *array) {
   kvp->kvptype = KVP_TYPE_AVP;
-  kvp->parent = (void *)parent;
   kvp->keyname = keyName;
   kvp->avp.length = length;
-  kvp->avp.current = 0;
   kvp->avp.array = array;
 }
 
 void SetKVP_IVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
                 const char *keyName, int *value, int min, int max) {
   kvp->kvptype = KVP_TYPE_IVP;
-  kvp->parent = (void *)parent;
   kvp->keyname = keyName;
   kvp->ivp.value = value;
   kvp->ivp.minvalue = min;
@@ -249,7 +340,6 @@ void SetKVP_IPVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
                  int max) {
   PEx->signals = 0x0F;
   kvp->kvptype = KVP_TYPE_IPVP;
-  kvp->parent = (void *)parent;
   kvp->keyname = keyName;
   kvp->ipvp.PEx = PEx;
   kvp->ipvp.minvalue = min;
@@ -259,7 +349,6 @@ void SetKVP_IPVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
 void SetKVP_FNCTN(KeyValuePair_t *kvp, KeyValuePair_t *parent,
                   const char *keyName, VoidFunction fnctn) {
   kvp->kvptype = KVP_TYPE_FNCTN;
-  kvp->parent = (void *)parent;
   kvp->keyname = keyName;
   kvp->fnctnvp.fnctn = fnctn;
 }
@@ -267,28 +356,27 @@ void SetKVP_FNCTN(KeyValuePair_t *kvp, KeyValuePair_t *parent,
 void SetKVP_CUSTOM(KeyValuePair_t *kvp, KeyValuePair_t *parent,
                   const char *keyName, DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata) {
   kvp->kvptype = KVP_TYPE_CUSTOM;
-  kvp->parent = (void *)parent;
   kvp->keyname = keyName;
   kvp->custom.displayFunction = dispfnctn;
   kvp->custom.buttonFunction = btnfnctn;
   kvp->custom.userdata = userdata;
 }
 
-
-
-inline void KVP_Increment(KeyValuePair_t *kvp) {
+inline void KVP_Increment(const KeyValuePair_t *kvp) {
   switch (kvp->kvptype) {
   case KVP_TYPE_IVP:
     if (*kvp->ivp.value < kvp->ivp.maxvalue)
       (*kvp->ivp.value)++;
     break;
-  case KVP_TYPE_AVP:
-    if (kvp->avp.current < (kvp->avp.length - 1))
-      kvp->avp.current++;
-    break;
+  case KVP_TYPE_AVP: {
+    if (menu_stack[menu_stack_position].currentpos < (kvp->avp.length - 1))
+    	menu_stack[menu_stack_position].currentpos++;
+	LED_setAll(0,0);
+	LED_setOne(0, (15*menu_stack[menu_stack_position].currentpos)/(kvp->avp.length - 1) ,1 );
+  } break;
   case KVP_TYPE_APVP:
-    if (kvp->apvp.current < (kvp->apvp.length - 1))
-      kvp->apvp.current++;
+    if (menu_stack[menu_stack_position].currentpos < (kvp->apvp.length - 1))
+    	menu_stack[menu_stack_position].currentpos++;
     break;
   case KVP_TYPE_U7VP:
     if (*kvp->u7vp.value < kvp->u7vp.maxvalue)
@@ -309,19 +397,21 @@ inline void KVP_Increment(KeyValuePair_t *kvp) {
   }
 }
 
-inline void KVP_Decrement(KeyValuePair_t *kvp) {
+inline void KVP_Decrement(const KeyValuePair_t *kvp) {
   switch (kvp->kvptype) {
   case KVP_TYPE_IVP:
     if (*kvp->ivp.value > kvp->ivp.minvalue)
       (*kvp->ivp.value)--;
     break;
   case KVP_TYPE_AVP:
-    if (kvp->avp.current > 0)
-      kvp->avp.current--;
+    if (menu_stack[menu_stack_position].currentpos > 0)
+      menu_stack[menu_stack_position].currentpos--;
+	LED_setAll(0,0);
+	LED_setOne(0, (15*menu_stack[menu_stack_position].currentpos)/(kvp->avp.length - 1) ,1 );
     break;
   case KVP_TYPE_APVP:
-    if (kvp->apvp.current > 0)
-      kvp->apvp.current--;
+    if (menu_stack[menu_stack_position].currentpos > 0)
+    	menu_stack[menu_stack_position].currentpos--;
     break;
   case KVP_TYPE_U7VP:
     if (*kvp->u7vp.value > kvp->u7vp.minvalue)
@@ -342,40 +432,6 @@ inline void KVP_Decrement(KeyValuePair_t *kvp) {
   }
 }
 
-
-#define POLLENC(NAME, INCREMENT_FUNCTION, DECREMENT_FUNCTION)  \
-      if (!expander_PrevStates.NAME##A) {                 \
-          if (!expander_PrevStates.NAME##B) {             \
-              if (expander_CurStates.NAME##B) {           \
-                  expander_PrevStates.NAME##B = 1;        \
-                  DECREMENT_FUNCTION                      \
-              } else if (expander_CurStates.NAME##A) {    \
-                  expander_PrevStates.NAME##A = 1;        \
-                  INCREMENT_FUNCTION                      \
-              }                                           \
-          } else {                                        \
-              if (expander_CurStates.NAME##A) {           \
-                  expander_PrevStates.NAME##A = 1;        \
-              } else if (!expander_CurStates.NAME##B) {   \
-                  expander_PrevStates.NAME##B = 0;        \
-              }                                           \
-          }                                               \
-      } else {                                            \
-          if (expander_PrevStates.NAME##B) {              \
-              if (!expander_CurStates.NAME##B) {          \
-                  expander_PrevStates.NAME##B = 0;        \
-              } else if (!expander_CurStates.NAME##A) {   \
-                  expander_PrevStates.NAME##A = 0;        \
-              }                                           \
-          } else {                                        \
-              if (!expander_CurStates.NAME##A) {          \
-                  expander_PrevStates.NAME##A = 0;        \
-              } else if (expander_CurStates.NAME##B) {    \
-                  expander_PrevStates.NAME##B = 1;        \
-              }                                           \
-          }                                               \
-      }
-
 /*
  * Create menu tree from file tree
  */
@@ -384,6 +440,7 @@ uint8_t *memp;
 KeyValuePair_t LoadMenu;
 
 void EnterMenuLoadFile(void) {
+/*
   KeyValuePair_t *F =
       &((KeyValuePair_t *)(LoadMenu.avp.array))[LoadMenu.avp.current];
 
@@ -391,9 +448,8 @@ void EnterMenuLoadFile(void) {
   strcat(str, F->keyname);
 
   LoadPatch(str);
+*/
 }
-
-
 
 static void UIUpdateLCD(void);
 static void UIPollButtons(void);
@@ -421,7 +477,7 @@ static THD_FUNCTION(ThreadUI2, arg) {
 
 
 void UIGoSafe(void) {
-	  KvpsDisplay = &RootMenu;
+	menu_stack_position = 0;
 }
 
 static KeyValuePair_t* userDisplay;
@@ -438,7 +494,6 @@ void ui_init(void) {
   Btn_Nav_Or.word = 0;
   Btn_Nav_And.word = ~0;
 
-  KvpsDisplay = &RootMenu;
   chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2, NULL);
   axoloti_control_init();
 
@@ -450,7 +505,7 @@ void ui_init(void) {
 
 void KVP_ClearObjects(void) {
   ObjectKvpRoot->apvp.length = 0;
-  KvpsDisplay = &RootMenu;
+  menu_stack_position = 0;
 }
 
 void KVP_RegisterObject(KeyValuePair_t *kvp) {
@@ -463,7 +518,7 @@ void KVP_RegisterObject(KeyValuePair_t *kvp) {
 #define LCD_COL_VAL LCD_COL_LEFT
 #define LCD_COL_ENTER LCD_COL_LEFT
 
-void KVP_DisplayInv(int x, int y, KeyValuePair_t *kvp) {
+void KVP_DisplayInv(int x, int y, const KeyValuePair_t *kvp) {
   LCD_drawStringInvN(x, y, kvp->keyname, LCD_COL_EQ);
   switch (kvp->kvptype) {
   case KVP_TYPE_U7VP:
@@ -502,7 +557,7 @@ void KVP_DisplayInv(int x, int y, KeyValuePair_t *kvp) {
   }
 }
 
-void KVP_Display(int x, int y, KeyValuePair_t *kvp) {
+void KVP_Display(int x, int y, const KeyValuePair_t *kvp) {
   LCD_drawStringN(x, y, kvp->keyname, LCD_COL_EQ);
   switch (kvp->kvptype) {
   case KVP_TYPE_U7VP:
@@ -599,10 +654,46 @@ void KVP_Display(int x, int y, KeyValuePair_t *kvp) {
 static void UIPollButtons(void) {
   Btn_Nav_CurStates.word = Btn_Nav_CurStates.word | Btn_Nav_Or.word;
   Btn_Nav_Or.word = 0;
-
+  const KeyValuePair_t * KvpsDisplay = menu_stack[menu_stack_position].parent;
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
     KeyValuePair_t *cur =
-        &((KeyValuePair_t *)(KvpsDisplay->avp.array))[KvpsDisplay->avp.current];
+        &((KeyValuePair_t *)(KvpsDisplay->avp.array))[menu_stack[menu_stack_position].currentpos];
+    IF_BTN_NAV_DOWN(btn_nav_Down)
+      KVP_Increment(KvpsDisplay);
+    if (EncBuffer[0]>0) {
+    	KVP_Increment(KvpsDisplay);
+    	EncBuffer[0]=0;
+    }
+    IF_BTN_NAV_DOWN(btn_nav_Up)
+      KVP_Decrement(KvpsDisplay);
+    if (EncBuffer[0]<0) {
+    	KVP_Decrement(KvpsDisplay);
+    	EncBuffer[0]=0;
+    }
+    IF_BTN_NAV_DOWN(btn_nav_Left)
+      KVP_Decrement(cur);
+    IF_BTN_NAV_DOWN(btn_nav_Right)
+      KVP_Increment(cur);
+    IF_BTN_NAV_DOWN(btn_nav_Enter) {
+      if ((cur->kvptype == KVP_TYPE_AVP) || (cur->kvptype == KVP_TYPE_APVP)
+          || (cur->kvptype == KVP_TYPE_CUSTOM)) {
+    	LCD_clearDisplay();
+    	if (menu_stack_position < menu_stack_size-1) {
+			menu_stack[menu_stack_position+1].parent = cur;
+			menu_stack[menu_stack_position+1].currentpos = 0;
+			menu_stack_position++;
+    	}
+      } else if (cur->kvptype == KVP_TYPE_FNCTN)
+        if (cur->fnctnvp.fnctn != 0)
+          (cur->fnctnvp.fnctn)();
+    }
+    IF_BTN_NAV_DOWN(btn_nav_Back) {
+    	if (menu_stack_position > 0) menu_stack_position--;
+    }
+  }
+  else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
+    const KeyValuePair_t *cur =
+        (const KeyValuePair_t *)(KvpsDisplay->apvp.array[menu_stack[menu_stack_position].currentpos]);
     IF_BTN_NAV_DOWN(btn_nav_Down)
       KVP_Increment(KvpsDisplay);
     IF_BTN_NAV_DOWN(btn_nav_Up)
@@ -614,47 +705,24 @@ static void UIPollButtons(void) {
     IF_BTN_NAV_DOWN(btn_nav_Enter) {
       if ((cur->kvptype == KVP_TYPE_AVP) || (cur->kvptype == KVP_TYPE_APVP)
           || (cur->kvptype == KVP_TYPE_CUSTOM)) {
-    	LCD_clearDisplay();
-        KvpsDisplay = cur;
+      	if (menu_stack_position < menu_stack_size-1) {
+			menu_stack[menu_stack_position+1].parent = cur;
+			menu_stack[menu_stack_position+1].currentpos = 0;
+			menu_stack_position++;
+      	}
       } else if (cur->kvptype == KVP_TYPE_FNCTN)
         if (cur->fnctnvp.fnctn != 0)
           (cur->fnctnvp.fnctn)();
     }
     IF_BTN_NAV_DOWN(btn_nav_Back)
-      if (KvpsDisplay->parent)
-        KvpsDisplay = (KeyValuePair_t *)KvpsDisplay->parent;
-
-  }
-  else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
-    KeyValuePair_t *cur =
-        (KeyValuePair_t *)(KvpsDisplay->apvp.array[KvpsDisplay->apvp.current]);
-    IF_BTN_NAV_DOWN(btn_nav_Down)
-      KVP_Increment(KvpsDisplay);
-    IF_BTN_NAV_DOWN(btn_nav_Up)
-      KVP_Decrement(KvpsDisplay);
-    IF_BTN_NAV_DOWN(btn_nav_Left)
-      KVP_Decrement(cur);
-    IF_BTN_NAV_DOWN(btn_nav_Right)
-      KVP_Increment(cur);
-    IF_BTN_NAV_DOWN(btn_nav_Enter) {
-      if ((cur->kvptype == KVP_TYPE_AVP) || (cur->kvptype == KVP_TYPE_APVP)
-          || (cur->kvptype == KVP_TYPE_CUSTOM))
-        KvpsDisplay = cur;
-      else if (cur->kvptype == KVP_TYPE_FNCTN)
-        if (cur->fnctnvp.fnctn != 0)
-          (cur->fnctnvp.fnctn)();
-    }
-    IF_BTN_NAV_DOWN(btn_nav_Back)
-      if (KvpsDisplay->parent)
-        KvpsDisplay = (KeyValuePair_t *)KvpsDisplay->parent;
+      if (menu_stack_position > 0) menu_stack_position--;
 
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
     if (KvpsDisplay->custom.buttonFunction != 0) (KvpsDisplay->custom.buttonFunction)(KvpsDisplay->custom.userdata);
 
     IF_BTN_NAV_DOWN(btn_nav_Back)
-      if (KvpsDisplay->parent)
-        KvpsDisplay = (KeyValuePair_t *)KvpsDisplay->parent;
+	  if (menu_stack_position > 0) menu_stack_position--;
 
   }
 
@@ -662,7 +730,7 @@ static void UIPollButtons(void) {
 // process encoder // todo: more than just one encoder...
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
     KeyValuePair_t *cur =
-        &((KeyValuePair_t *)(KvpsDisplay->avp.array))[KvpsDisplay->avp.current];
+        &((KeyValuePair_t *)(KvpsDisplay->avp.array))[menu_stack[menu_stack_position].currentpos];
     if ((cur->kvptype == KVP_TYPE_IVP) || (cur->kvptype == KVP_TYPE_IPVP)) {
       while (EncBuffer[0] > 0) {
         KVP_Increment(cur);
@@ -676,7 +744,7 @@ static void UIPollButtons(void) {
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
     KeyValuePair_t *cur =
-        (KeyValuePair_t *)(KvpsDisplay->apvp.array[KvpsDisplay->apvp.current]);
+        (KeyValuePair_t *)(KvpsDisplay->apvp.array[menu_stack[menu_stack_position].currentpos]);
     if ((cur->kvptype == KVP_TYPE_IVP) || (cur->kvptype == KVP_TYPE_IPVP)) {
       while (EncBuffer[0] > 0) {
         KVP_Increment(cur);
@@ -695,9 +763,10 @@ static void UIPollButtons(void) {
 }
 
 static void UIUpdateLCD(void) {
+  const KeyValuePair_t * KvpsDisplay = menu_stack[menu_stack_position].parent;
   KVP_DisplayInv(0, 0, KvpsDisplay);
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
-    int c = KvpsDisplay->avp.current;
+    int c = menu_stack[menu_stack_position].currentpos;
     int l = KvpsDisplay->avp.length;
     KeyValuePair_t *k = (KeyValuePair_t *)KvpsDisplay->avp.array;
     if (l < STATUSROW) {
@@ -730,23 +799,24 @@ static void UIUpdateLCD(void) {
       }
     }
 
-    if (KvpsDisplay->parent) {
+    if (menu_stack_position > 0) {
       LCD_drawStringInv(0, STATUSROW, "BACK");
       LCD_drawString(24, STATUSROW, "     ");
     }
     else
       LCD_drawString(0, STATUSROW, "          ");
-    if ((k[KvpsDisplay->avp.current].kvptype == KVP_TYPE_AVP)
-        || (k[KvpsDisplay->avp.current].kvptype == KVP_TYPE_APVP)
-        || (k[KvpsDisplay->avp.current].kvptype == KVP_TYPE_CUSTOM))
+    KeyValuePair_t * sel = &k[menu_stack[menu_stack_position].currentpos];
+    if ((sel->kvptype == KVP_TYPE_AVP)
+        || (sel->kvptype == KVP_TYPE_APVP)
+        || (sel->kvptype == KVP_TYPE_CUSTOM))
       LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
-    else if (k[KvpsDisplay->avp.current].kvptype == KVP_TYPE_FNCTN)
+    else if (sel->kvptype == KVP_TYPE_FNCTN)
       LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
     else
       LCD_drawString(LCD_COL_ENTER, STATUSROW, "     ");
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
-    int c = KvpsDisplay->apvp.current;
+    int c = menu_stack[menu_stack_position].currentpos;
     int l = KvpsDisplay->apvp.length;
     KeyValuePair_t **k = (KeyValuePair_t **)KvpsDisplay->apvp.array;
     if (l < 7) {
@@ -815,17 +885,18 @@ static void UIUpdateLCD(void) {
           LCD_drawStringN(LCD_COL_INDENT, line, " ", LCDWIDTH);
       }
     }
-    if (KvpsDisplay->parent) {
+	if (menu_stack_position > 0) {
       LCD_drawStringInv(0, STATUSROW, "BACK");
       LCD_drawString(24, STATUSROW, "     ");
     }
     else
       LCD_drawString(0, STATUSROW, "          ");
-    if ((k[KvpsDisplay->apvp.current]->kvptype == KVP_TYPE_AVP)
-        || (k[KvpsDisplay->apvp.current]->kvptype == KVP_TYPE_APVP)
-        || (k[KvpsDisplay->apvp.current]->kvptype == KVP_TYPE_CUSTOM))
+    KeyValuePair_t * sel = k[menu_stack[menu_stack_position].currentpos];
+    if ((sel->kvptype == KVP_TYPE_AVP)
+        || (sel->kvptype == KVP_TYPE_APVP)
+        || (sel->kvptype == KVP_TYPE_CUSTOM))
       LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
-    else if (k[KvpsDisplay->avp.current]->kvptype == KVP_TYPE_FNCTN)
+    else if (sel->kvptype == KVP_TYPE_FNCTN)
       LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
     else
       LCD_drawString(LCD_COL_ENTER, STATUSROW, "     ");
@@ -834,14 +905,16 @@ static void UIUpdateLCD(void) {
 	  if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata);
   }
 
-#if 0
-  static int dfgdfg = 0;
-  dfgdfg++;
-  LCD_drawHex32(0, 0, spilink_rx[0].control_type);
-  LCD_drawHex32(0, 1, Btn_Nav_CurStates.word);
-  LCD_drawHex32(0, 2, Btn_Nav_And.word);
-  LCD_drawHex32(0, 3, Btn_Nav_Or.word);
-  LCD_drawHex32(0, 4, dfgdfg);
+#if 0 // show protocol diagnostics
+  static int counter = 0;
+  counter++;
+  LCD_drawNumberHex32(0, 0, spilink_rx[0].header);
+  LCD_drawNumberHex32(0, 1, spilink_rx[0].frameno);
+  LCD_drawNumberHex32(0, 2, spilink_rx[0].control_type);
+  LCD_drawNumberHex32(0, 3, Btn_Nav_CurStates.word);
+  LCD_drawNumberHex32(0, 4, Btn_Nav_And.word);
+  LCD_drawNumberHex32(0, 5, Btn_Nav_Or.word);
+  LCD_drawNumberHex32(0, 6, counter);
 #endif
 }
 
