@@ -38,8 +38,7 @@ __STATIC_INLINE void spilink_master_process1(spilink_data_t *tx, spilink_data_t 
 		}
 	}
 
-	if ((rx->control_type == 0x80)||(rx->control_type == 0x800000)) {
-		// wtf?
+	if (rx->control_type == 0x80) {
 		Btn_Nav_Or.word |= ((int32_t *)rx->control_data)[0];
 		Btn_Nav_And.word |= ((int32_t *)rx->control_data)[1];
 		EncBuffer[0] += rx->control_data[8];

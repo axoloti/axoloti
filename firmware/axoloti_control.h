@@ -23,7 +23,6 @@
 #define LCDHEADER 0
 #define LCDROWS (LCDHEIGHT/8)
 
-
 // leds, dont exceed SPILINK_CTLDATASIZE
 #define LEDSIZE 3
 
@@ -54,17 +53,23 @@ typedef struct led_outputs {
 } led_outputs_t;
 
 extern led_outputs_t leds[LEDSIZE];
+#define LED_RING_LEFT (&leds[0])
+#define LED_RING_RIGHT (&leds[1])
+#define LED_STEPS (&leds[2])
 
 extern uint8_t control_rx_buffer[(LCDHEADER + LCDWIDTH)];
 
 extern void do_axoloti_control(void);
 void axoloti_control_init(void);
 
-void LED_clear(void);
-void LED_setAll(unsigned c, int32_t v);
-void LED_setOne(unsigned c, unsigned b, unsigned v );
+void LED_clear(led_outputs_t *c);
+void LED_set(led_outputs_t *c, int32_t v);
+void LED_setOne(led_outputs_t *c, unsigned v);
+void LED_addOne(led_outputs_t *c, unsigned b, unsigned v );
 
-void LCD_clearDisplay(void);
+void LCD_clear(void);
+void LCD_grey(void);
+
 void LCD_drawPixel(int x, int y, uint16_t color);
 void LCD_setPixel(int x, int y);
 void LCD_clearPixel(int x, int y);

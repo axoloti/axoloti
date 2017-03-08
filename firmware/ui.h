@@ -60,8 +60,8 @@ extern int8_t EncBuffer[2];
 extern Btn_Nav_States_struct Btn_Nav_CurStates;
 extern Btn_Nav_States_struct Btn_Nav_PrevStates;
 
-#define IF_BTN_NAV_DOWN(x) \
-  if (Btn_Nav_CurStates.fields.x && !Btn_Nav_PrevStates.fields.x)
+#define BTN_NAV_DOWN(x) \
+  (Btn_Nav_CurStates.fields.x && !Btn_Nav_PrevStates.fields.x)
 
 typedef struct {
   int *value;
@@ -93,8 +93,8 @@ typedef struct {
   int length;
 } arrayPtrValuePair;
 
-typedef void (*DisplayFunction)(void*);
-typedef void (*ButtonFunction)(void*);
+typedef void (*DisplayFunction)(void * userdata, int initialize);
+typedef void (*ButtonFunction)(void * userdata);
 typedef void (*VoidFunction)(void);
 
 typedef struct {

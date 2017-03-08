@@ -20,43 +20,48 @@
 #include "axoloti_control.h"
 #include "axoloti_board.h"
 #include "ui.h"
+#include "glcdfont.h"
 #include <string.h>
+
+#define VALIDATE_ARGS 1
 
 uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS] SRAM2;
 led_outputs_t leds[LEDSIZE] SRAM2;
 
 void axoloti_control_init(void) {
-	LCD_clearDisplay();
-	LED_clear();
+	LCD_clear();
+	LED_clear(LED_RING_LEFT);
+	LED_clear(LED_RING_RIGHT);
+	LED_clear(LED_STEPS);
 }
 
 #define _BV(bit) (1 << (bit))
 
-void LED_clear() {
-	int c;
-	for (c = 0; c < LEDSIZE; c++) {
-		leds[c].led_32b = 0;
-	}
+void LED_clear(led_outputs_t *c) {
+	c->led_32b = 0;
 }
 
-void LED_setAll(unsigned c, int32_t v) {
-	if (c < LEDSIZE) {
-		leds[c].led_32b = v;
-	}
+void LED_set(led_outputs_t *c, int32_t v) {
+	c->led_32b = v;
 }
 
-void LED_setOne(unsigned c, unsigned b, unsigned v) {
-	if (c < LEDSIZE && b < 16) {
-		leds[c].led_32b &= ~(0x3 << (b * 2));
-		leds[c].led_32b |= ((v & 0x3) << (b * 2));
-	}
+void LED_setOne(led_outputs_t *c, unsigned b) {
+	int v = 0x3 << (b * 2);
+	c->led_32b = v;
+}
+
+void LED_addOne(led_outputs_t *c, unsigned b, unsigned v) {
+	int x = v << (b * 2);
+	c->led_32b &= ~x;
+	c->led_32b |= x;
 }
 
 // the most basic function, set a single pixel
 void LCD_drawPixel(int x, int y, uint16_t color) {
+#if VALIDATE_ARGS
 	if ((x < 0) || (x >= LCDWIDTH) || (y < 0) || (y >= LCDHEIGHT))
 		return;
-
+#endif
 	// x is which column
 	if (color)
 		lcd_buffer[LCDHEADER + x + (y / 8) * LCDWIDTH] |= _BV(y % 8);
@@ -65,59 +70,84 @@ void LCD_drawPixel(int x, int y, uint16_t color) {
 }
 
 void LCD_setPixel(int x, int y) {
+#if VALIDATE_ARGS
 	if ((x < 0) || (x >= LCDWIDTH) || (y < 0) || (y >= LCDHEIGHT))
 		return;
+#endif
 	lcd_buffer[LCDHEADER + x + (y / 8) * (LCDWIDTH + LCDHEADER)] |= _BV(y % 8);
 }
 
 void LCD_clearPixel(int x, int y) {
+#if VALIDATE_ARGS
 	if ((x < 0) || (x >= LCDWIDTH) || (y < 0) || (y >= LCDHEIGHT))
 		return;
+#endif
 	lcd_buffer[LCDHEADER + x + (y / 8) * (LCDWIDTH + LCDHEADER)] &= ~_BV(y % 8);
 }
 
 uint8_t LCD_getPixel(int x, int y) {
+#if VALIDATE_ARGS
 	if ((x < 0) || (x >= LCDWIDTH) || (y < 0) || (y >= LCDHEIGHT))
 		return 0;
-
+#endif
 	return (lcd_buffer[LCDHEADER + x + (y / 8) * (LCDWIDTH + LCDHEADER)]
 			>> (y % 8)) & 0x1;
 }
 
 // clear everything
-void LCD_clearDisplay(void) {
+void LCD_clear(void) {
 	int i;
-	for (i = 0; i < LCDROWS; i++)
-		memset(&lcd_buffer[LCDHEADER + i * LCDWIDTH], 0, LCDWIDTH);
+	for (i = 0; i < LCDROWS; i++) {
+		uint32_t *p = (uint32_t *)&lcd_buffer[LCDHEADER + i * LCDWIDTH];
+		int j = LCDWIDTH/4;
+		while(j--) {
+			*p++=0;
+		}
+	}
 }
 
-extern const unsigned char font[];
+void LCD_grey(void) {
+	int i;
+	for (i = 0; i < LCDROWS; i++) {
+		uint32_t *p = (uint32_t *)&lcd_buffer[LCDHEADER + i * LCDWIDTH];
+		int j = LCDWIDTH/4;
+		while(j--) {
+			*p++=0b10101010010101011010101001010101;
+		}
+	}
+}
 
 void LCD_drawChar(int x, int line, unsigned char c) {
+#if VALIDATE_ARGS
 	if ((x < 0) || (x >= (LCDWIDTH - 5)) || (line < 0) || (line >= (LCDROWS)))
 		return;
-	int i = c * 5;
+#endif
 	int j = LCDHEADER + x + line * (LCDWIDTH + LCDHEADER);
-	lcd_buffer[j++] = font[i++];
-	lcd_buffer[j++] = font[i++];
-	lcd_buffer[j++] = font[i++];
-	lcd_buffer[j++] = font[i++];
-	lcd_buffer[j++] = font[i++];
-	lcd_buffer[j] = 0;
+	uint8_t *p = &lcd_buffer[j];
+	const uint8_t *f = &font[c][0];
+	*p++ = *f++;
+	*p++ = *f++;
+	*p++ = *f++;
+	*p++ = *f++;
+	*p++ = *f++;
+	*p++ = *f;
 }
 
 void LCD_drawCharInv(int x, int line, unsigned char c) {
+#if VALIDATE_ARGS
 	if ((x < 0) || (x >= (LCDWIDTH - 5)) || (line < 0)
 			|| (line >= (LCDHEIGHT / 8)))
 		return;
-	int i = c * 5;
+#endif
 	int j = LCDHEADER + x + line * (LCDHEADER + LCDWIDTH);
-	lcd_buffer[j++] = ~font[i++];
-	lcd_buffer[j++] = ~font[i++];
-	lcd_buffer[j++] = ~font[i++];
-	lcd_buffer[j++] = ~font[i++];
-	lcd_buffer[j++] = ~font[i++];
-	lcd_buffer[j] = 0xFF;
+	uint8_t *p = &lcd_buffer[j];
+	const uint8_t *f = &font[c][0];
+	*p++ = ~*f++;
+	*p++ = ~*f++;
+	*p++ = ~*f++;
+	*p++ = ~*f++;
+	*p++ = ~*f++;
+	*p++ = ~*f;
 }
 
 void LCD_drawNumber3D(int x, int line, int i) {
@@ -218,50 +248,56 @@ void LCD_drawNumberHex32(int x, int line, uint32_t i) {
 }
 
 void LCD_drawString(int x, int line, const char *str) {
-	if ((line < 0) || (line >= (LCDROWS)) || (x < 0))
+#if VALIDATE_ARGS
+	if ((line < 0) || (line >= LCDROWS) || (x < 0))
 		return;
+#endif
 	unsigned char c;
 	int j = LCDHEADER + x + line * (LCDWIDTH + LCDHEADER);
-	lcd_buffer[j++] = 0x00;
-	int x2 = x;
+	uint8_t *p = &lcd_buffer[j];
+	*p++ = 0x00;
+	int x2 = LCDWIDTH - x;
 	while ((c = *str++)) {
-		x2 += 6;
-		if (x2 >= LCDWIDTH)
-			return;
-		int i = c * 5;
-		lcd_buffer[j++] = font[i++];
-		lcd_buffer[j++] = font[i++];
-		lcd_buffer[j++] = font[i++];
-		lcd_buffer[j++] = font[i++];
-		lcd_buffer[j++] = font[i++];
-		lcd_buffer[j++] = 0;
+		x2 -= 6;
+		if (x2 <= 0) return;
+		const uint8_t *f = font[c];
+		*p++ = *f++;
+		*p++ = *f++;
+		*p++ = *f++;
+		*p++ = *f++;
+		*p++ = *f++;
+		*p++ = *f++;
 	}
 }
 
 void LCD_drawStringInv(int x, int line, const char *str) {
-	if ((line < 0) || (line >= (LCDROWS)) || (x < 0))
+#if VALIDATE_ARGS
+	if ((line < 0) || (line >= LCDROWS) || (x < 0))
 		return;
+#endif
 	unsigned char c;
 	int j = LCDHEADER + x + line * (LCDHEADER + LCDWIDTH);
-	lcd_buffer[j++] = 0xFF;
-	int x2 = x;
+	uint8_t *p = &lcd_buffer[j];
+	*p++ = 0xFF;
+	int x2 = LCDWIDTH - x;
 	while ((c = *str++)) {
-		x2 += 6;
-		if (x2 >= LCDWIDTH)
-			return;
-		int i = c * 5;
-		lcd_buffer[j++] = ~font[i++];
-		lcd_buffer[j++] = ~font[i++];
-		lcd_buffer[j++] = ~font[i++];
-		lcd_buffer[j++] = ~font[i++];
-		lcd_buffer[j++] = ~font[i++];
-		lcd_buffer[j++] = 0xFF;
+		x2 -= 6;
+		if (x2 <= 0) return;
+		const uint8_t *f = font[c];
+		*p++ = ~*f++;
+		*p++ = ~*f++;
+		*p++ = ~*f++;
+		*p++ = ~*f++;
+		*p++ = ~*f++;
+		*p++ = ~*f++;
 	}
 }
 
 void LCD_drawStringN(int x, int line, const char *str, int xend) {
+#if VALIDATE_ARGS
 	if ((line < 0) || (line >= (LCDROWS)) || (x < 0))
 		return;
+#endif
 	unsigned char c = *str++;
 	uint8_t *p = &lcd_buffer[LCDHEADER + x + line * (LCDHEADER + LCDWIDTH)];
 	*p++ = 0;
@@ -270,13 +306,13 @@ void LCD_drawStringN(int x, int line, const char *str, int xend) {
 		if (x + 6 >= xend)
 			break;
 		x += 6;
-		int i = c * 5;
-		*p++ = font[i++];
-		*p++ = font[i++];
-		*p++ = font[i++];
-		*p++ = font[i++];
-		*p++ = font[i++];
-		*p++ = 0;
+		const uint8_t *f = font[c];
+		*p++ = *f++;
+		*p++ = *f++;
+		*p++ = *f++;
+		*p++ = *f++;
+		*p++ = *f++;
+		*p++ = *f;
 		c = *str++;
 	}
 	while (x < xend) {
@@ -286,8 +322,10 @@ void LCD_drawStringN(int x, int line, const char *str, int xend) {
 }
 
 void LCD_drawStringInvN(int x, int line, const char *str, int xend) {
+#if VALIDATE_ARGS
 	if ((line < 0) || (line >= (LCDROWS)) || (x < 0))
 		return;
+#endif
 	unsigned char c = *str++;
 	uint8_t *p = &lcd_buffer[LCDHEADER + x + line * (LCDHEADER + LCDWIDTH)];
 	*p++ = 0xFF;
@@ -296,13 +334,13 @@ void LCD_drawStringInvN(int x, int line, const char *str, int xend) {
 		if (x + 6 >= xend)
 			break;
 		x += 6;
-		int i = c * 5;
-		*p++ = ~font[i++];
-		*p++ = ~font[i++];
-		*p++ = ~font[i++];
-		*p++ = ~font[i++];
-		*p++ = ~font[i++];
-		*p++ = 0xFF;
+		const uint8_t *f = font[c];
+		*p++ = ~*f++;
+		*p++ = ~*f++;
+		*p++ = ~*f++;
+		*p++ = ~*f++;
+		*p++ = ~*f++;
+		*p++ = ~*f;
 		c = *str++;
 	}
 	while (x < xend) {
@@ -312,8 +350,10 @@ void LCD_drawStringInvN(int x, int line, const char *str, int xend) {
 }
 
 void LCD_drawIBAR(int x, int line, int v, int N) {
+#if VALIDATE_ARGS
 	if ((line < 0) || (line >= (LCDHEIGHT / 8)) || (x < 0))
 		return;
+#endif
 	int j = LCDHEADER + x + (line * LCDWIDTH);
 	int k = 1;
 	int i;
@@ -338,8 +378,10 @@ void LCD_drawIBAR(int x, int line, int v, int N) {
 }
 
 void LCD_drawIBARadd(int x, int line, int v) {
+#if VALIDATE_ARGS
 	if ((line < 0) || (line >= (LCDHEIGHT)) || (x < 0))
 		return;
+#endif
 	int j = LCDHEADER + x + (line * LCDWIDTH);
 	int b = 1 << (line & 0x07);
 	if (v + x > LCDWIDTH) { // clip

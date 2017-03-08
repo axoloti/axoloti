@@ -27,11 +27,12 @@
 #include "pconnection.h"
 #include "axoloti_board.h"
 #include "axoloti_control.h"
+#include "glcdfont.h"
 #include "ff.h"
 #include <string.h>
 #include "spilink.h"
 
-#define LCD_COL_INDENT 0
+#define LCD_COL_INDENT 6
 #define LCD_COL_RIGHT 0
 #define LCD_COL_LEFT 97
 #define STATUSROW 7
@@ -43,7 +44,6 @@ Btn_Nav_States_struct Btn_Nav_And;
 
 int8_t EncBuffer[2];
 
-KeyValuePair_t *ObjectKvpRoot;
 #define MAXOBJECTS 256
 KeyValuePair_t *ObjectKvps[MAXOBJECTS];
 #define MAXTMPMENUITEMS 15
@@ -54,11 +54,13 @@ KeyValuePair_t TmpMenuKvps[MAXTMPMENUITEMS];
 #define ADCMenu_length 15
 #define FoodMenu_length 3
 
-extern const KeyValuePair_t MainMenu[MainMenu_length];
+extern KeyValuePair_t MainMenu[MainMenu_length];
+KeyValuePair_t *ObjectKvpRoot = &MainMenu[0];
 extern const KeyValuePair_t SdcMenu[SdcMenu_length];
 extern const KeyValuePair_t ADCMenu[ADCMenu_length];
 extern const KeyValuePair_t RootMenu;
 extern const KeyValuePair_t FoodMenu[FoodMenu_length];
+
 
 typedef struct {
 	const KeyValuePair_t *parent;
@@ -83,6 +85,7 @@ menu_stack_t menu_stack[menu_stack_size] = {
 int menu_stack_position = 0;
 
 void EnterMenuLoad(void) {
+// TODO: implement
 #if 0
   memp = (uint8_t *)&fbuff[0];
   FRESULT res;
@@ -139,13 +142,13 @@ void EnterMenuFormat(void) {
   }
 }
 
-void TestDisplayFunction(void *x) {
-
+void TestDisplayFunction(void *x, int initial) {
+	if (initial) {
+		LCD_grey();
+	}
 }
 
 void TestButtonFunction(void *x) {
-	LED_clear();
-
 	static uint8_t val0;
 	val0 += EncBuffer[0];
 	static uint8_t val1;
@@ -153,82 +156,83 @@ void TestButtonFunction(void *x) {
 	EncBuffer[0] = 0;
 	EncBuffer[1] = 0;
 
-	LED_setAll(0,0);
-	LED_setAll(1,0);
-	LED_setOne(0, val0 % 16 ,1 );
-	LED_setOne(1, val1 % 16 ,1);
+	LED_setOne(LED_RING_LEFT, val0 % 16);
+	LED_setOne(LED_RING_RIGHT, val1 % 16);
 
 	static int button[16];
-	IF_BTN_NAV_DOWN(btn_1)  button[0] =   (button[0]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_2)  button[1] =   (button[1]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_3)  button[2] =   (button[2]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_4)  button[3] =   (button[3]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_5)  button[4] =   (button[4]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_6)  button[5] =   (button[5]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_7)  button[6] =   (button[6]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_8)  button[7] =   (button[7]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_9)  button[8] =   (button[8]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_10) button[9] =   (button[9]  + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_11) button[10] =  (button[10] + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_12) button[11] =  (button[11] + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_13) button[12] =  (button[12] + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_14) button[13] =  (button[13] + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_15) button[14] =  (button[14] + 1) % 4;
-	IF_BTN_NAV_DOWN(btn_16) button[15] =  (button[15] + 1) % 4;
+	if (BTN_NAV_DOWN(btn_1))  button[0] =   (button[0]  + 1) % 4;
+	if (BTN_NAV_DOWN(btn_2))  button[1] =   (button[1]  + 1) % 4;
+	if (BTN_NAV_DOWN(btn_3))  button[2] =   (button[2]  + 1) % 4;
+	if (BTN_NAV_DOWN(btn_4))  button[3] =   (button[3]  + 1) % 4;
+	if (BTN_NAV_DOWN(btn_5))  button[4] =   (button[4]  + 1) % 4;
+	if (BTN_NAV_DOWN(btn_6))  button[5] =   (button[5]  + 1) % 4;
+	if (BTN_NAV_DOWN(btn_7))  button[6] =   (button[6]  + 1) % 4;
+	if (BTN_NAV_DOWN(btn_8))  button[7] =   (button[7]  + 1) % 4;
+	if (BTN_NAV_DOWN(btn_9))  button[8] =   (button[8]  + 1) % 4;
+	if (BTN_NAV_DOWN(btn_10)) button[9] =   (button[9]  + 1) % 4;
+	if (BTN_NAV_DOWN(btn_11)) button[10] =  (button[10] + 1) % 4;
+	if (BTN_NAV_DOWN(btn_12)) button[11] =  (button[11] + 1) % 4;
+	if (BTN_NAV_DOWN(btn_13)) button[12] =  (button[12] + 1) % 4;
+	if (BTN_NAV_DOWN(btn_14)) button[13] =  (button[13] + 1) % 4;
+	if (BTN_NAV_DOWN(btn_15)) button[14] =  (button[14] + 1) % 4;
+	if (BTN_NAV_DOWN(btn_16)) button[15] =  (button[15] + 1) % 4;
 
+	LED_clear(LED_STEPS);
 	int i=0;
 	for(i=0;i<16;i++) {
-		LED_setOne(2,i,button[i]);
+		LED_addOne(LED_STEPS,i,button[i]);
 	}
 
 	const int lmid = 50;
 	const int rmid = 86;
-    LCD_drawStringN(lmid, 1, "TEST", LCDWIDTH);
-    LCD_drawStringN(lmid, 2, "", rmid);
-    LCD_drawNumber3D(20,4, val0);
-    LCD_drawNumber3D(rmid,4, val1);
+    LCD_drawStringInvN(lmid, 1, "TEST", LCDWIDTH);
+    LCD_drawStringInvN(lmid, 2, "", rmid);
+    LCD_drawNumber3DInv(20, 4, val0);
+    LCD_drawCharInv(20, 5, val0);
+    LCD_drawNumber3DInv(rmid, 4, val1);
+    LCD_drawCharInv(rmid, 5, val1);
 
     if (Btn_Nav_CurStates.fields.btn_nav_Up) {
-    	LCD_drawStringN(lmid, 3, "Up", rmid);
-    	LCD_drawStringInv(0,3," ");
+    	LCD_drawStringInvN(lmid, 3, "Up", rmid);
+    	LCD_drawChar(0,3,' ');
     } else {
-    	LCD_drawString(0,3,"-");
+    	LCD_drawCharInv(0,3,'-');
     }
     if (Btn_Nav_CurStates.fields.btn_nav_Down) {
-    	LCD_drawStringN(lmid, 3, "Down", rmid);
-    	LCD_drawStringInv(0,5," ");
+    	LCD_drawStringInvN(lmid, 3, "Down", rmid);
+    	LCD_drawChar(0,5,' ');
     } else {
-    	LCD_drawString(0,5,"-");
+    	LCD_drawCharInv(0,5,'-');
     }
     if (Btn_Nav_CurStates.fields.btn_nav_Enter) {
-    	LCD_drawStringN(lmid, 3, "Enter", rmid);
-		LCD_drawStringInv(121,7," ");
+    	LCD_drawStringInvN(lmid, 3, "Enter", rmid);
+    	LCD_drawChar(121,7,' ');
 	} else {
-		LCD_drawString(121,7,"-");
+		LCD_drawCharInv(121,7,'-');
 	}
     if (Btn_Nav_CurStates.fields.btn_nav_Back) {
-    	LCD_drawStringN(lmid, 3, "Back", rmid);
-    	LCD_drawStringInv(0,7," ");
+    	LCD_drawStringInvN(lmid, 3, "Back", rmid);
+    	LCD_drawChar(0,7,' ');
     } else {
-    	LCD_drawString(0,7,"-");
+    	LCD_drawCharInv(0,7,'-');
     }
     if (Btn_Nav_CurStates.fields.btn_nav_Home) {
-    	LCD_drawStringN(lmid, 3, "Home", rmid);
+    	LCD_drawStringInvN(lmid, 3, "Home", rmid);
     }
     if (Btn_Nav_CurStates.fields.btn_nav_Left) {
-    	LCD_drawStringN(lmid, 3, "Left", rmid);
-		LCD_drawStringInv(121,3," ");
+    	LCD_drawStringInvN(lmid, 3, "Left", rmid);
+    	LCD_drawChar(121,3,' ');
 	} else {
-		LCD_drawString(121,3,"-");
+		LCD_drawCharInv(121,3,'-');
 	}
     if (Btn_Nav_CurStates.fields.btn_nav_Right) {
-    	LCD_drawStringN(lmid, 3, "Right", rmid);
-		LCD_drawStringInv(121,5," ");
+    	LCD_drawStringInvN(lmid, 3, "Right", rmid);
+    	LCD_drawChar(121,5,' ');
 	} else {
-		LCD_drawString(121,5,"-");
+		LCD_drawCharInv(121,5,'-');
 	}
     if (Btn_Nav_CurStates.fields.btn_nav_Shift) {
-    	LCD_drawStringN(lmid, 3, "Shift", rmid);
+    	LCD_drawStringInvN(lmid, 3, "Shift", rmid);
     }
 }
 
@@ -236,8 +240,8 @@ const KeyValuePair_t RootMenu = {
   KVP_TYPE_AVP, "--- AXOLOTI ---", .avp = {MainMenu, MainMenu_length}
 };
 
-const KeyValuePair_t MainMenu[MainMenu_length] = {
-  { KVP_TYPE_APVP, "Patch", .apvp = {(int *)ObjectKvps, 0}},
+KeyValuePair_t MainMenu[MainMenu_length] = {
+  { KVP_TYPE_APVP, "Patch", .apvp = {(int *)&ObjectKvps, 0}},
   { KVP_TYPE_AVP, "SDCard", .avp = {SdcMenu, SdcMenu_length}},
   { KVP_TYPE_AVP, "ADCs", .avp = {ADCMenu, ADCMenu_length}},
   { KVP_TYPE_IVP, "dsp%", .ivp = {&dspLoadPct, 0, 100}},
@@ -308,8 +312,6 @@ const KeyValuePair_t FoodMenu[FoodMenu_length] = {
   { KVP_TYPE_AVP, "Dish", .avp = {DishMenu, DishMenu_length}}
 };
 
-
-
 void SetKVP_APVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
                  const char *keyName, int length, KeyValuePair_t **array) {
   kvp->kvptype = KVP_TYPE_APVP;
@@ -371,8 +373,8 @@ inline void KVP_Increment(const KeyValuePair_t *kvp) {
   case KVP_TYPE_AVP: {
     if (menu_stack[menu_stack_position].currentpos < (kvp->avp.length - 1))
     	menu_stack[menu_stack_position].currentpos++;
-	LED_setAll(0,0);
-	LED_setOne(0, (15*menu_stack[menu_stack_position].currentpos)/(kvp->avp.length - 1) ,1 );
+	LED_set(0,0);
+	LED_addOne(0, (15*menu_stack[menu_stack_position].currentpos)/(kvp->avp.length - 1) ,1 );
   } break;
   case KVP_TYPE_APVP:
     if (menu_stack[menu_stack_position].currentpos < (kvp->apvp.length - 1))
@@ -406,8 +408,8 @@ inline void KVP_Decrement(const KeyValuePair_t *kvp) {
   case KVP_TYPE_AVP:
     if (menu_stack[menu_stack_position].currentpos > 0)
       menu_stack[menu_stack_position].currentpos--;
-	LED_setAll(0,0);
-	LED_setOne(0, (15*menu_stack[menu_stack_position].currentpos)/(kvp->avp.length - 1) ,1 );
+	LED_set(0,0);
+	LED_addOne(0, (15*menu_stack[menu_stack_position].currentpos)/(kvp->avp.length - 1) ,1 );
     break;
   case KVP_TYPE_APVP:
     if (menu_stack[menu_stack_position].currentpos > 0)
@@ -436,10 +438,10 @@ inline void KVP_Decrement(const KeyValuePair_t *kvp) {
  * Create menu tree from file tree
  */
 
-uint8_t *memp;
-KeyValuePair_t LoadMenu;
+//KeyValuePair_t LoadMenu;
 
 void EnterMenuLoadFile(void) {
+// Todo: implement patch load menu
 /*
   KeyValuePair_t *F =
       &((KeyValuePair_t *)(LoadMenu.avp.array))[LoadMenu.avp.current];
@@ -480,6 +482,7 @@ void UIGoSafe(void) {
 	menu_stack_position = 0;
 }
 
+#if 0 // obsolete?
 static KeyValuePair_t* userDisplay;
 
 void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata) {
@@ -489,6 +492,7 @@ void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* 
 		userDisplay->custom.userdata = userdata;
 	}
 }
+#endif
 
 void ui_init(void) {
   Btn_Nav_Or.word = 0;
@@ -509,13 +513,14 @@ void KVP_ClearObjects(void) {
 }
 
 void KVP_RegisterObject(KeyValuePair_t *kvp) {
-  ObjectKvps[ObjectKvpRoot->apvp.length] = kvp;
-//	kvp->parent = ObjectKvpRoot;
-  ObjectKvpRoot->apvp.length++;
+  if (ObjectKvpRoot->apvp.length < MAXOBJECTS) {
+	ObjectKvps[ObjectKvpRoot->apvp.length] = kvp;
+    ObjectKvpRoot->apvp.length++;
+  }
 }
 
 #define LCD_COL_EQ 91
-#define LCD_COL_VAL LCD_COL_LEFT
+#define LCD_COL_VAL 92
 #define LCD_COL_ENTER LCD_COL_LEFT
 
 void KVP_DisplayInv(int x, int y, const KeyValuePair_t *kvp) {
@@ -658,72 +663,81 @@ static void UIPollButtons(void) {
   if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
     KeyValuePair_t *cur =
         &((KeyValuePair_t *)(KvpsDisplay->avp.array))[menu_stack[menu_stack_position].currentpos];
-    IF_BTN_NAV_DOWN(btn_nav_Down)
+    if (BTN_NAV_DOWN(btn_nav_Down))
       KVP_Increment(KvpsDisplay);
     if (EncBuffer[0]>0) {
     	KVP_Increment(KvpsDisplay);
     	EncBuffer[0]=0;
     }
-    IF_BTN_NAV_DOWN(btn_nav_Up)
+    if (BTN_NAV_DOWN(btn_nav_Up))
       KVP_Decrement(KvpsDisplay);
     if (EncBuffer[0]<0) {
     	KVP_Decrement(KvpsDisplay);
     	EncBuffer[0]=0;
     }
-    IF_BTN_NAV_DOWN(btn_nav_Left)
+    if (BTN_NAV_DOWN(btn_nav_Left))
       KVP_Decrement(cur);
-    IF_BTN_NAV_DOWN(btn_nav_Right)
+    if (BTN_NAV_DOWN(btn_nav_Right))
       KVP_Increment(cur);
-    IF_BTN_NAV_DOWN(btn_nav_Enter) {
+    if (BTN_NAV_DOWN(btn_nav_Enter)) {
       if ((cur->kvptype == KVP_TYPE_AVP) || (cur->kvptype == KVP_TYPE_APVP)
           || (cur->kvptype == KVP_TYPE_CUSTOM)) {
-    	LCD_clearDisplay();
     	if (menu_stack_position < menu_stack_size-1) {
+        	LCD_clear();
 			menu_stack[menu_stack_position+1].parent = cur;
 			menu_stack[menu_stack_position+1].currentpos = 0;
 			menu_stack_position++;
+			if (cur->kvptype == KVP_TYPE_CUSTOM) {
+				const KeyValuePair_t * KvpsDisplay = menu_stack[menu_stack_position].parent;
+			    if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata, 1);
+			}
     	}
       } else if (cur->kvptype == KVP_TYPE_FNCTN)
         if (cur->fnctnvp.fnctn != 0)
           (cur->fnctnvp.fnctn)();
     }
-    IF_BTN_NAV_DOWN(btn_nav_Back) {
+    if (BTN_NAV_DOWN(btn_nav_Back)) {
     	if (menu_stack_position > 0) menu_stack_position--;
+    	LCD_clear();
     }
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
     const KeyValuePair_t *cur =
         (const KeyValuePair_t *)(KvpsDisplay->apvp.array[menu_stack[menu_stack_position].currentpos]);
-    IF_BTN_NAV_DOWN(btn_nav_Down)
+    if (BTN_NAV_DOWN(btn_nav_Down))
       KVP_Increment(KvpsDisplay);
-    IF_BTN_NAV_DOWN(btn_nav_Up)
+    if (BTN_NAV_DOWN(btn_nav_Up))
       KVP_Decrement(KvpsDisplay);
-    IF_BTN_NAV_DOWN(btn_nav_Left)
+    if (BTN_NAV_DOWN(btn_nav_Left))
       KVP_Decrement(cur);
-    IF_BTN_NAV_DOWN(btn_nav_Right)
+    if (BTN_NAV_DOWN(btn_nav_Right))
       KVP_Increment(cur);
-    IF_BTN_NAV_DOWN(btn_nav_Enter) {
+    if (BTN_NAV_DOWN(btn_nav_Enter)) {
       if ((cur->kvptype == KVP_TYPE_AVP) || (cur->kvptype == KVP_TYPE_APVP)
           || (cur->kvptype == KVP_TYPE_CUSTOM)) {
       	if (menu_stack_position < menu_stack_size-1) {
 			menu_stack[menu_stack_position+1].parent = cur;
 			menu_stack[menu_stack_position+1].currentpos = 0;
 			menu_stack_position++;
+			if (cur->kvptype == KVP_TYPE_CUSTOM) {
+				const KeyValuePair_t * KvpsDisplay = menu_stack[menu_stack_position].parent;
+			    if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata, 1);
+			}
       	}
       } else if (cur->kvptype == KVP_TYPE_FNCTN)
         if (cur->fnctnvp.fnctn != 0)
           (cur->fnctnvp.fnctn)();
     }
-    IF_BTN_NAV_DOWN(btn_nav_Back)
+    if (BTN_NAV_DOWN(btn_nav_Back))
       if (menu_stack_position > 0) menu_stack_position--;
-
+      LCD_clear();
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
     if (KvpsDisplay->custom.buttonFunction != 0) (KvpsDisplay->custom.buttonFunction)(KvpsDisplay->custom.userdata);
-
-    IF_BTN_NAV_DOWN(btn_nav_Back)
+    if (BTN_NAV_DOWN(btn_nav_Back)) {
 	  if (menu_stack_position > 0) menu_stack_position--;
-
+      LCD_clear();
+    }
   }
 
 
@@ -745,14 +759,23 @@ static void UIPollButtons(void) {
   else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
     KeyValuePair_t *cur =
         (KeyValuePair_t *)(KvpsDisplay->apvp.array[menu_stack[menu_stack_position].currentpos]);
+    if (EncBuffer[0] > 0) {
+      KVP_Increment(KvpsDisplay);
+      EncBuffer[0] = 0;
+    } else if (EncBuffer[0] < 0) {
+	  KVP_Decrement(KvpsDisplay);
+	  EncBuffer[0] = 0;
+    }
+    if (BTN_NAV_DOWN(btn_nav_Up))
+      KVP_Decrement(KvpsDisplay);
     if ((cur->kvptype == KVP_TYPE_IVP) || (cur->kvptype == KVP_TYPE_IPVP)) {
-      while (EncBuffer[0] > 0) {
+      while (EncBuffer[1] > 0) {
         KVP_Increment(cur);
-        EncBuffer[0]--;
+        EncBuffer[1]--;
       }
-      while (EncBuffer[0] < 0) {
+      while (EncBuffer[1] < 0) {
         KVP_Decrement(cur);
-        EncBuffer[0]++;
+        EncBuffer[1]++;
       }
     }
   }
@@ -769,36 +792,24 @@ static void UIUpdateLCD(void) {
     int c = menu_stack[menu_stack_position].currentpos;
     int l = KvpsDisplay->avp.length;
     KeyValuePair_t *k = (KeyValuePair_t *)KvpsDisplay->avp.array;
-    if (l < STATUSROW) {
-      // they all fit on the screen
-      int i;
-      for (i = 0; i < l; i++) {
-        if (c == i)
-          KVP_DisplayInv(LCD_COL_INDENT, 1 + i, &k[i]);
-        else
-          KVP_Display(LCD_COL_INDENT, 1 + i, &k[i]);
-      }
-      for (; i < STATUSROW; i++) {
-        LCD_drawStringN(LCD_COL_INDENT, 1 + i, " ", 78);
-      }
-    }
-    else {
-      int offset = 0;
-      if (c > 3) offset = c - 3;
-      if ((l-c) < 3) offset = l - 6;
-
-      int line;
-      for (line = 0; line < (STATUSROW-1); line++) {
-        if (offset+line < l) {
-        	if (offset+line == c)
-         	   KVP_DisplayInv(LCD_COL_INDENT, line+1, &k[offset+line]);
-        	else
-               KVP_Display(LCD_COL_INDENT, line+1, &k[offset+line]);
-        } else // blank
-          LCD_drawStringN(LCD_COL_INDENT, line+1, " ", LCDWIDTH);
-      }
-    }
-
+	int offset = 0;
+	if (c > 3) offset = c - 3;
+	if ((l-c) < 3) offset = l - 6;
+	if (l < STATUSROW) offset = 0;
+	LCD_drawChar(0,3,c>0?CHAR_ARROW_UP:0);
+	LCD_drawChar(0,5,c<(l-1)?CHAR_ARROW_DOWN:0);
+	LCD_drawChar(122,3,'+');
+	LCD_drawChar(122,5,'-');
+	int line;
+	for (line = 0; line < (STATUSROW-1); line++) {
+		if (offset+line < l) {
+			if (offset+line == c)
+			   KVP_DisplayInv(LCD_COL_INDENT, line+1, &k[offset+line]);
+			else
+			   KVP_Display(LCD_COL_INDENT, line+1, &k[offset+line]);
+		} else // blank
+		  LCD_drawStringN(LCD_COL_INDENT, line+1, " ", LCDWIDTH-6);
+	}
     if (menu_stack_position > 0) {
       LCD_drawStringInv(0, STATUSROW, "BACK");
       LCD_drawString(24, STATUSROW, "     ");
@@ -819,73 +830,25 @@ static void UIUpdateLCD(void) {
     int c = menu_stack[menu_stack_position].currentpos;
     int l = KvpsDisplay->apvp.length;
     KeyValuePair_t **k = (KeyValuePair_t **)KvpsDisplay->apvp.array;
-    if (l < 7) {
-      int i;
-      for (i = 0; i < l; i++) {
-        if (c == i)
-          KVP_DisplayInv(LCD_COL_INDENT, 1 + i, k[i]);
-        else
-          KVP_Display(LCD_COL_INDENT, 1 + i, k[i]);
-      }
-      for (; i < STATUSROW; i++) {
-        LCD_drawStringN(LCD_COL_INDENT, 1 + i, " ", 78);
-      }
-    }
-    else if (c == 0) {
-      if (c < l)
-        KVP_DisplayInv(LCD_COL_INDENT, 1, k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 1, " ", LCDWIDTH);
-      int line;
-      for (line = 2; line < STATUSROW; line++) {
-        if (c < l)
-          KVP_Display(LCD_COL_INDENT, line, k[c++]);
-        else
-          LCD_drawStringN(LCD_COL_INDENT, line, " ", LCDWIDTH);
-      }
-    }
-    else if (c == 1) {
-      c--;
-      if (c < l)
-        KVP_Display(LCD_COL_INDENT, 1, k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 1, " ", LCDWIDTH);
-      if (c < l)
-        KVP_DisplayInv(LCD_COL_INDENT, 2, k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 2, " ", LCDWIDTH);
-      int line;
-      for (line = 3; line < STATUSROW; line++) {
-        if (c < l)
-          KVP_Display(LCD_COL_INDENT, line, k[c++]);
-        else
-          LCD_drawStringN(LCD_COL_INDENT, line, " ", LCDWIDTH);
-      }
-    }
-    else {
-      c--;
-      c--;
-      if (c < l)
-        KVP_Display(LCD_COL_INDENT, 1, k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 1, " ", LCDWIDTH);
-      if (c < l)
-        KVP_Display(LCD_COL_INDENT, 2, k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 2, " ", LCDWIDTH);
-      if (c < l)
-        KVP_DisplayInv(LCD_COL_INDENT, 3, k[c++]);
-      else
-        LCD_drawStringN(LCD_COL_INDENT, 3, " ", LCDWIDTH);
-      int line;
-      for (line = 4; line < STATUSROW; line++) {
-        if (c < l)
-          KVP_Display(LCD_COL_INDENT, line, k[c++]);
-        else
-          LCD_drawStringN(LCD_COL_INDENT, line, " ", LCDWIDTH);
-      }
-    }
-	if (menu_stack_position > 0) {
+	int offset = 0;
+	if (c > 3) offset = c - 3;
+	if ((l-c) < 3) offset = l - 6;
+	if (l < STATUSROW) offset = 0;
+	LCD_drawChar(0,3,c>0?CHAR_ARROW_UP:0);
+	LCD_drawChar(0,5,c<(l-1)?CHAR_ARROW_DOWN:0);
+	LCD_drawChar(122,3,'-');
+	LCD_drawChar(122,5,'+');
+	int line;
+	for (line = 0; line < (STATUSROW-1); line++) {
+		if (offset+line < l) {
+			if (offset+line == c)
+			   KVP_DisplayInv(LCD_COL_INDENT, line+1, k[offset+line]);
+			else
+			   KVP_Display(LCD_COL_INDENT, line+1, k[offset+line]);
+		} else // blank
+		  LCD_drawStringN(LCD_COL_INDENT, line+1, " ", LCDWIDTH);
+	}
+    if (menu_stack_position > 0) {
       LCD_drawStringInv(0, STATUSROW, "BACK");
       LCD_drawString(24, STATUSROW, "     ");
     }
@@ -902,7 +865,7 @@ static void UIUpdateLCD(void) {
       LCD_drawString(LCD_COL_ENTER, STATUSROW, "     ");
   }
   else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
-	  if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata);
+	  if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata, 0);
   }
 
 #if 0 // show protocol diagnostics
@@ -924,7 +887,7 @@ void k_scope_disp_frac32_64(void * userdata) {
 // userdata  int32_t[64], one sample per column
   const int indent = (128 - (15 + 64)) / 2 ;
   int i;
-  LCD_clearDisplay();
+  LCD_clear();
   for (i = 0; i < 48; i++) {
     LCD_setPixel(index + 14, i);
   }
@@ -954,7 +917,7 @@ void k_scope_disp_frac32_minmax_64(void * userdata) {
 // userdata  int32_t[64][2], minimum and maximum per column
   const int indent = (128 - (15 + 64)) / 2 ;
   int i;
-  LCD_clearDisplay();
+  LCD_clear();
   for (i = 0; i < 48; i++) {
     LCD_setPixel(indent + 14, i);
   }
