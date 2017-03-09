@@ -100,9 +100,8 @@ then
         echo "${ARCHIVE} already downloaded"
     fi
     unzip -q -o ${ARCHIVE}
-#    mv ${ARDIR} chibios
     cd ${ARDIR}/ext
-    7z x ./fatfs-0.10b-patched.7z
+    7zip x ./fatfs-0.10b-patched.7z
     cd ../../
     mv ${ARDIR} ../..
 else
