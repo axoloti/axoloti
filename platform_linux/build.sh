@@ -35,13 +35,13 @@ fi
 
 case $OS in
     Ubuntu|Debian|DebianJessie32bit)
-        echo "apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0"
+        echo "apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0 p7zip-full"
       if [ $OS==DebianJessie32bit ]; then
             sudo apt-get install -y libtool libudev-dev automake autoconf \
                ant curl
       else
             sudo apt-get install -y libtool libudev-dev automake autoconf \
-               ant curl lib32z1 lib32ncurses5
+               ant curl lib32z1 lib32ncurses5 p7zip-full
       fi
 
         # On more recent versions of Ubuntu
@@ -101,7 +101,7 @@ then
     fi
     unzip -q -o ${ARCHIVE}
     cd ${ARDIR}/ext
-    7zip x ./fatfs-0.10b-patched.7z
+    7z x ./fatfs-0.10b-patched.7z
     cd ../../
     mv ${ARDIR} ../..
 else
