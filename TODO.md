@@ -3,7 +3,6 @@ This heavily impacts the usb device stack, moving from byte queues to the synchr
 
 * implement usb device midi
 * fix exception_checkandreport()
-* fix LogTextMessage, without sleeping in between, current implementation will just discard everything but the last string
 * remove "chibios_migration.h" dependencies in firmware (in a separate commit)
   objects/patches probably still need it.
 * USB MSC sdcard mounter: does not restart into normal mode, when ejecting disk on host.

@@ -33,9 +33,7 @@
 #include "flash.h"
 #include "exceptions.h"
 #include "crc32.h"
-#include "flash.h"
 #include "watchdog.h"
-#include "usbcfg.h"
 #include "bulk_usb.h"
 #include "midi.h"
 #include "midi_usb.h"
@@ -48,6 +46,8 @@ uint32_t fwid;
 
 thread_t * thd_bulk_Writer;
 thread_t * thd_bulk_Reader;
+
+static int isConnected = 0;
 
 
 char FileName[256];
@@ -80,6 +80,7 @@ static uint8_t bulk_rxbuf[64];
 uint32_t offset;
 uint32_t value;
 
+// in order of high to low priority
 #define evt_bulk_tx_ack  (1<<0)
 #define evt_bulk_fw_ver  (1<<1)
 #define evt_bulk_memrd32 (1<<2)
@@ -92,7 +93,7 @@ uint32_t value;
 
 const uint32_t tx_hdr_acknowledge = 0x416F7841; // "AxoA"
 const uint32_t tx_hdr_fwid = 0x566f7841; // "AxoV"
-const uint32_t tx_hdr_ = 0x566f7841; // "AxoV"
+const uint32_t tx_hdr_log = 0x546F7841; // "AxoT"
 const uint32_t tx_hdr_memrd32 = 0x796f7841; // "Axoy"
 const uint32_t tx_hdr_memrdx = 0x726f7841; // "Axor"
 
@@ -298,16 +299,121 @@ void bulk_tx_dirlist(void) {
   BulkUsbTransmit((const unsigned char* )msg, 14);
 }
 
+
 typedef struct bulk_tx_logmessage_pckt {
 	int header;
-	char str[64];
+	// + null terminated string
 } bulk_tx_logmessage_pckt_t;
 
-bulk_tx_logmessage_pckt_t logmessage;
+static binary_semaphore_t logsem;
+
+#define LOG_BUFFERS_NUMBER 3
+#define LOG_BUFFERS_SIZE 64
+
+/*
+ * LogStream specific data.
+ */
+#define _log_stream_data                                                    \
+  _base_sequential_stream_data                                              \
+  uint8_t ob[BQ_BUFFER_SIZE(LOG_BUFFERS_NUMBER, LOG_BUFFERS_SIZE)];         \
+  output_buffers_queue_t obqueue;
+
+/*
+ * LogStream virtual methods table, nothing added.
+ */
+struct LogStreamVMT {
+  _base_sequential_stream_methods
+};
+/**
+ * Memory stream object.
+ */
+typedef struct {
+  /** @brief Virtual Methods Table.*/
+  const struct LogStreamVMT *vmt;
+  _log_stream_data
+} LogStream;
+
+void logObjectInit(LogStream *msp);
+
+
+static size_t writes(void *ip, const uint8_t *bp, size_t n) {
+	LogStream *msp = ip;
+	msg_t r = obqWriteTimeout(&msp->obqueue, bp,
+						 n, TIME_INFINITE);
+	(void)r;
+	return n;
+}
+
+static size_t reads(void *ip, uint8_t *bp, size_t n){
+	return 0;
+}
+
+static msg_t put(void *ip, uint8_t b) {
+	LogStream *msp = ip;
+	return obqPutTimeout(&msp->obqueue, b, TIME_INFINITE);
+}
+
+static msg_t get(void *ip) {
+	return 0;
+}
+
+static const struct LogStreamVMT vmt = {writes, reads, put, get};
+
+LogStream logstream;
+
+/**
+ * @brief   Notification of filled buffer inserted into the output buffers queue.
+ *
+ * @param[in] bqp       the buffers queue pointer.
+ */
+static void obnotify(io_buffers_queue_t *bqp) {
+    chEvtSignalI(thd_bulk_Writer,evt_bulk_tx_logmessage);
+}
+
+void logObjectInit(LogStream *msp) {
+  msp->vmt    = &vmt;
+  obqObjectInit(&msp->obqueue, msp->ob,
+                LOG_BUFFERS_SIZE, LOG_BUFFERS_NUMBER,
+                obnotify, msp);
+}
+
 
 msg_t bulk_tx_logmessage(void) {
-    int l = strlen(logmessage.str);
-    return BulkUsbTransmit((const unsigned char* )&logmessage, l+5);
+  msg_t error = 0;
+  size_t s;
+  int cont = 1;
+  int h = tx_hdr_log; // "AxoT"
+  error = BulkUsbTransmit((const unsigned char* )&h, 4);
+  while(cont) {
+	  chSysLock();
+	  uint8_t *buf = obqGetFullBufferI(&logstream.obqueue,
+								 &s);
+	  chSchRescheduleS();
+	  chSysUnlock();
+
+	  if (buf) {
+		  error = BulkUsbTransmit(buf, s);
+		  // check if null-terminated
+		  if (s && !buf[s-1]) cont = 0;
+		  chSysLock();
+		  obqReleaseEmptyBufferI(&logstream.obqueue);
+		  chSchRescheduleS();
+		  chSysUnlock();
+	  } else {
+		  cont = 0;
+#if 0 // diagnostics
+		  if (s==0) {
+			  error = BulkUsbTransmit((const unsigned char* )&h, 4);
+			  error = BulkUsbTransmit((const unsigned char* )"emptyb", 7);
+		  } else {
+			  error = BulkUsbTransmit((const unsigned char* )&h, 4);
+			  error = BulkUsbTransmit((const unsigned char* )"nobuf", 6);
+		  }
+#endif
+	  }
+  }
+  chBSemSignal(&logsem);
+  return error;
 }
 
 typedef struct {
@@ -349,7 +455,7 @@ static THD_FUNCTION(BulkWriter, arg) {
 		switch (evt) {
 		case 1:
 			msg = bulk_tx_ack();
-			//exception_checkandreport();
+			exception_checkandreport();
 			break;
 		case evt_bulk_fw_ver:
 			msg = bulk_tx_fw_version();
@@ -572,16 +678,19 @@ static THD_WORKING_AREA(waBulkReader, 1024);
 static THD_FUNCTION(BulkReader, arg) {
 
   (void)arg;
-  chRegSetThreadName("reader");
+  chRegSetThreadName("bulkrdr");
   while (true) {
     msg_t msg = usbReceive(&USBD1, USBD2_DATA_AVAILABLE_EP,
     		bulk_rxbuf, sizeof (bulk_rxbuf));
-    if (msg == MSG_RESET)
+    if (msg == MSG_RESET) {
+      isConnected = 0;
       chThdSleepMilliseconds(500);
+    }
     else {
       uint32_t header = ((rcv_pckt_header_t *)bulk_rxbuf)->header;
       if (header == rcv_hdr_ping) {
     	  // AxoP : ping
+          isConnected = 1;
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
     	  if (!patchStatus) {
         	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_disp);
@@ -756,7 +865,8 @@ void InitPConnection(void) {
   extern int32_t _flash_end;
   fwid = CalcCRC32((uint8_t *)(FLASH_BASE_ADDR),
                    (uint32_t)(&_flash_end) & 0x07FFFFF);
-
+  logObjectInit(&logstream);
+  chBSemObjectInit(&logsem,0);
   /*
    * Activates the USB driver and then the USB bus pull-up on D+.
    * Note, a delay is inserted in order to not have to disconnect the cable
@@ -769,7 +879,6 @@ void InitPConnection(void) {
 
   thd_bulk_Writer = chThdCreateStatic(waBulkWriter, sizeof(waBulkWriter), NORMALPRIO, BulkWriter, NULL);
   thd_bulk_Reader =  chThdCreateStatic(waBulkReader, sizeof(waBulkReader), NORMALPRIO, BulkReader, NULL);
-
 }
 
 int GetFirmwareID(void) {
@@ -777,14 +886,16 @@ int GetFirmwareID(void) {
 }
 
 void LogTextMessage(const char* format, ...) {
-	// FIXME: use output_queue?
-	// current implementation discards multiple LogTextMessage calls
-	logmessage.header =  0x546F7841; // "AxoT"
-    va_list ap;
-    va_start(ap, format);
-    chsnprintf(logmessage.str, sizeof(logmessage.str), format, ap);
-    va_end(ap);
-    chEvtSignal(thd_bulk_Writer,evt_bulk_tx_logmessage);
+	if (isConnected) {
+		va_list ap;
+		va_start(ap, format);
+		chvprintf((BaseSequentialStream *)&logstream, format, ap);
+		va_end(ap);
+		chSequentialStreamPut((BaseSequentialStream *)&logstream,0);
+		obqFlush(&logstream.obqueue);
+		// would like to remove this semaphore, but that seems to cause data loss?
+		chBSemWait(&logsem);
+	}
 }
 
 
