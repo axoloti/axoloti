@@ -246,11 +246,10 @@ void exception_checkandreport(void) {
       LogTextMessage("exception: brownout");
     }
     else if (exceptiondump->type == fatfs_error) {
-   	  LogTextMessage("file error?");
       LogTextMessage("file error: %s, filename:\"%s\"",fs_err_name[exceptiondump->r0],(char *)(BKPSRAM_BASE)+12);
     }
     else if (exceptiondump->type == patch_load_crc_fail) {
-      LogTextMessage("failed to load patch, firmware version mismatch? filename:\"%s\"",(char *)(BKPSRAM_BASE)+12);
+      LogTextMessage("failed to load patch, firmware mismatch? \"%s\"",(char *)(BKPSRAM_BASE)+12);
     }
     else if (exceptiondump->type == patch_load_sdram_overflow) {
       LogTextMessage("sdram overflow by %d bytes",exceptiondump->r0);
@@ -258,8 +257,10 @@ void exception_checkandreport(void) {
     else if (exceptiondump->type == usbh_midi_ringbuffer_overflow) {
       LogTextMessage("usb host midi output ringbuffer overflow");
     }
-    else
-    {
+    else if (exceptiondump->type == halt) {
+      LogTextMessage("Panic: %s",exceptiondump->r0);
+    }
+    else {
       LogTextMessage("unknown exception?");
     }
 
@@ -465,9 +466,12 @@ void report_halt(const char *reason) {
   exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
   exceptiondump->type = halt;
   exceptiondump->r0 = (uint32_t)reason;
-  NVIC_SystemReset();
 
-  /* Harmless infinite loop.*/
-  while (true) {
+  if (!(CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk)) {
+	  // no debugger connected, do system reset
+	  NVIC_SystemReset();
+  } else {
+	  // software breakpoint
+	  asm("BKPT 255");
   }
 }
