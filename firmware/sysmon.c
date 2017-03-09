@@ -41,9 +41,7 @@ volatile uint8_t pattern_index;
 static WORKING_AREA(waThreadSysmon, 256);
 static THD_FUNCTION(ThreadSysmon, arg) {
   (void)arg;
-#if CH_USE_REGISTRY
   chRegSetThreadName("sysmon");
-#endif
   pattern_index = 0;
   while (1) {
     uint8_t pi = pattern_index;

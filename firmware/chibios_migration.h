@@ -25,6 +25,7 @@
 #define chQGetLink qGetLink
 #define chIQInit iqObjectInit
 #define chOQInit oqObjectInit
-
-
+#define CH_USE_REGISTRY CH_CFG_USE_REGISTRY
+#define chRegGetThreadName chRegGetThreadNameX
+#define THD_STATE_NAMES CH_STATE_NAMES
 #endif

@@ -55,9 +55,7 @@ static WORKING_AREA(waThreadSpilink, 256);
 
 static THD_FUNCTION(ThreadSpilinkSlave, arg) {
 	(void) arg;
-#if CH_USE_REGISTRY
 	chRegSetThreadName("spilink");
-#endif
 		// slave
 		while (1) {
 			/* Waiting for messages.*/

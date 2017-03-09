@@ -68,7 +68,6 @@ static Thread *pThreadDSP = 0;
 static const char *index_fn = "/index.axb";
 
 static int GetNumberOfThreads(void){
-#ifdef CH_USE_REGISTRY
   int i=1;
   Thread *thd1 = chRegFirstThread();
   while(thd1){
@@ -76,14 +75,10 @@ static int GetNumberOfThreads(void){
     thd1 = chRegNextThread (thd1);
   }
   return i;
-#else
-  return -1;
-#endif
 }
 
 void CheckStackOverflow(void) {
-#ifdef CH_USE_REGISTRY
-#ifdef CH_DBG_FILL_THREADS
+#if CH_DBG_FILL_THREADS
   Thread *thd = chRegFirstThread();
   // skip 1st thread, main thread
   thd = chRegNextThread (thd);
@@ -92,7 +87,7 @@ void CheckStackOverflow(void) {
   while(thd){
     char *stk = (char *)(thd+1);
     nfree = 0;
-    while(*stk == CH_STACK_FILL_VALUE) {
+    while(*stk == CH_DBG_STACK_FILL_VALUE) {
       nfree++;
       stk++;
       if (nfree>=STACKSPACE_MARGIN) break;
@@ -104,7 +99,7 @@ void CheckStackOverflow(void) {
     thd = chRegNextThread(thd);
   }
   if (critical) {
-    const char *name = chRegGetThreadName(thd);
+    const char *name = chRegGetThreadNameX(thd);
     if (name!=0)
       if (nfree)
         LogTextMessage("Thread %s : stack critical %d",name,nfree);
@@ -116,7 +111,6 @@ void CheckStackOverflow(void) {
       else
         LogTextMessage("Thread ?? : stack overflow");
   }
-#endif
 #endif
 }
 
@@ -173,9 +167,7 @@ static int StartPatch1(void) {
 
 static THD_FUNCTION(ThreadDSP, arg) {
   (void)(arg);
-#if CH_USE_REGISTRY
   chRegSetThreadName("dsp");
-#endif
   codec_clearbuffer();
   while (1) {
     // codec dsp cycle

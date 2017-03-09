@@ -925,9 +925,7 @@ USBH_StatusTypeDef  USBH_LL_Disconnect  (USBH_HandleTypeDef *phost)
   */
 static void USBH_Process_OS(void const * argument)
 {
-#if CH_USE_REGISTRY
   chRegSetThreadName("usbh");
-#endif
 
   osEvent event;
   

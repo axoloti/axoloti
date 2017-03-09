@@ -137,9 +137,7 @@ static const SerialConfig sdMidiCfg = {31250, // baud
 static WORKING_AREA(waThreadMidi, 256) CCM;
 static THD_FUNCTION(ThreadMidi, arg) {
   (void)arg;
-#if CH_USE_REGISTRY
   chRegSetThreadName("midi");
-#endif
   while (1) {
     char ch;
     ch = sdGet(&SDMIDI);

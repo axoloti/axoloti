@@ -36,9 +36,7 @@ thread_t * thd_midi_Reader;
 
 static THD_WORKING_AREA(waMidiWriter, 128);
 static THD_FUNCTION(MidiWriter, arg) {
-#if CH_USE_REGISTRY
   chRegSetThreadName("usbdmidiw");
-#endif
   // TODO: implement...
 	while (true) {
 		eventmask_t evt = chEvtWaitOne(1);
@@ -52,9 +50,7 @@ uint8_t midi_usbd_rxbuf[64];
 
 static THD_WORKING_AREA(waMidiReader, 128);
 static THD_FUNCTION(MidiReader, arg) {
-#if CH_USE_REGISTRY
   chRegSetThreadName("usbdmidir");
-#endif
   // TODO: implement...
 	while (true) {
 	    msg_t msg = usbReceive(&USBD1, USBD1_DATA_AVAILABLE_EP,
