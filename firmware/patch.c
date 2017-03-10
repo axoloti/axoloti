@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -22,6 +22,7 @@
 #include "string.h"
 #include "axoloti_board.h"
 #include "midi.h"
+#include "midi_usb.h"
 #include "watchdog.h"
 #include "pconnection.h"
 #include "sysmon.h"
@@ -177,7 +178,21 @@ static THD_FUNCTION(ThreadDSP, arg) {
       tStart = port_rt_get_counter_value();
       watchdog_feed();
       if (patchStatus == RUNNING) { // running
+    	// audio payload
         (patchMeta.fptr_dsp_process)(inbuf, outbuf);
+        // midi input
+        // perhaps throttle midi input processing when dsp_process took a lot of time
+        midi_message_t midi_in;
+        msg_t msg = midi_input_buffer_get(&midi_input_buffer, &midi_in);
+        while (msg == 0) {
+        	(patchMeta.fptr_MidiInHandler)(midi_in.fields.port, 0,
+        			midi_in.fields.b0,
+					midi_in.fields.b1,
+					midi_in.fields.b2);
+            msg = midi_input_buffer_get(&midi_input_buffer, &midi_in);
+        }
+        // notify usbd output
+        midi_output_buffer_notify(&midi_output_usbd);
       }
       else if (patchStatus == STOPPING){
         codec_clearbuffer();
@@ -355,6 +370,7 @@ void computebufI(int32_t *inp, int32_t *outp) {
   chSysUnlockFromIsr();
 }
 
+// MidiByte0 is only to be used by patches, avoids queuing
 void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t status,
                       uint8_t data1, uint8_t data2) {
   if (patchStatus == RUNNING) {

@@ -21,10 +21,15 @@
 #include <stdint.h>
 
 void serial_midi_init(void);
+
+void serial_MidiSend(midi_message_t midimsg);
+
+// report the number of bytes pending for transmission
+int  serial_MidiGetOutputBufferPending(void);
+
+// obsolete
 void serial_MidiSend1(uint8_t b0);
 void serial_MidiSend2(uint8_t b0, uint8_t b1);
 void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2);
-
-int  serial_MidiGetOutputBufferPending(void);
 
 #endif

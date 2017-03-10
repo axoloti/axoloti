@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014, 2015 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -19,6 +19,10 @@
 #define __MIDI_H
 
 #include <stdint.h>
+#include "midi_buffer.h"
+
+// the midi_input buffer uses virtual port mapping
+extern midi_input_buffer_t midi_input_buffer;
 
 // MidiDefs.h
 // according to MIDI standard
@@ -95,29 +99,36 @@
 #define MIDI_C_MONO				0x7e // mono on all notes off
 #define MIDI_C_POLY				0x7f // poly on all notes off
 
-typedef enum
+typedef enum // obsolete
 {
-    MIDI_DEVICE_OMNI = 0,          // for filtering
+    MIDI_DEVICE_OMNI = 0,        // for filtering
     MIDI_DEVICE_DIN,             // MIDI_DIN
     MIDI_DEVICE_USB_DEVICE,      // Board acting as Midi device over MicroUSB 
     MIDI_DEVICE_USB_HOST,        // Board hosting devices vid USB host port
     MIDI_DEVICE_DIGITAL_X1,      // x1 pins - not implemented
-    MIDI_DEVICE_DIGITAL_X2,       // x2 pins - not implemented
-    MIDI_DEVICE_INTERNAL = 0x0F     // internal (to the board) midi
+    MIDI_DEVICE_DIGITAL_X2,      // x2 pins - not implemented
+    MIDI_DEVICE_INTERNAL = 0x0F  // internal (to the board) midi
 } midi_device_t ;
 
+#define MIDI_DEVICE_OUTPUTMAP_NONE MIDI_DEVICE_OMNI
+#define MIDI_DEVICE_INPUTMAP_NONE -1
+
+// obsolete
 // midi port, from 1  = OMNI for filtering and internal messages
 #define MIDI_PORT_OMNI 0
 
 void midi_init(void);
-void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
 
+// obsolete: moved to polling in the dsp thread
+// void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
 
+// obsolete: migrated to virtual midi ports, ignoring the port, using dev as virtual port number
 void MidiSend1(midi_device_t dev, uint8_t port, uint8_t b0);
 void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1);
 void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
 void MidiSendSysEx(midi_device_t dev, uint8_t port, uint8_t bytes[], uint8_t len);
 
+// todo: migrate to virtual midi output port as argument instead of device
 int  MidiGetOutputBufferPending(midi_device_t dev);
 int  MidiGetOutputBufferAvailable(midi_device_t dev);
 

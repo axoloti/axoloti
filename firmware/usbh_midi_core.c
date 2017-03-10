@@ -36,56 +36,51 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usbh_midi_core_lld.h"
 #include "usbh_midi_core.h"
-
-
-#define _USB_H_
 #include "ch.h"
 #include "axoloti_board.h"
 #include "exceptions.h"
+#include "midi.h"
+#include "midi_buffer.h"
+
+midi_output_buffer_t midi_output_usbh;
+
+// map 16 usb host ports to 16 virtual inputs
+// this map squeezes all midi ports on the usb host connector onto one...
+midi_input_remap_t midi_inputmap_usbh[16] = {
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE},
+		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE}
+};
+
 
 USB_Setup_TypeDef MIDI_Setup;
 
 #define MIDI_MIN_READ_POLL 1
 #define MIDI_MIN_WRITE_POLL 1
 
-#define RING_BUFFER_SIZE 64
-
-typedef struct
-{
-    uint8_t data[4];
-} MIDIEvent_t;
-
-
-// very simple ring buffer
-// Note: this should be moved into main midi structure. (hub support will need this) 
-static struct {
-    MIDIEvent_t event[RING_BUFFER_SIZE];
-    volatile int8_t read_ptr;
-    volatile int8_t write_ptr;
-} send_ring_buffer;
-
-
-void usbh_midi_init_buffer(void) {
-  // make no bytes available for output, initialise will reset
-  send_ring_buffer.read_ptr  = 0;
-  send_ring_buffer.write_ptr = RING_BUFFER_SIZE - 1;
+static void notify(void * obj) {
+	// TODO: we're currently polling for USBH transmission
+	chSysHalt("usbh notify");
 }
-
-void usbh_midi_deinit_buffer(void) {
-  send_ring_buffer.read_ptr  = 0;
-  send_ring_buffer.write_ptr = -1;
-}
-
 
 void usbh_midi_init(void)
 {
-  usbh_midi_deinit_buffer();
+  midi_output_buffer_objinit(&midi_output_usbh, notify);
+  midi_output_buffer_deinit(&midi_output_usbh);
 }
-
-void usbh_midi_reset_buffer(void) {
-    send_ring_buffer.read_ptr = send_ring_buffer.write_ptr = 0;
-}
-
 
 // CIN for everyting except sysex
 inline uint8_t calcCIN(uint8_t b0) {
@@ -102,54 +97,33 @@ inline uint8_t calcPH(uint8_t port, uint8_t b0) {
 
 
 void usbh_MidiSend1(uint8_t port, uint8_t b0) {
-    if (send_ring_buffer.write_ptr + 1 == 0) return;
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.bytes.b1 = 0;
+	m.bytes.b2 = 0;
+	m.bytes.ph = calcPH(port, b0);
+	midi_output_buffer_put(&midi_output_usbh,m);
     USBH_DbgLog("usbh_MidiSend1");
-    uint8_t next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
-    
-    if(next == send_ring_buffer.read_ptr) {
-        report_usbh_midi_ringbuffer_overflow();
-        return;
-    }
-    
-    send_ring_buffer.event[next].data[0]=calcPH(port, b0);
-    send_ring_buffer.event[next].data[1]=b0;
-    send_ring_buffer.event[next].data[2]=0;
-    send_ring_buffer.event[next].data[3]=0;
-    send_ring_buffer.write_ptr=next;
 }
 
 void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1) {
-    if (send_ring_buffer.write_ptr + 1 == 0) return;
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.bytes.b1 = b1;
+	m.bytes.b2 = 0;
+	m.bytes.ph = calcPH(port, b0);
+	midi_output_buffer_put(&midi_output_usbh,m);
     USBH_DbgLog("usbh_MidiSend2");
-    uint8_t next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
-    
-    if(next == send_ring_buffer.read_ptr) {
-        report_usbh_midi_ringbuffer_overflow();
-        return;
-    }
-    
-    send_ring_buffer.event[next].data[0]=calcPH(port, b0);
-    send_ring_buffer.event[next].data[1]=b0;
-    send_ring_buffer.event[next].data[2]=b1;
-    send_ring_buffer.event[next].data[3]=0;
-    send_ring_buffer.write_ptr=next;
 }
 
 void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
-    if (send_ring_buffer.write_ptr + 1 == 0) return;
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.bytes.b1 = b1;
+	m.bytes.b2 = 0;
+	m.bytes.ph = calcPH(port, b0);
+	midi_output_buffer_put(&midi_output_usbh,m);
     USBH_DbgLog("usbh_MidiSend3");
-    uint8_t next = (send_ring_buffer.write_ptr + 1) % RING_BUFFER_SIZE;
-    
-    if(next == send_ring_buffer.read_ptr) {
-        report_usbh_midi_ringbuffer_overflow();
-        return;
-    }
-    
-    send_ring_buffer.event[next].data[0]=calcPH(port, b0);
-    send_ring_buffer.event[next].data[1]=b0;
-    send_ring_buffer.event[next].data[2]=b1;
-    send_ring_buffer.event[next].data[3]=b2;
-    send_ring_buffer.write_ptr=next;
 }
 
 #define CIN_SYSEX_START 0x04
@@ -158,7 +132,8 @@ void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
 #define CIN_SYSEX_END_3 0x07
 
 void usbh_MidiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len) {
-    if (send_ring_buffer.write_ptr + 1 == 0) return;
+#if 0 // TODO: needs re-implementation
+	if (send_ring_buffer.write_ptr + 1 == 0) return;
     USBH_DbgLog("usbh_MidiSysEx %i",len);
     uint8_t next = send_ring_buffer.write_ptr;
 
@@ -217,19 +192,15 @@ void usbh_MidiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len) {
     }
 
     send_ring_buffer.write_ptr=next;
+#endif
 }
 
 int  usbh_MidiGetOutputBufferPending(void) {
-
-    if(send_ring_buffer.write_ptr >= send_ring_buffer.read_ptr) {
-        return send_ring_buffer.write_ptr - send_ring_buffer.read_ptr;
-    }
-
-    return send_ring_buffer.write_ptr + RING_BUFFER_SIZE - send_ring_buffer.read_ptr;
+	return midi_output_buffer_getpending(&midi_output_usbh);
 }
 
 int  usbh_MidiGetOutputBufferAvailable(void) {
-    return RING_BUFFER_SIZE - usbh_MidiGetOutputBufferPending() - 1;
+	return midi_output_buffer_get_available(&midi_output_usbh);
 }
 
 /** @defgroup USBH_MIDI_CORE_Private_Variables
@@ -278,7 +249,7 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
     MIDI_HandleTypeDef *MIDI_Handle;
 
     uint8_t interface;
-    usbh_midi_init_buffer();
+    midi_output_buffer_objinit(&midi_output_usbh, notify);
 //    sysmon_disable_blinker();
 
     // this is limited to one midi interface, and also currently only 1 input and 1 output endpoint on that interface
@@ -348,7 +319,7 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
                 USBH_LL_SetToggle  (phost, MIDI_Handle->OutPipe,0);
 
                 // ring buffer ready to use
-                usbh_midi_reset_buffer();
+                midi_output_buffer_reset(&midi_output_usbh);
             }
             
             if (isValidInput(MIDI_Handle)) {
@@ -406,7 +377,7 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (__attribute__((__unused__))  USBH
         phost->pActiveClass->pData = NULL;
     }
 
-    usbh_midi_deinit_buffer();
+    midi_output_buffer_deinit(&midi_output_usbh);
 
     return USBH_OK;
 }
@@ -423,6 +394,18 @@ USBH_StatusTypeDef USBH_MIDI_ClassRequest(__attribute__((__unused__))  USBH_Hand
     USBH_StatusTypeDef status = USBH_OK;
 
     return status;
+}
+
+__STATIC_INLINE void usbh_midi_dispatch(midi_message_t m) {
+	int8_t *inputmap = midi_inputmap_usbh[m.fields.port];
+	int i=0;
+	for (i=0;i<MIDI_INPUT_REMAP_ENTRIES;i++) {
+		int virtual_port = *inputmap;
+		if (virtual_port == MIDI_DEVICE_INPUTMAP_NONE) break;
+		m.fields.port = virtual_port;
+		midi_input_buffer_put(&midi_input_buffer, m);
+		inputmap++;
+	}
 }
 
 /*-----------------------------------------------------------------------------------------*/
@@ -474,7 +457,9 @@ USBH_StatusTypeDef USBH_MIDI_ProcessInput(USBH_HandleTypeDef *phost) {
                 int n = USBH_LL_GetLastXferSize(phost, MIDI_Handle->InPipe);
                 for (i=0; i<n; i+=4) {
                     if (MIDI_Handle->buff_in[0+i]) {
-                        MIDI_CB(MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
+                    	midi_message_t m;
+                    	m.word = *(uint32_t *)&MIDI_Handle->buff_in[i];
+                    	usbh_midi_dispatch(m);
                 //  USBH_DbgLog("USB Host Input recv data : %x, %x, %x %x",
                 //              MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
                     }
@@ -507,8 +492,12 @@ USBH_StatusTypeDef USBH_MIDI_ProcessInput(USBH_HandleTypeDef *phost) {
                 int n = USBH_LL_GetLastXferSize(phost, MIDI_Handle->InPipe);
                 for (i=0; i<n; i+=4) {
                     if (MIDI_Handle->buff_in[0+i]) {
-                        MIDI_CB(MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
-                //  USBH_DbgLog("USB Host Input recv data : %x, %x, %x %x",
+                    	// TODO: add real to virtual port mapping
+                    	midi_message_t m;
+                    	m.word = *(uint32_t *)&MIDI_Handle->buff_in[i];
+                    	usbh_midi_dispatch(m);
+
+                    	//  USBH_DbgLog("USB Host Input recv data : %x, %x, %x %x",
                 //              MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
                     }
                 }
@@ -616,32 +605,21 @@ USBH_StatusTypeDef USBH_MIDI_ProcessOutput(USBH_HandleTypeDef *phost) {
                 USBH_ErrLog("USB Host Output(SD) ERROR");
                 USBH_ClrFeature(phost, MIDI_Handle->OutEp);
             }
-            if (send_ring_buffer.read_ptr != send_ring_buffer.write_ptr) {
-                MIDI_Handle->buff_out_len = 0;
-                while (send_ring_buffer.read_ptr != send_ring_buffer.write_ptr
-                        && MIDI_Handle->buff_out_len + 4 <= MIDI_Handle->OutEpSize ) {
-
-                        send_ring_buffer.read_ptr =(send_ring_buffer.read_ptr + 1) % RING_BUFFER_SIZE;
-                        USBH_DbgLog("USB Host Output sending data @ %i", send_ring_buffer.read_ptr  );
-
-#if 0
-                        USBH_DbgLog("USB Host Output sending data : %x, %x, %x %x",
-                                    send_ring_buffer.event[send_ring_buffer.read_ptr].data[0],
-                                    send_ring_buffer.event[send_ring_buffer.read_ptr].data[1],
-                                    send_ring_buffer.event[send_ring_buffer.read_ptr].data[2],
-                                    send_ring_buffer.event[send_ring_buffer.read_ptr].data[3]);
-#endif
-
-                        MIDI_Handle->buff_out[MIDI_Handle->buff_out_len + 0] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[0];
-                        MIDI_Handle->buff_out[MIDI_Handle->buff_out_len + 1] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[1];
-                        MIDI_Handle->buff_out[MIDI_Handle->buff_out_len + 2] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[2];
-                        MIDI_Handle->buff_out[MIDI_Handle->buff_out_len + 3] =  send_ring_buffer.event[send_ring_buffer.read_ptr].data[3];
-                        MIDI_Handle->buff_out_len += 4;
-                }
-
+            midi_message_t *buf = (midi_message_t *)MIDI_Handle->buff_out;
+            msg_t r = midi_output_buffer_get(&midi_output_usbh, buf);
+            int s = 0;
+            int max_pckts = MIDI_Handle->OutEpSize/sizeof(midi_message_t);
+            while (r==MSG_OK) {
+            	max_pckts--;
+            	s++;
+            	if (max_pckts) break;
+            	buf++;
+                r = midi_output_buffer_get(&midi_output_usbh, buf);
+            }
+            if (s>0) {
+            	MIDI_Handle->buff_out_len = s*4;
                 USBH_BulkSendData(phost, MIDI_Handle->buff_out, MIDI_Handle->buff_out_len, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
                 USBH_DbgLog("USB Host Output sent bytes : %i", MIDI_Handle->buff_out_len);
-
                 // now poll for completion
                 MIDI_Handle->state_out = MIDI_POLL;
             }
@@ -685,10 +663,9 @@ USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost) {
 //    palTogglePad(LED1_PORT,LED1_PIN);
 
     if (MIDI_Handle->state_out == MIDI_SEND_DATA) {
-        
 //        if (( phost->Timer - MIDI_Handle->write_timer) >= MIDI_Handle->write_poll
 //              || phost->Timer < MIDI_Handle->write_timer) {
-            if (send_ring_buffer.read_ptr != send_ring_buffer.write_ptr) {
+    	if (midi_output_usbh.read_index != midi_output_usbh.write_index) {
                 // ready to send more data, and we have data to send
                 #if (USBH_USE_OS == 1)
                 osMessagePutI ( phost->os_event, USBH_URB_EVENT, 0);

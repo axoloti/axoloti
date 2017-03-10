@@ -52,6 +52,8 @@ const signed char SysMsgLengthLookup[16] = {-1, // 0xf0=sysex start. may vary
     3 // 0xff= not reset, but a META-EVENT, which is always 3 bytes
     };
 
+midi_input_remap_t midi_inputmap_serial = {MIDI_DEVICE_DIN , MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE};
+
 unsigned char MidiByte0;
 unsigned char MidiByte1;
 unsigned char MidiByte2;
@@ -59,8 +61,27 @@ unsigned char MidiCurData;
 unsigned char MidiNumData;
 unsigned char MidiInChannel;
 
-void serial_MidiInByteHandler(uint8_t data);
+// CIN for everyting except sysex
+inline uint8_t calcCIN(uint8_t b0) {
+    return (b0 & 0xF0 ) >> 4;
+}
 
+// pack header CN | CIN
+inline uint8_t calcPH(uint8_t port, uint8_t b0) {
+    uint8_t cin  = calcCIN(b0);
+    uint8_t ph = ((( port - 1) & 0x0F) << 4)  | cin;
+    return ph;
+}
+
+__STATIC_INLINE void dispatch_midi_input(midi_message_t m) {
+  int i=0;
+  for (i=0;i<MIDI_INPUT_REMAP_ENTRIES;i++) {
+	  int virtual_port = midi_inputmap_serial[i];
+	  if (virtual_port == MIDI_DEVICE_INPUTMAP_NONE) break;
+	  m.fields.port = virtual_port;
+	  midi_input_buffer_put(&midi_input_buffer, m);
+  }
+}
 
 void serial_MidiInByteHandler(uint8_t data) {
   int8_t len;
@@ -69,7 +90,13 @@ void serial_MidiInByteHandler(uint8_t data) {
     if (len == -1) {
       len = SysMsgLengthLookup[data - 0xF0];
       if (len == 1) {
-        MidiInMsgHandler(MIDI_DEVICE_DIN, 1, data, 0, 0);
+    	  // TODO: sysex handling...
+    	  midi_message_t m;
+    	  m.bytes.ph = calcCIN(data);
+    	  m.bytes.b0 = data;
+    	  m.bytes.b1 = 0;
+    	  m.bytes.b2 = 0;
+    	  dispatch_midi_input(m);
       }
       else {
         MidiByte0 = data;
@@ -89,7 +116,12 @@ void serial_MidiInByteHandler(uint8_t data) {
       MidiByte1 = data;
       if (MidiNumData == 1) {
         // 2 byte message complete
-        MidiInMsgHandler(MIDI_DEVICE_DIN, 1, MidiByte0, MidiByte1, 0);
+    	  midi_message_t m;
+    	  m.bytes.ph = calcCIN(MidiByte0);
+    	  m.bytes.b0 = MidiByte0;
+    	  m.bytes.b1 = MidiByte1;
+    	  m.bytes.b2 = 0;
+    	  dispatch_midi_input(m);
         MidiCurData = 0;
       }
       else
@@ -98,7 +130,12 @@ void serial_MidiInByteHandler(uint8_t data) {
     else if (MidiCurData == 1) {
       MidiByte2 = data;
       if (MidiNumData == 2) {
-        MidiInMsgHandler(MIDI_DEVICE_DIN, 1, MidiByte0, MidiByte1, MidiByte2);
+    	  midi_message_t m;
+    	  m.bytes.ph = calcCIN(MidiByte0);
+    	  m.bytes.b0 = MidiByte0;
+    	  m.bytes.b1 = MidiByte1;
+    	  m.bytes.b2 = MidiByte2;
+    	  dispatch_midi_input(m);
         MidiCurData = 0;
       }
     }
@@ -108,22 +145,51 @@ void serial_MidiInByteHandler(uint8_t data) {
 // Midi OUT
 
 void serial_MidiSend1(uint8_t b0) {
-  sdPut(&SDMIDI, b0);
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.fields.cin = b0>>4;
+	serial_MidiSend(m);
 }
 
 void serial_MidiSend2(uint8_t b0, uint8_t b1) {
-  unsigned char tx[2];
-  tx[0] = b0;
-  tx[1] = b1;
-  sdWrite(&SDMIDI, tx, 2);
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.bytes.b1 = b1;
+	m.fields.cin = b0>>4;
+	serial_MidiSend(m);
 }
 
 void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2) {
-  unsigned char tx[3];
-  tx[0] = b0;
-  tx[1] = b1;
-  tx[2] = b2;
-  sdWrite(&SDMIDI, tx, 3);
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.bytes.b1 = b1;
+	m.bytes.b2 = b2;
+	m.fields.cin = b0>>4;
+	serial_MidiSend(m);
+}
+
+void serial_MidiSend(midi_message_t midimsg) {
+	// TODO: implement sysex
+	// TODO: running status
+	// TODO: skip other messages when sysex is in progress
+	switch(midimsg.fields.cin){
+	case 0x8: // note-off
+	case 0x9: // note-on
+	case 0xA: // PolyKeyPress
+	case 0xB: // Control change
+		sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
+		break;
+	case 0xC: // program change
+	case 0xD: // channel pressure
+		sdWrite(&SDMIDI, &midimsg.bytes.b0, 2);
+		break;
+	case 0xE: // pitch bend
+		sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
+		break;
+	case 0xF: // single byte
+		sdWrite(&SDMIDI, &midimsg.bytes.b0, 1);
+		break;
+	}
 }
 
 int serial_MidiGetOutputBufferPending(void) {

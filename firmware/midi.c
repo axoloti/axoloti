@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -23,124 +23,144 @@
 #include "usbh_midi_core.h"
 #include "midi_usb.h"
 #include "patch.h"
+#include "midi_buffer.h"
+#include "usbh_midi_core.h"
 
+midi_input_buffer_t midi_input_buffer;
 
+typedef struct {
+	int8_t midi_device_t;
+	int8_t port;
+} midi_output_routing_t;
+
+#define TARGETS_PER_VPORT 4
+// output routing table
+midi_output_routing_t midi_output_routing_table[16][TARGETS_PER_VPORT] = {
+// virtual output port 0 to DIN
+		{{MIDI_DEVICE_DIN, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 1 to USB device (PC)
+		{{MIDI_DEVICE_USB_DEVICE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 2 to USB host (usb-midi device on host port), port 0
+		{{MIDI_DEVICE_USB_HOST, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 3 to everything DIN, USBD port 0, USBH
+		{{MIDI_DEVICE_DIN, 0},{MIDI_DEVICE_USB_DEVICE, 0},{MIDI_DEVICE_USB_HOST, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 4 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 5 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 6 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 7 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 8 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 9 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 10 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 11 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 12 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 13 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// virtual output port 14 to nowhere
+		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
+// let's use virtual output port 15 for midi clock, to everywhere
+		{{MIDI_DEVICE_DIN, 0},{MIDI_DEVICE_USB_DEVICE, 0},{MIDI_DEVICE_USB_HOST, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}}
+};
+
+void MidiSendVirtual(midi_message_t m) {
+	int vport = m.fields.port;
+	midi_output_routing_t *port_routing = &midi_output_routing_table[vport][0];
+	int i;
+	for(i=0;i<TARGETS_PER_VPORT;i++) {
+		switch (port_routing->midi_device_t) {
+		case MIDI_DEVICE_OUTPUTMAP_NONE:
+			break;
+		case MIDI_DEVICE_DIN:
+			serial_MidiSend(m);
+		break;
+		case MIDI_DEVICE_USB_DEVICE:
+			m.fields.port = port_routing->port;
+			midi_output_buffer_put(&midi_output_usbd,m);
+		break;
+		case MIDI_DEVICE_USB_HOST:
+			m.fields.port = port_routing->port;
+			midi_output_buffer_put(&midi_output_usbh,m);
+			break;
+		}
+		port_routing++;
+	}
+}
+
+void MidiSendSysExVirtual(uint8_t port, uint8_t bytes[], uint8_t len) {
+	// TODO: implement
+}
+
+// CIN for everyting except sysex
+inline uint8_t calcCIN(uint8_t b0) {
+    return (b0 & 0xF0 ) >> 4;
+}
+
+// pack header CN | CIN
+inline uint8_t calcPH(uint8_t port, uint8_t b0) {
+    uint8_t cin  = calcCIN(b0);
+    uint8_t ph = ((( port - 1) & 0x0F) << 4)  | cin;
+    return ph;
+}
+
+// legacy API, ignore port arg, use dev number as virtual port number
 void MidiSend1(midi_device_t dev, uint8_t   port, uint8_t b0) {
-    switch (dev) {
-        case MIDI_DEVICE_DIN: {
-            serial_MidiSend1(b0);
-            break;
-        }
-        case MIDI_DEVICE_USB_HOST: {
-            usbh_MidiSend1(port, b0);
-            break;
-        }
-        case MIDI_DEVICE_INTERNAL: {
-            MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, 0, 0);
-            break;
-        }
-        case MIDI_DEVICE_USB_DEVICE: {
-            midi_usb_MidiSend1(port, b0);
-            break;
-        }
-        default: {
-            // nop
-        }
-    }
+	int virtualport = dev;
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.bytes.ph = calcPH(virtualport,b0);
+	MidiSendVirtual(m);
 }
 
 void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1) {
-    switch (dev) {
-        case MIDI_DEVICE_DIN: {
-            serial_MidiSend2(b0,b1);
-            break;
-        }
-        case MIDI_DEVICE_USB_HOST: {
-            usbh_MidiSend2(port, b0,b1);
-            break;
-        }
-        case MIDI_DEVICE_INTERNAL: {
-            MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, b1, 0);
-            break;
-        }
-        case MIDI_DEVICE_USB_DEVICE: {
-            midi_usb_MidiSend2(port, b0, b1);
-            break;
-        }
-        default: {
-            // nop
-        }
-    }
+	int virtualport = dev;
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.bytes.b1 = b1;
+	m.bytes.ph = calcPH(virtualport,b0);
+	MidiSendVirtual(m);
 }
 
 void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
-    switch (dev) {
-        case MIDI_DEVICE_DIN: {
-            serial_MidiSend3(b0,b1,b2);
-            break;
-        }
-        case MIDI_DEVICE_USB_HOST: {
-            usbh_MidiSend3(port,b0,b1,b2);
-            break;
-        }
-        case MIDI_DEVICE_INTERNAL: {
-            MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, b1, b2);
-            break;
-        }
-        case MIDI_DEVICE_USB_DEVICE: {
-            midi_usb_MidiSend3(port, b0, b1, b2);
-            break;
-        }
-        default: {
-            // nop
-        }
-    }
+	int virtualport = dev;
+	volatile midi_message_t m;
+	m.bytes.b0 = b0;
+	m.bytes.b1 = b1;
+	m.bytes.b2 = b2;
+	m.bytes.ph = calcPH(virtualport,b0);
+	MidiSendVirtual(m);
 }
 
 void MidiSendSysEx(midi_device_t dev, uint8_t port, uint8_t bytes[], uint8_t len) {
-    switch (dev) {
-        case MIDI_DEVICE_USB_HOST: {
-            usbh_MidiSendSysEx(port,bytes,len);
-            break;
-        }
-        default: {
-            // nop
-        }
-    }
+	int virtualport = dev;
+	MidiSendSysExVirtual(virtualport,bytes,len);
 }
 
 void midi_init(void) {
+    midi_input_buffer_objinit(&midi_input_buffer);
     serial_midi_init();
     usbh_midi_init();
 }
 
-
 int  MidiGetOutputBufferPending(midi_device_t dev)
 {
-    switch (dev) {
-        case MIDI_DEVICE_DIN: {
-            return serial_MidiGetOutputBufferPending();
-        }
-        case MIDI_DEVICE_USB_HOST: {
-            return usbh_MidiGetOutputBufferPending();
-        }
-        default: {
-            // not implemented 
-            return 0;
-        }
-    }
+	// low priority TODO: implement
+	// for a virtual output device, we need to find the
+	// maximum of bytes pending across all mapped real outputs
+	return 0;
 }
 
 int  MidiGetOutputBufferAvailable(midi_device_t dev)
 {
-    switch (dev) {
-        case MIDI_DEVICE_USB_HOST: {
-            return usbh_MidiGetOutputBufferAvailable();
-        }
-        default: {
-            // not implemented 
-            return 0;
-        }
-    }
+	// low priority TODO: implement
+	// for a virtual output device, we need to find the
+	// minimum of buffer bytes available across all mapped real outputs
+	return 0;
 }
-

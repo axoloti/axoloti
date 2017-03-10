@@ -124,7 +124,7 @@ static USBH_StatusTypeDef USBH_Virus_InterfaceInit(USBH_HandleTypeDef *phost) {
                 USBH_BulkSendData(phost, seq, sizeof(seq), MIDI_Handle->OutPipe,false);
 
                 // prime output ring buffer for use
-                usbh_midi_reset_buffer();
+                midi_output_buffer_reset(&midi_output_usbh);
             }
             
             if (isValidInput(MIDI_Handle)) {

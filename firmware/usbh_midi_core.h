@@ -26,6 +26,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stdint.h"
+#include "midi_buffer.h"
+#include "usbh_midi_core.h"
+
+extern midi_output_buffer_t midi_output_usbh;
 
 // external midi interface
 void usbh_midi_init(void);
