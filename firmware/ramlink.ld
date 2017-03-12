@@ -64,6 +64,12 @@ SECTIONS {
         PROVIDE(_pbss_end = .);        
     } > CCMSRAM
     
+    .sdram.data : ALIGN(4) SUBALIGN(4)
+    {
+        KEEP(*(.sdramdata))
+        KEEP(*(.sdramdata.*))
+    } > sdram
+
     .sdram (NOLOAD) : ALIGN(4) SUBALIGN(4)
     {
         KEEP(*(.sdram))

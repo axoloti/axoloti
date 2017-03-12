@@ -17,7 +17,12 @@ for playing.
 * TODO: implement sysex rx/tx: help invited
 * TODO: load/store midi routing config from sdcard: help invited
 * TODO: manipulate midi routing config in gui: let me do this..
-
+* TODO: Currently memory segments tagged with SECTION_SDRAM_DATA will 
+  only be correctly deployed in a live session.
+  Upload multiple memory segments binaries to sdcard (.sram.bin, .sdram.bin)
+  or better, pack them into one dfu/DfuSe formatted file, and parse in firmware.
+  A startup patch in flash will not be able to use a significant of sdram data
+  due to size limits. 
 * remove "chibios_migration.h" dependencies in firmware (in a separate commit)
   objects/patches probably still need it.
 * USB MSC sdcard mounter: does not restart into normal mode, when ejecting disk on host.

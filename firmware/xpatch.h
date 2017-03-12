@@ -22,3 +22,7 @@ extern "C" {
 #include "elements/dsp/part.h"
 #include "elements/dsp/patch.h"
 #include "streams/processor.h"
+
+#define SECTION_SDRAM_DATA __attribute__ ((section ( ".sdramdata" )))
+#define SECTION_SDRAM_BSS __attribute__ ((section ( ".sdram" )))
+#define SECTION_DMADATA __attribute__ ((section ( ".sram2" )))
