@@ -82,15 +82,9 @@ void usbh_midi_init(void)
   midi_output_buffer_deinit(&midi_output_usbh);
 }
 
-// CIN for everyting except sysex
-inline uint8_t calcCIN(uint8_t b0) {
-    return (b0 & 0xF0 ) >> 4;
-    
-}
-
 // pack header CN | CIN
-inline uint8_t calcPH(uint8_t port, uint8_t b0) {
-    uint8_t cin  = calcCIN(b0);
+inline uint8_t USBMidi_calcPH(uint8_t port, uint8_t b0) {
+    uint8_t cin  = (b0 & 0xF0 ) >> 4;
     uint8_t ph = ((( port - 1) & 0x0F) << 4)  | cin;
     return ph;
 }
@@ -101,7 +95,7 @@ void usbh_MidiSend1(uint8_t port, uint8_t b0) {
 	m.bytes.b0 = b0;
 	m.bytes.b1 = 0;
 	m.bytes.b2 = 0;
-	m.bytes.ph = calcPH(port, b0);
+	m.bytes.ph = USBMidi_calcPH(port, b0);
 	midi_output_buffer_put(&midi_output_usbh,m);
     USBH_DbgLog("usbh_MidiSend1");
 }
@@ -111,7 +105,7 @@ void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1) {
 	m.bytes.b0 = b0;
 	m.bytes.b1 = b1;
 	m.bytes.b2 = 0;
-	m.bytes.ph = calcPH(port, b0);
+	m.bytes.ph = USBMidi_calcPH(port, b0);
 	midi_output_buffer_put(&midi_output_usbh,m);
     USBH_DbgLog("usbh_MidiSend2");
 }
@@ -121,7 +115,7 @@ void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
 	m.bytes.b0 = b0;
 	m.bytes.b1 = b1;
 	m.bytes.b2 = 0;
-	m.bytes.ph = calcPH(port, b0);
+	m.bytes.ph = USBMidi_calcPH(port, b0);
 	midi_output_buffer_put(&midi_output_usbh,m);
     USBH_DbgLog("usbh_MidiSend3");
 }

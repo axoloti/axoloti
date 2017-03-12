@@ -98,14 +98,10 @@ void MidiSendSysExVirtual(uint8_t port, uint8_t bytes[], uint8_t len) {
 	// TODO: implement
 }
 
-// CIN for everyting except sysex
-inline uint8_t calcCIN(uint8_t b0) {
-    return (b0 & 0xF0 ) >> 4;
-}
-
 // pack header CN | CIN
-inline uint8_t calcPH(uint8_t port, uint8_t b0) {
-    uint8_t cin  = calcCIN(b0);
+inline uint8_t Midi_calcPH(uint8_t port, uint8_t b0) {
+    // CIN for everyting except sysex
+    uint8_t cin  = (b0 & 0xF0 ) >> 4;
     uint8_t ph = ((( port - 1) & 0x0F) << 4)  | cin;
     return ph;
 }
@@ -115,7 +111,7 @@ void MidiSend1(midi_device_t dev, uint8_t   port, uint8_t b0) {
 	int virtualport = dev;
 	midi_message_t m;
 	m.bytes.b0 = b0;
-	m.bytes.ph = calcPH(virtualport,b0);
+	m.bytes.ph = Midi_calcPH(virtualport,b0);
 	MidiSendVirtual(m);
 }
 
@@ -124,7 +120,7 @@ void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1) {
 	midi_message_t m;
 	m.bytes.b0 = b0;
 	m.bytes.b1 = b1;
-	m.bytes.ph = calcPH(virtualport,b0);
+	m.bytes.ph = Midi_calcPH(virtualport,b0);
 	MidiSendVirtual(m);
 }
 
@@ -134,7 +130,7 @@ void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t 
 	m.bytes.b0 = b0;
 	m.bytes.b1 = b1;
 	m.bytes.b2 = b2;
-	m.bytes.ph = calcPH(virtualport,b0);
+	m.bytes.ph = Midi_calcPH(virtualport,b0);
 	MidiSendVirtual(m);
 }
 

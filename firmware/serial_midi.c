@@ -62,16 +62,10 @@ unsigned char MidiNumData;
 unsigned char MidiInChannel;
 
 // CIN for everyting except sysex
-inline uint8_t calcCIN(uint8_t b0) {
+inline uint8_t SMidi_calcCIN(uint8_t b0) {
     return (b0 & 0xF0 ) >> 4;
 }
 
-// pack header CN | CIN
-inline uint8_t calcPH(uint8_t port, uint8_t b0) {
-    uint8_t cin  = calcCIN(b0);
-    uint8_t ph = ((( port - 1) & 0x0F) << 4)  | cin;
-    return ph;
-}
 
 __STATIC_INLINE void dispatch_midi_input(midi_message_t m) {
   int i=0;
@@ -92,7 +86,7 @@ void serial_MidiInByteHandler(uint8_t data) {
       if (len == 1) {
     	  // TODO: sysex handling...
     	  midi_message_t m;
-    	  m.bytes.ph = calcCIN(data);
+    	  m.bytes.ph = SMidi_calcCIN(data);
     	  m.bytes.b0 = data;
     	  m.bytes.b1 = 0;
     	  m.bytes.b2 = 0;
@@ -117,7 +111,7 @@ void serial_MidiInByteHandler(uint8_t data) {
       if (MidiNumData == 1) {
         // 2 byte message complete
     	  midi_message_t m;
-    	  m.bytes.ph = calcCIN(MidiByte0);
+    	  m.bytes.ph = SMidi_calcCIN(MidiByte0);
     	  m.bytes.b0 = MidiByte0;
     	  m.bytes.b1 = MidiByte1;
     	  m.bytes.b2 = 0;
@@ -131,7 +125,7 @@ void serial_MidiInByteHandler(uint8_t data) {
       MidiByte2 = data;
       if (MidiNumData == 2) {
     	  midi_message_t m;
-    	  m.bytes.ph = calcCIN(MidiByte0);
+    	  m.bytes.ph = SMidi_calcCIN(MidiByte0);
     	  m.bytes.b0 = MidiByte0;
     	  m.bytes.b1 = MidiByte1;
     	  m.bytes.b2 = MidiByte2;
