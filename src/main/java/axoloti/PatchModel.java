@@ -47,6 +47,7 @@ import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
+import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.Constants;
 import axoloti.utils.Preferences;
 import java.awt.Point;
@@ -821,6 +822,27 @@ public class PatchModel {
         return depends;
     }
 
+    public HashSet<String> getModules() {
+        HashSet<String> modules = new HashSet<>();
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            Set<String> i = o.getType().GetModules();
+            if (i != null) {
+                modules.addAll(i);
+            }
+        }
+        return modules;
+    }
+
+    public String getModuleDir(String module){
+        for (AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
+            File f = new File(lib.getLocalLocation() + "modules/" + module);
+            if(f.exists() && f.isDirectory()) {
+                return lib.getLocalLocation() + "modules/" +module;
+            }
+        }
+        return null;
+    }
+
     public String generateIncludes() {
         String inc = "";
         Set<String> includes = getIncludes();
@@ -833,6 +855,16 @@ public class PatchModel {
         }
         return inc;
     }
+
+    public String generateModules() {
+        String inc = "";
+        Set<String> modules = getModules();
+        for (String s : modules) {
+            inc += "#include \"" + s + "_wrapper.h\"\n";
+        }
+        return inc;
+    }
+
 
     /* the c++ code generator */
     String GeneratePexchAndDisplayCode() {
@@ -1425,8 +1457,12 @@ public class PatchModel {
              SortByExecution();
          else
              SortByPosition();
+        
+        String c="";
 
-        String c = generateIncludes();
+        c += generateIncludes();
+        c += "\n";
+        c += generateModules();
         c += "\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-parameter\"\n";
@@ -1524,6 +1560,7 @@ public class PatchModel {
         ao.sDisposeCode = GenerateDisposeCodePlusPlusSub("attr_parent");
         ao.includes = getIncludes();
         ao.depends = getDepends();
+        ao.modules = getModules();
         if ((notes != null) && (!notes.isEmpty())) {
             ao.sDescription = notes;
         } else {
@@ -1631,6 +1668,7 @@ public class PatchModel {
         ao.sDescription = FileNamePath;
         ao.includes = getIncludes();
         ao.depends = getDepends();
+        ao.modules = getModules();
         if ((notes != null) && (!notes.isEmpty())) {
             ao.sDescription = notes;
         } else {

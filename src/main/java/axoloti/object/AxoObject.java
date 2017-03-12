@@ -241,6 +241,9 @@ public class AxoObject extends AxoObjectAbstract {
     @ElementList(name = "depends", entry = "depend", type = String.class, required = false)
     public HashSet<String> depends;
 
+    @ElementList(name = "modules", entry = "modules", type = String.class, required = false)
+    public HashSet<String> modules;
+
     @Element(name = "code.declaration", required = false, data = true)
     public String sLocalData;
     @Element(name = "code.init", required = false, data = true)
@@ -525,6 +528,13 @@ public class AxoObject extends AxoObjectAbstract {
     public Set<String> GetDepends() {
         return depends;
     }
+    
+    
+    @Override
+    public Set<String> GetModules() {
+        return modules;
+    }
+
 
     public File GetHelpPatchFile() {
         if ((helpPatch == null) || (sPath == null) || sPath.isEmpty()) {
@@ -628,6 +638,13 @@ public class AxoObject extends AxoObjectAbstract {
             o.depends = null;
 
         }
+
+        if (o.modules != null) {
+            modules = (HashSet<String>) o.modules.clone();
+        } else {
+            o.modules = null;
+        }
+
         sLocalData = o.sLocalData;
         sInitCode = o.sInitCode;
         sDisposeCode = o.sDisposeCode;

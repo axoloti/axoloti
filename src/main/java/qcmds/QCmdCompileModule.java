@@ -31,25 +31,29 @@ import java.util.logging.Logger;
  *
  * @author Johannes Taelman
  */
-public class QCmdCompilePatch extends QCmdShellTask {
+public class QCmdCompileModule extends QCmdShellTask {
 
     PatchController patchController;
+    String module;
+    String moduleDir;
 
-    public QCmdCompilePatch(PatchController patchController) {
+    public QCmdCompileModule(PatchController patchController, String module, String moduleDir) {
         this.patchController = patchController;
+        this.module = module;
+        this.moduleDir = moduleDir;
     }
 
     @Override
     public String GetStartMessage() {
-        return "Start compiling patch";
+        return "Start compiling module " + module;
     }
 
     @Override
     public String GetDoneMessage() {
         if (success) {
-            return "Done compiling patch";
-        } else {
-            return "Compiling patch failed ( " + patchController.getFileNamePath() + " ) ";
+            return "Done compiling module " + module;
+         } else {
+            return "Compiling module failed ( "+ module + " ) ";
         }
     }
     
@@ -58,19 +62,8 @@ public class QCmdCompilePatch extends QCmdShellTask {
         ArrayList<String> list = new ArrayList<>();
         list.addAll(Arrays.asList(super.GetEnv()));
         
-        Set<String> moduleSet = this.patchController.patchModel.getModules();
-        if(moduleSet!=null) {
-            String modules = "";
-            String moduleDirs = "";
-            for(String m : moduleSet) {
-                modules += m + " ";
-                moduleDirs += 
-                    this.patchController.patchModel.getModuleDir(m) 
-                    + " ";
-            }
-            list.add("MODULES=" + modules);
-            list.add("MODULE_DIRS=" + moduleDirs);
-        }
+        list.add("MODULE=" + module);
+        list.add("MODULE_DIR=" + moduleDir);
         
         String vars[] = new String[list.size()];
         list.toArray(vars);
@@ -85,11 +78,11 @@ public class QCmdCompilePatch extends QCmdShellTask {
     @Override
     String GetExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return FirmwareDir() + "/compile_patch_win.bat";
+            return FirmwareDir() + "/compile_module_win.bat";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            return "/bin/sh ./compile_patch_osx.sh";
+            return "/bin/sh ./compile_module_osx.sh";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            return "/bin/sh ./compile_patch_linux.sh";
+            return "/bin/sh ./compile_module_linux.sh";
         } else {
             Logger.getLogger(QCmdCompilePatch.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;
