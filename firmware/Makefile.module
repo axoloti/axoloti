@@ -1,4 +1,4 @@
-CCFLAGS = -nostdlib -fno-exceptions -fno-rtti -mcpu=cortex-m4 -O3 -fomit-frame-pointer -falign-functions=16 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wunused-parameter -DCORTEX_USE_FPU=TRUE -DTHUMB_PRESENT -mno-thumb-interwork -DTHUMB_NO_INTERWORKING -mthumb -DTHUMB -std=c++11 -DARM_MATH_CM4 -D__FPU_PRESENT -fno-math-errno -fno-threadsafe-statics -fno-use-cxa-atexit -Wno-unused-parameter
+CCFLAGS = -nostdlib -fno-exceptions -fno-rtti -mcpu=cortex-m4 -O3 -fomit-frame-pointer -falign-functions=16 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wunused-parameter -DCORTEX_USE_FPU=TRUE -DTHUMB_PRESENT -mno-thumb-interwork -DTHUMB_NO_INTERWORKING -mthumb -DTHUMB -std=c++11 -DARM_MATH_CM4 -D__FPU_PRESENT -fno-math-errno -fno-threadsafe-statics -fno-use-cxa-atexit -Wno-unused-parameter -fpermissive
 LDFLAGS = -nostartfiles -Tramlink.ld -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb  -mno-thumb-interwork
 
 #-mcpu=cortex-m4   
@@ -22,8 +22,10 @@ axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
 
 
-CHIBIOS = ${axoloti_release}/chibios
+CHIBIOS = ${axoloti_release}/ChibiOS_16.1.7
+CHIBIOS_CONTRIB = $(CHIBIOS)/community
 CMSIS = ${axoloti_release}/CMSIS
+LCPP=g++
 
 SPACE := 
 SPACE += 
@@ -35,17 +37,26 @@ FIRMWARE=.
 $(info BDIR = ${BDIR})
 $(info FIRMWARE = ${FIRMWARE})
 
-include $(CHIBIOS)/boards/ST_STM32F4_DISCOVERY/board.mk
-include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
-include $(CHIBIOS)/os/hal/hal.mk
-include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
-include $(CHIBIOS)/os/kernel/kernel.mk
+include board.mk
+include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
+# HAL-OSAL files (optional).
+include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
+include $(CHIBIOS_CONTRIB)/os/hal/ports/STM32/STM32F4xx/platform.mk
+include $(CHIBIOS)/os/hal/osal/rt/osal.mk
+# RTOS files (optional).
+include $(CHIBIOS)/os/rt/rt.mk
+include $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk	
 include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 
-INCDIR = $(CMSIS)/Include $(CMSIS)/DSP_Lib/Include \
-         $(PORTINC) $(KERNINC) $(TESTINC) \
-         $(HALINC) $(PLATFORMINC) $(BOARDINC) $(FATFSINC) \
-         ${FIRMWARE} $(CHIBIOS) ${FIRMWARE}/mutable_instruments
+
+INCDIR = ${CMSIS}/Include \
+         ${CMSIS}/DSP_Lib/Include \
+		 $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
+         $(HALINC) $(PLATFORMINC) $(BOARDINC) $(TESTINC) \
+         $(FATFSINC) \
+         $(CHIBIOS)/os/various \
+         $(CHIBIOS)/os/hal/lib/streams \
+         ${FIRMWARE}  ${FIRMWARE}/mutable_instruments
 
 # Paths
 IINCDIR   = $(patsubst %,-I%,$(INCDIR) $(DINCDIR) $(UINCDIR))
@@ -68,7 +79,8 @@ MODOBJS := $(addprefix $(BUILDDIR)/, $(MOD_OBJS))
 $(BUILDDIR)/%.o: $(MODDIR)/%.cpp ${BDIR}/xpatch.h.gch
 	@echo $< $@ $*
 	@mkdir -p $(BUILDDIR)/$*
-	@$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
+	@$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch -MD -MP -c  $< -o $@
+	# @$(CPP) $(CCFLAGS) -H  -I ${MODDIR} $(IINCDIR)  -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c  $< -o $@
 
 ${BUILDDIR}/${MODLIB}: $(MODOBJS) $(BDIR)/createSym
 	@echo \#pragma once  > $(BUILDDIR)/$(MODULE)_wrapper.h 
