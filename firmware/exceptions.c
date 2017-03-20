@@ -56,6 +56,7 @@ typedef enum {
   halt
 } faulttype;
 
+// TODO: attach patch name or index to report!
 typedef struct {
   volatile uint32_t magicnumber;
   volatile faulttype type;
@@ -230,6 +231,8 @@ const char * const fs_err_name[] = {
 
 void exception_checkandreport(void) {
   if (exception_check()) {
+	// clear first, so in case reporting causes another exception we're not stuck
+	exception_clear();
     bool report_registers = 0;
     if (exceptiondump->type == fault) {
       LogTextMessage("exception report:");
@@ -264,6 +267,7 @@ void exception_checkandreport(void) {
       LogTextMessage("unknown exception?");
     }
 
+#if 0 // causes crash?
     if (report_registers) {
       LogTextMessage("pc=0x%x", exceptiondump->pc);
       LogTextMessage("psr=0x%x", exceptiondump->psr);
@@ -281,7 +285,7 @@ void exception_checkandreport(void) {
         LogTextMessage("mmfar=0x%x",exceptiondump->mmfar);
       }
     }
-    exception_clear();
+#endif
   }
 }
 
