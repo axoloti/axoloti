@@ -3,10 +3,11 @@ ENTRY(xpatch_init)
 MEMORY
 {
 
-      SRAM (rwx) : ORIGIN = 0x00011000, LENGTH = 0x0000B000 /* 44kB in RAM1 */
-      SRAM2 (rwx) : ORIGIN = 0x2001C000, LENGTH = 0x00002000 /* first 8kB in SRAM2 */
+      SRAM (rwx)  : ORIGIN = 0x00000000, LENGTH = 64k  /* first 64kB of SRAM1 */
+      SRAM2 (rwx) : ORIGIN = 0x2001C000, LENGTH =  8k  /* first 8kB in SRAM2 */
+	  SRAM3 (rwx) : ORIGIN = 0x20020000, LENGTH = 64k  /* whole of SRAM3 */
       CCMSRAM (rw) : ORIGIN = 0x10000000, LENGTH = 0x0000C000 /* CCM - ccmramend */
-    sdram : org = 0xC0000000, len = 0x800000
+      SDRAM : org = 0xC0000000, len = 0x800000
 }
 
 SECTIONS {
@@ -40,20 +41,20 @@ SECTIONS {
     {
         * (.rodata);
         * (.rodata.*);
-    } > SRAM
+    } > SRAM3
 
-    .data (NOLOAD): ALIGN(4) SUBALIGN(4)
+    .data : ALIGN(4) SUBALIGN(4)
     {
         sdata = .;
         * (.data);
         edata = .;
-    } > SRAM
+    } > SRAM3
 
     .sram2 (NOLOAD): ALIGN(4) SUBALIGN(4) 
     {
         * (.sram2);
         * (.sram2.*);
-    } > SRAM2
+    } > SRAM
    
     .bss (NOLOAD): ALIGN(4) SUBALIGN(4)
     {
@@ -68,15 +69,15 @@ SECTIONS {
     {
         KEEP(*(.sdramdata))
         KEEP(*(.sdramdata.*))
-    } > sdram
+    } > SDRAM
 
     .sdram (NOLOAD) : ALIGN(4) SUBALIGN(4)
     {
         KEEP(*(.sdram))
         KEEP(*(.sdram.*))
         PROVIDE(_sdram_dyn_start = .);
-        PROVIDE(_sdram_dyn_end = ORIGIN(sdram) + LENGTH(sdram));
-    } > sdram
+        PROVIDE(_sdram_dyn_end = ORIGIN(SDRAM) + LENGTH(SDRAM));
+    } > SDRAM
 
 
  /*   

@@ -158,7 +158,7 @@ public class PatchController {
                 }
             }
         }
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(patchModel.getBinFile(), sdfilename, cal));
+        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadPatchSD(sdfilename, cal));
 
         String dir;
         int i = sdfilename.lastIndexOf("/");

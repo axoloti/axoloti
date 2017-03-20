@@ -27,7 +27,7 @@
 MEMORY
 {
 /* make SRAM1 pretending to be flash memory */
-    flash : org = 0x00011000, LENGTH = 0x0000B000
+    flash : org = 0x00000000, LENGTH = 0x0000B000
     ram0  : org = 0x20000000, len = 192k    /* SRAM1 + SRAM2 + SRAM3 */
     ram1  : org = 0x20000000, len = 0 
     ram2  : org = 0x2001E000, len = 8k      /* 2nd half of SRAM2 */

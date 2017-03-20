@@ -24,10 +24,10 @@ MEMORY
 {
     flash : org = 0x08000000, len = 896k    /* last 128kB reserved for patch storage*/
     ram0  : org = 0x20000000, len = 192k    /* SRAM1 + SRAM2 + SRAM3 */
-    ram1  : org = 0x20000000, len = 0x0B000 /* SRAM1 */
-    ram2  : org = 0x2001E000, len = 8k      /* 2nd half of SRAM2 */
-    ram3  : org = 0x20020000, len = 64k     /* SRAM3 */
-    ram4  : org = 0x1000C000, len = 10k     /* CCM SRAM end*/
+    ram1  : org = 0x20010000, len =  48k    /* first 64kB of SRAM1 for patch, next 48kB for firmware */
+    ram2  : org = 0x2001E000, len =   8k    /* 2nd half of SRAM2 for fimware DMA */
+    ram3  : org = 0x20024000, len =   0k    /* SRAM3 for patch */
+    ram4  : org = 0x1000C000, len =  10k    /* CCM SRAM end*/
     ram5  : org = 0x40024000, len = 4k      /* BCKP SRAM */
     ram6  : org = 0x00000000, len = 0
     ram7  : org = 0x00000000, len = 0
@@ -48,7 +48,7 @@ REGION_ALIAS("DATA_RAM", ram1);
 REGION_ALIAS("BSS_RAM", ram1);
 
 /* RAM region to be used for the default heap.*/
-REGION_ALIAS("HEAP_RAM", ram3);
+REGION_ALIAS("HEAP_RAM", ram1);
 
 INCLUDE rules.ld
 

@@ -276,4 +276,6 @@
 #define SRAM3 __attribute__ ((section (".ram3")))
 #define CCM __attribute__ ((section (".ram4")))
 #define BKPSRAM __attribute__ ((section (".ram5")))
+#define DMA_MEM_FW __attribute__ ((section (".ram2")))
+
 

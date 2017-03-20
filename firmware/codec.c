@@ -22,10 +22,10 @@
 #include "axoloti_defines.h"
 #include "codec_ADAU1961.h"
 
-int32_t buf[BUFSIZE*2] SRAM2;
-int32_t buf2[BUFSIZE*2] SRAM2;
-int32_t rbuf[BUFSIZE*2] SRAM2;
-int32_t rbuf2[BUFSIZE*2] SRAM2;
+int32_t buf[BUFSIZE*2] DMA_MEM_FW;
+int32_t buf2[BUFSIZE*2] DMA_MEM_FW;
+int32_t rbuf[BUFSIZE*2] DMA_MEM_FW;
+int32_t rbuf2[BUFSIZE*2] DMA_MEM_FW;
 
 void codec_init(bool_t isMaster) {
   codec_ADAU1961_i2s_init(SAMPLERATE,isMaster);

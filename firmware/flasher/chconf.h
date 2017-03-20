@@ -500,7 +500,7 @@
 /* Port-specific settings (override port settings defaulted in chcore.h).    */
 /*===========================================================================*/
 
-#define CORTEX_VTOR_INIT                    0x00011200U
+#define CORTEX_VTOR_INIT                    0x00000200U
 
 #endif  /* _CHCONF_H_ */
 

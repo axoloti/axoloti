@@ -115,6 +115,7 @@ int main(void) {
 
   if (!exception_check() && !palReadPad(SW2_PORT, SW2_PIN)) {
     // only try booting a patch when no exception is to be reported
+	// TODO: maybe only skip startup patch when exception was caused by startup patch
     // and button S2 is not pressed
 
     sdcard_attemptMountIfUnmounted();
@@ -124,7 +125,8 @@ int main(void) {
     // if no patch booting or running yet
     // try loading from flash
     if (patchStatus == STOPPED) {
-        LoadPatchStartFlash();
+    	// disabled, need to re-implement...
+        // LoadPatchStartFlash();
     }
   }
 

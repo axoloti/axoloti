@@ -84,21 +84,23 @@ $(info MODULE_INC  = ${MODULE_INC})
 $(info MODULE_LIBS = ${MODULE_LIBS})
 $(info MODULE_LINKDIR = ${MODULE_LINKDIR})
 
-${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axoloti.h ${FIRMWARE}/parameter_functions.h ${FIRMWARE}/axoloti_math.h ${FIRMWARE}/axoloti_filters.h
+${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axoloti.h ${FIRMWARE}/parameter_functions.h ${FIRMWARE}/axoloti_math.h ${FIRMWARE}/axoloti_filters.h ${FIRMWARE}/build/axoloti.elf
 	@echo "Build precompiled header"
 	$(CPP) $(CCFLAGS) $(IINCDIR) -Winvalid-pch -MD -MP -c ${FIRMWARE}/xpatch.h  -o ${BDIR}/xpatch.h.gch
 
 
 ${BDIR}/xpatch.bin: ${BDIR}/xpatch.cpp ${MODULE_LIBS} ${BDIR}/xpatch.h.gch
 	@echo RM
-	@rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.sram.bin ${BDIR}/xpatch.sdram.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
+	@rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.sram1.bin ${BDIR}/xpatch.sram3.bin ${BDIR}/xpatch.sdram.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
 	@echo APP
 	@$(CPP) $(CCFLAGS) -H $(MODULE_BINC) $(MODULE_INC) $(IINCDIR) -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o 
 	@echo LINK
 	@$(LD) $(LDFLAGS) ${BDIR}/xpatch.o ${MODULE_LINKDIR} ${MODULE_LINKLIB} -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${FIRMWARE}/build/axoloti.elf -o ${BDIR}/xpatch.elf
 	@echo BIN
-	@$(CP) -O binary -R .sdram.* ${BDIR}/xpatch.elf ${BDIR}/xpatch.sram.bin
+	@$(CP) -O binary -R .sdram.* -R .rodata -R .rodata.* -R .data ${BDIR}/xpatch.elf ${BDIR}/xpatch.sram1.bin
+	@$(CP) -O binary --only-section=.rodata --only-section=.rodata.* --only-section=.data ${BDIR}/xpatch.elf ${BDIR}/xpatch.sram3.bin
 	@$(CP) -O binary --only-section=.sdram.data ${BDIR}/xpatch.elf ${BDIR}/xpatch.sdram.bin
+#	@$(DFUSE_PACK) -b 0x00000000:${BDIR}/xpatch.sram1.bin -b 0x20020000:${BDIR}/xpatch.sram3.bin -b 0xC0000000:${BDIR}/xpatch.sdram.bin ${BDIR}/xpatch.dfu
 
 clean:
 	@rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst ${BDIR}/xpatch.h.gch

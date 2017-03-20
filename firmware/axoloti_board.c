@@ -70,7 +70,7 @@ void adc_configpads(void) {
 /*
  * ADC samples buffer.
  */
-unsigned short adcvalues[ADC_GRP1_NUM_CHANNELS * ADC_GRP1_BUF_DEPTH] SRAM2;
+unsigned short adcvalues[ADC_GRP1_NUM_CHANNELS * ADC_GRP1_BUF_DEPTH] DMA_MEM_FW;
 
 /*
  * ADC conversion group.

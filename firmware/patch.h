@@ -88,7 +88,9 @@ void StopPatch(void);
 
 void start_dsp_thread(void);
 
-#define PATCHMAINLOC 0x00011000
+#define PATCHMAINLOC 0x20000000
+// aliased to ICODE by MEMRMP
+#define PATCHMAINLOC_ALIASED 0x00000000
 
 // patch is located in sector 11
 #define PATCHFLASHLOC 0x080E0000

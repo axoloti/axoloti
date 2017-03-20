@@ -84,12 +84,15 @@ public class QCmdUploadPatch implements QCmdSerialTask {
             if (f == null) {
                 // from now on there can be multiple segments!
                 String buildDir=System.getProperty(Axoloti.HOME_DIR)+"/build";
-                f = new File(buildDir + "/xpatch.sram.bin");
-                File f2 = new File(buildDir + "/xpatch.sdram.bin");
+                f = new File(buildDir + "/xpatch.sram1.bin");
+                File f2 = new File(buildDir + "/xpatch.sram3.bin");
+                File f3 = new File(buildDir + "/xpatch.sdram.bin");
                 Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath() + " " + f2.getAbsolutePath());
                 UploadBinFile(connection, f, connection.getTargetProfile().getPatchAddr());
                 if (f2.length() > 0)
-                    UploadBinFile(connection, f2, connection.getTargetProfile().getSDRAMAddr());
+                    UploadBinFile(connection, f2, connection.getTargetProfile().getSRAM3Addr());
+                if (f3.length() > 0)
+                    UploadBinFile(connection, f3, connection.getTargetProfile().getSDRAMAddr());
             } else {
                 // for flasher and mounter trojan patch binaries
                 Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath());
