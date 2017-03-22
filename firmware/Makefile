@@ -282,7 +282,7 @@ CPPSRC = \
        ${MUTABLE_INSTRUMENTS}/stmlib/utils/random.cpp \
        ${MUTABLE_INSTRUMENTS}/mutable_resources.cpp \
        ${BRAIDS_SRC} \
-       ${WARPSS_SRC} \
+       ${WARPS_SRC} \
        ${ELEMENTS_SRC} \
        ${CLOUDS_SRC} \
        ${RINGS_SRC} \
