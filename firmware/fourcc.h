@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2017 Johannes Taelman
+ * Copyright (C) 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,24 +15,22 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __SERIAL_MIDI_H
-#define __SERIAL_MIDI_H
+#ifndef FOURCC_H
+#define FOURCC_H
 
 #include <stdint.h>
-#include <midi.h>
 
-void serial_midi_init(void);
+typedef uint32_t fourcc_t;
 
-void serial_MidiSend(midi_message_t midimsg);
+#define FOURCC(a,b,c,d) ( (fourcc_t) ((((uint8_t)d)<<24) | (((uint8_t)c)<<16) | (((uint8_t)b)<<8) | ((uint8_t)a)) )
 
-// report the number of bytes pending for transmission
-int  serial_MidiGetOutputBufferPending(void);
+typedef struct {
+	uint32_t fourcc;
+	uint32_t size;
+	// uint8_t data[size];
+} chunk_header_t;
 
-extern midi_input_remap_t midi_inputmap_serial;
+#define CHUNK_HEADER(type) \
+{.fourcc = fourcc_##type, .size= sizeof(chunk_##type##_t) - sizeof(chunk_header_t)}
 
-// obsolete
-void serial_MidiSend1(uint8_t b0);
-void serial_MidiSend2(uint8_t b0, uint8_t b1);
-void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2);
-
-#endif
+#endif //FOURCC_H

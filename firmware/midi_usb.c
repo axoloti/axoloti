@@ -27,6 +27,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "midi.h"
+#include "midi_routing.h"
 #include "midi_usb.h"
 #include "usbcfg.h"
 #include "midi_buffer.h"

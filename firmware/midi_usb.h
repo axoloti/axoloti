@@ -28,10 +28,13 @@
 #define MIDI_USB_H
 
 #include "midi_buffer.h"
+#include "midi_routing.h"
 
 // no midi_input_buffer_t specific for the input side,
 // use midi_input_buffer after real->virtual port remapping
 extern midi_output_buffer_t midi_output_usbd;
+
+extern midi_input_remap_t midi_inputmap_usbd;
 
 void midi_usb_init(void);
 void midi_usb_MidiSend1(uint8_t port, uint8_t b0);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,10 +15,12 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ch.h"
 #include "hal.h"
 #include "axoloti_board.h"
 #include "midi.h"
+#include "midi_routing.h"
 #include "serial_midi.h"
 #include "patch.h"
 

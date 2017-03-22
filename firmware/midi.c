@@ -19,6 +19,7 @@
 #include "hal.h"
 #include "axoloti_board.h"
 #include "midi.h"
+#include "midi_routing.h"
 #include "serial_midi.h"
 #include "usbh_midi_core.h"
 #include "midi_usb.h"
@@ -28,14 +29,8 @@
 
 midi_input_buffer_t midi_input_buffer;
 
-typedef struct {
-	int8_t midi_device_t;
-	int8_t port;
-} midi_output_routing_t;
-
-#define TARGETS_PER_VPORT 4
 // output routing table
-midi_output_routing_t midi_output_routing_table[16][TARGETS_PER_VPORT] = {
+midi_output_routing_t midi_output_routing_table[MIDI_VPORTS][MIDI_TARGETS_PER_VPORT] = {
 // virtual output port 0 to DIN
 		{{MIDI_DEVICE_DIN, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
 // virtual output port 1 to USB device (PC)
@@ -74,7 +69,7 @@ void MidiSendVirtual(midi_message_t m) {
 	int vport = m.fields.port;
 	midi_output_routing_t *port_routing = &midi_output_routing_table[vport][0];
 	int i;
-	for(i=0;i<TARGETS_PER_VPORT;i++) {
+	for(i=0;i<MIDI_TARGETS_PER_VPORT;i++) {
 		switch (port_routing->midi_device_t) {
 		case MIDI_DEVICE_OUTPUTMAP_NONE:
 			break;

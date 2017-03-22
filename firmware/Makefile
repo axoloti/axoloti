@@ -218,7 +218,7 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/main.c \
        ${FIRMWARE}/patch.c \
        ${FIRMWARE}/flash.c \
-       ${FIRMWARE}/virtual_control.c \
+       ${FIRMWARE}/firmware_chunks.c \
        ${FIRMWARE}/midi_buffer.c \
        ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_cos_q31.c \
        ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sin_q31.c \

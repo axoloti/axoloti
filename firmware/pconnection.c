@@ -29,7 +29,6 @@
 #include "sdcard.h"
 #include "ui.h"
 #include "string.h"
-#include "virtual_control.h"
 #include "flash.h"
 #include "exceptions.h"
 #include "crc32.h"

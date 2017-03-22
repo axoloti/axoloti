@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -27,9 +27,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stdint.h"
 #include "midi_buffer.h"
+#include "midi_routing.h"
 #include "usbh_midi_core.h"
 
 extern midi_output_buffer_t midi_output_usbh;
+extern midi_input_remap_t midi_inputmap_usbh[16];
 
 // external midi interface
 void usbh_midi_init(void);

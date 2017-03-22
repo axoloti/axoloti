@@ -110,8 +110,6 @@ typedef enum // obsolete
     MIDI_DEVICE_INTERNAL = 0x0F  // internal (to the board) midi
 } midi_device_t ;
 
-#define MIDI_DEVICE_OUTPUTMAP_NONE MIDI_DEVICE_OMNI
-#define MIDI_DEVICE_INPUTMAP_NONE -1
 
 // obsolete
 // midi port, from 1  = OMNI for filtering and internal messages
@@ -131,6 +129,5 @@ void MidiSendSysEx(midi_device_t dev, uint8_t port, uint8_t bytes[], uint8_t len
 // todo: migrate to virtual midi output port as argument instead of device
 int  MidiGetOutputBufferPending(midi_device_t dev);
 int  MidiGetOutputBufferAvailable(midi_device_t dev);
-
 
 #endif

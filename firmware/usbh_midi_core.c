@@ -40,6 +40,7 @@
 #include "axoloti_board.h"
 #include "exceptions.h"
 #include "midi.h"
+#include "midi_routing.h"
 #include "midi_buffer.h"
 
 midi_output_buffer_t midi_output_usbh;

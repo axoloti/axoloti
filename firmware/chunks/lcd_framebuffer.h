@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,4 +15,21 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-void TransmitLCDoverUSB(void);
+
+// ------ lcd framebuffer ---------------------------------------------
+#ifndef CHUNK_LCD_FRMEBUFFER_H
+#define CHUNK_LCD_FRMEBUFFER_H
+
+#include "fourcc.h"
+
+#define fourcc_lcd_framebuffer FOURCC('L','C','D','F')
+
+typedef struct {
+	chunk_header_t header;
+	int width;
+	int height;
+	int pixeltype; // = 0
+	uint8_t *data;
+} chunk_lcd_framebuffer_t;
+
+#endif

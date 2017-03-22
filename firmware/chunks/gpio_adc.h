@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2017 Johannes Taelman
+ * Copyright (C) 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,24 +15,20 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __SERIAL_MIDI_H
-#define __SERIAL_MIDI_H
 
-#include <stdint.h>
-#include <midi.h>
+// ------ gpio ADC table chunk ----------------------------------------
+#ifndef CHUNK_ADC_H
+#define CHUNK_ADC_H
 
-void serial_midi_init(void);
+#include "fourcc.h"
 
-void serial_MidiSend(midi_message_t midimsg);
+#define fourcc_gpio_adc FOURCC('G','A','D','C')
 
-// report the number of bytes pending for transmission
-int  serial_MidiGetOutputBufferPending(void);
-
-extern midi_input_remap_t midi_inputmap_serial;
-
-// obsolete
-void serial_MidiSend1(uint8_t b0);
-void serial_MidiSend2(uint8_t b0, uint8_t b1);
-void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2);
+typedef struct {
+	chunk_header_t header;
+	int datatype; // =0
+	int channels;
+	void *data;
+} chunk_gpio_adc_t;
 
 #endif
