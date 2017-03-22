@@ -91,6 +91,10 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
 
     public abstract DataType getDatatype();
 
+    public String GetCMetaType() {
+        return "display_meta_type_undefined";
+    }
+
     public void updateSHA(MessageDigest md) {
         md.update(name.getBytes());
 //        md.update((byte)getDatatype().hashCode());

@@ -45,7 +45,7 @@ public class ParameterFrac32UMapGainSquare extends ParameterFrac32UMap {
     public ParameterInstanceFrac32UMap InstanceFactory() {
         ParameterInstanceFrac32UMap p = super.InstanceFactory();
         NativeToReal convs[] = {new SquareRatio(1.0), new SquareDB(0.0)};
-        p.SetPFunction("pfun_signed_clamp_fullrange_squarelaw");
+        p.SetPFunction("parameter_function::pf_signed_clamp_fullrange_squarelaw");
         p.convs = convs;
         return p;
     }

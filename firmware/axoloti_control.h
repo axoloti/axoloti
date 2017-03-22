@@ -22,13 +22,14 @@
 #define LCDHEIGHT 64
 #define LCDHEADER 0
 #define LCDROWS (LCDHEIGHT/8)
+#define LCD_CHAR_WIDTH 6
 
 // leds, dont exceed SPILINK_CTLDATASIZE
 #define LEDSIZE 3
 
 extern uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS];
 
-typedef struct led_outputs {
+typedef struct {
 	union {
 		struct {
 		  unsigned int led1 :2;
@@ -50,9 +51,9 @@ typedef struct led_outputs {
 		};
 		uint32_t led_32b;
 	};
-} led_outputs_t;
+} led_array_t;
 
-extern led_outputs_t leds[LEDSIZE];
+extern led_array_t leds[LEDSIZE];
 #define LED_RING_LEFT (&leds[0])
 #define LED_RING_RIGHT (&leds[1])
 #define LED_STEPS (&leds[2])
@@ -62,10 +63,10 @@ extern uint8_t control_rx_buffer[(LCDHEADER + LCDWIDTH)];
 extern void do_axoloti_control(void);
 void axoloti_control_init(void);
 
-void LED_clear(led_outputs_t *c);
-void LED_set(led_outputs_t *c, int32_t v);
-void LED_setOne(led_outputs_t *c, unsigned v);
-void LED_addOne(led_outputs_t *c, unsigned b, unsigned v );
+void LED_clear(led_array_t *c);
+void LED_set(led_array_t *c, int32_t v);
+void LED_setOne(led_array_t *c, unsigned v);
+void LED_addOne(led_array_t *c, unsigned b, unsigned v );
 
 void LCD_clear(void);
 void LCD_grey(void);
@@ -75,19 +76,39 @@ void LCD_setPixel(int x, int y);
 void LCD_clearPixel(int x, int y);
 uint8_t LCD_getPixel(int x, int y);
 
-void LCD_drawChar(int x, int line, unsigned char c);
-void LCD_drawCharInv(int x, int line, unsigned char c);
+void LCD_drawChar(int half_x, int line, unsigned char c);
+void LCD_drawCharInv(int half_x, int line, unsigned char c);
 
-void LCD_drawNumber3D(int x, int line, int i);
-void LCD_drawNumber3DInv(int x, int line, int i);
-void LCD_drawNumber5D(int x, int line, int i);
-void LCD_drawNumber5DInv(int x, int line, int i);
-void LCD_drawNumberHex32(int x, int line, uint32_t i);
-void LCD_drawString(int x, int line, const char *str);
-void LCD_drawStringInv(int x, int line, const char *str);
-void LCD_drawStringN(int x, int line, const char *str, int N);
-void LCD_drawStringInvN(int x, int line, const char *str, int N);
-void LCD_drawIBAR(int x, int y, int v, int N);
-void LCD_drawIBARInv(int x, int y, int v, int N);
-void LCD_drawIBARadd(int x, int y, int v);
+void LCD_drawNumber7D(int half_x, int line, int value);
+void LCD_drawNumber7DInv(int half_x, int line, int value);
+
+void LCD_drawNumberHex32(int half_x, int line, uint32_t value);
+void LCD_drawNumberHex32Inv(int half_x, int line, uint32_t value);
+
+void LCD_drawNumberQ27x64(int half_x, int line, int32_t value);
+void LCD_drawNumberQ27x64Inv(int half_x, int line, int32_t value);
+
+void LCD_drawString(int half_x, int line, const char *str);
+void LCD_drawStringInv(int half_x, int line, const char *str);
+void LCD_drawStringN(int half_x, int line, const char *str, int N);
+void LCD_drawStringInvN(int half_x, int line, const char *str, int N);
+
+void LCD_drawBitField(int half_x, int line, int value, int nbits);
+void LCD_drawBitFieldInv(int half_x, int line, int value, int nbits);
+void LCD_drawBitField2(int half_x, int line, int value, int nbits);
+void LCD_drawBitField2Inv(int half_x, int line, int value, int nbits);
+void LCD_drawHBar(int half_x, int line, int value, int length);
+void LCD_drawHBarInv(int half_x, int line, int value, int length);
+
+// obsolete?
+void LCD_drawIBAR(int half_x, int y, int v, int N);
+void LCD_drawIBARInv(int half_x, int y, int v, int N);
+void LCD_drawIBARadd(int half_x, int y, int v);
+
+void LCD_drawNumber3D(int half_x, int line, int value);
+void LCD_drawNumber3DInv(int half_x, int line, int value);
+void LCD_drawNumber5D(int half_x, int line, int value);
+void LCD_drawNumber5DInv(int half_x, int line, int value);
+
+
 #endif

@@ -5,7 +5,7 @@ import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceBin1Momentary;
 import components.control.PulseButtonComponent;
 
-public class ParameterInstanceViewBin1Momentary extends ParameterInstanceViewInt32 {
+public class ParameterInstanceViewBin1Momentary extends ParameterInstanceViewBin {
 
     public ParameterInstanceViewBin1Momentary(ParameterInstanceBin1Momentary parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);

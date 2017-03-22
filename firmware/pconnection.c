@@ -427,10 +427,10 @@ msg_t bulk_tx_paramchange(void) {
 	msg_t r = 0;
 	if (!patchStatus) {
 		unsigned int i;
-		for (i = 0; i < patchMeta.numPEx; i++) {
-			if (patchMeta.pPExch[i].signals & 0x01) {
-				int v = (patchMeta.pPExch)[i].value;
-				patchMeta.pPExch[i].signals &= ~0x01;
+		for (i = 0; i < patchMeta.nparams; i++) {
+			if (patchMeta.params[i].signals & 0x01) {
+				int v = (patchMeta.params)[i].d.frac.value;  // FIXME: can't assume parameter type is t_frac
+				patchMeta.params[i].signals &= ~0x01;
 				tx_pckt_paramchange pch;
 				pch.header = 0x516F7841; //"AxoQ"
 				pch.patchID = patchMeta.patchID;
@@ -745,12 +745,13 @@ static THD_FUNCTION(BulkReader, arg) {
     	  // AxoP : parameter change
     	  rcv_pckt_paramchange_t *p = (rcv_pckt_paramchange_t *)bulk_rxbuf;
           if ((p->patch_id == patchMeta.patchID) &&
-              (p->index < patchMeta.numPEx)) {
-            PExParameterChange(&(patchMeta.pPExch)[p->index], p->value, 0xFFFFFFEE);
+              (p->index < patchMeta.nparams)) {
+            ParameterChange(&(patchMeta.params)[p->index], p->value, 0xFFFFFFEE);
           }
       } else if (header == rcv_hdr_midi) {
     	  // AxoM : midi injection
     	  rcv_pckt_midi_t *p = (rcv_pckt_midi_t *)bulk_rxbuf;
+    	  // TODO: inject into specified virtual cable...
           MidiInMsgHandler(MIDI_DEVICE_INTERNAL, 1, p->midi[0], p->midi[1],
                            p->midi[2]);
       } else if (header == rcv_hdr_fs_create) {

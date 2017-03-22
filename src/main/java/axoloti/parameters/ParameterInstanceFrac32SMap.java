@@ -57,27 +57,15 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
     @Override
     public String GetPFunction() {
         if (pfunction == null) {
-            return "pfun_signed_clamp";
+            return "parameter_function::pf_signed_clamp";
         } else {
             return pfunction;
         }
     }
 
     @Override
-    public String GenerateCodeInit(String vprefix, String StructAccces) {
-        String n;
-        if (axoObjectInstance.parameterInstances.size() == 1) {
-            n = axoObjectInstance.getInstanceName();
-        } else {
-            n = axoObjectInstance.getInstanceName() + ":" + name;
-        }
-        String s = PExName(vprefix) + ".pfunction = " + GetPFunction() + ";\n"
-                + "  SetKVP_IPVP(&" + StructAccces + KVPName(vprefix) + ",ObjectKvpRoot, \"" + n + "\" ,"
-                + "&" + PExName(vprefix) + ","
-                + " -1<<27,"
-                + " 1<<27);\n"
-                + "  KVP_RegisterObject(&" + StructAccces + KVPName(vprefix) + ");\n";
-        return s;
+    public String GetCOffset() {
+        return "0";
     }
 
     @Override

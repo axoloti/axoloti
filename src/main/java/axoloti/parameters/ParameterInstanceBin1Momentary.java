@@ -30,31 +30,14 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public class ParameterInstanceBin1Momentary extends ParameterInstanceInt32 {
+public class ParameterInstanceBin1Momentary extends ParameterInstanceBin {
 
     public ParameterInstanceBin1Momentary() {
+        super();
     }
 
     public ParameterInstanceBin1Momentary(@Attribute(name = "value") int v) {
         super(v);
-    }
-
-    @Override
-    public String GenerateCodeInit(String vprefix, String StructAccces) {
-        String s = /*"    " + variableName(vprefix) + " = " + (value.getInt()) + ";\n"
-                 + "    " + valueName(vprefix) + " = " + (value.getInt()) + ";\n"
-                 +*/ "    " + signalsName(vprefix) + " = 0;\n"
-                + "    SetKVP_IPVP(&" + StructAccces + KVPName(vprefix) + ",ObjectKvpRoot, \"" + KVPName(vprefix) + "\" ,"
-                + "&" + PExName(vprefix) + ","
-                + 0 + ","
-                + ((1 << 16) - 1) + ");\n"
-                + "  KVP_RegisterObject(&" + StructAccces + KVPName(vprefix) + ");\n";
-        return s;
-    }
-
-    @Override
-    public String GenerateCodeDeclaration(String vprefix) {
-        return "KeyValuePair " + KVPName(vprefix) + ";\n";
     }
 
     @Override

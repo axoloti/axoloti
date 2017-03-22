@@ -19,6 +19,7 @@
 #include "patch.h"
 #include "axoloti_math.h"
 
+#if 1 // Obsolete parameter structure
 void PExModulationSourceChange(PExModulationTarget_t *modulation,
                                int32_t nTargets,
                                ParameterExchange_t *parameters,
@@ -59,6 +60,39 @@ void PExParameterChange(ParameterExchange_t *param, int32_t value,
     param->finalvalue = param->modvalue;
   }
 }
+#endif
+
+
+#if NEW_PARAMETER_SYSTEM
+
+void ParameterChange(Parameter_t *param, int32_t value, uint32_t signals) {
+switch (param->type) {
+case param_type_frac_sq27:
+case param_type_frac_uq27:
+	  param->d.frac.modvalue -= param->d.frac.value;
+	  param->d.frac.value = value;
+	  param->d.frac.modvalue += param->d.frac.value;
+	  break;
+case param_type_int: {
+	if (value<param->d.intt.minimum) value = param->d.intt.minimum;
+	if (value>param->d.intt.maximum) value = param->d.intt.maximum;
+	param->d.intt.value = value;
+	param->d.intt.modvalue = value;
+} break;
+default:
+// we don't support modulations on other types for now
+	param->d.intt.modvalue = param->d.intt.value;
+}
+
+  param->signals |= signals;
+  if (param->pfunction)
+    (param->pfunction)(param);
+  else
+	  // assuming finalvalue and modvalue fields are on the same position for integer and bit parameters:
+    param->d.frac.finalvalue = param->d.frac.modvalue;
+}
+
+#endif
 
 void ApplyPreset(unsigned int index) {
   if (patchMeta.fptr_applyPreset != 0)

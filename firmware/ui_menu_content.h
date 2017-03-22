@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,36 +15,16 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.parameters;
 
-import org.simpleframework.xml.Attribute;
+#ifndef UI_MENU_CONTENT_H
+#define UI_MENU_CONTENT_H
 
-/**
- *
- * @author Johannes Taelman
- */
-public abstract class ParameterInstanceFrac32S<T extends ParameterFrac32> extends ParameterInstanceFrac32<T> {
+#define MAIN_MENU_INDEX_PATCH 0
+#define MAIN_MENU_INDEX_PARAMS 1
 
-    public ParameterInstanceFrac32S() {
-    }
+#define MainMenu_length 7
+extern ui_node_t MainMenu[MainMenu_length];
+extern ui_node_t ParamMenu;
+extern ui_node_t ObjMenu;
 
-    public ParameterInstanceFrac32S(@Attribute(name = "value") double v) {
-        super(v);
-    }
-
-    @Override
-    public double getMin() {
-        return -64.0;
-    }
-
-    @Override
-    public double getMax() {
-        return 64.0;
-    }
-
-    @Override
-    public double getTick() {
-        return 1.0;
-    }
-
-}
+#endif

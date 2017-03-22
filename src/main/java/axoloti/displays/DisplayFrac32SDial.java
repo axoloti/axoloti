@@ -56,4 +56,8 @@ public class DisplayFrac32SDial extends Display {
         return TypeName;
     }
 
+    @Override
+    public String GetCMetaType() {
+        return "display_meta_type_dial_sq27";
+    }
 }

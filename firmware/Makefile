@@ -208,6 +208,7 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/midi.c \
        ${FIRMWARE}/midi_usb.c \
        ${FIRMWARE}/ui.c \
+       ${FIRMWARE}/ui_menu_content.c \
        ${FIRMWARE}/glcdfont.c \
        ${FIRMWARE}/usbcfg.c \
        ${FIRMWARE}/sdcard.c \

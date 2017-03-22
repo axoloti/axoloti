@@ -7,7 +7,7 @@ import components.piccolo.control.PCheckboxComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
-public class PParameterInstanceViewBin1 extends PParameterInstanceViewInt32 {
+public class PParameterInstanceViewBin1 extends PParameterInstanceViewBin {
 
     public PParameterInstanceViewBin1(ParameterInstanceBin1 parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);

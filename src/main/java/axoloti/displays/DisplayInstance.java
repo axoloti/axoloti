@@ -23,6 +23,7 @@ import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.utils.CodeGeneration;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
@@ -67,6 +68,14 @@ public abstract class DisplayInstance<T extends Display> implements AtomInstance
         this.offset = offset;
     }
 
+    public void setIndex(int i) {
+        index = i;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
     public abstract String valueName(String vprefix);
 
     public abstract String GenerateCodeInit(String vprefix);
@@ -95,5 +104,12 @@ public abstract class DisplayInstance<T extends Display> implements AtomInstance
         for (ModelChangedListener l : modelChangedListeners) {
             l.modelChanged();
         }
+    }
+
+    public String GenerateDisplayMetaInitializer() {
+        String c = "{ display_type: " + display.GetCMetaType() + ", name: "
+                + CodeGeneration.CPPCharArrayStaticInitializer(display.getName(), CodeGeneration.param_name_length)
+                + ", displaydata: &displayVector[" + offset + "]},\n";
+        return c;
     }
 }

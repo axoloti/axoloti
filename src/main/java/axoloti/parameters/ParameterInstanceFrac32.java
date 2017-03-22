@@ -167,6 +167,38 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     }
 
     @Override
+    public String GenerateParameterInitializer() {
+// { type: param_type_frac, unit: param_unit_abstract, signals: 0, pfunction: 0, d: { frac: { finalvalue:0,  0,  0,  0,  0}}},
+//        String pname = GetUserParameterName();
+        String s = "{ type: " + parameter.GetCType()
+                + ", unit: " + parameter.GetCUnit()
+                + ", signals: 0"
+                + ", pfunction: " + ((GetPFunction() == null) ? "0" : GetPFunction());
+        int v = GetValueRaw();
+        s += ", d: { frac: { finalvalue: 0"
+                + ", value: " + v
+                + ", modvalue: " + v
+                + ", offset: " + GetCOffset()
+                + ", multiplier: " + GetCMultiplier()
+                + "}}},\n";
+        return s;
+    }
+
+    @Override
+    public String variableName(String vprefix, boolean enableOnParent) {
+        if (isOnParent() && (enableOnParent)) {
+            return "%" + ControlOnParentName() + "%";
+        } else {
+            return PExName(vprefix) + ".d.frac.finalvalue";
+        }
+    }
+
+    @Override
+    public String valueName(String vprefix) {
+        return PExName(vprefix) + ".value";
+    }
+
+    @Override
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
     }

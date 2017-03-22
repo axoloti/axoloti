@@ -23,7 +23,7 @@ import java.security.MessageDigest;
  *
  * @author Johannes Taelman
  */
-public class ParameterBin1Momentary extends Parameter {
+public class ParameterBin1Momentary extends ParameterBin {
 
     public ParameterBin1Momentary() {
     }
@@ -48,5 +48,14 @@ public class ParameterBin1Momentary extends Parameter {
     @Override
     public String getTypeName() {
         return TypeName;
+    }
+
+    @Override
+    public String GetCType() {
+        return "param_type_bin_1bit_momentary";
+    }
+
+    @Override public int getNBits() {
+        return 1;
     }
 }

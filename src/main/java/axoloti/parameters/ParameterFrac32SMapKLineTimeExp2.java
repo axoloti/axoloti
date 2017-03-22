@@ -37,7 +37,7 @@ public class ParameterFrac32SMapKLineTimeExp2 extends ParameterFrac32SMap {
     @Override
     public ParameterInstanceFrac32SMap InstanceFactory() {
         ParameterInstanceFrac32SMap p = super.InstanceFactory();
-        p.SetPFunction("pfun_kexpltime");
+        p.SetPFunction("parameter_function::pf_kexpltime");
         NativeToReal convs[] = {new LinearTimeExp()};
         p.convs = convs;
         return p;

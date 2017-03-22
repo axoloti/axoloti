@@ -60,32 +60,10 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
     @Override
     public String GetPFunction() {
         if (pfunction == null) {
-            return "pfun_unsigned_clamp";
+            return "parameter_function::pf_unsigned_clamp";
         } else {
             return pfunction;
         }
-    }
-
-    @Override
-    public String GenerateCodeInit(String vprefix, String StructAccces) {
-        String n;
-        if (axoObjectInstance.parameterInstances.size() == 1) {
-            n = axoObjectInstance.getInstanceName();
-        } else {
-            n = axoObjectInstance.getInstanceName() + ":" + name;
-        }
-        String s = PExName(vprefix) + ".pfunction = " + GetPFunction() + ";\n"
-                + "  SetKVP_IPVP(&" + StructAccces + KVPName(vprefix) + ",ObjectKvpRoot, \"" + n + "\" ,"
-                + "&" + PExName(vprefix) + ","
-                + " 0,"
-                + " 1<<27);\n"
-                + "  KVP_RegisterObject(&" + StructAccces + KVPName(vprefix) + ");\n";
-        return s;
-    }
-
-    @Override
-    public String GenerateCodeDeclaration(String vprefix) {
-        return "KeyValuePair " + KVPName(vprefix) + ";\n";
     }
 
     @Override

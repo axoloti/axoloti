@@ -21,7 +21,7 @@ package axoloti.parameters;
  *
  * @author Johannes Taelman
  */
-public class ParameterBin16 extends Parameter {
+public class ParameterBin16 extends ParameterBin {
 
     public ParameterBin16() {
     }
@@ -40,5 +40,15 @@ public class ParameterBin16 extends Parameter {
     @Override
     public String getTypeName() {
         return TypeName;
+    }
+
+    @Override
+    public String GetCType() {
+        return "param_type_bin_16bits";
+    }
+
+    @Override
+    public int getNBits() {
+        return 16;
     }
 }

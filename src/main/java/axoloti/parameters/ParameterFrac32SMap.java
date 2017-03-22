@@ -58,4 +58,9 @@ public class ParameterFrac32SMap extends ParameterFrac32 {
     public String getTypeName() {
         return TypeName;
     }
+
+    @Override
+    public String GetCType() {
+        return "param_type_frac_sq27";
+    }
 }

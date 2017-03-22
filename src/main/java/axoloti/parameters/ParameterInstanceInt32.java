@@ -26,7 +26,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class ParameterInstanceInt32<T extends Parameter> extends ParameterInstance<T> {
+public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends ParameterInstance<T> {
 
     final ValueInt32 value = new ValueInt32();
 
@@ -44,6 +44,36 @@ public abstract class ParameterInstanceInt32<T extends Parameter> extends Parame
 
     public ParameterInstanceInt32(T param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
+    }
+
+    @Override
+    public String GenerateParameterInitializer() {
+        String s = "{ type: " + parameter.GetCType()
+                + ", unit: " + parameter.GetCUnit()
+                + ", signals: 0"
+                + ", pfunction: " + ((GetPFunction() == null) ? "0" : GetPFunction());
+        int v = GetValueRaw();
+        s += ", d: { intt: { finalvalue: 0"
+                + ", value: " + v
+                + ", modvalue: " + v
+                + ", minimum: " + parameter.getMinimum()
+                + ", maximum: " + (parameter.getMaximum() - 1 /* TODO: FIXME */)
+                + "}}},\n";
+        return s;
+    }
+
+    @Override
+    public String variableName(String vprefix, boolean enableOnParent) {
+        if (isOnParent() && (enableOnParent)) {
+            return "%" + ControlOnParentName() + "%";
+        } else {
+            return PExName(vprefix) + ".d.intt.finalvalue";
+        }
+    }
+
+    @Override
+    public String valueName(String vprefix) {
+        return PExName(vprefix) + ".t_int.value";
     }
 
     @Override

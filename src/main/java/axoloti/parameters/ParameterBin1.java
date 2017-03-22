@@ -23,7 +23,7 @@ import java.security.MessageDigest;
  *
  * @author Johannes Taelman
  */
-public class ParameterBin1 extends Parameter<ParameterInstanceBin1> {
+public class ParameterBin1 extends ParameterBin<ParameterInstanceBin1> {
 
     public ParameterBin1() {
     }
@@ -37,7 +37,7 @@ public class ParameterBin1 extends Parameter<ParameterInstanceBin1> {
         super.updateSHA(md);
         md.update("bool32.t".getBytes());
     }
-    
+
     @Override
     public ParameterInstanceBin1 InstanceFactory() {
         return new ParameterInstanceBin1();
@@ -48,5 +48,15 @@ public class ParameterBin1 extends Parameter<ParameterInstanceBin1> {
     @Override
     public String getTypeName() {
         return TypeName;
+    }
+
+    @Override
+    public String GetCType() {
+        return "param_type_bin_1bit_toggle";
+    }
+
+    @Override
+    public int getNBits() {
+        return 1;
     }
 }

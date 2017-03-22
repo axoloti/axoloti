@@ -44,7 +44,7 @@ public class ParameterFrac32UMapGain extends ParameterFrac32UMap {
     public ParameterInstanceFrac32UMap InstanceFactory() {
         ParameterInstanceFrac32UMap p = super.InstanceFactory();
         NativeToReal convs[] = {new LinRatio(1.0), new LinDB(0.0)};
-        p.SetPFunction("pfun_unsigned_clamp_fullrange");
+        p.SetPFunction("parameter_function::pf_unsigned_clamp_fullrange");
         p.convs = convs;
         return p;
     }

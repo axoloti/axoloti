@@ -19,23 +19,26 @@
 #include "axoloti_defines.h"
 #include "ui.h"
 #include "ch.h"
-#include "hal.h"
-#include "midi.h"
 #include "axoloti_math.h"
 #include "patch.h"
-#include "sdcard.h"
-#include "pconnection.h"
-#include "axoloti_board.h"
 #include "axoloti_control.h"
 #include "glcdfont.h"
-#include "ff.h"
 #include <string.h>
 #include "spilink.h"
+#include "ui_menu_content.h"
 
-#define LCD_COL_INDENT 6
-#define LCD_COL_RIGHT 0
-#define LCD_COL_LEFT 97
+
+// normal content has a indent to allow indicators on first column:
+#define LCD_COL_INDENT 3
+
+// the last column to write a character on:
+#define LCD_COL_RIGHT 61
+
+#define LCD_COL_ENTER 48
+
 #define STATUSROW 7
+
+#define LCD_VALUE_POSITION 36
 
 Btn_Nav_States_struct Btn_Nav_CurStates;
 Btn_Nav_States_struct Btn_Nav_PrevStates;
@@ -44,444 +47,134 @@ Btn_Nav_States_struct Btn_Nav_And;
 
 int8_t EncBuffer[2];
 
-#define MAXOBJECTS 256
-KeyValuePair_t *ObjectKvps[MAXOBJECTS];
-#define MAXTMPMENUITEMS 15
-KeyValuePair_t TmpMenuKvps[MAXTMPMENUITEMS];
-
-#define MainMenu_length 6
-#define SdcMenu_length 2
-#define ADCMenu_length 15
-#define FoodMenu_length 3
-
-extern KeyValuePair_t MainMenu[MainMenu_length];
-KeyValuePair_t *ObjectKvpRoot = &MainMenu[0];
-extern const KeyValuePair_t SdcMenu[SdcMenu_length];
-extern const KeyValuePair_t ADCMenu[ADCMenu_length];
-extern const KeyValuePair_t RootMenu;
-extern const KeyValuePair_t FoodMenu[FoodMenu_length];
-
+//ui_node_t *ObjectKvpRoot = &MainMenu[0];
+extern const ui_node_t RootMenu;
 
 typedef struct {
-	const KeyValuePair_t *parent;
+	const ui_node_t *parent;
 	int currentpos;
+	int maxposition;
 } menu_stack_t;
 
 #define menu_stack_size 10
 
 menu_stack_t menu_stack[menu_stack_size] = {
-	{&RootMenu, 0},
-	{&RootMenu, 0},
-	{&RootMenu, 0},
-	{&RootMenu, 0},
-	{&RootMenu, 0},
-	{&RootMenu, 0},
-	{&RootMenu, 0},
-	{&RootMenu, 0},
-	{&RootMenu, 0},
-	{&RootMenu, 0}
+	{&RootMenu, 0, MainMenu_length},
+	{&RootMenu, 0, MainMenu_length},
+	{&RootMenu, 0, MainMenu_length},
+	{&RootMenu, 0, MainMenu_length},
+	{&RootMenu, 0, MainMenu_length},
+	{&RootMenu, 0, MainMenu_length},
+	{&RootMenu, 0, MainMenu_length},
+	{&RootMenu, 0, MainMenu_length},
+	{&RootMenu, 0, MainMenu_length},
+	{&RootMenu, 0, MainMenu_length}
 };
 
 int menu_stack_position = 0;
+const int lcd_dirty_flag_header  = 1<<0;
+const int lcd_dirty_flag_listnav = 1<<1;
+const int lcd_dirty_flag_clearscreen = 1<<2;
+uint32_t lcd_dirty_flags;
 
-void EnterMenuLoad(void) {
-// TODO: implement
-#if 0
-  memp = (uint8_t *)&fbuff[0];
-  FRESULT res;
-  FILINFO fno;
-  DIR dir;
-  int index = 0;
-  char *fn;
-#if _USE_LFN
-  fno.lfname = 0;
-  fno.lfsize = 0;
-#endif
-  res = f_opendir(&dir, "");
-  if (res == FR_OK) {
-    for (;;) {
-      res = f_readdir(&dir, &fno);
-      if (res != FR_OK || fno.fname[0] == 0)
-        break;
-      if (fno.fname[0] == '.')
-        continue;
-      fn = fno.fname;
-      if (fno.fattrib & AM_DIR) {
-        // ignore subdirectories for now
-      }
-      else {
-        int l = strlen(fn);
-        if ((fn[l - 4] == '.') && (fn[l - 3] == 'B') && (fn[l - 2] == 'I')
-            && (fn[l - 1] == 'N')) {
-          char *s;
-          s = (char *)memp;
-          strcpy(s, fn);
-          memp += l + 1;
-          SetKVP_FNCTN(&TmpMenuKvps[index], NULL, s, &EnterMenuLoadFile);
-          index++;
-        }
-      }
-    }
-    SetKVP_AVP(&LoadMenu, &KvpsHead, "Load SD", index, &TmpMenuKvps[0]);
-    KvpsDisplay = &LoadMenu;
-  }
-  // TBC: error messaging
-#endif
-}
 
-void EnterMenuFormat(void) {
-  FRESULT err;
-  err = f_mkfs(0, 0, 0);
-  if (err != FR_OK) {
-    SetKVP_AVP(&TmpMenuKvps[0], &RootMenu, "Format failed", 0, 0);
-//    KvpsDisplay = &TmpMenuKvps[0];
-  }
-  else {
-    SetKVP_AVP(&TmpMenuKvps[0], &RootMenu, "Format OK", 0, 0);
-//    KvpsDisplay = &TmpMenuKvps[0];
-  }
-}
-
-void TestDisplayFunction(void *x, int initial) {
-	if (initial) {
-		LCD_grey();
-	}
-}
-
-void TestButtonFunction(void *x) {
-	static uint8_t val0;
-	val0 += EncBuffer[0];
-	static uint8_t val1;
-	val1 += EncBuffer[1];
-	EncBuffer[0] = 0;
-	EncBuffer[1] = 0;
-
-	LED_setOne(LED_RING_LEFT, val0 % 16);
-	LED_setOne(LED_RING_RIGHT, val1 % 16);
-
-	static int button[16];
-	if (BTN_NAV_DOWN(btn_1))  button[0] =   (button[0]  + 1) % 4;
-	if (BTN_NAV_DOWN(btn_2))  button[1] =   (button[1]  + 1) % 4;
-	if (BTN_NAV_DOWN(btn_3))  button[2] =   (button[2]  + 1) % 4;
-	if (BTN_NAV_DOWN(btn_4))  button[3] =   (button[3]  + 1) % 4;
-	if (BTN_NAV_DOWN(btn_5))  button[4] =   (button[4]  + 1) % 4;
-	if (BTN_NAV_DOWN(btn_6))  button[5] =   (button[5]  + 1) % 4;
-	if (BTN_NAV_DOWN(btn_7))  button[6] =   (button[6]  + 1) % 4;
-	if (BTN_NAV_DOWN(btn_8))  button[7] =   (button[7]  + 1) % 4;
-	if (BTN_NAV_DOWN(btn_9))  button[8] =   (button[8]  + 1) % 4;
-	if (BTN_NAV_DOWN(btn_10)) button[9] =   (button[9]  + 1) % 4;
-	if (BTN_NAV_DOWN(btn_11)) button[10] =  (button[10] + 1) % 4;
-	if (BTN_NAV_DOWN(btn_12)) button[11] =  (button[11] + 1) % 4;
-	if (BTN_NAV_DOWN(btn_13)) button[12] =  (button[12] + 1) % 4;
-	if (BTN_NAV_DOWN(btn_14)) button[13] =  (button[13] + 1) % 4;
-	if (BTN_NAV_DOWN(btn_15)) button[14] =  (button[14] + 1) % 4;
-	if (BTN_NAV_DOWN(btn_16)) button[15] =  (button[15] + 1) % 4;
-
-	LED_clear(LED_STEPS);
-	int i=0;
-	for(i=0;i<16;i++) {
-		LED_addOne(LED_STEPS,i,button[i]);
-	}
-
-	const int lmid = 50;
-	const int rmid = 86;
-    LCD_drawStringInvN(lmid, 1, "TEST", LCDWIDTH);
-    LCD_drawStringInvN(lmid, 2, "", rmid);
-    LCD_drawNumber3DInv(20, 4, val0);
-    LCD_drawCharInv(20, 5, val0);
-    LCD_drawNumber3DInv(rmid, 4, val1);
-    LCD_drawCharInv(rmid, 5, val1);
-
-    if (Btn_Nav_CurStates.fields.btn_nav_Up) {
-    	LCD_drawStringInvN(lmid, 3, "Up", rmid);
-    	LCD_drawChar(0,3,' ');
-    } else {
-    	LCD_drawCharInv(0,3,'-');
-    }
-    if (Btn_Nav_CurStates.fields.btn_nav_Down) {
-    	LCD_drawStringInvN(lmid, 3, "Down", rmid);
-    	LCD_drawChar(0,5,' ');
-    } else {
-    	LCD_drawCharInv(0,5,'-');
-    }
-    if (Btn_Nav_CurStates.fields.btn_nav_Enter) {
-    	LCD_drawStringInvN(lmid, 3, "Enter", rmid);
-    	LCD_drawChar(121,7,' ');
-	} else {
-		LCD_drawCharInv(121,7,'-');
-	}
-    if (Btn_Nav_CurStates.fields.btn_nav_Back) {
-    	LCD_drawStringInvN(lmid, 3, "Back", rmid);
-    	LCD_drawChar(0,7,' ');
-    } else {
-    	LCD_drawCharInv(0,7,'-');
-    }
-    if (Btn_Nav_CurStates.fields.btn_nav_Home) {
-    	LCD_drawStringInvN(lmid, 3, "Home", rmid);
-    }
-    if (Btn_Nav_CurStates.fields.btn_nav_Left) {
-    	LCD_drawStringInvN(lmid, 3, "Left", rmid);
-    	LCD_drawChar(121,3,' ');
-	} else {
-		LCD_drawCharInv(121,3,'-');
-	}
-    if (Btn_Nav_CurStates.fields.btn_nav_Right) {
-    	LCD_drawStringInvN(lmid, 3, "Right", rmid);
-    	LCD_drawChar(121,5,' ');
-	} else {
-		LCD_drawCharInv(121,5,'-');
-	}
-    if (Btn_Nav_CurStates.fields.btn_nav_Shift) {
-    	LCD_drawStringInvN(lmid, 3, "Shift", rmid);
-    }
-}
-
-const KeyValuePair_t RootMenu = {
-  KVP_TYPE_AVP, "--- AXOLOTI ---", .avp = {MainMenu, MainMenu_length}
-};
-
-KeyValuePair_t MainMenu[MainMenu_length] = {
-  { KVP_TYPE_APVP, "Patch", .apvp = {(int *)&ObjectKvps, 0}},
-  { KVP_TYPE_AVP, "SDCard", .avp = {SdcMenu, SdcMenu_length}},
-  { KVP_TYPE_AVP, "ADCs", .avp = {ADCMenu, ADCMenu_length}},
-  { KVP_TYPE_IVP, "dsp%", .ivp = {&dspLoadPct, 0, 100}},
-  { KVP_TYPE_CUSTOM, "Test", .custom = {&TestDisplayFunction, TestButtonFunction, 0}},
-  { KVP_TYPE_AVP, "Food", .avp = {FoodMenu, FoodMenu_length}}
-};
-
-const KeyValuePair_t SdcMenu[SdcMenu_length] = {
-  { KVP_TYPE_FNCTN, "Load patch", .fnctnvp = {&EnterMenuLoad}},
-  { KVP_TYPE_FNCTN, "Format", .fnctnvp = {&EnterMenuFormat}}
-};
-
-const KeyValuePair_t ADCMenu[ADCMenu_length] = {
-  { KVP_TYPE_SVP, "ADC0", .svp = {(int16_t *)&adcvalues[0]}},
-  { KVP_TYPE_SVP, "ADC1", .svp = {(int16_t *)&adcvalues[1]}},
-  { KVP_TYPE_SVP, "ADC2", .svp = {(int16_t *)&adcvalues[2]}},
-  { KVP_TYPE_SVP, "ADC3", .svp = {(int16_t *)&adcvalues[3]}},
-  { KVP_TYPE_SVP, "ADC4", .svp = {(int16_t *)&adcvalues[4]}},
-  { KVP_TYPE_SVP, "ADC5", .svp = {(int16_t *)&adcvalues[5]}},
-  { KVP_TYPE_SVP, "ADC6", .svp = {(int16_t *)&adcvalues[6]}},
-  { KVP_TYPE_SVP, "ADC7", .svp = {(int16_t *)&adcvalues[7]}},
-  { KVP_TYPE_SVP, "ADC8", .svp = {(int16_t *)&adcvalues[8]}},
-  { KVP_TYPE_SVP, "ADC9", .svp = {(int16_t *)&adcvalues[9]}},
-  { KVP_TYPE_SVP, "ADC10", .svp = {(int16_t *)&adcvalues[10]}},
-  { KVP_TYPE_SVP, "ADC11", .svp = {(int16_t *)&adcvalues[11]}},
-  { KVP_TYPE_SVP, "ADC12", .svp = {(int16_t *)&adcvalues[12]}},
-  { KVP_TYPE_SVP, "ADC13", .svp = {(int16_t *)&adcvalues[13]}},
-  { KVP_TYPE_SVP, "ADC14", .svp = {(int16_t *)&adcvalues[14]}}
-};
-
-#define AppleMenu_length 4
-const KeyValuePair_t AppleMenu[AppleMenu_length] = {
-  { KVP_TYPE_FNCTN, "JamesGrieve", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "GrannySmith", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Jonagold", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Cox", .fnctnvp = {NULL}},
-};
-
-#define NutsMenu_length 10
-const KeyValuePair_t NutsMenu[NutsMenu_length] = {
-  { KVP_TYPE_FNCTN, "Cashew", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Peanut", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Pecan", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Walnut", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Pistachio", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Hazelnut", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Coconut", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Brazil nut", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Macadamia", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Almond", .fnctnvp = {NULL}}
-};
-
-#define DishMenu_length 8
-const KeyValuePair_t DishMenu[DishMenu_length] = {
-  { KVP_TYPE_FNCTN, "Cake", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Salad", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Soup", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Waffle", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Ice cream", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Rice", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Spaghetti", .fnctnvp = {NULL}},
-  { KVP_TYPE_FNCTN, "Pizza", .fnctnvp = {NULL}}
-};
-
-const KeyValuePair_t FoodMenu[FoodMenu_length] = {
-  { KVP_TYPE_AVP, "Nuts", .avp = {NutsMenu, NutsMenu_length}},
-  { KVP_TYPE_AVP, "Apple", .avp = {AppleMenu, AppleMenu_length}},
-  { KVP_TYPE_AVP, "Dish", .avp = {DishMenu, DishMenu_length}}
-};
-
-void SetKVP_APVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
-                 const char *keyName, int length, KeyValuePair_t **array) {
-  kvp->kvptype = KVP_TYPE_APVP;
-  kvp->keyname = keyName;
+#if 0 // obsolete, use static initializers instead
+void SetKVP_APVP(ui_node_t *kvp, ui_node_t *parent,
+                 const char *keyName, int length, ui_node_t **array) {
+  kvp->node_type = KVP_TYPE_APVP;
+  kvp->name = keyName;
   kvp->apvp.length = length;
   kvp->apvp.array = (void *)array;
 }
 
-void SetKVP_AVP(KeyValuePair_t *kvp, const KeyValuePair_t *parent,
-                const char *keyName, int length, const KeyValuePair_t *array) {
-  kvp->kvptype = KVP_TYPE_AVP;
-  kvp->keyname = keyName;
-  kvp->avp.length = length;
-  kvp->avp.array = array;
+void SetKVP_AVP(ui_node_t *kvp, const ui_node_t *parent,
+                const char *keyName, int length, const ui_node_t *array) {
+  kvp->node_type = node_type_node_list;
+  kvp->name = keyName;
+  kvp->nodeList.length = length;
+  kvp->nodeList.array = array;
 }
 
-void SetKVP_IVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
+void SetKVP_IVP(ui_node_t *kvp, ui_node_t *parent,
                 const char *keyName, int *value, int min, int max) {
-  kvp->kvptype = KVP_TYPE_IVP;
-  kvp->keyname = keyName;
-  kvp->ivp.value = value;
-  kvp->ivp.minvalue = min;
-  kvp->ivp.maxvalue = max;
+  kvp->node_type = node_type_integer_value;
+  kvp->name = keyName;
+  kvp->intValue.pvalue = value;
+  kvp->intValue.minvalue = min;
+  kvp->intValue.maxvalue = max;
 }
 
-void SetKVP_IPVP(KeyValuePair_t *kvp, KeyValuePair_t *parent,
+void SetKVP_IPVP(ui_node_t *kvp, ui_node_t *parent,
                  const char *keyName, ParameterExchange_t *PEx, int min,
                  int max) {
   PEx->signals = 0x0F;
-  kvp->kvptype = KVP_TYPE_IPVP;
-  kvp->keyname = keyName;
+  kvp->node_type = KVP_TYPE_IPVP;
+  kvp->name = keyName;
   kvp->ipvp.PEx = PEx;
   kvp->ipvp.minvalue = min;
   kvp->ipvp.maxvalue = max;
 }
 
-void SetKVP_FNCTN(KeyValuePair_t *kvp, KeyValuePair_t *parent,
+void SetKVP_FNCTN(ui_node_t *kvp, ui_node_t *parent,
                   const char *keyName, VoidFunction fnctn) {
-  kvp->kvptype = KVP_TYPE_FNCTN;
-  kvp->keyname = keyName;
-  kvp->fnctnvp.fnctn = fnctn;
+  kvp->node_type = node_type_function;
+  kvp->name = keyName;
+  kvp->fnctn.fnctn = fnctn;
 }
 
-void SetKVP_CUSTOM(KeyValuePair_t *kvp, KeyValuePair_t *parent,
+void SetKVP_CUSTOM(ui_node_t *node, ui_node_t *parent,
                   const char *keyName, DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata) {
-  kvp->kvptype = KVP_TYPE_CUSTOM;
-  kvp->keyname = keyName;
-  kvp->custom.displayFunction = dispfnctn;
-  kvp->custom.buttonFunction = btnfnctn;
-  kvp->custom.userdata = userdata;
+  node->node_type = node_type_custom;
+  node->name = keyName;
+  node->custom.displayFunction = dispfnctn;
+  node->custom.buttonFunction = btnfnctn;
+  node->custom.userdata = userdata;
+}
+#endif
+
+inline void UINode_Increment(const ui_node_t *node) {
+	switch (node->node_type) {
+	case node_type_integer_value:
+		if (*node->intValue.pvalue < node->intValue.maxvalue)
+			(*node->intValue.pvalue)++;
+		break;
+	case node_type_object_list:
+	case node_type_param_list:
+	case node_type_object:
+	case node_type_node_list: {
+		if (menu_stack[menu_stack_position].currentpos
+				< (menu_stack[menu_stack_position].maxposition - 1))
+			menu_stack[menu_stack_position].currentpos++;
+		lcd_dirty_flags |= lcd_dirty_flag_listnav;
+	}
+		break;
+	default:
+		break;
+	}
 }
 
-inline void KVP_Increment(const KeyValuePair_t *kvp) {
-  switch (kvp->kvptype) {
-  case KVP_TYPE_IVP:
-    if (*kvp->ivp.value < kvp->ivp.maxvalue)
-      (*kvp->ivp.value)++;
-    break;
-  case KVP_TYPE_AVP: {
-    if (menu_stack[menu_stack_position].currentpos < (kvp->avp.length - 1))
-    	menu_stack[menu_stack_position].currentpos++;
-	LED_set(0,0);
-	LED_addOne(0, (15*menu_stack[menu_stack_position].currentpos)/(kvp->avp.length - 1) ,1 );
-  } break;
-  case KVP_TYPE_APVP:
-    if (menu_stack[menu_stack_position].currentpos < (kvp->apvp.length - 1))
-    	menu_stack[menu_stack_position].currentpos++;
-    break;
-  case KVP_TYPE_U7VP:
-    if (*kvp->u7vp.value < kvp->u7vp.maxvalue)
-      (*kvp->u7vp.value) += 1;
-    break;
-  case KVP_TYPE_IPVP: {
-    int32_t nval = kvp->ipvp.PEx->value + (1 << 20);
-    if (nval < kvp->ipvp.maxvalue) {
-      PExParameterChange(kvp->ipvp.PEx, nval, 0xFFFFFFE7);
-    }
-    else {
-      PExParameterChange(kvp->ipvp.PEx, kvp->ipvp.maxvalue, 0xFFFFFFE7);
-    }
-  }
-    break;
-  default:
-    break;
-  }
-}
-
-inline void KVP_Decrement(const KeyValuePair_t *kvp) {
-  switch (kvp->kvptype) {
-  case KVP_TYPE_IVP:
-    if (*kvp->ivp.value > kvp->ivp.minvalue)
-      (*kvp->ivp.value)--;
-    break;
-  case KVP_TYPE_AVP:
-    if (menu_stack[menu_stack_position].currentpos > 0)
-      menu_stack[menu_stack_position].currentpos--;
-	LED_set(0,0);
-	LED_addOne(0, (15*menu_stack[menu_stack_position].currentpos)/(kvp->avp.length - 1) ,1 );
-    break;
-  case KVP_TYPE_APVP:
-    if (menu_stack[menu_stack_position].currentpos > 0)
-    	menu_stack[menu_stack_position].currentpos--;
-    break;
-  case KVP_TYPE_U7VP:
-    if (*kvp->u7vp.value > kvp->u7vp.minvalue)
-      (*kvp->u7vp.value)--;
-    break;
-  case KVP_TYPE_IPVP: {
-    int32_t nval = kvp->ipvp.PEx->value - (1 << 20);
-    if (nval > kvp->ipvp.minvalue) {
-      PExParameterChange(kvp->ipvp.PEx, nval, 0xFFFFFFE7);
-    }
-    else {
-      PExParameterChange(kvp->ipvp.PEx, kvp->ipvp.minvalue, 0xFFFFFFE7);
-    }
-  }
-    break;
-  default:
-    break;
-  }
-}
-
-/*
- * Create menu tree from file tree
- */
-
-//KeyValuePair_t LoadMenu;
-
-void EnterMenuLoadFile(void) {
-// Todo: implement patch load menu
-/*
-  KeyValuePair_t *F =
-      &((KeyValuePair_t *)(LoadMenu.avp.array))[LoadMenu.avp.current];
-
-  char str[20] = "0:";
-  strcat(str, F->keyname);
-
-  LoadPatch(str);
-*/
-}
-
-static void UIUpdateLCD(void);
-static void UIPollButtons(void);
-
-void AxolotiControlUpdate(void) {
-    UIPollButtons();
-    UIUpdateLCD();
-}
-
-void (*pControlUpdate)(void) = AxolotiControlUpdate;
-
-static WORKING_AREA(waThreadUI2, 512);
-static THD_FUNCTION(ThreadUI2, arg) {
-  (void)(arg);
-  chRegSetThreadName("ui2");
-  while (1) {
-    if(pControlUpdate != 0L) {
-        pControlUpdate();
-    }
-    chThdSleepMilliseconds(15);
-  }
-}
-
-
-void UIGoSafe(void) {
-	menu_stack_position = 0;
+inline void UINode_Decrement(const ui_node_t *node) {
+	switch (node->node_type) {
+	case node_type_integer_value:
+		if (*node->intValue.pvalue > node->intValue.minvalue)
+			(*node->intValue.pvalue)--;
+		break;
+	case node_type_node_list:
+	case node_type_object_list:
+	case node_type_param_list:
+	case node_type_object: {
+		if (menu_stack[menu_stack_position].currentpos > 0)
+			menu_stack[menu_stack_position].currentpos--;
+		lcd_dirty_flags |= lcd_dirty_flag_listnav;
+	}
+		break;
+	default:
+		break;
+	}
 }
 
 #if 0 // obsolete?
-static KeyValuePair_t* userDisplay;
+static ui_node_t* userDisplay;
 
 void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata) {
 	if(userDisplay!=0) {
@@ -492,140 +185,86 @@ void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* 
 }
 #endif
 
-void ui_init(void) {
-  Btn_Nav_Or.word = 0;
-  Btn_Nav_And.word = ~0;
+#define LCD_COL_EQ 45
+#define LCD_COL_EQ_LENGTH 6
+#define LCD_COL_VAL 45
 
-  chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2, NULL);
-  axoloti_control_init();
-
-  int i;
-  for(i=0;i<2;i++) {
-	  EncBuffer[i]=0;
-  }
+void DisplayHeading(void) {
+	int h = 21;
+	int i = menu_stack_position;
+	while(i>0) {
+		const char *name = menu_stack[i].parent->name;
+		int l = strlen(name);
+		if (l>h) {
+			l=h;
+			LCD_drawStringInvN(0, 0, "----------------------", l);
+			break;
+		}
+		h -= l;
+		LCD_drawStringInvN(h*3, 0, name, l);
+		h--;
+		if ((h>=0)&&(i>0)) {
+			LCD_drawCharInv(h*3, 0, '>');
+		} else break;
+		i--;
+	}
 }
 
-void KVP_ClearObjects(void) {
-  ObjectKvpRoot->apvp.length = 0;
-  menu_stack_position = 0;
+void UINode_DrawInv(int x, int y, const ui_node_t *node) {
+	LCD_drawStringInvN(x, y, node->name, 14); // todo: fix 14
+	switch (node->node_type) {
+	case node_type_integer_value:
+		LCD_drawCharInv(LCD_COL_EQ, y, '=');
+		LCD_drawNumber5DInv(LCD_COL_VAL, y, *node->intValue.pvalue);
+		break;
+	case node_type_node_list:
+		LCD_drawStringInvN(LCD_COL_EQ, y, "     *", LCD_COL_EQ_LENGTH);
+		break;
+	case node_type_short_value:
+		LCD_drawCharInv(LCD_COL_EQ, y, '=');
+		LCD_drawNumber5DInv(LCD_COL_VAL, y, *node->shortValue.pvalue);
+		break;
+	case node_type_custom:
+		LCD_drawStringInvN(LCD_COL_EQ, y, "     @", LCD_COL_EQ_LENGTH);
+		break;
+	case node_type_param_list:
+		LCD_drawStringInvN(LCD_COL_EQ, y, "     $", LCD_COL_EQ_LENGTH);
+		break;
+	case node_type_object_list:
+		LCD_drawStringInvN(LCD_COL_EQ, y, "     0", LCD_COL_EQ_LENGTH);
+		break;
+	default:
+		break;
+	}
 }
 
-void KVP_RegisterObject(KeyValuePair_t *kvp) {
-  if (ObjectKvpRoot->apvp.length < MAXOBJECTS) {
-	ObjectKvps[ObjectKvpRoot->apvp.length] = kvp;
-    ObjectKvpRoot->apvp.length++;
-  }
+void UINode_Draw(int x, int y, const ui_node_t *node) {
+	LCD_drawStringN(x, y, node->name, 14); // todo: fix 14?
+	switch (node->node_type) {
+	case node_type_integer_value:
+		LCD_drawChar(LCD_COL_EQ, y, '=');
+		LCD_drawNumber5D(LCD_COL_VAL, y, *node->intValue.pvalue);
+		break;
+	case node_type_node_list:
+		LCD_drawStringN(LCD_COL_EQ, y, "     *", LCD_COL_EQ_LENGTH);
+		break;
+	case node_type_short_value:
+		LCD_drawChar(LCD_COL_EQ, y, '=');
+		LCD_drawNumber5D(LCD_COL_VAL, y, *node->shortValue.pvalue);
+		break;
+	case node_type_custom:
+		LCD_drawStringN(LCD_COL_EQ, y, "     @", LCD_COL_EQ_LENGTH);
+		break;
+	case node_type_param_list:
+		LCD_drawStringN(LCD_COL_EQ, y, "     $", LCD_COL_EQ_LENGTH);
+		break;
+	case node_type_object_list:
+		LCD_drawStringN(LCD_COL_EQ, y, "     0", LCD_COL_EQ_LENGTH);
+		break;
+	default:
+		break;
+	}
 }
-
-#define LCD_COL_EQ 91
-#define LCD_COL_VAL 92
-#define LCD_COL_ENTER LCD_COL_LEFT
-
-void KVP_DisplayInv(int x, int y, const KeyValuePair_t *kvp) {
-  LCD_drawStringInvN(x, y, kvp->keyname, LCD_COL_EQ);
-  switch (kvp->kvptype) {
-  case KVP_TYPE_U7VP:
-    LCD_drawCharInv(LCD_COL_EQ, y, '=');
-    LCD_drawNumber3DInv(LCD_COL_VAL, y, (*kvp->u7vp.value));
-    break;
-  case KVP_TYPE_IVP:
-    LCD_drawCharInv(LCD_COL_EQ, y, '=');
-    LCD_drawNumber3DInv(LCD_COL_VAL, y, *kvp->ivp.value);
-    break;
-  case KVP_TYPE_FVP:
-    LCD_drawStringInvN(LCD_COL_EQ, y, "     F", LCDWIDTH);
-    break;
-  case KVP_TYPE_AVP:
-    LCD_drawStringInvN(LCD_COL_EQ, y, "     *", LCDWIDTH);
-    break;
-  case KVP_TYPE_IDVP:
-    LCD_drawIBAR(LCD_COL_EQ, y, *kvp->idvp.value, LCDWIDTH);
-    break;
-  case KVP_TYPE_SVP:
-    LCD_drawCharInv(LCD_COL_EQ, y, '=');
-    LCD_drawNumber5DInv(LCD_COL_VAL, y, *kvp->svp.value);
-    break;
-  case KVP_TYPE_APVP:
-    LCD_drawStringInvN(LCD_COL_EQ, y, "     #", LCDWIDTH);
-    break;
-  case KVP_TYPE_CUSTOM:
-    LCD_drawStringInvN(LCD_COL_EQ, y, "     @", LCDWIDTH);
-    break;
-  case KVP_TYPE_IPVP:
-    LCD_drawCharInv(LCD_COL_EQ, y, '=');
-    LCD_drawNumber3DInv(LCD_COL_VAL, y, (kvp->ipvp.PEx->value) >> 20);
-    break;
-  default:
-    break;
-  }
-}
-
-void KVP_Display(int x, int y, const KeyValuePair_t *kvp) {
-  LCD_drawStringN(x, y, kvp->keyname, LCD_COL_EQ);
-  switch (kvp->kvptype) {
-  case KVP_TYPE_U7VP:
-    LCD_drawChar(LCD_COL_EQ, y, '=');
-    LCD_drawNumber3D(LCD_COL_VAL, y, (*kvp->u7vp.value));
-    break;
-  case KVP_TYPE_IVP:
-    LCD_drawChar(LCD_COL_EQ, y, '=');
-    LCD_drawNumber3D(LCD_COL_VAL, y, *kvp->ivp.value);
-    break;
-  case KVP_TYPE_FVP:
-    LCD_drawStringN(LCD_COL_EQ, y, "     F", LCDWIDTH);
-    break;
-  case KVP_TYPE_AVP:
-    LCD_drawStringN(LCD_COL_EQ, y, "     *", LCDWIDTH);
-    break;
-  case KVP_TYPE_IDVP:
-    LCD_drawIBAR(LCD_COL_EQ, y, *kvp->idvp.value, LCDWIDTH);
-    break;
-  case KVP_TYPE_SVP:
-    LCD_drawChar(LCD_COL_EQ, y, '=');
-    LCD_drawNumber5D(LCD_COL_VAL, y, *kvp->svp.value);
-    break;
-  case KVP_TYPE_APVP:
-    LCD_drawStringN(LCD_COL_EQ, y, "     #", LCDWIDTH);
-    break;
-  case KVP_TYPE_CUSTOM:
-    LCD_drawStringN(LCD_COL_EQ, y, "     @", LCDWIDTH);
-    break;
-  case KVP_TYPE_IPVP:
-    LCD_drawChar(LCD_COL_EQ, y, '=');
-    LCD_drawNumber3D(LCD_COL_VAL, y, (kvp->ipvp.PEx->value) >> 20);
-    break;
-  case KVP_TYPE_INTDISPLAY:
-    LCD_drawChar(LCD_COL_EQ, y, '=');
-    LCD_drawNumber3D(LCD_COL_VAL, y, *kvp->idv.value >> 20);
-//      LCD_drawChar(43+24+x,y,'.');
-//      LCD_drawChar(43+24+6+x,y,'0'+(((10*(*kvp->idv.value)&0xfffff))>>20));
-    break;
-  case KVP_TYPE_PITCHDISPLAY:
-    LCD_drawChar(LCD_COL_EQ, y, '=');
-    LCD_drawNumber3D(LCD_COL_VAL, y, *kvp->pdv.value >> 20);
-//      LCD_drawChar(43+24+x,y,'.');
-//      LCD_drawChar(43+24+6+x,y,'0'+(((10*(*kvp->pdv.value)&0xfffff))>>20));
-    break;
-  case KVP_TYPE_FREQDISPLAY: {
-    int f10 = ___SMMUL(*kvp->freqdv.value, 48000);
-    LCD_drawChar(LCD_COL_EQ, y, '=');
-    LCD_drawNumber5D(LCD_COL_VAL, y, f10);
-  }
-    break;
-  case KVP_TYPE_FRACTDISPLAY: {
-    int f10 = ___SMMUL(*kvp->fractdv.value, 160);
-    LCD_drawChar(LCD_COL_EQ, y, '=');
-    LCD_drawNumber3D(LCD_COL_VAL, y, f10 / 10);
-    LCD_drawChar(LCD_COL_VAL + 24 + x, y, '.');
-    LCD_drawChar(LCD_COL_VAL + 24 + 6 + x, y, '0' + (f10 - (10 * (f10 / 10))));
-  }
-    break;
-  default:
-    break;
-  }
-}
-
-
 
 /*
  * We need one uniform state for the buttons, whether controlled from the GUI or from Axoloti Control.
@@ -653,230 +292,748 @@ void KVP_Display(int x, int y, const KeyValuePair_t *kvp) {
  *                 no up_evt detectable from cur/prev!
  */
 
+static void nav_Back(void) {
+	if (menu_stack_position > 0)
+		menu_stack_position--;
+	lcd_dirty_flags = ~0;
+}
+
+void ui_enter_node(const ui_node_t *node) {
+	switch (node->node_type) {
+	case node_type_node_list:
+	case node_type_custom:
+	case node_type_param_list:
+	case node_type_param:
+	case node_type_object_list:
+	case node_type_object: {
+		if (menu_stack_position < menu_stack_size - 1) {
+			LCD_clear();
+			menu_stack_t *m = &menu_stack[menu_stack_position + 1];
+			m->parent = node;
+			m->currentpos = 0;
+			switch (node->node_type) {
+			case node_type_node_list:
+				m->maxposition = node->nodeList.length;
+				break;
+			case node_type_object_list:
+				m->maxposition = node->objList.nobjs;
+				break;
+			case node_type_param_list:
+				m->maxposition = node->paramList.nparams;
+				break;
+			case node_type_object:
+				m->maxposition = node->obj.obj->nparams
+						+ node->obj.obj->ndisplays;
+				break;
+			default:
+				m->maxposition = 0;
+			}
+			menu_stack_position++;
+			if (node->node_type == node_type_custom) {
+				const ui_node_t * KvpsDisplay =
+						menu_stack[menu_stack_position].parent;
+				if (KvpsDisplay->custom.displayFunction != 0)
+					(KvpsDisplay->custom.displayFunction)(
+							KvpsDisplay->custom.userdata, 1);
+			}
+			lcd_dirty_flags = ~0;
+		}
+	}
+		break;
+	case node_type_action_function:
+		if (node->fnctn.fnctn != 0)
+			(node->fnctn.fnctn)();
+		break;
+	default:
+		break;
+	}
+}
+
+void ProcessEncoderParameter(Parameter_t *p, int8_t *v) {
+// todo: add other parameter types
+// todo: clamp to parameter minimum, maximum
+// todo: use ticks
+	if (!*v) return;
+	switch (p->type) {
+	case param_type_bin_1bit_momentary:
+	case param_type_bin_1bit_toggle:
+		if (*v>0) {
+			ParameterChange(p,1,0xFFFFFFFF);
+		} else {
+			ParameterChange(p,0,0xFFFFFFFF);
+		}
+		break;
+	case param_type_int:
+		ParameterChange(p,p->d.intt.value + *v,0xFFFFFFFF);
+		break;
+	case param_type_frac_sq27:
+		ParameterChange(p,__SSAT(p->d.frac.value + (*v<<20),28),0xFFFFFFFF);
+		break;
+	case param_type_frac_uq27:
+		ParameterChange(p,__USAT(p->d.frac.value + (*v<<20),27),0xFFFFFFFF);
+		break;
+	default:
+		break;
+	}
+	*v = 0;
+}
+
+void ShowListPositionOnEncoderLEDRing(led_array_t *led_array, int pos, int length) {
+	if (length < 2) {
+		LED_clear(led_array);
+		return;
+	}
+	if (!pos) {
+		LED_setOne(led_array, 0);
+		return;
+	}
+	if (pos == length-1) {
+		LED_setOne(led_array, 15);
+		return;
+	}
+	LED_setOne(led_array, 1 + (pos*14)/(length - 1));
+}
+
+void ShowParameterOnEncoderLEDRing(led_array_t *led_array, Parameter_t *p) {
+// todo: add other parameter types
+	switch (p->type) {
+	case param_type_bin_1bit_momentary:
+	case param_type_bin_1bit_toggle:
+		if (p->d.intt.value) {
+			LED_setOne(led_array, 15);
+		} else {
+			LED_setOne(led_array, 0);
+		}
+		break;
+	case param_type_frac_uq27:
+		LED_setOne(led_array, __USAT(p->d.frac.value >> 23, 4));
+		break;
+	case param_type_frac_sq27:
+		LED_setOne(led_array, __SSAT(p->d.frac.value >> 24, 4)+8);
+		break;
+	case param_type_int:
+		// hmm maybe we need to differentiate between signed and unsigned?
+		if (p->d.intt.value >= 0 && p->d.intt.value < 16) {
+			LED_setOne(led_array, p->d.intt.value);
+		} else {
+			LED_clear(led_array);
+		}
+		break;
+	default:
+		LED_clear(led_array);
+	}
+}
+
+void ShowParameterOnButtonArrayLEDs(led_array_t *led_array, Parameter_t *p) {
+}
 
 static void UIPollButtons(void) {
-  Btn_Nav_CurStates.word = Btn_Nav_CurStates.word | Btn_Nav_Or.word;
-  Btn_Nav_Or.word = 0;
-  const KeyValuePair_t * KvpsDisplay = menu_stack[menu_stack_position].parent;
-  if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
-    KeyValuePair_t *cur =
-        &((KeyValuePair_t *)(KvpsDisplay->avp.array))[menu_stack[menu_stack_position].currentpos];
-    if (BTN_NAV_DOWN(btn_nav_Down))
-      KVP_Increment(KvpsDisplay);
-    if (EncBuffer[0]>0) {
-    	KVP_Increment(KvpsDisplay);
-    	EncBuffer[0]=0;
-    }
-    if (BTN_NAV_DOWN(btn_nav_Up))
-      KVP_Decrement(KvpsDisplay);
-    if (EncBuffer[0]<0) {
-    	KVP_Decrement(KvpsDisplay);
-    	EncBuffer[0]=0;
-    }
-    if (BTN_NAV_DOWN(btn_nav_Left))
-      KVP_Decrement(cur);
-    if (BTN_NAV_DOWN(btn_nav_Right))
-      KVP_Increment(cur);
-    if (BTN_NAV_DOWN(btn_nav_Enter)) {
-      if ((cur->kvptype == KVP_TYPE_AVP) || (cur->kvptype == KVP_TYPE_APVP)
-          || (cur->kvptype == KVP_TYPE_CUSTOM)) {
-    	if (menu_stack_position < menu_stack_size-1) {
-        	LCD_clear();
-			menu_stack[menu_stack_position+1].parent = cur;
-			menu_stack[menu_stack_position+1].currentpos = 0;
-			menu_stack_position++;
-			if (cur->kvptype == KVP_TYPE_CUSTOM) {
-				const KeyValuePair_t * KvpsDisplay = menu_stack[menu_stack_position].parent;
-			    if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata, 1);
+	Btn_Nav_CurStates.word = Btn_Nav_CurStates.word | Btn_Nav_Or.word;
+	Btn_Nav_Or.word = 0;
+	const ui_node_t * head_node = menu_stack[menu_stack_position].parent;
+
+	// list navigation
+	switch (head_node->node_type) {
+	case node_type_node_list:
+	case node_type_param_list:
+	case node_type_object_list:
+	case node_type_object: {
+		if (BTN_NAV_DOWN(btn_nav_Down))
+			UINode_Increment(head_node);
+		if (BTN_NAV_DOWN(btn_nav_Up))
+			UINode_Decrement(head_node);
+		if (EncBuffer[0] > 0) {
+			UINode_Increment(head_node);
+			EncBuffer[0] = 0;
+		}
+		if (EncBuffer[0] < 0) {
+			UINode_Decrement(head_node);
+			EncBuffer[0] = 0;
+		}
+
+	}
+		break;
+	default:
+		break;
+	}
+
+	if (head_node->node_type == node_type_node_list) {
+		ui_node_t *cur =
+				&((ui_node_t *) (head_node->nodeList.array))[menu_stack[menu_stack_position].currentpos];
+		if (BTN_NAV_DOWN(btn_nav_Left))
+			UINode_Decrement(cur);
+		if (BTN_NAV_DOWN(btn_nav_Right))
+			UINode_Increment(cur);
+		if (BTN_NAV_DOWN(btn_nav_Enter))
+			ui_enter_node(cur);
+		if ((cur->node_type == node_type_integer_value)) {
+			if (EncBuffer[1] > 0) {
+				UINode_Increment(cur);
+				EncBuffer[1]--;
 			}
-    	}
-      } else if (cur->kvptype == KVP_TYPE_FNCTN)
-        if (cur->fnctnvp.fnctn != 0)
-          (cur->fnctnvp.fnctn)();
-    }
-    if (BTN_NAV_DOWN(btn_nav_Back)) {
-    	if (menu_stack_position > 0) menu_stack_position--;
-    	LCD_clear();
-    }
-  }
-  else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
-    const KeyValuePair_t *cur =
-        (const KeyValuePair_t *)(KvpsDisplay->apvp.array[menu_stack[menu_stack_position].currentpos]);
-    if (BTN_NAV_DOWN(btn_nav_Down))
-      KVP_Increment(KvpsDisplay);
-    if (BTN_NAV_DOWN(btn_nav_Up))
-      KVP_Decrement(KvpsDisplay);
-    if (BTN_NAV_DOWN(btn_nav_Left))
-      KVP_Decrement(cur);
-    if (BTN_NAV_DOWN(btn_nav_Right))
-      KVP_Increment(cur);
-    if (BTN_NAV_DOWN(btn_nav_Enter)) {
-      if ((cur->kvptype == KVP_TYPE_AVP) || (cur->kvptype == KVP_TYPE_APVP)
-          || (cur->kvptype == KVP_TYPE_CUSTOM)) {
-      	if (menu_stack_position < menu_stack_size-1) {
-			menu_stack[menu_stack_position+1].parent = cur;
-			menu_stack[menu_stack_position+1].currentpos = 0;
-			menu_stack_position++;
-			if (cur->kvptype == KVP_TYPE_CUSTOM) {
-				const KeyValuePair_t * KvpsDisplay = menu_stack[menu_stack_position].parent;
-			    if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata, 1);
+			if (EncBuffer[1] < 0) {
+				UINode_Decrement(cur);
+				EncBuffer[1]++;
 			}
-      	}
-      } else if (cur->kvptype == KVP_TYPE_FNCTN)
-        if (cur->fnctnvp.fnctn != 0)
-          (cur->fnctnvp.fnctn)();
-    }
-    if (BTN_NAV_DOWN(btn_nav_Back))
-      if (menu_stack_position > 0) menu_stack_position--;
-      LCD_clear();
-  }
-  else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
-    if (KvpsDisplay->custom.buttonFunction != 0) (KvpsDisplay->custom.buttonFunction)(KvpsDisplay->custom.userdata);
-    if (BTN_NAV_DOWN(btn_nav_Back)) {
-	  if (menu_stack_position > 0) menu_stack_position--;
-      LCD_clear();
-    }
-  }
+		}
+	} else if (head_node->node_type == node_type_custom) {
+		if (head_node->custom.buttonFunction != 0)
+			(head_node->custom.buttonFunction)(head_node->custom.userdata);
+	} else if (head_node->node_type == node_type_param_list) {
+		int n = head_node->paramList.nparams;
+		if (n > 0) {
+			Parameter_t *p =
+					&head_node->paramList.params[menu_stack[menu_stack_position].currentpos];
+			if (BTN_NAV_DOWN(btn_nav_Enter)) {
+				ParamMenu.param.param = p;
+				ParamMenu.param.param_name =
+						&head_node->paramList.param_names[menu_stack[menu_stack_position].currentpos];
+				ui_enter_node(&ParamMenu);
+			}
+			ProcessEncoderParameter(p, &EncBuffer[1]);
+		}
+	} else if (head_node->node_type == node_type_object_list) {
+		if (head_node->objList.objs[menu_stack[menu_stack_position].currentpos].nparams
+				> 0) {
+			ProcessEncoderParameter(
+					head_node->objList.objs[menu_stack[menu_stack_position].currentpos].params,
+					&EncBuffer[1]);
+		}
+		if (BTN_NAV_DOWN(btn_nav_Enter)) {
+			// todo: use a stack of ObjMenu's
+			ObjMenu.obj.obj =
+					&(head_node->objList.objs)[menu_stack[menu_stack_position].currentpos];
+			// copy object name, need a null terminated string now
+			int i;
+			for (i = 0; i < MAX_PARAMETER_NAME_LENGTH; i++) {
+				((char *) ObjMenu.name)[i] = ObjMenu.obj.obj->name[i];
+			}
+			((char *) ObjMenu.name)[i] = 0;
+			ui_enter_node(&ObjMenu);
+		}
+	} else if (head_node->node_type == node_type_object) {
+		int nparams = head_node->obj.obj->nparams;
+		if (nparams > 0) {
+			int pos = menu_stack[menu_stack_position].currentpos;
+			if (pos < nparams) {
+				Parameter_t *p = &(head_node->obj.obj->params)[pos];
+				if (BTN_NAV_DOWN(btn_nav_Enter)) {
+					Parameter_name_t *pn =
+							&(head_node->obj.obj->param_names)[menu_stack[menu_stack_position].currentpos];
+					ParamMenu.param.param = p;
+					ParamMenu.param.param_name = pn;
+					ui_enter_node(&ParamMenu);
+				}
+				ProcessEncoderParameter(p, &EncBuffer[1]);
+			}
+		}
+	} else if (head_node->node_type == node_type_param) {
+		ProcessEncoderParameter(head_node->param.param, &EncBuffer[1]);
+	}
+
+	if (BTN_NAV_DOWN(btn_nav_Back))
+		nav_Back();
+
+	// for repaint diagnosis:
+	if (BTN_NAV_DOWN(btn_nav_Shift))
+		LCD_grey();
+
+	Btn_Nav_CurStates.word = Btn_Nav_CurStates.word & ~Btn_Nav_And.word;
+	Btn_Nav_PrevStates = Btn_Nav_CurStates;
+	Btn_Nav_And.word = 0;
+}
 
 
-// process encoder // todo: more than just one encoder...
-  if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
-    KeyValuePair_t *cur =
-        &((KeyValuePair_t *)(KvpsDisplay->avp.array))[menu_stack[menu_stack_position].currentpos];
-    if ((cur->kvptype == KVP_TYPE_IVP) || (cur->kvptype == KVP_TYPE_IPVP)) {
-      while (EncBuffer[0] > 0) {
-        KVP_Increment(cur);
-        EncBuffer[0]--;
-      }
-      while (EncBuffer[0] < 0) {
-        KVP_Decrement(cur);
-        EncBuffer[0]++;
-      }
-    }
-  }
-  else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
-    KeyValuePair_t *cur =
-        (KeyValuePair_t *)(KvpsDisplay->apvp.array[menu_stack[menu_stack_position].currentpos]);
-    if (EncBuffer[0] > 0) {
-      KVP_Increment(KvpsDisplay);
-      EncBuffer[0] = 0;
-    } else if (EncBuffer[0] < 0) {
-	  KVP_Decrement(KvpsDisplay);
-	  EncBuffer[0] = 0;
-    }
-    if (BTN_NAV_DOWN(btn_nav_Up))
-      KVP_Decrement(KvpsDisplay);
-    if ((cur->kvptype == KVP_TYPE_IVP) || (cur->kvptype == KVP_TYPE_IPVP)) {
-      while (EncBuffer[1] > 0) {
-        KVP_Increment(cur);
-        EncBuffer[1]--;
-      }
-      while (EncBuffer[1] < 0) {
-        KVP_Decrement(cur);
-        EncBuffer[1]++;
-      }
-    }
-  }
+static void drawParamValue(int line, int x, Parameter_t *param) {
+   // TODO: other parameter types
+   switch (param->type) {
+   case param_type_bin_1bit_momentary:
+   case param_type_bin_1bit_toggle:
+	   if (param->d.intt.value) {
+		   LCD_drawStringN(x, line, "      on", 8);
+	   } else {
+		   LCD_drawStringN(x, line, "     off", 8);
+	   }
+	   break;
+   case param_type_bin_16bits:
+	   LCD_drawBitField2(x, line, param->d.intt.value, 16);
+   	   break;
+   case param_type_bin_32bits:
+	   LCD_drawBitField(x, line, param->d.intt.value, 32);
+	   break;
+   case param_type_int:
+	   LCD_drawNumber7D(x,line, param->d.intt.value);
+	   break;
+   case param_type_frac_sq27:
+   case param_type_frac_uq27:
+   	   LCD_drawNumberQ27x64(x, line, param->d.frac.value);
+   	   break;
+   default:
+   	   LCD_drawNumberHex32(x, line, param->d.frac.value);
+   	   break;
+   }
+}
 
-  Btn_Nav_CurStates.word = Btn_Nav_CurStates.word & ~Btn_Nav_And.word;
-  Btn_Nav_PrevStates = Btn_Nav_CurStates;
-  Btn_Nav_And.word = 0;
+static void drawParamValueInv(int line, int x, Parameter_t *param) {
+   // TODO: other parameter types
+   switch (param->type) {
+   case param_type_bin_1bit_momentary:
+   case param_type_bin_1bit_toggle:
+	   if (param->d.intt.value) {
+		   LCD_drawStringInvN(x, line, "      on", 8);
+	   } else {
+		   LCD_drawStringInvN(x, line, "     off", 8);
+	   }
+	   break;
+   case param_type_bin_16bits:
+	   LCD_drawBitField2Inv(x, line, param->d.intt.value, 16);
+   	   break;
+   case param_type_bin_32bits:
+	   LCD_drawBitFieldInv(x, line, param->d.intt.value, 32);
+	   break;
+   case param_type_int:
+	   LCD_drawNumber7DInv(x,line, param->d.intt.value);
+	   break;
+   case param_type_frac_sq27:
+   case param_type_frac_uq27:
+   	   LCD_drawNumberQ27x64Inv(x, line, param->d.frac.value);
+   	   break;
+   default:
+   	   LCD_drawNumberHex32Inv(x, line, param->d.frac.value);
+   	   break;
+   }
+}
+
+static void drawDispValue(int line, int x, Display_meta_t *disp) {
+   // TODO: other display types
+   switch (disp->display_type) {
+   case display_meta_type_int32:
+	   LCD_drawNumber7D(x,line,*disp->displaydata);
+	   break;
+   case display_meta_type_ibar16:
+	   LCD_drawHBar(x, line, *disp->displaydata, 16);
+   	   break;
+   case display_meta_type_ibar32:
+	   LCD_drawHBar(x, line, *disp->displaydata, 32);
+   	   break;
+   case display_meta_type_chart_sq27:
+   case display_meta_type_dial_sq27:
+	   // TODO: create signed bar
+	   LCD_drawHBar(x, line, __SSAT(*disp->displaydata >>21,5)+16, 32);
+   	   break;
+   case display_meta_type_chart_uq27:
+   case display_meta_type_dial_uq27:
+	   LCD_drawHBar(x, line, __USAT(*disp->displaydata >>21,5), 32);
+	   break;
+   default:
+	   LCD_drawNumberHex32(x, line, *disp->displaydata);
+   }
+}
+
+static void drawDispValueInv(int line, int x, Display_meta_t *disp) {
+   // TODO: other display types
+   switch (disp->display_type) {
+   case display_meta_type_int32:
+	   LCD_drawNumber7DInv(x,line,*disp->displaydata);
+	   break;
+   case display_meta_type_ibar16:
+	   LCD_drawHBarInv(x, line, 1 + *disp->displaydata, 17);
+   	   break;
+   case display_meta_type_ibar32:
+	   LCD_drawHBarInv(x, line, *disp->displaydata, 32);
+   	   break;
+   case display_meta_type_chart_sq27:
+   case display_meta_type_dial_sq27:
+	   LCD_drawHBarInv(x, line, __SSAT(*disp->displaydata >>21,5)+16, 32);
+   	   break;
+   case display_meta_type_chart_uq27:
+   case display_meta_type_dial_uq27:
+	   LCD_drawHBarInv(x, line, __USAT(*disp->displaydata >>21,5), 32);
+	   break;
+   default:
+	   LCD_drawNumberHex32Inv(x, line, *disp->displaydata);
+   }
 }
 
 static void UIUpdateLCD(void) {
-  const KeyValuePair_t * KvpsDisplay = menu_stack[menu_stack_position].parent;
-  KVP_DisplayInv(0, 0, KvpsDisplay);
-  if (KvpsDisplay->kvptype == KVP_TYPE_AVP) {
-    int c = menu_stack[menu_stack_position].currentpos;
-    int l = KvpsDisplay->avp.length;
-    KeyValuePair_t *k = (KeyValuePair_t *)KvpsDisplay->avp.array;
-	int offset = 0;
-	if (c > 3) offset = c - 3;
-	if ((l-c) < 3) offset = l - 6;
-	if (l < STATUSROW) offset = 0;
-	LCD_drawChar(0,3,c>0?CHAR_ARROW_UP:0);
-	LCD_drawChar(0,5,c<(l-1)?CHAR_ARROW_DOWN:0);
-	LCD_drawChar(122,3,'+');
-	LCD_drawChar(122,5,'-');
-	int line;
-	for (line = 0; line < (STATUSROW-1); line++) {
-		if (offset+line < l) {
-			if (offset+line == c)
-			   KVP_DisplayInv(LCD_COL_INDENT, line+1, &k[offset+line]);
-			else
-			   KVP_Display(LCD_COL_INDENT, line+1, &k[offset+line]);
-		} else // blank
-		  LCD_drawStringN(LCD_COL_INDENT, line+1, " ", LCDWIDTH-6);
+
+	const ui_node_t * head_node = menu_stack[menu_stack_position].parent;
+	const int current_menu_position = menu_stack[menu_stack_position].currentpos;
+	const int current_menu_length = menu_stack[menu_stack_position].maxposition;
+
+	if (lcd_dirty_flags & lcd_dirty_flag_clearscreen) {
+		LCD_clear();
+		LED_clear(LED_STEPS);
+		LED_clear(LED_RING_LEFT);
+		LED_clear(LED_RING_RIGHT);
+		lcd_dirty_flags &= ~lcd_dirty_flag_clearscreen;
+		return;
 	}
-    if (menu_stack_position > 0) {
-      LCD_drawStringInv(0, STATUSROW, "BACK");
-      LCD_drawString(24, STATUSROW, "     ");
-    }
-    else
-      LCD_drawString(0, STATUSROW, "          ");
-    KeyValuePair_t * sel = &k[menu_stack[menu_stack_position].currentpos];
-    if ((sel->kvptype == KVP_TYPE_AVP)
-        || (sel->kvptype == KVP_TYPE_APVP)
-        || (sel->kvptype == KVP_TYPE_CUSTOM))
-      LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
-    else if (sel->kvptype == KVP_TYPE_FNCTN)
-      LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
-    else
-      LCD_drawString(LCD_COL_ENTER, STATUSROW, "     ");
-  }
-  else if (KvpsDisplay->kvptype == KVP_TYPE_APVP) {
-    int c = menu_stack[menu_stack_position].currentpos;
-    int l = KvpsDisplay->apvp.length;
-    KeyValuePair_t **k = (KeyValuePair_t **)KvpsDisplay->apvp.array;
-	int offset = 0;
-	if (c > 3) offset = c - 3;
-	if ((l-c) < 3) offset = l - 6;
-	if (l < STATUSROW) offset = 0;
-	LCD_drawChar(0,3,c>0?CHAR_ARROW_UP:0);
-	LCD_drawChar(0,5,c<(l-1)?CHAR_ARROW_DOWN:0);
-	LCD_drawChar(122,3,'-');
-	LCD_drawChar(122,5,'+');
-	int line;
-	for (line = 0; line < (STATUSROW-1); line++) {
-		if (offset+line < l) {
-			if (offset+line == c)
-			   KVP_DisplayInv(LCD_COL_INDENT, line+1, k[offset+line]);
-			else
-			   KVP_Display(LCD_COL_INDENT, line+1, k[offset+line]);
-		} else // blank
-		  LCD_drawStringN(LCD_COL_INDENT, line+1, " ", LCDWIDTH);
+	if (lcd_dirty_flags & lcd_dirty_flag_header) {
+		DisplayHeading();
+		lcd_dirty_flags &= ~lcd_dirty_flag_header;
+		return;
 	}
-    if (menu_stack_position > 0) {
-      LCD_drawStringInv(0, STATUSROW, "BACK");
-      LCD_drawString(24, STATUSROW, "     ");
-    }
-    else
-      LCD_drawString(0, STATUSROW, "          ");
-    KeyValuePair_t * sel = k[menu_stack[menu_stack_position].currentpos];
-    if ((sel->kvptype == KVP_TYPE_AVP)
-        || (sel->kvptype == KVP_TYPE_APVP)
-        || (sel->kvptype == KVP_TYPE_CUSTOM))
-      LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
-    else if (sel->kvptype == KVP_TYPE_FNCTN)
-      LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
-    else
-      LCD_drawString(LCD_COL_ENTER, STATUSROW, "     ");
-  }
-  else if (KvpsDisplay->kvptype == KVP_TYPE_CUSTOM) {
-	  if (KvpsDisplay->custom.displayFunction != 0) (KvpsDisplay->custom.displayFunction)(KvpsDisplay->custom.userdata, 0);
-  }
+	if (lcd_dirty_flags & lcd_dirty_flag_listnav) {
+		// update list navigation indicators
+		switch (head_node->node_type) {
+		case node_type_custom:
+			break;
+		default:
+			ShowListPositionOnEncoderLEDRing(LED_RING_LEFT, current_menu_position,
+					current_menu_length);
+			LCD_drawChar(0, 3, current_menu_position > 0 ? CHAR_ARROW_UP : 0);
+			LCD_drawChar(0, 5,
+					current_menu_position < (current_menu_length - 1) ?
+							CHAR_ARROW_DOWN : 0);
+		}
+		if (menu_stack_position > 0)
+			LCD_drawStringInv(0, STATUSROW, "BACK");
+		else
+			LCD_drawString(0, STATUSROW, "    ");
+		lcd_dirty_flags &= ~lcd_dirty_flag_listnav;
+		return;
+	}
+	// todo: get even lazier by painting list element names only when scrolled
+
+	switch (head_node->node_type) {
+	case node_type_node_list: {
+		int l = head_node->nodeList.length;
+		ui_node_t *k = (ui_node_t *) head_node->nodeList.array;
+		int offset = 0;
+		if (current_menu_position > 3)
+			offset = current_menu_position - 3;
+		if ((l - current_menu_position) < 3)
+			offset = l - 6;
+		if (l < STATUSROW)
+			offset = 0;
+		LCD_drawChar(61, 3, '+');
+		LCD_drawChar(61, 5, '-');
+		int line;
+		for (line = 0; line < (STATUSROW - 1); line++) {
+			if (offset + line < l) {
+				if (offset + line == current_menu_position)
+					UINode_DrawInv(LCD_COL_INDENT, line + 1, &k[offset + line]);
+				else
+					UINode_Draw(LCD_COL_INDENT, line + 1, &k[offset + line]);
+			} else
+				// blank
+				LCD_drawStringN(LCD_COL_INDENT, line + 1, "", 19);
+		}
+		ui_node_t * sel = &k[menu_stack[menu_stack_position].currentpos];
+
+		if ((sel->node_type == node_type_node_list)
+				|| (sel->node_type == node_type_custom)
+				|| (sel->node_type == node_type_param_list)
+				|| (sel->node_type == node_type_action_function
+						&& sel->fnctn.fnctn != 0))
+			LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
+		else
+			LCD_drawString(LCD_COL_ENTER, STATUSROW, "     ");
+	}
+		break;
+	case node_type_param_list: {
+		Parameter_t *params = head_node->paramList.params;
+		Parameter_name_t *param_names = head_node->paramList.param_names;
+		int l = head_node->paramList.nparams;
+		int offset = 0;
+		if (current_menu_position > 3)
+			offset = current_menu_position - 3;
+		if ((l - current_menu_position) < 3)
+			offset = l - 6;
+		if (l < STATUSROW)
+			offset = 0;
+		LCD_drawChar(LCD_COL_RIGHT, 3, '-');
+		LCD_drawChar(LCD_COL_RIGHT, 5, '+');
+		int line;
+		for (line = 0; line < (STATUSROW - 1); line++) {
+			if (offset + line < l) {
+				if (offset + line == current_menu_position) {
+					LCD_drawStringInvN(LCD_COL_INDENT, line + 1,
+							param_names[offset + line].name,
+							MAX_PARAMETER_NAME_LENGTH);
+					LCD_drawStringInvN(
+							LCD_COL_INDENT + 3 * MAX_PARAMETER_NAME_LENGTH,
+							line + 1, "", 3);
+					drawParamValueInv(line + 1, LCD_VALUE_POSITION,
+							&params[offset + line]);
+				} else {
+					LCD_drawStringN(LCD_COL_INDENT, line + 1,
+							param_names[offset + line].name,
+							MAX_PARAMETER_NAME_LENGTH);
+					LCD_drawStringN(
+							LCD_COL_INDENT + 3 * MAX_PARAMETER_NAME_LENGTH,
+							line + 1, "", 3);
+					drawParamValue(line + 1, LCD_VALUE_POSITION,
+							&params[offset + line]);
+				}
+			} else
+				// blank
+				LCD_drawStringN(LCD_COL_INDENT, line + 1, "", 19);
+		}
+		LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
+	}
+		break;
+	case node_type_param: {
+		LCD_clear();
+		Parameter_t *p = head_node->param.param;
+		Parameter_name_t *pn = head_node->param.param_name;
+		int line = 1;
+		LCD_drawStringN(LCD_COL_INDENT, line, pn->name,
+				MAX_PARAMETER_NAME_LENGTH);
+		line++;
+		LCD_drawStringN(LCD_COL_INDENT, line, "type", 10);
+		LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->type);
+		line++;
+		switch (p->type) {
+		case param_type_frac_sq27:
+		case param_type_frac_uq27:
+			LCD_drawStringN(LCD_COL_INDENT, line, "value", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.frac.value);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "modvalue", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.frac.modvalue);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "finalvalue", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.frac.finalvalue);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "offset", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.frac.offset);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "multiplier", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.frac.multiplier);
+			ShowParameterOnEncoderLEDRing(LED_RING_RIGHT, p);
+			break;
+		case param_type_bin_1bit_momentary:
+		case param_type_bin_1bit_toggle:
+		case param_type_bin_16bits:
+		case param_type_bin_32bits:
+			LCD_drawStringN(LCD_COL_INDENT, line, "value", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.bin.value);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "modvalue", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.bin.modvalue);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "finalvalue", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.bin.finalvalue);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "nbits", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.bin.nbits);
+			line++;
+			break;
+		case param_type_int:
+			LCD_drawStringN(LCD_COL_INDENT, line, "value", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.intt.value);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "modvalue", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.intt.modvalue);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "finalvalue", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.intt.finalvalue);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "minimum", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.intt.minimum);
+			line++;
+			LCD_drawStringN(LCD_COL_INDENT, line, "maximum", 10);
+			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.intt.maximum);
+			ShowParameterOnEncoderLEDRing(LED_RING_RIGHT, p);
+			break;
+		default:
+			LCD_drawStringN(LCD_COL_INDENT, line, "undefined", 10);
+		}
+	}
+		break;
+	case node_type_object_list: {
+		ui_object_t *ui_objects;
+		ui_objects = head_node->objList.objs;
+		int l = head_node->objList.nobjs;
+		int offset = 0;
+		if (current_menu_position > 3)
+			offset = current_menu_position - 3;
+		if ((l - current_menu_position) < 3)
+			offset = l - 6;
+		if (l < STATUSROW)
+			offset = 0;
+		LCD_drawChar(LCD_COL_RIGHT, 3, '-');
+		LCD_drawChar(LCD_COL_RIGHT, 5, '+');
+		int line;
+		for (line = 0; line < (STATUSROW - 1); line++) {
+			if (offset + line < l) {
+				ui_object_t *obj = &ui_objects[offset + line];
+				if (offset + line == current_menu_position) {
+					LCD_drawStringInvN(LCD_COL_INDENT, line + 1, obj->name,
+							MAX_PARAMETER_NAME_LENGTH);
+					LCD_drawStringInvN(
+							LCD_COL_INDENT + 3 * MAX_PARAMETER_NAME_LENGTH,
+							line + 1, "", 3);
+					if (obj->nparams) {
+						drawParamValueInv(line + 1, LCD_VALUE_POSITION,
+								obj->params);
+						ShowParameterOnEncoderLEDRing(LED_RING_RIGHT,
+								obj->params);
+					} else if (obj->ndisplays) {
+						drawDispValueInv(line + 1, LCD_VALUE_POSITION,
+								obj->displays);
+						LED_clear(LED_RING_RIGHT);
+					} else {
+						LED_clear(LED_RING_RIGHT);
+						LCD_drawStringN(LCD_VALUE_POSITION, line + 1, "", 8);
+					}
+				} else {
+					LCD_drawStringN(LCD_COL_INDENT, line + 1, obj->name,
+							MAX_PARAMETER_NAME_LENGTH);
+					LCD_drawStringN(
+							LCD_COL_INDENT + 3 * MAX_PARAMETER_NAME_LENGTH,
+							line + 1, "", 3);
+					if (obj->nparams) {
+						drawParamValue(line + 1, LCD_VALUE_POSITION,
+								obj->params);
+					} else if (obj->ndisplays) {
+						drawDispValue(line + 1, LCD_VALUE_POSITION,
+								obj->displays);
+					} else {
+						LCD_drawStringN(LCD_VALUE_POSITION, line + 1, "", 8);
+					}
+				}
+			} else
+				// blank
+				LCD_drawStringN(LCD_COL_INDENT, line + 1, "", 19);
+		}
+		LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
+	}
+		break;
+	case node_type_object: {
+		ui_object_t *ui_object;
+		ui_object = head_node->obj.obj;
+		int l = ui_object->nparams + ui_object->ndisplays;
+		int offset = 0;
+		if (current_menu_position > 3)
+			offset = current_menu_position - 3;
+		if ((l - current_menu_position) < 3)
+			offset = l - 6;
+		if (l < STATUSROW)
+			offset = 0;
+		LCD_drawChar(LCD_COL_RIGHT, 3, '-');
+		LCD_drawChar(LCD_COL_RIGHT, 5, '+');
+		int line;
+		for (line = 0; line < (STATUSROW - 1); line++) {
+			if (offset < l) {
+				if (offset == current_menu_position)
+					if (offset < ui_object->nparams) {
+						LCD_drawStringInvN(LCD_COL_INDENT, line + 1,
+								ui_object->param_names[offset].name,
+								MAX_PARAMETER_NAME_LENGTH);
+						LCD_drawStringInvN(
+								LCD_COL_INDENT + 3 * MAX_PARAMETER_NAME_LENGTH,
+								line + 1, "", 3);
+						drawParamValueInv(line + 1, LCD_VALUE_POSITION,
+								&ui_object->params[offset]);
+					} else {
+						LCD_drawStringInvN(LCD_COL_INDENT, line,
+								ui_object->displays[offset - ui_object->nparams].name,
+								MAX_PARAMETER_NAME_LENGTH);
+						LCD_drawStringN(
+								LCD_COL_INDENT + 3 * MAX_PARAMETER_NAME_LENGTH,
+								line + 1, "", 3);
+						drawDispValueInv(line + 1, LCD_VALUE_POSITION,
+								&ui_object->displays[offset - ui_object->nparams]);
+					}
+				else if (offset < ui_object->nparams) {
+					LCD_drawStringN(LCD_COL_INDENT, line + 1,
+							ui_object->param_names[offset].name,
+							MAX_PARAMETER_NAME_LENGTH);
+					drawParamValue(line + 1, LCD_VALUE_POSITION,
+							&ui_object->params[offset]);
+				} else {
+					LCD_drawStringN(LCD_COL_INDENT, line,
+							ui_object->displays[offset - ui_object->nparams].name,
+							MAX_PARAMETER_NAME_LENGTH);
+					drawDispValue(line + 1, LCD_VALUE_POSITION,
+							&ui_object->displays[offset - ui_object->nparams]);
+				}
+			} else
+				// blank line
+				LCD_drawStringN(LCD_COL_INDENT, line + 1, "", 19);
+			offset++;
+		}
+		if (current_menu_position < ui_object->nparams) {
+			ShowParameterOnEncoderLEDRing(LED_RING_RIGHT,
+					&ui_object->params[current_menu_position]);
+		}
+		LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
+	}
+		break;
+	case node_type_custom: {
+		if (head_node->custom.displayFunction != 0)
+			(head_node->custom.displayFunction)(head_node->custom.userdata, 0);
+	}
+		break;
+	case node_type_integer_value:
+	case node_type_action_function:
+	case node_type_short_value:
+		break;
+	}
 
 #if 0 // show protocol diagnostics
-  static int counter = 0;
-  counter++;
-  LCD_drawNumberHex32(0, 0, spilink_rx[0].header);
-  LCD_drawNumberHex32(0, 1, spilink_rx[0].frameno);
-  LCD_drawNumberHex32(0, 2, spilink_rx[0].control_type);
-  LCD_drawNumberHex32(0, 3, Btn_Nav_CurStates.word);
-  LCD_drawNumberHex32(0, 4, Btn_Nav_And.word);
-  LCD_drawNumberHex32(0, 5, Btn_Nav_Or.word);
-  LCD_drawNumberHex32(0, 6, counter);
+	static int counter = 0;
+	counter++;
+	LCD_drawNumberHex32(0, 0, spilink_rx[0].header);
+	LCD_drawNumberHex32(0, 1, spilink_rx[0].frameno);
+	LCD_drawNumberHex32(0, 2, spilink_rx[0].control_type);
+	LCD_drawNumberHex32(0, 3, Btn_Nav_CurStates.word);
+	LCD_drawNumberHex32(0, 4, Btn_Nav_And.word);
+	LCD_drawNumberHex32(0, 5, Btn_Nav_Or.word);
+	LCD_drawNumberHex32(0, 6, counter);
 #endif
+}
+
+
+void AxolotiControlUpdate(void) {
+    UIPollButtons();
+    UIUpdateLCD();
+}
+
+static WORKING_AREA(waThreadUI2, 512);
+static THD_FUNCTION(ThreadUI2, arg) {
+  (void)(arg);
+  chRegSetThreadName("ui2");
+  while (1) {
+	  AxolotiControlUpdate();
+	  chThdSleepMilliseconds(15);
+  }
+}
+
+void ui_go_safe(void) {
+	menu_stack_position = 0;
+	lcd_dirty_flags = ~0;
+	MainMenu[MAIN_MENU_INDEX_PATCH].objList.objs = 0;
+	MainMenu[MAIN_MENU_INDEX_PATCH].objList.nobjs = 0;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.params = 0;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.param_names = 0;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.nparams = 0;
+}
+
+void ui_init_patch(void) {
+	MainMenu[MAIN_MENU_INDEX_PATCH].objList.objs = patchMeta.objects;
+	MainMenu[MAIN_MENU_INDEX_PATCH].objList.nobjs = patchMeta.nobjects;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.params = patchMeta.params;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.param_names = patchMeta.param_names;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.nparams = patchMeta.nparams;
+}
+
+void ui_init(void) {
+	Btn_Nav_Or.word = 0;
+	Btn_Nav_And.word = ~0;
+	lcd_dirty_flags = ~0;
+
+	chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2,
+			NULL);
+	axoloti_control_init();
+
+	int i;
+	for (i = 0; i < 2; i++) {
+		EncBuffer[i] = 0;
+	}
 }
 
 #if 0 // obsolete

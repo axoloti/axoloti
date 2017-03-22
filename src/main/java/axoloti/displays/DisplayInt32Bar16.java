@@ -48,7 +48,7 @@ public class DisplayInt32Bar16 extends Display {
     public Int32 getDatatype() {
         return Int32.d;
     }
-    
+
     static public final String TypeName = "int32.bar16";
 
     @Override
@@ -56,4 +56,8 @@ public class DisplayInt32Bar16 extends Display {
         return TypeName;
     }
 
+    @Override
+    public String GetCMetaType() {
+        return "display_meta_type_ibar16";
+    }
 }

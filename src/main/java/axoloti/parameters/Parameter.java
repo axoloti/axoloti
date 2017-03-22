@@ -135,4 +135,12 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     public List<String> getEditableFields() {
         return new ArrayList<String>();
     }
+
+    public String GetCType() {
+        return "param_type_undefined";
+    }
+
+    public String GetCUnit() {
+        return "param_unit_abstract";
+    }
 }

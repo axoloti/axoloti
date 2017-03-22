@@ -309,6 +309,11 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
      return "";
      }
      */
+    
+    public String GenerateUICode(int count[]) {
+        return "";
+    }
+
     public String GenerateInitCodePlusPlus(String vprefix, boolean enableOnParent) {
         return "";
     }

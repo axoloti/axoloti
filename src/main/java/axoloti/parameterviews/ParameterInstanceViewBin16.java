@@ -5,7 +5,7 @@ import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceBin16;
 import components.control.CheckboxComponent;
 
-public class ParameterInstanceViewBin16 extends ParameterInstanceViewInt32 {
+public class ParameterInstanceViewBin16 extends ParameterInstanceViewBin {
 
     public ParameterInstanceViewBin16(ParameterInstanceBin16 parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);

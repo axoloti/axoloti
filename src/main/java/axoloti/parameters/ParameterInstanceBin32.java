@@ -33,28 +33,11 @@ import org.simpleframework.xml.Attribute;
 public class ParameterInstanceBin32 extends ParameterInstanceInt32 {
 
     public ParameterInstanceBin32() {
+        super();
     }
 
     public ParameterInstanceBin32(@Attribute(name = "value") int v) {
         super(v);
-    }
-
-    @Override
-    public String GenerateCodeInit(String vprefix, String StructAccces) {
-        String s = /*"    " + variableName(vprefix) + " = " + (value.getInt()) + ";\n"
-                 + "    " + valueName(vprefix) + " = " + (value.getInt()) + ";\n"
-                 + "    " + signalsName(vprefix) + " = 0;\n"
-                 +*/ "    SetKVP_IPVP(&" + StructAccces + KVPName(vprefix) + ",ObjectKvpRoot, \"" + KVPName(vprefix) + "\" ,"
-                + "&" + PExName(vprefix) + ","
-                + 0 + ","
-                + ((1 << 16) - 1) + ");\n"
-                + "  KVP_RegisterObject(&" + StructAccces + KVPName(vprefix) + ");\n";
-        return s;
-    }
-
-    @Override
-    public String GenerateCodeDeclaration(String vprefix) {
-        return "KeyValuePair " + KVPName(vprefix) + ";\n";
     }
 
     @Override

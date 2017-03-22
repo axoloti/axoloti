@@ -26,7 +26,7 @@ import org.simpleframework.xml.Element;
  *
  * @author Johannes Taelman
  */
-public class ParameterInt32Box extends Parameter<ParameterInstanceInt32Box> {
+public class ParameterInt32Box extends ParameterInt32<ParameterInstanceInt32Box> {
 
     @Element
     public ValueInt32 MinValue;
@@ -71,5 +71,20 @@ public class ParameterInt32Box extends Parameter<ParameterInstanceInt32Box> {
         l.add("MinValue");
         l.add("MaxValue");
         return l;
+    }
+
+    @Override
+    public String GetCType() {
+        return "param_type_int";
+    }
+
+    @Override
+    public int getMinimum() {
+        return MinValue.getInt();
+    }
+
+    @Override
+    public int getMaximum() {
+        return MaxValue.getInt();
     }
 }

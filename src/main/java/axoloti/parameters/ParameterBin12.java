@@ -21,7 +21,7 @@ package axoloti.parameters;
  *
  * @author Johannes Taelman
  */
-public class ParameterBin12 extends Parameter {
+public class ParameterBin12 extends ParameterBin {
 
     public ParameterBin12() {
     }
@@ -40,5 +40,10 @@ public class ParameterBin12 extends Parameter {
     @Override
     public String getTypeName() {
         return TypeName;
+    }
+
+    @Override
+    public int getNBits() {
+        return 12;
     }
 }

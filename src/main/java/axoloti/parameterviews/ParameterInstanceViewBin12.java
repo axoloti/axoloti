@@ -7,7 +7,7 @@ import components.control.CheckboxComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
-public class ParameterInstanceViewBin12 extends ParameterInstanceViewInt32 {
+public class ParameterInstanceViewBin12 extends ParameterInstanceViewBin {
 
     public ParameterInstanceViewBin12(ParameterInstanceBin12 parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);

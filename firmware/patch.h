@@ -38,22 +38,30 @@ typedef struct {
   int32_t value;
 } PresetParamChange_t;
 
+
 typedef struct {
   fptr_patch_init_t fptr_patch_init;
   fptr_patch_dispose_t fptr_patch_dispose;
   fptr_patch_dsp_process_t fptr_dsp_process;
   fptr_patch_midi_in_handler_t fptr_MidiInHandler;
   fptr_patch_applyPreset_t fptr_applyPreset;
-  uint32_t numPEx;
-  ParameterExchange_t *pPExch;
+  uint32_t nparams;
+  Parameter_t *params;
+  Parameter_name_t *param_names;
   int32_t *pDisplayVector;
+  Display_meta_t *display_metas;
+  int32_t ndisplay_metas;
   uint32_t patchID;
   uint32_t initpreset_size;
   void *pInitpreset;
   uint32_t npresets;
   uint32_t npreset_entries;
   PresetParamChange_t *pPresets; // is a npreset array of npreset_entries of PresetParamChange_t
+  int nobjects;
+  ui_object_t *objects;
+//  void *meta_table;
 } patchMeta_t;
+
 
 extern patchMeta_t patchMeta;
 

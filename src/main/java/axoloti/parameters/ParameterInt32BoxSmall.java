@@ -72,4 +72,9 @@ public class ParameterInt32BoxSmall extends Parameter<ParameterInstanceInt32BoxS
         l.add("MaxValue");
         return l;
     }
+
+    @Override
+    public String GetCType() {
+        return "param_type_int";
+    }
 }

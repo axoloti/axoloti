@@ -36,6 +36,7 @@ import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
+import axoloti.utils.CodeGeneration;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
@@ -179,9 +180,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     public String GenerateInstanceCodePlusPlus(String classname, boolean enableOnParent) {
         String c = "";
-        for (ParameterInstance p : parameterInstances) {
-            c += p.GenerateCodeDeclaration(classname);
-        }
         c += GenerateInstanceDataDeclaration2();
         for (AttributeInstance p : attributeInstances) {
             if (p.CValue() != null) {
@@ -191,6 +189,49 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         return c;
     }
 
+    public String GenerateUICode(int count[]) {
+        /*
+        // generate static initializer for ui_object_t
+
+typedef struct ui_object {
+	char name[MAX_PARAMETER_NAME_LENGTH];
+	uint32_t nparams;
+	Parameter_t **params;
+	uint32_t ndisplays;
+	Display_t **displays;
+	uint32_t nobjects;
+	struct ui_object *objects;
+} ui_object_t;
+         */
+        int nparams = getParameterInstances().size();
+        int ndisplays = getDisplayInstances().size();
+        if (nparams + ndisplays == 0) {
+            return "";
+        }
+        count[0]++;
+        String s = "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(getInstanceName(), CodeGeneration.param_name_length)
+                + ", nparams : " + nparams;
+        if (nparams > 0) {
+            s += ", params : &params[" + getParameterInstances().get(0).getIndex() + "]";
+            s += ", param_names : &param_names[" + getParameterInstances().get(0).getIndex() + "]";
+        } else {
+            s += ", params : 0";
+            s += ", param_names : 0";
+        }
+
+        if (ndisplays > 0) {
+            s += ", ndisplays : " + ndisplays
+                    + ", displays : &display_metas[" + getDisplayInstances().get(0).getIndex() + "]";
+        } else {
+            s += ", ndisplays : 0"
+                    + ", displays : 0";
+        }
+        s += ", nobjects : 0" // TBC
+                + ", objects : 0";
+        s += "},\n";
+        return s;
+    }
+
     @Override
     public String GenerateInitCodePlusPlus(String classname, boolean enableOnParent) {
         String c = "";
@@ -198,19 +239,16 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 //            c = "  void " + GenerateInitFunctionName() + "(" + GenerateStructName() + " * x ) {\n";
 //        else
 //        if (!classname.equals("one"))
-        c += "parent = _parent;\n";
+//        c += "parent = _parent;\n";
         for (ParameterInstance p : parameterInstances) {
             if (p.parameter.PropagateToChild != null) {
                 c += "// on Parent: propagate " + p.getName() + " " + enableOnParent + " " + getLegalName() + "" + p.parameter.PropagateToChild + "\n";
-                c += p.PExName("parent->") + ".pfunction = PropagateToSub;\n";
-                c += p.PExName("parent->") + ".finalvalue = (int32_t)(&(parent->instance"
-                        + getLegalName() + "_i.PExch[instance" + getLegalName() + "::PARAM_INDEX_"
+                c += p.PExName("_parent->") + ".pfunction = PropagateToSub;\n";
+                c += p.PExName("_parent->") + ".d.frac.finalvalue = (int32_t)(&(_parent->instance"
+                        + getLegalName() + "_i.params[instance" + getLegalName() + "::PARAM_INDEX_"
                         + p.parameter.PropagateToChild + "]));\n";
-
-            } else {
-                c += p.GenerateCodeInit("parent->", "");
             }
-            c += p.GenerateCodeInitModulator("parent->", "");
+            c += p.GenerateCodeInitModulator("_parent->", "");
             //           if ((p.isOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
             //String parentparametername = classname.substring(8);
@@ -314,8 +352,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     public String GenerateDoFunctionPlusPlus(String ClassName, String OnParentAccess, Boolean enableOnParent) {
         String s;
-        boolean comma = false;
-        s = "  public: void dsp (";
+        boolean comma = true;
+        s = "  public: void dsp (" + ClassName + " * parent";
         for (InletInstance i : inletInstances) {
             if (comma) {
                 s += ",\n";
@@ -366,7 +404,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         String s = "";
         s += "class " + getCInstanceName() + "{\n";
         s += "  public: // v1\n";
-        s += "  " + ClassName + " *parent;\n";
         s += GenerateInstanceCodePlusPlus(ClassName, enableOnParent);
         s += GenerateInitCodePlusPlus(ClassName, enableOnParent);
         s += GenerateDisposeCodePlusPlus(ClassName);
@@ -374,7 +411,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         {
             String d3 = GenerateCodeMidiHandler("");
             if (!d3.isEmpty()) {
-                s += MidiHandlerFunctionHeader;
+                s += "void MidiInHandler(" + ClassName + "*parent, midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2) {\n";
                 s += d3;
                 s += "}\n";
             }
@@ -408,11 +445,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     @Override
     public String GenerateCallMidiHandler() {
         if ((getType().sMidiCode != null) && (!getType().sMidiCode.isEmpty())) {
-            return getCInstanceName() + "_i.MidiInHandler(dev, port, status, data1, data2);\n";
+            return getCInstanceName() + "_i.MidiInHandler(this, dev, port, status, data1, data2);\n";
         }
         for (ParameterInstance pi : getParameterInstances()) {
             if (!pi.GenerateCodeMidiHandler("").isEmpty()) {
-                return getCInstanceName() + "_i.MidiInHandler(dev, port, status, data1, data2);\n";
+                return getCInstanceName() + "_i.MidiInHandler(this, dev, port, status, data1, data2);\n";
             }
         }
         return "";

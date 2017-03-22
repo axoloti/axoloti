@@ -44,7 +44,7 @@ public class ParameterFrac32UMap extends ParameterFrac32 {
     public ParameterFrac32UMap(String name, ValueFrac32 DefaultValue) {
         super(name, DefaultValue);
     }
-    
+
     @Override
     public ParameterInstanceFrac32UMap InstanceFactory() {
         return new ParameterInstanceFrac32UMap();
@@ -61,5 +61,10 @@ public class ParameterFrac32UMap extends ParameterFrac32 {
     @Override
     public String getTypeName() {
         return TypeName;
+    }
+
+    @Override
+    public String GetCType() {
+        return "param_type_frac_uq27";
     }
 }

@@ -56,4 +56,8 @@ public class DisplayInt32HexLabel extends Display {
         return TypeName;
     }
 
+    @Override
+    public String GetCMetaType() {
+        return "display_meta_type_hex32";
+    }
 }

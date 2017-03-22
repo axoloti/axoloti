@@ -48,6 +48,7 @@ import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.AxolotiLibrary;
+import axoloti.utils.CodeGeneration;
 import axoloti.utils.Constants;
 import axoloti.utils.Preferences;
 import java.awt.Point;
@@ -75,8 +76,6 @@ import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.core.Validate;
 import org.simpleframework.xml.strategy.Strategy;
-
-
 
 /**
  *
@@ -677,12 +676,15 @@ public class PatchModel {
         // 1 : patchref
         // 2 : length
 
+        i = 0;
         DisplayInstances = new ArrayList<DisplayInstance>();
         for (AxoObjectInstanceAbstract o : objectinstances) {
             for (DisplayInstance p : o.getDisplayInstances()) {
                 p.setOffset(offset + 3);
+                p.setIndex(i);
                 int l = p.getLength();
                 offset += l;
+                i++;
                 DisplayInstances.add(p);
             }
         }
@@ -833,11 +835,11 @@ public class PatchModel {
         return modules;
     }
 
-    public String getModuleDir(String module){
+    public String getModuleDir(String module) {
         for (AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
             File f = new File(lib.getLocalLocation() + "modules/" + module);
-            if(f.exists() && f.isDirectory()) {
-                return lib.getLocalLocation() + "modules/" +module;
+            if (f.exists() && f.isDirectory()) {
+                return lib.getLocalLocation() + "modules/" + module;
             }
         }
         return null;
@@ -875,9 +877,25 @@ public class PatchModel {
 
     String GeneratePexchAndDisplayCodeV() {
         String c = "";
-        c += "    static const uint32_t NPEXCH = " + +ParameterInstances.size() + ";\n";
-        c += "    ParameterExchange_t PExch[NPEXCH];\n";
+        c += "    static const uint32_t nparams = " + ParameterInstances.size() + ";\n";
+        c += "    Parameter_t params[nparams] = {\n";
+        for (ParameterInstance param : ParameterInstances) {
+            c += param.GenerateParameterInitializer();
+        }
+        c += "};\n";
+        c += "    Parameter_name_t param_names[nparams] = {\n";
+        for (ParameterInstance param : ParameterInstances) {
+            c += "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.GetUserParameterName(), CodeGeneration.param_name_length) + "},\n";
+        }
+        c += "};\n";
         c += "    int32_t displayVector[" + (displayDataLength + 3) + "];\n";
+
+        c += "    static const uint32_t ndisplay_metas = " + DisplayInstances.size() + ";\n";
+        c += "    Display_meta_t display_metas[ndisplay_metas] = {\n";
+        for (DisplayInstance disp : DisplayInstances) {
+            c += disp.GenerateDisplayMetaInitializer();
+        }
+        c += "};\n";
         c += "    static const uint32_t NPRESETS = " + settings.GetNPresets() + ";\n";
         c += "    static const uint32_t NPRESET_ENTRIES = " + settings.GetNPresetEntries() + ";\n";
         c += "    static const uint32_t NMODULATIONSOURCES = " + settings.GetNModulationSources() + ";\n";
@@ -981,8 +999,8 @@ public class PatchModel {
                 + "   if (!index) {\n"
                 + "     int i;\n"
                 + "     int32_t *p = GetInitParams();\n"
-                + "     for(i=0;i<NPEXCH;i++){\n"
-                + "        PExParameterChange(&PExch[i],p[i],0xFFEF);\n"
+                + "     for(i=0;i<nparams;i++){\n"
+                + "        ParameterChange(&params[i], p[i], 0xFFEF);\n"
                 + "     }\n"
                 + "   }\n"
                 + "   index--;\n"
@@ -992,8 +1010,8 @@ public class PatchModel {
                 + "       int i;\n"
                 + "       for(i=0;i<NPRESET_ENTRIES;i++){\n"
                 + "         PresetParamChange_t *pp = &p[i];\n"
-                + "         if ((pp->pexIndex>=0)&&(pp->pexIndex<NPEXCH)) {\n"
-                + "           PExParameterChange(&PExch[pp->pexIndex],pp->value,0xFFEF);"
+                + "         if ((pp->pexIndex>=0)&&(pp->pexIndex<nparams)) {\n"
+                + "            ParameterChange(&params[pp->pexIndex],pp->value,0xFFEF);"
                 + "         }\n"
                 + "         else break;\n"
                 + "       }\n"
@@ -1038,6 +1056,17 @@ public class PatchModel {
         s += "   };\n";
 
         return s;
+    }
+
+    String GenerateUICode() {
+        int count[] = new int[]{0};
+        String c = "";
+        for (AxoObjectInstanceAbstract objectInstance : getObjectInstances()) {
+            c += objectInstance.GenerateUICode(count);
+        }
+        c = "static const int n_ui_objects = " + count[0] + ";\n"
+                + "ui_object_t ui_objects[n_ui_objects] = {\n" + c + "};\n";
+        return c;
     }
 
     String GenerateParamInitCode3(String ClassName) {
@@ -1087,29 +1116,36 @@ public class PatchModel {
                 c += " );\n";
             }
         }
+        /* // no need for this?
         c += "      int k;\n"
-                + "      for (k = 0; k < NPEXCH; k++) {\n"
-                + "        if (PExch[k].pfunction){\n"
-                + "          (PExch[k].pfunction)(&PExch[k]);\n"
-                + "        } else {\n"
-                + "          PExch[k].finalvalue = PExch[k].value;\n"
+                + "      for (k = 0; k < nparams; k++) {"
+                + "        Parameter_t *param = &params[k];\n"
+                + "        switch(param->type) {\n"
+                + "          case param_type_frac: "
+                + "             if (param->pfunction)"
+                + "                 (param->pfunction)(param);\n"
+                + "             else param->finalvalue = param->value;"
+                + "             break;"
+                + "          default: \n"
+                + "            param[k].finalvalue = param[k].value;\n"
                 + "        }\n"
                 + "      }\n";
+         */
         return c;
     }
 
     String GenerateParamInitCodePlusPlusSub(String className, String parentReference) {
-        String c = "";
+        String c = "// GenerateParamInitCodePlusPlusSub\n";
         c += "   int i;\n";
         c += "   int j;\n";
         c += "   const int32_t *p;\n";
         c += "   p = GetInitParams();\n";
         c += "   for(j=0;j<" + ParameterInstances.size() + ";j++){\n";
-        c += "      PExch[j].value = p[j];\n";
-        c += "      PExch[j].modvalue = p[j];\n";
-        c += "      PExch[j].signals = 0;\n";
-        c += "      PExch[j].pfunction = 0;\n";
-//        c += "      PExch[j].finalvalue = p[j];\n"; /*TBC*/
+        c += "      Parameter_t *param = &params[j];\n";
+        c += "      if (param->pfunction)\n";
+        c += "         (param->pfunction)(param);\n";
+        c += "      else\n";
+        c += "         param->d.frac.finalvalue = param->d.frac.modvalue;\n";
         c += "   }\n";
         c += "   int32_t *pp = &PExModulationPrevVal[0][0];\n";
         c += "   for(j=0;j<attr_poly*NMODULATIONSOURCES;j++){\n";
@@ -1125,8 +1161,8 @@ public class PatchModel {
         String c = "";
         c += "/* init */\n";
         c += "void Init() {\n";
-        c += GenerateParamInitCodePlusPlusSub("", "this");
         c += GenerateObjInitCodePlusPlusSub("", "this");
+        c += GenerateParamInitCodePlusPlusSub("", "this");
         c += "}\n\n";
         return c;
     }
@@ -1210,9 +1246,9 @@ public class PatchModel {
         if (s.isEmpty()) {
             return c;
         }
-        c += "  " + o.getCInstanceName() + "_i.dsp(";
+        c += "  " + o.getCInstanceName() + "_i.dsp( this ";
 //            c += "  " + o.GenerateDoFunctionName() + "(this";
-        boolean needsComma = false;
+        boolean needsComma = true;
         for (InletInstance i : o.getInletInstances()) {
             if (needsComma) {
                 c += ", ";
@@ -1303,7 +1339,7 @@ public class PatchModel {
 
     String GenerateMidiCodePlusPlus(String ClassName) {
         String c = "";
-        c += "void MidiInHandler(midi_device_t dev, uint8_t port,uint8_t status, uint8_t data1, uint8_t data2){\n";
+        c += "void MidiInHandler(" + ClassName + " *parent, midi_device_t dev, uint8_t port,uint8_t status, uint8_t data1, uint8_t data2){\n";
         c += GenerateMidiInCodePlusPlus();
         c += "}\n\n";
         return c;
@@ -1365,7 +1401,7 @@ public class PatchModel {
                 + "}\n\n";
 
         c += "void PatchMidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2){\n"
-                + "  root.MidiInHandler(dev, port, status, data1, data2);\n"
+                + "  root.MidiInHandler(&root, dev, port, status, data1, data2);\n"
                 + "}\n\n";
 
         c += "typedef void (*funcp_t)(void);\n"
@@ -1389,7 +1425,7 @@ public class PatchModel {
         c += "void xpatch_init2(int fwid)\n"
                 + "{\n"
                 + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID + ") {\n"
-                + "    return;"
+                //                + "    return;"
                 + "  }\n"
                 + "  extern uint32_t _pbss_start;\n"
                 + "  extern uint32_t _pbss_end;\n"
@@ -1404,15 +1440,20 @@ public class PatchModel {
                 + "  }\n"
                 + "  patchMeta.npresets = " + settings.GetNPresets() + ";\n"
                 + "  patchMeta.npreset_entries = " + settings.GetNPresetEntries() + ";\n"
-                + "  patchMeta.pPresets = (PresetParamChange_t*) root.GetPresets();\n"
-                + "  patchMeta.pPExch = &root.PExch[0];\n"
+                + "  patchMeta.pPresets = 0;//(PresetParamChange_t*) root.GetPresets();\n"
+                + "  patchMeta.params = &root.params[0];\n"
+                + "  patchMeta.param_names = &root.param_names[0];\n"
                 + "  patchMeta.pDisplayVector = &root.displayVector[0];\n"
-                + "  patchMeta.numPEx = " + ParameterInstances.size() + ";\n"
+                + "  patchMeta.display_metas = &root.display_metas[0];\n"
+                + "  patchMeta.ndisplay_metas = root.ndisplay_metas;\n"
+                + "  patchMeta.nparams = " + ParameterInstances.size() + ";\n"
                 + "  patchMeta.patchID = " + GetIID() + ";\n"
                 + "  extern char _sdram_dyn_start;\n"
                 + "  extern char _sdram_dyn_end;\n"
                 + "  sdram_init(&_sdram_dyn_start,&_sdram_dyn_end);\n"
                 + "  root.Init();\n"
+                + "  patchMeta.objects = root.ui_objects;\n"
+                + "  patchMeta.nobjects = root.n_ui_objects;\n"
                 + "  patchMeta.fptr_applyPreset = ApplyPreset;\n"
                 + "  patchMeta.fptr_patch_dispose = PatchDispose;\n"
                 + "  patchMeta.fptr_MidiInHandler = PatchMidiInHandler;\n"
@@ -1453,12 +1494,13 @@ public class PatchModel {
         CreateIID();
 
         //TODO - use execution order, rather than UI ordering
-        if (USE_EXECUTION_ORDER)
-             SortByExecution();
-         else
-             SortByPosition();
-        
-        String c="";
+        if (USE_EXECUTION_ORDER) {
+            SortByExecution();
+        } else {
+            SortByPosition();
+        }
+
+        String c = "";
 
         c += generateIncludes();
         c += "\n";
@@ -1485,14 +1527,15 @@ public class PatchModel {
         c += "     typedef enum { A_STEREO, A_MONO, A_BALANCED } AudioModeType;\n";
         c += "     AudioModeType AudioOutputMode = A_STEREO;\n";
         c += "     AudioModeType AudioInputMode = A_STEREO;\n";
-
-        c += "static void PropagateToSub(ParameterExchange_t *origin) {\n"
-                + "      ParameterExchange_t *pex = (ParameterExchange_t *)origin->finalvalue;\n"
-                + "      PExParameterChange(pex,origin->modvalue,0xFFFFFFEE);\n"
+        c += "static void PropagateToSub(Parameter_t *origin) {\n"
+                + "      Parameter_t *p = (Parameter_t *)origin->d.frac.finalvalue;\n"
+                //                + "      LogTextMessage(\"tosub %8x\",origin->modvalue);\n"
+                + "      ParameterChange(p,origin->d.frac.modvalue,0xFFFFFFEE);\n"
                 + "}\n";
 
         c += GenerateStructCodePlusPlus("rootc", false, "rootc")
                 + "static const int polyIndex = 0;\n"
+                + GenerateUICode()
                 + GenerateParamInitCode3("rootc")
                 + GeneratePresetCode3("rootc")
                 + GenerateModulationCode3()
@@ -1737,10 +1780,6 @@ public class PatchModel {
         ao.sLocalData += GenerateObjectCode("voice", true, "parent->common->");
         ao.sLocalData += "attr_parent *common;\n";
         ao.sLocalData += "void Init(voice *parent) {\n";
-        ao.sLocalData += "        int i;\n"
-                + "        for(i=0;i<NPEXCH;i++){\n"
-                + "          PExch[i].pfunction = 0;\n"
-                + "        }\n";
         ao.sLocalData += GenerateObjInitCodePlusPlusSub("voice", "parent");
         ao.sLocalData += "}\n\n";
         ao.sLocalData += "void dsp(void) {\n int i;\n";
@@ -1756,12 +1795,14 @@ public class PatchModel {
                 + "    return v;\n"
                 + "}\n";
 
-        ao.sLocalData += "static void PropagateToVoices(ParameterExchange_t *origin) {\n"
-                + "      ParameterExchange_t *pex = (ParameterExchange_t *)origin->finalvalue;\n"
+        // FIXME
+        ao.sLocalData += "static void PropagateToVoices(Parameter_t *origin) {\n"
+                + "      Parameter_t *p = (Parameter_t *)origin->d.frac.finalvalue;\n"
+                //                + "      LogTextMessage(\"tovcs %8x\",origin->modvalue);\n"
                 + "      int vi;\n"
                 + "      for (vi = 0; vi < attr_poly; vi++) {\n"
-                + "        PExParameterChange(pex,origin->modvalue,0xFFFFFFEE);\n"
-                + "          pex = (ParameterExchange_t *)((int)pex + sizeof(voice)); // dirty trick...\n"
+                + "        ParameterChange(p,origin->d.frac.modvalue,0xFFFFFFEE);\n"
+                + "          p = (Parameter_t *)((int)p + sizeof(voice)); // dirty trick...\n"
                 + "      }"
                 + "}\n";
 
@@ -1777,9 +1818,9 @@ public class PatchModel {
 
         ao.sInitCode = GenerateParamInitCodePlusPlusSub("", "parent");
         ao.sInitCode += "int k;\n"
-                + "   for(k=0;k<NPEXCH;k++){\n"
-                + "      PExch[k].pfunction = PropagateToVoices;\n"
-                + "      PExch[k].finalvalue = (int32_t) (&(getVoices()[0].PExch[k]));\n"
+                + "   for(k=0;k<nparams;k++){\n"
+                + "      params[k].pfunction = PropagateToVoices;\n"
+                + "      params[k].d.frac.finalvalue = (int32_t) (&(getVoices()[0].params[k]));\n"
                 + "   }\n";
         ao.sInitCode += "int vi; for(vi=0;vi<attr_poly;vi++) {\n"
                 + "   voice *v = &getVoices()[vi];\n"
@@ -1788,16 +1829,16 @@ public class PatchModel {
                 + "   v->Init(&getVoices()[vi]);\n"
                 + "   notePlaying[vi]=0;\n"
                 + "   voicePriority[vi]=0;\n"
-                + "   for (j = 0; j < v->NPEXCH; j++) {\n"
-                + "      v->PExch[j].value = 0;\n"
-                + "      v->PExch[j].modvalue = 0;\n"
+                + "   for (j = 0; j < v->nparams; j++) {\n"
+                + "      v->params[j].d.frac.value = 0;\n"
+                + "      v->params[j].d.frac.modvalue = 0;\n"
                 + "   }\n"
                 + "}\n"
-                + "      for (k = 0; k < NPEXCH; k++) {\n"
-                + "        if (PExch[k].pfunction){\n"
-                + "          (PExch[k].pfunction)(&PExch[k]);\n"
+                + "      for (k = 0; k < nparams; k++) {\n"
+                + "        if (params[k].pfunction){\n"
+                + "          (params[k].pfunction)(&params[k]);\n"
                 + "        } else {\n"
-                + "          PExch[k].finalvalue = PExch[k].value;\n"
+                + "          params[k].d.frac.finalvalue = params[k].d.frac.value;\n"
                 + "        }\n"
                 + "      }\n"
                 + "priority=0;\n"
@@ -1862,7 +1903,7 @@ public class PatchModel {
                 + "  voicePriority[mini] = 100000+priority++;\n"
                 + "  notePlaying[mini] = data1;\n"
                 + "  pressed[mini] = 1;\n"
-                + "  getVoices()[mini].MidiInHandler(dev, port, status, data1, data2);\n"
+                + "  getVoices()[mini].MidiInHandler(this, dev, port, status, data1, data2);\n"
                 + "} else if (((status == MIDI_NOTE_ON + attr_midichannel) && (!data2))||\n"
                 + "          (status == MIDI_NOTE_OFF + attr_midichannel)) {\n"
                 + "  int i;\n"
@@ -1871,12 +1912,12 @@ public class PatchModel {
                 + "      voicePriority[i] = priority++;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "        getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
+                + "        getVoices()[i].MidiInHandler(this, dev, port, status, data1, data2);\n"
                 + "      }\n"
                 + "  }\n"
                 + "} else if (status == attr_midichannel + MIDI_CONTROL_CHANGE) {\n"
                 + "  int i;\n"
-                + "  for(i=0;i<attr_poly;i++) getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
+                + "  for(i=0;i<attr_poly;i++) getVoices()[i].MidiInHandler(this, dev, port, status, data1, data2);\n"
                 + "  if (data1 == 64) {\n"
                 + "    if (data2>0) {\n"
                 + "      sustain = 1;\n"
@@ -1884,13 +1925,13 @@ public class PatchModel {
                 + "      sustain = 0;\n"
                 + "      for(i=0;i<attr_poly;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0);\n"
+                + "          getVoices()[i].MidiInHandler(this, dev, port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0);\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {"
-                + "  int i;   for(i=0;i<attr_poly;i++) getVoices()[i].MidiInHandler(dev, port, status, data1, data2);\n"
+                + "  int i;   for(i=0;i<attr_poly;i++) getVoices()[i].MidiInHandler(this, dev, port, status, data1, data2);\n"
                 + "}\n";
         return ao;
     }
@@ -1925,7 +1966,7 @@ public class PatchModel {
                 + "  notePlaying[mini] = data1;\n"
                 + "  pressed[mini] = 1;\n"
                 + "  voiceChannel[mini] = status & 0x0F;\n"
-                + "  getVoices()[mini].MidiInHandler(dev, port, status & 0xF0, data1, data2);\n"
+                + "  getVoices()[mini].MidiInHandler(this, dev, port, status & 0xF0, data1, data2);\n"
                 + "} else if (((msg == MIDI_NOTE_ON) && (!data2))||\n"
                 + "            (msg == MIDI_NOTE_OFF)) {\n"
                 + "  int i;\n"
@@ -1935,14 +1976,14 @@ public class PatchModel {
                 + "      voiceChannel[i] = 0xFF;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "         getVoices()[i].MidiInHandler(dev, port, msg + attr_midichannel, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(this, dev, port, msg + attr_midichannel, data1, data2);\n"
                 + "      }\n"
                 + "  }\n"
                 + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, data1, data2);\n"
+                + "      getVoices()[i].MidiInHandler(this, dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "  if (data1 == 64) {\n"
@@ -1952,7 +1993,7 @@ public class PatchModel {
                 + "      sustain = 0;\n"
                 + "      for(i=0;i<attr_poly;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0);\n"
+                + "          getVoices()[i].MidiInHandler(this, dev, port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0);\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n"
@@ -1961,14 +2002,14 @@ public class PatchModel {
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++){\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_PITCH_BEND + attr_midichannel, data1, data2);\n"
+                + "      getVoices()[i].MidiInHandler(this, dev, port, MIDI_PITCH_BEND + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {"
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "         getVoices()[i].MidiInHandler(dev, port,msg + attr_midichannel, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(this, dev, port,msg + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "}\n";
@@ -2019,7 +2060,7 @@ public class PatchModel {
                 + "  notePlaying[mini] = data1;\n"
                 + "  pressed[mini] = 1;\n"
                 + "  voiceChannel[mini] = status & 0x0F;\n"
-                + "  getVoices()[mini].MidiInHandler(dev, port, status & 0xF0, data1, data2);\n"
+                + "  getVoices()[mini].MidiInHandler(this, dev, port, status & 0xF0, data1, data2);\n"
                 + "} else if (((msg == MIDI_NOTE_ON) && (!data2))||\n"
                 + "            (msg == MIDI_NOTE_OFF)) {\n"
                 + "  if (channel == attr_midichannel\n "
@@ -2490,8 +2531,9 @@ public class PatchModel {
         return files;
     }
 
+    @Deprecated
     public File getBinFile() {
-        String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";;
+        String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
         return new File(buildDir + "/xpatch.bin");
     }
 

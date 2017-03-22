@@ -43,14 +43,15 @@ void InitPatch0(void) {
   patchMeta.fptr_dsp_process = 0;
   patchMeta.fptr_MidiInHandler = 0;
   patchMeta.fptr_applyPreset = 0;
-  patchMeta.pPExch = NULL;
-  patchMeta.numPEx = 0;
+  patchMeta.params = NULL;
+  patchMeta.nparams = 0;
   patchMeta.pDisplayVector = 0;
   patchMeta.initpreset_size = 0;
   patchMeta.npresets = 0;
   patchMeta.npreset_entries = 0;
   patchMeta.pPresets = 0;
   patchMeta.patchID = 0;
+  patchMeta.nobjects = 0;
 }
 
 int dspLoadPct; // DSP load in percent
@@ -131,13 +132,13 @@ static void StopPatch1(void) {
        LogTextMessage("error: patch stopped but did not terminate its thread(s)");
     }
   }
-  UIGoSafe();
+  ui_go_safe();
   InitPatch0();
   sysmon_enable_blinker();
 }
 
 static int StartPatch1(void) {
-  KVP_ClearObjects();
+  ui_go_safe();
   sdcard_attemptMountIfUnmounted();
   // reinit pin configuration for adc
   adc_configpads();
@@ -147,7 +148,8 @@ static int StartPatch1(void) {
     *ccm = 0;
   patchMeta.fptr_dsp_process = 0;
   nThreadsBeforePatch = GetNumberOfThreads();
-  patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC + 1);
+  patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC_ALIASED + 1);
+  // PATCHMAINLOC_ALIASED + 1 for THUMB mode
   (patchMeta.fptr_patch_init)(GetFirmwareID());
   if (patchMeta.fptr_dsp_process == 0) {
     report_patchLoadFail((const char *)&loadFName[0]);
@@ -163,6 +165,7 @@ static int StartPatch1(void) {
     return -1;
   }
   patchStatus = RUNNING;
+  ui_init_patch();
   return 0;
 }
 
@@ -184,7 +187,7 @@ static THD_FUNCTION(ThreadDSP, arg) {
         // perhaps throttle midi input processing when dsp_process took a lot of time
         midi_message_t midi_in;
         msg_t msg = midi_input_buffer_get(&midi_input_buffer, &midi_in);
-        while (msg == 0) {
+        while (msg == MSG_OK) {
         	(patchMeta.fptr_MidiInHandler)(midi_in.fields.port, 0,
         			midi_in.fields.b0,
 					midi_in.fields.b1,
@@ -206,12 +209,14 @@ static THD_FUNCTION(ThreadDSP, arg) {
       adc_convert();
       DspTime = (port_rt_get_counter_value() - tStart);
       dspLoadPct = (DspTime) / (STM32_SYSCLK / 300000);
-      if (dspLoadPct > 99) {
+      if (dspLoadPct > 98) {
         // overload:
         // clear output buffers
         // and give other processes a chance
         codec_clearbuffer();
         //      LogTextMessage("dsp overrun");
+        // dsp overrun penalty,
+        // keeping cooperative with lower priority threads
         chThdSleepMilliseconds(1);
       }
       spilink_clear_audio_tx();

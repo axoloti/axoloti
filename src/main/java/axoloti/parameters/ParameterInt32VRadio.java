@@ -26,7 +26,7 @@ import org.simpleframework.xml.Element;
  *
  * @author Johannes Taelman
  */
-public class ParameterInt32VRadio extends Parameter<ParameterInstanceInt32VRadio> {
+public class ParameterInt32VRadio extends ParameterInt32<ParameterInstanceInt32VRadio> {
 
     @Element
     public ValueInt32 MaxValue;
@@ -64,5 +64,20 @@ public class ParameterInt32VRadio extends Parameter<ParameterInstanceInt32VRadio
         List l = super.getEditableFields();
         l.add("MaxValue");
         return l;
+    }
+
+    @Override
+    public String GetCType() {
+        return "param_type_int";
+    }
+
+    @Override
+    public int getMinimum() {
+        return 0;
+    }
+
+    @Override
+    public int getMaximum() {
+        return MaxValue.getInt();
     }
 }

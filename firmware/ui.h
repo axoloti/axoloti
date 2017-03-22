@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,12 +15,11 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef __UI_H
 #define __UI_H
 
 #include "parameters.h"
-
-void ui_init(void);
 
 typedef union {
   struct {
@@ -64,34 +63,19 @@ extern Btn_Nav_States_struct Btn_Nav_PrevStates;
   (Btn_Nav_CurStates.fields.x && !Btn_Nav_PrevStates.fields.x)
 
 typedef struct {
-  int *value;
+  int *pvalue;
   int minvalue;
   int maxvalue;
-} iValuePair;
+} ui_node_type_integer_adjustable;
 
 typedef struct {
-  float value;
-  float minvalue;
-  float maxvalue;
-} fValuePair;
-
-typedef struct {
-  const void *array; // pointer to KeyValuePair array
+  const void *array; // pointer to ui_node_t array
   int length;
-} arrayValuePair;
+} ui_node_type_node_list_t;
 
 typedef struct {
-  int32_t *value;
-} intDbgValuePairBar;
-
-typedef struct {
-  int16_t *value;
-} sValuePair;
-
-typedef struct {
-  int *array; // pointer to array of KeyValuePair pointers
-  int length;
-} arrayPtrValuePair;
+  int16_t *pvalue;
+} ui_node_type_short_value_t;
 
 typedef void (*DisplayFunction)(void * userdata, int initialize);
 typedef void (*ButtonFunction)(void * userdata);
@@ -101,110 +85,99 @@ typedef struct {
   DisplayFunction displayFunction; // function pointer
   ButtonFunction buttonFunction;
   void * userdata;
-} customUIFunctions;
-
-typedef struct {
-  int *value;
-} intDisplayValue;
-
-typedef struct {
-  int *value;
-} pitchDisplayValue;
-
-typedef struct {
-  int *value;
-} freqDisplayValue;
-
-typedef struct {
-  int *value;
-} fractDisplayValue;
-
-typedef struct {
-  ParameterExchange_t *PEx;
-  int minvalue;
-  int maxvalue;
-} ipValuePair;
-
-typedef struct {
-  uint8_t *value;
-  int minvalue;
-  int maxvalue;
-} u7ValuePair;
+} ui_node_custom_t;
 
 typedef struct {
   VoidFunction fnctn;
-} fnctnValuePair;
+} ui_node_action_function_t;
+
+typedef struct {
+	Parameter_t *params;
+	Parameter_name_t *param_names;
+	int32_t nparams;
+} ui_node_param_list_t;
+
+typedef struct {
+	Parameter_t *param;
+	Parameter_name_t *param_name;
+} ui_node_param_t;
+
+typedef struct {
+	ui_object_t *obj;
+} ui_node_object_t;
+
+typedef struct node_object_list {
+	ui_object_t *objs;
+	int32_t nobjs;
+} ui_node_object_list_t;
 
 typedef enum {
-  KVP_TYPE_IVP,
-  KVP_TYPE_FVP,
-  KVP_TYPE_SVP,
-  KVP_TYPE_AVP,
-  KVP_TYPE_IDVP,
-  KVP_TYPE_APVP,
-  KVP_TYPE_CUSTOM,
-  KVP_TYPE_INTDISPLAY,
-  KVP_TYPE_PITCHDISPLAY,
-  KVP_TYPE_FREQDISPLAY,
-  KVP_TYPE_FRACTDISPLAY,
-  KVP_TYPE_IPVP,
-  KVP_TYPE_U7VP,
-  KVP_TYPE_FNCTN,
-} KVP_type;
+  node_type_integer_value,
+  node_type_short_value,
+  node_type_custom,
+//  node_type_INTDISPLAY,
+  node_type_node_list,
+  node_type_action_function,
+  node_type_param_list,
+  node_type_param,
+  node_type_object_list,
+  node_type_object
+} ui_node_type;
 
-typedef struct KeyValuePair {
-  KVP_type kvptype;
-  const char *keyname;
+typedef struct {
+  ui_node_type node_type;
+  const char *name;
   union {
-    iValuePair ivp;
-    fValuePair fvp;
-    sValuePair svp;
-    arrayValuePair avp;
-    intDbgValuePairBar idvp;
-    arrayPtrValuePair apvp;
-    customUIFunctions custom;
-    intDisplayValue idv;
-    pitchDisplayValue pdv;
-    freqDisplayValue freqdv;
-    fractDisplayValue fractdv;
-    ipValuePair ipvp;
-    u7ValuePair u7vp;
-    fnctnValuePair fnctnvp;
+    ui_node_type_integer_adjustable intValue;
+    ui_node_type_short_value_t shortValue;
+    ui_node_custom_t custom;
+    ui_node_action_function_t fnctn;
+    ui_node_type_node_list_t nodeList;
+    ui_node_param_list_t paramList;
+    ui_node_param_t param;
+    ui_node_object_list_t objList;
+    ui_node_object_t obj;
   };
-} KeyValuePair_t;
+} ui_node_t;
 
-extern struct KeyValuePair *kvps;
-extern struct KeyValuePair *ObjectKvpRoot;
+#if 0
+// OBSOLETE
+void UINode_Draw(int x, int y, const ui_node_t *node);
+void UINode_Increment(const ui_node_t *node);
+void UINode_Decrement(const ui_node_t *node);
 
+void node_SendMetaDataUSB(ui_node_t *node);
+void node_SendDataUSB(ui_node_t *node);
+void node_ReceiveDataUSB(char *data);
 
-void KVP_Display(int x, int y, const KeyValuePair_t *kvp);
-void KVP_Increment(const KeyValuePair_t *kvp);
-void KVP_Decrement(const KeyValuePair_t *kvp);
+void node_ClearObjects(void);
+#endif
 
-void KVP_SendMetaDataUSB(struct KeyValuePair *kvp);
-void KVP_SendDataUSB(struct KeyValuePair *kvp);
-void KVP_ReceiveDataUSB(char *data);
+#if 1
+// OBSOLETE API!
+void KVP_RegisterObject(ui_node_t *node) __attribute__ ((deprecated));
 
-void KVP_ClearObjects(void);
-void KVP_RegisterObject(struct KeyValuePair *kvp);
-
-void SetKVP_APVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,
-                 const char *keyName, int length, KeyValuePair_t **array);
-void SetKVP_AVP(struct KeyValuePair *kvp, const KeyValuePair_t *parent,
-                const char *keyName, int length, const KeyValuePair_t *array);
-void SetKVP_IVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,
-                const char *keyName, int *value, int min, int max);
-void SetKVP_IPVP(struct KeyValuePair *kvp, KeyValuePair_t *parent,
+void SetKVP_APVP(ui_node_t *node, ui_node_t *parent,
+                 const char *keyName, int length, ui_node_t **array) __attribute__ ((deprecated));
+void SetKVP_AVP(ui_node_t *node, const ui_node_t *parent,
+                const char *keyName, int length, const ui_node_t *array) __attribute__ ((deprecated));
+void SetKVP_IVP(ui_node_t *node, ui_node_t *parent,
+                const char *keyName, int *value, int min, int max) __attribute__ ((deprecated));
+void SetKVP_IPVP(ui_node_t *node, ui_node_t *parent,
                  const char *keyName, ParameterExchange_t *PEx, int min,
-                 int max);
-void SetKVP_FNCTN(struct KeyValuePair *kvp, struct KeyValuePair *parent,
-                  const char *keyName, VoidFunction fnctn);
+                 int max) __attribute__ ((deprecated));
+void SetKVP_FNCTN(ui_node_t *node, ui_node_t *parent,
+                  const char *keyName, VoidFunction fnctn) __attribute__ ((deprecated));
+#endif
 
-void UIGoSafe(void);
+//void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata);
+//void AxolotiControlUpdate(void);
+//extern void (*pControlUpdate)(void);
 
-void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata);
+void ui_go_safe(void);
+void ui_init_patch(void);
+void ui_init(void);
+void ui_enter_node(const ui_node_t *node);
 
-void AxolotiControlUpdate(void);
-extern void (*pControlUpdate)(void);
 
 #endif

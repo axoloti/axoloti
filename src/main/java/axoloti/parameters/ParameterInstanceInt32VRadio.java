@@ -39,24 +39,6 @@ public class ParameterInstanceInt32VRadio extends ParameterInstanceInt32 {
     }
 
     @Override
-    public String GenerateCodeInit(String vprefix, String StructAccces) {
-        String s = /*"    " + variableName(vprefix) + " = " + (value.getInt()) + ";\n"
-                 + "    " + valueName(vprefix) + " = " + (value.getInt()) + ";\n"
-                 + "    " + signalsName(vprefix) + " = 0;\n"
-                 + "    SetKVP_IPVP(&" + StructAccces + KVPName(vprefix) + ",ObjectKvpRoot, \"" + KVPName(vprefix) + "\" ,"
-                 + "&" + PExName(vprefix) + ","
-                 + 0 + ","
-                 + ((1<<16)-1) + ");\n"
-                 + "  KVP_RegisterObject(&" + StructAccces + KVPName(vprefix) + ");\n"*/ "";
-        return s;
-    }
-
-    @Override
-    public String GenerateCodeDeclaration(String vprefix) {
-        return "KeyValuePair " + KVPName(vprefix) + ";\n";
-    }
-
-    @Override
     public String GenerateCodeMidiHandler(String vprefix) {
         // hmm this is only one possible behavior - could also map to full MIDI range...
         int max = ((ParameterInt32VRadio) parameter).MaxValue.getInt();

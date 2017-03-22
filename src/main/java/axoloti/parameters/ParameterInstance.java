@@ -26,6 +26,7 @@ import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
+import axoloti.utils.CodeGeneration;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -178,17 +179,11 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
         return CharEscape.CharEscape(name);
     }
 
-    public String KVPName(String vprefix) {
-        return "KVP_" + axoObjectInstance.getCInstanceName() + "_" + getLegalName();
-    }
-
     public String PExName(String vprefix) {
-        return vprefix + "PExch[" + indexName() + "]";
+        return vprefix + "params[" + indexName() + "]";
     }
 
-    public String valueName(String vprefix) {
-        return PExName(vprefix) + ".value";
-    }
+    abstract public String valueName(String vprefix);
 
     public String ControlOnParentName() {
         if (axoObjectInstance.parameterInstances.size() == 1) {
@@ -198,28 +193,17 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
         }
     }
 
-    public String variableName(String vprefix, boolean enableOnParent) {
-        if ((onParent != null) && (onParent) && (enableOnParent)) {
-            return "%" + ControlOnParentName() + "%";
-        } else {
-            return PExName(vprefix) + ".finalvalue";
-        }
-    }
+    abstract public String variableName(String vprefix, boolean enableOnParent);
 
     public String signalsName(String vprefix) {
         return PExName(vprefix) + ".signals";
     }
 
     public String GetPFunction() {
-        return "";
+        return "0";
     }
 
-    public String GenerateCodeDeclaration(String vprefix) {
-        return "";//("#define " + indexName() + " " + index + "\n");
-    }
-
-    public abstract String GenerateCodeInit(String vprefix, String StructAccces);
-
+//    public abstract String GenerateCodeInit(String vprefix, String StructAccces);
     public abstract String GenerateCodeMidiHandler(String vprefix);
 
     public void setIndex(int i) {
@@ -230,10 +214,28 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
         return index;
     }
 
+    public String GetUserParameterName() {
+        if (axoObjectInstance.parameterInstances.size() == 1) {
+            return axoObjectInstance.getInstanceName();
+        } else {
+            return name;
+        }
+    }
+
+    abstract public String GenerateParameterInitializer();
+
+    public String GetCMultiplier() {
+        return "0";
+    }
+
+    public String GetCOffset() {
+        return "0";
+    }
+
     String GenerateMidiCCCodeSub(String vprefix, String value) {
         if (MidiCC != null) {
             return "        if ((status == attr_midichannel + MIDI_CONTROL_CHANGE)&&(data1 == " + MidiCC + ")) {\n"
-                    + "            PExParameterChange(&parent->" + PExName(vprefix) + "," + value + ", 0xFFFD);\n"
+                    + "            ParameterChange(&parent->" + PExName(vprefix) + "," + value + ", 0xFFFD);\n"
                     + "        }\n";
         } else {
             return "";
