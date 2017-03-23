@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 
 /**
  *
@@ -61,7 +61,7 @@ public class QCmdVirtualButton implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         connection.ClearSync();
         connection.TransmitVirtualButton(b_or, b_and, enc1, enc2, enc3, enc4);
         return this;

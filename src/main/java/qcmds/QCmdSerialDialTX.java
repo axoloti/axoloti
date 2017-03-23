@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 
 /**
  *
@@ -32,7 +32,7 @@ public class QCmdSerialDialTX implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         connection.ClearSync();
         connection.writeBytes(b);
         return this;

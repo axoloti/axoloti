@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 import axoloti.SDCardInfo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +46,7 @@ public class QCmdDeleteFile implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         connection.ClearSync();
         Logger.getLogger(QCmdDeleteFile.class.getName()).log(Level.INFO, "deleting: {0}", filename);
         connection.TransmitDeleteFile(filename);

@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 import axoloti.SDCardInfo;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +45,7 @@ public class QCmdGetFileInfo implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         connection.ClearSync();
         connection.TransmitGetFileInfo(filename);
         return this;

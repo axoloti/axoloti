@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 import java.nio.ByteBuffer;
 
 /**
@@ -42,7 +42,7 @@ public class QCmdMemRead implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         synchronized (sync) {
             connection.ClearReadSync();
             connection.TransmitMemoryRead(addr, length);

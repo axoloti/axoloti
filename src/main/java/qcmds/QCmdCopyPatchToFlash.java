@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 
 /**
  *
@@ -29,7 +29,7 @@ public class QCmdCopyPatchToFlash implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         connection.ClearSync();
         connection.TransmitCopyToFlash();
         if (connection.WaitSync(5000)) {

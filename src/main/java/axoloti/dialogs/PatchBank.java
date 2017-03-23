@@ -29,7 +29,7 @@ import axoloti.PatchViewSwing;
 import axoloti.SDCardInfo;
 import axoloti.SDCardMountStatusListener;
 import axoloti.SDFileInfo;
-import axoloti.USBBulkConnection;
+import axoloti.CConnection;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -81,7 +81,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         files = new ArrayList<File>();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         DocumentWindowList.RegisterWindow(this);
-        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
+        CConnection.GetConnection().addConnectionStatusListener(this);
         jTable1.setModel(new AbstractTableModel() {
             private final String[] columnNames = {"Index", "File", "on sdcard"};
 
@@ -420,7 +420,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
-        USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
+        CConnection.GetConnection().removeConnectionStatusListener(this);
         dispose();
     }
 
@@ -676,7 +676,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
     private void jButtonUploadBankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadBankActionPerformed
         QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-        if (USBBulkConnection.GetConnection().isConnected()) {
+        if (CConnection.GetConnection().isConnected()) {
             processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "/index.axb"));
         }
     }//GEN-LAST:event_jButtonUploadBankActionPerformed
@@ -784,7 +784,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     private void jUploadAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadAllActionPerformed
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Uploading patch bank file");
         QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-        if (USBBulkConnection.GetConnection().isConnected()) {
+        if (CConnection.GetConnection().isConnected()) {
             processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "/index.axb"));
         }
 

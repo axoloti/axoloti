@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 
 /**
  *
@@ -36,7 +36,7 @@ public class QCmdTransmitGetFWVersion implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         connection.ClearSync();
         connection.TransmitGetFWVersion();
         connection.WaitSync();

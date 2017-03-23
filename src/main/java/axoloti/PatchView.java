@@ -274,7 +274,7 @@ public abstract class PatchView implements ModelChangedListener {
         QCmdProcessor qCmdProcessor = getPatchController().GetQCmdProcessor();
 
         qCmdProcessor.AppendToQueue(new QCmdStop());
-        if (USBBulkConnection.GetConnection().GetSDCardPresent()) {
+        if (CConnection.GetConnection().GetSDCardPresent()) {
 
             String f = "/" + getPatchController().getSDCardPath();
             //System.out.println("pathf" + f);

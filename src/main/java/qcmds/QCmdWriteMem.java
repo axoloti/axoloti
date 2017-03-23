@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 
 /**
  *
@@ -46,7 +46,7 @@ public class QCmdWriteMem implements QCmdSerialTask {
     final int MaxBlockSize = 32768;
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         connection.ClearSync();
         int offset = 0;
         int remaining = buffer.length;

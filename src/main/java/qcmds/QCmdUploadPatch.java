@@ -18,7 +18,7 @@
 package qcmds;
 
 import axoloti.Axoloti;
-import axoloti.Connection;
+import axoloti.IConnection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -52,7 +52,7 @@ public class QCmdUploadPatch implements QCmdSerialTask {
         return "Done uploading patch";
     }
 
-    void UploadBinFile(Connection connection, File f, int baseaddr) throws FileNotFoundException, IOException {
+    void UploadBinFile(IConnection connection, File f, int baseaddr) throws FileNotFoundException, IOException {
             int tlength = (int) f.length();
             FileInputStream inputStream = new FileInputStream(f);
             int offset = 0;
@@ -78,7 +78,7 @@ public class QCmdUploadPatch implements QCmdSerialTask {
     }
     
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         connection.ClearSync();
         try {
             if (f == null) {

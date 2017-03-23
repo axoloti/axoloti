@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 
 /**
  *
@@ -26,7 +26,7 @@ import axoloti.Connection;
 public class QCmdSerialTaskNull implements QCmdSerialTask {
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         return this;
     }
 

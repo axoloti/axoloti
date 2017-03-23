@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 import axoloti.SDCardInfo;
 import java.io.File;
 import java.io.FileInputStream;
@@ -76,7 +76,7 @@ public class QCmdUploadFile implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         connection.ClearSync();
         try {
             if (inputStream == null) {

@@ -15,42 +15,22 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package qcmds;
 
-import axoloti.IConnection;
+package axoloti;
 
 /**
  *
- * @author Johannes Taelman
+ * @author jtaelman
  */
-public class QCmdRecallPreset implements QCmdSerialTask {
 
-    int presetNo;
+// Connection singleton instance
+public class CConnection {
+    static private USBBulkConnection conn = null;
 
-    public QCmdRecallPreset(int presetNo) {
-        this.presetNo = presetNo;
-    }
-
-    @Override
-    public String GetStartMessage() {
-        return null;
-//        return "Start recalling preset";
-    }
-
-    @Override
-    public String GetDoneMessage() {
-        return null;
-//        return "Done recalling preset";
-    }
-
-    @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitRecallPreset(presetNo);
-        if (connection.WaitSync()) {
-            return this;
-        } else {
-            return new QCmdDisconnect();
+    public static IConnection GetConnection() {
+        if (conn == null) {
+            conn = new USBBulkConnection();
         }
-    }
+        return conn;
+    }    
 }

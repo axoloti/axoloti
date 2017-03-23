@@ -308,8 +308,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                     qcmdprocessorThread = new Thread(qcmdprocessor);
                     qcmdprocessorThread.setName("QCmdProcessor");
                     qcmdprocessorThread.start();
-                    USBBulkConnection.GetConnection().addConnectionStatusListener(MainFrame.this);
-                    USBBulkConnection.GetConnection().addSDCardMountStatusListener(MainFrame.this);
+                    CConnection.GetConnection().addConnectionStatusListener(MainFrame.this);
+                    CConnection.GetConnection().addSDCardMountStatusListener(MainFrame.this);
 
                     // user library, ask user if they wish to upgrade, or do manuall
                     // this allows them the opportunity to manually backup their files!
@@ -356,7 +356,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
                     ShowDisconnect();
                     if (!Axoloti.isFailSafeMode()) {
-                        boolean success = USBBulkConnection.GetConnection().connect();
+                        boolean success = CConnection.GetConnection().connect();
                         if (success) {
                             ShowConnect();
                         }
@@ -709,23 +709,23 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     }//GEN-LAST:event_jMenuItemPingActionPerformed
 
     private void jMenuItemFDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFDisconnectActionPerformed
-        USBBulkConnection.GetConnection().disconnect();
+        CConnection.GetConnection().disconnect();
     }//GEN-LAST:event_jMenuItemFDisconnectActionPerformed
 
     private void jMenuItemFConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFConnectActionPerformed
-        USBBulkConnection.GetConnection().connect();
+        CConnection.GetConnection().connect();
     }//GEN-LAST:event_jMenuItemFConnectActionPerformed
 
     private void jMenuItemSelectComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectComActionPerformed
-        USBBulkConnection.GetConnection().SelectPort();
+        CConnection.GetConnection().SelectPort();
     }//GEN-LAST:event_jMenuItemSelectComActionPerformed
 
     private void jCheckBoxConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxConnectActionPerformed
         if (!jCheckBoxConnect.isSelected()) {
-            USBBulkConnection.GetConnection().disconnect();
+            CConnection.GetConnection().disconnect();
         } else {
             qcmdprocessor.Panic();
-            boolean success = USBBulkConnection.GetConnection().connect();
+            boolean success = CConnection.GetConnection().connect();
             if (!success) {
                 ShowDisconnect();
             }
@@ -1073,8 +1073,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         jMenuItemEnterDFU.setEnabled(connect);
         jMenuItemMount.setEnabled(connect);
-        jMenuItemFlashDefault.setEnabled(connect && USBBulkConnection.GetConnection().getTargetProfile().hasSDRAM());
-        jMenuItemFlashSDR.setEnabled(connect && USBBulkConnection.GetConnection().getTargetProfile().hasSDRAM());
+        jMenuItemFlashDefault.setEnabled(connect && CConnection.GetConnection().getTargetProfile().hasSDRAM());
+        jMenuItemFlashSDR.setEnabled(connect && CConnection.GetConnection().getTargetProfile().hasSDRAM());
 
         if (!connect) {
             setCpuID(null);

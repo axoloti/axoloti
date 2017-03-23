@@ -17,10 +17,10 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 import axoloti.MainFrame;
 import axoloti.PatchController;
-import axoloti.USBBulkConnection;
+import axoloti.CConnection;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -35,7 +35,7 @@ public class QCmdProcessor implements Runnable {
 
     private final BlockingQueue<QCmd> queue;
     private final BlockingQueue<QCmd> queueResponse;
-    protected Connection serialconnection;
+    protected IConnection serialconnection;
     private PatchController patchController;
     private final PeriodicPinger pinger;
     private final Thread pingerThread;
@@ -79,7 +79,7 @@ public class QCmdProcessor implements Runnable {
     protected QCmdProcessor() {
         queue = new ArrayBlockingQueue<QCmd>(10);
         queueResponse = new ArrayBlockingQueue<QCmd>(10);
-        serialconnection = USBBulkConnection.GetConnection();
+        serialconnection = CConnection.GetConnection();
         pinger = new PeriodicPinger();
         pingerThread = new Thread(pinger);
         dialTransmitter = new PeriodicDialTransmitter();

@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 
 /**
  *
@@ -25,5 +25,5 @@ import axoloti.Connection;
  */
 public interface QCmdSerialTask extends QCmd {
 
-    public QCmd Do(Connection connection);
+    public QCmd Do(IConnection connection);
 }

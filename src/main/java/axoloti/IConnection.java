@@ -10,7 +10,7 @@ import qcmds.QCmdSerialTask;
  *
  * @author jtaelman
  */
-public abstract class Connection {
+public abstract class IConnection {
     abstract public boolean isConnected();
     abstract public void disconnect();
     abstract public boolean connect();
@@ -106,4 +106,6 @@ public abstract class Connection {
     @Deprecated
     abstract public void writeBytes(byte[] data);
 
+    
+    
 }

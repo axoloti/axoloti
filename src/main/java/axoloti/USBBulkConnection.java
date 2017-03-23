@@ -54,7 +54,7 @@ import qcmds.QCmdWriteMem;
  *
  * @author Johannes Taelman
  */
-public class USBBulkConnection extends Connection {
+public class USBBulkConnection extends IConnection {
 
     private PatchController patchController;
     private boolean disconnectRequested;
@@ -482,7 +482,7 @@ public class USBBulkConnection extends Connection {
 
     static private USBBulkConnection conn = null;
 
-    public static Connection GetConnection() {
+    public static IConnection GetConnection() {
         if (conn == null) {
             conn = new USBBulkConnection();
         }

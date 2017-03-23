@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.Connection;
+import axoloti.IConnection;
 
 /**
  *
@@ -39,7 +39,7 @@ public class QCmdMemRead1Word implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         synchronized (sync) {
             connection.ClearReadSync();
             connection.TransmitMemoryRead1Word(addr);

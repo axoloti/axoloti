@@ -19,7 +19,7 @@
 package qcmds;
 
 import axoloti.Axoloti;
-import axoloti.Connection;
+import axoloti.IConnection;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class QCmdUploadPatchSD extends QCmdUploadFile {
     }
     
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
        try {
             String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
             int nfiles = 3;

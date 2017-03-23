@@ -18,7 +18,7 @@
 package qcmds;
 
 import axoloti.Axoloti;
-import axoloti.Connection;
+import axoloti.IConnection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -54,7 +54,7 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(Connection connection) {
+    public QCmd Do(IConnection connection) {
         connection.ClearSync();
         try {
             if (f == null) {

@@ -22,7 +22,7 @@ import axoloti.MainFrame;
 import static axoloti.MainFrame.prefs;
 import axoloti.SDCardInfo;
 import axoloti.SDFileInfo;
-import axoloti.USBBulkConnection;
+import axoloti.CConnection;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
@@ -62,8 +62,8 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     public FileManagerFrame() {
         initComponents();
         fileMenu1.initComponents();
-        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
-        USBBulkConnection.GetConnection().addSDCardMountStatusListener(this);
+        CConnection.GetConnection().addConnectionStatusListener(this);
+        CConnection.GetConnection().addSDCardMountStatusListener(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jLabelSDInfo.setText("");
 
@@ -160,7 +160,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                     evt.acceptDrop(DnDConstants.ACTION_COPY);
                     List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                     QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-                    if (USBBulkConnection.GetConnection().isConnected()) {
+                    if (CConnection.GetConnection().isConnected()) {
                         for (File f : droppedFiles) {
                             System.out.println(f.getName());
                             if (!f.canRead()) {
@@ -350,10 +350,10 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     }// </editor-fold>//GEN-END:initComponents
 
     void RequestRefresh() {
-        if (USBBulkConnection.GetConnection().isConnected()) {
-            USBBulkConnection.GetConnection().AppendToQueue(new QCmdStop());
-            USBBulkConnection.GetConnection().WaitSync();
-            USBBulkConnection.GetConnection().AppendToQueue(new QCmdGetFileList());
+        if (CConnection.GetConnection().isConnected()) {
+            CConnection.GetConnection().AppendToQueue(new QCmdStop());
+            CConnection.GetConnection().WaitSync();
+            CConnection.GetConnection().AppendToQueue(new QCmdGetFileList());
         }
     }
 
@@ -371,7 +371,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                 dir = f.getFilename();
             }
         }
-        if (USBBulkConnection.GetConnection().isConnected()) {
+        if (CConnection.GetConnection().isConnected()) {
             final JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
             int returnVal = fc.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -393,8 +393,8 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     }//GEN-LAST:event_formWindowActivated
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
-        USBBulkConnection.GetConnection().removeSDCardMountStatusListener(this);
+        CConnection.GetConnection().removeConnectionStatusListener(this);
+        CConnection.GetConnection().removeSDCardMountStatusListener(this);
     }//GEN-LAST:event_formWindowClosing
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed

@@ -18,7 +18,7 @@
 package axoloti.dialogs;
 
 import axoloti.ConnectionStatusListener;
-import axoloti.USBBulkConnection;
+import axoloti.CConnection;
 import components.PianoComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
@@ -47,12 +47,12 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
         piano = new PianoComponent() {
             @Override
             public void KeyDown(int key) {
-                USBBulkConnection.GetConnection().SendMidi(0x90 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, jSliderVelocity.getValue());
+                CConnection.GetConnection().SendMidi(0x90 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, jSliderVelocity.getValue());
             }
 
             @Override
             public void KeyUp(int key) {
-                USBBulkConnection.GetConnection().SendMidi(0x80 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, 80);
+                CConnection.GetConnection().SendMidi(0x80 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, 80);
             }
 
         };
@@ -67,7 +67,7 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
         pbenddial.addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
-                USBBulkConnection.GetConnection().SendMidi(0xE0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
+                CConnection.GetConnection().SendMidi(0xE0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
             }
 
             @Override
@@ -80,7 +80,7 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
         });
         jPanel1.add(new JLabel("bend"));
         jPanel1.add(pbenddial);
-        USBBulkConnection.GetConnection().addConnectionStatusListener(this);        
+        CConnection.GetConnection().addConnectionStatusListener(this);        
     }
 
     /**
@@ -163,7 +163,7 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAllNotesOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAllNotesOffActionPerformed
-        USBBulkConnection.GetConnection().SendMidi(0xB0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0x7B, 80);
+        CConnection.GetConnection().SendMidi(0xB0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0x7B, 80);
         piano.clear();
     }//GEN-LAST:event_jButtonAllNotesOffActionPerformed
 

@@ -195,7 +195,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuPreset.setVisible(false);
         jMenuItemAdjScroll.setVisible(false);
 
-        if (USBBulkConnection.GetConnection().isConnected()) {
+        if (CConnection.GetConnection().isConnected()) {
             ShowConnect();
         }
 
@@ -204,8 +204,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
                 KeyUtils.CONTROL_OR_CMD_MASK | KeyEvent.SHIFT_DOWN_MASK));
 
-        USBBulkConnection.GetConnection().addConnectionStatusListener(this);
-        USBBulkConnection.GetConnection().addSDCardMountStatusListener(this);
+        CConnection.GetConnection().addConnectionStatusListener(this);
+        CConnection.GetConnection().addSDCardMountStatusListener(this);
 
         getPatchView().getViewportView().getComponent().requestFocusInWindow();
 
@@ -321,8 +321,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
-        USBBulkConnection.GetConnection().removeConnectionStatusListener(this);
-        USBBulkConnection.GetConnection().removeSDCardMountStatusListener(this);
+        CConnection.GetConnection().removeConnectionStatusListener(this);
+        CConnection.GetConnection().removeSDCardMountStatusListener(this);
         getPatchView().Close();
         dispose();
     }
