@@ -47,8 +47,9 @@ Btn_Nav_States_struct Btn_Nav_And;
 
 int8_t EncBuffer[2];
 
-//ui_node_t *ObjectKvpRoot = &MainMenu[0];
 extern const ui_node_t RootMenu;
+
+// ------ menu stack ------
 
 typedef struct {
 	const ui_node_t *parent;
@@ -72,9 +73,30 @@ menu_stack_t menu_stack[menu_stack_size] = {
 };
 
 int menu_stack_position = 0;
-const int lcd_dirty_flag_header  = 1<<0;
-const int lcd_dirty_flag_listnav = 1<<1;
-const int lcd_dirty_flag_clearscreen = 1<<2;
+
+// ------ Parameter node ------
+
+ui_node_t ParamMenu = {
+  node_type_param, "Param", .param = {0}
+};
+
+// ------ Object menu stuff ------
+
+// todo: use a stack of ObjMenu's
+char objname[MAX_PARAMETER_NAME_LENGTH + 1];
+
+ui_node_t ObjMenu = {
+  node_type_object, objname, .obj = {0}
+};
+
+// ------ LCD dirty flags ------
+// for selective repainting
+// in high to low priority order:
+
+const int lcd_dirty_flag_clearscreen = 1<<0;
+const int lcd_dirty_flag_header  = 1<<1;
+const int lcd_dirty_flag_initial = 1<<2;
+const int lcd_dirty_flag_listnav = 1<<3;
 uint32_t lcd_dirty_flags;
 
 
@@ -172,18 +194,6 @@ inline void UINode_Decrement(const ui_node_t *node) {
 		break;
 	}
 }
-
-#if 0 // obsolete?
-static ui_node_t* userDisplay;
-
-void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata) {
-	if(userDisplay!=0) {
-		userDisplay->custom.displayFunction = dispfnctn;
-		userDisplay->custom.buttonFunction = btnfnctn;
-		userDisplay->custom.userdata = userdata;
-	}
-}
-#endif
 
 #define LCD_COL_EQ 45
 #define LCD_COL_EQ_LENGTH 6
@@ -300,12 +310,11 @@ static void nav_Back(void) {
 
 void ui_enter_node(const ui_node_t *node) {
 	switch (node->node_type) {
-	case node_type_node_list:
-	case node_type_custom:
-	case node_type_param_list:
-	case node_type_param:
-	case node_type_object_list:
-	case node_type_object: {
+	case node_type_action_function:
+		if (node->fnctn.fnctn != 0)
+			(node->fnctn.fnctn)();
+		break;
+	default: {
 		if (menu_stack_position < menu_stack_size - 1) {
 			LCD_clear();
 			menu_stack_t *m = &menu_stack[menu_stack_position + 1];
@@ -315,11 +324,19 @@ void ui_enter_node(const ui_node_t *node) {
 			case node_type_node_list:
 				m->maxposition = node->nodeList.length;
 				break;
-			case node_type_object_list:
-				m->maxposition = node->objList.nobjs;
+			case node_type_object_list: {
+				// refuse to descent when empty
+				int n = node->objList.nobjs;
+				if (!n) return;
+				m->maxposition = n;
+			}
 				break;
-			case node_type_param_list:
-				m->maxposition = node->paramList.nparams;
+			case node_type_param_list: {
+				// refuse to descent when empty
+				int n = node->paramList.nparams;
+				if (!n) return;
+				m->maxposition = n;
+			}
 				break;
 			case node_type_object:
 				m->maxposition = node->obj.obj->nparams
@@ -329,22 +346,9 @@ void ui_enter_node(const ui_node_t *node) {
 				m->maxposition = 0;
 			}
 			menu_stack_position++;
-			if (node->node_type == node_type_custom) {
-				const ui_node_t * KvpsDisplay =
-						menu_stack[menu_stack_position].parent;
-				if (KvpsDisplay->custom.displayFunction != 0)
-					(KvpsDisplay->custom.displayFunction)(
-							KvpsDisplay->custom.userdata, 1);
-			}
 			lcd_dirty_flags = ~0;
 		}
 	}
-		break;
-	case node_type_action_function:
-		if (node->fnctn.fnctn != 0)
-			(node->fnctn.fnctn)();
-		break;
-	default:
 		break;
 	}
 }
@@ -376,6 +380,64 @@ void ProcessEncoderParameter(Parameter_t *p, int8_t *v) {
 		break;
 	}
 	*v = 0;
+}
+
+void ProcessStepButtonsParameter(Parameter_t *p) {
+	switch (p->type) {
+	case param_type_int: {
+		int x = -1;
+		if (BTN_NAV_DOWN(btn_1)) x = 0;
+		if (BTN_NAV_DOWN(btn_2)) x = 1;
+		if (BTN_NAV_DOWN(btn_3)) x = 2;
+		if (BTN_NAV_DOWN(btn_4)) x = 3;
+		if (BTN_NAV_DOWN(btn_5)) x = 4;
+		if (BTN_NAV_DOWN(btn_6)) x = 5;
+		if (BTN_NAV_DOWN(btn_7)) x = 6;
+		if (BTN_NAV_DOWN(btn_8)) x = 7;
+		if (BTN_NAV_DOWN(btn_9)) x = 8;
+		if (BTN_NAV_DOWN(btn_10)) x = 9;
+		if (BTN_NAV_DOWN(btn_11)) x = 10;
+		if (BTN_NAV_DOWN(btn_12)) x = 11;
+		if (BTN_NAV_DOWN(btn_13)) x = 12;
+		if (BTN_NAV_DOWN(btn_14)) x = 13;
+		if (BTN_NAV_DOWN(btn_15)) x = 14;
+		if (BTN_NAV_DOWN(btn_16)) x = 15;
+		if (x>=0) {
+			if ((x < p->d.intt.maximum) && (x >= p->d.intt.minimum)) {
+				ParameterChange(p, x, 0xFFFFFFFF);
+			}
+		}
+
+	}
+		break;
+	case param_type_bin_16bits: {
+		int x = 0;
+		if (BTN_NAV_DOWN(btn_1)) x |= 1<<0;
+		if (BTN_NAV_DOWN(btn_2)) x |= 1<<1;
+		if (BTN_NAV_DOWN(btn_3)) x |= 1<<2;
+		if (BTN_NAV_DOWN(btn_4)) x |= 1<<3;
+		if (BTN_NAV_DOWN(btn_5)) x |= 1<<4;
+		if (BTN_NAV_DOWN(btn_6)) x |= 1<<5;
+		if (BTN_NAV_DOWN(btn_7)) x |= 1<<6;
+		if (BTN_NAV_DOWN(btn_8)) x |= 1<<7;
+		if (BTN_NAV_DOWN(btn_9)) x |= 1<<8;
+		if (BTN_NAV_DOWN(btn_10)) x |= 1<<9;
+		if (BTN_NAV_DOWN(btn_11)) x |= 1<<10;
+		if (BTN_NAV_DOWN(btn_12)) x |= 1<<11;
+		if (BTN_NAV_DOWN(btn_13)) x |= 1<<12;
+		if (BTN_NAV_DOWN(btn_14)) x |= 1<<13;
+		if (BTN_NAV_DOWN(btn_15)) x |= 1<<14;
+		if (BTN_NAV_DOWN(btn_16)) x |= 1<<15;
+		if (x) {
+			// todo: add binary parameter API toggle function
+			int v = p->d.bin.value ^ x;
+			p->d.bin.value = v;
+			p->d.bin.finalvalue = v;
+			p->signals = ~0;
+		}
+	}
+		break;
+	}
 }
 
 void ShowListPositionOnEncoderLEDRing(led_array_t *led_array, int pos, int length) {
@@ -425,6 +487,30 @@ void ShowParameterOnEncoderLEDRing(led_array_t *led_array, Parameter_t *p) {
 }
 
 void ShowParameterOnButtonArrayLEDs(led_array_t *led_array, Parameter_t *p) {
+	switch (p->type) {
+	case param_type_int: {
+		LED_clear(LED_STEPS);
+		int v = p->d.intt.value;
+		if (v >= 0 && v < 16)
+			LED_addOne(led_array, v, 1);
+	}
+		break;
+	case param_type_bin_16bits: {
+		LED_clear(LED_STEPS);
+		int v = p->d.bin.value;
+		int i = 16;
+		int j = 0;
+		while (i--) {
+			if (v & 1)
+				LED_addOne(led_array, j, 1);
+			v >>= 1;
+			j++;
+		}
+	}
+		break;
+	default:
+		LED_clear(led_array);
+	}
 }
 
 static void UIPollButtons(void) {
@@ -450,7 +536,6 @@ static void UIPollButtons(void) {
 			UINode_Decrement(head_node);
 			EncBuffer[0] = 0;
 		}
-
 	}
 		break;
 	default:
@@ -491,15 +576,16 @@ static void UIPollButtons(void) {
 				ui_enter_node(&ParamMenu);
 			}
 			ProcessEncoderParameter(p, &EncBuffer[1]);
+			ProcessStepButtonsParameter(p);
 		}
 	} else if (head_node->node_type == node_type_object_list) {
 		if (head_node->objList.objs[menu_stack[menu_stack_position].currentpos].nparams
 				> 0) {
-			ProcessEncoderParameter(
-					head_node->objList.objs[menu_stack[menu_stack_position].currentpos].params,
-					&EncBuffer[1]);
+			Parameter_t *p = head_node->objList.objs[menu_stack[menu_stack_position].currentpos].params;
+			ProcessEncoderParameter(p, &EncBuffer[1]);
+			ProcessStepButtonsParameter(p);
 		}
-		if (BTN_NAV_DOWN(btn_nav_Enter)) {
+		if (BTN_NAV_DOWN(btn_nav_Enter) && (menu_stack[menu_stack_position].maxposition>0)) {
 			// todo: use a stack of ObjMenu's
 			ObjMenu.obj.obj =
 					&(head_node->objList.objs)[menu_stack[menu_stack_position].currentpos];
@@ -525,10 +611,12 @@ static void UIPollButtons(void) {
 					ui_enter_node(&ParamMenu);
 				}
 				ProcessEncoderParameter(p, &EncBuffer[1]);
+				ProcessStepButtonsParameter(p);
 			}
 		}
 	} else if (head_node->node_type == node_type_param) {
 		ProcessEncoderParameter(head_node->param.param, &EncBuffer[1]);
+		ProcessStepButtonsParameter(head_node->param.param);
 	}
 
 	if (BTN_NAV_DOWN(btn_nav_Back))
@@ -686,6 +774,7 @@ static void UIUpdateLCD(void) {
 			LCD_drawChar(0, 5,
 					current_menu_position < (current_menu_length - 1) ?
 							CHAR_ARROW_DOWN : 0);
+			LED_clear(LED_STEPS);
 		}
 		if (menu_stack_position > 0)
 			LCD_drawStringInv(0, STATUSROW, "BACK");
@@ -743,6 +832,7 @@ static void UIUpdateLCD(void) {
 			offset = l - 6;
 		if (l < STATUSROW)
 			offset = 0;
+		if (l>0) ShowParameterOnButtonArrayLEDs(LED_STEPS,&params[current_menu_position]);
 		LCD_drawChar(LCD_COL_RIGHT, 3, '-');
 		LCD_drawChar(LCD_COL_RIGHT, 5, '+');
 		int line;
@@ -808,6 +898,7 @@ static void UIUpdateLCD(void) {
 		case param_type_bin_1bit_toggle:
 		case param_type_bin_16bits:
 		case param_type_bin_32bits:
+			ShowParameterOnButtonArrayLEDs(LED_STEPS,p);
 			LCD_drawStringN(LCD_COL_INDENT, line, "value", 10);
 			LCD_drawNumberHex32(LCD_VALUE_POSITION, line, p->d.bin.value);
 			line++;
@@ -854,6 +945,7 @@ static void UIUpdateLCD(void) {
 			offset = l - 6;
 		if (l < STATUSROW)
 			offset = 0;
+		if (ui_objects[current_menu_position].nparams>0) ShowParameterOnButtonArrayLEDs(LED_STEPS,&ui_objects[current_menu_position].params[0]);
 		LCD_drawChar(LCD_COL_RIGHT, 3, '-');
 		LCD_drawChar(LCD_COL_RIGHT, 5, '+');
 		int line;
@@ -929,7 +1021,7 @@ static void UIUpdateLCD(void) {
 						drawParamValueInv(line + 1, LCD_VALUE_POSITION,
 								&ui_object->params[offset]);
 					} else {
-						LCD_drawStringInvN(LCD_COL_INDENT, line,
+						LCD_drawStringInvN(LCD_COL_INDENT, line + 1,
 								ui_object->displays[offset - ui_object->nparams].name,
 								MAX_PARAMETER_NAME_LENGTH);
 						LCD_drawStringN(
@@ -945,7 +1037,7 @@ static void UIUpdateLCD(void) {
 					drawParamValue(line + 1, LCD_VALUE_POSITION,
 							&ui_object->params[offset]);
 				} else {
-					LCD_drawStringN(LCD_COL_INDENT, line,
+					LCD_drawStringN(LCD_COL_INDENT, line + 1,
 							ui_object->displays[offset - ui_object->nparams].name,
 							MAX_PARAMETER_NAME_LENGTH);
 					drawDispValue(line + 1, LCD_VALUE_POSITION,
@@ -957,20 +1049,75 @@ static void UIUpdateLCD(void) {
 			offset++;
 		}
 		if (current_menu_position < ui_object->nparams) {
-			ShowParameterOnEncoderLEDRing(LED_RING_RIGHT,
-					&ui_object->params[current_menu_position]);
+			Parameter_t *p = &ui_object->params[current_menu_position];
+			ShowParameterOnEncoderLEDRing(LED_RING_RIGHT, p);
+			ShowParameterOnButtonArrayLEDs(LED_STEPS, p);
 		}
 		LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
 	}
 		break;
-	case node_type_custom: {
-		if (head_node->custom.displayFunction != 0)
-			(head_node->custom.displayFunction)(head_node->custom.userdata, 0);
+	case node_type_short_value: {
+		static int xpos = 0;
+		if (lcd_dirty_flags & lcd_dirty_flag_initial) {
+			lcd_dirty_flags &= ~lcd_dirty_flag_initial;
+			xpos = 0;
+		} else {
+			uint8_t *p = &lcd_buffer[xpos + LCDWIDTH];
+			int16_t *pvalue = head_node->shortValue.pvalue;
+			const int ylim = 6*8-1;
+			if (pvalue) {
+				LCD_drawNumber5D(20, 7, *pvalue);
+				int32_t y = ylim - (((*pvalue - head_node->shortValue.minvalue)*3*head_node->shortValue.scale)>>16);
+				int v = LCDROWS-2;
+				if (xpos & 1) {
+					uint32_t uy = y;
+					while(v--) {
+						if (uy<8)
+							*p=1<<uy;
+						else
+							*p=0;
+						uy=uy-8;
+						p += LCDWIDTH;
+					}
+				} else {
+					// with zero-line stipples, and clamped y
+					if (y<0) y=0;
+					if (y>ylim) y = ylim;
+					uint32_t uy = y;
+					uint32_t y0 = ylim - (((0 - head_node->shortValue.minvalue)*3*head_node->shortValue.scale)>>16);
+					while(v--) {
+						int v;
+						if (uy<8)
+							v=1<<uy;
+						else
+							v=0;
+						if (y0<8)
+							v |= 1<<y0;
+						*p=v;
+						uy=uy-8;
+						y0=y0-8;
+						p += LCDWIDTH;
+					}
+				}
+				xpos = (xpos + 1)&(LCDWIDTH-1);
+			}
+		}
 	}
 		break;
+	case node_type_custom: {
+		if (head_node->custom.displayFunction != 0) {
+			if (lcd_dirty_flags & lcd_dirty_flag_initial) {
+				(head_node->custom.displayFunction)(head_node->custom.userdata, 1);
+				lcd_dirty_flags &= ~lcd_dirty_flag_initial;
+			} else {
+				(head_node->custom.displayFunction)(head_node->custom.userdata, 0);
+			}
+		}
+	}
+		break;
+		// following are leaf nodes:
 	case node_type_integer_value:
 	case node_type_action_function:
-	case node_type_short_value:
 		break;
 	}
 
@@ -987,38 +1134,20 @@ static void UIUpdateLCD(void) {
 #endif
 }
 
-
-void AxolotiControlUpdate(void) {
-    UIPollButtons();
-    UIUpdateLCD();
-}
-
 static WORKING_AREA(waThreadUI2, 512);
 static THD_FUNCTION(ThreadUI2, arg) {
-  (void)(arg);
-  chRegSetThreadName("ui2");
-  while (1) {
-	  AxolotiControlUpdate();
-	  chThdSleepMilliseconds(15);
-  }
-}
-
-void ui_go_safe(void) {
-	menu_stack_position = 0;
-	lcd_dirty_flags = ~0;
-	MainMenu[MAIN_MENU_INDEX_PATCH].objList.objs = 0;
-	MainMenu[MAIN_MENU_INDEX_PATCH].objList.nobjs = 0;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.params = 0;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.param_names = 0;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.nparams = 0;
-}
-
-void ui_init_patch(void) {
-	MainMenu[MAIN_MENU_INDEX_PATCH].objList.objs = patchMeta.objects;
-	MainMenu[MAIN_MENU_INDEX_PATCH].objList.nobjs = patchMeta.nobjects;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.params = patchMeta.params;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.param_names = patchMeta.param_names;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.nparams = patchMeta.nparams;
+	(void) (arg);
+	chRegSetThreadName("ui2");
+	while (1) {
+		// todo: make better
+		// the motivation to differentiate between
+		// input handling and screen painting is that
+		// screen painting can be much slower
+		// than knob tweaking
+		UIPollButtons();
+		UIUpdateLCD();
+		chThdSleepMilliseconds(15);
+	}
 }
 
 void ui_init(void) {
@@ -1034,6 +1163,11 @@ void ui_init(void) {
 	for (i = 0; i < 2; i++) {
 		EncBuffer[i] = 0;
 	}
+}
+
+void ui_go_home(void) {
+	menu_stack_position = 0;
+	lcd_dirty_flags = ~0;
 }
 
 #if 0 // obsolete

@@ -29,6 +29,7 @@
 #include "spilink.h"
 #include "codec.h"
 #include "axoloti_memory.h"
+#include "ui_menu_content.h"
 
 //#define DEBUG_INT_ON_GPIO 1
 
@@ -132,13 +133,13 @@ static void StopPatch1(void) {
        LogTextMessage("error: patch stopped but did not terminate its thread(s)");
     }
   }
-  ui_go_safe();
+  ui_deinit_patch();
   InitPatch0();
   sysmon_enable_blinker();
 }
 
 static int StartPatch1(void) {
-  ui_go_safe();
+  ui_deinit_patch();
   sdcard_attemptMountIfUnmounted();
   // reinit pin configuration for adc
   adc_configpads();

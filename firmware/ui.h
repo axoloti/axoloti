@@ -75,6 +75,8 @@ typedef struct {
 
 typedef struct {
   int16_t *pvalue;
+  int16_t minvalue;
+  int16_t scale;
 } ui_node_type_short_value_t;
 
 typedef void (*DisplayFunction)(void * userdata, int initialize);
@@ -174,8 +176,7 @@ void SetKVP_FNCTN(ui_node_t *node, ui_node_t *parent,
 //void AxolotiControlUpdate(void);
 //extern void (*pControlUpdate)(void);
 
-void ui_go_safe(void);
-void ui_init_patch(void);
+void ui_go_home(void);
 void ui_init(void);
 void ui_enter_node(const ui_node_t *node);
 

@@ -81,7 +81,8 @@ case param_type_int: {
 } break;
 default:
 // we don't support modulations on other types for now
-	param->d.intt.modvalue = param->d.intt.value;
+	param->d.intt.value = value;
+	param->d.intt.modvalue = value;
 }
 
   param->signals |= signals;

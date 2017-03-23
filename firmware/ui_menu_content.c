@@ -24,21 +24,6 @@
 #include "patch.h"
 
 
-// ------ Parameter menu stuff ------
-
-ui_node_t ParamMenu = {
-  node_type_param, "Param", .param = {0}
-};
-
-// ------ Object menu stuff ------
-
-// todo: use a stack of ObjMenu's
-char objname[MAX_PARAMETER_NAME_LENGTH + 1];
-
-ui_node_t ObjMenu = {
-  node_type_object, objname, .obj = {0}
-};
-
 // ------ SDCard menu stuff ------
 
 int load_patch_index = 0;
@@ -83,21 +68,21 @@ const ui_node_t SdcMenu[SdcMenu_length] = {
 
 #define ADCMenu_length 15
 const ui_node_t ADCMenu[ADCMenu_length] = {
-  { node_type_short_value, "ADC0", .shortValue = {(int16_t *)&adcvalues[0]}},
-  { node_type_short_value, "ADC1", .shortValue = {(int16_t *)&adcvalues[1]}},
-  { node_type_short_value, "ADC2", .shortValue = {(int16_t *)&adcvalues[2]}},
-  { node_type_short_value, "ADC3", .shortValue = {(int16_t *)&adcvalues[3]}},
-  { node_type_short_value, "ADC4", .shortValue = {(int16_t *)&adcvalues[4]}},
-  { node_type_short_value, "ADC5", .shortValue = {(int16_t *)&adcvalues[5]}},
-  { node_type_short_value, "ADC6", .shortValue = {(int16_t *)&adcvalues[6]}},
-  { node_type_short_value, "ADC7", .shortValue = {(int16_t *)&adcvalues[7]}},
-  { node_type_short_value, "ADC8", .shortValue = {(int16_t *)&adcvalues[8]}},
-  { node_type_short_value, "ADC9", .shortValue = {(int16_t *)&adcvalues[9]}},
-  { node_type_short_value, "ADC10", .shortValue = {(int16_t *)&adcvalues[10]}},
-  { node_type_short_value, "ADC11", .shortValue = {(int16_t *)&adcvalues[11]}},
-  { node_type_short_value, "ADC12", .shortValue = {(int16_t *)&adcvalues[12]}},
-  { node_type_short_value, "ADC13", .shortValue = {(int16_t *)&adcvalues[13]}},
-  { node_type_short_value, "ADC14", .shortValue = {(int16_t *)&adcvalues[14]}}
+  { node_type_short_value, "PA0", .shortValue = {.pvalue =(int16_t *)&adcvalues[0], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PA1", .shortValue = {.pvalue =(int16_t *)&adcvalues[1], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PA2", .shortValue = {.pvalue =(int16_t *)&adcvalues[2], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PA3", .shortValue = {.pvalue =(int16_t *)&adcvalues[3], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PA4", .shortValue = {.pvalue =(int16_t *)&adcvalues[4], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PA5", .shortValue = {.pvalue =(int16_t *)&adcvalues[5], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PA6", .shortValue = {.pvalue =(int16_t *)&adcvalues[6], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PA7", .shortValue = {.pvalue =(int16_t *)&adcvalues[7], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PB0", .shortValue = {.pvalue =(int16_t *)&adcvalues[8], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PB1", .shortValue = {.pvalue =(int16_t *)&adcvalues[9], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PC0", .shortValue = {.pvalue =(int16_t *)&adcvalues[10], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PC1", .shortValue = {.pvalue =(int16_t *)&adcvalues[11], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PC2", .shortValue = {.pvalue =(int16_t *)&adcvalues[12], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PC3", .shortValue = {.pvalue =(int16_t *)&adcvalues[13], .minvalue = 0, .scale=0x100}},
+  { node_type_short_value, "PC4", .shortValue = {.pvalue =(int16_t *)&adcvalues[14], .minvalue = 0, .scale=0x100}},
 };
 
 // ------ Test menu stuff ------
@@ -257,3 +242,21 @@ ui_node_t MainMenu[MainMenu_length] = {
 const ui_node_t RootMenu = {
   node_type_node_list, "--- AXOLOTI ---", .nodeList = {MainMenu, MainMenu_length}
 };
+
+
+void ui_deinit_patch(void) {
+	ui_go_home();
+	MainMenu[MAIN_MENU_INDEX_PATCH].objList.objs = 0;
+	MainMenu[MAIN_MENU_INDEX_PATCH].objList.nobjs = 0;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.params = 0;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.param_names = 0;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.nparams = 0;
+}
+
+void ui_init_patch(void) {
+	MainMenu[MAIN_MENU_INDEX_PATCH].objList.objs = patchMeta.objects;
+	MainMenu[MAIN_MENU_INDEX_PATCH].objList.nobjs = patchMeta.nobjects;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.params = patchMeta.params;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.param_names = patchMeta.param_names;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.nparams = patchMeta.nparams;
+}

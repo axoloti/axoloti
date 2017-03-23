@@ -24,7 +24,8 @@
 
 #define MainMenu_length 7
 extern ui_node_t MainMenu[MainMenu_length];
-extern ui_node_t ParamMenu;
-extern ui_node_t ObjMenu;
+
+void ui_deinit_patch(void);
+void ui_init_patch(void);
 
 #endif

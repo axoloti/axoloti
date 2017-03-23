@@ -103,7 +103,7 @@ typedef struct {
   int32_t finalvalue; // parameter value after modulation and function evaluation
   int32_t value;      // parameter dial position
   int32_t modvalue;   // parameter dial position after modulation
-  int32_t nbits;      // minimum value after modulation
+  int32_t nbits;      // number of bits
 } ParameterBin_t;
 
 
