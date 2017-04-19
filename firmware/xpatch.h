@@ -5,8 +5,9 @@ extern "C" {
 #include <axoloti_memory.h>
 }
 
-#include "arm_intrinsics.hpp"
+#include "patch_chunks.h"
 
+#include "arm_intrinsics.hpp"
 #include "braids/parameter_interpolation.h"
 #include "braids/resources.h"
 #include "rings/dsp/string.h"

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -20,6 +20,9 @@ package axoloti.dialogs;
 import axoloti.ConnectionStatusListener;
 import axoloti.MainFrame;
 import axoloti.CConnection;
+import axoloti.IConnection;
+import axoloti.chunks.ChunkData;
+import axoloti.chunks.FourCCs;
 import components.RControlButtonWithLed;
 import components.RControlColorLed;
 import components.RControlEncoder;
@@ -27,16 +30,20 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.nio.ByteBuffer;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
+import javax.swing.KeyStroke;
+import qcmds.QCmdMemRead;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdVirtualButton;
 
@@ -69,67 +76,71 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         jPanelLCD.doLayout();
         jPanelLCD.setVisible(true);
         jPanelLCD.setFocusable(true);
-        jPanelLCD.addKeyListener(new KeyListener() {
+        InputMap inputmap = jPanelLCD.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputmap.put(KeyStroke.getKeyStroke("UP"),"up");
+        inputmap.put(KeyStroke.getKeyStroke("DOWN"),"down");
+        inputmap.put(KeyStroke.getKeyStroke("ENTER"),"enter");
+        inputmap.put(KeyStroke.getKeyStroke("ESCAPE"),"back");
+        ActionMap actionmap = jPanelLCD.getActionMap();
+ 
+        actionmap.put("up", new AbstractAction() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                switch (e.getKeyCode()) {
-
-                    default:
-                        break;
-                }
+            public void actionPerformed(ActionEvent e) {
+                tx_clicked(K_UP);
             }
-
+        });
+        actionmap.put("down", new AbstractAction() {
             @Override
-            public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_UP:
-                        tx_clicked(K_UP);
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        tx_clicked(K_DOWN);
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        tx_clicked(K_LEFT);
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        tx_clicked(K_RIGHT);
-                        break;
-                    case KeyEvent.VK_ENTER:
-                        tx_clicked(K_ENTER);
-                        break;
-                    case KeyEvent.VK_ESCAPE:
-                        tx_clicked(K_CANCEL);
-                        break;
-                    case KeyEvent.VK_SHIFT:
-                        tx_pressed(K_SHIFT);
-                        break;
-                    default:
-                        break;
-                }
+            public void actionPerformed(ActionEvent e) {
+                tx_clicked(K_DOWN);
             }
-
+        });
+        actionmap.put("enter", new AbstractAction() {
             @Override
-            public void keyReleased(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_SHIFT:
-                        tx_released(K_SHIFT);
-                        break;
-                    default:
-                        break;
-                }
+            public void actionPerformed(ActionEvent e) {
+                tx_clicked(K_ENTER);
+            }
+        });
+        actionmap.put("back", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tx_clicked(K_BACK);
             }
         });
 
-        for (int i = 0; i < 4; i++) {
-            encoders[i] = new RControlEncoder() {
-                @Override
-                public void DoRotation(int ticks) {
-                    QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-                    processor.AppendToQueue(new QCmdVirtualButton(ticks, 0, 0, 0));
-                }
-            };
-            jPanelRight.add(encoders[i]);
-        }
+        encoders[0] = new RControlEncoder() {
+            @Override
+            public void DoRotation(int ticks) {
+                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+                processor.AppendToQueue(new QCmdVirtualButton(ticks, 0, 0, 0));
+            }
+        };
+        encoders[1] = new RControlEncoder() {
+            @Override
+            public void DoRotation(int ticks) {
+                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+                processor.AppendToQueue(new QCmdVirtualButton(0, ticks, 0, 0));
+            }
+        };
+        encoders[2] = new RControlEncoder() {
+            @Override
+            public void DoRotation(int ticks) {
+                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+                processor.AppendToQueue(new QCmdVirtualButton(0, 0, ticks, 0));
+            }
+        };
+        encoders[3] = new RControlEncoder() {
+            @Override
+            public void DoRotation(int ticks) {
+                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+                processor.AppendToQueue(new QCmdVirtualButton(0, 0, 0, ticks));
+            }
+        };
+
+        jPanelRight.add(encoders[0]);
+        jPanelRight.add(encoders[1]);
+        jPanelRight.add(encoders[2]);
+        jPanelRight.add(encoders[3]);
 
         for (int i = 0; i < 4; i++) {
             leds[i] = new RControlColorLed();
@@ -148,7 +159,7 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         jButtonRight.setFocusable(false);
         jButtonUp.setFocusable(false);
         jButtoneEnter.setFocusable(false);
-        jButtonShift.setFocusable(false);
+        jButtonShift.setFocusable(false);        
     }
 
     @Override
@@ -187,12 +198,12 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
 
         @Override
         public void mousePressed(MouseEvent e) {
-            tx_pressed(1 << (index + 16));
+            tx_pressed(1 << (index));
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            tx_released(1 << (index + 16));
+            tx_released(1 << (index));
         }
 
         @Override
@@ -242,6 +253,9 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         filler14 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jButtonShift = new javax.swing.JButton();
         filler15 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        filler16 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
+        filler17 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
+        jButtonRefresh = new javax.swing.JButton();
         jPanelRight = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -355,6 +369,16 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         });
         jPanelNav.add(jButtonShift);
         jPanelNav.add(filler15);
+        jPanelNav.add(filler16);
+        jPanelNav.add(filler17);
+
+        jButtonRefresh.setText("refresh");
+        jButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRefreshActionPerformed(evt);
+            }
+        });
+        jPanelNav.add(jButtonRefresh);
 
         jPanel2.add(jPanelNav);
 
@@ -377,43 +401,60 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
     }
 
     void tx_pressed(int k) {
-        tx(k, ~0);
+        tx(k, 0);
     }
 
     void tx_released(int k) {
-        tx(0, ~k);
+        tx(0, k);
     }
 
     void tx_clicked(int k) {
-        tx(k, ~k);
+        tx(k, k);
     }
 // button masks
-    final int K_UP = 1;
-    final int K_DOWN = 2;
-    final int K_LEFT = 4;
-    final int K_RIGHT = 8;
-    final int K_ENTER = 16;
-    final int K_SHIFT = 32;
-    final int K_CANCEL = 64;
-    final int K_1 = 1 << 16;
-    final int K_2 = 1 << 17;
-    final int K_3 = 1 << 18;
-    final int K_4 = 1 << 19;
-    final int K_5 = 1 << 20;
-    final int K_6 = 1 << 21;
-    final int K_7 = 1 << 22;
-    final int K_8 = 1 << 23;
-    final int K_9 = 1 << 24;
-    final int K_10 = 1 << 25;
-    final int K_11 = 1 << 26;
-    final int K_12 = 1 << 27;
-    final int K_13 = 1 << 28;
-    final int K_14 = 1 << 29;
-    final int K_15 = 1 << 30;
-    final int K_16 = 1 << 31;
+    final int K_UP = 1<<24;
+    final int K_DOWN = 1<<25;
+    final int K_LEFT = 1<<26;
+    final int K_RIGHT = 1<<27;
+    final int K_BACK = 1<<28;
+    final int K_ENTER = 1<<29;
+    final int K_HOME = 1<<30;
+    final int K_SHIFT = 1<<31;
+    final int K_1 = 1 << 0;
+    final int K_2 = 1 << 1;
+    final int K_3 = 1 << 2;
+    final int K_4 = 1 << 3;
+    final int K_5 = 1 << 4;
+    final int K_6 = 1 << 5;
+    final int K_7 = 1 << 6;
+    final int K_8 = 1 << 7;
+    final int K_9 = 1 << 8;
+    final int K_10 = 1 << 9;
+    final int K_11 = 1 << 10;
+    final int K_12 = 1 << 11;
+    final int K_13 = 1 << 12;
+    final int K_14 = 1 << 13;
+    final int K_15 = 1 << 14;
+    final int K_16 = 1 << 15;
+    
+    public void refreshFB() {
+        QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+        ChunkData framebuffer = CConnection.GetConnection().GetFWChunks().GetOne(FourCCs.FW_LCD_FRAMEBUFFER);
+        framebuffer.data.rewind();
+        int width = framebuffer.data.getInt();
+        int height = framebuffer.data.getInt();
+        int pixeltype = framebuffer.data.getInt();
+        int addr = framebuffer.data.getInt();
+        processor.AppendToQueue(new QCmdMemRead(addr, 128*64/8, new IConnection.MemReadHandler() {
+            @Override
+            public void Done(ByteBuffer mem) {
+                updateFB(mem);
+            }
+        }));
+    }
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        tx_clicked(K_CANCEL);
+        tx_clicked(K_BACK);
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLeftActionPerformed
@@ -421,18 +462,6 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
     }//GEN-LAST:event_jButtonLeftActionPerformed
 
     private void jButtoneEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtoneEnterActionPerformed
-        /*
-         // test bitmap
-         byte[] pixels = ((DataBufferByte) bImage.getRaster().getDataBuffer()).getData();
-         int i;
-         for (i = 0; i < (128); i++) {
-         pixels[i] = (byte) (i);
-         }
-         for (; i < (128 * 8); i++) {
-         pixels[i] = (byte) (0xAA);
-         }
-         jPanelLCD.repaint();
-         */
         tx_clicked(K_ENTER);
     }//GEN-LAST:event_jButtoneEnterActionPerformed
 
@@ -456,6 +485,10 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         tx_pressed(K_SHIFT);
     }//GEN-LAST:event_jButtonShiftMouseReleased
 
+    private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshActionPerformed
+        refreshFB();
+    }//GEN-LAST:event_jButtonRefreshActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
@@ -464,6 +497,8 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
     private javax.swing.Box.Filler filler13;
     private javax.swing.Box.Filler filler14;
     private javax.swing.Box.Filler filler15;
+    private javax.swing.Box.Filler filler16;
+    private javax.swing.Box.Filler filler17;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
@@ -475,6 +510,7 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonDown;
     private javax.swing.JButton jButtonLeft;
+    private javax.swing.JButton jButtonRefresh;
     private javax.swing.JButton jButtonRight;
     private javax.swing.JButton jButtonShift;
     private javax.swing.JButton jButtonUp;
@@ -491,40 +527,26 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
 
     boolean dirty = false;
 
-    public void updateRow(final int LCDPacketRow, final ByteBuffer lcdRcvBuffer) {
-        if (false) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    if (LCDPacketRow < 8) {
-
-                        byte[] pixels = ((DataBufferByte) bImage.getRaster().getDataBuffer()).getData();
-                        for (int i = 0; i < (128); i++) {
-                            //int j = 1<<(i%8);
-                            int k = i - (i % 8);
-                            int y = i / 16;
-                            int j = 1 << y;
-                            int x = 8 * (i % 16);
-                            pixels[i + (LCDPacketRow * 128)] = (byte) ((((lcdRcvBuffer.get(x) & j) > 0) ? 0 : 128)
-                                    + (((lcdRcvBuffer.get(x + 1) & j) > 0) ? 0 : 64)
-                                    + (((lcdRcvBuffer.get(x + 2) & j) > 0) ? 0 : 32)
-                                    + (((lcdRcvBuffer.get(x + 3) & j) > 0) ? 0 : 16)
-                                    + (((lcdRcvBuffer.get(x + 4) & j) > 0) ? 0 : 8)
-                                    + (((lcdRcvBuffer.get(x + 5) & j) > 0) ? 0 : 4)
-                                    + (((lcdRcvBuffer.get(x + 6) & j) > 0) ? 0 : 2)
-                                    + (((lcdRcvBuffer.get(x + 7) & j) > 0) ? 0 : 1));
-                        }
-                        dirty = true;
-                        jPanelLCD.repaint(10);
-
-                    } else {
-                        // row 8 is for all the leds
-                        for (int i = 0; i < 16; i++) {
-                            buttonsWithLeds[i].setIlluminated(lcdRcvBuffer.get(i) != 0);
-                        }
-                    }
-                }
-            });
+    public void updateFB(final ByteBuffer lcdRcvBuffer) {
+        byte[] pixels = ((DataBufferByte) bImage.getRaster().getDataBuffer()).getData();
+        for (int row = 0;row<8;row++) {
+            for (int i = 0; i < 128; i++) {
+                //int j = 1<<(i%8);
+                int k = i - (i % 8);
+                int y = i / 16;
+                int j = 1 << y;
+                int x = 8 * (i % 16) + row*128;
+                pixels[i + row*128] = (byte) ((((lcdRcvBuffer.get(x) & j) > 0) ? 0 : 128)
+                        + (((lcdRcvBuffer.get(x + 1) & j) > 0) ? 0 : 64)
+                        + (((lcdRcvBuffer.get(x + 2) & j) > 0) ? 0 : 32)
+                        + (((lcdRcvBuffer.get(x + 3) & j) > 0) ? 0 : 16)
+                        + (((lcdRcvBuffer.get(x + 4) & j) > 0) ? 0 : 8)
+                        + (((lcdRcvBuffer.get(x + 5) & j) > 0) ? 0 : 4)
+                        + (((lcdRcvBuffer.get(x + 6) & j) > 0) ? 0 : 2)
+                        + (((lcdRcvBuffer.get(x + 7) & j) > 0) ? 0 : 1));
+            }
         }
+        dirty = true;
+        jPanelLCD.repaint(10);
     }
 }

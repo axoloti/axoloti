@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 - 2016 Johannes Taelman
+ * Copyright (C) 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -22,6 +22,7 @@ package axoloti;
  * transport
  */
 import axoloti.chunks.ChunkParser;
+import axoloti.chunks.FourCC;
 import axoloti.dialogs.USBPortSelectionDlg;
 import static axoloti.dialogs.USBPortSelectionDlg.ErrorString;
 import axoloti.displays.DisplayInstance;
@@ -55,7 +56,7 @@ import qcmds.QCmdWriteMem;
  *
  * @author Johannes Taelman
  */
-public class USBBulkConnection extends IConnection {
+public class USBBulkConnection_v2 extends IConnection {
 
     private PatchController patchController;
     private boolean disconnectRequested;
@@ -71,7 +72,7 @@ public class USBBulkConnection extends IConnection {
     private final short bulkPID = (short) 0x0442;
     private final int interfaceNumber = 2;
 
-    protected USBBulkConnection() {
+    protected USBBulkConnection_v2() {
         this.sync = new Sync();
         this.readsync = new Sync();
         this.patchController = null;
@@ -107,6 +108,7 @@ public class USBBulkConnection extends IConnection {
 
     @Override
     public void disconnect() {
+        disp_addr = 0;
         if (connected) {
             disconnectRequested = true;
             connected = false;
@@ -116,16 +118,16 @@ public class USBBulkConnection extends IConnection {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             }
             queueSerialTask.add(new QCmdSerialTaskNull());
             queueSerialTask.add(new QCmdSerialTaskNull());
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Disconnect request");
+            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Disconnect request");
             synchronized (sync) {
                 sync.Acked = false;
                 sync.notifyAll();
@@ -136,7 +138,7 @@ public class USBBulkConnection extends IConnection {
                 try {
                     receiverThread.join();
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -170,11 +172,11 @@ public class USBBulkConnection extends IConnection {
                     throw new LibUsbException("Unable to read device descriptor", result);
                 }
                 if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "USB device found");
+                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "USB device found");
                     DeviceHandle h = new DeviceHandle();
                     result = LibUsb.open(d, h);
                     if (result < 0) {
-                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, ErrorString(result));
+                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, ErrorString(result));
                     } else {
                         String serial = LibUsb.getStringDescriptor(h, descriptor.iSerialNumber());
                         if (cpuid != null) {
@@ -196,11 +198,11 @@ public class USBBulkConnection extends IConnection {
                     throw new LibUsbException("Unable to read device descriptor", result);
                 }
                 if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "USB device found");
+                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "USB device found");
                     DeviceHandle h = new DeviceHandle();
                     result = LibUsb.open(d, h);
                     if (result < 0) {
-                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, ErrorString(result));
+                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, ErrorString(result));
                     } else {
                         return h;
                     }
@@ -210,7 +212,7 @@ public class USBBulkConnection extends IConnection {
             // Ensure the allocated device list is freed
             //LibUsb.freeDeviceList(list, true);
         }
-        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "No available USB device found with matching PID/VID");
+        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "No available USB device found with matching PID/VID");
         // Device not found
         return null;
     }
@@ -260,7 +262,7 @@ public class USBBulkConnection extends IConnection {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             connected = true;
@@ -270,14 +272,14 @@ public class USBBulkConnection extends IConnection {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "connected");
+            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "connected");
 
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             }
             QCmdProcessor qcmdp = MainFrame.mainframe.getQcmdprocessor();
 
@@ -285,14 +287,13 @@ public class USBBulkConnection extends IConnection {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             }
             qcmdp.WaitQueueFinished();
 
             QCmdMemRead1Word q1 = new QCmdMemRead1Word(targetProfile.getCPUIDCodeAddr());
             qcmdp.AppendToQueue(q1);
             targetProfile.setCPUIDCode(q1.getResult());
-
             QCmdMemRead q;
 
             q = new QCmdMemRead(targetProfile.getCPUSerialAddr(), targetProfile.getCPUSerialLength());
@@ -308,9 +309,9 @@ public class USBBulkConnection extends IConnection {
             ByteBuffer signature = q.getResult();
             boolean signaturevalid = false;
             if (signature == null) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Can''t obtain signature, upgrade firmware?");
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Can''t obtain signature, upgrade firmware?");
             } else if ((signature.getInt(0) == 0xFFFFFFFF) && (signature.getInt(1) == 0xFFFFFFFF)) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Cannot validate authenticity, no signature present.");
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Cannot validate authenticity, no signature present.");
             } else {
                 signaturevalid = HWSignature.Verify(targetProfile.getCPUSerial(), otpInfo, bb2ba(signature));
                 if (signaturevalid) {
@@ -321,13 +322,14 @@ public class USBBulkConnection extends IConnection {
                         s += (char) (c & 0xFF);
                         c = otpInfo.get();
                     }
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Authentic {0}", s);
+                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Authentic {0}", s);
                 } else {
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Can''t validate authenticity, signature invalid!");
+                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "Can''t validate authenticity, signature invalid!");
                 }
             }
 
             boolean signing = false;
+//            boolean signaturevalid = false;
             if (signing && !signaturevalid) {
                 qcmdp.WaitQueueFinished();
                 ByteBuffer writeotpinfo = targetProfile.CreateOTPInfo();
@@ -373,16 +375,34 @@ public class USBBulkConnection extends IConnection {
                 System.out.println("</signature>");
 
             }
+            
+            ClearReadSync();
+            TransmitMemoryRead(patchentrypoint, 8);
+            WaitReadSync();
+            int fw_chunks_hdr = readsync.memReadBuffer.getInt();
+            int fw_chunks_size = readsync.memReadBuffer.getInt();
+            System.out.println("fw chunks hdr " + FourCC.Format(fw_chunks_hdr) + ", size " + fw_chunks_size);
+            ClearReadSync();
+            TransmitMemoryRead(patchentrypoint, fw_chunks_size + 8);
+            WaitReadSync();
+            fw_chunks = new ChunkParser(readsync.memReadBuffer);            
             ShowConnect();
             return true;
 
         } catch (Exception ex) {
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             ShowDisconnect();
             return false;
         }
     }
 
+    ChunkParser fw_chunks;
+    
+    @Override
+    public ChunkParser GetFWChunks() {
+        return fw_chunks;
+    }
+    
     static final byte OUT_ENDPOINT = 0x02;
     static final byte IN_ENDPOINT = (byte) 0x82;
     static final int TIMEOUT = 1000;
@@ -396,11 +416,11 @@ public class USBBulkConnection extends IConnection {
         if (result != LibUsb.SUCCESS) {
             if (result == LibUsb.ERROR_NO_DEVICE) {
                 disconnect();
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Device disconnected");
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "Device disconnected");
             } else if (result == LibUsb.ERROR_TIMEOUT) {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "USB transmit timeout");
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "USB transmit timeout");
             } else {
-                Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "Control transfer failed: {0}", result);
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "Control transfer failed: {0}", result);
             }
         }
         //System.out.println(transfered.get() + " bytes sent");
@@ -475,10 +495,19 @@ public class USBBulkConnection extends IConnection {
         cpuid = spsDlg.getCPUID();
         String name = MainFrame.prefs.getBoardName(cpuid);
         if (name == null) {
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: {0}", cpuid);
+            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "port: {0}", cpuid);
         } else {
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "port: {0} name: {1}", new Object[]{cpuid, name});
+            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "port: {0} name: {1}", new Object[]{cpuid, name});
         }
+    }
+
+    static private USBBulkConnection_v2 conn = null;
+
+    public static IConnection GetConnection() {
+        if (conn == null) {
+            conn = new USBBulkConnection_v2();
+        }
+        return conn;
     }
 
     @Override
@@ -508,19 +537,12 @@ public class USBBulkConnection extends IConnection {
         WaitSync();
     }
 
-    @Override
-    public void TransmitMemoryRead(int addr, int length, MemReadHandler handler) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public ChunkParser GetFWChunks() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     class Sync {
         boolean Acked = false;
+        boolean Pending = false;
+        ByteBuffer memReadBuffer;
     }
+    
     final Sync sync;
     final Sync readsync;
 
@@ -555,6 +577,7 @@ public class USBBulkConnection extends IConnection {
     public void ClearReadSync() {
         synchronized (readsync) {
             readsync.Acked = false;
+            readsync.memReadBuffer = null;
         }
     }
 
@@ -562,15 +585,38 @@ public class USBBulkConnection extends IConnection {
     public boolean WaitReadSync() {
         synchronized (readsync) {
             if (readsync.Acked) {
+                //System.out.println("nowait");
+                // TODO: should not need to sleep to obtain correct results...
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 return readsync.Acked;
             }
-            try {
-                readsync.wait(1000);
-            } catch (InterruptedException ex) {
-                //              Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, "Sync wait interrupted");
-            }
-            return readsync.Acked;
         }
+        for(int i=0;i<5;i++) {
+            synchronized (readsync) {
+                try {
+                    //System.out.println("wait");
+                    readsync.wait(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "Sync wait interrupted");
+                }
+                if (readsync.Acked) break;
+            }
+        }
+        // TODO: should not need to sleep to obtain correct results...
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (!readsync.Acked) {
+            System.out.println("sync: not ready!");
+        }
+        return readsync.Acked;
     }
 
     private final byte[] startPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('s')};
@@ -597,6 +643,13 @@ public class USBBulkConnection extends IConnection {
     @Override
     public void TransmitPing() {
         writeBytes(pingPckt);
+        if (disp_addr != 0)
+            TransmitMemoryRead(disp_addr, disp_length*4, new MemReadHandler() {
+            @Override
+            public void Done(ByteBuffer mem) {
+                DistributeToDisplays(mem);
+            }
+        });
     }
 
     @Override
@@ -625,7 +678,7 @@ public class USBBulkConnection extends IConnection {
         writeBytes(data);
         writeBytes(buffer);
         WaitSync();
-        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "block uploaded @ 0x{0} length {1}", new Object[]{Integer.toHexString(offset).toUpperCase(), Integer.toString(buffer.length)});
+        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "block uploaded @ 0x{0} length {1}", new Object[]{Integer.toHexString(offset).toUpperCase(), Integer.toString(buffer.length)});
     }
 
     @Override
@@ -821,6 +874,15 @@ public class USBBulkConnection extends IConnection {
 
     @Override
     public void TransmitMemoryRead(int addr, int length) {
+        while (readsync.Pending) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        readsync.Pending = true;
+        System.out.println(String.format("tx memrd addr=0x%08X le=%d",addr,length));
         byte[] data = new byte[12];
         data[0] = 'A';
         data[1] = 'x';
@@ -839,6 +901,36 @@ public class USBBulkConnection extends IConnection {
         WaitSync();
     }
 
+    @Override
+    public void TransmitMemoryRead(int addr, int length, MemReadHandler handler) {
+        while (readsync.Pending) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        readsync.Pending = true;
+        memReadHandler = handler;
+        //System.out.println(String.format("tx memrd addr=0x%08X le=%d",addr,length));
+        byte[] data = new byte[12];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'r';
+        data[4] = (byte) addr;
+        data[5] = (byte) (addr >> 8);
+        data[6] = (byte) (addr >> 16);
+        data[7] = (byte) (addr >> 24);
+        data[8] = (byte) length;
+        data[9] = (byte) (length >> 8);
+        data[10] = (byte) (length >> 16);
+        data[11] = (byte) (length >> 24);
+        ClearSync();
+        writeBytes(data);
+        WaitSync();
+    }
+    
     @Override
     public void TransmitMemoryRead1Word(int addr) {
         byte[] data = new byte[8];
@@ -860,6 +952,7 @@ public class USBBulkConnection extends IConnection {
         @Override
         public void run() {
             ByteBuffer recvbuffer = ByteBuffer.allocateDirect(32768);
+            recvbuffer.order(ByteOrder.LITTLE_ENDIAN);
             IntBuffer transfered = IntBuffer.allocate(1);
             while (!disconnectRequested) {
                 int result = LibUsb.bulkTransfer(handle, (byte) IN_ENDPOINT, recvbuffer, transfered, 1000);
@@ -868,12 +961,7 @@ public class USBBulkConnection extends IConnection {
                 }
                 {
                     int sz = transfered.get(0);
-                    if (sz != 0) {
-//                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receive sz: " + sz);
-                    }
-                    for (int i = 0; i < sz; i++) {
-                        processByte(recvbuffer.get(i));
-                    }
+                    processPacket(recvbuffer, sz);
                 }
             }
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receiver: thread stopped");
@@ -889,12 +977,12 @@ public class USBBulkConnection extends IConnection {
             while (!disconnectRequested) {
                 try {
                     QCmdSerialTask cmd = queueSerialTask.take();
-                    QCmd response = cmd.Do(USBBulkConnection.this);
+                    QCmd response = cmd.Do(USBBulkConnection_v2.this);
                     if (response != null) {
                         QCmdProcessor.getQCmdProcessor().getQueueResponse().add(response);
                     }
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "transmitter: thread stopped");
@@ -969,7 +1057,7 @@ public class USBBulkConnection extends IConnection {
                     return;
                 }
                 if (index >= getPatchModel().ParameterInstances.size()) {
-                    Logger.getLogger(USBBulkConnection.class
+                    Logger.getLogger(USBBulkConnection_v2.class
                             .getName()).log(Level.INFO, "Rx paramchange index out of range{0} {1}", new Object[]{index, value});
 
                     return;
@@ -977,7 +1065,7 @@ public class USBBulkConnection extends IConnection {
                 ParameterInstance pi = getPatchModel().ParameterInstances.get(index);
 
                 if (pi == null) {
-                    Logger.getLogger(USBBulkConnection.class
+                    Logger.getLogger(USBBulkConnection_v2.class
                             .getName()).log(Level.INFO, "Rx paramchange parameterInstance null{0} {1}", new Object[]{index, value});
                     return;
                 }
@@ -1021,16 +1109,19 @@ public class USBBulkConnection extends IConnection {
     private ByteBuffer lcdRcvBuffer = ByteBuffer.allocate(256);
     private ByteBuffer sdinfoRcvBuffer = ByteBuffer.allocate(12);
     private ByteBuffer fileinfoRcvBuffer = ByteBuffer.allocate(256);
-    private ByteBuffer memReadBuffer = ByteBuffer.allocate(16 * 4);
+    
     private int memReadAddr;
     private int memReadLength;
     private int memReadValue;
+    private MemReadHandler memReadHandler;
     private byte[] fwversion = new byte[4];
     private int patchentrypoint;
 
     @Override
     public ByteBuffer getMemReadBuffer() {
-        return memReadBuffer;
+        synchronized (readsync) {
+            return readsync.memReadBuffer;            
+        }
     }
 
     @Override
@@ -1060,7 +1151,7 @@ public class USBBulkConnection extends IConnection {
 
     void DisplayPackHeader(int i1, int i2) {
         if (i2 > 1024) {
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.FINE, "Lots of data coming! {0} / {1}", new Object[]{Integer.toHexString(i1), Integer.toHexString(i2)});
+            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.FINE, "Lots of data coming! {0} / {1}", new Object[]{Integer.toHexString(i1), Integer.toHexString(i2)});
         } else {
 //            Logger.getLogger(SerialConnection.class.getName()).info("OK! " + Integer.toHexString(i1) + " / " + Integer.toHexString(i2));
         }
@@ -1087,20 +1178,27 @@ public class USBBulkConnection extends IConnection {
             if (getPatchModel().DisplayInstances == null) {
                 return;
             }
-            //        Logger.getLogger(SerialConnection.class.getName()).info("Distr2");
-            SwingUtilities.invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    dispData.rewind();
-                    for (DisplayInstance d : getPatchModel().DisplayInstances) {
-                        d.ProcessByteBuffer(dispData);
+            if (!SwingUtilities.isEventDispatchThread()) {
+                //        Logger.getLogger(SerialConnection.class.getName()).info("Distr2");
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        dispData.rewind();
+                        for (DisplayInstance d : getPatchModel().DisplayInstances) {
+                            d.ProcessByteBuffer(dispData);
+                        }
                     }
-                }
-            });
+                });
+            } else  {
+                        dispData.rewind();
+                        for (DisplayInstance d : getPatchModel().DisplayInstances) {
+                            d.ProcessByteBuffer(dispData);
+                        }                
+            }
         } catch (InterruptedException ex) {
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1112,375 +1210,170 @@ public class USBBulkConnection extends IConnection {
 
     int LCDPacketRow = 0;
 
-    void processByte(byte cc) {
-//            Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE,"AxoP c="+(char)c+"="+Integer.toHexString(c)+" s="+Integer.toHexString(state));
-        int c = cc & 0xff;
-//            System.out.println("AxoP c="+(char)c+"="+Integer.toHexString(c));
+    ReceiverState rstate=ReceiverState.ackPckt;
+    
+    final int tx_hdr_acknowledge = 0x416F7841;  // "AxoA"
+    final int tx_hdr_fwid = 0x566f7841;         // "AxoV"
+    final int tx_hdr_log = 0x546F7841;          // "AxoT"
+    final int tx_hdr_memrd32 = 0x796f7841;      // "Axoy"
+    final int tx_hdr_memrdx = 0x726f7841;       // "Axor"
+    final int rx_hdr_displaypckt = 0x446F7841;  // "AxoD"
+    final int rx_hdr_paramchange = 0x516F7841;  // "AxoQ" 
+    
+    final boolean log_rx_diagnostics = true;
+    
+    void processPacket(ByteBuffer rbuf, int size) {
+        if (size == 0) {
+            GoIdleState();
+            return;
+        }
+        rbuf.rewind();
         switch (state) {
-            case header:
-                switch (headerstate) {
-                    case 0:
-                        if (c == 'A') {
-                            headerstate = 1;
-                        }
-                        break;
-                    case 1:
-                        if (c == 'x') {
-                            headerstate = 2;
-                        } else {
+            case header: {
+                if (size >= 4) {
+                    int header = rbuf.getInt();
+                    switch (header) {
+                        case tx_hdr_acknowledge: {
+                            int i0 = rbuf.getInt();
+                            int i1 = rbuf.getInt();
+                            int i2 = rbuf.getInt();
+                            int i3 = rbuf.getInt();
+                            int i4 = rbuf.getInt();
+                            int i5 = rbuf.getInt();
+                            Acknowledge(i1, i2, i3, i4, i5);
                             GoIdleState();
                         }
                         break;
-                    case 2:
-                        if (c == 'o') {
-                            headerstate = 3;
-                        } else {
-                            GoIdleState();
-                        }
-                        break;
-                    case 3:
-                        switch (c) {
-                            case 'Q':
-                                state = ReceiverState.paramchangePckt;
-                                //System.out.println("param packet start");
-                                dataIndex = 0;
-                                dataLength = 12;
-                                break;
-                            case 'A':
-                                state = ReceiverState.ackPckt;
-                                //System.out.println("ack packet start");
-                                dataIndex = 0;
-                                dataLength = 24;
-                                break;
-                            case 'D':
-                                state = ReceiverState.displayPcktHdr;
-                                //System.out.println("display packet start");
-                                dataIndex = 0;
-                                dataLength = 8;
-                                break;
-                            case 'T':
-                                state = ReceiverState.textPckt;
-                                //System.out.println("text packet start");
-                                textRcvBuffer.clear();
-                                dataIndex = 0;
-                                dataLength = 255;
-                                break;
-                            case '0':
-                            case '1':
-                            case '2':
-                            case '3':
-                            case '4':
-                            case '5':
-                            case '6':
-                            case '7':
-                            case '8':
-                                LCDPacketRow = c - '0';
-                                state = ReceiverState.lcdPckt;
-                                //System.out.println("text packet start");
-                                lcdRcvBuffer.rewind();
-                                dataIndex = 0;
-                                dataLength = 128;
-                                break;
-                            case 'd':
-                                state = ReceiverState.sdinfo;
-                                sdinfoRcvBuffer.rewind();
-                                dataIndex = 0;
-                                dataLength = 12;
-                                break;
-                            case 'f':
-                                state = ReceiverState.fileinfo;
-                                fileinfoRcvBuffer.clear();
-                                dataIndex = 0;
-                                dataLength = 8;
-                                break;
-                            case 'r':
-                                state = ReceiverState.memread;
-                                memReadBuffer.clear();
-                                dataIndex = 0;
-                                break;
-                            case 'y':
-                                state = ReceiverState.memread1word;
-                                dataIndex = 0;
-                                break;
-                            case 'V':
-                                state = ReceiverState.fwversion;
-                                dataIndex = 0;
-                                break;
-                            default:
-                                GoIdleState();
-                                break;
-                        }
-                        break;
-                    default:
-                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.SEVERE, "receiver: invalid header");
-                        GoIdleState();
-
-                        break;
-                }
-                break;
-            case paramchangePckt:
-                if (dataIndex < dataLength) {
-                    storeDataByte(c);
-                }
-//                    System.out.println("pch packet i=" +dataIndex + " v=" + c + " c="+ (char)(cc));
-                if (dataIndex == dataLength) {
-                    //System.out.println("param packet complete 0x" + Integer.toHexString(packetData[1]) + "    0x" + Integer.toHexString(packetData[0]));
-                    RPacketParamChange(packetData[2], packetData[1], packetData[0]);
-                    GoIdleState();
-                }
-                break;
-            case ackPckt:
-                if (dataIndex < dataLength) {
-                    //System.out.println("ack packet i=" +dataIndex + " v=" + c + " c="+ (char)(cc));
-                    storeDataByte(c);
-                }
-                if (dataIndex == dataLength) {
-                    //System.out.println("ack packet complete");
-                    Acknowledge(packetData[1], packetData[2], packetData[3], packetData[4], packetData[5]);
-                    GoIdleState();
-                }
-                break;
-            case lcdPckt:
-                if (dataIndex < dataLength) {
-                    //System.out.println("lcd packet i=" +dataIndex + " v=" + c + " c="+ (char)(cc));
-                    lcdRcvBuffer.put(cc);
-                    dataIndex++;
-                }
-                if (dataIndex == dataLength) {
-                    lcdRcvBuffer.rewind();
-//                    MainFrame.mainframe.remote.updateRow(LCDPacketRow, lcdRcvBuffer);
-                    GoIdleState();
-                }
-                break;
-            case displayPcktHdr:
-                if (dataIndex < dataLength) {
-                    storeDataByte(c);
-                }
-//                    System.out.println("pch packet i=" +dataIndex + " v=" + c + " c="+ (char)(cc));
-                if (dataIndex == dataLength) {
-                    DisplayPackHeader(packetData[0], packetData[1]);
-                }
-                break;
-            case displayPckt:
-                if (dataIndex < dataLength) {
-                    dispData.put(cc);
-                    dataIndex++;
-                }
-                if (dataIndex == dataLength) {
-                    DistributeToDisplays(dispData);
-                    GoIdleState();
-                }
-                break;
-            case textPckt:
-                if (c != 0) {
-                    textRcvBuffer.append((char) cc);
-                } else {
-                    //textRcvBuffer.append((char) cc);
-                    textRcvBuffer.limit(textRcvBuffer.position());
-                    textRcvBuffer.rewind();
-                    Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
-                    GoIdleState();
-                }
-                break;
-            case sdinfo:
-                if (dataIndex < dataLength) {
-                    sdinfoRcvBuffer.put(cc);
-                    dataIndex++;
-                }
-                if (dataIndex == dataLength) {
-                    sdinfoRcvBuffer.rewind();
-                    sdinfoRcvBuffer.order(ByteOrder.LITTLE_ENDIAN);
-//                    Logger.getLogger(SerialConnection.class.getName()).info("sdinfo: "
-//                            + sdinfoRcvBuffer.asIntBuffer().get(0) + " "
-//                            + sdinfoRcvBuffer.asIntBuffer().get(1) + " "
-//                            + sdinfoRcvBuffer.asIntBuffer().get(2));
-                    SDCardInfo.getInstance().SetInfo(sdinfoRcvBuffer.asIntBuffer().get(0), sdinfoRcvBuffer.asIntBuffer().get(1), sdinfoRcvBuffer.asIntBuffer().get(2));
-                    GoIdleState();
-                }
-                break;
-            case fileinfo:
-                if ((dataIndex < dataLength) || (c != 0)) {
-                    fileinfoRcvBuffer.put(cc);
-//                    System.out.println("fileinfo \'" + (char) c + "\' = " + c);
-                    dataIndex++;
-                } else {
-                    fileinfoRcvBuffer.put((byte) c);
-                    fileinfoRcvBuffer.order(ByteOrder.LITTLE_ENDIAN);
-                    fileinfoRcvBuffer.limit(fileinfoRcvBuffer.position());
-                    fileinfoRcvBuffer.rewind();
-                    int size = fileinfoRcvBuffer.getInt();
-                    int timestamp = fileinfoRcvBuffer.getInt();
-                    CharBuffer cb = Charset.forName("ISO-8859-1").decode(fileinfoRcvBuffer);
-                    String fname = cb.toString();
-                    // strip trailing null
-                    if (fname.charAt(fname.length() - 1) == (char) 0) {
-                        fname = fname.substring(0, fname.length() - 1);
-                    }
-                    SDCardInfo.getInstance().AddFile(fname, size, timestamp);
-//                    Logger.getLogger(USBBulkConnection.class.getName()).info("fileinfo: " + cb.toString());
-                    GoIdleState();
-                    if (fname.equals("/")) {
-                        // end of index
-//                        System.out.println("sdfilelist done");
-                        synchronized (readsync) {
-                            readsync.Acked = true;
-                            readsync.notifyAll();
-                        }
-                    }
-                }
-                break;
-            case memread:
-                switch (dataIndex) {
-                    case 0:
-                        memReadAddr = (cc & 0xFF);
-                        break;
-                    case 1:
-                        memReadAddr += (cc & 0xFF) << 8;
-                        break;
-                    case 2:
-                        memReadAddr += (cc & 0xFF) << 16;
-                        break;
-                    case 3:
-                        memReadAddr += (cc & 0xFF) << 24;
-                        break;
-                    case 4:
-                        memReadLength = (cc & 0xFF);
-                        break;
-                    case 5:
-                        memReadLength += (cc & 0xFF) << 8;
-                        break;
-                    case 6:
-                        memReadLength += (cc & 0xFF) << 16;
-                        break;
-                    case 7:
-                        memReadLength += (cc & 0xFF) << 24;
-                        break;
-                    case 8:
-                        memReadBuffer = ByteBuffer.allocate(memReadLength);
-                        memReadBuffer.rewind();
-                    default:
-                        memReadBuffer.put(cc);
-                        if (dataIndex == memReadLength + 7) {
-                            memReadBuffer.rewind();
-                            memReadBuffer.order(ByteOrder.LITTLE_ENDIAN);
-                            /*
-                             System.out.println("memread offset 0x" + Integer.toHexString(memReadAddr));
-                             int i = 0;
-                             while (memReadBuffer.hasRemaining()) {
-                             System.out.print(" " + String.format("%02X", memReadBuffer.get()));
-                             i++;
-                             //if ((i % 4) == 0) {
-                             //    System.out.print(" ");
-                             //}
-                             if ((i % 32) == 0) {
-                             System.out.println();
-                             }
-                             }
-                             System.out.println();
-                             */
+                        case tx_hdr_memrd32: {
+                            memReadAddr = rbuf.getInt();
+                            memReadValue = rbuf.getInt();
                             synchronized (readsync) {
                                 readsync.Acked = true;
+                                readsync.Pending = false;
                                 readsync.notifyAll();
                             }
                             GoIdleState();
                         }
-                }
-                dataIndex++;
-                break;
-
-            case memread1word:
-                switch (dataIndex) {
-                    case 0:
-                        memReadAddr = (cc & 0xFF);
                         break;
-                    case 1:
-                        memReadAddr += (cc & 0xFF) << 8;
-                        break;
-                    case 2:
-                        memReadAddr += (cc & 0xFF) << 16;
-                        break;
-                    case 3:
-                        memReadAddr += (cc & 0xFF) << 24;
-                        break;
-                    case 4:
-                        memReadValue = (cc & 0xFF);
-                        break;
-                    case 5:
-                        memReadValue += (cc & 0xFF) << 8;
-                        break;
-                    case 6:
-                        memReadValue += (cc & 0xFF) << 16;
-                        break;
-                    case 7:
-                        memReadValue += (cc & 0xFF) << 24;
-                        //System.out.println(String.format("addr %08X value %08X", memReadAddr, memReadValue));
-                        synchronized (readsync) {
-                            readsync.Acked = true;
-                            readsync.notifyAll();
+                        case tx_hdr_fwid: {
+                            fwversion[0] = rbuf.get();
+                            fwversion[1] = rbuf.get();
+                            fwversion[2] = rbuf.get();
+                            fwversion[3] = rbuf.get();
+                            int fwcrc1 = (rbuf.get() & 0xFF) << 24;
+                            fwcrc1 += (rbuf.get() & 0xFF) << 16;
+                            fwcrc1 += (rbuf.get() & 0xFF) << 8;
+                            fwcrc1 += (rbuf.get() & 0xFF);
+                            fwcrc = fwcrc1;
+                            int patchentrypoint1 = (rbuf.get() & 0xFF) << 24;
+                            patchentrypoint1 += (rbuf.get() & 0xFF) << 16;
+                            patchentrypoint1 += (rbuf.get() & 0xFF) << 8;
+                            patchentrypoint1 += (rbuf.get() & 0xFF);
+                            patchentrypoint = patchentrypoint1;
+                            String sFwcrc = String.format("%08X", fwcrc);
+                            Logger.getLogger(USBBulkConnection.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%s, entrypoint=0x%08X",
+                                    fwversion[0], fwversion[1], fwversion[2], fwversion[3], sFwcrc, patchentrypoint));
+                            MainFrame.mainframe.setFirmwareID(sFwcrc);
+                            GoIdleState();
                         }
-                        GoIdleState();
+                        break;
+                        case tx_hdr_log: {
+                            while (rbuf.remaining() > 0) {
+                                byte b =  rbuf.get();
+                                textRcvBuffer.append((char)b);
+                                if (b==0) break;
+                            }
+                            textRcvBuffer.limit(textRcvBuffer.position());
+                            textRcvBuffer.rewind();
+                            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
+                        }
+                        break;
+                        case tx_hdr_memrdx:
+                            memReadAddr = rbuf.getInt();
+                            memReadLength = rbuf.getInt();
+                            if (false && log_rx_diagnostics) {
+                                System.out.print("rx memrd addr=" + String.format("0x%08X", memReadAddr) + " le=" + memReadLength +" [");
+                                for(int i= 12;i<size;i++) {
+                                    // this would be unexpected extra data...
+                                    System.out.print("|"+(char)rbuf.get(i));
+                                }
+                                System.out.println("]");
+                            }
+                            state = ReceiverState.memread;
+                            break;
+                        case rx_hdr_displaypckt:
+                            if (log_rx_diagnostics) {
+                                //System.out.println("rx displaypckt deprecated");
+                            }
+                            int z = rbuf.getInt(); // expected 0
+                            int n = rbuf.getInt(); // size in number of 32 bit words
+                            break;
+                        case rx_hdr_paramchange: {
+                            int patchID = rbuf.getInt();
+                            int value = rbuf.getInt();
+                            int index = rbuf.getInt();
+                            RPacketParamChange(index, value, patchID);
+                        }
+                            break;
+                        default:
+                            System.out.println(String.format("lost header %8x", header));
+                    }
                 }
-                dataIndex++;
-                break;
-
-            case fwversion:
-                switch (dataIndex) {
-                    case 0:
-                        fwversion[0] = cc;
-                        break;
-                    case 1:
-                        fwversion[1] = cc;
-                        break;
-                    case 2:
-                        fwversion[2] = cc;
-                        break;
-                    case 3:
-                        fwversion[3] = cc;
-                        break;
-                    case 4:
-                        fwcrc = (cc & 0xFF) << 24;
-                        break;
-                    case 5:
-                        fwcrc += (cc & 0xFF) << 16;
-                        break;
-                    case 6:
-                        fwcrc += (cc & 0xFF) << 8;
-                        break;
-                    case 7:
-                        fwcrc += (cc & 0xFF);
-                        break;
-                    case 8:
-                        patchentrypoint = (cc & 0xFF) << 24;
-                        break;
-                    case 9:
-                        patchentrypoint += (cc & 0xFF) << 16;
-                        break;
-                    case 10:
-                        patchentrypoint += (cc & 0xFF) << 8;
-                        break;
-                    case 11:
-                        patchentrypoint += (cc & 0xFF);
-                        String sFwcrc = String.format("%08X", fwcrc);
-                        Logger.getLogger(USBBulkConnection.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%s, entrypoint=0x%08X",
-                                fwversion[0], fwversion[1], fwversion[2], fwversion[3], sFwcrc, patchentrypoint));
-                        MainFrame.mainframe.setFirmwareID(sFwcrc);
-                        GoIdleState();
-                        break;
+            }
+            break;
+            case memread: {                
+                if (memReadLength < size) {
+                    System.out.print("memread barf:<");
+                    rbuf.position(memReadLength);
+                    while(rbuf.hasRemaining()) {
+                        System.out.print("|"+(char)rbuf.get());
+                    }
+                    System.out.println(">");
                 }
-                dataIndex++;
-                break;
-
-            default:
+                //System.out.println("rx memrd recv'd sz=" + size);
+                byte memr[] = new byte[memReadLength];
+                rbuf.get(memr,0,memReadLength);
+                synchronized (readsync) {
+                    readsync.memReadBuffer = ByteBuffer.wrap(memr);
+                    readsync.memReadBuffer.order(ByteOrder.LITTLE_ENDIAN);
+                    readsync.memReadBuffer.rewind();
+                    readsync.Acked = true;
+                    readsync.Pending = false;
+                    readsync.notifyAll();
+                }
+                if (memReadHandler != null) {
+                    try {
+//                        System.out.println("handler: " + memReadHandler.toString());
+                        SwingUtilities.invokeAndWait(new Runnable() {
+                            @Override
+                            public void run() {
+                                memReadHandler.Done(readsync.memReadBuffer);
+                            }
+                        });
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InvocationTargetException ex) {
+                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                memReadHandler = null;
                 GoIdleState();
-                break;
+            } break;            
+            default:
+                System.out.println("state?" + state);
         }
     }
+
+    int disp_addr;
+    int disp_length;
 
     @Deprecated
     @Override
     public void  setDisplayAddr(int a, int l) {
+        disp_addr = a;
+        disp_length = l;
     }
-    
+
     @Override
     public axoloti_core getTargetProfile() {
         return targetProfile;

@@ -22,6 +22,7 @@ import static axoloti.Axoloti.HOME_DIR;
 import static axoloti.Axoloti.RELEASE_DIR;
 import static axoloti.Axoloti.RUNTIME_DIR;
 import axoloti.dialogs.AxolotiRemoteControl;
+import axoloti.dialogs.MidiRouting;
 import axoloti.dialogs.FileManagerFrame;
 import axoloti.dialogs.KeyboardFrame;
 import axoloti.dialogs.PatchBank;
@@ -60,6 +61,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import javax.swing.BoundedRangeModel;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
@@ -99,6 +101,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     FileManagerFrame filemanager;
     ThemeEditor themeEditor;
     AxolotiRemoteControl remote;
+    MidiRouting midirouting;
     QCmdProcessor qcmdprocessor;
     Thread qcmdprocessorThread;
     static public Cursor transparentCursor;
@@ -253,6 +256,10 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         remote = new AxolotiRemoteControl();
         remote.setTitle("Remote");
         remote.setVisible(false);
+
+        midirouting = new MidiRouting();
+        midirouting.setTitle("MIDI Routing");
+        midirouting.setVisible(false);      
 
         if (!prefs.getExpertMode()) {
             jMenuItemRefreshFWID.setVisible(false);
@@ -470,6 +477,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jMenuItemFDisconnect = new javax.swing.JMenuItem();
         jMenuItemPing = new javax.swing.JMenuItem();
         jMenuItemPanic = new javax.swing.JMenuItem();
+        jMenuItemMemViewer = new javax.swing.JMenuItem();
         jMenuItemMount = new javax.swing.JMenuItem();
         jMenuFirmware = new javax.swing.JMenu();
         jMenuItemFlashDefault = new javax.swing.JMenuItem();
@@ -623,6 +631,14 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             }
         });
         jMenuBoard.add(jMenuItemPanic);
+
+        jMenuItemMemViewer.setText("New memory viewer");
+        jMenuItemMemViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemMemViewerActionPerformed(evt);
+            }
+        });
+        jMenuBoard.add(jMenuItemMemViewer);
 
         jMenuItemMount.setText("Enter card reader mode (disconnects editor)");
         jMenuItemMount.addActionListener(new java.awt.event.ActionListener() {
@@ -969,6 +985,11 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     }//GEN-LAST:event_jMenuItemMountActionPerformed
 
+    private void jMenuItemMemViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMemViewerActionPerformed
+        JFrame F = new axoloti.dialogs.Memory();
+        F.setVisible(true);
+    }//GEN-LAST:event_jMenuItemMemViewerActionPerformed
+
     public void OpenURL() {
         String url = JOptionPane.showInputDialog(this, "Enter URL:");
         if (url == null) {
@@ -1031,6 +1052,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     private javax.swing.JMenuItem jMenuItemFlashDFU;
     private javax.swing.JMenuItem jMenuItemFlashDefault;
     private javax.swing.JMenuItem jMenuItemFlashSDR;
+    private javax.swing.JMenuItem jMenuItemMemViewer;
     private javax.swing.JMenuItem jMenuItemMount;
     private javax.swing.JMenuItem jMenuItemPanic;
     private javax.swing.JMenuItem jMenuItemPing;
@@ -1241,6 +1263,10 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         return remote;
     }
 
+    public MidiRouting getMidiRouting() {
+        return midirouting;
+    }
+    
     public KeyboardFrame getKeyboard() {
         return keyboard;
     }

@@ -1,5 +1,6 @@
 package axoloti;
 
+import axoloti.chunks.ChunkParser;
 import axoloti.targetprofile.axoloti_core;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -11,6 +12,12 @@ import qcmds.QCmdSerialTask;
  * @author jtaelman
  */
 public abstract class IConnection {
+    
+    public interface MemReadHandler
+    {
+        public void Done(ByteBuffer mem);
+    }
+    
     abstract public boolean isConnected();
     abstract public void disconnect();
     abstract public boolean connect();
@@ -30,6 +37,7 @@ public abstract class IConnection {
     abstract public void TransmitChangeWorkingDirectory(String path);
     abstract public void TransmitAppendFile(byte[] buffer);
     abstract public void TransmitCloseFile();
+    abstract public void TransmitMemoryRead(int addr, int length, MemReadHandler handler);
     abstract public void TransmitMemoryRead(int addr, int length);
     abstract public void TransmitMemoryRead1Word(int addr);    
     abstract public void SendUpdatedPreset(byte[] b);
@@ -48,6 +56,8 @@ public abstract class IConnection {
     abstract public ByteBuffer getMemReadBuffer();
     abstract public int getMemRead1Word();
     abstract public boolean GetSDCardPresent();
+    abstract public void setDisplayAddr(int a, int l);
+    abstract public ChunkParser GetFWChunks();
 
     private ArrayList<ConnectionStatusListener> csls = new ArrayList<ConnectionStatusListener>();
 

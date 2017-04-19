@@ -215,6 +215,7 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/sdram.c \
        ${FIRMWARE}/pconnection.c \
        ${FIRMWARE}/parameters.c \
+       ${FIRMWARE}/patch_chunks.c \
        ${FIRMWARE}/main.c \
        ${FIRMWARE}/patch.c \
        ${FIRMWARE}/flash.c \

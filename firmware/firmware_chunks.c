@@ -41,7 +41,7 @@ typedef struct {
 	chunk_lcd_framebuffer_t lcd_framebuffer;
 } chunk_firmware_chunks_t;
 
-#define fourcc_firmware_chunks  FOURCC('A','X','R','1')
+#define fourcc_fw_root  FOURCC('A','X','R','1')
 
 typedef struct {
 	chunk_header_t header;
@@ -49,7 +49,7 @@ typedef struct {
 } chunk_fw_root_t;
 
 const chunk_fw_root_t chunk_fw_root = {
-	.header = CHUNK_HEADER(firmware_chunks),
+	.header = CHUNK_HEADER(fw_root),
 	.fw_chunks = {
 		.midi_input_routing_din = {
 			.header = CHUNK_HEADER(midi_input_routing),
@@ -59,13 +59,13 @@ const chunk_fw_root_t chunk_fw_root = {
 		},
 		.midi_input_routing_usbh = {
 			.header = CHUNK_HEADER(midi_input_routing),
-			.name = "USBH",
+			.name = "USB Host",
 			.nports = 16,
 			.routing_table = &midi_inputmap_usbh[0]
 		},
 		.midi_input_routing_usbd = {
 			.header = CHUNK_HEADER(midi_input_routing),
-			.name = "USBD",
+			.name = "USB Device",
 			.nports = 1,
 			.routing_table = &midi_inputmap_usbd
 		},

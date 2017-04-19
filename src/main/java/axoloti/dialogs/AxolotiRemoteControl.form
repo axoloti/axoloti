@@ -307,6 +307,26 @@
                     <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.Glue"/>
                   </AuxValues>
                 </Component>
+                <Component class="javax.swing.Box$Filler" name="filler16">
+                </Component>
+                <Component class="javax.swing.Box$Filler" name="filler17">
+                  <Properties>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[32767, 32767]"/>
+                    </Property>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.Glue"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButtonRefresh">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="refresh"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonRefreshActionPerformed"/>
+                  </Events>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>

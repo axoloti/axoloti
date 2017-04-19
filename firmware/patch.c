@@ -149,8 +149,22 @@ static int StartPatch1(void) {
     *ccm = 0;
   patchMeta.fptr_dsp_process = 0;
   nThreadsBeforePatch = GetNumberOfThreads();
-  patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC_ALIASED + 1);
-  // PATCHMAINLOC_ALIASED + 1 for THUMB mode
+
+  fourcc_t signature = *(fourcc_t *)PATCHMAINLOC;
+  if (signature != FOURCC('a','x','x','2')) {
+	    report_patchLoadFail((const char *)&loadFName[0]);
+	    patchStatus = STARTFAILED;
+	    return -1;
+  }
+  chunk_header_t *patch_root_chunk = *(chunk_header_t * *)(PATCHMAINLOC+4);
+  readchunk_patch_root(patch_root_chunk);
+  if (patchMeta.fptr_patch_init == 0){
+	    report_patchLoadFail((const char *)&loadFName[0]);
+	    patchStatus = STARTFAILED;
+	    return -1;
+  }
+//  patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC_ALIASED + 1);
+// PATCHMAINLOC_ALIASED + 1 for THUMB mode
   (patchMeta.fptr_patch_init)(GetFirmwareID());
   if (patchMeta.fptr_dsp_process == 0) {
     report_patchLoadFail((const char *)&loadFName[0]);

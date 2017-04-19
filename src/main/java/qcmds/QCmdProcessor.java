@@ -54,6 +54,9 @@ public class QCmdProcessor implements Runnable {
                 }
                 if (queue.isEmpty() && serialconnection.isConnected()) {
                     queue.add(new QCmdPing());
+                    if (MainFrame.mainframe.getRemote().isFocused()){
+                        MainFrame.mainframe.getRemote().refreshFB();
+                    }
                 }
             }
         }

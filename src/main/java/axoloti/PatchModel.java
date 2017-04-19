@@ -680,7 +680,7 @@ public class PatchModel {
         DisplayInstances = new ArrayList<DisplayInstance>();
         for (AxoObjectInstanceAbstract o : objectinstances) {
             for (DisplayInstance p : o.getDisplayInstances()) {
-                p.setOffset(offset + 3);
+                p.setOffset(offset);
                 p.setIndex(i);
                 int l = p.getLength();
                 offset += l;
@@ -888,7 +888,7 @@ public class PatchModel {
             c += "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.GetUserParameterName(), CodeGeneration.param_name_length) + "},\n";
         }
         c += "};\n";
-        c += "    int32_t displayVector[" + (displayDataLength + 3) + "];\n";
+        c += "    int32_t displayVector[" + (displayDataLength) + "];\n";
 
         c += "    static const uint32_t ndisplay_metas = " + DisplayInstances.size() + ";\n";
         c += "    Display_meta_t display_metas[ndisplay_metas] = {\n";
@@ -1151,9 +1151,6 @@ public class PatchModel {
         c += "   for(j=0;j<attr_poly*NMODULATIONSOURCES;j++){\n";
         c += "      *pp = 0; pp++;\n";
         c += "   }\n";
-        c += "     displayVector[0] = 0x446F7841;\n"; // "AxoD"
-        c += "     displayVector[1] = 0;\n";
-        c += "     displayVector[2] = " + displayDataLength + ";\n";
         return c;
     }
 
@@ -1422,7 +1419,7 @@ public class PatchModel {
                 + "  }\n"
                 + "}\n\n";
 
-        c += "void xpatch_init2(int fwid)\n"
+        c += "void xpatch_init2(int32_t fwid)\n"
                 + "{\n"
                 + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID + ") {\n"
                 //                + "    return;"
@@ -1438,27 +1435,72 @@ public class PatchModel {
                 + "      fpp++;\n"
                 + "    }\n"
                 + "  }\n"
-                + "  patchMeta.npresets = " + settings.GetNPresets() + ";\n"
-                + "  patchMeta.npreset_entries = " + settings.GetNPresetEntries() + ";\n"
-                + "  patchMeta.pPresets = 0;//(PresetParamChange_t*) root.GetPresets();\n"
-                + "  patchMeta.params = &root.params[0];\n"
-                + "  patchMeta.param_names = &root.param_names[0];\n"
-                + "  patchMeta.pDisplayVector = &root.displayVector[0];\n"
-                + "  patchMeta.display_metas = &root.display_metas[0];\n"
-                + "  patchMeta.ndisplay_metas = root.ndisplay_metas;\n"
-                + "  patchMeta.nparams = " + ParameterInstances.size() + ";\n"
-                + "  patchMeta.patchID = " + GetIID() + ";\n"
                 + "  extern char _sdram_dyn_start;\n"
                 + "  extern char _sdram_dyn_end;\n"
                 + "  sdram_init(&_sdram_dyn_start,&_sdram_dyn_end);\n"
                 + "  root.Init();\n"
-                + "  patchMeta.objects = root.ui_objects;\n"
-                + "  patchMeta.nobjects = root.n_ui_objects;\n"
-                + "  patchMeta.fptr_applyPreset = ApplyPreset;\n"
-                + "  patchMeta.fptr_patch_dispose = PatchDispose;\n"
-                + "  patchMeta.fptr_MidiInHandler = PatchMidiInHandler;\n"
-                + "  patchMeta.fptr_dsp_process = PatchProcess;\n"
-                + "}\n";
+                + "}\n\n";
+        
+        c += "#define fourcc_patch_root FOURCC('A','X','P','T')\n"
+                + "typedef struct {\n"
+                + "	chunk_header_t header;\n"
+                + "	chunk_patch_meta_t patch_meta;\n"
+                + "	chunk_patch_preset_t patch_preset;\n"
+                + "	chunk_patch_parameter_t patch_parameter;\n"
+                + "	chunk_patch_ui_objects_t patch_ui_objects;\n"
+                + "	chunk_patch_initpreset_t patch_initpreset;\n"
+                + "	chunk_patch_display_t patch_display;\n"
+                + "	chunk_patch_display_meta_t patch_display_meta;\n"
+                + "	chunk_patch_functions_t patch_functions;\n"
+                + "} chunk_patch_root_t;\n"
+                + "\n"
+                + "chunk_patch_root_t patch_root_chunk = {\n"
+                + "		header : CHUNK_HEADER(patch_root),\n"
+                + "		patch_meta : {\n"
+                + "			header : CHUNK_HEADER(patch_meta),\n"
+                + "			patchID : " + GetIID() + ",\n"
+                + "			patchname : {'p','a','t','c','h'}\n"
+                + "		},\n"
+                + "		patch_preset : {\n"
+                + "			header : CHUNK_HEADER(patch_preset),\n"
+                + "			npresets : " + settings.GetNPresets() + ",\n"
+                + "			npreset_entries : " + settings.GetNPresetEntries() + ",\n"
+                + "			pPresets : 0\n"
+                + "		},\n"
+                + "		patch_parameter : {\n"
+                + "			header : CHUNK_HEADER(patch_parameter),\n"
+                + "			nparams : " + ParameterInstances.size() + ",\n"
+                + "			pParams : &root.params[0],\n"
+                + "			pParam_names : root.param_names\n"
+                + "		},\n"
+                + "		patch_ui_objects : {\n"
+                + "			header : CHUNK_HEADER(patch_ui_objects),\n"
+                + "                     nobjects : root.n_ui_objects,\n"
+                + "			pObjects : root.ui_objects,\n"
+                + "		},\n"
+                + "		patch_initpreset : {\n"
+                + "			header : CHUNK_HEADER(patch_initpreset),\n"
+                + "		},\n"
+                + "		patch_display : {\n"
+                + "			header : CHUNK_HEADER(patch_display),\n"
+                + "                     ndisplayVector : " + displayDataLength + ",\n"
+                + "                     pDisplayVector : root.displayVector,\n"
+                + "		},\n"
+                + "		patch_display_meta : {\n"
+                + "			header : CHUNK_HEADER(patch_display_meta),\n"
+                + "			ndisplay_metas : root.ndisplay_metas,\n"
+                + "			pDisplay_metas : &root.display_metas[0]\n"
+                + "		},\n"
+                + "		patch_functions : {\n"
+                + "			header : CHUNK_HEADER(patch_functions),\n"
+                + "					fptr_patch_init: xpatch_init2,\n"
+                + "					fptr_patch_dispose: PatchDispose,\n"
+                + "					fptr_dsp_process: PatchProcess,\n"
+                + "					fptr_MidiInHandler: PatchMidiInHandler,\n"
+                + "					fptr_applyPreset: ApplyPreset,\n"
+                + "		},\n"
+                + "};\n";
+        
         return c;
     }
 
@@ -1513,8 +1555,8 @@ public class PatchModel {
         } else {
             c += "#define MIDICHANNEL " + (settings.GetMidiChannel() - 1) + " // DEPRECATED!\n";
         }
-        c += "void xpatch_init2(int fwid);\n"
-                + "extern \"C\" __attribute__ ((section(\".boot\"))) void xpatch_init(int fwid){\n"
+        c += "void xpatch_init2(int32_t fwid);\n"
+                + "extern \"C\" __attribute__ ((section(\".boot\"))) void xpatch_init(int32_t fwid){\n"
                 + "  xpatch_init2(fwid);\n"
                 + "}\n\n";
 

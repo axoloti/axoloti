@@ -103,7 +103,7 @@ public class WindowMenu extends JMenu {
             JFrame frame = p.GetFrame();
             WindowMenuItem wmi = new WindowMenuItem(frame, prefix + frame.getTitle());
             jMenuWindow.add(wmi);
-            if (p.GetChildDocuments()!=null) {
+            if (p.GetChildDocuments() != null) {
                 PopulateDocuments(jMenuWindow, "> " + prefix, p.GetChildDocuments());
             }
         }
@@ -123,8 +123,12 @@ public class WindowMenu extends JMenu {
             WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getFilemanager(), "File Manager");
             jMenuWindow.add(a);
         }
-        if (false) {
+        {
             WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getRemote(), "Remote");
+            jMenuWindow.add(a);
+        }
+        {
+            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getMidiRouting(), "MIDI Routing");
             jMenuWindow.add(a);
         }
 

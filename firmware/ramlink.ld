@@ -12,10 +12,13 @@ MEMORY
 
 SECTIONS {
 
+	header : {
+		LONG(0x32787861) /* signature "axx2"  */
+		LONG(patch_root_chunk)
+	} > SRAM
+
     .text : ALIGN(16) SUBALIGN(16)
     {
-	/* Note: the .boot section _must_ be first in the resulting binary,
-	 * as that is where the firmware calls the patch when loaded. */
         * (.boot);
         * (.text);
         etext = .;

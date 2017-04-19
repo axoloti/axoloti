@@ -38,6 +38,7 @@
 #include "midi_usb.h"
 #include "watchdog.h"
 #include "sysmon.h"
+#include "firmware_chunks.h"
 
 //#define DEBUG_SERIAL 1
 
@@ -84,17 +85,17 @@ uint32_t value;
 #define evt_bulk_fw_ver  (1<<1)
 #define evt_bulk_memrd32 (1<<2)
 #define evt_bulk_memrdx  (1<<3)
-#define evt_bulk_tx_disp (1<<4)
 #define evt_bulk_tx_fileinfo (1<<5)
 #define evt_bulk_tx_logmessage (1<<6)
 #define evt_bulk_tx_dirlist (1<<7)
 #define evt_bulk_tx_paramchange (1<<8)
 
-const uint32_t tx_hdr_acknowledge = 0x416F7841; // "AxoA"
-const uint32_t tx_hdr_fwid = 0x566f7841; // "AxoV"
-const uint32_t tx_hdr_log = 0x546F7841; // "AxoT"
-const uint32_t tx_hdr_memrd32 = 0x796f7841; // "Axoy"
-const uint32_t tx_hdr_memrdx = 0x726f7841; // "Axor"
+const uint32_t tx_hdr_acknowledge = 0x416F7841;   // "AxoA"
+const uint32_t tx_hdr_fwid = 0x566f7841;          // "AxoV"
+const uint32_t tx_hdr_log = 0x546F7841;           // "AxoT"
+const uint32_t tx_hdr_memrd32 = 0x796f7841;       // "Axoy"
+const uint32_t tx_hdr_memrdx = 0x726f7841;        // "Axor"
+const uint32_t tx_hdr_paramchange = 0x516F7841;   // "AxoQ"
 
 msg_t bulk_tx_ack(void) {
 	int ack[7];
@@ -131,10 +132,11 @@ msg_t bulk_tx_fw_version(void) {
 	pckt.fwid[1] = (uint8_t) (fwid >> 16);
 	pckt.fwid[2] = (uint8_t) (fwid >> 8);
 	pckt.fwid[3] = (uint8_t) (fwid);
-	pckt.patch_mainloc[0] = (uint8_t) (PATCHMAINLOC >> 24);
-	pckt.patch_mainloc[1] = (uint8_t) (PATCHMAINLOC >> 16);
-	pckt.patch_mainloc[2] = (uint8_t) (PATCHMAINLOC >> 8);
-	pckt.patch_mainloc[3] = (uint8_t) (PATCHMAINLOC);
+	uint32_t chunk_addr = (uint32_t)chunk_fw_root_data;
+	pckt.patch_mainloc[0] = (uint8_t) (chunk_addr >> 24);
+	pckt.patch_mainloc[1] = (uint8_t) (chunk_addr >> 16);
+	pckt.patch_mainloc[2] = (uint8_t) (chunk_addr >> 8);
+	pckt.patch_mainloc[3] = (uint8_t) (chunk_addr);
 	return BulkUsbTransmit((const unsigned char* )(&pckt), sizeof(pckt));
 }
 
@@ -165,17 +167,13 @@ msg_t bulk_tx_memrdx(void) {
     pckt.size = value;
     msg_t m = BulkUsbTransmit((const unsigned char* )(&pckt), sizeof(pckt));
     if (m!=MSG_OK) return m;
-    return BulkUsbTransmit((const unsigned char* )(offset), value);
-}
-
-msg_t bulk_tx_disp(void) {
-  if (patchMeta.pDisplayVector == 0)
-	return 0;
-  unsigned int length = 12 + (patchMeta.pDisplayVector[2] * 4);
-  if (length > 2048)
-	return 0; // excessive size?
-  return BulkUsbTransmit((const unsigned char* )&patchMeta.pDisplayVector[0],
-						  length);
+    m = BulkUsbTransmit((const unsigned char* )(offset), value);
+    if (m!=MSG_OK) return m;
+	if ((value & 0x3F) == 0) {
+		// payload multiple of 64, transmit zero length packet to mark end
+		m = BulkUsbTransmit((const unsigned char* )(offset), 0);
+	}
+    return m;
 }
 
 msg_t bulk_tx_fileinfo(void) {
@@ -187,8 +185,14 @@ msg_t bulk_tx_fileinfo(void) {
     *(int32_t *)(&msg[4]) = fno.fsize;
     *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
     strcpy(&msg[12], &FileName[6]);
-    int l = strlen(&msg[12]);
-    return BulkUsbTransmit((const unsigned char* )msg, l+13);
+    int l = strlen(&msg[12]) + 13;
+    msg_t m = BulkUsbTransmit((const unsigned char* )msg, l);
+    if (m!=MSG_OK) return m;
+	if ((value & 0x3F) == 0) {
+		// payload multiple of 64, transmit zero length packet to mark end
+		m = BulkUsbTransmit((const unsigned char* )(offset), 0);
+	}
+	return m;
 }
 
 static FRESULT scan_files(char *path) {
@@ -431,10 +435,10 @@ msg_t bulk_tx_paramchange(void) {
 				int v = (patchMeta.params)[i].d.frac.value;  // FIXME: can't assume parameter type is t_frac
 				patchMeta.params[i].signals &= ~0x01;
 				tx_pckt_paramchange pch;
-				pch.header = 0x516F7841; //"AxoQ"
+				pch.header = tx_hdr_paramchange; //"AxoQ"
 				pch.patchID = patchMeta.patchID;
-				pch.index = i;
 				pch.value = v;
+				pch.index = i;
 				r = BulkUsbTransmit((const unsigned char* )&pch, sizeof(pch));
 				if (r<0) break;
 			}
@@ -470,9 +474,6 @@ static THD_FUNCTION(BulkWriter, arg) {
 			msg = bulk_tx_memrdx();
 			if (msg == MSG_RESET) break;
 			msg = bulk_tx_ack();
-			break;
-		case evt_bulk_tx_disp:
-			msg = bulk_tx_disp();
 			break;
 		case evt_bulk_tx_fileinfo:
 			msg = bulk_tx_fileinfo();
@@ -546,6 +547,16 @@ typedef struct {
    // uint8_t data[size];
 } rcv_pckt_preset_write_t;
 
+typedef struct {
+	uint32_t header;
+	uint32_t b_or;
+	uint32_t b_and;
+	uint8_t enc1;
+	uint8_t enc2;
+	uint8_t enc3;
+	uint8_t enc4;
+} rcv_pckt_ui_button_t;
+
 const uint32_t rcv_hdr_ping = 0x706f7841; // "Axop"
 const uint32_t rcv_hdr_getfwid = 0x566f7841; // "AxoV"
 const uint32_t rcv_hdr_memrd32 = 0x796f7841; // "Axoy"
@@ -563,6 +574,7 @@ const uint32_t rcv_hdr_fs_close = 0x636f7841; // "Axoc"
 const uint32_t rcv_hdr_fs_append = 0x416f7841; // "AxoA"
 const uint32_t rcv_hdr_preset_apply = 0x546f7841; // "AxoT"
 const uint32_t rcv_hdr_preset_write = 0x526f7841; // "AxoR"
+const uint32_t rcv_hdr_ui_button = 0x426f7841; // "AxoB"
 
 void ManipulateFile(void) {
   sdcard_attemptMountIfUnmounted();
@@ -692,7 +704,6 @@ static THD_FUNCTION(BulkReader, arg) {
           isConnected = 1;
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
     	  if (!patchStatus) {
-        	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_disp);
         	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_paramchange);
     	  }
       } else if (header == rcv_hdr_getfwid) {
@@ -770,8 +781,9 @@ static THD_FUNCTION(BulkReader, arg) {
     	  } else {
     		  // extended mode
     		  int i;
-    		  for (i=0;i<14;i++)
+    		  for (i=0;i<14;i++) {
     			  FileName[i] = p->fn[i];
+    		  }
 			  char c = p->fn[i];
 			  while(c && (i<(msg-8))) {
 				  c = p->fn[i];
@@ -850,6 +862,12 @@ static THD_FUNCTION(BulkReader, arg) {
 			  }
     	  }
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+      } else if (header == rcv_hdr_ui_button) {
+    	  rcv_pckt_ui_button_t *p = (rcv_pckt_ui_button_t *)bulk_rxbuf;
+    	  Btn_Nav_Or.word |= p->b_or;
+    	  Btn_Nav_And.word |= p->b_and;
+    	  EncBuffer[0] += p->enc1;
+    	  EncBuffer[1] += p->enc2;
       } else {
     	  // unidentified header!
     	  int i=100;

@@ -25,11 +25,11 @@ package axoloti;
 
 // Connection singleton instance
 public class CConnection {
-    static private USBBulkConnection conn = null;
+    static private USBBulkConnection_v2 conn = null;
 
     public static IConnection GetConnection() {
         if (conn == null) {
-            conn = new USBBulkConnection();
+            conn = new USBBulkConnection_v2();
         }
         return conn;
     }    

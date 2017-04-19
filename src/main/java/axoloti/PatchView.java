@@ -1,5 +1,10 @@
 package axoloti;
 
+import axoloti.chunks.ChunkData;
+import axoloti.chunks.ChunkParser;
+import axoloti.chunks.Cpatch_display;
+import axoloti.chunks.FourCC;
+import axoloti.chunks.FourCCs;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
@@ -32,6 +37,7 @@ import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,6 +57,7 @@ import qcmds.QCmdCompileModule;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdCreateDirectory;
 import qcmds.QCmdLock;
+import qcmds.QCmdMemRead;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStart;
 import qcmds.QCmdStop;
@@ -309,6 +316,34 @@ public abstract class PatchView implements ModelChangedListener {
         qCmdProcessor.AppendToQueue(new QCmdUploadPatch());
         qCmdProcessor.AppendToQueue(new QCmdStart(getPatchController()));
         qCmdProcessor.AppendToQueue(new QCmdLock(getPatchController()));
+        qCmdProcessor.AppendToQueue(new QCmdMemRead(CConnection.GetConnection().getTargetProfile().getPatchAddr(), 8, new IConnection.MemReadHandler() {
+            @Override
+            public void Done(ByteBuffer mem) {
+                int signature = mem.getInt();
+                int rootchunk_addr = mem.getInt();
+
+                qCmdProcessor.AppendToQueue(new QCmdMemRead(rootchunk_addr, 8, new IConnection.MemReadHandler() {
+                    @Override
+                    public void Done(ByteBuffer mem) {
+                        int fourcc = mem.getInt();
+                        int length = mem.getInt();
+                        System.out.println("rootchunk " + FourCC.Format(fourcc) + " len = " + length);
+
+                        qCmdProcessor.AppendToQueue(new QCmdMemRead(rootchunk_addr, length + 8, new IConnection.MemReadHandler() {
+                            @Override
+                            public void Done(ByteBuffer mem) {
+                                ChunkParser cp = new ChunkParser(mem);
+                                ChunkData cd = cp.GetOne(FourCCs.PATCH_DISPLAY);
+                                if (cd != null) {
+                                    Cpatch_display cpatch_display = new Cpatch_display(cd);
+                                    CConnection.GetConnection().setDisplayAddr(cpatch_display.pDisplayVector, cpatch_display.nDisplayVector);
+                                }
+                            }
+                        }));
+                    }
+                }));
+            }
+        }));
     }
 
     void SetDSPLoad(int pct) {

@@ -47,7 +47,7 @@ public class QCmdVirtualButton implements QCmdSerialTask {
         this.enc3 = enc3;
         this.enc4 = enc4;
         this.b_or = 0;
-        this.b_and = ~0;
+        this.b_and = 0;
     }
 
     @Override

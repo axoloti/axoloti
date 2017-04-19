@@ -14,7 +14,6 @@ with "play". One virtual input port can be used to merge all regular midi ports
 for playing.
 
 * TODO: implement binary image loader for startup patch in flash
-* TODO: implement FW chunks in pconnection and query them GUI 
 * TODO: test midi I/O extensively : help invited
 * TODO: implement sysex rx/tx: help invited
 * TODO: load/store midi routing config from sdcard: help invited
