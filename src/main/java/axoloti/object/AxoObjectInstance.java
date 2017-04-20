@@ -243,12 +243,12 @@ typedef struct ui_object {
         for (ParameterInstance p : parameterInstances) {
             if (p.parameter.PropagateToChild != null) {
                 c += "// on Parent: propagate " + p.getName() + " " + enableOnParent + " " + getLegalName() + "" + p.parameter.PropagateToChild + "\n";
-                c += p.PExName("_parent->") + ".pfunction = PropagateToSub;\n";
-                c += p.PExName("_parent->") + ".d.frac.finalvalue = (int32_t)(&(_parent->instance"
+                c += p.PExName("parent->") + ".pfunction = PropagateToSub;\n";
+                c += p.PExName("parent->") + ".d.frac.finalvalue = (int32_t)(&(parent->instance"
                         + getLegalName() + "_i.params[instance" + getLegalName() + "::PARAM_INDEX_"
                         + p.parameter.PropagateToChild + "]));\n";
             }
-            c += p.GenerateCodeInitModulator("_parent->", "");
+            c += p.GenerateCodeInitModulator("parent->", "");
             //           if ((p.isOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
             //String parentparametername = classname.substring(8);
@@ -267,7 +267,7 @@ typedef struct ui_object {
             }
             c += s + "\n";
         }
-        String d = "  public: void Init(" + classname + " * _parent";
+        String d = "  public: void Init(" + classname + " * parent";
         if (!displayInstances.isEmpty()) {
             for (DisplayInstance p : displayInstances) {
                 if (p.display.getLength() > 0) {
