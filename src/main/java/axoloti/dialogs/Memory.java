@@ -1,10 +1,10 @@
-
 package axoloti.dialogs;
 
 import axoloti.CConnection;
 import axoloti.ConnectionStatusListener;
 import axoloti.DocumentWindow;
 import axoloti.IConnection;
+import axoloti.menus.StandardMenubar;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +12,7 @@ import java.io.File;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 /**
@@ -25,6 +26,8 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
      */
     public Memory() {
         initComponents();
+        setJMenuBar(new StandardMenubar());
+        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jTextFieldAddr.setFont(Font.getFont(Font.MONOSPACED));
         jTextAreaMemoryContent.setFont(Font.getFont(Font.MONOSPACED));
         jTextAreaMemoryContent.setEditable(false);
@@ -129,10 +132,9 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
     void readmem(int addr) {
         this.addr = addr;
-        jTextFieldAddr.setText(String.format("0x%08x",addr));
+        jTextFieldAddr.setText(String.format("0x%08x", addr));
         jTextAreaMemoryContent.setFont(new Font("monospaced", Font.PLAIN, 12));
         int length = 256;
         CConnection.GetConnection().TransmitMemoryRead(addr, length, new IConnection.MemReadHandler() {
@@ -148,11 +150,11 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
                 }
                 jTextAreaMemoryContent.setText(s);
             }
-        });        
+        });
     }
-    
+
     int addr = 0;
-    
+
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
         String hex = jTextFieldAddr.getText();
         if (hex.startsWith("0x")) {

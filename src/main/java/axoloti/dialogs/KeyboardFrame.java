@@ -19,6 +19,7 @@ package axoloti.dialogs;
 
 import axoloti.ConnectionStatusListener;
 import axoloti.CConnection;
+import axoloti.menus.StandardMenubar;
 import components.PianoComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
@@ -43,6 +44,7 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
 
     public KeyboardFrame() {
         initComponents();
+        setJMenuBar(new StandardMenubar());
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         piano = new PianoComponent() {
             @Override

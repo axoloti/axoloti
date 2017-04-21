@@ -23,6 +23,7 @@ import axoloti.CConnection;
 import axoloti.IConnection;
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
+import axoloti.menus.StandardMenubar;
 import components.RControlButtonWithLed;
 import components.RControlColorLed;
 import components.RControlEncoder;
@@ -58,6 +59,7 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
      */
     public AxolotiRemoteControl() {
         initComponents();
+        setJMenuBar(new StandardMenubar());
         CConnection.GetConnection().addConnectionStatusListener(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jPanelLCD.setLayout(new FlowLayout());

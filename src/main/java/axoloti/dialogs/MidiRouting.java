@@ -5,12 +5,16 @@ import axoloti.ConnectionStatusListener;
 import axoloti.IConnection;
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
+import axoloti.menus.StandardMenubar;
 import java.awt.event.ActionEvent;
 import java.nio.ByteBuffer;
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -27,12 +31,14 @@ public class MidiRouting extends javax.swing.JFrame implements ConnectionStatusL
     public MidiRouting() {
         initComponents();
         CConnection.GetConnection().addConnectionStatusListener(this);
+        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
     }
 
     JTable table_midi_in_routing;
     JTable table_midi_out_routing;
 
     void initComponents() {
+        setJMenuBar(new StandardMenubar());
         setMinimumSize(new java.awt.Dimension(200, 160));
         table_midi_in_routing = new JTable(new DefaultTableModel() {
             @Override
