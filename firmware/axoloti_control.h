@@ -20,7 +20,7 @@
 
 #define LCDWIDTH 128
 #define LCDHEIGHT 64
-#define LCDHEADER 0
+#define LCDHEADER 0 // probably broken for other values than 0
 #define LCDROWS (LCDHEIGHT/8)
 #define LCD_CHAR_WIDTH 6
 
@@ -32,22 +32,38 @@ extern uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS];
 typedef struct {
 	union {
 		struct {
-		  unsigned int led1 :2;
-		  unsigned int led2 :2;
-		  unsigned int led3 :2;
-		  unsigned int led4 :2;
-		  unsigned int led5 :2;
-		  unsigned int led6 :2;
-		  unsigned int led7 :2;
-		  unsigned int led8 :2;
-		  unsigned int led9 :2;
-		  unsigned int led10 :2;
-		  unsigned int led11 :2;
-		  unsigned int led12 :2;
-		  unsigned int led13 :2;
-		  unsigned int led14 :2;
-		  unsigned int led15 :2;
-		  unsigned int led16 :2;
+		  unsigned int led1a :1;
+		  unsigned int led2a :1;
+		  unsigned int led3a :1;
+		  unsigned int led4a :1;
+		  unsigned int led5a :1;
+		  unsigned int led6a :1;
+		  unsigned int led7a :1;
+		  unsigned int led8a :1;
+		  unsigned int led9a :1;
+		  unsigned int led10a :1;
+		  unsigned int led11a :1;
+		  unsigned int led12a :1;
+		  unsigned int led13a :1;
+		  unsigned int led14a :1;
+		  unsigned int led15a :1;
+		  unsigned int led16a :1;
+		  unsigned int led1b :1;
+		  unsigned int led2b :1;
+		  unsigned int led3b :1;
+		  unsigned int led4b :1;
+		  unsigned int led5b :1;
+		  unsigned int led6b :1;
+		  unsigned int led7b :1;
+		  unsigned int led8b :1;
+		  unsigned int led9b :1;
+		  unsigned int led10b :1;
+		  unsigned int led11b :1;
+		  unsigned int led12b :1;
+		  unsigned int led13b :1;
+		  unsigned int led14b :1;
+		  unsigned int led15b :1;
+		  unsigned int led16b :1;
 		};
 		uint32_t led_32b;
 	};
@@ -109,6 +125,5 @@ void LCD_drawNumber3D(int half_x, int line, int value);
 void LCD_drawNumber3DInv(int half_x, int line, int value);
 void LCD_drawNumber5D(int half_x, int line, int value);
 void LCD_drawNumber5DInv(int half_x, int line, int value);
-
 
 #endif

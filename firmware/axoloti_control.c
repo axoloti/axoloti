@@ -47,12 +47,12 @@ void LED_set(led_array_t *c, int32_t v) {
 }
 
 void LED_setOne(led_array_t *c, unsigned b) {
-	int v = 0x3 << (b * 2);
+	int v = 0x10001 << b;
 	c->led_32b = v;
 }
 
 void LED_addOne(led_array_t *c, unsigned b, unsigned v) {
-	int x = v << (b * 2);
+	int x = (v+(v<<16)) << b;
 	c->led_32b &= ~x;
 	c->led_32b |= x;
 }
