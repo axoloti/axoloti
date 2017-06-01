@@ -21,6 +21,9 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
         model.addPropertyChangeListener(this);
         this.model = model;
         this.documentRoot = documentRoot;
+        if (documentRoot == null) {
+            System.out.println("documentroot is null");
+        }
     }
 
     // to be called in controller.createView()

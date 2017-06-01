@@ -3,6 +3,7 @@ package axoloti.objectviews;
 import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectPatcherObject;
+import axoloti.object.ObjectInstanceController;
 import axoloti.objecteditor.AxoObjectEditor;
 import components.ButtonComponent;
 import javax.swing.SwingUtilities;
@@ -12,8 +13,8 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     AxoObjectInstancePatcherObject model;
     ButtonComponent BtnEdit;
 
-    public AxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject model, PatchViewSwing patchView) {
-        super(model, patchView);
+    public AxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject model, ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(model, controller, patchView);
         this.model = model;
     }
 

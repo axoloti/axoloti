@@ -51,13 +51,4 @@ public class ParameterInstance4LevelX16 extends ParameterInstanceInt32 {
         super.setValue(value);
     }
 
-    @Override
-    @Deprecated
-    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PParameterInstanceView4LevelX16(this, (PAxoObjectInstanceView) o);
-        } else {
-            return new ParameterInstanceView4LevelX16(this, null, (AxoObjectInstanceView) o);
-        }
-    }
 }

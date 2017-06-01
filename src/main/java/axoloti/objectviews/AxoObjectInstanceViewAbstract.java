@@ -61,8 +61,11 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     LabelComponent InstanceLabel;
     private boolean Locked = false;
 
-    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, PatchViewSwing patchView) {
+    final ObjectInstanceController controller;
+    
+    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, ObjectInstanceController controller, PatchViewSwing patchView) {
         this.model = model;
+        this.controller = controller;
         this.patchView = patchView;
     }
 
@@ -467,17 +470,17 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         AxoObjectInstanceAbstract model = controller.getModel();
         AxoObjectInstanceViewAbstract view = null;
         if (model instanceof AxoObjectInstanceComment) {
-            view = new AxoObjectInstanceViewComment((AxoObjectInstanceComment)model, pv);            
+            view = new AxoObjectInstanceViewComment((AxoObjectInstanceComment)model, controller, pv);            
         } else if (model instanceof AxoObjectInstanceHyperlink) {
-            view = new AxoObjectInstanceViewHyperlink((AxoObjectInstanceHyperlink)model, pv);            
+            view = new AxoObjectInstanceViewHyperlink((AxoObjectInstanceHyperlink)model, controller, pv);            
         } else if (model instanceof AxoObjectInstanceZombie) {
-            view = new AxoObjectInstanceViewZombie((AxoObjectInstanceZombie)model, pv);
+            view = new AxoObjectInstanceViewZombie((AxoObjectInstanceZombie)model, controller, pv);
         } else if (model instanceof AxoObjectInstancePatcherObject) {
-            view = new AxoObjectInstanceViewPatcherObject((AxoObjectInstancePatcherObject)model, pv);
+            view = new AxoObjectInstanceViewPatcherObject((AxoObjectInstancePatcherObject)model, controller, pv);
         } else if (model instanceof AxoObjectInstancePatcher) {
-            view = new AxoObjectInstanceViewPatcher((AxoObjectInstancePatcher)model, pv);
+            view = new AxoObjectInstanceViewPatcher((AxoObjectInstancePatcher)model, controller, pv);
         } else if (model instanceof AxoObjectInstance) {
-            view = new AxoObjectInstanceView((AxoObjectInstance)model, pv);
+            view = new AxoObjectInstanceView((AxoObjectInstance)model, controller, pv);
         }
         view.PostConstructor();
         controller.addView(view);
@@ -491,6 +494,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
 
     @Override
     public AbstractController getController() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return controller;
     }
 }

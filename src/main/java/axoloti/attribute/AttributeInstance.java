@@ -82,16 +82,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     @Deprecated
     public abstract IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o);
 
-    @Deprecated
-    public IAttributeInstanceView createView(IAxoObjectInstanceView o) {
-        IAttributeInstanceView pi = getViewInstance(o);
-        if (o != null) {
-            o.addAttributeInstanceView(pi);
-        }
-        pi.PostConstructor();
-        return pi;
-    }
-
     public String getAttributeName() {
         return attributeName;
     }
@@ -104,7 +94,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     }
 
     @Override
-    public AbstractController createController(AbstractDocumentRoot documentRoot) {
+    public AttributeInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new AttributeInstanceController(this, documentRoot);
     }
 }

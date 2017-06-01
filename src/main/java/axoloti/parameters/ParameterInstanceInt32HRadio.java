@@ -45,13 +45,4 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
         return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max - 1));
     }
 
-    @Override
-    @Deprecated
-    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PParameterInstanceViewInt32HRadio(this, o);
-        } else {
-            return new ParameterInstanceViewInt32HRadio(this, null, o);
-        }
-    }
 }

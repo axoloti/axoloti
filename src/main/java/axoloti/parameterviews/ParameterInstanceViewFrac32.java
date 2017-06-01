@@ -53,10 +53,12 @@ public abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView 
 
     @Override
     public boolean handleAdjustment() {
+        // FIXME: cleanup preset logic
         Preset p = getParameterInstance().GetPreset(presetEditActive);
         if (p != null) {
             p.value = new ValueFrac32(getControlComponent().getValue());
-        } else if (getParameterInstance().getValue().getDouble() != getControlComponent().getValue()) {
+        }
+        if (getParameterInstance().getValue().getDouble() != getControlComponent().getValue()) {
             if (controller != null) {
                 ValueFrac32 vf32 = new ValueFrac32(getControlComponent().getValue());
                 controller.changeRawValue(vf32.getRaw());

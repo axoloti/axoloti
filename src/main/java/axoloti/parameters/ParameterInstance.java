@@ -328,19 +328,6 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         return name;
     }
 
-    @Deprecated // no references to view classes in model!
-    public abstract IParameterInstanceView getViewInstance(IAxoObjectInstanceView o);
-
-    @Deprecated // no references to view classes in model!
-    public IParameterInstanceView createView(IAxoObjectInstanceView o) {
-        IParameterInstanceView pi = getViewInstance(o);
-        pi.PostConstructor();
-        if (o != null) {
-            o.addParameterInstanceView(pi);
-        }
-        return pi;
-    }
-
     public void SetDirty() {
         // propagate dirty flag to patch if there is one
         if (getObjectInstance().getPatchModel() != null) {

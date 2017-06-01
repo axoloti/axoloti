@@ -6,6 +6,7 @@ import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObjectInstanceZombie;
+import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
@@ -27,8 +28,8 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
 
     AxoObjectInstanceZombie model;
 
-    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, PatchViewSwing patchView) {
-        super(model, patchView);
+    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(model, controller, patchView);
         this.model = model;
     }
 
@@ -41,14 +42,14 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
         final PopupIcon popupIcon = new PopupIcon();
         popupIcon.setPopupIconListener(
                 new PopupIcon.PopupIconListener() {
-            @Override
-            public void ShowPopup() {
-                JPopupMenu popup = CreatePopupMenu();
-                popupIcon.add(popup);
-                popup.show(popupIcon,
-                        0, popupIcon.getHeight());
-            }
-        });
+                    @Override
+                    public void ShowPopup() {
+                        JPopupMenu popup = CreatePopupMenu();
+                        popupIcon.add(popup);
+                        popup.show(popupIcon,
+                                0, popupIcon.getHeight());
+                    }
+                });
         Titlebar.add(popupIcon);
         Titlebar.add(idlbl);
 

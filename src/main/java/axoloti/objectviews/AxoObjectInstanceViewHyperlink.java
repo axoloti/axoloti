@@ -1,7 +1,9 @@
 package axoloti.objectviews;
 
 import axoloti.PatchViewSwing;
+import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceHyperlink;
+import axoloti.object.ObjectInstanceController;
 import components.LabelComponent;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
@@ -14,14 +16,17 @@ import javax.swing.BoxLayout;
 
 public class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
 
-    AxoObjectInstanceHyperlink model;
     private PulseButtonComponent button;
 
-    public AxoObjectInstanceViewHyperlink(AxoObjectInstanceHyperlink model, PatchViewSwing patchView) {
-        super(model, patchView);
-        this.model = model;
+    public AxoObjectInstanceViewHyperlink(AxoObjectInstanceHyperlink model, ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(model, controller, patchView);
     }
 
+    @Override
+    public AxoObjectInstanceHyperlink getModel() {
+        return (AxoObjectInstanceHyperlink)super.getModel();
+    }
+    
     public void PostConstructor() {
         super.PostConstructor();
         setOpaque(true);
@@ -31,7 +36,7 @@ public class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstrac
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
                 if (e.getValue() == 1.0) {
-                    model.Launch();
+                    getModel().Launch();
                 }
             }
 

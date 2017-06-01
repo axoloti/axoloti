@@ -2,6 +2,7 @@ package axoloti.objectviews;
 
 import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstancePatcher;
+import axoloti.object.ObjectInstanceController;
 import components.ButtonComponent;
 
 public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
@@ -9,8 +10,8 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
     AxoObjectInstancePatcher model;
     private ButtonComponent BtnUpdate;
 
-    public AxoObjectInstanceViewPatcher(AxoObjectInstancePatcher model, PatchViewSwing patchView) {
-        super(model, patchView);
+    public AxoObjectInstanceViewPatcher(AxoObjectInstancePatcher model, ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(model, controller, patchView);
         this.model = model;
     }
 

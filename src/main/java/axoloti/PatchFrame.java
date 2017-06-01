@@ -18,6 +18,7 @@
 package axoloti;
 
 import static axoloti.PatchViewType.PICCOLO;
+import axoloti.mvc.UndoUI;
 import axoloti.object.AxoObjects;
 import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -52,6 +53,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -66,18 +69,19 @@ import qcmds.QCmdUploadPatch;
  *
  * @author Johannes Taelman
  */
-public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener {
+public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener, UndoableEditListener {
 
     /**
      * Creates new form PatchFrame
      */
-    PatchController patchController;
+    final PatchController patchController;
 
     private PresetPanel presetPanel;
     private VisibleCablePanel visibleCablePanel;
 
     private static List<PatchFrame> instances = new ArrayList<>();
     private static PatchFrame topFrame;
+    UndoUI undoUi;
 
     private JScrollPane jScrollPane1;
 
@@ -86,6 +90,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         this.qcmdprocessor = qcmdprocessor;
         this.patchController = patchController;
         patchController.setPatchFrame(this);
+
+        undoUi = new UndoUI(patchController.getUndoManager());
+        patchController.getDocumentRoot().addUndoListener(this);
 
         initComponents();
         fileMenu1.initComponents();
@@ -104,6 +111,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane1.setAutoscrolls(true);
         getContentPane().add(jScrollPane1);
+
+        jMenuEdit.add(undoUi.createMenuItemUndo());
+        jMenuEdit.add(undoUi.createMenuItemRedo());      
 
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
@@ -1144,4 +1154,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuItemUploadSD.setEnabled(false);
         jMenuItemUploadSDStart.setEnabled(false);
     }
+    
+    @Override
+    public void undoableEditHappened(UndoableEditEvent e) {
+        undoUi.undoableEditHappened(e);
+    }    
 }

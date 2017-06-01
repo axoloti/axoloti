@@ -33,7 +33,7 @@ public class QCmdGuiDialTx implements QCmdGUITask {
             PatchController patchController = processor.getPatchController();
             PatchModel patchModel = null;
             if (patchController != null) {
-                patchModel = processor.getPatchController().patchModel;
+                patchModel = processor.getPatchController().getModel();
             }
             if (patchModel != null) {
                 for (ParameterInstance p : patchModel.getParameterInstances()) {

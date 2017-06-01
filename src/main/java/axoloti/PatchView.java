@@ -678,7 +678,7 @@ public abstract class PatchView implements ModelChangedListener {
 
             if (view == null || o.isDirty()) {
                 isNewObject = true;
-                ObjectInstanceController c = o.createController(null); // FIXME: null
+                ObjectInstanceController c = o.createController(patchController.getDocumentRoot());
                 view = AxoObjectInstanceView.createView(c, (PatchViewSwing)this);
             }
 

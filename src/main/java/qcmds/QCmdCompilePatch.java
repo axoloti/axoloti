@@ -58,14 +58,14 @@ public class QCmdCompilePatch extends QCmdShellTask {
         ArrayList<String> list = new ArrayList<>();
         list.addAll(Arrays.asList(super.GetEnv()));
         
-        Set<String> moduleSet = this.patchController.patchModel.getModules();
+        Set<String> moduleSet = this.patchController.getModel().getModules();
         if(moduleSet!=null) {
             String modules = "";
             String moduleDirs = "";
             for(String m : moduleSet) {
                 modules += m + " ";
                 moduleDirs += 
-                    this.patchController.patchModel.getModuleDir(m) 
+                    this.patchController.getModel().getModuleDir(m) 
                     + " ";
             }
             list.add("MODULES=" + modules);

@@ -89,11 +89,4 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         }
     }
 
-    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
-        if (patchView instanceof PatchViewPiccolo) {
-            return new PAxoObjectInstanceViewPatcherObject(this, (PatchViewPiccolo) patchView);
-        } else {
-            return new AxoObjectInstanceViewPatcherObject(this, (PatchViewSwing) patchView);
-        }
-    }
 }

@@ -44,13 +44,4 @@ public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S
         return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
     }
 
-    @Override
-    @Deprecated
-    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PParameterInstanceViewFrac32SMapVSlider(this, o);
-        } else {
-            return new ParameterInstanceViewFrac32SMapVSlider(this, null, o);
-        }
-    }
 }

@@ -2,6 +2,7 @@ package axoloti.objectviews;
 
 import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstanceComment;
+import axoloti.object.ObjectInstanceController;
 import components.LabelComponent;
 import components.TextFieldComponent;
 import java.awt.event.ActionEvent;
@@ -19,8 +20,8 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
 
     AxoObjectInstanceComment model;
 
-    public AxoObjectInstanceViewComment(AxoObjectInstanceComment model, PatchViewSwing patchView) {
-        super(model, patchView);
+    public AxoObjectInstanceViewComment(AxoObjectInstanceComment model, ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(model, controller, patchView);
         this.model = model;
     }
 

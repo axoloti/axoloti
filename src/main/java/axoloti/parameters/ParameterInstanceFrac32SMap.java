@@ -73,13 +73,4 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
         return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
     }
 
-    @Override
-    @Deprecated
-    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PParameterInstanceViewFrac32SMap(this, o);
-        } else {
-            return new ParameterInstanceViewFrac32SMap(this, null, o);
-        }
-    }
 }

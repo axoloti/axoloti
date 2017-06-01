@@ -50,14 +50,4 @@ public class ParameterInstanceBin12 extends ParameterInstanceBin {
         super.setValue(value);
     }
 
-    @Override
-    @Deprecated
-    public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PParameterInstanceViewBin12(this, o);
-
-        } else {
-            return new ParameterInstanceViewBin12(this, null, o);
-        }
-    }
 }
