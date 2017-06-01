@@ -128,7 +128,6 @@ public class AssignPresetPanel extends JPanel {
                 if (valueBeforeAdjustment != ctrls.get(i).getValue()) {
                     PatchModel patchModel = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel();
                     if (patchModel != null) {
-                        parameterInstanceView.getAxoObjectInstanceView().getPatchView().getPatchController().pushUndoState();
                         patchModel.setDirty();
                     }
                 }

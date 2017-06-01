@@ -48,7 +48,6 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
             model.setCommentText(s);
             model.setDirty(true);
             getPatchModel().setDirty();
-            getPatchView().getPatchController().pushUndoState();
         }
     }
 }

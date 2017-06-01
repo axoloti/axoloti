@@ -199,7 +199,6 @@ public abstract class PCtrlComponentAbstract extends PatchPNode implements PFocu
         for (PCtrlListener listener : listenerList) {
             listener.PCtrlAdjustmentFinished(new PCtrlEvent(this, getValue()));
         }
-        getPatchViewPiccolo().getPatchController().pushUndoState();
     }
 
     public void robotMoveToCenter(PInputEvent e) {

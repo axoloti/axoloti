@@ -130,8 +130,8 @@ public abstract class PIoletAbstract extends PatchPNode implements IIoletAbstrac
                         }
                     }
                     if (axoObjectInstanceView.getPatchModel().PromoteOverloading(false)) {
-                        getPatchView().getPatchController().popUndoState();
-                        getPatchView().getPatchController().pushUndoState();
+//                        getPatchView().getPatchController().popUndoState();
+//                        getPatchView().getPatchController().pushUndoState();
                     }
                     dragtarget.repaint();
                 }

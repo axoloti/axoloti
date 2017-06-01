@@ -33,7 +33,6 @@ public class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
                 if (!getAttributeInstance().getString().equals(comboBox.getSelectedItem())) {
                     getAttributeInstance().setString(comboBox.getSelectedItem());
                     getAttributeInstance().setSelectedIndex(comboBox.getSelectedIndex());
-                    axoObjectInstanceView.getPatchView().getPatchController().pushUndoState();
                     attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }

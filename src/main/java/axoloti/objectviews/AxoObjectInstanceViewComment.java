@@ -126,7 +126,6 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
             model.setCommentText(s);
             model.setDirty(true);
             getPatchModel().setDirty();
-            getPatchView().getPatchController().pushUndoState();
         }
     }
 }

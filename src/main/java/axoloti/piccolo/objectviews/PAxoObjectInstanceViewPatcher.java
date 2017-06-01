@@ -43,7 +43,6 @@ public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
             @Override
             public void OnPushed() {
                 model.updateObj();
-                getPatchView().getPatchController().pushUndoState();
             }
         });
         addChild(BtnUpdate);

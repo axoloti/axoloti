@@ -50,7 +50,6 @@ public class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
             @Override
             public void ACtrlAdjustmentFinished(ACtrlEvent e) {
                 if (getAttributeInstance().getValue() != getAttributeInstance().getValueBeforeAdjustment()) {
-                    //axoObjectInstanceView.getPatchView().getPatchController().pushUndoState();
                     //attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }

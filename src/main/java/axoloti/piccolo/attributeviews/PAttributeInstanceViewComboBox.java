@@ -30,7 +30,6 @@ public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString
                 if (!attributeInstance.getString().equals(comboBox.getSelectedItem())) {
                     attributeInstance.setString(comboBox.getSelectedItem());
                     attributeInstance.setSelectedIndex(comboBox.getSelectedIndex());
-                    axoObjectInstanceView.getPatchView().getPatchController().pushUndoState();
                     attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }

@@ -261,7 +261,6 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     @Override
     public void setInstanceName(String InstanceName) {
         if (model.setInstanceName(InstanceName)) {
-            getPatchView().getPatchController().pushUndoState();
         }
     }
 

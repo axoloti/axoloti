@@ -371,7 +371,6 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 public void actionPerformed(ActionEvent ae) {
                     if (!getPatchView().isLocked()) {
                         model.ConvertToPatchPatcher();
-                        getPatchView().getPatchController().pushUndoState();
                     }
                 }
             });
@@ -383,7 +382,6 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 public void actionPerformed(ActionEvent ae) {
                     if (!getPatchView().isLocked()) {
                         model.ConvertToEmbeddedObj();
-                        getPatchView().getPatchController().pushUndoState();
                     }
                 }
             });

@@ -199,11 +199,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             ShowConnect();
         }
 
-        undoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
-                KeyUtils.CONTROL_OR_CMD_MASK));
-        redoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z,
-                KeyUtils.CONTROL_OR_CMD_MASK | KeyEvent.SHIFT_DOWN_MASK));
-
         CConnection.GetConnection().addConnectionStatusListener(this);
         CConnection.GetConnection().addSDCardMountStatusListener(this);
 
@@ -384,8 +379,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuSaveClip = new javax.swing.JMenuItem();
         jMenuClose = new javax.swing.JMenuItem();
         jMenuEdit = new javax.swing.JMenu();
-        undoItem = new javax.swing.JMenuItem();
-        redoItem = new javax.swing.JMenuItem();
         jMenuItemDelete = new javax.swing.JMenuItem();
         jMenuItemSelectAll = new javax.swing.JMenuItem();
         jMenuItemAddObj = new javax.swing.JMenuItem();
@@ -463,12 +456,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         jLabel1.setText("DSP load ");
         jLabel1.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 jLabel1AncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
         jToolbarPanel.add(jLabel1);
@@ -536,40 +529,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         jMenuEdit.setMnemonic('E');
         jMenuEdit.setText("Edit");
-
-        undoItem.setText("Undo");
-        undoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                undoItemAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
-        undoItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                undoItemActionPerformed(evt);
-            }
-        });
-        jMenuEdit.add(undoItem);
-
-        redoItem.setText("Redo");
-        redoItem.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                redoItemAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
-        redoItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                redoItemActionPerformed(evt);
-            }
-        });
-        jMenuEdit.add(redoItem);
 
         jMenuItemDelete.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, 0));
         jMenuItemDelete.setText("Delete");
@@ -946,14 +905,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
     }//GEN-LAST:event_formWindowClosing
 
-    private void jMenuItemDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDeleteActionPerformed
-        getPatchView().deleteSelectedAxoObjectInstanceViews();
-    }//GEN-LAST:event_jMenuItemDeleteActionPerformed
-
-    private void jMenuItemSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectAllActionPerformed
-        getPatchView().SelectAll();
-    }//GEN-LAST:event_jMenuItemSelectAllActionPerformed
-
     private void jMenuItemNotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNotesActionPerformed
         getPatchView().ShowNotesFrame();
     }//GEN-LAST:event_jMenuItemNotesActionPerformed
@@ -1027,10 +978,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCopyPatchToFlash());
     }//GEN-LAST:event_jMenuItemUploadInternalFlashActionPerformed
 
-    private void jMenuItemAddObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddObjActionPerformed
-        getPatchView().ShowClassSelector(new Point(20, 20), null, null);
-    }//GEN-LAST:event_jMenuItemAddObjActionPerformed
-
     private void jMenuCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCloseActionPerformed
         AskClose();
     }//GEN-LAST:event_jMenuCloseActionPerformed
@@ -1056,24 +1003,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         patchController.Compile();
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
-    private void undoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_undoItemActionPerformed
-        patchController.undo();
-        updateUndoRedoEnabled();
-    }//GEN-LAST:event_undoItemActionPerformed
-
-    private void redoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_redoItemActionPerformed
-        patchController.redo();
-        updateUndoRedoEnabled();
-    }//GEN-LAST:event_redoItemActionPerformed
-
-    private void undoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_undoItemAncestorAdded
-        undoItem.setEnabled(patchController.canUndo());
-    }//GEN-LAST:event_undoItemAncestorAdded
-
-    private void redoItemAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_redoItemAncestorAdded
-        redoItem.setEnabled(patchController.canRedo());
-    }//GEN-LAST:event_redoItemAncestorAdded
-
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
         getRootPane().setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_formWindowLostFocus
@@ -1081,6 +1010,18 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void jLabel1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabel1AncestorAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel1AncestorAdded
+
+    private void jMenuItemAddObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddObjActionPerformed
+        getPatchView().ShowClassSelector(new Point(20, 20), null, null);
+    }//GEN-LAST:event_jMenuItemAddObjActionPerformed
+
+    private void jMenuItemSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectAllActionPerformed
+        getPatchView().SelectAll();
+    }//GEN-LAST:event_jMenuItemSelectAllActionPerformed
+
+    private void jMenuItemDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDeleteActionPerformed
+        getPatchView().deleteSelectedAxoObjectInstanceViews();
+    }//GEN-LAST:event_jMenuItemDeleteActionPerformed
 
     private boolean GoLive() {
         if (getPatchModel().getFileNamePath().endsWith(".axs")
@@ -1153,8 +1094,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPanel jToolbarPanel;
-    private javax.swing.JMenuItem redoItem;
-    private javax.swing.JMenuItem undoItem;
     private axoloti.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
 
@@ -1192,11 +1131,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     @Override
     public ArrayList<DocumentWindow> GetChildDocuments() {
         return dwl;
-    }
-
-    public void updateUndoRedoEnabled() {
-        redoItem.setEnabled(getPatchModel().canRedo());
-        undoItem.setEnabled(getPatchModel().canUndo());
     }
 
     @Override

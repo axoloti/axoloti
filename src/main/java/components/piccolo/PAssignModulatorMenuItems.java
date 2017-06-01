@@ -82,7 +82,6 @@ public class PAssignModulatorMenuItems {
                 public void ACtrlAdjustmentFinished(ACtrlEvent e) {
                     double vnew = ((HSliderComponent) e.getSource()).getValue();
                     if (vnew != valueBeforeAdjustment) {
-                        parameterInstanceView.getObjectInstanceView().getPatchView().getPatchController().pushUndoState();
                         parameterInstanceView.getParameterInstance().SetDirty();
                     }
                 }

@@ -243,7 +243,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                 }
                 draggingObjects = null;
                 if (dirtyOnRelease) {
-                    getPatchView().getPatchController().pushUndoState();
                     getPatchModel().setDirty();
                 }
                 getPatchView().AdjustSize();
@@ -359,7 +358,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     public void setInstanceName(String InstanceName) {
         if (model.setInstanceName(InstanceName)) {
             doLayout();
-            getPatchView().getPatchController().pushUndoState();
             repaint();
         }
     }

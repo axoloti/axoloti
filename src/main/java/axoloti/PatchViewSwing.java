@@ -387,7 +387,6 @@ public class PatchViewSwing extends PatchView {
         getPatchController().patchModel.PromoteOverloading(true);
         ShowPreset(0);
         SelectNone();
-        getPatchController().patchModel.pushUndoState(false);
     }
 
     @Override

@@ -50,14 +50,6 @@ public class PatchController {
         return patchFrame;
     }
 
-    public boolean canUndo() {
-        return !isLocked() && patchModel.canUndo();
-    }
-
-    public boolean canRedo() {
-        return !isLocked() && patchModel.canRedo();
-    }
-
     public void RecallPreset(int i) {
         GetQCmdProcessor().AppendToQueue(new QCmdRecallPreset(i));
     }
@@ -174,15 +166,8 @@ public class PatchController {
         UploadToSDCard("/" + getSDCardPath() + "/patch.bin");
     }
 
-    private void pushUndoState(boolean changeOccurred) {
-        if (changeOccurred) {
-            pushUndoState();
-        }
-    }
-
     private void finalizeModelChange(boolean changeOccurred) {
         if (changeOccurred) {
-            pushUndoState();
             setDirty();
         }
     }
@@ -212,7 +197,6 @@ public class PatchController {
     public Net AddConnection(IInletInstanceView il, IOutletInstanceView ol) {
         if (!isLocked()) {
             Net net = patchModel.AddConnection(il.getInletInstance(), ol.getOutletInstance());
-            pushUndoState(net != null);
             return net;
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked");
@@ -223,7 +207,6 @@ public class PatchController {
     public Net AddConnection(IInletInstanceView il, IInletInstanceView ol) {
         if (!isLocked()) {
             Net net = patchModel.AddConnection(il.getInletInstance(), ol.getInletInstance());
-            pushUndoState(net != null);
             return net;
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't add connection: locked!");
@@ -265,7 +248,6 @@ public class PatchController {
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         if (!isLocked()) {
             AxoObjectInstanceAbstract object = patchModel.AddObjectInstance(obj, loc);
-            pushUndoState(object != null);
             return object;
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked!");
@@ -325,17 +307,6 @@ public class PatchController {
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         patchModel.paste(v, pos, restoreConnectionsToExternalOutlets);
-        pushUndoState();
-    }
-
-    public void undo() {
-        patchModel.undo();
-        patchFrame.updateUndoRedoEnabled();
-    }
-
-    public void redo() {
-        patchModel.redo();
-        patchFrame.updateUndoRedoEnabled();
     }
 
     public void repaintPatchView() {
@@ -352,16 +323,7 @@ public class PatchController {
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
         AxoObjectInstanceAbstract newObject = patchModel.ChangeObjectInstanceType(obj, objType);
-        pushUndoState(newObject != obj);
         return newObject;
-    }
-
-    public boolean isLoadingUndoState() {
-        return patchModel.isLoadingUndoState();
-    }
-
-    public void clearLoadingUndoState() {
-        patchModel.setLoadingUndoState(false);
     }
 
     public boolean isLocked() {
@@ -370,15 +332,6 @@ public class PatchController {
 
     public void setLocked(boolean locked) {
         patchModel.setLocked(locked);
-    }
-
-    public void pushUndoState() {
-        patchModel.pushUndoState();
-        patchFrame.updateUndoRedoEnabled();
-    }
-
-    public void popUndoState() {
-        patchModel.popUndoState();
     }
 
     public Net getNetDraggingModel() {

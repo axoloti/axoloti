@@ -264,7 +264,6 @@ public abstract class PatchView implements ModelChangedListener {
             }
             if (isUpdate) {
                 AdjustSize();
-                patchController.pushUndoState();
                 patchController.setDirty();
             }
         } else {
@@ -533,7 +532,6 @@ public abstract class PatchView implements ModelChangedListener {
                 }
             }
             if (succeeded) {
-                getPatchController().pushUndoState();
                 getPatchController().setDirty();
             }
         } else {
@@ -638,7 +636,7 @@ public abstract class PatchView implements ModelChangedListener {
         Map<String, IAxoObjectInstanceView> existingViews = new HashMap<>();
         Set<String> newObjectNames = new HashSet<>();
 
-        if (getPatchController().isLoadingUndoState()) {
+        if (false) { // was: if (getPatchController().isLoadingUndoState()) {
             // prevent detached sub-windows
             Close();
             removeAllObjectViews();
@@ -703,7 +701,8 @@ public abstract class PatchView implements ModelChangedListener {
                 add(view);
                 view.moveToFront();
 
-                if (updateSelection && !getPatchController().isLoadingUndoState()) {
+                if (updateSelection) {
+                // was: if (updateSelection && !getPatchController().isLoadingUndoState()) {
 
                     if (view.isZombie()) {
                         IAxoObjectInstanceView oldZombie = existingViews.get(o.getInstanceName());
@@ -725,8 +724,6 @@ public abstract class PatchView implements ModelChangedListener {
                 o.setDirty(false);
             }
         }
-
-        getPatchController().clearLoadingUndoState();
 
         if (newObjects == 1 && editorView != null) {
             // if single new comment added, show instancename editor

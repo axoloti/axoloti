@@ -115,8 +115,6 @@ public class PatchModel {
 
     private ArrayList<ModelChangedListener> modelChangedListeners = new ArrayList<ModelChangedListener>();
 
-    private boolean loadingUndoState = false;
-
     // patch this patch is contained in
     private PatchModel container = null;
     private AxoObjectInstanceAbstract controllerinstance;
@@ -124,9 +122,6 @@ public class PatchModel {
     public boolean presetUpdatePending = false;
 
     boolean locked = false;
-
-    private List<String> undoStates = new ArrayList<String>();
-    public int currentState = 0;
 
     static public class PatchVersionException
             extends RuntimeException {
@@ -553,76 +548,6 @@ public class PatchModel {
         if (!m.Modulations.contains(n)) {
             m.Modulations.add(n);
             System.out.println("modulation added to Modulator " + Modulators.indexOf(m));
-        }
-    }
-
-    public void pushUndoState() {
-        pushUndoState(true);
-    }
-
-    public void pushUndoState(boolean advanceCurrentState) {
-        if (advanceCurrentState) {
-            currentState += 1;
-        }
-        saveState();
-        cleanUpDanglingUndoStates();
-    }
-
-    public void popUndoState() {
-        currentState -= 1;
-    }
-
-    public void cleanUpDanglingUndoStates() {
-        try {
-            undoStates.subList(currentState + 1, undoStates.size()).clear();
-        } catch (IndexOutOfBoundsException e) {
-            // ignore
-        }
-    }
-
-    void saveState() {
-        SortByPosition();
-        Serializer serializer = new Persister();
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        try {
-            serializer.write(this, b);
-            try {
-                undoStates.set(currentState, b.toString());
-            } catch (IndexOutOfBoundsException e) {
-                undoStates.add(b.toString());
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public boolean isLoadingUndoState() {
-        return loadingUndoState;
-    }
-
-    public void setLoadingUndoState(boolean loadingUndoState) {
-        this.loadingUndoState = loadingUndoState;
-    }
-
-    void loadState() {
-        Serializer serializer = new Persister();
-        ByteArrayInputStream b = new ByteArrayInputStream(undoStates.get(currentState).getBytes());
-        try {
-            PatchModel p = serializer.read(PatchModel.class, b);
-            objectinstances = p.objectinstances;
-            for (AxoObjectInstanceAbstract o : objectinstances) {
-                o.setPatchModel(this);
-            }
-            nets = p.nets;
-            Modulators = p.Modulators;
-            for (Net n : nets) {
-                n.setPatchModel(this);
-            }
-            PostContructor();
-            setLoadingUndoState(true);
-            notifyModelChangedListeners();
-        } catch (Exception ex) {
-            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -2577,30 +2502,6 @@ public class PatchModel {
     public File getBinFile() {
         String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
         return new File(buildDir + "/xpatch.bin");
-    }
-
-    public boolean canUndo() {
-        return currentState > 0;
-    }
-
-    public boolean canRedo() {
-        return currentState < undoStates.size() - 1;
-    }
-
-    public void undo() {
-        if (canUndo()) {
-            currentState -= 1;
-            loadState();
-            setDirty();
-        }
-    }
-
-    public void redo() {
-        if (canRedo()) {
-            currentState += 1;
-            loadState();
-            setDirty();
-        }
     }
 
     public ArrayList<AxoObjectInstanceAbstract> getObjectInstances() {

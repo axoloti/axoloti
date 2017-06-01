@@ -41,7 +41,6 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
             @Override
             public void OnPushed() {
                 model.updateObj();
-                getPatchView().getPatchController().pushUndoState();
             }
         });
         add(BtnUpdate);
