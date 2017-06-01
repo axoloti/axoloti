@@ -26,6 +26,9 @@ import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInt32;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFile;
@@ -82,7 +85,7 @@ import org.simpleframework.xml.strategy.Strategy;
  * @author Johannes Taelman
  */
 @Root
-public class PatchModel {
+public class PatchModel extends AbstractModel {
 
     //TODO - use execution order, rather than UI ordering
     static final boolean USE_EXECUTION_ORDER = false;
@@ -122,6 +125,11 @@ public class PatchModel {
     public boolean presetUpdatePending = false;
 
     boolean locked = false;
+
+    @Override
+    public PatchController createController(AbstractDocumentRoot documentRoot) {
+        return new PatchController(this, documentRoot);
+    }
 
     static public class PatchVersionException
             extends RuntimeException {

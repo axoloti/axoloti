@@ -1384,6 +1384,6 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     public PatchModel getPatchModel() {
-        return patchController.patchModel;
+        return patchController.getModel();
     }
 }

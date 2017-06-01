@@ -20,9 +20,6 @@ package axoloti.object;
 import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.PatchModel;
-import axoloti.PatchView;
-import axoloti.PatchViewPiccolo;
-import axoloti.PatchViewSwing;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.attribute.*;
@@ -31,11 +28,9 @@ import axoloti.datatypes.Frac32buffer;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import axoloti.utils.CodeGeneration;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -635,22 +630,6 @@ typedef struct ui_object {
     }
 
     @Override
-    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
-        if (patchView instanceof PatchViewSwing) {
-            return new AxoObjectInstanceView(this, (PatchViewSwing) patchView);
-        } else {
-            return new PAxoObjectInstanceView(this, (PatchViewPiccolo) patchView);
-        }
-    }
-
-    @Override
-    public IAxoObjectInstanceView createView(PatchView patchView) {
-        IAxoObjectInstanceView pi = getViewInstance(patchView);
-        pi.PostConstructor();
-        return pi;
-    }
-
-    @Override
     public void updateObj1() {
         getType().addObjectModifiedListener(this);
     }
@@ -740,5 +719,10 @@ typedef struct ui_object {
     @Override
     public void setDisplayInstances(ArrayList<DisplayInstance> displayInstances) {
         this.displayInstances = displayInstances;
+    }
+
+    @Override
+    public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
+        return new ObjectInstanceController(this, documentRoot);        
     }
 }

@@ -23,6 +23,7 @@ import axoloti.PatchViewPiccolo;
 import axoloti.PatchViewSwing;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceZombie;
+import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.objectviews.AxoObjectInstanceViewZombie;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
@@ -97,11 +98,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
-        if (patchView instanceof PatchViewPiccolo) {
-            return new PAxoObjectInstanceViewZombie(this, (PatchViewPiccolo) patchView);
-        } else {
-            return new AxoObjectInstanceViewZombie(this, (PatchViewSwing) patchView);
-        }
+    public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
+        return new ObjectInstanceController(this, documentRoot);        
     }
 }

@@ -19,12 +19,12 @@ package axoloti.object;
 
 import axoloti.MainFrame;
 import axoloti.PatchModel;
-import axoloti.PatchView;
 import axoloti.SDFileReference;
 import axoloti.attribute.AttributeInstance;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.CharEscape;
@@ -41,7 +41,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "obj_abstr")
-public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectInstanceAbstract>, ObjectModifiedListener {
+public abstract class AxoObjectInstanceAbstract extends AbstractModel implements Comparable<AxoObjectInstanceAbstract>, ObjectModifiedListener {
 
     @Attribute(name = "type")
     public String typeName;
@@ -353,14 +353,6 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
     public void updateObj1() {
     }
 
-    public abstract IAxoObjectInstanceView getViewInstance(PatchView patchView);
-
-    public IAxoObjectInstanceView createView(PatchView patchView) {
-        IAxoObjectInstanceView pi = getViewInstance(patchView);
-        pi.PostConstructor();
-        return pi;
-    }
-
     @Override
     public void ObjectModified(Object src) {
     }
@@ -395,6 +387,9 @@ public abstract class AxoObjectInstanceAbstract implements Comparable<AxoObjectI
     }
 
     public void setParameterInstances(ArrayList<ParameterInstance> parameterInstances) {
-
     }
+
+    @Override
+    public abstract ObjectInstanceController createController(AbstractDocumentRoot documentRoot);
+    
 }

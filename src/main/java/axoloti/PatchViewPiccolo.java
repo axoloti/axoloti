@@ -279,9 +279,9 @@ public class PatchViewPiccolo extends PatchView {
 
     @Override
     public void PostConstructor() {
-        getPatchController().patchModel.PostContructor();
+        getPatchController().getModel().PostContructor();
         modelChanged(false);
-        getPatchController().patchModel.PromoteOverloading(true);
+        getPatchController().getModel().PromoteOverloading(true);
         ShowPreset(0);
         SelectNone();
     }

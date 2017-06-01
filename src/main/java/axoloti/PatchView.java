@@ -12,7 +12,10 @@ import axoloti.inlets.InletInstanceZombie;
 import axoloti.iolet.IoletAbstract;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFromPatch;
+import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.ObjectInstanceController;
+import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewComment;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -121,7 +124,7 @@ public abstract class PatchView implements ModelChangedListener {
         if (NotesFrame == null) {
             NotesFrame = new TextEditor(new StringRef(), getPatchController().getPatchFrame());
             NotesFrame.setTitle("notes");
-            NotesFrame.SetText(getPatchController().patchModel.notes);
+            NotesFrame.SetText(getPatchController().getModel().notes);
             NotesFrame.addFocusListener(new FocusListener() {
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -129,7 +132,7 @@ public abstract class PatchView implements ModelChangedListener {
 
                 @Override
                 public void focusLost(FocusEvent e) {
-                    getPatchController().patchModel.notes = NotesFrame.GetText();
+                    getPatchController().getModel().notes = NotesFrame.GetText();
                 }
             });
         }
@@ -291,25 +294,25 @@ public abstract class PatchView implements ModelChangedListener {
             getPatchController().UploadDependentFiles(f);
         } else {
             // issue warning when there are dependent files
-            ArrayList<SDFileReference> files = getPatchController().patchModel.GetDependendSDFiles();
+            ArrayList<SDFileReference> files = getPatchController().getModel().GetDependendSDFiles();
             if (files.size() > 0) {
                 Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, "Patch requires file {0} on SDCard, but no SDCard mounted", files.get(0).targetPath);
             }
         }
         getPatchController().ShowPreset(0);
         getPatchController().setPresetUpdatePending(false);
-        for (AxoObjectInstanceAbstract o : getPatchController().patchModel.getObjectInstances()) {
+        for (AxoObjectInstanceAbstract o : getPatchController().getModel().getObjectInstances()) {
             for (ParameterInstance pi : o.getParameterInstances()) {
                 pi.ClearNeedsTransmit();
             }
         }
         getPatchController().WriteCode();
         qCmdProcessor.setPatchController(null);
-        for(String module : getPatchController().patchModel.getModules()) {
+        for(String module : getPatchController().getModel().getModules()) {
            qCmdProcessor.AppendToQueue(
                    new QCmdCompileModule(getPatchController(),
                            module, 
-                           getPatchController().patchModel.getModuleDir(module)));
+                           getPatchController().getModel().getModuleDir(module)));
         }
         qCmdProcessor.AppendToQueue(new QCmdCompilePatch(getPatchController()));
         qCmdProcessor.AppendToQueue(new QCmdUploadPatch());
@@ -373,14 +376,14 @@ public abstract class PatchView implements ModelChangedListener {
 
     void PreSerialize() {
         if (NotesFrame != null) {
-            getPatchController().patchModel.notes = NotesFrame.GetText();
+            getPatchController().getModel().notes = NotesFrame.GetText();
         }
-        getPatchController().patchModel.windowPos = getPatchController().getPatchFrame().getBounds();
+        getPatchController().getModel().windowPos = getPatchController().getPatchFrame().getBounds();
     }
 
     boolean save(File f) {
         PreSerialize();
-        boolean b = getPatchController().patchModel.save(f);
+        boolean b = getPatchController().getModel().save(f);
         if (ObjEditor != null) {
             ObjEditor.UpdateObject();
         }
@@ -392,11 +395,10 @@ public abstract class PatchView implements ModelChangedListener {
         Serializer serializer = new Persister(strategy);
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, stream);
-            PatchController patchController = new PatchController();
+            PatchController patchController = patchModel.createController(null); /* FIXME: null */
             PatchView patchView = MainFrame.prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchView(patchView);
-            patchController.setPatchModel(patchModel);
             PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
             patchView.setFileNamePath(name);
             patchView.PostConstructor();
@@ -423,11 +425,10 @@ public abstract class PatchView implements ModelChangedListener {
         Serializer serializer = new Persister(strategy);
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = new PatchController();
+            PatchController patchController = patchModel.createController(null); /* FIXME: null */
             PatchView patchView = MainFrame.prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchView(patchView);
-            patchController.setPatchModel(patchModel);
             PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
             patchView.setFileNamePath(f.getAbsolutePath());
             patchView.PostConstructor();
@@ -646,7 +647,7 @@ public abstract class PatchView implements ModelChangedListener {
                 existingViews.put(instanceName, view);
             }
 
-            for (AxoObjectInstanceAbstract o : getPatchController().patchModel.getObjectInstances()) {
+            for (AxoObjectInstanceAbstract o : getPatchController().getModel().getObjectInstances()) {
                 String instanceName = o.getInstanceName();
                 if (!o.isDirty()) {
                     newObjectNames.add(instanceName);
@@ -669,7 +670,7 @@ public abstract class PatchView implements ModelChangedListener {
         int newObjects = 0;
         IAxoObjectInstanceView editorView = null;
 
-        for (AxoObjectInstanceAbstract o : getPatchController().patchModel.getObjectInstances()) {
+        for (AxoObjectInstanceAbstract o : getPatchController().getModel().getObjectInstances()) {
 
             IAxoObjectInstanceView view = existingViews.get(o.getInstanceName());
             boolean isNewObject = false;
@@ -677,7 +678,8 @@ public abstract class PatchView implements ModelChangedListener {
 
             if (view == null || o.isDirty()) {
                 isNewObject = true;
-                view = o.createView(this);
+                ObjectInstanceController c = o.createController(null); // FIXME: null
+                view = AxoObjectInstanceView.createView(c, (PatchViewSwing)this);
             }
 
             if (view.isZombie()) {
@@ -730,7 +732,7 @@ public abstract class PatchView implements ModelChangedListener {
             editorView.addInstanceNameEditor();
         }
 
-        for (Net n : (List<Net>) getPatchController().patchModel.getNets().clone()) {
+        for (Net n : (List<Net>) getPatchController().getModel().getNets().clone()) {
             INetView netView = n.createView(this);
             netView.setVisible(isCableTypeEnabled(n.getDataType()));
             for (InletInstance i : n.dest) {

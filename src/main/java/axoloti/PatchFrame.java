@@ -262,7 +262,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }
 
     public PatchModel getPatchModel() {
-        return patchController.patchModel;
+        return patchController.getModel();
     }
 
     QCmdProcessor qcmdprocessor;

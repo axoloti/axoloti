@@ -1,6 +1,9 @@
 package axoloti;
 
 import axoloti.inlets.IInletInstanceView;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractView;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -18,17 +21,13 @@ import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
 import qcmds.QCmdUploadFile;
 
-public class PatchController {
+public class PatchController extends AbstractController<PatchModel, AbstractView> {
 
-    public PatchModel patchModel;
     public PatchView patchView;
     public PatchFrame patchFrame;
 
-    public PatchController() {
-    }
-
-    public void setPatchModel(PatchModel patchModel) {
-        this.patchModel = patchModel;
+    public PatchController(PatchModel model, AbstractDocumentRoot documentRoot) {
+        super(model, documentRoot);
     }
 
     public void setPatchView(PatchView patchView) {
@@ -59,16 +58,16 @@ public class PatchController {
     }
 
     public void Compile() {
-        for(String module : patchModel.getModules()) {
+        for(String module : getModel().getModules()) {
            GetQCmdProcessor().AppendToQueue(new QCmdCompileModule(this,
                    module, 
-                   patchModel.getModuleDir(module)));
+                   getModel().getModuleDir(module)));
         }
         GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
     }
 
     void UploadDependentFiles(String sdpath) {
-        ArrayList<SDFileReference> files = patchModel.GetDependendSDFiles();
+        ArrayList<SDFileReference> files = getModel().GetDependendSDFiles();
         for (SDFileReference fref : files) {
             File f = fref.localfile;
             if (f == null) {
@@ -118,14 +117,14 @@ public class PatchController {
     }
 
     public void UploadToSDCard(String sdfilename) {
-        patchModel.WriteCode();
+        getModel().WriteCode();
         Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
         QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
-        for(String module : patchModel.getModules()) {
+        for(String module : getModel().getModules()) {
            qcmdprocessor.AppendToQueue(new QCmdCompileModule(this,
                    module,
-                   patchModel.getModuleDir(module)
+                   getModel().getModuleDir(module)
            ));
         }
         qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
@@ -139,7 +138,7 @@ public class PatchController {
         }
         qcmdprocessor.WaitQueueFinished();
         Calendar cal;
-        if (patchModel.isDirty()) {
+        if (getModel().isDirty()) {
             cal = Calendar.getInstance();
         } else {
             cal = Calendar.getInstance();
@@ -196,7 +195,7 @@ public class PatchController {
 
     public Net AddConnection(IInletInstanceView il, IOutletInstanceView ol) {
         if (!isLocked()) {
-            Net net = patchModel.AddConnection(il.getInletInstance(), ol.getOutletInstance());
+            Net net = getModel().AddConnection(il.getInletInstance(), ol.getOutletInstance());
             return net;
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked");
@@ -206,7 +205,7 @@ public class PatchController {
 
     public Net AddConnection(IInletInstanceView il, IInletInstanceView ol) {
         if (!isLocked()) {
-            Net net = patchModel.AddConnection(il.getInletInstance(), ol.getInletInstance());
+            Net net = getModel().AddConnection(il.getInletInstance(), ol.getInletInstance());
             return net;
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't add connection: locked!");
@@ -233,21 +232,21 @@ public class PatchController {
     }
 
     public void setFileNamePath(String FileNamePath) {
-        patchModel.setFileNamePath(FileNamePath);
+        getModel().setFileNamePath(FileNamePath);
         if (getPatchFrame() != null) {
             getPatchFrame().setTitle(FileNamePath);
         }
     }
 
     public boolean delete(IAxoObjectInstanceView o) {
-        boolean succeeded = patchModel.delete((AxoObjectInstanceAbstract) o.getModel());
+        boolean succeeded = getModel().delete((AxoObjectInstanceAbstract) o.getModel());
         o.getModel().Close();
         return succeeded;
     }
 
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         if (!isLocked()) {
-            AxoObjectInstanceAbstract object = patchModel.AddObjectInstance(obj, loc);
+            AxoObjectInstanceAbstract object = getModel().AddObjectInstance(obj, loc);
             return object;
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked!");
@@ -256,15 +255,15 @@ public class PatchController {
     }
 
     public String GetCurrentWorkingDirectory() {
-        return patchModel.GetCurrentWorkingDirectory();
+        return getModel().GetCurrentWorkingDirectory();
     }
 
     public void setDirty() {
-        patchModel.setDirty();
+        getModel().setDirty();
     }
 
     public String getFileNamePath() {
-        return patchModel.getFileNamePath();
+        return getModel().getFileNamePath();
     }
 
     public String getSDCardPath() {
@@ -282,15 +281,15 @@ public class PatchController {
     }
 
     public void WriteCode() {
-        patchModel.WriteCode();
+        getModel().WriteCode();
     }
 
     public void setPresetUpdatePending(boolean updatePending) {
-        patchModel.presetUpdatePending = updatePending;
+        getModel().presetUpdatePending = updatePending;
     }
 
     public boolean isPresetUpdatePending() {
-        return patchModel.presetUpdatePending;
+        return getModel().presetUpdatePending;
     }
 
     Dimension GetSize() {
@@ -298,7 +297,7 @@ public class PatchController {
     }
 
     public PatchSettings getSettings() {
-        return patchModel.settings;
+        return getModel().settings;
     }
 
     public void ShowCompileFail() {
@@ -306,7 +305,7 @@ public class PatchController {
     }
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
-        patchModel.paste(v, pos, restoreConnectionsToExternalOutlets);
+        getModel().paste(v, pos, restoreConnectionsToExternalOutlets);
     }
 
     public void repaintPatchView() {
@@ -322,19 +321,19 @@ public class PatchController {
     }
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
-        AxoObjectInstanceAbstract newObject = patchModel.ChangeObjectInstanceType(obj, objType);
+        AxoObjectInstanceAbstract newObject = getModel().ChangeObjectInstanceType(obj, objType);
         return newObject;
     }
 
     public boolean isLocked() {
-        return patchModel.isLocked();
+        return getModel().isLocked();
     }
 
     public void setLocked(boolean locked) {
-        patchModel.setLocked(locked);
+        getModel().setLocked(locked);
     }
 
     public Net getNetDraggingModel() {
-        return new Net(patchModel);
+        return new Net(getModel());
     }
 }

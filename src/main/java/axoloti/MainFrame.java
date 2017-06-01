@@ -825,22 +825,21 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = new PatchController();
+            PatchController patchController = patchModel.createController(null); /* fixme: null */
             PatchView patchView = prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchView(patchView);
-            patchController.setPatchModel(patchModel);
             PatchFrame pf = new PatchFrame(patchController, qcmdprocessor);
             patchView.setFileNamePath(f.getPath());
             patchView.PostConstructor();
             patchModel.WriteCode();
             qcmdprocessor.WaitQueueFinished();
             Thread.sleep(500);
-            for(String module : patchController.patchModel.getModules()) {
+            for(String module : patchController.getModel().getModules()) {
                 qcmdprocessor.AppendToQueue(
                         new QCmdCompileModule(patchController,
                                 module,
-                                patchController.patchModel.getModuleDir(module)
+                                patchController.getModel().getModuleDir(module)
                         ));
             }
             QCmdCompilePatch cp = new QCmdCompilePatch(patchController);
@@ -903,10 +902,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = new PatchController();
+            PatchController patchController = patchModel.createController(null); /* fixme: null */
             PatchView patchView = prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
-            patchController.setPatchModel(patchModel);
             patchController.setPatchView(patchView);
             PatchFrame patchFrame = new PatchFrame(patchController, qcmdprocessor);
             patchView.setFileNamePath(f.getPath());
@@ -1008,10 +1006,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     public void NewPatch() {
         PatchModel patchModel = new PatchModel();
-        PatchController patchController = new PatchController();
+        PatchController patchController = patchModel.createController(null); /* fixme: null */
         PatchView patchView = prefs.getPatchView(patchController);
         patchModel.addModelChangedListener(patchView);
-        patchController.setPatchModel(patchModel);
         patchController.setPatchView(patchView);
         PatchFrame pf = new PatchFrame(patchController, qcmdprocessor);
         patchView.PostConstructor();

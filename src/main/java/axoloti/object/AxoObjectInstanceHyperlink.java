@@ -21,6 +21,8 @@ import axoloti.PatchModel;
 import axoloti.PatchView;
 import axoloti.PatchViewPiccolo;
 import axoloti.PatchViewSwing;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.objectviews.AxoObjectInstanceViewHyperlink;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewHyperlink;
@@ -78,11 +80,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
-        if (patchView instanceof PatchViewPiccolo) {
-            return new PAxoObjectInstanceViewHyperlink(this, (PatchViewPiccolo) patchView);
-        } else {
-            return new AxoObjectInstanceViewHyperlink(this, (PatchViewSwing) patchView);
-        }
+    public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
+        return new ObjectInstanceController(this, documentRoot);        
     }
 }

@@ -21,6 +21,8 @@ import axoloti.PatchModel;
 import axoloti.PatchView;
 import axoloti.PatchViewPiccolo;
 import axoloti.PatchViewSwing;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.objectviews.AxoObjectInstanceViewComment;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewComment;
@@ -79,19 +81,15 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
-        if (patchView instanceof PatchViewPiccolo) {
-            return new PAxoObjectInstanceViewComment(this, (PatchViewPiccolo) patchView);
-        } else {
-            return new AxoObjectInstanceViewComment(this, (PatchViewSwing) patchView);
-        }
-    }
-
-    @Override
     public String getInstanceName() {
         if (InstanceName == null) {
             InstanceName = getGeneratedInstanceName();
         }
         return InstanceName;
+    }
+
+    @Override
+    public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
+        return new ObjectInstanceController(this, documentRoot);
     }
 }

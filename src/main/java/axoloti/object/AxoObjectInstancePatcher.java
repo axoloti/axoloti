@@ -71,10 +71,9 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     }
 
     public void initSubpatchFrame() {
-        PatchController patchController = new PatchController();
+        PatchController patchController = getSubPatchModel().createController(null); /* FIXME: null */
         PatchView patchView = MainFrame.prefs.getPatchView(patchController);
         patchController.setPatchView(patchView);
-        patchController.setPatchModel(getSubPatchModel());
         getSubPatchModel().addModelChangedListener(patchView);
         pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
         patchController.patchView.setFileNamePath(getInstanceName());
@@ -105,15 +104,6 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         super.Close();
         if (pf != null) {
             pf.Close();
-        }
-    }
-
-    @Override
-    public IAxoObjectInstanceView getViewInstance(PatchView patchView) {
-        if (patchView instanceof PatchViewPiccolo) {
-            return new PAxoObjectInstanceViewPatcher(this, (PatchViewPiccolo) patchView);
-        } else {
-            return new AxoObjectInstanceViewPatcher(this, (PatchViewSwing) patchView);
         }
     }
 

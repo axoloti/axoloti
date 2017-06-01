@@ -292,11 +292,10 @@ public class FileMenu extends JMenu {
     }
 
     public void NewPatch() {
-        PatchController patchController = new PatchController();
         PatchModel patchModel = new PatchModel();
+        PatchController patchController = patchModel.createController(null); /*FIXME: null */
         PatchView patchView = MainFrame.prefs.getPatchView(patchController);
         patchModel.addModelChangedListener(patchView);
-        patchController.setPatchModel(patchModel);
         patchController.setPatchView(patchView);
         PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
         patchView.PostConstructor();

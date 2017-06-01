@@ -9,7 +9,16 @@ import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractView;
+import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.AxoObjectInstanceComment;
+import axoloti.object.AxoObjectInstanceHyperlink;
+import axoloti.object.AxoObjectInstancePatcher;
+import axoloti.object.AxoObjectInstancePatcherObject;
+import axoloti.object.AxoObjectInstanceZombie;
+import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
@@ -28,6 +37,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.swing.BorderFactory;
@@ -37,7 +47,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.Border;
 
-public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListener, MouseMotionListener, IAxoObjectInstanceView {
+public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListener, MouseMotionListener, IAxoObjectInstanceView, AbstractView {
 
     protected AxoObjectInstanceAbstract model;
     protected MouseListener ml;
@@ -260,7 +270,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
 
     @Override
     public PatchModel getPatchModel() {
-        return patchView.getPatchController().patchModel;
+        return patchView.getPatchController().getModel();
     }
 
     @Override
@@ -451,5 +461,36 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     @Override
     public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
         return null;
+    }
+    
+    public static AxoObjectInstanceViewAbstract createView(ObjectInstanceController controller, PatchViewSwing pv) {
+        AxoObjectInstanceAbstract model = controller.getModel();
+        AxoObjectInstanceViewAbstract view = null;
+        if (model instanceof AxoObjectInstanceComment) {
+            view = new AxoObjectInstanceViewComment((AxoObjectInstanceComment)model, pv);            
+        } else if (model instanceof AxoObjectInstanceHyperlink) {
+            view = new AxoObjectInstanceViewHyperlink((AxoObjectInstanceHyperlink)model, pv);            
+        } else if (model instanceof AxoObjectInstanceZombie) {
+            view = new AxoObjectInstanceViewZombie((AxoObjectInstanceZombie)model, pv);
+        } else if (model instanceof AxoObjectInstancePatcherObject) {
+            view = new AxoObjectInstanceViewPatcherObject((AxoObjectInstancePatcherObject)model, pv);
+        } else if (model instanceof AxoObjectInstancePatcher) {
+            view = new AxoObjectInstanceViewPatcher((AxoObjectInstancePatcher)model, pv);
+        } else if (model instanceof AxoObjectInstance) {
+            view = new AxoObjectInstanceView((AxoObjectInstance)model, pv);
+        }
+        view.PostConstructor();
+        controller.addView(view);
+        return view;
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public AbstractController getController() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

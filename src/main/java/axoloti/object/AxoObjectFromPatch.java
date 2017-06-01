@@ -46,10 +46,9 @@ public class AxoObjectFromPatch extends AxoObject {
         Serializer serializer = new Persister();
         try {
             patchModel = serializer.read(PatchModel.class, f);
-            patchController = new PatchController();
+            patchController = patchModel.createController(null); /* FIXME: null */
             patchView = MainFrame.prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
-            patchController.setPatchModel(patchModel);
             patchController.setPatchView(patchView);
             patchView.setFileNamePath(f.getAbsolutePath());
             patchView.PostConstructor();
