@@ -2,6 +2,10 @@
 
 set -e
 
+PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
+
+mkdir -p "${PLATFORM_ROOT}/src"
+
 CH_VERSION=16.1.7
 if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ]; 
 then
