@@ -72,11 +72,12 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
     }
 
     @Override
+    @Deprecated
     public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PAttributeInstanceViewTablename(this, (PAxoObjectInstanceView) o);
         } else {
-            return new AttributeInstanceViewTablename(this, (AxoObjectInstanceView) o);
+            return new AttributeInstanceViewTablename(this, null, (AxoObjectInstanceView) o);
         }
     }
 }

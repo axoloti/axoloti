@@ -2,8 +2,9 @@ package axoloti.attributeviews;
 
 import axoloti.PatchView;
 import axoloti.attribute.AttributeInstance;
+import axoloti.mvc.AbstractView;
 
-public interface IAttributeInstanceView {
+public interface IAttributeInstanceView extends AbstractView {
 
     public void Lock();
 
@@ -13,7 +14,9 @@ public interface IAttributeInstanceView {
 
     public String getName();
 
+    @Deprecated
     public PatchView getPatchView();
 
     public AttributeInstance getAttributeInstance();
+
 }

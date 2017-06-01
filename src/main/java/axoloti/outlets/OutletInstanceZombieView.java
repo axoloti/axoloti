@@ -9,8 +9,8 @@ public class OutletInstanceZombieView extends OutletInstanceView {
 
     private final OutletInstanceZombie outletInstanceZombie;
 
-    public OutletInstanceZombieView(OutletInstanceZombie outletInstanceZombie, AxoObjectInstanceViewAbstract o) {
-        super(outletInstanceZombie, o);
+    public OutletInstanceZombieView(OutletInstanceZombie outletInstanceZombie, OutletInstanceController controller, AxoObjectInstanceViewAbstract o) {
+        super(outletInstanceZombie, controller, o);
         this.outletInstanceZombie = outletInstanceZombie;
     }
 

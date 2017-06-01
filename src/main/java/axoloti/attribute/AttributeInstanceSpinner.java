@@ -50,20 +50,13 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
         return "" + value;
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
     @Override
+    @Deprecated
     public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PAttributeInstanceViewSpinner(this, (PAxoObjectInstanceView) o);
         } else {
-            return new AttributeInstanceViewSpinner(this, (AxoObjectInstanceView) o);
+            return new AttributeInstanceViewSpinner(this, null, (AxoObjectInstanceView) o);
         }
     }
 }

@@ -4,6 +4,7 @@ import axoloti.Preset;
 import axoloti.Theme;
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import components.AssignMidiCCComponent;
 import components.AssignMidiCCMenuItems;
@@ -22,8 +23,8 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
 
-    public ParameterInstanceViewFrac32UMap(ParameterInstanceFrac32UMap parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public ParameterInstanceViewFrac32UMap(ParameterInstanceFrac32UMap parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, controller, axoObjectInstanceView);
     }
 
     @Override

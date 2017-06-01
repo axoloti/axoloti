@@ -1,7 +1,8 @@
 package axoloti.attributeviews;
 
+import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceObjRef;
-import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
@@ -15,19 +16,21 @@ import javax.swing.event.DocumentListener;
 
 public class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
 
-    AttributeInstanceObjRef attributeInstance;
-
     JTextField TFObjName;
     JLabel vlabel;
 
-    public AttributeInstanceViewObjRef(AttributeInstanceObjRef attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public AttributeInstanceViewObjRef(AttributeInstanceObjRef attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, controller, axoObjectInstanceView);
+    }
+
+    @Override
+    public AttributeInstanceObjRef getAttributeInstance() {
+        return (AttributeInstanceObjRef) super.getAttributeInstance();
     }
 
     public void PostConstructor() {
         super.PostConstructor();
-        TFObjName = new JTextField(attributeInstance.getString());
+        TFObjName = new JTextField(getAttributeInstance().getString());
         Dimension d = TFObjName.getSize();
         d.width = 92;
         d.height = 22;
@@ -40,7 +43,7 @@ public class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent ke) {
-                if (ke.getKeyChar() == KeyEvent.VK_ENTER){
+                if (ke.getKeyChar() == KeyEvent.VK_ENTER) {
                     transferFocus();
                 }
             }
@@ -56,7 +59,7 @@ public class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                attributeInstance.setString(TFObjName.getText());
+                getAttributeInstance().setString(TFObjName.getText());
             }
 
             @Override
@@ -77,12 +80,12 @@ public class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                attributeInstance.setValueBeforeAdjustment(TFObjName.getText());
+                getAttributeInstance().setValueBeforeAdjustment(TFObjName.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (!TFObjName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
+                if (!TFObjName.getText().equals(getAttributeInstance().getValueBeforeAdjustment())) {
                     attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }
@@ -104,12 +107,12 @@ public class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
 
     @Override
     public String getString() {
-        return attributeInstance.getString();
+        return getAttributeInstance().getString();
     }
 
     @Override
     public void setString(String objName) {
-        attributeInstance.setString(objName);
+        getAttributeInstance().setString(objName);
         if (TFObjName != null) {
             TFObjName.setText(objName);
         }

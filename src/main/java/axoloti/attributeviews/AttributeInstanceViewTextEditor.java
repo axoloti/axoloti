@@ -1,8 +1,9 @@
 package axoloti.attributeviews;
 
 import axoloti.TextEditor;
+import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceTextEditor;
-import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import components.ButtonComponent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
@@ -10,35 +11,38 @@ import javax.swing.JLabel;
 
 public class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
 
-    AttributeInstanceTextEditor attributeInstance;
     ButtonComponent bEdit;
     JLabel vlabel;
 
-    public AttributeInstanceViewTextEditor(AttributeInstanceTextEditor attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public AttributeInstanceViewTextEditor(AttributeInstanceTextEditor attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, controller, axoObjectInstanceView);
+    }
+
+    @Override
+    public AttributeInstanceTextEditor getAttributeInstance() {
+        return (AttributeInstanceTextEditor) super.getAttributeInstance();
     }
 
     void showEditor() {
-        if (attributeInstance.editor == null) {
-            attributeInstance.editor = new TextEditor(attributeInstance.getStringRef(), getPatchView().getPatchController().getPatchFrame());
-            attributeInstance.editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.getDefinition().getName());
-            attributeInstance.editor.addWindowFocusListener(new WindowFocusListener() {
+        if (getAttributeInstance().editor == null) {
+            getAttributeInstance().editor = new TextEditor(getAttributeInstance().getStringRef(), getPatchView().getPatchController().getPatchFrame());
+            getAttributeInstance().editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.getDefinition().getName());
+            getAttributeInstance().editor.addWindowFocusListener(new WindowFocusListener() {
                 @Override
                 public void windowGainedFocus(WindowEvent e) {
-                    attributeInstance.setValueBeforeAdjustment(attributeInstance.getStringRef().s);
+                    getAttributeInstance().setValueBeforeAdjustment(getAttributeInstance().getStringRef().s);
                 }
 
                 @Override
                 public void windowLostFocus(WindowEvent e) {
-                    if (!attributeInstance.getValueBeforeAdjustment().equals(attributeInstance.getStringRef().s)) {
+                    if (!getAttributeInstance().getValueBeforeAdjustment().equals(getAttributeInstance().getStringRef().s)) {
                         attributeInstance.getObjectInstance().getPatchModel().setDirty();
                     }
                 }
             });
         }
-        attributeInstance.editor.setState(java.awt.Frame.NORMAL);
-        attributeInstance.editor.setVisible(true);
+        getAttributeInstance().editor.setState(java.awt.Frame.NORMAL);
+        getAttributeInstance().editor.setVisible(true);
     }
 
     @Override
@@ -70,14 +74,14 @@ public class AttributeInstanceViewTextEditor extends AttributeInstanceViewString
 
     @Override
     public String getString() {
-        return attributeInstance.getString();
+        return getAttributeInstance().getString();
     }
 
     @Override
     public void setString(String sText) {
-        attributeInstance.setString(sText);
-        if (attributeInstance.editor != null) {
-            attributeInstance.editor.SetText(sText);
+        getAttributeInstance().setString(sText);
+        if (getAttributeInstance().editor != null) {
+            getAttributeInstance().editor.SetText(sText);
         }
     }
 }

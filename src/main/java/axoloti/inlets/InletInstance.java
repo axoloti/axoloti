@@ -22,6 +22,9 @@ import axoloti.Net;
 import static axoloti.PatchViewType.PICCOLO;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
@@ -35,7 +38,7 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "dest")
-public class InletInstance<T extends Inlet> implements AtomInstance<T> {
+public class InletInstance<T extends Inlet> extends AbstractModel implements AtomInstance<T> {
 
     @Attribute(name = "inlet", required = false)
     public String inletname;
@@ -91,10 +94,12 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
     }
 
     public void RefreshName() {
-        name = axoObj.getInstanceName() + " " + inlet.name;
-        objname = axoObj.getInstanceName();
+        if (axoObj != null) {
+            name = axoObj.getInstanceName() + " " + inlet.name;
+            objname = axoObj.getInstanceName();
+            name = null;
+        }
         inletname = inlet.name;
-        name = null;
     }
 
     public String getObjname() {
@@ -120,18 +125,25 @@ public class InletInstance<T extends Inlet> implements AtomInstance<T> {
         return axoObj.getPatchModel().delete(axoObj.getPatchModel().GetNet(this));
     }
 
+    @Deprecated
     public IInletInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PInletInstanceView(this, (PAxoObjectInstanceView) o);
         } else {
-            return new InletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
+            return new InletInstanceView(this, null, (AxoObjectInstanceViewAbstract) o);
         }
     }
 
+    @Deprecated
     public IInletInstanceView createView(IAxoObjectInstanceView o) {
         IInletInstanceView inletInstanceView = getViewInstance(o);
         o.addInletInstanceView(inletInstanceView);
         inletInstanceView.PostConstructor();
         return inletInstanceView;
+    }
+
+    @Override
+    public AbstractController createController(AbstractDocumentRoot documentRoot) {
+        return new InletInstanceController(this, documentRoot);
     }
 }

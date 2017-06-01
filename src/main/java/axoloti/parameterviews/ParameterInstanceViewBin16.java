@@ -3,12 +3,13 @@ package axoloti.parameterviews;
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceBin16;
+import axoloti.parameters.ParameterInstanceController;
 import components.control.CheckboxComponent;
 
 public class ParameterInstanceViewBin16 extends ParameterInstanceViewBin {
 
-    public ParameterInstanceViewBin16(ParameterInstanceBin16 parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public ParameterInstanceViewBin16(ParameterInstanceBin16 parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, controller, axoObjectInstanceView);
     }
 
     @Override
@@ -19,12 +20,6 @@ public class ParameterInstanceViewBin16 extends ParameterInstanceViewBin {
     @Override
     public void updateV() {
         ctrl.setValue(parameterInstance.getValue().getInt());
-    }
-
-    @Override
-    public void setValue(Value value) {
-        parameterInstance.setValue(value);
-        updateV();
     }
 
     @Override

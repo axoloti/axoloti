@@ -21,6 +21,9 @@ import axoloti.SDFileReference;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributeviews.IAttributeInstanceView;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import static axoloti.utils.CharEscape.CharEscape;
@@ -32,7 +35,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class AttributeInstance<T extends AxoAttribute> implements AtomInstance<T> {
+public abstract class AttributeInstance<T extends AxoAttribute> extends AbstractModel implements AtomInstance<T> {
 
     @Attribute
     String attributeName;
@@ -76,11 +79,15 @@ public abstract class AttributeInstance<T extends AxoAttribute> implements AtomI
     public void Close() {
     }
 
+    @Deprecated
     public abstract IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o);
 
+    @Deprecated
     public IAttributeInstanceView createView(IAxoObjectInstanceView o) {
         IAttributeInstanceView pi = getViewInstance(o);
-        o.addAttributeInstanceView(pi);
+        if (o != null) {
+            o.addAttributeInstanceView(pi);
+        }
         pi.PostConstructor();
         return pi;
     }
@@ -94,5 +101,10 @@ public abstract class AttributeInstance<T extends AxoAttribute> implements AtomI
         if (getObjectInstance().getPatchModel() != null) {
             getObjectInstance().getPatchModel().setDirty();
         }
+    }
+
+    @Override
+    public AbstractController createController(AbstractDocumentRoot documentRoot) {
+        return new AttributeInstanceController(this, documentRoot);
     }
 }

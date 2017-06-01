@@ -46,20 +46,13 @@ public class AttributeInstanceInt32 extends AttributeInstanceInt<AxoAttributeInt
         return "" + value;
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
     @Override
+    @Deprecated
     public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PAttributeInstanceViewInt32(this, (PAxoObjectInstanceView) o);
         } else {
-            return new AttributeInstanceViewInt32(this, (AxoObjectInstanceView) o);
+            return new AttributeInstanceViewInt32(this, null, (AxoObjectInstanceView) o);
         }
     }
 }

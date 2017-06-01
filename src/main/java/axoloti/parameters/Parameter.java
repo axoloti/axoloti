@@ -19,6 +19,7 @@ package axoloti.parameters;
 
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
+import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import generatedobjects.GeneratedObjects;

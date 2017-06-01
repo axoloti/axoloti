@@ -22,6 +22,7 @@ import axoloti.Modulator;
 import axoloti.datatypes.Frac32;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueFrac32;
+import axoloti.datatypes.ValueInt32;
 import axoloti.object.AxoObjectInstance;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
@@ -40,7 +41,8 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     @ElementList(required = false)
     ArrayList<Modulation> modulators;
 
-    final ValueFrac32 value = new ValueFrac32();
+    // was final
+    ValueFrac32 value = new ValueFrac32();
 
     public ParameterInstanceFrac32(@Attribute(name = "value") double v) {
         value.setDouble(v);
@@ -62,16 +64,30 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     }
 
     @Override
-    public Value<Frac32> getValue() {
+    public Value getValue() {
         return value;
     }
 
     @Override
     public void setValue(Value value) {
-        super.setValue(value);
-        this.value.setDouble(value.getDouble());
+        Integer oldvalue = this.value.getRaw();
+        this.value = new ValueFrac32();
+        this.value.setRaw(value.getRaw());
+        firePropertyChange(
+            ParameterInstanceController.ELEMENT_PARAM_VALUE,
+            oldvalue, (Integer)value.getRaw());
     }
 
+    public void setValue(ValueInt32 value) {
+        setValue((Value)value);
+        //this.value.setRaw(value.getRaw());
+    }
+   
+    public void setValue(ValueFrac32 value) {
+        setValue((Value)value);
+        //this.value.setRaw(value.getRaw());
+    }
+    
     @Override
     public void applyDefaultValue() {
         if (((ParameterFrac32) parameter).DefaultValue != null) {

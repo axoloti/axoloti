@@ -77,11 +77,12 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     }
 
     @Override
+    @Deprecated
     public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PAttributeInstanceViewTextEditor(this, (PAxoObjectInstanceView) o);
         } else {
-            return new AttributeInstanceViewTextEditor(this, (AxoObjectInstanceView) o);
+            return new AttributeInstanceViewTextEditor(this, null, (AxoObjectInstanceView) o);
         }
     }
 

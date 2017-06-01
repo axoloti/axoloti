@@ -125,11 +125,12 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
+    @Deprecated
     public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PAttributeInstanceViewSDFile(this, (PAxoObjectInstanceView) o);
         } else {
-            return new AttributeInstanceViewSDFile(this, (AxoObjectInstanceView) o);
+            return new AttributeInstanceViewSDFile(this, null, (AxoObjectInstanceView) o);
         }
     }
 }

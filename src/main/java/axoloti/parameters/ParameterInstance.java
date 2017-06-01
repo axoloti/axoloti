@@ -21,12 +21,13 @@ import axoloti.Modulation;
 import axoloti.Preset;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
-import axoloti.utils.CodeGeneration;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -37,7 +38,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "param")
-public abstract class ParameterInstance<T extends Parameter> implements AtomInstance<T> {
+public abstract class ParameterInstance<T extends Parameter> extends AbstractModel implements AtomInstance<T> {
 
     @Attribute
     String name;
@@ -161,6 +162,7 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
                 axoObjectInstance.getPatchModel().setDirty();
             }
         }
+        firePropertyChange(ParameterInstanceController.ELEMENT_PARAM_VALUE, null, value);
     }
 
     public void SetValueRaw(int v) {
@@ -326,12 +328,16 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
         return name;
     }
 
+    @Deprecated // no references to view classes in model!
     public abstract IParameterInstanceView getViewInstance(IAxoObjectInstanceView o);
 
+    @Deprecated // no references to view classes in model!
     public IParameterInstanceView createView(IAxoObjectInstanceView o) {
         IParameterInstanceView pi = getViewInstance(o);
         pi.PostConstructor();
-        o.addParameterInstanceView(pi);
+        if (o != null) {
+            o.addParameterInstanceView(pi);
+        }
         return pi;
     }
 
@@ -340,5 +346,10 @@ public abstract class ParameterInstance<T extends Parameter> implements AtomInst
         if (getObjectInstance().getPatchModel() != null) {
             getObjectInstance().getPatchModel().setDirty();
         }
+    }
+    
+    @Override
+    public ParameterInstanceController createController(AbstractDocumentRoot documentRoot) {
+        return new ParameterInstanceController(this, documentRoot);
     }
 }

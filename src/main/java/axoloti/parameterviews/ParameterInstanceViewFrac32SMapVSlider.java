@@ -3,13 +3,14 @@ package axoloti.parameterviews;
 import axoloti.Preset;
 import axoloti.Theme;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceFrac32SMapVSlider;
 import components.control.VSliderComponent;
 
 public class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32S {
 
-    public ParameterInstanceViewFrac32SMapVSlider(ParameterInstanceFrac32SMapVSlider parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public ParameterInstanceViewFrac32SMapVSlider(ParameterInstanceFrac32SMapVSlider parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, controller, axoObjectInstanceView);
     }
 
     @Override

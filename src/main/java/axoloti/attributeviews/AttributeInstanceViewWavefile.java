@@ -1,7 +1,9 @@
 package axoloti.attributeviews;
 
+import axoloti.attribute.AttributeInstance;
+import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceWavefile;
-import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -14,19 +16,22 @@ import javax.swing.event.DocumentListener;
 
 public class AttributeInstanceViewWavefile extends AttributeInstanceView {
 
-    AttributeInstanceWavefile attributeInstance;
     JTextField TFwaveFilename;
     JLabel vlabel;
 
-    public AttributeInstanceViewWavefile(AttributeInstanceWavefile attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public AttributeInstanceViewWavefile(AttributeInstanceWavefile attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, controller, axoObjectInstanceView);
     }
 
     @Override
+    public AttributeInstanceWavefile getAttributeInstance() {
+        return (AttributeInstanceWavefile)super.getAttributeInstance();
+    }
+    
+    @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFwaveFilename = new JTextField(attributeInstance.getWaveFilename());
+        TFwaveFilename = new JTextField(getAttributeInstance().getWaveFilename());
         Dimension d = TFwaveFilename.getSize();
         d.width = 128;
         d.height = 22;
@@ -52,7 +57,7 @@ public class AttributeInstanceViewWavefile extends AttributeInstanceView {
         TFwaveFilename.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                attributeInstance.setWaveFilename(TFwaveFilename.getText());
+                getAttributeInstance().setWaveFilename(TFwaveFilename.getText());
             }
 
             @Override
@@ -73,12 +78,12 @@ public class AttributeInstanceViewWavefile extends AttributeInstanceView {
         TFwaveFilename.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                attributeInstance.setValueBeforeAdjustment(TFwaveFilename.getText());
+                getAttributeInstance().setValueBeforeAdjustment(TFwaveFilename.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (!TFwaveFilename.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
+                if (!TFwaveFilename.getText().equals(getAttributeInstance().getValueBeforeAdjustment())) {
                     attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }

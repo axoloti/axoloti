@@ -9,8 +9,8 @@ public class InletInstanceZombieView extends InletInstanceView {
 
     private final InletInstanceZombie inletInstanceZombie;
 
-    public InletInstanceZombieView(InletInstanceZombie inletInstanceZombie, AxoObjectInstanceViewAbstract o) {
-        super(inletInstanceZombie, o);
+    public InletInstanceZombieView(InletInstanceZombie inletInstanceZombie, InletInstanceController controller, AxoObjectInstanceViewAbstract o) {
+        super(inletInstanceZombie, controller, o);
         this.inletInstanceZombie = inletInstanceZombie;
     }
 

@@ -2,10 +2,13 @@ package axoloti.piccolo.attributeviews;
 
 import axoloti.PatchView;
 import axoloti.attribute.AttributeInstance;
+import axoloti.attribute.AttributeInstanceController;
 import axoloti.attributeviews.IAttributeInstanceView;
+import axoloti.mvc.AbstractController;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.PatchPNode;
 import components.piccolo.PLabelComponent;
+import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 
 public abstract class PAttributeInstanceView extends PatchPNode implements IAttributeInstanceView {
@@ -51,5 +54,15 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
     @Override
     public AttributeInstance getAttributeInstance() {
         return attributeInstance;
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public AbstractController getController() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

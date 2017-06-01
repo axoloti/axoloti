@@ -5,19 +5,14 @@ import axoloti.Theme;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceInt32;
 import java.awt.Graphics;
 
 public abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
-    ParameterInstanceViewInt32(ParameterInstanceInt32 parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
-    }
-
-    @Override
-    public void setValue(Value value) {
-        parameterInstance.setValue(value);
-        updateV();
+    ParameterInstanceViewInt32(ParameterInstanceInt32 parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, controller, axoObjectInstanceView);
     }
 
     @Override

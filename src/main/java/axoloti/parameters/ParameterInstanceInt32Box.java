@@ -63,11 +63,12 @@ public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
     }
 
     @Override
+    @Deprecated
     public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PParameterInstanceViewInt32Box(this, o);
         } else {
-            return new ParameterInstanceViewInt32Box(this, o);
+            return new ParameterInstanceViewInt32Box(this, null, o);
         }
     }
 }

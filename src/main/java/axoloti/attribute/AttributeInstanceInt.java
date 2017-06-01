@@ -49,6 +49,18 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
         }
     }
 
+    public Integer getValue() {
+        return value;
+    }
+
+    public void setValue(Integer value) {
+        Integer oldvalue = this.value;
+        this.value = value;
+        firePropertyChange(
+                AttributeInstanceController.ELEMENT_ATTR_VALUE,
+                oldvalue, value);
+    }
+
     @Override
     public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
         throw new RuntimeException("Cannot instantiate AttributeInstanceIntView");

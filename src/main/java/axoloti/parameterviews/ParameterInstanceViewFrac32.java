@@ -4,6 +4,7 @@ import axoloti.Modulation;
 import axoloti.Preset;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceFrac32;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,8 +14,8 @@ import javax.swing.JPopupMenu;
 
 public abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
 
-    ParameterInstanceViewFrac32(ParameterInstanceFrac32 parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    ParameterInstanceViewFrac32(ParameterInstanceFrac32 parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, controller, axoObjectInstanceView);
     }
 
     @Override
@@ -56,9 +57,10 @@ public abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView 
         if (p != null) {
             p.value = new ValueFrac32(getControlComponent().getValue());
         } else if (getParameterInstance().getValue().getDouble() != getControlComponent().getValue()) {
-            getParameterInstance().getValue().setDouble(getControlComponent().getValue());
-            getParameterInstance().setNeedsTransmit(true);
-            UpdateUnit();
+            if (controller != null) {
+                ValueFrac32 vf32 = new ValueFrac32(getControlComponent().getValue());
+                controller.changeRawValue(vf32.getRaw());
+            }
         } else {
             return false;
         }

@@ -3,13 +3,16 @@ package axoloti.piccolo.inlets;
 import axoloti.INetView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
+import axoloti.inlets.InletInstanceController;
 import axoloti.inlets.InletInstancePopupMenu;
+import axoloti.mvc.AbstractController;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.iolet.PIoletAbstract;
 import components.piccolo.PJackInputComponent;
 import components.piccolo.PLabelComponent;
 import components.piccolo.PSignalMetaDataIcon;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
@@ -20,6 +23,7 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
 
     InletInstancePopupMenu popup;
     InletInstance inletInstance;
+    InletInstanceController controller;
 
     public PInletInstanceView(InletInstance inletInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
@@ -94,5 +98,15 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
     @Override
     public JPopupMenu getPopup() {
         return popup;
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public AbstractController getController() {
+        return controller;
     }
 }

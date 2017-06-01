@@ -24,7 +24,7 @@ import org.simpleframework.xml.Attribute;
  * @author Johannes Taelman
  */
 //@Root(name="value")
-public class ValueFrac32 extends Value<Frac32> {
+public class ValueFrac32 extends Value {
 
     @Attribute
     private double v;
@@ -32,7 +32,7 @@ public class ValueFrac32 extends Value<Frac32> {
     public ValueFrac32() {
     }
 
-    public ValueFrac32(Value<Frac32> vv) {
+    public ValueFrac32(Value vv) {
         v = ((ValueFrac32) vv).v;
     }
 
@@ -51,8 +51,8 @@ public class ValueFrac32 extends Value<Frac32> {
     }
 
     @Override
-    public int compareTo(Frac32 o) {
-        return 0;
+    public int compareTo(Object o) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

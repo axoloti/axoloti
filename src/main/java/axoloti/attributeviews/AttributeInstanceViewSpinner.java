@@ -1,50 +1,57 @@
 package axoloti.attributeviews;
 
+import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceSpinner;
-import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
 import components.control.NumberBoxComponent;
+import java.beans.PropertyChangeEvent;
 
 public class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
 
-    AttributeInstanceSpinner attributeInstance;
     NumberBoxComponent spinner;
 
-    public AttributeInstanceViewSpinner(AttributeInstanceSpinner attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public AttributeInstanceViewSpinner(AttributeInstanceSpinner attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, controller, axoObjectInstanceView);
+    }
+
+    @Override
+    public AttributeInstanceSpinner getAttributeInstance() {
+        return (AttributeInstanceSpinner) super.getAttributeInstance();
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        int value = attributeInstance.getValue();
+        Integer ival = getAttributeInstance().getValue();
+        int value = ival;
 
-        if (value < attributeInstance.getDefinition().getMinValue()) {
-            attributeInstance.setValue(attributeInstance.getDefinition().getMinValue());
+        if (value < getAttributeInstance().getDefinition().getMinValue()) {
+            getAttributeInstance().setValue(getAttributeInstance().getDefinition().getMinValue());
         }
-        if (value > attributeInstance.getDefinition().getMaxValue()) {
-            attributeInstance.setValue(attributeInstance.getDefinition().getMaxValue());
+        if (value > getAttributeInstance().getDefinition().getMaxValue()) {
+            getAttributeInstance().setValue(getAttributeInstance().getDefinition().getMaxValue());
         }
-        spinner = new NumberBoxComponent(value, attributeInstance.getDefinition().getMinValue(), attributeInstance.getDefinition().getMaxValue(), 1.0);
+        spinner = new NumberBoxComponent(value, getAttributeInstance().getDefinition().getMinValue(), getAttributeInstance().getDefinition().getMaxValue(), 1.0);
         add(spinner);
         spinner.addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
-                attributeInstance.setValue((int) spinner.getValue());
+//                attributeInstance.setValue((int) spinner.getValue());
+                controller.changeValue((Integer) (int) spinner.getValue());
             }
 
             @Override
             public void ACtrlAdjustmentBegin(ACtrlEvent e) {
-                attributeInstance.setValueBeforeAdjustment(attributeInstance.getValue());
+                //attributeInstance.setValueBeforeAdjustment(attributeInstance.getValue());
             }
 
             @Override
             public void ACtrlAdjustmentFinished(ACtrlEvent e) {
-                if (attributeInstance.getValue() != attributeInstance.getValueBeforeAdjustment()) {
-                    axoObjectInstanceView.getPatchView().getPatchController().pushUndoState();
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
+                if (getAttributeInstance().getValue() != getAttributeInstance().getValueBeforeAdjustment()) {
+                    //axoObjectInstanceView.getPatchView().getPatchController().pushUndoState();
+                    //attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }
         });
@@ -63,4 +70,15 @@ public class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
             spinner.setEnabled(true);
         }
     }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(
+                AttributeInstanceController.ELEMENT_ATTR_VALUE)) {
+            Integer newValue = (Integer) evt.getNewValue();
+            spinner.setValue(newValue);
+        }
+    }
+
 }

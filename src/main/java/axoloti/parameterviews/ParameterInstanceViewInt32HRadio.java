@@ -1,6 +1,7 @@
 package axoloti.parameterviews;
 
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceInt32HRadio;
 import axoloti.parameters.ParameterInt32HRadio;
 import components.AssignMidiCCMenuItems;
@@ -10,8 +11,8 @@ import javax.swing.JPopupMenu;
 
 public class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
 
-    public ParameterInstanceViewInt32HRadio(ParameterInstanceInt32HRadio parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public ParameterInstanceViewInt32HRadio(ParameterInstanceInt32HRadio parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, controller, axoObjectInstanceView);
     }
 
     @Override

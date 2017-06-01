@@ -95,11 +95,12 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
+    @Deprecated
     public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PAttributeInstanceViewObjRef(this, (PAxoObjectInstanceView) o);
         } else {
-            return new AttributeInstanceViewObjRef(this, (AxoObjectInstanceView) o);
+            return new AttributeInstanceViewObjRef(this, null, (AxoObjectInstanceView) o);
         }
     }
 

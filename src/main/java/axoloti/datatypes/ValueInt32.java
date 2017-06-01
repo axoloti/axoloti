@@ -25,7 +25,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root
-public class ValueInt32 extends Value<Int32> {
+public class ValueInt32 extends Value {
 
     @Attribute(name = "i")
     private int v;
@@ -37,7 +37,7 @@ public class ValueInt32 extends Value<Int32> {
         this.v = v;
     }
 
-    public ValueInt32(Value<Int32> vv) {
+    public ValueInt32(Value vv) {
         v = ((ValueInt32) vv).v;
     }
 
@@ -52,7 +52,7 @@ public class ValueInt32 extends Value<Int32> {
     }
 
     @Override
-    public int compareTo(Int32 o) {
+    public int compareTo(Object o) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

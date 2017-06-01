@@ -22,12 +22,12 @@ package axoloti.datatypes;
  * @author Johannes Taelman
  * @param <dt> data type
  */
-public abstract class Value<dt extends DataType> implements Comparable<dt> {
+public abstract class Value implements Comparable {
 
     public Value() {
     }
 
-    public Value(Value<dt> v) {
+    public Value(Value v) {
     }
 
     public abstract int getInt();

@@ -1,9 +1,10 @@
 package axoloti.outlets;
 
+import axoloti.mvc.AbstractView;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import java.awt.Point;
 
-public interface IOutletInstanceView {
+public interface IOutletInstanceView extends AbstractView {
 
     public void PostConstructor();
 
@@ -24,4 +25,6 @@ public interface IOutletInstanceView {
     public void setAlignmentX(float alignmentX);
 
     public void setAlignmentY(float alignmentY);
+
+
 }

@@ -4,12 +4,14 @@ import axoloti.INetView;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
+import axoloti.outlets.OutletInstanceController;
 import axoloti.outlets.OutletInstancePopupMenu;
 import axoloti.piccolo.iolet.PIoletAbstract;
 import components.piccolo.PJackOutputComponent;
 import components.piccolo.PLabelComponent;
 import components.piccolo.PSignalMetaDataIcon;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
@@ -20,6 +22,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
 
     OutletInstancePopupMenu popup;
     OutletInstance outletInstance;
+    OutletInstanceController controller;
 
     public POutletInstanceView(OutletInstance outletInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
@@ -96,5 +99,15 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
     @Override
     public JPopupMenu getPopup() {
         return popup;
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public OutletInstanceController getController() {
+        return controller;
     }
 }

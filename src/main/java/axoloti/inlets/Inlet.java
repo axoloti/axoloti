@@ -77,8 +77,9 @@ public abstract class Inlet implements AtomDefinition, Cloneable {
     }
 
     @Override
-    public AtomInstance CreateInstance(AxoObjectInstance o) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public InletInstance CreateInstance(AxoObjectInstance o) {
+        InletInstance i = new InletInstance(this, null);        
+        return i;
     }
 
     public abstract DataType getDatatype();

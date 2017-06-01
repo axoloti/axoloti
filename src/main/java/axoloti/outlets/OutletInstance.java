@@ -22,6 +22,10 @@ import axoloti.Net;
 import static axoloti.PatchViewType.PICCOLO;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
+import axoloti.inlets.InletInstanceController;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
@@ -35,7 +39,7 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "source")
-public class OutletInstance<T extends Outlet> implements Comparable<OutletInstance>, AtomInstance<T> {
+public class OutletInstance<T extends Outlet> extends AbstractModel implements Comparable<OutletInstance>, AtomInstance<T> {
 
     @Attribute(name = "outlet", required = false)
     public String outletname;
@@ -126,11 +130,12 @@ public class OutletInstance<T extends Outlet> implements Comparable<OutletInstan
         return axoObj.getPatchModel().delete(axoObj.getPatchModel().GetNet(this));
     }
 
+    @Deprecated
     public IOutletInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new POutletInstanceView(this, (PAxoObjectInstanceView) o);
         } else {
-            return new OutletInstanceView(this, (AxoObjectInstanceViewAbstract) o);
+            return new OutletInstanceView(this, null, (AxoObjectInstanceViewAbstract) o);
         }
     }
 
@@ -140,4 +145,10 @@ public class OutletInstance<T extends Outlet> implements Comparable<OutletInstan
         outletInstanceView.PostConstructor();
         return outletInstanceView;
     }
+
+    @Override
+    public AbstractController createController(AbstractDocumentRoot documentRoot) {
+        return new OutletInstanceController(this, documentRoot);
+    }
+    
 }

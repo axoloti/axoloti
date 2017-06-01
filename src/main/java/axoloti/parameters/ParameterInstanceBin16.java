@@ -51,11 +51,12 @@ public class ParameterInstanceBin16 extends ParameterInstanceBin {
     }
 
     @Override
+    @Deprecated
     public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PParameterInstanceViewBin16(this, o);
         } else {
-            return new ParameterInstanceViewBin16(this, o);
+            return new ParameterInstanceViewBin16(this, null, o);
         }
     }
 }

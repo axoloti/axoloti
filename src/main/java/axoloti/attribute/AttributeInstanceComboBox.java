@@ -75,11 +75,12 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     }
 
     @Override
+    @Deprecated
     public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PAttributeInstanceViewComboBox(this, (PAxoObjectInstanceView) o);
         } else {
-            return new AttributeInstanceViewComboBox(this, (AxoObjectInstanceView) o);
+            return new AttributeInstanceViewComboBox(this, null, (AxoObjectInstanceView) o);
         }
     }
 }

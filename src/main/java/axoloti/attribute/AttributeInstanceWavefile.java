@@ -108,11 +108,12 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
     }
 
     @Override
+    @Deprecated
     public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PAttributeInstanceViewWavefile(this, (PAxoObjectInstanceView) o);
         } else {
-            return new AttributeInstanceViewWavefile(this, (AxoObjectInstanceView) o);
+            return new AttributeInstanceViewWavefile(this, null, (AxoObjectInstanceView) o);
         }
     }
 

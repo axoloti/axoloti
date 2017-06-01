@@ -5,9 +5,11 @@ import axoloti.MainFrame;
 import axoloti.Theme;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
@@ -18,8 +20,11 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
 
     OutletInstance outletInstance;
 
-    public OutletInstanceView(OutletInstance outletInstance, AxoObjectInstanceViewAbstract axoObj) {
+    final OutletInstanceController controller;
+
+    public OutletInstanceView(OutletInstance outletInstance, OutletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         this.outletInstance = outletInstance;
+        this.controller = controller;
         this.axoObj = axoObj;
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
     }
@@ -72,4 +77,23 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
     public void deleteNet() {
         getPatchView().getPatchController().deleteNet(this);
     }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public OutletInstanceController getController() {
+        return controller;
+    }
+
+    public static OutletInstanceView createView(OutletInstanceController controller, IAxoObjectInstanceView obj) {
+        OutletInstance model = controller.getModel();
+        OutletInstanceView view = new OutletInstanceView(model, controller, (AxoObjectInstanceViewAbstract) obj);
+        view.PostConstructor();
+        controller.addView(view);
+        return view;
+    }
+
 }

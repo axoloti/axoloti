@@ -45,11 +45,12 @@ public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S
     }
 
     @Override
+    @Deprecated
     public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PParameterInstanceViewFrac32SMapVSlider(this, o);
         } else {
-            return new ParameterInstanceViewFrac32SMapVSlider(this, o);
+            return new ParameterInstanceViewFrac32SMapVSlider(this, null, o);
         }
     }
 }

@@ -1,13 +1,14 @@
 package axoloti.parameterviews;
 
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceInt32Box;
 import components.control.NumberBoxComponent;
 
 public class ParameterInstanceViewInt32Box extends ParameterInstanceViewInt32 {
 
-    public ParameterInstanceViewInt32Box(ParameterInstanceInt32Box parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
+    public ParameterInstanceViewInt32Box(ParameterInstanceInt32Box parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, controller, axoObjectInstanceView);
     }
 
     @Override

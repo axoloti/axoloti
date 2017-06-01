@@ -74,11 +74,12 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
     }
 
     @Override
+    @Deprecated
     public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PParameterInstanceViewFrac32SMap(this, o);
         } else {
-            return new ParameterInstanceViewFrac32SMap(this, o);
+            return new ParameterInstanceViewFrac32SMap(this, null, o);
         }
     }
 }

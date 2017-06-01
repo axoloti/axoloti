@@ -52,11 +52,12 @@ public class OutletInstanceZombie extends OutletInstance {
     }
 
     @Override
+    @Deprecated
     public IOutletInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new POutletInstanceZombieView(this, (PAxoObjectInstanceViewZombie) o);
         } else {
-            return new OutletInstanceZombieView(this, (AxoObjectInstanceViewZombie) o);
+            return new OutletInstanceZombieView(this, null, (AxoObjectInstanceViewZombie) o);
         }
     }
 

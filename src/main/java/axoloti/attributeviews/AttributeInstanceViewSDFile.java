@@ -1,7 +1,8 @@
 package axoloti.attributeviews;
 
+import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceSDFile;
-import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
 import components.ButtonComponent;
 import java.awt.Dimension;
@@ -15,21 +16,23 @@ import javax.swing.event.DocumentListener;
 
 public class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
 
-    AttributeInstanceSDFile attributeInstance;
-
     JTextField TFFileName;
     JLabel vlabel;
     ButtonComponent ButtonChooseFile;
 
-    public AttributeInstanceViewSDFile(AttributeInstanceSDFile attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public AttributeInstanceViewSDFile(AttributeInstanceSDFile attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, controller, axoObjectInstanceView);
+    }
+
+    @Override
+    public AttributeInstanceSDFile getAttributeInstance() {
+        return (AttributeInstanceSDFile) super.getAttributeInstance();
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFFileName = new JTextField(attributeInstance.getString());
+        TFFileName = new JTextField(getAttributeInstance().getString());
         Dimension d = TFFileName.getSize();
         d.width = 128;
         d.height = 22;
@@ -41,7 +44,7 @@ public class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         add(TFFileName);
         TFFileName.getDocument().addDocumentListener(new DocumentListener() {
             void update() {
-                attributeInstance.setString(TFFileName.getText());
+                getAttributeInstance().setString(TFFileName.getText());
             }
 
             @Override
@@ -62,13 +65,13 @@ public class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         TFFileName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                attributeInstance.setValueBeforeAdjustment(TFFileName.getText());
+                getAttributeInstance().setValueBeforeAdjustment(TFFileName.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (!TFFileName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
+                if (!TFFileName.getText().equals(getAttributeInstance().getValueBeforeAdjustment())) {
+                    getAttributeInstance().getObjectInstance().getPatchModel().setDirty();
                 }
             }
         });
@@ -76,13 +79,13 @@ public class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         ButtonChooseFile.addActListener(new ButtonComponent.ActListener() {
             @Override
             public void OnPushed() {
-                JFileChooser fc = new JFileChooser(attributeInstance.getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
+                JFileChooser fc = new JFileChooser(getAttributeInstance().getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
                 int returnVal = fc.showOpenDialog(getPatchView().getPatchController().getPatchFrame());
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    String f = attributeInstance.toRelative(fc.getSelectedFile());
+                    String f = getAttributeInstance().toRelative(fc.getSelectedFile());
                     TFFileName.setText(f);
-                    if (!f.equals(attributeInstance.getString())) {
-                        attributeInstance.setString(f);
+                    if (!f.equals(getAttributeInstance().getString())) {
+                        getAttributeInstance().setString(f);
                         attributeInstance.getObjectInstance().getPatchModel().setDirty();
                     }
                 }
@@ -113,12 +116,12 @@ public class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
 
     @Override
     public String getString() {
-        return attributeInstance.getString();
+        return getAttributeInstance().getString();
     }
 
     @Override
     public void setString(String tableName) {
-        attributeInstance.setString(tableName);
+        getAttributeInstance().setString(tableName);
         if (TFFileName != null) {
             TFFileName.setText(tableName);
         }

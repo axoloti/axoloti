@@ -1,16 +1,13 @@
 package axoloti.attributeviews;
 
+import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceString;
-import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 
 public abstract class AttributeInstanceViewString extends AttributeInstanceView {
 
-    AttributeInstanceString attributeInstance;
-
-    public AttributeInstanceViewString(AttributeInstanceString attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
-
+    public AttributeInstanceViewString(AttributeInstanceString attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, controller, axoObjectInstanceView);
     }
 
     public abstract String getString();

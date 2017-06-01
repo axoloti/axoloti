@@ -28,7 +28,8 @@ import org.simpleframework.xml.Attribute;
  */
 public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends ParameterInstance<T> {
 
-    final ValueInt32 value = new ValueInt32();
+    // was final
+    ValueInt32 value = new ValueInt32();
 
     @Attribute(name = "value", required = false)
     public int getValuex() {

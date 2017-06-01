@@ -46,11 +46,12 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
     }
 
     @Override
+    @Deprecated
     public IParameterInstanceView getViewInstance(IAxoObjectInstanceView o) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             return new PParameterInstanceViewInt32HRadio(this, o);
         } else {
-            return new ParameterInstanceViewInt32HRadio(this, o);
+            return new ParameterInstanceViewInt32HRadio(this, null, o);
         }
     }
 }

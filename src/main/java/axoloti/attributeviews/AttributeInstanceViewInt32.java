@@ -1,7 +1,8 @@
 package axoloti.attributeviews;
 
+import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceInt32;
-import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
@@ -10,13 +11,16 @@ import javax.swing.event.ChangeListener;
 
 public class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
 
-    AttributeInstanceInt32 attributeInstance;
     JSlider slider;
     JLabel vlabel;
 
-    public AttributeInstanceViewInt32(AttributeInstanceInt32 attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public AttributeInstanceViewInt32(AttributeInstanceInt32 attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, controller, axoObjectInstanceView);
+    }
+
+    @Override
+    public AttributeInstanceInt32 getAttributeInstance() {
+        return (AttributeInstanceInt32) super.getAttributeInstance();
     }
 
     @Override
@@ -26,28 +30,28 @@ public class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
         Dimension d = slider.getSize();
         d.width = 128;
         d.height = 22;
-        if (attributeInstance.getValue() < attributeInstance.getDefinition().getMinValue()) {
-            attributeInstance.setValue(attributeInstance.getDefinition().getMinValue());
+        if (getAttributeInstance().getValue() < getAttributeInstance().getDefinition().getMinValue()) {
+            getAttributeInstance().setValue(getAttributeInstance().getDefinition().getMinValue());
         }
-        if (attributeInstance.getValue() > attributeInstance.getDefinition().getMaxValue()) {
-            attributeInstance.setValue(attributeInstance.getDefinition().getMaxValue());
+        if (getAttributeInstance().getValue() > getAttributeInstance().getDefinition().getMaxValue()) {
+            getAttributeInstance().setValue(getAttributeInstance().getDefinition().getMaxValue());
         }
-        slider.setMinimum(attributeInstance.getDefinition().getMinValue());
-        slider.setMaximum(attributeInstance.getDefinition().getMaxValue());
-        slider.setValue(attributeInstance.getValue());
+        slider.setMinimum(getAttributeInstance().getDefinition().getMinValue());
+        slider.setMaximum(getAttributeInstance().getDefinition().getMaxValue());
+        slider.setValue(getAttributeInstance().getValue());
         slider.setMaximumSize(d);
         slider.setMinimumSize(d);
         slider.setPreferredSize(d);
         slider.setSize(d);
         add(slider);
         vlabel = new JLabel();
-        vlabel.setText("       " + attributeInstance.getValue());
+        vlabel.setText("       " + getAttributeInstance().getValue());
         add(vlabel);
         slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent ce) {
-                attributeInstance.setValue(slider.getValue());
-                vlabel.setText("" + attributeInstance.getValue());
+                getAttributeInstance().setValue(slider.getValue());
+                vlabel.setText("" + getAttributeInstance().getValue());
             }
         });
     }

@@ -16,7 +16,8 @@ import org.simpleframework.xml.Attribute;
  */
 public abstract class ParameterInstanceBin<T extends ParameterBin> extends ParameterInstance<T> {
 
-    final ValueInt32 value = new ValueInt32();
+    // used to be final, now it is mutating
+    ValueInt32 value = new ValueInt32();
 
     @Attribute(name = "value", required = false)
     public int getValuex() {
@@ -24,6 +25,7 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
     }
 
     public ParameterInstanceBin() {
+        super();
     }
 
     public ParameterInstanceBin(@Attribute(name = "value") int v) {
@@ -72,7 +74,19 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
 
     @Override
     public void setValue(Value value) {
-        this.value.setInt(value.getInt());
+        Integer oldvalue = this.value.getInt();
+        this.value = new ValueInt32(value);
+        firePropertyChange(
+                ParameterInstanceController.ELEMENT_PARAM_VALUE,
+                oldvalue, (Integer) value.getInt());
+    }
+
+    public void setValue(ValueInt32 value) {
+        Integer oldvalue = this.value.getInt();
+        this.value = new ValueInt32(value);
+        firePropertyChange(
+                ParameterInstanceController.ELEMENT_PARAM_VALUE,
+                oldvalue, (Integer) value.getInt());
     }
 
     @Override

@@ -1,7 +1,8 @@
 package axoloti.attributeviews;
 
+import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceTablename;
-import axoloti.objectviews.AxoObjectInstanceView;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
@@ -17,8 +18,8 @@ public class AttributeInstanceViewTablename extends AttributeInstanceViewString 
     JTextField TFtableName;
     JLabel vlabel;
 
-    public AttributeInstanceViewTablename(AttributeInstanceTablename attributeInstance, AxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, axoObjectInstanceView);
+    public AttributeInstanceViewTablename(AttributeInstanceTablename attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attributeInstance, controller, axoObjectInstanceView);
         this.attributeInstance = attributeInstance;
     }
 

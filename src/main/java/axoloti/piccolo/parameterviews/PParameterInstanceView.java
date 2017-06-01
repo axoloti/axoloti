@@ -5,6 +5,7 @@ import axoloti.Preset;
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstance;
+import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.PatchPNode;
@@ -20,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBoxMenuItem;
@@ -34,6 +36,8 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
     PLabelComponent valuelbl = new PLabelComponent("123456789");
     PCtrlComponentAbstract ctrl;
 
+    ParameterInstanceController controller;
+    
     PAssignMidiCCComponent midiAssign;
 
     protected IAxoObjectInstanceView axoObjectInstanceView;
@@ -304,4 +308,15 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
     public IAxoObjectInstanceView getObjectInstanceView() {
         return axoObjectInstanceView;
     }
+    
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        updateV();
+    }
+
+    @Override
+    public ParameterInstanceController getController() {
+        return controller;
+    }
+
 }

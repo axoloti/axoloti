@@ -486,7 +486,7 @@ public class Preferences {
     }
 
     public PatchViewType getPatchViewType() {
-        patchViewType = PICCOLO;
+        patchViewType = PatchViewType.SWING;
         return patchViewType;
     }
 

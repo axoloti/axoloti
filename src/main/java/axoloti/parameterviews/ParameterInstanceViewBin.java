@@ -6,18 +6,13 @@ import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceBin;
+import axoloti.parameters.ParameterInstanceController;
 import java.awt.Graphics;
 
 public abstract class ParameterInstanceViewBin extends ParameterInstanceView {
 
-    ParameterInstanceViewBin(ParameterInstanceBin parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, axoObjectInstanceView);
-    }
-
-    @Override
-    public void setValue(Value value) {
-        parameterInstance.setValue(value);
-        updateV();
+    ParameterInstanceViewBin(ParameterInstanceBin parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, controller, axoObjectInstanceView);
     }
 
     @Override
@@ -44,9 +39,9 @@ public abstract class ParameterInstanceViewBin extends ParameterInstanceView {
         if (p != null) {
             p.value = new ValueInt32((int) getControlComponent().getValue());
         } else if (parameterInstance.getValue().getInt() != (int) getControlComponent().getValue()) {
-            parameterInstance.getValue().setInt((int) getControlComponent().getValue());
-            parameterInstance.setNeedsTransmit(true);
-            UpdateUnit();
+            if (controller != null) {
+                controller.changeRawValue((int)getControlComponent().getValue());
+            }
         } else {
             return false;
         }

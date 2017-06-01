@@ -5,10 +5,12 @@ import axoloti.MainFrame;
 import axoloti.Theme;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import components.JackInputComponent;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
@@ -19,9 +21,12 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
 
     InletInstance inletInstance;
 
-    public InletInstanceView(InletInstance inletInstance, AxoObjectInstanceViewAbstract axoObj) {
+    final InletInstanceController controller;
+
+    public InletInstanceView(InletInstance inletInstance, InletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         this.inletInstance = inletInstance;
         this.axoObj = axoObj;
+        this.controller = controller;
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
     }
 
@@ -34,7 +39,7 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
         jack.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(jack);
         add(new SignalMetaDataIcon(inletInstance.getInlet().GetSignalMetaData()));
-        if (axoObj.getObjectInstance().getType().GetInlets().size() > 1) {
+        if (!((axoObj != null) && axoObj.getObjectInstance().getType().GetInlets().size() <= 1)) {
             add(Box.createHorizontalStrut(3));
             add(new LabelComponent(inletInstance.getInlet().getName()));
         }
@@ -78,5 +83,23 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
                 netView.setSelected(highlighted);
             }
         }
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public InletInstanceController getController() {
+        return controller;
+    }
+
+    public static InletInstanceView createView(InletInstanceController controller, IAxoObjectInstanceView obj) {
+        InletInstance model = controller.getModel();
+        InletInstanceView view = new InletInstanceView(model, controller, (AxoObjectInstanceViewAbstract) obj);
+        view.PostConstructor();
+        controller.addView(view);
+        return view;
     }
 }
