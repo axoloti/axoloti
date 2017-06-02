@@ -8,7 +8,7 @@ import components.control.ACtrlListener;
 import components.control.NumberBoxComponent;
 import java.beans.PropertyChangeEvent;
 
-public class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
+class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
 
     NumberBoxComponent spinner;
 

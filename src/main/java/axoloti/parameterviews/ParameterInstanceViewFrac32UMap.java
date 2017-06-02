@@ -18,7 +18,7 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
+class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
@@ -51,14 +51,13 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
         btns.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         btns.setLayout(new BoxLayout(btns, BoxLayout.PAGE_AXIS));
 
-        //lblCC = new LabelComponent("C");
-        //btns.add(lblCC);
-        midiAssign = new AssignMidiCCComponent(this);
-        btns.add(midiAssign);
-        modulationAssign = new AssignModulatorComponent(this);
-        btns.add(modulationAssign);
-        presetAssign = new AssignPresetComponent(this);
-        btns.add(presetAssign);
+        // FIXME: reintroduce cc/modulator/preset buttons
+//        midiAssign = new AssignMidiCCComponent(this);
+//        btns.add(midiAssign);
+//        modulationAssign = new AssignModulatorComponent(this);
+//        btns.add(modulationAssign);
+//        presetAssign = new AssignPresetComponent(this);
+//        btns.add(presetAssign);
         add(btns);
 
 //        setComponentPopupMenu(new ParameterInstanceUInt7MapPopupMenu3(this));
@@ -93,7 +92,8 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
             ctrl.setValue(getParameterInstance().getValue().getDouble());
         }
-        presetAssign.repaint();
+        // FIXME
+        // presetAssign.repaint();
         /*
          if ((presets != null) && (!presets.isEmpty())) {
          lblPreset.setVisible(true);
@@ -106,12 +106,13 @@ public class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32
     @Override
     public void populatePopup(JPopupMenu m) {
         super.populatePopup(m);
-        JMenu m1 = new JMenu("Midi CC");
-        new AssignMidiCCMenuItems(this, m1);
-        m.add(m1);
-        JMenu m2 = new JMenu("Modulation");
-        new AssignModulatorMenuItems(this, m2);
-        m.add(m2);
+        // FIXME : reintroduce midi/modulation popup menu
+//        JMenu m1 = new JMenu("Midi CC");
+//        new AssignMidiCCMenuItems(this, m1);
+//        m.add(m1);
+//        JMenu m2 = new JMenu("Modulation");
+//        new AssignModulatorMenuItems(this, m2);
+//        m.add(m2);
     }
 
     @Override

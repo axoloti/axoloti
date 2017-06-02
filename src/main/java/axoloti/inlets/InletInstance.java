@@ -125,25 +125,8 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
         return axoObj.getPatchModel().delete(axoObj.getPatchModel().GetNet(this));
     }
 
-    @Deprecated
-    public IInletInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PInletInstanceView(this, (PAxoObjectInstanceView) o);
-        } else {
-            return new InletInstanceView(this, null, (AxoObjectInstanceViewAbstract) o);
-        }
-    }
-
-    @Deprecated
-    public IInletInstanceView createView(IAxoObjectInstanceView o) {
-        IInletInstanceView inletInstanceView = getViewInstance(o);
-        o.addInletInstanceView(inletInstanceView);
-        inletInstanceView.PostConstructor();
-        return inletInstanceView;
-    }
-
     @Override
-    public AbstractController createController(AbstractDocumentRoot documentRoot) {
+    public InletInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new InletInstanceController(this, documentRoot);
     }
 }

@@ -9,7 +9,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
+class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
 
     JSlider slider;
     JLabel vlabel;

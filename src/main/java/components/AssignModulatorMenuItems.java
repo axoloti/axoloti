@@ -20,8 +20,8 @@ package components;
 import axoloti.Modulation;
 import axoloti.Modulator;
 import axoloti.datatypes.ValueFrac32;
+import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceFrac32;
-import axoloti.parameterviews.ParameterInstanceViewFrac32UMap;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
 import components.control.HSliderComponent;
@@ -41,13 +41,13 @@ public class AssignModulatorMenuItems {
 
     double valueBeforeAdjustment;
 
-    public AssignModulatorMenuItems(final ParameterInstanceViewFrac32UMap parameterInstanceView, JComponent parent) {
+    public AssignModulatorMenuItems(final ParameterInstance parameterInstance, JComponent parent) {
         final ArrayList<HSliderComponent> hsls = new ArrayList<HSliderComponent>();
 
         //this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         hsls.clear();
 
-        for (Modulator m : parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel().getModulators()) {
+        for (Modulator m : parameterInstance.getObjectInstance().getPatchModel().getModulators()) {
             JPanel p = new JPanel();
             p.setLayout(new BoxLayout(p, BoxLayout.LINE_AXIS));
             String modlabel;
@@ -58,8 +58,8 @@ public class AssignModulatorMenuItems {
             }
             p.add(new JLabel(modlabel + " "));
             HSliderComponent hsl = new HSliderComponent();
-            if (parameterInstanceView.getParameterInstance().getModulators() != null) {
-                List<Modulation> modulators = parameterInstanceView.getParameterInstance().getModulators();
+            if (parameterInstance.getModulators() != null) {
+                List<Modulation> modulators = parameterInstance.getModulators();
                 for (Modulation n : modulators) {
                     if (m.Modulations.contains(n)) {
                         System.out.println("modulation restored " + n.getValue().getDouble());
@@ -73,7 +73,7 @@ public class AssignModulatorMenuItems {
                     int i = hsls.indexOf(e.getSource());
                     //                            System.out.println("ctrl " + i + parameterInstance.axoObj.patch.Modulators.get(i).objinst.InstanceName);
                     ValueFrac32 v = new ValueFrac32(((HSliderComponent) e.getSource()).getValue());
-                    ((ParameterInstanceFrac32) parameterInstanceView.getParameterInstance()).updateModulation(i, v.getDouble());
+                    ((ParameterInstanceFrac32) parameterInstance).updateModulation(i, v.getDouble());
                 }
 
                 @Override
@@ -85,7 +85,7 @@ public class AssignModulatorMenuItems {
                 public void ACtrlAdjustmentFinished(ACtrlEvent e) {
                     double vnew = ((HSliderComponent) e.getSource()).getValue();
                     if (vnew != valueBeforeAdjustment) {
-                        parameterInstanceView.getParameterInstance().SetDirty();
+                        parameterInstance.SetDirty();
                     }
                 }
             });
@@ -93,7 +93,7 @@ public class AssignModulatorMenuItems {
             p.add(hsl);
             parent.add(p);
         }
-        if (parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel().getModulators().isEmpty()) {
+        if (parameterInstance.getObjectInstance().getPatchModel().getModulators().isEmpty()) {
             JMenuItem d = new JMenuItem("no modulation sources in patch");
             d.setEnabled(false);
             parent.add(d);

@@ -9,7 +9,7 @@ import axoloti.parameters.ParameterInstanceBin;
 import axoloti.parameters.ParameterInstanceController;
 import java.awt.Graphics;
 
-public abstract class ParameterInstanceViewBin extends ParameterInstanceView {
+abstract class ParameterInstanceViewBin extends ParameterInstanceView {
 
     ParameterInstanceViewBin(ParameterInstanceBin parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, controller, axoObjectInstanceView);

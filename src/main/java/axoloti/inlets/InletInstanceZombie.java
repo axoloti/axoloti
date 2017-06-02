@@ -51,23 +51,4 @@ public class InletInstanceZombie extends InletInstance {
         return inletname;
     }
 
-    @Override
-    @Deprecated
-    public IInletInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PInletInstanceZombieView(this, (PAxoObjectInstanceViewZombie) o);
-        } else {
-            return new InletInstanceZombieView(this, null, (AxoObjectInstanceViewZombie) o);
-        }
-    }
-
-    @Override
-    @Deprecated
-    public IInletInstanceView createView(IAxoObjectInstanceView o) {
-        IInletInstanceView inletInstanceView = getViewInstance(o);
-        o.addInletInstanceView(inletInstanceView);
-        inletInstanceView.PostConstructor();
-        o.resizeToGrid();
-        return inletInstanceView;
-    }
 }

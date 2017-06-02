@@ -12,7 +12,7 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-public abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
+abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
 
     ParameterInstanceViewFrac32(ParameterInstanceFrac32 parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, controller, axoObjectInstanceView);

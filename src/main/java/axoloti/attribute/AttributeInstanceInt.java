@@ -61,11 +61,6 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
                 oldvalue, value);
     }
 
-    @Override
-    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        throw new RuntimeException("Cannot instantiate AttributeInstanceIntView");
-    }
-
     public int getValueBeforeAdjustment() {
         return valueBeforeAdjustment;
     }

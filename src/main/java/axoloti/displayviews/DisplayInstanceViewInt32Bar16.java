@@ -1,14 +1,15 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceInt32Bar16;
 import components.displays.LedstripComponent;
 
-public class DisplayInstanceViewInt32Bar16 extends DisplayInstanceViewInt32 {
+class DisplayInstanceViewInt32Bar16 extends DisplayInstanceViewInt32 {
     private DisplayInstanceInt32Bar16 displayInstance;
     private LedstripComponent readout;
     
-    public DisplayInstanceViewInt32Bar16(DisplayInstanceInt32Bar16 displayInstance) {
-        super(displayInstance);
+    public DisplayInstanceViewInt32Bar16(DisplayInstanceInt32Bar16 displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
         this.displayInstance = displayInstance;
     }
     

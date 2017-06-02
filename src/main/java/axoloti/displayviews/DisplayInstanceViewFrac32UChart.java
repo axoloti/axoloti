@@ -1,15 +1,16 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceFrac32UChart;
 import components.displays.ScopeComponent;
 
-public class DisplayInstanceViewFrac32UChart extends DisplayInstanceViewFrac32 {
+class DisplayInstanceViewFrac32UChart extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceFrac32UChart displayInstance;
     private ScopeComponent scope;
 
-    public DisplayInstanceViewFrac32UChart(DisplayInstanceFrac32UChart displayInstance) {
-        super(displayInstance);
+    public DisplayInstanceViewFrac32UChart(DisplayInstanceFrac32UChart displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
         this.displayInstance = displayInstance;
     }
 

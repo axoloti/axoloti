@@ -51,21 +51,4 @@ public class OutletInstanceZombie extends OutletInstance {
         return outletname;
     }
 
-    @Override
-    @Deprecated
-    public IOutletInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new POutletInstanceZombieView(this, (PAxoObjectInstanceViewZombie) o);
-        } else {
-            return new OutletInstanceZombieView(this, null, (AxoObjectInstanceViewZombie) o);
-        }
-    }
-
-    @Override
-    public IOutletInstanceView createView(IAxoObjectInstanceView o) {
-        IOutletInstanceView outletInstanceView = getViewInstance(o);
-        o.addOutletInstanceView(outletInstanceView);
-        outletInstanceView.PostConstructor();
-        return outletInstanceView;
-    }
 }

@@ -1,14 +1,15 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceFrac32VBarDB;
 import components.displays.VBarComponentDB;
 
-public class DisplayInstanceViewFrac32VBarDB extends DisplayInstanceViewFrac32 {
+class DisplayInstanceViewFrac32VBarDB extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceFrac32VBarDB displayInstance;
 
-    public DisplayInstanceViewFrac32VBarDB(DisplayInstanceFrac32VBarDB displayInstance) {
-        super(displayInstance);
+    public DisplayInstanceViewFrac32VBarDB(DisplayInstanceFrac32VBarDB displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
         this.displayInstance = displayInstance;
     }
 

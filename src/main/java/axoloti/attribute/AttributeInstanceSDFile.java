@@ -17,17 +17,9 @@
  */
 package axoloti.attribute;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
 import axoloti.SDFileReference;
 import axoloti.attributedefinition.AxoAttributeSDFile;
-import axoloti.attributeviews.AttributeInstanceViewSDFile;
-import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.attributeviews.PAttributeInstanceViewSDFile;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -124,13 +116,4 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         }
     }
 
-    @Override
-    @Deprecated
-    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PAttributeInstanceViewSDFile(this, (PAxoObjectInstanceView) o);
-        } else {
-            return new AttributeInstanceViewSDFile(this, null, (AxoObjectInstanceView) o);
-        }
-    }
 }

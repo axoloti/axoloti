@@ -1,15 +1,16 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceInt32HexLabel;
 import components.LabelComponent;
 
-public class DisplayInstanceViewInt32HexLabel extends DisplayInstanceViewInt32 {
+class DisplayInstanceViewInt32HexLabel extends DisplayInstanceViewInt32 {
 
     private DisplayInstanceInt32HexLabel displayInstance;
     private LabelComponent readout;
 
-    public DisplayInstanceViewInt32HexLabel(DisplayInstanceInt32HexLabel displayInstance) {
-        super(displayInstance);
+    public DisplayInstanceViewInt32HexLabel(DisplayInstanceInt32HexLabel displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
         this.displayInstance = displayInstance;
     }
 

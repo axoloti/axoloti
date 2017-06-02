@@ -8,7 +8,7 @@ import axoloti.utils.Constants;
 import components.DropDownComponent;
 import java.util.logging.Level;
 
-public class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
+class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
 
     DropDownComponent comboBox;
 

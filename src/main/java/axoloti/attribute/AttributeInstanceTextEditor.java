@@ -17,18 +17,10 @@
  */
 package axoloti.attribute;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
 import axoloti.StringRef;
 import axoloti.TextEditor;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
-import axoloti.attributeviews.AttributeInstanceViewTextEditor;
-import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.attributeviews.PAttributeInstanceViewTextEditor;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import org.simpleframework.xml.Element;
 
 /**
@@ -76,16 +68,6 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
         sRef.s = sText;
     }
 
-    @Override
-    @Deprecated
-    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PAttributeInstanceViewTextEditor(this, (PAxoObjectInstanceView) o);
-        } else {
-            return new AttributeInstanceViewTextEditor(this, null, (AxoObjectInstanceView) o);
-        }
-    }
-
     public StringRef getStringRef() {
         return sRef;
     }
@@ -97,4 +79,5 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
         }
         editor = null;
     }
+
 }

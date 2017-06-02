@@ -17,16 +17,8 @@
  */
 package axoloti.attribute;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
 import axoloti.attributedefinition.AxoAttributeSpinner;
-import axoloti.attributeviews.AttributeInstanceViewSpinner;
-import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.attributeviews.PAttributeInstanceViewSpinner;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 
 /**
  *
@@ -50,13 +42,4 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
         return "" + value;
     }
 
-    @Override
-    @Deprecated
-    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PAttributeInstanceViewSpinner(this, (PAxoObjectInstanceView) o);
-        } else {
-            return new AttributeInstanceViewSpinner(this, null, (AxoObjectInstanceView) o);
-        }
-    }
 }

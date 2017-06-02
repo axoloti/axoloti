@@ -1,15 +1,17 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceFrac8U128VBar;
 import components.VGraphComponent;
+import java.beans.PropertyChangeEvent;
 
-public class DisplayInstanceViewFrac8U128VBar extends DisplayInstanceView {
+class DisplayInstanceViewFrac8U128VBar extends DisplayInstanceView {
 
     DisplayInstanceFrac8U128VBar displayInstance;
     private VGraphComponent vgraph;
 
-    public DisplayInstanceViewFrac8U128VBar(DisplayInstanceFrac8U128VBar displayInstance) {
-        super(displayInstance);
+    public DisplayInstanceViewFrac8U128VBar(DisplayInstanceFrac8U128VBar displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
         this.displayInstance = displayInstance;
     }
 
@@ -23,5 +25,10 @@ public class DisplayInstanceViewFrac8U128VBar extends DisplayInstanceView {
     @Override
     public void updateV() {
         vgraph.setValue(displayInstance.getIDst());
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

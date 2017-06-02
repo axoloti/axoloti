@@ -17,16 +17,8 @@
  */
 package axoloti.attribute;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
 import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.attributeviews.AttributeInstanceViewComboBox;
-import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.attributeviews.PAttributeInstanceViewComboBox;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -74,13 +66,4 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
         this.selectedIndex = selectedIndex;
     }
 
-    @Override
-    @Deprecated
-    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PAttributeInstanceViewComboBox(this, (PAxoObjectInstanceView) o);
-        } else {
-            return new AttributeInstanceViewComboBox(this, null, (AxoObjectInstanceView) o);
-        }
-    }
 }

@@ -7,7 +7,7 @@ import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceFrac32UMapVSlider;
 import components.control.VSliderComponent;
 
-public class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32U {
+class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32U {
 
     public ParameterInstanceViewFrac32UMapVSlider(ParameterInstanceFrac32UMapVSlider parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, controller, axoObjectInstanceView);

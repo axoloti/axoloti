@@ -11,11 +11,13 @@ import axoloti.attributeviews.AttributeInstanceView;
 import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.displays.Display;
 import axoloti.displays.DisplayInstance;
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displayviews.DisplayInstanceView;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
+import axoloti.inlets.InletInstanceController;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
@@ -24,6 +26,7 @@ import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletInstance;
+import axoloti.outlets.OutletInstanceController;
 import axoloti.outlets.OutletInstanceView;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterInstance;
@@ -242,7 +245,9 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                 }
             }
             getModel().inletInstances.add(inletInstance);
-            InletInstanceView view = (InletInstanceView) inletInstance.createView(this);
+            //InletInstanceView view = (InletInstanceView) inletInstance.createView(this);
+            InletInstanceController c = inletInstance.createController(getController().getDocumentRoot());
+            InletInstanceView view = InletInstanceView.createView(c, this);
             view.setAlignmentX(LEFT_ALIGNMENT);
             p_inletViews.add(view);
             inletInstanceViews.add(view);
@@ -268,7 +273,9 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             }
             // need a view here
             getModel().outletInstances.add(outletInstance);
-            OutletInstanceView view = (OutletInstanceView) outletInstance.createView(this);
+            OutletInstanceController c = outletInstance.createController(getController().getDocumentRoot());
+            OutletInstanceView view = OutletInstanceView.createView(c, this);
+//            OutletInstanceView view = (OutletInstanceView) outletInstance.createView(this);
             view.setAlignmentX(RIGHT_ALIGNMENT);
             p_outletViews.add(view);
             outletInstanceViews.add(view);
@@ -322,7 +329,10 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
         for (Display p : getType().displays) {
             DisplayInstance pin = p.CreateInstance(getObjectInstance());
-            DisplayInstanceView view = (DisplayInstanceView) pin.createView(this);
+            DisplayInstanceController c = pin.createController(getController().getDocumentRoot());
+            DisplayInstanceView view = DisplayInstanceView.createView(c, null);
+            addDisplayInstanceView(view);
+//                    (DisplayInstanceView) pin.createView(this);
             view.setAlignmentX(RIGHT_ALIGNMENT);
             view.doLayout();
             getModel().displayInstances.add(pin);

@@ -17,12 +17,6 @@
  */
 package axoloti.displays;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
-import axoloti.displayviews.DisplayInstanceViewVScale;
-import axoloti.displayviews.IDisplayInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.displayviews.PDisplayInstanceViewVScale;
 import java.nio.ByteBuffer;
 
 /**
@@ -50,12 +44,4 @@ public class DisplayInstanceVScale extends DisplayInstance<DisplayVScale> {
         super.ProcessByteBuffer(bb);
     }
 
-    @Override
-    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PDisplayInstanceViewVScale(this, view);
-        } else {
-            return new DisplayInstanceViewVScale(this);
-        }
-    }
 }

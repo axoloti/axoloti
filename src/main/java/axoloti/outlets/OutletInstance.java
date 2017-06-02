@@ -130,24 +130,8 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
         return axoObj.getPatchModel().delete(axoObj.getPatchModel().GetNet(this));
     }
 
-    @Deprecated
-    public IOutletInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new POutletInstanceView(this, (PAxoObjectInstanceView) o);
-        } else {
-            return new OutletInstanceView(this, null, (AxoObjectInstanceViewAbstract) o);
-        }
-    }
-
-    public IOutletInstanceView createView(IAxoObjectInstanceView o) {
-        IOutletInstanceView outletInstanceView = getViewInstance(o);
-        o.addOutletInstanceView(outletInstanceView);
-        outletInstanceView.PostConstructor();
-        return outletInstanceView;
-    }
-
     @Override
-    public AbstractController createController(AbstractDocumentRoot documentRoot) {
+    public OutletInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new OutletInstanceController(this, documentRoot);
     }
     

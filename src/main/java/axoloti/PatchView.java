@@ -8,8 +8,11 @@ import axoloti.chunks.FourCCs;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
+import axoloti.inlets.InletInstanceController;
+import axoloti.inlets.InletInstanceView;
 import axoloti.inlets.InletInstanceZombie;
 import axoloti.iolet.IoletAbstract;
+import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstance;
@@ -21,6 +24,8 @@ import axoloti.objectviews.AxoObjectInstanceViewComment;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
+import axoloti.outlets.OutletInstanceController;
+import axoloti.outlets.OutletInstanceView;
 import axoloti.outlets.OutletInstanceZombie;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.IParameterInstanceView;
@@ -425,7 +430,8 @@ public abstract class PatchView implements ModelChangedListener {
         Serializer serializer = new Persister(strategy);
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = patchModel.createController(null); /* FIXME: null */
+            AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
+            PatchController patchController = patchModel.createController(documentRoot);
             PatchView patchView = MainFrame.prefs.getPatchView(patchController);
             patchModel.addModelChangedListener(patchView);
             patchController.setPatchView(patchView);
@@ -740,7 +746,8 @@ public abstract class PatchView implements ModelChangedListener {
                     IAxoObjectInstanceView zombieObjectView = zombieViewMap.get(i.getObjectInstance());
                     IInletInstanceView inletView = zombieObjectView.getInletInstanceView(i);
                     if (inletView == null) {
-                        inletView = i.createView(zombieObjectView);
+                        InletInstanceController c = i.createController(patchController.getDocumentRoot());
+                        inletView = InletInstanceView.createView(c, zombieObjectView);
                         zombieObjectView.addInletInstanceView(inletView);
                     }
 
@@ -754,7 +761,8 @@ public abstract class PatchView implements ModelChangedListener {
                     IAxoObjectInstanceView zombieObjectView = zombieViewMap.get(o.getObjectInstance());
                     IOutletInstanceView outletView = zombieObjectView.getOutletInstanceView(o);
                     if (outletView == null) {
-                        outletView = o.createView(zombieObjectView);
+                        OutletInstanceController c = o.createController(patchController.getDocumentRoot());
+                        outletView = OutletInstanceView.createView(c, zombieObjectView);                        
                         zombieObjectView.addOutletInstanceView(outletView);
                     }
                     netView.connectOutlet(outletView);

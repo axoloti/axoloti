@@ -17,16 +17,8 @@
  */
 package axoloti.attribute;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
 import axoloti.attributedefinition.AxoAttributeTablename;
-import axoloti.attributeviews.AttributeInstanceViewTablename;
-import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.attributeviews.PAttributeInstanceViewTablename;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.core.Persist;
 
@@ -71,13 +63,4 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
         }
     }
 
-    @Override
-    @Deprecated
-    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PAttributeInstanceViewTablename(this, (PAxoObjectInstanceView) o);
-        } else {
-            return new AttributeInstanceViewTablename(this, null, (AxoObjectInstanceView) o);
-        }
-    }
 }

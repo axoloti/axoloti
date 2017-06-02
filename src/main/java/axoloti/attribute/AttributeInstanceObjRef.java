@@ -17,17 +17,9 @@
  */
 package axoloti.attribute;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
 import axoloti.SubPatchMode;
 import axoloti.attributedefinition.AxoAttributeObjRef;
-import axoloti.attributeviews.AttributeInstanceViewObjRef;
-import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.attributeviews.PAttributeInstanceViewObjRef;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import axoloti.utils.CharEscape;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -92,16 +84,6 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     @Override
     public void setString(String objName) {
         this.objName = objName;
-    }
-
-    @Override
-    @Deprecated
-    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PAttributeInstanceViewObjRef(this, (PAxoObjectInstanceView) o);
-        } else {
-            return new AttributeInstanceViewObjRef(this, null, (AxoObjectInstanceView) o);
-        }
     }
 
     @Persist

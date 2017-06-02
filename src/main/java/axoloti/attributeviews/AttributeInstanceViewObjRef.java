@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
+class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
 
     JTextField TFObjName;
     JLabel vlabel;

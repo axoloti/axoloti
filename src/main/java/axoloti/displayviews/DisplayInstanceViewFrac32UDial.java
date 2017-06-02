@@ -1,16 +1,17 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceFrac32UDial;
 import components.displays.DispComponent;
 
-public class DisplayInstanceViewFrac32UDial extends DisplayInstanceViewFrac32 {
+class DisplayInstanceViewFrac32UDial extends DisplayInstanceViewFrac32 {
 
     private DispComponent dial;
 
     DisplayInstanceFrac32UDial displayInstance;
 
-    public DisplayInstanceViewFrac32UDial(DisplayInstanceFrac32UDial displayInstance) {
-        super(displayInstance);
+    public DisplayInstanceViewFrac32UDial(DisplayInstanceFrac32UDial displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
         this.displayInstance = displayInstance;
     }
 

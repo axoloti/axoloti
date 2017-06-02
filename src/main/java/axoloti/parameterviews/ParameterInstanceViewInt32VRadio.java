@@ -9,7 +9,7 @@ import components.control.VRadioComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
-public class ParameterInstanceViewInt32VRadio extends ParameterInstanceViewInt32 {
+class ParameterInstanceViewInt32VRadio extends ParameterInstanceViewInt32 {
 
     public ParameterInstanceViewInt32VRadio(ParameterInstanceInt32VRadio parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, controller, axoObjectInstanceView);

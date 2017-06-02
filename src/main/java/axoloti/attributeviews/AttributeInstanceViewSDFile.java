@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
+class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
 
     JTextField TFFileName;
     JLabel vlabel;

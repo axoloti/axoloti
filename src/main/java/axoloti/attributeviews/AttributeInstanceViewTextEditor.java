@@ -9,7 +9,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import javax.swing.JLabel;
 
-public class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
+class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
 
     ButtonComponent bEdit;
     JLabel vlabel;

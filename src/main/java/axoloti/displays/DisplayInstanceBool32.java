@@ -17,12 +17,8 @@
  */
 package axoloti.displays;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
-import axoloti.displayviews.DisplayInstanceViewBool32;
-import axoloti.displayviews.IDisplayInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.displayviews.PDisplayInstanceViewBool32;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
 
 /**
  *
@@ -34,12 +30,4 @@ public class DisplayInstanceBool32<DisplayBool32> extends DisplayInstanceInt32 {
         super();
     }
 
-    @Override
-    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PDisplayInstanceViewBool32(this, view);
-        } else {
-            return new DisplayInstanceViewBool32(this);
-        }
-    }
 }

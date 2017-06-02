@@ -9,7 +9,7 @@ import components.control.HRadioComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
-public class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
+class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
 
     public ParameterInstanceViewInt32HRadio(ParameterInstanceInt32HRadio parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, controller, axoObjectInstanceView);

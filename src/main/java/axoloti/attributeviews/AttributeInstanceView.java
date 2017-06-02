@@ -4,12 +4,16 @@ import axoloti.PatchViewSwing;
 import axoloti.Theme;
 import axoloti.atom.AtomInstanceView;
 import axoloti.attribute.AttributeInstance;
+import axoloti.attribute.AttributeInstanceComboBox;
 import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceInt32;
 import axoloti.attribute.AttributeInstanceObjRef;
 import axoloti.attribute.AttributeInstanceSDFile;
 import axoloti.attribute.AttributeInstanceSpinner;
+import axoloti.attribute.AttributeInstanceTablename;
+import axoloti.attribute.AttributeInstanceTextEditor;
 import axoloti.mvc.AbstractController;
+import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import components.LabelComponent;
 import java.beans.PropertyChangeEvent;
@@ -76,7 +80,9 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
     public static AttributeInstanceView createView(AttributeInstanceController controller, IAxoObjectInstanceView obj) {
         AttributeInstance model = controller.getModel();
         AttributeInstanceView view;
-        if (model instanceof AttributeInstanceInt32) {
+        if (model instanceof AttributeInstanceComboBox) {
+            view = new AttributeInstanceViewComboBox((AttributeInstanceComboBox) model, controller, (AxoObjectInstanceView) obj);
+        } else if (model instanceof AttributeInstanceInt32) {
             view = new AttributeInstanceViewInt32((AttributeInstanceInt32) model, controller, obj);
         } else if (model instanceof AttributeInstanceObjRef) {
             view = new AttributeInstanceViewObjRef((AttributeInstanceObjRef) model, controller, obj);
@@ -84,6 +90,10 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
             view = new AttributeInstanceViewSDFile((AttributeInstanceSDFile) model, controller, obj);
         } else if (model instanceof AttributeInstanceSpinner) {
             view = new AttributeInstanceViewSpinner((AttributeInstanceSpinner) model, controller, obj);
+        } else if (model instanceof AttributeInstanceTablename) {
+            view = new AttributeInstanceViewTablename((AttributeInstanceTablename) model, controller, obj);
+        } else if (model instanceof AttributeInstanceTextEditor) {
+            view = new AttributeInstanceViewTextEditor((AttributeInstanceTextEditor) model, controller, obj);
         } else {
             view = null;
         }

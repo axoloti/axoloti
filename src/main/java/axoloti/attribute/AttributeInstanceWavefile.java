@@ -17,16 +17,8 @@
  */
 package axoloti.attribute;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
 import axoloti.attributedefinition.AxoAttributeWavefile;
-import axoloti.attributeviews.AttributeInstanceViewWavefile;
-import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.AxoObjectInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.attributeviews.PAttributeInstanceViewWavefile;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -104,16 +96,6 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
         if (a instanceof AttributeInstanceWavefile) {
             AttributeInstanceWavefile a1 = (AttributeInstanceWavefile) a;
             setWaveFilename(a1.getWaveFilename());
-        }
-    }
-
-    @Override
-    @Deprecated
-    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PAttributeInstanceViewWavefile(this, (PAxoObjectInstanceView) o);
-        } else {
-            return new AttributeInstanceViewWavefile(this, null, (AxoObjectInstanceView) o);
         }
     }
 

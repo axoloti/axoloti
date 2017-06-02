@@ -20,6 +20,8 @@ package axoloti.displays;
 import axoloti.ModelChangedListener;
 import axoloti.atom.AtomInstance;
 import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -32,7 +34,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class DisplayInstance<T extends Display> implements AtomInstance<T> {
+public abstract class DisplayInstance<T extends Display> extends AbstractModel implements AtomInstance<T> {
 
     @Attribute
     String name;
@@ -84,16 +86,6 @@ public abstract class DisplayInstance<T extends Display> implements AtomInstance
         notifyModelChangedListeners();
     }
 
-    public abstract IDisplayInstanceView getViewInstance(IAxoObjectInstanceView o);
-
-    public IDisplayInstanceView createView(IAxoObjectInstanceView o) {
-        IDisplayInstanceView displayInstanceView = getViewInstance(o);
-        addModelChangedListener((ModelChangedListener) displayInstanceView);
-        displayInstanceView.PostConstructor();
-        o.addDisplayInstanceView(displayInstanceView);
-        return displayInstanceView;
-    }
-
     ArrayList<ModelChangedListener> modelChangedListeners = new ArrayList<ModelChangedListener>();
 
     public void addModelChangedListener(ModelChangedListener l) {
@@ -112,4 +104,10 @@ public abstract class DisplayInstance<T extends Display> implements AtomInstance
                 + ", displaydata: &displayVector[" + offset + "]},\n";
         return c;
     }
+    
+    @Override
+    public DisplayInstanceController createController(AbstractDocumentRoot documentRoot) {
+        return new DisplayInstanceController(this, documentRoot);
+    }
+
 }

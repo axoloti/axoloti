@@ -47,11 +47,6 @@ public abstract class AttributeInstanceString<T extends AxoAttribute> extends At
         }
     }
 
-    @Override
-    public IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o) {
-        throw new RuntimeException("Cannot instantiate AttributeInstanceStringView");
-    }
-
     private String valueBeforeAdjustment = "";
 
     public void setValueBeforeAdjustment(String valueBeforeAdjustment) {

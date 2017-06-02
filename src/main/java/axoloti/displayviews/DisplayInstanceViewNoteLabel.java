@@ -1,14 +1,15 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceNoteLabel;
 import components.LabelComponent;
 
-public class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
+class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceNoteLabel displayInstance;
 
-    public DisplayInstanceViewNoteLabel(DisplayInstanceNoteLabel displayInstance) {
-        super(displayInstance);
+    public DisplayInstanceViewNoteLabel(DisplayInstanceNoteLabel displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
         this.displayInstance = displayInstance;
     }
 

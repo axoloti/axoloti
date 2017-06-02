@@ -17,12 +17,6 @@
  */
 package axoloti.displays;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
-import axoloti.displayviews.DisplayInstanceViewNoteLabel;
-import axoloti.displayviews.IDisplayInstanceView;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.displayviews.PDisplayInstanceViewNoteLabel;
 import axoloti.realunits.NativeToReal;
 import axoloti.realunits.PitchToNote;
 
@@ -43,12 +37,4 @@ public class DisplayInstanceNoteLabel extends DisplayInstanceFrac32<DisplayNoteL
         return conv;
     }
 
-    @Override
-    public IDisplayInstanceView getViewInstance(IAxoObjectInstanceView view) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            return new PDisplayInstanceViewNoteLabel(this, view);
-        } else {
-            return new DisplayInstanceViewNoteLabel(this);
-        }
-    }
 }

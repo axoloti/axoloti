@@ -1,15 +1,17 @@
 package axoloti.displayviews;
 
 import axoloti.displays.DisplayInstanceBool32;
+import axoloti.displays.DisplayInstanceController;
 import components.displays.LedstripComponent;
+import java.beans.PropertyChangeEvent;
 
-public class DisplayInstanceViewBool32 extends DisplayInstanceViewInt32 {
+class DisplayInstanceViewBool32 extends DisplayInstanceViewInt32 {
 
     DisplayInstanceBool32 displayInstance;
     private LedstripComponent readout;
 
-    public DisplayInstanceViewBool32(DisplayInstanceBool32 displayInstance) {
-        super(displayInstance);
+    public DisplayInstanceViewBool32(DisplayInstanceBool32 displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
         this.displayInstance = displayInstance;
     }
 

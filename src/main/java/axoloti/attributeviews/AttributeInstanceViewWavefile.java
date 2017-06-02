@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class AttributeInstanceViewWavefile extends AttributeInstanceView {
+class AttributeInstanceViewWavefile extends AttributeInstanceView {
 
     JTextField TFwaveFilename;
     JLabel vlabel;

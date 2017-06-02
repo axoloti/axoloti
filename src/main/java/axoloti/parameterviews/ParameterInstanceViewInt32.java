@@ -9,7 +9,7 @@ import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceInt32;
 import java.awt.Graphics;
 
-public abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
+abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
     ParameterInstanceViewInt32(ParameterInstanceInt32 parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, controller, axoObjectInstanceView);

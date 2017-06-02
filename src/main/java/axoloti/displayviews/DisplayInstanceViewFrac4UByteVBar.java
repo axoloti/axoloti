@@ -1,15 +1,16 @@
 package axoloti.displayviews;
 
 import axoloti.datatypes.Value;
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceFrac4UByteVBar;
 import components.displays.VLineComponent;
 
-public class DisplayInstanceViewFrac4UByteVBar extends DisplayInstanceViewFrac32 {
+class DisplayInstanceViewFrac4UByteVBar extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceFrac4UByteVBar displayInstance;
 
-    public DisplayInstanceViewFrac4UByteVBar(DisplayInstanceFrac4UByteVBar displayInstance) {
-        super(displayInstance);
+    public DisplayInstanceViewFrac4UByteVBar(DisplayInstanceFrac4UByteVBar displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
         this.displayInstance = displayInstance;
     }
     private VLineComponent vbar[];

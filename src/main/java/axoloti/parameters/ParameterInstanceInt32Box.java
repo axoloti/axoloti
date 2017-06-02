@@ -17,12 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameterviews.IParameterInstanceView;
-import axoloti.parameterviews.ParameterInstanceViewInt32Box;
-import axoloti.piccolo.parameterviews.PParameterInstanceViewInt32Box;
 import org.simpleframework.xml.Attribute;
 
 /**

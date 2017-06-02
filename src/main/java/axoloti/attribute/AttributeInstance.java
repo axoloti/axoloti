@@ -79,9 +79,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     public void Close() {
     }
 
-    @Deprecated
-    public abstract IAttributeInstanceView getViewInstance(IAxoObjectInstanceView o);
-
     public String getAttributeName() {
         return attributeName;
     }

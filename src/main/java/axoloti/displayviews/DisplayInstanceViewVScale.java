@@ -1,16 +1,16 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceVScale;
 import components.displays.VValueLabelsComponent;
+import java.beans.PropertyChangeEvent;
 
-public class DisplayInstanceViewVScale extends DisplayInstanceView {
+class DisplayInstanceViewVScale extends DisplayInstanceView {
 
-    DisplayInstanceVScale displayInstance;
     private VValueLabelsComponent vlabels;
 
-    public DisplayInstanceViewVScale(DisplayInstanceVScale displayInstance) {
-        super(displayInstance);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewVScale(DisplayInstanceVScale displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
     }
 
     @Override
@@ -23,5 +23,10 @@ public class DisplayInstanceViewVScale extends DisplayInstanceView {
 
         vlabels = new VValueLabelsComponent(-60, 10, 10);
         add(vlabels);
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

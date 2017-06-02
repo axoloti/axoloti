@@ -1,15 +1,16 @@
 package axoloti.displayviews;
 
 import axoloti.datatypes.Value;
+import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceFrac4UByteVBarDB;
 import components.displays.VLineComponentDB;
 
-public class DisplayInstanceViewFrac4UByteVBarDB extends DisplayInstanceViewFrac32 {
+class DisplayInstanceViewFrac4UByteVBarDB extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceFrac4UByteVBarDB displayInstance;
 
-    public DisplayInstanceViewFrac4UByteVBarDB(DisplayInstanceFrac4UByteVBarDB displayInstance) {
-        super(displayInstance);
+    public DisplayInstanceViewFrac4UByteVBarDB(DisplayInstanceFrac4UByteVBarDB displayInstance, DisplayInstanceController controller) {
+        super(displayInstance, controller);
         this.displayInstance = displayInstance;
     }
 

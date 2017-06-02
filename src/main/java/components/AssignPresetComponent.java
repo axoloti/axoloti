@@ -18,7 +18,7 @@
 package components;
 
 import axoloti.Theme;
-import axoloti.parameterviews.ParameterInstanceViewFrac32UMap;
+import axoloti.parameters.ParameterInstance;
 import axoloti.utils.Constants;
 import components.control.HSliderComponent;
 import java.awt.Dimension;
@@ -39,20 +39,21 @@ public class AssignPresetComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    final ParameterInstanceViewFrac32UMap parameterInstanceView;
+    final ParameterInstance parameterInstance;
 
-    public AssignPresetComponent(ParameterInstanceViewFrac32UMap parameterInstanceView) {
+    public AssignPresetComponent(ParameterInstance parameterInstance) {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
-        this.parameterInstanceView = parameterInstanceView;
+        this.parameterInstance = parameterInstance;
 
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JPopupMenu pm = new JPopupMenu();
-                AssignPresetMenuItems m = new AssignPresetMenuItems(AssignPresetComponent.this.parameterInstanceView, pm);
+                // FIXME
+                //AssignPresetMenuItems m = new AssignPresetMenuItems(AssignPresetComponent.this.parameterInstanceView, pm);
                 pm.show(AssignPresetComponent.this, 0, getHeight());
 
                 e.consume();
@@ -81,14 +82,14 @@ public class AssignPresetComponent extends JComponent {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if ((parameterInstanceView.getParameterInstance().getPresets() != null) && (!parameterInstanceView.getParameterInstance().getPresets().isEmpty())) {
+        if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setFont(Constants.FONT);
             g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
             g2.fillRect(1, 1, getWidth(), getHeight());
-            if ((parameterInstanceView.getParameterInstance().getPresets() != null) && (!parameterInstanceView.getParameterInstance().getPresets().isEmpty())) {
+            if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
                 g2.setColor(Theme.getCurrentTheme().Component_Primary);
                 g2.fillRect(1, 1, 8, getHeight());
                 g2.setColor(Theme.getCurrentTheme().Component_Secondary);
