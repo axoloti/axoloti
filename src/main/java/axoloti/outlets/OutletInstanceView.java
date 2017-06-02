@@ -88,12 +88,4 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
         return controller;
     }
 
-    public static OutletInstanceView createView(OutletInstanceController controller, IAxoObjectInstanceView obj) {
-        OutletInstance model = controller.getModel();
-        OutletInstanceView view = new OutletInstanceView(model, controller, (AxoObjectInstanceViewAbstract) obj);
-        view.PostConstructor();
-        controller.addView(view);
-        return view;
-    }
-
 }

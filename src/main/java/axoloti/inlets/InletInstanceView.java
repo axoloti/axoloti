@@ -95,11 +95,4 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
         return controller;
     }
 
-    public static InletInstanceView createView(InletInstanceController controller, IAxoObjectInstanceView obj) {
-        InletInstance model = controller.getModel();
-        InletInstanceView view = new InletInstanceView(model, controller, (AxoObjectInstanceViewAbstract) obj);
-        view.PostConstructor();
-        controller.addView(view);
-        return view;
-    }
 }

@@ -9,15 +9,8 @@ import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractView;
-import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.object.AxoObjectInstanceComment;
-import axoloti.object.AxoObjectInstanceHyperlink;
-import axoloti.object.AxoObjectInstancePatcher;
-import axoloti.object.AxoObjectInstancePatcherObject;
-import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
@@ -178,9 +171,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                     nx = ((nx + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
                     ny = ((ny + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
                 }
-                if (o.model.getX() != nx || o.model.getY() != ny) {
-                    o.setLocation(nx, ny);
-                }
+                o.getController().changeLocation(nx, ny);
             }
         }
     }
@@ -291,35 +282,9 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         return new ArrayList<>();
     }
 
-    @Override
-    public void setLocation(int x, int y) {
-
-        super.setLocation(x, y);
-
-        model.setX(x);
-        model.setY(y);
-        if (getPatchView() != null) {
-            repaint();
-            for (IInletInstanceView i : getInletInstanceViews()) {
-                INetView n = getPatchView().GetNetView(i);
-                if (n != null) {
-                    n.updateBounds();
-                    n.repaint();
-                }
-            }
-            for (IOutletInstanceView i : getOutletInstanceViews()) {
-                INetView n = getPatchView().GetNetView(i);
-                if (n != null) {
-                    n.updateBounds();
-                    n.repaint();
-                }
-            }
-        }
-    }
-
     protected void handleInstanceNameEditorAction() {
         String s = InstanceNameTF.getText();
-        setInstanceName(s);
+        getController().changeInstanceName(s);
         if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
             InstanceNameTF.getParent().remove(InstanceNameTF);
         }
@@ -368,11 +333,11 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         InstanceNameTF.requestFocus();
     }
 
+    @Override
     public void setInstanceName(String InstanceName) {
-        if (model.setInstanceName(InstanceName)) {
-            doLayout();
-            repaint();
-        }
+        InstanceLabel.setText(InstanceName);
+        doLayout();
+        repaint();
     }
 
     public static final Border BORDER_SELECTED = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected);
@@ -392,16 +357,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
 
     public Boolean isSelected() {
         return selected;
-    }
-
-    public void SetLocation(int x1, int y1) {
-        super.setLocation(x1, y1);
-        model.setLocation(x1, y1);
-        if (getPatchView() != null) {
-            for (INetView n : getPatchView().getNetViews()) {
-                n.updateBounds();
-            }
-        }
     }
 
     @Override
@@ -466,34 +421,37 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         return null;
     }
     
-    public static AxoObjectInstanceViewAbstract createView(ObjectInstanceController controller, PatchViewSwing pv) {
-        AxoObjectInstanceAbstract model = controller.getModel();
-        AxoObjectInstanceViewAbstract view = null;
-        if (model instanceof AxoObjectInstanceComment) {
-            view = new AxoObjectInstanceViewComment((AxoObjectInstanceComment)model, controller, pv);            
-        } else if (model instanceof AxoObjectInstanceHyperlink) {
-            view = new AxoObjectInstanceViewHyperlink((AxoObjectInstanceHyperlink)model, controller, pv);            
-        } else if (model instanceof AxoObjectInstanceZombie) {
-            view = new AxoObjectInstanceViewZombie((AxoObjectInstanceZombie)model, controller, pv);
-        } else if (model instanceof AxoObjectInstancePatcherObject) {
-            view = new AxoObjectInstanceViewPatcherObject((AxoObjectInstancePatcherObject)model, controller, pv);
-        } else if (model instanceof AxoObjectInstancePatcher) {
-            view = new AxoObjectInstanceViewPatcher((AxoObjectInstancePatcher)model, controller, pv);
-        } else if (model instanceof AxoObjectInstance) {
-            view = new AxoObjectInstanceView((AxoObjectInstance)model, controller, pv);
-        }
-        view.PostConstructor();
-        controller.addView(view);
-        return view;
-    }
-
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_LOCATION)) {
+            Point newValue = (Point) evt.getNewValue();
+            setLocation(newValue.x, newValue.y);
+            if (getPatchView() != null) {
+                repaint();
+                for (IInletInstanceView i : getInletInstanceViews()) {
+                    INetView n = getPatchView().GetNetView(i);
+                    if (n != null) {
+                        n.updateBounds();
+                        n.repaint();
+                    }
+                }
+                for (IOutletInstanceView i : getOutletInstanceViews()) {
+                    INetView n = getPatchView().GetNetView(i);
+                    if (n != null) {
+                        n.updateBounds();
+                        n.repaint();
+                    }
+                }
+            }
+        }
+        if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_INSTANCENAME)) {
+            String s = (String) evt.getNewValue();
+            setInstanceName(s);
+        }
     }
 
     @Override
-    public AbstractController getController() {
+    public ObjectInstanceController getController() {
         return controller;
     }
 }

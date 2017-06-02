@@ -9,23 +9,22 @@ import axoloti.datatypes.DataType;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceController;
-import axoloti.inlets.InletInstanceView;
+import axoloti.inlets.InletInstanceViewFactory;
 import axoloti.inlets.InletInstanceZombie;
 import axoloti.iolet.IoletAbstract;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFromPatch;
-import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectInstanceController;
-import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewComment;
+import axoloti.objectviews.AxoObjectInstanceViewFactory;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceController;
-import axoloti.outlets.OutletInstanceView;
+import axoloti.outlets.OutletInstanceViewFactory;
 import axoloti.outlets.OutletInstanceZombie;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.IParameterInstanceView;
@@ -267,7 +266,8 @@ public abstract class PatchView implements ModelChangedListener {
                     p.y = p.y + ystep;
                     p.x = xgrid * (p.x / xgrid);
                     p.y = ygrid * (p.y / ygrid);
-                    o.SetLocation(p.x, p.y);
+                    // FIXME
+                    // o.SetLocation(p.x, p.y);
                 }
             }
             if (isUpdate) {
@@ -508,7 +508,8 @@ public abstract class PatchView implements ModelChangedListener {
         if ((nx < 0) || (ny < 0)) { // move all to positive coordinates
             for (IAxoObjectInstanceView o : objectInstanceViews) {
                 Point p = o.getLocation();
-                o.SetLocation(p.x - nx, p.y - ny);
+                // FIXME
+                // o.SetLocation(p.x - nx, p.y - ny);
             }
         }
 
@@ -685,7 +686,7 @@ public abstract class PatchView implements ModelChangedListener {
             if (view == null || o.isDirty()) {
                 isNewObject = true;
                 ObjectInstanceController c = o.createController(patchController.getDocumentRoot());
-                view = AxoObjectInstanceView.createView(c, (PatchViewSwing)this);
+                view = AxoObjectInstanceViewFactory.createView(c, (PatchViewSwing)this);
             }
 
             if (view.isZombie()) {
@@ -747,7 +748,7 @@ public abstract class PatchView implements ModelChangedListener {
                     IInletInstanceView inletView = zombieObjectView.getInletInstanceView(i);
                     if (inletView == null) {
                         InletInstanceController c = i.createController(patchController.getDocumentRoot());
-                        inletView = InletInstanceView.createView(c, zombieObjectView);
+                        inletView = InletInstanceViewFactory.createView(c, zombieObjectView);
                         zombieObjectView.addInletInstanceView(inletView);
                     }
 
@@ -762,7 +763,7 @@ public abstract class PatchView implements ModelChangedListener {
                     IOutletInstanceView outletView = zombieObjectView.getOutletInstanceView(o);
                     if (outletView == null) {
                         OutletInstanceController c = o.createController(patchController.getDocumentRoot());
-                        outletView = OutletInstanceView.createView(c, zombieObjectView);                        
+                        outletView = OutletInstanceViewFactory.createView(c, zombieObjectView);                        
                         zombieObjectView.addOutletInstanceView(outletView);
                     }
                     netView.connectOutlet(outletView);

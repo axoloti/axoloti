@@ -52,8 +52,6 @@ public interface IAxoObjectInstanceView {
 
     public Boolean isSelected();
 
-    public void SetLocation(int x1, int y1);
-
     public void moveToFront();
 
     public void resizeToGrid();

@@ -189,8 +189,8 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
 
     @Override
     public void setLocation(int x, int y) {
-        model.setX(x);
-        model.setY(y);
+        //model.setX(x);
+        //model.setY(y);
         setOffset(x, y);
         if (getPatchView() != null) {
             repaint();

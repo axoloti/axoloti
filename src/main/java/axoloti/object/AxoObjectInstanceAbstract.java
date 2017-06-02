@@ -106,20 +106,24 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         this.patchModel = patchModel;
     }
 
-    public String getInstanceName() {
-        return InstanceName;
-    }
-
     public void setType(AxoObjectAbstract type) {
         this.type = type;
         typeUUID = type.getUUID();
     }
 
+    public AxoObjectAbstract getType() {
+        return type;
+    }
+
+    public String getInstanceName() {
+        return InstanceName;
+    }
+
     public boolean setInstanceName(String InstanceName) {
+        String oldvalue = this.InstanceName;
         if (this.InstanceName.equals(InstanceName)) {
             return false;
         }
-
         if (getPatchModel() != null) {
             AxoObjectInstanceAbstract o1 = getPatchModel().GetObjectInstance(InstanceName);
             if ((o1 != null) && (o1 != this)) {
@@ -130,11 +134,11 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         this.InstanceName = InstanceName;
         setDirty(true);
         getPatchModel().setDirty();
-        return true;
-    }
 
-    public AxoObjectAbstract getType() {
-        return type;
+        firePropertyChange(
+            ObjectInstanceController.OBJ_INSTANCENAME,
+            oldvalue, this.InstanceName);
+        return true;
     }
 
     public AxoObjectAbstract resolveType() {
@@ -178,14 +182,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
 
     public int getY() {
         return y;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     /*
@@ -256,11 +252,24 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     public void refreshIndex() {
     }
 
-    public void SetLocation(int x1, int y1) {
-        x = x1;
-        y = y1;
+    private Point p = new Point();
+    
+    public void setLocation(Point p) {
+        Point oldvalue = this.p;
+        this.p = p;
+        x = p.x;
+        y = p.y;
+        firePropertyChange(
+            ObjectInstanceController.OBJ_LOCATION,
+            oldvalue, p);
     }
 
+    public Point getLocation() {
+        p.x = x;
+        p.y = y;
+        return p;
+    }
+    
     public boolean providesModulationSource() {
         return false;
     }
