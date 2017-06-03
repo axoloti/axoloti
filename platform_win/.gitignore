@@ -9,6 +9,7 @@ manifest/
 chibios/
 apache-ant-1.9.4/
 ChibiOS_*/
+gcc-arm-none-eabi-6-2017-q1-update-win32/
 
 coreutils-5.3.0-bin.zip
 make-3.81-bin.zip

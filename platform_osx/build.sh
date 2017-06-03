@@ -24,7 +24,7 @@ then
     mkdir "${PLATFORM_ROOT}/src"
 fi
 
-CH_VERSION=16.1.7
+CH_VERSION=16.1.8
 if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ]; 
 then
     cd "${PLATFORM_ROOT}/src"
@@ -47,22 +47,22 @@ else
     echo "chibios directory already present, skipping..."
 fi
 
-if [ ! -f "$PLATFORM_ROOT/bin/arm-none-eabi-gcc" ]; 
+
+if [ ! -f "gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc" ];
 then
-    cd "${PLATFORM_ROOT}/src"
-    ARCHIVE=gcc-arm-none-eabi-4_9-2015q2-20150609-mac.tar.bz2
+    ARDIR=gcc-arm-none-eabi-6-2017-q1-update
+    ARCHIVE=${ARDIR}-mac.tar.bz2
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
-        curl -L https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q2-update/+download/$ARCHIVE > $ARCHIVE
+        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/6_1-2017q1/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi
     tar xfj ${ARCHIVE}
-    cp -r gcc-arm-none-eabi-4_9-2015q2/* ..
-    rm -r gcc-arm-none-eabi-4_9-2015q2
+    rm ${ARCHIVE}
 else
-    echo "bin/arm-none-eabi-gcc already present, skipping..."
+    echo "gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc already present, skipping..."
 fi
 
 

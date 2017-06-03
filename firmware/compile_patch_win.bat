@@ -1,6 +1,7 @@
 @ECHO OFF
 
-set PATH=%axoloti_runtime%\platform_win\bin
+set PATH=%platformdir%gcc-arm-none-eabi-6-2017-q1-update\bin;%platformdir%bin
+
 call :setfirmware "%axoloti_firmware%"
 call :sethome "%axoloti_home%"
 call :setrelease "%axoloti_release%"
