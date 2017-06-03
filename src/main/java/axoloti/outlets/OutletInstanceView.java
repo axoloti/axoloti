@@ -29,6 +29,7 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
     }
 
+    @Override
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setMaximumSize(new Dimension(32767, 14));
@@ -53,10 +54,12 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
         return new OutletInstancePopupMenu(this);
     }
 
+    @Override
     public OutletInstance getOutletInstance() {
         return outletInstance;
     }
 
+    @Override
     public void setHighlighted(boolean highlighted) {
         if ((getRootPane() == null
                 || getRootPane().getCursor() != MainFrame.transparentCursor)
@@ -70,10 +73,12 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
         }
     }
 
+    @Override
     public void disconnect() {
         getPatchView().getPatchController().disconnect(this);
     }
 
+    @Override
     public void deleteNet() {
         getPatchView().getPatchController().deleteNet(this);
     }

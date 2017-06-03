@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package axoloti.parameterviews;
 
 import axoloti.Preset;
@@ -10,18 +5,6 @@ import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstance;
-import axoloti.parameters.ParameterInstanceBin1;
-import axoloti.parameters.ParameterInstanceBin12;
-import axoloti.parameters.ParameterInstanceBin16;
-import axoloti.parameters.ParameterInstanceBin1Momentary;
-import axoloti.parameters.ParameterInstanceFrac32SMap;
-import axoloti.parameters.ParameterInstanceFrac32SMapVSlider;
-import axoloti.parameters.ParameterInstanceFrac32UMap;
-import axoloti.parameters.ParameterInstanceFrac32UMapVSlider;
-import axoloti.parameters.ParameterInstanceInt32Box;
-import axoloti.parameters.ParameterInstanceInt32BoxSmall;
-import axoloti.parameters.ParameterInstanceInt32HRadio;
-import axoloti.parameters.ParameterInstanceInt32VRadio;
 import components.AssignMidiCCComponent;
 import components.AssignPresetMenuItems;
 import components.LabelComponent;

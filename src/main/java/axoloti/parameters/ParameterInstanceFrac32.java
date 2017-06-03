@@ -19,7 +19,6 @@ package axoloti.parameters;
 
 import axoloti.Modulation;
 import axoloti.Modulator;
-import axoloti.datatypes.Frac32;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;

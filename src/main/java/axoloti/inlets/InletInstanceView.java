@@ -5,7 +5,6 @@ import axoloti.MainFrame;
 import axoloti.Theme;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.objectviews.IAxoObjectInstanceView;
 import components.JackInputComponent;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
@@ -30,6 +29,7 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
     }
 
+    @Override
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
@@ -60,18 +60,22 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
         return name.substring(sepIndex + 1);
     }
 
+    @Override
     public InletInstance getInletInstance() {
         return inletInstance;
     }
 
+    @Override
     public void disconnect() {
         getPatchView().getPatchController().disconnect(this);
     }
 
+    @Override
     public void deleteNet() {
         getPatchView().getPatchController().deleteNet(this);
     }
 
+    @Override
     public void setHighlighted(boolean highlighted) {
         if ((getRootPane() == null
                 || getRootPane().getCursor() != MainFrame.transparentCursor)

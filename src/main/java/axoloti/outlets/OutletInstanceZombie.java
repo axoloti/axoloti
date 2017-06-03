@@ -17,14 +17,8 @@
  */
 package axoloti.outlets;
 
-import axoloti.MainFrame;
-import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstanceZombie;
-import axoloti.objectviews.AxoObjectInstanceViewZombie;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceViewZombie;
-import axoloti.piccolo.outlets.POutletInstanceZombieView;
 
 /**
  *

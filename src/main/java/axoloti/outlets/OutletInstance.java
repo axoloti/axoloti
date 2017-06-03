@@ -17,21 +17,13 @@
  */
 package axoloti.outlets;
 
-import axoloti.MainFrame;
 import axoloti.Net;
-import static axoloti.PatchViewType.PICCOLO;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
-import axoloti.inlets.InletInstanceController;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceView;
-import axoloti.piccolo.outlets.POutletInstanceView;
 import org.simpleframework.xml.*;
 
 /**

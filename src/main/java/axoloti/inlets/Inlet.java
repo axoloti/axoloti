@@ -18,7 +18,6 @@
 package axoloti.inlets;
 
 import axoloti.atom.AtomDefinition;
-import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
 import axoloti.object.AxoObjectInstance;
