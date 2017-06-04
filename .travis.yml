@@ -13,7 +13,7 @@ before_install:
       ./platform_linux/build.sh
       ;;
     osx)
-      brew install ant
+      brew install ant p7zip
       ./platform_osx/build.sh
       ;;
     esac;

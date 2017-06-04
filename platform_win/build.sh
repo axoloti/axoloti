@@ -26,13 +26,12 @@ then
     7z x ./fatfs-0.10b-patched.7z
     cd ../../
     mv ${ARDIR} ../..
+    cd "${PLATFORM_ROOT}"
 else
     echo "chibios directory already present, skipping..."
 fi
 
-cd "${PLATFORM_ROOT}"
-
-if [ ! -f "gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc.exe" ];
+if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc.exe" ];
 then
     ARDIR=gcc-arm-none-eabi-6-2017-q1-update
     ARCHIVE=${ARDIR}-win32.zip

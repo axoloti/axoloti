@@ -109,8 +109,10 @@ else
 fi
 
 
-if [ ! -f "gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc" ];
+
+if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc" ];
 then
+    cd "${PLATFORM_ROOT}"
     ARDIR=gcc-arm-none-eabi-6-2017-q1-update
     ARCHIVE=${ARDIR}-linux.tar.bz2
     if [ ! -f ${ARCHIVE} ]; 

@@ -65,7 +65,7 @@ PROJECT = mounter
 BUILDDIR = mounter_build
 
 # Imported source files and paths
-CHIBIOS = ${axoloti_release}/ChibiOS_16.1.7
+CHIBIOS = ${axoloti_release}/ChibiOS_16.1.8
 CHIBIOS_CONTRIB = $(CHIBIOS)/community
 
 include board.mk
