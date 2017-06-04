@@ -16,7 +16,9 @@ call :setrelease "%axoloti_release%"
 if not defined axoloti_home (
    set axoloti_home=%platformdir%..
 )
-set PATH=%platformdir%bin
+
+set PATH=%platformdir%gcc-arm-none-eabi-6-2017-q1-update\bin;%platformdir%bin;%windir%\system32
+echo %PATH%
 
 goto :eof
 
