@@ -1,9 +1,11 @@
 package axoloti.piccolo.displayviews;
 
 import axoloti.displays.DisplayInstanceBool32;
+import axoloti.mvc.AbstractController;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import components.piccolo.displays.PLedstripComponent;
 import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
 
 public class PDisplayInstanceViewBool32 extends PDisplayInstanceViewInt32 {
 

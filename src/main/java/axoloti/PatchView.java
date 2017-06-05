@@ -70,7 +70,7 @@ import qcmds.QCmdStart;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadPatch;
 
-public abstract class PatchView implements ModelChangedListener {
+public abstract class PatchView extends PatchAbstractView implements ModelChangedListener {
 
     // shortcut patch names
     final static String patchComment = "patch/comment";
@@ -82,10 +82,9 @@ public abstract class PatchView implements ModelChangedListener {
     final static String patchMidiKey = "midi/in/keyb";
     final static String patchDisplay = "disp/";
 
-    private final PatchController patchController;
 
     PatchView(PatchController patchController) {
-        this.patchController = patchController;
+        super(patchController.getModel(),patchController);
     }
 
     ArrayList<IAxoObjectInstanceView> objectInstanceViews = new ArrayList<>();
@@ -272,7 +271,7 @@ public abstract class PatchView implements ModelChangedListener {
             }
             if (isUpdate) {
                 AdjustSize();
-                patchController.setDirty();
+                controller.setDirty();
             }
         } else {
             Logger.getLogger(PatchView.class.getName()).log(Level.INFO, "can't move: locked");
@@ -474,7 +473,7 @@ public abstract class PatchView implements ModelChangedListener {
     }
 
     public PatchController getPatchController() {
-        return patchController;
+        return controller;
     }
 
     public void Close() {
@@ -685,7 +684,7 @@ public abstract class PatchView implements ModelChangedListener {
 
             if (view == null || o.isDirty()) {
                 isNewObject = true;
-                ObjectInstanceController c = o.createController(patchController.getDocumentRoot());
+                ObjectInstanceController c = o.createController(controller.getDocumentRoot());
                 view = AxoObjectInstanceViewFactory.createView(c, (PatchViewSwing)this);
             }
 
@@ -747,7 +746,7 @@ public abstract class PatchView implements ModelChangedListener {
                     IAxoObjectInstanceView zombieObjectView = zombieViewMap.get(i.getObjectInstance());
                     IInletInstanceView inletView = zombieObjectView.getInletInstanceView(i);
                     if (inletView == null) {
-                        InletInstanceController c = i.createController(patchController.getDocumentRoot());
+                        InletInstanceController c = i.createController(controller.getDocumentRoot());
                         inletView = InletInstanceViewFactory.createView(c, zombieObjectView);
                         zombieObjectView.addInletInstanceView(inletView);
                     }
@@ -762,7 +761,7 @@ public abstract class PatchView implements ModelChangedListener {
                     IAxoObjectInstanceView zombieObjectView = zombieViewMap.get(o.getObjectInstance());
                     IOutletInstanceView outletView = zombieObjectView.getOutletInstanceView(o);
                     if (outletView == null) {
-                        OutletInstanceController c = o.createController(patchController.getDocumentRoot());
+                        OutletInstanceController c = o.createController(controller.getDocumentRoot());
                         outletView = OutletInstanceViewFactory.createView(c, zombieObjectView);                        
                         zombieObjectView.addOutletInstanceView(outletView);
                     }

@@ -182,7 +182,8 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 }
             }
             getModel().getInletInstances().add(inletInstance);
-            PInletInstanceView view = (PInletInstanceView) inletInstance.createView(this);
+            // TODO: PICCOLO view factory
+            PInletInstanceView view = null; // (PInletInstanceView) inletInstance.createView(this);
             view.setAlignmentX(LEFT_ALIGNMENT);
             inletInstanceViews.add(view);
         }
@@ -206,8 +207,10 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                     n.connectOutlet(outletInstance);
                 }
             }
-            getModel().getOutletInstances().add(outletInstance);
-            POutletInstanceView view = (POutletInstanceView) outletInstance.createView(this);
+            getModel().getOutletInstances().add(outletInstance);            
+            POutletInstanceView view = null;
+            // TODO: PICCOLO view factory
+            // ... = (POutletInstanceView) outletInstance.createView(this);            
             view.setAlignmentX(RIGHT_ALIGNMENT);
             outletInstanceViews.add(view);
         }
@@ -230,7 +233,9 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 }
             }
             AttributeInstance attributeInstance1 = p.CreateInstance(getObjectInstance(), attributeInstanceP);
-            PAttributeInstanceView attributeInstanceView = (PAttributeInstanceView) attributeInstance1.createView(this);
+            PAttributeInstanceView attributeInstanceView = null;
+            // TODO: implement PICCOLO view factory
+            // ... = (PAttributeInstanceView) attributeInstance1.createView(this);
             attributeInstanceView.setAlignmentX(LEFT_ALIGNMENT);
             addChild(attributeInstanceView);
             getModel().getAttributeInstances().add(attributeInstance1);
@@ -243,14 +248,18 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                     pin.CopyValueFrom(pinp);
                 }
             }
-            PParameterInstanceView view = (PParameterInstanceView) pin.createView(this);
+            PParameterInstanceView view = null;
+            // TODO: implement PICCOLO view factory
+            // ... = (PParameterInstanceView) pin.createView(this);
             view.setAlignmentX(RIGHT_ALIGNMENT);
             getModel().getParameterInstances().add(pin);
         }
 
         for (Display p : getType().displays) {
             DisplayInstance pin = p.CreateInstance(getObjectInstance());
-            PDisplayInstanceView view = (PDisplayInstanceView) pin.createView(this);
+            PDisplayInstanceView view = null; 
+            // TODO: implement PICCOLO view factory
+            // ... = (PDisplayInstanceView) pin.createView(this);
             view.setAlignmentX(RIGHT_ALIGNMENT);
             getModel().getDisplayInstances().add(pin);
         }

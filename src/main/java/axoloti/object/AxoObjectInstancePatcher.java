@@ -22,11 +22,7 @@ import axoloti.PatchController;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
 import axoloti.PatchView;
-import axoloti.PatchViewPiccolo;
-import axoloti.PatchViewSwing;
-import axoloti.objectviews.AxoObjectInstanceViewPatcher;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceViewPatcher;
+import axoloti.PatchViewCodegen;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
 
@@ -60,7 +56,11 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     public void updateObj1() {
         init();
         if (getSubPatchModel() != null) {
-            AxoObject ao = getSubPatchModel().GenerateAxoObj(new AxoObjectPatcher());
+            // cheating here by creating a new controller...
+            PatchController controller = new PatchController(getSubPatchModel(), null);
+            PatchViewCodegen codegen = new PatchViewCodegen(getSubPatchModel(), controller);
+            AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
+
             setType(ao);
             ao.id = "patch/patcher";
             ao.sDescription = getSubPatchModel().getNotes();
@@ -92,7 +92,11 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     @Override
     public void updateObj() {
         if (getSubPatchModel() != null) {
-            AxoObject ao = getSubPatchModel().GenerateAxoObj(new AxoObjectPatcher());
+            // cheating here by creating a new controller...
+            PatchController controller = new PatchController(getSubPatchModel(), null);
+            PatchViewCodegen codegen = new PatchViewCodegen(getSubPatchModel(), controller);
+            AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
+
             setType(ao);
             setDirty(true);
             getPatchModel().setDirty();

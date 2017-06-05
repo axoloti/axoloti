@@ -3,9 +3,11 @@ package axoloti.piccolo.displayviews;
 import axoloti.ModelChangedListener;
 import axoloti.displays.DisplayInstance;
 import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.mvc.AbstractController;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.PatchPNode;
 import components.piccolo.PLabelComponent;
+import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 
 public abstract class PDisplayInstanceView extends PatchPNode implements ModelChangedListener, IDisplayInstanceView {
@@ -35,5 +37,15 @@ public abstract class PDisplayInstanceView extends PatchPNode implements ModelCh
     @Override
     public void modelChanged() {
         updateV();
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public AbstractController getController() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

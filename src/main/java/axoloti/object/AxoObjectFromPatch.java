@@ -22,6 +22,7 @@ import axoloti.PatchController;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
 import axoloti.PatchView;
+import axoloti.PatchViewCodegen;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.logging.Level;
@@ -64,7 +65,10 @@ public class AxoObjectFromPatch extends AxoObject {
     }
 
     final public void UpdateObject() {
-        AxoObject o = patchModel.GenerateAxoObj(new AxoObject());
+        // cheating here by creating a new controller...
+        PatchController controller = new PatchController(patchModel, null);
+        PatchViewCodegen codegen = new PatchViewCodegen(patchModel, controller);
+        AxoObject o = codegen.GenerateAxoObj(new AxoObject());
         attributes = o.attributes;
         depends = o.depends;
         displays = o.displays;

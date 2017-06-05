@@ -18,13 +18,7 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.PatchView;
-import axoloti.PatchViewPiccolo;
-import axoloti.PatchViewSwing;
 import axoloti.objecteditor.AxoObjectEditor;
-import axoloti.objectviews.AxoObjectInstanceViewPatcherObject;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceViewPatcherObject;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
 
