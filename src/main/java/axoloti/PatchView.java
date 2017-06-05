@@ -41,6 +41,7 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,7 +71,7 @@ import qcmds.QCmdStart;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadPatch;
 
-public abstract class PatchView extends PatchAbstractView implements ModelChangedListener {
+public abstract class PatchView extends PatchAbstractView {
 
     // shortcut patch names
     final static String patchComment = "patch/comment";
@@ -125,7 +126,7 @@ public abstract class PatchView extends PatchAbstractView implements ModelChange
 
     void ShowNotesFrame() {
         if (NotesFrame == null) {
-            NotesFrame = new TextEditor(new StringRef(), getPatchController().getPatchFrame());
+            NotesFrame = new TextEditor(new StringRef(), getPatchFrame());
             NotesFrame.setTitle("notes");
             NotesFrame.SetText(getPatchController().getModel().notes);
             NotesFrame.addFocusListener(new FocusListener() {
@@ -176,7 +177,7 @@ public abstract class PatchView extends PatchAbstractView implements ModelChange
     }
 
     public void ShowCompileFail() {
-        Unlock();
+        setLocked(false);
     }
 
     public abstract void add(IAxoObjectInstanceView v);
@@ -279,10 +280,6 @@ public abstract class PatchView extends PatchAbstractView implements ModelChange
     }
 
     void GoLive() {
-        PatchView patchView = getPatchController().patchView;
-        if (patchView != null) {
-            patchView.Unlock();
-        }
 
         QCmdProcessor qCmdProcessor = getPatchController().GetQCmdProcessor();
 
@@ -352,10 +349,6 @@ public abstract class PatchView extends PatchAbstractView implements ModelChange
         }));
     }
 
-    void SetDSPLoad(int pct) {
-        getPatchController().getPatchFrame().ShowDSPLoad(pct);
-    }
-
     Dimension GetInitialSize() {
         int mx = 100; // min size
         int my = 100;
@@ -382,7 +375,7 @@ public abstract class PatchView extends PatchAbstractView implements ModelChange
         if (NotesFrame != null) {
             getPatchController().getModel().notes = NotesFrame.GetText();
         }
-        getPatchController().getModel().windowPos = getPatchController().getPatchFrame().getBounds();
+        getPatchController().getModel().windowPos = getPatchFrame().getBounds();
     }
 
     boolean save(File f) {
@@ -399,11 +392,12 @@ public abstract class PatchView extends PatchAbstractView implements ModelChange
         Serializer serializer = new Persister(strategy);
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, stream);
-            PatchController patchController = patchModel.createController(null); /* FIXME: null */
+            AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
+            PatchController patchController = patchModel.createController(documentRoot);
             PatchView patchView = MainFrame.prefs.getPatchView(patchController);
-            patchModel.addModelChangedListener(patchView);
-            patchController.setPatchView(patchView);
-            PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+            patchController.addView(patchView);
+            PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());
+            patchView.setPatchFrame(pf);
             patchView.setFileNamePath(name);
             patchView.PostConstructor();
             pf.setVisible(true);
@@ -432,9 +426,9 @@ public abstract class PatchView extends PatchAbstractView implements ModelChange
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
             PatchController patchController = patchModel.createController(documentRoot);
             PatchView patchView = MainFrame.prefs.getPatchView(patchController);
-            patchModel.addModelChangedListener(patchView);
-            patchController.setPatchView(patchView);
-            PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+            patchController.addView(patchView);
+            PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());
+            patchView.setPatchFrame(pf);
             patchView.setFileNamePath(f.getAbsolutePath());
             patchView.PostConstructor();
             patchView.setFileNamePath(f.getPath());
@@ -477,7 +471,7 @@ public abstract class PatchView extends PatchAbstractView implements ModelChange
     }
 
     public void Close() {
-        Unlock();
+        setLocked(false);
         Collection<IAxoObjectInstanceView> c = (Collection<IAxoObjectInstanceView>) objectInstanceViews.clone();
         for (IAxoObjectInstanceView o : c) {
             o.getModel().Close();
@@ -588,24 +582,6 @@ public abstract class PatchView extends PatchAbstractView implements ModelChange
         return netViews;
     }
 
-    public void Lock() {
-        getPatchController().getPatchFrame().SetLive(true);
-
-        setLocked(true);
-        for (IAxoObjectInstanceView o : objectInstanceViews) {
-            o.Lock();
-        }
-    }
-
-    public void Unlock() {
-        getPatchController().getPatchFrame().SetLive(false);
-        setLocked(false);
-        List<IAxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<IAxoObjectInstanceView>) objectInstanceViews.clone();
-        for (IAxoObjectInstanceView o : objectInstanceViewsClone) {
-            o.Unlock();
-        }
-    }
-
     public boolean isLocked() {
         return getPatchController().isLocked();
     }
@@ -638,7 +614,29 @@ public abstract class PatchView extends PatchAbstractView implements ModelChange
     public void modelChanged() {
         modelChanged(true);
     }
-
+    
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
+            if ((Boolean)evt.getNewValue() == false) {
+                getPatchFrame().SetLive(false);
+                List<IAxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<IAxoObjectInstanceView>) objectInstanceViews.clone();
+                for (IAxoObjectInstanceView o : objectInstanceViewsClone) {
+                    o.Unlock();
+                }
+            } else {
+                getPatchFrame().SetLive(true);
+                for (IAxoObjectInstanceView o : objectInstanceViews) {
+                    o.Lock();
+                }
+            }
+        } else if (evt.getPropertyName().equals(PatchController.PATCH_DSPLOAD)) {
+            if (getPatchFrame() != null ) {
+                getPatchFrame().ShowDSPLoad((Integer)evt.getNewValue());
+            }
+        }
+    }
+    
     public void modelChanged(boolean updateSelection) {
         Map<String, IAxoObjectInstanceView> existingViews = new HashMap<>();
         Set<String> newObjectNames = new HashSet<>();

@@ -940,9 +940,9 @@ public class USBBulkConnection extends IConnection {
             public void run() {
                 if (patchController != null) {
                     if ((getPatchModel().GetIID() != PatchID) && getPatchView().isLocked()) {
-                        getPatchView().Unlock();
+                        patchController.setLocked(false);
                     } else {
-                        getPatchView().SetDSPLoad(DSPLoad);
+                        patchController.setDspLoad(DSPLoad);
                     }
                 }
                 MainFrame.mainframe.showPatchIndex(patchIndex);
@@ -965,7 +965,7 @@ public class USBBulkConnection extends IConnection {
 
                 }
                 if (getPatchModel().GetIID() != patchID) {
-                    getPatchView().Unlock();
+                    patchController.setLocked(false);
                     return;
                 }
                 if (index >= getPatchModel().ParameterInstances.size()) {
@@ -1486,8 +1486,9 @@ public class USBBulkConnection extends IConnection {
         return targetProfile;
     }
 
+    @Deprecated
     public PatchView getPatchView() {
-        return patchController.patchView;
+        return null; //patchController.patchView;
     }
 
     public PatchModel getPatchModel() {

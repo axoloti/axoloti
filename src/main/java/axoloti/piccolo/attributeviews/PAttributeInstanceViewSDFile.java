@@ -79,7 +79,7 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
             @Override
             public void OnPushed() {
                 JFileChooser fc = new JFileChooser(attributeInstance.getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
-                int returnVal = fc.showOpenDialog(getPatchView().getPatchController().getPatchFrame());
+                int returnVal = fc.showOpenDialog(null); // FIXME: parent frame, was: getPatchView().getPatchController().getPatchFrame());
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String f = attributeInstance.toRelative(fc.getSelectedFile());
                     TFFileName.setText(f);

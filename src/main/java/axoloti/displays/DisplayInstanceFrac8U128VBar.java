@@ -71,4 +71,13 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
         return n;
     }
 
+    @Override
+    public Object getValue() {
+        return null; // TODO
+    }
+
+    public void setValue(Object v) {
+        // TODO
+    }
+
 }

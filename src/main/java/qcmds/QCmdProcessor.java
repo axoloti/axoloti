@@ -234,7 +234,7 @@ public class QCmdProcessor implements Runnable {
 
     public void setPatchController(PatchController patchController) {
         if (this.patchController != null) {
-            this.patchController.patchView.Unlock();
+            this.patchController.setLocked(false);
         }
         this.patchController = patchController;
     }

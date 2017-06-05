@@ -419,11 +419,11 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
     }//GEN-LAST:event_jTextFieldAttributionsFocusLost
 
     private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
-        patchController.getPatchFrame().GetChildDocuments().remove(this);
+        //patchController.getPatchFrame().GetChildDocuments().remove(this);
     }//GEN-LAST:event_formComponentHidden
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        patchController.getPatchFrame().GetChildDocuments().add(this);
+        //patchController.getPatchFrame().GetChildDocuments().add(this);
     }//GEN-LAST:event_formComponentShown
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

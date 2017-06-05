@@ -296,9 +296,9 @@ public class FileMenu extends JMenu {
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
         PatchController patchController = patchModel.createController(documentRoot);
         PatchView patchView = MainFrame.prefs.getPatchView(patchController);
-        patchModel.addModelChangedListener(patchView);
-        patchController.setPatchView(patchView);
-        PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+        patchController.addView(patchView);
+        PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());
+        patchView.setPatchFrame(pf);
         patchView.PostConstructor();
         patchView.setFileNamePath("untitled");
         pf.setVisible(true);

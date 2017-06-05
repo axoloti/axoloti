@@ -75,27 +75,39 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
      * Creates new form PatchFrame
      */
     final PatchController patchController;
+    final PatchView patchView;
 
     private PresetPanel presetPanel;
     private VisibleCablePanel visibleCablePanel;
 
-    private static List<PatchFrame> instances = new ArrayList<>();
-    private static PatchFrame topFrame;
     UndoUI undoUi;
 
     private JScrollPane jScrollPane1;
 
-    public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
+    public PatchFrame(final PatchController patchController, final PatchView patchView, QCmdProcessor qcmdprocessor) {
+        this.patchView = patchView;
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
         this.patchController = patchController;
-        patchController.setPatchFrame(this);
 
         undoUi = new UndoUI(patchController.getUndoManager());
         patchController.getDocumentRoot().addUndoListener(this);
 
         initComponents();
         fileMenu1.initComponents();
+        JMenuItem menuItemNewView = new JMenuItem("new view");
+        menuItemNewView.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PatchView pv = new PatchViewSwing(patchController);
+                patchController.addView(pv);
+                PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());
+                patchView.setPatchFrame(pf);
+                patchView.PostConstructor();
+                pf.setVisible(true);
+            }
+        });
+        fileMenu1.add(menuItemNewView);
 
         presetPanel = new PresetPanel(patchController);
         visibleCablePanel = new VisibleCablePanel(getPatchView());
@@ -268,7 +280,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }
 
     private PatchView getPatchView() {
-        return patchController.getPatchView();
+        return patchView;
     }
 
     public PatchModel getPatchModel() {
@@ -303,8 +315,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public void ShowDisconnect() {
-        if (getPatchView().isLocked()) {
-            getPatchView().Unlock();
+        if (getPatchController().isLocked()) {
+            getPatchController().setLocked(false);
         }
         jCheckBoxLive.setSelected(false);
         jCheckBoxMenuItemLive.setSelected(false);
@@ -313,7 +325,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public void ShowConnect() {
-        getPatchView().Unlock();
+        if (getPatchController().isLocked()) {
+            getPatchController().setLocked(false);
+        }
         jCheckBoxLive.setSelected(false);
         jCheckBoxMenuItemLive.setSelected(false);
         ShowConnect1(true);
@@ -746,7 +760,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             }
         } else {
             qcmdprocessor.AppendToQueue(new QCmdStop());
-            getPatchView().Unlock();
+            getPatchController().setLocked(false);
         }
     }//GEN-LAST:event_jCheckBoxLiveActionPerformed
 
@@ -893,11 +907,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuUploadCodeActionPerformed
 
     private void jMenuItemLockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLockActionPerformed
-        getPatchView().Lock();
+        //getPatchView().Lock();
     }//GEN-LAST:event_jMenuItemLockActionPerformed
 
     private void jMenuItemUnlockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUnlockActionPerformed
-        getPatchView().Unlock();
+        //getPatchView().Unlock();
     }//GEN-LAST:event_jMenuItemUnlockActionPerformed
 
     private void jMenuItemClearPresetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemClearPresetActionPerformed
@@ -950,7 +964,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             }
         } else {
             qcmdprocessor.AppendToQueue(new QCmdStop());
-            getPatchView().Unlock();
+            getPatchController().setLocked(false);
         }
     }//GEN-LAST:event_jCheckBoxMenuItemLiveActionPerformed
 

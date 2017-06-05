@@ -14,7 +14,8 @@ abstract class DisplayInstanceViewInt32 extends DisplayInstanceView1 {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.\
+        updateV();
     }
 
 }

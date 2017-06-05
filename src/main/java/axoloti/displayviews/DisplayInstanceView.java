@@ -1,6 +1,5 @@
 package axoloti.displayviews;
 
-import axoloti.ModelChangedListener;
 import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceBool32;
 import axoloti.displays.DisplayInstanceController;
@@ -26,7 +25,7 @@ import components.LabelComponent;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-public abstract class DisplayInstanceView extends JPanel implements ModelChangedListener, IDisplayInstanceView {
+public abstract class DisplayInstanceView extends JPanel implements IDisplayInstanceView {
 
     final DisplayInstance displayInstance;
     DisplayInstanceController controller;
@@ -50,11 +49,6 @@ public abstract class DisplayInstanceView extends JPanel implements ModelChanged
 
     @Override
     public abstract void updateV();
-
-    @Override
-    public void modelChanged() {
-        updateV();
-    }
 
     public static DisplayInstanceView createView(DisplayInstanceController controller, IDisplayInstanceView obj) {
         DisplayInstance model = controller.getModel();

@@ -47,7 +47,7 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
             PatchPCanvas container = new PatchPCanvas();
             container.setVisible(true);
             getMainView().setLayout(null);
-            scale = patchController.getPatchView().getViewportView().getViewScale();
+            scale = 1.0; // patchController.getPatchView().getViewportView().getViewScale();
             container.setEnabled(false);
             container.getCamera().scale(scale);
             container.getLayer().addChild(objectInstanceView);
@@ -88,8 +88,9 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
     public void Launch(Point patchLoc, IAxoObjectInstanceView o, String searchString) {
         super.Launch(patchLoc, o, searchString, false);
 
-        if (patchController.getPatchView().getViewportView().getViewScale() != scale) {
-            SetPreview(previewObj, true);
-        }
+// FIXME
+//        if (patchController.getPatchView().getViewportView().getViewScale() != scale) {
+//            SetPreview(previewObj, true);
+//        }
     }
 }

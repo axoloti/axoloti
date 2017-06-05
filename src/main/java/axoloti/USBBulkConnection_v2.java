@@ -1027,10 +1027,10 @@ public class USBBulkConnection_v2 extends IConnection {
             @Override
             public void run() {
                 if (patchController != null) {
-                    if ((getPatchModel().GetIID() != PatchID) && getPatchView().isLocked()) {
-                        getPatchView().Unlock();
+                    if ((getPatchModel().GetIID() != PatchID) && getPatchModel().getLocked()) {
+                        patchController.setLocked(false);
                     } else {
-                        getPatchView().SetDSPLoad(DSPLoad);
+                        patchController.setDspLoad(DSPLoad);
                     }
                 }
                 MainFrame.mainframe.showPatchIndex(patchIndex);
@@ -1048,12 +1048,11 @@ public class USBBulkConnection_v2 extends IConnection {
                     //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange patch null {0} {1}", new Object[]{index, value});
                     return;
                 }
-                if (!getPatchView().isLocked()) {
+                if (!getPatchModel().getLocked()) {
                     return;
-
                 }
                 if (getPatchModel().GetIID() != patchID) {
-                    getPatchView().Unlock();
+                    patchController.setLocked(false);
                     return;
                 }
                 if (index >= getPatchModel().ParameterInstances.size()) {
@@ -1072,7 +1071,6 @@ public class USBBulkConnection_v2 extends IConnection {
 
                 if (!pi.getNeedsTransmit()) {
                     pi.SetValueRaw(value);
-                    getPatchView().updateParameterView(pi);
                 }
 
 //                System.out.println("rcv ppc objname:" + pi.axoObj.getInstanceName() + " pname:"+ pi.name);
@@ -1172,7 +1170,7 @@ public class USBBulkConnection_v2 extends IConnection {
             if (patchController == null) {
                 return;
             }
-            if (!getPatchView().isLocked()) {
+            if (!getPatchModel().getLocked()) {
                 return;
             }
             if (getPatchModel().DisplayInstances == null) {
@@ -1377,10 +1375,6 @@ public class USBBulkConnection_v2 extends IConnection {
     @Override
     public axoloti_core getTargetProfile() {
         return targetProfile;
-    }
-
-    public PatchView getPatchView() {
-        return patchController.patchView;
     }
 
     public PatchModel getPatchModel() {

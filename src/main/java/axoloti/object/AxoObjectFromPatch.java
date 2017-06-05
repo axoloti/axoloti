@@ -23,6 +23,7 @@ import axoloti.PatchFrame;
 import axoloti.PatchModel;
 import axoloti.PatchView;
 import axoloti.PatchViewCodegen;
+import axoloti.mvc.AbstractDocumentRoot;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.logging.Level;
@@ -47,10 +48,10 @@ public class AxoObjectFromPatch extends AxoObject {
         Serializer serializer = new Persister();
         try {
             patchModel = serializer.read(PatchModel.class, f);
-            patchController = patchModel.createController(null); /* FIXME: null */
+            AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
+            patchController = patchModel.createController(documentRoot);
             patchView = MainFrame.prefs.getPatchView(patchController);
-            patchModel.addModelChangedListener(patchView);
-            patchController.setPatchView(patchView);
+            patchController.addView(patchView);
             patchView.setFileNamePath(f.getAbsolutePath());
             patchView.PostConstructor();
             patchView.ObjEditor = this;
@@ -94,7 +95,7 @@ public class AxoObjectFromPatch extends AxoObject {
     @Override
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (pf == null) {
-            pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
+            pf = new PatchFrame(patchController, patchView, MainFrame.mainframe.getQcmdprocessor());
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);

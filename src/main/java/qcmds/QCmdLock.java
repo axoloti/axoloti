@@ -44,6 +44,6 @@ public class QCmdLock implements QCmdGUITask {
     @Override
     public void DoGUI(QCmdProcessor processor) {
         processor.setPatchController(patchController);
-        patchController.patchView.Lock();
+        patchController.setLocked(true);
     }
 }

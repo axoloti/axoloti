@@ -23,30 +23,16 @@ import qcmds.QCmdUploadFile;
 
 public class PatchController extends AbstractController<PatchModel, AbstractView> {
 
-    public PatchView patchView;
-    public PatchFrame patchFrame;
-
+    public final static String PATCH_LOCKED = "Locked";
+    public final static String PATCH_FILENAME = "FileNamePath";
+    public final static String PATCH_DSPLOAD = "DspLoad";
+    
     public PatchController(PatchModel model, AbstractDocumentRoot documentRoot) {
         super(model, documentRoot);
     }
 
-    public void setPatchView(PatchView patchView) {
-        this.patchView = patchView;
-    }
-
-    public void setPatchFrame(PatchFrame patchFrame) {
-        this.patchFrame = patchFrame;
-    }
-
     QCmdProcessor GetQCmdProcessor() {
-        if (patchFrame == null) {
-            return null;
-        }
-        return patchFrame.qcmdprocessor;
-    }
-
-    public PatchFrame getPatchFrame() {
-        return patchFrame;
+        return QCmdProcessor.getQCmdProcessor();
     }
 
     public void RecallPreset(int i) {
@@ -54,7 +40,8 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
     }
 
     public void ShowPreset(int i) {
-        patchView.ShowPreset(i);
+        // TODO : fix preset logic
+        //patchView.ShowPreset(i);
     }
 
     public void Compile() {
@@ -232,10 +219,8 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
     }
 
     public void setFileNamePath(String FileNamePath) {
+        setModelProperty(PATCH_FILENAME, FileNamePath);
         getModel().setFileNamePath(FileNamePath);
-        if (getPatchFrame() != null) {
-            getPatchFrame().setTitle(FileNamePath);
-        }
     }
 
     public boolean delete(IAxoObjectInstanceView o) {
@@ -293,7 +278,8 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
     }
 
     Dimension GetSize() {
-        return patchView.GetSize();
+        // hmmm don't know which view...
+        return new Dimension(500,500); // patchView.GetSize();
     }
 
     public PatchSettings getSettings() {
@@ -301,23 +287,24 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
     }
 
     public void ShowCompileFail() {
-        patchView.ShowCompileFail();
+        // TODO: fixme
+        // patchView.ShowCompileFail();
     }
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         getModel().paste(v, pos, restoreConnectionsToExternalOutlets);
     }
 
+    @Deprecated
     public void repaintPatchView() {
-        patchView.repaint();
+        // TODO: fixme
+        //patchView.repaint();
     }
 
+    @Deprecated
     public Point getViewLocationOnScreen() {
-        return patchView.getLocationOnScreen();
-    }
-
-    public PatchView getPatchView() {
-        return patchView;
+        // fake it for now
+        return new Point(100,100); //patchView.getLocationOnScreen();
     }
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
@@ -326,14 +313,20 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
     }
 
     public boolean isLocked() {
-        return getModel().isLocked();
+        return getModel().getLocked();
     }
 
     public void setLocked(boolean locked) {
-        getModel().setLocked(locked);
+        setModelProperty(PATCH_LOCKED, (Boolean)locked);
+    }
+
+    void setDspLoad(int DSPLoad) {
+        setModelProperty(PATCH_DSPLOAD, (Integer)DSPLoad);
     }
 
     public Net getNetDraggingModel() {
         return new Net(getModel());
     }
+
+
 }

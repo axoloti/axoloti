@@ -18,6 +18,7 @@ import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.CodeGeneration;
+import java.beans.PropertyChangeEvent;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1350,6 +1351,10 @@ public class PatchViewCodegen extends PatchAbstractView {
             ao.helpPatch = getModel().helpPatch;
         }
         return ao;
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
     }
     
 }

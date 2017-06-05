@@ -23,6 +23,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
+import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -490,14 +491,14 @@ public class PatchViewPiccolo extends PatchView {
     }
 
     @Override
-    public void Lock() {
-        super.Lock();
-        canvas.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
-    }
-
-    @Override
-    public void Unlock() {
-        super.Unlock();
-        canvas.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
+            if ((Boolean)evt.getNewValue() == false) {
+                canvas.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
+            } else {
+                canvas.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
+            }            
+        }
     }
 }

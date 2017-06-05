@@ -36,6 +36,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
+import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -436,15 +437,15 @@ public class PatchViewSwing extends PatchView {
     }
 
     @Override
-    public void Lock() {
-        super.Lock();
-        Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
-    }
-
-    @Override
-    public void Unlock() {
-        super.Unlock();
-        Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
+            if ((Boolean)evt.getNewValue() == false) {
+                Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
+            } else {
+                Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);                
+            }            
+        }
     }
 
     @Override

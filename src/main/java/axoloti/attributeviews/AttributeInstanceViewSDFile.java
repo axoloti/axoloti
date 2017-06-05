@@ -80,7 +80,8 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
             @Override
             public void OnPushed() {
                 JFileChooser fc = new JFileChooser(getAttributeInstance().getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
-                int returnVal = fc.showOpenDialog(getPatchView().getPatchController().getPatchFrame());
+                int returnVal = fc.showOpenDialog(null // FIXME: parent frame
+                        );
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String f = getAttributeInstance().toRelative(fc.getSelectedFile());
                     TFFileName.setText(f);

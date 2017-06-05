@@ -645,7 +645,7 @@ typedef struct ui_object {
     @Override
     public void ObjectModified(Object src) {
         if (getPatchModel() != null) {
-            if (!getPatchModel().isLocked()) {
+            if (!getPatchModel().getLocked()) {
                 updateObj();
             } else {
                 deferredObjTypeUpdate = true;

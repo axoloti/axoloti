@@ -17,14 +17,11 @@
  */
 package axoloti.displays;
 
-import axoloti.ModelChangedListener;
 import axoloti.atom.AtomInstance;
-import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.CodeGeneration;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -83,19 +80,7 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     public abstract String GenerateCodeInit(String vprefix);
 
     public void ProcessByteBuffer(ByteBuffer bb) {
-        notifyModelChangedListeners();
-    }
-
-    ArrayList<ModelChangedListener> modelChangedListeners = new ArrayList<ModelChangedListener>();
-
-    public void addModelChangedListener(ModelChangedListener l) {
-        modelChangedListeners.add(l);
-    }
-
-    protected void notifyModelChangedListeners() {
-        for (ModelChangedListener l : modelChangedListeners) {
-            l.modelChanged();
-        }
+        //notifyModelChangedListeners();
     }
 
     public String GenerateDisplayMetaInitializer() {
@@ -104,7 +89,10 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
                 + ", displaydata: &displayVector[" + offset + "]},\n";
         return c;
     }
-    
+
+    abstract public Object getValue();
+//    abstract void setValue(Object o);
+
     @Override
     public DisplayInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new DisplayInstanceController(this, documentRoot);

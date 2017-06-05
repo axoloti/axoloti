@@ -17,13 +17,14 @@
  */
 package axoloti.displays;
 
+import axoloti.datatypes.Value;
 import java.nio.ByteBuffer;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class DisplayInstanceVScale extends DisplayInstance<DisplayVScale> {
+public class DisplayInstanceVScale extends DisplayInstance1<DisplayVScale> {
 
     public DisplayInstanceVScale() {
         super();
@@ -42,6 +43,11 @@ public class DisplayInstanceVScale extends DisplayInstance<DisplayVScale> {
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {
         super.ProcessByteBuffer(bb);
+    }
+
+    @Override
+    public Value getValueRef() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

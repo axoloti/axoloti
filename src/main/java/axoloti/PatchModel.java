@@ -18,15 +18,8 @@
 package axoloti;
 
 import axoloti.attribute.AttributeInstance;
-import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.displays.DisplayInstance;
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletCharPtr32;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInstance;
-import axoloti.inlets.InletInt32;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObject;
@@ -43,21 +36,13 @@ import axoloti.object.AxoObjectPatcher;
 import axoloti.object.AxoObjectPatcherObject;
 import axoloti.object.AxoObjectZombie;
 import axoloti.object.AxoObjects;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletCharPtr32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
-import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.AxolotiLibrary;
-import axoloti.utils.CodeGeneration;
 import axoloti.utils.Constants;
 import axoloti.utils.Preferences;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -116,8 +101,8 @@ public class PatchModel extends AbstractModel {
     @Element(required = false)
      String helpPatch;
 
-    private ArrayList<ModelChangedListener> modelChangedListeners = new ArrayList<ModelChangedListener>();
-
+    Integer dspLoad;
+    
     // patch this patch is contained in
     private PatchModel container = null;
     AxoObjectInstanceAbstract controllerinstance;
@@ -309,7 +294,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public void setDirty() {
-        notifyModelChangedListeners();
+        //notifyModelChangedListeners();
         dirty = true;
 
         if (container != null) {
@@ -1247,16 +1232,6 @@ public class PatchModel extends AbstractModel {
         nets.add(n);
     }
 
-    public void addModelChangedListener(ModelChangedListener listener) {
-        modelChangedListeners.add(listener);
-    }
-
-    public void notifyModelChangedListeners() {
-        for (ModelChangedListener m : modelChangedListeners) {
-            m.modelChanged();
-        }
-    }
-
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         if (v.isEmpty()) {
             return;
@@ -1437,11 +1412,27 @@ public class PatchModel extends AbstractModel {
         return null;
     }
 
-    public void setLocked(boolean locked) {
+    public void setLocked(Boolean locked) {
+        Boolean oldvalue = this.locked;
         this.locked = locked;
+        firePropertyChange(
+                PatchController.PATCH_LOCKED,
+                oldvalue, locked);
     }
 
-    public boolean isLocked() {
+    public Boolean getLocked() {
         return locked;
+    }
+
+    public Integer getDspLoad() {
+        return dspLoad;
+    }
+
+    public void setDspLoad(Integer dspLoad) {
+        Integer oldvalue = this.dspLoad;
+        this.dspLoad = dspLoad;
+        firePropertyChange(
+                PatchController.PATCH_DSPLOAD,
+                oldvalue, dspLoad);
     }
 }

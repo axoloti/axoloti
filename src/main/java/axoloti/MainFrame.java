@@ -28,6 +28,7 @@ import axoloti.dialogs.KeyboardFrame;
 import axoloti.dialogs.PatchBank;
 import axoloti.dialogs.PreferencesFrame;
 import axoloti.dialogs.ThemeEditor;
+import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.object.AxoObjects;
 import axoloti.usb.Usb;
 import axoloti.utils.AxolotiLibrary;
@@ -827,9 +828,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             PatchModel patchModel = serializer.read(PatchModel.class, f);
             PatchController patchController = patchModel.createController(null); /* fixme: null */
             PatchView patchView = prefs.getPatchView(patchController);
-            patchModel.addModelChangedListener(patchView);
-            patchController.setPatchView(patchView);
-            PatchFrame pf = new PatchFrame(patchController, qcmdprocessor);
+            patchController.addView(patchView);
+            PatchFrame pf = new PatchFrame(patchController, patchView, qcmdprocessor);
+            patchView.setPatchFrame(pf);
             patchView.setFileNamePath(f.getPath());
             patchView.PostConstructor();
             patchModel.WriteCode();
@@ -904,9 +905,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             PatchModel patchModel = serializer.read(PatchModel.class, f);
             PatchController patchController = patchModel.createController(null); /* fixme: null */
             PatchView patchView = prefs.getPatchView(patchController);
-            patchModel.addModelChangedListener(patchView);
-            patchController.setPatchView(patchView);
-            PatchFrame patchFrame = new PatchFrame(patchController, qcmdprocessor);
+            patchController.addView(patchView);
+            PatchFrame patchFrame = new PatchFrame(patchController, patchView, qcmdprocessor);
+            patchView.setPatchFrame(patchFrame);
             patchView.setFileNamePath(f.getPath());
             patchView.PostConstructor();
             status = patchModel.save(f);
@@ -1006,11 +1007,12 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     public void NewPatch() {
         PatchModel patchModel = new PatchModel();
-        PatchController patchController = patchModel.createController(null); /* fixme: null */
+        AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
+        PatchController patchController = patchModel.createController(documentRoot);
         PatchView patchView = prefs.getPatchView(patchController);
-        patchModel.addModelChangedListener(patchView);
-        patchController.setPatchView(patchView);
-        PatchFrame pf = new PatchFrame(patchController, qcmdprocessor);
+        patchController.addView(patchView);
+        PatchFrame pf = new PatchFrame(patchController, patchView, qcmdprocessor);
+        patchView.setPatchFrame(pf);
         patchView.PostConstructor();
         patchView.setFileNamePath("untitled");
         pf.setVisible(true);

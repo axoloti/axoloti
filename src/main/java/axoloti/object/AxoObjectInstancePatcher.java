@@ -73,11 +73,11 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     public void initSubpatchFrame() {
         PatchController patchController = getSubPatchModel().createController(null); /* FIXME: null */
         PatchView patchView = MainFrame.prefs.getPatchView(patchController);
-        patchController.setPatchView(patchView);
-        getSubPatchModel().addModelChangedListener(patchView);
-        pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
-        patchController.patchView.setFileNamePath(getInstanceName());
-        patchController.patchView.PostConstructor();
+        pf = new PatchFrame(patchController, patchView, MainFrame.mainframe.getQcmdprocessor());
+        patchController.addView(patchView);
+        patchView.setPatchFrame(pf);
+        patchView.setFileNamePath(getInstanceName());
+        patchView.PostConstructor();
     }
 
     public void init() {
