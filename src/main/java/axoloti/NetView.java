@@ -40,6 +40,7 @@ public class NetView extends JComponent implements INetView {
         setOpaque(false);
         
         PostConstructor();
+        updateBounds();
     }
 
     public void PostConstructor() {
