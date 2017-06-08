@@ -77,7 +77,7 @@ public abstract class Inlet implements AtomDefinition, Cloneable {
 
     @Override
     public InletInstance CreateInstance(AxoObjectInstance o) {
-        InletInstance i = new InletInstance(this, null);        
+        InletInstance i = new InletInstance(this, o);
         return i;
     }
 

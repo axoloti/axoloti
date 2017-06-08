@@ -18,10 +18,14 @@
 package axoloti;
 
 import axoloti.attribute.AttributeInstance;
+import axoloti.attributedefinition.AxoAttribute;
+import axoloti.displays.Display;
 import axoloti.displays.DisplayInstance;
+import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
+import axoloti.mvc.array.ArrayModel;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFile;
@@ -36,7 +40,9 @@ import axoloti.object.AxoObjectPatcher;
 import axoloti.object.AxoObjectPatcherObject;
 import axoloti.object.AxoObjectZombie;
 import axoloti.object.AxoObjects;
+import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletInstance;
+import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.Constants;
@@ -84,9 +90,9 @@ public class PatchModel extends AbstractModel {
         @ElementList(entry = "comment", type = AxoObjectInstanceComment.class, inline = true, required = false),
         @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true, required = false),
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true, required = false)})
-    ArrayList<AxoObjectInstanceAbstract> objectinstances = new ArrayList<AxoObjectInstanceAbstract>();
+    ArrayModel<AxoObjectInstanceAbstract> objectinstances = new ArrayModel<AxoObjectInstanceAbstract>();
     @ElementList(name = "nets")
-    public ArrayList<Net> nets = new ArrayList<Net>();
+    public ArrayModel<Net> nets = new ArrayModel<Net>();
     @Element(required = false)
     PatchSettings settings;
     @Element(required = false, data = true)
@@ -97,15 +103,15 @@ public class PatchModel extends AbstractModel {
     ArrayList<ParameterInstance> ParameterInstances = new ArrayList<ParameterInstance>();
     ArrayList<DisplayInstance> DisplayInstances = new ArrayList<DisplayInstance>();
     ArrayList<Modulator> Modulators = new ArrayList<Modulator>();
-    private boolean dirty = false;
     @Element(required = false)
-     String helpPatch;
+    String helpPatch;
 
     Integer dspLoad;
-    
+
     // patch this patch is contained in
     private PatchModel container = null;
-    AxoObjectInstanceAbstract controllerinstance;
+    // controller object
+    AxoObjectInstanceAbstract controllerObjectInstance;
 
     public boolean presetUpdatePending = false;
 
@@ -235,12 +241,156 @@ public class PatchModel extends AbstractModel {
         super();
     }
 
+    private void applyType(AxoObjectInstance obji, AxoObjectAbstract objtype) {
+        // WARNING: only call after deserialization, before nets are reconstructed, or controllers are created
+        ArrayList<AttributeInstance> pAttributeInstances = (ArrayList<AttributeInstance>) obji.getAttributeInstances().getArray().clone();
+        ArrayList<ParameterInstance> pParameterInstances = (ArrayList<ParameterInstance>) obji.getParameterInstances().getArray().clone();
+
+        if (objtype instanceof AxoObject) {
+            AxoObject objtype1 = (AxoObject) objtype;
+
+            obji.inletInstances.clear();
+            for (Inlet inl : objtype1.inlets) {
+                InletInstance inlin = new InletInstance(inl, obji);
+                obji.inletInstances.add(inlin);
+            }
+
+            obji.outletInstances.clear();
+            for (Outlet o : objtype1.outlets) {
+                OutletInstance oin = new OutletInstance(o, obji);
+                obji.outletInstances.add(oin);
+            }
+
+            obji.attributeInstances.clear();
+            for (AxoAttribute p : objtype1.attributes) {
+                AttributeInstance attrp1 = null;
+                for (AttributeInstance attrp : pAttributeInstances) {
+                    if (attrp.getAttributeName().equals(p.getName())) {
+                        attrp1 = attrp;
+                        break;
+                    }
+                }
+                AttributeInstance attri = p.CreateInstance(obji, attrp1);
+                obji.attributeInstances.add(attri);
+            }
+
+            obji.parameterInstances.clear();
+            for (Parameter p : objtype1.params) {
+                ParameterInstance pin = p.CreateInstance(obji);
+                for (ParameterInstance pinp : pParameterInstances) {
+                    if (pinp.getName().equals(pin.getName())) {
+                        pin.CopyValueFrom(pinp);
+                        break;
+                    }
+                }
+                obji.parameterInstances.add(pin);
+            }
+
+            obji.displayInstances.clear();
+            for (Display p : objtype1.displays) {
+                DisplayInstance pin = p.CreateInstance(obji);
+                obji.displayInstances.add(pin);
+            }
+        }
+    }
+
+/*
+    public void applyType(AxoObjectInstance obji, AxoObjectAbstract objtype) {
+
+        AttributeInstance pAttributeInstances[] = (AttributeInstance[])obji.getAttributeInstances().toArray();
+        InletInstance pInletInstances[] = (InletInstance[])obji.getInletInstances().toArray();
+        OutletInstance pOutletInstances[] = (OutletInstance[])obji.getOutletInstances().toArray();
+        ParameterInstance pParameterInstances[] = (ParameterInstance[])obji.getParameterInstances().toArray();
+
+        ArrayList<AttributeInstance> nAttributeInstances = new ArrayList<>();
+        ArrayList<InletInstance> nInletInstances = new ArrayList<>();
+        ArrayList<OutletInstance> nOutletInstances = new ArrayList<>();
+        ArrayList<ParameterInstance> nParameterInstances = new ArrayList<>();
+        ArrayList<DisplayInstance> nDisplayInstances = new ArrayList<>();
+
+        if (objtype instanceof AxoObject) {
+            AxoObject objtype1  = (AxoObject)objtype;
+
+            for (Inlet inl : objtype1.inlets) {
+                InletInstance inlinp = null;
+                for (InletInstance inlin1 : pInletInstances) {
+                    if (inlin1.GetLabel().equals(inl.getName())) {
+                        inlinp = inlin1;
+                    }
+                }
+                InletInstance inlin = new InletInstance(inl, obji);
+                if (inlinp != null) {
+                    Net n = getNet(inlinp);
+                    if (n != null) {
+                        n.dest.add(inlin);
+                    }
+                }
+                nInletInstances.add(inlin);
+            }
+
+            // disconnect stale inlets from nets
+//            for (InletInstance inlin1 : pInletInstances) {
+//                getPatch().disconnect(inlin1);
+//            }
+
+            for (Outlet o : objtype1.outlets) {
+                OutletInstance oinp = null;
+                for (OutletInstance oinp1 : pOutletInstances) {
+                    if (oinp1.GetLabel().equals(o.getName())) {
+                        oinp = oinp1;
+                    }
+                }
+                OutletInstance oin = new OutletInstance(o, obji);
+                if (oinp != null) {
+                    Net n = getNet(oinp);
+                    if (n != null) {
+                        n.source.add(oin);
+                    }
+                }
+                nOutletInstances.add(oin);
+            }
+
+            // disconnect stale outlets from nets
+//            for (OutletInstance oinp1 : pOutletInstances) {
+//                getPatch().disconnect(oinp1);
+//            }
+
+            for (AxoAttribute p : objtype1.attributes) {
+                AttributeInstance attrp1 = null;
+                for (AttributeInstance attrp : pAttributeInstances) {
+                    if (attrp.getName().equals(p.getName())) {
+                        attrp1 = attrp;
+                    }
+                }
+                AttributeInstance attri = p.CreateInstance(obji, attrp1);
+                nAttributeInstances.add(attri);
+            }
+
+            for (Parameter p : objtype1.params) {
+                ParameterInstance pin = p.CreateInstance(obji);
+                for (ParameterInstance pinp : pParameterInstances) {
+                    if (pinp.getName().equals(pin.getName())) {
+                        pin.CopyValueFrom(pinp);
+                    }
+                }
+                nParameterInstances.add(pin);
+            }
+
+            for (Display p : objtype1.displays) {
+                DisplayInstance pin = p.CreateInstance(obji);
+                nDisplayInstances.add(pin);
+            }
+        }
+    }
+    */
     public void PostContructor() {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             o.patchModel = this;
             AxoObjectAbstract t = o.resolveType();
             if ((t != null) && (t.providesModulationSource())) {
-
+                if (t instanceof AxoObject) {
+                    applyType((AxoObjectInstance) o, (AxoObject) t);
+                }
                 Modulator[] m = t.getModulators();
                 if (Modulators == null) {
                     Modulators = new ArrayList<Modulator>();
@@ -252,11 +402,14 @@ public class PatchModel extends AbstractModel {
             }
         }
 
-        ArrayList<AxoObjectInstanceAbstract> obj2 = (ArrayList<AxoObjectInstanceAbstract>) objectinstances.clone();
+        ArrayList<AxoObjectInstanceAbstract> obj2 = (ArrayList<AxoObjectInstanceAbstract>) objectinstances.getArray().clone();
         for (AxoObjectInstanceAbstract o : obj2) {
             AxoObjectAbstract t = o.getType();
             if ((t != null) && (!t.providesModulationSource())) {
                 o.patchModel = this;
+                if (t instanceof AxoObject) {
+                    applyType((AxoObjectInstance) o, (AxoObject) t);
+                }
                 //System.out.println("Obj added " + o.getInstanceName());
             } else if (t == null) {
                 objectinstances.remove(o);
@@ -266,14 +419,19 @@ public class PatchModel extends AbstractModel {
                 objectinstances.add(zombie);
             }
         }
-        ArrayList<Net> nets2 = (ArrayList<Net>) nets.clone();
-        for (Net n : nets2) {
+
+        System.out.println("object:(1)");
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            System.out.println("  " + o.getType().id + ":" + o.getInstanceName());
+        }
+
+        for (Net n : nets) {
             n.patchModel = this;
+            n.PostConstructor();
         }
         if (settings == null) {
             settings = new PatchSettings();
         }
-        ClearDirty();
     }
 
     public ArrayList<ParameterInstance> getParameterInstances() {
@@ -289,21 +447,17 @@ public class PatchModel extends AbstractModel {
         return null;
     }
 
+    @Deprecated
     public void ClearDirty() {
-        dirty = false;
     }
 
+    @Deprecated
     public void setDirty() {
-        //notifyModelChangedListeners();
-        dirty = true;
-
-        if (container != null) {
-            container.setDirty();
-        }
     }
 
+    @Deprecated
     public boolean isDirty() {
-        return dirty;
+        return false;
     }
 
     public PatchModel container() {
@@ -312,213 +466,6 @@ public class PatchModel extends AbstractModel {
 
     public void setContainer(PatchModel c) {
         container = c;
-    }
-
-    public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
-        if (obj == null) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "AddObjectInstance NULL");
-            return null;
-        }
-        int i = 1;
-        String n = obj.getDefaultInstanceName() + "_";
-        while (GetObjectInstance(n + i) != null) {
-            i++;
-        }
-        AxoObjectInstanceAbstract objinst = obj.CreateInstance(this, n + i, loc);
-        setDirty();
-
-        Modulator[] m = obj.getModulators();
-        if (m != null) {
-            if (Modulators == null) {
-                Modulators = new ArrayList<Modulator>();
-            }
-            for (Modulator mm : m) {
-                mm.objinst = objinst;
-                Modulators.add(mm);
-            }
-        }
-
-        return objinst;
-    }
-
-    public Net GetNet(InletInstance io) {
-        for (Net net : nets) {
-            for (InletInstance d : net.dest) {
-                if (d == io) {
-                    return net;
-                }
-            }
-        }
-        return null;
-    }
-
-    public Net GetNet(OutletInstance io) {
-        for (Net net : nets) {
-            for (OutletInstance d : net.source) {
-                if (d == io) {
-                    return net;
-                }
-            }
-        }
-        return null;
-    }
-
-    /*
-     private boolean CompatType(DataType source, DataType d2){
-     if (d1 == d2) return true;
-     if ((d1 == DataType.bool32)&&(d2 == DataType.frac32)) return true;
-     if ((d1 == DataType.frac32)&&(d2 == DataType.bool32)) return true;
-     return false;
-     }*/
-    public Net AddConnection(InletInstance il, OutletInstance ol) {
-        if (il.getObjectInstance().getPatchModel() != this) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
-            return null;
-        }
-        if (ol.getObjectInstance().getPatchModel() != this) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
-            return null;
-        }
-        Net n1, n2;
-        n1 = GetNet(il);
-        n2 = GetNet(ol);
-        if ((n1 == null) && (n2 == null)) {
-            Net n = new Net(this);
-            nets.add(n);
-            n.connectInlet(il);
-            n.connectOutlet(ol);
-            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
-            return n;
-        } else if (n1 == n2) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: already connected");
-            return null;
-        } else if ((n1 != null) && (n2 == null)) {
-            if (n1.source.isEmpty()) {
-                Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: adding outlet to inlet net");
-                n1.connectOutlet(ol);
-                return n1;
-            } else {
-                disconnect(il);
-                Net n = new Net(this);
-                nets.add(n);
-                n.connectInlet(il);
-                n.connectOutlet(ol);
-                Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
-                return n;
-            }
-        } else if ((n1 == null) && (n2 != null)) {
-            n2.connectInlet(il);
-            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: add additional outlet");
-            return n2;
-        } else if ((n1 != null) && (n2 != null)) {
-            // inlet already has connect, and outlet has another
-            // replace
-            disconnect(il);
-            n2.connectInlet(il);
-            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: replace inlet with existing net");
-            return n2;
-        }
-        return null;
-    }
-
-    public Net AddConnection(InletInstance il, InletInstance ol) {
-        if (il == ol) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: same inlet");
-            return null;
-        }
-        if (il.getObjectInstance().patchModel != this) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
-            return null;
-        }
-        if (ol.getObjectInstance().patchModel != this) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
-            return null;
-        }
-        Net n1, n2;
-        n1 = GetNet(il);
-        n2 = GetNet(ol);
-        if ((n1 == null) && (n2 == null)) {
-            Net n = new Net(this);
-            nets.add(n);
-            n.connectInlet(il);
-            n.connectInlet(ol);
-            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
-            return n;
-        } else if (n1 == n2) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: already connected");
-        } else if ((n1 != null) && (n2 == null)) {
-            n1.connectInlet(ol);
-            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: inlet added");
-            return n1;
-        } else if ((n1 == null) && (n2 != null)) {
-            n2.connectInlet(il);
-            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: inlet added");
-            return n2;
-        } else if ((n1 != null) && (n2 != null)) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: both inlets included in net");
-            return null;
-        }
-        return null;
-    }
-
-    public Net disconnect(InletInstance io) {
-        Net n = GetNet(io);
-        if (n != null) {
-            n.dest.remove(io);
-            if (n.source.size() + n.dest.size() <= 1) {
-                delete(n);
-            }
-            return n;
-        }
-
-        return null;
-    }
-
-    public Net disconnect(OutletInstance io) {
-        Net n = GetNet(io);
-        if (n != null) {
-            n.source.remove((OutletInstance) io);
-            if (n.source.size() + n.dest.size() <= 1) {
-                delete(n);
-            }
-            return n;
-        }
-        return null;
-    }
-
-    public Net delete(Net n) {
-        nets.remove(n);
-        return n;
-    }
-
-    public boolean delete(AxoObjectInstanceAbstract o) {
-        boolean deletionSucceeded = false;
-        if (o == null) {
-            return deletionSucceeded;
-        }
-        for (InletInstance ii : o.getInletInstances()) {
-            disconnect(ii);
-        }
-        for (OutletInstance oi : o.getOutletInstances()) {
-            disconnect(oi);
-        }
-        int i;
-        for (i = Modulators.size() - 1; i >= 0; i--) {
-            Modulator m1 = Modulators.get(i);
-            if (m1.objinst == o) {
-                Modulators.remove(m1);
-                for (Modulation mt : m1.Modulations) {
-                    mt.destination.removeModulation(mt);
-                }
-            }
-        }
-        deletionSucceeded = objectinstances.remove(o);
-        AxoObjectAbstract t = o.getType();
-        if (o != null) {
-            //            o.Close();
-            t.DeleteInstance(o);
-        }
-        return deletionSucceeded;
     }
 
     public void updateModulation(Modulation n) {
@@ -551,7 +498,6 @@ public class PatchModel extends AbstractModel {
         try {
             serializer.write(this, f);
             MainFrame.prefs.addRecentFile(f.getAbsolutePath());
-            dirty = false;
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -615,6 +561,7 @@ public class PatchModel extends AbstractModel {
     }
 
     void SortParentsByExecution(AxoObjectInstanceAbstract o, LinkedList<AxoObjectInstanceAbstract> result) {
+        /*
         LinkedList<AxoObjectInstanceAbstract> before = new LinkedList<AxoObjectInstanceAbstract>(result);
         LinkedList<AxoObjectInstanceAbstract> parents = new LinkedList<AxoObjectInstanceAbstract>();
         // get the parents
@@ -644,9 +591,11 @@ public class PatchModel extends AbstractModel {
                 SortParentsByExecution(c, result);
             }
         }
+        */
     }
 
     void SortByExecution() {
+        /*
         LinkedList<AxoObjectInstanceAbstract> endpoints = new LinkedList<AxoObjectInstanceAbstract>();
         LinkedList<AxoObjectInstanceAbstract> result = new LinkedList<AxoObjectInstanceAbstract>();
         // start with all objects without outlets (end points)
@@ -674,8 +623,9 @@ public class PatchModel extends AbstractModel {
         // add the end points
         result.addAll(endpoints);
         // turn it back into a freshly sorted array
-        objectinstances = new ArrayList<AxoObjectInstanceAbstract>(result);
+/////////        objectinstances = new ArrayModel<AxoObjectInstanceAbstract>(result);
         refreshIndexes();
+        */
     }
 
     public Modulator GetModulatorOfModulation(Modulation modulation) {
@@ -715,8 +665,8 @@ public class PatchModel extends AbstractModel {
 
     public HashSet<String> getIncludes() {
         HashSet<String> includes = new HashSet<String>();
-        if (controllerinstance != null) {
-            Set<String> i = controllerinstance.getType().GetIncludes();
+        if (controllerObjectInstance != null) {
+            Set<String> i = controllerObjectInstance.getType().GetIncludes();
             if (i != null) {
                 includes.addAll(i);
             }
@@ -776,7 +726,7 @@ public class PatchModel extends AbstractModel {
 
     String GenerateCode3() {
         Preferences prefs = MainFrame.prefs;
-        controllerinstance = null;
+        controllerObjectInstance = null;
         String cobjstr = prefs.getControllerObject();
         if (prefs.isControllerEnabled() && cobjstr != null && !cobjstr.isEmpty()) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Using controller object: {0}", cobjstr);
@@ -786,13 +736,18 @@ public class PatchModel extends AbstractModel {
                 x = objs.get(0);
             }
             if (x != null) {
-                controllerinstance = x.CreateInstance(null, "ctrl0x123", new Point(0, 0));
+                controllerObjectInstance = x.CreateInstance(null, "ctrl0x123", new Point(0, 0));
             } else {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Unable to created controller for : {0}", cobjstr);
             }
         }
 
         CreateIID();
+
+        System.out.println("object:(2)");
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            System.out.println("  "+o.getType().id+":"+o.getInstanceName());
+        }
 
         //TODO - use execution order, rather than UI ordering
         if (USE_EXECUTION_ORDER) {
@@ -801,6 +756,11 @@ public class PatchModel extends AbstractModel {
             SortByPosition();
         }
 
+        System.out.println("object:(3)");
+        for (AxoObjectInstanceAbstract o : objectinstances) {
+            System.out.println("  "+o.getType().id+":"+o.getInstanceName());
+        }
+        
         // cheating here by creating a new controller...
         PatchController controller = new PatchController(this, null);
         PatchViewCodegen codegen = new PatchViewCodegen(this, controller);               
@@ -995,22 +955,24 @@ public class PatchModel extends AbstractModel {
          */
         return pdata;
     }
-
+    
+/*
     public void transferObjectConnections(AxoObjectInstanceZombie oldObject, AxoObjectInstance newObject) {
-        transferObjectConnections(oldObject.getInletInstances(),
-                oldObject.getOutletInstances(),
+        transferObjectConnections(oldObject.getInletInstances().getArray(),
+                oldObject.getOutletInstances().getArray(),
                 newObject);
     }
 
     public void transferObjectConnections(AxoObjectInstance oldObject, AxoObjectInstance newObject) {
-        transferObjectConnections(oldObject.inletInstances,
-                oldObject.outletInstances,
+        transferObjectConnections(oldObject.inletInstances.getArray(),
+                oldObject.outletInstances.getArray(),
                 newObject);
     }
-
+*/
+    
     public void transferObjectConnections(ArrayList<InletInstance> inletInstances,
             ArrayList<OutletInstance> outletInstances,
-            AxoObjectInstance newObject) {
+            AxoObjectInstance newObject) { /*
         for (int i = 0; i < outletInstances.size(); i++) {
             OutletInstance oldOutletInstance = outletInstances.get(i);
             try {
@@ -1044,37 +1006,19 @@ public class PatchModel extends AbstractModel {
             } catch (IndexOutOfBoundsException e) {
                 break;
             }
-        }
+        }*/
     }
 
     public void transferInputValues(AxoObjectInstance oldObject, AxoObjectInstance newObject) {
-        for (int i = 0; i < oldObject.getParameterInstances().size(); i++) {
-            ParameterInstance oldParameterInstance = oldObject.getParameterInstances().get(i);
-            try {
-                ParameterInstance newParameterInstance = newObject.getParameterInstances().get(i);
-                newParameterInstance.CopyValueFrom(oldParameterInstance);
-                newObject.setDirty(true);
-            } catch (IndexOutOfBoundsException e) {
-                break;
-            }
-        }
-        for (int i = 0; i < oldObject.getAttributeInstances().size(); i++) {
-            AttributeInstance oldAttributeInstance = oldObject.getAttributeInstances().get(i);
-            try {
-                AttributeInstance newAttributeInstance = newObject.getAttributeInstances().get(i);
-                newAttributeInstance.CopyValueFrom(oldAttributeInstance);
-                newObject.setDirty(true);
-            } catch (IndexOutOfBoundsException e) {
-                break;
-            }
-        }
+        // was broken: transfer by name, not by index...
     }
 
     public void transferState(AxoObjectInstance oldObject, AxoObjectInstance newObject) {
-        transferObjectConnections(oldObject, newObject);
-        transferInputValues(oldObject, newObject);
+        // was broken: transfer by name, not by index...
     }
 
+    // broken: should move to controller...
+    /*
     public AxoObjectInstanceAbstract ChangeObjectInstanceType1(AxoObjectInstanceAbstract oldObject, AxoObjectAbstract newObjectType) {
         if ((oldObject instanceof AxoObjectInstancePatcher) && (newObjectType instanceof AxoObjectPatcher)) {
             return oldObject;
@@ -1102,12 +1046,14 @@ public class PatchModel extends AbstractModel {
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract oldObject, AxoObjectAbstract newObjectType) {
         AxoObjectInstanceAbstract newObject = ChangeObjectInstanceType1(oldObject, newObjectType);
         if (newObject != oldObject) {
-            delete(oldObject);
+//            delete(oldObject);
             setDirty();
         }
         return newObject;
     }
-
+    */
+    
+    
     /**
      *
      * @param initial If true, only objects restored from object name reference
@@ -1205,7 +1151,7 @@ public class PatchModel extends AbstractModel {
         return new File(buildDir + "/xpatch.bin");
     }
 
-    public ArrayList<AxoObjectInstanceAbstract> getObjectInstances() {
+    public ArrayModel<AxoObjectInstanceAbstract> getObjectInstances() {
         return objectinstances;
     }
 
@@ -1224,7 +1170,7 @@ public class PatchModel extends AbstractModel {
         objectinstances.add(o);
     }
 
-    public ArrayList<Net> getNets() {
+    public ArrayModel<Net> getNets() {
         return nets;
     }
 
@@ -1241,7 +1187,7 @@ public class PatchModel extends AbstractModel {
         try {
             PatchModel p = serializer.read(PatchModel.class, v);
             Map<String, String> dict = new HashMap<String, String>();
-            ArrayList<AxoObjectInstanceAbstract> obj2 = (ArrayList<AxoObjectInstanceAbstract>) p.objectinstances.clone();
+            ArrayList<AxoObjectInstanceAbstract> obj2 = (ArrayList<AxoObjectInstanceAbstract>) p.objectinstances.getArray().clone();
             for (AxoObjectInstanceAbstract o : obj2) {
                 o.patchModel = this;
                 AxoObjectAbstract obj = o.resolveType();
@@ -1368,6 +1314,7 @@ public class PatchModel extends AbstractModel {
                     }
                     n.dest = dest2;
                 }
+                /*
                 if (n.source.size() + n.dest.size() > 1) {
                     if ((connectedInlet == null) && (connectedOutlet == null)) {
                         n.patchModel = this;
@@ -1394,6 +1341,7 @@ public class PatchModel extends AbstractModel {
                         }
                     }
                 }
+                */
             }
             setDirty();
         } catch (javax.xml.stream.XMLStreamException ex) {
@@ -1434,5 +1382,18 @@ public class PatchModel extends AbstractModel {
         firePropertyChange(
                 PatchController.PATCH_DSPLOAD,
                 oldvalue, dspLoad);
+    }
+
+    // ------------- new objectinstances MVC stuff
+    public ArrayModel<AxoObjectInstanceAbstract> getObjectinstances() {
+        return objectinstances;
+    }
+
+    public void setObjectinstances(ArrayModel<AxoObjectInstanceAbstract> objectinstances) {
+        ArrayModel<AxoObjectInstanceAbstract> old_value = this.objectinstances;
+        this.objectinstances = objectinstances;
+        firePropertyChange(
+                PatchController.PATCH_OBJECTINSTANCES,
+                old_value, objectinstances);
     }
 }

@@ -8,11 +8,11 @@ import axoloti.chunks.FourCCs;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
-import axoloti.inlets.InletInstanceController;
-import axoloti.inlets.InletInstanceViewFactory;
-import axoloti.inlets.InletInstanceZombie;
 import axoloti.iolet.IoletAbstract;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.array.ArrayModel;
+import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstanceAbstract;
@@ -23,9 +23,6 @@ import axoloti.objectviews.AxoObjectInstanceViewFactory;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
-import axoloti.outlets.OutletInstanceController;
-import axoloti.outlets.OutletInstanceViewFactory;
-import axoloti.outlets.OutletInstanceZombie;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewComment;
@@ -83,18 +80,52 @@ public abstract class PatchView extends PatchAbstractView {
     final static String patchMidiKey = "midi/in/keyb";
     final static String patchDisplay = "disp/";
 
-
+    ArrayView<IAxoObjectInstanceView> objectInstanceViews;
+    ArrayView<INetView> netViews;
+    
     PatchView(PatchController patchController) {
         super(patchController.getModel(),patchController);
     }
 
-    ArrayList<IAxoObjectInstanceView> objectInstanceViews = new ArrayList<>();
+    public void PostConstructor() {
+        objectInstanceViews = new ArrayView<IAxoObjectInstanceView>(controller.objectInstanceControllers) {
+            @Override
+            public IAxoObjectInstanceView viewFactory(AbstractController ctrl) {
+                IAxoObjectInstanceView view = AxoObjectInstanceViewFactory.createView((ObjectInstanceController)ctrl, (PatchViewSwing)PatchView.this);
+                view.PostConstructor();
+                return view;
+            }
+            @Override
+            public void updateUI() {
+                removeAllObjectViews();
+                for(IAxoObjectInstanceView v: getSubViews()){
+                    add(v);
+                }
+            }
+        };
+        controller.objectInstanceControllers.addView(objectInstanceViews);
 
-    public ArrayList<IAxoObjectInstanceView> getObjectInstanceViews() {
-        return objectInstanceViews;
+        netViews = new ArrayView<INetView>(controller.netControllers) {
+            @Override
+            public INetView viewFactory(AbstractController ctrl) {
+                INetView view = new NetView((Net)(ctrl.getModel()),(NetController)ctrl, (PatchViewSwing)PatchView.this);
+                view.PostConstructor();
+                return view;
+            }
+            @Override
+            public void updateUI() {
+                removeAllNetViews();
+                for(INetView v: getSubViews()){
+                    add(v);
+                }
+            }
+        };
+        controller.netControllers.addView(netViews);
     }
 
-    public ArrayList<INetView> netViews = new ArrayList<>();
+    public ArrayView<IAxoObjectInstanceView> getObjectInstanceViews() {
+        return objectInstanceViews;
+    }
 
     public abstract PatchViewportView getViewportView();
 
@@ -105,8 +136,6 @@ public abstract class PatchView extends PatchAbstractView {
 
     public abstract Point getLocationOnScreen();
 
-    public abstract void PostConstructor();
-
     public abstract void requestFocus();
 
     public abstract void AdjustSize();
@@ -115,11 +144,11 @@ public abstract class PatchView extends PatchAbstractView {
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         SelectNone();
-        getPatchController().paste(v, pos, restoreConnectionsToExternalOutlets);
+        getController().paste(v, pos, restoreConnectionsToExternalOutlets);
     }
 
     public void setFileNamePath(String FileNamePath) {
-        getPatchController().setFileNamePath(FileNamePath);
+        getController().setFileNamePath(FileNamePath);
     }
 
     TextEditor NotesFrame;
@@ -128,7 +157,7 @@ public abstract class PatchView extends PatchAbstractView {
         if (NotesFrame == null) {
             NotesFrame = new TextEditor(new StringRef(), getPatchFrame());
             NotesFrame.setTitle("notes");
-            NotesFrame.SetText(getPatchController().getModel().notes);
+            NotesFrame.SetText(getController().getModel().notes);
             NotesFrame.addFocusListener(new FocusListener() {
                 @Override
                 public void focusGained(FocusEvent e) {
@@ -136,7 +165,7 @@ public abstract class PatchView extends PatchAbstractView {
 
                 @Override
                 public void focusLost(FocusEvent e) {
-                    getPatchController().getModel().notes = NotesFrame.GetText();
+                    getController().getModel().notes = NotesFrame.GetText();
                 }
             });
         }
@@ -151,7 +180,7 @@ public abstract class PatchView extends PatchAbstractView {
             return;
         }
         if (osf == null) {
-            osf = new ObjectSearchFrame(getPatchController());
+            osf = new ObjectSearchFrame(getController());
         }
         osf.Launch(p, o, searchString);
     }
@@ -209,7 +238,7 @@ public abstract class PatchView extends PatchAbstractView {
                 p.objectinstances.add(o.getObjectInstance());
             }
         }
-        p.nets = new ArrayList<Net>();
+        p.nets = new ArrayModel<Net>();
         for (INetView n : netViews) {
             int sel = 0;
             for (IInletInstanceView i : n.getDestinationViews()) {
@@ -266,13 +295,11 @@ public abstract class PatchView extends PatchAbstractView {
                     p.y = p.y + ystep;
                     p.x = xgrid * (p.x / xgrid);
                     p.y = ygrid * (p.y / ygrid);
-                    // FIXME
-                    // o.SetLocation(p.x, p.y);
+                    ((ObjectInstanceController)o.getController()).changeLocation(p.x, p.y);
                 }
             }
             if (isUpdate) {
                 AdjustSize();
-                controller.setDirty();
             }
         } else {
             Logger.getLogger(PatchView.class.getName()).log(Level.INFO, "can't move: locked");
@@ -281,44 +308,44 @@ public abstract class PatchView extends PatchAbstractView {
 
     void GoLive() {
 
-        QCmdProcessor qCmdProcessor = getPatchController().GetQCmdProcessor();
+        QCmdProcessor qCmdProcessor = getController().GetQCmdProcessor();
 
         qCmdProcessor.AppendToQueue(new QCmdStop());
         if (CConnection.GetConnection().GetSDCardPresent()) {
 
-            String f = "/" + getPatchController().getSDCardPath();
+            String f = "/" + getController().getSDCardPath();
             //System.out.println("pathf" + f);
             if (SDCardInfo.getInstance().find(f) == null) {
                 qCmdProcessor.AppendToQueue(new QCmdCreateDirectory(f));
             }
             qCmdProcessor.AppendToQueue(new QCmdChangeWorkingDirectory(f));
-            getPatchController().UploadDependentFiles(f);
+            getController().UploadDependentFiles(f);
         } else {
             // issue warning when there are dependent files
-            ArrayList<SDFileReference> files = getPatchController().getModel().GetDependendSDFiles();
+            ArrayList<SDFileReference> files = getController().getModel().GetDependendSDFiles();
             if (files.size() > 0) {
                 Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, "Patch requires file {0} on SDCard, but no SDCard mounted", files.get(0).targetPath);
             }
         }
-        getPatchController().ShowPreset(0);
-        getPatchController().setPresetUpdatePending(false);
-        for (AxoObjectInstanceAbstract o : getPatchController().getModel().getObjectInstances()) {
+        getController().ShowPreset(0);
+        getController().setPresetUpdatePending(false);
+        for (AxoObjectInstanceAbstract o : getController().getModel().getObjectInstances()) {
             for (ParameterInstance pi : o.getParameterInstances()) {
                 pi.ClearNeedsTransmit();
             }
         }
-        getPatchController().WriteCode();
+        getController().WriteCode();
         qCmdProcessor.setPatchController(null);
-        for(String module : getPatchController().getModel().getModules()) {
+        for(String module : getController().getModel().getModules()) {
            qCmdProcessor.AppendToQueue(
-                   new QCmdCompileModule(getPatchController(),
+                   new QCmdCompileModule(getController(),
                            module, 
-                           getPatchController().getModel().getModuleDir(module)));
+                           getController().getModel().getModuleDir(module)));
         }
-        qCmdProcessor.AppendToQueue(new QCmdCompilePatch(getPatchController()));
+        qCmdProcessor.AppendToQueue(new QCmdCompilePatch(getController()));
         qCmdProcessor.AppendToQueue(new QCmdUploadPatch());
-        qCmdProcessor.AppendToQueue(new QCmdStart(getPatchController()));
-        qCmdProcessor.AppendToQueue(new QCmdLock(getPatchController()));
+        qCmdProcessor.AppendToQueue(new QCmdStart(getController()));
+        qCmdProcessor.AppendToQueue(new QCmdLock(getController()));
         qCmdProcessor.AppendToQueue(new QCmdMemRead(CConnection.GetConnection().getTargetProfile().getPatchAddr(), 8, new IConnection.MemReadHandler() {
             @Override
             public void Done(ByteBuffer mem) {
@@ -352,18 +379,20 @@ public abstract class PatchView extends PatchAbstractView {
     Dimension GetInitialSize() {
         int mx = 100; // min size
         int my = 100;
-        for (IAxoObjectInstanceView i : objectInstanceViews) {
+        if (objectInstanceViews != null) {
+            for (IAxoObjectInstanceView i : objectInstanceViews) {
 
-            Dimension s = i.getPreferredSize();
+                Dimension s = i.getPreferredSize();
 
-            int ox = i.getLocation().x + (int) s.getWidth();
-            int oy = i.getLocation().y + (int) s.getHeight();
+                int ox = i.getLocation().x + (int) s.getWidth();
+                int oy = i.getLocation().y + (int) s.getHeight();
 
-            if (ox > mx) {
-                mx = ox;
-            }
-            if (oy > my) {
-                my = oy;
+                if (ox > mx) {
+                    mx = ox;
+                }
+                if (oy > my) {
+                    my = oy;
+                }
             }
         }
         // adding more, as getPreferredSize is not returning true dimension of
@@ -373,14 +402,14 @@ public abstract class PatchView extends PatchAbstractView {
 
     void PreSerialize() {
         if (NotesFrame != null) {
-            getPatchController().getModel().notes = NotesFrame.GetText();
+            getController().getModel().notes = NotesFrame.GetText();
         }
-        getPatchController().getModel().windowPos = getPatchFrame().getBounds();
+        getController().getModel().windowPos = getPatchFrame().getBounds();
     }
 
     boolean save(File f) {
         PreSerialize();
-        boolean b = getPatchController().getModel().save(f);
+        boolean b = getController().getModel().save(f);
         if (ObjEditor != null) {
             ObjEditor.UpdateObject();
         }
@@ -423,6 +452,7 @@ public abstract class PatchView extends PatchAbstractView {
         Serializer serializer = new Persister(strategy);
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, f);
+            patchModel.PostContructor();
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
             PatchController patchController = patchModel.createController(documentRoot);
             PatchView patchView = MainFrame.prefs.getPatchView(patchController);
@@ -466,22 +496,18 @@ public abstract class PatchView extends PatchAbstractView {
         repaint();
     }
 
-    public PatchController getPatchController() {
-        return controller;
-    }
-
     public void Close() {
         setLocked(false);
-        Collection<IAxoObjectInstanceView> c = (Collection<IAxoObjectInstanceView>) objectInstanceViews.clone();
+        Collection<IAxoObjectInstanceView> c = (Collection<IAxoObjectInstanceView>) objectInstanceViews.getSubViews().clone();
         for (IAxoObjectInstanceView o : c) {
             o.getModel().Close();
         }
         if (NotesFrame != null) {
             NotesFrame.dispose();
         }
-        if ((getPatchController().getSettings() != null)
-                && (getPatchController().getSettings().editor != null)) {
-            getPatchController().getSettings().editor.dispose();
+        if ((getController().getSettings() != null)
+                && (getController().getSettings().editor != null)) {
+            getController().getSettings().editor.dispose();
         }
     }
 
@@ -523,17 +549,18 @@ public abstract class PatchView extends PatchAbstractView {
         return new Dimension(mx, my);
     }
 
+    IAxoObjectInstanceView getObjectInstanceView(AxoObjectInstanceAbstract o) {
+        return objectInstanceViews.getViewOfModel(o);
+    }
+
     void deleteSelectedAxoObjectInstanceViews() {
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "deleteSelectedAxoObjInstances()");
         if (!isLocked()) {
             boolean succeeded = false;
             for (IAxoObjectInstanceView o : objectInstanceViews) {
                 if (o.isSelected()) {
-                    succeeded |= getPatchController().delete(o);
+                    succeeded |= getController().delete((ObjectInstanceController)o.getController());
                 }
-            }
-            if (succeeded) {
-                getPatchController().setDirty();
             }
         } else {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't delete: locked!");
@@ -578,25 +605,28 @@ public abstract class PatchView extends PatchAbstractView {
         return null;
     }
 
-    public List<INetView> getNetViews() {
+    public ArrayView<INetView> getNetViews() {
         return netViews;
     }
 
     public boolean isLocked() {
-        return getPatchController().isLocked();
+        return getController().isLocked();
     }
 
     public void setLocked(boolean locked) {
-        getPatchController().setLocked(locked);
+        getController().setLocked(locked);
     }
 
     public void ShowPreset(int i) {
+        // TODO: reconstruct preset logic
+        /*
         ArrayList<IAxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<IAxoObjectInstanceView>) objectInstanceViews.clone();
         for (IAxoObjectInstanceView o : objectInstanceViewsClone) {
             for (IParameterInstanceView p : o.getParameterInstanceViews()) {
                 p.ShowPreset(i);
             }
         }
+        */
     }
 
     Map<ParameterInstance, IParameterInstanceView> parameterInstanceViews = new HashMap<>();
@@ -614,13 +644,13 @@ public abstract class PatchView extends PatchAbstractView {
     public void modelChanged() {
         modelChanged(true);
     }
-    
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
             if ((Boolean)evt.getNewValue() == false) {
                 getPatchFrame().SetLive(false);
-                List<IAxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<IAxoObjectInstanceView>) objectInstanceViews.clone();
+                List<IAxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<IAxoObjectInstanceView>) objectInstanceViews.getSubViews().clone();
                 for (IAxoObjectInstanceView o : objectInstanceViewsClone) {
                     o.Unlock();
                 }
@@ -634,10 +664,18 @@ public abstract class PatchView extends PatchAbstractView {
             if (getPatchFrame() != null ) {
                 getPatchFrame().ShowDSPLoad((Integer)evt.getNewValue());
             }
+        } else if (evt.getPropertyName().equals(PatchController.PATCH_OBJECTINSTANCES)) {
+            objectInstanceViews.updateUI();
+        } else if (evt.getPropertyName().equals(PatchController.PATCH_NETS)) {
+            netViews.updateUI();
         }
     }
-    
+
     public void modelChanged(boolean updateSelection) {
+    }
+    
+    @Deprecated
+    public void modelChanged1(boolean updateSelection) {
         Map<String, IAxoObjectInstanceView> existingViews = new HashMap<>();
         Set<String> newObjectNames = new HashSet<>();
 
@@ -651,7 +689,7 @@ public abstract class PatchView extends PatchAbstractView {
                 existingViews.put(instanceName, view);
             }
 
-            for (AxoObjectInstanceAbstract o : getPatchController().getModel().getObjectInstances()) {
+            for (AxoObjectInstanceAbstract o : getController().getModel().getObjectInstances()) {
                 String instanceName = o.getInstanceName();
                 if (!o.isDirty()) {
                     newObjectNames.add(instanceName);
@@ -674,7 +712,7 @@ public abstract class PatchView extends PatchAbstractView {
         int newObjects = 0;
         IAxoObjectInstanceView editorView = null;
 
-        for (AxoObjectInstanceAbstract o : getPatchController().getModel().getObjectInstances()) {
+        for (AxoObjectInstanceAbstract o : getController().getModel().getObjectInstances()) {
 
             IAxoObjectInstanceView view = existingViews.get(o.getInstanceName());
             boolean isNewObject = false;
@@ -698,9 +736,9 @@ public abstract class PatchView extends PatchAbstractView {
             }
 
             // keep param view references for preset updates
-            for (IParameterInstanceView pi : view.getParameterInstanceViews()) {
-                parameterInstanceViews.put(pi.getParameterInstance(), pi);
-            }
+//            for (IParameterInstanceView pi : view.getParameterInstanceViews()) {
+//                parameterInstanceViews.put(pi.getParameterInstance(), pi);
+//            }
 
             if (isNewObject) {
                 newObjects += 1;
@@ -735,7 +773,7 @@ public abstract class PatchView extends PatchAbstractView {
             // if single new comment added, show instancename editor
             editorView.addInstanceNameEditor();
         }
-
+/*
         for (Net n : (List<Net>) getPatchController().getModel().getNets().clone()) {
             INetView netView = n.createView(this);
             netView.setVisible(isCableTypeEnabled(n.getDataType()));
@@ -770,7 +808,7 @@ public abstract class PatchView extends PatchAbstractView {
             }
             add(netView);
         }
-
+*/
         validateObjects();
         validateNets();
 
@@ -800,12 +838,12 @@ public abstract class PatchView extends PatchAbstractView {
                         if (f.exists() && f.canRead()) {
                             AxoObjectAbstract o = new AxoObjectFromPatch(f);
                             String fn = f.getCanonicalPath();
-                            if (getPatchController().GetCurrentWorkingDirectory() != null
-                                    && fn.startsWith(getPatchController().GetCurrentWorkingDirectory())) {
+                            if (getController().GetCurrentWorkingDirectory() != null
+                                    && fn.startsWith(getController().GetCurrentWorkingDirectory())) {
                                 o.createdFromRelativePath = true;
                             }
 
-                            getPatchController().AddObjectInstance(o, dtde.getLocation());
+                            getController().AddObjectInstance(o, dtde.getLocation());
                         }
                     }
                     dtde.dropComplete(true);
@@ -818,6 +856,5 @@ public abstract class PatchView extends PatchAbstractView {
             }
             super.drop(dtde);
         }
-    ;
-};
+    };
 }

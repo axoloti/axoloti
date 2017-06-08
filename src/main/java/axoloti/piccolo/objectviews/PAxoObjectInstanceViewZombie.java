@@ -4,6 +4,7 @@ import axoloti.PatchViewPiccolo;
 import axoloti.Theme;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
+import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
@@ -167,13 +168,13 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
     }
 
     @Override
-    public Collection<IInletInstanceView> getInletInstanceViews() {
-        return inletInstanceViews.values();
+    public ArrayView<IInletInstanceView> getInletInstanceViews() {
+        return null; //inletInstanceViews;
     }
 
     @Override
-    public Collection<IOutletInstanceView> getOutletInstanceViews() {
-        return outletInstanceViews.values();
+    public ArrayView<IOutletInstanceView> getOutletInstanceViews() {
+        return null; //outletInstanceViews;
     }
 
     private Map<InletInstance, IInletInstanceView> inletInstanceViews = new HashMap<>();

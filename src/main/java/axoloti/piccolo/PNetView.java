@@ -5,6 +5,7 @@ import axoloti.Net;
 import axoloti.PatchViewPiccolo;
 import axoloti.Theme;
 import axoloti.inlets.IInletInstanceView;
+import axoloti.mvc.AbstractController;
 import axoloti.outlets.IOutletInstanceView;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -13,6 +14,7 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -257,5 +259,15 @@ public class PNetView extends PatchPNode implements INetView {
     @Override
     public ArrayList<IInletInstanceView> getDestinationViews() {
         return dest;
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public AbstractController getController() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

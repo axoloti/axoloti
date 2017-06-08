@@ -1,15 +1,18 @@
 package axoloti;
 
-import axoloti.inlets.IInletInstanceView;
+import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractView;
+import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.outlets.IOutletInstanceView;
+import axoloti.outlets.OutletInstance;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,9 +29,13 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
     public final static String PATCH_LOCKED = "Locked";
     public final static String PATCH_FILENAME = "FileNamePath";
     public final static String PATCH_DSPLOAD = "DspLoad";
-    
+    public final static String PATCH_OBJECTINSTANCES = "Objectinstances";
+    public final static String PATCH_NETS = "Nets";
+
     public PatchController(PatchModel model, AbstractDocumentRoot documentRoot) {
         super(model, documentRoot);
+        objectInstanceControllers = new ArrayController(model.objectinstances, documentRoot);
+        netControllers = new ArrayController(model.nets, documentRoot);
     }
 
     QCmdProcessor GetQCmdProcessor() {
@@ -125,7 +132,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         }
         qcmdprocessor.WaitQueueFinished();
         Calendar cal;
-        if (getModel().isDirty()) {
+        if (true) { // getModel().isDirty()) {
             cal = Calendar.getInstance();
         } else {
             cal = Calendar.getInstance();
@@ -152,87 +159,68 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         UploadToSDCard("/" + getSDCardPath() + "/patch.bin");
     }
 
-    private void finalizeModelChange(boolean changeOccurred) {
-        if (changeOccurred) {
-            setDirty();
-        }
-    }
-
-    public Net disconnect(IInletInstanceView ii) {
-        if (!isLocked()) {
-            Net net = ii.getInletInstance().disconnect();
-            finalizeModelChange(net != null);
-            return net;
-        } else {
-            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
-            return null;
-        }
-    }
-
-    public Net disconnect(IOutletInstanceView oi) {
-        if (!isLocked()) {
-            Net net = oi.getOutletInstance().disconnect();
-            finalizeModelChange(net != null);
-            return net;
-        } else {
-            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't disconnect: locked!");
-            return null;
-        }
-    }
-
-    public Net AddConnection(IInletInstanceView il, IOutletInstanceView ol) {
-        if (!isLocked()) {
-            Net net = getModel().AddConnection(il.getInletInstance(), ol.getOutletInstance());
-            return net;
-        } else {
-            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked");
-            return null;
-        }
-    }
-
-    public Net AddConnection(IInletInstanceView il, IInletInstanceView ol) {
-        if (!isLocked()) {
-            Net net = getModel().AddConnection(il.getInletInstance(), ol.getInletInstance());
-            return net;
-        } else {
-            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't add connection: locked!");
-            return null;
-        }
-    }
-
-    public void deleteNet(IInletInstanceView ii) {
-        if (!isLocked()) {
-            Net net = ii.getInletInstance().deleteNet();
-            finalizeModelChange(net != null);
-        } else {
-            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't delete: locked!");
-        }
-    }
-
-    public void deleteNet(IOutletInstanceView oi) {
-        if (!isLocked()) {
-            Net net = oi.getOutletInstance().deleteNet();
-            finalizeModelChange(net != null);
-        } else {
-            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Can't delete: locked!");
-        }
-    }
-
     public void setFileNamePath(String FileNamePath) {
         setModelProperty(PATCH_FILENAME, FileNamePath);
         getModel().setFileNamePath(FileNamePath);
     }
 
-    public boolean delete(IAxoObjectInstanceView o) {
-        boolean succeeded = getModel().delete((AxoObjectInstanceAbstract) o.getModel());
-        o.getModel().Close();
+    public boolean delete(ObjectInstanceController o) {
+        boolean deletionSucceeded = false;
+        if (o == null) {
+            return deletionSucceeded;
+        }
+        for (InletInstance ii : o.getModel().getInletInstances()) {
+            disconnect(ii);
+        }
+        for (OutletInstance oi : o.getModel().getOutletInstances()) {
+            disconnect(oi);
+        }
+        int i;
+        for (i = getModel().Modulators.size() - 1; i >= 0; i--) {
+            Modulator m1 = getModel().Modulators.get(i);
+            if (m1.objinst == o.getModel()) {
+                getModel().Modulators.remove(m1);
+                for (Modulation mt : m1.Modulations) {
+                    mt.destination.removeModulation(mt);
+                }
+            }
+        }
+        AxoObjectAbstract t = o.getModel().getType();
+        if (o != null) {
+            //            o.Close();
+            t.DeleteInstance(o.getModel());
+        }
+        boolean succeeded = objectInstanceControllers.remove(o.getModel());
         return succeeded;
     }
-
+    
+    
     public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
         if (!isLocked()) {
-            AxoObjectInstanceAbstract object = getModel().AddObjectInstance(obj, loc);
-            return object;
+
+            if (obj == null) {
+                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "AddObjectInstance NULL");
+                return null;
+            }
+            int i = 1;
+            String n = obj.getDefaultInstanceName() + "_";
+            while (getModel().GetObjectInstance(n + i) != null) {
+                i++;
+            }
+            AxoObjectInstanceAbstract objinst = obj.CreateInstance(getModel(), n + i, loc);
+
+            Modulator[] m = obj.getModulators();
+            if (m != null) {
+                if (getModel().Modulators == null) {
+                    getModel().Modulators = new ArrayList<Modulator>();
+                }
+                for (Modulator mm : m) {
+                    mm.objinst = objinst;
+                    getModel().Modulators.add(mm);
+                }
+            }
+            objectInstanceControllers.add(objinst);
+            return objinst;
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked!");
             return null;
@@ -241,10 +229,6 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
 
     public String GetCurrentWorkingDirectory() {
         return getModel().GetCurrentWorkingDirectory();
-    }
-
-    public void setDirty() {
-        getModel().setDirty();
     }
 
     public String getFileNamePath() {
@@ -301,15 +285,16 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         //patchView.repaint();
     }
 
-    @Deprecated
+    @Deprecated // needs to ask PatchView
     public Point getViewLocationOnScreen() {
         // fake it for now
         return new Point(100,100); //patchView.getLocationOnScreen();
     }
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
-        AxoObjectInstanceAbstract newObject = getModel().ChangeObjectInstanceType(obj, objType);
-        return newObject;
+//        AxoObjectInstanceAbstract newObject = getModel().ChangeObjectInstanceType(obj, objType);
+//        return newObject;
+        return null;
     }
 
     public boolean isLocked() {
@@ -328,5 +313,160 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         return new Net(getModel());
     }
 
+    // ------------- new objectinstances MVC stuff
+    ArrayController<ObjectInstanceController> objectInstanceControllers;
+    ArrayController<NetController> netControllers;
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(PATCH_OBJECTINSTANCES)) {
+            objectInstanceControllers.syncControllers();
+        }
+        super.propertyChange(evt);
+    }
+
+    public NetController getNetFromInlet(InletInstance il) {
+        for (NetController c : netControllers) {
+            for (InletInstance d : c.getModel().dest) {
+                if (d == il) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+
+    public NetController getNetFromOutlet(OutletInstance il) {
+        for (NetController c : netControllers) {
+            for (OutletInstance d : c.getModel().source) {
+                if (d == il) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Net AddConnection(InletInstance il, OutletInstance ol) {
+        if (il.getObjectInstance().getPatchModel() != getModel()) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
+            return null;
+        }
+        if (ol.getObjectInstance().getPatchModel() != getModel()) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
+            return null;
+        }
+        NetController n1, n2;
+        n1 = getNetFromInlet(il);
+        n2 = getNetFromOutlet(ol);
+        if ((n1 == null) && (n2 == null)) {
+            Net n = new Net(getModel());
+            NetController nc = (NetController) netControllers.add(n);
+            nc.connectInlet(il);
+            nc.connectOutlet(ol);
+            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
+            return n;
+        } else if (n1 == n2) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: already connected");
+            return null;
+        } else if ((n1 != null) && (n2 == null)) {
+            if (n1.getModel().source.isEmpty()) {
+                Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: adding outlet to inlet net");
+                n1.connectOutlet(ol);
+                return n1.getModel();
+            } else {
+                disconnect(il);
+                Net n = new Net(getModel());
+                NetController nc = (NetController) netControllers.add(n);
+                nc.connectInlet(il);
+                nc.connectOutlet(ol);
+                getModel().nets.add(n);
+                Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
+                return n;
+            }
+        } else if ((n1 == null) && (n2 != null)) {
+            n2.connectInlet(il);
+            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: add additional outlet");
+            return n2.getModel();
+        } else if ((n1 != null) && (n2 != null)) {
+            // inlet already has connect, and outlet has another
+            // replace
+            disconnect(il);
+            n2.connectInlet(il);
+            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: replace inlet with existing net");
+            return n2.getModel();
+        }
+        return null;
+    }
+
+    public Net AddConnection(InletInstance il, InletInstance ol) {
+        if (il == ol) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: same inlet");
+            return null;
+        }
+        if (il.getObjectInstance().patchModel != getModel()) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
+            return null;
+        }
+        if (ol.getObjectInstance().patchModel != getModel()) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
+            return null;
+        }
+        NetController n1, n2;
+        n1 = getNetFromInlet(il);
+        n2 = getNetFromInlet(ol);
+        if ((n1 == null) && (n2 == null)) {
+            Net n = new Net(getModel());
+            NetController nc = (NetController) netControllers.add(n);
+            nc.connectInlet(il);
+            nc.connectInlet(ol);
+            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
+            return n;
+        } else if (n1 == n2) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: already connected");
+        } else if ((n1 != null) && (n2 == null)) {
+            n1.connectInlet(ol);
+            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: inlet added");
+            return n1.getModel();
+        } else if ((n1 == null) && (n2 != null)) {
+            n2.connectInlet(il);
+            Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: inlet added");
+            return n2.getModel();
+        } else if ((n1 != null) && (n2 != null)) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: both inlets included in net");
+            return null;
+        }
+        return null;
+    }
+
+    public Net disconnect(InletInstance io) {
+        NetController n = getNetFromInlet(io);
+        if (n != null) {
+            if (n.getModel().source.isEmpty() && n.getModel().dest.size() == 1) {
+                delete(n);
+            } else {
+                n.disconnect(io);
+            }
+        }
+
+        return null;
+    }
+
+    public Net disconnect(OutletInstance io) {
+        NetController n = getNetFromOutlet(io);
+        if (n != null) {
+            if (n.getModel().dest.isEmpty() && n.getModel().source.size() == 1) {
+                delete(n);
+            } else {
+                n.disconnect(io);
+            }
+        }
+        return null;
+    }
+
+    public NetController delete(NetController n) {
+        netControllers.remove(n.getModel());
+        return n;
+    }
 
 }

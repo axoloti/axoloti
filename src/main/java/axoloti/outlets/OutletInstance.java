@@ -111,15 +111,8 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
             return false;
         }
 
-        return (axoObj.getPatchModel().GetNet(this) != null);
-    }
-
-    public Net disconnect() {
-        return axoObj.getPatchModel().disconnect(this);
-    }
-
-    public Net deleteNet() {
-        return axoObj.getPatchModel().delete(axoObj.getPatchModel().GetNet(this));
+        // FIXME: return (axoObj.getPatchModel().GetNet(this) != null);
+        return false;
     }
 
     @Override

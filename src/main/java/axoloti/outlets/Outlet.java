@@ -94,7 +94,7 @@ public abstract class Outlet implements AtomDefinition, Cloneable {
 
     @Override
     public OutletInstance CreateInstance(AxoObjectInstance o) {
-        OutletInstance i = new OutletInstance(this, null);
+        OutletInstance i = new OutletInstance(this, o);
         return i;
     }
 

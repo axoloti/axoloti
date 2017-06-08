@@ -118,16 +118,16 @@ public class PatchViewCodegen extends PatchAbstractView {
             }
         }
         c += "/* controller classes */\n";
-        if (getModel().controllerinstance != null) {
-            c += getModel().controllerinstance.GenerateClass(classname, OnParentAccess, enableOnParent);
+        if (getModel().controllerObjectInstance != null) {
+            c += getModel().controllerObjectInstance.GenerateClass(classname, OnParentAccess, enableOnParent);
         }
         c += "/* object classes */\n";
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
             c += o.GenerateClass(classname, OnParentAccess, enableOnParent);
         }
         c += "/* controller instances */\n";
-        if (getModel().controllerinstance != null) {
-            String s = getModel().controllerinstance.getCInstanceName();
+        if (getModel().controllerObjectInstance != null) {
+            String s = getModel().controllerObjectInstance.getCInstanceName();
             if (!s.isEmpty()) {
                 c += "     " + s + " " + s + "_i;\n";
             }
@@ -288,11 +288,11 @@ public class PatchViewCodegen extends PatchAbstractView {
 
     String GenerateObjInitCodePlusPlusSub(String className, String parentReference) {
         String c = "";
-        if (getModel().controllerinstance != null) {
-            String s = getModel().controllerinstance.getCInstanceName();
+        if (getModel().controllerObjectInstance != null) {
+            String s = getModel().controllerObjectInstance.getCInstanceName();
             if (!s.isEmpty()) {
                 c += "   " + s + "_i.Init(" + parentReference;
-                for (DisplayInstance i : getModel().controllerinstance.getDisplayInstances()) {
+                for (DisplayInstance i : getModel().controllerObjectInstance.getDisplayInstances()) {
                     if (i.display.getLength() > 0) {
                         c += ", ";
                         c += i.valueName("");
@@ -375,10 +375,10 @@ public class PatchViewCodegen extends PatchAbstractView {
                 c += "   " + o.getCInstanceName() + "_i.Dispose();\n";
             }
         }
-        if (getModel().controllerinstance != null) {
-            String s = getModel().controllerinstance.getCInstanceName();
+        if (getModel().controllerObjectInstance != null) {
+            String s = getModel().controllerObjectInstance.getCInstanceName();
             if (!s.isEmpty()) {
-                c += "   " + getModel().controllerinstance.getCInstanceName() + "_i.Dispose();\n";
+                c += "   " + getModel().controllerObjectInstance.getCInstanceName() + "_i.Dispose();\n";
             }
         }
 
@@ -413,8 +413,8 @@ public class PatchViewCodegen extends PatchAbstractView {
         c += "//--------- </zero> ----------//\n";
 
         c += "//--------- <controller calls> ----------//\n";
-        if (getModel().controllerinstance != null) {
-            c += GenerateDSPCodePlusPlusSubObj(getModel().controllerinstance, ClassName, enableOnParent);
+        if (getModel().controllerObjectInstance != null) {
+            c += GenerateDSPCodePlusPlusSubObj(getModel().controllerObjectInstance, ClassName, enableOnParent);
         }
         c += "//--------- <object calls> ----------//\n";
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
@@ -450,7 +450,7 @@ public class PatchViewCodegen extends PatchAbstractView {
             if (needsComma) {
                 c += ", ";
             }
-            Net n = getModel().GetNet(i);
+            Net n = controller.getNetFromInlet(i).getModel();
             if ((n != null) && (n.isValidNet())) {
                 if (i.getDataType().equals(n.getDataType())) {
                     if (n.NeedsLatch()
@@ -477,7 +477,7 @@ public class PatchViewCodegen extends PatchAbstractView {
             if (needsComma) {
                 c += ", ";
             }
-            Net n = getModel().GetNet(i);
+            Net n = controller.getNetFromOutlet(i).getModel();
             if ((n != null) && n.isValidNet()) {
                 if (n.IsFirstOutlet(i)) {
                     c += n.CName();
@@ -525,8 +525,8 @@ public class PatchViewCodegen extends PatchAbstractView {
 
     String GenerateMidiInCodePlusPlus() {
         String c = "";
-        if (getModel().controllerinstance != null) {
-            c += getModel().controllerinstance.GenerateCallMidiHandler();
+        if (getModel().controllerObjectInstance != null) {
+            c += getModel().controllerObjectInstance.GenerateCallMidiHandler();
         }
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
             c += o.GenerateCallMidiHandler();

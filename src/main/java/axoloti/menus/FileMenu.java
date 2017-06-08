@@ -27,11 +27,7 @@ import axoloti.PatchView;
 import axoloti.PatchViewSwing;
 import axoloti.dialogs.PatchBank;
 import axoloti.dialogs.PreferencesFrame;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvctest.TestController;
-import axoloti.mvctest.TestModel;
-import axoloti.mvctest.TestView;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.KeyUtils;
 import axoloti.utils.Preferences;
@@ -194,19 +190,6 @@ public class FileMenu extends JMenu {
             }
         });
         add(jMenuQuit);
-
-        JMenuItem jMenuMVCTest  = new JMenuItem("MVCTest");
-        jMenuMVCTest.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                // temporary test code....
-                AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-                TestModel testModel = new TestModel();
-                TestController testController = new TestController(testModel, documentRoot);              
-                TestView testView = new TestView(testController);
-            }
-        });
-        add(jMenuMVCTest);
 
         jMenuRegenerateObjects.setVisible(false);
         if (!Preferences.LoadPreferences().getExpertMode()) {

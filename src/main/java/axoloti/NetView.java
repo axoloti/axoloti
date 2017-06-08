@@ -1,7 +1,12 @@
 package axoloti;
 
 import axoloti.inlets.IInletInstanceView;
+import axoloti.inlets.InletInstance;
+import axoloti.mvc.AbstractController;
+import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
+import axoloti.outlets.OutletInstance;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,6 +15,7 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.geom.QuadCurve2D;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -21,19 +27,37 @@ public class NetView extends JComponent implements INetView {
     protected Net net;
     protected boolean selected = false;
 
+    NetController controller;
     PatchViewSwing patchView;
 
-    NetView(Net net, PatchViewSwing patchView) {
+    NetView(Net net, NetController controller, PatchViewSwing patchView) {
         this.net = net;
         this.patchView = patchView;
+        this.controller = controller;
 
         setSize(1, 1);
         setLocation(0, 0);
         setOpaque(false);
+        
+        PostConstructor();
     }
 
     public void PostConstructor() {
-        net.PostConstructor();
+        source.clear();
+        dest.clear();
+        // resolve inlet/outlet views
+        for(OutletInstance i : net.source) {
+            AxoObjectInstanceAbstract o = i.getObjectInstance();
+            IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
+            IOutletInstanceView o2 = ov.getOutletInstanceViews().getViewOfModel(i);
+            source.add(o2);
+        }
+        for(InletInstance i : net.dest) {
+            AxoObjectInstanceAbstract o = i.getObjectInstance();
+            IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
+            IInletInstanceView o2 = ov.getInletInstanceViews().getViewOfModel(i);
+            dest.add(o2);
+        }
     }
 
     public void setSelected(boolean selected) {
@@ -70,20 +94,6 @@ public class NetView extends JComponent implements INetView {
         g2.draw(curve);
     }
 
-    public void connectInlet(IInletInstanceView inlet) {
-        if (inlet == null) {
-            throw new RuntimeException("Cannot connect a null InletInstanceView to a NetView.");
-        }
-        dest.add(inlet);
-    }
-
-    public void connectOutlet(IOutletInstanceView outlet) {
-        if (outlet == null) {
-            throw new RuntimeException("Cannot connect a null OutInstanceView to a NetView.");
-        }
-        source.add(outlet);
-    }
-
     public void updateBounds() {
         int min_y = Integer.MAX_VALUE;
         int min_x = Integer.MAX_VALUE;
@@ -113,6 +123,10 @@ public class NetView extends JComponent implements INetView {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        paint1(g);
+    }
+
+    void paint1(Graphics g){
         float shadowOffset = 0.5f;
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -129,6 +143,7 @@ public class NetView extends JComponent implements INetView {
             }
 
             c = net.getDataType().GetColor();
+            if (source.isEmpty()) p0 = new Point(10,10); else
             p0 = source.get(0).getJackLocInCanvas();
         } else {
             if (selected) {
@@ -148,7 +163,8 @@ public class NetView extends JComponent implements INetView {
             } else if (!dest.isEmpty()) {
                 p0 = dest.get(0).getJackLocInCanvas();
             } else {
-                throw new Error("empty nets should not exist");
+                //throw new Error("empty nets should not exist");
+                p0 = new Point(0,0);
             }
         }
 
@@ -173,16 +189,33 @@ public class NetView extends JComponent implements INetView {
 
         }
     }
-
+    
     public Net getNet() {
         return net;
     }
 
+    @Override
     public ArrayList<IOutletInstanceView> getSourceViews() {
         return source;
     }
 
+    @Override
     public ArrayList<IInletInstanceView> getDestinationViews() {
         return dest;
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        if ((evt.getPropertyName().equals(NetController.NET_SOURCES))
+                || (evt.getPropertyName().equals(NetController.NET_DESTINATIONS))) {
+            PostConstructor();
+            updateBounds();
+            repaint();
+        }
+    }
+
+    @Override
+    public AbstractController getController() {
+        return controller;
     }
 }

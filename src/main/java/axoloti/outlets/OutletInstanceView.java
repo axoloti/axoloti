@@ -5,7 +5,6 @@ import axoloti.MainFrame;
 import axoloti.Theme;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.objectviews.IAxoObjectInstanceView;
 import components.LabelComponent;
 import components.SignalMetaDataIcon;
 import java.awt.Dimension;
@@ -75,12 +74,12 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
 
     @Override
     public void disconnect() {
-        getPatchView().getPatchController().disconnect(this);
+        getPatchView().getController().disconnect(this.getController().getModel());
     }
 
     @Override
     public void deleteNet() {
-        getPatchView().getPatchController().deleteNet(this);
+//        getPatchView().getPatchController().deleteNet(this.getController().getModel());
     }
 
     @Override

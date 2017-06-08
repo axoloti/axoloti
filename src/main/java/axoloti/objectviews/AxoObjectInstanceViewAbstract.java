@@ -9,7 +9,7 @@ import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
-import axoloti.mvc.AbstractView;
+import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
@@ -32,7 +32,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
-import java.util.Collection;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
@@ -40,7 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.Border;
 
-public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListener, MouseMotionListener, IAxoObjectInstanceView, AbstractView {
+public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListener, MouseMotionListener, IAxoObjectInstanceView {
 
     protected AxoObjectInstanceAbstract model;
     protected MouseListener ml;
@@ -264,22 +263,22 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
 
     @Override
     public PatchModel getPatchModel() {
-        return patchView.getPatchController().getModel();
+        return patchView.getController().getModel();
     }
 
     @Override
-    public Collection<IInletInstanceView> getInletInstanceViews() {
-        return new ArrayList<>();
+    public ArrayView<IInletInstanceView> getInletInstanceViews() {
+        return null;
     }
 
     @Override
-    public Collection<IOutletInstanceView> getOutletInstanceViews() {
-        return new ArrayList<>();
+    public ArrayView<IOutletInstanceView> getOutletInstanceViews() {
+        return null;
     }
 
     @Override
-    public ArrayList<IParameterInstanceView> getParameterInstanceViews() {
-        return new ArrayList<>();
+    public ArrayView<IParameterInstanceView> getParameterInstanceViews() {
+        return null;
     }
 
     protected void handleInstanceNameEditorAction() {
@@ -420,7 +419,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
         return null;
     }
-    
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_LOCATION)) {
@@ -428,18 +427,22 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
             setLocation(newValue.x, newValue.y);
             if (getPatchView() != null) {
                 repaint();
-                for (IInletInstanceView i : getInletInstanceViews()) {
-                    INetView n = getPatchView().GetNetView(i);
-                    if (n != null) {
-                        n.updateBounds();
-                        n.repaint();
+                if (getInletInstanceViews() != null) {
+                    for (IInletInstanceView i : getInletInstanceViews()) {
+                        INetView n = getPatchView().GetNetView(i);
+                        if (n != null) {
+                            n.updateBounds();
+                            n.repaint();
+                        }
                     }
                 }
-                for (IOutletInstanceView i : getOutletInstanceViews()) {
-                    INetView n = getPatchView().GetNetView(i);
-                    if (n != null) {
-                        n.updateBounds();
-                        n.repaint();
+                if (getOutletInstanceViews() != null) {
+                    for (IOutletInstanceView i : getOutletInstanceViews()) {
+                        INetView n = getPatchView().GetNetView(i);
+                        if (n != null) {
+                            n.updateBounds();
+                            n.repaint();
+                        }
                     }
                 }
             }

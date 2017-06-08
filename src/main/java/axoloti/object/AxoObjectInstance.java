@@ -23,12 +23,16 @@ import axoloti.PatchModel;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.attribute.*;
+import axoloti.attributedefinition.AxoAttribute;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.Frac32buffer;
+import axoloti.displays.Display;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.array.ArrayModel;
+import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
 import axoloti.utils.CodeGeneration;
@@ -51,8 +55,8 @@ import org.simpleframework.xml.strategy.Strategy;
 @Root(name = "obj")
 public class AxoObjectInstance extends AxoObjectInstanceAbstract implements ObjectModifiedListener {
 
-    public ArrayList<InletInstance> inletInstances = new ArrayList<InletInstance>();
-    public ArrayList<OutletInstance> outletInstances = new ArrayList<OutletInstance>();
+    public ArrayModel<InletInstance> inletInstances = new ArrayModel<InletInstance>();
+    public ArrayModel<OutletInstance> outletInstances = new ArrayModel<OutletInstance>();
     @Path("params")
     @ElementListUnion({
         @ElementList(entry = "frac32.u.map", type = ParameterInstanceFrac32UMap.class, inline = true, required = false),
@@ -69,7 +73,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         @ElementList(entry = "bin32", type = ParameterInstanceBin32.class, inline = true, required = false),
         @ElementList(entry = "bool32.tgl", type = ParameterInstanceBin1.class, inline = true, required = false),
         @ElementList(entry = "bool32.mom", type = ParameterInstanceBin1Momentary.class, inline = true, required = false)})
-    public ArrayList<ParameterInstance> parameterInstances = new ArrayList<ParameterInstance>();
+    public ArrayModel<ParameterInstance> parameterInstances = new ArrayModel<ParameterInstance>();
     @Path("attribs")
     @ElementListUnion({
         @ElementList(entry = "objref", type = AttributeInstanceObjRef.class, inline = true, required = false),
@@ -79,8 +83,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
         @ElementList(entry = "spinner", type = AttributeInstanceSpinner.class, inline = true, required = false),
         @ElementList(entry = "file", type = AttributeInstanceSDFile.class, inline = true, required = false),
         @ElementList(entry = "text", type = AttributeInstanceTextEditor.class, inline = true, required = false)})
-    public ArrayList<AttributeInstance> attributeInstances = new ArrayList<AttributeInstance>();
-    public ArrayList<DisplayInstance> displayInstances = new ArrayList<DisplayInstance>();
+    public ArrayModel<AttributeInstance> attributeInstances = new ArrayModel<>();
+    public ArrayModel<DisplayInstance> displayInstances = new ArrayModel<DisplayInstance>();
 
     public AxoObjectInstance() {
         super();
@@ -88,8 +92,28 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     public AxoObjectInstance(AxoObject type, PatchModel patchModel, String InstanceName1, Point location) {
         super(type, patchModel, InstanceName1, location);
+        for (AxoAttribute a : getType().attributes) {
+            attributeInstances.add(a.CreateInstance(this));
+        }
+        for (Parameter a : getType().params) {
+            parameterInstances.add(a.CreateInstance(this));
+        }
+        for (Inlet a : getType().inlets) {
+            inletInstances.add(a.CreateInstance(this));
+        }
+        for (Outlet a : getType().outlets) {
+            outletInstances.add(a.CreateInstance(this));
+        }
+        for (Display a : getType().displays) {
+            displayInstances.add(a.CreateInstance(this));
+        }
     }
-
+   
+    @Override
+    public void PostConstructor() {
+        super.PostConstructor();
+    }
+    
     @Override
     public boolean setInstanceName(String s) {
         boolean result = super.setInstanceName(s);
@@ -467,6 +491,7 @@ typedef struct ui_object {
 
     @Override
     public boolean PromoteToOverloadedObj() {
+        /* FIXME
         if (getType() instanceof AxoObjectFromPatch) {
             return false;
         }
@@ -541,7 +566,7 @@ typedef struct ui_object {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.FINE, "promoting " + this + " to " + selected);
             getPatchModel().ChangeObjectInstanceType(this, selected);
             return true;
-        }
+        }*/
         return false;
     }
 
@@ -574,7 +599,7 @@ typedef struct ui_object {
         return files;
     }
 
-    public void ConvertToPatchPatcher() {
+    public void ConvertToPatchPatcher() {/*
         try {
             ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/patcher", null);
             assert (!ol.isEmpty());
@@ -587,15 +612,15 @@ typedef struct ui_object {
             oi.initSubpatchFrame();
             oi.updateObj();
             getPatchModel().transferState(this, oi);
-            getPatchModel().delete(this);
+            //getPatchModel().delete(this);
             getPatchModel().setDirty();
             oi.setInstanceName(getInstanceName());
         } catch (Exception ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Failed to convert to patch/patcher", ex);
-        }
+        }*/
     }
 
-    public void ConvertToEmbeddedObj() {
+    public void ConvertToEmbeddedObj() {/*
         try {
             ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object", null);
             assert (!ol.isEmpty());
@@ -611,11 +636,11 @@ typedef struct ui_object {
             oi.setInstanceName(iname);
             getPatchModel().setDirty();
             getPatchModel().transferState(this, oi);
-            getPatchModel().delete(this);
+            //getPatchModel().delete(this);
             getPatchModel().setDirty();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
 
     @Persist
@@ -638,8 +663,9 @@ typedef struct ui_object {
     public Integer editorActiveTabIndex;
     public boolean deferredObjTypeUpdate = false;
 
-    public void updateObj() {
+    public void updateObj() {/*
         getPatchModel().ChangeObjectInstanceType(this, this.getType());
+            */
     }
 
     @Override
@@ -672,52 +698,53 @@ typedef struct ui_object {
         }
     }
 
-    public ArrayList<InletInstance> getInletInstances() {
+    @Override
+    public ArrayModel<InletInstance> getInletInstances() {
         return this.inletInstances;
     }
 
     @Override
-    public ArrayList<OutletInstance> getOutletInstances() {
+    public ArrayModel<OutletInstance> getOutletInstances() {
         return this.outletInstances;
     }
 
     @Override
-    public ArrayList<ParameterInstance> getParameterInstances() {
+    public ArrayModel<ParameterInstance> getParameterInstances() {
         return this.parameterInstances;
     }
 
     @Override
-    public ArrayList<AttributeInstance> getAttributeInstances() {
+    public ArrayModel<AttributeInstance> getAttributeInstances() {
         return this.attributeInstances;
     }
 
     @Override
-    public ArrayList<DisplayInstance> getDisplayInstances() {
+    public ArrayModel<DisplayInstance> getDisplayInstances() {
         return this.displayInstances;
     }
 
     @Override
-    public void setInletInstances(ArrayList<InletInstance> inletInstances) {
+    public void setInletInstances(ArrayModel<InletInstance> inletInstances) {
         this.inletInstances = inletInstances;
     }
 
     @Override
-    public void setOutletInstances(ArrayList<OutletInstance> outletInstances) {
+    public void setOutletInstances(ArrayModel<OutletInstance> outletInstances) {
         this.outletInstances = outletInstances;
     }
 
     @Override
-    public void setParameterInstances(ArrayList<ParameterInstance> parameterInstances) {
+    public void setParameterInstances(ArrayModel<ParameterInstance> parameterInstances) {
         this.parameterInstances = parameterInstances;
     }
 
     @Override
-    public void setAttributeInstances(ArrayList<AttributeInstance> attributeInstances) {
+    public void setAttributeInstances(ArrayModel<AttributeInstance> attributeInstances) {
         this.attributeInstances = attributeInstances;
     }
 
     @Override
-    public void setDisplayInstances(ArrayList<DisplayInstance> displayInstances) {
+    public void setDisplayInstances(ArrayModel<DisplayInstance> displayInstances) {
         this.displayInstances = displayInstances;
     }
 

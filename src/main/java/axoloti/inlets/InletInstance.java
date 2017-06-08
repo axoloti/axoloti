@@ -106,16 +106,8 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
         if (axoObj.getPatchModel() == null) {
             return false;
         }
-
-        return (axoObj.getPatchModel().GetNet(this) != null);
-    }
-
-    public Net disconnect() {
-        return axoObj.getPatchModel().disconnect(this);
-    }
-
-    public Net deleteNet() {
-        return axoObj.getPatchModel().delete(axoObj.getPatchModel().GetNet(this));
+        return false;
+        //FIXME: return (axoObj.getPatchModel().GetNet(this) != null);
     }
 
     @Override

@@ -25,6 +25,7 @@ import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
+import axoloti.mvc.array.ArrayModel;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.CharEscape;
@@ -105,6 +106,9 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         this.y = location.y;
         this.patchModel = patchModel;
     }
+    
+    public void PostConstructor() {
+    }
 
     public void setType(AxoObjectAbstract type) {
         this.type = type;
@@ -132,8 +136,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
             }
         }
         this.InstanceName = InstanceName;
-        setDirty(true);
-        getPatchModel().setDirty();
 
         firePropertyChange(
             ObjectInstanceController.OBJ_INSTANCENAME,
@@ -221,24 +223,24 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return "";
     }
 
-    public Collection<InletInstance> getInletInstances() {
-        return new ArrayList<>();
+    public ArrayModel<InletInstance> getInletInstances() {
+        return new ArrayModel<>();
     }
 
-    public Collection<OutletInstance> getOutletInstances() {
-        return new ArrayList<>();
+    public ArrayModel<OutletInstance> getOutletInstances() {
+        return new ArrayModel<>();
     }
 
-    public ArrayList<ParameterInstance> getParameterInstances() {
-        return new ArrayList<>();
+    public ArrayModel<ParameterInstance> getParameterInstances() {
+        return new ArrayModel();
     }
 
-    public ArrayList<AttributeInstance> getAttributeInstances() {
-        return new ArrayList<>();
+    public ArrayModel getAttributeInstances() {
+        return new ArrayModel();
     }
 
-    public ArrayList<DisplayInstance> getDisplayInstances() {
-        return new ArrayList<>();
+    public ArrayModel<DisplayInstance> getDisplayInstances() {
+        return new ArrayModel();
     }
 
     public InletInstance GetInletInstance(String n) {
@@ -373,32 +375,35 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         }
     }
 
+    @Deprecated
     private boolean isDirty = false;
 
+    @Deprecated
     public void setDirty(boolean dirty) {
         this.isDirty = dirty;
     }
 
+    @Deprecated
     public boolean isDirty() {
         return isDirty;
     }
 
-    public void setDisplayInstances(ArrayList<DisplayInstance> displayInstances) {
+    public void setDisplayInstances(ArrayModel<DisplayInstance> displayInstances) {
     }
 
-    public void setAttributeInstances(ArrayList<AttributeInstance> Instances) {
+    public void setAttributeInstances(ArrayModel<AttributeInstance> Instances) {
     }
 
-    public void setInletInstances(ArrayList<InletInstance> inletInstances) {
+    public void setInletInstances(ArrayModel<InletInstance> inletInstances) {
     }
 
-    public void setOutletInstances(ArrayList<OutletInstance> outletInstances) {
+    public void setOutletInstances(ArrayModel<OutletInstance> outletInstances) {
     }
 
-    public void setParameterInstances(ArrayList<ParameterInstance> parameterInstances) {
+    public void setParameterInstances(ArrayModel<ParameterInstance> parameterInstances) {
     }
 
     @Override
     public abstract ObjectInstanceController createController(AbstractDocumentRoot documentRoot);
-    
+
 }

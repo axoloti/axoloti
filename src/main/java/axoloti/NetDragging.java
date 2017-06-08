@@ -32,12 +32,12 @@ import javax.swing.SwingUtilities;
  */
 public class NetDragging extends NetView {
 
-    public NetDragging(PatchViewSwing patchView) {
-        this(patchView.getPatchController().getNetDraggingModel(), patchView);
+    public NetDragging(NetController controller, PatchViewSwing patchView) {
+        this(controller.getModel(), controller, patchView);
     }
 
-    public NetDragging(Net n, PatchViewSwing patchView) {
-        super(n, patchView);
+    public NetDragging(Net n, NetController controller, PatchViewSwing patchView) {
+        super(n, controller, patchView);
         this.net = n;
     }
 
@@ -50,8 +50,7 @@ public class NetDragging extends NetView {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    protected void paint1(Graphics g) {
         float shadowOffset = 0.5f;
 
         Graphics2D g2 = (Graphics2D) g;
@@ -140,21 +139,4 @@ public class NetDragging extends NetView {
                 (int) CtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * padding));
     }
 
-    @Override
-    public void connectInlet(IInletInstanceView inlet) {
-        if (inlet == null) {
-            throw new RuntimeException("Cannot connect a null InletInstanceView to a NetView.");
-        }
-        dest.add(inlet);
-        net.connectInlet(inlet.getInletInstance());
-    }
-
-    @Override
-    public void connectOutlet(IOutletInstanceView outlet) {
-        if (outlet == null) {
-            throw new RuntimeException("Cannot connect a null OutInstanceView to a NetView.");
-        }
-        source.add(outlet);
-        net.connectOutlet(outlet.getOutletInstance());
-    }
 }

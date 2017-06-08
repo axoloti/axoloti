@@ -126,7 +126,6 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
         if (!model.getCommentText().equals(s)) {
             model.setCommentText(s);
             model.setDirty(true);
-            getPatchModel().setDirty();
         }
     }
 }

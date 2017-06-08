@@ -9,6 +9,8 @@ import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
@@ -29,6 +31,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -168,18 +171,18 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public Collection<IInletInstanceView> getInletInstanceViews() {
-        return new ArrayList<>();
+    public ArrayView<IInletInstanceView> getInletInstanceViews() {
+        return null;
     }
 
     @Override
-    public Collection<IOutletInstanceView> getOutletInstanceViews() {
-        return new ArrayList<>();
+    public ArrayView<IOutletInstanceView> getOutletInstanceViews() {
+        return null;
     }
 
     @Override
-    public ArrayList<IParameterInstanceView> getParameterInstanceViews() {
-        return new ArrayList<>();
+    public ArrayView<IParameterInstanceView> getParameterInstanceViews() {
+        return null;
     }
 
     @Override
@@ -329,5 +332,15 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     @Override
     public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
         return null;
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public AbstractController getController() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

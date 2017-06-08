@@ -1,17 +1,16 @@
 package axoloti;
 
 import axoloti.inlets.IInletInstanceView;
+import axoloti.mvc.AbstractView;
 import axoloti.outlets.IOutletInstanceView;
 import java.util.ArrayList;
 
-public interface INetView {
+public interface INetView extends AbstractView {
 
-    public void connectInlet(IInletInstanceView inlet);
-
-    public void connectOutlet(IOutletInstanceView outlet);
-
+    @Deprecated
     public void updateBounds();
 
+    @Deprecated
     public Net getNet();
 
     public void PostConstructor();
@@ -26,6 +25,7 @@ public interface INetView {
 
     public void setVisible(boolean isVisible);
 
+    @Deprecated
     public void repaint();
 
     public void validate();

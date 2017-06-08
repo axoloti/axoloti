@@ -1,8 +1,6 @@
 package axoloti;
 
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractView;
-import java.beans.PropertyChangeEvent;
 
 /**
  *
@@ -17,20 +15,15 @@ public abstract class PatchAbstractView implements AbstractView {
     }
 
     @Override
-    public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public PatchController getController() {
+        return controller;
     }
 
-    @Override
-    public AbstractController getController() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
     PatchFrame patchFrame;
 
     public void setPatchFrame(PatchFrame patchFrame) {
         this.patchFrame = patchFrame;
-    }   
+    }
 
     public PatchFrame getPatchFrame() {
         return patchFrame;

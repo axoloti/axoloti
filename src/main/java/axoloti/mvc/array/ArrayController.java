@@ -5,40 +5,43 @@ import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
  * @author jtaelman
  */
-public class ArrayController extends AbstractController<ArrayModel, ArrayView> {
+public class ArrayController<T extends AbstractController> extends AbstractController<ArrayModel, ArrayView> implements Iterable<T> {
 
     static final String ARRAY = "Array";
 
-    ArrayList<AbstractController> subcontrollers = new ArrayList<>();
+    ArrayList<T> subcontrollers = new ArrayList<>();
 
     public ArrayController(ArrayModel model, AbstractDocumentRoot documentRoot) {
         super(model, documentRoot);
         ArrayList<AbstractModel> am = model.getArray();
         for (AbstractModel m : am) {
-            subcontrollers.add(m.createController(documentRoot));
+            subcontrollers.add((T)m.createController(documentRoot));
         }
     }
 
-    public void add(AbstractModel m) {
-        subcontrollers.add(m.createController(getDocumentRoot()));
+    public T add(AbstractModel m) {
+        AbstractController c = m.createController(getDocumentRoot());
+        subcontrollers.add((T)c);
         ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
         n.add(m);
         setModelUndoableProperty(ARRAY, n);
+        return (T)c;
     }
 
-    void removeLast() {
-        subcontrollers.remove(subcontrollers.size() - 1);
+    public boolean remove(AbstractModel m) {
         ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
-        n.remove(n.size() - 1);
-        setModelUndoableProperty(ARRAY, n);
+        boolean r = n.remove(m);
+        if (r) setModelUndoableProperty(ARRAY, n);
+        return r;
     }
 
-    void updateSubcontrollers() {
+    public void syncControllers() {
         ArrayList<AbstractController> subcontrollers2 = (ArrayList<AbstractController>) subcontrollers.clone();
         subcontrollers = new ArrayList<>();
         for (Object o : getModel().array) {
@@ -53,7 +56,7 @@ public class ArrayController extends AbstractController<ArrayModel, ArrayView> {
             if (ctrl == null) {
                 ctrl = om.createController(getDocumentRoot());
             }
-            subcontrollers.add(ctrl);
+            subcontrollers.add((T)ctrl);
         }
     }
 
@@ -66,8 +69,13 @@ public class ArrayController extends AbstractController<ArrayModel, ArrayView> {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        updateSubcontrollers();
+        syncControllers();
         super.propertyChange(evt);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return subcontrollers.iterator();
     }
 
 }

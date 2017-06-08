@@ -116,7 +116,7 @@ public class PatchViewPiccolo extends PatchView {
                     || ((e.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(e))) {
                 Point patchPosition = asPoint(e.getInputManager().getCurrentCanvasPosition());
                 getCanvas().getCamera().getViewTransform().inverseTransform(patchPosition, patchPosition);
-                getPatchController().AddObjectInstance(
+                getController().AddObjectInstance(
                         MainFrame.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), patchPosition);
                 e.setHandled(true);
             } else if ((e.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(e)) {
@@ -280,9 +280,9 @@ public class PatchViewPiccolo extends PatchView {
 
     @Override
     public void PostConstructor() {
-        getPatchController().getModel().PostContructor();
+        getController().getModel().PostContructor();
         modelChanged(false);
-        getPatchController().getModel().PromoteOverloading(true);
+        getController().getModel().PromoteOverloading(true);
         ShowPreset(0);
         SelectNone();
     }
@@ -361,14 +361,12 @@ public class PatchViewPiccolo extends PatchView {
     public void add(IAxoObjectInstanceView v) {
         PatchPNode node = (PatchPNode) v;
         getCanvas().getLayer().addChild(node);
-        objectInstanceViews.add(v);
         addFocusables(node.getChildrenIterator());
     }
 
     public void remove(IAxoObjectInstanceView v) {
         PatchPNode node = (PatchPNode) v;
         getCanvas().getLayer().removeChild(node);
-        objectInstanceViews.remove(v);
         removeFocusables(node.getChildrenIterator());
     }
 
@@ -376,7 +374,6 @@ public class PatchViewPiccolo extends PatchView {
         for (IAxoObjectInstanceView objectView : objectInstanceViews) {
             getCanvas().getLayer().removeChild((PatchPNode) objectView);
         }
-        objectInstanceViews.clear();
     }
 
     public void removeAllNetViews() {
@@ -389,11 +386,9 @@ public class PatchViewPiccolo extends PatchView {
                 oiv.repaint();
             }
         }
-        netViews.clear();
     }
 
     public void add(INetView v) {
-        netViews.add(v);
         PatchPNode node = (PatchPNode) v;
         getCanvas().getLayer().addChild(node);
 //        node.setVisible(false);
@@ -446,10 +441,10 @@ public class PatchViewPiccolo extends PatchView {
             canvasPosition = asPoint(getCanvas().getRoot().getDefaultInputManager().getCurrentCanvasPosition());
         }
         if (osf == null) {
-            osf = new PObjectSearchFrame(getPatchController());
+            osf = new PObjectSearchFrame(getController());
         }
         osf.Launch(patchPosition, o, searchString);
-        Point ps = getPatchController().getViewLocationOnScreen();
+        Point ps = getController().getViewLocationOnScreen();
         Point patchLocClipped = osf.clipToStayWithinScreen(canvasPosition);
         osf.setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
         osf.setVisible(true);
@@ -459,7 +454,7 @@ public class PatchViewPiccolo extends PatchView {
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         SelectNone();
         getCanvas().getCamera().getViewTransform().inverseTransform(pos, pos);
-        getPatchController().paste(v,
+        getController().paste(v,
                 pos,
                 restoreConnectionsToExternalOutlets);
     }

@@ -5,6 +5,7 @@ import axoloti.Theme;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
+import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
@@ -17,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BoxLayout;
@@ -126,13 +126,13 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
     private Map<OutletInstance, IOutletInstanceView> outletInstanceViews = new HashMap<>();
 
     @Override
-    public Collection<IInletInstanceView> getInletInstanceViews() {
-        return inletInstanceViews.values();
+    public ArrayView<IInletInstanceView> getInletInstanceViews() {
+        return null; //inletInstanceViews.values();
     }
 
     @Override
-    public Collection<IOutletInstanceView> getOutletInstanceViews() {
-        return outletInstanceViews.values();
+    public ArrayView<IOutletInstanceView> getOutletInstanceViews() {
+        return null; //outletInstanceViews.values();
     }
 
     @Override

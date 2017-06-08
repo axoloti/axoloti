@@ -167,7 +167,7 @@ public class PatchViewSwing extends PatchView {
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(ke))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(ke))) {
-                    getPatchController().AddObjectInstance(MainFrame.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
+                    getController().AddObjectInstance(MainFrame.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
                     ke.consume();
                 } else if ((ke.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = Layers.getMousePosition();
@@ -382,10 +382,10 @@ public class PatchViewSwing extends PatchView {
 
     @Override
     public void PostConstructor() {
-        getPatchController().getModel().PostContructor();
+        super.PostConstructor();
         Layers.setPreferredSize(new Dimension(5000, 5000));
-        modelChanged(false);
-        getPatchController().getModel().PromoteOverloading(true);
+//        modelChanged(false);
+//        getPatchController().getModel().PromoteOverloading(true);
         ShowPreset(0);
         SelectNone();
     }
@@ -426,7 +426,7 @@ public class PatchViewSwing extends PatchView {
     }
 
     public void AdjustSize() {
-        Dimension s = getPatchController().GetSize();
+        Dimension s = getController().GetSize();
         clampLayerSize(s);
         if (!Layers.getSize().equals(s)) {
             Layers.setSize(s);
@@ -479,29 +479,33 @@ public class PatchViewSwing extends PatchView {
     @Override
     public void remove(IAxoObjectInstanceView v) {
         objectLayerPanel.remove((AxoObjectInstanceViewAbstract) v);
-        objectInstanceViews.remove(v);
     }
 
     @Override
     public void add(IAxoObjectInstanceView v) {
-        objectLayerPanel.add((AxoObjectInstanceViewAbstract) v);
-        objectInstanceViews.add(v);
+        if (objectLayerPanel != null) {
+            objectLayerPanel.add((AxoObjectInstanceViewAbstract) v);
+        }
     }
 
     @Override
     public void removeAllObjectViews() {
-        objectLayerPanel.removeAll();
-        objectInstanceViews.clear();
+        if (objectLayerPanel != null) {
+            objectLayerPanel.removeAll();
+        }
     }
 
     @Override
     public void removeAllNetViews() {
-        netViews.clear();
-        netLayerPanel.removeAll();
+        if (netLayerPanel != null) {
+            netLayerPanel.removeAll();
+        }
     }
 
     public void add(INetView view) {
-        netViews.add(view);
-        netLayerPanel.add((NetView) view);
+        if (netLayerPanel != null) {
+            netLayerPanel.add((NetView) view);
+        }
     }
+
 }

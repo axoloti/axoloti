@@ -361,7 +361,7 @@ public class AxoObject extends AxoObjectAbstract {
 
         AxoObjectInstance o = new AxoObjectInstance(this, patchModel, InstanceName1, location);
         if (patchModel != null) {
-            patchModel.getObjectInstances().add(o);
+            patchModel.addObjectInstance(o);
         }
 
         return o;

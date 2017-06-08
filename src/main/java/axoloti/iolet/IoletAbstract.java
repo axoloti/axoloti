@@ -3,13 +3,17 @@ package axoloti.iolet;
 import axoloti.INetView;
 import axoloti.MainFrame;
 import axoloti.Net;
+import axoloti.NetController;
 import axoloti.NetDragging;
 import axoloti.PatchModel;
 import axoloti.PatchViewSwing;
 import axoloti.inlets.IInletInstanceView;
+import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
+import axoloti.mvc.AbstractView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.outlets.IOutletInstanceView;
+import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
 import java.awt.Component;
 import java.awt.IllegalComponentStateException;
@@ -24,7 +28,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import org.simpleframework.xml.Attribute;
 
-public abstract class IoletAbstract extends JPanel implements MouseListener, MouseMotionListener, IIoletAbstract {
+public abstract class IoletAbstract extends JPanel implements MouseListener, MouseMotionListener, IIoletAbstract, AbstractView {
 
     @Deprecated
     @Attribute(required = false)
@@ -109,13 +113,16 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
             setHighlighted(true);
             if (!axoObj.isLocked()) {
                 if (dragnet == null) {
-                    dragnet = new NetDragging(getPatchView());
+                    Net dnet = new Net(getPatchModel());
+                    NetController dragNetController = dnet.createController(null);
                     dragtarget = null;
                     if (this instanceof InletInstanceView) {
-                        dragnet.connectInlet((IInletInstanceView) this);
+                        dragNetController.connectInlet( (InletInstance)getController().getModel());
                     } else {
-                        dragnet.connectOutlet((IOutletInstanceView) this);
+                        dragNetController.connectOutlet((OutletInstance)getController().getModel());
                     }
+                    dragnet = new NetDragging(dnet, dragNetController, getPatchView());
+                    dragNetController.addView(dragnet);
                 }
                 dragnet.setVisible(true);
                 if (getPatchView() != null) {
@@ -145,21 +152,21 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
 
                 if (this != c) {
                     if (IoletAbstract.this instanceof InletInstanceView) {
-                        n = getPatchView().getPatchController().disconnect((InletInstanceView) IoletAbstract.this);
+                        n = getPatchView().getController().disconnect((InletInstance) getController().getModel());
                     } else {
-                        n = getPatchView().getPatchController().disconnect((OutletInstanceView) IoletAbstract.this);
+                        n = getPatchView().getController().disconnect((OutletInstance) getController().getModel());
                     }
                 }
             } else {
                 if (this instanceof InletInstanceView) {
                     if (dragtarget instanceof InletInstanceView) {
-                        n = getPatchView().getPatchController().AddConnection(((InletInstanceView) IoletAbstract.this), ((InletInstanceView) dragtarget));
+                        n = getPatchView().getController().AddConnection(((InletInstance) getController().getModel()), ((InletInstanceView) dragtarget).getController().getModel());
                     } else if (dragtarget instanceof OutletInstanceView) {
-                        n = getPatchView().getPatchController().AddConnection(((InletInstanceView) IoletAbstract.this), ((OutletInstanceView) dragtarget));
+                        n = getPatchView().getController().AddConnection(((InletInstance) getController().getModel()), ((OutletInstanceView) dragtarget).getController().getModel());
                     }
                 } else if (this instanceof OutletInstanceView) {
                     if (dragtarget instanceof InletInstanceView) {
-                        n = getPatchView().getPatchController().AddConnection(((InletInstanceView) dragtarget), ((OutletInstanceView) IoletAbstract.this));
+                        n = getPatchView().getController().AddConnection(((InletInstanceView) dragtarget).getController().getModel(), ((OutletInstanceView) IoletAbstract.this).getController().getModel());
                     }
                 }
                 if (axoObj.getPatchModel().PromoteOverloading(false)) {

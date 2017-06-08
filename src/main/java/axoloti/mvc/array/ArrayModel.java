@@ -12,7 +12,7 @@ import java.util.ListIterator;
  *
  * @author jtaelman
  */
-public class ArrayModel<T extends AbstractModel> extends AbstractModel implements List<T> {
+public class ArrayModel<T extends AbstractModel> extends AbstractModel implements List<T>, Iterable<T> {
 
     ArrayList<T> array = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class ArrayModel<T extends AbstractModel> extends AbstractModel implement
 
     @Override
     public Object[] toArray() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return array.toArray();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class ArrayModel<T extends AbstractModel> extends AbstractModel implement
 
     @Override
     public boolean remove(Object o) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return array.remove(o);
     }
 
     @Override
@@ -101,12 +101,12 @@ public class ArrayModel<T extends AbstractModel> extends AbstractModel implement
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        array.clear();
     }
 
     @Override
     public T get(int index) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return array.get(index);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class ArrayModel<T extends AbstractModel> extends AbstractModel implement
 
     @Override
     public void add(int index, T element) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        array.add(index, element);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class ArrayModel<T extends AbstractModel> extends AbstractModel implement
 
     @Override
     public int indexOf(Object o) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return array.indexOf(o);
     }
 
     @Override
@@ -136,12 +136,12 @@ public class ArrayModel<T extends AbstractModel> extends AbstractModel implement
 
     @Override
     public ListIterator listIterator() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return array.listIterator();
     }
 
     @Override
     public ListIterator listIterator(int index) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return array.listIterator(index);
     }
 
     @Override

@@ -101,9 +101,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             public void actionPerformed(ActionEvent e) {
                 PatchView pv = new PatchViewSwing(patchController);
                 patchController.addView(pv);
-                PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());
-                patchView.setPatchFrame(pf);
-                patchView.PostConstructor();
+                PatchFrame pf = new PatchFrame(patchController, pv, QCmdProcessor.getQCmdProcessor());
+                pv.setPatchFrame(pf);
+                pv.PostConstructor();
                 pf.setVisible(true);
             }
         });
@@ -348,7 +348,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public boolean AskClose() {
-        if (getPatchModel().isDirty() && getPatchModel().container() == null) {
+        // FIXME: only ask if document is dirty
+        if (getPatchModel().container() == null) {
             Object[] options = {"Save",
                 "Don't save",
                 "Cancel"};
@@ -934,13 +935,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuItemNotesActionPerformed
 
     private void jMenuItemSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSettingsActionPerformed
+        // Needs review: why should edit->settings give to access to the object editor???
         IAxoObjectInstanceView selObj = null;
-        List<IAxoObjectInstanceView> oi = getPatchView().getObjectInstanceViews();
-        if (oi != null) {
-            for (IAxoObjectInstanceView i : oi) {
-                if (i.isSelected() && i instanceof AxoObjectInstanceView) {
-                    selObj = i;
-                }
+        for (IAxoObjectInstanceView i : getPatchView().getObjectInstanceViews()) {
+            if (i.isSelected() && i instanceof AxoObjectInstanceView) {
+                selObj = i;
             }
         }
 

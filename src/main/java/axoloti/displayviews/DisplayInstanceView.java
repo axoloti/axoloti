@@ -50,54 +50,6 @@ public abstract class DisplayInstanceView extends JPanel implements IDisplayInst
     @Override
     public abstract void updateV();
 
-    public static DisplayInstanceView createView(DisplayInstanceController controller, IDisplayInstanceView obj) {
-        DisplayInstance model = controller.getModel();
-        DisplayInstanceView view;
-        if (model instanceof DisplayInstanceBool32) {
-            view = new DisplayInstanceViewBool32((DisplayInstanceBool32) model, controller);
-        } else if (model instanceof DisplayInstanceFrac32SChart) {
-            view = new DisplayInstanceViewFrac32SChart((DisplayInstanceFrac32SChart) model, controller);
-        } else if (model instanceof DisplayInstanceFrac32SDial) {
-            view = new DisplayInstanceViewFrac32SDial((DisplayInstanceFrac32SDial) model, controller);
-        } else if (model instanceof DisplayInstanceFrac32UChart) {
-            view = new DisplayInstanceViewFrac32UChart((DisplayInstanceFrac32UChart) model, controller);
-        } else if (model instanceof DisplayInstanceFrac32UDial) {
-            view = new DisplayInstanceViewFrac32UDial((DisplayInstanceFrac32UDial) model, controller);
-        } else if (model instanceof DisplayInstanceFrac32VBar) {
-            view = new DisplayInstanceViewFrac32VBar((DisplayInstanceFrac32VBar) model, controller);
-        } else if (model instanceof DisplayInstanceFrac32VBarDB) {
-            view = new DisplayInstanceViewFrac32VBarDB((DisplayInstanceFrac32VBarDB) model, controller);
-        } else if (model instanceof DisplayInstanceFrac32VU) {
-            view = new DisplayInstanceViewFrac32VU((DisplayInstanceFrac32VU) model, controller);
-        } else if (model instanceof DisplayInstanceFrac4ByteVBar) {
-            view = new DisplayInstanceViewFrac4ByteVBar((DisplayInstanceFrac4ByteVBar) model, controller);
-        } else if (model instanceof DisplayInstanceFrac4UByteVBar) {
-            view = new DisplayInstanceViewFrac4UByteVBar((DisplayInstanceFrac4UByteVBar) model, controller);
-        } else if (model instanceof DisplayInstanceFrac4UByteVBarDB) {
-            view = new DisplayInstanceViewFrac4UByteVBarDB((DisplayInstanceFrac4UByteVBarDB) model, controller);
-        } else if (model instanceof DisplayInstanceFrac8S128VBar) {
-            view = new DisplayInstanceViewFrac8S128VBar((DisplayInstanceFrac8S128VBar) model, controller);
-        } else if (model instanceof DisplayInstanceFrac8U128VBar) {
-            view = new DisplayInstanceViewFrac8U128VBar((DisplayInstanceFrac8U128VBar) model, controller);
-        } else if (model instanceof DisplayInstanceInt32Bar16) {
-            view = new DisplayInstanceViewInt32Bar16((DisplayInstanceInt32Bar16) model, controller);
-        } else if (model instanceof DisplayInstanceInt32Bar32) {
-            view = new DisplayInstanceViewInt32Bar32((DisplayInstanceInt32Bar32) model, controller);
-        } else if (model instanceof DisplayInstanceInt32HexLabel) {
-            view = new DisplayInstanceViewInt32HexLabel((DisplayInstanceInt32HexLabel) model, controller);
-        } else if (model instanceof DisplayInstanceInt32Label) {
-            view = new DisplayInstanceViewInt32Label((DisplayInstanceInt32Label) model, controller);
-        } else if (model instanceof DisplayInstanceNoteLabel) {
-            view = new DisplayInstanceViewNoteLabel((DisplayInstanceNoteLabel) model, controller);
-        } else if (model instanceof DisplayInstanceVScale) {
-            view = new DisplayInstanceViewVScale((DisplayInstanceVScale) model, controller);
-        } else {
-            view = null;
-        }
-        view.PostConstructor();
-        controller.addView(view);
-        return view;
-    }    
 
     @Override
     public DisplayInstanceController getController() {

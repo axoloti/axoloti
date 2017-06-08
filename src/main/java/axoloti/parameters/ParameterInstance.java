@@ -326,6 +326,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         return name;
     }
 
+    @Deprecated
     public void SetDirty() {
         // propagate dirty flag to patch if there is one
         if (getObjectInstance().getPatchModel() != null) {

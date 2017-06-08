@@ -22,7 +22,7 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
         this.model = model;
         this.documentRoot = documentRoot;
         if (documentRoot == null) {
-            System.out.println("documentroot is null");
+            //System.out.println("documentroot is null");
         }
     }
 
@@ -108,7 +108,7 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
 
     public void setModelUndoableProperty(String propertyName, Object newValue) {
         if (getUndoManager() == null) {
-            System.out.println("no undomanager");
+            //System.out.println("no undomanager");
             setModelProperty(propertyName, newValue);
         } else {
             Object old_val = getModelProperty(propertyName);

@@ -67,12 +67,12 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
 
     @Override
     public void disconnect() {
-        getPatchView().getPatchController().disconnect(this);
+        getPatchView().getController().disconnect(getController().getModel());
     }
 
     @Override
     public void deleteNet() {
-        getPatchView().getPatchController().deleteNet(this);
+        getPatchView().getController().delete(getPatchView().getController().getNetFromInlet(this.getController().getModel()));
     }
 
     @Override

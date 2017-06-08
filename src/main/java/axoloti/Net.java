@@ -20,6 +20,8 @@ package axoloti;
 import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.InletInstance;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.outlets.OutletInstance;
 import axoloti.piccolo.PNetView;
@@ -34,7 +36,7 @@ import org.simpleframework.xml.*;
  * @author Johannes Taelman
  */
 @Root(name = "net")
-public class Net {
+public class Net extends AbstractModel {
 
     @ElementList(inline = true, required = false)
     ArrayList<OutletInstance> source;
@@ -98,19 +100,6 @@ public class Net {
         }
         source = source2;
         dest = dest2;
-    }
-
-    public void connectInlet(InletInstance inlet) {
-        if (inlet.getObjectInstance().patchModel != patchModel) {
-            return;
-        }
-        dest.add(inlet);
-    }
-
-    public void connectOutlet(OutletInstance outlet) {
-        if (outlet.getObjectInstance().patchModel == patchModel) {
-            source.add(outlet);
-        }
     }
 
     public boolean isValidNet() {
@@ -204,13 +193,13 @@ public class Net {
         return "net" + i;
     }
 
-    public INetView createView(PatchView patchView) {
+    public INetView createView(NetController controller, PatchView patchView) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             INetView n = new PNetView(this, (PatchViewPiccolo) patchView);
             n.PostConstructor();
             return n;
         } else {
-            INetView n = new NetView(this, (PatchViewSwing) patchView);
+            INetView n = new NetView(this, controller, (PatchViewSwing) patchView);
             n.PostConstructor();
             return n;
         }
@@ -218,5 +207,34 @@ public class Net {
 
     public void setPatchModel(PatchModel patchModel) {
         this.patchModel = patchModel;
+    }
+
+    @Override
+    public NetController createController(AbstractDocumentRoot documentRoot) {
+        return new NetController(this, documentRoot);
+    }
+
+    public ArrayList<OutletInstance> getSources() {
+        return source;
+    }
+
+    public void setSources(ArrayList<OutletInstance> source) {
+        ArrayList<OutletInstance> old_value = this.source;
+        this.source = source;
+        firePropertyChange(
+                NetController.NET_SOURCES,
+                old_value, source);
+    }
+
+    public ArrayList<InletInstance> getDestinations() {
+        return dest;
+    }
+
+    public void setDestinations(ArrayList<InletInstance> dest) {
+        ArrayList<InletInstance> old_value = this.dest;
+        this.dest = dest;
+        firePropertyChange(
+                NetController.NET_DESTINATIONS,
+                old_value, dest);
     }
 }

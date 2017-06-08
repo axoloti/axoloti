@@ -20,12 +20,9 @@ package axoloti.attribute;
 import axoloti.SDFileReference;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
-import axoloti.attributeviews.IAttributeInstanceView;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.IAxoObjectInstanceView;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
 import java.util.ArrayList;
@@ -83,6 +80,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
         return attributeName;
     }
 
+    @Deprecated
     void SetDirty() {
         // propagate dirty flag to patch if there is one
         if (getObjectInstance().getPatchModel() != null) {

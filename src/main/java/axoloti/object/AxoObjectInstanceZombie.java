@@ -24,11 +24,11 @@ import axoloti.PatchViewSwing;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceZombie;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.array.ArrayModel;
 import axoloti.objectviews.AxoObjectInstanceViewZombie;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceZombie;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceViewZombie;
 import java.awt.Point;
 import java.util.ArrayList;
 import org.simpleframework.xml.Root;
@@ -40,8 +40,8 @@ import org.simpleframework.xml.Root;
 @Root(name = "zombie")
 public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
 
-    public ArrayList<InletInstance> inletInstances = new ArrayList<InletInstance>();
-    public ArrayList<OutletInstance> outletInstances = new ArrayList<OutletInstance>();
+    public ArrayModel<InletInstance> inletInstances = new ArrayModel<InletInstance>();
+    public ArrayModel<OutletInstance> outletInstances = new ArrayModel<OutletInstance>();
 
     public AxoObjectInstanceZombie() {
     }
@@ -88,17 +88,17 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public ArrayList<InletInstance> getInletInstances() {
+    public ArrayModel<InletInstance> getInletInstances() {
         return inletInstances;
     }
 
     @Override
-    public ArrayList<OutletInstance> getOutletInstances() {
+    public ArrayModel<OutletInstance> getOutletInstances() {
         return outletInstances;
     }
 
     @Override
     public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
-        return new ObjectInstanceController(this, documentRoot);        
+        return new ObjectInstanceController(this, documentRoot);
     }
 }

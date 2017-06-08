@@ -12,8 +12,10 @@ public interface IInletInstanceView extends AbstractView {
 
     public void setHighlighted(boolean highlighted);
 
+    @Deprecated // use controller
     public void disconnect();
 
+    @Deprecated // use controller
     public void deleteNet();
 
     public void repaint();

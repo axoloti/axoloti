@@ -6,17 +6,17 @@ import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
+import axoloti.mvc.AbstractView;
+import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameterviews.IParameterInstanceView;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Collection;
 import javax.swing.JComponent;
 
-public interface IAxoObjectInstanceView {
+public interface IAxoObjectInstanceView extends AbstractView {
 
     public AxoObjectInstanceAbstract getModel();
 
@@ -36,11 +36,11 @@ public interface IAxoObjectInstanceView {
 
     public IOutletInstanceView getOutletInstanceView(OutletInstance ouletInstance);
 
-    public Collection<IInletInstanceView> getInletInstanceViews();
+    public ArrayView<IInletInstanceView> getInletInstanceViews();
 
-    public Collection<IOutletInstanceView> getOutletInstanceViews();
+    public ArrayView<IOutletInstanceView> getOutletInstanceViews();
 
-    public ArrayList<IParameterInstanceView> getParameterInstanceViews();
+    public ArrayView<IParameterInstanceView> getParameterInstanceViews();
 
     public void setLocation(int x, int y);
 
