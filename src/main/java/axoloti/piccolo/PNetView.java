@@ -74,22 +74,6 @@ public class PNetView extends PatchPNode implements INetView {
         g2.draw(curve);
     }
 
-    @Override
-    public void connectInlet(IInletInstanceView inlet) {
-        if (inlet == null) {
-            throw new RuntimeException("Cannot connect a null InletInstanceView to a NetView.");
-        }
-        dest.add(inlet);
-    }
-
-    @Override
-    public void connectOutlet(IOutletInstanceView outlet) {
-        if (outlet == null) {
-            throw new RuntimeException("Cannot connect a null OutInstanceView to a NetView.");
-        }
-        source.add(outlet);
-    }
-
     protected Map<IInletInstanceView, QuadCurve2D.Float> inletCurves = new HashMap<>();
     protected Map<IOutletInstanceView, QuadCurve2D.Float> outletCurves = new HashMap<>();
 

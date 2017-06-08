@@ -88,12 +88,10 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
 
     @Override
     public void disconnect() {
-        getPatchView().getPatchController().disconnect(this);
     }
 
     @Override
     public void deleteNet() {
-        getPatchView().getPatchController().deleteNet(this);
     }
 
     @Override

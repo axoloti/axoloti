@@ -16,7 +16,7 @@ import org.piccolo2d.util.PPaintContext;
 public class PNetDragging extends PNetView {
 
     public PNetDragging(PatchViewPiccolo patchView) {
-        this(patchView.getPatchController().getNetDraggingModel(), patchView);
+        this(patchView.getController().getNetDraggingModel(), patchView);
     }
 
     public PNetDragging(Net net, PatchViewPiccolo patchView) {
@@ -143,21 +143,4 @@ public class PNetDragging extends PNetView {
 
     }
 
-    @Override
-    public void connectInlet(IInletInstanceView inlet) {
-        if (inlet == null) {
-            throw new RuntimeException("Cannot connect a null InletInstanceView to a NetView.");
-        }
-        dest.add(inlet);
-        net.connectInlet(inlet.getInletInstance());
-    }
-
-    @Override
-    public void connectOutlet(IOutletInstanceView outlet) {
-        if (outlet == null) {
-            throw new RuntimeException("Cannot connect a null OutInstanceView to a NetView.");
-        }
-        source.add(outlet);
-        net.connectOutlet(outlet.getOutletInstance());
-    }
 }

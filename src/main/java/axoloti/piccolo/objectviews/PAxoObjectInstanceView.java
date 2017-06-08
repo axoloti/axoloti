@@ -178,10 +178,10 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             }
             InletInstance inletInstance = new InletInstance(inlet, getObjectInstance());
             if (inletInstanceP != null) {
-                Net n = getPatchModel().GetNet(inletInstanceP);
-                if (n != null) {
-                    n.connectInlet(inletInstance);
-                }
+//                Net n = getPatchModel().GetNet(inletInstanceP);
+//                if (n != null) {
+//                    n.connectInlet(inletInstance);
+//                }
             }
             getModel().getInletInstances().add(inletInstance);
             // TODO: PICCOLO view factory
@@ -192,7 +192,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         // disconnect stale inlets from nets
         for (InletInstance inletInstance : pInletInstances) {
-            getPatchModel().disconnect(inletInstance);
+//            getPatchModel().disconnect(inletInstance);
         }
 
         for (Outlet o : getType().outlets) {
@@ -204,10 +204,10 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             }
             OutletInstance outletInstance = new OutletInstance(o, getObjectInstance());
             if (outletInstanceP != null) {
-                Net n = getPatchModel().GetNet(outletInstanceP);
-                if (n != null) {
-                    n.connectOutlet(outletInstance);
-                }
+//                Net n = getPatchModel().GetNet(outletInstanceP);
+//                if (n != null) {
+//                    n.connectOutlet(outletInstance);
+//                }
             }
             getModel().getOutletInstances().add(outletInstance);            
             POutletInstanceView view = null;
@@ -219,7 +219,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         // disconnect stale outlets from nets
         for (OutletInstance outletInstance : pOutletInstances) {
-            getPatchModel().disconnect(outletInstance);
+//            getPatchModel().disconnect(outletInstance);
         }
 
         p_ioletViews.addChild(p_inletViews);

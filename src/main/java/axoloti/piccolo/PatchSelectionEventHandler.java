@@ -102,7 +102,7 @@ public class PatchSelectionEventHandler extends PSelectionEventHandler {
         if (isDragging) {
             isDragging = false;
             parent.AdjustSize();
-            parent.getPatchController().setDirty();
+            //parent.getController().setDirty();
         }
     }
 

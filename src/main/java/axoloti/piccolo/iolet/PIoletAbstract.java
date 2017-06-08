@@ -82,9 +82,9 @@ public abstract class PIoletAbstract extends PatchPNode implements IIoletAbstrac
                         dragnet = new PNetDragging(getPatchView());
                         dragtarget = null;
                         if (PIoletAbstract.this instanceof PInletInstanceView) {
-                            dragnet.connectInlet((IInletInstanceView) PIoletAbstract.this);
+                            //dragnet.connectInlet((IInletInstanceView) PIoletAbstract.this);
                         } else {
-                            dragnet.connectOutlet((IOutletInstanceView) PIoletAbstract.this);
+                            //dragnet.connectOutlet((IOutletInstanceView) PIoletAbstract.this);
                         }
                     }
                     dragnet.setVisible(true);
@@ -112,21 +112,21 @@ public abstract class PIoletAbstract extends PatchPNode implements IIoletAbstrac
                 if (dragtarget == null) {
                     if (!PIoletAbstract.this.getBoundsReference().contains(globalToLocal(e.getPosition()))) {
                         if (PIoletAbstract.this instanceof PInletInstanceView) {
-                            n = getPatchView().getPatchController().disconnect((PInletInstanceView) PIoletAbstract.this);
+                            //n = getPatchView().getController().disconnect((PInletInstanceView) PIoletAbstract.this);
                         } else {
-                            n = getPatchView().getPatchController().disconnect((POutletInstanceView) PIoletAbstract.this);
+                            //n = getPatchView().getController().disconnect((POutletInstanceView) PIoletAbstract.this);
                         }
                     }
                 } else {
                     if (PIoletAbstract.this instanceof PInletInstanceView) {
                         if (dragtarget instanceof PInletInstanceView) {
-                            n = getPatchView().getPatchController().AddConnection(((PInletInstanceView) PIoletAbstract.this), ((PInletInstanceView) dragtarget));
+                            //n = getPatchView().getController().AddConnection(((PInletInstanceView) PIoletAbstract.this), ((PInletInstanceView) dragtarget));
                         } else if (dragtarget instanceof POutletInstanceView) {
-                            n = getPatchView().getPatchController().AddConnection(((PInletInstanceView) PIoletAbstract.this), ((POutletInstanceView) dragtarget));
+                            //n = getPatchView().getController().AddConnection(((PInletInstanceView) PIoletAbstract.this), ((POutletInstanceView) dragtarget));
                         }
                     } else if (PIoletAbstract.this instanceof POutletInstanceView) {
                         if (dragtarget instanceof PInletInstanceView) {
-                            n = getPatchView().getPatchController().AddConnection(((PInletInstanceView) dragtarget), ((POutletInstanceView) PIoletAbstract.this));
+                            //n = getPatchView().getController().AddConnection(((PInletInstanceView) dragtarget), ((POutletInstanceView) PIoletAbstract.this));
                         }
                     }
                     if (axoObjectInstanceView.getPatchModel().PromoteOverloading(false)) {

@@ -167,7 +167,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
 
     @Override
     public PatchModel getPatchModel() {
-        return patchView.getPatchController().getModel();
+        return patchView.getController().getModel();
     }
 
     @Override

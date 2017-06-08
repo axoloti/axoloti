@@ -76,12 +76,10 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
 
     @Override
     public void disconnect() {
-        getPatchView().getPatchController().disconnect(this);
     }
 
     @Override
     public void deleteNet() {
-        getPatchView().getPatchController().deleteNet(this);
     }
 
     public void setHighlighted(boolean highlighted) {
