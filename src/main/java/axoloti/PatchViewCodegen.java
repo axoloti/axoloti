@@ -450,8 +450,9 @@ public class PatchViewCodegen extends PatchAbstractView {
             if (needsComma) {
                 c += ", ";
             }
-            Net n = controller.getNetFromInlet(i).getModel();
-            if ((n != null) && (n.isValidNet())) {
+            NetController nc = controller.getNetFromInlet(i);
+            if ((nc != null) && (nc.getModel().isValidNet())) {
+                Net n = nc.getModel();
                 if (i.getDataType().equals(n.getDataType())) {
                     if (n.NeedsLatch()
                             && (getModel().objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= getModel().objectinstances.indexOf(o))) {
@@ -465,9 +466,9 @@ public class PatchViewCodegen extends PatchAbstractView {
                 } else {
                     c += n.getDataType().GenerateConversionToType(i.getDataType(), n.CName());
                 }
-            } else if (n == null) { // unconnected input
+            } else if (nc == null) { // unconnected input
                 c += i.getDataType().GenerateSetDefaultValueCode();
-            } else if (!n.isValidNet()) {
+            } else if (!nc.getModel().isValidNet()) {
                 c += i.getDataType().GenerateSetDefaultValueCode();
                 Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.getObjectInstance().getInstanceName() + ":" + i.getInletname());
             }

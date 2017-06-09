@@ -118,16 +118,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         clear();
         model.updateObj1();
 
-        ArrayModel<ParameterInstance> pParameterInstances = getModel().parameterInstances;
-        ArrayModel<AttributeInstance> pAttributeInstances = getModel().attributeInstances;
-        ArrayModel<InletInstance> pInletInstances = getModel().inletInstances;
-        ArrayModel<OutletInstance> pOutletInstances = getModel().outletInstances;
-        getModel().parameterInstances = new ArrayModel<ParameterInstance>();
-        getModel().attributeInstances = new ArrayModel<AttributeInstance>();
-        getModel().displayInstances = new ArrayModel<DisplayInstance>();
-        getModel().inletInstances = new ArrayModel<InletInstance>();
-        getModel().outletInstances = new ArrayModel<OutletInstance>();
-
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
         final PopupIcon popupIcon = new PopupIcon();
