@@ -8,8 +8,13 @@ import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInt32;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.ObjectInstanceController;
+import axoloti.object.codegenview.AxoObjectInstanceAbstractCodegenView;
+import axoloti.object.codegenview.AxoObjectInstanceCodegenViewFactory;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletCharPtr32;
 import axoloti.outlets.OutletFrac32;
@@ -28,9 +33,23 @@ import java.util.logging.Logger;
  * @author jtaelman
  */
 public class PatchViewCodegen extends PatchAbstractView {
+   
+    ArrayView<AxoObjectInstanceAbstractCodegenView> objectInstanceViews;
+    ArrayView<INetView> netViews;
 
     public PatchViewCodegen(PatchModel model, PatchController controller) {
         super(model, controller);
+        objectInstanceViews = new ArrayView<AxoObjectInstanceAbstractCodegenView>(controller.objectInstanceControllers) {            
+            @Override
+            public void updateUI() {
+            }
+
+            @Override
+            public AxoObjectInstanceAbstractCodegenView viewFactory(AbstractController ctrl) {
+                return AxoObjectInstanceCodegenViewFactory.createView((ObjectInstanceController)ctrl);
+            }
+        };
+        controller.objectInstanceControllers.addView(objectInstanceViews);
     }
 
     private PatchSettings getSettings() {
@@ -117,25 +136,29 @@ public class PatchViewCodegen extends PatchAbstractView {
                 k++;
             }
         }
-        c += "/* controller classes */\n";
-        if (getModel().controllerObjectInstance != null) {
-            c += getModel().controllerObjectInstance.GenerateClass(classname, OnParentAccess, enableOnParent);
-        }
+
+// FIXME: enable "controller object" code generation
+//        c += "/* controller classes */\n";
+//        if (getModel().controllerObjectInstance != null) {
+//            c += getModel().controllerObjectInstance.GenerateClass(classname, OnParentAccess, enableOnParent);
+//        }
+
         c += "/* object classes */\n";
-        for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
+        for (AxoObjectInstanceAbstractCodegenView o : objectInstanceViews) {
             c += o.GenerateClass(classname, OnParentAccess, enableOnParent);
         }
-        c += "/* controller instances */\n";
-        if (getModel().controllerObjectInstance != null) {
-            String s = getModel().controllerObjectInstance.getCInstanceName();
-            if (!s.isEmpty()) {
-                c += "     " + s + " " + s + "_i;\n";
-            }
-        }
+// FIXME (2): enable "controller object" code generation
+//        c += "/* controller instances */\n";
+//        if (getModel().controllerObjectInstance != null) {
+//            String s = getModel().controllerObjectInstance.getCInstanceName();
+//            if (!s.isEmpty()) {
+//                c += "     " + s + " " + s + "_i;\n";
+//            }
+//        }
 
         c += "/* object instances */\n";
-        for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            String s = o.getCInstanceName();
+        for (AxoObjectInstanceAbstractCodegenView o : objectInstanceViews) {
+            String s = o.getModel().getCInstanceName();
             if (!s.isEmpty()) {
                 c += "     " + s + " " + s + "_i;\n";
             }
@@ -148,7 +171,7 @@ public class PatchViewCodegen extends PatchAbstractView {
             }
         }
         return c;
-    }    
+    }
     
     String GenerateStructCodePlusPlusSub(String classname, boolean enableOnParent) {
         String c = "";
@@ -168,8 +191,8 @@ public class PatchViewCodegen extends PatchAbstractView {
     String GenerateUICode() {
         int count[] = new int[]{0};
         String c = "";
-        for (AxoObjectInstanceAbstract objectInstance : getModel().getObjectInstances()) {
-            c += objectInstance.GenerateUICode(count);
+        for (AxoObjectInstanceAbstractCodegenView o : objectInstanceViews) {
+            c += o.GenerateUICode(count);
         }
         c = "static const int n_ui_objects = " + count[0] + ";\n"
                 + "ui_object_t ui_objects[n_ui_objects] = {\n" + c + "};\n";

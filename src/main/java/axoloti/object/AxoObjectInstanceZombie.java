@@ -82,10 +82,10 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
         return i;
     }
 
-    @Override
-    public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
-        return "\n#error \"unresolved object: " + getInstanceName() + " in patch: " + getPatchModel().getFileNamePath() + "\"\n";
-    }
+//    @Override
+//    public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
+//        return "\n#error \"unresolved object: " + getInstanceName() + " in patch: " + getPatchModel().getFileNamePath() + "\"\n";
+//    }
 
     @Override
     public ArrayModel<InletInstance> getInletInstances() {

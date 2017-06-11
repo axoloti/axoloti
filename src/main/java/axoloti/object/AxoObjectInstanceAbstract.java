@@ -321,21 +321,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
      }
      */
     
-    public String GenerateUICode(int count[]) {
-        return "";
-    }
-
-    public String GenerateInitCodePlusPlus(String vprefix, boolean enableOnParent) {
-        return "";
-    }
-
-    public String GenerateDisposeCodePlusPlus(String vprefix) {
-        return "";
-    }
-
-    public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
-        return "";
-    }
 
     public boolean hasStruct() {
         return false;

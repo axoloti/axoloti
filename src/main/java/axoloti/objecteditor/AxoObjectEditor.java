@@ -187,7 +187,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             }
         });
 
-        jLabelMidiPrototype.setText(AxoObjectInstance.MidiHandlerFunctionHeader);
+//        jLabelMidiPrototype.setText(AxoObjectInstance.MidiHandlerFunctionHeader);
 
         jTextAreaLocalData.getDocument().addDocumentListener(new DocumentChangeListener() {
             @Override
