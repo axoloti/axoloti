@@ -269,7 +269,6 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         addChild(p_parameterViews);
         addChild(p_displayViews);
         addToSwingProxy(Box.createVerticalGlue());
-        getType().addObjectModifiedListener(model);
 
         addInputEventListener(new PBasicInputEventHandler() {
             @Override

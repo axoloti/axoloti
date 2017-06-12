@@ -88,8 +88,6 @@ public class AxoObjectFromPatch extends AxoObject {
         sMidiCode = o.sMidiCode;
         sSRateCode = o.sSRateCode;
         helpPatch = o.helpPatch;
-
-        FireObjectModified(this);
     }
 
     @Override

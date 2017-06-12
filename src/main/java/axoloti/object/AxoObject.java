@@ -300,7 +300,6 @@ public class AxoObject extends AxoObjectAbstract {
         includes = new HashSet<String>();
     }
 
-    ArrayList<ObjectModifiedListener> instances = new ArrayList<ObjectModifiedListener>();
     AxoObjectEditor editor;
 
     Rectangle editorBounds;
@@ -342,9 +341,6 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public void DeleteInstance(AxoObjectInstanceAbstract o) {
-        if ((o != null) && (o instanceof AxoObjectInstance)) {
-            instances.remove((AxoObjectInstance) o);
-        }
     }
 
     @Override
@@ -552,26 +548,6 @@ public class AxoObject extends AxoObjectAbstract {
         } else {
             return null;
         }
-    }
-
-    @Override
-    public void FireObjectModified(Object src) {
-        ArrayList<ObjectModifiedListener> c = new ArrayList<ObjectModifiedListener>(instances);
-        for (ObjectModifiedListener oml : c) {
-            oml.ObjectModified(src);
-        }
-    }
-
-    @Override
-    public void addObjectModifiedListener(ObjectModifiedListener oml) {
-        if (!instances.contains(oml)) {
-            instances.add(oml);
-        }
-    }
-
-    @Override
-    public void removeObjectModifiedListener(ObjectModifiedListener oml) {
-        instances.remove(oml);
     }
 
     @Override

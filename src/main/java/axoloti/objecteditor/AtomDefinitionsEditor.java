@@ -190,7 +190,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                     GetAtomDefinitions().add(o);
                     jTable1.setRowSelectionInterval(GetAtomDefinitions().size() - 1, GetAtomDefinitions().size() - 1);
                     UpdateTable2();
-                    AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                 } catch (InstantiationException ex) {
                     Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IllegalAccessException ex) {
@@ -214,7 +213,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                     jTable1.setRowSelectionInterval(row - 1, row - 1);
                 }
                 UpdateTable2();
-                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                 panel.revalidate();
             }
         });
@@ -230,7 +228,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                 T o = GetAtomDefinitions().remove(row);
                 GetAtomDefinitions().add(row - 1, o);
                 jTable1.setRowSelectionInterval(row - 1, row - 1);
-                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
             }
         });
         jPanel1.add(jButtonMoveUp);
@@ -247,7 +244,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                 }
                 T o = GetAtomDefinitions().remove(row);
                 GetAtomDefinitions().add(row + 1, o);
-                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                 jTable1.setRowSelectionInterval(row + 1, row + 1);
             }
         });
@@ -303,7 +299,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                             T j = (T) value.getClass().newInstance();
                             j.setName(GetAtomDefinition(rowIndex).getName());
                             GetAtomDefinitions().set(rowIndex, j);
-                            AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                             UpdateTable2();
                         } catch (InstantiationException ex) {
                             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -419,7 +414,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                         if (f.getType() == int.class) {
                             try {
                                 f.setInt(o, Integer.parseInt((String) value));
-                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (IllegalAccessException ex) {
@@ -431,7 +425,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                                 l.clear();
                                 String s = (String) value;
                                 l.addAll(StringToStringArrayList(s));
-                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (IllegalAccessException ex) {
@@ -446,7 +439,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                                     f.set(o, v);
                                 }
                                 v.setInt(Integer.parseInt((String) value));
-                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (IllegalAccessException ex) {
@@ -469,7 +461,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                                     } catch (java.lang.NumberFormatException e) {
                                     }
                                 }
-                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (IllegalAccessException ex) {
@@ -478,7 +469,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                         } else if (f.getType() == String.class) {
                             try {
                                 f.set(o, (String) value);
-                                AtomDefinitionsEditor.this.obj.FireObjectModified(this);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (IllegalAccessException ex) {

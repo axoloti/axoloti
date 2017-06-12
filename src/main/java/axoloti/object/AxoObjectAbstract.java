@@ -185,18 +185,6 @@ public abstract class AxoObjectAbstract extends AbstractModel implements  Compar
         this.uuid = uuid;
     }
 
-    @Deprecated
-    public void FireObjectModified(Object src) {
-    }
-
-    @Deprecated
-    public void addObjectModifiedListener(ObjectModifiedListener oml) {
-    }
-
-    @Deprecated
-    public void removeObjectModifiedListener(ObjectModifiedListener oml) {
-    }
-
     // Let's violate the MVC pattern for now and use a singleton controller for this model
     // how undo/redo must be handled when open documents contain instances is yet unclear...
     private ObjectController controller;

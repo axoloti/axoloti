@@ -54,7 +54,7 @@ import org.simpleframework.xml.strategy.Strategy;
  * @author Johannes Taelman
  */
 @Root(name = "obj")
-public class AxoObjectInstance extends AxoObjectInstanceAbstract implements ObjectModifiedListener {
+public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     public ArrayModel<InletInstance> inletInstances = new ArrayModel<InletInstance>();
     public ArrayModel<OutletInstance> outletInstances = new ArrayModel<OutletInstance>();
@@ -369,7 +369,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     @Override
     public void updateObj1() {
-        getType().addObjectModifiedListener(this);
     }
 
     public Rectangle editorBounds;
@@ -381,7 +380,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
             */
     }
 
-    @Override
     public void ObjectModified(Object src) {
         if (getPatchModel() != null) {
             if (!getPatchModel().getLocked()) {

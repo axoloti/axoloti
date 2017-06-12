@@ -24,7 +24,6 @@ import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.ObjectController;
-import axoloti.object.ObjectModifiedListener;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.OSDetect;
 import java.awt.BorderLayout;
@@ -52,7 +51,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public final class AxoObjectEditor extends JFrame implements DocumentWindow, ObjectModifiedListener {
+public final class AxoObjectEditor extends JFrame implements DocumentWindow {
 
     final AxoObject editObj;
     private String origXML;
@@ -119,11 +118,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     }
 
     void Revert() {
+        // needs review
         try {
             Serializer serializer = new Persister();
             AxoObject objrev = serializer.read(AxoObject.class, origXML);
             editObj.copy(objrev);
-            editObj.FireObjectModified(this);
             Close();
 
         } catch (Exception ex) {
@@ -166,7 +165,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             @Override
             void update() {
                 editObj.sAuthor = jTextFieldAuthor.getText().trim();
-                editObj.FireObjectModified(this);
             }
         });
 
@@ -174,7 +172,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             @Override
             void update() {
                 editObj.sLicense = jTextFieldLicense.getText().trim();
-                editObj.FireObjectModified(this);
             }
         });
 
@@ -182,7 +179,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             @Override
             void update() {
                 editObj.helpPatch = jTextFieldHelp.getText().trim();
-                editObj.FireObjectModified(this);
             }
         });
 
@@ -190,7 +186,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
             @Override
             void update() {
                 editObj.sDescription = jTextDesc.getText().trim();
-                editObj.FireObjectModified(this);
             }
         });
 
@@ -342,7 +337,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         return !(origXML.equals(editOS.toString()));
     }
 
-    @Override
+    // needed?
     public void ObjectModified(Object source) {
         if (source != this) {
             jTextAreaLocalData.setText(editObj.sLocalData == null ? "" : editObj.sLocalData);
@@ -367,7 +362,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     }
 
     public void initEditFromOrig() {
-        editObj.addObjectModifiedListener(this);
         initFields();
     }
 
@@ -419,7 +413,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
-        editObj.removeObjectModifiedListener(this);
         dispose();
         editObj.CloseEditor();
     }
@@ -844,7 +837,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
-        editObj.FireObjectModified(this);
         if (!isCompositeObject()) {
             MainFrame.axoObjects.WriteAxoObject(editObj.sPath, editObj);
             updateReferenceXML();
