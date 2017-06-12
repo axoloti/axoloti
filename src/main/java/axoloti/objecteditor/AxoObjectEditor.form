@@ -289,7 +289,7 @@
                 </Container>
               </SubComponents>
             </Container>
-            <Container class="axoloti.objecteditor.InletDefinitionsEditorPanel" name="inletDefinitionsEditor1">
+            <Container class="javax.swing.JPanel" name="inletDefinitionsEditor1">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Inlets">
@@ -301,17 +301,17 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="521" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="481" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="416" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="433" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
             </Container>
-            <Container class="axoloti.objecteditor.OutletDefinitionsEditorPanel" name="outletDefinitionsEditorPanel1">
+            <Container class="javax.swing.JPanel" name="outletDefinitionsEditor1">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Outlets">
@@ -323,17 +323,17 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="521" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="481" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="416" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="433" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
             </Container>
-            <Container class="axoloti.objecteditor.AttributeDefinitionsEditorPanel" name="attributeDefinitionsEditorPanel1">
+            <Container class="javax.swing.JPanel" name="attributeDefinitionsEditorPanel1">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Attributes">
@@ -345,17 +345,17 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="521" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="481" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="416" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="433" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
             </Container>
-            <Container class="axoloti.objecteditor.ParamDefinitionsEditorPanel" name="paramDefinitionsEditorPanel1">
+            <Container class="javax.swing.JPanel" name="paramDefinitionsEditorPanel1">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Parameters">
@@ -367,17 +367,17 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="521" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="481" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="416" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="433" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
             </Container>
-            <Container class="axoloti.objecteditor.DisplayDefinitionsEditorPanel" name="displayDefinitionsEditorPanel1">
+            <Container class="javax.swing.JPanel" name="displayDefinitionsEditorPanel1">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                   <JTabbedPaneConstraints tabName="Displays">
@@ -389,12 +389,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="521" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="481" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="416" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="433" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>

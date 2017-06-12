@@ -18,19 +18,15 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.PatchView;
-import axoloti.PatchViewPiccolo;
-import axoloti.PatchViewSwing;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceZombie;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.array.ArrayModel;
-import axoloti.objectviews.AxoObjectInstanceViewZombie;
-import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceZombie;
 import java.awt.Point;
-import java.util.ArrayList;
+import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.Root;
 
 /**
@@ -46,7 +42,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     public AxoObjectInstanceZombie() {
     }
 
-    public AxoObjectInstanceZombie(AxoObjectAbstract type, PatchModel patch1, String InstanceName1, Point location) {
+    public AxoObjectInstanceZombie(ObjectController type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
     }
 
@@ -101,4 +97,9 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new ObjectInstanceController(this, documentRoot);
     }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {        
+    }
+
 }

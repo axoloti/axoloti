@@ -18,16 +18,12 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.PatchView;
-import axoloti.PatchViewPiccolo;
 import axoloti.PatchViewSwing;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.objectviews.AxoObjectInstanceViewHyperlink;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceViewHyperlink;
 import java.awt.Desktop;
 import java.awt.Point;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -46,7 +42,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     public AxoObjectInstanceHyperlink() {
     }
 
-    public AxoObjectInstanceHyperlink(AxoObjectAbstract type, PatchModel patch1, String InstanceName1, Point location) {
+    public AxoObjectInstanceHyperlink(ObjectController type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
     }
 
@@ -83,4 +79,10 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new ObjectInstanceController(this, documentRoot);        
     }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

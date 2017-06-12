@@ -17,13 +17,14 @@
  */
 package axoloti.inlets;
 
-import axoloti.Net;
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.*;
 
 /**
@@ -79,7 +80,7 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     }
 
     public String GetLabel() {
-        return inlet.name;
+        return inlet.getName();
     }
 
     public Inlet getInlet() {
@@ -88,11 +89,11 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
 
     public void RefreshName() {
         if (axoObj != null) {
-            name = axoObj.getInstanceName() + " " + inlet.name;
+            name = axoObj.getInstanceName() + " " + inlet.getName();
             objname = axoObj.getInstanceName();
             name = null;
         }
-        inletname = inlet.name;
+        inletname = inlet.getName();
     }
 
     public String getObjname() {
@@ -113,5 +114,22 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     @Override
     public InletInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new InletInstanceController(this, documentRoot);
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        // triggered by a model definition change, triggering instance view changes
+        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)
+                || evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+            firePropertyChange(
+                    evt.getPropertyName(),
+                    evt.getOldValue(),
+                    evt.getNewValue());
+        }
+    }
+
+    @Override
+    public AtomController getController() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

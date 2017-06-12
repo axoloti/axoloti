@@ -28,7 +28,9 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
 
     // to be called in controller.createView()
     final public void addView(View view) {
-        registeredViews.add(view);
+        if (view != null) {
+            registeredViews.add(view);
+        }
     }
 
     final public void removeView(View view) {

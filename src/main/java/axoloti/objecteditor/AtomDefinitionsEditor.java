@@ -17,14 +17,19 @@
  */
 package axoloti.objecteditor;
 
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractView;
+import axoloti.mvc.array.ArrayController;
+import axoloti.mvc.array.ArrayModel;
+import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObject;
-import axoloti.object.ObjectModifiedListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.annotation.Annotation;
+import java.beans.PropertyChangeEvent;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -47,25 +52,20 @@ import javax.swing.table.AbstractTableModel;
  * @author jtaelman
  * @param <T>
  */
-abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel implements ObjectModifiedListener {
+abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView {
 
     final T[] AtomDefinitionsList;
     AxoObject obj;
     private T o;
 
-    public AtomDefinitionsEditor(T[] AtomDefinitionsList) {
-        this.AtomDefinitionsList = AtomDefinitionsList;
+    public AtomDefinitionsEditor(ArrayController controller, T[] atomDefinitionsList) {
+        super(controller);
+        this.AtomDefinitionsList = atomDefinitionsList;
     }
 
-    abstract ArrayList<T> GetAtomDefinitions();
+    abstract ArrayModel<T> GetAtomDefinitions();
 
     abstract String getDefaultName();
-
-    @Override
-    public void ObjectModified(Object src) {
-        jTable1.revalidate();
-        jTable1.repaint();
-    }
 
     static String StringArrayToString(ArrayList<String> va) {
         // items quoted, separated by comma
@@ -144,28 +144,27 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
         return l;
     }
 
-    void initComponents(AxoObject obj) {
+    void initComponents(AxoObject obj, JPanel panel) {
         this.obj = obj;
-        obj.addObjectModifiedListener(this);
         jScrollPane1 = new JScrollPane();
         jTable1 = new JTable();
         jTable1.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jTable1.setVisible(true);
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         jScrollPane1.add(jTable1);
-        add(jScrollPane1);
+        panel.add(jScrollPane1);
 
         jPanel1 = new JPanel();
         jPanel1.setLayout(new BoxLayout(jPanel1, BoxLayout.X_AXIS));
-        add(jPanel1);
+        panel.add(jPanel1);
 
         jScrollPane2 = new JScrollPane();
         jTable2 = new JTable();
         jTable2.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jTable2.setVisible(true);
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         jScrollPane2.add(jTable2);
-        add(jScrollPane2);
+        panel.add(jScrollPane2);
 
         jButtonAdd = new JButton("Add");
         jButtonAdd.addActionListener(new ActionListener() {
@@ -216,7 +215,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
                 }
                 UpdateTable2();
                 AtomDefinitionsEditor.this.obj.FireObjectModified(this);
-                AtomDefinitionsEditor.this.revalidate();
+                panel.revalidate();
             }
         });
         jPanel1.add(jButtonRemove);
@@ -293,11 +292,12 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
                 }
 
                 switch (columnIndex) {
-                    case 0:
+                    case 0: {
                         assert (value instanceof String);
-                        GetAtomDefinition(rowIndex).setName((String) value);
-                        AtomDefinitionsEditor.this.obj.FireObjectModified(this);
-                        break;
+                        AtomController c = (AtomController) getController().get(rowIndex);
+                        c.changeName((String) value);
+                    }
+                    break;
                     case 1:
                         try {
                             T j = (T) value.getClass().newInstance();
@@ -311,11 +311,12 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
                             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
                         }
                         break;
-                    case 2:
+                    case 2: {
                         assert (value instanceof String);
-                        GetAtomDefinition(rowIndex).setDescription((String) value);
-                        AtomDefinitionsEditor.this.obj.FireObjectModified(this);
-                        break;
+                        AtomController c = (AtomController) getController().get(rowIndex);
+                        c.changeDescription((String) value);
+                    }
+                    break;
                 }
             }
 
@@ -580,4 +581,19 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends JPanel im
     JButton jButtonRemove;
     JButton jButtonAdd;
     JPanel jPanel1;
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+    }
+
+    @Override
+    public void updateUI() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public AbstractView viewFactory(AbstractController ctrl) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
+    }
 }

@@ -1,6 +1,7 @@
 package axoloti.parameterviews;
 
 import axoloti.Preset;
+import axoloti.atom.AtomController;
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
@@ -30,6 +31,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
     ParameterInstance parameterInstance;
     LabelComponent valuelbl = new LabelComponent("123456789");
     ACtrlComponent ctrl;
+    LabelComponent label = new LabelComponent("");
 
     final ParameterInstanceController controller;
 
@@ -61,11 +63,12 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         }
 
         if ((parameterInstance.getParameter().noLabel == null) || (parameterInstance.getParameter().noLabel == false)) {
-            if (lbls != null) {
-                lbls.add(new LabelComponent(parameterInstance.getParameter().name));
-            } else {
-                add(new LabelComponent(parameterInstance.getParameter().name));
-            }
+            label.setText(parameterInstance.getParameter().getName());
+        }
+        if (lbls != null) {
+            lbls.add(label);
+        } else {
+            add(label);
         }
 
         if (parameterInstance.getConvs() != null) {
@@ -96,7 +99,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         if (parameterInstance.getParameter().description != null) {
             ctrl.setToolTipText(parameterInstance.getParameter().description);
         } else {
-            ctrl.setToolTipText(parameterInstance.getParameter().name);
+            ctrl.setToolTipText(parameterInstance.getParameter().getName());
         }
         add(getControlComponent());
         getControlComponent().addMouseListener(popupMouseListener);
@@ -289,8 +292,13 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        updateV();
+        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)) {
+            label.setText((String)evt.getNewValue());
+            doLayout();
+        } else if (evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+            setToolTipText((String)evt.getNewValue());
+        } else {
+            updateV();
+        }
     }
-
-
 }

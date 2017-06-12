@@ -19,7 +19,8 @@ package axoloti.objecteditor;
 
 import axoloti.attributedefinition.AttributeTypes;
 import axoloti.attributedefinition.AxoAttribute;
-import java.util.ArrayList;
+import axoloti.mvc.array.ArrayController;
+import axoloti.mvc.array.ArrayModel;
 
 /**
  *
@@ -27,12 +28,12 @@ import java.util.ArrayList;
  */
 public class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAttribute> {
 
-    public AttributeDefinitionsEditorPanel() {
-        super(AttributeTypes.getTypes());
+    public AttributeDefinitionsEditorPanel(ArrayController controller) {
+        super(controller, AttributeTypes.getTypes());
     }
 
     @Override
-    ArrayList<AxoAttribute> GetAtomDefinitions() {
+    ArrayModel<AxoAttribute> GetAtomDefinitions() {
         return obj.attributes;
     }
 

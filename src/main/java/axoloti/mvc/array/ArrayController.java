@@ -21,23 +21,25 @@ public class ArrayController<T extends AbstractController> extends AbstractContr
         super(model, documentRoot);
         ArrayList<AbstractModel> am = model.getArray();
         for (AbstractModel m : am) {
-            subcontrollers.add((T)m.createController(documentRoot));
+            subcontrollers.add((T) m.createController(documentRoot));
         }
     }
 
     public T add(AbstractModel m) {
         AbstractController c = m.createController(getDocumentRoot());
-        subcontrollers.add((T)c);
+        subcontrollers.add((T) c);
         ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
         n.add(m);
         setModelUndoableProperty(ARRAY, n);
-        return (T)c;
+        return (T) c;
     }
 
     public boolean remove(AbstractModel m) {
         ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
         boolean r = n.remove(m);
-        if (r) setModelUndoableProperty(ARRAY, n);
+        if (r) {
+            setModelUndoableProperty(ARRAY, n);
+        }
         return r;
     }
 
@@ -56,7 +58,7 @@ public class ArrayController<T extends AbstractController> extends AbstractContr
             if (ctrl == null) {
                 ctrl = om.createController(getDocumentRoot());
             }
-            subcontrollers.add((T)ctrl);
+            subcontrollers.add((T) ctrl);
         }
     }
 
@@ -76,6 +78,10 @@ public class ArrayController<T extends AbstractController> extends AbstractContr
     @Override
     public Iterator<T> iterator() {
         return subcontrollers.iterator();
+    }
+
+    public T get(int index) {
+        return subcontrollers.get(index);
     }
 
 }

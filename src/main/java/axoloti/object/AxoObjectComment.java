@@ -38,7 +38,8 @@ public class AxoObjectComment extends AxoObjectAbstract {
 
     @Override
     public AxoObjectInstanceAbstract CreateInstance(PatchModel patch, String InstanceName1, Point location) {
-        AxoObjectInstanceComment o = new AxoObjectInstanceComment(this, patch, InstanceName1, location);
+        ObjectController ctrl = createController(null);
+        AxoObjectInstanceComment o = new AxoObjectInstanceComment(ctrl, patch, InstanceName1, location);
         if (patch != null) {
             patch.objectinstances.add(o);
         }

@@ -222,10 +222,10 @@ public class gentools {
             AxoObject oo = (AxoObject) o;
             for (Parameter p : oo.params) {
                 if (oo.sKRateCode != null) {
-                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
                 if (oo.sSRateCode != null) {
-                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
             }
             for (AxoAttribute p : oo.attributes) {

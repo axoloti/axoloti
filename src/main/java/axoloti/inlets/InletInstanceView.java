@@ -3,6 +3,7 @@ package axoloti.inlets;
 import axoloti.INetView;
 import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.atom.AtomController;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import components.JackInputComponent;
@@ -22,6 +23,8 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
 
     final InletInstanceController controller;
 
+    LabelComponent label;
+
     public InletInstanceView(InletInstance inletInstance, InletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         this.inletInstance = inletInstance;
         this.axoObj = axoObj;
@@ -39,10 +42,13 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
         jack.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(jack);
         add(new SignalMetaDataIcon(inletInstance.getInlet().GetSignalMetaData()));
-        if (!((axoObj != null) && axoObj.getObjectInstance().getType().GetInlets().size() <= 1)) {
-            add(Box.createHorizontalStrut(3));
-            add(new LabelComponent(inletInstance.getInlet().getName()));
+        add(Box.createHorizontalStrut(3));
+        if (!((axoObj != null) && axoObj.getObjectInstance().getType().getInlets().size() <= 1)) {
+            label = new LabelComponent(inletInstance.getInlet().getName());
+        } else {
+            label = new LabelComponent("");            
         }
+        add(label);
         add(Box.createHorizontalGlue());
         setToolTipText(inletInstance.getInlet().getDescription());
 
@@ -91,7 +97,12 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)) {
+            label.setText((String)evt.getNewValue());
+            doLayout();
+        } else if (evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+            setToolTipText((String)evt.getNewValue());
+        }
     }
 
     @Override

@@ -18,12 +18,15 @@
 package axoloti.outlets;
 
 import axoloti.Net;
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.*;
 
 /**
@@ -76,7 +79,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     }
 
     public String GetLabel() {
-        return outlet.name;
+        return outlet.getName();
     }
 
     public String GetCName() {
@@ -93,9 +96,9 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     }
 
     public void RefreshName() {
-        name = axoObj.getInstanceName() + " " + outlet.name;
+        name = axoObj.getInstanceName() + " " + outlet.getName();
         objname = axoObj.getInstanceName();
-        outletname = outlet.name;
+        outletname = outlet.getName();
         name = null;
     }
 
@@ -118,6 +121,23 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     @Override
     public OutletInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new OutletInstanceController(this, documentRoot);
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        // triggered by a model definition change, triggering instance view changes
+        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)
+                || evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+            firePropertyChange(
+                    evt.getPropertyName(),
+                    evt.getOldValue(),
+                    evt.getNewValue());
+        }
+    }
+
+    @Override
+    public AtomController getController() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }

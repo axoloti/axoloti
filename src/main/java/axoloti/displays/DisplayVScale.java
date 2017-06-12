@@ -27,7 +27,6 @@ import java.security.MessageDigest;
 public class DisplayVScale extends Display {
 
     public DisplayVScale() {
-        name = "";
     }
 
     public DisplayVScale(String name) {

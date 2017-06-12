@@ -67,9 +67,9 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
 
         if ((parameterInstance.getParameter().noLabel == null) || (parameterInstance.getParameter().noLabel == false)) {
             if (lbls != null) {
-                lbls.addChild(new PLabelComponent(parameterInstance.getParameter().name));
+                lbls.addChild(new PLabelComponent(parameterInstance.getParameter().getName()));
             } else {
-                addChild(new PLabelComponent(parameterInstance.getParameter().name));
+                addChild(new PLabelComponent(parameterInstance.getParameter().getName()));
             }
         }
 
@@ -103,7 +103,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         if (parameterInstance.getParameter().description != null) {
             ctrl.setToolTipText(parameterInstance.getParameter().description);
         } else {
-            ctrl.setToolTipText(parameterInstance.getParameter().name);
+            ctrl.setToolTipText(parameterInstance.getParameter().getName());
         }
         addChild(getControlComponent());
         getControlComponent().addInputEventListener(popupMouseListener);

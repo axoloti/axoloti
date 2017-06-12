@@ -54,7 +54,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
 
         addToSwingProxy(Box.createHorizontalGlue());
 
-        if (axoObjectInstanceView.getObjectInstance().getType().GetOutlets().size() > 1) {
+        if (axoObjectInstanceView.getObjectInstance().getType().getOutlets().size() > 1) {
             addChild(new PLabelComponent(outletInstance.getOutlet().getName()));
             addToSwingProxy(Box.createHorizontalStrut(2));
         }

@@ -17,6 +17,7 @@
  */
 package axoloti.inlets;
 
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
@@ -25,25 +26,18 @@ import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
-import org.simpleframework.xml.Attribute;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class Inlet implements AtomDefinition, Cloneable {
-
-    @Attribute
-    String name;
-    @Attribute(required = false)
-    public String description;
+public abstract class Inlet extends AtomDefinition implements Cloneable {
 
     public Inlet() {
     }
 
     public Inlet(String name, String description) {
-        this.name = name;
-        this.description = description;
+        super(name, description);
     }
 
     @Override
@@ -51,33 +45,15 @@ public abstract class Inlet implements AtomDefinition, Cloneable {
         return getTypeName();
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String GetCName() {
-        return "inlet_" + CharEscape.CharEscape(name);
+        return "inlet_" + CharEscape.CharEscape(getName());
     }
 
     @Override
     public InletInstance CreateInstance(AxoObjectInstance o) {
         InletInstance i = new InletInstance(this, o);
+        AtomController c = createController(null);
+        c.addView(i);
         return i;
     }
 
@@ -88,7 +64,7 @@ public abstract class Inlet implements AtomDefinition, Cloneable {
     }
 
     public void updateSHA(MessageDigest md) {
-        md.update(name.getBytes());
+        md.update(getName().getBytes());
         md.update((byte) getDatatype().hashCode());
     }
 
@@ -98,7 +74,7 @@ public abstract class Inlet implements AtomDefinition, Cloneable {
     }
 
     @Override
-    public List<String> getEditableFields(){
+    public List<String> getEditableFields() {
         return new ArrayList<String>();
     }
 }

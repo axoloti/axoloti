@@ -18,6 +18,7 @@
 package axoloti.attribute;
 
 import axoloti.SDFileReference;
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.mvc.AbstractDocumentRoot;
@@ -25,6 +26,7 @@ import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 
@@ -91,5 +93,22 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     @Override
     public AttributeInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new AttributeInstanceController(this, documentRoot);
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        // triggered by a model definition change, triggering instance view changes
+        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)
+                || evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+            firePropertyChange(
+                    evt.getPropertyName(),
+                    evt.getOldValue(),
+                    evt.getNewValue());
+        }
+    }
+
+    @Override
+    public AtomController getController() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -36,7 +36,8 @@ public class AxoObjectHyperlink extends AxoObjectAbstract {
 
     @Override
     public AxoObjectInstanceHyperlink CreateInstance(PatchModel patch, String InstanceName1, Point location) {
-        AxoObjectInstanceHyperlink o = new AxoObjectInstanceHyperlink(this, patch, InstanceName1, location);
+        ObjectController controller = createController(null);
+        AxoObjectInstanceHyperlink o = new AxoObjectInstanceHyperlink(controller, patch, InstanceName1, location);
         if (patch != null) {
             patch.objectinstances.add(o);
         }

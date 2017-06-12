@@ -17,14 +17,15 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomInstance;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.utils.CodeGeneration;
+import java.beans.PropertyChangeEvent;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -98,4 +99,20 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
         return new DisplayInstanceController(this, documentRoot);
     }
 
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        // triggered by a model definition change, triggering instance view changes
+        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)
+                || evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+            firePropertyChange(
+                    evt.getPropertyName(),
+                    evt.getOldValue(),
+                    evt.getNewValue());
+        }
+    }
+
+    @Override
+    public AtomController getController() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

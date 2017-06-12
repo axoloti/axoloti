@@ -25,6 +25,7 @@ import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
+import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
@@ -42,7 +43,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "obj_abstr")
-public abstract class AxoObjectInstanceAbstract extends AbstractModel implements Comparable<AxoObjectInstanceAbstract>, ObjectModifiedListener {
+public abstract class AxoObjectInstanceAbstract extends AbstractModel implements Comparable<AxoObjectInstanceAbstract>, AbstractView {
 
     @Attribute(name = "type")
     public String typeName;
@@ -60,13 +61,16 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     public PatchModel patchModel;
     AxoObjectAbstract type;
     private boolean typeWasAmbiguous = false;
+    
+    ObjectController controller;
 
     public AxoObjectInstanceAbstract() {
     }
 
-    public AxoObjectInstanceAbstract(AxoObjectAbstract type, PatchModel patchModel, String InstanceName1, Point location) {
+    public AxoObjectInstanceAbstract(ObjectController typeController, PatchModel patchModel, String InstanceName1, Point location) {
         super();
-        this.type = type;
+        this.type = typeController.getModel();
+        this.controller = typeController;
         typeName = type.id;
         if (type.createdFromRelativePath && (patchModel != null)) {
             String pPath = patchModel.getFileNamePath();
@@ -349,15 +353,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     public void updateObj1() {
     }
 
-    @Override
-    public void ObjectModified(Object src) {
-    }
-
     public void Close() {
-        AxoObjectAbstract t = getType();
-        if (t != null) {
-            t.removeObjectModifiedListener(this);
-        }
     }
 
     @Deprecated
@@ -390,5 +386,10 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
 
     @Override
     public abstract ObjectInstanceController createController(AbstractDocumentRoot documentRoot);
+    
+    @Override
+    public ObjectController getController() {
+        return controller;
+    }
 
 }

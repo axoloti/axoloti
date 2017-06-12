@@ -29,6 +29,7 @@ class DisplayInstanceViewFrac8S128VBar extends DisplayInstanceView {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

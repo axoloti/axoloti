@@ -413,7 +413,8 @@ public class PatchModel extends AbstractModel {
                 //System.out.println("Obj added " + o.getInstanceName());
             } else if (t == null) {
                 objectinstances.remove(o);
-                AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(new AxoObjectZombie(), this, o.getInstanceName(), new Point(o.getX(), o.getY()));
+                AxoObjectZombie z = new AxoObjectZombie();
+                AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(z.createController(null), this, o.getInstanceName(), new Point(o.getX(), o.getY()));
                 zombie.patchModel = this;
                 zombie.typeName = o.typeName;
                 objectinstances.add(zombie);
@@ -1205,7 +1206,8 @@ public class PatchModel extends AbstractModel {
                 } else {
                     //o.patch = this;
                     p.objectinstances.remove(o);
-                    AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(new AxoObjectZombie(), this, o.getInstanceName(), new Point(o.getX(), o.getY()));
+                    AxoObjectZombie z = new AxoObjectZombie();                    
+                    AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(z.createController(null), this, o.getInstanceName(), new Point(o.getX(), o.getY()));
                     zombie.patchModel = this;
                     zombie.typeName = o.typeName;
                     p.objectinstances.add(zombie);

@@ -19,6 +19,7 @@ package axoloti.parameters;
 
 import axoloti.Modulation;
 import axoloti.Preset;
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
 import axoloti.mvc.AbstractDocumentRoot;
@@ -26,6 +27,7 @@ import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -60,7 +62,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         super();
         parameter = param;
         this.axoObjectInstance = axoObjInstance;
-        name = parameter.name;
+        name = parameter.getName();
     }
 
     public String GetCName() {
@@ -189,7 +191,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         if (axoObjectInstance.parameterInstances.size() == 1) {
             return axoObjectInstance.getInstanceName();
         } else {
-            return axoObjectInstance.getInstanceName() + ":" + parameter.name;
+            return axoObjectInstance.getInstanceName() + ":" + parameter.getName();
         }
     }
 
@@ -244,7 +246,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
 
     public Parameter getParameterForParent() {
         Parameter pcopy = parameter.getClone();
-        pcopy.name = ControlOnParentName();
+        pcopy.setName(ControlOnParentName());
         pcopy.noLabel = null;
         pcopy.PropagateToChild = axoObjectInstance.getLegalName() + "_" + getLegalName();
         return pcopy;
@@ -337,5 +339,22 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     @Override
     public ParameterInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new ParameterInstanceController(this, documentRoot);
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        // triggered by a model definition change, triggering instance view changes
+        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)
+                || evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+            firePropertyChange(
+                    evt.getPropertyName(),
+                    evt.getOldValue(),
+                    evt.getNewValue());
+        }
+    }
+
+    @Override
+    public AtomController getController() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

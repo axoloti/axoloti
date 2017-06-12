@@ -19,7 +19,8 @@ package axoloti.objecteditor;
 
 import axoloti.displays.Display;
 import axoloti.displays.DisplayTypes;
-import java.util.ArrayList;
+import axoloti.mvc.array.ArrayController;
+import axoloti.mvc.array.ArrayModel;
 
 /**
  *
@@ -27,12 +28,12 @@ import java.util.ArrayList;
  */
 public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
 
-    public DisplayDefinitionsEditorPanel() {
-        super(DisplayTypes.getTypes());
+    public DisplayDefinitionsEditorPanel(ArrayController controller) {
+        super(controller, DisplayTypes.getTypes());
     }
 
     @Override
-    ArrayList<Display> GetAtomDefinitions() {
+    ArrayModel<Display> GetAtomDefinitions() {
         return obj.displays;
     }
 

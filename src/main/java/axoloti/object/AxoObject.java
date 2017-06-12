@@ -63,6 +63,8 @@ import axoloti.inlets.InletFrac32Pos;
 import axoloti.inlets.InletInt32;
 import axoloti.inlets.InletInt32Bipolar;
 import axoloti.inlets.InletInt32Pos;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.array.ArrayModel;
 import axoloti.objecteditor.AxoObjectEditor;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletBool32;
@@ -150,7 +152,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = InletFrac32BufferPos.TypeName, type = InletFrac32BufferPos.class, inline = true, required = false),
         @ElementList(entry = InletFrac32BufferBipolar.TypeName, type = InletFrac32BufferBipolar.class, inline = true, required = false)
     })
-    public ArrayList<Inlet> inlets;
+    public ArrayModel<Inlet> inlets;
     @Path("outlets")
     @ElementListUnion({
         @ElementList(entry = OutletBool32.TypeName, type = OutletBool32.class, inline = true, required = false),
@@ -166,7 +168,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = OutletFrac32BufferPos.TypeName, type = OutletFrac32BufferPos.class, inline = true, required = false),
         @ElementList(entry = OutletFrac32BufferBipolar.TypeName, type = OutletFrac32BufferBipolar.class, inline = true, required = false)
     })
-    public ArrayList<Outlet> outlets;
+    public ArrayModel<Outlet> outlets;
     @Path("displays")
     @ElementListUnion({
         @ElementList(entry = DisplayBool32.TypeName, type = DisplayBool32.class, inline = true, required = false),
@@ -189,7 +191,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = DisplayFrac8U128VBar.TypeName, type = DisplayFrac8U128VBar.class, inline = true, required = false),
         @ElementList(entry = DisplayNoteLabel.TypeName, type = DisplayNoteLabel.class, inline = true, required = false)
     })
-    public ArrayList<Display> displays; // readouts
+    public ArrayModel<Display> displays; // readouts
     @Path("params")
     @ElementListUnion({
         @ElementList(entry = ParameterFrac32UMap.TypeName, type = ParameterFrac32UMap.class, inline = true, required = false),
@@ -223,7 +225,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = ParameterBin1.TypeName, type = ParameterBin1.class, inline = true, required = false),
         @ElementList(entry = ParameterBin1Momentary.TypeName, type = ParameterBin1Momentary.class, inline = true, required = false)
     })
-    public ArrayList<Parameter> params; // variables
+    public ArrayModel<Parameter> params; // variables
     @Path("attribs")
     @ElementListUnion({
         @ElementList(entry = AxoAttributeObjRef.TypeName, type = AxoAttributeObjRef.class, inline = true, required = false),
@@ -233,7 +235,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = AxoAttributeSpinner.TypeName, type = AxoAttributeSpinner.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeSDFile.TypeName, type = AxoAttributeSDFile.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeTextEditor.TypeName, type = AxoAttributeTextEditor.class, inline = true, required = false)})
-    public ArrayList<AxoAttribute> attributes; // literal constants
+    public ArrayModel<AxoAttribute> attributes; // literal constants
     @ElementList(name = "file-depends", entry = "file-depend", type = SDFileReference.class, required = false)
     public ArrayList<SDFileReference> filedepends;
     @ElementList(name = "includes", entry = "include", type = String.class, required = false)
@@ -280,21 +282,21 @@ public class AxoObject extends AxoObjectAbstract {
     public String sMidiResetControllersCode;
 
     public AxoObject() {
-        inlets = new ArrayList<Inlet>();
-        outlets = new ArrayList<Outlet>();
-        displays = new ArrayList<Display>();
-        params = new ArrayList<Parameter>();
-        attributes = new ArrayList<AxoAttribute>();
+        inlets = new ArrayModel<Inlet>();
+        outlets = new ArrayModel<Outlet>();
+        displays = new ArrayModel<Display>();
+        params = new ArrayModel<Parameter>();
+        attributes = new ArrayModel<AxoAttribute>();
         includes = new HashSet<String>();
     }
 
     public AxoObject(String id, String sDescription) {
         super(id, sDescription);
-        inlets = new ArrayList<Inlet>();
-        outlets = new ArrayList<Outlet>();
-        displays = new ArrayList<Display>();
-        params = new ArrayList<Parameter>();
-        attributes = new ArrayList<AxoAttribute>();
+        inlets = new ArrayModel<Inlet>();
+        outlets = new ArrayModel<Outlet>();
+        displays = new ArrayModel<Display>();
+        params = new ArrayModel<Parameter>();
+        attributes = new ArrayModel<AxoAttribute>();
         includes = new HashSet<String>();
     }
 
@@ -323,7 +325,8 @@ public class AxoObject extends AxoObjectAbstract {
 
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (editor == null) {
-            editor = new AxoObjectEditor(this);
+            ObjectController ctrl = createController(null);
+            editor = new AxoObjectEditor(ctrl);
         }
 
         setEditorBounds(editorBounds);
@@ -358,8 +361,9 @@ public class AxoObject extends AxoObjectAbstract {
                 Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object {0} uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!", InstanceName1);
             }
         }
-
-        AxoObjectInstance o = new AxoObjectInstance(this, patchModel, InstanceName1, location);
+        ObjectController ctrl = createController(null);
+        AxoObjectInstance o = new AxoObjectInstance(ctrl, patchModel, InstanceName1, location);
+        ctrl.addView(o);
         if (patchModel != null) {
             patchModel.addObjectInstance(o);
         }
@@ -424,12 +428,12 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public ArrayList<Inlet> GetInlets() {
+    public ArrayModel<Inlet> getInlets() {
         return inlets;
     }
 
     @Override
-    public ArrayList<Outlet> GetOutlets() {
+    public ArrayModel<Outlet> getOutlets() {
         return outlets;
     }
 
@@ -573,23 +577,23 @@ public class AxoObject extends AxoObjectAbstract {
     @Override
     public AxoObject clone() throws CloneNotSupportedException {
         AxoObject c = (AxoObject) super.clone();
-        c.inlets = new ArrayList<Inlet>();
+        c.inlets = new ArrayModel<Inlet>();
         for (Inlet i : inlets) {
             c.inlets.add(i.clone());
         }
-        c.outlets = new ArrayList<Outlet>();
+        c.outlets = new ArrayModel<Outlet>();
         for (Outlet i : outlets) {
             c.outlets.add(i.clone());
         }
-        c.params = new ArrayList<Parameter>();
+        c.params = new ArrayModel<Parameter>();
         for (Parameter i : params) {
             c.params.add(i.clone());
         }
-        c.displays = new ArrayList<Display>();
+        c.displays = new ArrayModel<Display>();
         for (Display i : displays) {
             c.displays.add(i.clone());
         }
-        c.attributes = new ArrayList<AxoAttribute>();
+        c.attributes = new ArrayModel<AxoAttribute>();
         for (AxoAttribute i : attributes) {
             c.attributes.add(i.clone());
         }
@@ -598,23 +602,23 @@ public class AxoObject extends AxoObjectAbstract {
 
     public void copy(AxoObject o) throws CloneNotSupportedException {
 
-        inlets = new ArrayList<Inlet>();
+        inlets = new ArrayModel<Inlet>();
         for (Inlet i : o.inlets) {
             inlets.add(i.clone());
         }
-        outlets = new ArrayList<Outlet>();
+        outlets = new ArrayModel<Outlet>();
         for (Outlet i : o.outlets) {
             outlets.add(i.clone());
         }
-        params = new ArrayList<Parameter>();
+        params = new ArrayModel<Parameter>();
         for (Parameter i : o.params) {
             params.add(i.clone());
         }
-        displays = new ArrayList<Display>();
+        displays = new ArrayModel<Display>();
         for (Display i : o.displays) {
             displays.add(i.clone());
         }
-        attributes = new ArrayList<AxoAttribute>();
+        attributes = new ArrayModel<AxoAttribute>();
         for (AxoAttribute i : o.attributes) {
             attributes.add(i.clone());
         }
@@ -659,4 +663,5 @@ public class AxoObject extends AxoObjectAbstract {
     public AxoObjectEditor getEditor() {
         return editor;
     }
+
 }

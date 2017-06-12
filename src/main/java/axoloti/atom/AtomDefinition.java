@@ -17,8 +17,12 @@
  */
 package axoloti.atom;
 
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import java.util.List;
+import org.simpleframework.xml.Attribute;
 
 /**
  *
@@ -26,23 +30,57 @@ import java.util.List;
  */
 /**
  * An Axoloti Object Definition is composed out of AtomDefinition
-*
+ *
  */
-public interface AtomDefinition {
+abstract public class AtomDefinition extends AbstractModel {
 
-    abstract public String getName();
+    @Attribute
+    String name;
+    @Attribute(required = false)
+    public String description;
 
-    abstract public void setName(String name);
+    public AtomDefinition() {
+    }
+
+    public AtomDefinition(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    final public String getName() {
+        return name;
+    }
+
+    final public void setName(String name) {
+        String old_value = this.name;
+        this.name = name;
+        firePropertyChange(
+                AtomController.ATOM_NAME,
+                old_value, name);
+    }
+
+    final public String getDescription() {
+        return description;
+    }
+
+    final public void setDescription(String description) {
+        String old_value = this.description;
+        this.description = description;
+        firePropertyChange(
+                AtomController.ATOM_DESCRIPTION,
+                old_value, description);
+    }
 
     abstract public AtomInstance CreateInstance(AxoObjectInstance o);
-
-    abstract public String getDescription();
-
-    abstract public void setDescription(String description);
 
     abstract public String getTypeName();
 
     abstract public List<String> getEditableFields();
-    
+
+    @Override
+    public AtomController createController(AbstractDocumentRoot documentRoot) {
+        return new AtomController(this, documentRoot);
+    }
+
 //    abstract public AtomDefinition Factory(String name);    
 }

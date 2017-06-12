@@ -17,6 +17,7 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
@@ -29,12 +30,8 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class Display<T extends DisplayInstance> implements AtomDefinition, Cloneable {
+public abstract class Display<T extends DisplayInstance> extends AtomDefinition implements Cloneable {
 
-    @Attribute
-    String name;
-    @Attribute(required = false)
-    public String description;
     @Attribute(required = false)
     public Boolean noLabel;
 
@@ -42,27 +39,7 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     }
 
     public Display(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
+        super(name, null);
     }
 
     @Override
@@ -75,14 +52,16 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     }
 
     public String GetCName() {
-        return "disp_" + name;
+        return "disp_" + getName();
     }
 
     @Override
     public DisplayInstance CreateInstance(AxoObjectInstance o) {
         DisplayInstance pi = InstanceFactory();
+        AtomController c = createController(null);
+        c.addView(pi);
         pi.axoObjectInstance = o;
-        pi.name = this.name;
+        pi.name = getName();
         pi.display = this;
         return pi;
     }
@@ -96,7 +75,7 @@ public abstract class Display<T extends DisplayInstance> implements AtomDefiniti
     }
 
     public void updateSHA(MessageDigest md) {
-        md.update(name.getBytes());
+        md.update(getName().getBytes());
 //        md.update((byte)getDatatype().hashCode());
     }
 

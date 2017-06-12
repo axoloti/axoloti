@@ -17,8 +17,8 @@
  */
 package axoloti.outlets;
 
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomDefinition;
-import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
 import axoloti.object.AxoObjectInstance;
@@ -32,12 +32,8 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class Outlet implements AtomDefinition, Cloneable {
+public abstract class Outlet extends AtomDefinition implements Cloneable {
 
-    @Attribute
-    String name;
-    @Attribute(required = false)
-    public String description;
     @Deprecated
     @Attribute(required = false)
     Boolean SumBuffer;
@@ -50,8 +46,7 @@ public abstract class Outlet implements AtomDefinition, Cloneable {
     }
 
     public Outlet(String name, String description) {
-        this.name = name;
-        this.description = description;
+        super(name, description);
     }
 
     @Override
@@ -60,7 +55,7 @@ public abstract class Outlet implements AtomDefinition, Cloneable {
     }
 
     public String GetCName() {
-        return "outlet_" + CharEscape.CharEscape(name);
+        return "outlet_" + CharEscape.CharEscape(getName());
     }
 
     public SignalMetaData GetSignalMetaData() {
@@ -68,33 +63,15 @@ public abstract class Outlet implements AtomDefinition, Cloneable {
     }
 
     public void updateSHA(MessageDigest md) {
-        md.update(name.getBytes());
+        md.update(getName().getBytes());
         md.update((byte) getDatatype().hashCode());
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     @Override
     public OutletInstance CreateInstance(AxoObjectInstance o) {
         OutletInstance i = new OutletInstance(this, o);
+        AtomController c = createController(null);
+        c.addView(i);
         return i;
     }
 

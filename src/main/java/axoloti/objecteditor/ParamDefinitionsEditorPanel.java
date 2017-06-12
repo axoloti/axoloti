@@ -17,9 +17,11 @@
  */
 package axoloti.objecteditor;
 
+import axoloti.mvc.array.ArrayController;
+import axoloti.mvc.array.ArrayModel;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterTypes;
-import java.util.ArrayList;
+
 
 /**
  *
@@ -27,12 +29,12 @@ import java.util.ArrayList;
  */
 public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter> {
 
-    public ParamDefinitionsEditorPanel() {
-        super(ParameterTypes.getTypes());
+    public ParamDefinitionsEditorPanel(ArrayController controller) {
+        super(controller, ParameterTypes.getTypes());
     }
 
     @Override
-    ArrayList<Parameter> GetAtomDefinitions() {
+    ArrayModel<Parameter> GetAtomDefinitions() {
         return obj.params;
     }
 
@@ -40,4 +42,5 @@ public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter
     String getDefaultName() {
         return "p";
     }
+
 }

@@ -47,7 +47,7 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
             model.getAxoObject().sDescription = "";
         }
         if (model.aoe == null) {
-            model.aoe = new AxoObjectEditor(model.getAxoObject());
+            model.aoe = new AxoObjectEditor(model.getAxoObject().createController(null));
         } else {
             model.aoe.updateReferenceXML();
         }

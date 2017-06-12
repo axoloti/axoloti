@@ -17,9 +17,9 @@
  */
 package axoloti.parameters;
 
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
-import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import generatedobjects.GeneratedObjects;
@@ -38,12 +38,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public abstract class Parameter<T extends ParameterInstance> implements AtomDefinition, Cloneable {
-
-    @Attribute
-    public String name;
-    @Attribute(required = false)
-    public String description;
+public abstract class Parameter<T extends ParameterInstance> extends AtomDefinition implements Cloneable {
 
 //    @Attribute(required = false)
 //    Value<dt> defaultVal;
@@ -61,31 +56,11 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     }
 
     public Parameter(String name) {
-        this.name = name;
+        super(name, null);
     }
 
     public String GetCName() {
-        return "param_" + CharEscape.CharEscape(name);
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
+        return "param_" + CharEscape.CharEscape(getName());
     }
 
     @Override
@@ -96,8 +71,10 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     @Override
     public ParameterInstance CreateInstance(AxoObjectInstance o) {
         ParameterInstance pi = InstanceFactory();
+        AtomController c = createController(null);
+        c.addView(pi);
         pi.axoObjectInstance = o;
-        pi.name = name;
+        pi.name = getName();
         pi.parameter = this;
         pi.applyDefaultValue();
         return pi;
@@ -123,7 +100,7 @@ public abstract class Parameter<T extends ParameterInstance> implements AtomDefi
     }
 
     public void updateSHA(MessageDigest md) {
-        md.update(name.getBytes());
+        md.update(getName().getBytes());
 //        md.update((byte) getDatatype().hashCode());
     }
 

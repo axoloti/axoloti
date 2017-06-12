@@ -20,9 +20,11 @@ package axoloti.object;
 import axoloti.Modulator;
 import axoloti.PatchModel;
 import axoloti.inlets.Inlet;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
+import axoloti.mvc.array.ArrayModel;
 import axoloti.outlets.Outlet;
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import org.simpleframework.xml.Attribute;
@@ -38,7 +40,7 @@ import org.simpleframework.xml.core.Persist;
  * @author Johannes Taelman
  */
 @Root(name = "objdef")
-public abstract class AxoObjectAbstract implements Comparable, Cloneable {
+public abstract class AxoObjectAbstract extends AbstractModel implements  Comparable, Cloneable {
 
     @Attribute
     public String id;
@@ -102,17 +104,15 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
         return null;
     }
 
-    public ArrayList<Inlet> GetInlets() {
+    public ArrayModel<Inlet> getInlets() {
         return null;
     }
 
-    public ArrayList<Outlet> GetOutlets() {
+    public ArrayModel<Outlet> getOutlets() {
         return null;
     }
 
-    public AxoObjectInstanceAbstract CreateInstance(PatchModel patchModel, String InstanceName1, Point location) {
-        return null;
-    }
+    public abstract AxoObjectInstanceAbstract CreateInstance(PatchModel patchModel, String InstanceName1, Point location);
 
     public void DeleteInstance(AxoObjectInstanceAbstract o) {
     }
@@ -185,13 +185,27 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
         this.uuid = uuid;
     }
 
+    @Deprecated
     public void FireObjectModified(Object src) {
     }
 
+    @Deprecated
     public void addObjectModifiedListener(ObjectModifiedListener oml) {
     }
 
+    @Deprecated
     public void removeObjectModifiedListener(ObjectModifiedListener oml) {
     }
 
+    // Let's violate the MVC pattern for now and use a singleton controller for this model
+    // how undo/redo must be handled when open documents contain instances is yet unclear...
+    private ObjectController controller;
+
+    @Override
+    public ObjectController createController(AbstractDocumentRoot documentRoot) {
+        if (controller == null) {
+            controller = new ObjectController(this, documentRoot);
+        }
+        return controller;
+    }
 }

@@ -3,6 +3,7 @@ package axoloti.outlets;
 import axoloti.INetView;
 import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.atom.AtomController;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import components.LabelComponent;
@@ -21,6 +22,8 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
 
     final OutletInstanceController controller;
 
+    LabelComponent label;
+
     public OutletInstanceView(OutletInstance outletInstance, OutletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         this.outletInstance = outletInstance;
         this.controller = controller;
@@ -34,10 +37,13 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
         setMaximumSize(new Dimension(32767, 14));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(Box.createHorizontalGlue());
-        if (axoObj.getObjectInstance().getType().GetOutlets().size() > 1) {
-            add(new LabelComponent(outletInstance.getOutlet().getName()));
-            add(Box.createHorizontalStrut(2));
+        if (axoObj.getObjectInstance().getType().getOutlets().size() > 1) {
+            label = new LabelComponent(outletInstance.getOutlet().getName());
+        } else {
+            label = new LabelComponent("");
         }
+        add(label);
+        add(Box.createHorizontalStrut(2));
         add(new SignalMetaDataIcon(outletInstance.getOutlet().GetSignalMetaData()));
         jack = new components.JackOutputComponent(this);
         jack.setForeground(outletInstance.getOutlet().getDatatype().GetColor());
@@ -84,7 +90,11 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)) {
+            label.setText((String)evt.getNewValue());
+        } else if (evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+            setToolTipText((String)evt.getNewValue());
+        }
     }
 
     @Override

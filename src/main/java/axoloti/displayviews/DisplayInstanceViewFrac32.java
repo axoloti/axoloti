@@ -15,6 +15,9 @@ abstract class DisplayInstanceViewFrac32 extends DisplayInstanceView1 {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        updateV();
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+            updateV();
+        }
     }
 }

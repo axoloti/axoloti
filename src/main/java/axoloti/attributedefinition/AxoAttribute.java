@@ -21,6 +21,7 @@ package axoloti.attributedefinition;
  *
  * @author Johannes Taelman
  */
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomDefinition;
 import axoloti.attribute.AttributeInstance;
 import axoloti.object.AxoObjectInstance;
@@ -28,20 +29,14 @@ import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
-import org.simpleframework.xml.Attribute;
 
-public abstract class AxoAttribute implements AtomDefinition, Cloneable {
-
-    @Attribute
-    String name;
-    @Attribute(required = false)
-    public String description;
+public abstract class AxoAttribute extends AtomDefinition implements Cloneable {
 
     public AxoAttribute() {
     }
 
     public AxoAttribute(String name) {
-        this.name = name;
+        super(name, null);
     }
 
     @Override
@@ -50,28 +45,11 @@ public abstract class AxoAttribute implements AtomDefinition, Cloneable {
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
     public AttributeInstance CreateInstance(AxoObjectInstance o) {
         AttributeInstance pi = InstanceFactory(o);
+        AtomController c = createController(null);
+        c.addView(pi);
+
 //        o.add(pi);
 //        pi.PostConstructor();
         return pi;
@@ -79,6 +57,8 @@ public abstract class AxoAttribute implements AtomDefinition, Cloneable {
 
     public AttributeInstance CreateInstance(AxoObjectInstance o, AttributeInstance a) {
         AttributeInstance pi = InstanceFactory(o);
+        AtomController c = createController(null);
+        c.addView(pi);
         if (a != null) {
             pi.CopyValueFrom(a);
         }
@@ -90,11 +70,11 @@ public abstract class AxoAttribute implements AtomDefinition, Cloneable {
     public abstract AttributeInstance InstanceFactory(AxoObjectInstance o);
 
     public void updateSHA(MessageDigest md) {
-        md.update(name.getBytes());
+        md.update(getName().getBytes());
     }
 
     public String GetCName() {
-        return "attr_" + CharEscape.CharEscape(name);
+        return "attr_" + CharEscape.CharEscape(getName());
     }
 
     @Override

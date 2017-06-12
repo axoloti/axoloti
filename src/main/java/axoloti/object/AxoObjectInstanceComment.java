@@ -18,15 +18,10 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.PatchView;
-import axoloti.PatchViewPiccolo;
-import axoloti.PatchViewSwing;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.objectviews.AxoObjectInstanceViewComment;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceViewComment;
 import java.awt.Point;
+import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
@@ -49,7 +44,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
         }
     }
 
-    public AxoObjectInstanceComment(AxoObjectAbstract type, PatchModel patch1, String InstanceName1, Point location) {
+    public AxoObjectInstanceComment(ObjectController type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
         if (InstanceName != null) {
             commentText = InstanceName;
@@ -92,4 +87,10 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new ObjectInstanceController(this, documentRoot);
     }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

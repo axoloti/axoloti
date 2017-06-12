@@ -59,7 +59,7 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
         addChild(jack);
         addChild(new PSignalMetaDataIcon(inletInstance.getInlet().GetSignalMetaData(), axoObjectInstanceView));
 
-        if (axoObjectInstanceView.getObjectInstance().getType().GetInlets().size() > 1) {
+        if (axoObjectInstanceView.getObjectInstance().getType().getInlets().size() > 1) {
             addToSwingProxy(Box.createHorizontalStrut(3));
             addChild(new PLabelComponent(inletInstance.getInlet().getName()));
         }

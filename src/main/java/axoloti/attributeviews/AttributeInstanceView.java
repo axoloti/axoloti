@@ -2,18 +2,11 @@ package axoloti.attributeviews;
 
 import axoloti.PatchViewSwing;
 import axoloti.Theme;
+import axoloti.atom.AtomController;
 import axoloti.atom.AtomInstanceView;
 import axoloti.attribute.AttributeInstance;
-import axoloti.attribute.AttributeInstanceComboBox;
 import axoloti.attribute.AttributeInstanceController;
-import axoloti.attribute.AttributeInstanceInt32;
-import axoloti.attribute.AttributeInstanceObjRef;
-import axoloti.attribute.AttributeInstanceSDFile;
-import axoloti.attribute.AttributeInstanceSpinner;
-import axoloti.attribute.AttributeInstanceTablename;
-import axoloti.attribute.AttributeInstanceTextEditor;
 import axoloti.mvc.AbstractController;
-import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import components.LabelComponent;
 import java.beans.PropertyChangeEvent;
@@ -28,6 +21,8 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
 
     final AttributeInstanceController controller;
 
+    LabelComponent label;
+
     AttributeInstanceView(AttributeInstance attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         this.attributeInstance = attributeInstance;
         this.controller = controller;
@@ -41,7 +36,8 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        add(new LabelComponent(attributeInstance.getDefinition().getName()));
+        label = new LabelComponent(attributeInstance.getDefinition().getName());
+        add(label);
         setSize(getPreferredSize());
         String description = attributeInstance.getDefinition().getDescription();
         if (description != null) {
@@ -69,13 +65,17 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)) {
+            label.setText((String) evt.getNewValue());
+            doLayout();
+        } else if (evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+            setToolTipText((String) evt.getNewValue());
+        }
     }
 
     @Override
     public AbstractController getController() {
         return controller;
     }
-
 
 }

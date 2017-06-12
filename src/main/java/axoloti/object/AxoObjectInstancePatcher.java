@@ -41,7 +41,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     }
 
     public AxoObjectInstancePatcher(AxoObject type, PatchModel patch1, String InstanceName1, Point location) {
-        super(type, patch1, InstanceName1, location);
+        super(type.createController(null), patch1, InstanceName1, location);
     }
 
     public PatchModel getSubPatchModel() {

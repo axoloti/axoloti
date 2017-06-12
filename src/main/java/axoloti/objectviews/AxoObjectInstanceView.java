@@ -416,8 +416,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         p_parameterViews.setAlignmentX(LEFT_ALIGNMENT);
         p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
 
-        getType().addObjectModifiedListener(model);
-
         synchronized (getTreeLock()) {
             validateTree();
         }

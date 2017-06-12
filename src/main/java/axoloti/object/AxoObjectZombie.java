@@ -50,7 +50,8 @@ public class AxoObjectZombie extends AxoObjectAbstract {
 
     @Override
     public AxoObjectInstanceAbstract CreateInstance(PatchModel patch, String InstanceName1, Point location) {
-        AxoObjectInstanceZombie o = new AxoObjectInstanceZombie(this, patch, InstanceName1, location);
+        ObjectController ctrl = createController(null);
+        AxoObjectInstanceZombie o = new AxoObjectInstanceZombie(ctrl, patch, InstanceName1, location);
         if (patch != null) {
             patch.objectinstances.add(o);
         }

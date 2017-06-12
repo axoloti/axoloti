@@ -23,6 +23,7 @@ import axoloti.MainFrame;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.ObjectController;
 import axoloti.object.ObjectModifiedListener;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.OSDetect;
@@ -130,7 +131,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         }
     }
 
-    public AxoObjectEditor(final AxoObject origObj) {
+    public AxoObjectEditor(ObjectController ctrl) {
+        AxoObject origObj = (AxoObject)ctrl.getModel();
         initComponents();
         if (OSDetect.getOS() == OSDetect.OS.MAC) {
             jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.TOP);
@@ -149,11 +151,16 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
 
         initEditFromOrig();
         updateReferenceXML();
-        inletDefinitionsEditor1.initComponents(editObj);
-        outletDefinitionsEditorPanel1.initComponents(editObj);
-        paramDefinitionsEditorPanel1.initComponents(editObj);
-        attributeDefinitionsEditorPanel1.initComponents(editObj);
-        displayDefinitionsEditorPanel1.initComponents(editObj);
+        InletDefinitionsEditorPanel inlets = new InletDefinitionsEditorPanel(ctrl.inlets);
+        OutletDefinitionsEditorPanel outlets = new OutletDefinitionsEditorPanel(ctrl.outlets);
+        AttributeDefinitionsEditorPanel attrs = new AttributeDefinitionsEditorPanel(ctrl.attrs);
+        ParamDefinitionsEditorPanel params = new ParamDefinitionsEditorPanel(ctrl.params);
+        DisplayDefinitionsEditorPanel disps = new DisplayDefinitionsEditorPanel(ctrl.disps);
+        inlets.initComponents(editObj, inletDefinitionsEditor1);
+        outlets.initComponents(editObj, outletDefinitionsEditor1);
+        attrs.initComponents(editObj, attributeDefinitionsEditorPanel1);
+        params.initComponents(editObj, paramDefinitionsEditorPanel1);
+        disps.initComponents(editObj, displayDefinitionsEditorPanel1);
 
         jTextFieldAuthor.getDocument().addDocumentListener(new DocumentChangeListener() {
             @Override
@@ -276,11 +283,12 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         jTextAreaSRateCode.setEditable(!readonly);
         jTextAreaDisposeCode.setEditable(!readonly);
         jTextAreaMidiCode.setEditable(!readonly);
-        inletDefinitionsEditor1.setEditable(!readonly);
-        outletDefinitionsEditorPanel1.setEditable(!readonly);
-        paramDefinitionsEditorPanel1.setEditable(!readonly);
-        attributeDefinitionsEditorPanel1.setEditable(!readonly);
-        displayDefinitionsEditorPanel1.setEditable(!readonly);
+// FIXME: readonly
+//        inletDefinitionsEditor1.setEditable(!readonly);
+//        outletDefinitionsEditorPanel1.setEditable(!readonly);
+//        paramDefinitionsEditorPanel1.setEditable(!readonly);
+//        attributeDefinitionsEditorPanel1.setEditable(!readonly);
+//        displayDefinitionsEditorPanel1.setEditable(!readonly);
     }
 
     void initFields() {
@@ -412,11 +420,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     public void Close() {
         DocumentWindowList.UnregisterWindow(this);
         editObj.removeObjectModifiedListener(this);
-        editObj.removeObjectModifiedListener(attributeDefinitionsEditorPanel1);
-        editObj.removeObjectModifiedListener(displayDefinitionsEditorPanel1);
-        editObj.removeObjectModifiedListener(inletDefinitionsEditor1);
-        editObj.removeObjectModifiedListener(outletDefinitionsEditorPanel1);
-        editObj.removeObjectModifiedListener(paramDefinitionsEditorPanel1);
         dispose();
         editObj.CloseEditor();
     }
@@ -480,11 +483,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         jLabel11 = new javax.swing.JLabel();
         jScrollPane14 = new javax.swing.JScrollPane();
         jListModules = new javax.swing.JList();
-        inletDefinitionsEditor1 = new axoloti.objecteditor.InletDefinitionsEditorPanel();
-        outletDefinitionsEditorPanel1 = new axoloti.objecteditor.OutletDefinitionsEditorPanel();
-        attributeDefinitionsEditorPanel1 = new axoloti.objecteditor.AttributeDefinitionsEditorPanel();
-        paramDefinitionsEditorPanel1 = new axoloti.objecteditor.ParamDefinitionsEditorPanel();
-        displayDefinitionsEditorPanel1 = new axoloti.objecteditor.DisplayDefinitionsEditorPanel();
+        inletDefinitionsEditor1 = new javax.swing.JPanel();
+        outletDefinitionsEditor1 = new javax.swing.JPanel();
+        attributeDefinitionsEditorPanel1 = new javax.swing.JPanel();
+        paramDefinitionsEditorPanel1 = new javax.swing.JPanel();
+        displayDefinitionsEditorPanel1 = new javax.swing.JPanel();
         jPanelLocalData = new javax.swing.JPanel();
         jPanelInitCode = new javax.swing.JPanel();
         jPanelKRateCode = new javax.swing.JPanel();
@@ -624,37 +627,37 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         inletDefinitionsEditor1.setLayout(inletDefinitionsEditor1Layout);
         inletDefinitionsEditor1Layout.setHorizontalGroup(
             inletDefinitionsEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 521, Short.MAX_VALUE)
+            .addGap(0, 481, Short.MAX_VALUE)
         );
         inletDefinitionsEditor1Layout.setVerticalGroup(
             inletDefinitionsEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 433, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Inlets", inletDefinitionsEditor1);
 
-        javax.swing.GroupLayout outletDefinitionsEditorPanel1Layout = new javax.swing.GroupLayout(outletDefinitionsEditorPanel1);
-        outletDefinitionsEditorPanel1.setLayout(outletDefinitionsEditorPanel1Layout);
-        outletDefinitionsEditorPanel1Layout.setHorizontalGroup(
-            outletDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 521, Short.MAX_VALUE)
+        javax.swing.GroupLayout outletDefinitionsEditor1Layout = new javax.swing.GroupLayout(outletDefinitionsEditor1);
+        outletDefinitionsEditor1.setLayout(outletDefinitionsEditor1Layout);
+        outletDefinitionsEditor1Layout.setHorizontalGroup(
+            outletDefinitionsEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 481, Short.MAX_VALUE)
         );
-        outletDefinitionsEditorPanel1Layout.setVerticalGroup(
-            outletDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+        outletDefinitionsEditor1Layout.setVerticalGroup(
+            outletDefinitionsEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 433, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Outlets", outletDefinitionsEditorPanel1);
+        jTabbedPane1.addTab("Outlets", outletDefinitionsEditor1);
 
         javax.swing.GroupLayout attributeDefinitionsEditorPanel1Layout = new javax.swing.GroupLayout(attributeDefinitionsEditorPanel1);
         attributeDefinitionsEditorPanel1.setLayout(attributeDefinitionsEditorPanel1Layout);
         attributeDefinitionsEditorPanel1Layout.setHorizontalGroup(
             attributeDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 521, Short.MAX_VALUE)
+            .addGap(0, 481, Short.MAX_VALUE)
         );
         attributeDefinitionsEditorPanel1Layout.setVerticalGroup(
             attributeDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 433, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Attributes", attributeDefinitionsEditorPanel1);
@@ -663,11 +666,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         paramDefinitionsEditorPanel1.setLayout(paramDefinitionsEditorPanel1Layout);
         paramDefinitionsEditorPanel1Layout.setHorizontalGroup(
             paramDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 521, Short.MAX_VALUE)
+            .addGap(0, 481, Short.MAX_VALUE)
         );
         paramDefinitionsEditorPanel1Layout.setVerticalGroup(
             paramDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 433, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Parameters", paramDefinitionsEditorPanel1);
@@ -676,11 +679,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
         displayDefinitionsEditorPanel1.setLayout(displayDefinitionsEditorPanel1Layout);
         displayDefinitionsEditorPanel1Layout.setHorizontalGroup(
             displayDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 521, Short.MAX_VALUE)
+            .addGap(0, 481, Short.MAX_VALUE)
         );
         displayDefinitionsEditorPanel1Layout.setVerticalGroup(
             displayDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 416, Short.MAX_VALUE)
+            .addGap(0, 433, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Displays", displayDefinitionsEditorPanel1);
@@ -859,13 +862,14 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     }//GEN-LAST:event_jMenuItemCopyToLibraryActionPerformed
 
     private void jMenuItemRevertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemRevertActionPerformed
-        Rectangle editorBounds = this.getBounds();
-        int activeTabIndex = this.getActiveTabIndex();
-        Revert();
-        AxoObjectEditor axoObjectEditor = new AxoObjectEditor(editObj);
-        axoObjectEditor.setBounds(editorBounds);
-        axoObjectEditor.setActiveTabIndex(activeTabIndex);
-        axoObjectEditor.setVisible(true);
+        // FIXME
+//        Rectangle editorBounds = this.getBounds();
+//        int activeTabIndex = this.getActiveTabIndex();
+//        Revert();
+//        AxoObjectEditor axoObjectEditor = new AxoObjectEditor(editObj);
+//        axoObjectEditor.setBounds(editorBounds);
+//        axoObjectEditor.setActiveTabIndex(activeTabIndex);
+//        axoObjectEditor.setVisible(true);
     }//GEN-LAST:event_jMenuItemRevertActionPerformed
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
@@ -873,11 +877,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     }//GEN-LAST:event_formWindowLostFocus
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private axoloti.objecteditor.AttributeDefinitionsEditorPanel attributeDefinitionsEditorPanel1;
-    private axoloti.objecteditor.DisplayDefinitionsEditorPanel displayDefinitionsEditorPanel1;
+    private javax.swing.JPanel attributeDefinitionsEditorPanel1;
+    private javax.swing.JPanel displayDefinitionsEditorPanel1;
     private axoloti.menus.FileMenu fileMenu1;
     private axoloti.menus.HelpMenu helpMenu1;
-    private axoloti.objecteditor.InletDefinitionsEditorPanel inletDefinitionsEditor1;
+    private javax.swing.JPanel inletDefinitionsEditor1;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -924,8 +928,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, Obj
     private javax.swing.JTextField jTextFieldAuthor;
     private javax.swing.JTextField jTextFieldHelp;
     private javax.swing.JTextField jTextFieldLicense;
-    private axoloti.objecteditor.OutletDefinitionsEditorPanel outletDefinitionsEditorPanel1;
-    private axoloti.objecteditor.ParamDefinitionsEditorPanel paramDefinitionsEditorPanel1;
+    private javax.swing.JPanel outletDefinitionsEditor1;
+    private javax.swing.JPanel paramDefinitionsEditorPanel1;
     private org.fife.ui.rsyntaxtextarea.RSyntaxTextArea rSyntaxTextAreaXML;
     private axoloti.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables

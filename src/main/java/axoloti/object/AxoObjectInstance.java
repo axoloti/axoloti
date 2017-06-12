@@ -22,6 +22,7 @@ import axoloti.Net;
 import axoloti.PatchModel;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
+import axoloti.atom.AtomController;
 import axoloti.attribute.*;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.datatypes.DataType;
@@ -35,9 +36,9 @@ import axoloti.mvc.array.ArrayModel;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
-import axoloti.utils.CodeGeneration;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -89,9 +90,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     public AxoObjectInstance() {
         super();
     }
-
-    public AxoObjectInstance(AxoObject type, PatchModel patchModel, String InstanceName1, Point location) {
-        super(type, patchModel, InstanceName1, location);
+   
+    public AxoObjectInstance(ObjectController controller, PatchModel patchModel, String InstanceName1, Point location) {
+        super(controller, patchModel, InstanceName1, location);
         for (AxoAttribute a : getType().attributes) {
             attributeInstances.add(a.CreateInstance(this));
         }
@@ -160,7 +161,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
 
     public ParameterInstance GetParameterInstance(String n) {
         for (ParameterInstance o : parameterInstances) {
-            if (n.equals(o.parameter.name)) {
+            if (n.equals(o.parameter.getName())) {
                 return o;
             }
         }
@@ -463,5 +464,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract implements Obje
     @Override
     public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new ObjectInstanceController(this, documentRoot);        
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
     }
 }

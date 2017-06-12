@@ -28,7 +28,7 @@ import axoloti.object.AxoObjectInstance;
 public class AxoAttributeWavefile extends AxoAttribute {
 
     public AxoAttributeWavefile(String name) {
-        this.name = name;
+        super(name);
     }
 
     public AxoAttributeWavefile() {
