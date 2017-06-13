@@ -75,13 +75,8 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
     }
 
     @Override
-    public String getString() {
-        return getAttributeInstance().getString();
-    }
-
-    @Override
     public void setString(String sText) {
-        getAttributeInstance().setString(sText);
+        getAttributeInstance().setValue(sText);
         if (getAttributeInstance().editor != null) {
             getAttributeInstance().editor.SetText(sText);
         }

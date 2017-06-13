@@ -70,12 +70,11 @@ public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewStri
 
     @Override
     public String getString() {
-        return attributeInstance.getString();
+        return attributeInstance.getValue();
     }
 
     @Override
     public void setString(String sText) {
-        attributeInstance.setString(sText);
         if (editor != null) {
             editor.SetText(sText);
         }

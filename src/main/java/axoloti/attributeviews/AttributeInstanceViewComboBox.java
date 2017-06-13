@@ -2,11 +2,9 @@ package axoloti.attributeviews;
 
 import axoloti.attribute.AttributeInstanceComboBox;
 import axoloti.attribute.AttributeInstanceController;
-import axoloti.object.AxoObjectInstance;
 import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.utils.Constants;
 import components.DropDownComponent;
-import java.util.logging.Level;
 
 class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
 
@@ -26,50 +24,14 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
         super.PostConstructor();
         comboBox = new DropDownComponent(getAttributeInstance().getDefinition().getMenuEntries(), getAttributeInstance());
         comboBox.setFont(Constants.FONT);
-        setString(getAttributeInstance().getString());
+        setString(getAttributeInstance().getValue());
         comboBox.addItemListener(new DropDownComponent.DDCListener() {
             @Override
             public void SelectionChanged() {
-                if (!getAttributeInstance().getString().equals(comboBox.getSelectedItem())) {
-                    getAttributeInstance().setString(comboBox.getSelectedItem());
-                    getAttributeInstance().setSelectedIndex(comboBox.getSelectedIndex());
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                }
+                getController().changeValue(comboBox.getSelectedItem());
             }
         });
         add(comboBox);
-    }
-
-    @Override
-    public String getString() {
-        return comboBox.getSelectedItem();
-    }
-
-    @Override
-    public void setString(String selection) {
-        getAttributeInstance().setString(selection);
-
-        if (comboBox == null) {
-            return;
-        }
-        if (comboBox.getItemCount() == 0) {
-            return;
-        }
-        if (selection == null) {
-            getAttributeInstance().setString(comboBox.getItemAt(0));
-        }
-        comboBox.setSelectedItem(getAttributeInstance().getString());
-        getAttributeInstance().setSelectedIndex(comboBox.getSelectedIndex());
-        if (getAttributeInstance().getString().equals(comboBox.getSelectedItem())) {
-            return;
-        }
-        for (int i = 0; i < comboBox.getItemCount(); i++) {
-            if (getAttributeInstance().getString().equals(comboBox.getItemAt(i))) {
-                getAttributeInstance().setString(comboBox.getItemAt(i));
-                return;
-            }
-        }
-        java.util.logging.Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Error: object \"{0}\" attribute \"{1}\", value \"{2}\" unmatched", new Object[]{attributeInstance.getObjectInstance().getInstanceName(), attributeInstance.getDefinition().getName(), selection});
     }
 
     @Override
@@ -84,5 +46,12 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
         if (comboBox != null) {
             comboBox.setEnabled(true);
         }
+    }
+
+    @Override
+    public void setString(String s) {
+        AttributeInstanceComboBox aic = (AttributeInstanceComboBox) getController().getModel();
+        int index = aic.getIndex(s);
+        comboBox.setSelectedItem(aic.getDefinition().getMenuEntries().get(index));
     }
 }

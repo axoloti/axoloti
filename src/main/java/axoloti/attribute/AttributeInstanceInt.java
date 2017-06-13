@@ -18,9 +18,7 @@
 package axoloti.attribute;
 
 import axoloti.attributedefinition.AxoAttribute;
-import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.IAxoObjectInstanceView;
 import org.simpleframework.xml.Attribute;
 
 /**

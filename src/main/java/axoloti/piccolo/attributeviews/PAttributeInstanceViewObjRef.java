@@ -22,7 +22,7 @@ public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
 
     public void PostConstructor() {
         super.PostConstructor();
-        TFObjName = new PTextFieldComponent(attributeInstance.getString());
+        TFObjName = new PTextFieldComponent(attributeInstance.getValue());
         Dimension d = TFObjName.getSize();
         d.width = 92;
         d.height = 22;
@@ -58,7 +58,7 @@ public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
         TFObjName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                attributeInstance.setString(TFObjName.getText());
+                getController().changeValue(TFObjName.getText());
             }
 
             @Override
@@ -94,12 +94,12 @@ public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
 
     @Override
     public String getString() {
-        return attributeInstance.getString();
+        return attributeInstance.getValue();
     }
 
     @Override
     public void setString(String objName) {
-        attributeInstance.setString(objName);
+        attributeInstance.setValue(objName);
         if (TFObjName != null) {
             TFObjName.setText(objName);
         }

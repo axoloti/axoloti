@@ -30,8 +30,6 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     @Attribute(name = "selection", required = false)
     String selection;
 
-    int selectedIndex;
-
     public AttributeInstanceComboBox() {
     }
 
@@ -44,7 +42,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
         if (getDefinition().getCEntries().isEmpty()) {
             return "";
         }
-        String s = getDefinition().getCEntries().get(selectedIndex);
+        String s = getDefinition().getCEntries().get(getSelectedIndex());
         if (s != null) {
             return s;
         } else {
@@ -53,17 +51,36 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     }
 
     @Override
-    public String getString() {
+    public String getValue() {
         return selection;
     }
 
     @Override
-    public void setString(String selection) {
+    public void setValue(String selection) {
+        String oldvalue = this.selection;
+        int selectedIndex = getIndex(selection);
+        selection = getDefinition().getMenuEntries().get(selectedIndex);
         this.selection = selection;
+        firePropertyChange(
+                AttributeInstanceController.ELEMENT_ATTR_VALUE,
+                oldvalue, this.selection);
     }
 
-    public void setSelectedIndex(int selectedIndex) {
-        this.selectedIndex = selectedIndex;
+    public int getIndex(String selection) {
+        int selectedIndex = 0;
+        if (selection == null) {
+            return 0;
+        }
+        for (int i = 0; i < getDefinition().getMenuEntries().size(); i++) {
+            if (selection.equals(getDefinition().getMenuEntries().get(i))) {
+                selectedIndex = i;
+                break;
+            }
+        }
+        return selectedIndex;
     }
 
+    public int getSelectedIndex() {
+        return getIndex(selection);
+    }
 }

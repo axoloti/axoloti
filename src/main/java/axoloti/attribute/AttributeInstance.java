@@ -82,14 +82,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
         return attributeName;
     }
 
-    @Deprecated
-    void SetDirty() {
-        // propagate dirty flag to patch if there is one
-        if (getObjectInstance().getPatchModel() != null) {
-            getObjectInstance().getPatchModel().setDirty();
-        }
-    }
-
     @Override
     public AttributeInstanceController createController(AbstractDocumentRoot documentRoot) {
         return new AttributeInstanceController(this, documentRoot);

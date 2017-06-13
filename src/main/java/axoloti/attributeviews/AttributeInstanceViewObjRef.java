@@ -30,7 +30,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
 
     public void PostConstructor() {
         super.PostConstructor();
-        TFObjName = new JTextField(getAttributeInstance().getString());
+        TFObjName = new JTextField(getAttributeInstance().getValue());
         Dimension d = TFObjName.getSize();
         d.width = 92;
         d.height = 22;
@@ -59,7 +59,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                getAttributeInstance().setString(TFObjName.getText());
+                //getController().changeValue(TFObjName.getText());
             }
 
             @Override
@@ -80,14 +80,11 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getAttributeInstance().setValueBeforeAdjustment(TFObjName.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (!TFObjName.getText().equals(getAttributeInstance().getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                }
+                getController().changeValue(TFObjName.getText());
             }
         });
     }
@@ -106,15 +103,11 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
     }
 
     @Override
-    public String getString() {
-        return getAttributeInstance().getString();
-    }
-
-    @Override
     public void setString(String objName) {
-        getAttributeInstance().setString(objName);
         if (TFObjName != null) {
-            TFObjName.setText(objName);
+            if (!TFObjName.getText().equals(objName)) {
+                TFObjName.setText(objName);
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ public class PAttributeInstanceViewTablename extends PAttributeInstanceViewStrin
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFtableName = new PTextFieldComponent(attributeInstance.getString());
+        TFtableName = new PTextFieldComponent(attributeInstance.getValue());
         Dimension d = TFtableName.getSize();
         d.width = 128;
         d.height = 22;
@@ -35,7 +35,7 @@ public class PAttributeInstanceViewTablename extends PAttributeInstanceViewStrin
         TFtableName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                attributeInstance.setString(TFtableName.getText());
+                attributeInstance.setValue(TFtableName.getText());
             }
 
             @Override
@@ -90,12 +90,12 @@ public class PAttributeInstanceViewTablename extends PAttributeInstanceViewStrin
 
     @Override
     public String getString() {
-        return attributeInstance.getString();
+        return attributeInstance.getValue();
     }
 
     @Override
     public void setString(String tableName) {
-        attributeInstance.setString(tableName);
+        attributeInstance.setValue(tableName);
         if (TFtableName != null) {
             TFtableName.setText(tableName);
         }

@@ -6,7 +6,6 @@ import axoloti.atom.AtomController;
 import axoloti.atom.AtomInstanceView;
 import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceController;
-import axoloti.mvc.AbstractController;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import components.LabelComponent;
 import java.beans.PropertyChangeEvent;
@@ -15,7 +14,6 @@ import javax.swing.BoxLayout;
 public abstract class AttributeInstanceView extends AtomInstanceView implements IAttributeInstanceView {
 
     IAxoObjectInstanceView axoObjectInstanceView;
-    PatchViewSwing patchView;
 
     AttributeInstance attributeInstance;
 
@@ -74,7 +72,7 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
     }
 
     @Override
-    public AbstractController getController() {
+    public AttributeInstanceController getController() {
         return controller;
     }
 

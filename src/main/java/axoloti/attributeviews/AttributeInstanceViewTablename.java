@@ -26,7 +26,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFtableName = new JTextField(attributeInstance.getString());
+        TFtableName = new JTextField(attributeInstance.getValue());
         Dimension d = TFtableName.getSize();
         d.width = 128;
         d.height = 22;
@@ -40,7 +40,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
         TFtableName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                attributeInstance.setString(TFtableName.getText());
+                getController().changeValue(TFtableName.getText());
             }
 
             @Override
@@ -62,14 +62,12 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
         TFtableName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                attributeInstance.setValueBeforeAdjustment(TFtableName.getText());
+                getController().changeValue(TFtableName.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (!TFtableName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                }
+                getController().changeValue(TFtableName.getText());
             }
         });
     }
@@ -89,13 +87,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
     }
 
     @Override
-    public String getString() {
-        return attributeInstance.getString();
-    }
-
-    @Override
     public void setString(String tableName) {
-        attributeInstance.setString(tableName);
         if (TFtableName != null) {
             TFtableName.setText(tableName);
         }

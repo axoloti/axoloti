@@ -26,7 +26,7 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFFileName = new PTextFieldComponent(attributeInstance.getString());
+        TFFileName = new PTextFieldComponent(attributeInstance.getValue());
         Dimension d = TFFileName.getSize();
         d.width = 128;
         d.height = 22;
@@ -37,7 +37,7 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
         addChild(TFFileName);
         TFFileName.getDocument().addDocumentListener(new DocumentListener() {
             void update() {
-                attributeInstance.setString(TFFileName.getText());
+                attributeInstance.setValue(TFFileName.getText());
             }
 
             @Override
@@ -83,8 +83,8 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String f = attributeInstance.toRelative(fc.getSelectedFile());
                     TFFileName.setText(f);
-                    if (!f.equals(attributeInstance.getString())) {
-                        attributeInstance.setString(f);
+                    if (!f.equals(attributeInstance.getValue())) {
+                        attributeInstance.setValue(f);
                         attributeInstance.getObjectInstance().getPatchModel().setDirty();
                     }
                 }
@@ -115,12 +115,12 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
 
     @Override
     public String getString() {
-        return attributeInstance.getString();
+        return attributeInstance.getValue();
     }
 
     @Override
     public void setString(String tableName) {
-        attributeInstance.setString(tableName);
+        attributeInstance.setValue(tableName);
         if (TFFileName != null) {
             TFFileName.setText(tableName);
         }

@@ -59,12 +59,12 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     }
 
     @Override
-    public String getString() {
+    public String getValue() {
         return sRef.s;
     }
 
     @Override
-    public void setString(String sText) {
+    public void setValue(String sText) {
         sRef.s = sText;
     }
 

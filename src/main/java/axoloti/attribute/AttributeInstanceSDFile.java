@@ -56,13 +56,17 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
-    public String getString() {
+    public String getValue() {
         return fileName;
     }
 
     @Override
-    public void setString(String tableName) {
+    public void setValue(String tableName) {
+        String oldvalue = this.fileName;
         this.fileName = tableName;
+        firePropertyChange(
+                AttributeInstanceController.ELEMENT_ATTR_VALUE,
+                oldvalue, this.fileName);
     }
 
     @Override

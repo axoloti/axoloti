@@ -23,13 +23,13 @@ public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString
     public void PostConstructor() {
         super.PostConstructor();
         comboBox = new PDropDownComponent(attributeInstance.getDefinition().getMenuEntries(), attributeInstance, axoObjectInstanceView);
-        setString(attributeInstance.getString());
+        setString(attributeInstance.getValue());
         comboBox.addItemListener(new PDropDownComponent.DDCListener() {
             @Override
             public void SelectionChanged() {
-                if (!attributeInstance.getString().equals(comboBox.getSelectedItem())) {
-                    attributeInstance.setString(comboBox.getSelectedItem());
-                    attributeInstance.setSelectedIndex(comboBox.getSelectedIndex());
+                if (!attributeInstance.getValue().equals(comboBox.getSelectedItem())) {
+                    attributeInstance.setValue(comboBox.getSelectedItem());
+                    //attributeInstance.setSelectedIndex(comboBox.getSelectedIndex());
                     attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }
@@ -44,7 +44,9 @@ public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString
 
     @Override
     public void setString(String selection) {
-        attributeInstance.setString(selection);
+        // TODO: use MVC pattern
+        /*
+        attributeInstance.setValue(selection);
 
         if (comboBox == null) {
             return;
@@ -53,20 +55,21 @@ public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString
             return;
         }
         if (selection == null) {
-            attributeInstance.setString(comboBox.getItemAt(0));
+            attributeInstance.setValue(comboBox.getItemAt(0));
         }
-        comboBox.setSelectedItem(attributeInstance.getString());
+        comboBox.setSelectedItem(attributeInstance.getValue());
         attributeInstance.setSelectedIndex(comboBox.getSelectedIndex());
-        if (attributeInstance.getString().equals(comboBox.getSelectedItem())) {
+        if (attributeInstance.getValue().equals(comboBox.getSelectedItem())) {
             return;
         }
         for (int i = 0; i < comboBox.getItemCount(); i++) {
-            if (attributeInstance.getString().equals(comboBox.getItemAt(i))) {
-                attributeInstance.setString(comboBox.getItemAt(i));
+            if (attributeInstance.getValue().equals(comboBox.getItemAt(i))) {
+                attributeInstance.setValue(comboBox.getItemAt(i));
                 return;
             }
         }
         java.util.logging.Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Error: object \"{0}\" attribute \"{1}\", value \"{2}\" unmatched", new Object[]{attributeInstance.getObjectInstance().getInstanceName(), attributeInstance.getDefinition().getName(), selection});
+        */
     }
 
     @Override

@@ -47,13 +47,17 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
     }
 
     @Override
-    public String getString() {
+    public String getValue() {
         return tableName;
     }
 
     @Override
-    public void setString(String tableName) {
+    public void setValue(String tableName) {
+        String oldvalue = this.tableName;
         this.tableName = tableName;
+        firePropertyChange(
+                AttributeInstanceController.ELEMENT_ATTR_VALUE,
+                oldvalue, this.tableName);
     }
 
     @Persist

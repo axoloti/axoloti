@@ -32,7 +32,7 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFFileName = new JTextField(getAttributeInstance().getString());
+        TFFileName = new JTextField(getAttributeInstance().getValue());
         Dimension d = TFFileName.getSize();
         d.width = 128;
         d.height = 22;
@@ -44,7 +44,7 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         add(TFFileName);
         TFFileName.getDocument().addDocumentListener(new DocumentListener() {
             void update() {
-                getAttributeInstance().setString(TFFileName.getText());
+                //getController().changeValue(TFFileName.getText());
             }
 
             @Override
@@ -65,14 +65,12 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         TFFileName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getAttributeInstance().setValueBeforeAdjustment(TFFileName.getText());
+                getController().changeValue(TFFileName.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (!TFFileName.getText().equals(getAttributeInstance().getValueBeforeAdjustment())) {
-                    getAttributeInstance().getObjectInstance().getPatchModel().setDirty();
-                }
+                getController().changeValue(TFFileName.getText());
             }
         });
         ButtonChooseFile = new ButtonComponent("choose");
@@ -81,14 +79,10 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
             public void OnPushed() {
                 JFileChooser fc = new JFileChooser(getAttributeInstance().getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
                 int returnVal = fc.showOpenDialog(null // FIXME: parent frame
-                        );
+                );
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String f = getAttributeInstance().toRelative(fc.getSelectedFile());
-                    TFFileName.setText(f);
-                    if (!f.equals(getAttributeInstance().getString())) {
-                        getAttributeInstance().setString(f);
-                        attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                    }
+                    getController().changeValue(f);
                 }
             }
         });
@@ -116,13 +110,7 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
     }
 
     @Override
-    public String getString() {
-        return getAttributeInstance().getString();
-    }
-
-    @Override
     public void setString(String tableName) {
-        getAttributeInstance().setString(tableName);
         if (TFFileName != null) {
             TFFileName.setText(tableName);
         }

@@ -77,13 +77,17 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
-    public String getString() {
+    public String getValue() {
         return objName;
     }
 
     @Override
-    public void setString(String objName) {
+    public void setValue(String objName) {
+        String oldvalue = this.objName;
         this.objName = objName;
+        firePropertyChange(
+                AttributeInstanceController.ELEMENT_ATTR_VALUE,
+                oldvalue, this.objName);
     }
 
     @Persist

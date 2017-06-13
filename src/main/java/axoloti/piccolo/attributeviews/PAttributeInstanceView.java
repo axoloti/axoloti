@@ -62,7 +62,7 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
     }
 
     @Override
-    public AbstractController getController() {
+    public AttributeInstanceController getController() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

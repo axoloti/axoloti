@@ -35,15 +35,15 @@ public abstract class AttributeInstanceString<T extends AxoAttribute> extends At
         super(param, axoObj1);
     }
 
-    public abstract String getString();
+    public abstract String getValue();
 
-    public abstract void setString(String s);
+    public abstract void setValue(String s);
 
     @Override
     public void CopyValueFrom(AttributeInstance a) {
         if (a instanceof AttributeInstanceString) {
             AttributeInstanceString a1 = (AttributeInstanceString) a;
-            setString(a1.getString());
+            setValue(a1.getValue());
         }
     }
 
