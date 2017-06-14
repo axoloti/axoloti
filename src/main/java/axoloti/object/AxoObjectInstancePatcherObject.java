@@ -70,8 +70,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         if (getAxoObject() != null) {
             getAxoObject().id = "patch/object";
             setType(getAxoObject());
-            this.setDirty(true);
-            getPatchModel().setDirty();
         }
     }
 

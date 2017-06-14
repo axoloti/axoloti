@@ -1,7 +1,7 @@
 package axoloti.parameterviews;
 
 import axoloti.Preset;
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
@@ -292,10 +292,10 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)) {
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
             label.setText((String)evt.getNewValue());
             doLayout();
-        } else if (evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             setToolTipText((String)evt.getNewValue());
         } else {
             updateV();

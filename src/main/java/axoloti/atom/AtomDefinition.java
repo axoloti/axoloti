@@ -17,7 +17,6 @@
  */
 package axoloti.atom;
 
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
@@ -55,7 +54,7 @@ abstract public class AtomDefinition extends AbstractModel {
         String old_value = this.name;
         this.name = name;
         firePropertyChange(
-                AtomController.ATOM_NAME,
+                AtomDefinitionController.ATOM_NAME,
                 old_value, name);
     }
 
@@ -67,7 +66,7 @@ abstract public class AtomDefinition extends AbstractModel {
         String old_value = this.description;
         this.description = description;
         firePropertyChange(
-                AtomController.ATOM_DESCRIPTION,
+                AtomDefinitionController.ATOM_DESCRIPTION,
                 old_value, description);
     }
 
@@ -78,12 +77,12 @@ abstract public class AtomDefinition extends AbstractModel {
     abstract public List<String> getEditableFields();
 
     // FIXME: violating the MVC pattern for now and use a singleton controller for this model
-    private AtomController atomController = null;
+    private AtomDefinitionController atomController = null;
     
     @Override
-    public AtomController createController(AbstractDocumentRoot documentRoot) {
+    public AtomDefinitionController createController(AbstractDocumentRoot documentRoot) {
         if (atomController == null)
-            atomController = new AtomController(this, documentRoot);
+            atomController = new AtomDefinitionController(this, documentRoot);
         return atomController;
     }
 }

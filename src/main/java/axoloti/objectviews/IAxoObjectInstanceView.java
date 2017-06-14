@@ -9,6 +9,7 @@ import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameterviews.IParameterInstanceView;
@@ -16,7 +17,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JComponent;
 
-public interface IAxoObjectInstanceView extends AbstractView {
+public interface IAxoObjectInstanceView extends AbstractView<ObjectInstanceController> {
 
     public AxoObjectInstanceAbstract getModel();
 
@@ -55,8 +56,6 @@ public interface IAxoObjectInstanceView extends AbstractView {
     public void moveToFront();
 
     public void resizeToGrid();
-
-    public AxoObjectInstanceAbstract getObjectInstance();
 
     public Point getLocation();
 

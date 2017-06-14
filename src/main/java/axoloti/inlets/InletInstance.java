@@ -17,7 +17,7 @@
  */
 package axoloti.inlets;
 
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.mvc.AbstractDocumentRoot;
@@ -104,9 +104,6 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
         if (axoObj == null) {
             return false;
         }
-        if (axoObj.getPatchModel() == null) {
-            return false;
-        }
         return false;
         //FIXME: return (axoObj.getPatchModel().GetNet(this) != null);
     }
@@ -119,8 +116,8 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
-        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)
-                || evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)
+                || evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             firePropertyChange(
                     evt.getPropertyName(),
                     evt.getOldValue(),
@@ -129,7 +126,7 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     }
 
     @Override
-    public AtomController getController() {
+    public AtomDefinitionController getController() {
         return inlet.createController(null);
     }
 }

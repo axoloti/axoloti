@@ -62,7 +62,7 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
             getMainView().revalidate();
             getMainView().repaint();
 
-            AxoObjectAbstract t = objectInstanceView.getObjectInstance().getType();
+            AxoObjectAbstract t = objectInstanceView.getModel().getType();
             if (t != null) {
                 String description = t.sDescription == null || t.sDescription.isEmpty() ? o.sDescription : t.sDescription;
                 String path = t.sPath == null ? o.sPath : t.sPath;

@@ -17,7 +17,7 @@
  */
 package axoloti.objecteditor;
 
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
@@ -280,7 +280,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                 switch (columnIndex) {
                     case 0: {
                         assert (value instanceof String);
-                        AtomController c = (AtomController) getController().get(rowIndex);
+                        AtomDefinitionController c = (AtomDefinitionController) getController().get(rowIndex);
                         c.changeName((String) value);
                     }
                     break;
@@ -298,7 +298,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                         break;
                     case 2: {
                         assert (value instanceof String);
-                        AtomController c = (AtomController) getController().get(rowIndex);
+                        AtomDefinitionController c = (AtomDefinitionController) getController().get(rowIndex);
                         c.changeDescription((String) value);
                     }
                     break;

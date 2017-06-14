@@ -3,7 +3,7 @@ package axoloti.inlets;
 import axoloti.INetView;
 import axoloti.MainFrame;
 import axoloti.Theme;
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import components.JackInputComponent;
@@ -43,7 +43,7 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
         add(jack);
         add(new SignalMetaDataIcon(inletInstance.getInlet().GetSignalMetaData()));
         add(Box.createHorizontalStrut(3));
-        if (!((axoObj != null) && axoObj.getObjectInstance().getType().getInlets().size() <= 1)) {
+        if (!((axoObj != null) && axoObj.getModel().getType().getInlets().size() <= 1)) {
             label = new LabelComponent(inletInstance.getInlet().getName());
         } else {
             label = new LabelComponent("");            
@@ -97,10 +97,10 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)) {
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
             label.setText((String)evt.getNewValue());
             doLayout();
-        } else if (evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             setToolTipText((String)evt.getNewValue());
         }
     }

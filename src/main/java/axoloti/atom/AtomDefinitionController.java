@@ -7,12 +7,12 @@ import axoloti.mvc.AbstractDocumentRoot;
  *
  * @author jtaelman
  */
-public class AtomController extends AbstractController<AtomDefinition, AtomInstance> {
+public class AtomDefinitionController extends AbstractController<AtomDefinition, AtomInstance> {
 
     public static final String ATOM_NAME = "Name";
     public static final String ATOM_DESCRIPTION = "Description";
 
-    public AtomController(AtomDefinition model, AbstractDocumentRoot documentRoot) {
+    public AtomDefinitionController(AtomDefinition model, AbstractDocumentRoot documentRoot) {
         super(model, documentRoot);
     }
 

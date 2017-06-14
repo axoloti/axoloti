@@ -307,18 +307,18 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
         setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
         if (o != null) {
-            target_object = o.getObjectInstance();
+            target_object = o.getModel();
         } else {
             target_object = null;
         }
         if (o != null) {
-            AxoObjectAbstract oa = o.getObjectInstance().getType();
+            AxoObjectAbstract oa = o.getModel().getType();
             if (oa != null) {
                 Search(oa.id);
                 SetPreview(oa);
                 ExpandJTreeToEl(oa);
             }
-            jTextFieldObjName.setText(o.getObjectInstance().typeName);
+            jTextFieldObjName.setText(o.getModel().typeName);
         } else if (searchString != null) {
             Search(searchString);
             jTextFieldObjName.setText(searchString);
@@ -356,7 +356,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             objectInstanceView.revalidate();
             jPanel1.revalidate();
             jPanel1.repaint();
-            AxoObjectAbstract t = objectInstanceView.getObjectInstance().getType();
+            AxoObjectAbstract t = objectInstanceView.getModel().getType();
             if (t != null) {
                 String description = t.sDescription == null || t.sDescription.isEmpty() ? o.sDescription : t.sDescription;
                 String path = t.sPath == null ? o.sPath : t.sPath;

@@ -3,7 +3,7 @@ package axoloti.outlets;
 import axoloti.INetView;
 import axoloti.MainFrame;
 import axoloti.Theme;
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import components.LabelComponent;
@@ -37,7 +37,7 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
         setMaximumSize(new Dimension(32767, 14));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(Box.createHorizontalGlue());
-        if (axoObj.getObjectInstance().getType().getOutlets().size() > 1) {
+        if (axoObj.getModel().getType().getOutlets().size() > 1) {
             label = new LabelComponent(outletInstance.getOutlet().getName());
         } else {
             label = new LabelComponent("");
@@ -90,9 +90,9 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)) {
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
             label.setText((String)evt.getNewValue());
-        } else if (evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             setToolTipText((String)evt.getNewValue());
         }
     }

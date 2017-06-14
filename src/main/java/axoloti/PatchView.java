@@ -244,7 +244,7 @@ public abstract class PatchView extends PatchAbstractView {
         PatchModel p = new PatchModel();
         for (IAxoObjectInstanceView o : getObjectInstanceViews()) {
             if (o.isSelected()) {
-                p.objectinstances.add(o.getObjectInstance());
+                p.objectinstances.add(o.getModel());
             }
         }
         p.nets = new ArrayModel<Net>();
@@ -734,7 +734,7 @@ public abstract class PatchView extends PatchAbstractView {
             }
 
             if (view.isZombie()) {
-                zombieViewMap.put(view.getObjectInstance(), view);
+                zombieViewMap.put(view.getModel(), view);
             }
 
             for (IInletInstanceView ii : view.getInletInstanceViews()) {
@@ -788,7 +788,7 @@ public abstract class PatchView extends PatchAbstractView {
             netView.setVisible(isCableTypeEnabled(n.getDataType()));
             for (InletInstance i : n.dest) {
                 if (i instanceof InletInstanceZombie) {
-                    IAxoObjectInstanceView zombieObjectView = zombieViewMap.get(i.getObjectInstance());
+                    IAxoObjectInstanceView zombieObjectView = zombieViewMap.get(i.getModel());
                     IInletInstanceView inletView = zombieObjectView.getInletInstanceView(i);
                     if (inletView == null) {
                         InletInstanceController c = i.createController(controller.getDocumentRoot());
@@ -803,7 +803,7 @@ public abstract class PatchView extends PatchAbstractView {
             }
             for (OutletInstance o : n.source) {
                 if (o instanceof OutletInstanceZombie) {
-                    IAxoObjectInstanceView zombieObjectView = zombieViewMap.get(o.getObjectInstance());
+                    IAxoObjectInstanceView zombieObjectView = zombieViewMap.get(o.getModel());
                     IOutletInstanceView outletView = zombieObjectView.getOutletInstanceView(o);
                     if (outletView == null) {
                         OutletInstanceController c = o.createController(controller.getDocumentRoot());

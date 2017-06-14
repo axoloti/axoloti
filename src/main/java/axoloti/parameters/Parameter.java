@@ -17,7 +17,7 @@
  */
 package axoloti.parameters;
 
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
@@ -71,7 +71,7 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
     @Override
     public ParameterInstance CreateInstance(AxoObjectInstance o) {
         ParameterInstance pi = InstanceFactory();
-        AtomController c = createController(null);
+        AtomDefinitionController c = createController(null);
         c.addView(pi);
         pi.axoObjectInstance = o;
         pi.name = getName();

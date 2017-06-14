@@ -58,7 +58,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
     @Override
     public AxoObjectInstance getModel() {
-        return (AxoObjectInstance)model;
+        return (AxoObjectInstance)super.getModel();
     }
     
     public AxoObject getType() {
@@ -97,7 +97,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        model.updateObj1();
+        getModel().updateObj1();
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -113,7 +113,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         });
         Titlebar.add(popupIcon);
 
-        LabelComponent idlbl = new LabelComponent(model.typeName);
+        LabelComponent idlbl = new LabelComponent(getModel().typeName);
         idlbl.setAlignmentX(LEFT_ALIGNMENT);
         idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
         Titlebar.add(idlbl);
@@ -145,7 +145,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         //IndexLabel.setAlignmentX(RIGHT_ALIGNMENT);
         Titlebar.setAlignmentX(LEFT_ALIGNMENT);
         add(Titlebar);
-        InstanceLabel = new LabelComponent(model.getInstanceName());
+        InstanceLabel = new LabelComponent(getModel().getInstanceName());
         InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
         InstanceLabel.addMouseListener(new MouseListener() {
             @Override
@@ -320,7 +320,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         synchronized (getTreeLock()) {
             validateTree();
         }
-        setLocation(model.getX(), model.getY());
+        setLocation(getModel().getX(), getModel().getY());
         resizeToGrid();
     }
 
@@ -366,13 +366,13 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             popm_adapt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    model.PromoteToOverloadedObj();
+                    getModel().PromoteToOverloadedObj();
                 }
             });
             popup.add(popm_adapt);
         }
 
-        if (model.getType() instanceof AxoObjectFromPatch) {
+        if (getModel().getType() instanceof AxoObjectFromPatch) {
             JMenuItem popm_embed = new JMenuItem("embed as patch/patcher");
             popm_embed.addActionListener(new ActionListener() {
                 @Override
@@ -426,11 +426,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             getModel().updateObj();
             getModel().deferredObjTypeUpdate = false;
         }
-    }
-
-    @Override
-    public AxoObjectInstance getObjectInstance() {
-        return getModel();
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author jtaelman
  */
-public abstract class ArrayView<T extends AbstractView> implements AbstractView, Iterable<T> {
+public abstract class ArrayView<T extends AbstractView> implements AbstractView<ArrayController>, Iterable<T> {
     
     ArrayController<AbstractController> controller;
     List<T> subviews = new ArrayList<>();

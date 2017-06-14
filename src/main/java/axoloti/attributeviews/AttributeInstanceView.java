@@ -2,7 +2,7 @@ package axoloti.attributeviews;
 
 import axoloti.PatchViewSwing;
 import axoloti.Theme;
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstanceView;
 import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceController;
@@ -63,10 +63,10 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)) {
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
             label.setText((String) evt.getNewValue());
             doLayout();
-        } else if (evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             setToolTipText((String) evt.getNewValue());
         }
     }

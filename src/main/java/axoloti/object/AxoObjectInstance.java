@@ -21,7 +21,7 @@ import axoloti.PatchController;
 import axoloti.PatchModel;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.*;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.displays.DisplayInstance;
@@ -99,7 +99,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
             @Override
             public InletInstance viewFactory(AbstractController ctrl) {
-                AtomController ctrl1 = (AtomController) ctrl;
+                AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
                 return (InletInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
             }
 
@@ -118,7 +118,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
             @Override
             public OutletInstance viewFactory(AbstractController ctrl) {
-                AtomController ctrl1 = (AtomController) ctrl;
+                AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
                 return (OutletInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
             }
 
@@ -137,7 +137,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
             @Override
             public DisplayInstance viewFactory(AbstractController ctrl) {
-                AtomController ctrl1 = (AtomController) ctrl;
+                AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
                 return (DisplayInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
             }
 
@@ -154,7 +154,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
             @Override
             public ParameterInstance viewFactory(AbstractController ctrl) {
-                AtomController ctrl1 = (AtomController) ctrl;
+                AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
                 return (ParameterInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
             }
 
@@ -171,7 +171,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
             @Override
             public AttributeInstance viewFactory(AbstractController ctrl) {
-                AtomController ctrl1 = (AtomController) ctrl;
+                AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
                 return (AttributeInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
             }
 

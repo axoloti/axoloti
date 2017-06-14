@@ -17,7 +17,7 @@
  */
 package axoloti.displays;
 
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
 import axoloti.object.AxoObjectInstance;
@@ -58,7 +58,7 @@ public abstract class Display<T extends DisplayInstance> extends AtomDefinition 
     @Override
     public DisplayInstance CreateInstance(AxoObjectInstance o) {
         DisplayInstance pi = InstanceFactory();
-        AtomController c = createController(null);
+        AtomDefinitionController c = createController(null);
         c.addView(pi);
         pi.axoObjectInstance = o;
         pi.name = getName();

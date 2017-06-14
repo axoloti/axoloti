@@ -176,7 +176,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                     inletInstanceP = inletInstance;
                 }
             }
-            InletInstance inletInstance = new InletInstance(inlet, getObjectInstance());
+            InletInstance inletInstance = new InletInstance(inlet, getModel());
             if (inletInstanceP != null) {
 //                Net n = getPatchModel().GetNet(inletInstanceP);
 //                if (n != null) {
@@ -202,7 +202,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                     outletInstanceP = outletInstance;
                 }
             }
-            OutletInstance outletInstance = new OutletInstance(o, getObjectInstance());
+            OutletInstance outletInstance = new OutletInstance(o, getModel());
             if (outletInstanceP != null) {
 //                Net n = getPatchModel().GetNet(outletInstanceP);
 //                if (n != null) {
@@ -234,7 +234,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                     attributeInstanceP = attributeInstance;
                 }
             }
-            AttributeInstance attributeInstance1 = p.CreateInstance(getObjectInstance(), attributeInstanceP);
+            AttributeInstance attributeInstance1 = p.CreateInstance(getModel(), attributeInstanceP);
             PAttributeInstanceView attributeInstanceView = null;
             // TODO: implement PICCOLO view factory
             // ... = (PAttributeInstanceView) attributeInstance1.createView(this);
@@ -244,7 +244,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         }
 
         for (Parameter p : getType().params) {
-            ParameterInstance pin = p.CreateInstance(getObjectInstance());
+            ParameterInstance pin = p.CreateInstance(getModel());
             for (ParameterInstance pinp : pParameterInstances) {
                 if (pinp.getName().equals(pin.getName())) {
                     pin.CopyValueFrom(pinp);
@@ -258,7 +258,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         }
 
         for (Display p : getType().displays) {
-            DisplayInstance pin = p.CreateInstance(getObjectInstance());
+            DisplayInstance pin = p.CreateInstance(getModel());
             PDisplayInstanceView view = null; 
             // TODO: implement PICCOLO view factory
             // ... = (PDisplayInstanceView) pin.createView(this);
@@ -433,7 +433,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     @Override
-    public AxoObjectInstance getObjectInstance() {
+    public AxoObjectInstance getModel() {
         return model;
     }
 

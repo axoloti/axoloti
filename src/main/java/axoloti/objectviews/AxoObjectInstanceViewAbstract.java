@@ -41,7 +41,6 @@ import javax.swing.border.Border;
 
 public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListener, MouseMotionListener, IAxoObjectInstanceView {
 
-    protected AxoObjectInstanceAbstract model;
     protected MouseListener ml;
     protected MouseMotionListener mml;
     protected boolean dragging = false;
@@ -56,14 +55,13 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     final ObjectInstanceController controller;
     
     AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, ObjectInstanceController controller, PatchViewSwing patchView) {
-        this.model = model;
         this.controller = controller;
         this.patchView = patchView;
     }
 
     @Override
     public AxoObjectInstanceAbstract getModel() {
-        return model;
+        return getController().getModel();
     }
 
     @Override
@@ -101,7 +99,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         Titlebar.setMaximumSize(TITLEBAR_MAXIMUM_SIZE);
 
         setBorder(BORDER_UNSELECTED);
-        model.resolveType();
+        getModel().resolveType();
 
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
@@ -239,7 +237,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                     if (getPatchView().objectLayerPanel.getComponentZOrder(o) > maxZIndex) {
                         maxZIndex = getPatchView().objectLayerPanel.getComponentZOrder(o);
                     }
-                    if (o.model.getX() != dragLocation.x || o.model.getY() != dragLocation.y) {
+                    if (o.getModel().getX() != dragLocation.x || o.getModel().getY() != dragLocation.y) {
                         dirtyOnRelease = true;
                     }
                     o.repaint();
@@ -290,7 +288,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     }
 
     public void addInstanceNameEditor() {
-        InstanceNameTF = new TextFieldComponent(model.getInstanceName());
+        InstanceNameTF = new TextFieldComponent(getModel().getInstanceName());
         InstanceNameTF.selectAll();
         InstanceNameTF.addActionListener(new ActionListener() {
             @Override
@@ -369,10 +367,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         d.width = ((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID;
         d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
         setSize(d);
-    }
-
-    public AxoObjectInstanceAbstract getObjectInstance() {
-        return model;
     }
 
     @Override

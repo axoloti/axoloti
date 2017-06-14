@@ -19,7 +19,7 @@ package axoloti.parameters;
 
 import axoloti.Modulation;
 import axoloti.Preset;
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
 import axoloti.mvc.AbstractDocumentRoot;
@@ -157,11 +157,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     public abstract Value getValue();
 
     public void setValue(Value value) {
-        if (axoObjectInstance != null) {
-            if (axoObjectInstance.getPatchModel() != null) {
-                axoObjectInstance.getPatchModel().setDirty();
-            }
-        }
+
         firePropertyChange(ParameterInstanceController.ELEMENT_PARAM_VALUE, null, value);
     }
 
@@ -330,10 +326,6 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
 
     @Deprecated
     public void SetDirty() {
-        // propagate dirty flag to patch if there is one
-        if (getObjectInstance().getPatchModel() != null) {
-            getObjectInstance().getPatchModel().setDirty();
-        }
     }
     
     @Override
@@ -344,8 +336,8 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
-        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)
-                || evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)
+                || evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             firePropertyChange(
                     evt.getPropertyName(),
                     evt.getOldValue(),
@@ -354,7 +346,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     }
 
     @Override
-    public AtomController getController() {
+    public AtomDefinitionController getController() {
         return parameter.createController(null);
     }
 }

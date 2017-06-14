@@ -18,7 +18,7 @@
 package axoloti.outlets;
 
 import axoloti.Net;
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.mvc.AbstractController;
@@ -110,9 +110,6 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
         if (axoObj == null) {
             return false;
         }
-        if (axoObj.getPatchModel() == null) {
-            return false;
-        }
 
         // FIXME: return (axoObj.getPatchModel().GetNet(this) != null);
         return false;
@@ -126,8 +123,8 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
-        if (evt.getPropertyName().equals(AtomController.ATOM_NAME)
-                || evt.getPropertyName().equals(AtomController.ATOM_DESCRIPTION)) {
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)
+                || evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             firePropertyChange(
                     evt.getPropertyName(),
                     evt.getOldValue(),
@@ -136,7 +133,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     }
 
     @Override
-    public AtomController getController() {
+    public AtomDefinitionController getController() {
         return outlet.createController(null);
     }
     

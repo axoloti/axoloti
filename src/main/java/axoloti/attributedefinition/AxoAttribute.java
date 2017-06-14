@@ -21,7 +21,7 @@ package axoloti.attributedefinition;
  *
  * @author Johannes Taelman
  */
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
 import axoloti.attribute.AttributeInstance;
 import axoloti.object.AxoObjectInstance;
@@ -47,7 +47,7 @@ public abstract class AxoAttribute extends AtomDefinition implements Cloneable {
     @Override
     public AttributeInstance CreateInstance(AxoObjectInstance o) {
         AttributeInstance pi = InstanceFactory(o);
-        AtomController c = createController(null);
+        AtomDefinitionController c = createController(null);
         c.addView(pi);
 
 //        o.add(pi);
@@ -57,7 +57,7 @@ public abstract class AxoAttribute extends AtomDefinition implements Cloneable {
 
     public AttributeInstance CreateInstance(AxoObjectInstance o, AttributeInstance a) {
         AttributeInstance pi = InstanceFactory(o);
-        AtomController c = createController(null);
+        AtomDefinitionController c = createController(null);
         c.addView(pi);
         if (a != null) {
             pi.CopyValueFrom(a);

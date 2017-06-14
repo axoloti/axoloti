@@ -17,7 +17,7 @@
  */
 package axoloti.outlets;
 
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
@@ -70,7 +70,7 @@ public abstract class Outlet extends AtomDefinition implements Cloneable {
     @Override
     public OutletInstance CreateInstance(AxoObjectInstance o) {
         OutletInstance i = new OutletInstance(this, o);
-        AtomController c = createController(null);
+        AtomDefinitionController c = createController(null);
         c.addView(i);
         return i;
     }

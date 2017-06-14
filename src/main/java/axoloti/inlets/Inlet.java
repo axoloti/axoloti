@@ -17,7 +17,7 @@
  */
 package axoloti.inlets;
 
-import axoloti.atom.AtomController;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
@@ -52,7 +52,7 @@ public abstract class Inlet extends AtomDefinition implements Cloneable {
     @Override
     public InletInstance CreateInstance(AxoObjectInstance o) {
         InletInstance i = new InletInstance(this, o);
-        AtomController c = createController(null);
+        AtomDefinitionController c = createController(null);
         c.addView(i);
         return i;
     }

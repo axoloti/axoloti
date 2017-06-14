@@ -312,21 +312,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return false;
     }
 
-    /*
-     public String GenerateStructName() {
-     return "";
-     }
-
-     public String GenerateDoFunctionName(){
-     return "";
-     }
-
-     public String GenerateInitFunctionName(){
-     return "";
-     }
-     */
-    
-
     public boolean hasStruct() {
         return false;
     }
@@ -362,7 +347,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
 
     @Deprecated
     public void setDirty(boolean dirty) {
-        this.isDirty = dirty;
     }
 
     @Deprecated

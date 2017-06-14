@@ -50,7 +50,7 @@ public class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstrac
         });
         add(button);
         add(Box.createHorizontalStrut(5));
-        InstanceLabel = new LabelComponent(model.getInstanceName());
+        InstanceLabel = new LabelComponent(getModel().getInstanceName());
         InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
         InstanceLabel.addMouseListener(new MouseListener() {
             @Override
@@ -81,7 +81,7 @@ public class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstrac
         });
         InstanceLabel.addMouseMotionListener(this);
         add(InstanceLabel);
-        setLocation(model.getX(), model.getY());
+        setLocation(getModel().getX(), getModel().getY());
 
         resizeToGrid();
     }

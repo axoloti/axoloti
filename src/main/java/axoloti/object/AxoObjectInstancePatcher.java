@@ -98,8 +98,6 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
             AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
 
             setType(ao);
-            setDirty(true);
-            getPatchModel().setDirty();
         }
     }
 

@@ -12,6 +12,7 @@ import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
@@ -282,11 +283,6 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public AxoObjectInstanceAbstract getObjectInstance() {
-        return model;
-    }
-
-    @Override
     public void addParameterInstanceView(IParameterInstanceView view) {
     }
 
@@ -340,7 +336,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public AbstractController getController() {
+    public ObjectInstanceController getController() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
