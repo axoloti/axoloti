@@ -96,14 +96,6 @@ public abstract class AxoObjectAbstract extends AbstractModel implements  Compar
         this.upgradeSha = null;
     }
 
-    Inlet GetInlet(String n) {
-        return null;
-    }
-
-    Outlet GetOutlet(String n) {
-        return null;
-    }
-
     public ArrayModel<Inlet> getInlets() {
         return null;
     }

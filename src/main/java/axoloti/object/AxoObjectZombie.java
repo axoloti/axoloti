@@ -18,8 +18,6 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.inlets.Inlet;
-import axoloti.outlets.Outlet;
 import java.awt.Point;
 import org.simpleframework.xml.Root;
 
@@ -36,16 +34,6 @@ public class AxoObjectZombie extends AxoObjectAbstract {
 
     public AxoObjectZombie(String id, String sDescription) {
         super(id, sDescription);
-    }
-
-    @Override
-    Inlet GetInlet(String n) {
-        return null;
-    }
-
-    @Override
-    Outlet GetOutlet(String n) {
-        return null;
     }
 
     @Override

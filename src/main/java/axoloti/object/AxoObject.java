@@ -360,9 +360,6 @@ public class AxoObject extends AxoObjectAbstract {
         ObjectController ctrl = createController(null);
         AxoObjectInstance o = new AxoObjectInstance(ctrl, patchModel, InstanceName1, location);
         ctrl.addView(o);
-        if (patchModel != null) {
-            patchModel.addObjectInstance(o);
-        }
 
         return o;
     }
@@ -401,26 +398,6 @@ public class AxoObject extends AxoObjectAbstract {
         } else {
             return null;
         }
-    }
-
-    @Override
-    public Inlet GetInlet(String n) {
-        for (Inlet i : inlets) {
-            if (i.getName().equals(n)) {
-                return i;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Outlet GetOutlet(String n) {
-        for (Outlet i : outlets) {
-            if (i.getName().equals(n)) {
-                return i;
-            }
-        }
-        return null;
     }
 
     @Override

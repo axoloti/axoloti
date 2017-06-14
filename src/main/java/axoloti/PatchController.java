@@ -6,18 +6,28 @@ import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObjectAbstract;
+import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.AxoObjectInstanceZombie;
+import axoloti.object.AxoObjectZombie;
 import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
+import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.convert.AnnotationStrategy;
+import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
 import qcmds.QCmdCompileModule;
 import qcmds.QCmdCompilePatch;
 import qcmds.QCmdProcessor;
@@ -275,8 +285,189 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         // patchView.ShowCompileFail();
     }
 
+
+    private AxoObjectInstanceAbstract getObjectAtLocation(int x, int y) {
+        for (AxoObjectInstanceAbstract o : getModel().getObjectInstances()) {
+            if ((o.getX() == x) && (o.getY() == y)) {
+                return o;
+            }
+        }
+        return null;
+    }
+    
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
-        getModel().paste(v, pos, restoreConnectionsToExternalOutlets);
+        if (v.isEmpty()) {
+            return;
+        }
+        Strategy strategy = new AnnotationStrategy();
+        Serializer serializer = new Persister(strategy);
+        try {
+            PatchModel p = serializer.read(PatchModel.class, v);
+            Map<String, String> dict = new HashMap<String, String>();
+            ArrayList<AxoObjectInstanceAbstract> obj2 = (ArrayList<AxoObjectInstanceAbstract>) p.objectinstances.getArray().clone();
+            for (AxoObjectInstanceAbstract o : obj2) {
+                o.patchModel = getModel();
+                AxoObjectAbstract obj = o.resolveType();
+                if (o instanceof AxoObjectInstance)
+                getModel().applyType((AxoObjectInstance)o, obj);
+                if (obj != null) {
+                    Modulator[] m = obj.getModulators();
+                    if (m != null) {
+                        if (getModel().Modulators == null) {
+                            getModel().Modulators = new ArrayList<Modulator>();
+                        }
+                        for (Modulator mm : m) {
+                            mm.objinst = o;
+                            getModel().Modulators.add(mm);
+                        }
+                    }
+                } else {
+                    //o.patch = this;
+                    p.objectinstances.remove(o);
+                    AxoObjectZombie z = new AxoObjectZombie();                    
+                    AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(z.createController(null), getModel(), o.getInstanceName(), new Point(o.getX(), o.getY()));
+                    zombie.patchModel = getModel();
+                    zombie.typeName = o.typeName;
+                    p.objectinstances.add(zombie);
+                }
+            }
+            int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+            for (AxoObjectInstanceAbstract o : p.objectinstances) {
+                String original_name = o.getInstanceName();
+                if (original_name != null) {
+                    String new_name = original_name;
+                    String ss[] = new_name.split("_");
+                    boolean hasNumeralSuffix = false;
+                    try {
+                        if ((ss.length > 1) && (Integer.toString(Integer.parseInt(ss[ss.length - 1]))).equals(ss[ss.length - 1])) {
+                            hasNumeralSuffix = true;
+                        }
+                    } catch (NumberFormatException e) {
+                    }
+                    if (hasNumeralSuffix) {
+                        int n = Integer.parseInt(ss[ss.length - 1]) + 1;
+                        String bs = original_name.substring(0, original_name.length() - ss[ss.length - 1].length());
+                        while (getModel().GetObjectInstance(new_name) != null) {
+                            new_name = bs + n++;
+                        }
+                        while (dict.containsKey(new_name)) {
+                            new_name = bs + n++;
+                        }
+                    } else {
+                        while (getModel().GetObjectInstance(new_name) != null) {
+                            new_name = new_name + "_";
+                        }
+                        while (dict.containsKey(new_name)) {
+                            new_name = new_name + "_";
+                        }
+                    }
+                    if (!new_name.equals(original_name)) {
+                        o.setInstanceName(new_name);
+                    }
+                    dict.put(original_name, new_name);
+                }
+                if (o.getX() < minX) {
+                    minX = o.getX();
+                }
+                if (o.getY() < minY) {
+                    minY = o.getY();
+                }
+                o.patchModel = getModel();
+                objectInstanceControllers.add(o);
+                int newposx = o.getX();
+                int newposy = o.getY();
+
+                if (pos != null) {
+                    // paste at cursor position, with delta snapped to grid
+                    newposx += Constants.X_GRID * ((pos.x - minX + Constants.X_GRID / 2) / Constants.X_GRID);
+                    newposy += Constants.Y_GRID * ((pos.y - minY + Constants.Y_GRID / 2) / Constants.Y_GRID);
+                }
+                while (getObjectAtLocation(newposx, newposy) != null) {
+                    newposx += Constants.X_GRID;
+                    newposy += Constants.Y_GRID;
+                }
+                o.setLocation(newposx, newposy);
+            }
+            for (Net n : p.nets) {
+                InletInstance connectedInlet = null;
+                OutletInstance connectedOutlet = null;
+                if (n.source != null) {
+                    ArrayList<OutletInstance> source2 = new ArrayList<OutletInstance>();
+                    for (OutletInstance o : n.source) {
+                        String objname = o.getObjname();
+                        String outletname = o.getOutletname();
+                        if ((objname != null) && (outletname != null)) {
+                            String on2 = dict.get(objname);
+                            if (on2 != null) {
+//                                o.name = on2 + " " + r[1];
+                                OutletInstance i = new OutletInstance();
+                                i.outletname = outletname;
+                                i.objname = on2;
+                                source2.add(i);
+                            } else if (restoreConnectionsToExternalOutlets) {
+                                AxoObjectInstanceAbstract obj = getModel().GetObjectInstance(objname);
+                                if ((obj != null) && (connectedOutlet == null)) {
+                                    OutletInstance oi = obj.GetOutletInstance(outletname);
+                                    if (oi != null) {
+                                        connectedOutlet = oi;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    n.source = source2;
+                }
+                if (n.dest != null) {
+                    ArrayList<InletInstance> dest2 = new ArrayList<InletInstance>();
+                    for (InletInstance o : n.dest) {
+                        String objname = o.getObjname();
+                        String inletname = o.getInletname();
+                        if ((objname != null) && (inletname != null)) {
+                            String on2 = dict.get(objname);
+                            if (on2 != null) {
+                                InletInstance i = new InletInstance();
+                                i.inletname = inletname;
+                                i.objname = on2;
+                                dest2.add(i);
+                            }
+                        }
+                    }
+                    n.dest = dest2;
+                }
+                /*
+                if (n.source.size() + n.dest.size() > 1) {
+                    if ((connectedInlet == null) && (connectedOutlet == null)) {
+                        n.patchModel = this;
+                        nets.add(n);
+                    } else if (connectedInlet != null) {
+                        for (InletInstance o : n.dest) {
+                            InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
+                            if ((o2 != null) && (o2 != connectedInlet)) {
+                                AddConnection(connectedInlet, o2);
+                            }
+                        }
+                        for (OutletInstance o : n.source) {
+                            OutletInstance o2 = getOutletByReference(o.getObjname(), o.getOutletname());
+                            if (o2 != null) {
+                                AddConnection(connectedInlet, o2);
+                            }
+                        }
+                    } else if (connectedOutlet != null) {
+                        for (InletInstance o : n.dest) {
+                            InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
+                            if (o2 != null) {
+                                AddConnection(o2, connectedOutlet);
+                            }
+                        }
+                    }
+                }
+                */
+            }
+        } catch (javax.xml.stream.XMLStreamException ex) {
+            // silence
+        } catch (Exception ex) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Deprecated
@@ -468,5 +659,6 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         netControllers.remove(n.getModel());
         return n;
     }
+
 
 }
