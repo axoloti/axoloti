@@ -18,7 +18,6 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
@@ -72,7 +71,11 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     }
 
     public void setCommentText(String commentText) {
+        String oldvalue = this.commentText;
         this.commentText = commentText;
+        firePropertyChange(
+            ObjectInstanceController.OBJ_COMMENT,
+            oldvalue, commentText);
     }
 
     @Override
@@ -90,7 +93,8 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // a comment object is not supposed to mutate
+        throw new UnsupportedOperationException("Not supported.");
     }
 
 }

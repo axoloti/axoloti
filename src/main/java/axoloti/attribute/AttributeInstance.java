@@ -101,6 +101,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
 
     @Override
     public AtomController getController() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // returning the singleton for now...
+        return attr.createController(null);
     }
 }

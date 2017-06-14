@@ -155,11 +155,17 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         AttributeDefinitionsEditorPanel attrs = new AttributeDefinitionsEditorPanel(ctrl.attrs);
         ParamDefinitionsEditorPanel params = new ParamDefinitionsEditorPanel(ctrl.params);
         DisplayDefinitionsEditorPanel disps = new DisplayDefinitionsEditorPanel(ctrl.disps);
+        
         inlets.initComponents(editObj, inletDefinitionsEditor1);
+        ctrl.inlets.addView(inlets);
         outlets.initComponents(editObj, outletDefinitionsEditor1);
+        ctrl.outlets.addView(outlets);
         attrs.initComponents(editObj, attributeDefinitionsEditorPanel1);
+        ctrl.attrs.addView(attrs);
         params.initComponents(editObj, paramDefinitionsEditorPanel1);
+        ctrl.params.addView(params);
         disps.initComponents(editObj, displayDefinitionsEditorPanel1);
+        ctrl.disps.addView(disps);
 
         jTextFieldAuthor.getDocument().addDocumentListener(new DocumentChangeListener() {
             @Override

@@ -177,6 +177,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return type;
     }
 
+    @Deprecated
     public void setLocation(int x, int y) {
         this.x = x;
         this.y = y;

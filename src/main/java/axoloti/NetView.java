@@ -102,6 +102,9 @@ public class NetView extends JComponent implements INetView {
         int max_x = Integer.MIN_VALUE;
 
         for (IInletInstanceView i : dest) {
+            if (i==null){
+                System.out.println("null");
+            }
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);
@@ -109,6 +112,9 @@ public class NetView extends JComponent implements INetView {
             max_y = Math.max(max_y, p1.y);
         }
         for (IOutletInstanceView i : source) {
+            if (i==null){
+                System.out.println("null");
+            }
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);

@@ -20,6 +20,13 @@ public class ObjectInstanceController extends AbstractController<AxoObjectInstan
     public static final String OBJ_INLET_INSTANCES = "InletInstances";
     public static final String OBJ_OUTLET_INSTANCES = "OutletInstances";
     public static final String OBJ_DISPLAY_INSTANCES = "DisplayInstances";
+    public static final String OBJ_COMMENT = "CommentText";
+
+    public ArrayController attributeInstanceControllers;
+    public ArrayController parameterInstanceControllers;
+    public ArrayController inletInstanceControllers;
+    public ArrayController outletInstanceControllers;
+    public ArrayController displayInstanceControllers;
 
     public ObjectInstanceController(AxoObjectInstanceAbstract model, AbstractDocumentRoot documentRoot) {
         super(model, documentRoot);
@@ -40,12 +47,6 @@ public class ObjectInstanceController extends AbstractController<AxoObjectInstan
     public void changeInstanceName(String s) {
         setModelUndoableProperty(OBJ_INSTANCENAME, s);
     }
-
-    public ArrayController attributeInstanceControllers;
-    public ArrayController parameterInstanceControllers;
-    public ArrayController inletInstanceControllers;
-    public ArrayController outletInstanceControllers;
-    public ArrayController displayInstanceControllers;
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

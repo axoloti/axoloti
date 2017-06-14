@@ -130,6 +130,6 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
 
     @Override
     public AtomController getController() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return inlet.createController(null);
     }
 }

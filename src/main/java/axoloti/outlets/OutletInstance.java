@@ -137,7 +137,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
 
     @Override
     public AtomController getController() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return outlet.createController(null);
     }
     
 }

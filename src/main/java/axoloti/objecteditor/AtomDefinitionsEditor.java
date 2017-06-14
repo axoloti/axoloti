@@ -45,6 +45,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -187,7 +188,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                         }
                     }
                     o.setName(getDefaultName() + i);
-                    GetAtomDefinitions().add(o);
+                    getController().add(o);
                     jTable1.setRowSelectionInterval(GetAtomDefinitions().size() - 1, GetAtomDefinitions().size() - 1);
                     UpdateTable2();
                 } catch (InstantiationException ex) {
@@ -207,7 +208,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                     return;
                 }
                 if (jTable1.getRowCount() >= row) {
-                    GetAtomDefinitions().remove(row);
+                    getController().remove(getController().get(row).getModel());
                 }
                 if (row > 0) {
                     jTable1.setRowSelectionInterval(row - 1, row - 1);
@@ -222,11 +223,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
             @Override
             public void actionPerformed(ActionEvent e) {
                 int row = jTable1.getSelectedRow();
-                if (row < 1) {
-                    return;
-                }
-                T o = GetAtomDefinitions().remove(row);
-                GetAtomDefinitions().add(row - 1, o);
+                getController().moveUp(row);
                 jTable1.setRowSelectionInterval(row - 1, row - 1);
             }
         });
@@ -236,14 +233,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
             @Override
             public void actionPerformed(ActionEvent e) {
                 int row = jTable1.getSelectedRow();
-                if (row < 0) {
-                    return;
-                }
-                if (row > (GetAtomDefinitions().size() - 1)) {
-                    return;
-                }
-                T o = GetAtomDefinitions().remove(row);
-                GetAtomDefinitions().add(row + 1, o);
+                getController().moveDown(row);
                 jTable1.setRowSelectionInterval(row + 1, row + 1);
             }
         });
@@ -574,16 +564,22 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (jTable1 != null) {
+            jTable1.tableChanged(new TableModelEvent(jTable1.getModel()));
+        }
     }
 
     @Override
     public void updateUI() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public AbstractView viewFactory(AbstractController ctrl) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         return null;
     }
+
+    @Override
+    public void removeView(AbstractView view){        
+    }
+
 }

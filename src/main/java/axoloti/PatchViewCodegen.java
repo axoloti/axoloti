@@ -48,6 +48,10 @@ public class PatchViewCodegen extends PatchAbstractView {
             public AxoObjectInstanceAbstractCodegenView viewFactory(AbstractController ctrl) {
                 return AxoObjectInstanceCodegenViewFactory.createView((ObjectInstanceController)ctrl);
             }
+
+            @Override
+            public void removeView(AxoObjectInstanceAbstractCodegenView view) {
+            }
         };
         controller.objectInstanceControllers.addView(objectInstanceViews);
     }

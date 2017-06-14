@@ -355,6 +355,6 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
 
     @Override
     public AtomController getController() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return parameter.createController(null);
     }
 }

@@ -3,37 +3,29 @@ package axoloti.objectviews;
 import axoloti.MainFrame;
 import axoloti.PatchViewSwing;
 import axoloti.Theme;
-import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceController;
 import axoloti.attributeviews.AttributeInstanceView;
 import axoloti.attributeviews.AttributeInstanceViewFactory;
 import axoloti.attributeviews.IAttributeInstanceView;
-import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceController;
-import axoloti.displayviews.DisplayInstanceView;
 import axoloti.displayviews.DisplayInstanceViewFactory;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
-import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceController;
 import axoloti.inlets.InletInstanceView;
 import axoloti.inlets.InletInstanceViewFactory;
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.array.ArrayModel;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
-import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceController;
 import axoloti.outlets.OutletInstanceView;
 import axoloti.outlets.OutletInstanceViewFactory;
-import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameterviews.IParameterInstanceView;
-import axoloti.parameterviews.ParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewFactory;
 import components.LabelComponent;
 import components.PopupIcon;
@@ -52,6 +44,7 @@ import javax.swing.JPopupMenu;
 public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract implements IAxoObjectInstanceView {
 
     LabelComponent IndexLabel;
+    public final JPanel p_attributeViews = new JPanel();
     public final JPanel p_parameterViews = new JPanel();
     public final JPanel p_displayViews = new JPanel();
     public final JPanel p_ioletViews = new JPanel();
@@ -95,17 +88,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
     }
 
-    public void clear() {
-        p_parameterViews.removeAll();
-        p_displayViews.removeAll();
-        p_ioletViews.removeAll();
-        p_inletViews.removeAll();
-        p_outletViews.removeAll();
-//      inletInstanceViews.clear();
-//      outletInstanceViews.clear();
-//      parameterInstanceViews.clear();
-    }
-
     ArrayView<IInletInstanceView> inletInstanceViews;
     ArrayView<IOutletInstanceView> outletInstanceViews;
     ArrayView<IAttributeInstanceView> attributeInstanceViews;
@@ -115,7 +97,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        clear();
         model.updateObj1();
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -223,34 +204,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         }
         p_displayViews.add(Box.createHorizontalGlue());
         p_parameterViews.add(Box.createHorizontalGlue());
-/*
-        for (Inlet inlet : getType().inlets) {
-            InletInstance inletInstanceP = null;
-            for (InletInstance inletInstance : pInletInstances) {
-                if (inletInstance.GetLabel().equals(inlet.getName())) {
-                    inletInstanceP = inletInstance;
-                }
-            }
-            InletInstance inletInstance = new InletInstance(inlet, getObjectInstance());
-            if (inletInstanceP != null) {
-                Net n = getPatchModel().GetNet(inletInstanceP);
-                if (n != null) {
-                    n.connectInlet(inletInstance);
-                }
-            }
-            getModel().inletInstances.add(inletInstance);
-            //InletInstanceView view = (InletInstanceView) inletInstance.viewFactory(this);
-            InletInstanceController c = inletInstance.createController(getController().getDocumentRoot());
-            InletInstanceView view = InletInstanceViewFactory.viewFactory(c, this);
-            view.setAlignmentX(LEFT_ALIGNMENT);
-            p_inletViews.add(view);
-            inletInstanceViews.add(view);
-        }
-        // disconnect stale inlets from nets
-        for (InletInstance inletInstance : pInletInstances) {
-            getPatchModel().disconnect(inletInstance);
-        }
-*/
         
         inletInstanceViews = new ArrayView<IInletInstanceView>(controller.inletInstanceControllers) {
             @Override
@@ -260,45 +213,19 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
             @Override
             public void updateUI() {
+                p_inletViews.removeAll();
+                for(IInletInstanceView c: getSubViews()){
+                    p_inletViews.add((Component)c);
+                }
+                resizeToGrid();
+            }
+
+            @Override
+            public void removeView(IInletInstanceView view) {
             }
         };
         controller.inletInstanceControllers.addView(inletInstanceViews);
-        for (IInletInstanceView view : inletInstanceViews){
-            view.setAlignmentX(LEFT_ALIGNMENT);
-            p_inletViews.add((Component)view);
-        }
-        
-/*        
-        for (Outlet o : getType().outlets) {
-            OutletInstance outletInstanceP = null;
-            for (OutletInstance outletInstance : pOutletInstances) {
-                if (outletInstance.GetLabel().equals(o.getName())) {
-                    outletInstanceP = outletInstance;
-                }
-            }
-            OutletInstance outletInstance = new OutletInstance(o, getObjectInstance());
-            if (outletInstanceP != null) {
-                Net n = getPatchModel().GetNet(outletInstanceP);
-                if (n != null) {
-                    n.connectOutlet(outletInstance);
-                }
-            }
-            // need a view here
-            getModel().outletInstances.add(outletInstance);
-            OutletInstanceController c = outletInstance.createController(getController().getDocumentRoot());
-            OutletInstanceView view = OutletInstanceViewFactory.viewFactory(c, this);
-//            OutletInstanceView view = (OutletInstanceView) outletInstance.viewFactory(this);
-            view.setAlignmentX(RIGHT_ALIGNMENT);
-            p_outletViews.add(view);
-            outletInstanceViews.add(view);
-        }
-        // disconnect stale outlets from nets
-        for (OutletInstance outletInstance : pOutletInstances) {
-            getPatchModel().disconnect(outletInstance);
-        }
 
-*/
-        
         outletInstanceViews = new ArrayView<IOutletInstanceView>(controller.outletInstanceControllers) {
             @Override
             public OutletInstanceView viewFactory(AbstractController ctrl) {
@@ -306,37 +233,24 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             }
             @Override
             public void updateUI() {
+                p_outletViews.removeAll();
+                for(IOutletInstanceView c: getSubViews()){
+                    p_outletViews.add((Component)c);
+                }
+                resizeToGrid();
+            }
+
+            @Override
+            public void removeView(IOutletInstanceView view) {
             }
         };
         controller.outletInstanceControllers.addView(outletInstanceViews);
-        for (IOutletInstanceView view : outletInstanceViews){
-            view.setAlignmentX(RIGHT_ALIGNMENT);
-            p_outletViews.add((Component)view);
-        }
 
         p_ioletViews.add(p_inletViews);
         p_ioletViews.add(Box.createHorizontalGlue());
         p_ioletViews.add(p_outletViews);
         add(p_ioletViews);
-        
-/*        
-        for (AxoAttribute p : getType().attributes) {
-            AttributeInstance attributeInstanceP = null;
-            for (AttributeInstance attributeInstance : pAttributeInstances) {
-                if (attributeInstance.getAttributeName().equals(p.getName())) {
-                    attributeInstanceP = attributeInstance;
-                }
-            }
-            AttributeInstance attributeInstance1 = p.CreateInstance(getObjectInstance(), attributeInstanceP);
-            AttributeInstanceController c = attributeInstance1.createController(getController().getDocumentRoot());
-            AttributeInstanceView attributeInstanceView = AttributeInstanceViewFactory.viewFactory(c, this);
-            attributeInstanceView.setAlignmentX(LEFT_ALIGNMENT);
-            addAttributeInstanceView(attributeInstanceView);
-            attributeInstanceView.doLayout();
-            getModel().attributeInstances.add(attributeInstance1);
-        }
-*/
-        
+
         attributeInstanceViews = new ArrayView<IAttributeInstanceView>(controller.attributeInstanceControllers) {
             @Override
             public AttributeInstanceView viewFactory(AbstractController ctrl) {
@@ -344,28 +258,19 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             }
             @Override
             public void updateUI() {
+                p_attributeViews.removeAll();
+                for(IAttributeInstanceView c: getSubViews()){
+                    p_attributeViews.add((Component)c);
+                }
+                resizeToGrid();
+            }
+
+            @Override
+            public void removeView(IAttributeInstanceView view) {
             }
         };
         controller.attributeInstanceControllers.addView(attributeInstanceViews);
-        for (IAttributeInstanceView view : attributeInstanceViews){
-            addAttributeInstanceView(view);
-        }
-        
-/*
-        for (Parameter p : getType().params) {
-            ParameterInstance pin = p.CreateInstance(getObjectInstance());
-            for (ParameterInstance pinp : pParameterInstances) {
-                if (pinp.getName().equals(pin.getName())) {
-                    pin.CopyValueFrom(pinp);
-                }
-            }
-            ParameterInstanceController c = pin.createController(getController().getDocumentRoot());
-            ParameterInstanceView view = ParameterInstanceViewFactory.viewFactory(c, this);
-            addParameterInstanceView(view);
-            view.setAlignmentX(RIGHT_ALIGNMENT);
-            getModel().parameterInstances.add(pin);
-        }
-*/
+
         parameterInstanceViews = new ArrayView<IParameterInstanceView>(controller.parameterInstanceControllers) {
             @Override
             public IParameterInstanceView viewFactory(AbstractController ctrl) {
@@ -373,27 +278,18 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             }
             @Override
             public void updateUI() {
+                p_parameterViews.removeAll();
+                for(IParameterInstanceView c: getSubViews()){
+                    p_parameterViews.add((Component)c);
+                }
+                resizeToGrid();
+            }
+
+            @Override
+            public void removeView(IParameterInstanceView view) {
             }
         };
-
         controller.parameterInstanceControllers.addView(parameterInstanceViews);
-        for (IParameterInstanceView v : parameterInstanceViews){
-            addParameterInstanceView(v);
-        }
-/*
-        for (Display p : getType().displays) {
-            DisplayInstance pin = p.CreateInstance(getObjectInstance());
-            DisplayInstanceController c = pin.createController(getController().getDocumentRoot());
-            DisplayInstanceView view = DisplayInstanceView.createView(c, null);
-            addDisplayInstanceView(view);
-//                    (DisplayInstanceView) pin.viewFactory(this);
-            view.setAlignmentX(RIGHT_ALIGNMENT);
-            view.doLayout();
-            getModel().displayInstances.add(pin);
-        }
-//        p_displays.add(Box.createHorizontalGlue());
-//        p_params.add(Box.createHorizontalGlue());
-*/        
         
         displayInstanceViews = new ArrayView<IDisplayInstanceView>(controller.displayInstanceControllers) {
             @Override
@@ -402,15 +298,20 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             }
             @Override
             public void updateUI() {
+                p_displayViews.removeAll();
+                for(IDisplayInstanceView c: getSubViews()){
+                    p_displayViews.add((Component)c);
+                }
+                resizeToGrid();                
+            }
+
+            @Override
+            public void removeView(IDisplayInstanceView view) {
             }
         };
-
         controller.displayInstanceControllers.addView(displayInstanceViews);
-        for (IDisplayInstanceView v : displayInstanceViews){
-            addDisplayInstanceView(v);
-        }
-        
-        
+
+        add(p_attributeViews);
         add(p_parameterViews);
         add(p_displayViews);
         p_parameterViews.setAlignmentX(LEFT_ALIGNMENT);
@@ -548,28 +449,27 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     }
 
     @Override
+    @Deprecated
     public void addParameterInstanceView(IParameterInstanceView view) {
-        p_parameterViews.add((ParameterInstanceView) view);
     }
 
     @Override
+    @Deprecated
     public void addAttributeInstanceView(IAttributeInstanceView view) {
-        add((AttributeInstanceView) view);
     }
 
     @Override
+    @Deprecated
     public void addDisplayInstanceView(IDisplayInstanceView view) {
-        p_displayViews.add((DisplayInstanceView) view);
     }
 
     @Override
+    @Deprecated
     public void addOutletInstanceView(IOutletInstanceView view) {
-        p_outletViews.add((OutletInstanceView) view);
-
     }
 
     @Override
+    @Deprecated
     public void addInletInstanceView(IInletInstanceView view) {
-        p_inletViews.add((InletInstanceView) view);
     }
 }

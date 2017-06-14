@@ -77,10 +77,13 @@ abstract public class AtomDefinition extends AbstractModel {
 
     abstract public List<String> getEditableFields();
 
+    // FIXME: violating the MVC pattern for now and use a singleton controller for this model
+    private AtomController atomController = null;
+    
     @Override
     public AtomController createController(AbstractDocumentRoot documentRoot) {
-        return new AtomController(this, documentRoot);
+        if (atomController == null)
+            atomController = new AtomController(this, documentRoot);
+        return atomController;
     }
-
-//    abstract public AtomDefinition Factory(String name);    
 }

@@ -44,7 +44,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -91,16 +90,21 @@ public abstract class PatchView extends PatchAbstractView {
         objectInstanceViews = new ArrayView<IAxoObjectInstanceView>(controller.objectInstanceControllers) {
             @Override
             public IAxoObjectInstanceView viewFactory(AbstractController ctrl) {
-                IAxoObjectInstanceView view = AxoObjectInstanceViewFactory.createView((ObjectInstanceController)ctrl, (PatchViewSwing)PatchView.this);
+                IAxoObjectInstanceView view = AxoObjectInstanceViewFactory.createView((ObjectInstanceController) ctrl, (PatchViewSwing) PatchView.this);
                 view.PostConstructor();
                 return view;
             }
+
             @Override
             public void updateUI() {
                 removeAllObjectViews();
-                for(IAxoObjectInstanceView v: getSubViews()){
+                for (IAxoObjectInstanceView v : getSubViews()) {
                     add(v);
                 }
+            }
+
+            @Override
+            public void removeView(IAxoObjectInstanceView view) {
             }
         };
         controller.objectInstanceControllers.addView(objectInstanceViews);
@@ -108,16 +112,21 @@ public abstract class PatchView extends PatchAbstractView {
         netViews = new ArrayView<INetView>(controller.netControllers) {
             @Override
             public INetView viewFactory(AbstractController ctrl) {
-                INetView view = new NetView((Net)(ctrl.getModel()),(NetController)ctrl, (PatchViewSwing)PatchView.this);
+                INetView view = new NetView((Net) (ctrl.getModel()), (NetController) ctrl, (PatchViewSwing) PatchView.this);
                 view.PostConstructor();
                 return view;
             }
+
             @Override
             public void updateUI() {
                 removeAllNetViews();
-                for(INetView v: getSubViews()){
+                for (INetView v : getSubViews()) {
                     add(v);
                 }
+            }
+
+            @Override
+            public void removeView(INetView view) {
             }
         };
         controller.netControllers.addView(netViews);
@@ -498,10 +507,11 @@ public abstract class PatchView extends PatchAbstractView {
 
     public void Close() {
         setLocked(false);
-        Collection<IAxoObjectInstanceView> c = (Collection<IAxoObjectInstanceView>) objectInstanceViews.getSubViews().clone();
+        /*
+        IAxoObjectInstanceView c[] = (IAxoObjectInstanceView[])objectInstanceViews.getSubViews().toArray();
         for (IAxoObjectInstanceView o : c) {
             o.getModel().Close();
-        }
+        }*/
         if (NotesFrame != null) {
             NotesFrame.dispose();
         }
@@ -650,9 +660,8 @@ public abstract class PatchView extends PatchAbstractView {
         if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
             if ((Boolean)evt.getNewValue() == false) {
                 getPatchFrame().SetLive(false);
-                List<IAxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<IAxoObjectInstanceView>) objectInstanceViews.getSubViews().clone();
-                for (IAxoObjectInstanceView o : objectInstanceViewsClone) {
-                    o.Unlock();
+                for (IAxoObjectInstanceView o : objectInstanceViews) {
+                    o.Lock();
                 }
             } else {
                 getPatchFrame().SetLive(true);

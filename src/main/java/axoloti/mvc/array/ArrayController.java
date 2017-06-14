@@ -45,7 +45,7 @@ public class ArrayController<T extends AbstractController> extends AbstractContr
 
     public void syncControllers() {
         ArrayList<AbstractController> subcontrollers2 = (ArrayList<AbstractController>) subcontrollers.clone();
-        subcontrollers = new ArrayList<>();
+        subcontrollers.clear();
         for (Object o : getModel().array) {
             AbstractModel om = (AbstractModel) o;
             AbstractController ctrl = null;
@@ -82,6 +82,30 @@ public class ArrayController<T extends AbstractController> extends AbstractContr
 
     public T get(int index) {
         return subcontrollers.get(index);
+    }
+
+    public void moveUp(int index) {
+        if (index < 1) {
+            return;
+        }
+        ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
+        AbstractModel elem = n.get(index);
+        n.remove(index);
+        n.add(index-1, elem);
+        setModelUndoableProperty(ARRAY, n);
+    }
+
+    public void moveDown(int row) {
+        if (row < 0) {
+            return;
+        }
+        if (row > (getModel().getArray().size() - 1)) {
+            return;
+        }
+        ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
+        AbstractModel o = n.remove(row);
+        n.add(row + 1, o);
+        setModelUndoableProperty(ARRAY, n);
     }
 
 }

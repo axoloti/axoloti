@@ -113,6 +113,7 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
 
     @Override
     public AtomController getController() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // returning the singleton for now...
+        return display.createController(null);
     }
 }

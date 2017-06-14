@@ -3,6 +3,7 @@ package axoloti.objectviews;
 import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstanceComment;
 import axoloti.object.ObjectInstanceController;
+import static axoloti.object.ObjectInstanceController.OBJ_INSTANCENAME;
 import components.LabelComponent;
 import components.TextFieldComponent;
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 
@@ -123,9 +125,15 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
 
     @Override
     public void setInstanceName(String s) {
-        if (!model.getCommentText().equals(s)) {
-            model.setCommentText(s);
-            model.setDirty(true);
+        getController().setModelUndoableProperty(ObjectInstanceController.OBJ_COMMENT, s);
+    }
+    
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_COMMENT)) {
+            InstanceLabel.setText((String) evt.getNewValue());
+            resizeToGrid();
         }
     }
 }

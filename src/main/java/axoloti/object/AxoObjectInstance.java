@@ -17,23 +17,19 @@
  */
 package axoloti.object;
 
-import axoloti.MainFrame;
-import axoloti.Net;
+import axoloti.PatchController;
 import axoloti.PatchModel;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.atom.AtomController;
 import axoloti.attribute.*;
 import axoloti.attributedefinition.AxoAttribute;
-import axoloti.datatypes.DataType;
-import axoloti.datatypes.Frac32buffer;
-import axoloti.displays.Display;
 import axoloti.displays.DisplayInstance;
-import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.array.ArrayModel;
-import axoloti.outlets.Outlet;
+import axoloti.mvc.array.ArrayView;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.*;
 import java.awt.Point;
@@ -41,13 +37,8 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persist;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Strategy;
 
 /**
  *
@@ -87,29 +78,110 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public ArrayModel<AttributeInstance> attributeInstances = new ArrayModel<>();
     public ArrayModel<DisplayInstance> displayInstances = new ArrayModel<DisplayInstance>();
 
+    // link from object definition to object instance
+    public ArrayView<InletInstance> vInlets;
+    public ArrayView<OutletInstance> vOutlets;
+    public ArrayView<DisplayInstance> vDisps;
+    public ArrayView<ParameterInstance> vParams;
+    public ArrayView<AttributeInstance> vAttrs;
+    
     public AxoObjectInstance() {
         super();
     }
-   
+
     public AxoObjectInstance(ObjectController controller, PatchModel patchModel, String InstanceName1, Point location) {
         super(controller, patchModel, InstanceName1, location);
-        for (AxoAttribute a : getType().attributes) {
-            attributeInstances.add(a.CreateInstance(this));
-        }
-        for (Parameter a : getType().params) {
-            parameterInstances.add(a.CreateInstance(this));
-        }
-        for (Inlet a : getType().inlets) {
-            inletInstances.add(a.CreateInstance(this));
-        }
-        for (Outlet a : getType().outlets) {
-            outletInstances.add(a.CreateInstance(this));
-        }
-        for (Display a : getType().displays) {
-            displayInstances.add(a.CreateInstance(this));
-        }
+
+        vInlets = new ArrayView<InletInstance>(controller.inlets, inletInstances) {
+            @Override
+            public void updateUI() {
+            }
+
+            @Override
+            public InletInstance viewFactory(AbstractController ctrl) {
+                AtomController ctrl1 = (AtomController) ctrl;
+                return (InletInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
+            }
+
+            @Override
+            public void removeView(InletInstance view) {
+                //PatchController c = // we need a patchcontroller reference here.
+                //c.disconnect(view)
+            }
+        };
+        controller.inlets.addView(vInlets);
+
+        vOutlets = new ArrayView<OutletInstance>(controller.outlets, outletInstances) {
+            @Override
+            public void updateUI() {
+            }
+
+            @Override
+            public OutletInstance viewFactory(AbstractController ctrl) {
+                AtomController ctrl1 = (AtomController) ctrl;
+                return (OutletInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
+            }
+
+            @Override
+            public void removeView(OutletInstance view) {
+                //PatchController c = // we need a patchcontroller reference here.
+                //c.disconnect(view)
+            }
+        };
+        controller.outlets.addView(vOutlets);
+
+        vDisps = new ArrayView<DisplayInstance>(controller.disps, displayInstances) {
+            @Override
+            public void updateUI() {
+            }
+
+            @Override
+            public DisplayInstance viewFactory(AbstractController ctrl) {
+                AtomController ctrl1 = (AtomController) ctrl;
+                return (DisplayInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
+            }
+
+            @Override
+            public void removeView(DisplayInstance view) {
+            }
+        };
+        controller.disps.addView(vDisps);
+
+        vParams = new ArrayView<ParameterInstance>(controller.params, parameterInstances) {
+            @Override
+            public void updateUI() {
+            }
+
+            @Override
+            public ParameterInstance viewFactory(AbstractController ctrl) {
+                AtomController ctrl1 = (AtomController) ctrl;
+                return (ParameterInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
+            }
+
+            @Override
+            public void removeView(ParameterInstance view) {
+            }
+        };
+        controller.params.addView(vParams);
+
+        vAttrs = new ArrayView<AttributeInstance>(controller.attrs, attributeInstances) {
+            @Override
+            public void updateUI() {
+            }
+
+            @Override
+            public AttributeInstance viewFactory(AbstractController ctrl) {
+                AtomController ctrl1 = (AtomController) ctrl;
+                return (AttributeInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
+            }
+
+            @Override
+            public void removeView(AttributeInstance view) {
+            }
+        };
+        controller.attrs.addView(vAttrs);
     }
-   
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();

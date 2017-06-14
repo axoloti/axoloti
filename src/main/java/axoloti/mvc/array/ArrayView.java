@@ -5,6 +5,7 @@ import axoloti.mvc.AbstractView;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -13,21 +14,29 @@ import java.util.Iterator;
 public abstract class ArrayView<T extends AbstractView> implements AbstractView, Iterable<T> {
     
     ArrayController<AbstractController> controller;
-    ArrayList<T> subviews = new ArrayList<>();
+    List<T> subviews = new ArrayList<>();
 
     public ArrayView(ArrayController controller) {
         this.controller = controller;
+        subviews = new ArrayList<>();
         Sync();
     }
-    
+
+    public ArrayView(ArrayController controller, List<T> subviews) {
+        this.controller = controller;
+        this.subviews = subviews;
+        Sync();
+    }
+
     private void Sync() {
-        ArrayList<T> subviews2 = (ArrayList<T>) subviews.clone();
+        ArrayList<T> subviews2= new ArrayList<T>(subviews);
         for (T view : subviews) {
             if (!controller.subcontrollers.contains(view.getController())) {
                 subviews2.remove(view);
+                removeView(view);
             }
         }
-        subviews = new ArrayList<>();
+        subviews.clear();
         for (AbstractController ctrl : controller) {
             // do we have a view already?
             T view = null;
@@ -48,7 +57,7 @@ public abstract class ArrayView<T extends AbstractView> implements AbstractView,
 
     public abstract void updateUI();
     
-    public ArrayList<T> getSubViews(){
+    public List<T> getSubViews(){
         return subviews;
     }
     
@@ -65,6 +74,8 @@ public abstract class ArrayView<T extends AbstractView> implements AbstractView,
     }
     
     public abstract T viewFactory(AbstractController ctrl);
+
+    public abstract void removeView(T view);
 
     @Override
     public Iterator<T> iterator() {

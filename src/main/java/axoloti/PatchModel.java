@@ -1167,16 +1167,8 @@ public class PatchModel extends AbstractModel {
         Modulators.add(m);
     }
 
-    public void addObjectInstance(AxoObjectInstanceAbstract o) {
-        objectinstances.add(o);
-    }
-
     public ArrayModel<Net> getNets() {
         return nets;
-    }
-
-    public void addNet(Net n) {
-        nets.add(n);
     }
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {

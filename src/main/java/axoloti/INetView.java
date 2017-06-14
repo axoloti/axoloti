@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public interface INetView extends AbstractView {
 
-    @Deprecated
     public void updateBounds();
 
     @Deprecated
@@ -25,7 +24,6 @@ public interface INetView extends AbstractView {
 
     public void setVisible(boolean isVisible);
 
-    @Deprecated
     public void repaint();
 
     public void validate();
