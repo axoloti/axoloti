@@ -136,7 +136,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
     }
 
     public String CName() {
-        int i = getParent().getModel().nets.indexOf(this);
+        int i = getParent().netControllers.indexOf(this);
         return "net" + i;
     }
 }

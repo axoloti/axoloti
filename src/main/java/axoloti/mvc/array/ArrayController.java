@@ -1,5 +1,6 @@
 package axoloti.mvc.array;
 
+import axoloti.NetController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
@@ -108,6 +109,14 @@ public abstract class ArrayController<T extends AbstractController, M extends Ab
         M o = n.remove(row);
         n.add(row + 1, o);
         setModelUndoableProperty(ARRAY, n);
+    }
+
+    public int indexOf(NetController netController) {
+        int index = subcontrollers.indexOf(netController);
+        if (index < 0) {
+            throw new Error("ArrayController does not contain " + netController.toString());
+        }
+        return index;
     }
 
 }
