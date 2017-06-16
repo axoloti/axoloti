@@ -70,7 +70,7 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
     }
 
     @Override
-    public InletInstance getInletInstance() {
+    public InletInstance getModel() {
         return inletInstance;
     }
 

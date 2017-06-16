@@ -7,11 +7,8 @@ import components.displays.VLineComponentDB;
 
 class DisplayInstanceViewFrac4UByteVBarDB extends DisplayInstanceViewFrac32 {
 
-    DisplayInstanceFrac4UByteVBarDB displayInstance;
-
-    public DisplayInstanceViewFrac4UByteVBarDB(DisplayInstanceFrac4UByteVBarDB displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewFrac4UByteVBarDB(DisplayInstanceController controller) {
+        super(controller);
     }
 
     private VLineComponentDB vbar[];
@@ -28,7 +25,7 @@ class DisplayInstanceViewFrac4UByteVBarDB extends DisplayInstanceViewFrac32 {
     }
 
     private Value getValue() {
-        return displayInstance.getValueRef();
+        return getModel().getValueRef();
     }
 
     @Override

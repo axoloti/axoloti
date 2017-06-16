@@ -68,12 +68,12 @@ public class PAssignPresetComponent extends PatchPNode {
 
     @Override
     protected void paint(PPaintContext paintContext) {
-        if ((parameterInstanceView.getParameterInstance().getPresets() != null) && (!parameterInstanceView.getParameterInstance().getPresets().isEmpty())) {
+        if ((parameterInstanceView.getModel().getPresets() != null) && (!parameterInstanceView.getModel().getPresets().isEmpty())) {
             Graphics2D g2 = paintContext.getGraphics();
             g2.setFont(Constants.FONT);
             g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
             g2.fillRect(1, 1, (int) getWidth(), (int) getHeight());
-            if ((parameterInstanceView.getParameterInstance().getPresets() != null) && (!parameterInstanceView.getParameterInstance().getPresets().isEmpty())) {
+            if ((parameterInstanceView.getModel().getPresets() != null) && (!parameterInstanceView.getModel().getPresets().isEmpty())) {
                 g2.setColor(Theme.getCurrentTheme().Component_Primary);
                 g2.fillRect(1, 1, 8, (int) getHeight());
                 g2.setColor(Theme.getCurrentTheme().Component_Secondary);

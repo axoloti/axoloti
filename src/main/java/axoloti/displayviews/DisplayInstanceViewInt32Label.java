@@ -5,12 +5,11 @@ import axoloti.displays.DisplayInstanceInt32Label;
 import components.LabelComponent;
 
 class DisplayInstanceViewInt32Label extends DisplayInstanceViewInt32 {
-    private DisplayInstanceInt32Label displayInstance;
+
     private LabelComponent readout;
 
-    public DisplayInstanceViewInt32Label(DisplayInstanceInt32Label displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewInt32Label(DisplayInstanceController controller) {
+        super(controller);
     }
 
     @Override
@@ -24,6 +23,6 @@ class DisplayInstanceViewInt32Label extends DisplayInstanceViewInt32 {
 
     @Override
     public void updateV() {
-        readout.setText(":" + Integer.toString(displayInstance.getValueRef().getInt()));
+        readout.setText(":" + Integer.toString(getModel().getValueRef().getInt()));
     }
 }

@@ -7,12 +7,10 @@ import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewBool32 extends DisplayInstanceViewInt32 {
 
-    DisplayInstanceBool32 displayInstance;
     private LedstripComponent readout;
 
-    public DisplayInstanceViewBool32(DisplayInstanceBool32 displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewBool32(DisplayInstanceController controller) {
+        super(controller);
     }
 
     @Override
@@ -27,6 +25,6 @@ class DisplayInstanceViewBool32 extends DisplayInstanceViewInt32 {
 
     @Override
     public void updateV() {
-        readout.setValue(displayInstance.getValueRef().getInt() > 0 ? 1 : 0);
+        readout.setValue(getModel().getValueRef().getInt() > 0 ? 1 : 0);
     }
 }

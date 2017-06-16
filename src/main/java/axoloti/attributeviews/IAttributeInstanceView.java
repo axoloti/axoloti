@@ -17,6 +17,6 @@ public interface IAttributeInstanceView extends AbstractView {
     @Deprecated
     public PatchView getPatchView();
 
-    public AttributeInstance getAttributeInstance();
+    public AttributeInstance getModel();
 
 }

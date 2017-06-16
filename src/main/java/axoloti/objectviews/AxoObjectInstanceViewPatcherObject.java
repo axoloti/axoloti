@@ -10,12 +10,10 @@ import javax.swing.SwingUtilities;
 
 public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
 
-    AxoObjectInstancePatcherObject model;
     ButtonComponent BtnEdit;
 
-    public AxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject model, ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(model, controller, patchView);
-        this.model = model;
+    public AxoObjectInstanceViewPatcherObject(ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(controller, patchView);
     }
 
     @Override
@@ -39,27 +37,32 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
         edit();
     }
 
+    @Override
+    public AxoObjectInstancePatcherObject getModel() {
+        return (AxoObjectInstancePatcherObject) controller.getModel();
+    }
+
     public void edit() {
-        if (model.getAxoObject() == null) {
-            model.setAxoObject(new AxoObjectPatcherObject());
+        if (getModel().getAxoObject() == null) {
+            getModel().setAxoObject(new AxoObjectPatcherObject());
 //            ao.id = "id";
-            model.getAxoObject().sDescription = "";
+            getModel().getAxoObject().sDescription = "";
         }
-        if (model.aoe == null) {
-            model.aoe = new AxoObjectEditor(model.getAxoObject().createController(null, null));
+        if (getModel().aoe == null) {
+            getModel().aoe = new AxoObjectEditor(getModel().getAxoObject().createController(null, null));
         } else {
-            model.aoe.updateReferenceXML();
+            getModel().aoe.updateReferenceXML();
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                model.aoe.setState(java.awt.Frame.NORMAL);
-                model.aoe.setVisible(true);
+                getModel().aoe.setState(java.awt.Frame.NORMAL);
+                getModel().aoe.setVisible(true);
             }
         });
     }
 
     public boolean isEditorOpen() {
-        return model.aoe != null && model.aoe.isVisible();
+        return getModel().aoe != null && getModel().aoe.isVisible();
     }
 }

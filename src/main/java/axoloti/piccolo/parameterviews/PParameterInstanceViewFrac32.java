@@ -18,18 +18,18 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
     }
 
     @Override
-    public ParameterInstanceFrac32 getParameterInstance() {
+    public ParameterInstanceFrac32 getModel() {
         return (ParameterInstanceFrac32) parameterInstance;
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        if (getParameterInstance().getModulators() != null) {
-            List<Modulation> modulators = getParameterInstance().getModulators();
+        if (getModel().getModulators() != null) {
+            List<Modulation> modulators = getModel().getModulators();
             for (Modulation m : modulators) {
                 System.out.println("mod amount " + m.getValue().getDouble());
-                m.PostConstructor(getParameterInstance());
+                m.PostConstructor(getModel());
             }
         }
     }
@@ -41,9 +41,9 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
         m_default.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getParameterInstance().applyDefaultValue();
+                getModel().applyDefaultValue();
                 updateV();
-                getControlComponent().setValue(getParameterInstance().getValue().getDouble());
+                getControlComponent().setValue(getModel().getValue().getDouble());
                 handleAdjustment();
             }
         });
@@ -52,12 +52,12 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
 
     @Override
     public boolean handleAdjustment() {
-        Preset p = getParameterInstance().GetPreset(presetEditActive);
+        Preset p = getModel().GetPreset(presetEditActive);
         if (p != null) {
             p.value = new ValueFrac32(getControlComponent().getValue());
-        } else if (getParameterInstance().getValue().getDouble() != getControlComponent().getValue()) {
-            getParameterInstance().getValue().setDouble(getControlComponent().getValue());
-            getParameterInstance().setNeedsTransmit(true);
+        } else if (getModel().getValue().getDouble() != getControlComponent().getValue()) {
+            getModel().getValue().setDouble(getControlComponent().getValue());
+            getModel().setNeedsTransmit(true);
             UpdateUnit();
         } else {
             return false;
@@ -68,11 +68,11 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
     @Override
     public void CopyValueFrom(PParameterInstanceView p) {
         if (p instanceof PParameterInstanceViewFrac32) {
-            getParameterInstance().CopyValueFrom(((PParameterInstanceViewFrac32) p).parameterInstance);
+            getModel().CopyValueFrom(((PParameterInstanceViewFrac32) p).parameterInstance);
         }
     }
 
     public void updateModulation(int index, double amount) {
-        getParameterInstance().updateModulation(index, amount);
+        getModel().updateModulation(index, amount);
     }
 }

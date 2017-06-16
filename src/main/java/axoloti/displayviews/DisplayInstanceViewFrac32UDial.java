@@ -8,11 +8,8 @@ class DisplayInstanceViewFrac32UDial extends DisplayInstanceViewFrac32 {
 
     private DispComponent dial;
 
-    DisplayInstanceFrac32UDial displayInstance;
-
-    public DisplayInstanceViewFrac32UDial(DisplayInstanceFrac32UDial displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewFrac32UDial(DisplayInstanceController controller) {
+        super(controller);
     }
 
     @Override
@@ -25,6 +22,6 @@ class DisplayInstanceViewFrac32UDial extends DisplayInstanceViewFrac32 {
 
     @Override
     public void updateV() {
-        dial.setValue(displayInstance.getValueRef().getDouble());
+        dial.setValue(getModel().getValueRef().getDouble());
     }
 }

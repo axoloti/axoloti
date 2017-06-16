@@ -11,18 +11,18 @@ import javax.swing.JPopupMenu;
 
 class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
 
-    public ParameterInstanceViewInt32HRadio(ParameterInstanceInt32HRadio parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, controller, axoObjectInstanceView);
+    public ParameterInstanceViewInt32HRadio(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
     public void updateV() {
-        ctrl.setValue(parameterInstance.getValue().getInt());
+        ctrl.setValue(getModel().getValue().getInt());
     }
 
     @Override
     public HRadioComponent CreateControl() {
-        return new HRadioComponent(0, ((ParameterInt32HRadio) parameterInstance.getModel()).MaxValue.getInt());
+        return new HRadioComponent(0, ((ParameterInt32HRadio) getModel().getModel()).MaxValue.getInt());
     }
 
     @Override

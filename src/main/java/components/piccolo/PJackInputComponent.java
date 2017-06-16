@@ -43,13 +43,13 @@ public class PJackInputComponent extends PatchPNode {
 
         g2.setStroke(stroke);
         g2.setPaint(Theme.getCurrentTheme().Object_TitleBar_Background);
-        if (inletInstanceView.getInletInstance().isConnected()) {
+        if (inletInstanceView.getModel().isConnected()) {
             g2.fillOval(margin + 1, margin + 1, sz - margin - margin, sz - margin - margin);
         }
         g2.drawOval(margin + 1, margin + 1, sz - margin - margin, sz - margin - margin);
 
         g2.setPaint(getForeground());
-        if (inletInstanceView.getInletInstance().isConnected()) {
+        if (inletInstanceView.getModel().isConnected()) {
             g2.fillOval(margin, margin, sz - margin - margin, sz - margin - margin);
         }
         g2.drawOval(margin, margin, sz - margin - margin, sz - margin - margin);

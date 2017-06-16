@@ -39,7 +39,7 @@ public class MidiAssignments extends javax.swing.JDialog {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        PatchModel patch = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel();
+        PatchModel patch = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
         String CCObj[] = new String[128];
         String CCParam[] = new String[128];
         for (AxoObjectInstanceAbstract obj : patch.objectinstances) {
@@ -54,7 +54,7 @@ public class MidiAssignments extends javax.swing.JDialog {
                 }
             }
         }
-        result = parameterInstanceView.getParameterInstance().getMidiCC();
+        result = parameterInstanceView.getModel().getMidiCC();
         for (int i = 0; i < 128; i++) {
             String name = "";
             if (i < MidiCCToName.length) {

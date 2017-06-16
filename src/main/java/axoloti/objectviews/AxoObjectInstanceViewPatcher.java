@@ -1,24 +1,28 @@
 package axoloti.objectviews;
 
 import axoloti.PatchViewSwing;
+import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.ObjectInstanceController;
 import components.ButtonComponent;
 
 public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
-    AxoObjectInstancePatcher model;
     private ButtonComponent BtnUpdate;
 
-    public AxoObjectInstanceViewPatcher(AxoObjectInstancePatcher model, ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(model, controller, patchView);
-        this.model = model;
+    public AxoObjectInstanceViewPatcher(ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(controller, patchView);
+    }
+
+    @Override
+    public AxoObjectInstancePatcher getModel() {
+        return (AxoObjectInstancePatcher) super.getModel();
     }
 
     public void edit() {
-        model.init();
-        model.pf.setState(java.awt.Frame.NORMAL);
-        model.pf.setVisible(true);
+        getModel().init();
+        getModel().pf.setState(java.awt.Frame.NORMAL);
+        getModel().pf.setVisible(true);
     }
 
     @Override
@@ -41,7 +45,7 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
         BtnUpdate.addActListener(new ButtonComponent.ActListener() {
             @Override
             public void OnPushed() {
-                model.updateObj();
+                getModel().updateObj();
             }
         });
         add(BtnUpdate);

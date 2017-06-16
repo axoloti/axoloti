@@ -28,7 +28,7 @@ public interface IParameterInstanceView extends AbstractView {
 
     public void ExcludeFromPreset();
 
-    public ParameterInstance getParameterInstance();
+    public ParameterInstance getModel();
 
     public Preset AddPreset(int index, Value value);
 

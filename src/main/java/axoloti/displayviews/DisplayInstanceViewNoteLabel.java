@@ -1,16 +1,14 @@
 package axoloti.displayviews;
 
 import axoloti.displays.DisplayInstanceController;
+import axoloti.displays.DisplayInstanceFrac32;
 import axoloti.displays.DisplayInstanceNoteLabel;
 import components.LabelComponent;
 
 class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
 
-    DisplayInstanceNoteLabel displayInstance;
-
-    public DisplayInstanceViewNoteLabel(DisplayInstanceNoteLabel displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewNoteLabel(DisplayInstanceController controller) {
+        super(controller);
     }
 
     private LabelComponent readout;
@@ -25,7 +23,12 @@ class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
     }
 
     @Override
+    DisplayInstanceNoteLabel getModel() {
+        return (DisplayInstanceNoteLabel) super.getModel();
+    }
+
+    @Override
     public void updateV() {
-        readout.setText(displayInstance.getConv().ToReal(displayInstance.getValueRef()));
+        readout.setText(getModel().getConv().ToReal(getModel().getValueRef()));
     }
 }

@@ -12,28 +12,28 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
 
     NumberBoxComponent spinner;
 
-    public AttributeInstanceViewSpinner(AttributeInstanceSpinner attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, controller, axoObjectInstanceView);
+    public AttributeInstanceViewSpinner(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
-    public AttributeInstanceSpinner getAttributeInstance() {
-        return (AttributeInstanceSpinner) super.getAttributeInstance();
+    public AttributeInstanceSpinner getModel() {
+        return (AttributeInstanceSpinner) super.getModel();
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        Integer ival = getAttributeInstance().getValue();
+        Integer ival = getModel().getValue();
         int value = ival;
 
-        if (value < getAttributeInstance().getModel().getMinValue()) {
-            getAttributeInstance().setValue(getAttributeInstance().getModel().getMinValue());
+        if (value < getModel().getModel().getMinValue()) {
+            getModel().setValue(getModel().getModel().getMinValue());
         }
-        if (value > getAttributeInstance().getModel().getMaxValue()) {
-            getAttributeInstance().setValue(getAttributeInstance().getModel().getMaxValue());
+        if (value > getModel().getModel().getMaxValue()) {
+            getModel().setValue(getModel().getModel().getMaxValue());
         }
-        spinner = new NumberBoxComponent(value, getAttributeInstance().getModel().getMinValue(), getAttributeInstance().getModel().getMaxValue(), 1.0);
+        spinner = new NumberBoxComponent(value, getModel().getModel().getMinValue(), getModel().getModel().getMaxValue(), 1.0);
         add(spinner);
         spinner.addACtrlListener(new ACtrlListener() {
             @Override
@@ -49,7 +49,7 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
 
             @Override
             public void ACtrlAdjustmentFinished(ACtrlEvent e) {
-                if (getAttributeInstance().getValue() != getAttributeInstance().getValueBeforeAdjustment()) {
+                if (getModel().getValue() != getModel().getValueBeforeAdjustment()) {
                     //attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }

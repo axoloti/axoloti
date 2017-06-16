@@ -17,23 +17,24 @@ import axoloti.objectviews.IAxoObjectInstanceView;
  * @author jtaelman
  */
 public class AttributeInstanceViewFactory {
+
     public static AttributeInstanceView createView(AttributeInstanceController controller, IAxoObjectInstanceView obj) {
         AttributeInstance model = controller.getModel();
         AttributeInstanceView view;
         if (model instanceof AttributeInstanceComboBox) {
-            view = new AttributeInstanceViewComboBox((AttributeInstanceComboBox) model, controller, (AxoObjectInstanceView) obj);
+            view = new AttributeInstanceViewComboBox(controller, (AxoObjectInstanceView) obj);
         } else if (model instanceof AttributeInstanceInt32) {
-            view = new AttributeInstanceViewInt32((AttributeInstanceInt32) model, controller, obj);
+            view = new AttributeInstanceViewInt32(controller, obj);
         } else if (model instanceof AttributeInstanceObjRef) {
-            view = new AttributeInstanceViewObjRef((AttributeInstanceObjRef) model, controller, obj);
+            view = new AttributeInstanceViewObjRef(controller, obj);
         } else if (model instanceof AttributeInstanceSDFile) {
-            view = new AttributeInstanceViewSDFile((AttributeInstanceSDFile) model, controller, obj);
+            view = new AttributeInstanceViewSDFile(controller, obj);
         } else if (model instanceof AttributeInstanceSpinner) {
-            view = new AttributeInstanceViewSpinner((AttributeInstanceSpinner) model, controller, obj);
+            view = new AttributeInstanceViewSpinner(controller, obj);
         } else if (model instanceof AttributeInstanceTablename) {
-            view = new AttributeInstanceViewTablename((AttributeInstanceTablename) model, controller, obj);
+            view = new AttributeInstanceViewTablename(controller, obj);
         } else if (model instanceof AttributeInstanceTextEditor) {
-            view = new AttributeInstanceViewTextEditor((AttributeInstanceTextEditor) model, controller, obj);
+            view = new AttributeInstanceViewTextEditor(controller, obj);
         } else {
             view = null;
         }

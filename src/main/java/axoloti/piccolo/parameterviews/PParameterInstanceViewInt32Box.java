@@ -11,19 +11,19 @@ public class PParameterInstanceViewInt32Box extends PParameterInstanceViewInt32 
     }
 
     @Override
-    public ParameterInstanceInt32Box getParameterInstance() {
+    public ParameterInstanceInt32Box getModel() {
         return (ParameterInstanceInt32Box) parameterInstance;
     }
 
     @Override
     public void updateV() {
-        ctrl.setValue(getParameterInstance().getValue().getInt());
+        ctrl.setValue(getModel().getValue().getInt());
     }
 
     @Override
     public PNumberBoxComponent CreateControl() {
-        PNumberBoxComponent n = new PNumberBoxComponent(0.0, getParameterInstance().getMin(),
-                getParameterInstance().getMax(), 1.0, axoObjectInstanceView);
+        PNumberBoxComponent n = new PNumberBoxComponent(0.0, getModel().getMin(),
+                getModel().getMax(), 1.0, axoObjectInstanceView);
         return n;
     }
 

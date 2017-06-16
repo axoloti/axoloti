@@ -14,37 +14,37 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
     ButtonComponent bEdit;
     JLabel vlabel;
 
-    public AttributeInstanceViewTextEditor(AttributeInstanceTextEditor attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, controller, axoObjectInstanceView);
+    public AttributeInstanceViewTextEditor(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
-    public AttributeInstanceTextEditor getAttributeInstance() {
-        return (AttributeInstanceTextEditor) super.getAttributeInstance();
+    public AttributeInstanceTextEditor getModel() {
+        return (AttributeInstanceTextEditor) super.getModel();
     }
 
     void showEditor() {
-        if (getAttributeInstance().editor == null) {
-            getAttributeInstance().editor = new TextEditor(getAttributeInstance().getStringRef(), null);
+        if (getModel().editor == null) {
+            getModel().editor = new TextEditor(getModel().getStringRef(), null);
             // FIXME: null DocumentWindow arg, was: 
             // getPatchView().getPatchController().getPatchFrame());
-            getAttributeInstance().editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.getModel().getName());
-            getAttributeInstance().editor.addWindowFocusListener(new WindowFocusListener() {
+            getModel().editor.setTitle(getModel().getObjectInstance().getInstanceName() + "/" + getModel().getModel().getName());
+            getModel().editor.addWindowFocusListener(new WindowFocusListener() {
                 @Override
                 public void windowGainedFocus(WindowEvent e) {
-                    getAttributeInstance().setValueBeforeAdjustment(getAttributeInstance().getStringRef().s);
+                    getModel().setValueBeforeAdjustment(getModel().getStringRef().s);
                 }
 
                 @Override
                 public void windowLostFocus(WindowEvent e) {
-                    if (!getAttributeInstance().getValueBeforeAdjustment().equals(getAttributeInstance().getStringRef().s)) {
-                        attributeInstance.getObjectInstance().getPatchModel().setDirty();
+                    if (!getModel().getValueBeforeAdjustment().equals(getModel().getStringRef().s)) {
+                        getModel().getObjectInstance().getPatchModel().setDirty();
                     }
                 }
             });
         }
-        getAttributeInstance().editor.setState(java.awt.Frame.NORMAL);
-        getAttributeInstance().editor.setVisible(true);
+        getModel().editor.setState(java.awt.Frame.NORMAL);
+        getModel().editor.setVisible(true);
     }
 
     @Override
@@ -76,9 +76,9 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
 
     @Override
     public void setString(String sText) {
-        getAttributeInstance().setValue(sText);
-        if (getAttributeInstance().editor != null) {
-            getAttributeInstance().editor.SetText(sText);
+        getModel().setValue(sText);
+        if (getModel().editor != null) {
+            getModel().editor.SetText(sText);
         }
     }
 }

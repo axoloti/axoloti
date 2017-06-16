@@ -10,8 +10,7 @@ import axoloti.objectviews.IAxoObjectInstanceView;
 public class OutletInstanceViewFactory {
 
     public static OutletInstanceView createView(OutletInstanceController controller, IAxoObjectInstanceView obj) {
-        OutletInstance model = controller.getModel();
-        OutletInstanceView view = new OutletInstanceView(model, controller, (AxoObjectInstanceViewAbstract) obj);
+        OutletInstanceView view = new OutletInstanceView(controller, (AxoObjectInstanceViewAbstract) obj);
         view.PostConstructor();
         controller.addView(view);
         return view;

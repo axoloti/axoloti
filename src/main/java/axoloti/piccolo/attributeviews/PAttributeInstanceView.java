@@ -52,7 +52,7 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
     }
 
     @Override
-    public AttributeInstance getAttributeInstance() {
+    public AttributeInstance getModel() {
         return attributeInstance;
     }
 

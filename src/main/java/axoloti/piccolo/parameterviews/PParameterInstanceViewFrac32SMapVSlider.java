@@ -18,14 +18,14 @@ public class PParameterInstanceViewFrac32SMapVSlider extends PParameterInstanceV
     }
 
     @Override
-    public ParameterInstanceFrac32SMapVSlider getParameterInstance() {
+    public ParameterInstanceFrac32SMapVSlider getModel() {
         return (ParameterInstanceFrac32SMapVSlider) parameterInstance;
     }
 
     @Override
     public void updateV() {
         if (ctrl != null) {
-            ctrl.setValue(getParameterInstance().getValue().getDouble());
+            ctrl.setValue(getModel().getValue().getDouble());
         }
     }
 
@@ -36,19 +36,19 @@ public class PParameterInstanceViewFrac32SMapVSlider extends PParameterInstanceV
     public void ShowPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = getParameterInstance().GetPreset(presetEditActive);
+            Preset p = getModel().GetPreset(presetEditActive);
             if (p != null) {
                 setPaint(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
                 setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getParameterInstance().getValue().getDouble());
+                ctrl.setValue(getModel().getValue().getDouble());
             }
         } else {
             setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getParameterInstance().getValue().getDouble());
+            ctrl.setValue(getModel().getValue().getDouble());
         }
-        if ((getParameterInstance().getPresets() != null) && (!getParameterInstance().getPresets().isEmpty())) {
+        if ((getModel().getPresets() != null) && (!getModel().getPresets().isEmpty())) {
 //            lblPreset.setVisible(true);
         } else {
 //            lblPreset.setVisible(false);
@@ -57,8 +57,8 @@ public class PParameterInstanceViewFrac32SMapVSlider extends PParameterInstanceV
 
     @Override
     public PVSliderComponent CreateControl() {
-        return new PVSliderComponent(0.0, getParameterInstance().getMin(),
-                getParameterInstance().getMax(), getParameterInstance().getTick(), axoObjectInstanceView);
+        return new PVSliderComponent(0.0, getModel().getMin(),
+                getModel().getMax(), getModel().getTick(), axoObjectInstanceView);
     }
 
     @Override

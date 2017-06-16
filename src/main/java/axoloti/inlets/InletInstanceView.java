@@ -19,17 +19,19 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
 
     InletInstancePopupMenu popup = new InletInstancePopupMenu(this);
 
-    InletInstance inletInstance;
-
     final InletInstanceController controller;
 
     LabelComponent label;
 
-    public InletInstanceView(InletInstance inletInstance, InletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
-        this.inletInstance = inletInstance;
+    public InletInstanceView(InletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         this.axoObj = axoObj;
         this.controller = controller;
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
+    }
+
+    @Override
+    public InletInstance getModel() {
+        return controller.getModel();
     }
 
     @Override
@@ -38,19 +40,19 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         setMaximumSize(new Dimension(32767, 14));
         jack = new JackInputComponent(this);
-        jack.setForeground(inletInstance.getModel().getDatatype().GetColor());
+        jack.setForeground(getModel().getModel().getDatatype().GetColor());
         jack.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(jack);
-        add(new SignalMetaDataIcon(inletInstance.getModel().GetSignalMetaData()));
+        add(new SignalMetaDataIcon(getModel().getModel().GetSignalMetaData()));
         add(Box.createHorizontalStrut(3));
         if (!((axoObj != null) && axoObj.getModel().getType().getInlets().size() <= 1)) {
-            label = new LabelComponent(inletInstance.getModel().getName());
+            label = new LabelComponent(getModel().getModel().getName());
         } else {
             label = new LabelComponent("");
         }
         add(label);
         add(Box.createHorizontalGlue());
-        setToolTipText(inletInstance.getModel().getDescription());
+        setToolTipText(getModel().getModel().getDescription());
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -64,11 +66,6 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
     public String getInletname() {
         int sepIndex = name.lastIndexOf(' ');
         return name.substring(sepIndex + 1);
-    }
-
-    @Override
-    public InletInstance getInletInstance() {
-        return inletInstance;
     }
 
     @Override

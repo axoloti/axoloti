@@ -6,11 +6,8 @@ import components.displays.VBarComponentDB;
 
 class DisplayInstanceViewFrac32VBarDB extends DisplayInstanceViewFrac32 {
 
-    DisplayInstanceFrac32VBarDB displayInstance;
-
-    public DisplayInstanceViewFrac32VBarDB(DisplayInstanceFrac32VBarDB displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewFrac32VBarDB(DisplayInstanceController controller) {
+        super(controller);
     }
 
     private VBarComponentDB vbar;
@@ -25,6 +22,6 @@ class DisplayInstanceViewFrac32VBarDB extends DisplayInstanceViewFrac32 {
 
     @Override
     public void updateV() {
-        vbar.setValue(displayInstance.getValueRef().getDouble());
+        vbar.setValue(getModel().getValueRef().getDouble());
     }
 }

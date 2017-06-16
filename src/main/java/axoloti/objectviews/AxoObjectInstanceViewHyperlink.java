@@ -18,15 +18,15 @@ public class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstrac
 
     private PulseButtonComponent button;
 
-    public AxoObjectInstanceViewHyperlink(AxoObjectInstanceHyperlink model, ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(model, controller, patchView);
+    public AxoObjectInstanceViewHyperlink(ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(controller, patchView);
     }
 
     @Override
     public AxoObjectInstanceHyperlink getModel() {
-        return (AxoObjectInstanceHyperlink)super.getModel();
+        return (AxoObjectInstanceHyperlink) super.getModel();
     }
-    
+
     public void PostConstructor() {
         super.PostConstructor();
         setOpaque(true);

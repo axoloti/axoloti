@@ -37,8 +37,8 @@ public class PatchViewCodegen extends PatchAbstractView {
     ArrayView<AxoObjectInstanceAbstractCodegenView> objectInstanceViews;
     ArrayView<INetView> netViews;
 
-    public PatchViewCodegen(PatchModel model, PatchController controller) {
-        super(model, controller);
+    public PatchViewCodegen(PatchController controller) {
+        super(controller);
         objectInstanceViews = new ArrayView<AxoObjectInstanceAbstractCodegenView>(controller.objectInstanceControllers) {            
             @Override
             public void updateUI() {

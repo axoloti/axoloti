@@ -68,7 +68,7 @@ public class AxoObjectFromPatch extends AxoObject {
     final public void UpdateObject() {
         // cheating here by creating a new controller...
         PatchController controller = new PatchController(patchModel, null);
-        PatchViewCodegen codegen = new PatchViewCodegen(patchModel, controller);
+        PatchViewCodegen codegen = new PatchViewCodegen(controller);
         AxoObject o = codegen.GenerateAxoObj(new AxoObject());
         attributes = o.attributes;
         depends = o.depends;

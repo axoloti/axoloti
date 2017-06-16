@@ -6,15 +6,11 @@ import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
-import components.AssignMidiCCComponent;
-import components.AssignMidiCCMenuItems;
 import components.AssignModulatorComponent;
-import components.AssignModulatorMenuItems;
 import components.AssignPresetComponent;
 import components.control.DialComponent;
 import java.awt.Graphics;
 import javax.swing.BoxLayout;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
@@ -23,23 +19,23 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
 
-    public ParameterInstanceViewFrac32UMap(ParameterInstanceFrac32UMap parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, controller, axoObjectInstanceView);
+    public ParameterInstanceViewFrac32UMap(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
-    public ParameterInstanceFrac32UMap getParameterInstance() {
-        return (ParameterInstanceFrac32UMap) parameterInstance;
+    public ParameterInstanceFrac32UMap getModel() {
+        return (ParameterInstanceFrac32UMap) super.getModel();
     }
 
     @Override
     public DialComponent CreateControl() {
         DialComponent d = new DialComponent(
                 0.0,
-                getParameterInstance().getMin(),
-                getParameterInstance().getMax(),
-                getParameterInstance().getTick());
-        d.setNative(getParameterInstance().getConvs());
+                getModel().getMin(),
+                getModel().getMax(),
+                getModel().getTick());
+        d.setNative(getModel().getConvs());
         return d;
     }
 
@@ -69,7 +65,7 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     public void updateV() {
         super.updateV();
         if (ctrl != null) {
-            ctrl.setValue(getParameterInstance().getValue().getDouble());
+            ctrl.setValue(getModel().getValue().getDouble());
         }
     }
 
@@ -80,17 +76,17 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     public void ShowPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = getParameterInstance().GetPreset(presetEditActive);
+            Preset p = getModel().GetPreset(presetEditActive);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getParameterInstance().getValue().getDouble());
+                ctrl.setValue(getModel().getValue().getDouble());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getParameterInstance().getValue().getDouble());
+            ctrl.setValue(getModel().getValue().getDouble());
         }
         // FIXME
         // presetAssign.repaint();
@@ -122,7 +118,7 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 
     @Override
     public void updateModulation(int index, double amount) {
-        getParameterInstance().updateModulation(index, amount);
+        getModel().updateModulation(index, amount);
         if (modulationAssign != null) {
             modulationAssign.repaint();
         }
@@ -130,20 +126,20 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 
     @Override
     public Preset AddPreset(int index, Value value) {
-        Preset p = getParameterInstance().AddPreset(index, value);
+        Preset p = getModel().AddPreset(index, value);
         presetAssign.repaint();
         return p;
     }
 
     @Override
     public void RemovePreset(int index) {
-        getParameterInstance().RemovePreset(index);
+        getModel().RemovePreset(index);
         presetAssign.repaint();
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        if (parameterInstance.isOnParent()) {
+        if (getModel().isOnParent()) {
             setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         } else {
             setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);

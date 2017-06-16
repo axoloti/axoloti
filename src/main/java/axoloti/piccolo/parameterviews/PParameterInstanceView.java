@@ -278,7 +278,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         updateV();
     }
 
-    public ParameterInstance getParameterInstance() {
+    public ParameterInstance getModel() {
         return parameterInstance;
     }
 

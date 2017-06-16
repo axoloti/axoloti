@@ -8,7 +8,7 @@ public interface IInletInstanceView extends AbstractView {
 
     public void PostConstructor();
 
-    public InletInstance getInletInstance();
+    public InletInstance getModel();
 
     public void setHighlighted(boolean highlighted);
 

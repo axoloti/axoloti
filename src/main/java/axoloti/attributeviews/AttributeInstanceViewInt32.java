@@ -14,13 +14,13 @@ class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
     JSlider slider;
     JLabel vlabel;
 
-    public AttributeInstanceViewInt32(AttributeInstanceInt32 attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, controller, axoObjectInstanceView);
+    public AttributeInstanceViewInt32(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
-    public AttributeInstanceInt32 getAttributeInstance() {
-        return (AttributeInstanceInt32) super.getAttributeInstance();
+    public AttributeInstanceInt32 getModel() {
+        return (AttributeInstanceInt32) super.getModel();
     }
 
     @Override
@@ -30,28 +30,28 @@ class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
         Dimension d = slider.getSize();
         d.width = 128;
         d.height = 22;
-        if (getAttributeInstance().getValue() < getAttributeInstance().getModel().getMinValue()) {
-            getAttributeInstance().setValue(getAttributeInstance().getModel().getMinValue());
+        if (getModel().getValue() < getModel().getModel().getMinValue()) {
+            getModel().setValue(getModel().getModel().getMinValue());
         }
-        if (getAttributeInstance().getValue() > getAttributeInstance().getModel().getMaxValue()) {
-            getAttributeInstance().setValue(getAttributeInstance().getModel().getMaxValue());
+        if (getModel().getValue() > getModel().getModel().getMaxValue()) {
+            getModel().setValue(getModel().getModel().getMaxValue());
         }
-        slider.setMinimum(getAttributeInstance().getModel().getMinValue());
-        slider.setMaximum(getAttributeInstance().getModel().getMaxValue());
-        slider.setValue(getAttributeInstance().getValue());
+        slider.setMinimum(getModel().getModel().getMinValue());
+        slider.setMaximum(getModel().getModel().getMaxValue());
+        slider.setValue(getModel().getValue());
         slider.setMaximumSize(d);
         slider.setMinimumSize(d);
         slider.setPreferredSize(d);
         slider.setSize(d);
         add(slider);
         vlabel = new JLabel();
-        vlabel.setText("       " + getAttributeInstance().getValue());
+        vlabel.setText("       " + getModel().getValue());
         add(vlabel);
         slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent ce) {
-                getAttributeInstance().setValue(slider.getValue());
-                vlabel.setText("" + getAttributeInstance().getValue());
+                getModel().setValue(slider.getValue());
+                vlabel.setText("" + getModel().getValue());
             }
         });
     }

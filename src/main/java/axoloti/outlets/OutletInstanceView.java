@@ -18,18 +18,17 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
 
     OutletInstancePopupMenu popup = new OutletInstancePopupMenu(this);
 
-    OutletInstance outletInstance;
-
     final OutletInstanceController controller;
 
     LabelComponent label;
 
-    public OutletInstanceView(OutletInstance outletInstance, OutletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
-        this.outletInstance = outletInstance;
+    public OutletInstanceView(OutletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         this.controller = controller;
         this.axoObj = axoObj;
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
     }
+    
+    
 
     @Override
     public void PostConstructor() {
@@ -38,17 +37,17 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(Box.createHorizontalGlue());
         if (axoObj.getModel().getType().getOutlets().size() > 1) {
-            label = new LabelComponent(outletInstance.getModel().getName());
+            label = new LabelComponent(getModel().getModel().getName());
         } else {
             label = new LabelComponent("");
         }
         add(label);
         add(Box.createHorizontalStrut(2));
-        add(new SignalMetaDataIcon(outletInstance.getModel().GetSignalMetaData()));
+        add(new SignalMetaDataIcon(getModel().getModel().GetSignalMetaData()));
         jack = new components.JackOutputComponent(this);
-        jack.setForeground(outletInstance.getModel().getDatatype().GetColor());
+        jack.setForeground(getModel().getModel().getDatatype().GetColor());
         add(jack);
-        setToolTipText(outletInstance.getModel().getDescription());
+        setToolTipText(getModel().getModel().getDescription());
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -60,8 +59,8 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
     }
 
     @Override
-    public OutletInstance getOutletInstance() {
-        return outletInstance;
+    public OutletInstance getModel() {
+        return getController().getModel();
     }
 
     @Override

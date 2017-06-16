@@ -76,7 +76,7 @@ public abstract class PatchView extends PatchAbstractView {
     ArrayView<INetView> netViews;
     
     PatchView(PatchController patchController) {
-        super(patchController.getModel(),patchController);
+        super(patchController);
     }
 
     public void PostConstructor() {

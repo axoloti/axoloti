@@ -7,8 +7,8 @@ import java.beans.PropertyChangeEvent;
 
 abstract class AttributeInstanceViewString extends AttributeInstanceView {
 
-    public AttributeInstanceViewString(AttributeInstanceString attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, controller, axoObjectInstanceView);
+    public AttributeInstanceViewString(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     public abstract void setString(String s);

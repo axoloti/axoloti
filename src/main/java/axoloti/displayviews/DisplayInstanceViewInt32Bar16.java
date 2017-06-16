@@ -3,16 +3,16 @@ package axoloti.displayviews;
 import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceInt32Bar16;
 import components.displays.LedstripComponent;
+import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewInt32Bar16 extends DisplayInstanceViewInt32 {
-    private DisplayInstanceInt32Bar16 displayInstance;
+
     private LedstripComponent readout;
-    
-    public DisplayInstanceViewInt32Bar16(DisplayInstanceInt32Bar16 displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+
+    public DisplayInstanceViewInt32Bar16(DisplayInstanceController controller) {
+        super(controller);
     }
-    
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();
@@ -21,10 +21,10 @@ class DisplayInstanceViewInt32Bar16 extends DisplayInstanceViewInt32 {
         add(readout);
         readout.setSize(readout.getHeight(), 80);
     }
-    
+
     @Override
     public void updateV() {
-        int i = displayInstance.getValueRef().getInt();
+        int i = getModel().getValueRef().getInt();
         if ((i >= 0) && (i < 16)) {
             readout.setValue(1 << i);
         } else {

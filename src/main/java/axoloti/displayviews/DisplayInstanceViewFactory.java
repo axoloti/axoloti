@@ -28,53 +28,53 @@ import axoloti.objectviews.IAxoObjectInstanceView;
  * @author jtaelman
  */
 public class DisplayInstanceViewFactory {
-    
+
     public static DisplayInstanceView createView(DisplayInstanceController controller, IAxoObjectInstanceView obj) {
         DisplayInstance model = controller.getModel();
         DisplayInstanceView view;
         if (model instanceof DisplayInstanceBool32) {
-            view = new DisplayInstanceViewBool32((DisplayInstanceBool32) model, controller);
+            view = new DisplayInstanceViewBool32(controller);
         } else if (model instanceof DisplayInstanceFrac32SChart) {
-            view = new DisplayInstanceViewFrac32SChart((DisplayInstanceFrac32SChart) model, controller);
+            view = new DisplayInstanceViewFrac32SChart(controller);
         } else if (model instanceof DisplayInstanceFrac32SDial) {
-            view = new DisplayInstanceViewFrac32SDial((DisplayInstanceFrac32SDial) model, controller);
+            view = new DisplayInstanceViewFrac32SDial(controller);
         } else if (model instanceof DisplayInstanceFrac32UChart) {
-            view = new DisplayInstanceViewFrac32UChart((DisplayInstanceFrac32UChart) model, controller);
+            view = new DisplayInstanceViewFrac32UChart(controller);
         } else if (model instanceof DisplayInstanceFrac32UDial) {
-            view = new DisplayInstanceViewFrac32UDial((DisplayInstanceFrac32UDial) model, controller);
+            view = new DisplayInstanceViewFrac32UDial(controller);
         } else if (model instanceof DisplayInstanceFrac32VBar) {
-            view = new DisplayInstanceViewFrac32VBar((DisplayInstanceFrac32VBar) model, controller);
+            view = new DisplayInstanceViewFrac32VBar(controller);
         } else if (model instanceof DisplayInstanceFrac32VBarDB) {
-            view = new DisplayInstanceViewFrac32VBarDB((DisplayInstanceFrac32VBarDB) model, controller);
+            view = new DisplayInstanceViewFrac32VBarDB(controller);
         } else if (model instanceof DisplayInstanceFrac32VU) {
-            view = new DisplayInstanceViewFrac32VU((DisplayInstanceFrac32VU) model, controller);
+            view = new DisplayInstanceViewFrac32VU(controller);
         } else if (model instanceof DisplayInstanceFrac4ByteVBar) {
-            view = new DisplayInstanceViewFrac4ByteVBar((DisplayInstanceFrac4ByteVBar) model, controller);
+            view = new DisplayInstanceViewFrac4ByteVBar(controller);
         } else if (model instanceof DisplayInstanceFrac4UByteVBar) {
-            view = new DisplayInstanceViewFrac4UByteVBar((DisplayInstanceFrac4UByteVBar) model, controller);
+            view = new DisplayInstanceViewFrac4UByteVBar(controller);
         } else if (model instanceof DisplayInstanceFrac4UByteVBarDB) {
-            view = new DisplayInstanceViewFrac4UByteVBarDB((DisplayInstanceFrac4UByteVBarDB) model, controller);
+            view = new DisplayInstanceViewFrac4UByteVBarDB(controller);
         } else if (model instanceof DisplayInstanceFrac8S128VBar) {
-            view = new DisplayInstanceViewFrac8S128VBar((DisplayInstanceFrac8S128VBar) model, controller);
+            view = new DisplayInstanceViewFrac8S128VBar(controller);
         } else if (model instanceof DisplayInstanceFrac8U128VBar) {
-            view = new DisplayInstanceViewFrac8U128VBar((DisplayInstanceFrac8U128VBar) model, controller);
+            view = new DisplayInstanceViewFrac8U128VBar(controller);
         } else if (model instanceof DisplayInstanceInt32Bar16) {
-            view = new DisplayInstanceViewInt32Bar16((DisplayInstanceInt32Bar16) model, controller);
+            view = new DisplayInstanceViewInt32Bar16(controller);
         } else if (model instanceof DisplayInstanceInt32Bar32) {
-            view = new DisplayInstanceViewInt32Bar32((DisplayInstanceInt32Bar32) model, controller);
+            view = new DisplayInstanceViewInt32Bar32(controller);
         } else if (model instanceof DisplayInstanceInt32HexLabel) {
-            view = new DisplayInstanceViewInt32HexLabel((DisplayInstanceInt32HexLabel) model, controller);
+            view = new DisplayInstanceViewInt32HexLabel(controller);
         } else if (model instanceof DisplayInstanceInt32Label) {
-            view = new DisplayInstanceViewInt32Label((DisplayInstanceInt32Label) model, controller);
+            view = new DisplayInstanceViewInt32Label(controller);
         } else if (model instanceof DisplayInstanceNoteLabel) {
-            view = new DisplayInstanceViewNoteLabel((DisplayInstanceNoteLabel) model, controller);
+            view = new DisplayInstanceViewNoteLabel(controller);
         } else if (model instanceof DisplayInstanceVScale) {
-            view = new DisplayInstanceViewVScale((DisplayInstanceVScale) model, controller);
+            view = new DisplayInstanceViewVScale(controller);
         } else {
             view = null;
         }
         view.PostConstructor();
         controller.addView(view);
         return view;
-    }    
+    }
 }

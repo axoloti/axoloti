@@ -3,7 +3,6 @@ package axoloti.objectviews;
 import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstanceComment;
 import axoloti.object.ObjectInstanceController;
-import static axoloti.object.ObjectInstanceController.OBJ_INSTANCENAME;
 import components.LabelComponent;
 import components.TextFieldComponent;
 import java.awt.event.ActionEvent;
@@ -20,11 +19,13 @@ import javax.swing.BoxLayout;
 
 public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
 
-    AxoObjectInstanceComment model;
+    public AxoObjectInstanceViewComment(ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(controller, patchView);
+    }
 
-    public AxoObjectInstanceViewComment(AxoObjectInstanceComment model, ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(model, controller, patchView);
-        this.model = model;
+    @Override
+    public AxoObjectInstanceComment getModel() {
+        return (AxoObjectInstanceComment) super.getModel();
     }
 
     @Override
@@ -33,7 +34,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
 
         setOpaque(true);
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        InstanceLabel = new LabelComponent(model.getCommentText());
+        InstanceLabel = new LabelComponent(getModel().getCommentText());
         InstanceLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         InstanceLabel.setAlignmentX(CENTER_ALIGNMENT);
         InstanceLabel.addMouseListener(new MouseListener() {
@@ -74,14 +75,14 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
         });
         InstanceLabel.addMouseMotionListener(this);
         add(InstanceLabel);
-        setLocation(model.getX(), model.getY());
+        setLocation(getModel().getX(), getModel().getY());
 
         resizeToGrid();
     }
 
     @Override
     public void addInstanceNameEditor() {
-        InstanceNameTF = new TextFieldComponent(model.getCommentText());
+        InstanceNameTF = new TextFieldComponent(getModel().getCommentText());
         InstanceNameTF.selectAll();
 //        InstanceNameTF.setInputVerifier(new AxoObjectInstanceNameVerifier());
         InstanceNameTF.addActionListener(new ActionListener() {
@@ -127,7 +128,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
     public void setInstanceName(String s) {
         getController().setModelUndoableProperty(ObjectInstanceController.OBJ_COMMENT, s);
     }
-    
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);

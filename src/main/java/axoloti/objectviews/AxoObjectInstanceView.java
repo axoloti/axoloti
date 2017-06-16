@@ -51,16 +51,16 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     public final JPanel p_inletViews = new JPanel();
     public final JPanel p_outletViews = new JPanel();
 
-    public AxoObjectInstanceView(AxoObjectInstance model, ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(model, controller, patchView);
+    public AxoObjectInstanceView(ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(controller, patchView);
         init1();
     }
 
     @Override
     public AxoObjectInstance getModel() {
-        return (AxoObjectInstance)super.getModel();
+        return (AxoObjectInstance) super.getModel();
     }
-    
+
     public AxoObject getType() {
         return getModel().getType();
     }
@@ -204,18 +204,18 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         }
         p_displayViews.add(Box.createHorizontalGlue());
         p_parameterViews.add(Box.createHorizontalGlue());
-        
+
         inletInstanceViews = new ArrayView<IInletInstanceView>(controller.inletInstanceControllers) {
             @Override
             public InletInstanceView viewFactory(AbstractController ctrl) {
-                return InletInstanceViewFactory.createView((InletInstanceController)ctrl, AxoObjectInstanceView.this);
+                return InletInstanceViewFactory.createView((InletInstanceController) ctrl, AxoObjectInstanceView.this);
             }
 
             @Override
             public void updateUI() {
                 p_inletViews.removeAll();
-                for(IInletInstanceView c: getSubViews()){
-                    p_inletViews.add((Component)c);
+                for (IInletInstanceView c : getSubViews()) {
+                    p_inletViews.add((Component) c);
                 }
                 resizeToGrid();
             }
@@ -229,13 +229,14 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         outletInstanceViews = new ArrayView<IOutletInstanceView>(controller.outletInstanceControllers) {
             @Override
             public OutletInstanceView viewFactory(AbstractController ctrl) {
-                return OutletInstanceViewFactory.createView((OutletInstanceController)ctrl, AxoObjectInstanceView.this);
+                return OutletInstanceViewFactory.createView((OutletInstanceController) ctrl, AxoObjectInstanceView.this);
             }
+
             @Override
             public void updateUI() {
                 p_outletViews.removeAll();
-                for(IOutletInstanceView c: getSubViews()){
-                    p_outletViews.add((Component)c);
+                for (IOutletInstanceView c : getSubViews()) {
+                    p_outletViews.add((Component) c);
                 }
                 resizeToGrid();
             }
@@ -254,13 +255,14 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         attributeInstanceViews = new ArrayView<IAttributeInstanceView>(controller.attributeInstanceControllers) {
             @Override
             public AttributeInstanceView viewFactory(AbstractController ctrl) {
-                return AttributeInstanceViewFactory.createView((AttributeInstanceController)ctrl, AxoObjectInstanceView.this);
+                return AttributeInstanceViewFactory.createView((AttributeInstanceController) ctrl, AxoObjectInstanceView.this);
             }
+
             @Override
             public void updateUI() {
                 p_attributeViews.removeAll();
-                for(IAttributeInstanceView c: getSubViews()){
-                    p_attributeViews.add((Component)c);
+                for (IAttributeInstanceView c : getSubViews()) {
+                    p_attributeViews.add((Component) c);
                 }
                 resizeToGrid();
             }
@@ -274,13 +276,14 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         parameterInstanceViews = new ArrayView<IParameterInstanceView>(controller.parameterInstanceControllers) {
             @Override
             public IParameterInstanceView viewFactory(AbstractController ctrl) {
-                return ParameterInstanceViewFactory.createView((ParameterInstanceController)ctrl, AxoObjectInstanceView.this);
+                return ParameterInstanceViewFactory.createView((ParameterInstanceController) ctrl, AxoObjectInstanceView.this);
             }
+
             @Override
             public void updateUI() {
                 p_parameterViews.removeAll();
-                for(IParameterInstanceView c: getSubViews()){
-                    p_parameterViews.add((Component)c);
+                for (IParameterInstanceView c : getSubViews()) {
+                    p_parameterViews.add((Component) c);
                 }
                 resizeToGrid();
             }
@@ -290,19 +293,20 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             }
         };
         controller.parameterInstanceControllers.addView(parameterInstanceViews);
-        
+
         displayInstanceViews = new ArrayView<IDisplayInstanceView>(controller.displayInstanceControllers) {
             @Override
             public IDisplayInstanceView viewFactory(AbstractController ctrl) {
-                return DisplayInstanceViewFactory.createView((DisplayInstanceController)ctrl, AxoObjectInstanceView.this);
+                return DisplayInstanceViewFactory.createView((DisplayInstanceController) ctrl, AxoObjectInstanceView.this);
             }
+
             @Override
             public void updateUI() {
                 p_displayViews.removeAll();
-                for(IDisplayInstanceView c: getSubViews()){
-                    p_displayViews.add((Component)c);
+                for (IDisplayInstanceView c : getSubViews()) {
+                    p_displayViews.add((Component) c);
                 }
-                resizeToGrid();                
+                resizeToGrid();
             }
 
             @Override

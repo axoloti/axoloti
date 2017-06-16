@@ -11,8 +11,7 @@ import axoloti.objectviews.IAxoObjectInstanceView;
 public class InletInstanceViewFactory {
     
     public static InletInstanceView createView(InletInstanceController controller, IAxoObjectInstanceView obj) {
-        InletInstance model = controller.getModel();
-        InletInstanceView view = new InletInstanceView(model, controller, (AxoObjectInstanceViewAbstract) obj);
+        InletInstanceView view = new InletInstanceView(controller, (AxoObjectInstanceViewAbstract) obj);
         view.PostConstructor();
         controller.addView(view);
         return view;

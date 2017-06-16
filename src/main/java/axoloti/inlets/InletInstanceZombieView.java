@@ -7,21 +7,19 @@ import javax.swing.BoxLayout;
 
 public class InletInstanceZombieView extends InletInstanceView {
 
-    private final InletInstanceZombie inletInstanceZombie;
 
-    public InletInstanceZombieView(InletInstanceZombie inletInstanceZombie, InletInstanceController controller, AxoObjectInstanceViewAbstract o) {
-        super(inletInstanceZombie, controller, o);
-        this.inletInstanceZombie = inletInstanceZombie;
+    public InletInstanceZombieView(InletInstanceController controller, AxoObjectInstanceViewAbstract o) {
+        super( controller, o);
     }
 
     @Override
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         jack = new components.JackInputComponent(this);
-        jack.setForeground(inletInstanceZombie.getDataType().GetColor());
+        jack.setForeground(getModel().getDataType().GetColor());
         add(jack);
         add(Box.createHorizontalStrut(2));
-        add(new LabelComponent(inletInstanceZombie.inletname));
+        add(new LabelComponent(getModel().inletname));
         add(Box.createHorizontalGlue());
     }
 

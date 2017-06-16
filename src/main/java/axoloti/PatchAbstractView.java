@@ -10,7 +10,7 @@ public abstract class PatchAbstractView implements AbstractView {
 
     final PatchController controller;
 
-    PatchAbstractView(PatchModel model, PatchController controller) {
+    PatchAbstractView(PatchController controller) {
         this.controller = controller;
     }
 

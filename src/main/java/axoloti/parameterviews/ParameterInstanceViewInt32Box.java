@@ -7,23 +7,23 @@ import components.control.NumberBoxComponent;
 
 class ParameterInstanceViewInt32Box extends ParameterInstanceViewInt32 {
 
-    public ParameterInstanceViewInt32Box(ParameterInstanceInt32Box parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, controller, axoObjectInstanceView);
+    public ParameterInstanceViewInt32Box(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
-    public ParameterInstanceInt32Box getParameterInstance() {
-        return (ParameterInstanceInt32Box) parameterInstance;
+    public ParameterInstanceInt32Box getModel() {
+        return (ParameterInstanceInt32Box) super.getModel();
     }
 
     @Override
     public void updateV() {
-        ctrl.setValue(getParameterInstance().getValue().getInt());
+        ctrl.setValue(getModel().getValue().getInt());
     }
 
     @Override
     public NumberBoxComponent CreateControl() {
-        NumberBoxComponent n = new NumberBoxComponent(0.0, getParameterInstance().getMin(), getParameterInstance().getMax(), 1.0);
+        NumberBoxComponent n = new NumberBoxComponent(0.0, getModel().getMin(), getModel().getMax(), 1.0);
         return n;
     }
 

@@ -58,7 +58,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (getSubPatchModel() != null) {
             // cheating here by creating a new controller...
             PatchController controller = new PatchController(getSubPatchModel(), null);
-            PatchViewCodegen codegen = new PatchViewCodegen(getSubPatchModel(), controller);
+            PatchViewCodegen codegen = new PatchViewCodegen(controller);
             AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
 
             setType(ao);
@@ -95,7 +95,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         if (getSubPatchModel() != null) {
             // cheating here by creating a new controller...
             PatchController controller = new PatchController(getSubPatchModel(), null);
-            PatchViewCodegen codegen = new PatchViewCodegen(getSubPatchModel(), controller);
+            PatchViewCodegen codegen = new PatchViewCodegen(controller);
             AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
 
             setType(ao);

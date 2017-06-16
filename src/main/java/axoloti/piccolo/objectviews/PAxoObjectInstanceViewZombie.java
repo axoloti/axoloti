@@ -182,7 +182,7 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
     @Override
     public void addInletInstanceView(IInletInstanceView view) {
-        inletInstanceViews.put(view.getInletInstance(), view);
+        inletInstanceViews.put(view.getModel(), view);
         p_inletViews.addChild((PInletInstanceView) view);
         view.setAlignmentX(LEFT_ALIGNMENT);
 
@@ -190,7 +190,7 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
     @Override
     public void addOutletInstanceView(IOutletInstanceView view) {
-        outletInstanceViews.put(view.getOutletInstance(), view);
+        outletInstanceViews.put(view.getModel(), view);
         p_outletViews.addChild((POutletInstanceView) view);
         view.setAlignmentX(RIGHT_ALIGNMENT);
     }

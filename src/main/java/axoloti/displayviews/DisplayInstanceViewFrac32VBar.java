@@ -5,14 +5,13 @@ import axoloti.displays.DisplayInstanceFrac32VBar;
 import components.displays.VBarComponent;
 
 class DisplayInstanceViewFrac32VBar extends DisplayInstanceViewFrac32 {
-    DisplayInstanceFrac32VBar displayInstance;
+
     private VBarComponent vbar;
 
-    public DisplayInstanceViewFrac32VBar(DisplayInstanceFrac32VBar displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewFrac32VBar(DisplayInstanceController controller) {
+        super(controller);
     }
-    
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();
@@ -24,6 +23,6 @@ class DisplayInstanceViewFrac32VBar extends DisplayInstanceViewFrac32 {
 
     @Override
     public void updateV() {
-        vbar.setValue(displayInstance.getValueRef().getDouble());
+        vbar.setValue(getModel().getValueRef().getDouble());
     }
 }

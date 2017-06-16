@@ -10,21 +10,21 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
 
     DropDownComponent comboBox;
 
-    public AttributeInstanceViewComboBox(AttributeInstanceComboBox attributeInstance, AttributeInstanceController controller, AxoObjectInstanceView axoObjectView) {
-        super(attributeInstance, controller, axoObjectView);
+    public AttributeInstanceViewComboBox(AttributeInstanceController controller, AxoObjectInstanceView axoObjectView) {
+        super(controller, axoObjectView);
     }
 
     @Override
-    public AttributeInstanceComboBox getAttributeInstance() {
-        return (AttributeInstanceComboBox) super.getAttributeInstance();
+    public AttributeInstanceComboBox getModel() {
+        return (AttributeInstanceComboBox) super.getModel();
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        comboBox = new DropDownComponent(getAttributeInstance().getModel().getMenuEntries(), getAttributeInstance());
+        comboBox = new DropDownComponent(getModel().getModel().getMenuEntries(), getModel());
         comboBox.setFont(Constants.FONT);
-        setString(getAttributeInstance().getValue());
+        setString(getModel().getValue());
         comboBox.addItemListener(new DropDownComponent.DDCListener() {
             @Override
             public void SelectionChanged() {

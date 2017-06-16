@@ -9,8 +9,8 @@ import components.control.VSliderComponent;
 
 class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32S {
 
-    public ParameterInstanceViewFrac32SMapVSlider(ParameterInstanceFrac32SMapVSlider parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, controller, axoObjectInstanceView);
+    public ParameterInstanceViewFrac32SMapVSlider(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
@@ -19,14 +19,14 @@ class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32
     }
 
     @Override
-    public ParameterInstanceFrac32SMapVSlider getParameterInstance() {
-        return (ParameterInstanceFrac32SMapVSlider) parameterInstance;
+    public ParameterInstanceFrac32SMapVSlider getModel() {
+        return (ParameterInstanceFrac32SMapVSlider) super.getModel();
     }
 
     @Override
     public void updateV() {
         if (ctrl != null) {
-            ctrl.setValue(getParameterInstance().getValue().getDouble());
+            ctrl.setValue(getModel().getValue().getDouble());
         }
     }
 
@@ -37,19 +37,19 @@ class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32
     public void ShowPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = getParameterInstance().GetPreset(presetEditActive);
+            Preset p = getModel().GetPreset(presetEditActive);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getParameterInstance().getValue().getDouble());
+                ctrl.setValue(getModel().getValue().getDouble());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getParameterInstance().getValue().getDouble());
+            ctrl.setValue(getModel().getValue().getDouble());
         }
-        if ((getParameterInstance().getPresets() != null) && (!getParameterInstance().getPresets().isEmpty())) {
+        if ((getModel().getPresets() != null) && (!getModel().getPresets().isEmpty())) {
 //            lblPreset.setVisible(true);
         } else {
 //            lblPreset.setVisible(false);
@@ -58,7 +58,7 @@ class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32
 
     @Override
     public VSliderComponent CreateControl() {
-        return new VSliderComponent(0.0, getParameterInstance().getMin(), getParameterInstance().getMax(), getParameterInstance().getTick());
+        return new VSliderComponent(0.0, getModel().getMin(), getModel().getMax(), getModel().getTick());
     }
 
     @Override

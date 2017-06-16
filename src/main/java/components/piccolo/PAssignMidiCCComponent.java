@@ -47,7 +47,7 @@ public class PAssignMidiCCComponent extends PatchPNode {
         setPreferredSize(dim);
         setSize(dim);
         this.parameterInstanceView = param;
-        setVisible(parameterInstanceView.getParameterInstance().getMidiCC() >= 0);
+        setVisible(parameterInstanceView.getModel().getMidiCC() >= 0);
         addInputEventListener(new PBasicInputEventHandler() {
             @Override
             public void mouseClicked(PInputEvent e) {
@@ -72,7 +72,7 @@ public class PAssignMidiCCComponent extends PatchPNode {
         g2.setFont(Constants.FONT);
         g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(1, 1, (int) getWidth(), (int) getHeight());
-        if (parameterInstanceView.getParameterInstance().getMidiCC() >= 0) {
+        if (parameterInstanceView.getModel().getMidiCC() >= 0) {
             g2.setColor(Theme.getCurrentTheme().Component_Primary);
             g2.fillRect(1, 1, 8, (int) getHeight());
             g2.setColor(Theme.getCurrentTheme().Component_Secondary);
@@ -92,7 +92,7 @@ public class PAssignMidiCCComponent extends PatchPNode {
     }
 
     public void setCC(int i) {
-        setVisible(parameterInstanceView.getParameterInstance().getMidiCC() >= 0);
+        setVisible(parameterInstanceView.getModel().getMidiCC() >= 0);
         if (getVisible()) {
             repaint();
         }

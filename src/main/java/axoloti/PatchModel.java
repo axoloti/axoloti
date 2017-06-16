@@ -546,7 +546,7 @@ public class PatchModel extends AbstractModel {
         
         // cheating here by creating a new controller...
         PatchController controller = new PatchController(this, null);
-        PatchViewCodegen codegen = new PatchViewCodegen(this, controller);               
+        PatchViewCodegen codegen = new PatchViewCodegen(controller);               
         String c = codegen.GenerateCode4();
         return c;
     }
@@ -557,7 +557,7 @@ public class PatchModel extends AbstractModel {
         SortByPosition();
         // cheating here by creating a new controller...
         PatchController controller = new PatchController(this, null);
-        PatchViewCodegen codegen = new PatchViewCodegen(this, controller);
+        PatchViewCodegen codegen = new PatchViewCodegen(controller);
         AxoObject ao = codegen.GenerateAxoObj(new AxoObject());
         ao.sDescription = FileNamePath;
         ao.id = fnNoExtension;

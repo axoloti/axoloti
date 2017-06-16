@@ -6,12 +6,10 @@ import components.displays.ScopeComponent;
 
 class DisplayInstanceViewFrac32SChart extends DisplayInstanceViewFrac32 {
 
-    final DisplayInstanceFrac32SChart displayInstance;
     private ScopeComponent scope;
 
-    public DisplayInstanceViewFrac32SChart(DisplayInstanceFrac32SChart displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewFrac32SChart(DisplayInstanceController controller) {
+        super(controller);
     }
 
     @Override
@@ -25,6 +23,6 @@ class DisplayInstanceViewFrac32SChart extends DisplayInstanceViewFrac32 {
 
     @Override
     public void updateV() {
-        scope.setValue(displayInstance.getValueRef().getDouble());
+        scope.setValue(getModel().getValueRef().getDouble());
     }
 }

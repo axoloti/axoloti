@@ -6,11 +6,8 @@ import java.beans.PropertyChangeEvent;
 
 abstract class DisplayInstanceViewFrac32 extends DisplayInstanceView1 {
 
-    DisplayInstanceFrac32 displayInstance;
-
-    DisplayInstanceViewFrac32(DisplayInstanceFrac32 displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    DisplayInstanceViewFrac32(DisplayInstanceController controller) {
+        super(controller);
     }
 
     @Override
@@ -19,5 +16,10 @@ abstract class DisplayInstanceViewFrac32 extends DisplayInstanceView1 {
         if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
             updateV();
         }
+    }
+
+    @Override
+    DisplayInstanceFrac32 getModel() {
+        return (DisplayInstanceFrac32) super.getModel();
     }
 }

@@ -61,7 +61,7 @@ public class JackOutputComponent extends JComponent {
         g2.setPaint(Theme.getCurrentTheme().Component_Primary);
         g2.drawRect(margin, margin + 1, sz - margin - margin, sz - margin - margin);
 
-        if (outletInstanceView.getOutletInstance().isConnected()) {
+        if (outletInstanceView.getModel().isConnected()) {
             g2.fillOval(margin + inset, margin + inset + 1, sz - (margin + inset) * 2 + 1, sz - (margin + inset) * 2 + 1);
             g2.setPaint(getForeground());
             g2.fillOval(margin + inset - 1, margin + inset, sz - (margin + inset) * 2 + 1, sz - (margin + inset) * 2 + 1);

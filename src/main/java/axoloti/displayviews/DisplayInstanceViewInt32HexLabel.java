@@ -6,12 +6,10 @@ import components.LabelComponent;
 
 class DisplayInstanceViewInt32HexLabel extends DisplayInstanceViewInt32 {
 
-    private DisplayInstanceInt32HexLabel displayInstance;
     private LabelComponent readout;
 
-    public DisplayInstanceViewInt32HexLabel(DisplayInstanceInt32HexLabel displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewInt32HexLabel(DisplayInstanceController controller) {
+        super(controller);
     }
 
     @Override
@@ -25,6 +23,6 @@ class DisplayInstanceViewInt32HexLabel extends DisplayInstanceViewInt32 {
 
     @Override
     public void updateV() {
-        readout.setText(String.format("0x%08X", displayInstance.getValueRef().getInt()));
+        readout.setText(String.format("0x%08X", getModel().getValueRef().getInt()));
     }
 }

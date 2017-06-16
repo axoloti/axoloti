@@ -10,26 +10,28 @@ import javax.swing.JPanel;
 
 public abstract class DisplayInstanceView extends JPanel implements IDisplayInstanceView {
 
-    final DisplayInstance displayInstance;
     DisplayInstanceController controller;
     LabelComponent label;
-    
-    DisplayInstanceView(DisplayInstance displayInstance, DisplayInstanceController controller) {
-        this.displayInstance = displayInstance;
+
+    DisplayInstanceView(DisplayInstanceController controller) {
         this.controller = controller;
+    }
+
+    DisplayInstance getModel() {
+        return getController().getModel();
     }
 
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        if ((displayInstance.getModel().noLabel == null) || (displayInstance.getModel().noLabel == false)) {
-            label = new LabelComponent(displayInstance.getModel().getName());
+        if ((getModel().getModel().noLabel == null) || (getModel().getModel().noLabel == false)) {
+            label = new LabelComponent(getModel().getModel().getName());
         } else {
             label = new LabelComponent("");
         }
         add(label);
         setSize(getPreferredSize());
-	String description = displayInstance.getModel().getDescription();
-	if (description != null) {
+        String description = getModel().getModel().getDescription();
+        if (description != null) {
             setToolTipText(description);
         }
     }
@@ -37,19 +39,18 @@ public abstract class DisplayInstanceView extends JPanel implements IDisplayInst
     @Override
     public abstract void updateV();
 
-
     @Override
     public DisplayInstanceController getController() {
         return controller;
     }
-    
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
-            label.setText((String)evt.getNewValue());
+            label.setText((String) evt.getNewValue());
             doLayout();
         } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
-            setToolTipText((String)evt.getNewValue());
+            setToolTipText((String) evt.getNewValue());
         }
     }
 }

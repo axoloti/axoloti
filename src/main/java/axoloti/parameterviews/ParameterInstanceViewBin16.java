@@ -8,8 +8,8 @@ import components.control.CheckboxComponent;
 
 class ParameterInstanceViewBin16 extends ParameterInstanceViewBin {
 
-    public ParameterInstanceViewBin16(ParameterInstanceBin16 parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, controller, axoObjectInstanceView);
+    public ParameterInstanceViewBin16(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
@@ -19,7 +19,7 @@ class ParameterInstanceViewBin16 extends ParameterInstanceViewBin {
 
     @Override
     public void updateV() {
-        ctrl.setValue(parameterInstance.getValue().getInt());
+        ctrl.setValue(getModel().getValue().getInt());
     }
 
     @Override

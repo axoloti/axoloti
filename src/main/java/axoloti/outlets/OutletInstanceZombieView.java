@@ -7,21 +7,18 @@ import javax.swing.BoxLayout;
 
 public class OutletInstanceZombieView extends OutletInstanceView {
 
-    private final OutletInstanceZombie outletInstanceZombie;
-
-    public OutletInstanceZombieView(OutletInstanceZombie outletInstanceZombie, OutletInstanceController controller, AxoObjectInstanceViewAbstract o) {
-        super(outletInstanceZombie, controller, o);
-        this.outletInstanceZombie = outletInstanceZombie;
+    public OutletInstanceZombieView(OutletInstanceController controller, AxoObjectInstanceViewAbstract o) {
+        super(controller, o);
     }
 
     @Override
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         add(Box.createHorizontalGlue());
-        add(new LabelComponent(outletInstanceZombie.outletname));
+        add(new LabelComponent(getModel().outletname));
         add(Box.createHorizontalStrut(2));
         jack = new components.JackOutputComponent(this);
-        jack.setForeground(outletInstanceZombie.getDataType().GetColor());
+        jack.setForeground(getModel().getDataType().GetColor());
         add(jack);
     }
 }

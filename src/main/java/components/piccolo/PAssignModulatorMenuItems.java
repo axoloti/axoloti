@@ -45,7 +45,7 @@ public class PAssignModulatorMenuItems {
 
         hsls.clear();
 
-        for (Modulator m : parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel().getModulators()) {
+        for (Modulator m : parameterInstanceView.getModel().getObjectInstance().getPatchModel().getModulators()) {
             JPanel p = new JPanel();
             p.setLayout(new BoxLayout(p, BoxLayout.LINE_AXIS));
             String modlabel;
@@ -56,8 +56,8 @@ public class PAssignModulatorMenuItems {
             }
             p.add(new JLabel(modlabel + " "));
             HSliderComponent hsl = new HSliderComponent();
-            if (parameterInstanceView.getParameterInstance().getModulators() != null) {
-                List<Modulation> modulators = parameterInstanceView.getParameterInstance().getModulators();
+            if (parameterInstanceView.getModel().getModulators() != null) {
+                List<Modulation> modulators = parameterInstanceView.getModel().getModulators();
                 for (Modulation n : modulators) {
                     if (m.Modulations.contains(n)) {
                         System.out.println("modulation restored " + n.getValue().getDouble());
@@ -82,7 +82,7 @@ public class PAssignModulatorMenuItems {
                 public void ACtrlAdjustmentFinished(ACtrlEvent e) {
                     double vnew = ((HSliderComponent) e.getSource()).getValue();
                     if (vnew != valueBeforeAdjustment) {
-                        parameterInstanceView.getParameterInstance().SetDirty();
+                        parameterInstanceView.getModel().SetDirty();
                     }
                 }
             });
@@ -90,7 +90,7 @@ public class PAssignModulatorMenuItems {
             p.add(hsl);
             parent.add(p);
         }
-        if (parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel().getModulators().isEmpty()) {
+        if (parameterInstanceView.getModel().getObjectInstance().getPatchModel().getModulators().isEmpty()) {
             JMenuItem d = new JMenuItem("no modulation sources in patch");
             d.setEnabled(false);
             parent.add(d);

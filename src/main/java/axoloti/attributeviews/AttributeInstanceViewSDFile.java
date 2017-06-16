@@ -20,19 +20,19 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
     JLabel vlabel;
     ButtonComponent ButtonChooseFile;
 
-    public AttributeInstanceViewSDFile(AttributeInstanceSDFile attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, controller, axoObjectInstanceView);
+    public AttributeInstanceViewSDFile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
-    public AttributeInstanceSDFile getAttributeInstance() {
-        return (AttributeInstanceSDFile) super.getAttributeInstance();
+    public AttributeInstanceSDFile getModel() {
+        return (AttributeInstanceSDFile) super.getModel();
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFFileName = new JTextField(getAttributeInstance().getValue());
+        TFFileName = new JTextField(getModel().getValue());
         Dimension d = TFFileName.getSize();
         d.width = 128;
         d.height = 22;
@@ -77,11 +77,11 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         ButtonChooseFile.addActListener(new ButtonComponent.ActListener() {
             @Override
             public void OnPushed() {
-                JFileChooser fc = new JFileChooser(getAttributeInstance().getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
+                JFileChooser fc = new JFileChooser(getModel().getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
                 int returnVal = fc.showOpenDialog(null // FIXME: parent frame
                 );
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    String f = getAttributeInstance().toRelative(fc.getSelectedFile());
+                    String f = getModel().toRelative(fc.getSelectedFile());
                     getController().changeValue(f);
                 }
             }

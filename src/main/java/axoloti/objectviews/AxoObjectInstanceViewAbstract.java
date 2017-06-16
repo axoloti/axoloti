@@ -53,8 +53,8 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     private boolean Locked = false;
 
     final ObjectInstanceController controller;
-    
-    AxoObjectInstanceViewAbstract(AxoObjectInstanceAbstract model, ObjectInstanceController controller, PatchViewSwing patchView) {
+
+    AxoObjectInstanceViewAbstract(ObjectInstanceController controller, PatchViewSwing patchView) {
         this.controller = controller;
         this.patchView = patchView;
     }

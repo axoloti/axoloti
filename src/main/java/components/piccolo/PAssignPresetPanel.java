@@ -23,7 +23,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
 
     public PAssignPresetPanel(PParameterInstanceView parameterInstanceView) {
         this.parameterInstanceView = parameterInstanceView;
-        int n = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel().getSettings().GetNPresets();
+        int n = parameterInstanceView.getModel().getObjectInstance().getPatchModel().getSettings().GetNPresets();
         setVisible(true);
 
         removeInputEventListener(zoomEventHandler);
@@ -56,14 +56,14 @@ public class PAssignPresetPanel extends PatchPCanvas {
             ctrl.setPresetCanvas(this);
             ctrls.add(ctrl);
             ctrl.addPCtrlListener(ctrlListener);
-            Preset p = parameterInstanceView.getParameterInstance().GetPreset(i + 1);
+            Preset p = parameterInstanceView.getModel().GetPreset(i + 1);
             if (p != null) {
                 cb.setValue(1);
                 ctrl.setValue(p.value.getDouble());
             } else {
                 cb.setValue(0);
                 ctrl.setEnabled(false);
-                ctrl.setValue(parameterInstanceView.getParameterInstance().getValue().getDouble());
+                ctrl.setValue(parameterInstanceView.getModel().getValue().getDouble());
             }
             row.addChild(ctrl);
             container.addChild(row);
@@ -87,14 +87,14 @@ public class PAssignPresetPanel extends PatchPCanvas {
             boolean selected = Boolean.parseBoolean(s[1]);
             System.out.println(data);
             if (selected) {
-                parameterInstanceView.AddPreset(i + 1, parameterInstanceView.getParameterInstance().getValue());
+                parameterInstanceView.AddPreset(i + 1, parameterInstanceView.getModel().getValue());
                 ctrls.get(i).setEnabled(true);
-                ctrls.get(i).setValue(parameterInstanceView.getParameterInstance().GetPreset(i + 1).value.getDouble()); // TBC!!!
+                ctrls.get(i).setValue(parameterInstanceView.getModel().GetPreset(i + 1).value.getDouble()); // TBC!!!
             } else {
                 ctrls.get(i).setEnabled(false);
                 parameterInstanceView.RemovePreset(i + 1);
             }
-            PatchModel patchModel = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel();
+            PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
             if (patchModel != null) {
                 patchModel.setDirty();
             }
@@ -112,14 +112,14 @@ public class PAssignPresetPanel extends PatchPCanvas {
             int i = ctrls.indexOf(e.getSource());
             if (i >= 0) {
                 if (ctrls.get(i).isEnabled()) {
-                    if (parameterInstanceView.getParameterInstance().getValue() instanceof ValueInt32) {
-                        parameterInstanceView.getParameterInstance().AddPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
-                    } else if (parameterInstanceView.getParameterInstance().getValue() instanceof ValueFrac32) {
+                    if (parameterInstanceView.getModel().getValue() instanceof ValueInt32) {
+                        parameterInstanceView.getModel().AddPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
+                    } else if (parameterInstanceView.getModel().getValue() instanceof ValueFrac32) {
                         parameterInstanceView.AddPreset(i + 1, new ValueFrac32(ctrls.get(i).getValue()));
                     }
                 }
             }
-            parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel().presetUpdatePending = true;
+            parameterInstanceView.getModel().getObjectInstance().getPatchModel().presetUpdatePending = true;
         }
 
         @Override
@@ -135,7 +135,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
             int i = ctrls.indexOf(e.getSource());
             if (i >= 0) {
                 if (valueBeforeAdjustment != ctrls.get(i).getValue()) {
-                    PatchModel patchModel = parameterInstanceView.getParameterInstance().getObjectInstance().getPatchModel();
+                    PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
                     if (patchModel != null) {
                         patchModel.setDirty();
                     }

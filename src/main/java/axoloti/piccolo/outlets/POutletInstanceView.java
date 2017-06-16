@@ -70,7 +70,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
     }
 
     @Override
-    public OutletInstance getOutletInstance() {
+    public OutletInstance getModel() {
         return outletInstance;
     }
 

@@ -62,8 +62,8 @@ public class PAssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (PAssignPresetMenuItems.this.param.getParameterInstance().getPresets() != null) {
-                        PAssignPresetMenuItems.this.param.getParameterInstance().getPresets().clear();
+                    if (PAssignPresetMenuItems.this.param.getModel().getPresets() != null) {
+                        PAssignPresetMenuItems.this.param.getModel().getPresets().clear();
                     }
                     PAssignPresetMenuItems.this.param.ExcludeFromPreset();
                 }

@@ -1,5 +1,6 @@
 package axoloti.attributeviews;
 
+import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceTablename;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -14,19 +15,22 @@ import javax.swing.event.DocumentListener;
 
 class AttributeInstanceViewTablename extends AttributeInstanceViewString {
 
-    AttributeInstanceTablename attributeInstance;
     JTextField TFtableName;
     JLabel vlabel;
 
-    public AttributeInstanceViewTablename(AttributeInstanceTablename attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, controller, axoObjectInstanceView);
-        this.attributeInstance = attributeInstance;
+    public AttributeInstanceViewTablename(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
+    }
+
+    @Override
+    public AttributeInstanceTablename getModel() {
+        return (AttributeInstanceTablename) super.getModel();
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFtableName = new JTextField(attributeInstance.getValue());
+        TFtableName = new JTextField(getModel().getValue());
         Dimension d = TFtableName.getSize();
         d.width = 128;
         d.height = 22;

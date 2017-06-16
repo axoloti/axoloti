@@ -7,24 +7,27 @@ import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewFrac8S128VBar extends DisplayInstanceView {
 
-    DisplayInstanceFrac8S128VBar displayInstance;
     private VGraphComponent vgraph;
 
-    public DisplayInstanceViewFrac8S128VBar(DisplayInstanceFrac8S128VBar displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewFrac8S128VBar(DisplayInstanceController controller) {
+        super(controller);
     }
-    
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        vgraph = new VGraphComponent(displayInstance.getN(), 128, -64, 64);
+        vgraph = new VGraphComponent(getModel().getN(), 128, -64, 64);
         add(vgraph);
     }
-    
+
+    @Override
+    DisplayInstanceFrac8S128VBar getModel() {
+        return (DisplayInstanceFrac8S128VBar) super.getModel();
+    }
+
     @Override
     public void updateV() {
-        vgraph.setValue(displayInstance.getIDst());
+        vgraph.setValue(getModel().getIDst());
     }
 
     @Override

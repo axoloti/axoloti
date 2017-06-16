@@ -19,19 +19,19 @@ class AttributeInstanceViewWavefile extends AttributeInstanceView {
     JTextField TFwaveFilename;
     JLabel vlabel;
 
-    public AttributeInstanceViewWavefile(AttributeInstanceWavefile attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(attributeInstance, controller, axoObjectInstanceView);
+    public AttributeInstanceViewWavefile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
-    public AttributeInstanceWavefile getAttributeInstance() {
-        return (AttributeInstanceWavefile)super.getAttributeInstance();
+    public AttributeInstanceWavefile getModel() {
+        return (AttributeInstanceWavefile) super.getModel();
     }
-    
+
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        TFwaveFilename = new JTextField(getAttributeInstance().getWaveFilename());
+        TFwaveFilename = new JTextField(getModel().getWaveFilename());
         Dimension d = TFwaveFilename.getSize();
         d.width = 128;
         d.height = 22;
@@ -57,7 +57,7 @@ class AttributeInstanceViewWavefile extends AttributeInstanceView {
         TFwaveFilename.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                getAttributeInstance().setWaveFilename(TFwaveFilename.getText());
+                getModel().setWaveFilename(TFwaveFilename.getText());
             }
 
             @Override
@@ -78,13 +78,13 @@ class AttributeInstanceViewWavefile extends AttributeInstanceView {
         TFwaveFilename.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getAttributeInstance().setValueBeforeAdjustment(TFwaveFilename.getText());
+                getModel().setValueBeforeAdjustment(TFwaveFilename.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (!TFwaveFilename.getText().equals(getAttributeInstance().getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
+                if (!TFwaveFilename.getText().equals(getModel().getValueBeforeAdjustment())) {
+                    getModel().getObjectInstance().getPatchModel().setDirty();
                 }
             }
         });

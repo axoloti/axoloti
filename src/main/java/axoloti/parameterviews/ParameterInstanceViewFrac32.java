@@ -14,23 +14,23 @@ import javax.swing.JPopupMenu;
 
 abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
 
-    ParameterInstanceViewFrac32(ParameterInstanceFrac32 parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, controller, axoObjectInstanceView);
+    ParameterInstanceViewFrac32(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
-    public ParameterInstanceFrac32 getParameterInstance() {
-        return (ParameterInstanceFrac32) parameterInstance;
+    public ParameterInstanceFrac32 getModel() {
+        return (ParameterInstanceFrac32) super.getModel();
     }
 
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        if (getParameterInstance().getModulators() != null) {
-            List<Modulation> modulators = getParameterInstance().getModulators();
+        if (getModel().getModulators() != null) {
+            List<Modulation> modulators = getModel().getModulators();
             for (Modulation m : modulators) {
                 System.out.println("mod amount " + m.getValue().getDouble());
-                m.PostConstructor(getParameterInstance());
+                m.PostConstructor(getModel());
             }
         }
     }
@@ -42,9 +42,9 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
         m_default.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getParameterInstance().applyDefaultValue();
+                getModel().applyDefaultValue();
                 updateV();
-                getControlComponent().setValue(getParameterInstance().getValue().getDouble());
+                getControlComponent().setValue(getModel().getValue().getDouble());
                 handleAdjustment();
             }
         });
@@ -54,11 +54,11 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     @Override
     public boolean handleAdjustment() {
         // FIXME: cleanup preset logic
-        Preset p = getParameterInstance().GetPreset(presetEditActive);
+        Preset p = getModel().GetPreset(presetEditActive);
         if (p != null) {
             p.value = new ValueFrac32(getControlComponent().getValue());
         }
-        if (getParameterInstance().getValue().getDouble() != getControlComponent().getValue()) {
+        if (getModel().getValue().getDouble() != getControlComponent().getValue()) {
             if (controller != null) {
                 ValueFrac32 vf32 = new ValueFrac32(getControlComponent().getValue());
                 controller.changeRawValue(vf32.getRaw());
@@ -70,6 +70,6 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     }
 
     public void updateModulation(int index, double amount) {
-        getParameterInstance().updateModulation(index, amount);
+        getModel().updateModulation(index, amount);
     }
 }

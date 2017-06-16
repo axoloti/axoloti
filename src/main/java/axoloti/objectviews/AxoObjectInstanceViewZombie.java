@@ -6,7 +6,6 @@ import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
 import axoloti.mvc.array.ArrayView;
-import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
@@ -26,16 +25,13 @@ import javax.swing.JPopupMenu;
 
 public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
 
-    AxoObjectInstanceZombie model;
-
-    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie model, ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(model, controller, patchView);
-        this.model = model;
+    public AxoObjectInstanceViewZombie(ObjectInstanceController controller, PatchViewSwing patchView) {
+        super(controller, patchView);
     }
 
     public void PostConstructor() {
         super.PostConstructor();
-        LabelComponent idlbl = new LabelComponent(model.typeName);
+        LabelComponent idlbl = new LabelComponent(getController().getModel().typeName);
         idlbl.setAlignmentX(LEFT_ALIGNMENT);
         idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
 
@@ -61,7 +57,7 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
         setOpaque(true);
         setBackground(Theme.getCurrentTheme().Object_Zombie_Background);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        InstanceLabel = new LabelComponent(model.getInstanceName());
+        InstanceLabel = new LabelComponent(getController().getModel().getInstanceName());
         InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
         InstanceLabel.addMouseListener(new MouseListener() {
             @Override
@@ -88,7 +84,7 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
             }
         });
         add(InstanceLabel);
-        setLocation(model.getX(), model.getY());
+        setLocation(getController().getModel().getX(), getController().getModel().getY());
 
         resizeToGrid();
     }
@@ -137,13 +133,13 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
 
     @Override
     public void addInletInstanceView(IInletInstanceView view) {
-        inletInstanceViews.put(view.getInletInstance(), view);
+        inletInstanceViews.put(view.getModel(), view);
         add((InletInstanceView) view);
     }
 
     @Override
     public void addOutletInstanceView(IOutletInstanceView view) {
-        outletInstanceViews.put(view.getOutletInstance(), view);
+        outletInstanceViews.put(view.getModel(), view);
         add((OutletInstanceView) view);
     }
 

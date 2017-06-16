@@ -28,7 +28,7 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     }
 
     @Override
-    public ParameterInstanceFrac32UMap getParameterInstance() {
+    public ParameterInstanceFrac32UMap getModel() {
         return (ParameterInstanceFrac32UMap) parameterInstance;
     }
 
@@ -36,10 +36,10 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     public PDialComponent CreateControl() {
         PDialComponent d = new PDialComponent(
                 0.0,
-                getParameterInstance().getMin(),
-                getParameterInstance().getMax(),
-                getParameterInstance().getTick(), axoObjectInstanceView);
-        d.setNative(getParameterInstance().getConvs());
+                getModel().getMin(),
+                getModel().getMax(),
+                getModel().getTick(), axoObjectInstanceView);
+        d.setNative(getModel().getConvs());
         return d;
     }
 
@@ -72,7 +72,7 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     public void updateV() {
         super.updateV();
         if (ctrl != null) {
-            ctrl.setValue(getParameterInstance().getValue().getDouble());
+            ctrl.setValue(getModel().getValue().getDouble());
         }
     }
 
@@ -85,8 +85,8 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     }
 
     private void updatePresetAssignVisibility(boolean repaint) {
-        presetAssign.setVisible((getParameterInstance().getPresets() != null)
-                && (!getParameterInstance().getPresets().isEmpty()));
+        presetAssign.setVisible((getModel().getPresets() != null)
+                && (!getModel().getPresets().isEmpty()));
         if (repaint && presetAssign.getVisible()) {
             presetAssign.repaint();
         }
@@ -94,7 +94,7 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
 
     private void updateModulationAssignVisibility(boolean repaint) {
         if (modulationAssign != null) {
-            modulationAssign.setVisible(getParameterInstance().getModulators() != null);
+            modulationAssign.setVisible(getModel().getModulators() != null);
             if (repaint && modulationAssign.getVisible()) {
                 modulationAssign.repaint();
             }
@@ -108,17 +108,17 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     public void ShowPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = getParameterInstance().GetPreset(presetEditActive);
+            Preset p = getModel().GetPreset(presetEditActive);
             if (p != null) {
                 setPaint(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
                 setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getParameterInstance().getValue().getDouble());
+                ctrl.setValue(getModel().getValue().getDouble());
             }
         } else {
             setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getParameterInstance().getValue().getDouble());
+            ctrl.setValue(getModel().getValue().getDouble());
         }
         updatePresetAssignVisibility();
     }
@@ -141,20 +141,20 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
 
     @Override
     public void updateModulation(int index, double amount) {
-        getParameterInstance().updateModulation(index, amount);
+        getModel().updateModulation(index, amount);
         updateModulationAssignVisibility();
     }
 
     @Override
     public Preset AddPreset(int index, Value value) {
-        Preset p = getParameterInstance().AddPreset(index, value);
+        Preset p = getModel().AddPreset(index, value);
         updatePresetAssignVisibility();
         return p;
     }
 
     @Override
     public void RemovePreset(int index) {
-        getParameterInstance().RemovePreset(index);
+        getModel().RemovePreset(index);
         updatePresetAssignVisibility();
     }
 

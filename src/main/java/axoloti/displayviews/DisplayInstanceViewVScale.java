@@ -9,8 +9,8 @@ class DisplayInstanceViewVScale extends DisplayInstanceView {
 
     private VValueLabelsComponent vlabels;
 
-    public DisplayInstanceViewVScale(DisplayInstanceVScale displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
+    public DisplayInstanceViewVScale(DisplayInstanceController controller) {
+        super(controller);
     }
 
     @Override

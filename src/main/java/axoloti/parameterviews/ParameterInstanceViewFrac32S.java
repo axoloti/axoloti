@@ -2,11 +2,10 @@ package axoloti.parameterviews;
 
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
-import axoloti.parameters.ParameterInstanceFrac32S;
 
 abstract class ParameterInstanceViewFrac32S extends ParameterInstanceViewFrac32 {
 
-    ParameterInstanceViewFrac32S(ParameterInstanceFrac32S parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, controller, axoObjectInstanceView);
+    ParameterInstanceViewFrac32S(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 }

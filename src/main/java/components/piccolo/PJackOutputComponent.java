@@ -38,13 +38,13 @@ public class PJackOutputComponent extends PatchPNode {
         g2.setStroke(stroke);
 
         g2.setPaint(Theme.getCurrentTheme().Object_TitleBar_Background);
-        if (outletInstanceView.getOutletInstance().isConnected()) {
+        if (outletInstanceView.getModel().isConnected()) {
             g2.fillRect(margin, margin + 1, sz - margin - margin, sz - margin - margin);
         }
         g2.drawRect(margin, margin + 1, sz - margin - margin, sz - margin - margin);
 
         g2.setPaint(getForeground());
-        if (outletInstanceView.getOutletInstance().isConnected()) {
+        if (outletInstanceView.getModel().isConnected()) {
             g2.fillRect(margin - 1, margin, sz - margin - margin, sz - margin - margin);
         }
         g2.drawRect(margin - 1, margin, sz - margin - margin, sz - margin - margin);

@@ -15,14 +15,11 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
 
     IAxoObjectInstanceView axoObjectInstanceView;
 
-    AttributeInstance attributeInstance;
-
     final AttributeInstanceController controller;
 
     LabelComponent label;
 
-    AttributeInstanceView(AttributeInstance attributeInstance, AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        this.attributeInstance = attributeInstance;
+    AttributeInstanceView(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         this.controller = controller;
         this.axoObjectInstanceView = axoObjectInstanceView;
     }
@@ -34,10 +31,10 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        label = new LabelComponent(attributeInstance.getModel().getName());
+        label = new LabelComponent(getModel().getModel().getName());
         add(label);
         setSize(getPreferredSize());
-        String description = attributeInstance.getModel().getDescription();
+        String description = getModel().getModel().getDescription();
         if (description != null) {
             setToolTipText(description);
         }
@@ -45,8 +42,8 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
 
     @Override
     public String getName() {
-        if (attributeInstance != null) {
-            return attributeInstance.getAttributeName();
+        if (getModel() != null) {
+            return getModel().getAttributeName();
         } else {
             return super.getName();
         }
@@ -57,8 +54,9 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
         return (PatchViewSwing) axoObjectInstanceView.getPatchView();
     }
 
-    public AttributeInstance getAttributeInstance() {
-        return attributeInstance;
+    @Override
+    public AttributeInstance getModel() {
+        return getController().getModel();
     }
 
     @Override

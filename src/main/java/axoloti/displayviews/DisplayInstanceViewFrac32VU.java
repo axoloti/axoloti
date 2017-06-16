@@ -6,11 +6,8 @@ import components.displays.VUComponent;
 
 class DisplayInstanceViewFrac32VU extends DisplayInstanceViewFrac32 {
 
-    DisplayInstanceFrac32VU displayInstance;
-
-    public DisplayInstanceViewFrac32VU(DisplayInstanceFrac32VU displayInstance, DisplayInstanceController controller) {
-        super(displayInstance, controller);
-        this.displayInstance = displayInstance;
+    public DisplayInstanceViewFrac32VU(DisplayInstanceController controller) {
+        super(controller);
     }
 
     private VUComponent vu;
@@ -26,6 +23,6 @@ class DisplayInstanceViewFrac32VU extends DisplayInstanceViewFrac32 {
 
     @Override
     public void updateV() {
-        vu.setValue(displayInstance.getValueRef().getDouble());
+        vu.setValue(getModel().getValueRef().getDouble());
     }
 }

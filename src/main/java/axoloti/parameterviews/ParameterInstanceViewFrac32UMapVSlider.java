@@ -9,8 +9,8 @@ import components.control.VSliderComponent;
 
 class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32U {
 
-    public ParameterInstanceViewFrac32UMapVSlider(ParameterInstanceFrac32UMapVSlider parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, controller, axoObjectInstanceView);
+    public ParameterInstanceViewFrac32UMapVSlider(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
@@ -21,7 +21,7 @@ class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32
     @Override
     public void updateV() {
         if (ctrl != null) {
-            ctrl.setValue(parameterInstance.getValue().getDouble());
+            ctrl.setValue(getModel().getValue().getDouble());
         }
     }
 
@@ -32,19 +32,19 @@ class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32
     public void ShowPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = parameterInstance.GetPreset(presetEditActive);
+            Preset p = getModel().GetPreset(presetEditActive);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue(p.value.getDouble());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(parameterInstance.getValue().getDouble());
+                ctrl.setValue(getModel().getValue().getDouble());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(parameterInstance.getValue().getDouble());
+            ctrl.setValue(getModel().getValue().getDouble());
         }
-        if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
+        if ((getModel().getPresets() != null) && (!getModel().getPresets().isEmpty())) {
 //            lblPreset.setVisible(true);
         } else {
 //            lblPreset.setVisible(false);

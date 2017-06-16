@@ -8,7 +8,7 @@ public interface IOutletInstanceView extends AbstractView {
 
     public void PostConstructor();
 
-    public OutletInstance getOutletInstance();
+    public OutletInstance getModel();
 
     public void setHighlighted(boolean highlighted);
 

@@ -11,36 +11,36 @@ import java.awt.Graphics;
 
 abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
-    ParameterInstanceViewInt32(ParameterInstanceInt32 parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, controller, axoObjectInstanceView);
+    ParameterInstanceViewInt32(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
     public void ShowPreset(int i) {
         presetEditActive = i;
         if (i > 0) {
-            Preset p = parameterInstance.GetPreset(presetEditActive);
+            Preset p = getModel().GetPreset(presetEditActive);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 getControlComponent().setValue(p.value.getDouble());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                getControlComponent().setValue(parameterInstance.getValue().getDouble());
+                getControlComponent().setValue(getModel().getValue().getDouble());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            getControlComponent().setValue(parameterInstance.getValue().getDouble());
+            getControlComponent().setValue(getModel().getValue().getDouble());
         }
     }
 
     @Override
     public boolean handleAdjustment() {
-        Preset p = parameterInstance.GetPreset(presetEditActive);
+        Preset p = getModel().GetPreset(presetEditActive);
         if (p != null) {
             p.value = new ValueInt32((int) getControlComponent().getValue());
-        } else if (parameterInstance.getValue().getInt() != (int) getControlComponent().getValue()) {
-            parameterInstance.getValue().setInt((int) getControlComponent().getValue());
-            parameterInstance.setNeedsTransmit(true);
+        } else if (getModel().getValue().getInt() != (int) getControlComponent().getValue()) {
+            getModel().getValue().setInt((int) getControlComponent().getValue());
+            getModel().setNeedsTransmit(true);
             UpdateUnit();
         } else {
             return false;
@@ -50,7 +50,7 @@ abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
     @Override
     public void paintComponent(Graphics g) {
-        if (parameterInstance.isOnParent()) {
+        if (getModel().isOnParent()) {
             setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         } else {
             setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);

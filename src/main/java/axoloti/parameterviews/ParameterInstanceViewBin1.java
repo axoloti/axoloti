@@ -1,7 +1,6 @@
 package axoloti.parameterviews;
 
 import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceBin1;
 import axoloti.parameters.ParameterInstanceController;
 import components.AssignMidiCCMenuItems;
 import components.control.CheckboxComponent;
@@ -10,8 +9,8 @@ import javax.swing.JPopupMenu;
 
 class ParameterInstanceViewBin1 extends ParameterInstanceViewBin {
 
-    public ParameterInstanceViewBin1(ParameterInstanceBin1 parameterInstance, ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(parameterInstance, controller, axoObjectInstanceView);
+    public ParameterInstanceViewBin1(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(controller, axoObjectInstanceView);
     }
 
     @Override
@@ -25,7 +24,7 @@ class ParameterInstanceViewBin1 extends ParameterInstanceViewBin {
 
     @Override
     public void updateV() {
-        ctrl.setValue(parameterInstance.getValue().getInt());
+        ctrl.setValue(getModel().getValue().getInt());
     }
 
     @Override
