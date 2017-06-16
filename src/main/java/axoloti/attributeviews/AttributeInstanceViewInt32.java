@@ -30,14 +30,14 @@ class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
         Dimension d = slider.getSize();
         d.width = 128;
         d.height = 22;
-        if (getAttributeInstance().getValue() < getAttributeInstance().getDefinition().getMinValue()) {
-            getAttributeInstance().setValue(getAttributeInstance().getDefinition().getMinValue());
+        if (getAttributeInstance().getValue() < getAttributeInstance().getModel().getMinValue()) {
+            getAttributeInstance().setValue(getAttributeInstance().getModel().getMinValue());
         }
-        if (getAttributeInstance().getValue() > getAttributeInstance().getDefinition().getMaxValue()) {
-            getAttributeInstance().setValue(getAttributeInstance().getDefinition().getMaxValue());
+        if (getAttributeInstance().getValue() > getAttributeInstance().getModel().getMaxValue()) {
+            getAttributeInstance().setValue(getAttributeInstance().getModel().getMaxValue());
         }
-        slider.setMinimum(getAttributeInstance().getDefinition().getMinValue());
-        slider.setMaximum(getAttributeInstance().getDefinition().getMaxValue());
+        slider.setMinimum(getAttributeInstance().getModel().getMinValue());
+        slider.setMaximum(getAttributeInstance().getModel().getMaxValue());
         slider.setValue(getAttributeInstance().getValue());
         slider.setMaximumSize(d);
         slider.setMinimumSize(d);

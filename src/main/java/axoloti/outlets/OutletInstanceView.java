@@ -38,17 +38,17 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(Box.createHorizontalGlue());
         if (axoObj.getModel().getType().getOutlets().size() > 1) {
-            label = new LabelComponent(outletInstance.getOutlet().getName());
+            label = new LabelComponent(outletInstance.getModel().getName());
         } else {
             label = new LabelComponent("");
         }
         add(label);
         add(Box.createHorizontalStrut(2));
-        add(new SignalMetaDataIcon(outletInstance.getOutlet().GetSignalMetaData()));
+        add(new SignalMetaDataIcon(outletInstance.getModel().GetSignalMetaData()));
         jack = new components.JackOutputComponent(this);
-        jack.setForeground(outletInstance.getOutlet().getDatatype().GetColor());
+        jack.setForeground(outletInstance.getModel().getDatatype().GetColor());
         add(jack);
-        setToolTipText(outletInstance.getOutlet().getDescription());
+        setToolTipText(outletInstance.getModel().getDescription());
 
         addMouseListener(this);
         addMouseMotionListener(this);

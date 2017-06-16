@@ -25,6 +25,4 @@ public abstract class AbstractModel {
         propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
     }
 
-    // Controller factory method, just returns an appropriate controller class instance
-    public abstract AbstractController createController(AbstractDocumentRoot documentRoot);
 }

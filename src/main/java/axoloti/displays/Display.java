@@ -58,7 +58,7 @@ public abstract class Display<T extends DisplayInstance> extends AtomDefinition 
     @Override
     public DisplayInstance CreateInstance(AxoObjectInstance o) {
         DisplayInstance pi = InstanceFactory();
-        AtomDefinitionController c = createController(null);
+        AtomDefinitionController c = createController(null, null);
         c.addView(pi);
         pi.axoObjectInstance = o;
         pi.name = getName();

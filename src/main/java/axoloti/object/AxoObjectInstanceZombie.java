@@ -20,8 +20,6 @@ package axoloti.object;
 import axoloti.PatchModel;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceZombie;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceZombie;
@@ -82,7 +80,6 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
 //    public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
 //        return "\n#error \"unresolved object: " + getInstanceName() + " in patch: " + getPatchModel().getFileNamePath() + "\"\n";
 //    }
-
     @Override
     public ArrayModel<InletInstance> getInletInstances() {
         return inletInstances;
@@ -94,12 +91,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
-        return new ObjectInstanceController(this, documentRoot);
-    }
-
-    @Override
-    public void modelPropertyChange(PropertyChangeEvent evt) {        
+    public void modelPropertyChange(PropertyChangeEvent evt) {
     }
 
 }

@@ -36,17 +36,15 @@ public class AxoObjectHyperlink extends AxoObjectAbstract {
 
     @Override
     public AxoObjectInstanceHyperlink CreateInstance(PatchModel patch, String InstanceName1, Point location) {
-        ObjectController controller = createController(null);
-        AxoObjectInstanceHyperlink o = new AxoObjectInstanceHyperlink(controller, patch, InstanceName1, location);
-        if (patch != null) {
-            patch.objectinstances.add(o);
-        }
+        ObjectController ctrl = createController(null, null);
+        AxoObjectInstanceHyperlink o = new AxoObjectInstanceHyperlink(ctrl, patch, InstanceName1, location);
+        ctrl.addView(o);
         return o;
     }
- 
+
     @Override
     public String GenerateUUID() {
         return null;
     }
-    
+
 }

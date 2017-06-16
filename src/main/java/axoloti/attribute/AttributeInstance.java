@@ -21,9 +21,11 @@ import axoloti.SDFileReference;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.ObjectInstanceController;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
 import java.beans.PropertyChangeEvent;
@@ -67,8 +69,8 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     }
 
     @Override
-    public T getDefinition() {
-        return attr;
+    public T getModel() {
+        return (T) getController().getModel();
     }
 
     public ArrayList<SDFileReference> GetDependendSDFiles() {
@@ -80,11 +82,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
 
     public String getAttributeName() {
         return attributeName;
-    }
-
-    @Override
-    public AttributeInstanceController createController(AbstractDocumentRoot documentRoot) {
-        return new AttributeInstanceController(this, documentRoot);
     }
 
     @Override
@@ -102,6 +99,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     @Override
     public AtomDefinitionController getController() {
         // returning the singleton for now...
-        return attr.createController(null);
+        return attr.createController(null, null);
     }
 }

@@ -17,12 +17,9 @@
  */
 package axoloti.outlets;
 
-import axoloti.Net;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
@@ -44,7 +41,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     @Attribute(name = "obj", required = false)
     public String objname;
 
-    private final T outlet;
+    private AtomDefinitionController controller;
 
     protected AxoObjectInstanceAbstract axoObj;
 
@@ -59,31 +56,31 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     }
 
     @Override
-    public T getDefinition() {
-        return outlet;
+    public T getModel() {
+        return (T)getController().getModel();
     }
 
     public OutletInstance() {
-        this.outlet = null;
+        this.controller = null;
         this.axoObj = null;
     }
 
-    public OutletInstance(T outlet, AxoObjectInstance axoObj) {
-        this.outlet = outlet;
+    public OutletInstance(AtomDefinitionController outletController, AxoObjectInstance axoObj) {
+        this.controller = outletController;
         this.axoObj = axoObj;
         RefreshName();
     }
 
     public DataType getDataType() {
-        return outlet.getDatatype();
+        return getModel().getDatatype();
     }
 
     public String GetLabel() {
-        return outlet.getName();
+        return getModel().getName();
     }
 
     public String GetCName() {
-        return outlet.GetCName();
+        return getModel().GetCName();
     }
 
     @Override
@@ -91,14 +88,10 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
         return axoObj.compareTo(t.axoObj);
     }
 
-    public Outlet getOutlet() {
-        return outlet;
-    }
-
     public void RefreshName() {
-        name = axoObj.getInstanceName() + " " + outlet.getName();
+        name = axoObj.getInstanceName() + " " + getModel().getName();
         objname = axoObj.getInstanceName();
-        outletname = outlet.getName();
+        outletname = getModel().getName();
         name = null;
     }
 
@@ -116,11 +109,6 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     }
 
     @Override
-    public OutletInstanceController createController(AbstractDocumentRoot documentRoot) {
-        return new OutletInstanceController(this, documentRoot);
-    }
-
-    @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
         if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)
@@ -134,7 +122,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
 
     @Override
     public AtomDefinitionController getController() {
-        return outlet.createController(null);
+        return controller;
     }
-    
+
 }

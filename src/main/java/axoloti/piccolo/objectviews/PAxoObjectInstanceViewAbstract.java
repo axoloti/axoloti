@@ -9,7 +9,6 @@ import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectInstanceController;
@@ -34,7 +33,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.BorderFactory;
@@ -128,8 +126,6 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         // define child nodes that should show object popup
         popupMenuNodes.add(this);
         popupMenuNodes.add(titleBar);
-
-        model.resolveType();
 
         popupIcon.addInputEventListener(new PBasicInputEventHandler() {
             @Override

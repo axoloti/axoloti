@@ -21,7 +21,7 @@ public class PParameterInstanceViewInt32VRadio extends PParameterInstanceViewInt
 
     @Override
     public PVRadioComponent CreateControl() {
-        return new PVRadioComponent(0, ((ParameterInt32VRadio) parameterInstance.getParameter()).MaxValue.getInt(), axoObjectInstanceView);
+        return new PVRadioComponent(0, ((ParameterInt32VRadio) parameterInstance.getModel()).MaxValue.getInt(), axoObjectInstanceView);
     }
 
     @Override

@@ -57,19 +57,19 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
 
         PatchPNode lbls = null;
-        if ((((parameterInstance.getParameter().noLabel == null)
-                || (parameterInstance.getParameter().noLabel == false)))
+        if ((((parameterInstance.getModel().noLabel == null)
+                || (parameterInstance.getModel().noLabel == false)))
                 && (parameterInstance.getConvs() != null)) {
             lbls = new PatchPNode(getPatchView());
             lbls.setLayout(new BoxLayout(lbls.getProxyComponent(), BoxLayout.Y_AXIS));
             this.addChild(lbls);
         }
 
-        if ((parameterInstance.getParameter().noLabel == null) || (parameterInstance.getParameter().noLabel == false)) {
+        if ((parameterInstance.getModel().noLabel == null) || (parameterInstance.getModel().noLabel == false)) {
             if (lbls != null) {
-                lbls.addChild(new PLabelComponent(parameterInstance.getParameter().getName()));
+                lbls.addChild(new PLabelComponent(parameterInstance.getModel().getName()));
             } else {
-                addChild(new PLabelComponent(parameterInstance.getParameter().getName()));
+                addChild(new PLabelComponent(parameterInstance.getModel().getName()));
             }
         }
 
@@ -100,10 +100,10 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         }
 
         ctrl = CreateControl();
-        if (parameterInstance.getParameter().description != null) {
-            ctrl.setToolTipText(parameterInstance.getParameter().description);
+        if (parameterInstance.getModel().description != null) {
+            ctrl.setToolTipText(parameterInstance.getModel().description);
         } else {
-            ctrl.setToolTipText(parameterInstance.getParameter().getName());
+            ctrl.setToolTipText(parameterInstance.getModel().getName());
         }
         addChild(getControlComponent());
         getControlComponent().addInputEventListener(popupMouseListener);
@@ -120,11 +120,6 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
 
             @Override
             public void PCtrlAdjustmentFinished(PCtrlEvent e) {
-                if ((valueBeforeAdjustment != getControlComponent().getValue())
-                        && (axoObjectInstanceView != null)
-                        && (axoObjectInstanceView.getPatchModel() != null)) {
-                    axoObjectInstanceView.getPatchModel().setDirty();
-                }
             }
         });
         updateV();
@@ -195,12 +190,10 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
             int i = Integer.parseInt(s.substring(2));
             if (i != parameterInstance.getMidiCC()) {
                 SetMidiCC(i);
-                axoObjectInstanceView.getPatchModel().setDirty();
             }
         } else if (s.equals("none")) {
             if (-1 != parameterInstance.getMidiCC()) {
                 SetMidiCC(-1);
-                axoObjectInstanceView.getPatchModel().setDirty();
             }
         }
     }

@@ -22,7 +22,7 @@ public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        comboBox = new PDropDownComponent(attributeInstance.getDefinition().getMenuEntries(), attributeInstance, axoObjectInstanceView);
+        comboBox = new PDropDownComponent(attributeInstance.getModel().getMenuEntries(), attributeInstance, axoObjectInstanceView);
         setString(attributeInstance.getValue());
         comboBox.addItemListener(new PDropDownComponent.DDCListener() {
             @Override
@@ -68,7 +68,7 @@ public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString
                 return;
             }
         }
-        java.util.logging.Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Error: object \"{0}\" attribute \"{1}\", value \"{2}\" unmatched", new Object[]{attributeInstance.getObjectInstance().getInstanceName(), attributeInstance.getDefinition().getName(), selection});
+        java.util.logging.Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "Error: object \"{0}\" attribute \"{1}\", value \"{2}\" unmatched", new Object[]{attributeInstance.getObjectInstance().getInstanceName(), attributeInstance.getModel().getName(), selection});
         */
     }
 

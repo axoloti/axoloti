@@ -19,8 +19,6 @@ package axoloti.object;
 
 import axoloti.PatchModel;
 import axoloti.PatchViewSwing;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import java.awt.Desktop;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
@@ -73,11 +71,6 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
     @Override
     public String getCInstanceName() {
         return "";
-    }
-
-    @Override
-    public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
-        return new ObjectInstanceController(this, documentRoot);        
     }
 
     @Override

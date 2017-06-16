@@ -91,7 +91,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         this.patchController = patchController;
 
         undoUi = new UndoUI(patchController.getUndoManager());
-        patchController.getDocumentRoot().addUndoListener(this);
+        if (patchController.getDocumentRoot() != null) {
+            patchController.getDocumentRoot().addUndoListener(this);
+        }
 
         initComponents();
         fileMenu1.initComponents();

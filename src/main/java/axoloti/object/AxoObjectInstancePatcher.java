@@ -41,7 +41,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     }
 
     public AxoObjectInstancePatcher(AxoObject type, PatchModel patch1, String InstanceName1, Point location) {
-        super(type.createController(null), patch1, InstanceName1, location);
+        super(type.createController(null, null), patch1, InstanceName1, location);
     }
 
     public PatchModel getSubPatchModel() {
@@ -71,7 +71,8 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     }
 
     public void initSubpatchFrame() {
-        PatchController patchController = getSubPatchModel().createController(null); /* FIXME: null */
+        PatchController patchController = new PatchController(getSubPatchModel(), null); /* FIXME: null */
+
         PatchView patchView = MainFrame.prefs.getPatchView(patchController);
         pf = new PatchFrame(patchController, patchView, MainFrame.mainframe.getQcmdprocessor());
         patchController.addView(patchView);

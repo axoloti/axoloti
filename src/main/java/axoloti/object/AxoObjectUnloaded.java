@@ -53,7 +53,7 @@ public class AxoObjectUnloaded extends AxoObjectAbstract {
     @Override
     public AxoObjectInstance CreateInstance(PatchModel patch, String InstanceName1, Point location) {
         Load();
-        AxoObjectInstance oi = new AxoObjectInstance(loadedObject.createController(null), patch, InstanceName1, location);
+        AxoObjectInstance oi = new AxoObjectInstance(loadedObject.createController(null, null), patch, InstanceName1, location);
         if (patch != null) {
             patch.objectinstances.add(oi);
         }

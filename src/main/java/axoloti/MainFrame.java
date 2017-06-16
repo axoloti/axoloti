@@ -826,7 +826,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = patchModel.createController(null); /* fixme: null */
+            PatchController patchController = new PatchController(patchModel, null); /* fixme: null */
             PatchView patchView = prefs.getPatchView(patchController);
             patchController.addView(patchView);
             PatchFrame pf = new PatchFrame(patchController, patchView, qcmdprocessor);
@@ -903,7 +903,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = patchModel.createController(null); /* fixme: null */
+            PatchController patchController = new PatchController(patchModel, null); /* fixme: null */
             PatchView patchView = prefs.getPatchView(patchController);
             patchController.addView(patchView);
             PatchFrame patchFrame = new PatchFrame(patchController, patchView, qcmdprocessor);
@@ -1008,7 +1008,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     public void NewPatch() {
         PatchModel patchModel = new PatchModel();
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-        PatchController patchController = patchModel.createController(documentRoot);
+        PatchController patchController = new PatchController(patchModel, documentRoot);
         PatchView patchView = prefs.getPatchView(patchController);
         patchController.addView(patchView);
         PatchFrame pf = new PatchFrame(patchController, patchView, qcmdprocessor);

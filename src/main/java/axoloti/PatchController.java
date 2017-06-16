@@ -6,12 +6,8 @@ import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.object.AxoObjectInstanceZombie;
-import axoloti.object.AxoObjectZombie;
 import axoloti.object.ObjectInstanceController;
-import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
@@ -34,7 +30,7 @@ import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
 import qcmds.QCmdUploadFile;
 
-public class PatchController extends AbstractController<PatchModel, AbstractView> {
+public class PatchController extends AbstractController<PatchModel, AbstractView, AbstractController> {
 
     public final static String PATCH_LOCKED = "Locked";
     public final static String PATCH_FILENAME = "FileNamePath";
@@ -43,9 +39,35 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
     public final static String PATCH_NETS = "Nets";
 
     public PatchController(PatchModel model, AbstractDocumentRoot documentRoot) {
-        super(model, documentRoot);
-        objectInstanceControllers = new ArrayController(model.objectinstances, documentRoot);
-        netControllers = new ArrayController(model.nets, documentRoot);
+        super(model, documentRoot, null);
+        if (model.settings == null) {
+            model.settings = new PatchSettings();
+        }
+        // Now it is the time to cleanup the model, replace object instances with linked objects
+        ArrayList<AxoObjectInstanceAbstract> unlinked_object_instances = (ArrayList<AxoObjectInstanceAbstract>) model.objectinstances.getArray().clone();
+        model.objectinstances.clear();
+        for (AxoObjectInstanceAbstract unlinked_object_instance : unlinked_object_instances) {
+            unlinked_object_instance.setPatchModel(model);
+            AxoObjectAbstract t = unlinked_object_instance.resolveType(model.GetCurrentWorkingDirectory());
+            AxoObjectInstanceAbstract linked_object_instance = t.CreateInstance(model, unlinked_object_instance.getInstanceName(), unlinked_object_instance.getLocation());
+            linked_object_instance.applyValues(unlinked_object_instance);
+            model.objectinstances.add(linked_object_instance);
+        }
+
+        objectInstanceControllers = new ArrayController<ObjectInstanceController, AxoObjectInstanceAbstract, PatchController>(model.objectinstances, documentRoot, this) {
+
+            @Override
+            public ObjectInstanceController createController(AxoObjectInstanceAbstract model, AbstractDocumentRoot documentRoot, PatchController parent) {
+                return new ObjectInstanceController(model, documentRoot, parent);
+            }
+        };
+        netControllers = new ArrayController<NetController, Net, PatchController>(model.nets, documentRoot, this) {
+
+            @Override
+            public NetController createController(Net model, AbstractDocumentRoot documentRoot, PatchController parent) {
+                return new NetController(model, documentRoot, parent);
+            }
+        };
     }
 
     QCmdProcessor GetQCmdProcessor() {
@@ -305,6 +327,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
             PatchModel p = serializer.read(PatchModel.class, v);
             Map<String, String> dict = new HashMap<String, String>();
             ArrayList<AxoObjectInstanceAbstract> obj2 = (ArrayList<AxoObjectInstanceAbstract>) p.objectinstances.getArray().clone();
+            /*
             for (AxoObjectInstanceAbstract o : obj2) {
                 o.patchModel = getModel();
                 AxoObjectAbstract obj = o.resolveType();
@@ -325,12 +348,13 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
                     //o.patch = this;
                     p.objectinstances.remove(o);
                     AxoObjectZombie z = new AxoObjectZombie();                    
-                    AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(z.createController(null), getModel(), o.getInstanceName(), new Point(o.getX(), o.getY()));
+                    AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(z.createController(null, null), getModel(), o.getInstanceName(), new Point(o.getX(), o.getY()));
                     zombie.patchModel = getModel();
                     zombie.typeName = o.typeName;
                     p.objectinstances.add(zombie);
                 }
             }
+            */
             int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
             for (AxoObjectInstanceAbstract o : p.objectinstances) {
                 String original_name = o.getInstanceName();
@@ -372,8 +396,10 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
                 if (o.getY() < minY) {
                     minY = o.getY();
                 }
-                o.patchModel = getModel();
-                objectInstanceControllers.add(o);
+                AxoObjectAbstract t = o.resolveType(getModel().GetCurrentWorkingDirectory());
+                AxoObjectInstanceAbstract o2 = t.CreateInstance(getModel(), o.getInstanceName(), o.getLocation());  
+                o2.applyValues(o);
+                objectInstanceControllers.add(o2);
                 int newposx = o.getX();
                 int newposy = o.getY();
 
@@ -500,13 +526,14 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         setModelProperty(PATCH_DSPLOAD, (Integer)DSPLoad);
     }
 
+    @Deprecated
     public Net getNetDraggingModel() {
-        return new Net(getModel());
+        return new Net();
     }
 
     // ------------- new objectinstances MVC stuff
-    ArrayController<ObjectInstanceController> objectInstanceControllers;
-    ArrayController<NetController> netControllers;
+    ArrayController<ObjectInstanceController, AxoObjectInstanceAbstract, PatchController> objectInstanceControllers;
+    ArrayController<NetController, Net, PatchController> netControllers;
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -551,7 +578,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         n1 = getNetFromInlet(il);
         n2 = getNetFromOutlet(ol);
         if ((n1 == null) && (n2 == null)) {
-            Net n = new Net(getModel());
+            Net n = new Net();
             NetController nc = (NetController) netControllers.add(n);
             nc.connectInlet(il);
             nc.connectOutlet(ol);
@@ -567,7 +594,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
                 return n1.getModel();
             } else {
                 disconnect(il);
-                Net n = new Net(getModel());
+                Net n = new Net();
                 NetController nc = (NetController) netControllers.add(n);
                 nc.connectInlet(il);
                 nc.connectOutlet(ol);
@@ -595,11 +622,11 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: same inlet");
             return null;
         }
-        if (il.getObjectInstance().patchModel != getModel()) {
+        if (il.getObjectInstance().getPatchModel() != getModel()) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
             return null;
         }
-        if (ol.getObjectInstance().patchModel != getModel()) {
+        if (ol.getObjectInstance().getPatchModel() != getModel()) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
             return null;
         }
@@ -607,7 +634,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         n1 = getNetFromInlet(il);
         n2 = getNetFromInlet(ol);
         if ((n1 == null) && (n2 == null)) {
-            Net n = new Net(getModel());
+            Net n = new Net();
             NetController nc = (NetController) netControllers.add(n);
             nc.connectInlet(il);
             nc.connectInlet(ol);
@@ -659,6 +686,5 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         netControllers.remove(n.getModel());
         return n;
     }
-
 
 }

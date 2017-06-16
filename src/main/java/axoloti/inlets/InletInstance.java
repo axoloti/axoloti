@@ -20,7 +20,6 @@ package axoloti.inlets;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
@@ -42,7 +41,7 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     @Attribute(name = "obj", required = false)
     public String objname;
 
-    private final T inlet;
+    private final AtomDefinitionController controller;
 
     protected AxoObjectInstanceAbstract axoObj;
 
@@ -56,44 +55,40 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     }
 
     @Override
-    public T getDefinition() {
-        return inlet;
+    public T getModel() {
+        return (T) getController().getModel();
     }
 
     public InletInstance() {
-        this.inlet = null;
-        this.axoObj = null;
+        axoObj = null;
+        controller = null;
     }
 
-    public InletInstance(T inlet, final AxoObjectInstance axoObj) {
-        this.inlet = inlet;
+    public InletInstance(AtomDefinitionController inletController, final AxoObjectInstance axoObj) {
+        this.controller = inletController;
         this.axoObj = axoObj;
         RefreshName();
     }
 
     public DataType getDataType() {
-        return inlet.getDatatype();
+        return getModel().getDatatype();
     }
 
     public String GetCName() {
-        return inlet.GetCName();
+        return getModel().GetCName();
     }
 
     public String GetLabel() {
-        return inlet.getName();
-    }
-
-    public Inlet getInlet() {
-        return inlet;
+        return getModel().getName();
     }
 
     public void RefreshName() {
         if (axoObj != null) {
-            name = axoObj.getInstanceName() + " " + inlet.getName();
+            name = axoObj.getInstanceName() + " " + getModel().getName();
             objname = axoObj.getInstanceName();
             name = null;
         }
-        inletname = inlet.getName();
+        inletname = getModel().getName();
     }
 
     public String getObjname() {
@@ -106,11 +101,6 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
         }
         return false;
         //FIXME: return (axoObj.getPatchModel().GetNet(this) != null);
-    }
-
-    @Override
-    public InletInstanceController createController(AbstractDocumentRoot documentRoot) {
-        return new InletInstanceController(this, documentRoot);
     }
 
     @Override
@@ -127,6 +117,6 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
 
     @Override
     public AtomDefinitionController getController() {
-        return inlet.createController(null);
+        return controller;
     }
 }

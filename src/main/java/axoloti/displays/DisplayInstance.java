@@ -19,10 +19,12 @@ package axoloti.displays;
 
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.ObjectInstanceController;
 import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.nio.ByteBuffer;
@@ -52,8 +54,8 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     }
 
     @Override
-    public T getDefinition() {
-        return display;
+    public T getModel() {
+        return (T) getController().getModel();
     }
 
     public String GetCName() {
@@ -95,11 +97,6 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
 //    abstract void setValue(Object o);
 
     @Override
-    public DisplayInstanceController createController(AbstractDocumentRoot documentRoot) {
-        return new DisplayInstanceController(this, documentRoot);
-    }
-
-    @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
         if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)
@@ -114,6 +111,6 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     @Override
     public AtomDefinitionController getController() {
         // returning the singleton for now...
-        return display.createController(null);
+        return display.createController(null, null);
     }
 }

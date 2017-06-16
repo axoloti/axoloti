@@ -36,7 +36,7 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
         @Override
         public void mouseEntered(PInputEvent e) {
             if (e.getInputManager().getMouseFocus() == null) {
-                axoObjectInstanceView.getCanvas().setToolTipText(inletInstance.getInlet().getDescription());
+                axoObjectInstanceView.getCanvas().setToolTipText(inletInstance.getModel().getDescription());
             }
         }
 
@@ -54,14 +54,14 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
         setMaximumSize(new Dimension(32767, 14));
 
         jack = new PJackInputComponent(this);
-        ((PJackInputComponent) jack).setForeground(inletInstance.getInlet().getDatatype().GetColor());
+        ((PJackInputComponent) jack).setForeground(inletInstance.getModel().getDatatype().GetColor());
 
         addChild(jack);
-        addChild(new PSignalMetaDataIcon(inletInstance.getInlet().GetSignalMetaData(), axoObjectInstanceView));
+        addChild(new PSignalMetaDataIcon(inletInstance.getModel().GetSignalMetaData(), axoObjectInstanceView));
 
         if (axoObjectInstanceView.getModel().getType().getInlets().size() > 1) {
             addToSwingProxy(Box.createHorizontalStrut(3));
-            addChild(new PLabelComponent(inletInstance.getInlet().getName()));
+            addChild(new PLabelComponent(inletInstance.getModel().getName()));
         }
         addToSwingProxy(Box.createHorizontalGlue());
 

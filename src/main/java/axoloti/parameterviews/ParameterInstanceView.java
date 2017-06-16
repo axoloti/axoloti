@@ -56,14 +56,14 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
         JPanel lbls = null;
-        if ((((parameterInstance.getParameter().noLabel == null) || (parameterInstance.getParameter().noLabel == false))) && (parameterInstance.getConvs() != null)) {
+        if ((((parameterInstance.getModel().noLabel == null) || (parameterInstance.getModel().noLabel == false))) && (parameterInstance.getConvs() != null)) {
             lbls = new JPanel();
             lbls.setLayout(new BoxLayout(lbls, BoxLayout.Y_AXIS));
             this.add(lbls);
         }
 
-        if ((parameterInstance.getParameter().noLabel == null) || (parameterInstance.getParameter().noLabel == false)) {
-            label.setText(parameterInstance.getParameter().getName());
+        if ((parameterInstance.getModel().noLabel == null) || (parameterInstance.getModel().noLabel == false)) {
+            label.setText(parameterInstance.getModel().getName());
         }
         if (lbls != null) {
             lbls.add(label);
@@ -96,10 +96,10 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         }
 
         ctrl = CreateControl();
-        if (parameterInstance.getParameter().description != null) {
-            ctrl.setToolTipText(parameterInstance.getParameter().description);
+        if (parameterInstance.getModel().description != null) {
+            ctrl.setToolTipText(parameterInstance.getModel().description);
         } else {
-            ctrl.setToolTipText(parameterInstance.getParameter().getName());
+            ctrl.setToolTipText(parameterInstance.getModel().getName());
         }
         add(getControlComponent());
         getControlComponent().addMouseListener(popupMouseListener);
@@ -117,12 +117,6 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
             @Override
             public void ACtrlAdjustmentFinished(ACtrlEvent e) {
-                if ((valueBeforeAdjustment != getControlComponent().getValue())
-                        && (axoObjectInstanceView != null)
-                        && (axoObjectInstanceView.getPatchModel() != null)) {
-                    //System.out.println("finished" +getControlComponent().getValue());
-                    axoObjectInstanceView.getPatchModel().setDirty();
-                }
             }
         });
         updateV();
@@ -202,12 +196,10 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
             int i = Integer.parseInt(s.substring(2));
             if (i != parameterInstance.getMidiCC()) {
                 SetMidiCC(i);
-                axoObjectInstanceView.getPatchModel().setDirty();
             }
         } else if (s.equals("none")) {
             if (-1 != parameterInstance.getMidiCC()) {
                 SetMidiCC(-1);
-                axoObjectInstanceView.getPatchModel().setDirty();
             }
         }
     }

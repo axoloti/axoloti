@@ -7,7 +7,6 @@ import axoloti.chunks.FourCC;
 import axoloti.chunks.FourCCs;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.IInletInstanceView;
-import axoloti.inlets.InletInstance;
 import axoloti.iolet.IoletAbstract;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
@@ -18,15 +17,11 @@ import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.objectviews.AxoObjectInstanceViewComment;
 import axoloti.objectviews.AxoObjectInstanceViewFactory;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
-import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.IParameterInstanceView;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceViewComment;
-import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
@@ -45,10 +40,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -431,7 +424,7 @@ public abstract class PatchView extends PatchAbstractView {
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, stream);
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-            PatchController patchController = patchModel.createController(documentRoot);
+            PatchController patchController = new PatchController(patchModel, documentRoot);
             PatchView patchView = MainFrame.prefs.getPatchView(patchController);
             patchController.addView(patchView);
             PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());
@@ -461,9 +454,8 @@ public abstract class PatchView extends PatchAbstractView {
         Serializer serializer = new Persister(strategy);
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            patchModel.PostContructor();
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-            PatchController patchController = patchModel.createController(documentRoot);
+            PatchController patchController = new PatchController(patchModel, documentRoot);
             PatchView patchView = MainFrame.prefs.getPatchView(patchController);
             patchController.addView(patchView);
             PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());
@@ -567,7 +559,8 @@ public abstract class PatchView extends PatchAbstractView {
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "deleteSelectedAxoObjInstances()");
         if (!isLocked()) {
             boolean succeeded = false;
-            for (IAxoObjectInstanceView o : objectInstanceViews) {
+            IAxoObjectInstanceView oiv[] = objectInstanceViews.getSubViews().toArray(new IAxoObjectInstanceView[0]);
+            for (IAxoObjectInstanceView o : oiv) {
                 if (o.isSelected()) {
                     succeeded |= getController().delete((ObjectInstanceController)o.getController());
                 }
@@ -681,153 +674,6 @@ public abstract class PatchView extends PatchAbstractView {
     }
 
     public void modelChanged(boolean updateSelection) {
-    }
-    
-    @Deprecated
-    public void modelChanged1(boolean updateSelection) {
-        Map<String, IAxoObjectInstanceView> existingViews = new HashMap<>();
-        Set<String> newObjectNames = new HashSet<>();
-
-        if (false) { // was: if (getPatchController().isLoadingUndoState()) {
-            // prevent detached sub-windows
-            Close();
-            removeAllObjectViews();
-        } else {
-            for (IAxoObjectInstanceView view : objectInstanceViews) {
-                String instanceName = view.getModel().getInstanceName();
-                existingViews.put(instanceName, view);
-            }
-
-            for (AxoObjectInstanceAbstract o : getController().getModel().getObjectInstances()) {
-                String instanceName = o.getInstanceName();
-                if (!o.isDirty()) {
-                    newObjectNames.add(instanceName);
-                }
-            }
-
-            for (String existingObjectName : existingViews.keySet()) {
-                if (!newObjectNames.contains(existingObjectName)) {
-                    remove(existingViews.get(existingObjectName));
-                }
-            }
-        }
-
-        removeAllNetViews();
-
-        Map<InletInstance, IInletInstanceView> inletViewMap = new HashMap<InletInstance, IInletInstanceView>();
-        Map<OutletInstance, IOutletInstanceView> outletViewMap = new HashMap<OutletInstance, IOutletInstanceView>();
-        Map<AxoObjectInstanceAbstract, IAxoObjectInstanceView> zombieViewMap = new HashMap<AxoObjectInstanceAbstract, IAxoObjectInstanceView>();
-
-        int newObjects = 0;
-        IAxoObjectInstanceView editorView = null;
-
-        for (AxoObjectInstanceAbstract o : getController().getModel().getObjectInstances()) {
-
-            IAxoObjectInstanceView view = existingViews.get(o.getInstanceName());
-            boolean isNewObject = false;
-            boolean isPromotion = existingViews.containsKey(o.getInstanceName() + Constants.TEMP_OBJECT_SUFFIX);
-
-            if (view == null || o.isDirty()) {
-                isNewObject = true;
-                ObjectInstanceController c = o.createController(controller.getDocumentRoot());
-                view = AxoObjectInstanceViewFactory.createView(c, (PatchViewSwing)this);
-            }
-
-            if (view.isZombie()) {
-                zombieViewMap.put(view.getModel(), view);
-            }
-
-            for (IInletInstanceView ii : view.getInletInstanceViews()) {
-                inletViewMap.put(ii.getInletInstance(), ii);
-            }
-            for (IOutletInstanceView oi : view.getOutletInstanceViews()) {
-                outletViewMap.put(oi.getOutletInstance(), oi);
-            }
-
-            // keep param view references for preset updates
-//            for (IParameterInstanceView pi : view.getParameterInstanceViews()) {
-//                parameterInstanceViews.put(pi.getParameterInstance(), pi);
-//            }
-
-            if (isNewObject) {
-                newObjects += 1;
-                add(view);
-                view.moveToFront();
-
-                if (updateSelection) {
-                // was: if (updateSelection && !getPatchController().isLoadingUndoState()) {
-
-                    if (view.isZombie()) {
-                        IAxoObjectInstanceView oldZombie = existingViews.get(o.getInstanceName());
-                        view.setSelected(oldZombie != null ? oldZombie.isSelected() : isNewObject);
-                    } else {
-                        if (isNewObject && !o.isDirty()) {
-                            view.setSelected(true);
-                        }
-                        if (isPromotion) {
-                            view.setSelected(existingViews.get(o.getInstanceName() + Constants.TEMP_OBJECT_SUFFIX).isSelected());
-                        }
-                    }
-                    if (isNewObject && !o.isDirty()
-                            && (view instanceof AxoObjectInstanceViewComment
-                            || view instanceof PAxoObjectInstanceViewComment)) {
-                        editorView = view;
-                    }
-                }
-                o.setDirty(false);
-            }
-        }
-
-        if (newObjects == 1 && editorView != null) {
-            // if single new comment added, show instancename editor
-            editorView.addInstanceNameEditor();
-        }
-/*
-        for (Net n : (List<Net>) getPatchController().getModel().getNets().clone()) {
-            INetView netView = n.createView(this);
-            netView.setVisible(isCableTypeEnabled(n.getDataType()));
-            for (InletInstance i : n.dest) {
-                if (i instanceof InletInstanceZombie) {
-                    IAxoObjectInstanceView zombieObjectView = zombieViewMap.get(i.getModel());
-                    IInletInstanceView inletView = zombieObjectView.getInletInstanceView(i);
-                    if (inletView == null) {
-                        InletInstanceController c = i.createController(controller.getDocumentRoot());
-                        inletView = InletInstanceViewFactory.createView(c, zombieObjectView);
-                        zombieObjectView.addInletInstanceView(inletView);
-                    }
-
-                    netView.connectInlet(inletView);
-                } else {
-                    netView.connectInlet(inletViewMap.get(i));
-                }
-            }
-            for (OutletInstance o : n.source) {
-                if (o instanceof OutletInstanceZombie) {
-                    IAxoObjectInstanceView zombieObjectView = zombieViewMap.get(o.getModel());
-                    IOutletInstanceView outletView = zombieObjectView.getOutletInstanceView(o);
-                    if (outletView == null) {
-                        OutletInstanceController c = o.createController(controller.getDocumentRoot());
-                        outletView = OutletInstanceViewFactory.createView(c, zombieObjectView);                        
-                        zombieObjectView.addOutletInstanceView(outletView);
-                    }
-                    netView.connectOutlet(outletView);
-                } else {
-                    netView.connectOutlet(outletViewMap.get(o));
-                }
-            }
-            add(netView);
-        }
-*/
-        validateObjects();
-        validateNets();
-
-        AdjustSize();
-        validate();
-
-        for (INetView n : netViews) {
-            n.updateBounds();
-        }
-        repaint();
     }
 
     DropTarget dt = new DropTarget() {

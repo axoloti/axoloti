@@ -93,10 +93,6 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
         return axoObj.getPatchView();
     }
 
-    public PatchModel getPatchModel() {
-        return axoObj.getPatchModel();
-    }
-
     NetDragging dragnet = null;
     IoletAbstract dragtarget = null;
 
@@ -113,13 +109,13 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
             setHighlighted(true);
             if (!axoObj.isLocked()) {
                 if (dragnet == null) {
-                    Net dnet = new Net(getPatchModel());
-                    NetController dragNetController = dnet.createController(null);
+                    Net dnet = new Net();
+                    NetController dragNetController = new NetController(dnet, null, getPatchView().getController());
                     dragtarget = null;
                     if (this instanceof InletInstanceView) {
-                        dragNetController.connectInlet( (InletInstance)getController().getModel());
+                        dragNetController.connectInlet((InletInstance) getController().getModel());
                     } else {
-                        dragNetController.connectOutlet((OutletInstance)getController().getModel());
+                        dragNetController.connectOutlet((OutletInstance) getController().getModel());
                     }
                     dragnet = new NetDragging(dnet, dragNetController, getPatchView());
                     dragNetController.addView(dragnet);
@@ -169,13 +165,10 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
                         n = getPatchView().getController().AddConnection(((InletInstanceView) dragtarget).getController().getModel(), ((OutletInstanceView) IoletAbstract.this).getController().getModel());
                     }
                 }
-                if (axoObj.getPatchModel().PromoteOverloading(false)) {
-                    //getPatchView().getPatchController().popUndoState();
-                    //getPatchView().getPatchController().pushUndoState();
-                }
-            }
-            if (n != null) {
-                getPatchModel().setDirty();
+                //if (axoObj.getPatchModel().PromoteOverloading(false)) {
+                //getPatchView().getPatchController().popUndoState();
+                //getPatchView().getPatchController().pushUndoState();
+                //}
             }
             getPatchView().selectionRectLayerPanel.repaint();
             e.consume();

@@ -21,14 +21,14 @@ public abstract class DisplayInstanceView extends JPanel implements IDisplayInst
 
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        if ((displayInstance.getDefinition().noLabel == null) || (displayInstance.getDefinition().noLabel == false)) {
-            label = new LabelComponent(displayInstance.getDefinition().getName());
+        if ((displayInstance.getModel().noLabel == null) || (displayInstance.getModel().noLabel == false)) {
+            label = new LabelComponent(displayInstance.getModel().getName());
         } else {
             label = new LabelComponent("");
         }
         add(label);
         setSize(getPreferredSize());
-	String description = displayInstance.getDefinition().getDescription();
+	String description = displayInstance.getModel().getDescription();
 	if (description != null) {
             setToolTipText(description);
         }

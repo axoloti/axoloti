@@ -168,10 +168,10 @@ public class PatchViewCodegen extends PatchAbstractView {
             }
         }
         c += "/* net latches */\n";
-        for (Net n : getModel().nets) {
+        for (NetController n : getController().netControllers) {
             // check if net has multiple sources
-            if ((n.CType() != null) && n.NeedsLatch()) {
-                c += "    " + n.CType() + " " + n.CName() + "Latch" + ";\n";
+            if ((n.getModel().CType() != null) && n.NeedsLatch()) {
+                c += "    " + n.getModel().CType() + " " + n.CName() + "Latch" + ";\n";
             }
         }
         return c;
@@ -424,9 +424,9 @@ public class PatchViewCodegen extends PatchAbstractView {
     String GenerateDSPCodePlusPlusSub(String ClassName, boolean enableOnParent) {
         String c = "";
         c += "//--------- <nets> -----------//\n";
-        for (Net n : getModel().nets) {
-            if (n.CType() != null) {
-                c += "    " + n.CType() + " " + n.CName() + ";\n";
+        for (NetController n : getController().netControllers) {
+            if (n.getModel().CType() != null) {
+                c += "    " + n.getModel().CType() + " " + n.CName() + ";\n";
             } else {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Net has no data type!");
             }
@@ -450,11 +450,11 @@ public class PatchViewCodegen extends PatchAbstractView {
         c += "//--------- </object calls> ----------//\n";
 
         c += "//--------- <net latch copy> ----------//\n";
-        for (Net n : getModel().nets) {
+        for (NetController nc : getController().netControllers) {
             // check if net has multiple sources
-            if (n.NeedsLatch()) {
-                if (n.getDataType() != null) {
-                    c += n.getDataType().GenerateCopyCode(n.CName() + "Latch", n.CName());
+            if (nc.NeedsLatch()) {
+                if (nc.getModel().getDataType() != null) {
+                    c += nc.getModel().getDataType().GenerateCopyCode(nc.CName() + "Latch", nc.CName());
                 } else {
                     Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Only inlets connected on net!");
                 }
@@ -481,17 +481,17 @@ public class PatchViewCodegen extends PatchAbstractView {
             if ((nc != null) && (nc.getModel().isValidNet())) {
                 Net n = nc.getModel();
                 if (i.getDataType().equals(n.getDataType())) {
-                    if (n.NeedsLatch()
+                    if (nc.NeedsLatch()
                             && (getModel().objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= getModel().objectinstances.indexOf(o))) {
-                        c += n.CName() + "Latch";
+                        c += nc.CName() + "Latch";
                     } else {
-                        c += n.CName();
+                        c += nc.CName();
                     }
-                } else if (n.NeedsLatch()
+                } else if (nc.NeedsLatch()
                         && (getModel().objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= getModel().objectinstances.indexOf(o))) {
-                    c += n.getDataType().GenerateConversionToType(i.getDataType(), n.CName() + "Latch");
+                    c += n.getDataType().GenerateConversionToType(i.getDataType(), nc.CName() + "Latch");
                 } else {
-                    c += n.getDataType().GenerateConversionToType(i.getDataType(), n.CName());
+                    c += n.getDataType().GenerateConversionToType(i.getDataType(), nc.CName());
                 }
             } else if (nc == null) { // unconnected input
                 c += i.getDataType().GenerateSetDefaultValueCode();
@@ -505,12 +505,12 @@ public class PatchViewCodegen extends PatchAbstractView {
             if (needsComma) {
                 c += ", ";
             }
-            Net n = controller.getNetFromOutlet(i).getModel();
-            if ((n != null) && n.isValidNet()) {
-                if (n.IsFirstOutlet(i)) {
-                    c += n.CName();
+            NetController nc = controller.getNetFromOutlet(i);
+            if ((nc != null) && nc.getModel().isValidNet()) {
+                if (nc.IsFirstOutlet(i)) {
+                    c += nc.CName();
                 } else {
-                    c += n.CName() + "+";
+                    c += nc.CName() + "+";
                 }
             } else {
                 c += i.getDataType().UnconnectedSink();

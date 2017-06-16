@@ -69,8 +69,8 @@ public abstract class Outlet extends AtomDefinition implements Cloneable {
 
     @Override
     public OutletInstance CreateInstance(AxoObjectInstance o) {
-        OutletInstance i = new OutletInstance(this, o);
-        AtomDefinitionController c = createController(null);
+        AtomDefinitionController c = createController(null, null);
+        OutletInstance i = new OutletInstance(c, o);
         c.addView(i);
         return i;
     }

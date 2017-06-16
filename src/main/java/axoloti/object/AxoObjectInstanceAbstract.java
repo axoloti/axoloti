@@ -18,11 +18,13 @@
 package axoloti.object;
 
 import axoloti.MainFrame;
+import axoloti.PatchController;
 import axoloti.PatchModel;
 import axoloti.SDFileReference;
 import axoloti.attribute.AttributeInstance;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.AbstractView;
@@ -58,7 +60,9 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     int x;
     @Attribute
     int y;
-    public PatchModel patchModel;
+
+    private PatchModel patchModel;
+
     AxoObjectAbstract type;
     private boolean typeWasAmbiguous = false;
     
@@ -110,9 +114,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         this.y = location.y;
         this.patchModel = patchModel;
     }
-    
-    public void PostConstructor() {
-    }
 
     public void setType(AxoObjectAbstract type) {
         this.type = type;
@@ -147,7 +148,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return true;
     }
 
-    public AxoObjectAbstract resolveType() {
+    public AxoObjectAbstract resolveType(String directory) {
         if (type != null) {
             return type;
         }
@@ -159,7 +160,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
             }
         }
         if (type == null) {
-            ArrayList<AxoObjectAbstract> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, patchModel.GetCurrentWorkingDirectory());
+            ArrayList<AxoObjectAbstract> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, directory);
             if (types == null) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} not found", typeName);
             } else { // pick first
@@ -370,11 +371,11 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     }
 
     @Override
-    public abstract ObjectInstanceController createController(AbstractDocumentRoot documentRoot);
-    
-    @Override
     public ObjectController getController() {
         return controller;
+    }
+
+    public void applyValues(AxoObjectInstanceAbstract unlinked_object_instance) {
     }
 
 }

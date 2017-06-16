@@ -38,19 +38,19 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         setMaximumSize(new Dimension(32767, 14));
         jack = new JackInputComponent(this);
-        jack.setForeground(inletInstance.getInlet().getDatatype().GetColor());
+        jack.setForeground(inletInstance.getModel().getDatatype().GetColor());
         jack.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(jack);
-        add(new SignalMetaDataIcon(inletInstance.getInlet().GetSignalMetaData()));
+        add(new SignalMetaDataIcon(inletInstance.getModel().GetSignalMetaData()));
         add(Box.createHorizontalStrut(3));
         if (!((axoObj != null) && axoObj.getModel().getType().getInlets().size() <= 1)) {
-            label = new LabelComponent(inletInstance.getInlet().getName());
+            label = new LabelComponent(inletInstance.getModel().getName());
         } else {
-            label = new LabelComponent("");            
+            label = new LabelComponent("");
         }
         add(label);
         add(Box.createHorizontalGlue());
-        setToolTipText(inletInstance.getInlet().getDescription());
+        setToolTipText(inletInstance.getModel().getDescription());
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -98,10 +98,10 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
-            label.setText((String)evt.getNewValue());
+            label.setText((String) evt.getNewValue());
             doLayout();
         } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
-            setToolTipText((String)evt.getNewValue());
+            setToolTipText((String) evt.getNewValue());
         }
     }
 

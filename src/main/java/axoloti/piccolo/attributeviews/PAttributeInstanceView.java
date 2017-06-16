@@ -33,7 +33,7 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
     public void PostConstructor() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setPickable(false);
-        addChild(new PLabelComponent(attributeInstance.getDefinition().getName()));
+        addChild(new PLabelComponent(attributeInstance.getModel().getName()));
         setSize(getPreferredSize());
     }
 

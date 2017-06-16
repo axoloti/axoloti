@@ -27,13 +27,13 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
         Integer ival = getAttributeInstance().getValue();
         int value = ival;
 
-        if (value < getAttributeInstance().getDefinition().getMinValue()) {
-            getAttributeInstance().setValue(getAttributeInstance().getDefinition().getMinValue());
+        if (value < getAttributeInstance().getModel().getMinValue()) {
+            getAttributeInstance().setValue(getAttributeInstance().getModel().getMinValue());
         }
-        if (value > getAttributeInstance().getDefinition().getMaxValue()) {
-            getAttributeInstance().setValue(getAttributeInstance().getDefinition().getMaxValue());
+        if (value > getAttributeInstance().getModel().getMaxValue()) {
+            getAttributeInstance().setValue(getAttributeInstance().getModel().getMaxValue());
         }
-        spinner = new NumberBoxComponent(value, getAttributeInstance().getDefinition().getMinValue(), getAttributeInstance().getDefinition().getMaxValue(), 1.0);
+        spinner = new NumberBoxComponent(value, getAttributeInstance().getModel().getMinValue(), getAttributeInstance().getModel().getMaxValue(), 1.0);
         add(spinner);
         spinner.addACtrlListener(new ACtrlListener() {
             @Override

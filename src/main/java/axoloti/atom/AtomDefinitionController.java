@@ -2,18 +2,19 @@ package axoloti.atom;
 
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.object.ObjectController;
 
 /**
  *
  * @author jtaelman
  */
-public class AtomDefinitionController extends AbstractController<AtomDefinition, AtomInstance> {
+public class AtomDefinitionController extends AbstractController<AtomDefinition, AtomInstance, ObjectController> {
 
     public static final String ATOM_NAME = "Name";
     public static final String ATOM_DESCRIPTION = "Description";
 
-    public AtomDefinitionController(AtomDefinition model, AbstractDocumentRoot documentRoot) {
-        super(model, documentRoot);
+    public AtomDefinitionController(AtomDefinition model, AbstractDocumentRoot documentRoot, ObjectController parent) {
+        super(model, documentRoot, parent);
     }
 
     public void changeName(String name) {

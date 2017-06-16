@@ -18,7 +18,6 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.mvc.AbstractDocumentRoot;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.Attribute;
@@ -74,8 +73,8 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
         String oldvalue = this.commentText;
         this.commentText = commentText;
         firePropertyChange(
-            ObjectInstanceController.OBJ_COMMENT,
-            oldvalue, commentText);
+                ObjectInstanceController.OBJ_COMMENT,
+                oldvalue, commentText);
     }
 
     @Override
@@ -87,14 +86,15 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
-        return new ObjectInstanceController(this, documentRoot);
-    }
-
-    @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // a comment object is not supposed to mutate
         throw new UnsupportedOperationException("Not supported.");
     }
 
+    @Override
+    public void applyValues(AxoObjectInstanceAbstract unlinked_object_instance) {
+        if (unlinked_object_instance instanceof AxoObjectInstanceComment) {
+            this.commentText = ((AxoObjectInstanceComment) unlinked_object_instance).commentText;
+        }
+    }
 }

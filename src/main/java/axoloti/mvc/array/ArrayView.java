@@ -1,6 +1,7 @@
 package axoloti.mvc.array;
 
 import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractModel;
 import axoloti.mvc.AbstractView;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
@@ -12,8 +13,8 @@ import java.util.List;
  * @author jtaelman
  */
 public abstract class ArrayView<T extends AbstractView> implements AbstractView<ArrayController>, Iterable<T> {
-    
-    ArrayController<AbstractController> controller;
+
+    ArrayController<AbstractController, AbstractModel, AbstractController> controller;
     List<T> subviews = new ArrayList<>();
 
     public ArrayView(ArrayController controller) {
@@ -29,7 +30,7 @@ public abstract class ArrayView<T extends AbstractView> implements AbstractView<
     }
 
     private void Sync() {
-        ArrayList<T> subviews2= new ArrayList<T>(subviews);
+        ArrayList<T> subviews2 = new ArrayList<T>(subviews);
         for (T view : subviews) {
             if (!controller.subcontrollers.contains(view.getController())) {
                 subviews2.remove(view);
@@ -56,11 +57,11 @@ public abstract class ArrayView<T extends AbstractView> implements AbstractView<
     }
 
     public abstract void updateUI();
-    
-    public List<T> getSubViews(){
+
+    public List<T> getSubViews() {
         return subviews;
     }
-    
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(ArrayController.ARRAY)) {
@@ -72,7 +73,7 @@ public abstract class ArrayView<T extends AbstractView> implements AbstractView<
     public ArrayController getController() {
         return controller;
     }
-    
+
     public abstract T viewFactory(AbstractController ctrl);
 
     public abstract void removeView(T view);
@@ -82,10 +83,11 @@ public abstract class ArrayView<T extends AbstractView> implements AbstractView<
         return subviews.iterator();
     }
 
-    public T getViewOfModel(Object model){
-        for(T v : subviews) {
-            if (v.getController().getModel() == model)
+    public T getViewOfModel(Object model) {
+        for (T v : subviews) {
+            if (v.getController().getModel() == model) {
                 return v;
+            }
         }
         return null;
     }

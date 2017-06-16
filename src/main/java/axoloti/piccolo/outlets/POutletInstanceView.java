@@ -35,7 +35,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
         @Override
         public void mouseEntered(PInputEvent e) {
             if (e.getInputManager().getMouseFocus() == null) {
-                axoObjectInstanceView.getCanvas().setToolTipText(outletInstance.getOutlet().getDescription());
+                axoObjectInstanceView.getCanvas().setToolTipText(outletInstance.getModel().getDescription());
             }
         }
 
@@ -55,14 +55,14 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
         addToSwingProxy(Box.createHorizontalGlue());
 
         if (axoObjectInstanceView.getModel().getType().getOutlets().size() > 1) {
-            addChild(new PLabelComponent(outletInstance.getOutlet().getName()));
+            addChild(new PLabelComponent(outletInstance.getModel().getName()));
             addToSwingProxy(Box.createHorizontalStrut(2));
         }
-        PSignalMetaDataIcon foo = new PSignalMetaDataIcon(outletInstance.getOutlet().GetSignalMetaData(), axoObjectInstanceView);
+        PSignalMetaDataIcon foo = new PSignalMetaDataIcon(outletInstance.getModel().GetSignalMetaData(), axoObjectInstanceView);
         addChild(foo);
 
         jack = new PJackOutputComponent(this);
-        ((PJackOutputComponent) jack).setForeground(outletInstance.getOutlet().getDatatype().GetColor());
+        ((PJackOutputComponent) jack).setForeground(outletInstance.getModel().getDatatype().GetColor());
         addChild(jack);
 
         addInputEventListener(getInputEventHandler());

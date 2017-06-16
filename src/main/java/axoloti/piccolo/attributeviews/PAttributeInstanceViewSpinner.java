@@ -21,14 +21,14 @@ public class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
         super.PostConstructor();
         int value = attributeInstance.getValue();
 
-        if (value < attributeInstance.getDefinition().getMinValue()) {
-            attributeInstance.setValue(attributeInstance.getDefinition().getMinValue());
+        if (value < attributeInstance.getModel().getMinValue()) {
+            attributeInstance.setValue(attributeInstance.getModel().getMinValue());
         }
-        if (value > attributeInstance.getDefinition().getMaxValue()) {
-            attributeInstance.setValue(attributeInstance.getDefinition().getMaxValue());
+        if (value > attributeInstance.getModel().getMaxValue()) {
+            attributeInstance.setValue(attributeInstance.getModel().getMaxValue());
         }
-        spinner = new PNumberBoxComponent(value, attributeInstance.getDefinition().getMinValue(),
-                attributeInstance.getDefinition().getMaxValue(), 1.0, axoObjectInstanceView);
+        spinner = new PNumberBoxComponent(value, attributeInstance.getModel().getMinValue(),
+                attributeInstance.getModel().getMaxValue(), 1.0, axoObjectInstanceView);
         addChild(spinner);
         spinner.addPCtrlListener(new PCtrlListener() {
             @Override

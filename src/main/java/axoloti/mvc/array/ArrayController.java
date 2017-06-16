@@ -11,30 +11,32 @@ import java.util.Iterator;
  *
  * @author jtaelman
  */
-public class ArrayController<T extends AbstractController> extends AbstractController<ArrayModel, ArrayView> implements Iterable<T> {
+public abstract class ArrayController<T extends AbstractController, M extends AbstractModel, P extends AbstractController> extends AbstractController<ArrayModel, ArrayView, P> implements Iterable<T> {
 
     static final String ARRAY = "Array";
 
     ArrayList<T> subcontrollers = new ArrayList<>();
 
-    public ArrayController(ArrayModel model, AbstractDocumentRoot documentRoot) {
-        super(model, documentRoot);
-        ArrayList<AbstractModel> am = model.getArray();
-        for (AbstractModel m : am) {
-            subcontrollers.add((T) m.createController(documentRoot));
+    public abstract T createController(M model, AbstractDocumentRoot documentRoot, P parent);
+
+    public ArrayController(ArrayModel model, AbstractDocumentRoot documentRoot, P parent) {
+        super(model, documentRoot, parent);
+        ArrayList<M> am = model.getArray();
+        for (M m : am) {
+            subcontrollers.add(createController(m, documentRoot, parent));
         }
     }
 
-    public T add(AbstractModel m) {
-        AbstractController c = m.createController(getDocumentRoot());
+    public T add(M m) {
+        AbstractController c = createController(m, getDocumentRoot(), getParent());
         subcontrollers.add((T) c);
-        ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
+        ArrayList<M> n = (ArrayList<M>) (getModel().getArray().clone());
         n.add(m);
         setModelUndoableProperty(ARRAY, n);
         return (T) c;
     }
 
-    public boolean remove(AbstractModel m) {
+    public boolean remove(M m) {
         ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
         boolean r = n.remove(m);
         if (r) {
@@ -47,7 +49,7 @@ public class ArrayController<T extends AbstractController> extends AbstractContr
         ArrayList<AbstractController> subcontrollers2 = (ArrayList<AbstractController>) subcontrollers.clone();
         subcontrollers.clear();
         for (Object o : getModel().array) {
-            AbstractModel om = (AbstractModel) o;
+            M om = (M) o;
             AbstractController ctrl = null;
             for (AbstractController ctrl2 : subcontrollers2) {
                 if (om == ctrl2.getModel()) {
@@ -56,7 +58,7 @@ public class ArrayController<T extends AbstractController> extends AbstractContr
                 }
             }
             if (ctrl == null) {
-                ctrl = om.createController(getDocumentRoot());
+                ctrl = createController(om, getDocumentRoot(), getParent());
             }
             subcontrollers.add((T) ctrl);
         }
@@ -88,10 +90,10 @@ public class ArrayController<T extends AbstractController> extends AbstractContr
         if (index < 1) {
             return;
         }
-        ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
-        AbstractModel elem = n.get(index);
+        ArrayList<M> n = (ArrayList<M>) (getModel().getArray().clone());
+        M elem = n.get(index);
         n.remove(index);
-        n.add(index-1, elem);
+        n.add(index - 1, elem);
         setModelUndoableProperty(ARRAY, n);
     }
 
@@ -102,8 +104,8 @@ public class ArrayController<T extends AbstractController> extends AbstractContr
         if (row > (getModel().getArray().size() - 1)) {
             return;
         }
-        ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
-        AbstractModel o = n.remove(row);
+        ArrayList<M> n = (ArrayList<M>) (getModel().getArray().clone());
+        M o = n.remove(row);
         n.add(row + 1, o);
         setModelUndoableProperty(ARRAY, n);
     }

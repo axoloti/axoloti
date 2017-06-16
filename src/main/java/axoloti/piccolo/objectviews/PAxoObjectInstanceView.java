@@ -176,14 +176,14 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                     inletInstanceP = inletInstance;
                 }
             }
-            InletInstance inletInstance = new InletInstance(inlet, getModel());
+//            InletInstance inletInstance = new InletInstance(inlet, getModel());
             if (inletInstanceP != null) {
 //                Net n = getPatchModel().GetNet(inletInstanceP);
 //                if (n != null) {
 //                    n.connectInlet(inletInstance);
 //                }
             }
-            getModel().getInletInstances().add(inletInstance);
+//            getModel().getInletInstances().add(inletInstance);
             // TODO: PICCOLO view factory
             PInletInstanceView view = null; // (PInletInstanceView) inletInstance.createView(this);
             view.setAlignmentX(LEFT_ALIGNMENT);
@@ -202,14 +202,14 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                     outletInstanceP = outletInstance;
                 }
             }
-            OutletInstance outletInstance = new OutletInstance(o, getModel());
+//            OutletInstance outletInstance = new OutletInstance(o, getModel());
             if (outletInstanceP != null) {
 //                Net n = getPatchModel().GetNet(outletInstanceP);
 //                if (n != null) {
 //                    n.connectOutlet(outletInstance);
 //                }
             }
-            getModel().getOutletInstances().add(outletInstance);            
+//            getModel().getOutletInstances().add(outletInstance);            
             POutletInstanceView view = null;
             // TODO: PICCOLO view factory
             // ... = (POutletInstanceView) outletInstance.createView(this);            

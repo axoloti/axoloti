@@ -22,7 +22,7 @@ class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
 
     @Override
     public HRadioComponent CreateControl() {
-        return new HRadioComponent(0, ((ParameterInt32HRadio) parameterInstance.getParameter()).MaxValue.getInt());
+        return new HRadioComponent(0, ((ParameterInt32HRadio) parameterInstance.getModel()).MaxValue.getInt());
     }
 
     @Override

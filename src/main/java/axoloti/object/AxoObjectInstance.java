@@ -84,7 +84,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public ArrayView<DisplayInstance> vDisps;
     public ArrayView<ParameterInstance> vParams;
     public ArrayView<AttributeInstance> vAttrs;
-    
+
     public AxoObjectInstance() {
         super();
     }
@@ -155,7 +155,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             @Override
             public ParameterInstance viewFactory(AbstractController ctrl) {
                 AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-                return (ParameterInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
+                ParameterInstance p = ParameterInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
+                return (ParameterInstance) p;
             }
 
             @Override
@@ -182,11 +183,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         controller.attrs.addView(vAttrs);
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-    }
-    
     @Override
     public boolean setInstanceName(String s) {
         boolean result = super.setInstanceName(s);
@@ -277,81 +273,81 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     @Override
     public boolean PromoteToOverloadedObj() {
         /* FIXME
-        if (getType() instanceof AxoObjectFromPatch) {
-            return false;
-        }
-        if (getType() instanceof AxoObjectPatcher) {
-            return false;
-        }
-        if (getType() instanceof AxoObjectPatcherObject) {
-            return false;
-        }
-        String id = typeName;
-        ArrayList<AxoObjectAbstract> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, getPatchModel().GetCurrentWorkingDirectory());
-        if (candidates == null) {
-            return false;
-        }
-        if (candidates.isEmpty()) {
-            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "could not resolve any candidates {0}", id);
-        }
-        if (candidates.size() == 1) {
-            return false;
-        }
+         if (getType() instanceof AxoObjectFromPatch) {
+         return false;
+         }
+         if (getType() instanceof AxoObjectPatcher) {
+         return false;
+         }
+         if (getType() instanceof AxoObjectPatcherObject) {
+         return false;
+         }
+         String id = typeName;
+         ArrayList<AxoObjectAbstract> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, getPatchModel().GetCurrentWorkingDirectory());
+         if (candidates == null) {
+         return false;
+         }
+         if (candidates.isEmpty()) {
+         Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "could not resolve any candidates {0}", id);
+         }
+         if (candidates.size() == 1) {
+         return false;
+         }
 
-        int ranking[];
-        ranking = new int[candidates.size()];
-        // auto-choose depending on 1st connected inlet
+         int ranking[];
+         ranking = new int[candidates.size()];
+         // auto-choose depending on 1st connected inlet
 
-        //      InletInstance i = null;// = GetInletInstances().get(0);
-        for (InletInstance j : getInletInstances()) {
-            Net n = getPatchModel().GetNet(j);
-            if (n == null) {
-                continue;
-            }
-            DataType d = n.getDataType();
-            if (d == null) {
-                continue;
-            }
-            String name = j.getInlet().getName();
-            for (int i = 0; i < candidates.size(); i++) {
-                AxoObjectAbstract o = candidates.get(i);
-                Inlet i2 = o.GetInlet(name);
-                if (i2 == null) {
-                    continue;
-                }
-                if (i2.getDatatype().equals(d)) {
-                    ranking[i] += 10;
-                } else if (d.IsConvertableToType(i2.getDatatype())) {
-                    ranking[i] += 2;
-                }
-            }
-        }
+         //      InletInstance i = null;// = GetInletInstances().get(0);
+         for (InletInstance j : getInletInstances()) {
+         Net n = getPatchModel().GetNet(j);
+         if (n == null) {
+         continue;
+         }
+         DataType d = n.getDataType();
+         if (d == null) {
+         continue;
+         }
+         String name = j.getModel().getName();
+         for (int i = 0; i < candidates.size(); i++) {
+         AxoObjectAbstract o = candidates.get(i);
+         Inlet i2 = o.GetInlet(name);
+         if (i2 == null) {
+         continue;
+         }
+         if (i2.getDatatype().equals(d)) {
+         ranking[i] += 10;
+         } else if (d.IsConvertableToType(i2.getDatatype())) {
+         ranking[i] += 2;
+         }
+         }
+         }
 
-        int max = -1;
-        int maxi = 0;
-        for (int i = 0; i < candidates.size(); i++) {
-            if (ranking[i] > max) {
-                max = ranking[i];
-                maxi = i;
-            }
-        }
-        AxoObjectAbstract selected = candidates.get(maxi);
-        int rindex = candidates.indexOf(getType());
-        if (rindex >= 0) {
-            if (ranking[rindex] == max) {
-                selected = getType();
-            }
-        }
+         int max = -1;
+         int maxi = 0;
+         for (int i = 0; i < candidates.size(); i++) {
+         if (ranking[i] > max) {
+         max = ranking[i];
+         maxi = i;
+         }
+         }
+         AxoObjectAbstract selected = candidates.get(maxi);
+         int rindex = candidates.indexOf(getType());
+         if (rindex >= 0) {
+         if (ranking[rindex] == max) {
+         selected = getType();
+         }
+         }
 
-        if (selected == null) {
-            //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion to null" + this + " to " + selected);
-            return false;
-        }
-        if (selected != getType()) {
-            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.FINE, "promoting " + this + " to " + selected);
-            getPatchModel().ChangeObjectInstanceType(this, selected);
-            return true;
-        }*/
+         if (selected == null) {
+         //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion to null" + this + " to " + selected);
+         return false;
+         }
+         if (selected != getType()) {
+         Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.FINE, "promoting " + this + " to " + selected);
+         getPatchModel().ChangeObjectInstanceType(this, selected);
+         return true;
+         }*/
         return false;
     }
 
@@ -385,47 +381,49 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
 
     public void ConvertToPatchPatcher() {/*
-        try {
-            ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/patcher", null);
-            assert (!ol.isEmpty());
-            AxoObjectAbstract o = ol.get(0);
-            AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatchModel().AddObjectInstance(o, new Point(x, y));
-            AxoObjectFromPatch ao = (AxoObjectFromPatch) getType();
-            Strategy strategy = new AnnotationStrategy();
-            Serializer serializer = new Persister(strategy);
-            oi.setSubPatchModel(serializer.read(PatchModel.class, new File(ao.patchModel.getFileNamePath())));
-            oi.initSubpatchFrame();
-            oi.updateObj();
-            getPatchModel().transferState(this, oi);
-            //getPatchModel().delete(this);
-            getPatchModel().setDirty();
-            oi.setInstanceName(getInstanceName());
-        } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Failed to convert to patch/patcher", ex);
-        }*/
+         try {
+         ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/patcher", null);
+         assert (!ol.isEmpty());
+         AxoObjectAbstract o = ol.get(0);
+         AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatchModel().AddObjectInstance(o, new Point(x, y));
+         AxoObjectFromPatch ao = (AxoObjectFromPatch) getType();
+         Strategy strategy = new AnnotationStrategy();
+         Serializer serializer = new Persister(strategy);
+         oi.setSubPatchModel(serializer.read(PatchModel.class, new File(ao.patchModel.getFileNamePath())));
+         oi.initSubpatchFrame();
+         oi.updateObj();
+         getPatchModel().transferState(this, oi);
+         //getPatchModel().delete(this);
+         getPatchModel().setDirty();
+         oi.setInstanceName(getInstanceName());
+         } catch (Exception ex) {
+         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Failed to convert to patch/patcher", ex);
+         }*/
+
     }
 
     public void ConvertToEmbeddedObj() {/*
-        try {
-            ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object", null);
-            assert (!ol.isEmpty());
-            AxoObjectAbstract o = ol.get(0);
-            String iname = getInstanceName();
-            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatchModel().ChangeObjectInstanceType1(this, o);
-            AxoObject ao = getType();
-            oi.ao = new AxoObjectPatcherObject(ao.id, ao.sDescription);
-            oi.ao.copy(ao);
-            oi.ao.sPath = "";
-            oi.ao.upgradeSha = null;
-            oi.ao.CloseEditor();
-            oi.setInstanceName(iname);
-            getPatchModel().setDirty();
-            getPatchModel().transferState(this, oi);
-            //getPatchModel().delete(this);
-            getPatchModel().setDirty();
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+         try {
+         ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object", null);
+         assert (!ol.isEmpty());
+         AxoObjectAbstract o = ol.get(0);
+         String iname = getInstanceName();
+         AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatchModel().ChangeObjectInstanceType1(this, o);
+         AxoObject ao = getType();
+         oi.ao = new AxoObjectPatcherObject(ao.id, ao.sDescription);
+         oi.ao.copy(ao);
+         oi.ao.sPath = "";
+         oi.ao.upgradeSha = null;
+         oi.ao.CloseEditor();
+         oi.setInstanceName(iname);
+         getPatchModel().setDirty();
+         getPatchModel().transferState(this, oi);
+         //getPatchModel().delete(this);
+         getPatchModel().setDirty();
+         } catch (CloneNotSupportedException ex) {
+         Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
+         }*/
+
     }
 
     @Persist
@@ -448,8 +446,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public boolean deferredObjTypeUpdate = false;
 
     public void updateObj() {/*
-        getPatchModel().ChangeObjectInstanceType(this, this.getType());
-            */
+         getPatchModel().ChangeObjectInstanceType(this, this.getType());
+         */
+
     }
 
     public void ObjectModified(Object src) {
@@ -532,11 +531,32 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public ObjectInstanceController createController(AbstractDocumentRoot documentRoot) {
-        return new ObjectInstanceController(this, documentRoot);        
+    public void modelPropertyChange(PropertyChangeEvent evt) {
     }
 
     @Override
-    public void modelPropertyChange(PropertyChangeEvent evt) {
+    public void applyValues(AxoObjectInstanceAbstract sourceObject) {
+        if (sourceObject instanceof AxoObjectInstance) {
+            AxoObjectInstance sourceObject2 = (AxoObjectInstance) sourceObject;
+            for (ParameterInstance p : parameterInstances) {
+                // find matching parameter in source
+                for (ParameterInstance p2 : sourceObject2.parameterInstances) {
+                    if (p.getName().equals(p2.getName())) {
+                        p.CopyValueFrom(p2);
+                        break;
+                    }
+                }
+            }
+            for (AttributeInstance a : attributeInstances) {
+                // find matching parameter in source
+                for (AttributeInstance a2 : sourceObject2.attributeInstances) {
+                    if (a.getAttributeName().equals(a2.getAttributeName())) {
+                        a.CopyValueFrom(a2);
+                        break;
+                    }
+                }
+            }
+        }
     }
+
 }

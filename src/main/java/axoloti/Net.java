@@ -20,15 +20,11 @@ package axoloti;
 import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.InletInstance;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.outlets.OutletInstance;
 import axoloti.piccolo.PNetView;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.simpleframework.xml.*;
 
 /**
@@ -42,7 +38,6 @@ public class Net extends AbstractModel {
     ArrayList<OutletInstance> source;
     @ElementList(inline = true, required = false)
     ArrayList<InletInstance> dest = new ArrayList<>();
-    public PatchModel patchModel;
     boolean selected = false;
 
     public Net() {
@@ -52,54 +47,6 @@ public class Net extends AbstractModel {
         if (dest == null) {
             dest = new ArrayList<>();
         }
-    }
-
-    public Net(PatchModel patchModel) {
-        this();
-        this.patchModel = patchModel;
-    }
-
-    public void PostConstructor() {
-        // InletInstances and OutletInstances actually already exist, need to replace dummies with the real ones
-        ArrayList<OutletInstance> source2 = new ArrayList<>();
-        for (OutletInstance i : source) {
-            String objname = i.getObjname();
-            String outletname = i.getOutletname();
-
-            AxoObjectInstanceAbstract o = patchModel.GetObjectInstance(objname);
-            if (o == null) {
-                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net source obj : {0}::{1}", new Object[]{i.getObjname(), i.getOutletname()});
-                patchModel.nets.remove(this);
-                return;
-            }
-            OutletInstance r = o.GetOutletInstance(outletname);
-            if (r == null) {
-                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net source outlet : {0}::{1}", new Object[]{i.getObjname(), i.getOutletname()});
-                patchModel.nets.remove(this);
-                return;
-            }
-            source2.add(r);
-        }
-        ArrayList<InletInstance> dest2 = new ArrayList<>();
-        for (InletInstance i : dest) {
-            String objname = i.getObjname();
-            String inletname = i.getInletname();
-            AxoObjectInstanceAbstract o = patchModel.GetObjectInstance(objname);
-            if (o == null) {
-                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net dest obj :{0}::{1}", new Object[]{i.getObjname(), i.getInletname()});
-                patchModel.nets.remove(this);
-                return;
-            }
-            InletInstance r = o.GetInletInstance(inletname);
-            if (r == null) {
-                Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "could not resolve net dest inlet :{0}::{1}", new Object[]{i.getObjname(), i.getInletname()});
-                patchModel.nets.remove(this);
-                return;
-            }
-            dest2.add(r);
-        }
-        source = source2;
-        dest = dest2;
     }
 
     public boolean isValidNet() {
@@ -128,41 +75,6 @@ public class Net extends AbstractModel {
         return c;
     }
 
-    public boolean NeedsLatch() {
-        // reads before last write on net
-        int lastSource = 0;
-        for (OutletInstance s : source) {
-            int i = patchModel.objectinstances.indexOf(s.getObjectInstance());
-            if (i > lastSource) {
-                lastSource = i;
-            }
-        }
-        int firstDest = java.lang.Integer.MAX_VALUE;
-        for (InletInstance d : dest) {
-            int i = patchModel.objectinstances.indexOf(d.getObjectInstance());
-            if (i < firstDest) {
-                firstDest = i;
-            }
-        }
-        return (firstDest <= lastSource);
-    }
-
-    public boolean IsFirstOutlet(OutletInstance oi) {
-        if (source.size() == 1) {
-            return true;
-        }
-        for (AxoObjectInstanceAbstract o : patchModel.objectinstances) {
-            for (OutletInstance i : o.getOutletInstances()) {
-                if (source.contains(i)) {
-                    // o is first objectinstance connected to this net
-                    return oi == i;
-                }
-            }
-        }
-        Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "IsFirstOutlet: shouldn't get here");
-        return false;
-    }
-
     public DataType getDataType() {
         if (source.isEmpty()) {
             return null;
@@ -174,7 +86,7 @@ public class Net extends AbstractModel {
         DataType t = source.get(0).getDataType();
         return t;
     }
-    
+
     public ArrayList<OutletInstance> GetSource() {
         return source;
     }
@@ -188,11 +100,6 @@ public class Net extends AbstractModel {
         }
     }
 
-    public String CName() {
-        int i = patchModel.nets.indexOf(this);
-        return "net" + i;
-    }
-
     public INetView createView(NetController controller, PatchView patchView) {
         if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
             INetView n = new PNetView(this, (PatchViewPiccolo) patchView);
@@ -203,15 +110,6 @@ public class Net extends AbstractModel {
             n.PostConstructor();
             return n;
         }
-    }
-
-    public void setPatchModel(PatchModel patchModel) {
-        this.patchModel = patchModel;
-    }
-
-    @Override
-    public NetController createController(AbstractDocumentRoot documentRoot) {
-        return new NetController(this, documentRoot);
     }
 
     public ArrayList<OutletInstance> getSources() {

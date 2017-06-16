@@ -1,5 +1,6 @@
 package axoloti.mvc.array;
 
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import java.util.ArrayList;
@@ -149,8 +150,4 @@ public class ArrayModel<T extends AbstractModel> extends AbstractModel implement
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public ArrayController createController(AbstractDocumentRoot documentRoot) {
-        return new ArrayController(this, documentRoot);
-    }
 }

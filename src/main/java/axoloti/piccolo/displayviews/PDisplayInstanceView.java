@@ -24,8 +24,8 @@ public abstract class PDisplayInstanceView extends PatchPNode implements IDispla
     public void PostConstructor() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setPickable(false);
-        if ((displayInstance.getDefinition().noLabel == null) || (displayInstance.getDefinition().noLabel == false)) {
-            addChild(new PLabelComponent(displayInstance.getDefinition().getName()));
+        if ((displayInstance.getModel().noLabel == null) || (displayInstance.getModel().noLabel == false)) {
+            addChild(new PLabelComponent(displayInstance.getModel().getName()));
         }
         setSize(getPreferredSize());
     }

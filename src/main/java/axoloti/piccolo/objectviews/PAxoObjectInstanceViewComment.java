@@ -46,8 +46,6 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
     public void setInstanceName(String s) {
         if (!model.getCommentText().equals(s)) {
             model.setCommentText(s);
-            model.setDirty(true);
-            getPatchModel().setDirty();
         }
     }
 }

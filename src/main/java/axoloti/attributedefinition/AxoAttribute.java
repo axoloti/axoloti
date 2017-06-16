@@ -47,7 +47,7 @@ public abstract class AxoAttribute extends AtomDefinition implements Cloneable {
     @Override
     public AttributeInstance CreateInstance(AxoObjectInstance o) {
         AttributeInstance pi = InstanceFactory(o);
-        AtomDefinitionController c = createController(null);
+        AtomDefinitionController c = createController(null, null);
         c.addView(pi);
 
 //        o.add(pi);
@@ -57,7 +57,7 @@ public abstract class AxoAttribute extends AtomDefinition implements Cloneable {
 
     public AttributeInstance CreateInstance(AxoObjectInstance o, AttributeInstance a) {
         AttributeInstance pi = InstanceFactory(o);
-        AtomDefinitionController c = createController(null);
+        AtomDefinitionController c = createController(null, null);
         c.addView(pi);
         if (a != null) {
             pi.CopyValueFrom(a);

@@ -20,6 +20,7 @@ package axoloti.object;
 import axoloti.Modulator;
 import axoloti.PatchModel;
 import axoloti.inlets.Inlet;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.array.ArrayModel;
@@ -181,8 +182,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements  Compar
     // how undo/redo must be handled when open documents contain instances is yet unclear...
     private ObjectController controller;
 
-    @Override
-    public ObjectController createController(AbstractDocumentRoot documentRoot) {
+    public ObjectController createController(AbstractDocumentRoot documentRoot, AbstractController parent) {
         if (controller == null) {
             controller = new ObjectController(this, documentRoot);
         }

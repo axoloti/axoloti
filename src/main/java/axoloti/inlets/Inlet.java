@@ -51,8 +51,8 @@ public abstract class Inlet extends AtomDefinition implements Cloneable {
 
     @Override
     public InletInstance CreateInstance(AxoObjectInstance o) {
-        InletInstance i = new InletInstance(this, o);
-        AtomDefinitionController c = createController(null);
+        AtomDefinitionController c = createController(null, null);
+        InletInstance i = new InletInstance(c, o);
         c.addView(i);
         return i;
     }

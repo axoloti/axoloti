@@ -22,7 +22,7 @@ public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewStri
         if (editor == null) {
             editor = new TextEditor(attributeInstance.getStringRef(), null);
             // fixme DocumentWindow null arg was: getPatchView().getPatchController().getPatchFrame());
-            editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.getDefinition().getName());
+            editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.getModel().getName());
             editor.addWindowFocusListener(new WindowFocusListener() {
                 @Override
                 public void windowGainedFocus(WindowEvent e) {

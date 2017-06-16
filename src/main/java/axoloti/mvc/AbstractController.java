@@ -11,15 +11,17 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
-public abstract class AbstractController<Model extends AbstractModel, View extends AbstractView> implements PropertyChangeListener {
+public abstract class AbstractController<Model extends AbstractModel, View extends AbstractView, ParentController extends AbstractController> implements PropertyChangeListener {
 
     final private ArrayList<View> registeredViews = new ArrayList<View>();
     private final Model model;
+    private final ParentController parent;
     final AbstractDocumentRoot documentRoot;
 
-    public AbstractController(Model model, AbstractDocumentRoot documentRoot) {
+    public AbstractController(Model model, AbstractDocumentRoot documentRoot, ParentController parent) {
         model.addPropertyChangeListener(this);
         this.model = model;
+        this.parent = parent;
         this.documentRoot = documentRoot;
         if (documentRoot == null) {
             //System.out.println("documentroot is null");
@@ -29,7 +31,13 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
     // to be called in controller.createView()
     final public void addView(View view) {
         if (view != null) {
-            registeredViews.add(view);
+            if (registeredViews.contains(view)) {
+                System.out.println("view already added : " + view.toString());
+            } else {
+                registeredViews.add(view);
+            }
+        } else {
+            System.out.println("view is null");
         }
     }
 
@@ -39,6 +47,10 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
 
     public Model getModel() {
         return model;
+    }
+
+    public ParentController getParent() {
+        return parent;
     }
 
     public AbstractDocumentRoot getDocumentRoot() {

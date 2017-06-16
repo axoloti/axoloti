@@ -17,12 +17,9 @@
  */
 package axoloti;
 
-import axoloti.attribute.AttributeInstance;
-import axoloti.attributedefinition.AxoAttribute;
-import axoloti.displays.Display;
 import axoloti.displays.DisplayInstance;
-import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.array.ArrayModel;
@@ -36,11 +33,8 @@ import axoloti.object.AxoObjectInstanceHyperlink;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectInstanceZombie;
-import axoloti.object.AxoObjectZombie;
 import axoloti.object.AxoObjects;
-import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletInstance;
-import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.Preferences;
@@ -111,11 +105,6 @@ public class PatchModel extends AbstractModel {
     public boolean presetUpdatePending = false;
 
     boolean locked = false;
-
-    @Override
-    public PatchController createController(AbstractDocumentRoot documentRoot) {
-        return new PatchController(this, documentRoot);
-    }
 
     static public class PatchVersionException
             extends RuntimeException {
@@ -234,200 +223,7 @@ public class PatchModel extends AbstractModel {
 
     public PatchModel() {
         super();
-    }
-
-    void applyType(AxoObjectInstance obji, AxoObjectAbstract objtype) {
-        // WARNING: only call after deserialization, before nets are reconstructed, or controllers are created
-        ArrayList<AttributeInstance> pAttributeInstances = (ArrayList<AttributeInstance>) obji.getAttributeInstances().getArray().clone();
-        ArrayList<ParameterInstance> pParameterInstances = (ArrayList<ParameterInstance>) obji.getParameterInstances().getArray().clone();
-
-        if (objtype instanceof AxoObject) {
-            AxoObject objtype1 = (AxoObject) objtype;
-
-            obji.inletInstances.clear();
-            for (Inlet inl : objtype1.inlets) {
-                InletInstance inlin = new InletInstance(inl, obji);
-                obji.inletInstances.add(inlin);
-            }
-
-            obji.outletInstances.clear();
-            for (Outlet o : objtype1.outlets) {
-                OutletInstance oin = new OutletInstance(o, obji);
-                obji.outletInstances.add(oin);
-            }
-
-            obji.attributeInstances.clear();
-            for (AxoAttribute p : objtype1.attributes) {
-                AttributeInstance attrp1 = null;
-                for (AttributeInstance attrp : pAttributeInstances) {
-                    if (attrp.getAttributeName().equals(p.getName())) {
-                        attrp1 = attrp;
-                        break;
-                    }
-                }
-                AttributeInstance attri = p.CreateInstance(obji, attrp1);
-                obji.attributeInstances.add(attri);
-            }
-
-            obji.parameterInstances.clear();
-            for (Parameter p : objtype1.params) {
-                ParameterInstance pin = p.CreateInstance(obji);
-                for (ParameterInstance pinp : pParameterInstances) {
-                    if (pinp.getName().equals(pin.getName())) {
-                        pin.CopyValueFrom(pinp);
-                        break;
-                    }
-                }
-                obji.parameterInstances.add(pin);
-            }
-
-            obji.displayInstances.clear();
-            for (Display p : objtype1.displays) {
-                DisplayInstance pin = p.CreateInstance(obji);
-                obji.displayInstances.add(pin);
-            }
-        }
-    }
-
-/*
-    public void applyType(AxoObjectInstance obji, AxoObjectAbstract objtype) {
-
-        AttributeInstance pAttributeInstances[] = (AttributeInstance[])obji.getAttributeInstances().toArray();
-        InletInstance pInletInstances[] = (InletInstance[])obji.getInletInstances().toArray();
-        OutletInstance pOutletInstances[] = (OutletInstance[])obji.getOutletInstances().toArray();
-        ParameterInstance pParameterInstances[] = (ParameterInstance[])obji.getParameterInstances().toArray();
-
-        ArrayList<AttributeInstance> nAttributeInstances = new ArrayList<>();
-        ArrayList<InletInstance> nInletInstances = new ArrayList<>();
-        ArrayList<OutletInstance> nOutletInstances = new ArrayList<>();
-        ArrayList<ParameterInstance> nParameterInstances = new ArrayList<>();
-        ArrayList<DisplayInstance> nDisplayInstances = new ArrayList<>();
-
-        if (objtype instanceof AxoObject) {
-            AxoObject objtype1  = (AxoObject)objtype;
-
-            for (Inlet inl : objtype1.inlets) {
-                InletInstance inlinp = null;
-                for (InletInstance inlin1 : pInletInstances) {
-                    if (inlin1.GetLabel().equals(inl.getName())) {
-                        inlinp = inlin1;
-                    }
-                }
-                InletInstance inlin = new InletInstance(inl, obji);
-                if (inlinp != null) {
-                    Net n = getNet(inlinp);
-                    if (n != null) {
-                        n.dest.add(inlin);
-                    }
-                }
-                nInletInstances.add(inlin);
-            }
-
-            // disconnect stale inlets from nets
-//            for (InletInstance inlin1 : pInletInstances) {
-//                getPatch().disconnect(inlin1);
-//            }
-
-            for (Outlet o : objtype1.outlets) {
-                OutletInstance oinp = null;
-                for (OutletInstance oinp1 : pOutletInstances) {
-                    if (oinp1.GetLabel().equals(o.getName())) {
-                        oinp = oinp1;
-                    }
-                }
-                OutletInstance oin = new OutletInstance(o, obji);
-                if (oinp != null) {
-                    Net n = getNet(oinp);
-                    if (n != null) {
-                        n.source.add(oin);
-                    }
-                }
-                nOutletInstances.add(oin);
-            }
-
-            // disconnect stale outlets from nets
-//            for (OutletInstance oinp1 : pOutletInstances) {
-//                getPatch().disconnect(oinp1);
-//            }
-
-            for (AxoAttribute p : objtype1.attributes) {
-                AttributeInstance attrp1 = null;
-                for (AttributeInstance attrp : pAttributeInstances) {
-                    if (attrp.getName().equals(p.getName())) {
-                        attrp1 = attrp;
-                    }
-                }
-                AttributeInstance attri = p.CreateInstance(obji, attrp1);
-                nAttributeInstances.add(attri);
-            }
-
-            for (Parameter p : objtype1.params) {
-                ParameterInstance pin = p.CreateInstance(obji);
-                for (ParameterInstance pinp : pParameterInstances) {
-                    if (pinp.getName().equals(pin.getName())) {
-                        pin.CopyValueFrom(pinp);
-                    }
-                }
-                nParameterInstances.add(pin);
-            }
-
-            for (Display p : objtype1.displays) {
-                DisplayInstance pin = p.CreateInstance(obji);
-                nDisplayInstances.add(pin);
-            }
-        }
-    }
-    */
-    public void PostContructor() {
-        for (AxoObjectInstanceAbstract o : objectinstances) {
-            o.patchModel = this;
-            AxoObjectAbstract t = o.resolveType();
-            if ((t != null) && (t.providesModulationSource())) {
-                if (t instanceof AxoObject) {
-                    applyType((AxoObjectInstance) o, (AxoObject) t);
-                }
-                Modulator[] m = t.getModulators();
-                if (Modulators == null) {
-                    Modulators = new ArrayList<Modulator>();
-                }
-                for (Modulator mm : m) {
-                    mm.objinst = o;
-                    Modulators.add(mm);
-                }
-            }
-        }
-
-        ArrayList<AxoObjectInstanceAbstract> obj2 = (ArrayList<AxoObjectInstanceAbstract>) objectinstances.getArray().clone();
-        for (AxoObjectInstanceAbstract o : obj2) {
-            AxoObjectAbstract t = o.getType();
-            if ((t != null) && (!t.providesModulationSource())) {
-                o.patchModel = this;
-                if (t instanceof AxoObject) {
-                    applyType((AxoObjectInstance) o, (AxoObject) t);
-                }
-                //System.out.println("Obj added " + o.getInstanceName());
-            } else if (t == null) {
-                objectinstances.remove(o);
-                AxoObjectZombie z = new AxoObjectZombie();
-                AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(z.createController(null), this, o.getInstanceName(), new Point(o.getX(), o.getY()));
-                zombie.patchModel = this;
-                zombie.typeName = o.typeName;
-                objectinstances.add(zombie);
-            }
-        }
-
-        System.out.println("object:(1)");
-        for (AxoObjectInstanceAbstract o : objectinstances) {
-            System.out.println("  " + o.getType().id + ":" + o.getInstanceName());
-        }
-
-        for (Net n : nets) {
-            n.patchModel = this;
-            n.PostConstructor();
-        }
-        if (settings == null) {
-            settings = new PatchSettings();
-        }
+        settings = new PatchSettings();
     }
 
     public ArrayList<ParameterInstance> getParameterInstances() {
@@ -444,16 +240,7 @@ public class PatchModel extends AbstractModel {
     }
 
     @Deprecated
-    public void ClearDirty() {
-    }
-
-    @Deprecated
     public void setDirty() {
-    }
-
-    @Deprecated
-    public boolean isDirty() {
-        return false;
     }
 
     public PatchModel container() {

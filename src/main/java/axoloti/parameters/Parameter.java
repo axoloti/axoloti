@@ -71,7 +71,7 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
     @Override
     public ParameterInstance CreateInstance(AxoObjectInstance o) {
         ParameterInstance pi = InstanceFactory();
-        AtomDefinitionController c = createController(null);
+        AtomDefinitionController c = createController(null, null);
         c.addView(pi);
         pi.axoObjectInstance = o;
         pi.name = getName();

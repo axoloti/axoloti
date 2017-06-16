@@ -24,14 +24,14 @@ public class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {
         super.PostConstructor();
 
         slider = new PVSliderComponent(attributeInstance.getValue(),
-                attributeInstance.getDefinition().getMinValue(),
-                attributeInstance.getDefinition().getMaxValue(), 1, axoObjectInstanceView);
+                attributeInstance.getModel().getMinValue(),
+                attributeInstance.getModel().getMaxValue(), 1, axoObjectInstanceView);
 
-        if (attributeInstance.getValue() < attributeInstance.getDefinition().getMinValue()) {
-            attributeInstance.setValue(attributeInstance.getDefinition().getMinValue());
+        if (attributeInstance.getValue() < attributeInstance.getModel().getMinValue()) {
+            attributeInstance.setValue(attributeInstance.getModel().getMinValue());
         }
-        if (attributeInstance.getValue() > attributeInstance.getDefinition().getMaxValue()) {
-            attributeInstance.setValue(attributeInstance.getDefinition().getMaxValue());
+        if (attributeInstance.getValue() > attributeInstance.getModel().getMaxValue()) {
+            attributeInstance.setValue(attributeInstance.getModel().getMaxValue());
         }
 
         Dimension d = slider.getSize();

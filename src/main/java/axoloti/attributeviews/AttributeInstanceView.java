@@ -34,10 +34,10 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
     public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        label = new LabelComponent(attributeInstance.getDefinition().getName());
+        label = new LabelComponent(attributeInstance.getModel().getName());
         add(label);
         setSize(getPreferredSize());
-        String description = attributeInstance.getDefinition().getDescription();
+        String description = attributeInstance.getModel().getDescription();
         if (description != null) {
             setToolTipText(description);
         }

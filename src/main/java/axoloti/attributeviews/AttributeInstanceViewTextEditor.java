@@ -28,7 +28,7 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
             getAttributeInstance().editor = new TextEditor(getAttributeInstance().getStringRef(), null);
             // FIXME: null DocumentWindow arg, was: 
             // getPatchView().getPatchController().getPatchFrame());
-            getAttributeInstance().editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.getDefinition().getName());
+            getAttributeInstance().editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.getModel().getName());
             getAttributeInstance().editor.addWindowFocusListener(new WindowFocusListener() {
                 @Override
                 public void windowGainedFocus(WindowEvent e) {

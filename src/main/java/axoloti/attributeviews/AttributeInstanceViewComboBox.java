@@ -22,7 +22,7 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        comboBox = new DropDownComponent(getAttributeInstance().getDefinition().getMenuEntries(), getAttributeInstance());
+        comboBox = new DropDownComponent(getAttributeInstance().getModel().getMenuEntries(), getAttributeInstance());
         comboBox.setFont(Constants.FONT);
         setString(getAttributeInstance().getValue());
         comboBox.addItemListener(new DropDownComponent.DDCListener() {
@@ -52,6 +52,8 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
     public void setString(String s) {
         AttributeInstanceComboBox aic = (AttributeInstanceComboBox) getController().getModel();
         int index = aic.getIndex(s);
-        comboBox.setSelectedItem(aic.getDefinition().getMenuEntries().get(index));
+        if (aic.getModel().getMenuEntries().size() > 0) {
+            comboBox.setSelectedItem(aic.getModel().getMenuEntries().get(index));
+        }
     }
 }

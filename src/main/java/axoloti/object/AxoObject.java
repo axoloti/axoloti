@@ -324,7 +324,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (editor == null) {
-            ObjectController ctrl = createController(null);
+            ObjectController ctrl = createController(null, null);
             editor = new AxoObjectEditor(ctrl);
         }
 
@@ -357,10 +357,9 @@ public class AxoObject extends AxoObjectAbstract {
                 Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object {0} uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!", InstanceName1);
             }
         }
-        ObjectController ctrl = createController(null);
+        ObjectController ctrl = createController(null, null);
         AxoObjectInstance o = new AxoObjectInstance(ctrl, patchModel, InstanceName1, location);
         ctrl.addView(o);
-
         return o;
     }
 

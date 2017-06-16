@@ -35,7 +35,6 @@ public class PNetView extends PatchPNode implements INetView {
 
     @Override
     public void PostConstructor() {
-        net.PostConstructor();
     }
 
     @Override

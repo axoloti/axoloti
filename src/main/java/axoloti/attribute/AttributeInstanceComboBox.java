@@ -39,10 +39,10 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
 
     @Override
     public String CValue() {
-        if (getDefinition().getCEntries().isEmpty()) {
+        if (getModel().getCEntries().isEmpty()) {
             return "";
         }
-        String s = getDefinition().getCEntries().get(getSelectedIndex());
+        String s = getModel().getCEntries().get(getSelectedIndex());
         if (s != null) {
             return s;
         } else {
@@ -59,7 +59,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     public void setValue(String selection) {
         String oldvalue = this.selection;
         int selectedIndex = getIndex(selection);
-        selection = getDefinition().getMenuEntries().get(selectedIndex);
+        selection = getModel().getMenuEntries().get(selectedIndex);
         this.selection = selection;
         firePropertyChange(
                 AttributeInstanceController.ELEMENT_ATTR_VALUE,
@@ -71,8 +71,8 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
         if (selection == null) {
             return 0;
         }
-        for (int i = 0; i < getDefinition().getMenuEntries().size(); i++) {
-            if (selection.equals(getDefinition().getMenuEntries().get(i))) {
+        for (int i = 0; i < getModel().getMenuEntries().size(); i++) {
+            if (selection.equals(getModel().getMenuEntries().get(i))) {
                 selectedIndex = i;
                 break;
             }

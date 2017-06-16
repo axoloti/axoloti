@@ -22,9 +22,11 @@ import axoloti.Preset;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.ObjectInstanceController;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import java.beans.PropertyChangeEvent;
@@ -55,6 +57,8 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     @Attribute(required = false)
     Integer MidiCC = null;
 
+    AtomDefinitionController controller;
+    
     public ParameterInstance() {
     }
 
@@ -270,8 +274,8 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     }
 
     @Override
-    public T getDefinition() {
-        return parameter;
+    public T getModel() {
+        return (T)getController().getModel();
     }
 
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
@@ -316,21 +320,12 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         this.selectedConv = selectedConv;
     }
 
-    public T getParameter() {
-        return parameter;
-    }
-
     public String getName() {
         return name;
     }
 
     @Deprecated
     public void SetDirty() {
-    }
-    
-    @Override
-    public ParameterInstanceController createController(AbstractDocumentRoot documentRoot) {
-        return new ParameterInstanceController(this, documentRoot);
     }
 
     @Override
@@ -347,6 +342,11 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
 
     @Override
     public AtomDefinitionController getController() {
-        return parameter.createController(null);
+        return controller;
     }
+
+    void setController(AtomDefinitionController controller) {
+        this.controller = controller;
+    }
+
 }

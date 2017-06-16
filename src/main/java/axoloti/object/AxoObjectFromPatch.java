@@ -49,7 +49,7 @@ public class AxoObjectFromPatch extends AxoObject {
         try {
             patchModel = serializer.read(PatchModel.class, f);
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-            patchController = patchModel.createController(documentRoot);
+            patchController = new PatchController(patchModel, documentRoot);
             patchView = MainFrame.prefs.getPatchView(patchController);
             patchController.addView(patchView);
             patchView.setFileNamePath(f.getAbsolutePath());

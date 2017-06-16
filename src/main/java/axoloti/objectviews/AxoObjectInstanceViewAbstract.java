@@ -99,7 +99,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         Titlebar.setMaximumSize(TITLEBAR_MAXIMUM_SIZE);
 
         setBorder(BORDER_UNSELECTED);
-        getModel().resolveType();
 
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
@@ -244,7 +243,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                 }
                 draggingObjects = null;
                 if (dirtyOnRelease) {
-                    getPatchModel().setDirty();
+
                 }
                 getPatchView().AdjustSize();
             }

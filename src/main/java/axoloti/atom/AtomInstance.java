@@ -31,6 +31,6 @@ public interface AtomInstance<T extends AtomDefinition> extends AbstractView {
 
     public AxoObjectInstanceAbstract getObjectInstance();
 
-    public T getDefinition();
+    public T getModel();
 
 }
