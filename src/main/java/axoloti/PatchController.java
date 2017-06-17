@@ -6,7 +6,9 @@ import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayController;
+import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
+import axoloti.object.AxoObjectFile;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectInstancePatcherObject;
@@ -59,18 +61,6 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         model.objectinstances.clear();
         for (AxoObjectInstanceAbstract unlinked_object_instance : unlinked_object_instances) {
             add_unlinked_objectinstance(unlinked_object_instance);
-        /*
-            unlinked_object_instance.setPatchModel(model);
-            if (unlinked_object_instance instanceof AxoObjectInstancePatcher
-                    || unlinked_object_instance instanceof AxoObjectInstancePatcherObject) {
-                model.objectinstances.add(unlinked_object_instance);
-            } else {
-                AxoObjectAbstract t = unlinked_object_instance.resolveType(model.GetCurrentWorkingDirectory());
-                AxoObjectInstanceAbstract linked_object_instance = t.CreateInstance(model, unlinked_object_instance.getInstanceName(), unlinked_object_instance.getLocation());
-                linked_object_instance.applyValues(unlinked_object_instance);
-                model.objectinstances.add(linked_object_instance);
-            }
-            */
         }
 
         objectInstanceControllers = new ArrayController<ObjectInstanceController, AxoObjectInstanceAbstract, PatchController>(model.objectinstances, documentRoot, this) {
@@ -783,4 +773,26 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         return n;
     }
 
+    @Deprecated // no longer in use?
+    void ExportAxoObj(File f1) {
+        String fnNoExtension = f1.getName().substring(0, f1.getName().lastIndexOf(".axo"));
+        
+        getModel().SortByPosition();
+        // cheating here by creating a new controller...
+        PatchViewCodegen codegen = new PatchViewCodegen(this);
+        AxoObject ao = codegen.GenerateAxoObj(new AxoObject());
+        ao.sDescription = getModel().getFileNamePath();
+        ao.id = fnNoExtension;
+
+        AxoObjectFile aof = new AxoObjectFile();
+        aof.objs.add(ao);
+        Serializer serializer = new Persister();
+        try {
+            serializer.write(aof, f1);
+        } catch (Exception ex) {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Export obj complete");
+    }    
+    
 }

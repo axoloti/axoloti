@@ -50,11 +50,6 @@ public class AxoObjectFromPatch extends AxoObject {
             patchModel = serializer.read(PatchModel.class, f);
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
             patchController = new PatchController(patchModel, documentRoot, null);
-            patchView = MainFrame.prefs.getPatchView(patchController);
-            patchController.addView(patchView);
-            patchView.setFileNamePath(f.getAbsolutePath());
-            patchView.PostConstructor();
-            patchView.ObjEditor = this;
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -93,7 +88,7 @@ public class AxoObjectFromPatch extends AxoObject {
     @Override
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (pf == null) {
-            pf = new PatchFrame(patchController, patchView, MainFrame.mainframe.getQcmdprocessor());
+            pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);

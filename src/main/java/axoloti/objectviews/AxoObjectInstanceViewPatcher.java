@@ -2,7 +2,6 @@ package axoloti.objectviews;
 
 import axoloti.MainFrame;
 import axoloti.PatchFrame;
-import axoloti.PatchView;
 import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.ObjectInstanceController;
@@ -20,7 +19,7 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
     @Override
     public ObjectInstancePatcherController getController() {
-        return (ObjectInstancePatcherController)super.getController();
+        return (ObjectInstancePatcherController) super.getController();
     }
 
     @Override
@@ -29,14 +28,10 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
     }
 
     public void initSubpatchFrame() {
-        PatchView patchView = MainFrame.prefs.getPatchView(getController().subPatchController);
         if (pf == null) {
-            pf = new PatchFrame(getController().subPatchController, patchView, MainFrame.mainframe.getQcmdprocessor());
-            patchView.setPatchFrame(pf);
+            pf = new PatchFrame(getController().subPatchController, MainFrame.mainframe.getQcmdprocessor());
+            getController().subPatchController.addView(pf);
         }
-        getController().subPatchController.addView(patchView);
-        //patchView.setFileNamePath(getInstanceName());
-        patchView.PostConstructor();
     }
 
     public void edit() {

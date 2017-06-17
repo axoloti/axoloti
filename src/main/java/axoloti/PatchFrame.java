@@ -18,6 +18,7 @@
 package axoloti;
 
 import static axoloti.PatchViewType.PICCOLO;
+import axoloti.mvc.AbstractView;
 import axoloti.mvc.UndoUI;
 import axoloti.object.AxoObjects;
 import axoloti.objectviews.AxoObjectInstanceView;
@@ -39,11 +40,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -69,7 +70,7 @@ import qcmds.QCmdUploadPatch;
  *
  * @author Johannes Taelman
  */
-public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener, UndoableEditListener {
+public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener, UndoableEditListener, AbstractView {
 
     /**
      * Creates new form PatchFrame
@@ -84,8 +85,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private JScrollPane jScrollPane1;
 
-    public PatchFrame(final PatchController patchController, final PatchView patchView, QCmdProcessor qcmdprocessor) {
-        this.patchView = patchView;
+    public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
+        patchView = new PatchViewSwing(patchController);
+        patchView.PostConstructor();
+        patchController.addView(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
         this.patchController = patchController;
@@ -101,11 +104,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         menuItemNewView.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PatchView pv = new PatchViewSwing(patchController);
-                patchController.addView(pv);
-                PatchFrame pf = new PatchFrame(patchController, pv, QCmdProcessor.getQCmdProcessor());
-                pv.setPatchFrame(pf);
-                pv.PostConstructor();
+                PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+                patchController.addView(pf);
                 pf.setVisible(true);
             }
         });
@@ -295,7 +295,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     
     QCmdProcessor qcmdprocessor;
 
-    public void SetLive(boolean b) {
+    private void setLive(boolean b) {
         if (b) {
             jCheckBoxLive.setSelected(true);
             jCheckBoxLive.setEnabled(true);
@@ -1178,4 +1178,19 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public void undoableEditHappened(UndoableEditEvent e) {
         undoUi.undoableEditHappened(e);
     }    
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
+            if ((Boolean)evt.getNewValue() == false) {
+                setLive(false);
+            } else {
+                setLive(true);
+            }
+        } else if (evt.getPropertyName().equals(PatchController.PATCH_DSPLOAD)) {
+            ShowDSPLoad((Integer)evt.getNewValue());
+        } else if (evt.getPropertyName().equals(PatchController.PATCH_FILENAME)) {
+            this.setTitle((String)evt.getNewValue());
+        }
+    }
 }

@@ -19,8 +19,6 @@ package axoloti;
 
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.object.AxoObject;
@@ -37,13 +35,8 @@ import axoloti.object.AxoObjects;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.AxolotiLibrary;
-import axoloti.utils.Preferences;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -212,14 +205,6 @@ public class PatchModel extends AbstractModel {
         return settings;
     }
 
-    public void setFileNamePath(String FileNamePath) {
-        this.FileNamePath = FileNamePath;
-    }
-
-    public String getFileNamePath() {
-        return FileNamePath;
-    }
-
     public PatchModel() {
         super();
         settings = new PatchSettings();
@@ -310,10 +295,6 @@ public class PatchModel extends AbstractModel {
             }
         }
         int offset = 0;
-        // 0 : header
-        // 1 : patchref
-        // 2 : length
-
         i = 0;
         DisplayInstances = new ArrayList<DisplayInstance>();
         for (AxoObjectInstanceAbstract o : objectinstances) {
@@ -498,29 +479,6 @@ public class PatchModel extends AbstractModel {
         IID = r.nextInt();
     }
 
-
-
-    void ExportAxoObj(File f1) {
-        String fnNoExtension = f1.getName().substring(0, f1.getName().lastIndexOf(".axo"));
-        
-        SortByPosition();
-        // cheating here by creating a new controller...
-        PatchController controller = new PatchController(this, null, null);
-        PatchViewCodegen codegen = new PatchViewCodegen(controller);
-        AxoObject ao = codegen.GenerateAxoObj(new AxoObject());
-        ao.sDescription = FileNamePath;
-        ao.id = fnNoExtension;
-
-        AxoObjectFile aof = new AxoObjectFile();
-        aof.objs.add(ao);
-        Serializer serializer = new Persister();
-        try {
-            serializer.write(aof, f1);
-        } catch (Exception ex) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Export obj complete");
-    }
 
     /*
      void ApplyPreset(int i) { // OBSOLETE
@@ -851,16 +809,30 @@ public class PatchModel extends AbstractModel {
         return nets;
     }
 
+    // ------------- new MVC methods
+
+    public String getFileNamePath() {
+        return FileNamePath;
+    }
+
+    public void setFileNamePath(String FileNamePath) {
+        String oldValue = this.FileNamePath;        
+        this.FileNamePath = FileNamePath;
+        firePropertyChange(
+                PatchController.PATCH_FILENAME,
+                oldValue, FileNamePath);
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
     public void setLocked(Boolean locked) {
         Boolean oldvalue = this.locked;
         this.locked = locked;
         firePropertyChange(
                 PatchController.PATCH_LOCKED,
                 oldvalue, locked);
-    }
-
-    public Boolean getLocked() {
-        return locked;
     }
 
     public Integer getDspLoad() {
@@ -875,7 +847,6 @@ public class PatchModel extends AbstractModel {
                 oldvalue, dspLoad);
     }
 
-    // ------------- new objectinstances MVC stuff
     public ArrayModel<AxoObjectInstanceAbstract> getObjectinstances() {
         return objectinstances;
     }

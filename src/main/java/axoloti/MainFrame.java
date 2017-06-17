@@ -827,12 +827,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
             PatchController patchController = new PatchController(patchModel, null, null); /* fixme: null */
-            PatchView patchView = prefs.getPatchView(patchController);
-            patchController.addView(patchView);
-            PatchFrame pf = new PatchFrame(patchController, patchView, qcmdprocessor);
-            patchView.setPatchFrame(pf);
-            patchView.setFileNamePath(f.getPath());
-            patchView.PostConstructor();
             patchController.WriteCode();
             qcmdprocessor.WaitQueueFinished();
             Thread.sleep(500);
@@ -846,7 +840,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             QCmdCompilePatch cp = new QCmdCompilePatch(patchController);
             patchController.GetQCmdProcessor().AppendToQueue(cp);
             qcmdprocessor.WaitQueueFinished();
-            pf.Close();
             Thread.sleep(2500);
             status = cp.success();
             if (status == false) {
@@ -905,11 +898,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             PatchModel patchModel = serializer.read(PatchModel.class, f);
             PatchController patchController = new PatchController(patchModel, null, null); /* fixme: null */
             PatchView patchView = prefs.getPatchView(patchController);
-            patchController.addView(patchView);
-            PatchFrame patchFrame = new PatchFrame(patchController, patchView, qcmdprocessor);
-            patchView.setPatchFrame(patchFrame);
-            patchView.setFileNamePath(f.getPath());
-            patchView.PostConstructor();
+            PatchFrame patchFrame = new PatchFrame(patchController, qcmdprocessor);
+            patchController.addView(patchFrame);
             status = patchModel.save(f);
             if (status == false) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "UPGRADING FAILED: {0}", f.getPath());
@@ -1009,12 +999,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         PatchModel patchModel = new PatchModel();
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
         PatchController patchController = new PatchController(patchModel, documentRoot, null);
-        PatchView patchView = prefs.getPatchView(patchController);
-        patchController.addView(patchView);
-        PatchFrame pf = new PatchFrame(patchController, patchView, qcmdprocessor);
-        patchView.setPatchFrame(pf);
-        patchView.PostConstructor();
-        patchView.setFileNamePath("untitled");
+        PatchFrame pf = new PatchFrame(patchController, qcmdprocessor);
+        patchController.addView(pf);
         pf.setVisible(true);
     }
 

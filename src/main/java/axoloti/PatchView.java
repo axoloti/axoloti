@@ -417,20 +417,24 @@ public abstract class PatchView extends PatchAbstractView {
         }
         return b;
     }
+    
+    public static PatchFrame OpenPatchModel(PatchModel pm, String fileNamePath) {
+        if (pm.getFileNamePath() == null) {
+            pm.setFileNamePath("untitled");
+        }
+        AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
+        PatchController patchController = new PatchController(pm, documentRoot, null);
+        PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+        patchController.addView(pf);
+        return pf;
+    }
 
     public static void OpenPatch(String name, InputStream stream) {
         Strategy strategy = new AnnotationStrategy();
         Serializer serializer = new Persister(strategy);
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, stream);
-            AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-            PatchController patchController = new PatchController(patchModel, documentRoot, null);
-            PatchView patchView = MainFrame.prefs.getPatchView(patchController);
-            patchController.addView(patchView);
-            PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());
-            patchView.setPatchFrame(pf);
-            patchView.setFileNamePath(name);
-            patchView.PostConstructor();
+            PatchFrame pf = OpenPatchModel(patchModel, name);
             pf.setVisible(true);
 
         } catch (Exception ex) {
@@ -454,15 +458,7 @@ public abstract class PatchView extends PatchAbstractView {
         Serializer serializer = new Persister(strategy);
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-            PatchController patchController = new PatchController(patchModel, documentRoot, null);
-            PatchView patchView = MainFrame.prefs.getPatchView(patchController);
-            patchController.addView(patchView);
-            PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());
-            patchView.setPatchFrame(pf);
-            patchView.setFileNamePath(f.getAbsolutePath());
-            patchView.PostConstructor();
-            patchView.setFileNamePath(f.getPath());
+            PatchFrame pf = OpenPatchModel(patchModel, f.getAbsolutePath());
             return pf;
         } catch (java.lang.reflect.InvocationTargetException ite) {
             if (ite.getTargetException() instanceof PatchModel.PatchVersionException) {
@@ -487,6 +483,7 @@ public abstract class PatchView extends PatchAbstractView {
         return pf;
     }
 
+    @Deprecated
     public void updateNetVisibility() {
         for (INetView n : netViews) {
             DataType d = n.getNet().getDataType();
@@ -652,19 +649,13 @@ public abstract class PatchView extends PatchAbstractView {
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
             if ((Boolean)evt.getNewValue() == false) {
-                getPatchFrame().SetLive(false);
                 for (IAxoObjectInstanceView o : objectInstanceViews) {
-                    o.Lock();
+                    o.Unlock();
                 }
             } else {
-                getPatchFrame().SetLive(true);
                 for (IAxoObjectInstanceView o : objectInstanceViews) {
                     o.Lock();
                 }
-            }
-        } else if (evt.getPropertyName().equals(PatchController.PATCH_DSPLOAD)) {
-            if (getPatchFrame() != null ) {
-                getPatchFrame().ShowDSPLoad((Integer)evt.getNewValue());
             }
         } else if (evt.getPropertyName().equals(PatchController.PATCH_OBJECTINSTANCES)) {
             objectInstanceViews.updateUI();
