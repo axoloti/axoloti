@@ -19,8 +19,10 @@ package axoloti;
 
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectTreeNode;
 import axoloti.object.ObjectInstanceController;
+import axoloti.object.ObjectInstancePatcherController;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewFactory;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -347,7 +349,12 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             if (jList1.getSelectedValue() != o) {
             }
             AxoObjectInstanceAbstract objectInstance = o.CreateInstance(null, "dummy", new Point(5, 5));
-            ObjectInstanceController c = new ObjectInstanceController(objectInstance, null, null);
+            ObjectInstanceController c;
+            if (objectInstance instanceof AxoObjectInstancePatcher) {
+                c = new ObjectInstancePatcherController((AxoObjectInstancePatcher) objectInstance, null, null);
+            } else {
+                c = new ObjectInstanceController(objectInstance, null, null);
+            }
             AxoObjectInstanceViewAbstract objectInstanceView = AxoObjectInstanceViewFactory.createView(c, null);
             jPanel1.removeAll();
             jPanel1.add(objectInstanceView);

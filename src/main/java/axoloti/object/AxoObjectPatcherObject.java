@@ -34,6 +34,8 @@ public class AxoObjectPatcherObject extends AxoObject {
     public AxoObjectPatcherObject(String id, String sDescription) {
         super(id, sDescription);
     }
+    
+    public ObjectController objectController;
 
     @Override
     public AxoObjectInstancePatcherObject CreateInstance(PatchModel patch, String InstanceName1, Point location) {
@@ -47,11 +49,10 @@ public class AxoObjectPatcherObject extends AxoObject {
                 || (sMidiResetControllersCode != null)) {
             Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object {0} uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!", InstanceName1);
         }
-
-        AxoObjectInstancePatcherObject o = new AxoObjectInstancePatcherObject(this, patch, InstanceName1, location);
-        if (patch != null) {
-            patch.objectinstances.add(o);
-        }
+        AxoObjectPatcherObject newObj = new AxoObjectPatcherObject("patch/object","");        
+        objectController = newObj.createController(null, null);
+        AxoObjectInstancePatcherObject o = new AxoObjectInstancePatcherObject(objectController, patch, InstanceName1, location);
+        objectController.addView(o);
         return o;
     }
 }

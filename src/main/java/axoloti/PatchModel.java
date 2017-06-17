@@ -97,9 +97,8 @@ public class PatchModel extends AbstractModel {
 
     Integer dspLoad;
 
-    // patch this patch is contained in
-    private PatchModel container = null;
-    // controller object
+    // a "controller object" is magically added to evey top-level patch
+    // (configured in preferences)
     AxoObjectInstanceAbstract controllerObjectInstance;
 
     public boolean presetUpdatePending = false;
@@ -241,14 +240,6 @@ public class PatchModel extends AbstractModel {
 
     @Deprecated
     public void setDirty() {
-    }
-
-    public PatchModel container() {
-        return container;
-    }
-
-    public void setContainer(PatchModel c) {
-        container = c;
     }
 
     public void updateModulation(Modulation n) {
@@ -507,56 +498,14 @@ public class PatchModel extends AbstractModel {
         IID = r.nextInt();
     }
 
-    String GenerateCode3() {
-        Preferences prefs = MainFrame.prefs;
-        controllerObjectInstance = null;
-        String cobjstr = prefs.getControllerObject();
-        if (prefs.isControllerEnabled() && cobjstr != null && !cobjstr.isEmpty()) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Using controller object: {0}", cobjstr);
-            AxoObjectAbstract x = null;
-            ArrayList<AxoObjectAbstract> objs = MainFrame.axoObjects.GetAxoObjectFromName(cobjstr, GetCurrentWorkingDirectory());
-            if ((objs != null) && (!objs.isEmpty())) {
-                x = objs.get(0);
-            }
-            if (x != null) {
-                controllerObjectInstance = x.CreateInstance(null, "ctrl0x123", new Point(0, 0));
-            } else {
-                Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Unable to created controller for : {0}", cobjstr);
-            }
-        }
 
-        CreateIID();
-
-        System.out.println("object:(2)");
-        for (AxoObjectInstanceAbstract o : objectinstances) {
-            System.out.println("  "+o.getType().id+":"+o.getInstanceName());
-        }
-
-        //TODO - use execution order, rather than UI ordering
-        if (USE_EXECUTION_ORDER) {
-            SortByExecution();
-        } else {
-            SortByPosition();
-        }
-
-        System.out.println("object:(3)");
-        for (AxoObjectInstanceAbstract o : objectinstances) {
-            System.out.println("  "+o.getType().id+":"+o.getInstanceName());
-        }
-        
-        // cheating here by creating a new controller...
-        PatchController controller = new PatchController(this, null);
-        PatchViewCodegen codegen = new PatchViewCodegen(controller);               
-        String c = codegen.GenerateCode4();
-        return c;
-    }
 
     void ExportAxoObj(File f1) {
         String fnNoExtension = f1.getName().substring(0, f1.getName().lastIndexOf(".axo"));
         
         SortByPosition();
         // cheating here by creating a new controller...
-        PatchController controller = new PatchController(this, null);
+        PatchController controller = new PatchController(this, null, null);
         PatchViewCodegen codegen = new PatchViewCodegen(controller);
         AxoObject ao = codegen.GenerateAxoObj(new AxoObject());
         ao.sDescription = FileNamePath;
@@ -571,22 +520,6 @@ public class PatchModel extends AbstractModel {
             Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Export obj complete");
-    }
-
-    public void WriteCode() {
-        String c = GenerateCode3();
-
-        try {
-            String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
-            FileOutputStream f = new FileOutputStream(buildDir + "/xpatch.cpp");
-            f.write(c.getBytes());
-            f.close();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, ex.toString());
-        } catch (IOException ex) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, ex.toString());
-        }
-        Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Generate code complete");
     }
 
     /*

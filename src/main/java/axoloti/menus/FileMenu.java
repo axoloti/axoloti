@@ -277,7 +277,7 @@ public class FileMenu extends JMenu {
     public void NewPatch() {
         PatchModel patchModel = new PatchModel();
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-        PatchController patchController = new PatchController(patchModel, documentRoot);
+        PatchController patchController = new PatchController(patchModel, documentRoot, null);
         PatchView patchView = MainFrame.prefs.getPatchView(patchController);
         patchController.addView(patchView);
         PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());

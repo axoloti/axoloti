@@ -19,8 +19,6 @@ package axoloti.object;
 
 import axoloti.PatchModel;
 import java.awt.Point;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -35,22 +33,17 @@ public class AxoObjectPatcher extends AxoObject {
         super(id, sDescription);
     }
 
-    public AxoObjectInstancePatcher CreateInstance(PatchModel patch, String InstanceName1, Point location) {
-        if ((sMidiCCCode != null)
-                || (sMidiAllNotesOffCode != null)
-                || (sMidiCCCode != null)
-                || (sMidiChannelPressure != null)
-                || (sMidiNoteOffCode != null)
-                || (sMidiNoteOnCode != null)
-                || (sMidiPBendCode != null)
-                || (sMidiResetControllersCode != null)) {
-            Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object {0} uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!", InstanceName1);
-        }
-
-        AxoObjectInstancePatcher o = new AxoObjectInstancePatcher(this, patch, InstanceName1, location);
-        if (patch != null) {
-            patch.objectinstances.add(o);
-        }
+    public AxoObjectInstancePatcher CreateInstance(PatchModel patchModel, String InstanceName1, Point location, PatchModel subPatch) {
+        AxoObjectPatcher newObj = new AxoObjectPatcher("patch/patcher", "");
+        ObjectController ctrl1 = newObj.createController(null, null);
+        AxoObjectInstancePatcher o = new AxoObjectInstancePatcher(ctrl1, patchModel, InstanceName1, location, subPatch);
+        ctrl1.addView(o);
         return o;
     }
+
+    @Override
+    public AxoObjectInstancePatcher CreateInstance(PatchModel patchModel, String InstanceName1, Point location) {
+        return CreateInstance(patchModel, InstanceName1, location, new PatchModel());
+    }
 }
+ 

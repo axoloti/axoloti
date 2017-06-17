@@ -1,17 +1,26 @@
 package axoloti.objectviews;
 
+import axoloti.MainFrame;
+import axoloti.PatchFrame;
+import axoloti.PatchView;
 import axoloti.PatchViewSwing;
-import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.ObjectInstanceController;
+import axoloti.object.ObjectInstancePatcherController;
 import components.ButtonComponent;
 
 public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
     private ButtonComponent BtnUpdate;
+    public PatchFrame pf;
 
     public AxoObjectInstanceViewPatcher(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller, patchView);
+    }
+
+    @Override
+    public ObjectInstancePatcherController getController() {
+        return (ObjectInstancePatcherController)super.getController();
     }
 
     @Override
@@ -19,10 +28,21 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
         return (AxoObjectInstancePatcher) super.getModel();
     }
 
+    public void initSubpatchFrame() {
+        PatchView patchView = MainFrame.prefs.getPatchView(getController().subPatchController);
+        if (pf == null) {
+            pf = new PatchFrame(getController().subPatchController, patchView, MainFrame.mainframe.getQcmdprocessor());
+            patchView.setPatchFrame(pf);
+        }
+        getController().subPatchController.addView(patchView);
+        //patchView.setFileNamePath(getInstanceName());
+        patchView.PostConstructor();
+    }
+
     public void edit() {
-        getModel().init();
-        getModel().pf.setState(java.awt.Frame.NORMAL);
-        getModel().pf.setVisible(true);
+        initSubpatchFrame();
+        pf.setState(java.awt.Frame.NORMAL);
+        pf.setVisible(true);
     }
 
     @Override
@@ -39,16 +59,6 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
             }
         });
         add(BtnEdit);
-        BtnUpdate = new ButtonComponent("update");
-        BtnUpdate.setAlignmentX(LEFT_ALIGNMENT);
-        BtnUpdate.setAlignmentY(TOP_ALIGNMENT);
-        BtnUpdate.addActListener(new ButtonComponent.ActListener() {
-            @Override
-            public void OnPushed() {
-                getModel().updateObj();
-            }
-        });
-        add(BtnUpdate);
         resizeToGrid();
     }
 

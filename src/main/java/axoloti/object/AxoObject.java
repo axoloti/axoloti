@@ -19,6 +19,7 @@ package axoloti.object;
 
 import static axoloti.Axoloti.FIRMWARE_DIR;
 import axoloti.Modulator;
+import axoloti.PatchController;
 import axoloti.SDFileReference;
 import axoloti.PatchModel;
 import axoloti.attributedefinition.AxoAttribute;
@@ -504,13 +505,11 @@ public class AxoObject extends AxoObjectAbstract {
     public Set<String> GetDepends() {
         return depends;
     }
-    
-    
+
     @Override
     public Set<String> GetModules() {
         return modules;
     }
-
 
     public File GetHelpPatchFile() {
         if ((helpPatch == null) || (sPath == null) || sPath.isEmpty()) {

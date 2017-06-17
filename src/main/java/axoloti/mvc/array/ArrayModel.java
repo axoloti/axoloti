@@ -61,6 +61,10 @@ public class ArrayModel<T extends AbstractModel> extends AbstractModel implement
 
     @Override
     public boolean add(T e) {
+        if (array.contains(e)) {
+            System.out.println("model already added : " + e.toString());
+            return false;
+        }
         ArrayList<T> old_array = this.array;
         array = (ArrayList<T>) array.clone();
         boolean r = array.add(e);
@@ -72,7 +76,13 @@ public class ArrayModel<T extends AbstractModel> extends AbstractModel implement
 
     @Override
     public boolean remove(Object o) {
-        return array.remove(o);
+        ArrayList<T> old_array = this.array;
+        array = (ArrayList<T>) array.clone();
+        boolean r = array.remove(o);
+        firePropertyChange(
+                ArrayController.ARRAY,
+                old_array, array);
+        return r;
     }
 
     @Override

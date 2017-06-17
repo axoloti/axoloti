@@ -289,6 +289,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         return patchController.getModel();
     }
 
+    public PatchController getController() {
+        return patchController;
+    }
+    
     QCmdProcessor qcmdprocessor;
 
     public void SetLive(boolean b) {
@@ -351,7 +355,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     @Override
     public boolean AskClose() {
         // FIXME: only ask if document is dirty
-        if (getPatchModel().container() == null) {
+        if (getPatchController().getParent() == null) {
             Object[] options = {"Save",
                 "Don't save",
                 "Cancel"};
@@ -894,7 +898,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jCheckBoxMenuItemCordsInBackgroundActionPerformed
 
     private void jMenuGenerateCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGenerateCodeActionPerformed
-        getPatchModel().WriteCode();
+        getController().WriteCode();
     }//GEN-LAST:event_jMenuGenerateCodeActionPerformed
 
     private void jMenuCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCompileCodeActionPerformed
@@ -990,7 +994,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuSaveClipActionPerformed
 
     private void jMenuItemUploadInternalFlashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadInternalFlashActionPerformed
-        getPatchModel().WriteCode();
+        getController().WriteCode();
         qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
         for(String module : getPatchModel().getModules()) {
            qcmdprocessor.AppendToQueue(
@@ -1024,8 +1028,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuSaveCopyActionPerformed
 
     private void jMenuGenerateAndCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGenerateAndCompileCodeActionPerformed
-        getPatchModel().WriteCode();
-        patchController.Compile();
+        getController().WriteCode();
+        getController().Compile();
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
@@ -1050,7 +1054,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private boolean GoLive() {
         if (getPatchModel().getFileNamePath().endsWith(".axs")
-                || getPatchModel().container() != null) {
+                || (getPatchController().getParent() != null)) {
             Object[] options = {"Yes",
                 "No"};
 

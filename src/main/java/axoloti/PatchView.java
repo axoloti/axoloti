@@ -424,7 +424,7 @@ public abstract class PatchView extends PatchAbstractView {
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, stream);
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-            PatchController patchController = new PatchController(patchModel, documentRoot);
+            PatchController patchController = new PatchController(patchModel, documentRoot, null);
             PatchView patchView = MainFrame.prefs.getPatchView(patchController);
             patchController.addView(patchView);
             PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());
@@ -455,7 +455,7 @@ public abstract class PatchView extends PatchAbstractView {
         try {
             PatchModel patchModel = serializer.read(PatchModel.class, f);
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-            PatchController patchController = new PatchController(patchModel, documentRoot);
+            PatchController patchController = new PatchController(patchModel, documentRoot, null);
             PatchView patchView = MainFrame.prefs.getPatchView(patchController);
             patchController.addView(patchView);
             PatchFrame pf = new PatchFrame(patchController, patchView, QCmdProcessor.getQCmdProcessor());

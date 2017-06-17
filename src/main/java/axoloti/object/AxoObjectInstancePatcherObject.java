@@ -31,31 +31,33 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     public AxoObjectEditor aoe;
 
     @Element(name = "object")
-    AxoObjectPatcherObject ao;
+    public AxoObjectPatcherObject ao;
 
     public AxoObjectInstancePatcherObject() {
+        if (ao == null) {
+            ao = new AxoObjectPatcherObject();
+        }
     }
 
-    public AxoObjectInstancePatcherObject(AxoObject type, PatchModel patch1, String InstanceName1, Point location) {
-        super(type.createController(null, null), patch1, InstanceName1, location);
+    public AxoObjectInstancePatcherObject(ObjectController objectController, PatchModel patch1, String InstanceName1, Point location) {
+        super(objectController, patch1, InstanceName1, location);
+        ao = (AxoObjectPatcherObject)objectController.getModel();
     }
 
     public AxoObject getAxoObject() {
         return ao;
     }
 
-    public void setAxoObject(AxoObjectPatcherObject axoObject) {
-        this.ao = axoObject;
-    }
-
     @Override
-    public void updateObj1() {
+    public void updateObj1() { 
+        /*
         if (getAxoObject() == null) {
             setAxoObject(new AxoObjectPatcherObject());
             getAxoObject().id = "patch/object";
             getAxoObject().sDescription = "";
         }
         setType(getAxoObject());
+        */
         /*
          if (pg != null) {
          AxoObject ao = pg.GenerateAxoObj();
@@ -67,18 +69,19 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
 
     @Override
     public void updateObj() {
+        /*
         if (getAxoObject() != null) {
             getAxoObject().id = "patch/object";
             setType(getAxoObject());
-        }
+        }*/
     }
 
     @Override
     public void Close() {
         super.Close();
+        /*
         if (aoe != null) {
             aoe.Close();
-        }
+        }*/
     }
-
 }

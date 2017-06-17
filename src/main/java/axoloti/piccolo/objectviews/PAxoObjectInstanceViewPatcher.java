@@ -17,9 +17,9 @@ public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
     }
 
     public void edit() {
-        model.init();
-        model.pf.setState(java.awt.Frame.NORMAL);
-        model.pf.setVisible(true);
+        //model.init();
+        //model.pf.setState(java.awt.Frame.NORMAL);
+        //model.pf.setVisible(true);
     }
 
     @Override

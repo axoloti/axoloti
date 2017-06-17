@@ -2,7 +2,6 @@ package axoloti.objectviews;
 
 import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstancePatcherObject;
-import axoloti.object.AxoObjectPatcherObject;
 import axoloti.object.ObjectInstanceController;
 import axoloti.objecteditor.AxoObjectEditor;
 import components.ButtonComponent;
@@ -43,13 +42,8 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     }
 
     public void edit() {
-        if (getModel().getAxoObject() == null) {
-            getModel().setAxoObject(new AxoObjectPatcherObject());
-//            ao.id = "id";
-            getModel().getAxoObject().sDescription = "";
-        }
         if (getModel().aoe == null) {
-            getModel().aoe = new AxoObjectEditor(getModel().getAxoObject().createController(null, null));
+            getModel().aoe = new AxoObjectEditor(getModel().getController());
         } else {
             getModel().aoe.updateReferenceXML();
         }

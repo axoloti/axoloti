@@ -107,8 +107,8 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
             e.consume();
         } else {
             setHighlighted(true);
-            if (!axoObj.isLocked()) {
-                if (dragnet == null) {
+//            if (!axoObj.isLocked()) {
+//                if (dragnet == null) {
                     Net dnet = new Net();
                     NetController dragNetController = new NetController(dnet, null, getPatchView().getController());
                     dragtarget = null;
@@ -119,13 +119,13 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
                     }
                     dragnet = new NetDragging(dnet, dragNetController, getPatchView());
                     dragNetController.addView(dragnet);
-                }
+//                }
                 dragnet.setVisible(true);
                 if (getPatchView() != null) {
                     getPatchView().selectionRectLayerPanel.add(dragnet);
                 }
                 e.consume();
-            }
+//            }
         }
     }
 

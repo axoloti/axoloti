@@ -17,12 +17,7 @@
  */
 package axoloti.object;
 
-import axoloti.MainFrame;
-import axoloti.PatchController;
-import axoloti.PatchFrame;
 import axoloti.PatchModel;
-import axoloti.PatchView;
-import axoloti.PatchViewCodegen;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
 
@@ -32,85 +27,60 @@ import org.simpleframework.xml.Element;
  */
 public class AxoObjectInstancePatcher extends AxoObjectInstance {
 
-    public PatchFrame pf;
-
     @Element(name = "subpatch")
     PatchModel subPatchModel;
 
     public AxoObjectInstancePatcher() {
+        if (subPatchModel == null) {
+            subPatchModel = new PatchModel();
+        }
     }
 
-    public AxoObjectInstancePatcher(AxoObject type, PatchModel patch1, String InstanceName1, Point location) {
-        super(type.createController(null, null), patch1, InstanceName1, location);
+    public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location, PatchModel subPatchModel) {
+        super(controller, patch1, InstanceName1, location);
+        if (subPatchModel == null) {
+            subPatchModel = new PatchModel();
+        }
+        this.subPatchModel = subPatchModel;
     }
 
     public PatchModel getSubPatchModel() {
         return subPatchModel;
     }
 
-    public void setSubPatchModel(PatchModel subPatchModel) {
-        this.subPatchModel = subPatchModel;
-    }
-
     @Override
+    @Deprecated
     public void updateObj1() {
-        init();
-        if (getSubPatchModel() != null) {
-            // cheating here by creating a new controller...
-            PatchController controller = new PatchController(getSubPatchModel(), null);
-            PatchViewCodegen codegen = new PatchViewCodegen(controller);
-            AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
-
-            setType(ao);
-            ao.id = "patch/patcher";
-            ao.sDescription = getSubPatchModel().getNotes();
-            ao.sLicense = getSubPatchModel().getSettings().getLicense();
-            ao.sAuthor = getSubPatchModel().getSettings().getAuthor();
-            getSubPatchModel().setContainer(getPatchModel());
-        }
-    }
-
-    public void initSubpatchFrame() {
-        PatchController patchController = new PatchController(getSubPatchModel(), null); /* FIXME: null */
-
-        PatchView patchView = MainFrame.prefs.getPatchView(patchController);
-        pf = new PatchFrame(patchController, patchView, MainFrame.mainframe.getQcmdprocessor());
-        patchController.addView(patchView);
-        patchView.setPatchFrame(pf);
-        patchView.setFileNamePath(getInstanceName());
-        patchView.PostConstructor();
-    }
-
-    public void init() {
-        if (getSubPatchModel() == null) {
-            setSubPatchModel(new PatchModel());
-        }
-        if (pf == null) {
-            initSubpatchFrame();
-        }
+        /*
+         if (getSubPatchModel() != null) {
+         // cheating here by creating a new controller...
+         PatchViewCodegen codegen = new PatchViewCodegen(subPatchController);
+         AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
+         setType(ao);
+         ao.id = "patch/patcher";
+         ao.sDescription = getSubPatchModel().getNotes();
+         ao.sLicense = getSubPatchModel().getSettings().getLicense();
+         ao.sAuthor = getSubPatchModel().getSettings().getAuthor();
+         getSubPatchModel().setContainer(getPatchModel());
+         }*/
     }
 
     @Override
+    @Deprecated
     public void updateObj() {
-        if (getSubPatchModel() != null) {
-            // cheating here by creating a new controller...
-            PatchController controller = new PatchController(getSubPatchModel(), null);
-            PatchViewCodegen codegen = new PatchViewCodegen(controller);
-            AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
-
-            setType(ao);
-        }
+//        if (getSubPatchModel() != null) {
+//            // cheating here by creating a new controller...
+//            PatchController controller = new PatchController(getSubPatchModel(), null);
+//            PatchViewCodegen codegen = new PatchViewCodegen(controller);
+//            AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
+//
+//            setType(ao);
+//        }
     }
 
     @Override
     public void Close() {
         super.Close();
-        if (pf != null) {
-            pf.Close();
-        }
     }
 
-    public PatchFrame getPatchFrame() {
-        return pf;
-    }
 }

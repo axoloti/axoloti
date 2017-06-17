@@ -826,14 +826,14 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = new PatchController(patchModel, null); /* fixme: null */
+            PatchController patchController = new PatchController(patchModel, null, null); /* fixme: null */
             PatchView patchView = prefs.getPatchView(patchController);
             patchController.addView(patchView);
             PatchFrame pf = new PatchFrame(patchController, patchView, qcmdprocessor);
             patchView.setPatchFrame(pf);
             patchView.setFileNamePath(f.getPath());
             patchView.PostConstructor();
-            patchModel.WriteCode();
+            patchController.WriteCode();
             qcmdprocessor.WaitQueueFinished();
             Thread.sleep(500);
             for(String module : patchController.getModel().getModules()) {
@@ -903,7 +903,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = new PatchController(patchModel, null); /* fixme: null */
+            PatchController patchController = new PatchController(patchModel, null, null); /* fixme: null */
             PatchView patchView = prefs.getPatchView(patchController);
             patchController.addView(patchView);
             PatchFrame patchFrame = new PatchFrame(patchController, patchView, qcmdprocessor);
@@ -1008,7 +1008,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     public void NewPatch() {
         PatchModel patchModel = new PatchModel();
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-        PatchController patchController = new PatchController(patchModel, documentRoot);
+        PatchController patchController = new PatchController(patchModel, documentRoot, null);
         PatchView patchView = prefs.getPatchView(patchController);
         patchController.addView(patchView);
         PatchFrame pf = new PatchFrame(patchController, patchView, qcmdprocessor);

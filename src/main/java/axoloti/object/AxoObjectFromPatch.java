@@ -49,7 +49,7 @@ public class AxoObjectFromPatch extends AxoObject {
         try {
             patchModel = serializer.read(PatchModel.class, f);
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-            patchController = new PatchController(patchModel, documentRoot);
+            patchController = new PatchController(patchModel, documentRoot, null);
             patchView = MainFrame.prefs.getPatchView(patchController);
             patchController.addView(patchView);
             patchView.setFileNamePath(f.getAbsolutePath());
@@ -67,7 +67,7 @@ public class AxoObjectFromPatch extends AxoObject {
 
     final public void UpdateObject() {
         // cheating here by creating a new controller...
-        PatchController controller = new PatchController(patchModel, null);
+        PatchController controller = new PatchController(patchModel, null, null);
         PatchViewCodegen codegen = new PatchViewCodegen(controller);
         AxoObject o = codegen.GenerateAxoObj(new AxoObject());
         attributes = o.attributes;
