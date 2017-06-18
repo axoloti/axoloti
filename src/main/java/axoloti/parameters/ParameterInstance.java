@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Complete;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -64,6 +66,21 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         parameter = param;
         this.axoObjectInstance = axoObjInstance;
         name = parameter.getName();
+    }
+
+    @Complete
+    public void Complete() {
+        if (onParent == null) {
+            onParent = false;
+        }
+    }
+
+    @Persist
+    public void Persist() {
+        // called prior to serialization
+        if (onParent != null && onParent == false) {
+            onParent = null;
+        }
     }
 
     public String GetCName() {
@@ -279,7 +296,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         return "";
     }
 
-    public boolean isOnParent() {
+    public boolean getOnParent() {
         if (onParent == null) {
             return false;
         } else {
@@ -287,18 +304,18 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         }
     }
 
-    public void setOnParent(Boolean b) {
-        if (b == null) {
+    public void setOnParent(Boolean onParent) {
+        if (onParent == null) {
             return;
         }
-        if (isOnParent() == b) {
+        if (getOnParent() == onParent) {
             return;
         }
-        if (b) {
-            onParent = true;
-        } else {
-            onParent = null;
-        }
+        Boolean oldValue = this.onParent;        
+        this.onParent = onParent;
+        firePropertyChange(
+                ParameterInstanceController.ELEMENT_PARAM_ON_PARENT,
+                oldValue, onParent);
     }
 
     public ArrayList<Modulation> getModulators() {

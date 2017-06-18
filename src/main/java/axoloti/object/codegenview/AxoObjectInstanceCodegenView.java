@@ -98,7 +98,7 @@ typedef struct ui_object {
                         + p.parameter.PropagateToChild + "]));\n";
             }
             c += p.GenerateCodeInitModulator("parent->", "");
-            //           if ((p.isOnParent() && !enableOnParent)) {
+            //           if ((p.getOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
             //String parentparametername = classname.substring(8);
             //c += "// classname : " + classname + " : " + parentparametername + "\n";
@@ -156,7 +156,7 @@ typedef struct ui_object {
             s = s.replace("attr_name", getModel().getCInstanceName());
             s = s.replace("attr_legal_name", getModel().getLegalName());
             for (ParameterInstance p : getModel().parameterInstances) {
-                if (p.isOnParent() && enableOnParent) {
+                if (p.getOnParent() && enableOnParent) {
 //                    s = s.replace("%" + p.name + "%", OnParentAccess + p.variableName(vprefix, enableOnParent));
                 } else {
 //                    s = s.replace("%" + p.name + "%", p.variableName(vprefix, enableOnParent));

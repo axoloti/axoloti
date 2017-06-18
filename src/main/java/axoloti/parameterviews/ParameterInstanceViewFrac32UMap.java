@@ -139,7 +139,7 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 
     @Override
     public void paintComponent(Graphics g) {
-        if (getModel().isOnParent()) {
+        if (getModel().getOnParent()) {
             setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         } else {
             setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);

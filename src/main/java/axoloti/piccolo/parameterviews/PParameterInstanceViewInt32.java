@@ -65,7 +65,7 @@ public abstract class PParameterInstanceViewInt32 extends PParameterInstanceView
     @Override
     protected void paint(PPaintContext paintContext) {
         Graphics2D g2 = paintContext.getGraphics();
-        if (parameterInstance.isOnParent()) {
+        if (parameterInstance.getOnParent()) {
             ctrl.setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         } else {
             ctrl.setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);

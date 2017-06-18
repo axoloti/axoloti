@@ -2,20 +2,18 @@ package axoloti;
 
 import axoloti.atom.AtomDefinition;
 import axoloti.inlets.Inlet;
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletInt32;
 import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.AbstractModel;
 import axoloti.mvc.AbstractView;
+import axoloti.mvc.array.ArrayController;
+import axoloti.mvc.array.ArrayModel;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.ObjectInstanceController;
+import axoloti.objectviews.AxoObjectInstanceViewParenting;
 import axoloti.outlets.Outlet;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
+import axoloti.parameters.Parameter;
 import java.beans.PropertyChangeEvent;
 
 /**
@@ -31,85 +29,29 @@ public class PatchViewObject extends PatchAbstractView {
 
     final AxoObjectPatcher targetObj;
 
-    class ObjectInstanceViewParenting implements AbstractView<ObjectInstanceController> {
+    ArrayView<AxoObjectInstanceViewParenting> objectInstanceViews;
 
-        final ObjectInstanceController controller;
-        final AtomDefinition atom[];
-
-        public ObjectInstanceViewParenting(ObjectInstanceController controller) {
-            this.controller = controller;
-            String typeName = controller.getModel().typeName;
-            if (typeName.equals("patch/inlet a")) {
-                Inlet i = new InletFrac32Buffer(controller.getModel().getInstanceName(), "");
-                targetObj.getInlets().add(i);
-                atom = new AtomDefinition[]{i};
-            } else if (typeName.equals("patch/inlet b")) {
-                Inlet i = new InletBool32(controller.getModel().getInstanceName(), "");
-                targetObj.getInlets().add(i);
-                atom = new AtomDefinition[]{i};
-            } else if (typeName.equals("patch/inlet f")) {
-                Inlet i = new InletFrac32(controller.getModel().getInstanceName(), "");
-                targetObj.getInlets().add(i);
-                atom = new AtomDefinition[]{i};
-            } else if (typeName.equals("patch/inlet i")) {
-                Inlet i = new InletInt32(controller.getModel().getInstanceName(), "");
-                targetObj.getInlets().add(i);
-                atom = new AtomDefinition[]{i};
-            } else if (typeName.equals("patch/outlet a")) {
-                Outlet i = new OutletFrac32Buffer(controller.getModel().getInstanceName(), "");
-                targetObj.getOutlets().add(i);
-                atom = new AtomDefinition[]{i};
-            } else if (typeName.equals("patch/outlet b")) {
-                Outlet i = new OutletBool32(controller.getModel().getInstanceName(), "");
-                targetObj.getOutlets().add(i);
-                atom = new AtomDefinition[]{i};
-            } else if (typeName.equals("patch/outlet f")) {
-                Outlet i = new OutletFrac32(controller.getModel().getInstanceName(), "");
-                targetObj.getOutlets().add(i);
-                atom = new AtomDefinition[]{i};
-            } else if (typeName.equals("patch/outlet i")) {
-                Outlet i = new OutletInt32(controller.getModel().getInstanceName(), "");
-                targetObj.getOutlets().add(i);
-                atom = new AtomDefinition[]{i};
-            } else {
-                atom = null;
-            }
-        }
-
-        @Override
-        public void modelPropertyChange(PropertyChangeEvent evt) {
-            if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_INSTANCENAME)) {
-                String typeName = controller.getModel().typeName;
-                if (typeName.equals("patch/inlet a")
-                        || typeName.equals("patch/inlet b")
-                        || typeName.equals("patch/inlet f")
-                        || typeName.equals("patch/inlet i")
-                        || typeName.equals("patch/outlet a")
-                        || typeName.equals("patch/outlet b")
-                        || typeName.equals("patch/outlet f")
-                        || typeName.equals("patch/outlet i")) {
-                    atom[0].setName((String) evt.getNewValue());
-                }
-            }
-        }
-
-        @Override
-        public ObjectInstanceController getController() {
-            return controller;
-        }
-    }
+    ArrayModel<AtomDefinition> atomDefinitionsOnParent;
+    ArrayController<AbstractController, AtomDefinition, AbstractController> atomDefinitionsOnParentController;
+    ArrayView<AbstractView> atomDefinitionsOnParentView;
     
-    ArrayView<ObjectInstanceViewParenting> objectInstanceViews;
-
     public PatchViewObject(PatchController controller, AxoObjectPatcher targetObj) {
         super(controller);
         this.targetObj = targetObj;
-
-        objectInstanceViews = new ArrayView<ObjectInstanceViewParenting>(controller.objectInstanceControllers) {
+        atomDefinitionsOnParent = new ArrayModel<>();
+        atomDefinitionsOnParentController = new ArrayController<AbstractController, AtomDefinition, AbstractController>(atomDefinitionsOnParent, null, null) {
 
             @Override
-            public ObjectInstanceViewParenting viewFactory(AbstractController ctrl) {
-                return new ObjectInstanceViewParenting((ObjectInstanceController) ctrl);
+            public AbstractController createController(AtomDefinition model, AbstractDocumentRoot documentRoot, AbstractController parent) {
+                return new AbstractController(model, documentRoot, parent) {};
+            }
+        };
+
+        objectInstanceViews = new ArrayView<AxoObjectInstanceViewParenting>(controller.objectInstanceControllers) {
+
+            @Override
+            public AxoObjectInstanceViewParenting viewFactory(AbstractController ctrl) {
+                return new AxoObjectInstanceViewParenting((ObjectInstanceController) ctrl, atomDefinitionsOnParent);
             }
 
             @Override
@@ -117,19 +59,59 @@ public class PatchViewObject extends PatchAbstractView {
             }
 
             @Override
-            public void removeView(ObjectInstanceViewParenting view) {
-                if (view.atom != null) {
-                    for (AtomDefinition a : view.atom) {
-                        if (a instanceof Inlet) {
-                            targetObj.getInlets().remove((Inlet) a);
-                        } else if (a instanceof Outlet) {
-                            targetObj.getOutlets().remove((Outlet) a);
-                        }
+            public void removeView(AxoObjectInstanceViewParenting view) {
+                if (view.getAtomDefinitions() != null) {
+                    for (AtomDefinition a : view.getAtomDefinitions()) {
+                        atomDefinitionsOnParent.remove(a);
                     }
                 }
             }
         };
+
         controller.objectInstanceControllers.addView(objectInstanceViews);
+
+        atomDefinitionsOnParentView = new ArrayView<AbstractView>(atomDefinitionsOnParentController) {
+            
+            @Override
+            public void updateUI() {
+            }
+            
+            @Override
+            public AbstractView viewFactory(AbstractController ctrl1) {
+                AtomDefinition m = (AtomDefinition)ctrl1.getModel();
+                if (m instanceof Inlet) {
+                    targetObj.getInlets().add((Inlet) m);
+                } else if (m instanceof Outlet) {
+                    targetObj.getOutlets().add((Outlet) m);
+                } else if (m instanceof Parameter) {
+                    targetObj.getParameters().add((Parameter) m);
+                }
+                return new AbstractView() {
+                    @Override
+                    public void modelPropertyChange(PropertyChangeEvent evt) {
+                        System.out.println("event >" + evt.getPropertyName() + " >" + evt.getNewValue());
+                    }
+
+                    @Override
+                    public AbstractController getController() {
+                        return ctrl1;
+                    }
+                };
+            }
+            
+            @Override
+            public void removeView(AbstractView view) {
+                AtomDefinition m = (AtomDefinition)view.getController().getModel();
+                if (m instanceof Inlet) {
+                    targetObj.getInlets().remove((Inlet) m);
+                } else if (m instanceof Outlet) {
+                    targetObj.getOutlets().remove((Outlet) m);
+                } else if (m instanceof Parameter) {
+                    targetObj.getParameters().remove((Parameter) m);
+                }                
+            }
+        };
+        atomDefinitionsOnParentController.addView(atomDefinitionsOnParentView);
     }
 
     @Override

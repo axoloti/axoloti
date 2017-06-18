@@ -410,6 +410,10 @@ public class AxoObject extends AxoObjectAbstract {
         return outlets;
     }
 
+    public ArrayModel<Parameter> getParameters() {
+        return params;
+    }
+
     @Override
     public String getCName() {
         return id;

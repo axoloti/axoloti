@@ -33,7 +33,7 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
 
     @Override
     public String variableName(String vprefix, boolean enableOnParent) {
-        if (isOnParent() && (enableOnParent)) {
+        if (getOnParent() && (enableOnParent)) {
             return "%" + ControlOnParentName() + "%";
         } else {
             return PExName(vprefix) + ".d.bin.finalvalue";

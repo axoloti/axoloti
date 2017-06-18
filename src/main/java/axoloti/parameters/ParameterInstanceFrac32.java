@@ -201,7 +201,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
 
     @Override
     public String variableName(String vprefix, boolean enableOnParent) {
-        if (isOnParent() && (enableOnParent)) {
+        if (getOnParent() && (enableOnParent)) {
             return "%" + ControlOnParentName() + "%";
         } else {
             return PExName(vprefix) + ".d.frac.finalvalue";

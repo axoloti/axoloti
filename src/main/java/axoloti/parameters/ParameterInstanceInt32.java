@@ -65,7 +65,7 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
 
     @Override
     public String variableName(String vprefix, boolean enableOnParent) {
-        if (isOnParent() && (enableOnParent)) {
+        if (getOnParent() && (enableOnParent)) {
             return "%" + ControlOnParentName() + "%";
         } else {
             return PExName(vprefix) + ".d.intt.finalvalue";

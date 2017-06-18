@@ -135,13 +135,12 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     public void populatePopup(JPopupMenu m) {
         final JCheckBoxMenuItem m_onParent = new JCheckBoxMenuItem("parameter on parent");
-        m_onParent.setSelected(getModel().isOnParent());
+        m_onParent.setSelected(getModel().getOnParent());
         m.add(m_onParent);
         m_onParent.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 getModel().setOnParent(m_onParent.isSelected());
-                repaint();
             }
         });
 
@@ -287,7 +286,10 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
             doLayout();
         } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             setToolTipText((String) evt.getNewValue());
-        } else {
+        } else if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_ON_PARENT)) {
+            repaint();
+        }
+        else {
             updateV();
         }
     }

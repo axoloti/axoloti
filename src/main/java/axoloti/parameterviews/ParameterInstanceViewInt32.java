@@ -50,7 +50,7 @@ abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
     @Override
     public void paintComponent(Graphics g) {
-        if (getModel().isOnParent()) {
+        if (getModel().getOnParent()) {
             setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         } else {
             setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);

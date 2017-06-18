@@ -139,7 +139,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
 
     public void populatePopup(JPopupMenu m) {
         final JCheckBoxMenuItem m_onParent = new JCheckBoxMenuItem("parameter on parent");
-        m_onParent.setSelected(parameterInstance.isOnParent());
+        m_onParent.setSelected(parameterInstance.getOnParent());
         m.add(m_onParent);
         m_onParent.addActionListener(new ActionListener() {
             @Override
@@ -236,7 +236,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
     public abstract void ShowPreset(int i);
 
     public boolean isOnParent() {
-        return parameterInstance.isOnParent();
+        return parameterInstance.getOnParent();
     }
 
     public int presetEditActive = 0;

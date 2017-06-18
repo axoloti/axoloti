@@ -821,7 +821,7 @@ public class PatchViewCodegen extends PatchAbstractView {
                 ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
-                if (p.isOnParent()) {
+                if (p.getOnParent()) {
                     ao.params.add(p.getParameterForParent());
                 }
             }
@@ -943,7 +943,7 @@ public class PatchViewCodegen extends PatchAbstractView {
                 // ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
-                if (p.isOnParent()) {
+                if (p.getOnParent()) {
                     ao.params.add(p.getParameterForParent());
                 }
             }

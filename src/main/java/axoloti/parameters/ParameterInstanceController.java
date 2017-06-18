@@ -13,6 +13,7 @@ import axoloti.parameterviews.IParameterInstanceView;
 public class ParameterInstanceController extends AbstractController<ParameterInstance, IParameterInstanceView, ObjectInstanceController> {
 
     public static final String ELEMENT_PARAM_VALUE = "Value";
+    public static final String ELEMENT_PARAM_ON_PARENT = "OnParent";
 
     public ParameterInstanceController(ParameterInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
         super(model, documentRoot, parent);
