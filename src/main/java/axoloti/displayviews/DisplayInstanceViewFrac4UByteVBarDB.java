@@ -1,20 +1,19 @@
 package axoloti.displayviews;
 
-import axoloti.datatypes.Value;
 import axoloti.displays.DisplayInstanceController;
-import axoloti.displays.DisplayInstanceFrac4UByteVBarDB;
 import components.displays.VLineComponentDB;
+import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewFrac4UByteVBarDB extends DisplayInstanceViewFrac32 {
 
-    public DisplayInstanceViewFrac4UByteVBarDB(DisplayInstanceController controller) {
+    DisplayInstanceViewFrac4UByteVBarDB(DisplayInstanceController controller) {
         super(controller);
     }
 
     private VLineComponentDB vbar[];
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         vbar = new VLineComponentDB[4];
         for (int i = 0; i < 4; i++) {
@@ -24,15 +23,16 @@ class DisplayInstanceViewFrac4UByteVBarDB extends DisplayInstanceViewFrac32 {
         }
     }
 
-    private Value getValue() {
-        return getModel().getValueRef();
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+            int raw = (Integer) evt.getNewValue();
+            vbar[0].setValue((byte) ((raw & 0x000000FF)));
+            vbar[1].setValue((byte) ((raw & 0x0000FF00) >> 8));
+            vbar[2].setValue((byte) ((raw & 0x00FF0000) >> 16));
+            vbar[3].setValue((byte) ((raw & 0xFF000000) >> 24));
+        }
     }
 
-    @Override
-    public void updateV() {
-        vbar[0].setValue((byte) ((getValue().getRaw() & 0x000000FF)));
-        vbar[1].setValue((byte) ((getValue().getRaw() & 0x0000FF00) >> 8));
-        vbar[2].setValue((byte) ((getValue().getRaw() & 0x00FF0000) >> 16));
-        vbar[3].setValue((byte) ((getValue().getRaw() & 0xFF000000) >> 24));
-    }
 }

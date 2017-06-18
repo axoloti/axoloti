@@ -25,6 +25,6 @@ public class PDisplayInstanceViewFrac32UDial extends PDisplayInstanceViewFrac32 
 
     @Override
     public void updateV() {
-        dial.setValue(displayInstance.getValueRef().getDouble());
+        //dial.setValue(displayInstance.getValueRef().getDouble());
     }
 }

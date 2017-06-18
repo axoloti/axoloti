@@ -8,7 +8,7 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-public abstract class DisplayInstanceView extends JPanel implements IDisplayInstanceView {
+abstract class DisplayInstanceView extends JPanel implements IDisplayInstanceView {
 
     DisplayInstanceController controller;
     LabelComponent label;
@@ -21,7 +21,7 @@ public abstract class DisplayInstanceView extends JPanel implements IDisplayInst
         return getController().getModel();
     }
 
-    public void PostConstructor() {
+    void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         if ((getModel().getModel().noLabel == null) || (getModel().getModel().noLabel == false)) {
             label = new LabelComponent(getModel().getModel().getName());
@@ -35,9 +35,6 @@ public abstract class DisplayInstanceView extends JPanel implements IDisplayInst
             setToolTipText(description);
         }
     }
-
-    @Override
-    public abstract void updateV();
 
     @Override
     public DisplayInstanceController getController() {

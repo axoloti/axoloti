@@ -1,6 +1,5 @@
 package axoloti.displayviews;
 
-import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceFrac8U128VBar;
 import components.VGraphComponent;
@@ -10,12 +9,12 @@ class DisplayInstanceViewFrac8U128VBar extends DisplayInstanceView {
 
     private VGraphComponent vgraph;
 
-    public DisplayInstanceViewFrac8U128VBar(DisplayInstanceController controller) {
+    DisplayInstanceViewFrac8U128VBar(DisplayInstanceController controller) {
         super(controller);
     }
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         vgraph = new VGraphComponent(getModel().getN(), 128, 0, 128);
         add(vgraph);
@@ -27,13 +26,10 @@ class DisplayInstanceViewFrac8U128VBar extends DisplayInstanceView {
     }
 
     @Override
-    public void updateV() {
-        vgraph.setValue(getModel().getIDst());
-    }
-
-    @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+            vgraph.setValue(getModel().getIDst());
+        }
     }
 }

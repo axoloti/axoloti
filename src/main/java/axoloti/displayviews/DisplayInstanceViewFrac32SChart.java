@@ -1,19 +1,19 @@
 package axoloti.displayviews;
 
 import axoloti.displays.DisplayInstanceController;
-import axoloti.displays.DisplayInstanceFrac32SChart;
 import components.displays.ScopeComponent;
+import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewFrac32SChart extends DisplayInstanceViewFrac32 {
 
     private ScopeComponent scope;
 
-    public DisplayInstanceViewFrac32SChart(DisplayInstanceController controller) {
+    DisplayInstanceViewFrac32SChart(DisplayInstanceController controller) {
         super(controller);
     }
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
 
         scope = new ScopeComponent(-64.0, 64.0);
@@ -22,7 +22,11 @@ class DisplayInstanceViewFrac32SChart extends DisplayInstanceViewFrac32 {
     }
 
     @Override
-    public void updateV() {
-        scope.setValue(getModel().getValueRef().getDouble());
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+            scope.setValue((Double) evt.getNewValue());
+        }
     }
+
 }

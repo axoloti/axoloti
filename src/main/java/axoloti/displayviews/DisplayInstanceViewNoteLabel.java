@@ -1,20 +1,20 @@
 package axoloti.displayviews;
 
 import axoloti.displays.DisplayInstanceController;
-import axoloti.displays.DisplayInstanceFrac32;
 import axoloti.displays.DisplayInstanceNoteLabel;
 import components.LabelComponent;
+import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
 
-    public DisplayInstanceViewNoteLabel(DisplayInstanceController controller) {
+    DisplayInstanceViewNoteLabel(DisplayInstanceController controller) {
         super(controller);
     }
 
     private LabelComponent readout;
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
 
         readout = new LabelComponent("xxxxx");
@@ -28,7 +28,12 @@ class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
     }
 
     @Override
-    public void updateV() {
-        readout.setText(getModel().getConv().ToReal(getModel().getValueRef()));
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+            throw new UnsupportedOperationException("Not supported yet.");
+            //readout.setText(getModel().getConv().ToReal(((Value) evt.getNewValue())));
+        }
     }
+
 }

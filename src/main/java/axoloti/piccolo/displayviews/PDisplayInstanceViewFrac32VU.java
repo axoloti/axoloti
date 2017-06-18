@@ -26,6 +26,6 @@ public class PDisplayInstanceViewFrac32VU extends PDisplayInstanceViewFrac32 {
 
     @Override
     public void updateV() {
-        vu.setValue(displayInstance.getValueRef().getDouble());
+        //vu.setValue(displayInstance.getValueRef().getDouble());
     }
 }

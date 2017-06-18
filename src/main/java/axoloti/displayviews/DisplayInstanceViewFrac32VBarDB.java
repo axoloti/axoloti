@@ -1,19 +1,19 @@
 package axoloti.displayviews;
 
 import axoloti.displays.DisplayInstanceController;
-import axoloti.displays.DisplayInstanceFrac32VBarDB;
 import components.displays.VBarComponentDB;
+import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewFrac32VBarDB extends DisplayInstanceViewFrac32 {
 
-    public DisplayInstanceViewFrac32VBarDB(DisplayInstanceController controller) {
+    DisplayInstanceViewFrac32VBarDB(DisplayInstanceController controller) {
         super(controller);
     }
 
     private VBarComponentDB vbar;
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         vbar = new VBarComponentDB(-200, -60, 10);
         vbar.setValue(0);
@@ -21,7 +21,10 @@ class DisplayInstanceViewFrac32VBarDB extends DisplayInstanceViewFrac32 {
     }
 
     @Override
-    public void updateV() {
-        vbar.setValue(getModel().getValueRef().getDouble());
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+            vbar.setValue((Double) evt.getNewValue());
+        }
     }
 }

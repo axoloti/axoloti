@@ -1,19 +1,19 @@
 package axoloti.displayviews;
 
 import axoloti.displays.DisplayInstanceController;
-import axoloti.displays.DisplayInstanceFrac32VU;
 import components.displays.VUComponent;
+import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewFrac32VU extends DisplayInstanceViewFrac32 {
 
-    public DisplayInstanceViewFrac32VU(DisplayInstanceController controller) {
+    DisplayInstanceViewFrac32VU(DisplayInstanceController controller) {
         super(controller);
     }
 
     private VUComponent vu;
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
 
         vu = new VUComponent();
@@ -22,7 +22,10 @@ class DisplayInstanceViewFrac32VU extends DisplayInstanceViewFrac32 {
     }
 
     @Override
-    public void updateV() {
-        vu.setValue(getModel().getValueRef().getDouble());
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+            vu.setValue((Double) evt.getNewValue());
+        }
     }
 }

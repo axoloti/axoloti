@@ -27,6 +27,6 @@ public class PDisplayInstanceViewNoteLabel extends PDisplayInstanceViewFrac32 {
 
     @Override
     public void updateV() {
-        readout.setText(displayInstance.getConv().ToReal(displayInstance.getValueRef()));
+        //readout.setText(displayInstance.getConv().ToReal(displayInstance.getValueRef()));
     }
 }

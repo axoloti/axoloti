@@ -41,34 +41,7 @@ public abstract class DisplayInstance1<T extends Display> extends DisplayInstanc
         return "displayVector[" + offset + "]";
     }
 
-    public abstract Value getValueRef();
+//    public abstract Value getValueRef();
 
-    @Override
-    public void ProcessByteBuffer(ByteBuffer bb) {
-        super.ProcessByteBuffer(bb);
-        setValue(new IntValue(bb.getInt()));
-    }
 
-    IntValue value;
-
-    public void setValue(IntValue value) {
-        IntValue oldvalue = this.value;
-        this.value = value;
-        getValueRef().setRaw(value.v);
-        firePropertyChange(DisplayInstanceController.DISP_VALUE, oldvalue, value);
-    }
-
-    @Override
-    public IntValue getValue() {
-        return value;
-    }
-
-    class IntValue {
-
-        public int v;
-
-        public IntValue(int v) {
-            this.v = v;
-        }
-    }
 }

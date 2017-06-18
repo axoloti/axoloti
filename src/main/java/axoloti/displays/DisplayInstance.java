@@ -19,12 +19,9 @@ package axoloti.displays;
 
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
-import axoloti.object.ObjectInstanceController;
 import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.nio.ByteBuffer;
@@ -82,9 +79,7 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
 
     public abstract String GenerateCodeInit(String vprefix);
 
-    public void ProcessByteBuffer(ByteBuffer bb) {
-        //notifyModelChangedListeners();
-    }
+    public abstract void ProcessByteBuffer(ByteBuffer bb);
 
     public String GenerateDisplayMetaInitializer() {
         String c = "{ display_type: " + display.GetCMetaType() + ", name: "
@@ -93,7 +88,7 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
         return c;
     }
 
-    abstract public Object getValue();
+    public abstract Object getValue();
 //    abstract void setValue(Object o);
 
     @Override

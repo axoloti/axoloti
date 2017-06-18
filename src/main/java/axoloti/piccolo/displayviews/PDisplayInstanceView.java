@@ -20,7 +20,6 @@ public abstract class PDisplayInstanceView extends PatchPNode implements IDispla
         this.axoObjectInstanceView = axoObjectInstanceView;
     }
 
-    @Override
     public void PostConstructor() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setPickable(false);
@@ -30,7 +29,6 @@ public abstract class PDisplayInstanceView extends PatchPNode implements IDispla
         setSize(getPreferredSize());
     }
 
-    @Override
     public abstract void updateV();
 
     @Override

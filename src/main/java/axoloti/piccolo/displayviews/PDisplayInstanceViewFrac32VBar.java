@@ -25,6 +25,6 @@ public class PDisplayInstanceViewFrac32VBar extends PDisplayInstanceViewFrac32 {
 
     @Override
     public void updateV() {
-        vbar.setValue(displayInstance.getValueRef().getDouble());
+        //vbar.setValue(displayInstance.getValueRef().getDouble());
     }
 }

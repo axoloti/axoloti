@@ -27,7 +27,8 @@ public class PDisplayInstanceViewFrac4UByteVBar extends PDisplayInstanceViewFrac
     }
 
     public Value getValue() {
-        return displayInstance.getValueRef();
+        //return displayInstance.getValueRef();
+        return null;
     }
 
     @Override

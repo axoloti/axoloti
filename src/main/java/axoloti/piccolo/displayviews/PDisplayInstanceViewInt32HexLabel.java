@@ -26,6 +26,6 @@ public class PDisplayInstanceViewInt32HexLabel extends PDisplayInstanceViewInt32
 
     @Override
     public void updateV() {
-        readout.setText(String.format("0x%08X", displayInstance.getValueRef().getInt()));
+        //readout.setText(String.format("0x%08X", displayInstance.getValueRef().getInt()));
     }
 }

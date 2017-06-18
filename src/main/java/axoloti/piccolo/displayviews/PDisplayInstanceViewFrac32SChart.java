@@ -25,6 +25,6 @@ public class PDisplayInstanceViewFrac32SChart extends PDisplayInstanceViewFrac32
 
     @Override
     public void updateV() {
-        scope.setValue(displayInstance.getValueRef().getDouble());
+        //scope.setValue(displayInstance.getValueRef().getDouble());
     }
 }

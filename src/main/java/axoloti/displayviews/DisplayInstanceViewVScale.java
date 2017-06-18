@@ -1,7 +1,6 @@
 package axoloti.displayviews;
 
 import axoloti.displays.DisplayInstanceController;
-import axoloti.displays.DisplayInstanceVScale;
 import components.displays.VValueLabelsComponent;
 import java.beans.PropertyChangeEvent;
 
@@ -9,16 +8,12 @@ class DisplayInstanceViewVScale extends DisplayInstanceView {
 
     private VValueLabelsComponent vlabels;
 
-    public DisplayInstanceViewVScale(DisplayInstanceController controller) {
+    DisplayInstanceViewVScale(DisplayInstanceController controller) {
         super(controller);
     }
 
     @Override
-    public void updateV() {
-    }
-
-    @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
 
         vlabels = new VValueLabelsComponent(-60, 10, 10);

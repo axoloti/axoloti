@@ -26,6 +26,6 @@ public class PDisplayInstanceViewInt32Label extends PDisplayInstanceViewInt32 {
 
     @Override
     public void updateV() {
-        readout.setText(Integer.toString(displayInstance.getValueRef().getInt()));
+        //readout.setText(Integer.toString(displayInstance.getValueRef().getInt()));
     }
 }

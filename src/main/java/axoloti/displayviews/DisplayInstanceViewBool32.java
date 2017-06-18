@@ -1,6 +1,5 @@
 package axoloti.displayviews;
 
-import axoloti.displays.DisplayInstanceBool32;
 import axoloti.displays.DisplayInstanceController;
 import components.displays.LedstripComponent;
 import java.beans.PropertyChangeEvent;
@@ -9,12 +8,12 @@ class DisplayInstanceViewBool32 extends DisplayInstanceViewInt32 {
 
     private LedstripComponent readout;
 
-    public DisplayInstanceViewBool32(DisplayInstanceController controller) {
+    DisplayInstanceViewBool32(DisplayInstanceController controller) {
         super(controller);
     }
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
 
         readout = new LedstripComponent(0, 1);
@@ -24,7 +23,11 @@ class DisplayInstanceViewBool32 extends DisplayInstanceViewInt32 {
     }
 
     @Override
-    public void updateV() {
-        readout.setValue(getModel().getValueRef().getInt() > 0 ? 1 : 0);
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+            int i = (Integer) evt.getNewValue();
+            readout.setValue(i > 0 ? 1 : 0);
+        }
     }
 }

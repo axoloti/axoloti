@@ -51,7 +51,6 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
 
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {
-        super.ProcessByteBuffer(bb);
         bb.get(dst);
         for (int i = 0; i < n; i++) {
             idst[i] = dst[i];//&0xff;

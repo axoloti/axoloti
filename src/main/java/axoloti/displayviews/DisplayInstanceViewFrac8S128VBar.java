@@ -9,12 +9,12 @@ class DisplayInstanceViewFrac8S128VBar extends DisplayInstanceView {
 
     private VGraphComponent vgraph;
 
-    public DisplayInstanceViewFrac8S128VBar(DisplayInstanceController controller) {
+    DisplayInstanceViewFrac8S128VBar(DisplayInstanceController controller) {
         super(controller);
     }
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         vgraph = new VGraphComponent(getModel().getN(), 128, -64, 64);
         add(vgraph);
@@ -26,13 +26,10 @@ class DisplayInstanceViewFrac8S128VBar extends DisplayInstanceView {
     }
 
     @Override
-    public void updateV() {
-        vgraph.setValue(getModel().getIDst());
-    }
-
-    @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+            vgraph.setValue(getModel().getIDst());
+        }
     }
 }

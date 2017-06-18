@@ -26,7 +26,7 @@ public class PDisplayInstanceViewInt32Bar32 extends PDisplayInstanceViewInt32 {
 
     @Override
     public void updateV() {
-        int i = displayInstance.getValueRef().getInt();
+        int i = 0;//displayInstance.getValueRef().getInt();
         if ((i >= 0) && (i < 32)) {
             readout.setValue(1 << i);
         } else {

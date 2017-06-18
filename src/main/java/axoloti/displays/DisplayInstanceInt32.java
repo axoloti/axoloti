@@ -17,8 +17,7 @@
  */
 package axoloti.displays;
 
-import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueInt32;
+import java.nio.ByteBuffer;
 
 /**
  *
@@ -26,10 +25,21 @@ import axoloti.datatypes.ValueInt32;
  */
 public abstract class DisplayInstanceInt32<T extends Display> extends DisplayInstance1<T> {
 
-    ValueInt32 value = new ValueInt32();
+    Integer value = 0;
 
     @Override
-    public Value getValueRef() {
+    public void ProcessByteBuffer(ByteBuffer bb) {
+        setValue(bb.getInt());
+    }
+
+    @Override
+    public Integer getValue() {
         return value;
+    }
+
+    public void setValue(Integer newValue) {
+        Integer oldvalue = value;
+        value = newValue;
+        firePropertyChange(DisplayInstanceController.DISP_VALUE, oldvalue, value);
     }
 }
