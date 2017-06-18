@@ -24,6 +24,7 @@ import axoloti.outlets.OutletInt32;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +38,10 @@ public class PatchViewCodegen extends PatchAbstractView {
     ArrayView<AxoObjectInstanceAbstractCodegenView> objectInstanceViews;
     ArrayView<INetView> netViews;
 
+    final ArrayList<ParameterInstance> ParameterInstances;    
+    final ArrayList<DisplayInstance> DisplayInstances;
+    final int displayDataLength;
+    
     public PatchViewCodegen(PatchController controller) {
         super(controller);
         objectInstanceViews = new ArrayView<AxoObjectInstanceAbstractCodegenView>(controller.objectInstanceControllers) {            
@@ -53,6 +58,31 @@ public class PatchViewCodegen extends PatchAbstractView {
             public void removeView(AxoObjectInstanceAbstractCodegenView view) {
             }
         };
+
+        int i = 0;        
+        ParameterInstances = new ArrayList<ParameterInstance>();
+        for (AxoObjectInstanceAbstract o : controller.getModel().objectinstances) {
+            for (ParameterInstance p : o.getParameterInstances()) {
+                p.setIndex(i);
+                i++;
+                ParameterInstances.add(p);
+            }
+        }
+        int offset = 0;
+        i = 0;
+        DisplayInstances = new ArrayList<DisplayInstance>();
+        for (AxoObjectInstanceAbstract o : controller.getModel().objectinstances) {
+            for (DisplayInstance p : o.getDisplayInstances()) {
+                p.setOffset(offset);
+                p.setIndex(i);
+                int l = p.getLength();
+                offset += l;
+                i++;
+                DisplayInstances.add(p);
+            }
+        }
+        displayDataLength = offset;        
+        
         controller.objectInstanceControllers.addView(objectInstanceViews);
     }
 
@@ -96,22 +126,22 @@ public class PatchViewCodegen extends PatchAbstractView {
 
     String GeneratePexchAndDisplayCodeV() {
         String c = "";
-        c += "    static const uint32_t nparams = " + getModel().ParameterInstances.size() + ";\n";
+        c += "    static const uint32_t nparams = " + ParameterInstances.size() + ";\n";
         c += "    Parameter_t params[nparams] = {\n";
-        for (ParameterInstance param : getModel().ParameterInstances) {
+        for (ParameterInstance param : ParameterInstances) {
             c += param.GenerateParameterInitializer();
         }
         c += "};\n";
         c += "    Parameter_name_t param_names[nparams] = {\n";
-        for (ParameterInstance param : getModel().ParameterInstances) {
+        for (ParameterInstance param : ParameterInstances) {
             c += "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.GetUserParameterName(), CodeGeneration.param_name_length) + "},\n";
         }
         c += "};\n";
-        c += "    int32_t displayVector[" + (getModel().displayDataLength) + "];\n";
+        c += "    int32_t displayVector[" + displayDataLength + "];\n";
 
-        c += "    static const uint32_t ndisplay_metas = " + getModel().DisplayInstances.size() + ";\n";
+        c += "    static const uint32_t ndisplay_metas = " + DisplayInstances.size() + ";\n";
         c += "    Display_meta_t display_metas[ndisplay_metas] = {\n";
-        for (DisplayInstance disp : getModel().DisplayInstances) {
+        for (DisplayInstance disp : DisplayInstances) {
             c += disp.GenerateDisplayMetaInitializer();
         }
         c += "};\n";
@@ -135,7 +165,7 @@ public class PatchViewCodegen extends PatchAbstractView {
         {
             c += "/* parameter instance indices */\n";
             int k = 0;
-            for (ParameterInstance p : getModel().ParameterInstances) {
+            for (ParameterInstance p : ParameterInstances) {
                 c += "static const int PARAM_INDEX_" + p.getObjectInstance().getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
                 k++;
             }
@@ -205,11 +235,11 @@ public class PatchViewCodegen extends PatchAbstractView {
 
 
     String GenerateParamInitCode3(String ClassName) {
-        int s = getModel().ParameterInstances.size();
+        int s = ParameterInstances.size();
         String c = "   static int32_t * GetInitParams(void){\n"
                 + "      static const int32_t p[" + s + "]= {\n";
         for (int i = 0; i < s; i++) {
-            c += "      " + getModel().ParameterInstances.get(i).GetValueRaw();
+            c += "      " + ParameterInstances.get(i).GetValueRaw();
             if (i != s - 1) {
                 c += ",\n";
             } else {
@@ -366,7 +396,7 @@ public class PatchViewCodegen extends PatchAbstractView {
         c += "   int j;\n";
         c += "   const int32_t *p;\n";
         c += "   p = GetInitParams();\n";
-        c += "   for(j=0;j<" + getModel().ParameterInstances.size() + ";j++){\n";
+        c += "   for(j=0;j<" + ParameterInstances.size() + ";j++){\n";
         c += "      Parameter_t *param = &params[j];\n";
         c += "      if (param->pfunction)\n";
         c += "         (param->pfunction)(param);\n";
@@ -699,7 +729,7 @@ public class PatchViewCodegen extends PatchAbstractView {
                 + "		},\n"
                 + "		patch_parameter : {\n"
                 + "			header : CHUNK_HEADER(patch_parameter),\n"
-                + "			nparams : " + getModel().ParameterInstances.size() + ",\n"
+                + "			nparams : " + ParameterInstances.size() + ",\n"
                 + "			pParams : &root.params[0],\n"
                 + "			pParam_names : root.param_names\n"
                 + "		},\n"
@@ -713,7 +743,7 @@ public class PatchViewCodegen extends PatchAbstractView {
                 + "		},\n"
                 + "		patch_display : {\n"
                 + "			header : CHUNK_HEADER(patch_display),\n"
-                + "                     ndisplayVector : " + getModel().displayDataLength + ",\n"
+                + "                     ndisplayVector : " + displayDataLength + ",\n"
                 + "                     pDisplayVector : root.displayVector,\n"
                 + "		},\n"
                 + "		patch_display_meta : {\n"
@@ -953,7 +983,7 @@ public class PatchViewCodegen extends PatchAbstractView {
         ao.sLocalData += GeneratePexchAndDisplayCode();
         ao.sLocalData += "/* parameter instance indices */\n";
         int k = 0;
-        for (ParameterInstance p : getModel().ParameterInstances) {
+        for (ParameterInstance p : ParameterInstances) {
             ao.sLocalData += "static const int PARAM_INDEX_" + p.getObjectInstance().getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
             k++;
         }
@@ -1381,6 +1411,14 @@ public class PatchViewCodegen extends PatchAbstractView {
         return ao;
     }
 
+    public ArrayList<ParameterInstance> getParameterInstances() {
+        return ParameterInstances;
+    }
+
+    public ArrayList<DisplayInstance> getDisplayInstances() {
+        return DisplayInstances;
+    }
+    
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
     }

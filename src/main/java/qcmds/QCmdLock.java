@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.PatchController;
+import axoloti.PatchViewCodegen;
 
 /**
  *
@@ -25,9 +25,9 @@ import axoloti.PatchController;
  */
 public class QCmdLock implements QCmdGUITask {
 
-    PatchController patchController;
+    PatchViewCodegen patchController;
 
-    public QCmdLock(PatchController patchController) {
+    public QCmdLock(PatchViewCodegen patchController) {
         this.patchController = patchController;
     }
 
@@ -44,6 +44,6 @@ public class QCmdLock implements QCmdGUITask {
     @Override
     public void DoGUI(QCmdProcessor processor) {
         processor.setPatchController(patchController);
-        patchController.setLocked(true);
+        patchController.getController().setLocked(true);
     }
 }

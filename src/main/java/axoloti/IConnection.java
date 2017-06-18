@@ -51,7 +51,7 @@ public abstract class IConnection {
     abstract public boolean WaitSync();
     abstract public void ClearReadSync();
     abstract public boolean WaitReadSync();
-    abstract public void setPatchController(PatchController patchController);
+    abstract public void setPatch(PatchViewCodegen patchViewCodegen);
     abstract public axoloti_core getTargetProfile();
     abstract public ByteBuffer getMemReadBuffer();
     abstract public int getMemRead1Word();

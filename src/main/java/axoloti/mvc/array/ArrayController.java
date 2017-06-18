@@ -29,6 +29,10 @@ public abstract class ArrayController<T extends AbstractController, M extends Ab
     }
 
     public T add(M m) {
+        if (getModel().getArray().contains(m)) {
+            System.out.println("array already contains model :" + m.toString());
+            return null;
+        }
         AbstractController c = createController(m, getDocumentRoot(), getParent());
         subcontrollers.add((T) c);
         ArrayList<M> n = (ArrayList<M>) (getModel().getArray().clone());

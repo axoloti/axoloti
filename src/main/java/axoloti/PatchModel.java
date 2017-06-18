@@ -17,13 +17,10 @@
  */
 package axoloti;
 
-import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.array.ArrayModel;
-import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.object.AxoObjectFile;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceComment;
@@ -82,8 +79,7 @@ public class PatchModel extends AbstractModel {
     @Element(required = false)
     Rectangle windowPos;
     String FileNamePath;
-    ArrayList<ParameterInstance> ParameterInstances = new ArrayList<ParameterInstance>();
-    ArrayList<DisplayInstance> DisplayInstances = new ArrayList<DisplayInstance>();
+
     ArrayList<Modulator> Modulators = new ArrayList<Modulator>();
     @Element(required = false)
     String helpPatch;
@@ -210,10 +206,6 @@ public class PatchModel extends AbstractModel {
         settings = new PatchSettings();
     }
 
-    public ArrayList<ParameterInstance> getParameterInstances() {
-        return ParameterInstances;
-    }
-
     public AxoObjectInstanceAbstract GetObjectInstance(String n) {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (n.equals(o.getInstanceName())) {
@@ -279,35 +271,12 @@ public class PatchModel extends AbstractModel {
          */
     }
 
-    int displayDataLength = 0;
 
     void refreshIndexes() {
         for (AxoObjectInstanceAbstract o : objectinstances) {
             o.refreshIndex();
         }
-        int i = 0;
-        ParameterInstances = new ArrayList<ParameterInstance>();
-        for (AxoObjectInstanceAbstract o : objectinstances) {
-            for (ParameterInstance p : o.getParameterInstances()) {
-                p.setIndex(i);
-                i++;
-                ParameterInstances.add(p);
-            }
-        }
-        int offset = 0;
-        i = 0;
-        DisplayInstances = new ArrayList<DisplayInstance>();
-        for (AxoObjectInstanceAbstract o : objectinstances) {
-            for (DisplayInstance p : o.getDisplayInstances()) {
-                p.setOffset(offset);
-                p.setIndex(i);
-                int l = p.getLength();
-                offset += l;
-                i++;
-                DisplayInstances.add(p);
-            }
-        }
-        displayDataLength = offset;
+
     }
 
     void SortByPosition() {
@@ -810,13 +779,12 @@ public class PatchModel extends AbstractModel {
     }
 
     // ------------- new MVC methods
-
     public String getFileNamePath() {
         return FileNamePath;
     }
 
     public void setFileNamePath(String FileNamePath) {
-        String oldValue = this.FileNamePath;        
+        String oldValue = this.FileNamePath;
         this.FileNamePath = FileNamePath;
         firePropertyChange(
                 PatchController.PATCH_FILENAME,

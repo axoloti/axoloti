@@ -19,6 +19,7 @@ package qcmds;
 
 import axoloti.PatchController;
 import axoloti.PatchModel;
+import axoloti.PatchViewCodegen;
 import axoloti.parameters.ParameterInstance;
 
 /**
@@ -30,13 +31,9 @@ public class QCmdGuiDialTx implements QCmdGUITask {
     @Override
     public void DoGUI(QCmdProcessor processor) {
         if (processor.isQueueEmpty()) {
-            PatchController patchController = processor.getPatchController();
-            PatchModel patchModel = null;
+            PatchViewCodegen patchController = processor.getPatchController();
             if (patchController != null) {
-                patchModel = processor.getPatchController().getModel();
-            }
-            if (patchModel != null) {
-                for (ParameterInstance p : patchModel.getParameterInstances()) {
+                for (ParameterInstance p : patchController.getParameterInstances()) {
                     if (p.getNeedsTransmit()) {
                         if (processor.hasQueueSpaceLeft()) {
                             processor.AppendToQueue(new QCmdSerialDialTX(p.TXData()));
@@ -44,9 +41,9 @@ public class QCmdGuiDialTx implements QCmdGUITask {
                         } else {
                             break;
                         }
-
                     }
                 }
+                /* FIXME: live preset updating
                 if (patchController.isPresetUpdatePending() && processor.hasQueueSpaceLeft()) {
                     byte pb[] = new byte[patchModel.getSettings().GetNPresets() * patchModel.getSettings().GetNPresetEntries() * 8];
                     int p = 0;
@@ -62,6 +59,7 @@ public class QCmdGuiDialTx implements QCmdGUITask {
                     processor.AppendToQueue(new QCmdUpdatePreset(pb));
                     patchController.setPresetUpdatePending(false);
                 }
+                */
             }
         }
     }

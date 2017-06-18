@@ -22,6 +22,7 @@ import axoloti.Preset;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
+import axoloti.datatypes.ValueFrac32;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.realunits.NativeToReal;
@@ -180,7 +181,9 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     }
 
     public void SetValueRaw(int v) {
-        getValue().setRaw(v);
+        ValueFrac32 v1 = new ValueFrac32();
+        v1.setRaw(v);
+        setValue(v1);
     }
 
     public int GetValueRaw() {

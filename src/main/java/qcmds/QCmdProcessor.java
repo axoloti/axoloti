@@ -21,6 +21,7 @@ import axoloti.IConnection;
 import axoloti.MainFrame;
 import axoloti.PatchController;
 import axoloti.CConnection;
+import axoloti.PatchViewCodegen;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -36,7 +37,7 @@ public class QCmdProcessor implements Runnable {
     private final BlockingQueue<QCmd> queue;
     private final BlockingQueue<QCmd> queueResponse;
     protected IConnection serialconnection;
-    private PatchController patchController;
+    private PatchViewCodegen patchController;
     private final PeriodicPinger pinger;
     private final Thread pingerThread;
     private final PeriodicDialTransmitter dialTransmitter;
@@ -97,7 +98,7 @@ public class QCmdProcessor implements Runnable {
         return singleton;
     }
     
-    public PatchController getPatchController() {
+    public PatchViewCodegen getPatchController() {
         return patchController;
     }
 
@@ -232,9 +233,9 @@ public class QCmdProcessor implements Runnable {
         });
     }
 
-    public void setPatchController(PatchController patchController) {
+    public void setPatchController(PatchViewCodegen patchController) {
         if (this.patchController != null) {
-            this.patchController.setLocked(false);
+            this.patchController.getController().setLocked(false);
         }
         this.patchController = patchController;
     }

@@ -175,32 +175,27 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         }
 */
         getModel().CreateIID();
-
-        System.out.println("object:(2)");
-        for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            System.out.println("  "+o.getType().id+":"+o.getInstanceName());
-        }
-
         //TODO - use execution order, rather than UI ordering
         if (USE_EXECUTION_ORDER) {
             getModel().SortByExecution();
         } else {
             getModel().SortByPosition();
         }
-
-        System.out.println("object:(3)");
-        for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            System.out.println("  "+o.getType().id+":"+o.getInstanceName());
-        }
-
         PatchViewCodegen codegen = new PatchViewCodegen(this);               
         String c = codegen.GenerateCode4();
         return c;
     }    
  
-    public void WriteCode() {
-        String c = GenerateCode3();
-
+    public PatchViewCodegen WriteCode() {
+//        String c = GenerateCode3();
+        getModel().CreateIID();
+        if (USE_EXECUTION_ORDER) {
+            getModel().SortByExecution();
+        } else {
+            getModel().SortByPosition();
+        }
+        PatchViewCodegen codegen = new PatchViewCodegen(this);               
+        String c = codegen.GenerateCode4();
         try {
             String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
             FileOutputStream f = new FileOutputStream(buildDir + "/xpatch.cpp");
@@ -212,6 +207,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
             Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, ex.toString());
         }
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Generate code complete");
+        return codegen;
     }
    
     

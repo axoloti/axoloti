@@ -336,7 +336,7 @@ public abstract class PatchView extends PatchAbstractView {
                 pi.ClearNeedsTransmit();
             }
         }
-        getController().WriteCode();
+        PatchViewCodegen pvcg = getController().WriteCode();
         qCmdProcessor.setPatchController(null);
         for(String module : getController().getModel().getModules()) {
            qCmdProcessor.AppendToQueue(
@@ -346,8 +346,8 @@ public abstract class PatchView extends PatchAbstractView {
         }
         qCmdProcessor.AppendToQueue(new QCmdCompilePatch(getController()));
         qCmdProcessor.AppendToQueue(new QCmdUploadPatch());
-        qCmdProcessor.AppendToQueue(new QCmdStart(getController()));
-        qCmdProcessor.AppendToQueue(new QCmdLock(getController()));
+        qCmdProcessor.AppendToQueue(new QCmdStart(pvcg));
+        qCmdProcessor.AppendToQueue(new QCmdLock(pvcg));
         qCmdProcessor.AppendToQueue(new QCmdMemRead(CConnection.GetConnection().getTargetProfile().getPatchAddr(), 8, new IConnection.MemReadHandler() {
             @Override
             public void Done(ByteBuffer mem) {

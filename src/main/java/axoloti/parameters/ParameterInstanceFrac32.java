@@ -72,6 +72,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         Integer oldvalue = this.value.getRaw();
         this.value = new ValueFrac32();
         this.value.setRaw(value.getRaw());
+        needsTransmit = true;
         firePropertyChange(
             ParameterInstanceController.ELEMENT_PARAM_VALUE,
             oldvalue, (Integer)value.getRaw());

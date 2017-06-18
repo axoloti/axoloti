@@ -6,7 +6,7 @@ import axoloti.mvc.AbstractView;
  *
  * @author jtaelman
  */
-public abstract class PatchAbstractView implements AbstractView {
+public abstract class PatchAbstractView implements AbstractView<PatchController> {
 
     final PatchController controller;
 

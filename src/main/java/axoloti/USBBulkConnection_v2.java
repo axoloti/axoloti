@@ -58,7 +58,7 @@ import qcmds.QCmdWriteMem;
  */
 public class USBBulkConnection_v2 extends IConnection {
 
-    private PatchController patchController;
+    private PatchViewCodegen patch;
     private boolean disconnectRequested;
     private boolean connected;
     private Thread transmitterThread;
@@ -75,7 +75,7 @@ public class USBBulkConnection_v2 extends IConnection {
     protected USBBulkConnection_v2() {
         this.sync = new Sync();
         this.readsync = new Sync();
-        this.patchController = null;
+        this.patch = null;
         disconnectRequested = false;
         connected = false;
         queueSerialTask = new ArrayBlockingQueue<QCmdSerialTask>(10);
@@ -87,8 +87,8 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     @Override
-    public void setPatchController(PatchController patchController) {
-        this.patchController = patchController;
+    public void setPatch(PatchViewCodegen patchViewCodegen) {
+        this.patch = patchViewCodegen;
     }
 
     public void Panic() {
@@ -1026,11 +1026,11 @@ public class USBBulkConnection_v2 extends IConnection {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                if (patchController != null) {
+                if (patch != null) {
                     if ((getPatchModel().GetIID() != PatchID) && getPatchModel().getLocked()) {
-                        patchController.setLocked(false);
+                        patch.getController().setLocked(false);
                     } else {
-                        patchController.setDspLoad(DSPLoad);
+                        patch.getController().setDspLoad(DSPLoad);
                     }
                 }
                 MainFrame.mainframe.showPatchIndex(patchIndex);
@@ -1044,7 +1044,7 @@ public class USBBulkConnection_v2 extends IConnection {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                if (patchController == null) {
+                if (patch == null) {
                     //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "Rx paramchange patch null {0} {1}", new Object[]{index, value});
                     return;
                 }
@@ -1052,16 +1052,16 @@ public class USBBulkConnection_v2 extends IConnection {
                     return;
                 }
                 if (getPatchModel().GetIID() != patchID) {
-                    patchController.setLocked(false);
+                    patch.getController().setLocked(false);
                     return;
                 }
-                if (index >= getPatchModel().ParameterInstances.size()) {
+                if (index >= patch.ParameterInstances.size()) {
                     Logger.getLogger(USBBulkConnection_v2.class
                             .getName()).log(Level.INFO, "Rx paramchange index out of range{0} {1}", new Object[]{index, value});
 
                     return;
                 }
-                ParameterInstance pi = getPatchModel().ParameterInstances.get(index);
+                ParameterInstance pi = patch.ParameterInstances.get(index);
 
                 if (pi == null) {
                     Logger.getLogger(USBBulkConnection_v2.class
@@ -1167,13 +1167,13 @@ public class USBBulkConnection_v2 extends IConnection {
     void DistributeToDisplays(final ByteBuffer dispData) {
 //        Logger.getLogger(SerialConnection.class.getName()).info("Distr1");
         try {
-            if (patchController == null) {
+            if (patch == null) {
                 return;
             }
             if (!getPatchModel().getLocked()) {
                 return;
             }
-            if (getPatchModel().DisplayInstances == null) {
+            if (patch.DisplayInstances == null) {
                 return;
             }
             if (!SwingUtilities.isEventDispatchThread()) {
@@ -1182,14 +1182,14 @@ public class USBBulkConnection_v2 extends IConnection {
                     @Override
                     public void run() {
                         dispData.rewind();
-                        for (DisplayInstance d : getPatchModel().DisplayInstances) {
+                        for (DisplayInstance d : patch.DisplayInstances) {
                             d.ProcessByteBuffer(dispData);
                         }
                     }
                 });
             } else  {
                         dispData.rewind();
-                        for (DisplayInstance d : getPatchModel().DisplayInstances) {
+                        for (DisplayInstance d : patch.DisplayInstances) {
                             d.ProcessByteBuffer(dispData);
                         }                
             }
@@ -1378,6 +1378,6 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     public PatchModel getPatchModel() {
-        return patchController.getModel();
+        return patch.getController().getModel();
     }
 }
