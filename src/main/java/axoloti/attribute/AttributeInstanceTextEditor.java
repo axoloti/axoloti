@@ -19,6 +19,7 @@ package axoloti.attribute;
 
 import axoloti.StringRef;
 import axoloti.TextEditor;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
 import axoloti.object.AxoObjectInstance;
 import org.simpleframework.xml.Element;
@@ -37,11 +38,13 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     String getSText() {
         return sRef.s;
     }
-
-    public AttributeInstanceTextEditor() {
+    
+    AttributeInstanceTextEditor(){
+        super();
     }
 
     public AttributeInstanceTextEditor(@Element(name = "sText", required = false) String s) {
+        super(null, null);
         if (s == null) {
             sRef.s = "";
         } else {
@@ -49,8 +52,8 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
         }
     }
 
-    public AttributeInstanceTextEditor(AxoAttributeTextEditor param, AxoObjectInstance axoObj1) {
-        super(param, axoObj1);
+    AttributeInstanceTextEditor(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
+        super(controller, axoObj1);
     }
 
     @Override

@@ -10,8 +10,6 @@ public interface IAttributeInstanceView extends AbstractView {
 
     public void UnLock();
 
-    public void PostConstructor();
-
     public String getName();
 
     @Deprecated

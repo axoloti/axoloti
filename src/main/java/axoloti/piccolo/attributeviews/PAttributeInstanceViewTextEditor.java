@@ -26,14 +26,14 @@ public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewStri
             editor.addWindowFocusListener(new WindowFocusListener() {
                 @Override
                 public void windowGainedFocus(WindowEvent e) {
-                    attributeInstance.setValueBeforeAdjustment(attributeInstance.getStringRef().s);
+                    //attributeInstance.setValueBeforeAdjustment(attributeInstance.getStringRef().s);
                 }
 
                 @Override
                 public void windowLostFocus(WindowEvent e) {
-                    if (!attributeInstance.getValueBeforeAdjustment().equals(attributeInstance.getStringRef().s)) {
-                        attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                    }
+                    //if (!attributeInstance.getValueBeforeAdjustment().equals(attributeInstance.getStringRef().s)) {
+                    //    attributeInstance.getObjectInstance().getPatchModel().setDirty();
+                    //}
                 }
             });
         }

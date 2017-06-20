@@ -17,6 +17,7 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.datatypes.ValueFrac32;
 import java.nio.ByteBuffer;
 
@@ -27,6 +28,10 @@ import java.nio.ByteBuffer;
 public abstract class DisplayInstanceFrac32<T extends Display> extends DisplayInstance1<T> {
 
     Double value = 0.0;
+
+    DisplayInstanceFrac32(AtomDefinitionController controller) {
+        super(controller);
+    }
 
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {

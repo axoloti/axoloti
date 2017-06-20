@@ -17,6 +17,7 @@
  */
 package axoloti.object;
 
+import axoloti.PatchController;
 import axoloti.PatchModel;
 import java.awt.Point;
 
@@ -27,22 +28,19 @@ import java.awt.Point;
 public class AxoObjectPatcher extends AxoObject {
 
     public AxoObjectPatcher() {
+        super("patch/patcher", "");
     }
 
     public AxoObjectPatcher(String id, String sDescription) {
         super(id, sDescription);
     }
 
-    public AxoObjectInstancePatcher CreateInstance(PatchModel patchModel, String InstanceName1, Point location, PatchModel subPatch) {
-        AxoObjectPatcher newObj = new AxoObjectPatcher("patch/patcher", "");
+    public AxoObjectInstancePatcher CreateInstance(PatchController patchController, String InstanceName1, Point location, PatchModel subPatch) {
+        AxoObjectPatcher newObj = new AxoObjectPatcher();
         ObjectController ctrl1 = newObj.createController(null, null);
-        AxoObjectInstancePatcher o = new AxoObjectInstancePatcher(ctrl1, patchModel, InstanceName1, location, subPatch);
+        AxoObjectInstancePatcher o = new AxoObjectInstancePatcher(ctrl1, patchController.getModel(), InstanceName1, location, subPatch);
         ctrl1.addView(o);
         return o;
     }
 
-    @Override
-    public AxoObjectInstancePatcher CreateInstance(PatchModel patchModel, String InstanceName1, Point location) {
-        return CreateInstance(patchModel, InstanceName1, location, new PatchModel());
-    }
 }

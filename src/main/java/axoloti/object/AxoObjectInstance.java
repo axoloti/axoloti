@@ -25,12 +25,15 @@ import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.*;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.displays.DisplayInstance;
+import axoloti.displays.DisplayInstanceFactory;
 import axoloti.inlets.InletInstance;
+import axoloti.inlets.InletInstanceFactory;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.mvc.array.ArrayView;
 import axoloti.outlets.OutletInstance;
+import axoloti.outlets.OutletInstanceFactory;
 import axoloti.parameters.*;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -100,13 +103,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             @Override
             public InletInstance viewFactory(AbstractController ctrl) {
                 AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-                return (InletInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
+                return InletInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
             }
 
             @Override
             public void removeView(InletInstance view) {
-                //PatchController c = // we need a patchcontroller reference here.
-                //c.disconnect(view)
             }
         };
         controller.inlets.addView(vInlets);
@@ -119,13 +120,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             @Override
             public OutletInstance viewFactory(AbstractController ctrl) {
                 AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-                return (OutletInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
+                return OutletInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
             }
 
             @Override
             public void removeView(OutletInstance view) {
-                //PatchController c = // we need a patchcontroller reference here.
-                //c.disconnect(view)
             }
         };
         controller.outlets.addView(vOutlets);
@@ -138,7 +137,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             @Override
             public DisplayInstance viewFactory(AbstractController ctrl) {
                 AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-                return (DisplayInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
+                return DisplayInstanceFactory.createView(ctrl1);
             }
 
             @Override
@@ -155,8 +154,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             @Override
             public ParameterInstance viewFactory(AbstractController ctrl) {
                 AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-                ParameterInstance p = ParameterInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
-                return (ParameterInstance) p;
+                return ParameterInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
             }
 
             @Override
@@ -173,7 +171,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             @Override
             public AttributeInstance viewFactory(AbstractController ctrl) {
                 AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-                return (AttributeInstance) ctrl1.getModel().CreateInstance(AxoObjectInstance.this);
+                return AttributeInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
             }
 
             @Override

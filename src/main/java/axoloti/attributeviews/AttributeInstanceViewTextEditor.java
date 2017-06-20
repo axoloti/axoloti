@@ -14,7 +14,7 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
     ButtonComponent bEdit;
     JLabel vlabel;
 
-    public AttributeInstanceViewTextEditor(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+    AttributeInstanceViewTextEditor(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
     }
 
@@ -32,14 +32,14 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
             getModel().editor.addWindowFocusListener(new WindowFocusListener() {
                 @Override
                 public void windowGainedFocus(WindowEvent e) {
-                    getModel().setValueBeforeAdjustment(getModel().getStringRef().s);
+                    //getModel().setValueBeforeAdjustment(getModel().getStringRef().s);
                 }
 
                 @Override
                 public void windowLostFocus(WindowEvent e) {
-                    if (!getModel().getValueBeforeAdjustment().equals(getModel().getStringRef().s)) {
-                        getModel().getObjectInstance().getPatchModel().setDirty();
-                    }
+                    //if (!getModel().getValueBeforeAdjustment().equals(getModel().getStringRef().s)) {
+                    //     getModel().getObjectInstance().getPatchModel().setDirty();
+                    // }
                 }
             });
         }
@@ -48,7 +48,7 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
     }
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         bEdit = new ButtonComponent("Edit");
         add(bEdit);

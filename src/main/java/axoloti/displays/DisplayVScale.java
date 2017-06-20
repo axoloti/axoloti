@@ -34,11 +34,6 @@ public class DisplayVScale extends Display {
     }
 
     @Override
-    public DisplayInstanceVScale InstanceFactory() {
-        return new DisplayInstanceVScale();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("vscale".getBytes());

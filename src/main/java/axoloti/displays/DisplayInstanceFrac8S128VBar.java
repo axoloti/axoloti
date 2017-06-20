@@ -17,6 +17,7 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomDefinitionController;
 import java.nio.ByteBuffer;
 
 /**
@@ -27,8 +28,8 @@ public class DisplayInstanceFrac8S128VBar extends DisplayInstance<DisplayFrac8S1
 
     final int n = 128;
 
-    public DisplayInstanceFrac8S128VBar() {
-        super();
+    DisplayInstanceFrac8S128VBar(AtomDefinitionController controller) {
+        super(controller);
     }
 
     @Override

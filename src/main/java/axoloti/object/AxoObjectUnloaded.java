@@ -17,6 +17,7 @@
  */
 package axoloti.object;
 
+import axoloti.PatchController;
 import axoloti.PatchModel;
 import java.awt.Point;
 import java.io.File;
@@ -50,15 +51,16 @@ public class AxoObjectUnloaded extends AxoObjectAbstract {
         return loadedObject;
     }
 
+    /*
     @Override
-    public AxoObjectInstance CreateInstance(PatchModel patch, String InstanceName1, Point location) {
+    public AxoObjectInstance CreateInstance(PatchController patchController, String InstanceName1, Point location) {
         Load();
-        AxoObjectInstance oi = new AxoObjectInstance(loadedObject.createController(null, null), patch, InstanceName1, location);
-        if (patch != null) {
-            patch.objectinstances.add(oi);
+        AxoObjectInstance oi = new AxoObjectInstance(loadedObject.createController(null, null), patchController.getModel(), InstanceName1, location);
+        if (patchController.getModel() != null) {
+            patchController.getModel().objectinstances.add(oi);
         }
         return oi;
-    }
+    }*/
 
     @Override
     public String GenerateUUID() {

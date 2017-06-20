@@ -18,6 +18,7 @@
 package axoloti.attribute;
 
 import axoloti.SubPatchMode;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttributeObjRef;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
@@ -35,14 +36,11 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     @Attribute(name = "obj")
     String objName = "";
 
-    private AxoObjectInstance axoObj;
-
-    public AttributeInstanceObjRef() {
+    AttributeInstanceObjRef() {
     }
-
-    public AttributeInstanceObjRef(AxoAttributeObjRef param, AxoObjectInstance axoObj1) {
-        super(param, axoObj1);
-        this.axoObj = axoObj1;
+    
+    AttributeInstanceObjRef(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
+        super(controller, axoObj1);
     }
 
     @Override

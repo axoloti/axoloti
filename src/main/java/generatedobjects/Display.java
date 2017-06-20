@@ -648,7 +648,7 @@ public class Display extends gentools {
     static AxoObject CreateDisplayBool32() {
         AxoObject o = new AxoObject("bool", "display boolean");
         o.inlets.add(new InletBool32("in", "input"));
-        o.displays.add(new DisplayBool32("v"));
+        //o.displays.add(new DisplayBool32("v"));
         o.sKRateCode = "%v%=%in%;\n";
         return o;
     }

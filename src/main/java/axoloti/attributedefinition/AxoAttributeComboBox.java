@@ -60,11 +60,6 @@ public class AxoAttributeComboBox extends AxoAttribute {
         return CEntries;
     }
 
-    @Override
-    public AttributeInstanceComboBox InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceComboBox(this, o);
-    }
-
     static public final String TypeName = "combo";
 
     @Override

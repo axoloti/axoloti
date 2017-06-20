@@ -20,7 +20,7 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
     JLabel vlabel;
     ButtonComponent ButtonChooseFile;
 
-    public AttributeInstanceViewSDFile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+    AttributeInstanceViewSDFile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
     }
 
@@ -30,7 +30,7 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
     }
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         TFFileName = new JTextField(getModel().getValue());
         Dimension d = TFFileName.getSize();

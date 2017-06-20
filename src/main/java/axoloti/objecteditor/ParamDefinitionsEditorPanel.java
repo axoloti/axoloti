@@ -18,10 +18,8 @@
 package axoloti.objecteditor;
 
 import axoloti.mvc.array.ArrayController;
-import axoloti.mvc.array.ArrayModel;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterTypes;
-
 
 /**
  *
@@ -31,11 +29,6 @@ public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter
 
     public ParamDefinitionsEditorPanel(ArrayController controller) {
         super(controller, ParameterTypes.getTypes());
-    }
-
-    @Override
-    ArrayModel<Parameter> GetAtomDefinitions() {
-        return obj.params;
     }
 
     @Override

@@ -21,11 +21,8 @@ import axoloti.SDFileReference;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.ObjectInstanceController;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
 import java.beans.PropertyChangeEvent;
@@ -41,18 +38,19 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     @Attribute
     String attributeName;
 
-    T attr;
+    final AtomDefinitionController controller;
 
     AxoObjectInstance axoObj;
     LabelComponent lbl;
 
-    public AttributeInstance() {
+    AttributeInstance() {
+        this.controller = null;
     }
 
-    public AttributeInstance(T attr, AxoObjectInstance axoObj1) {
-        this.attr = attr;
+    AttributeInstance(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
+        this.controller = controller;
         axoObj = axoObj1;
-        attributeName = attr.getName();
+        attributeName = controller.getModel().getName();
     }
 
     public abstract String CValue();
@@ -98,7 +96,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
 
     @Override
     public AtomDefinitionController getController() {
-        // returning the singleton for now...
-        return attr.createController(null, null);
+        return controller;
     }
 }

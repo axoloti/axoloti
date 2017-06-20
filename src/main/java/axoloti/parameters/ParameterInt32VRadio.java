@@ -72,12 +72,12 @@ public class ParameterInt32VRadio extends ParameterInt32<ParameterInstanceInt32V
     }
 
     @Override
-    public int getMinimum() {
+    public Integer getMinValue() {
         return 0;
     }
 
     @Override
-    public int getMaximum() {
+    public Integer getMaxValue() {
         return MaxValue.getInt();
     }
 }

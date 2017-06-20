@@ -17,14 +17,16 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomDefinitionController;
+
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceInt32HexLabel extends DisplayInstanceInt32<DisplayInt32HexLabel> {
 
-    public DisplayInstanceInt32HexLabel() {
-        super();
+    DisplayInstanceInt32HexLabel(AtomDefinitionController controller) {
+        super(controller);
     }
 
 }

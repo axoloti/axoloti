@@ -29,8 +29,7 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
     @Override
     public abstract void UnLock();
 
-    @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setPickable(false);
         addChild(new PLabelComponent(attributeInstance.getModel().getName()));

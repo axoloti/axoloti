@@ -21,7 +21,7 @@ public abstract class AbstractModel {
     }
 
     final protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
-//        System.out.println("firePropertyChange " + propertyName + " " + newValue.toString() + " (" + propertyChangeSupport.getPropertyChangeListeners().length + ")");
+//        System.out.println("firePropertyChange " + propertyName + " " + newValue.toString() + " (" + propertyChangeSupport.getPropertyChangeListeners().length + ")" + this.toString());
         propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
     }
 

@@ -37,10 +37,10 @@ import org.simpleframework.xml.Root;
 @Root(name = "hyperlink")
 public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
 
-    public AxoObjectInstanceHyperlink() {
+    AxoObjectInstanceHyperlink() {
     }
 
-    public AxoObjectInstanceHyperlink(ObjectController type, PatchModel patch1, String InstanceName1, Point location) {
+    AxoObjectInstanceHyperlink(ObjectController type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
     }
 

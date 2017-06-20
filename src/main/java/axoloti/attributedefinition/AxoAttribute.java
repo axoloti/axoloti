@@ -21,10 +21,7 @@ package axoloti.attributedefinition;
  *
  * @author Johannes Taelman
  */
-import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
-import axoloti.attribute.AttributeInstance;
-import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -43,31 +40,6 @@ public abstract class AxoAttribute extends AtomDefinition implements Cloneable {
     public String toString() {
         return getTypeName();
     }
-
-    @Override
-    public AttributeInstance CreateInstance(AxoObjectInstance o) {
-        AttributeInstance pi = InstanceFactory(o);
-        AtomDefinitionController c = createController(null, null);
-        c.addView(pi);
-
-//        o.add(pi);
-//        pi.PostConstructor();
-        return pi;
-    }
-
-    public AttributeInstance CreateInstance(AxoObjectInstance o, AttributeInstance a) {
-        AttributeInstance pi = InstanceFactory(o);
-        AtomDefinitionController c = createController(null, null);
-        c.addView(pi);
-        if (a != null) {
-            pi.CopyValueFrom(a);
-        }
-//        o.add(pi);
-//        pi.PostConstructor();
-        return pi;
-    }
-
-    public abstract AttributeInstance InstanceFactory(AxoObjectInstance o);
 
     public void updateSHA(MessageDigest md) {
         md.update(getName().getBytes());

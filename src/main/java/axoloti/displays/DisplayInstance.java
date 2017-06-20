@@ -38,11 +38,14 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     @Attribute(required = false)
     Boolean onParent;
     protected int index;
-    public T display;
-    AxoObjectInstance axoObjectInstance;
+
+    private AxoObjectInstance axoObjectInstance;
     protected int offset;
 
-    public DisplayInstance() {
+    AtomDefinitionController controller;
+
+    public DisplayInstance(AtomDefinitionController controller) {
+        this.controller = controller;
     }
 
     @Override
@@ -56,11 +59,11 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     }
 
     public String GetCName() {
-        return display.GetCName();
+        return getModel().GetCName();
     }
 
     public int getLength() { // length in 32-bit words
-        return display.getLength();
+        return getModel().getLength();
     }
 
     public void setOffset(int offset) {
@@ -82,8 +85,8 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     public abstract void ProcessByteBuffer(ByteBuffer bb);
 
     public String GenerateDisplayMetaInitializer() {
-        String c = "{ display_type: " + display.GetCMetaType() + ", name: "
-                + CodeGeneration.CPPCharArrayStaticInitializer(display.getName(), CodeGeneration.param_name_length)
+        String c = "{ display_type: " + getModel().GetCMetaType() + ", name: "
+                + CodeGeneration.CPPCharArrayStaticInitializer(getModel().getName(), CodeGeneration.param_name_length)
                 + ", displaydata: &displayVector[" + offset + "]},\n";
         return c;
     }
@@ -105,7 +108,6 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
 
     @Override
     public AtomDefinitionController getController() {
-        // returning the singleton for now...
-        return display.createController(null, null);
+        return controller;
     }
 }

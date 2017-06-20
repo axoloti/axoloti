@@ -17,10 +17,8 @@
  */
 package axoloti.displays;
 
-import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
-import axoloti.object.AxoObjectInstance;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,19 +52,6 @@ public abstract class Display<T extends DisplayInstance> extends AtomDefinition 
     public String GetCName() {
         return "disp_" + getName();
     }
-
-    @Override
-    public DisplayInstance CreateInstance(AxoObjectInstance o) {
-        DisplayInstance pi = InstanceFactory();
-        AtomDefinitionController c = createController(null, null);
-        c.addView(pi);
-        pi.axoObjectInstance = o;
-        pi.name = getName();
-        pi.display = this;
-        return pi;
-    }
-
-    public abstract T InstanceFactory();
 
     public abstract DataType getDatatype();
 

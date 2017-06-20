@@ -17,14 +17,16 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomDefinitionController;
+
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceInt32Bar16 extends DisplayInstanceInt32<DisplayInt32Bar16> {
 
-    public DisplayInstanceInt32Bar16() {
-        super();
+    DisplayInstanceInt32Bar16(AtomDefinitionController controller) {
+        super(controller);
     }
 
 }

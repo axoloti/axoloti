@@ -34,11 +34,6 @@ public class DisplayInt32Bar16 extends Display {
     }
 
     @Override
-    public DisplayInstanceInt32Bar16 InstanceFactory() {
-        return new DisplayInstanceInt32Bar16();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("int32.bar16".getBytes());

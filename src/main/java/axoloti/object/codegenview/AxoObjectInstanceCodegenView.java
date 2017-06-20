@@ -119,12 +119,12 @@ typedef struct ui_object {
         String d = "  public: void Init(" + classname + " * parent";
         if (!getModel().displayInstances.isEmpty()) {
             for (DisplayInstance p : getModel().displayInstances) {
-                if (p.display.getLength() > 0) {
+                if (p.getModel().getLength() > 0) {
                     d += ",\n";
-                    if (p.display.getDatatype().isPointer()) {
-                        d += p.display.getDatatype().CType() + " " + p.GetCName();
+                    if (p.getModel().getDatatype().isPointer()) {
+                        d += p.getModel().getDatatype().CType() + " " + p.GetCName();
                     } else {
-                        d += p.display.getDatatype().CType() + " & " + p.GetCName();
+                        d += p.getModel().getDatatype().CType() + " & " + p.GetCName();
                     }
                 }
             }
@@ -227,14 +227,14 @@ typedef struct ui_object {
             }
         }
         for (DisplayInstance i : getModel().displayInstances) {
-            if (i.display.getLength() > 0) {
+            if (i.getModel().getLength() > 0) {
                 if (comma) {
                     s += ",\n";
                 }
-                if (i.display.getDatatype().isPointer()) {
-                    s += i.display.getDatatype().CType() + " " + i.GetCName();
+                if (i.getModel().getDatatype().isPointer()) {
+                    s += i.getModel().getDatatype().CType() + " " + i.GetCName();
                 } else {
-                    s += i.display.getDatatype().CType() + " & " + i.GetCName();
+                    s += i.getModel().getDatatype().CType() + " & " + i.GetCName();
                 }
                 comma = true;
             }

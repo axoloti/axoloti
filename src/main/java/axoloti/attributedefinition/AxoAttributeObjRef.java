@@ -17,9 +17,6 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstanceObjRef;
-import axoloti.object.AxoObjectInstance;
-
 /**
  *
  * @author Johannes Taelman
@@ -31,11 +28,6 @@ public class AxoAttributeObjRef extends AxoAttribute {
 
     public AxoAttributeObjRef(String name) {
         super(name);
-    }
-
-    @Override
-    public AttributeInstanceObjRef InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceObjRef(this, o);
     }
 
     static public final String TypeName = "objref";

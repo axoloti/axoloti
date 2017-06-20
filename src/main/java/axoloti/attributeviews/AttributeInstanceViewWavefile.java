@@ -19,7 +19,7 @@ class AttributeInstanceViewWavefile extends AttributeInstanceView {
     JTextField TFwaveFilename;
     JLabel vlabel;
 
-    public AttributeInstanceViewWavefile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+    AttributeInstanceViewWavefile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
     }
 
@@ -29,7 +29,7 @@ class AttributeInstanceViewWavefile extends AttributeInstanceView {
     }
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         TFwaveFilename = new JTextField(getModel().getWaveFilename());
         Dimension d = TFwaveFilename.getSize();
@@ -78,14 +78,14 @@ class AttributeInstanceViewWavefile extends AttributeInstanceView {
         TFwaveFilename.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getModel().setValueBeforeAdjustment(TFwaveFilename.getText());
+                //getModel().setValueBeforeAdjustment(TFwaveFilename.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (!TFwaveFilename.getText().equals(getModel().getValueBeforeAdjustment())) {
-                    getModel().getObjectInstance().getPatchModel().setDirty();
-                }
+                //if (!TFwaveFilename.getText().equals(getModel().getValueBeforeAdjustment())) {
+                //    getModel().getObjectInstance().getPatchModel().setDirty();
+                //}
             }
         });
     }

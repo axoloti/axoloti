@@ -1,5 +1,6 @@
 package axoloti.attributeviews;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceSpinner;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -12,7 +13,7 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
 
     NumberBoxComponent spinner;
 
-    public AttributeInstanceViewSpinner(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+    AttributeInstanceViewSpinner(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
     }
 
@@ -22,7 +23,7 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
     }
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         Integer ival = getModel().getValue();
         int value = ival;
@@ -38,20 +39,15 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
         spinner.addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
-//                attributeInstance.setValue((int) spinner.getValue());
                 controller.changeValue((Integer) (int) spinner.getValue());
             }
 
             @Override
             public void ACtrlAdjustmentBegin(ACtrlEvent e) {
-                //attributeInstance.setValueBeforeAdjustment(attributeInstance.getValue());
             }
 
             @Override
             public void ACtrlAdjustmentFinished(ACtrlEvent e) {
-                if (getModel().getValue() != getModel().getValueBeforeAdjustment()) {
-                    //attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                }
             }
         });
     }
@@ -77,6 +73,14 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
                 AttributeInstanceController.ELEMENT_ATTR_VALUE)) {
             Integer newValue = (Integer) evt.getNewValue();
             spinner.setValue(newValue);
+        } else if (evt.getPropertyName().equals(
+                AtomDefinitionController.ATOM_MAXVALUE)) {
+            Integer newValue = (Integer) evt.getNewValue();
+            spinner.setMax(newValue);
+        } else if (evt.getPropertyName().equals(
+                AtomDefinitionController.ATOM_MINVALUE)) {
+            Integer newValue = (Integer) evt.getNewValue();
+            spinner.setMin(newValue);
         }
     }
 

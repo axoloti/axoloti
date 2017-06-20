@@ -17,8 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.PatchModel;
-import java.awt.Point;
 import org.simpleframework.xml.Root;
 
 /**
@@ -34,16 +32,6 @@ public class AxoObjectZombie extends AxoObjectAbstract {
 
     public AxoObjectZombie(String id, String sDescription) {
         super(id, sDescription);
-    }
-
-    @Override
-    public AxoObjectInstanceAbstract CreateInstance(PatchModel patch, String InstanceName1, Point location) {
-        ObjectController ctrl = createController(null, null);
-        AxoObjectInstanceZombie o = new AxoObjectInstanceZombie(ctrl, patch, InstanceName1, location);
-        if (patch != null) {
-            patch.objectinstances.add(o);
-        }
-        return o;
     }
 
     @Override

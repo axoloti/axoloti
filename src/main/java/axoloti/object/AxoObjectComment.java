@@ -17,7 +17,7 @@
  */
 package axoloti.object;
 
-import axoloti.PatchModel;
+import axoloti.PatchController;
 import java.awt.Point;
 import org.simpleframework.xml.Root;
 
@@ -34,14 +34,6 @@ public class AxoObjectComment extends AxoObjectAbstract {
 
     public AxoObjectComment(String id, String sDescription) {
         super(id, sDescription);
-    }
-
-    @Override
-    public AxoObjectInstanceAbstract CreateInstance(PatchModel patch, String InstanceName1, Point location) {
-        ObjectController ctrl = createController(null, null);
-        AxoObjectInstanceComment o = new AxoObjectInstanceComment(ctrl, patch, InstanceName1, location);
-        ctrl.addView(o);
-        return o;
     }
 
     @Override

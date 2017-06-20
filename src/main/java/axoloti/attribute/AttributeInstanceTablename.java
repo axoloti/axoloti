@@ -17,6 +17,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttributeTablename;
 import axoloti.object.AxoObjectInstance;
 import org.simpleframework.xml.Attribute;
@@ -31,14 +32,12 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
     @Attribute(name = "table")
     String tableName = "";
 
-    private AxoObjectInstance axoObj;
-
-    public AttributeInstanceTablename() {
+    AttributeInstanceTablename() {
+        super();
     }
 
-    public AttributeInstanceTablename(AxoAttributeTablename param, AxoObjectInstance axoObj1) {
-        super(param, axoObj1);
-        this.axoObj = axoObj1;
+    AttributeInstanceTablename(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
+        super(controller, axoObj1);
     }
 
     @Override

@@ -350,7 +350,7 @@ public class PatchViewCodegen extends PatchAbstractView {
             if (!s.isEmpty()) {
                 c += "   " + s + "_i.Init(" + parentReference;
                 for (DisplayInstance i : getModel().controllerObjectInstance.getDisplayInstances()) {
-                    if (i.display.getLength() > 0) {
+                    if (i.getModel().getLength() > 0) {
                         c += ", ";
                         c += i.valueName("");
                     }
@@ -364,7 +364,7 @@ public class PatchViewCodegen extends PatchAbstractView {
             if (!s.isEmpty()) {
                 c += "   " + o.getCInstanceName() + "_i.Init(" + parentReference;
                 for (DisplayInstance i : o.getDisplayInstances()) {
-                    if (i.display.getLength() > 0) {
+                    if (i.getModel().getLength() > 0) {
                         c += ", ";
                         c += i.valueName("");
                     }
@@ -557,7 +557,7 @@ public class PatchViewCodegen extends PatchAbstractView {
             }
         }
         for (DisplayInstance i : o.getDisplayInstances()) {
-            if (i.display.getLength() > 0) {
+            if (i.getModel().getLength() > 0) {
                 if (needsComma) {
                     c += ", ";
                 }

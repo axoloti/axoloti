@@ -44,14 +44,14 @@ public class PAttributeInstanceViewWavefile extends PAttributeInstanceView {
 
             @Override
             public void keyboardFocusGained(PInputEvent e) {
-                attributeInstance.setValueBeforeAdjustment(TFwaveFilename.getText());
+                //attributeInstance.setValueBeforeAdjustment(TFwaveFilename.getText());
             }
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                if (!TFwaveFilename.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                }
+                //if (!TFwaveFilename.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
+                //    attributeInstance.getObjectInstance().getPatchModel().setDirty();
+                //}
             }
         });
 

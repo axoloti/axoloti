@@ -10,7 +10,6 @@ import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.outlets.Outlet;
 import axoloti.parameters.Parameter;
-import axoloti.parameters.ParameterInstanceFactory;
 
 /**
  *
@@ -32,14 +31,14 @@ public class ObjectController extends AbstractController<AxoObjectAbstract, Abst
 
                 @Override
                 public AtomDefinitionController createController(Inlet model, AbstractDocumentRoot documentRoot, ObjectController parent) {
-                    return model.createController(documentRoot, parent);
+                    return new AtomDefinitionController(model, documentRoot,  parent);
                 }
             };
             outlets = new ArrayController<AtomDefinitionController, Outlet, ObjectController>(model.getOutlets(), documentRoot, this) {
 
                 @Override
                 public AtomDefinitionController createController(Outlet model, AbstractDocumentRoot documentRoot, ObjectController parent) {
-                    return model.createController(documentRoot, parent);
+                    return new AtomDefinitionController(model, documentRoot,  parent);
                 }
             };
             AxoObject m = (AxoObject) model;
@@ -47,21 +46,21 @@ public class ObjectController extends AbstractController<AxoObjectAbstract, Abst
 
                 @Override
                 public AtomDefinitionController createController(AxoAttribute model, AbstractDocumentRoot documentRoot, ObjectController parent) {
-                    return model.createController(documentRoot, parent);
+                    return new AtomDefinitionController(model, documentRoot,  parent);
                 }
             };
             params = new ArrayController<AtomDefinitionController, Parameter, ObjectController>(m.params, documentRoot, this) {
 
                 @Override
                 public AtomDefinitionController createController(Parameter model, AbstractDocumentRoot documentRoot, ObjectController parent) {
-                    return model.createController(documentRoot, parent);
+                    return new AtomDefinitionController(model, documentRoot,  parent);
                 }
             };
             disps = new ArrayController<AtomDefinitionController, Display, ObjectController>(m.displays, documentRoot, this) {
 
                 @Override
                 public AtomDefinitionController createController(Display model, AbstractDocumentRoot documentRoot, ObjectController parent) {
-                    return model.createController(documentRoot, parent);
+                    return new AtomDefinitionController(model, documentRoot,  parent);
                 }
             };
         }

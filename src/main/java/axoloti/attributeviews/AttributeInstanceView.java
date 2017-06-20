@@ -28,7 +28,7 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
 
     public abstract void UnLock();
 
-    public void PostConstructor() {
+    void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         label = new LabelComponent(getModel().getModel().getName());

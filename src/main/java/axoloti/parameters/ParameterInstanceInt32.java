@@ -57,8 +57,8 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
         s += ", d: { intt: { finalvalue: 0"
                 + ", value: " + v
                 + ", modvalue: " + v
-                + ", minimum: " + parameter.getMinimum()
-                + ", maximum: " + (parameter.getMaximum() - 1 /* TODO: FIXME */)
+                + ", minimum: " + parameter.getMinValue()
+                + ", maximum: " + (parameter.getMaxValue() - 1 /* TODO: FIXME */)
                 + "}}},\n";
         return s;
     }

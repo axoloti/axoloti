@@ -17,6 +17,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.object.AxoObjectInstance;
 import org.simpleframework.xml.Attribute;
@@ -30,13 +31,11 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
     @Attribute
     int value;
 
-    private int valueBeforeAdjustment;
-
-    public AttributeInstanceInt() {
+    AttributeInstanceInt() {
     }
-
-    public AttributeInstanceInt(T param, AxoObjectInstance axoObj1) {
-        super(param, axoObj1);
+    
+    public AttributeInstanceInt(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
+        super(controller, axoObj1);
     }
 
     @Override
@@ -59,11 +58,4 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
                 oldvalue, value);
     }
 
-    public int getValueBeforeAdjustment() {
-        return valueBeforeAdjustment;
-    }
-
-    public void setValueBeforeAdjustment(int valueBeforeAdjustment) {
-        this.valueBeforeAdjustment = valueBeforeAdjustment;
-    }
 }

@@ -38,7 +38,7 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
             getListView().setSelectedValue(o, true);
             if (getListView().getSelectedValue() != o) {
             }
-            AxoObjectInstanceAbstract objectInstance = o.CreateInstance(null, "dummy", new Point(0, 0));
+            AxoObjectInstanceAbstract objectInstance = null;//o.CreateInstance(null, "dummy", new Point(0, 0));
             PAxoObjectInstanceViewAbstract objectInstanceView = null;
             // TODO: PICCOLO view factory
             //... = (PAxoObjectInstanceViewAbstract) objectInstance.createView((PatchViewPiccolo) patchController.getPatchView());

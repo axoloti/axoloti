@@ -17,6 +17,7 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomDefinitionController;
 import java.nio.ByteBuffer;
 
 /**
@@ -26,6 +27,10 @@ import java.nio.ByteBuffer;
 public abstract class DisplayInstanceInt32<T extends Display> extends DisplayInstance1<T> {
 
     Integer value = 0;
+
+    DisplayInstanceInt32(AtomDefinitionController controller) {
+        super(controller);
+    }
 
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {

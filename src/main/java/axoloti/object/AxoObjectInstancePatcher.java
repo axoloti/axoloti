@@ -36,6 +36,11 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         }
     }
 
+    public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location) {
+        super(controller, patch1, InstanceName1, location);        
+    }
+    
+    
     public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location, PatchModel subPatchModel) {
         super(controller, patch1, InstanceName1, location);
         if (subPatchModel == null) {

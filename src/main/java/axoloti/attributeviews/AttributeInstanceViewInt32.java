@@ -9,12 +9,13 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+@Deprecated // we shall not use Swing controls in a patch
 class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
 
     JSlider slider;
     JLabel vlabel;
 
-    public AttributeInstanceViewInt32(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+    AttributeInstanceViewInt32(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
     }
 
@@ -24,7 +25,7 @@ class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
     }
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         slider = new JSlider();
         Dimension d = slider.getSize();

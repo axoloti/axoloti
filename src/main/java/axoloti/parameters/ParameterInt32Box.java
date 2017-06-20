@@ -79,12 +79,12 @@ public class ParameterInt32Box extends ParameterInt32<ParameterInstanceInt32Box>
     }
 
     @Override
-    public int getMinimum() {
+    public Integer getMinValue() {
         return MinValue.getInt();
     }
 
     @Override
-    public int getMaximum() {
+    public Integer getMaxValue() {
         return MaxValue.getInt();
     }
 }

@@ -34,11 +34,6 @@ public class DisplayFrac32VU extends Display {
     }
 
     @Override
-    public DisplayInstanceFrac32VU InstanceFactory() {
-        return new DisplayInstanceFrac32VU();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("frac32.vu".getBytes());

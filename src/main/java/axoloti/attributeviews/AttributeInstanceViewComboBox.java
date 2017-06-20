@@ -20,7 +20,7 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
     }
 
     @Override
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         comboBox = new DropDownComponent(getModel().getModel().getMenuEntries(), getModel());
         comboBox.setFont(Constants.FONT);

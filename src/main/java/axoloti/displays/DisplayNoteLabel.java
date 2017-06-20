@@ -34,11 +34,6 @@ public class DisplayNoteLabel extends Display {
     }
 
     @Override
-    public DisplayInstanceNoteLabel InstanceFactory() {
-        return new DisplayInstanceNoteLabel();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("note.label".getBytes());

@@ -34,11 +34,6 @@ public class DisplayFrac8U128VBar extends Display {
     }
 
     @Override
-    public DisplayInstanceFrac8U128VBar InstanceFactory() {
-        return new DisplayInstanceFrac8U128VBar();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("frac8.u.128.vbar".getBytes());

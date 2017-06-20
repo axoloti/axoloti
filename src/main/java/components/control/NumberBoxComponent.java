@@ -387,6 +387,7 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     public void setMax(double max) {
         this.max = max;
+        repaint();
     }
 
     public double getMin() {
@@ -395,6 +396,7 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     public void setMin(double min) {
         this.min = min;
+        repaint();
     }
 
     public double getTick() {

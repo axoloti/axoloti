@@ -61,14 +61,14 @@ public class PAttributeInstanceViewTablename extends PAttributeInstanceViewStrin
 
             @Override
             public void keyboardFocusGained(PInputEvent e) {
-                attributeInstance.setValueBeforeAdjustment(TFtableName.getText());
+                //attributeInstance.setValueBeforeAdjustment(TFtableName.getText());
             }
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                if (!TFtableName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                }
+                //if (!TFtableName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
+                //    attributeInstance.getObjectInstance().getPatchModel().setDirty();
+                //}
 
             }
         });

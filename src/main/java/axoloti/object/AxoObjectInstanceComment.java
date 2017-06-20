@@ -35,14 +35,14 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     @Attribute(name = "text", required = false)
     private String commentText;
 
-    public AxoObjectInstanceComment() {
+    AxoObjectInstanceComment() {
         if (InstanceName != null) {
             commentText = InstanceName;
             InstanceName = getGeneratedInstanceName();
         }
     }
 
-    public AxoObjectInstanceComment(ObjectController type, PatchModel patch1, String InstanceName1, Point location) {
+    AxoObjectInstanceComment(ObjectController type, PatchModel patch1, String InstanceName1, Point location) {
         super(type, patch1, InstanceName1, location);
         if (InstanceName != null) {
             commentText = InstanceName;

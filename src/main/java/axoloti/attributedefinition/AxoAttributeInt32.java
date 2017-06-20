@@ -17,8 +17,6 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstanceInt32;
-import axoloti.object.AxoObjectInstance;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 
@@ -55,11 +53,6 @@ public class AxoAttributeInt32 extends AxoAttribute {
 
     public int getDefaultValue() {
         return DefaultValue;
-    }
-    
-    @Override
-    public AttributeInstanceInt32 InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceInt32(this, o);
     }
 
     static public final String TypeName = "int";

@@ -20,7 +20,6 @@ package axoloti.objecteditor;
 import axoloti.displays.Display;
 import axoloti.displays.DisplayTypes;
 import axoloti.mvc.array.ArrayController;
-import axoloti.mvc.array.ArrayModel;
 
 /**
  *
@@ -30,11 +29,6 @@ public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display
 
     public DisplayDefinitionsEditorPanel(ArrayController controller) {
         super(controller, DisplayTypes.getTypes());
-    }
-
-    @Override
-    ArrayModel<Display> GetAtomDefinitions() {
-        return obj.displays;
     }
 
     @Override

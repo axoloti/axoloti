@@ -44,14 +44,14 @@ public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
 
             @Override
             public void keyboardFocusGained(PInputEvent e) {
-                attributeInstance.setValueBeforeAdjustment(TFObjName.getText());
+                //attributeInstance.setValueBeforeAdjustment(TFObjName.getText());
             }
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                if (!TFObjName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                }
+                //if (!TFObjName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
+                //    attributeInstance.getObjectInstance().getPatchModel().setDirty();
+                //}
             }
         });
 

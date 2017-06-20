@@ -34,11 +34,6 @@ public class DisplayFrac32SChart extends Display {
     }
 
     @Override
-    public DisplayInstanceFrac32SChart InstanceFactory() {
-        return new DisplayInstanceFrac32SChart();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("frac32.s.chart".getBytes());

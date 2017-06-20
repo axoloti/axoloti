@@ -20,7 +20,6 @@ package axoloti.atom;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
-import axoloti.object.AxoObjectInstance;
 import axoloti.object.ObjectController;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
@@ -71,8 +70,6 @@ abstract public class AtomDefinition extends AbstractModel {
                 AtomDefinitionController.ATOM_DESCRIPTION,
                 old_value, description);
     }
-
-    abstract public AtomInstance CreateInstance(AxoObjectInstance o);
 
     abstract public String getTypeName();
 

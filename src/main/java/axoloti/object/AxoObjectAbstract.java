@@ -18,14 +18,12 @@
 package axoloti.object;
 
 import axoloti.Modulator;
-import axoloti.PatchModel;
 import axoloti.inlets.Inlet;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.outlets.Outlet;
-import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
 import org.simpleframework.xml.Attribute;
@@ -103,11 +101,6 @@ public abstract class AxoObjectAbstract extends AbstractModel implements  Compar
 
     public ArrayModel<Outlet> getOutlets() {
         return null;
-    }
-
-    public abstract AxoObjectInstanceAbstract CreateInstance(PatchModel patchModel, String InstanceName1, Point location);
-
-    public void DeleteInstance(AxoObjectInstanceAbstract o) {
     }
 
     @Override

@@ -20,7 +20,6 @@ package axoloti.objecteditor;
 import axoloti.attributedefinition.AttributeTypes;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.mvc.array.ArrayController;
-import axoloti.mvc.array.ArrayModel;
 
 /**
  *
@@ -32,10 +31,6 @@ public class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAt
         super(controller, AttributeTypes.getTypes());
     }
 
-    @Override
-    ArrayModel<AxoAttribute> GetAtomDefinitions() {
-        return obj.attributes;
-    }
 
     @Override
     String getDefaultName() {

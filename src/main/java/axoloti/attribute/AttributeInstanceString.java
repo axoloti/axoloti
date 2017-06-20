@@ -17,6 +17,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
@@ -28,11 +29,12 @@ import axoloti.objectviews.IAxoObjectInstanceView;
  */
 public abstract class AttributeInstanceString<T extends AxoAttribute> extends AttributeInstance<T> {
 
-    public AttributeInstanceString() {
+    AttributeInstanceString() {
+        super();
     }
 
-    public AttributeInstanceString(T param, AxoObjectInstance axoObj1) {
-        super(param, axoObj1);
+    AttributeInstanceString(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
+        super(controller, axoObj1);
     }
 
     public abstract String getValue();
@@ -47,13 +49,4 @@ public abstract class AttributeInstanceString<T extends AxoAttribute> extends At
         }
     }
 
-    private String valueBeforeAdjustment = "";
-
-    public void setValueBeforeAdjustment(String valueBeforeAdjustment) {
-        this.valueBeforeAdjustment = valueBeforeAdjustment;
-    }
-
-    public String getValueBeforeAdjustment() {
-        return valueBeforeAdjustment;
-    }
 }

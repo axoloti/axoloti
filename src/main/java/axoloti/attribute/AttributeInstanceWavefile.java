@@ -17,6 +17,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttributeWavefile;
 import axoloti.object.AxoObjectInstance;
 import java.io.File;
@@ -42,14 +43,8 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
     @Attribute
     String waveFilename;
 
-    private AxoObjectInstance axoObj;
-
-    public AttributeInstanceWavefile() {
-    }
-
-    public AttributeInstanceWavefile(AxoAttributeWavefile param, AxoObjectInstance axoObj1) {
-        super(param, axoObj1);
-        this.axoObj = axoObj1;
+    AttributeInstanceWavefile(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
+        super(controller, axoObj1);
     }
 
     @Override
@@ -99,13 +94,4 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
         }
     }
 
-    private String valueBeforeAdjustment;
-
-    public void setValueBeforeAdjustment(String valueBeforeAdjustment) {
-        this.valueBeforeAdjustment = valueBeforeAdjustment;
-    }
-
-    public String getValueBeforeAdjustment() {
-        return valueBeforeAdjustment;
-    }
 }

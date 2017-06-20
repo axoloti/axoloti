@@ -34,11 +34,6 @@ public class DisplayFrac32VBarDB extends Display {
     }
 
     @Override
-    public DisplayInstanceFrac32VBarDB InstanceFactory() {
-        return new DisplayInstanceFrac32VBarDB();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("frac32.vbar.db".getBytes());

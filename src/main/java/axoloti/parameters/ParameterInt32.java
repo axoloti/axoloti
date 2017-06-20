@@ -13,7 +13,7 @@ public abstract class ParameterInt32<T extends ParameterInstanceInt32> extends P
         super(name);
     }
 
-    public abstract int getMinimum();
+    public abstract Integer getMinValue();
 
-    public abstract int getMaximum();
+    public abstract Integer getMaxValue();
 }

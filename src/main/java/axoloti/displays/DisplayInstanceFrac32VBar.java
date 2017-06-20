@@ -17,14 +17,16 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomDefinitionController;
+
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceFrac32VBar extends DisplayInstanceFrac32<DisplayFrac32VBar> {
 
-    public DisplayInstanceFrac32VBar() {
-        super();
+    DisplayInstanceFrac32VBar(AtomDefinitionController controller) {
+        super(controller);
     }
 
 }

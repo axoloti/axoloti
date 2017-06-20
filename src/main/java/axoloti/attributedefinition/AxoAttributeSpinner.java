@@ -17,6 +17,7 @@
  */
 package axoloti.attributedefinition;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.AttributeInstanceSpinner;
 import axoloti.object.AxoObjectInstance;
 import java.util.List;
@@ -29,13 +30,16 @@ import org.simpleframework.xml.Attribute;
 public class AxoAttributeSpinner extends AxoAttribute {
 
     @Attribute
-    public int MinValue;
+    Integer MinValue;
     @Attribute
-    public int MaxValue;
+    Integer MaxValue;
     @Attribute
-    public int DefaultValue;
+    Integer DefaultValue;
 
     public AxoAttributeSpinner() {
+        MinValue = 0;
+        MaxValue = 0;
+        DefaultValue = 0;
     }
 
     public AxoAttributeSpinner(String name, int MinValue, int MaxValue, int DefaultValue) {
@@ -45,37 +49,50 @@ public class AxoAttributeSpinner extends AxoAttribute {
         this.DefaultValue = DefaultValue;
     }
 
-    public int getMinValue() {
-        return MinValue;
-    }
-
-    public int getMaxValue() {
-        return MaxValue;
-    }
-
-    public int getDefaultValue() {
-        return DefaultValue;
-    }
-    
-    @Override
-    public AttributeInstanceSpinner InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceSpinner(this, o);
-    }
-
-    static public final String TypeName = "spinner";
+    public static final String TypeName = "spinner";
 
     @Override
     public String getTypeName() {
         return TypeName;
     }
-    
+
     @Override
-    public List<String> getEditableFields(){
+    public List<String> getEditableFields() {
         List l = super.getEditableFields();
-        l.add("MinValue");
-        l.add("MaxValue");
-        l.add("DefaultValue");
+        l.add(AtomDefinitionController.ATOM_MINVALUE);
+        l.add(AtomDefinitionController.ATOM_MAXVALUE);
+        l.add(AtomDefinitionController.ATOM_DEFAULTVALUE);
         return l;
     }
-    
+
+    public Integer getMinValue() {
+        return MinValue;
+    }
+
+    public Integer getMaxValue() {
+        return MaxValue;
+    }
+
+    public Integer getDefaultValue() {
+        return DefaultValue;
+    }
+
+    public void setMinValue(Integer MinValue) {
+        Integer oldValue = this.MinValue;
+        this.MinValue = MinValue;
+        firePropertyChange(AtomDefinitionController.ATOM_MINVALUE, oldValue, MinValue);
+    }
+
+    public void setMaxValue(Integer MaxValue) {
+        Integer oldValue = this.MaxValue;
+        this.MaxValue = MaxValue;
+        firePropertyChange(AtomDefinitionController.ATOM_MAXVALUE, oldValue, MaxValue);
+    }
+
+    public void setDefaultValue(Integer DefaultValue) {
+        Integer oldValue = this.DefaultValue;
+        this.DefaultValue = DefaultValue;
+        firePropertyChange(AtomDefinitionController.ATOM_DEFAULTVALUE, oldValue, DefaultValue);
+    }
+
 }

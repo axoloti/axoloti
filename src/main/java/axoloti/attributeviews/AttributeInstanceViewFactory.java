@@ -37,13 +37,10 @@ public class AttributeInstanceViewFactory {
             view = new AttributeInstanceViewTextEditor(controller, obj);
         } else {
             view = null;
+            throw new Error("unkonwn attribute type");
         }
         /*
          // these have different constructors... FIXME
-         else if (model instanceof AttributeInstanceTablename) {
-         return new AttributeInstanceTablename((AttributeInstanceTablename)model, obj);
-         } else if (model instanceof AttributeInstanceTextEditor) {
-         return new AttributeInstanceTextEditor((AttributeInstanceTextEditor)model, obj);
          } else if (model instanceof AttributeInstanceWavefile) {
          return new AttributeInstanceWavefile((AttributeInstanceWavefile)model, obj);
          }  

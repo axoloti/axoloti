@@ -17,6 +17,7 @@
  */
 package axoloti.attribute;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.object.AxoObjectInstance;
 import org.simpleframework.xml.Attribute;
@@ -30,11 +31,11 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     @Attribute(name = "selection", required = false)
     String selection;
 
-    public AttributeInstanceComboBox() {
+    AttributeInstanceComboBox() {
     }
 
-    public AttributeInstanceComboBox(AxoAttributeComboBox param, AxoObjectInstance axoObj1) {
-        super(param, axoObj1);
+    AttributeInstanceComboBox(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
+        super(controller, axoObj1);
     }
 
     @Override

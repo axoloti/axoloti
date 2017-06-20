@@ -19,7 +19,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
     JTextField TFObjName;
     JLabel vlabel;
 
-    public AttributeInstanceViewObjRef(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+    AttributeInstanceViewObjRef(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
     }
 
@@ -28,7 +28,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         return (AttributeInstanceObjRef) super.getModel();
     }
 
-    public void PostConstructor() {
+    void PostConstructor() {
         super.PostConstructor();
         TFObjName = new JTextField(getModel().getValue());
         Dimension d = TFObjName.getSize();

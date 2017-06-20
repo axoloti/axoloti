@@ -17,6 +17,7 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomDefinitionController;
 import java.nio.ByteBuffer;
 
 /**
@@ -25,8 +26,8 @@ import java.nio.ByteBuffer;
  */
 public class DisplayInstanceVScale extends DisplayInstance1<DisplayVScale> {
 
-    public DisplayInstanceVScale() {
-        super();
+    public DisplayInstanceVScale(AtomDefinitionController controller) {
+        super(controller);
     }
 
     @Override

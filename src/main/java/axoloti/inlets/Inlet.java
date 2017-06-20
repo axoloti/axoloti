@@ -49,14 +49,6 @@ public abstract class Inlet extends AtomDefinition implements Cloneable {
         return "inlet_" + CharEscape.CharEscape(getName());
     }
 
-    @Override
-    public InletInstance CreateInstance(AxoObjectInstance o) {
-        AtomDefinitionController c = createController(null, null);
-        InletInstance i = new InletInstance(c, o);
-        c.addView(i);
-        return i;
-    }
-
     public abstract DataType getDatatype();
 
     public SignalMetaData GetSignalMetaData() {

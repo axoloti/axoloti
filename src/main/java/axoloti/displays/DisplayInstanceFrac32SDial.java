@@ -17,14 +17,16 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomDefinitionController;
+
 /**
  *
  * @author Johannes Taelman
  */
 public class DisplayInstanceFrac32SDial extends DisplayInstanceFrac32<DisplayFrac32SDial> {
 
-    public DisplayInstanceFrac32SDial() {
-        super();
+    DisplayInstanceFrac32SDial(AtomDefinitionController controller) {
+        super(controller);
     }
 
 }

@@ -340,13 +340,11 @@ public class AxoObject extends AxoObjectAbstract {
         editor = null;
     }
 
+    /*
     @Override
-    public void DeleteInstance(AxoObjectInstanceAbstract o) {
-    }
-
-    @Override
-    public AxoObjectInstance CreateInstance(PatchModel patchModel, String InstanceName1, Point location) {
-        if (patchModel != null) {
+    public AxoObjectInstance CreateInstance(PatchController patchController, String InstanceName1, Point location) {
+        PatchModel patchModel = null;
+        if (patchController != null) {
             if ((sMidiCCCode != null)
                     || (sMidiAllNotesOffCode != null)
                     || (sMidiCCCode != null)
@@ -357,12 +355,13 @@ public class AxoObject extends AxoObjectAbstract {
                     || (sMidiResetControllersCode != null)) {
                 Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object {0} uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!", InstanceName1);
             }
+            patchModel = patchController.getModel();
         }
         ObjectController ctrl = createController(null, null);
         AxoObjectInstance o = new AxoObjectInstance(ctrl, patchModel, InstanceName1, location);
         ctrl.addView(o);
         return o;
-    }
+    }*/
 
     @Override
     public boolean providesModulationSource() {

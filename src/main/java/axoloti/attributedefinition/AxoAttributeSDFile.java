@@ -17,9 +17,6 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstanceSDFile;
-import axoloti.object.AxoObjectInstance;
-
 /**
  *
  * @author Johannes Taelman
@@ -31,11 +28,6 @@ public class AxoAttributeSDFile extends AxoAttribute {
 
     public AxoAttributeSDFile(String name) {
         super(name);
-    }
-
-    @Override
-    public AttributeInstanceSDFile InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceSDFile(this, o);
     }
 
     static public final String TypeName = "file";

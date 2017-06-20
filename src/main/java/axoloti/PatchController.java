@@ -10,6 +10,7 @@ import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFile;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.AxoObjectInstanceFactory;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectPatcher;
@@ -288,8 +289,8 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         }
         AxoObjectAbstract t = o.getModel().getType();
         if (o != null) {
-            //            o.Close();
-            t.DeleteInstance(o.getModel());
+            //o.Close();
+            //t.DeleteInstance(o.getModel());
         }
         boolean succeeded = objectInstanceControllers.remove(o.getModel());
         return succeeded;
@@ -307,7 +308,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
             while (getModel().GetObjectInstance(n + i) != null) {
                 i++;
             }
-            AxoObjectInstanceAbstract objinst = obj.CreateInstance(getModel(), n + i, loc);
+            AxoObjectInstanceAbstract objinst = AxoObjectInstanceFactory.createView(obj.createController(null, null), this, n + i, loc);
 
             Modulator[] m = obj.getModulators();
             if (m != null) {
@@ -379,27 +380,27 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         }
         return null;
     }
-    
+
     void add_unlinked_objectinstance(AxoObjectInstanceAbstract o) {
             o.setPatchModel(getModel());
             if (o instanceof AxoObjectInstancePatcher) {
                 AxoObjectPatcher op = new AxoObjectPatcher("patch/patcher", "");
-                AxoObjectInstancePatcher linked_object_instance = op.CreateInstance(getModel(), o.getInstanceName(), o.getLocation(), ((AxoObjectInstancePatcher) o).getSubPatchModel());
+                AxoObjectInstancePatcher linked_object_instance = op.CreateInstance(this, o.getInstanceName(), o.getLocation(), ((AxoObjectInstancePatcher) o).getSubPatchModel());
                 linked_object_instance.applyValues(o);
                 getModel().objectinstances.add(linked_object_instance);
             } else if (o instanceof AxoObjectInstancePatcherObject) {
                 AxoObjectPatcherObject opo = ((AxoObjectInstancePatcherObject) o).ao;
-                ObjectController opoc = opo.createController(getDocumentRoot(), this);
+                ObjectController opoc = new ObjectController(opo, getDocumentRoot());
                 AxoObjectInstanceAbstract linked_object_instance = new AxoObjectInstancePatcherObject(opoc, getModel(), o.getInstanceName(), o.getLocation());
                 opoc.addView(linked_object_instance);
                 linked_object_instance.applyValues(o);
                 getModel().objectinstances.add(linked_object_instance);
             } else {
                 AxoObjectAbstract t = o.resolveType(getModel().GetCurrentWorkingDirectory());
-                AxoObjectInstanceAbstract linked_object_instance = t.CreateInstance(getModel(), o.getInstanceName(), o.getLocation());
+                AxoObjectInstanceAbstract linked_object_instance = AxoObjectInstanceFactory.createView(t.createController(null, null), this, o.getInstanceName(), o.getLocation());
                 linked_object_instance.applyValues(o);
                 getModel().objectinstances.add(linked_object_instance);
-            }        
+            }
     }
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {

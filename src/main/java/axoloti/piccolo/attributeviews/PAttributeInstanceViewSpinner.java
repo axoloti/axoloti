@@ -38,14 +38,14 @@ public class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
 
             @Override
             public void PCtrlAdjustmentBegin(PCtrlEvent e) {
-                attributeInstance.setValueBeforeAdjustment(attributeInstance.getValue());
+                //attributeInstance.setValueBeforeAdjustment(attributeInstance.getValue());
             }
 
             @Override
             public void PCtrlAdjustmentFinished(PCtrlEvent e) {
-                if (attributeInstance.getValue() != attributeInstance.getValueBeforeAdjustment()) {
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                }
+                //if (attributeInstance.getValue() != attributeInstance.getValueBeforeAdjustment()) {
+                //    attributeInstance.getObjectInstance().getPatchModel().setDirty();
+                //}
             }
         });
     }

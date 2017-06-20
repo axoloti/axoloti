@@ -17,9 +17,6 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.attribute.AttributeInstanceTablename;
-import axoloti.object.AxoObjectInstance;
-
 /**
  *
  * @author Johannes Taelman
@@ -31,11 +28,6 @@ public class AxoAttributeTablename extends AxoAttribute {
 
     public AxoAttributeTablename(String name) {
         super(name);
-    }
-
-    @Override
-    public AttributeInstanceTablename InstanceFactory(AxoObjectInstance o) {
-        return new AttributeInstanceTablename(this, o);
     }
 
     static public final String TypeName = "table";

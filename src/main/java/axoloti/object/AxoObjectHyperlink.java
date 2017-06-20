@@ -17,7 +17,7 @@
  */
 package axoloti.object;
 
-import axoloti.PatchModel;
+import axoloti.PatchController;
 import java.awt.Point;
 
 /**
@@ -34,13 +34,6 @@ public class AxoObjectHyperlink extends AxoObjectAbstract {
         super(id, sDescription);
     }
 
-    @Override
-    public AxoObjectInstanceHyperlink CreateInstance(PatchModel patch, String InstanceName1, Point location) {
-        ObjectController ctrl = createController(null, null);
-        AxoObjectInstanceHyperlink o = new AxoObjectInstanceHyperlink(ctrl, patch, InstanceName1, location);
-        ctrl.addView(o);
-        return o;
-    }
 
     @Override
     public String GenerateUUID() {

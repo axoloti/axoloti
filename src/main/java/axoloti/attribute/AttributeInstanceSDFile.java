@@ -18,6 +18,7 @@
 package axoloti.attribute;
 
 import axoloti.SDFileReference;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttributeSDFile;
 import axoloti.object.AxoObjectInstance;
 import java.io.File;
@@ -37,11 +38,12 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     @Attribute(name = "file")
     String fileName = "";
 
-    public AttributeInstanceSDFile() {
+    AttributeInstanceSDFile(){
+        super();
     }
-
-    public AttributeInstanceSDFile(AxoAttributeSDFile param, AxoObjectInstance axoObj1) {
-        super(param, axoObj1);
+    
+    AttributeInstanceSDFile(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
+        super(controller, axoObj1);
         this.axoObj = axoObj1;
     }
 

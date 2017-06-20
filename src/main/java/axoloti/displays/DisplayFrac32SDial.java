@@ -34,11 +34,6 @@ public class DisplayFrac32SDial extends Display {
     }
 
     @Override
-    public DisplayInstanceFrac32SDial InstanceFactory() {
-        return new DisplayInstanceFrac32SDial();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("frac32.s.dial".getBytes());

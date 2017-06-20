@@ -26,18 +26,6 @@ import java.security.MessageDigest;
  */
 public class DisplayBool32 extends Display {
 
-    public DisplayBool32() {
-    }
-
-    public DisplayBool32(String name) {
-        super(name);
-    }
-
-    @Override
-    public DisplayInstanceBool32 InstanceFactory() {
-        return new DisplayInstanceBool32();
-    }
-
     @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);

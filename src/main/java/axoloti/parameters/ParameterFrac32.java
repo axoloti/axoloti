@@ -48,4 +48,12 @@ public abstract class ParameterFrac32<T extends ParameterInstanceFrac32> extends
         l.add("DefaultValue");
         return l;
     }
+
+    public ValueFrac32 getDefaultValue() {
+        return DefaultValue;
+    }
+
+    public void setDefaultValue(ValueFrac32 DefaultValue) {
+        this.DefaultValue = DefaultValue;
+    }
 }

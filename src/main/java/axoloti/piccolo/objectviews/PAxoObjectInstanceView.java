@@ -234,13 +234,13 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                     attributeInstanceP = attributeInstance;
                 }
             }
-            AttributeInstance attributeInstance1 = p.CreateInstance(getModel(), attributeInstanceP);
+//            AttributeInstance attributeInstance1 = p.CreateInstance(getModel(), attributeInstanceP);
             PAttributeInstanceView attributeInstanceView = null;
             // TODO: implement PICCOLO view factory
             // ... = (PAttributeInstanceView) attributeInstance1.createView(this);
             attributeInstanceView.setAlignmentX(LEFT_ALIGNMENT);
             addChild(attributeInstanceView);
-            getModel().getAttributeInstances().add(attributeInstance1);
+//            getModel().getAttributeInstances().add(attributeInstance1);
         }
 
         for (Parameter p : getType().params) {
@@ -258,12 +258,12 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         }
 
         for (Display p : getType().displays) {
-            DisplayInstance pin = p.CreateInstance(getModel());
+//            DisplayInstance pin = p.CreateInstance(getModel());
             PDisplayInstanceView view = null; 
             // TODO: implement PICCOLO view factory
             // ... = (PDisplayInstanceView) pin.createView(this);
             view.setAlignmentX(RIGHT_ALIGNMENT);
-            getModel().getDisplayInstances().add(pin);
+//            getModel().getDisplayInstances().add(pin);
         }
 
         addChild(p_parameterViews);

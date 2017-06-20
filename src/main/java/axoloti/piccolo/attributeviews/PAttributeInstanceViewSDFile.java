@@ -64,14 +64,14 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
 
             @Override
             public void keyboardFocusGained(PInputEvent e) {
-                attributeInstance.setValueBeforeAdjustment(TFFileName.getText());
+                //attributeInstance.setValueBeforeAdjustment(TFFileName.getText());
             }
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                if (!TFFileName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
-                }
+                //if (!TFFileName.getText().equals(attributeInstance.getValueBeforeAdjustment())) {
+                //    attributeInstance.getObjectInstance().getPatchModel().setDirty();
+                //}
             }
         });
         ButtonChooseFile = new PButtonComponent("choose", axoObjectInstanceView);

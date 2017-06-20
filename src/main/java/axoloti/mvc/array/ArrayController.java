@@ -43,6 +43,7 @@ public abstract class ArrayController<T extends AbstractController, M extends Ab
 
     public boolean remove(M m) {
         ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
+        
         boolean r = n.remove(m);
         if (r) {
             setModelUndoableProperty(ARRAY, n);

@@ -34,11 +34,6 @@ public class DisplayFrac4UByteVBarDB extends Display {
     }
 
     @Override
-    public DisplayInstanceFrac4UByteVBarDB InstanceFactory() {
-        return new DisplayInstanceFrac4UByteVBarDB();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("frac32.4ubytevbar.db".getBytes());

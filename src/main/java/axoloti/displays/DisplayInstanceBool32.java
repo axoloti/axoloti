@@ -17,6 +17,7 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 
@@ -26,8 +27,8 @@ import axoloti.mvc.AbstractDocumentRoot;
  */
 public class DisplayInstanceBool32<DisplayBool32> extends DisplayInstanceInt32 {
 
-    public DisplayInstanceBool32() {
-        super();
+    public DisplayInstanceBool32(AtomDefinitionController controller) {
+        super(controller);
     }
 
 }
