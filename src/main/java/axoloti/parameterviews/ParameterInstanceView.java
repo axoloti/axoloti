@@ -1,6 +1,7 @@
 package axoloti.parameterviews;
 
 import axoloti.Preset;
+import axoloti.Theme;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -98,34 +99,33 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         }
 
         ctrl = CreateControl();
-        if (getModel().getModel().description != null) {
-            ctrl.setToolTipText(getModel().getModel().description);
-        } else {
-            ctrl.setToolTipText(getModel().getModel().getName());
-        }
+
         add(getControlComponent());
         getControlComponent().addMouseListener(popupMouseListener);
         getControlComponent().addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
                 boolean changed = handleAdjustment();
+                getController().getModel().setNeedsTransmit(true);
             }
 
             @Override
             public void ACtrlAdjustmentBegin(ACtrlEvent e) {
-                valueBeforeAdjustment = getControlComponent().getValue();
-                //System.out.println("begin "+value_before);
             }
-
+            
             @Override
             public void ACtrlAdjustmentFinished(ACtrlEvent e) {
             }
         });
-        updateV();
-        getModel().setMidiCC(getModel().getMidiCC());
     }
 
-    double valueBeforeAdjustment;
+    void showOnParent(boolean onParent){
+        if (getModel().getOnParent()) {
+            setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
+        } else {
+            setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);               
+        }
+    }
 
     public void doPopup(MouseEvent e) {
         JPopupMenu m = new JPopupMenu();
@@ -135,13 +135,14 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     public void populatePopup(JPopupMenu m) {
         final JCheckBoxMenuItem m_onParent = new JCheckBoxMenuItem("parameter on parent");
-        m_onParent.setSelected(getModel().getOnParent());
+        boolean op = getModel().getOnParent();
+        m_onParent.setSelected(op);
         m.add(m_onParent);
         m_onParent.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                getModel().setOnParent(m_onParent.isSelected());
-            }
+               getController().setModelUndoableProperty(ParameterInstanceController.ELEMENT_PARAM_ON_PARENT, !op);
+             }
         });
 
         JMenu m_preset = new JMenu("Preset");
@@ -192,46 +193,11 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String s = e.getActionCommand();
-        if (s.startsWith("CC")) {
-            int i = Integer.parseInt(s.substring(2));
-            if (i != getModel().getMidiCC()) {
-                SetMidiCC(i);
-            }
-        } else if (s.equals("none")) {
-            if (-1 != getModel().getMidiCC()) {
-                SetMidiCC(-1);
-            }
-        }
-    }
-
-    @Override
-    public String getName() {
-        if (getModel() != null) {
-            return getModel().getName();
-        } else {
-            return super.getName();
-        }
     }
 
     void UpdateUnit() {
         if (getModel().getConvs() != null) {
             valuelbl.setText(getModel().getConvs()[getModel().getSelectedConv()].ToReal(getModel().getValue()));
-        }
-    }
-
-    public void updateV() {
-        UpdateUnit();
-    }
-
-    public void SetMidiCC(Integer cc) {
-        getModel().setMidiCC(cc);
-        if ((cc != null) && (cc >= 0)) {
-            if (midiAssign != null) {
-                midiAssign.setCC(cc);
-            }
-        } else if (midiAssign != null) {
-            midiAssign.setCC(-1);
         }
     }
 
@@ -267,12 +233,12 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         ShowPreset(presetEditActive);
     }
 
-    public Preset AddPreset(int index, Value value) {
-        return getModel().AddPreset(index, value);
+    final public Preset AddPreset(int index, Value value) {
+        return getController().AddPreset(index, value);
     }
 
-    public void RemovePreset(int index) {
-        getModel().RemovePreset(index);
+    final public void RemovePreset(int index) {
+        getController().RemovePreset(index);
     }
 
     public IAxoObjectInstanceView getAxoObjectInstanceView() {
@@ -287,10 +253,16 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             setToolTipText((String) evt.getNewValue());
         } else if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_ON_PARENT)) {
-            repaint();
-        }
-        else {
-            updateV();
+            showOnParent((Boolean)evt.getNewValue());
+        } else if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_MIDI_CC)) {
+            Integer v = (Integer) evt.getNewValue();
+            if (midiAssign != null) {
+                if (v != null) {
+                    midiAssign.setCC(v);
+                } else {
+                    midiAssign.setCC(-1);
+                }
+            }
         }
     }
 }

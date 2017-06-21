@@ -23,6 +23,7 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
     LabelComponent label;
 
     public OutletInstanceView(OutletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
+        super();
         this.controller = controller;
         this.axoObj = axoObj;
         setBackground(Theme.getCurrentTheme().Object_Default_Background);

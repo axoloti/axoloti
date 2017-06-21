@@ -97,7 +97,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        getModel().updateObj1();
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -321,11 +320,9 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         p_parameterViews.setAlignmentX(LEFT_ALIGNMENT);
         p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
 
-        synchronized (getTreeLock()) {
-            validateTree();
-        }
         setLocation(getModel().getX(), getModel().getY());
-        resizeToGrid();
+        resizeToGrid();        
+        setVisible(true);
     }
 
     @Override
@@ -425,10 +422,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         super.Unlock();
         for (IAttributeInstanceView a : attributeInstanceViews) {
             a.UnLock();
-        }
-        if (getModel().deferredObjTypeUpdate) {
-            getModel().updateObj();
-            getModel().deferredObjTypeUpdate = false;
         }
     }
 

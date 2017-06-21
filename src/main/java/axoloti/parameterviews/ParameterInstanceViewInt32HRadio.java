@@ -16,11 +16,6 @@ class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
     }
 
     @Override
-    public void updateV() {
-        ctrl.setValue(getModel().getValue().getInt());
-    }
-
-    @Override
     public HRadioComponent CreateControl() {
         return new HRadioComponent(0, ((ParameterInt32HRadio) getModel().getModel()).MaxValue.getInt());
     }
@@ -34,7 +29,7 @@ class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
     public void populatePopup(JPopupMenu m) {
         super.populatePopup(m);
         JMenu m1 = new JMenu("Midi CC");
-        new AssignMidiCCMenuItems(this, m1);
+        new AssignMidiCCMenuItems(getController(), m1);
         m.add(m1);
     }
 }

@@ -78,13 +78,8 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
     }
 
     @Override
-    public ValueInt32 getValue() {
-        return value;
-    }
-
-    @Override
     public void setValue(Value value) {
-        this.value.setInt(value.getInt());
+        setValue((ValueInt32)value);
     }
 
     @Override
@@ -96,4 +91,22 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
             value.setRaw(p1.value.getRaw());
         }
     }
+
+    /**
+     * **
+     */
+    @Override
+    public ValueInt32 getValue() {
+        return value;
+    }
+
+    public void setValue(ValueInt32 value) {
+        ValueInt32 oldvalue = this.value;
+        this.value = value;
+        needsTransmit = true;
+        firePropertyChange(
+                ParameterInstanceController.ELEMENT_PARAM_VALUE,
+                oldvalue, value);
+    }
+
 }

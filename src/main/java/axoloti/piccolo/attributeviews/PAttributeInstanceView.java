@@ -39,7 +39,7 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
     @Override
     public String getName() {
         if (attributeInstance != null) {
-            return attributeInstance.getAttributeName();
+            return attributeInstance.getName();
         } else {
             return super.getName();
         }

@@ -18,7 +18,6 @@
 package axoloti.atom;
 
 import axoloti.mvc.AbstractView;
-import axoloti.object.AxoObjectInstanceAbstract;
 
 /**
  *
@@ -28,8 +27,6 @@ import axoloti.object.AxoObjectInstanceAbstract;
  * An Axoloti Object Instance is composed out of AtomInstances
  */
 public interface AtomInstance<T extends AtomDefinition> extends AbstractView {
-
-    public AxoObjectInstanceAbstract getObjectInstance();
 
     public T getModel();
 

@@ -41,7 +41,7 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
         m_default.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getModel().applyDefaultValue();
+                //getModel().applyDefaultValue();
                 updateV();
                 getControlComponent().setValue(getModel().getValue().getDouble());
                 handleAdjustment();

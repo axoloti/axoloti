@@ -17,6 +17,7 @@
  */
 package axoloti.parameters;
 
+import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
 import java.security.MessageDigest;
 import java.util.List;
@@ -26,7 +27,7 @@ import org.simpleframework.xml.Element;
  *
  * @author Johannes Taelman
  */
-public class ParameterInt32BoxSmall extends Parameter<ParameterInstanceInt32BoxSmall> {
+public class ParameterInt32BoxSmall extends ParameterInt32<ParameterInstanceInt32BoxSmall> {
 
     @Element
     public ValueInt32 MinValue;
@@ -77,4 +78,15 @@ public class ParameterInt32BoxSmall extends Parameter<ParameterInstanceInt32BoxS
     public String GetCType() {
         return "param_type_int";
     }
+
+    @Override
+    public Integer getMinValue() {
+        return MinValue.getInt();
+    }
+
+    @Override
+    public Integer getMaxValue() {
+        return MaxValue.getInt();
+    }
+
 }

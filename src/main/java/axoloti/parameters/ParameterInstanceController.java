@@ -1,10 +1,13 @@
 package axoloti.parameters;
 
+import axoloti.Preset;
+import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.object.ObjectInstanceController;
 import axoloti.parameterviews.IParameterInstanceView;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,13 +17,59 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
 
     public static final String ELEMENT_PARAM_VALUE = "Value";
     public static final String ELEMENT_PARAM_ON_PARENT = "OnParent";
+    public static final String ELEMENT_PARAM_MIDI_CC = "MidiCC";
+    public static final String ELEMENT_PARAM_PRESETS = "Presets";
 
+    public static String[] propertyNames = {ELEMENT_PARAM_VALUE, ELEMENT_PARAM_ON_PARENT, ELEMENT_PARAM_MIDI_CC, ELEMENT_PARAM_PRESETS};
+
+    @Override
+    public String[] getPropertyNames() {
+        return propertyNames;
+    }
+    
     public ParameterInstanceController(ParameterInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
         super(model, documentRoot, parent);
     }
 
-    public void changeRawValue(int rawValue) {
-        setModelUndoableProperty(ELEMENT_PARAM_VALUE, new ValueInt32((Integer) rawValue));
+//    public void changeRawValue(int rawValue) {
+//        setModelUndoableProperty(ELEMENT_PARAM_VALUE, new ValueInt32((Integer) rawValue));
+//    }
+    
+    public Preset AddPreset(int index, Value value) {
+        if (getModel().getPresets() == null) {
+            ArrayList<Preset> new_presets = new ArrayList<Preset>();
+            Preset p = new Preset(index, value);
+            new_presets.add(p);
+            setModelUndoableProperty(ELEMENT_PARAM_PRESETS, new_presets);
+            return p;
+        }
+        Preset p = getModel().GetPreset(index);
+        ArrayList<Preset> new_presets = (ArrayList<Preset>) getModel().getPresets().clone();
+        if (p != null) {
+            new_presets.remove(p);
+        }
+        Preset pnew = new Preset(index, value);
+        new_presets.add(pnew);
+        setModelUndoableProperty(ELEMENT_PARAM_PRESETS, new_presets);
+        return pnew;
     }
 
+    public void RemovePreset(int index) {
+        Preset p = getModel().GetPreset(index);
+        if (p != null) {
+            ArrayList<Preset> presets = (ArrayList<Preset>) getModel().getPresets().clone();
+            presets.remove(p);
+            setModelUndoableProperty(ELEMENT_PARAM_PRESETS, presets);
+        }
+    }
+
+    public void applyDefaultValue() {
+        Value d = (getModel().parameter).getDefaultValue();
+        if (d != null) {
+            setModelUndoableProperty(ELEMENT_PARAM_VALUE, d);
+        } else {
+            setModelUndoableProperty(ELEMENT_PARAM_VALUE, d);
+        }
+    }    
+    
 }

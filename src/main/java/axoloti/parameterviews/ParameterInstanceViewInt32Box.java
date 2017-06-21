@@ -17,11 +17,6 @@ class ParameterInstanceViewInt32Box extends ParameterInstanceViewInt32 {
     }
 
     @Override
-    public void updateV() {
-        ctrl.setValue(getModel().getValue().getInt());
-    }
-
-    @Override
     public NumberBoxComponent CreateControl() {
         NumberBoxComponent n = new NumberBoxComponent(0.0, getModel().getMin(), getModel().getMax(), 1.0);
         return n;

@@ -337,9 +337,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         this.patchModel = patchModel;
     }
 
-    public void updateObj1() {
-    }
-
     public void Close() {
     }
 

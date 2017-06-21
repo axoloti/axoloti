@@ -50,7 +50,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     AttributeInstance(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
         this.controller = controller;
         axoObj = axoObj1;
-        attributeName = controller.getModel().getName();
     }
 
     public abstract String CValue();
@@ -61,7 +60,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
         return "attr_" + CharEscape(attributeName);
     }
 
-    @Override
     public AxoObjectInstance getObjectInstance() {
         return axoObj;
     }
@@ -84,13 +82,10 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        // triggered by a model definition change, triggering instance view changes
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)
-                || evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
-            firePropertyChange(
-                    evt.getPropertyName(),
-                    evt.getOldValue(),
-                    evt.getNewValue());
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
+            setName((String) evt.getNewValue());
+        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+            //setDescription(evt.getNewValue());
         }
     }
 
@@ -98,4 +93,15 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     public AtomDefinitionController getController() {
         return controller;
     }
+
+    public String getName() {
+        return attributeName;
+    }
+
+    public void setName(String attributeName) {
+        String preVal = this.attributeName;
+        this.attributeName = attributeName;
+        firePropertyChange(AtomDefinitionController.ATOM_NAME, preVal, attributeName);
+    }
+
 }

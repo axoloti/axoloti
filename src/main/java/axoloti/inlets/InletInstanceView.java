@@ -24,6 +24,7 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
     LabelComponent label;
 
     public InletInstanceView(InletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
+        super();
         this.axoObj = axoObj;
         this.controller = controller;
         setBackground(Theme.getCurrentTheme().Object_Default_Background);

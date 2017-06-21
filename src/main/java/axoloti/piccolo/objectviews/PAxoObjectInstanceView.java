@@ -83,7 +83,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     public void PostConstructor() {
         super.PostConstructor();
         setPaint(Theme.getCurrentTheme().Object_Default_Background);
-        model.updateObj1();
+        //model.updateObj1();
 
         setLocation(model.getX(), model.getY());
         setDrawBorder(true);
@@ -230,7 +230,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         for (AxoAttribute p : getType().attributes) {
             AttributeInstance attributeInstanceP = null;
             for (AttributeInstance attributeInstance : pAttributeInstances) {
-                if (attributeInstance.getAttributeName().equals(p.getName())) {
+                if (attributeInstance.getName().equals(p.getName())) {
                     attributeInstanceP = attributeInstance;
                 }
             }

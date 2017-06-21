@@ -30,7 +30,7 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
 
     Integer MinValue;
     Integer MaxValue;
-    
+
     AttributeInstanceSpinner() {
         super();
     }

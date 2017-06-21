@@ -18,13 +18,6 @@ class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32
         super.PostConstructor();
     }
 
-    @Override
-    public void updateV() {
-        if (ctrl != null) {
-            ctrl.setValue(getModel().getValue().getDouble());
-        }
-    }
-
     /*
      *  Preset logic
      */

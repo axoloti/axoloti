@@ -33,7 +33,7 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
 
     AttributeInstanceInt() {
     }
-    
+
     public AttributeInstanceInt(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
         super(controller, axoObj1);
     }

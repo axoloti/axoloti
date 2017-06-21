@@ -23,7 +23,7 @@ public class AxoObjectInstanceFactory {
         if (objm instanceof AxoObjectUnloaded) {
             ((AxoObjectUnloaded) objm).Load();
             objm = ((AxoObjectUnloaded) objm).loadedObject;
-            obj = ((AxoObjectUnloaded) objm).loadedObject.createController(null, null);
+            obj = objm.createController(null, null);
         }
         if (objm instanceof AxoObjectComment) {
             obji = new AxoObjectInstanceComment(obj, patchModel, instanceName, location);

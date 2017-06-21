@@ -29,7 +29,7 @@ public class AttributeInstanceInt32 extends AttributeInstanceInt<AxoAttributeInt
 
     AttributeInstanceInt32() {
     }
-    
+
     AttributeInstanceInt32(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
         super(controller, axoObj1);
     }

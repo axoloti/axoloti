@@ -58,7 +58,6 @@ public class AssignPresetPanel extends JPanel {
             c.gridx = 1;
             ACtrlComponent ctrl = parameterInstanceView.CreateControl();
             ctrls.add(ctrl);
-            ctrl.addACtrlListener(ctrlListener);
             Preset p = parameterInstanceView.getModel().GetPreset(i + 1);
             if (p != null) {
                 cb.setSelected(true);
@@ -67,6 +66,7 @@ public class AssignPresetPanel extends JPanel {
                 ctrl.setEnabled(false);
                 ctrl.setValue(parameterInstanceView.getModel().getValue().getDouble());
             }
+            ctrl.addACtrlListener(ctrlListener);
             add(ctrl, c);
         }
     }
@@ -104,7 +104,7 @@ public class AssignPresetPanel extends JPanel {
             if (i >= 0) {
                 if (ctrls.get(i).isEnabled()) {
                     if (parameterInstanceView.getModel().getValue() instanceof ValueInt32) {
-                        parameterInstanceView.getModel().AddPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
+                        parameterInstanceView.getController().AddPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
                     } else if (parameterInstanceView.getModel().getValue() instanceof ValueFrac32) {
                         parameterInstanceView.AddPreset(i + 1, new ValueFrac32(ctrls.get(i).getValue()));
                     }

@@ -49,34 +49,6 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     }
 
     @Override
-    public void updateObj1() { 
-        /*
-        if (getAxoObject() == null) {
-            setAxoObject(new AxoObjectPatcherObject());
-            getAxoObject().id = "patch/object";
-            getAxoObject().sDescription = "";
-        }
-        setType(getAxoObject());
-        */
-        /*
-         if (pg != null) {
-         AxoObject ao = pg.GenerateAxoObj();
-         setType(ao);
-         pg.container(patch);
-         }
-         */
-    }
-
-    @Override
-    public void updateObj() {
-        /*
-        if (getAxoObject() != null) {
-            getAxoObject().id = "patch/object";
-            setType(getAxoObject());
-        }*/
-    }
-
-    @Override
     public void Close() {
         super.Close();
         /*

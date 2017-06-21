@@ -39,8 +39,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location) {
         super(controller, patch1, InstanceName1, location);        
     }
-    
-    
+
     public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location, PatchModel subPatchModel) {
         super(controller, patch1, InstanceName1, location);
         if (subPatchModel == null) {
@@ -51,36 +50,6 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
 
     public PatchModel getSubPatchModel() {
         return subPatchModel;
-    }
-
-    @Override
-    @Deprecated
-    public void updateObj1() {
-        /*
-         if (getSubPatchModel() != null) {
-         // cheating here by creating a new controller...
-         PatchViewCodegen codegen = new PatchViewCodegen(subPatchController);
-         AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
-         setType(ao);
-         ao.id = "patch/patcher";
-         ao.sDescription = getSubPatchModel().getNotes();
-         ao.sLicense = getSubPatchModel().getSettings().getLicense();
-         ao.sAuthor = getSubPatchModel().getSettings().getAuthor();
-         getSubPatchModel().setContainer(getPatchModel());
-         }*/
-    }
-
-    @Override
-    @Deprecated
-    public void updateObj() {
-//        if (getSubPatchModel() != null) {
-//            // cheating here by creating a new controller...
-//            PatchController controller = new PatchController(getSubPatchModel(), null);
-//            PatchViewCodegen codegen = new PatchViewCodegen(controller);
-//            AxoObject ao = codegen.GenerateAxoObj(new AxoObjectPatcher());
-//
-//            setType(ao);
-//        }
     }
 
     @Override

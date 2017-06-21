@@ -40,6 +40,7 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
     private int selIndex = -1;
 
     public Checkbox4StatesComponent(int value, int n) {
+        super();
         //setInheritsPopupMenu(true);
         this.value = 0;//value;
         this.n = n;
@@ -64,7 +65,7 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
         int mask = 3 << (position * 2);
         int v = (int) value;
         v = (v & ~mask) + (val << (position * 2));
-        setValue((double) v);
+        fireValue((double) v);
     }
 
     private int GetFieldValue(int position) {
@@ -275,9 +276,14 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
             this.value = value;
             repaint();
         }
-        fireEvent();
     }
 
+    
+    public void fireValue(double value) {
+        setValue(value);
+        fireEvent();
+    }
+    
     @Override
     public double getValue() {
         return value;

@@ -63,40 +63,11 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     }
 
     @Override
-    public Value getValue() {
-        return value;
-    }
-
-    @Override
     public void setValue(Value value) {
-        Integer oldvalue = this.value.getRaw();
-        this.value = new ValueFrac32();
-        this.value.setRaw(value.getRaw());
-        needsTransmit = true;
-        firePropertyChange(
-            ParameterInstanceController.ELEMENT_PARAM_VALUE,
-            oldvalue, (Integer)value.getRaw());
+        setValue((ValueFrac32)value);
+        //this.value.setRaw(value.getRaw());
     }
 
-    public void setValue(ValueInt32 value) {
-        setValue((Value)value);
-        //this.value.setRaw(value.getRaw());
-    }
-   
-    public void setValue(ValueFrac32 value) {
-        setValue((Value)value);
-        //this.value.setRaw(value.getRaw());
-    }
-    
-    @Override
-    public void applyDefaultValue() {
-        if (((ParameterFrac32) parameter).DefaultValue != null) {
-            value.setRaw(((ParameterFrac32) parameter).DefaultValue.getRaw());
-        } else {
-            value.setRaw(0);
-        }
-        needsTransmit = true;
-    }
 
     public void updateModulation(int index, double amount) {
         //System.out.println("updatemodulation1:" + index);
@@ -218,4 +189,21 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
     }
+    
+    /*****/
+    
+    @Override
+    public ValueFrac32 getValue() {
+        return value;
+    }
+
+    public void setValue(ValueFrac32 value) {
+        ValueFrac32 oldvalue = this.value;
+        this.value = value;
+        needsTransmit = true;
+        firePropertyChange(
+            ParameterInstanceController.ELEMENT_PARAM_VALUE,
+            oldvalue, value);
+    }
+    
 }

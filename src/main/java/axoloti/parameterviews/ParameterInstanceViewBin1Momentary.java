@@ -11,11 +11,6 @@ class ParameterInstanceViewBin1Momentary extends ParameterInstanceViewBin {
     }
 
     @Override
-    public void updateV() {
-        ctrl.setValue(getModel().getValue().getInt());
-    }
-
-    @Override
     public PulseButtonComponent CreateControl() {
         return new PulseButtonComponent();
     }

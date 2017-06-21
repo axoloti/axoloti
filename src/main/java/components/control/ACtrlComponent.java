@@ -51,6 +51,7 @@ public abstract class ACtrlComponent extends JComponent {
     protected Color customBackgroundColor;
 
     public ACtrlComponent() {
+        super();
         setFocusable(true);
         addFocusListener(new FocusListener() {
             @Override

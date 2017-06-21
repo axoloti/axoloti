@@ -21,7 +21,6 @@ import axoloti.objectviews.AxoObjectInstanceViewFactory;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.parameters.ParameterInstance;
-import axoloti.parameterviews.IParameterInstanceView;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
@@ -39,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,6 +123,7 @@ public abstract class PatchView extends PatchAbstractView {
             }
         };
         controller.netControllers.addView(netViews);
+        
     }
 
     public ArrayView<IAxoObjectInstanceView> getObjectInstanceViews() {
@@ -133,8 +134,6 @@ public abstract class PatchView extends PatchAbstractView {
 
     public void initViewportView() {
     }
-
-    public abstract void repaint();
 
     public abstract Point getLocationOnScreen();
 
@@ -422,10 +421,17 @@ public abstract class PatchView extends PatchAbstractView {
         if (pm.getFileNamePath() == null) {
             pm.setFileNamePath("untitled");
         }
+        long ChronoStart = Calendar.getInstance().getTimeInMillis();
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
         PatchController patchController = new PatchController(pm, documentRoot, null);
+        long ChronoControllerCreated = Calendar.getInstance().getTimeInMillis();
+        System.out.println("ChronoControllerCreated " + (ChronoControllerCreated - ChronoStart));
         PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+        long ChronoFrameCreated = Calendar.getInstance().getTimeInMillis();
+        System.out.println("ChronoFrameCreated " + (ChronoFrameCreated - ChronoControllerCreated));
         patchController.addView(pf);
+        long ChronoAddView = Calendar.getInstance().getTimeInMillis();
+        System.out.println("ChronoAddViewCreated " + (ChronoAddView - ChronoFrameCreated));
         return pf;
     }
 
@@ -491,7 +497,7 @@ public abstract class PatchView extends PatchAbstractView {
                 n.setVisible(isCableTypeEnabled(d));
             }
         }
-        repaint();
+        //repaint();
     }
 
     public void Close() {
@@ -629,22 +635,6 @@ public abstract class PatchView extends PatchAbstractView {
         */
     }
 
-    Map<ParameterInstance, IParameterInstanceView> parameterInstanceViews = new HashMap<>();
-
-    public void updateParameterView(ParameterInstance pi) {
-        parameterInstanceViews.get(pi).updateV();
-    }
-
-    public abstract void validate();
-
-    public abstract void validateObjects();
-
-    public abstract void validateNets();
-
-    public void modelChanged() {
-        modelChanged(true);
-    }
-
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
@@ -662,9 +652,6 @@ public abstract class PatchView extends PatchAbstractView {
         } else if (evt.getPropertyName().equals(PatchController.PATCH_NETS)) {
             netViews.updateUI();
         }
-    }
-
-    public void modelChanged(boolean updateSelection) {
     }
 
     DropTarget dt = new DropTarget() {

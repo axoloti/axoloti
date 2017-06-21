@@ -16,6 +16,13 @@ public class AtomDefinitionController extends AbstractController<AtomDefinition,
     public static final String ATOM_MAXVALUE = "MaxValue";
     public static final String ATOM_DEFAULTVALUE = "DefaultValue";
 
+    public static final String[] PROPERTY_NAMES = {ATOM_NAME, ATOM_DESCRIPTION};
+
+    @Override
+    public String[] getPropertyNames() {
+        return PROPERTY_NAMES;
+    }
+
     public AtomDefinitionController(AtomDefinition model, AbstractDocumentRoot documentRoot, ObjectController parent) {
         super(model, documentRoot, parent);
     }

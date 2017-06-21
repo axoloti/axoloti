@@ -64,12 +64,12 @@ public class PatchViewSwing extends PatchView {
 
     public PatchLayeredPane Layers = new PatchLayeredPane();
 
-    public JPanel objectLayerPanel = new JPanel();
-    public JPanel draggedObjectLayerPanel = new JPanel();
-    public JPanel netLayerPanel = new JPanel();
-    public JPanel selectionRectLayerPanel = new JPanel();
+    public JPanel objectLayerPanel = new JPanel(null);
+    public JPanel draggedObjectLayerPanel = new JPanel(null);
+    public JPanel netLayerPanel = new JPanel(null);
+    public JPanel selectionRectLayerPanel = new JPanel(null);
 
-    JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel);
+//    JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel);
     JLayer<JComponent> draggedObjectLayer = new JLayer<JComponent>(draggedObjectLayerPanel);
     JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel);
     JLayer<JComponent> selectionRectLayer = new JLayer<JComponent>(selectionRectLayerPanel);
@@ -86,22 +86,22 @@ public class PatchViewSwing extends PatchView {
         Layers.setLocation(0, 0);
 
         JComponent[] layerComponents = {
-            objectLayer, objectLayerPanel, draggedObjectLayerPanel, netLayerPanel,
+            /*objectLayer,*/ objectLayerPanel, draggedObjectLayerPanel, netLayerPanel,
             selectionRectLayerPanel, draggedObjectLayer, netLayer, selectionRectLayer};
         for (JComponent c : layerComponents) {
             c.setLayout(null);
             c.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
             c.setLocation(0, 0);
             c.setOpaque(false);
-            c.validate();
+            //c.validate();
         }
 
-        Layers.add(objectLayer, new Integer(1));
+        Layers.add(objectLayerPanel, new Integer(1));
         Layers.add(netLayer, new Integer(2));
         Layers.add(draggedObjectLayer, new Integer(3));
         Layers.add(selectionRectLayer, new Integer(4));
 
-        objectLayer.setName("objectLayer");
+//        objectLayer.setName("objectLayer");
         draggedObjectLayer.setName("draggedObjectLayer");
         netLayer.setName("netLayer");
         netLayerPanel.setName("netLayerPanel");
@@ -395,22 +395,15 @@ public class PatchViewSwing extends PatchView {
         if (b) {
             Layers.removeAll();
             Layers.add(netLayer, new Integer(1));
-            Layers.add(objectLayer, new Integer(2));
+            Layers.add(objectLayerPanel, new Integer(2));
             Layers.add(draggedObjectLayer, new Integer(3));
             Layers.add(selectionRectLayer, new Integer(4));
         } else {
             Layers.removeAll();
-            Layers.add(objectLayer, new Integer(1));
+            Layers.add(objectLayerPanel, new Integer(1));
             Layers.add(netLayer, new Integer(2));
             Layers.add(draggedObjectLayer, new Integer(3));
             Layers.add(selectionRectLayer, new Integer(4));
-        }
-    }
-
-    @Override
-    public void repaint() {
-        if (Layers != null) {
-            Layers.repaint();
         }
     }
 
@@ -446,21 +439,6 @@ public class PatchViewSwing extends PatchView {
                 Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);                
             }            
         }
-    }
-
-    @Override
-    public void validate() {
-        Layers.validate();
-    }
-
-    @Override
-    public void validateObjects() {
-        objectLayerPanel.validate();
-    }
-
-    @Override
-    public void validateNets() {
-        netLayerPanel.validate();
     }
 
     public PatchViewportView getViewportView() {

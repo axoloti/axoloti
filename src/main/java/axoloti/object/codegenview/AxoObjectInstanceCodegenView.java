@@ -156,7 +156,8 @@ typedef struct ui_object {
             s = s.replace("attr_name", getModel().getCInstanceName());
             s = s.replace("attr_legal_name", getModel().getLegalName());
             for (ParameterInstance p : getModel().parameterInstances) {
-                if (p.getOnParent() && enableOnParent) {
+                Boolean op = p.getOnParent();
+                if (op!=null && op == true) {
 //                    s = s.replace("%" + p.name + "%", OnParentAccess + p.variableName(vprefix, enableOnParent));
                 } else {
 //                    s = s.replace("%" + p.name + "%", p.variableName(vprefix, enableOnParent));

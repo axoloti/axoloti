@@ -77,7 +77,7 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         ButtonChooseFile.addActListener(new ButtonComponent.ActListener() {
             @Override
             public void OnPushed() {
-                JFileChooser fc = new JFileChooser(getModel().getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
+                JFileChooser fc = new JFileChooser(getController().getParent().getParent().getModel().GetCurrentWorkingDirectory());
                 int returnVal = fc.showOpenDialog(null // FIXME: parent frame
                 );
                 if (returnVal == JFileChooser.APPROVE_OPTION) {

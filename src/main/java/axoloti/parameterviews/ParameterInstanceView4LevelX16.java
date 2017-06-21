@@ -24,8 +24,4 @@ class ParameterInstanceView4LevelX16 extends ParameterInstanceViewInt32 {
     public void ShowPreset(int i) {
     }
 
-    @Override
-    public void updateV() {
-        ctrl.setValue(getModel().getValue().getInt());
-    }
 }

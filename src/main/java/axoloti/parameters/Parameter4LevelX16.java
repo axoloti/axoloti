@@ -17,6 +17,8 @@
  */
 package axoloti.parameters;
 
+import axoloti.datatypes.ValueInt32;
+
 /**
  *
  * @author Johannes Taelman
@@ -33,6 +35,11 @@ public class Parameter4LevelX16 extends Parameter<ParameterInstance4LevelX16> {
     @Override
     public ParameterInstance4LevelX16 InstanceFactory() {
         return new ParameterInstance4LevelX16();
+    }
+
+    @Override
+    public ValueInt32 getDefaultValue() {
+        return new ValueInt32(0);
     }
 
     static public final String TypeName = "int2x16";

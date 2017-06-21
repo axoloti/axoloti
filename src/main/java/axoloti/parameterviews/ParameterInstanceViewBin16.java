@@ -18,11 +18,6 @@ class ParameterInstanceViewBin16 extends ParameterInstanceViewBin {
     }
 
     @Override
-    public void updateV() {
-        ctrl.setValue(getModel().getValue().getInt());
-    }
-
-    @Override
     public CheckboxComponent getControlComponent() {
         return (CheckboxComponent) ctrl;
     }

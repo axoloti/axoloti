@@ -984,7 +984,6 @@ public class USBBulkConnection extends IConnection {
 
                 if (!pi.getNeedsTransmit()) {
                     pi.SetValueRaw(value);
-                    getPatchView().updateParameterView(pi);
                 }
 
 //                System.out.println("rcv ppc objname:" + pi.axoObj.getInstanceName() + " pname:"+ pi.name);

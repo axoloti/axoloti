@@ -44,6 +44,11 @@ public class HRadioComponent extends ACtrlComponent {
         this.value = 0;//value;
         this.n = n;
         bsize = 12;
+        Dimension d = new Dimension(bsize * n + 2, bsize + 2);
+        setSize(d);
+        setPreferredSize(d);
+        setMaximumSize(d);
+        setMinimumSize(d);
         SetupTransferHandler();
     }
 
@@ -59,7 +64,7 @@ public class HRadioComponent extends ACtrlComponent {
     @Override
     protected void mouseDragged(MouseEvent e) {
         if (dragAction) {
-            setValue(mousePosToVal(e.getX(),e.getY()));
+            fireValue(mousePosToVal(e.getX(),e.getY()));
         }
     }
 
@@ -69,7 +74,7 @@ public class HRadioComponent extends ACtrlComponent {
             grabFocus();
             if (e.getButton() == 1) {
                 fireEventAdjustmentBegin();
-                setValue(mousePosToVal(e.getX(),e.getY()));
+                fireValue(mousePosToVal(e.getX(),e.getY()));
                 dragAction = true;
             }
             e.consume();
@@ -98,7 +103,7 @@ public class HRadioComponent extends ACtrlComponent {
                     v = 0;
                 }
                 fireEventAdjustmentBegin();
-                setValue(v);
+                fireValue(v);
                 ke.consume();
                 return;
             }
@@ -109,20 +114,20 @@ public class HRadioComponent extends ACtrlComponent {
                     v = n - 1;
                 }
                 fireEventAdjustmentBegin();
-                setValue(v);
+                fireValue(v);
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_HOME: {
                 fireEventAdjustmentBegin();
-                setValue(0);
+                fireValue(0);
                 fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_END: {
                 fireEventAdjustmentBegin();
-                setValue(n - 1);
+                fireValue(n - 1);
                 fireEventAdjustmentFinished();
                 ke.consume();
                 return;
@@ -143,7 +148,7 @@ public class HRadioComponent extends ACtrlComponent {
                 int i = ke.getKeyChar() - '0';
                 if (i < n) {
                     fireEventAdjustmentBegin();
-                    setValue(i);
+                    fireValue(i);
                     fireEventAdjustmentFinished();
                 }
                 ke.consume();
@@ -186,26 +191,15 @@ public class HRadioComponent extends ACtrlComponent {
     }
 
     @Override
-    public Dimension getMinimumSize() {
-        return new Dimension(bsize * n + 2, bsize + 2);
-    }
-
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(bsize * n + 2, bsize + 2);
-    }
-
-    @Override
-    public Dimension getMaximumSize() {
-        return new Dimension(bsize * n + 2, bsize + 2);
-    }
-
-    @Override
     public void setValue(double value) {
         if (this.value != value) {
             this.value = value;
         }
         repaint();
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
         fireEvent();
     }
 

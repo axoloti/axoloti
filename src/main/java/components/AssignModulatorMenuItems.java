@@ -85,7 +85,7 @@ public class AssignModulatorMenuItems {
                 public void ACtrlAdjustmentFinished(ACtrlEvent e) {
                     double vnew = ((HSliderComponent) e.getSource()).getValue();
                     if (vnew != valueBeforeAdjustment) {
-                        parameterInstance.SetDirty();
+                        //parameterInstance.SetDirty();
                     }
                 }
             });

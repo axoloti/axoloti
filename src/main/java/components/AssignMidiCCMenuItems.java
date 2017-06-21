@@ -18,7 +18,7 @@
 package components;
 
 import axoloti.dialogs.MidiAssignments;
-import axoloti.parameterviews.ParameterInstanceView;
+import axoloti.parameters.ParameterInstanceController;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,16 +32,21 @@ import javax.swing.JRadioButton;
  *
  * @author Johannes Taelman
  */
-public class AssignMidiCCMenuItems {
+public class AssignMidiCCMenuItems implements ActionListener {
+    
+    final ParameterInstanceController parameterInstanceController;
 
-    public AssignMidiCCMenuItems(final ParameterInstanceView parameterInstanceView, JComponent parent) {
+    public AssignMidiCCMenuItems(final ParameterInstanceController parameterInstanceController, JComponent parent) {
+        this.parameterInstanceController = parameterInstanceController;
+        /*
         JMenuItem m = new JMenuItem("Assign...");
         m.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MidiAssignments ma = new MidiAssignments(null, true, parameterInstanceView);
+                MidiAssignments ma = new MidiAssignments(null, true, parameterInstanceController);
                 int v = ma.getResult();
                 if (v >= 0) {
+                    parameterInstanceController.setModelUndoableProperty(ParameterInstanceController, ma);
                     parameterInstanceView.actionPerformed(new ActionEvent(this, 0, "CC" + v));
                 } else {
                     parameterInstanceView.actionPerformed(new ActionEvent(this, 0, "none"));
@@ -49,10 +54,11 @@ public class AssignMidiCCMenuItems {
             }
         });
         parent.add(m);
+        */
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(16, 0));
         ButtonGroup group = new ButtonGroup();
-        int cc = parameterInstanceView.getModel().getMidiCC();
+        int cc = parameterInstanceController.getModel().getMidiCC();
         parent.add(p);
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 8; j++) {
@@ -60,7 +66,7 @@ public class AssignMidiCCMenuItems {
                 if (k != 0) {
                     JRadioButton rbMenuItem = new JRadioButton("CC" + k);
                     rbMenuItem.setActionCommand("CC" + k);
-                    rbMenuItem.addActionListener(parameterInstanceView);
+                    rbMenuItem.addActionListener(this);
                     group.add(rbMenuItem);
                     if (cc == k) {
                         rbMenuItem.setSelected(true);
@@ -73,10 +79,22 @@ public class AssignMidiCCMenuItems {
                     if (cc < 0) {
                         rbMenuItem.setSelected(true);
                     }
-                    rbMenuItem.addActionListener(parameterInstanceView);
+                    rbMenuItem.addActionListener(this);
                     p.add(rbMenuItem);
                 }
             }
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String s = e.getActionCommand();
+        if (s.startsWith("CC")) {
+            Integer i = Integer.parseInt(s.substring(2));
+            parameterInstanceController.setModelUndoableProperty(ParameterInstanceController.ELEMENT_PARAM_MIDI_CC, i);
+        } else if (s.equals("none")) {
+            Integer v = -1;
+            parameterInstanceController.setModelUndoableProperty(ParameterInstanceController.ELEMENT_PARAM_MIDI_CC, v);
+        }        
     }
 }

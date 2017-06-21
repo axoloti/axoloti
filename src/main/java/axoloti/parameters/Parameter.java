@@ -20,6 +20,7 @@ package axoloti.parameters;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
+import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
 import generatedobjects.GeneratedObjects;
@@ -75,9 +76,11 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
         pi.axoObjectInstance = o;
         pi.name = getName();
         pi.parameter = this;
-        pi.applyDefaultValue();
+//        pi.applyDefaultValue();
         return pi;
     }
+
+    abstract public Value getDefaultValue();
 
     public abstract T InstanceFactory();
 

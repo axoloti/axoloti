@@ -38,10 +38,10 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     @Attribute(name = "file")
     String fileName = "";
 
-    AttributeInstanceSDFile(){
+    AttributeInstanceSDFile() {
         super();
     }
-    
+
     AttributeInstanceSDFile(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
         super(controller, axoObj1);
         this.axoObj = axoObj1;

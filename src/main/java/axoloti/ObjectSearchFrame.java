@@ -29,6 +29,7 @@ import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewFactory;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -361,11 +362,9 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             AxoObjectInstanceViewAbstract objectInstanceView = AxoObjectInstanceViewFactory.createView(c, null);
             jPanel1.removeAll();
             jPanel1.add(objectInstanceView);
-            objectInstanceView.invalidate();
-            objectInstanceView.repaint();
             objectInstanceView.revalidate();
             jPanel1.revalidate();
-            jPanel1.repaint();
+           
             AxoObjectAbstract t = objectInstanceView.getModel().getType();
             if (t != null) {
                 String description = t.sDescription == null || t.sDescription.isEmpty() ? o.sDescription : t.sDescription;

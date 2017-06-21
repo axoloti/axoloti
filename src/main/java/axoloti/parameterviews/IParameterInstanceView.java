@@ -17,9 +17,7 @@ public interface IParameterInstanceView extends AbstractView {
 
     public String getName();
 
-    public void updateV();
-
-    public void SetMidiCC(Integer cc);
+//    public void updateV();
 
 //    public void SetValueRaw(int v);
     public void ShowPreset(int i);

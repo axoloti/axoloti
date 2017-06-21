@@ -38,7 +38,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
 
     AttributeInstanceObjRef() {
     }
-    
+
     AttributeInstanceObjRef(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
         super(controller, axoObj1);
     }
@@ -50,17 +50,17 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
             o = "";
         }
         if (o.isEmpty()) {
-            Logger.getLogger(AttributeInstanceObjRef.class.getName()).log(Level.SEVERE, "incomplete object reference attribute in {0}", getObjectInstance().getInstanceName());
+            Logger.getLogger(AttributeInstanceObjRef.class.getName()).log(Level.SEVERE, "incomplete object reference attribute");
         }
         String o2 = "parent->";
-
-        if ((o.length() > 3) && (o.substring(0, 3).equals("../"))
-                && ((getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyphonic)
-                || (getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polychannel)
-                || (getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyexpression))) {
-            o2 = o2 + "common->";
-        }
-
+        /* FIXME
+         if ((o.length() > 3) && (o.substring(0, 3).equals("../"))
+         && ((getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyphonic)
+         || (getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polychannel)
+         || (getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyexpression))) {
+         o2 = o2 + "common->";
+         }
+         */
         while ((o.length() > 3) && (o.substring(0, 3).equals("../"))) {
             o2 = o2 + "parent->";
             o = o.substring(3);

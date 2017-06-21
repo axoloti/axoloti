@@ -39,6 +39,7 @@ public class HSliderComponent extends ACtrlComponent {
     int px;
 
     public HSliderComponent() {
+        super();
         Dimension d = new Dimension(160, 12);
         setMinimumSize(d);
         setPreferredSize(d);
@@ -49,7 +50,7 @@ public class HSliderComponent extends ACtrlComponent {
 
     @Override
     protected void mouseDragged(MouseEvent e) {
-        setValue(value - px + e.getX());
+        fireValue(value - px + e.getX());
         px = e.getX();
     }
 
@@ -110,9 +111,13 @@ public class HSliderComponent extends ACtrlComponent {
         }
         this.value = value;
         repaint();
-        fireEvent();
     }
 
+    public void fireValue(double value) {
+        setValue(value);
+        fireEvent();
+    }
+    
     @Override
     public double getValue() {
         return value;

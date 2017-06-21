@@ -139,13 +139,13 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
 
     public void populatePopup(JPopupMenu m) {
         final JCheckBoxMenuItem m_onParent = new JCheckBoxMenuItem("parameter on parent");
-        m_onParent.setSelected(parameterInstance.getOnParent());
+        boolean op = parameterInstance.getOnParent();
+        m_onParent.setSelected(op);
         m.add(m_onParent);
         m_onParent.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                parameterInstance.setOnParent(m_onParent.isSelected());
-                repaint();
+                getController().setModelUndoableProperty(ParameterInstanceController.ELEMENT_PARAM_ON_PARENT, !op);
             }
         });
 
@@ -283,11 +283,11 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
     }
 
     public Preset AddPreset(int index, Value value) {
-        return parameterInstance.AddPreset(index, value);
+        return getController().AddPreset(index, value);
     }
 
     public void RemovePreset(int index) {
-        parameterInstance.RemovePreset(index);
+        getController().RemovePreset(index);
     }
 
     public Component getCanvas() {

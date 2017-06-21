@@ -6,11 +6,15 @@ import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
+import components.AssignMidiCCComponent;
+import components.AssignMidiCCMenuItems;
 import components.AssignModulatorComponent;
 import components.AssignPresetComponent;
 import components.control.DialComponent;
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
@@ -47,27 +51,20 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
         btns.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         btns.setLayout(new BoxLayout(btns, BoxLayout.PAGE_AXIS));
 
-        // FIXME: reintroduce cc/modulator/preset buttons
-//        midiAssign = new AssignMidiCCComponent(this);
-//        btns.add(midiAssign);
+        midiAssign = new AssignMidiCCComponent(getController());
+        btns.add(midiAssign);
+// FIXME: reintroduce modulator button
 //        modulationAssign = new AssignModulatorComponent(this);
 //        btns.add(modulationAssign);
-//        presetAssign = new AssignPresetComponent(this);
-//        btns.add(presetAssign);
+        presetAssign = new AssignPresetComponent(getController());
+        btns.add(presetAssign);
         add(btns);
 
 //        setComponentPopupMenu(new ParameterInstanceUInt7MapPopupMenu3(this));
         addMouseListener(popupMouseListener);
-        updateV();
+//        ctrl.setValue(getModel().getValue().getDouble());
     }
 
-    @Override
-    public void updateV() {
-        super.updateV();
-        if (ctrl != null) {
-            ctrl.setValue(getModel().getValue().getDouble());
-        }
-    }
 
     /*
      *  Preset logic
@@ -88,8 +85,6 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
             ctrl.setValue(getModel().getValue().getDouble());
         }
-        // FIXME
-        // presetAssign.repaint();
         /*
          if ((presets != null) && (!presets.isEmpty())) {
          lblPreset.setVisible(true);
@@ -102,13 +97,13 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     @Override
     public void populatePopup(JPopupMenu m) {
         super.populatePopup(m);
+        JMenu m1 = new JMenu("Midi CC");
+        new AssignMidiCCMenuItems(getController(), m1);
+        m.add(m1);
+        JMenu m2 = new JMenu("Modulation");
         // FIXME : reintroduce midi/modulation popup menu
-//        JMenu m1 = new JMenu("Midi CC");
-//        new AssignMidiCCMenuItems(this, m1);
-//        m.add(m1);
-//        JMenu m2 = new JMenu("Modulation");
 //        new AssignModulatorMenuItems(this, m2);
-//        m.add(m2);
+        m.add(m2);
     }
 
     @Override
@@ -125,25 +120,16 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     }
 
     @Override
-    public Preset AddPreset(int index, Value value) {
-        Preset p = getModel().AddPreset(index, value);
-        presetAssign.repaint();
-        return p;
-    }
-
-    @Override
-    public void RemovePreset(int index) {
-        getModel().RemovePreset(index);
-        presetAssign.repaint();
-    }
-
-    @Override
     public void paintComponent(Graphics g) {
-        if (getModel().getOnParent()) {
-            setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
-        } else {
-            setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
-        }
         super.paintComponent(g);
     }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_PRESETS)) {
+            presetAssign.repaint();
+        }
+    }
+
 }

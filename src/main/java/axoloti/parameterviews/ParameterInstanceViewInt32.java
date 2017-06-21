@@ -2,12 +2,11 @@ package axoloti.parameterviews;
 
 import axoloti.Preset;
 import axoloti.Theme;
-import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
-import axoloti.parameters.ParameterInstanceInt32;
-import java.awt.Graphics;
+import static axoloti.parameters.ParameterInstanceController.ELEMENT_PARAM_VALUE;
+import java.beans.PropertyChangeEvent;
 
 abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
@@ -39,9 +38,8 @@ abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
         if (p != null) {
             p.value = new ValueInt32((int) getControlComponent().getValue());
         } else if (getModel().getValue().getInt() != (int) getControlComponent().getValue()) {
-            getModel().getValue().setInt((int) getControlComponent().getValue());
-            getModel().setNeedsTransmit(true);
-            UpdateUnit();
+                ValueInt32 vi32 = new ValueInt32((int)getControlComponent().getValue());
+                getController().setModelUndoableProperty(ELEMENT_PARAM_VALUE, vi32);
         } else {
             return false;
         }
@@ -49,12 +47,12 @@ abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
-        if (getModel().getOnParent()) {
-            setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
-        } else {
-            setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_VALUE)) {
+            ValueInt32 v = (ValueInt32) evt.getNewValue();
+            ctrl.setValue(v.getInt());
         }
-        super.paintComponent(g);
     }
+    
 }

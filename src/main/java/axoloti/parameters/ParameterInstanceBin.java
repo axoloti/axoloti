@@ -11,7 +11,6 @@ import org.simpleframework.xml.Attribute;
  */
 public abstract class ParameterInstanceBin<T extends ParameterBin> extends ParameterInstance<T> {
 
-    // used to be final, now it is mutating
     ValueInt32 value = new ValueInt32();
 
     @Attribute(name = "value", required = false)
@@ -63,28 +62,6 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
     }
 
     @Override
-    public ValueInt32 getValue() {
-        return value;
-    }
-
-    @Override
-    public void setValue(Value value) {
-        Integer oldvalue = this.value.getInt();
-        this.value = new ValueInt32(value);
-        firePropertyChange(
-                ParameterInstanceController.ELEMENT_PARAM_VALUE,
-                oldvalue, (Integer) value.getInt());
-    }
-
-    public void setValue(ValueInt32 value) {
-        Integer oldvalue = this.value.getInt();
-        this.value = new ValueInt32(value);
-        firePropertyChange(
-                ParameterInstanceController.ELEMENT_PARAM_VALUE,
-                oldvalue, (Integer) value.getInt());
-    }
-
-    @Override
     public void CopyValueFrom(ParameterInstance p) {
         super.CopyValueFrom(p);
         if (p instanceof ParameterInstanceBin) {
@@ -92,5 +69,19 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
             presets = p1.presets;
             value.setRaw(p1.value.getRaw());
         }
+    }
+
+    @Override
+    public ValueInt32 getValue() {
+        return value;
+    }
+
+    public void setValue(ValueInt32 value) {
+        ValueInt32 oldvalue = this.value;
+        this.value = value;
+        needsTransmit = true;
+        firePropertyChange(
+                ParameterInstanceController.ELEMENT_PARAM_VALUE,
+                oldvalue, value);
     }
 }

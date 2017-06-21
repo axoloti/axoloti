@@ -45,20 +45,21 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     @Attribute
     String name;
     @Attribute(required = false)
-    private Boolean onParent;
-    protected int index;
-    public T parameter;
+    private Boolean onParent = false;
     @ElementList(required = false)
     ArrayList<Preset> presets;
+    @Attribute(required = false)
+    private Integer MidiCC = null;
+    
+    protected int index;
+    public T parameter;
     protected boolean needsTransmit = false;
     AxoObjectInstance axoObjectInstance;
     NativeToReal convs[];
     int selectedConv = 0;
-    @Attribute(required = false)
-    Integer MidiCC = null;
 
     AtomDefinitionController controller;
-    
+
     public ParameterInstance() {
     }
 
@@ -74,6 +75,9 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         if (onParent == null) {
             onParent = false;
         }
+        if (MidiCC == null) {
+            MidiCC = -1;
+        }
     }
 
     @Persist
@@ -81,6 +85,9 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         // called prior to serialization
         if (onParent != null && onParent == false) {
             onParent = null;
+        }
+        if (MidiCC != null && MidiCC < 0) {
+            MidiCC = null;
         }
     }
 
@@ -95,17 +102,17 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         setMidiCC(p.MidiCC);
     }
 
-    public void applyDefaultValue() {
-    }
-
+    @Deprecated // TODO: move live parameter tweaking in a separate view
     public boolean getNeedsTransmit() {
         return needsTransmit;
     }
 
+    @Deprecated // TODO: move live parameter tweaking in a separate view
     public void ClearNeedsTransmit() {
         needsTransmit = false;
     }
 
+    @Deprecated // TODO: move live parameter tweaking in a separate view
     public void setNeedsTransmit(boolean needsTransmit) {
         this.needsTransmit = needsTransmit;
     }
@@ -144,35 +151,6 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         return null;
     }
 
-    public ArrayList<Preset> getPresets() {
-        return presets;
-    }
-
-    public void setPresets(ArrayList<Preset> presets) {
-        this.presets = presets;
-    }
-
-    public Preset AddPreset(int index, Value value) {
-        Preset p = GetPreset(index);
-        if (p != null) {
-            p.value = value;
-            return p;
-        }
-        if (presets == null) {
-            presets = new ArrayList<Preset>();
-        }
-        p = new Preset(index, value);
-        presets.add(p);
-        return p;
-    }
-
-    public void RemovePreset(int index) {
-        Preset p = GetPreset(index);
-        if (p != null) {
-            presets.remove(p);
-        }
-    }
-
     public abstract Value getValue();
 
     public void setValue(Value value) {
@@ -181,6 +159,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     }
 
     public void SetValueRaw(int v) {
+        // FIXME, different types possible
         ValueFrac32 v1 = new ValueFrac32();
         v1.setRaw(v);
         setValue(v1);
@@ -195,7 +174,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     }
 
     public String getLegalName() {
-        return CharEscape.CharEscape(name);
+        return CharEscape.CharEscape(getName());
     }
 
     public String PExName(String vprefix) {
@@ -222,7 +201,6 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         return "0";
     }
 
-//    public abstract String GenerateCodeInit(String vprefix, String StructAccces);
     public abstract String GenerateCodeMidiHandler(String vprefix);
 
     public void setIndex(int i) {
@@ -233,11 +211,13 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         return index;
     }
 
+    
+    // review!
     public String GetUserParameterName() {
         if (axoObjectInstance.parameterInstances.size() == 1) {
             return axoObjectInstance.getInstanceName();
         } else {
-            return name;
+            return getName();
         }
     }
 
@@ -269,56 +249,17 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         return pcopy;
     }
 
-    public void setMidiCC(Integer cc) {
-        if ((cc != null) && (cc >= 0)) {
-            MidiCC = cc;
-        } else {
-            MidiCC = null;
-        }
-    }
-
-    public int getMidiCC() {
-        if (MidiCC == null) {
-            return -1;
-        } else {
-            return MidiCC;
-        }
-    }
-
-    @Override
     public AxoObjectInstance getObjectInstance() {
         return axoObjectInstance;
     }
 
     @Override
     public T getModel() {
-        return (T)getController().getModel();
+        return (T) getController().getModel();
     }
 
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
-    }
-
-    public boolean getOnParent() {
-        if (onParent == null) {
-            return false;
-        } else {
-            return onParent;
-        }
-    }
-
-    public void setOnParent(Boolean onParent) {
-        if (onParent == null) {
-            return;
-        }
-        if (getOnParent() == onParent) {
-            return;
-        }
-        Boolean oldValue = this.onParent;        
-        this.onParent = onParent;
-        firePropertyChange(
-                ParameterInstanceController.ELEMENT_PARAM_ON_PARENT,
-                oldValue, onParent);
     }
 
     public ArrayList<Modulation> getModulators() {
@@ -337,13 +278,18 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         this.selectedConv = selectedConv;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public AtomDefinitionController getController() {
+        return controller;
     }
 
-    @Deprecated
-    public void SetDirty() {
+    void setController(AtomDefinitionController controller) {
+        this.controller = controller;
     }
+
+    /* MVC getters and setters */
+
+    /* View personality */    
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
@@ -357,13 +303,70 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         }
     }
 
-    @Override
-    public AtomDefinitionController getController() {
-        return controller;
+    /* Model personality */
+    public Integer getMidiCC() {
+        if (MidiCC == null) {
+            return -1;
+        } else {
+            return MidiCC;
+        }
     }
 
-    void setController(AtomDefinitionController controller) {
-        this.controller = controller;
+    public void setMidiCC(Integer MidiCC) {
+        Integer prevValue = this.MidiCC;
+        if ((MidiCC != null) && (MidiCC >= 0)) {
+            this.MidiCC = MidiCC;
+        } else {
+            this.MidiCC = null;
+        }
+        this.MidiCC = MidiCC;
+        firePropertyChange(ParameterInstanceController.ELEMENT_PARAM_MIDI_CC, prevValue, MidiCC);
+    }
+
+    public Boolean getOnParent() {
+        if (onParent == null) {
+            return false;
+        } else {
+            return onParent;
+        }
+    }
+
+    public void setOnParent(Boolean onParent) {
+        if (onParent == null) {
+            return;
+        }
+        if (getOnParent() == onParent) {
+            return;
+        }
+        Boolean oldValue = this.onParent;
+        this.onParent = onParent;
+        firePropertyChange(
+                ParameterInstanceController.ELEMENT_PARAM_ON_PARENT,
+                oldValue, onParent);
+    }
+
+    public ArrayList<Preset> getPresets() {
+        if (presets != null) {
+            return presets;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void setPresets(ArrayList<Preset> presets) {
+        ArrayList<Preset> prevValue = this.presets;
+        this.presets = presets;
+        firePropertyChange(ParameterInstanceController.ELEMENT_PARAM_PRESETS, prevValue, this.presets);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        String prevValue = this.name;
+        this.name = name;
+        firePropertyChange(AtomDefinitionController.ATOM_NAME, prevValue, name);
     }
 
 }

@@ -20,6 +20,7 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
     LabelComponent label;
 
     AttributeInstanceView(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+        super();
         this.controller = controller;
         this.axoObjectInstanceView = axoObjectInstanceView;
     }
@@ -37,15 +38,6 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
         String description = getModel().getModel().getDescription();
         if (description != null) {
             setToolTipText(description);
-        }
-    }
-
-    @Override
-    public String getName() {
-        if (getModel() != null) {
-            return getModel().getAttributeName();
-        } else {
-            return super.getName();
         }
     }
 

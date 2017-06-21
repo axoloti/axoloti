@@ -17,7 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.Preset;
 import axoloti.datatypes.Value;
 import org.simpleframework.xml.Attribute;
 
@@ -33,16 +32,6 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
 
     public ParameterInstanceFrac32UMap(@Attribute(name = "value") double v) {
         super(v);
-    }
-
-    @Override
-    public Preset AddPreset(int index, Value value) {
-        return super.AddPreset(index, value);
-    }
-
-    @Override
-    public void RemovePreset(int index) {
-        super.RemovePreset(index);
     }
 
     String pfunction;

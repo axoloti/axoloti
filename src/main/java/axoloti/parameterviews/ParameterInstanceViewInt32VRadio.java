@@ -16,11 +16,6 @@ class ParameterInstanceViewInt32VRadio extends ParameterInstanceViewInt32 {
     }
 
     @Override
-    public void updateV() {
-        ctrl.setValue(getModel().getValue().getInt());
-    }
-
-    @Override
     public VRadioComponent CreateControl() {
         return new VRadioComponent(0, ((ParameterInt32VRadio) getModel().getModel()).MaxValue.getInt());
     }
@@ -35,7 +30,7 @@ class ParameterInstanceViewInt32VRadio extends ParameterInstanceViewInt32 {
         super.populatePopup(m);
         JMenu m1 = new JMenu("Midi CC");
         // AssignMidiCCMenuItems, does stuff in ctor
-        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(this, m1);
+        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(getController(), m1);
         m.add(m1);
     }
 }

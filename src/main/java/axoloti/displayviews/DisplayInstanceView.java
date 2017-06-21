@@ -30,10 +30,6 @@ abstract class DisplayInstanceView extends JPanel implements IDisplayInstanceVie
         }
         add(label);
         setSize(getPreferredSize());
-        String description = getModel().getModel().getDescription();
-        if (description != null) {
-            setToolTipText(description);
-        }
     }
 
     @Override

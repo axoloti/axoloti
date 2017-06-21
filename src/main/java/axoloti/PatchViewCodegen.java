@@ -851,7 +851,8 @@ public class PatchViewCodegen extends PatchAbstractView {
                 ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
-                if (p.getOnParent()) {
+                Boolean op = p.getOnParent();
+                if (op!=null && op == true) {
                     ao.params.add(p.getParameterForParent());
                 }
             }

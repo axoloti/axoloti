@@ -23,13 +23,6 @@ class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32
         return (ParameterInstanceFrac32SMapVSlider) super.getModel();
     }
 
-    @Override
-    public void updateV() {
-        if (ctrl != null) {
-            ctrl.setValue(getModel().getValue().getDouble());
-        }
-    }
-
     /*
      *  Preset logic
      */

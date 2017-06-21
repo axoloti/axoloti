@@ -147,14 +147,14 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
 
     @Override
     public Preset AddPreset(int index, Value value) {
-        Preset p = getModel().AddPreset(index, value);
+        Preset p = getController().AddPreset(index, value);
         updatePresetAssignVisibility();
         return p;
     }
 
     @Override
     public void RemovePreset(int index) {
-        getModel().RemovePreset(index);
+        getController().RemovePreset(index);
         updatePresetAssignVisibility();
     }
 

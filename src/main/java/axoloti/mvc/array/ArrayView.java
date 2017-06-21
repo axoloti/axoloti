@@ -49,7 +49,7 @@ public abstract class ArrayView<T extends AbstractView> implements AbstractView<
             }
             if (view == null) {
                 view = viewFactory(ctrl);
-                ctrl.addView(view);
+                // the factory method is assumed to add the view to controller
             }
             subviews.add(view);
         }

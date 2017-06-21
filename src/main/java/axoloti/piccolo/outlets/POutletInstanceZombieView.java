@@ -24,7 +24,7 @@ public class POutletInstanceZombieView extends POutletInstanceView implements IO
         setMaximumSize(new Dimension(32767, 14));
 
         addToSwingProxy(Box.createHorizontalGlue());
-        addChild(new PLabelComponent(outletInstanceZombie.outletname));
+        addChild(new PLabelComponent(outletInstanceZombie.getName()));
         addToSwingProxy(Box.createHorizontalStrut(2));
         jack = new PJackOutputComponent(this);
         jack.setForeground(outletInstanceZombie.getDataType().GetColor());

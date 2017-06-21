@@ -12,6 +12,12 @@ import axoloti.object.ObjectInstanceController;
 public class AttributeInstanceController extends AbstractController<AttributeInstance, IAttributeInstanceView, ObjectInstanceController> {
 
     public static final String ELEMENT_ATTR_VALUE = "Value";
+    public static final String[] PROPERTY_NAMES = {ELEMENT_ATTR_VALUE};
+
+    @Override
+    public String[] getPropertyNames() {
+        return PROPERTY_NAMES;
+    }
 
     public AttributeInstanceController(AttributeInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
         super(model, documentRoot, parent);

@@ -269,18 +269,13 @@ public class PatchViewPiccolo extends PatchView {
     };
 
     @Override
-    public void repaint() {
-        // no need to explicitly repaint on model change
-    }
-
-    @Override
     public Point getLocationOnScreen() {
         return getCanvas().getLocationOnScreen();
     }
 
     @Override
     public void PostConstructor() {
-        modelChanged(false);
+        //modelChanged(false);
         getController().getModel().PromoteOverloading(true);
         ShowPreset(0);
         SelectNone();

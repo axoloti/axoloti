@@ -31,6 +31,8 @@ public class AxoObjectInstanceViewFactory {
             view = new AxoObjectInstanceViewPatcher(controller, pv);
         } else if (model instanceof AxoObjectInstance) {
             view = new AxoObjectInstanceView(controller, pv);
+        } else {
+            throw new Error("unknown object type");
         }
         view.PostConstructor();
         controller.addView(view);

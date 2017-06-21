@@ -54,11 +54,12 @@ public class VSliderComponent extends ACtrlComponent {
     private Robot robot;
 
     public VSliderComponent(double value, double min, double max, double tick) {
+        super();
         this.max = max;
         this.min = min;
         this.value = value;
         this.tick = tick;
-
+        setSize(dim);
         setPreferredSize(dim);
         setMaximumSize(dim);
         setMinimumSize(dim);
@@ -88,7 +89,7 @@ public class VSliderComponent extends ACtrlComponent {
         if (isEnabled()) {
             double v = value + tick * ((int) Math.round((py - e.getYOnScreen())));
             robotMoveToCenter();
-            setValue(v);
+            fireValue(v);
         }
     }
 
@@ -122,41 +123,41 @@ public class VSliderComponent extends ACtrlComponent {
             case KeyEvent.VK_UP:
             case KeyEvent.VK_RIGHT:
                 fireEventAdjustmentBegin();
-                setValue(getValue() + steps);
+                fireValue(getValue() + steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_LEFT:
                 fireEventAdjustmentBegin();
-                setValue(getValue() - steps);
+                fireValue(getValue() - steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_PAGE_UP:
                 fireEventAdjustmentBegin();
-                setValue(getValue() + 5 * steps);
+                fireValue(getValue() + 5 * steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_PAGE_DOWN:
                 fireEventAdjustmentBegin();
-                setValue(getValue() - 5 * steps);
+                fireValue(getValue() - 5 * steps);
                 ke.consume();
                 break;
             case KeyEvent.VK_HOME:
                 fireEventAdjustmentBegin();
-                setValue(max);
+                fireValue(max);
                 fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case KeyEvent.VK_END:
                 fireEventAdjustmentBegin();
-                setValue(min);
+                fireValue(min);
                 fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case KeyEvent.VK_ENTER:
                 fireEventAdjustmentBegin();
                 try {
-                    setValue(Float.parseFloat(keybBuffer));
+                    fireValue(Float.parseFloat(keybBuffer));
                 } catch (java.lang.NumberFormatException ex) {
                 }
                 fireEventAdjustmentFinished();
@@ -279,6 +280,10 @@ public class VSliderComponent extends ACtrlComponent {
         this.value = value;
         setToolTipText("" + value);
         repaint();
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
         fireEvent();
     }
 

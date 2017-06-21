@@ -34,7 +34,7 @@ import org.simpleframework.xml.*;
 public class OutletInstance<T extends Outlet> extends AbstractModel implements Comparable<OutletInstance>, AtomInstance<T> {
 
     @Attribute(name = "outlet", required = false)
-    public String outletname;
+    String outletname;
     @Deprecated
     @Attribute(required = false)
     public String name;
@@ -45,7 +45,6 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
 
     protected AxoObjectInstanceAbstract axoObj;
 
-    @Override
     public AxoObjectInstanceAbstract getObjectInstance() {
         return this.axoObj;
     }
@@ -111,15 +110,24 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)
-                || evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
-            firePropertyChange(
-                    evt.getPropertyName(),
-                    evt.getOldValue(),
-                    evt.getNewValue());
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
+            setName((String)evt.getNewValue());
+        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+            //setDescription(evt.getNewValue());
         }
     }
 
+
+    public String getName() {
+        return outletname;
+    }
+
+    public void setName(String outletname) {
+        String preVal = this.outletname;
+        this.outletname = outletname;
+        firePropertyChange(AtomDefinitionController.ATOM_NAME, preVal, outletname);
+    }
+    
     @Override
     public AtomDefinitionController getController() {
         return controller;

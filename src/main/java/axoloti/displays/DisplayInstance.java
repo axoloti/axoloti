@@ -21,7 +21,6 @@ import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.nio.ByteBuffer;
@@ -39,18 +38,12 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     Boolean onParent;
     protected int index;
 
-    private AxoObjectInstance axoObjectInstance;
     protected int offset;
 
     AtomDefinitionController controller;
 
     public DisplayInstance(AtomDefinitionController controller) {
         this.controller = controller;
-    }
-
-    @Override
-    public AxoObjectInstanceAbstract getObjectInstance() {
-        return axoObjectInstance;
     }
 
     @Override

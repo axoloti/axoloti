@@ -17,12 +17,10 @@
  */
 package axoloti;
 
-import static axoloti.PatchViewType.PICCOLO;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
 import axoloti.outlets.OutletInstance;
-import axoloti.piccolo.PNetView;
 import java.awt.Color;
 import java.util.ArrayList;
 import org.simpleframework.xml.*;
@@ -97,18 +95,6 @@ public class Net extends AbstractModel {
             return d.CType();
         } else {
             return null;
-        }
-    }
-
-    public INetView createView(NetController controller, PatchView patchView) {
-        if (MainFrame.prefs.getPatchViewType() == PICCOLO) {
-            INetView n = new PNetView(this, (PatchViewPiccolo) patchView);
-            n.PostConstructor();
-            return n;
-        } else {
-            INetView n = new NetView(this, controller, (PatchViewSwing) patchView);
-            n.PostConstructor();
-            return n;
         }
     }
 

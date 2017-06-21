@@ -55,8 +55,10 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     final ObjectInstanceController controller;
 
     AxoObjectInstanceViewAbstract(ObjectInstanceController controller, PatchViewSwing patchView) {
+        super();
         this.controller = controller;
         this.patchView = patchView;
+        setVisible(false);
     }
 
     @Override
@@ -101,8 +103,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         setBorder(BORDER_UNSELECTED);
 
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-
-        setVisible(true);
 
         Titlebar.addMouseListener(this);
         addMouseListener(this);
@@ -286,6 +286,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         }
     }
 
+    @Override
     public void addInstanceNameEditor() {
         InstanceNameTF = new TextFieldComponent(getModel().getInstanceName());
         InstanceNameTF.selectAll();
@@ -332,13 +333,13 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     @Override
     public void setInstanceName(String InstanceName) {
         InstanceLabel.setText(InstanceName);
-        doLayout();
-        repaint();
+        resizeToGrid();
     }
 
     public static final Border BORDER_SELECTED = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected);
     public static final Border BORDER_UNSELECTED = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected);
 
+    @Override
     public void setSelected(boolean Selected) {
         if (this.selected != Selected) {
             if (Selected) {
@@ -346,7 +347,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
             } else {
                 setBorder(BORDER_UNSELECTED);
             }
-            repaint();
         }
         this.selected = Selected;
     }
@@ -361,11 +361,12 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     }
 
     public void resizeToGrid() {
-        validate();
+        doLayout();
         Dimension d = getPreferredSize();
         d.width = ((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID;
         d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
         setSize(d);
+        revalidate();
     }
 
     @Override
@@ -419,13 +420,11 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
             Point newValue = (Point) evt.getNewValue();
             setLocation(newValue.x, newValue.y);
             if (getPatchView() != null) {
-                repaint();
                 if (getInletInstanceViews() != null) {
                     for (IInletInstanceView i : getInletInstanceViews()) {
                         INetView n = getPatchView().GetNetView(i);
                         if (n != null) {
                             n.updateBounds();
-                            n.repaint();
                         }
                     }
                 }
@@ -434,7 +433,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                         INetView n = getPatchView().GetNetView(i);
                         if (n != null) {
                             n.updateBounds();
-                            n.repaint();
                         }
                     }
                 }

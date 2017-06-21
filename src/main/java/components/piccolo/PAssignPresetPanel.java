@@ -113,7 +113,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
             if (i >= 0) {
                 if (ctrls.get(i).isEnabled()) {
                     if (parameterInstanceView.getModel().getValue() instanceof ValueInt32) {
-                        parameterInstanceView.getModel().AddPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
+                        parameterInstanceView.getController().AddPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
                     } else if (parameterInstanceView.getModel().getValue() instanceof ValueFrac32) {
                         parameterInstanceView.AddPreset(i + 1, new ValueFrac32(ctrls.get(i).getValue()));
                     }

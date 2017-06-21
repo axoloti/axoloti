@@ -23,11 +23,6 @@ class ParameterInstanceViewBin1 extends ParameterInstanceViewBin {
     }
 
     @Override
-    public void updateV() {
-        ctrl.setValue(getModel().getValue().getInt());
-    }
-
-    @Override
     public CheckboxComponent getControlComponent() {
         return (CheckboxComponent) ctrl;
     }
@@ -37,7 +32,7 @@ class ParameterInstanceViewBin1 extends ParameterInstanceViewBin {
         super.populatePopup(m);
         JMenu m1 = new JMenu("Midi CC");
         // assignMidiCCMenuItems, does stuff in ctor
-        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(this, m1);
+        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(getController(), m1);
         m.add(m1);
     }
 }

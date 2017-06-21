@@ -435,13 +435,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
     }
 
-    @Override
-    public void updateObj1() {
-    }
-
     public Rectangle editorBounds;
     public Integer editorActiveTabIndex;
-    public boolean deferredObjTypeUpdate = false;
 
     public void updateObj() {/*
          getPatchModel().ChangeObjectInstanceType(this, this.getType());
@@ -452,9 +447,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public void ObjectModified(Object src) {
         if (getPatchModel() != null) {
             if (!getPatchModel().getLocked()) {
-                updateObj();
             } else {
-                deferredObjTypeUpdate = true;
             }
         }
 
@@ -548,7 +541,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             for (AttributeInstance a : attributeInstances) {
                 // find matching parameter in source
                 for (AttributeInstance a2 : sourceObject2.attributeInstances) {
-                    if (a.getAttributeName().equals(a2.getAttributeName())) {
+                    if (a.getName().equals(a2.getName())) {
                         a.CopyValueFrom(a2);
                         break;
                     }

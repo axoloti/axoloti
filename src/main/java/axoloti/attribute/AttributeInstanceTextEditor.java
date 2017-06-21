@@ -38,8 +38,8 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     String getSText() {
         return sRef.s;
     }
-    
-    AttributeInstanceTextEditor(){
+
+    AttributeInstanceTextEditor() {
         super();
     }
 

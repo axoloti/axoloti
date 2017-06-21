@@ -38,6 +38,7 @@ public class PulseButtonComponent extends ACtrlComponent {
     private final static Dimension dim = new Dimension(bsize, bsize);
 
     public PulseButtonComponent() {
+        super();
         this.value = 0;
         setMinimumSize(dim);
         setMaximumSize(dim);
@@ -53,7 +54,7 @@ public class PulseButtonComponent extends ACtrlComponent {
     protected void mousePressed(MouseEvent e) {
         grabFocus();
         if (e.getButton() == 1) {
-            setValue(1.0);
+            fireValue(1.0);
         }
     }
 
@@ -61,7 +62,7 @@ public class PulseButtonComponent extends ACtrlComponent {
     protected void mouseReleased(MouseEvent e) {
         if (e.getButton() == 1) {
             if (!e.isShiftDown()) {
-                setValue(0.0);
+                fireValue(0.0);
             }
         }
     }
@@ -69,7 +70,7 @@ public class PulseButtonComponent extends ACtrlComponent {
     @Override
     public void keyPressed(KeyEvent ke) {
         if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            setValue(1.0);
+            fireValue(1.0);
             ke.consume();
         }
     }
@@ -77,7 +78,7 @@ public class PulseButtonComponent extends ACtrlComponent {
     @Override
     void keyReleased(KeyEvent ke) {
         if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            setValue(1.0);
+            fireValue(1.0);
             ke.consume();
         }
     }
@@ -116,8 +117,12 @@ public class PulseButtonComponent extends ACtrlComponent {
         if (this.value != value) {
             this.value = value;
         }
-        fireEvent();
         repaint();
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
+        fireEvent();
     }
 
     @Override

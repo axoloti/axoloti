@@ -73,12 +73,14 @@ public class NumberBoxComponent extends ACtrlComponent {
     }
 
     public NumberBoxComponent(double value, double min, double max, double tick, int hsize, int vsize) {
+        super();
         setInheritsPopupMenu(true);
         this.value = value;
         this.min = min;
         this.max = max;
         this.tick = tick;
         Dimension d = new Dimension(hsize, vsize);
+        setSize(d);
         setPreferredSize(d);
         setMaximumSize(d);
         setMinimumSize(d);
@@ -126,7 +128,8 @@ public class NumberBoxComponent extends ACtrlComponent {
                 if (v < min) {
                     v = min;
                 }
-                setValue(v);
+                fireValue(v);
+                fireEvent();
             }
         }
     }
@@ -143,12 +146,14 @@ public class NumberBoxComponent extends ACtrlComponent {
                 if (e.getY() > getHeight() / 2) {
                     hiliteDown = true;
                     fireEventAdjustmentBegin();
-                    setValue(value - tick);
+                    fireValue(value - tick);
+                    fireEvent();
                     fireEventAdjustmentFinished();
                 } else {
                     hiliteUp = true;
                     fireEventAdjustmentBegin();
-                    setValue(value + tick);
+                    fireValue(value + tick);
+                    fireEvent();
                     fireEventAdjustmentFinished();
                 }
             } else {
@@ -197,41 +202,47 @@ public class NumberBoxComponent extends ACtrlComponent {
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_RIGHT:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() + steps);
+                    fireValue(getValue() + steps);
+                    fireEvent();
                     ke.consume();
                     break;
                 case KeyEvent.VK_DOWN:
                 case KeyEvent.VK_LEFT:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() - steps);
+                    fireValue(getValue() - steps);
+                    fireEvent();
                     ke.consume();
                     break;
                 case KeyEvent.VK_PAGE_UP:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() + 5 * steps);
+                    fireValue(getValue() + 5 * steps);
+                    fireEvent();
                     ke.consume();
                     break;
                 case KeyEvent.VK_PAGE_DOWN:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() - 5 * steps);
+                    fireValue(getValue() - 5 * steps);
+                    fireEvent();
                     ke.consume();
                     break;
                 case KeyEvent.VK_HOME:
                     fireEventAdjustmentBegin();
-                    setValue(getMin());
+                    fireValue(getMin());
+                    fireEvent();
                     fireEventAdjustmentFinished();
                     ke.consume();
                     break;
                 case KeyEvent.VK_END:
                     fireEventAdjustmentBegin();
-                    setValue(getMax());
+                    fireValue(getMax());
+                    fireEvent();
                     fireEventAdjustmentFinished();
                     ke.consume();
                     break;
                 case KeyEvent.VK_ENTER:
                     fireEventAdjustmentBegin();
                     try {
-                        setValue(Float.parseFloat(keybBuffer));
+                        fireValue(Float.parseFloat(keybBuffer));
                     } catch (java.lang.NumberFormatException ex) {
                     }
                     fireEventAdjustmentFinished();
@@ -371,8 +382,11 @@ public class NumberBoxComponent extends ACtrlComponent {
             }
             this.setToolTipText(s);
         }
-
         repaint();
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
         fireEvent();
     }
 

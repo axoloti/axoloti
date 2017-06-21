@@ -497,6 +497,8 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
                 }
                 o.setLocation(newposx, newposy);
             }
+            
+            // TODO: review pasting nets!
             for (Net n : p.nets) {
                 InletInstance connectedInlet = null;
                 OutletInstance connectedOutlet = null;
@@ -510,7 +512,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
                             if (on2 != null) {
 //                                o.name = on2 + " " + r[1];
                                 OutletInstance i = new OutletInstance();
-                                i.outletname = outletname;
+                                //i.outletname = outletname;
                                 i.objname = on2;
                                 source2.add(i);
                             } else if (restoreConnectionsToExternalOutlets) {
