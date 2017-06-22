@@ -17,8 +17,6 @@ import javax.swing.JPopupMenu;
 
 public class InletInstanceView extends IoletAbstract implements IInletInstanceView {
 
-    InletInstancePopupMenu popup = new InletInstancePopupMenu(this);
-
     final InletInstanceController controller;
 
     LabelComponent label;
@@ -61,7 +59,7 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
 
     @Override
     public JPopupMenu getPopup() {
-        return popup;
+        return new InletInstancePopupMenu(this);
     }
 
     public String getInletname() {

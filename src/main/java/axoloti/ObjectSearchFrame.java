@@ -29,7 +29,6 @@ import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewFactory;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -480,7 +479,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         accepted = false;
         MainFrame.mainframe.SetGrabFocusOnSevereErrors(true);
         setVisible(false);
-        patchController.repaintPatchView();
     }
 
     void Accept() {
@@ -504,7 +502,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 }
             }
             setVisible(false);
-            patchController.repaintPatchView();
         }
     }
 

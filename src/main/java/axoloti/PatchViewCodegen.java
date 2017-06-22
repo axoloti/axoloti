@@ -25,6 +25,7 @@ import axoloti.parameters.ParameterInstance;
 import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -510,15 +511,16 @@ public class PatchViewCodegen extends PatchAbstractView {
             NetController nc = controller.getNetFromInlet(i);
             if ((nc != null) && (nc.getModel().isValidNet())) {
                 Net n = nc.getModel();
+                OutletInstance firstSource = java.util.Collections.min(Arrays.asList(n.getSources()));
                 if (i.getDataType().equals(n.getDataType())) {
                     if (nc.NeedsLatch()
-                            && (getModel().objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= getModel().objectinstances.indexOf(o))) {
+                            && (getModel().objectinstances.indexOf(firstSource.getObjectInstance()) >= getModel().objectinstances.indexOf(o))) {
                         c += nc.CName() + "Latch";
                     } else {
                         c += nc.CName();
                     }
                 } else if (nc.NeedsLatch()
-                        && (getModel().objectinstances.indexOf(n.source.get(0).getObjectInstance()) >= getModel().objectinstances.indexOf(o))) {
+                        && (getModel().objectinstances.indexOf(firstSource) >= getModel().objectinstances.indexOf(o))) {
                     c += n.getDataType().GenerateConversionToType(i.getDataType(), nc.CName() + "Latch");
                 } else {
                     c += n.getDataType().GenerateConversionToType(i.getDataType(), nc.CName());

@@ -287,11 +287,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
                 }
             }
         }
-        AxoObjectAbstract t = o.getModel().getType();
-        if (o != null) {
-            //o.Close();
-            //t.DeleteInstance(o.getModel());
-        }
+        o.getModel().getController().removeView(o.getModel());
         boolean succeeded = objectInstanceControllers.remove(o.getModel());
         return succeeded;
     }
@@ -502,89 +498,79 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
             for (Net n : p.nets) {
                 InletInstance connectedInlet = null;
                 OutletInstance connectedOutlet = null;
-                if (n.source != null) {
-                    ArrayList<OutletInstance> source2 = new ArrayList<OutletInstance>();
-                    for (OutletInstance o : n.source) {
-                        String objname = o.getObjname();
-                        String outletname = o.getOutletname();
-                        if ((objname != null) && (outletname != null)) {
-                            String on2 = dict.get(objname);
-                            if (on2 != null) {
+                ArrayList<OutletInstance> source2 = new ArrayList<OutletInstance>();
+                for (OutletInstance o : n.getSources()) {
+                    String objname = o.getObjname();
+                    String outletname = o.getOutletname();
+                    if ((objname != null) && (outletname != null)) {
+                        String on2 = dict.get(objname);
+                        if (on2 != null) {
 //                                o.name = on2 + " " + r[1];
-                                OutletInstance i = new OutletInstance();
-                                //i.outletname = outletname;
-                                i.objname = on2;
-                                source2.add(i);
-                            } else if (restoreConnectionsToExternalOutlets) {
-                                AxoObjectInstanceAbstract obj = getModel().GetObjectInstance(objname);
-                                if ((obj != null) && (connectedOutlet == null)) {
-                                    OutletInstance oi = obj.GetOutletInstance(outletname);
-                                    if (oi != null) {
-                                        connectedOutlet = oi;
-                                    }
+                            OutletInstance i = new OutletInstance(on2, outletname);
+                            //i.outletname = outletname;
+                            source2.add(i);
+                        } else if (restoreConnectionsToExternalOutlets) {
+                            // this is untested and probably faulty.
+                            AxoObjectInstanceAbstract obj = getModel().GetObjectInstance(objname);
+                            if ((obj != null) && (connectedOutlet == null)) {
+                                OutletInstance oi = obj.GetOutletInstance(outletname);
+                                if (oi != null) {
+                                    connectedOutlet = oi;
                                 }
                             }
                         }
                     }
-                    n.source = source2;
                 }
-                if (n.dest != null) {
-                    ArrayList<InletInstance> dest2 = new ArrayList<InletInstance>();
-                    for (InletInstance o : n.dest) {
-                        String objname = o.getObjname();
-                        String inletname = o.getInletname();
-                        if ((objname != null) && (inletname != null)) {
-                            String on2 = dict.get(objname);
-                            if (on2 != null) {
-                                InletInstance i = new InletInstance();
-                                i.inletname = inletname;
-                                i.objname = on2;
-                                dest2.add(i);
-                            }
+                n.setSources(source2.toArray(new OutletInstance[]{}));
+
+                ArrayList<InletInstance> dest2 = new ArrayList<InletInstance>();
+                for (InletInstance o : n.getDestinations()) {
+                    String objname = o.getObjname();
+                    String inletname = o.getInletname();
+                    if ((objname != null) && (inletname != null)) {
+                        String on2 = dict.get(objname);
+                        if (on2 != null) {
+                            InletInstance i = new InletInstance(on2, inletname);
+                            dest2.add(i);
                         }
                     }
-                    n.dest = dest2;
                 }
-                /*
-                 if (n.source.size() + n.dest.size() > 1) {
-                 if ((connectedInlet == null) && (connectedOutlet == null)) {
-                 n.patchModel = this;
-                 nets.add(n);
-                 } else if (connectedInlet != null) {
-                 for (InletInstance o : n.dest) {
-                 InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
-                 if ((o2 != null) && (o2 != connectedInlet)) {
-                 AddConnection(connectedInlet, o2);
-                 }
-                 }
-                 for (OutletInstance o : n.source) {
-                 OutletInstance o2 = getOutletByReference(o.getObjname(), o.getOutletname());
-                 if (o2 != null) {
-                 AddConnection(connectedInlet, o2);
-                 }
-                 }
-                 } else if (connectedOutlet != null) {
-                 for (InletInstance o : n.dest) {
-                 InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
-                 if (o2 != null) {
-                 AddConnection(o2, connectedOutlet);
-                 }
-                 }
-                 }
-                 }
-                 */
+                n.setDestinations(dest2.toArray(new InletInstance[]{}));
+
+                if (n.getSources().length + n.getDestinations().length > 1) {
+                    if ((connectedInlet == null) && (connectedOutlet == null)) {
+                        /*
+                    n.patchModel = this;
+                    nets.add(n);
+                    } else if (connectedInlet != null) {
+                    for (InletInstance o : n.dest) {
+                    InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
+                    if ((o2 != null) && (o2 != connectedInlet)) {
+                    AddConnection(connectedInlet, o2);
+                    }
+                    }
+                    for (OutletInstance o : n.source) {
+                    OutletInstance o2 = getOutletByReference(o.getObjname(), o.getOutletname());
+                    if (o2 != null) {
+                    AddConnection(connectedInlet, o2);
+                    }
+                    }
+                    } else if (connectedOutlet != null) {
+                    for (InletInstance o : n.dest) {
+                    InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
+                    if (o2 != null) {
+                    AddConnection(o2, connectedOutlet);
+                    }
+                    }*/
+                        netControllers.add(n);
+                    }
+                }
             }
         } catch (javax.xml.stream.XMLStreamException ex) {
             // silence
         } catch (Exception ex) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @Deprecated
-    public void repaintPatchView() {
-        // TODO: fixme
-        //patchView.repaint();
     }
 
     @Deprecated // needs to ask PatchView
@@ -611,11 +597,6 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         setModelProperty(PATCH_DSPLOAD, (Integer) DSPLoad);
     }
 
-    @Deprecated
-    public Net getNetDraggingModel() {
-        return new Net();
-    }
-
     // ------------- new objectinstances MVC stuff
     ArrayController<ObjectInstanceController, AxoObjectInstanceAbstract, PatchController> objectInstanceControllers;
     ArrayController<NetController, Net, PatchController> netControllers;
@@ -630,7 +611,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
 
     public NetController getNetFromInlet(InletInstance il) {
         for (NetController c : netControllers) {
-            for (InletInstance d : c.getModel().dest) {
+            for (InletInstance d : c.getModel().getDestinations()) {
                 if (d == il) {
                     return c;
                 }
@@ -641,7 +622,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
 
     public NetController getNetFromOutlet(OutletInstance il) {
         for (NetController c : netControllers) {
-            for (OutletInstance d : c.getModel().source) {
+            for (OutletInstance d : c.getModel().getSources()) {
                 if (d == il) {
                     return c;
                 }
@@ -663,26 +644,22 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         n1 = getNetFromInlet(il);
         n2 = getNetFromOutlet(ol);
         if ((n1 == null) && (n2 == null)) {
-            Net n = new Net();
-            NetController nc = (NetController) netControllers.add(n);
-            nc.connectInlet(il);
-            nc.connectOutlet(ol);
+            Net n = new Net(new OutletInstance[]{ol}, new InletInstance[]{il});
+            netControllers.add(n);
             Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
             return n;
         } else if (n1 == n2) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: already connected");
             return null;
         } else if ((n1 != null) && (n2 == null)) {
-            if (n1.getModel().source.isEmpty()) {
+            if (n1.getModel().getSources().length == 0) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: adding outlet to inlet net");
                 n1.connectOutlet(ol);
                 return n1.getModel();
             } else {
                 disconnect(il);
-                Net n = new Net();
-                NetController nc = (NetController) netControllers.add(n);
-                nc.connectInlet(il);
-                nc.connectOutlet(ol);
+                Net n = new Net(new OutletInstance[]{ol}, new InletInstance[]{il});
+                netControllers.add(n);
                 getModel().nets.add(n);
                 Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
                 return n;
@@ -719,10 +696,8 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         n1 = getNetFromInlet(il);
         n2 = getNetFromInlet(ol);
         if ((n1 == null) && (n2 == null)) {
-            Net n = new Net();
-            NetController nc = (NetController) netControllers.add(n);
-            nc.connectInlet(il);
-            nc.connectInlet(ol);
+            Net n = new Net(new OutletInstance[]{}, new InletInstance[]{il, ol});
+            netControllers.add(n);
             Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
             return n;
         } else if (n1 == n2) {
@@ -745,7 +720,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
     public Net disconnect(InletInstance io) {
         NetController n = getNetFromInlet(io);
         if (n != null) {
-            if (n.getModel().source.isEmpty() && n.getModel().dest.size() == 1) {
+            if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
                 delete(n);
             } else {
                 n.disconnect(io);
@@ -758,7 +733,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
     public Net disconnect(OutletInstance io) {
         NetController n = getNetFromOutlet(io);
         if (n != null) {
-            if (n.getModel().dest.isEmpty() && n.getModel().source.size() == 1) {
+            if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
                 delete(n);
             } else {
                 n.disconnect(io);

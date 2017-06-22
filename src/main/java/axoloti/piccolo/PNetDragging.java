@@ -16,7 +16,8 @@ import org.piccolo2d.util.PPaintContext;
 public class PNetDragging extends PNetView {
 
     public PNetDragging(PatchViewPiccolo patchView) {
-        this(patchView.getController().getNetDraggingModel(), patchView);
+        super(null,null);
+        //this(patchView.getController().getNetDraggingModel(), patchView);
     }
 
     public PNetDragging(Net net, PatchViewPiccolo patchView) {

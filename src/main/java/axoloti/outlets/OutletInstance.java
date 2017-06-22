@@ -25,6 +25,7 @@ import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.*;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -39,11 +40,16 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     @Attribute(required = false)
     public String name;
     @Attribute(name = "obj", required = false)
-    public String objname;
+    String objname;
 
     private AtomDefinitionController controller;
 
     protected AxoObjectInstanceAbstract axoObj;
+
+    @Persist
+    public void Persist() {
+        objname = axoObj.getInstanceName();
+    }
 
     public AxoObjectInstanceAbstract getObjectInstance() {
         return this.axoObj;
@@ -51,12 +57,11 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
 
     public String getOutletname() {
         return outletname;
-
     }
 
     @Override
     public T getModel() {
-        return (T)getController().getModel();
+        return (T) getController().getModel();
     }
 
     public OutletInstance() {
@@ -64,10 +69,17 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
         this.axoObj = null;
     }
 
+    public OutletInstance(String objname, String outletname) {
+        this.controller = null;
+        this.axoObj = null;
+        this.objname = objname;
+        this.outletname = outletname;
+    }
+
     public OutletInstance(AtomDefinitionController outletController, AxoObjectInstance axoObj) {
         this.controller = outletController;
         this.axoObj = axoObj;
-        RefreshName();
+        //RefreshName();
     }
 
     public DataType getDataType() {
@@ -87,15 +99,22 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
         return axoObj.compareTo(t.axoObj);
     }
 
+    @Deprecated
     public void RefreshName() {
-        name = axoObj.getInstanceName() + " " + getModel().getName();
-        objname = axoObj.getInstanceName();
-        outletname = getModel().getName();
-        name = null;
+        /*
+         name = axoObj.getInstanceName() + " " + getModel().getName();
+         objname = axoObj.getInstanceName();
+         outletname = getModel().getName();
+         name = null;
+         */
     }
 
     public String getObjname() {
-        return this.objname;
+        if (axoObj != null) {
+            return axoObj.getInstanceName();
+        } else {
+            return this.objname;
+        }
     }
 
     public boolean isConnected() {
@@ -111,12 +130,11 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
         if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
-            setName((String)evt.getNewValue());
+            setName((String) evt.getNewValue());
         } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             //setDescription(evt.getNewValue());
         }
     }
-
 
     public String getName() {
         return outletname;
@@ -127,7 +145,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
         this.outletname = outletname;
         firePropertyChange(AtomDefinitionController.ATOM_NAME, preVal, outletname);
     }
-    
+
     @Override
     public AtomDefinitionController getController() {
         return controller;

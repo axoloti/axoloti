@@ -27,8 +27,8 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
             //System.out.println("documentroot is null");
         }
     }
-    
-    public String[] getPropertyNames(){
+
+    public String[] getPropertyNames() {
         return new String[]{};
     }
 
@@ -38,7 +38,7 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
             if (registeredViews.contains(view)) {
                 System.out.println("view already added : " + view.toString());
             } else {
-                for(String propertyName : getPropertyNames()){
+                for (String propertyName : getPropertyNames()) {
                     Object propertyValue = getModelProperty(propertyName);
                     PropertyChangeEvent evt = new PropertyChangeEvent(model, propertyName, null, propertyValue);
                     view.modelPropertyChange(evt);
@@ -51,6 +51,9 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
     }
 
     final public void removeView(View view) {
+        if (!registeredViews.contains(view)) {
+            throw new Error("view was not attached to controller" + view.toString());
+        }
         registeredViews.remove(view);
     }
 

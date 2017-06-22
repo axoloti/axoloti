@@ -20,7 +20,6 @@ import org.piccolo2d.event.PInputEvent;
 
 public class POutletInstanceView extends PIoletAbstract implements IOutletInstanceView {
 
-    OutletInstancePopupMenu popup;
     OutletInstance outletInstance;
     OutletInstanceController controller;
 
@@ -28,7 +27,6 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
         super(axoObjectInstanceView);
         this.outletInstance = outletInstance;
 
-        popup = new OutletInstancePopupMenu(this);
     }
 
     private final PBasicInputEventHandler toolTipEventListener = new PBasicInputEventHandler() {
@@ -96,7 +94,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
 
     @Override
     public JPopupMenu getPopup() {
-        return popup;
+        return new OutletInstancePopupMenu(this);
     }
 
     @Override

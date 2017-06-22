@@ -85,19 +85,17 @@ public abstract class PatchView extends PatchAbstractView {
             public IAxoObjectInstanceView viewFactory(AbstractController ctrl) {
                 IAxoObjectInstanceView view = AxoObjectInstanceViewFactory.createView((ObjectInstanceController) ctrl, (PatchViewSwing) PatchView.this);
                 view.PostConstructor();
+                add(view);
                 return view;
             }
 
             @Override
             public void updateUI() {
-                removeAllObjectViews();
-                for (IAxoObjectInstanceView v : getSubViews()) {
-                    add(v);
-                }
             }
 
             @Override
             public void removeView(IAxoObjectInstanceView view) {
+                remove(view);
             }
         };
         controller.objectInstanceControllers.addView(objectInstanceViews);
@@ -107,19 +105,18 @@ public abstract class PatchView extends PatchAbstractView {
             public INetView viewFactory(AbstractController ctrl) {
                 INetView view = new NetView((Net) (ctrl.getModel()), (NetController) ctrl, (PatchViewSwing) PatchView.this);
                 view.PostConstructor();
+                ctrl.addView(view);
+                add(view);
                 return view;
             }
 
             @Override
             public void updateUI() {
-                removeAllNetViews();
-                for (INetView v : getSubViews()) {
-                    add(v);
-                }
             }
 
             @Override
             public void removeView(INetView view) {
+                remove(view);
             }
         };
         controller.netControllers.addView(netViews);
@@ -213,6 +210,8 @@ public abstract class PatchView extends PatchAbstractView {
     public abstract void add(IAxoObjectInstanceView v);
 
     public abstract void remove(IAxoObjectInstanceView v);
+
+    public abstract void remove(INetView view);
 
     public abstract void removeAllObjectViews();
 

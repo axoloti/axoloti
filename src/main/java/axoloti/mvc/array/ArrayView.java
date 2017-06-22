@@ -15,11 +15,11 @@ import java.util.List;
 public abstract class ArrayView<T extends AbstractView> implements AbstractView<ArrayController>, Iterable<T> {
 
     ArrayController<AbstractController, AbstractModel, AbstractController> controller;
-    List<T> subviews = new ArrayList<>();
+    final List<T> subviews;
 
     public ArrayView(ArrayController controller) {
         this.controller = controller;
-        subviews = new ArrayList<>();
+        subviews = new ArrayList<>(controller.subcontrollers.size());
         Sync();
     }
 
@@ -74,6 +74,9 @@ public abstract class ArrayView<T extends AbstractView> implements AbstractView<
         return controller;
     }
 
+    /* Override this method to create a suitable view of the model referenced 
+     * by the controller. The implementation should also call the addView method 
+     * of the controller. */
     public abstract T viewFactory(AbstractController ctrl);
 
     public abstract void removeView(T view);

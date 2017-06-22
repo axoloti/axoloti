@@ -6,6 +6,8 @@ import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.outlets.OutletInstance;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +25,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         if (parent != null) {
             PatchModel patchModel = parent.getModel();
             ArrayList<OutletInstance> source2 = new ArrayList<>();
-            for (OutletInstance i : model.source) {
+            for (OutletInstance i : model.getSources()) {
                 String objname = i.getObjname();
                 String outletname = i.getOutletname();
 
@@ -42,7 +44,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
                 source2.add(r);
             }
             ArrayList<InletInstance> dest2 = new ArrayList<>();
-            for (InletInstance i : model.dest) {
+            for (InletInstance i : model.getDestinations()) {
                 String objname = i.getObjname();
                 String inletname = i.getInletname();
                 AxoObjectInstanceAbstract o = patchModel.GetObjectInstance(objname);
@@ -59,8 +61,8 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
                 }
                 dest2.add(r);
             }
-            model.source = source2;
-            model.dest = dest2;
+            model.setSources(source2.toArray(new OutletInstance[]{}));
+            model.setDestinations(dest2.toArray(new InletInstance[]{}));
         }
     }
 
@@ -68,49 +70,49 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         if (inlet.getObjectInstance().getPatchModel() != getParent().getModel()) {
             return;
         }
-        ArrayList<InletInstance> n = (ArrayList<InletInstance>) getModel().dest.clone();
+        ArrayList<InletInstance> n = new ArrayList<>(Arrays.asList(getModel().getDestinations()));
         n.add(inlet);
-        setModelUndoableProperty(NET_DESTINATIONS, n);
+        setModelUndoableProperty(NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
     }
 
     public void connectOutlet(OutletInstance outlet) {
         if (outlet.getObjectInstance().getPatchModel() != getParent().getModel()) {
             return;
         }
-        ArrayList<OutletInstance> n = (ArrayList<OutletInstance>) getModel().source.clone();
+        ArrayList<OutletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
         n.add(outlet);
-        setModelUndoableProperty(NET_SOURCES, n);
+        setModelUndoableProperty(NET_SOURCES, n.toArray(new OutletInstance[]{}));
     }
 
     void disconnect(InletInstance inlet) {
         if (inlet.getObjectInstance().getPatchModel() != getParent().getModel()) {
             return;
         }
-        ArrayList<InletInstance> n = (ArrayList<InletInstance>) getModel().dest.clone();
+        ArrayList<InletInstance> n = new ArrayList<>(Arrays.asList(getModel().getDestinations()));
         n.remove(inlet);
-        setModelUndoableProperty(NET_DESTINATIONS, n);
+        setModelUndoableProperty(NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
     }
 
     void disconnect(OutletInstance outlet) {
         if (outlet.getObjectInstance().getPatchModel() != getParent().getModel()) {
             return;
         }
-        ArrayList<OutletInstance> n = (ArrayList<OutletInstance>) getModel().source.clone();
+        ArrayList<OutletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
         n.remove(outlet);
-        setModelUndoableProperty(NET_SOURCES, n);
+        setModelUndoableProperty(NET_SOURCES, n.toArray(new OutletInstance[]{}));
     }
 
     public boolean NeedsLatch() {
         // reads before last write on net
         int lastSource = 0;
-        for (OutletInstance s : getModel().source) {
+        for (OutletInstance s : getModel().getSources()) {
             int i = getParent().getModel().objectinstances.indexOf(s.getObjectInstance());
             if (i > lastSource) {
                 lastSource = i;
             }
         }
         int firstDest = java.lang.Integer.MAX_VALUE;
-        for (InletInstance d : getModel().dest) {
+        for (InletInstance d : getModel().getDestinations()) {
             int i = getParent().getModel().objectinstances.indexOf(d.getObjectInstance());
             if (i < firstDest) {
                 firstDest = i;
@@ -120,12 +122,13 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
     }
 
     public boolean IsFirstOutlet(OutletInstance oi) {
-        if (getModel().source.size() == 1) {
+        if (getModel().getSources().length == 1) {
             return true;
         }
         for (AxoObjectInstanceAbstract o : getParent().getModel().objectinstances) {
             for (OutletInstance i : o.getOutletInstances()) {
-                if (getModel().source.contains(i)) {
+                List<OutletInstance> outletlist = Arrays.asList(getModel().getSources());
+                if (outletlist.contains(i)) {
                     // o is first objectinstance connected to this net
                     return oi == i;
                 }

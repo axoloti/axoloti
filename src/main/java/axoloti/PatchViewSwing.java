@@ -457,12 +457,20 @@ public class PatchViewSwing extends PatchView {
     @Override
     public void remove(IAxoObjectInstanceView v) {
         objectLayerPanel.remove((AxoObjectInstanceViewAbstract) v);
+        objectLayerPanel.repaint(((AxoObjectInstanceViewAbstract) v).getBounds());
     }
 
+    @Override
+    public void remove(INetView view) {
+        netLayerPanel.remove((NetView) view);
+        netLayerPanel.repaint(((NetView) view).getBounds());
+    }   
+    
     @Override
     public void add(IAxoObjectInstanceView v) {
         if (objectLayerPanel != null) {
             objectLayerPanel.add((AxoObjectInstanceViewAbstract) v);
+            v.repaint();
         }
     }
 

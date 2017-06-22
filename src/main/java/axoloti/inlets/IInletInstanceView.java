@@ -10,13 +10,10 @@ public interface IInletInstanceView extends AbstractView {
 
     public InletInstance getModel();
 
+    @Override
+    public InletInstanceController getController();
+
     public void setHighlighted(boolean highlighted);
-
-    @Deprecated // use controller
-    public void disconnect();
-
-    @Deprecated // use controller
-    public void deleteNet();
 
     public void repaint();
 

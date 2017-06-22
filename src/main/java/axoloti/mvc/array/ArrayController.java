@@ -16,13 +16,14 @@ public abstract class ArrayController<T extends AbstractController, M extends Ab
 
     static final String ARRAY = "Array";
 
-    ArrayList<T> subcontrollers = new ArrayList<>();
+    final ArrayList<T> subcontrollers;
 
     public abstract T createController(M model, AbstractDocumentRoot documentRoot, P parent);
 
     public ArrayController(ArrayModel model, AbstractDocumentRoot documentRoot, P parent) {
         super(model, documentRoot, parent);
         ArrayList<M> am = model.getArray();
+        subcontrollers = new ArrayList<>(am.size());
         for (M m : am) {
             subcontrollers.add(createController(m, documentRoot, parent));
         }

@@ -38,22 +38,23 @@ public class NetView extends JComponent implements INetView {
         setSize(1, 1);
         setLocation(0, 0);
         setOpaque(false);
-        
+
         PostConstructor();
         updateBounds();
     }
 
+    @Override
     public void PostConstructor() {
         source.clear();
         dest.clear();
         // resolve inlet/outlet views
-        for(OutletInstance i : net.source) {
+        for (OutletInstance i : net.getSources()) {
             AxoObjectInstanceAbstract o = i.getObjectInstance();
             IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
             IOutletInstanceView o2 = ov.getOutletInstanceViews().getViewOfModel(i);
             source.add(o2);
         }
-        for(InletInstance i : net.dest) {
+        for (InletInstance i : net.getDestinations()) {
             AxoObjectInstanceAbstract o = i.getObjectInstance();
             IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
             IInletInstanceView o2 = ov.getInletInstanceViews().getViewOfModel(i);
@@ -102,7 +103,7 @@ public class NetView extends JComponent implements INetView {
         int max_x = Integer.MIN_VALUE;
 
         for (IInletInstanceView i : dest) {
-            if (i==null){
+            if (i == null) {
                 System.out.println("null");
             }
             Point p1 = i.getJackLocInCanvas();
@@ -112,7 +113,7 @@ public class NetView extends JComponent implements INetView {
             max_y = Math.max(max_y, p1.y);
         }
         for (IOutletInstanceView i : source) {
-            if (i==null){
+            if (i == null) {
                 System.out.println("null");
             }
             Point p1 = i.getJackLocInCanvas();
@@ -133,7 +134,7 @@ public class NetView extends JComponent implements INetView {
         paint1(g);
     }
 
-    void paint1(Graphics g){
+    void paint1(Graphics g) {
         float shadowOffset = 0.5f;
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -150,8 +151,11 @@ public class NetView extends JComponent implements INetView {
             }
 
             c = net.getDataType().GetColor();
-            if (source.isEmpty()) p0 = new Point(10,10); else
-            p0 = source.get(0).getJackLocInCanvas();
+            if (source.isEmpty()) {
+                p0 = new Point(10, 10);
+            } else {
+                p0 = source.get(0).getJackLocInCanvas();
+            }
         } else {
             if (selected) {
                 g2.setStroke(strokeBrokenSelected);
@@ -171,7 +175,7 @@ public class NetView extends JComponent implements INetView {
                 p0 = dest.get(0).getJackLocInCanvas();
             } else {
                 //throw new Error("empty nets should not exist");
-                p0 = new Point(0,0);
+                p0 = new Point(0, 0);
             }
         }
 
@@ -196,7 +200,7 @@ public class NetView extends JComponent implements INetView {
 
         }
     }
-    
+
     public Net getNet() {
         return net;
     }

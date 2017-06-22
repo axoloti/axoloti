@@ -364,6 +364,9 @@ public class PatchViewPiccolo extends PatchView {
         removeFocusables(node.getChildrenIterator());
     }
 
+    public void remove(INetView v) {
+    }
+
     public void removeAllObjectViews() {
         for (IAxoObjectInstanceView objectView : objectInstanceViews) {
             getCanvas().getLayer().removeChild((PatchPNode) objectView);

@@ -10,11 +10,10 @@ public interface IOutletInstanceView extends AbstractView {
 
     public OutletInstance getModel();
 
+    @Override
+    public OutletInstanceController getController();
+
     public void setHighlighted(boolean highlighted);
-
-    public void disconnect();
-
-    public void deleteNet();
 
     public void repaint();
 
@@ -25,6 +24,5 @@ public interface IOutletInstanceView extends AbstractView {
     public void setAlignmentX(float alignmentX);
 
     public void setAlignmentY(float alignmentY);
-
 
 }

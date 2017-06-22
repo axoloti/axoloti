@@ -22,7 +22,9 @@ import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
 import axoloti.outlets.OutletInstance;
 import java.awt.Color;
-import java.util.ArrayList;
+import java.util.Arrays;
+import static java.util.Arrays.asList;
+import java.util.List;
 import org.simpleframework.xml.*;
 
 /**
@@ -32,32 +34,84 @@ import org.simpleframework.xml.*;
 @Root(name = "net")
 public class Net extends AbstractModel {
 
-    @ElementList(inline = true, required = false)
-    ArrayList<OutletInstance> source;
-    @ElementList(inline = true, required = false)
-    ArrayList<InletInstance> dest = new ArrayList<>();
+    OutletInstance[] sources;
+    InletInstance[] dests;
     boolean selected = false;
 
-    public Net() {
+    public Net(
+            @ElementList(name = "source", inline = true, required = false) List<OutletInstance> source,
+            @ElementList(name = "dest", inline = true, required = false) List<InletInstance> dest
+    ) {
         if (source == null) {
-            source = new ArrayList<>();
+            this.sources = new OutletInstance[]{};
+        } else {
+            this.sources = source.toArray(new OutletInstance[]{});
         }
         if (dest == null) {
-            dest = new ArrayList<>();
+            this.dests = new InletInstance[]{};
+        } else {
+            this.dests = dest.toArray(new InletInstance[]{});
+        }
+    }
+
+    @ElementList(name = "source", inline = true, required = false)
+    public List<OutletInstance> getSourceList() {
+        if (sources == null) {
+            return null;
+        }
+        if (sources.length == 0) {
+            return null;
+        }
+        return asList(sources);
+    }
+
+    @ElementList(name = "dest", inline = true, required = false)
+    public List<InletInstance> getDestList() {
+        if (dests == null) {
+            return null;
+        }
+        if (dests.length == 0) {
+            return null;
+        }
+        return asList(dests);
+    }
+
+    public Net() {
+        this.sources = new OutletInstance[]{};
+        this.dests = new InletInstance[]{};
+    }
+
+    public Net(OutletInstance[] sources, InletInstance[] dests) {
+        this.sources = sources;
+        this.dests = dests;
+    }
+
+    public void validate() {
+        if (sources == null) {
+            throw new Error("source is null, empty array required");
+        }
+        if (dests == null) {
+            throw new Error("dest is null, empty array required");
+        }
+        if (dests.length + sources.length < 2) {
+            throw new Error("less than 2 iolets connected, should not exist");
         }
     }
 
     public boolean isValidNet() {
-        if (source.isEmpty()) {
+        if (sources == null) {
             return false;
         }
-        if (source.size() > 1) {
+        if (sources.length != 1) {
             return false;
         }
-        if (dest.isEmpty()) {
+        if (dests == null) {
             return false;
         }
-        for (InletInstance s : dest) {
+        if (dests.length == 0) {
+            return false;
+        }
+        for (InletInstance s : dests) {
             if (!getDataType().IsConvertableToType(s.getDataType())) {
                 return false;
             }
@@ -74,19 +128,18 @@ public class Net extends AbstractModel {
     }
 
     public DataType getDataType() {
-        if (source.isEmpty()) {
+        if (sources == null) {
             return null;
         }
-        if (source.size() == 1) {
-            return source.get(0).getDataType();
+        if (sources.length == 0) {
+            return null;
         }
-        java.util.Collections.sort(source);
-        DataType t = source.get(0).getDataType();
+        if (sources.length == 1) {
+            return sources[0].getDataType();
+        }
+        OutletInstance first_outlet = java.util.Collections.min(Arrays.asList(sources));
+        DataType t = first_outlet.getDataType();
         return t;
-    }
-
-    public ArrayList<OutletInstance> GetSource() {
-        return source;
     }
 
     public String CType() {
@@ -98,27 +151,29 @@ public class Net extends AbstractModel {
         }
     }
 
-    public ArrayList<OutletInstance> getSources() {
-        return source;
+    public OutletInstance[] getSources() {
+        return sources;
     }
 
-    public void setSources(ArrayList<OutletInstance> source) {
-        ArrayList<OutletInstance> old_value = this.source;
-        this.source = source;
+    public void setSources(OutletInstance[] sources) {
+        OutletInstance[] old_value = this.sources;
+        this.sources = sources;
+        validate();
         firePropertyChange(
                 NetController.NET_SOURCES,
-                old_value, source);
+                old_value, sources);
     }
 
-    public ArrayList<InletInstance> getDestinations() {
-        return dest;
+    public InletInstance[] getDestinations() {
+        return dests;
     }
 
-    public void setDestinations(ArrayList<InletInstance> dest) {
-        ArrayList<InletInstance> old_value = this.dest;
-        this.dest = dest;
+    public void setDestinations(InletInstance[] dests) {
+        InletInstance[] old_value = this.dests;
+        this.dests = dests;
+        validate();
         firePropertyChange(
                 NetController.NET_DESTINATIONS,
-                old_value, dest);
+                old_value, dests);
     }
 }

@@ -76,6 +76,9 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         p_inletViews.setAlignmentX(LEFT_ALIGNMENT);
         p_inletViews.setAlignmentY(TOP_ALIGNMENT);
 
+        p_attributeViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+        p_attributeViews.setLayout(new BoxLayout(p_attributeViews, BoxLayout.PAGE_AXIS));
+        
         p_outletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         p_outletViews.setLayout(new BoxLayout(p_outletViews, BoxLayout.PAGE_AXIS));
         p_outletViews.setAlignmentX(RIGHT_ALIGNMENT);
@@ -246,10 +249,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         };
         controller.outletInstanceControllers.addView(outletInstanceViews);
 
-        p_ioletViews.add(p_inletViews);
-        p_ioletViews.add(Box.createHorizontalGlue());
-        p_ioletViews.add(p_outletViews);
-        add(p_ioletViews);
 
         attributeInstanceViews = new ArrayView<IAttributeInstanceView>(controller.attributeInstanceControllers) {
             @Override
@@ -314,6 +313,11 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         };
         controller.displayInstanceControllers.addView(displayInstanceViews);
 
+
+        p_ioletViews.add(p_inletViews);
+        p_ioletViews.add(Box.createHorizontalGlue());
+        p_ioletViews.add(p_outletViews);
+        add(p_ioletViews);
         add(p_attributeViews);
         add(p_parameterViews);
         add(p_displayViews);

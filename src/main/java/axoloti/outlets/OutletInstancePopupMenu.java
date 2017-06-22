@@ -17,6 +17,8 @@
  */
 package axoloti.outlets;
 
+import axoloti.NetController;
+import axoloti.PatchController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
@@ -34,20 +36,24 @@ public class OutletInstancePopupMenu extends JPopupMenu {
         super();
         this.outletInstanceView = outletInstanceView;
         JMenuItem itemDisconnect = new JMenuItem("Disconnect outlet");
-        JMenuItem itemDelete = new JMenuItem("Delete net");
         itemDisconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                OutletInstancePopupMenu.this.outletInstanceView.disconnect();
-            }
-        });
-        itemDelete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                OutletInstancePopupMenu.this.outletInstanceView.deleteNet();
+                outletInstanceView.getController().getParent().getParent().disconnect(outletInstanceView.getController().getModel());
             }
         });
         add(itemDisconnect);
+        JMenuItem itemDelete = new JMenuItem("Delete net");
+        itemDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                PatchController pc = outletInstanceView.getController().getParent().getParent();
+                NetController n = pc.getNetFromOutlet(outletInstanceView.getController().getModel());
+                if (n!= null) {
+                    pc.delete(n);
+                }
+            }
+        });
         add(itemDelete);
     }
 }

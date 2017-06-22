@@ -4,6 +4,7 @@ import axoloti.INetView;
 import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.NetController;
+import axoloti.NetDrag;
 import axoloti.NetDragging;
 import axoloti.PatchModel;
 import axoloti.PatchViewSwing;
@@ -109,7 +110,7 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
             setHighlighted(true);
 //            if (!axoObj.isLocked()) {
 //                if (dragnet == null) {
-                    Net dnet = new Net();
+                    Net dnet = new NetDrag();
                     NetController dragNetController = new NetController(dnet, null, getPatchView().getController());
                     dragtarget = null;
                     if (this instanceof InletInstanceView) {

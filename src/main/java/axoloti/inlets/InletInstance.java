@@ -25,6 +25,7 @@ import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.*;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -34,12 +35,12 @@ import org.simpleframework.xml.*;
 public class InletInstance<T extends Inlet> extends AbstractModel implements AtomInstance<T> {
 
     @Attribute(name = "inlet", required = false)
-    public String inletname;
+    protected String inletname;
     @Deprecated
     @Attribute(required = false)
-    public String name;
+    protected String name;
     @Attribute(name = "obj", required = false)
-    public String objname;
+    protected String objname;
 
     private final AtomDefinitionController controller;
 
@@ -52,6 +53,11 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     public AxoObjectInstanceAbstract getObjectInstance() {
         return axoObj;
     }
+    
+    @Persist
+    public void Persist() {
+        objname = axoObj.getInstanceName();
+    }
 
     @Override
     public T getModel() {
@@ -63,6 +69,14 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
         controller = null;
     }
 
+    public InletInstance(String objname, String inletname) {
+        axoObj = null;
+        controller = null;
+        this.objname = objname;
+        this.inletname = inletname;
+    }
+    
+    
     public InletInstance(AtomDefinitionController inletController, final AxoObjectInstance axoObj) {
         this.controller = inletController;
         this.axoObj = axoObj;
@@ -90,7 +104,11 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     }
 
     public String getObjname() {
-        return this.objname;
+        if (axoObj != null) {
+            return axoObj.getInstanceName();
+        } else {
+            return this.objname;
+        }
     }
 
     public boolean isConnected() {

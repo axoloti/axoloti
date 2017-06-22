@@ -17,6 +17,8 @@
  */
 package axoloti.inlets;
 
+import axoloti.NetController;
+import axoloti.PatchController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
@@ -28,26 +30,27 @@ import javax.swing.JPopupMenu;
  */
 public class InletInstancePopupMenu extends JPopupMenu {
 
-    IInletInstanceView inletInstanceView;
-
     public InletInstancePopupMenu(IInletInstanceView inletInstanceView) {
         super();
-        this.inletInstanceView = inletInstanceView;
         JMenuItem itemDisconnect = new JMenuItem("Disconnect inlet");
-        JMenuItem itemDelete = new JMenuItem("Delete net");
         itemDisconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                InletInstancePopupMenu.this.inletInstanceView.disconnect();
-            }
-        });
-        itemDelete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                InletInstancePopupMenu.this.inletInstanceView.deleteNet();
+                inletInstanceView.getController().getParent().getParent().disconnect(inletInstanceView.getController().getModel());
             }
         });
         add(itemDisconnect);
+        JMenuItem itemDelete = new JMenuItem("Delete net");
+        itemDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                PatchController pc = inletInstanceView.getController().getParent().getParent();
+                NetController n = pc.getNetFromInlet(inletInstanceView.getController().getModel());
+                if (n != null) {
+                    pc.delete(n);
+                }
+            }
+        });
         add(itemDelete);
     }
 }

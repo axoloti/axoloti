@@ -104,7 +104,7 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
     }
 
     @Override
-    public AbstractController getController() {
+    public InletInstanceController getController() {
         return controller;
     }
 }

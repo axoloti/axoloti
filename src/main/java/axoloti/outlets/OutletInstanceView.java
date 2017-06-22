@@ -16,8 +16,6 @@ import javax.swing.JPopupMenu;
 
 public class OutletInstanceView extends IoletAbstract implements IOutletInstanceView {
 
-    OutletInstancePopupMenu popup = new OutletInstancePopupMenu(this);
-
     final OutletInstanceController controller;
 
     LabelComponent label;
