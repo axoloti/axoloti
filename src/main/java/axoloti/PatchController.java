@@ -18,6 +18,7 @@ import axoloti.object.AxoObjectPatcherObject;
 import axoloti.object.ObjectController;
 import axoloti.object.ObjectInstanceController;
 import axoloti.object.ObjectInstancePatcherController;
+import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.utils.Constants;
 import axoloti.utils.Preferences;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -266,29 +268,29 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         getModel().setFileNamePath(FileNamePath);
     }
 
-    public boolean delete(ObjectInstanceController o) {
+    public boolean delete(AxoObjectInstanceAbstract o) {
         boolean deletionSucceeded = false;
         if (o == null) {
             return deletionSucceeded;
         }
-        for (InletInstance ii : o.getModel().getInletInstances()) {
+        for (InletInstance ii : o.getInletInstances()) {
             disconnect(ii);
         }
-        for (OutletInstance oi : o.getModel().getOutletInstances()) {
+        for (OutletInstance oi : o.getOutletInstances()) {
             disconnect(oi);
         }
         int i;
         for (i = getModel().Modulators.size() - 1; i >= 0; i--) {
             Modulator m1 = getModel().Modulators.get(i);
-            if (m1.objinst == o.getModel()) {
+            if (m1.objinst == o) {
                 getModel().Modulators.remove(m1);
                 for (Modulation mt : m1.Modulations) {
                     mt.destination.removeModulation(mt);
                 }
             }
         }
-        o.getModel().getController().removeView(o.getModel());
-        boolean succeeded = objectInstanceControllers.remove(o.getModel());
+//        o.getController().removeView(o);
+        boolean succeeded = objectInstanceControllers.remove(o);
         return succeeded;
     }
 
@@ -768,5 +770,45 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         }
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Export obj complete");
     }    
-    
+
+    public void SelectNone() {
+        for (AxoObjectInstanceAbstract o : getModel().getObjectInstances()) {
+            o.setSelected(false);
+        }
+    }
+
+    void SelectAll() {
+        for (AxoObjectInstanceAbstract o : getModel().getObjectInstances()) {
+            o.setSelected(true);
+        }
+    }
+
+    /*
+    void deleteSelectedAxoObjectInstanceViews() {
+        Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "deleteSelectedAxoObjInstances()");
+        if (!isLocked()) {
+            ArrayList<ObjectInstanceController> selected = getController().getSelectedObjects();
+            if (!selected.isEmpty()) {
+                getController().addMetaUndo("delete objects");
+                for (ObjectInstanceController o : selected) {
+                    getController().delete(o.getModel());
+                }
+            }
+        } else {
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't delete: locked!");
+        }
+    }
+*/
+
+
+    List<ObjectInstanceController> getSelectedObjects() {
+        ArrayList<ObjectInstanceController> selected = new ArrayList<>();
+        for (ObjectInstanceController o : objectInstanceControllers) {
+            if (o.getModel().getSelected()) {
+                selected.add(o);
+            }
+        }
+        return selected;
+    }
+
 }

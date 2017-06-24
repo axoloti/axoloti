@@ -8,13 +8,14 @@ import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 
 /**
  *
  * @author jtaelman
  */
-public class UndoUI {
+public class UndoUI implements UndoableEditListener {
 
     UndoManager undoManager;
 
@@ -89,6 +90,7 @@ public class UndoUI {
         return menuRedo;
     }
 
+    @Override
     public void undoableEditHappened(UndoableEditEvent e) {
         undoAction.update();
         redoAction.update();

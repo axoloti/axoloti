@@ -46,7 +46,6 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     protected boolean dragging = false;
     private Point dragLocation = null;
     private Point dragAnchor = null;
-    protected boolean selected = false;
     final JPanel Titlebar = new JPanel();
     TextFieldComponent InstanceNameTF;
     LabelComponent InstanceLabel;
@@ -121,11 +120,11 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         if (getPatchView() != null) {
             if (me.getClickCount() == 1) {
                 if (me.isShiftDown()) {
-                    setSelected(!isSelected());
+                    getModel().setSelected(!getModel().getSelected());
                     me.consume();
-                } else if (selected == false) {
-                    getPatchView().SelectNone();
-                    setSelected(true);
+                } else if (!getModel().getSelected()) {
+                    getController().getParent().SelectNone();
+                    getModel().setSelected(true);
                     me.consume();
                 }
             }
@@ -197,9 +196,10 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                 moveToDraggedLayer(this);
                 draggingObjects.add(this);
                 dragLocation = getLocation();
-                if (isSelected()) {
+                getController().addMetaUndo("move");
+                if (getModel().getSelected()) {
                     for (IAxoObjectInstanceView o : getPatchView().getObjectInstanceViews()) {
-                        if (o.isSelected()) {
+                        if (o.getModel().getSelected()) {
                             AxoObjectInstanceViewAbstract oa = (AxoObjectInstanceViewAbstract) o;
                             moveToDraggedLayer(oa);
                             draggingObjects.add(oa);
@@ -230,21 +230,14 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         int maxZIndex = 0;
         if (draggingObjects != null) {
             if (getPatchModel() != null) {
-                boolean dirtyOnRelease = false;
                 for (AxoObjectInstanceViewAbstract o : draggingObjects) {
                     moveToObjectLayer(o, 0);
                     if (getPatchView().objectLayerPanel.getComponentZOrder(o) > maxZIndex) {
                         maxZIndex = getPatchView().objectLayerPanel.getComponentZOrder(o);
                     }
-                    if (o.getModel().getX() != dragLocation.x || o.getModel().getY() != dragLocation.y) {
-                        dirtyOnRelease = true;
-                    }
                     o.repaint();
                 }
                 draggingObjects = null;
-                if (dirtyOnRelease) {
-
-                }
                 getPatchView().AdjustSize();
             }
             me.consume();
@@ -288,6 +281,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
 
     @Override
     public void addInstanceNameEditor() {
+        getController().addMetaUndo("edit object instance name");        
         InstanceNameTF = new TextFieldComponent(getModel().getInstanceName());
         InstanceNameTF.selectAll();
         InstanceNameTF.addActionListener(new ActionListener() {
@@ -331,7 +325,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     }
 
     @Override
-    public void setInstanceName(String InstanceName) {
+    public void showInstanceName(String InstanceName) {
         InstanceLabel.setText(InstanceName);
         resizeToGrid();
     }
@@ -339,20 +333,12 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     public static final Border BORDER_SELECTED = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Selected);
     public static final Border BORDER_UNSELECTED = BorderFactory.createLineBorder(Theme.getCurrentTheme().Object_Border_Unselected);
 
-    @Override
-    public void setSelected(boolean Selected) {
-        if (this.selected != Selected) {
-            if (Selected) {
-                setBorder(BORDER_SELECTED);
-            } else {
-                setBorder(BORDER_UNSELECTED);
-            }
+    public void showSelected(boolean Selected) {
+        if (Selected) {
+            setBorder(BORDER_SELECTED);
+        } else {
+            setBorder(BORDER_UNSELECTED);
         }
-        this.selected = Selected;
-    }
-
-    public Boolean isSelected() {
-        return selected;
     }
 
     @Override
@@ -437,10 +423,11 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                     }
                 }
             }
-        }
-        if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_INSTANCENAME)) {
+        } else if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_INSTANCENAME)) {
             String s = (String) evt.getNewValue();
-            setInstanceName(s);
+            showInstanceName(s);
+        } else if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_SELECTED)) {
+            showSelected((Boolean)evt.getNewValue());
         }
     }
 

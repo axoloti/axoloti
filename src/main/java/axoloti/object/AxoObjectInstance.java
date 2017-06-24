@@ -17,19 +17,16 @@
  */
 package axoloti.object;
 
-import axoloti.PatchController;
 import axoloti.PatchModel;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.*;
-import axoloti.attributedefinition.AxoAttribute;
 import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceFactory;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceFactory;
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.mvc.array.ArrayView;
 import axoloti.outlets.OutletInstance;
@@ -82,11 +79,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public ArrayModel<DisplayInstance> displayInstances = new ArrayModel<DisplayInstance>();
 
     // link from object definition to object instance
-    public ArrayView<InletInstance> vInlets;
-    public ArrayView<OutletInstance> vOutlets;
-    public ArrayView<DisplayInstance> vDisps;
-    public ArrayView<ParameterInstance> vParams;
-    public ArrayView<AttributeInstance> vAttrs;
+    ArrayView<InletInstance> vInlets;
+    ArrayView<OutletInstance> vOutlets;
+    ArrayView<DisplayInstance> vDisps;
+    ArrayView<ParameterInstance> vParams;
+    ArrayView<AttributeInstance> vAttrs;
 
     public AxoObjectInstance() {
         super();
@@ -95,9 +92,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public AxoObjectInstance(ObjectController controller, PatchModel patchModel, String InstanceName1, Point location) {
         super(controller, patchModel, InstanceName1, location);
 
-        vInlets = new ArrayView<InletInstance>(controller.inlets, inletInstances) {
+        vInlets = new ArrayView<InletInstance>(controller.inlets) {
             @Override
             public void updateUI() {
+                inletInstances.setArray(new ArrayList<>(getSubViews()));
             }
 
             @Override
@@ -112,15 +110,17 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         };
         controller.inlets.addView(vInlets);
 
-        vOutlets = new ArrayView<OutletInstance>(controller.outlets, outletInstances) {
+        vOutlets = new ArrayView<OutletInstance>(controller.outlets) {
             @Override
             public void updateUI() {
+                outletInstances.setArray(new ArrayList<>(getSubViews()));
             }
 
             @Override
             public OutletInstance viewFactory(AbstractController ctrl) {
                 AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-                return OutletInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
+                OutletInstance o = OutletInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
+                return o;
             }
 
             @Override
@@ -129,9 +129,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         };
         controller.outlets.addView(vOutlets);
 
-        vDisps = new ArrayView<DisplayInstance>(controller.disps, displayInstances) {
+        vDisps = new ArrayView<DisplayInstance>(controller.disps) {
             @Override
             public void updateUI() {
+                displayInstances.setArray(new ArrayList<>(getSubViews()));
             }
 
             @Override
@@ -146,9 +147,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         };
         controller.disps.addView(vDisps);
 
-        vParams = new ArrayView<ParameterInstance>(controller.params, parameterInstances) {
+        vParams = new ArrayView<ParameterInstance>(controller.params) {
             @Override
             public void updateUI() {
+                parameterInstances.setArray(new ArrayList<>(getSubViews()));
             }
 
             @Override
@@ -163,9 +165,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         };
         controller.params.addView(vParams);
 
-        vAttrs = new ArrayView<AttributeInstance>(controller.attrs, attributeInstances) {
+        vAttrs = new ArrayView<AttributeInstance>(controller.attrs) {
             @Override
             public void updateUI() {
+                attributeInstances.setArray(new ArrayList<>(getSubViews()));
             }
 
             @Override
@@ -184,12 +187,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     @Override
     public boolean setInstanceName(String s) {
         boolean result = super.setInstanceName(s);
-        for (InletInstance i : inletInstances) {
-            i.RefreshName();
-        }
-        for (OutletInstance i : outletInstances) {
-            i.RefreshName();
-        }
         return result;
     }
 

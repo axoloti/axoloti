@@ -54,7 +54,7 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
 
     @Override
     public JPopupMenu getPopup() {
-        return new OutletInstancePopupMenu(this);
+        return new OutletInstancePopupMenu(getController());
     }
 
     @Override
@@ -74,16 +74,6 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
                 netView.setSelected(highlighted);
             }
         }
-    }
-
-    @Override
-    public void disconnect() {
-        getPatchView().getController().disconnect(this.getController().getModel());
-    }
-
-    @Override
-    public void deleteNet() {
-//        getPatchView().getPatchController().deleteNet(this.getController().getModel());
     }
 
     @Override

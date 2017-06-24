@@ -59,7 +59,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                //getController().changeValue(TFObjName.getText());
+                getController().changeValue(TFObjName.getText());
             }
 
             @Override
@@ -80,6 +80,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
+                getController().addMetaUndo("edit attribute " + getModel().getName());
             }
 
             @Override

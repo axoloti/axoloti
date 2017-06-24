@@ -111,6 +111,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
             @Override
             public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+                getController().addMetaUndo("change parameter " + getModel().getName());
             }
             
             @Override
@@ -141,8 +142,13 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         m_onParent.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-               getController().setModelUndoableProperty(ParameterInstanceController.ELEMENT_PARAM_ON_PARENT, !op);
-             }
+                if (op) {
+                    getController().addMetaUndo("set parameter on parameter of " + getModel().getName());
+                } else {
+                    getController().addMetaUndo("clear parameter on parameter of " + getModel().getName());
+                }
+                getController().setModelUndoableProperty(ParameterInstanceController.ELEMENT_PARAM_ON_PARENT, !op);
+            }
         });
 
         JMenu m_preset = new JMenu("Preset");

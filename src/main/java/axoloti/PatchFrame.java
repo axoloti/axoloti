@@ -20,7 +20,9 @@ package axoloti;
 import static axoloti.PatchViewType.PICCOLO;
 import axoloti.mvc.AbstractView;
 import axoloti.mvc.UndoUI;
+import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjects;
+import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.KeyUtils;
@@ -45,6 +47,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -55,7 +58,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -70,7 +72,7 @@ import qcmds.QCmdUploadPatch;
  *
  * @author Johannes Taelman
  */
-public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener, UndoableEditListener, AbstractView {
+public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener, AbstractView {
 
     /**
      * Creates new form PatchFrame
@@ -95,7 +97,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         undoUi = new UndoUI(patchController.getUndoManager());
         if (patchController.getDocumentRoot() != null) {
-            patchController.getDocumentRoot().addUndoListener(this);
+            patchController.getDocumentRoot().addUndoListener(undoUi);
         }
 
         initComponents();
@@ -149,7 +151,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     serializer.write(p, baos);
                     StringSelection s = new StringSelection(baos.toString());
                     clip.setContents(s, (ClipboardOwner) null);
-                    getPatchView().deleteSelectedAxoObjectInstanceViews();
+                    getController().addMetaUndo("cut");
+                    for (AxoObjectInstanceAbstract o : p.getObjectInstances()) {
+                        getController().delete(o);
+                    }
                 } catch (Exception ex) {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -944,7 +949,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         // Needs review: why should edit->settings give to access to the object editor???
         IAxoObjectInstanceView selObj = null;
         for (IAxoObjectInstanceView i : getPatchView().getObjectInstanceViews()) {
-            if (i.isSelected() && i instanceof AxoObjectInstanceView) {
+            if (i.getModel().getSelected() && i instanceof AxoObjectInstanceView) {
                 selObj = i;
             }
         }
@@ -1045,11 +1050,17 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuItemAddObjActionPerformed
 
     private void jMenuItemSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectAllActionPerformed
-        getPatchView().SelectAll();
+        getController().SelectAll();
     }//GEN-LAST:event_jMenuItemSelectAllActionPerformed
 
     private void jMenuItemDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDeleteActionPerformed
-        getPatchView().deleteSelectedAxoObjectInstanceViews();
+        List<ObjectInstanceController> selected = getController().getSelectedObjects();
+        if (!selected.isEmpty()) {
+            getController().addMetaUndo("delete objects");
+            for (ObjectInstanceController o : selected) {
+                getController().delete(o.getModel());
+            }
+        }
     }//GEN-LAST:event_jMenuItemDeleteActionPerformed
 
     private boolean GoLive() {
@@ -1173,11 +1184,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuItemUploadSD.setEnabled(false);
         jMenuItemUploadSDStart.setEnabled(false);
     }
-    
-    @Override
-    public void undoableEditHappened(UndoableEditEvent e) {
-        undoUi.undoableEditHappened(e);
-    }    
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {

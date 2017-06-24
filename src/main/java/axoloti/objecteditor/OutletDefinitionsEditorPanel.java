@@ -35,4 +35,10 @@ public class OutletDefinitionsEditorPanel extends AtomDefinitionsEditor<Outlet> 
     String getDefaultName() {
         return "o";
     }
+
+    @Override
+    String getAtomTypeName() {
+        return "outlet";
+    }
+
 }

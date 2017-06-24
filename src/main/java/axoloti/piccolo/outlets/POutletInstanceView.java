@@ -85,16 +85,8 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
     }
 
     @Override
-    public void disconnect() {
-    }
-
-    @Override
-    public void deleteNet() {
-    }
-
-    @Override
     public JPopupMenu getPopup() {
-        return new OutletInstancePopupMenu(this);
+        return new OutletInstancePopupMenu(getController());
     }
 
     @Override

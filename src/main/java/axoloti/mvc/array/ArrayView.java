@@ -29,6 +29,7 @@ public abstract class ArrayView<T extends AbstractView> implements AbstractView<
         Sync();
     }
 
+    // needs review
     private void Sync() {
         ArrayList<T> subviews2 = new ArrayList<T>(subviews);
         for (T view : subviews) {
@@ -54,6 +55,9 @@ public abstract class ArrayView<T extends AbstractView> implements AbstractView<
             subviews.add(view);
         }
         updateUI();
+        if (subviews.size() != controller.subcontrollers.size()){
+            throw new Error("sync error");
+        }
     }
 
     public abstract void updateUI();

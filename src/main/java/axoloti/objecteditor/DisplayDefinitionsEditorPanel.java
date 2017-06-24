@@ -35,4 +35,10 @@ public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display
     String getDefaultName() {
         return "d";
     }
+
+    @Override
+    String getAtomTypeName() {
+        return "display";
+    }
+
 }

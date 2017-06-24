@@ -143,7 +143,7 @@ public class PatchViewPiccolo extends PatchView {
                     ShowClassSelector(e, null, patchAudio);
                 }
             } else if ((e.getKeyCode() == KeyEvent.VK_DELETE) || (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-                deleteSelectedAxoObjectInstanceViews();
+                //deleteSelectedAxoObjectInstanceViews();
 
                 e.setHandled(true);
             } else if (e.getKeyCode() == KeyEvent.VK_UP) {
@@ -221,7 +221,7 @@ public class PatchViewPiccolo extends PatchView {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (action == MOVE) {
-                deleteSelectedAxoObjectInstanceViews();
+                //deleteSelectedAxoObjectInstanceViews();
             }
         }
 
@@ -278,12 +278,6 @@ public class PatchViewPiccolo extends PatchView {
         //modelChanged(false);
         getController().getModel().PromoteOverloading(true);
         ShowPreset(0);
-        SelectNone();
-    }
-
-    @Override
-    public void SelectNone() {
-        canvas.getSelectionEventHandler().unselectAll();
     }
 
     @Override
@@ -449,7 +443,6 @@ public class PatchViewPiccolo extends PatchView {
 
     @Override
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
-        SelectNone();
         getCanvas().getCamera().getViewTransform().inverseTransform(pos, pos);
         getController().paste(v,
                 pos,

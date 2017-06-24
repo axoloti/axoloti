@@ -66,7 +66,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
         TFtableName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getController().changeValue(TFtableName.getText());
+                getController().addMetaUndo("edit attribute " + getModel().getName());
             }
 
             @Override

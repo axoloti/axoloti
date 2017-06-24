@@ -36,4 +36,10 @@ public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter
         return "p";
     }
 
+    @Override
+    String getAtomTypeName() {
+        return "parameter";
+    }
+    
+    
 }

@@ -149,20 +149,25 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
 
                 if (this != c) {
                     if (IoletAbstract.this instanceof InletInstanceView) {
+                        getPatchView().getController().addMetaUndo("disconnect inlet");
                         n = getPatchView().getController().disconnect((InletInstance) getController().getModel());
                     } else {
+                        getPatchView().getController().addMetaUndo("disconnect outlet");
                         n = getPatchView().getController().disconnect((OutletInstance) getController().getModel());
                     }
                 }
             } else {
                 if (this instanceof InletInstanceView) {
                     if (dragtarget instanceof InletInstanceView) {
+                        getPatchView().getController().addMetaUndo("connect");
                         n = getPatchView().getController().AddConnection(((InletInstance) getController().getModel()), ((InletInstanceView) dragtarget).getController().getModel());
                     } else if (dragtarget instanceof OutletInstanceView) {
+                        getPatchView().getController().addMetaUndo("connect");
                         n = getPatchView().getController().AddConnection(((InletInstance) getController().getModel()), ((OutletInstanceView) dragtarget).getController().getModel());
                     }
                 } else if (this instanceof OutletInstanceView) {
                     if (dragtarget instanceof InletInstanceView) {
+                        getPatchView().getController().addMetaUndo("connect");
                         n = getPatchView().getController().AddConnection(((InletInstanceView) dragtarget).getController().getModel(), ((OutletInstanceView) IoletAbstract.this).getController().getModel());
                     }
                 }

@@ -71,8 +71,8 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
     }
 
     @Override
-    public void setInstanceName(String s) {
-        super.setInstanceName(s);
+    public void showInstanceName(String s) {
+        super.showInstanceName(s);
         resizeToGrid();
     }
 }

@@ -132,6 +132,11 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
         return null;
     }
 
+    public void addMetaUndo(String actionName) {
+        if (documentRoot == null) return;
+        documentRoot.getUndoManager().addEdit(new UndoableEditGroup(actionName));
+    }
+    
     public void setModelUndoableProperty(String propertyName, Object newValue) {
         if (getUndoManager() == null) {
             //System.out.println("no undomanager");
@@ -141,7 +146,7 @@ public abstract class AbstractController<Model extends AbstractModel, View exten
             if (old_val == newValue) {
                 return;
             }
-            UndoableEdit uedit = new AbstractUndoableEdit(this, propertyName, old_val, newValue);
+            UndoableEdit uedit = new UndoablePropertyChange(this, propertyName, old_val, newValue);
             getUndoManager().addEdit(uedit);
             setModelProperty(propertyName, newValue);
             if (documentRoot != null) {

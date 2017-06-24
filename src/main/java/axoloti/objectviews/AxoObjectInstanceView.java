@@ -219,7 +219,9 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                 for (IInletInstanceView c : getSubViews()) {
                     p_inletViews.add((Component) c);
                 }
+                p_inletViews.doLayout();
                 resizeToGrid();
+                p_inletViews.repaint();
             }
 
             @Override
@@ -240,7 +242,9 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                 for (IOutletInstanceView c : getSubViews()) {
                     p_outletViews.add((Component) c);
                 }
+                p_outletViews.doLayout();
                 resizeToGrid();
+                p_outletViews.repaint();
             }
 
             @Override
@@ -324,8 +328,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         p_parameterViews.setAlignmentX(LEFT_ALIGNMENT);
         p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
 
-        setLocation(getModel().getX(), getModel().getY());
-        resizeToGrid();        
+        resizeToGrid();
         setVisible(true);
     }
 

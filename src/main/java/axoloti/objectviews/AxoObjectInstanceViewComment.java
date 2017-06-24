@@ -46,10 +46,12 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
                 if (getPatchView() != null) {
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
-                            setSelected(!isSelected());
-                        } else if (isSelected() == false) {
-                            getPatchView().SelectNone();
-                            setSelected(true);
+                            getModel().setSelected(!getModel().getSelected());
+                            me.consume();
+                        } else if (!getModel().getSelected()) {
+                            getController().getParent().SelectNone();
+                            getModel().setSelected(true);
+                            me.consume();
                         }
                     }
                 }
@@ -78,6 +80,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
         setLocation(getModel().getX(), getModel().getY());
 
         resizeToGrid();
+        setVisible(true);
     }
 
     @Override
@@ -125,7 +128,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
     }
 
     @Override
-    public void setInstanceName(String s) {
+    public void showInstanceName(String s) {
         getController().setModelUndoableProperty(ObjectInstanceController.OBJ_COMMENT, s);
     }
 

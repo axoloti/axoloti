@@ -59,22 +59,12 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
 
     @Override
     public JPopupMenu getPopup() {
-        return new InletInstancePopupMenu(this);
+        return new InletInstancePopupMenu(getController());
     }
 
     public String getInletname() {
         int sepIndex = name.lastIndexOf(' ');
         return name.substring(sepIndex + 1);
-    }
-
-    @Override
-    public void disconnect() {
-        getPatchView().getController().disconnect(getController().getModel());
-    }
-
-    @Override
-    public void deleteNet() {
-        getPatchView().getController().delete(getPatchView().getController().getNetFromInlet(this.getController().getModel()));
     }
 
     @Override

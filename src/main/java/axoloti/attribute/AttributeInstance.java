@@ -76,10 +76,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     public void Close() {
     }
 
-    public String getAttributeName() {
-        return attributeName;
-    }
-
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {

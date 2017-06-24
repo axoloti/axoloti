@@ -184,6 +184,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                         }
                     }
                     o.setName(getDefaultName() + i);
+                    getController().addMetaUndo("add " + getAtomTypeName());
                     getController().add(o);
                     UpdateTable2();
                 } catch (InstantiationException ex) {
@@ -203,6 +204,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                     return;
                 }
                 if (jTable1.getRowCount() >= row) {
+                getController().addMetaUndo("remove " + getAtomTypeName());
                     getController().remove(getController().get(row).getModel());
                 }
                 if (row > 0) {
@@ -218,6 +220,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
             @Override
             public void actionPerformed(ActionEvent e) {
                 int row = jTable1.getSelectedRow();
+                getController().addMetaUndo("move " + getAtomTypeName());
                 getController().moveUp(row);
                 jTable1.setRowSelectionInterval(row - 1, row - 1);
             }
@@ -228,6 +231,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
             @Override
             public void actionPerformed(ActionEvent e) {
                 int row = jTable1.getSelectedRow();
+                getController().addMetaUndo("move " + getAtomTypeName());
                 getController().moveDown(row);
                 jTable1.setRowSelectionInterval(row + 1, row + 1);
             }
@@ -275,6 +279,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                     case 0: {
                         assert (value instanceof String);
                         AtomDefinitionController c = (AtomDefinitionController) getController().get(rowIndex);
+                        getController().addMetaUndo("edit " + getAtomTypeName() + " name");
                         c.changeName((String) value);
                     }
                     break;
@@ -283,6 +288,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                             T j = (T) value.getClass().newInstance();
                             j.setName(GetAtomDefinition(rowIndex).getName());
                             j.setDescription(GetAtomDefinition(rowIndex).getDescription());
+                            getController().addMetaUndo("change " + getAtomTypeName() + " type");
                             getController().add(j);
                             getController().getModel().remove(getController().getModel().get(rowIndex));
                             UpdateTable2();
@@ -294,6 +300,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                         break;
                     case 2: {
                         assert (value instanceof String);
+                        getController().addMetaUndo("edit " + getAtomTypeName() + " description");
                         atomDefinitionController.changeDescription((String) value);
                     }
                     break;
@@ -405,6 +412,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                         Type t = v.getClass();
                         if (v instanceof Integer) {
                             try {
+                                getController().addMetaUndo("edit " + field);
                                 o.setModelUndoableProperty(field, Integer.parseInt((String) value));
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -425,6 +433,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                         } else if (v instanceof ValueInt32) {
                             try {
                                 ValueInt32 v2 = new ValueInt32(Integer.parseInt((String) value));
+                                getController().addMetaUndo("edit " + field);
                                 o.setModelUndoableProperty(field, v2);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -432,12 +441,14 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                         } else if (v instanceof ValueFrac32) {
                             try {
                                 ValueFrac32 v2 = new ValueFrac32(Double.parseDouble((String) value));
+                                getController().addMetaUndo("edit " + field);
                                 o.setModelUndoableProperty(field, v2);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         } else if (v instanceof String) {
                             try {
+                                getController().addMetaUndo("edit " + field);
                                 o.setModelUndoableProperty(field, value);
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -550,5 +561,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
     @Override
     public void removeView(AbstractView view) {
     }
+
+    abstract String getAtomTypeName();
 
 }

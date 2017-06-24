@@ -20,6 +20,7 @@ package axoloti.objecteditor;
 import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
 import axoloti.MainFrame;
+import axoloti.mvc.UndoUI;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.ObjectController;
@@ -61,6 +62,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
 
     private boolean readonly = false;
 
+    UndoUI undoUi;
+    
     static RSyntaxTextArea initCodeEditor(JPanel p) {
         RSyntaxTextArea rsta = new RSyntaxTextArea(20, 60);
         rsta.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
@@ -154,6 +157,13 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         jTextAreaMidiCode = initCodeEditor(jPanelMidiCode2);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
+        undoUi = new UndoUI(ctrl.getUndoManager());
+        if (ctrl.getDocumentRoot() != null) {
+            ctrl.getDocumentRoot().addUndoListener(undoUi);
+        }
+        jMenuEdit.add(undoUi.createMenuItemUndo());
+        jMenuEdit.add(undoUi.createMenuItemRedo());
+        
         initEditFromOrig();
         updateReferenceXML();
         InletDefinitionsEditorPanel inlets = new InletDefinitionsEditorPanel(ctrl.inlets);
@@ -513,6 +523,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         jMenuItemSave = new javax.swing.JMenuItem();
         jMenuItemRevert = new javax.swing.JMenuItem();
         jMenuItemCopyToLibrary = new javax.swing.JMenuItem();
+        jMenuEdit = new javax.swing.JMenu();
         windowMenu1 = new axoloti.menus.WindowMenu();
         helpMenu1 = new axoloti.menus.HelpMenu();
 
@@ -835,6 +846,9 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         fileMenu1.add(jMenuItemCopyToLibrary);
 
         jMenuBar1.add(fileMenu1);
+
+        jMenuEdit.setText("Edit");
+        jMenuBar1.add(jMenuEdit);
         jMenuBar1.add(windowMenu1);
 
         helpMenu1.setText("Help");
@@ -906,6 +920,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
     private javax.swing.JList jListIncludes;
     private javax.swing.JList jListModules;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenuItem jMenuItemCopyToLibrary;
     private javax.swing.JMenuItem jMenuItemRevert;
     private javax.swing.JMenuItem jMenuItemSave;

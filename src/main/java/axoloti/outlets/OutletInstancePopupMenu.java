@@ -30,30 +30,39 @@ import javax.swing.JPopupMenu;
  */
 public class OutletInstancePopupMenu extends JPopupMenu {
 
-    IOutletInstanceView outletInstanceView;
-
-    public OutletInstancePopupMenu(IOutletInstanceView outletInstanceView) {
+    public OutletInstancePopupMenu(OutletInstanceController outletInstanceController) {
         super();
-        this.outletInstanceView = outletInstanceView;
-        JMenuItem itemDisconnect = new JMenuItem("Disconnect outlet");
-        itemDisconnect.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                outletInstanceView.getController().getParent().getParent().disconnect(outletInstanceView.getController().getModel());
-            }
-        });
-        add(itemDisconnect);
-        JMenuItem itemDelete = new JMenuItem("Delete net");
-        itemDelete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                PatchController pc = outletInstanceView.getController().getParent().getParent();
-                NetController n = pc.getNetFromOutlet(outletInstanceView.getController().getModel());
-                if (n!= null) {
-                    pc.delete(n);
+
+        PatchController pc = outletInstanceController.getParent().getParent();
+        NetController nc = pc.getNetFromOutlet(outletInstanceController.getModel());
+
+        JMenuItem itemDisconnect = new JMenuItem("Disconnect inlet");
+        if (nc == null) {
+            itemDisconnect.setEnabled(false);
+            add(itemDisconnect);
+            return;
+        }
+        if (nc.getModel().getDestinations().length + nc.getModel().getSources().length > 1) {
+            add(itemDisconnect);
+            itemDisconnect.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    outletInstanceController.addMetaUndo("disconnect inlet");
+                    pc.disconnect(outletInstanceController.getModel());
                 }
-            }
-        });
-        add(itemDelete);
+            });
+        }
+        if (nc.getModel().getDestinations().length + nc.getModel().getSources().length > 2) {
+            add(itemDisconnect);
+            JMenuItem itemDelete = new JMenuItem("Delete net");
+            itemDelete.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    outletInstanceController.addMetaUndo("delete net");
+                    pc.delete(nc);
+                }
+            });
+            add(itemDelete);            
+        }
     }
 }

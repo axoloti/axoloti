@@ -107,6 +107,7 @@ public abstract class PatchView extends PatchAbstractView {
                 view.PostConstructor();
                 ctrl.addView(view);
                 add(view);
+                view.repaint();
                 return view;
             }
 
@@ -141,7 +142,7 @@ public abstract class PatchView extends PatchAbstractView {
     abstract void setCordsInBackground(boolean cordsInBackground);
 
     void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
-        SelectNone();
+        getController().addMetaUndo("Paste");
         getController().paste(v, pos, restoreConnectionsToExternalOutlets);
     }
 
@@ -219,22 +220,12 @@ public abstract class PatchView extends PatchAbstractView {
 
     public abstract void add(INetView v);
 
-    void SelectAll() {
-        for (IAxoObjectInstanceView o : objectInstanceViews) {
-            o.setSelected(true);
-        }
-    }
 
-    public void SelectNone() {
-        for (IAxoObjectInstanceView o : objectInstanceViews) {
-            o.setSelected(false);
-        }
-    }
 
     PatchModel getSelectedObjects() {
         PatchModel p = new PatchModel();
         for (IAxoObjectInstanceView o : getObjectInstanceViews()) {
-            if (o.isSelected()) {
+            if (o.getModel().getSelected()) {
                 p.objectinstances.add(o.getModel());
             }
         }
@@ -242,12 +233,12 @@ public abstract class PatchView extends PatchAbstractView {
         for (INetView n : netViews) {
             int sel = 0;
             for (IInletInstanceView i : n.getDestinationViews()) {
-                if (i.getObjectInstanceView().isSelected()) {
+                if (i.getObjectInstanceView().getModel().getSelected()) {
                     sel++;
                 }
             }
             for (IOutletInstanceView i : n.getSourceViews()) {
-                if (i.getObjectInstanceView().isSelected()) {
+                if (i.getObjectInstanceView().getModel().getSelected()) {
                     sel++;
                 }
             }
@@ -286,19 +277,16 @@ public abstract class PatchView extends PatchAbstractView {
                     xgrid = xsteps;
                     break;
             }
-            boolean isUpdate = false;
-            for (IAxoObjectInstanceView o : objectInstanceViews) {
-                if (o.isSelected()) {
-                    isUpdate = true;
-                    Point p = o.getLocation();
+            List<ObjectInstanceController> selection = getController().getSelectedObjects();
+            if (!selection.isEmpty()) {
+                for (ObjectInstanceController o : selection) {
+                    Point p = o.getModel().getLocation();
                     p.x = p.x + xstep;
                     p.y = p.y + ystep;
                     p.x = xgrid * (p.x / xgrid);
                     p.y = ygrid * (p.y / ygrid);
-                    ((ObjectInstanceController)o.getController()).changeLocation(p.x, p.y);
+                    o.changeLocation(p.x, p.y);
                 }
-            }
-            if (isUpdate) {
                 AdjustSize();
             }
         } else {
@@ -557,22 +545,10 @@ public abstract class PatchView extends PatchAbstractView {
         return objectInstanceViews.getViewOfModel(o);
     }
 
-    void deleteSelectedAxoObjectInstanceViews() {
-        Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "deleteSelectedAxoObjInstances()");
-        if (!isLocked()) {
-            boolean succeeded = false;
-            IAxoObjectInstanceView oiv[] = objectInstanceViews.getSubViews().toArray(new IAxoObjectInstanceView[0]);
-            for (IAxoObjectInstanceView o : oiv) {
-                if (o.isSelected()) {
-                    succeeded |= getController().delete((ObjectInstanceController)o.getController());
-                }
-            }
-        } else {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't delete: locked!");
-        }
-    }
-
     public INetView GetNetView(IInletInstanceView i) {
+        if (netViews == null) {
+            return null;
+        }
         for (INetView netView : netViews) {
             for (IInletInstanceView d : netView.getDestinationViews()) {
                 if (d == i) {
@@ -584,6 +560,9 @@ public abstract class PatchView extends PatchAbstractView {
     }
 
     public INetView GetNetView(IOutletInstanceView o) {
+        if (netViews == null) {
+            return null;
+        }
         for (INetView netView : netViews) {
             for (IOutletInstanceView d : netView.getSourceViews()) {
                 if (d == o) {

@@ -44,6 +44,7 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
 
             @Override
             public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+                getController().addMetaUndo("edit attribute " + getModel().getName());
             }
 
             @Override

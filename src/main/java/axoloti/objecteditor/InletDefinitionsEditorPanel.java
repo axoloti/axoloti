@@ -35,5 +35,10 @@ public class InletDefinitionsEditorPanel extends AtomDefinitionsEditor<Inlet> {
     String getDefaultName() {
         return "i";
     }
-
+    
+    @Override
+    String getAtomTypeName() {
+        return "inlet";
+    }
+    
 }

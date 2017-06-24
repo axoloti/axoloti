@@ -42,7 +42,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     @Attribute(name = "obj", required = false)
     String objname;
 
-    private AtomDefinitionController controller;
+    final private AtomDefinitionController controller;
 
     protected AxoObjectInstanceAbstract axoObj;
 

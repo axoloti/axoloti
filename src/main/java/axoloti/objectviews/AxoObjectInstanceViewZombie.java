@@ -112,8 +112,8 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
     }
 
     @Override
-    public void setInstanceName(String s) {
-        super.setInstanceName(s);
+    public void showInstanceName(String s) {
+        super.showInstanceName(s);
         resizeToGrid();
         repaint();
     }

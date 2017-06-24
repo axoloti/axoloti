@@ -80,9 +80,11 @@ public class AssignPresetPanel extends JPanel {
             if (((JCheckBox) e.getSource()).isSelected()) {
                 parameterInstanceView.AddPreset(i + 1, parameterInstanceView.getModel().getValue());
                 ctrls.get(i).setEnabled(true);
+                parameterInstanceView.getController().addMetaUndo("add preset to parameter " + parameterInstanceView.getModel().getName());
                 ctrls.get(i).setValue(parameterInstanceView.getModel().GetPreset(i + 1).value.getDouble()); // TBC!!!
             } else {
                 ctrls.get(i).setEnabled(false);
+                parameterInstanceView.getController().addMetaUndo("remove preset from parameter " + parameterInstanceView.getModel().getName());
                 parameterInstanceView.RemovePreset(i + 1);
             }
             PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
@@ -115,6 +117,7 @@ public class AssignPresetPanel extends JPanel {
 
         @Override
         public void ACtrlAdjustmentBegin(ACtrlEvent e) {
+            parameterInstanceView.getController().addMetaUndo("change preset of parameter " + parameterInstanceView.getModel().getName());
             int i = ctrls.indexOf(e.getSource());
             if (i >= 0) {
                 valueBeforeAdjustment = ctrls.get(i).getValue();

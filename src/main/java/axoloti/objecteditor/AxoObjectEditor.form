@@ -57,6 +57,11 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenuEdit">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Edit"/>
+          </Properties>
+        </Menu>
         <Menu class="axoloti.menus.WindowMenu" name="windowMenu1">
         </Menu>
         <Menu class="axoloti.menus.HelpMenu" name="helpMenu1">

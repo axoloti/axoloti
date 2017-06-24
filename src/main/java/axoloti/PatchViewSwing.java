@@ -17,7 +17,9 @@
  */
 package axoloti;
 
+import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjects;
+import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
@@ -39,6 +41,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
@@ -208,19 +211,28 @@ public class PatchViewSwing extends PatchView {
                         }
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-                    deleteSelectedAxoObjectInstanceViews();
-
+                    List<ObjectInstanceController> selected = getController().getSelectedObjects();
+                    if (!selected.isEmpty()) {
+                        getController().addMetaUndo("delete objects");
+                        for (ObjectInstanceController o : selected) {
+                            getController().delete(o.getModel());
+                        }
+                    }
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_UP) {
+                    getController().addMetaUndo("move up");
                     MoveSelectedAxoObjInstances(Direction.UP, xsteps, ysteps);
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_DOWN) {
+                    getController().addMetaUndo("move down");
                     MoveSelectedAxoObjInstances(Direction.DOWN, xsteps, ysteps);
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    getController().addMetaUndo("move right");
                     MoveSelectedAxoObjInstances(Direction.RIGHT, xsteps, ysteps);
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+                    getController().addMetaUndo("move left");
                     MoveSelectedAxoObjInstances(Direction.LEFT, xsteps, ysteps);
                     ke.consume();
                 }
@@ -235,9 +247,7 @@ public class PatchViewSwing extends PatchView {
             @Override
             public void mouseClicked(MouseEvent me) {
                 if (me.getButton() == MouseEvent.BUTTON1) {
-                    for (IAxoObjectInstanceView o : objectInstanceViews) {
-                        o.setSelected(false);
-                    }
+                    getController().SelectNone();
                     if (me.getClickCount() == 2) {
                         ShowClassSelector(me.getPoint(), null, null);
                     } else {
@@ -275,7 +285,7 @@ public class PatchViewSwing extends PatchView {
                     Rectangle r = selectionrectangle.getBounds();
                     for (IAxoObjectInstanceView o : objectInstanceViews) {
                         Rectangle bounds = new Rectangle(o.getLocation().x, o.getLocation().y, o.getSize().width, o.getSize().height);
-                        o.setSelected(bounds.intersects(r));
+                        o.getModel().setSelected(bounds.intersects(r));
                     }
                     selectionrectangle.setVisible(false);
                     me.consume();
@@ -341,7 +351,10 @@ public class PatchViewSwing extends PatchView {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (action == MOVE) {
-                deleteSelectedAxoObjectInstanceViews();
+                getController().addMetaUndo("cut");
+                for (AxoObjectInstanceAbstract o : p.getObjectInstances()) {
+                    getController().delete(o);
+                }
             }
         }
 
@@ -387,7 +400,6 @@ public class PatchViewSwing extends PatchView {
 //        modelChanged(false);
 //        getPatchController().getModel().PromoteOverloading(true);
         ShowPreset(0);
-        SelectNone();
     }
 
     @Override

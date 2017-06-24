@@ -43,7 +43,7 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
     }
 
     @Override
-    public void setInstanceName(String s) {
+    public void showInstanceName(String s) {
         if (!model.getCommentText().equals(s)) {
             model.setCommentText(s);
         }

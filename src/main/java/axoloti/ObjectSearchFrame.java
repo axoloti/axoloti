@@ -496,8 +496,10 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             }
             if (x != null) {
                 if (target_object == null) {
+                    patchController.addMetaUndo("add object");
                     patchController.AddObjectInstance(x, new Point(patchLocX, patchLocY));
                 } else {
+                    patchController.addMetaUndo("change object type");
                     AxoObjectInstanceAbstract oi = patchController.ChangeObjectInstanceType(target_object, x);
                 }
             }

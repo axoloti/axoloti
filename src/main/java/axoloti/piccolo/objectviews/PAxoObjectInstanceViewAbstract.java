@@ -207,7 +207,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     protected void handleInstanceNameEditorAction() {
-        setInstanceName(InstanceNameTF.getText());
+        showInstanceName(InstanceNameTF.getText());
         removeChild(InstanceNameTF);
         instanceLabel.setVisible(true);
         repaint();
@@ -254,7 +254,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public void setInstanceName(String InstanceName) {
+    public void showInstanceName(String InstanceName) {
         if (model.setInstanceName(InstanceName)) {
         }
     }

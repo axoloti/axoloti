@@ -29,7 +29,7 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
         super(axoObjectInstanceView);
         this.inletInstance = inletInstance;
 
-        popup = new InletInstancePopupMenu(this);
+        popup = new InletInstancePopupMenu(getController());
     }
 
     private final PBasicInputEventHandler toolTipEventListener = new PBasicInputEventHandler() {
@@ -72,14 +72,6 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
     @Override
     public InletInstance getModel() {
         return inletInstance;
-    }
-
-    @Override
-    public void disconnect() {
-    }
-
-    @Override
-    public void deleteNet() {
     }
 
     public void setHighlighted(boolean highlighted) {

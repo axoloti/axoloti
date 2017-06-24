@@ -60,6 +60,8 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     int x;
     @Attribute
     int y;
+    
+    Boolean selected = false;
 
     private PatchModel patchModel;
 
@@ -146,6 +148,17 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
             ObjectInstanceController.OBJ_INSTANCENAME,
             oldvalue, this.InstanceName);
         return true;
+    }
+    
+
+    public Boolean getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Boolean selected) {
+        Boolean prev_value = this.selected;
+        this.selected = selected;
+        firePropertyChange(ObjectInstanceController.OBJ_SELECTED, prev_value, selected);
     }
 
     public AxoObjectAbstract resolveType(String directory) {

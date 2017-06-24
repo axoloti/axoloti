@@ -84,11 +84,12 @@ public class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstrac
         setLocation(getModel().getX(), getModel().getY());
 
         resizeToGrid();
+        setVisible(true);
     }
 
     @Override
-    public void setInstanceName(String s) {
-        super.setInstanceName(s);
+    public void showInstanceName(String s) {
+        super.showInstanceName(s);
         resizeToGrid();
     }
 }

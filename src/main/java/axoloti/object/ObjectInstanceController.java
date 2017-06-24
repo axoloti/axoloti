@@ -25,6 +25,7 @@ import java.beans.PropertyChangeEvent;
 public class ObjectInstanceController extends AbstractController<AxoObjectInstanceAbstract, AbstractView, PatchController> {
 
     public static final String OBJ_LOCATION = "Location";
+    public static final String OBJ_SELECTED = "Selected";
     public static final String OBJ_INSTANCENAME = "InstanceName";
     public static final String OBJ_PARAMETER_INSTANCES = "ParameterInstances";
     public static final String OBJ_ATTRIBUTE_INSTANCES = "AttributeInstances";
@@ -32,6 +33,11 @@ public class ObjectInstanceController extends AbstractController<AxoObjectInstan
     public static final String OBJ_OUTLET_INSTANCES = "OutletInstances";
     public static final String OBJ_DISPLAY_INSTANCES = "DisplayInstances";
     public static final String OBJ_COMMENT = "CommentText";
+
+    @Override
+    public String[] getPropertyNames() {
+        return new String[]{OBJ_LOCATION, OBJ_SELECTED};
+    }
 
     public final ArrayController<AttributeInstanceController, AttributeInstance, ObjectInstanceController> attributeInstanceControllers;
     public final ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController> parameterInstanceControllers;

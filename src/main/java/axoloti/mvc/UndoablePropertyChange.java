@@ -8,14 +8,14 @@ import javax.swing.undo.UndoableEdit;
  *
  * @author jtaelman
  */
-public class AbstractUndoableEdit implements UndoableEdit {
+public class UndoablePropertyChange implements UndoableEdit {
 
     Object new_value;
     final Object old_value;
     final AbstractController controller;
     final String propertyName;
 
-    public AbstractUndoableEdit(AbstractController controller, String propertyName, Object old_value, Object new_value) {
+    public UndoablePropertyChange(AbstractController controller, String propertyName, Object old_value, Object new_value) {
         this.new_value = new_value;
         this.controller = controller;
         this.propertyName = propertyName;
@@ -60,10 +60,10 @@ public class AbstractUndoableEdit implements UndoableEdit {
 
     @Override
     public boolean addEdit(UndoableEdit anEdit) {
-        if (!(anEdit instanceof AbstractUndoableEdit)) {
+        if (!(anEdit instanceof UndoablePropertyChange)) {
             return false;
         }
-        AbstractUndoableEdit anAbsEdit = (AbstractUndoableEdit) anEdit;
+        UndoablePropertyChange anAbsEdit = (UndoablePropertyChange) anEdit;
         if (anAbsEdit.getController() != controller) {
             return false;
         }

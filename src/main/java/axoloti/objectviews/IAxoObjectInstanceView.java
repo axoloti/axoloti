@@ -47,11 +47,7 @@ public interface IAxoObjectInstanceView extends AbstractView<ObjectInstanceContr
 
     public void addInstanceNameEditor();
 
-    public void setInstanceName(String InstanceName);
-
-    public void setSelected(boolean selected);
-
-    public Boolean isSelected();
+    public void showInstanceName(String InstanceName);
 
     public void moveToFront();
 
