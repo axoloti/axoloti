@@ -70,7 +70,7 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.PAGE_AXIS));
 
-        PLabelComponent titleBarLabel = new PLabelComponent(model.typeName);
+        PLabelComponent titleBarLabel = new PLabelComponent("zombie");//model.typeName);
         titleBarLabel.setAlignmentX(LEFT_ALIGNMENT);
         titleBarLabel.setPickable(false);
 

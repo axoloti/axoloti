@@ -201,11 +201,11 @@ public class gentools {
              CheckString(oo,oo.sSRateCode);            
              */
         }
-        if (o.sAuthor == null) {
-            o.sAuthor = "Johannes Taelman";
+        if (o.getAuthor() == null) {
+            o.setAuthor("Johannes Taelman");
         }
-        if (o.sLicense == null) {
-            o.sLicense = "BSD";
+        if (o.getLicense() == null) {
+            o.setLicense("BSD");
         }
         if (o.GetIncludes() == null) {
             o.SetIncludes(null);

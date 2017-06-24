@@ -246,7 +246,7 @@ public class Midi extends gentools {
 
     static AxoObject Create_ctlin4i() {
         AxoObject o = new AxoObject("cc hr i", "Receives Midi Continuous Controller messages, 14 bit, float output");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
         o.outlets.add(new OutletFrac32Pos("midiCC", "midi CC 0.0-64.0"));
         o.outlets.add(new OutletBool32Pulse("trig", "trigger output"));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
@@ -270,7 +270,7 @@ public class Midi extends gentools {
 
     static AxoObject Create_ctlin4ii() {
         AxoObject o = new AxoObject("cc hr ii", "Receives Midi Continuous Controller messages, 14 bit, float output");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
         o.outlets.add(new OutletFrac32Pos("midiCC", "midi CC 0.0-64.0"));
         o.outlets.add(new OutletBool32Pulse("trig", "trigger output"));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
@@ -619,7 +619,7 @@ public class Midi extends gentools {
 
     static AxoObject Create_bendin2() {
         AxoObject o = new AxoObject("bend hr", "Midi pitch bend input hi res");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
         o.outlets.add(new OutletFrac32Bipolar("bend", "pitch bend, -64..64"));
         o.outlets.add(new OutletBool32Pulse("trig", "trigger output"));
         o.attributes.add(new AxoAttributeSpinner("ccl", 0, 127, 85));
@@ -889,7 +889,7 @@ public class Midi extends gentools {
     static AxoObject Create_polytouchout() {
         AxoObject o = new AxoObject("poly touch", "Midi poly pressure output");
         o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
 
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Bipolar("note", "note (-64..63)"));
@@ -910,7 +910,7 @@ public class Midi extends gentools {
     static AxoObject Create_channeltouchout() {
         AxoObject o = new AxoObject("channel touch", "Midi channel pressure output");
         o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
 
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Pos("pressure", "pressure"));
@@ -1067,7 +1067,7 @@ public class Midi extends gentools {
     }
     static AxoObject Create_intern_polytouchout() {
         AxoObject o = new AxoObject("poly touch", "Midi poly pressure output");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
 
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Bipolar("note", "note (-64..63)"));
@@ -1087,7 +1087,7 @@ public class Midi extends gentools {
 
     static AxoObject Create_intern_channeltouchout() {
         AxoObject o = new AxoObject("channel touch", "Midi channel pressure output");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
 
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Pos("pressure", "pressure"));
@@ -1105,7 +1105,7 @@ public class Midi extends gentools {
     
     static AxoObject Create_mpe() {
         AxoObject o = new AxoObject("mpe", "Controller input for MIDI Polyphonic Expression");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
         o.outlets.add(new OutletFrac32Bipolar("note", "midi note number (-64..63)"));
         o.outlets.add(new OutletBool32("gate", "key pressed, no retrigger legato"));
         o.outlets.add(new OutletBool32("gate2", "key pressed, retrigger on legato"));

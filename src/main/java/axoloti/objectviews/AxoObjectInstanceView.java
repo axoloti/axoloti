@@ -115,23 +115,23 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         });
         Titlebar.add(popupIcon);
 
-        LabelComponent idlbl = new LabelComponent(getModel().typeName);
+        LabelComponent idlbl = new LabelComponent(getModel().getTypeName());
         idlbl.setAlignmentX(LEFT_ALIGNMENT);
         idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
         Titlebar.add(idlbl);
 
         String tooltiptxt = "<html>";
-        if ((getType().sDescription != null) && (!getType().sDescription.isEmpty())) {
-            tooltiptxt += getType().sDescription;
+        if ((getType().getDescription() != null) && (!getType().getDescription().isEmpty())) {
+            tooltiptxt += getType().getDescription();
         }
-        if ((getType().sAuthor != null) && (!getType().sAuthor.isEmpty())) {
-            tooltiptxt += "<p>Author: " + getType().sAuthor;
+        if ((getType().getAuthor() != null) && (!getType().getAuthor().isEmpty())) {
+            tooltiptxt += "<p>Author: " + getType().getAuthor();
         }
-        if ((getType().sLicense != null) && (!getType().sLicense.isEmpty())) {
-            tooltiptxt += "<p>License: " + getType().sLicense;
+        if ((getType().getLicense() != null) && (!getType().getLicense().isEmpty())) {
+            tooltiptxt += "<p>License: " + getType().getLicense();
         }
-        if ((getType().sPath != null) && (!getType().sPath.isEmpty())) {
-            tooltiptxt += "<p>Path: " + getType().sPath;
+        if ((getType().getPath() != null) && (!getType().getPath().isEmpty())) {
+            tooltiptxt += "<p>Path: " + getType().getPath();
         }
         Titlebar.setToolTipText(tooltiptxt);
 

@@ -87,7 +87,7 @@ public class AxoObjects {
                     if (loadOK) {
                         AxoObjectAbstract o = of.objs.get(0);
                         if (o != null) {
-                            o.sPath = fnameA;
+                            o.setPath(fnameA);
                             // to be completed : loading overloaded objects too
                             o.createdFromRelativePath = true;
                             Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "loaded : {0}", fnameA);
@@ -97,6 +97,7 @@ public class AxoObjects {
                     }
                 }
             }
+            /* TODO: review
             { // try subpatch file
                 ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
                 String fnameP = bfname + ".axs";
@@ -108,12 +109,13 @@ public class AxoObjects {
                     if (n.startsWith("./") || n.startsWith("../")) {
                         o.createdFromRelativePath = true;
                     }
-                    o.sPath = f.getPath();
+                    o.setPath(f.getPath());
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "loaded : {0}", fnameP);
                     set.add(o);
                     return set;
                 }
             }
+            */
         }
         ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
         // need to clone ObjectList to avoid a ConcurrentModificationException?
@@ -123,6 +125,7 @@ public class AxoObjects {
             }
         }
         if (set.isEmpty()) {
+            /* todo: needs review
             String spath[] = MainFrame.prefs.getObjectSearchPath();
             for (String s : spath) {
                 String fsname = s + "/" + n + ".axs";
@@ -137,6 +140,7 @@ public class AxoObjects {
                     return set;
                 }
             }
+                    */
             return null;
         } else {
             return set;
@@ -253,7 +257,7 @@ public class AxoObjects {
                     }
                     if (o!=null) {
                         for (AxoObjectAbstract a : o.objs) {
-                            a.sPath = fileEntry.getAbsolutePath();
+                            a.setPath(fileEntry.getAbsolutePath());
                             if (!prefix.isEmpty()) {
                                 a.id = prefix.substring(1) + "/" + a.id;
                             }
@@ -273,7 +277,7 @@ public class AxoObjects {
                             ObjectList.add(a);
 
                             if ((a.getUUID() != null) && (ObjectUUIDMap.containsKey(a.getUUID()))) {
-                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Duplicate UUID! {0}\nOriginal name: {1}\nPath: {2}", new Object[]{fileEntry.getAbsolutePath(), ObjectUUIDMap.get(a.getUUID()).id, ObjectUUIDMap.get(a.getUUID()).sPath});
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Duplicate UUID! {0}\nOriginal name: {1}\nPath: {2}", new Object[]{fileEntry.getAbsolutePath(), ObjectUUIDMap.get(a.getUUID()).id, ObjectUUIDMap.get(a.getUUID()).getPath()});
                             }
                             ObjectUUIDMap.put(a.getUUID(), a);
                         }
@@ -288,7 +292,7 @@ public class AxoObjects {
                             fullname = prefix.substring(1) + "/" + oname;
                         }
                         AxoObjectUnloaded a = new AxoObjectUnloaded(fullname, fileEntry);
-                        a.sPath = fileEntry.getAbsolutePath();
+                        a.setPath(fileEntry.getAbsolutePath());
                         t.Objects.add(a);
                         ObjectList.add(a);
                     } catch (Exception ex) {
@@ -449,8 +453,8 @@ public class AxoObjects {
                 oo.sMidiCode = null;
             }
         }
-        if (o.sLicense == null) {
-            o.sLicense = "GPL";
+        if (o.getLicense() == null) {
+            o.setLicense("GPL");
         }
         if (o.GetIncludes() == null) {
             o.SetIncludes(null);

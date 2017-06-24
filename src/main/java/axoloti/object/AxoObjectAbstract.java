@@ -39,7 +39,7 @@ import org.simpleframework.xml.core.Persist;
  * @author Johannes Taelman
  */
 @Root(name = "objdef")
-public abstract class AxoObjectAbstract extends AbstractModel implements  Comparable, Cloneable {
+public abstract class AxoObjectAbstract extends AbstractModel implements Comparable, Cloneable {
 
     @Attribute
     public String id;
@@ -57,17 +57,17 @@ public abstract class AxoObjectAbstract extends AbstractModel implements  Compar
     HashSet<String> upgradeSha;
 
     @Element(name = "sDescription", required = false)
-    public String sDescription;
+    String sDescription;
 
     public String shortId;
 
     public boolean createdFromRelativePath = false;
 
     @Element(name = "author", required = false)
-    public String sAuthor;
+    private String sAuthor;
     @Element(name = "license", required = false)
-    public String sLicense;
-    public String sPath;
+    private String sLicense;
+    private String sPath;
 
     @Commit
     public void Commit() {
@@ -169,6 +169,66 @@ public abstract class AxoObjectAbstract extends AbstractModel implements  Compar
 
     public void setUUID(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        String oldvalue = this.id;
+        this.id = id;
+        firePropertyChange(
+                ObjectController.OBJ_ID,
+                oldvalue, id);
+    }
+
+    public String getDescription() {
+        return sDescription;
+    }
+
+    public void setDescription(String sDescription) {
+        String oldvalue = this.sDescription;
+        this.sDescription = sDescription;
+        firePropertyChange(
+                ObjectController.OBJ_DESCRIPTION,
+                oldvalue, sDescription);
+    }
+
+    public String getLicense() {
+        return sLicense;
+    }
+
+    public void setLicense(String sLicense) {
+        String oldvalue = this.sLicense;
+        this.sLicense = sLicense;
+        firePropertyChange(
+                ObjectController.OBJ_LICENSE,
+                oldvalue, sLicense);
+    }
+
+    public String getPath() {
+        return sPath;
+    }
+
+    public void setPath(String sPath) {
+        String oldvalue = this.sPath;
+        this.sPath = sPath;
+        firePropertyChange(
+                ObjectController.OBJ_PATH,
+                oldvalue, sPath);
+    }
+
+    public String getAuthor() {
+        return sAuthor;
+    }
+
+    public void setAuthor(String sAuthor) {
+        String oldvalue = this.sAuthor;
+        this.sAuthor = sAuthor;
+        firePropertyChange(
+                ObjectController.OBJ_AUTHOR,
+                oldvalue, sPath);
     }
 
     // Let's violate the MVC pattern for now and use a singleton controller for this model

@@ -131,7 +131,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         titleBar.addChild(popupIcon);
 
-        PLabelComponent titleBarLabel = new PLabelComponent(model.typeName);
+        PLabelComponent titleBarLabel = new PLabelComponent(model.getController().getModel().id);
         titleBarLabel.setAlignmentX(LEFT_ALIGNMENT);
         titleBarLabel.setPickable(false);
 
@@ -312,17 +312,17 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     private void initializeTooltipText() {
-        if ((getType().sDescription != null) && (!getType().sDescription.isEmpty())) {
-            tooltipText += getType().sDescription;
+        if ((getType().getDescription() != null) && (!getType().getDescription().isEmpty())) {
+            tooltipText += getType().getDescription();
         }
-        if ((getType().sAuthor != null) && (!getType().sAuthor.isEmpty())) {
-            tooltipText += "<p>Author: " + getType().sAuthor;
+        if ((getType().getAuthor() != null) && (!getType().getAuthor().isEmpty())) {
+            tooltipText += "<p>Author: " + getType().getAuthor();
         }
-        if ((getType().sLicense != null) && (!getType().sLicense.isEmpty())) {
-            tooltipText += "<p>License: " + getType().sLicense;
+        if ((getType().getLicense() != null) && (!getType().getLicense().isEmpty())) {
+            tooltipText += "<p>License: " + getType().getLicense();
         }
-        if ((getType().sPath != null) && (!getType().sPath.isEmpty())) {
-            tooltipText += "<p>Path: " + getType().sPath;
+        if ((getType().getPath() != null) && (!getType().getPath().isEmpty())) {
+            tooltipText += "<p>Path: " + getType().getPath();
         }
     }
 

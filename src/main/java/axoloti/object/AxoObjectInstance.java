@@ -352,7 +352,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (files == null) {
             files = new ArrayList<SDFileReference>();
         } else {
-            String p1 = getType().sPath;
+            String p1 = getType().getPath();
             if (p1 == null) {
                 // embedded object, reference path is of the patch
                 p1 = getPatchModel().getFileNamePath();

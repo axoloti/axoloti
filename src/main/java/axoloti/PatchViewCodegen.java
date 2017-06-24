@@ -831,25 +831,26 @@ public class PatchViewCodegen extends PatchAbstractView {
     public AxoObject GenerateAxoObjNormal(AxoObject template) {
         AxoObject ao = template;
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            if (o.typeName.equals("patch/inlet f")) {
+            String typeName = o.getType().id;
+            if (typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/inlet i")) {
+            } else if (typeName.equals("patch/inlet i")) {
                 ao.inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/inlet b")) {
+            } else if (typeName.equals("patch/inlet b")) {
                 ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/inlet a")) {
+            } else if (typeName.equals("patch/inlet a")) {
                 ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/inlet string")) {
+            } else if (typeName.equals("patch/inlet string")) {
                 ao.inlets.add(new InletCharPtr32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/outlet f")) {
+            } else if (typeName.equals("patch/outlet f")) {
                 ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/outlet i")) {
+            } else if (typeName.equals("patch/outlet i")) {
                 ao.outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/outlet b")) {
+            } else if (typeName.equals("patch/outlet b")) {
                 ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/outlet a")) {
+            } else if (typeName.equals("patch/outlet a")) {
                 ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/outlet string")) {
+            } else if (typeName.equals("patch/outlet string")) {
                 ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
@@ -874,28 +875,30 @@ public class PatchViewCodegen extends PatchAbstractView {
         ao.depends = getModel().getDepends();
         ao.modules = getModel().getModules();
         if ((getModel().notes != null) && (!getModel().notes.isEmpty())) {
-            ao.sDescription = getModel().notes;
+            ao.setDescription(getModel().notes);
         } else {
-            ao.sDescription = "no description";
+            ao.setDescription("no description");
         }
         ao.sKRateCode = "int i; /*...*/\n";
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            if (o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
+            String typeName = o.getType().id;
+            if (typeName.equals("patch/inlet f") || typeName.equals("patch/inlet i") || typeName.equals("patch/inlet b")) {
                 ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
-            } else if (o.typeName.equals("patch/inlet string")) {
+            } else if (typeName.equals("patch/inlet string")) {
                 ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = (char *)inlet_" + o.getLegalName() + ";\n";
-            } else if (o.typeName.equals("patch/inlet a")) {
+            } else if (typeName.equals("patch/inlet a")) {
                 ao.sKRateCode += "   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = inlet_" + o.getLegalName() + "[i];\n";
             }
 
         }
         ao.sKRateCode += GenerateDSPCodePlusPlusSub("attr_parent", true);
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i") || o.typeName.equals("patch/outlet b")) {
+            String typeName = o.getType().id;
+            if (typeName.equals("patch/outlet f") || typeName.equals("patch/outlet i") || typeName.equals("patch/outlet b")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = " + o.getCInstanceName() + "_i._outlet;\n";
-            } else if (o.typeName.equals("patch/outlet string")) {
+            } else if (typeName.equals("patch/outlet string")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = (char *)" + o.getCInstanceName() + "_i._outlet;\n";
-            } else if (o.typeName.equals("patch/outlet a")) {
+            } else if (typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "      for(i=0;i<BUFSIZE;i++) outlet_" + o.getLegalName() + "[i] = " + o.getCInstanceName() + "_i._outlet[i];\n";
             }
         }
@@ -928,14 +931,14 @@ public class PatchViewCodegen extends PatchAbstractView {
     AxoObject GenerateAxoObjPoly(AxoObject template) {
         AxoObject ao = template;
         ao.id = "unnamedobject";
-        ao.sDescription = getModel().FileNamePath;
+        ao.setDescription(getModel().FileNamePath);
         ao.includes = getModel().getIncludes();
         ao.depends = getModel().getDepends();
         ao.modules = getModel().getModules();
         if ((getModel().notes != null) && (!getModel().notes.isEmpty())) {
-            ao.sDescription = getModel().notes;
+            ao.setDescription(getModel().notes);
         } else {
-            ao.sDescription = "no description";
+            ao.setDescription("no description");
         }
         String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         ao.attributes.add(new AxoAttributeComboBox("poly", centries, centries));
@@ -953,25 +956,26 @@ public class PatchViewCodegen extends PatchAbstractView {
         }
 
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            if (o.typeName.equals("patch/inlet f")) {
+            String typeName = o.getType().id;
+            if (typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/inlet i")) {
+            } else if (typeName.equals("patch/inlet i")) {
                 ao.inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/inlet b")) {
+            } else if (typeName.equals("patch/inlet b")) {
                 ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/inlet a")) {
+            } else if (typeName.equals("patch/inlet a")) {
                 ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/inlet string")) {
+            } else if (typeName.equals("patch/inlet string")) {
                 ao.inlets.add(new InletCharPtr32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/outlet f")) {
+            } else if (typeName.equals("patch/outlet f")) {
                 ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/outlet i")) {
+            } else if (typeName.equals("patch/outlet i")) {
                 ao.outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/outlet b")) {
+            } else if (typeName.equals("patch/outlet b")) {
                 ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/outlet a")) {
+            } else if (typeName.equals("patch/outlet a")) {
                 ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
-            } else if (o.typeName.equals("patch/outlet string")) {
+            } else if (typeName.equals("patch/outlet string")) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "string outlet impossible in poly subpatches!");
                 // ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             }
@@ -1069,10 +1073,11 @@ public class PatchViewCodegen extends PatchAbstractView {
                 + "}\n";
         ao.sKRateCode = "";
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            if (o.typeName.equals("patch/outlet f") || o.typeName.equals("patch/outlet i")
-                    || o.typeName.equals("patch/outlet b") || o.typeName.equals("patch/outlet string")) {
+            String typeName = o.getType().id;
+            if (typeName.equals("patch/outlet f") || typeName.equals("patch/outlet i")
+                    || typeName.equals("patch/outlet b") || typeName.equals("patch/outlet string")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = 0;\n";
-            } else if (o.typeName.equals("patch/outlet a")) {
+            } else if (typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
                         + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] = 0;\n"
@@ -1082,24 +1087,26 @@ public class PatchViewCodegen extends PatchAbstractView {
         ao.sKRateCode += "int vi; for(vi=0;vi<attr_poly;vi++) {";
 
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            if (o.typeName.equals("inlet") || o.typeName.equals("inlet_i") || o.typeName.equals("inlet_b") || o.typeName.equals("inlet_")
-                    || o.typeName.equals("patch/inlet f") || o.typeName.equals("patch/inlet i") || o.typeName.equals("patch/inlet b")) {
+            String typeName = o.getType().id;
+            if (typeName.equals("inlet") || typeName.equals("inlet_i") || typeName.equals("inlet_b") || typeName.equals("inlet_")
+                    || typeName.equals("patch/inlet f") || typeName.equals("patch/inlet i") || typeName.equals("patch/inlet b")) {
                 ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
-            } else if (o.typeName.equals("inlet_string") || o.typeName.equals("patch/inlet string")) {
+            } else if (typeName.equals("inlet_string") || typeName.equals("patch/inlet string")) {
                 ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = (char *)inlet_" + o.getLegalName() + ";\n";
-            } else if (o.typeName.equals("inlet~") || o.typeName.equals("patch/inlet a")) {
+            } else if (typeName.equals("inlet~") || typeName.equals("patch/inlet a")) {
                 ao.sKRateCode += "{int j; for(j=0;j<BUFSIZE;j++) getVoices()[vi]." + o.getCInstanceName() + "_i._inlet[j] = inlet_" + o.getLegalName() + "[j];}\n";
             }
         }
         ao.sKRateCode += "getVoices()[vi].dsp();\n";
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            if (o.typeName.equals("outlet") || o.typeName.equals("patch/outlet f")
-                    || o.typeName.equals("patch/outlet i")
-                    || o.typeName.equals("patch/outlet b")) {
+            String typeName = o.getType().id;
+            if (typeName.equals("outlet") || typeName.equals("patch/outlet f")
+                    || typeName.equals("patch/outlet i")
+                    || typeName.equals("patch/outlet b")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
-            } else if (o.typeName.equals("patch/outlet string")) {
+            } else if (typeName.equals("patch/outlet string")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = (char *)getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
-            } else if (o.typeName.equals("patch/outlet a")) {
+            } else if (typeName.equals("patch/outlet a")) {
                 ao.sKRateCode += "{\n"
                         + "      int j;\n"
                         + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
@@ -1406,9 +1413,9 @@ public class PatchViewCodegen extends PatchAbstractView {
             }
         }
         if (getSettings() != null) {
-            ao.sAuthor = getSettings().getAuthor();
-            ao.sLicense = getSettings().getLicense();
-            ao.sDescription = getModel().notes;
+            ao.setAuthor(getSettings().getAuthor());
+            ao.setLicense(getSettings().getLicense());
+            ao.setDescription(getModel().notes);
             ao.helpPatch = getModel().helpPatch;
         }
         return ao;

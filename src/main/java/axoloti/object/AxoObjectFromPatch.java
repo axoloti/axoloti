@@ -54,7 +54,7 @@ public class AxoObjectFromPatch extends AxoObject {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
         shortId = f.getName().substring(0, f.getName().lastIndexOf("."));
-        sPath = f.getAbsolutePath();
+        setPath(f.getAbsolutePath());
         UpdateObject();
         MainFrame.axoObjects.ObjectList.add(this);
         // strip file extension
@@ -73,12 +73,12 @@ public class AxoObjectFromPatch extends AxoObject {
         inlets = o.inlets;
         outlets = o.outlets;
         params = o.params;
-        sAuthor = o.sAuthor;
-        sDescription = o.sDescription;
+        setAuthor(o.getAuthor());
+        setDescription(o.getDescription());
         sDisposeCode = o.sDisposeCode;
         sInitCode = o.sInitCode;
         sKRateCode = o.sKRateCode;
-        sLicense = o.sLicense;
+        setLicense(o.getLicense());
         sLocalData = o.sLocalData;
         sMidiCode = o.sMidiCode;
         sSRateCode = o.sSRateCode;
@@ -93,4 +93,5 @@ public class AxoObjectFromPatch extends AxoObject {
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);
     }
+
 }

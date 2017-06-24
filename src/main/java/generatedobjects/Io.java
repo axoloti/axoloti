@@ -82,8 +82,8 @@ public class Io extends gentools {
     static AxoObject CreateAnalogRead() {
         AxoObject o = new AxoObject("analog", "external analog control voltage input");
         o.outlets.add(new OutletFrac32("out", "external analog control voltage input"));
-        o.sDescription = "Reads an external analog voltage. Voltage range 0 to 3.3V maps to 0..64, with 12-bit precision. "
-                + "Apply no more than 3.3V!";
+        o.setDescription("Reads an external analog voltage. Voltage range 0 to 3.3V maps to 0..64, with 12-bit precision. "
+                + "Apply no more than 3.3V!");
         String mentries[] = {
             "PA0 (ADC1_IN0)",
             "PA1 (ADC1_IN1)",
@@ -155,7 +155,7 @@ public class Io extends gentools {
     static AxoObject CreateDigitalRead() {
         AxoObject o = new AxoObject("digital", "external digital input");
         o.outlets.add(new OutletBool32("out", "external digital input"));
-        o.sDescription = "Reads a digital input pin. 3.3V logic maximum!";
+        o.setDescription("Reads a digital input pin. 3.3V logic maximum!");
         String GpioIModM[] = {
             "hi-z",
             "pullup",
@@ -176,7 +176,7 @@ public class Io extends gentools {
     static AxoObject CreateDigitalReadButton1() {
         AxoObject o = new AxoObject("button1", "button S1");
         o.outlets.add(new OutletBool32("out", "button state"));
-        o.sDescription = "button S1 on axoloti core board";
+        o.setDescription("button S1 on axoloti core board");
         o.sInitCode = "palSetPadMode(SW1_PORT,SW1_PIN,PAL_MODE_INPUT);";
         o.sKRateCode = "%out%= palReadPad(SW1_PORT,SW1_PIN);";
         return o;
@@ -184,7 +184,7 @@ public class Io extends gentools {
     static AxoObject CreateDigitalReadButton2() {
         AxoObject o = new AxoObject("button2", "button S2");
         o.outlets.add(new OutletBool32("out", "button state"));
-        o.sDescription = "button S2 on axoloti core board";
+        o.setDescription("button S2 on axoloti core board");
         o.sKRateCode = "%out%= palReadPad(SW2_PORT,SW2_PIN);";
         return o;
     }

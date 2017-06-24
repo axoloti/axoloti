@@ -322,7 +322,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 SetPreview(oa);
                 ExpandJTreeToEl(oa);
             }
-            jTextFieldObjName.setText(o.getModel().typeName);
+            jTextFieldObjName.setText(o.getModel().getController().getModel().id);
         } else if (searchString != null) {
             Search(searchString);
             jTextFieldObjName.setText(searchString);
@@ -366,10 +366,10 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
            
             AxoObjectAbstract t = objectInstanceView.getModel().getType();
             if (t != null) {
-                String description = t.sDescription == null || t.sDescription.isEmpty() ? o.sDescription : t.sDescription;
-                String path = t.sPath == null ? o.sPath : t.sPath;
-                String author = t.sAuthor == null ? o.sAuthor : t.sAuthor;
-                String license = t.sLicense == null ? o.sLicense : t.sLicense;
+                String description = t.getDescription() == null || t.getDescription().isEmpty() ? o.getDescription() : t.getDescription();
+                String path = t.getPath() == null ? o.getPath() : t.getPath();
+                String author = t.getAuthor() == null ? o.getAuthor() : t.getAuthor();
+                String license = t.getLicense() == null ? o.getLicense() : t.getLicense();
                 String txt = description;
                 if ((path != null) && (!path.isEmpty())) {
                     txt += "\n<p>\nPath: " + path;
@@ -450,7 +450,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 }
             }
             for (AxoObjectAbstract o : MainFrame.axoObjects.ObjectList) {
-                if (o.sDescription != null && o.sDescription.contains(s)) {
+                if (o.getDescription() != null && o.getDescription().contains(s)) {
                     if (!listData.contains(o)) {
                         listData.add(o);
                     }

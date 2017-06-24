@@ -399,7 +399,7 @@ public abstract class PatchView extends PatchAbstractView {
         PreSerialize();
         boolean b = getController().getModel().save(f);
         if (ObjEditor != null) {
-            ObjEditor.UpdateObject();
+            // ObjEditor.UpdateObject();
         }
         return b;
     }
@@ -647,6 +647,7 @@ public abstract class PatchView extends PatchAbstractView {
                     List<File> flist = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
                     for (File f : flist) {
                         if (f.exists() && f.canRead()) {
+                            /* TODO: needs review
                             AxoObjectAbstract o = new AxoObjectFromPatch(f);
                             String fn = f.getCanonicalPath();
                             if (getController().GetCurrentWorkingDirectory() != null
@@ -655,6 +656,7 @@ public abstract class PatchView extends PatchAbstractView {
                             }
 
                             getController().AddObjectInstance(o, dtde.getLocation());
+                            */
                         }
                     }
                     dtde.dropComplete(true);

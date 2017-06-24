@@ -127,7 +127,7 @@ public class AxoObjectInstanceViewParenting implements AbstractView<ObjectInstan
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_INSTANCENAME)) {
-            String typeName = controller.getModel().typeName;
+            String typeName = controller.getModel().getType().id;
             if (typeName.equals("patch/inlet a")
                     || typeName.equals("patch/inlet b")
                     || typeName.equals("patch/inlet f")

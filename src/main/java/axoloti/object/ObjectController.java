@@ -17,6 +17,17 @@ import axoloti.parameters.Parameter;
  */
 public class ObjectController extends AbstractController<AxoObjectAbstract, AbstractView, AbstractController> {
 
+    public static final String OBJ_ID = "Id";
+    public static final String OBJ_DESCRIPTION = "Description";
+    public static final String OBJ_LICENSE = "License";
+    public static final String OBJ_PATH = "Path";
+    public static final String OBJ_AUTHOR = "Author";
+
+    @Override
+    public String[] getPropertyNames() {
+        return new String[]{OBJ_ID, OBJ_DESCRIPTION, OBJ_LICENSE, OBJ_PATH, OBJ_AUTHOR};
+    }
+
     public ArrayController<AtomDefinitionController, Inlet, ObjectController> inlets;
     public ArrayController<AtomDefinitionController, Outlet, ObjectController> outlets;
     public ArrayController<AtomDefinitionController, AxoAttribute, ObjectController> attrs;

@@ -186,20 +186,21 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         jTextFieldAuthor.getDocument().addDocumentListener(new DocumentChangeListener() {
             @Override
             void update() {
-                getModel().sAuthor = jTextFieldAuthor.getText().trim();
+                getController().setModelUndoableProperty(ObjectController.OBJ_AUTHOR, jTextFieldAuthor.getText().trim());
             }
         });
 
         jTextFieldLicense.getDocument().addDocumentListener(new DocumentChangeListener() {
             @Override
             void update() {
-                getModel().sLicense = jTextFieldLicense.getText().trim();
+                getController().setModelUndoableProperty(ObjectController.OBJ_LICENSE, jTextFieldLicense.getText().trim());
             }
         });
 
         jTextFieldHelp.getDocument().addDocumentListener(new DocumentChangeListener() {
             @Override
             void update() {
+                // TODO...
                 getModel().helpPatch = jTextFieldHelp.getText().trim();
             }
         });
@@ -207,7 +208,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         jTextDesc.getDocument().addDocumentListener(new DocumentChangeListener() {
             @Override
             void update() {
-                getModel().sDescription = jTextDesc.getText().trim();
+                getController().setModelUndoableProperty(ObjectController.OBJ_DESCRIPTION, jTextDesc.getText().trim());
             }
         });
 
@@ -254,7 +255,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         // is it from the factory?
         AxolotiLibrary sellib = null;
         for (AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
-            if (ctrl.getModel().sPath != null && ctrl.getModel().sPath.startsWith(lib.getLocalLocation())) {
+            if (ctrl.getModel().getPath() != null && ctrl.getModel().getPath().startsWith(lib.getLocalLocation())) {
 
                 if (sellib == null || sellib.getLocalLocation().length() < lib.getLocalLocation().length()) {
                     sellib = lib;
@@ -311,9 +312,9 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
 
     void initFields() {
         jLabelName.setText(getModel().getCName());
-        jTextFieldLicense.setText(getModel().sLicense);
-        jTextDesc.setText(getModel().sDescription);
-        jTextFieldAuthor.setText(getModel().sAuthor);
+        jTextFieldLicense.setText(getModel().getLicense());
+        jTextDesc.setText(getModel().getDescription());
+        jTextFieldAuthor.setText(getModel().getAuthor());
         jTextFieldHelp.setText(getModel().helpPatch);
 
         ((DefaultListModel) jListIncludes.getModel()).removeAllElements();
@@ -449,12 +450,12 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
     }
 
     boolean isCompositeObject() {
-        if (getModel().sPath == null) {
+        if (getModel().getPath() == null) {
             return false;
         }
         int count = 0;
         for (AxoObjectAbstract o : MainFrame.axoObjects.ObjectList) {
-            if (getModel().sPath.equalsIgnoreCase(o.sPath)) {
+            if (getModel().getPath().equalsIgnoreCase(o.getPath())) {
                 count++;
             }
         }
@@ -865,11 +866,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
         if (!isCompositeObject()) {
-            MainFrame.axoObjects.WriteAxoObject(getModel().sPath, getModel());
+            MainFrame.axoObjects.WriteAxoObject(getModel().getPath(), getModel());
             updateReferenceXML();
             MainFrame.axoObjects.LoadAxoObjects();
         } else {
-            JOptionPane.showMessageDialog(null, "The original object file " + getModel().sPath + " contains multiple objects, the object editor does not support this.\n"
+            JOptionPane.showMessageDialog(null, "The original object file " + getModel().getPath() + " contains multiple objects, the object editor does not support this.\n"
                     + "Your changes are NOT saved!");
         }
     }//GEN-LAST:event_jMenuItemSaveActionPerformed

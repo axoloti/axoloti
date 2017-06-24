@@ -18,14 +18,11 @@
 package axoloti.object;
 
 import axoloti.MainFrame;
-import axoloti.PatchController;
 import axoloti.PatchModel;
 import axoloti.SDFileReference;
 import axoloti.attribute.AttributeInstance;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayModel;
@@ -34,7 +31,6 @@ import axoloti.parameters.ParameterInstance;
 import axoloti.utils.CharEscape;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Attribute;
@@ -51,9 +47,9 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     public String typeName;
     @Deprecated
     @Attribute(name = "sha", required = false)
-    public String typeSHA;
+    String typeSHA;
     @Attribute(name = "uuid", required = false)
-    public String typeUUID;
+    String typeUUID;
     @Attribute(name = "name", required = false)
     String InstanceName;
     @Attribute
@@ -80,7 +76,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         typeName = type.id;
         if (type.createdFromRelativePath && (patchModel != null)) {
             String pPath = patchModel.getFileNamePath();
-            String oPath = type.sPath;
+            String oPath = type.getPath();
 
             if (oPath.endsWith(".axp") || oPath.endsWith(".axo") || oPath.endsWith(".axs")) {
                 oPath = oPath.substring(0, oPath.length() - 4);
@@ -388,4 +384,9 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     public void applyValues(AxoObjectInstanceAbstract unlinked_object_instance) {
     }
 
+    public String getTypeName() {
+        if (type != null) return type.getId();
+        else return typeName;
+    }
+    
 }

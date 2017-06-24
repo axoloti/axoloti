@@ -31,7 +31,7 @@ public class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
 
     public void PostConstructor() {
         super.PostConstructor();
-        LabelComponent idlbl = new LabelComponent(getController().getModel().typeName);
+        LabelComponent idlbl = new LabelComponent("zombie"); // FIXME: getController().getModel().typeName);
         idlbl.setAlignmentX(LEFT_ALIGNMENT);
         idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
 

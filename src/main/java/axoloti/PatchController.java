@@ -757,7 +757,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         // cheating here by creating a new controller...
         PatchViewCodegen codegen = new PatchViewCodegen(this);
         AxoObject ao = codegen.GenerateAxoObj(new AxoObject());
-        ao.sDescription = getModel().getFileNamePath();
+        ao.setDescription(getModel().getFileNamePath());
         ao.id = fnNoExtension;
 
         AxoObjectFile aof = new AxoObjectFile();

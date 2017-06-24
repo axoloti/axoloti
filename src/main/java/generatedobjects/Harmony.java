@@ -45,7 +45,7 @@ public class Harmony extends gentools {
         o.inlets.add(new InletBool32("latch", "latch to record scale notes"));
         o.outlets.add(new OutletFrac32Bipolar("note", "note number (-64..63)"));
         o.params.add(new ParameterBin12("b12"));
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
         o.sLocalData
                 = "    int32_t _scaleVal;\n"
                 + "    int8_t  _scale[12];\n"

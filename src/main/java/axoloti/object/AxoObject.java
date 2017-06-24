@@ -19,9 +19,7 @@ package axoloti.object;
 
 import static axoloti.Axoloti.FIRMWARE_DIR;
 import axoloti.Modulator;
-import axoloti.PatchController;
 import axoloti.SDFileReference;
-import axoloti.PatchModel;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.attributedefinition.AxoAttributeInt32;
@@ -64,7 +62,6 @@ import axoloti.inlets.InletFrac32Pos;
 import axoloti.inlets.InletInt32;
 import axoloti.inlets.InletInt32Bipolar;
 import axoloti.inlets.InletInt32Pos;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.objecteditor.AxoObjectEditor;
 import axoloti.outlets.Outlet;
@@ -111,15 +108,12 @@ import axoloti.parameters.ParameterInt32Box;
 import axoloti.parameters.ParameterInt32BoxSmall;
 import axoloti.parameters.ParameterInt32HRadio;
 import axoloti.parameters.ParameterInt32VRadio;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.simpleframework.xml.*;
 
 /**
@@ -470,17 +464,17 @@ public class AxoObject extends AxoObjectAbstract {
     public HashSet<String> GetIncludes() {
         if ((includes == null) || includes.isEmpty()) {
             return null;
-        } else if (sPath != null) {
+        } else if (getPath() != null) {
             HashSet<String> r = new HashSet<String>();
             for (String s : includes) {
                 if (s.startsWith("./")) {
-                    String strippedPath = sPath.substring(0, sPath.lastIndexOf(File.separatorChar));
+                    String strippedPath = getPath().substring(0, getPath().lastIndexOf(File.separatorChar));
                     File f = new File(strippedPath + "/" + s.substring(2));
                     String s2 = f.getAbsolutePath();
                     s2 = s2.replace('\\', '/');
                     r.add(s2);
                 } else if (s.startsWith("../")) {
-                    String strippedPath = sPath.substring(0, sPath.lastIndexOf(File.separatorChar));
+                    String strippedPath = getPath().substring(0, getPath().lastIndexOf(File.separatorChar));
                     File f = new File(strippedPath + "/" + s);
                     String s2 = f.getAbsolutePath();
                     s2 = s2.replace('\\', '/');
@@ -515,10 +509,10 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     public File GetHelpPatchFile() {
-        if ((helpPatch == null) || (sPath == null) || sPath.isEmpty()) {
+        if ((helpPatch == null) || (getPath() == null) || getPath().isEmpty()) {
             return null;
         }
-        File o = new File(sPath);
+        File o = new File(getPath());
         String p = o.getParent() + File.separator + helpPatch;
         File f = new File(p);
         if (f.isFile() && f.canRead()) {
@@ -609,8 +603,10 @@ public class AxoObject extends AxoObjectAbstract {
         sKRateCode = o.sKRateCode;
         sSRateCode = o.sSRateCode;
         sMidiCode = o.sMidiCode;
-        sAuthor = o.sAuthor;
-        sLicense = o.sLicense;
+        setAuthor(o.getAuthor());
+        setLicense(o.getLicense());
+        //sAuthor = o.sAuthor;
+        //sLicense = o.sLicense;
         sDescription = o.sDescription;
     }
 
