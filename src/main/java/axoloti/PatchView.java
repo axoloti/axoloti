@@ -12,7 +12,6 @@ import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.mvc.array.ArrayView;
-import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectInstanceController;

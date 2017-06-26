@@ -18,7 +18,7 @@ public class AxoObjectInstanceFactory {
         } else {
             patchModel = null;
         }
-        AxoObjectAbstract objm = obj.getModel();
+        IAxoObject objm = obj.getModel();
         AxoObjectInstanceAbstract obji;
         if (objm instanceof AxoObjectUnloaded) {
             ((AxoObjectUnloaded) objm).Load();

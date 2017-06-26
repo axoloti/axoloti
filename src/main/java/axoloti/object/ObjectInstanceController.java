@@ -9,7 +9,6 @@ import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceController;
@@ -17,12 +16,13 @@ import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceController;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
+import axoloti.mvc.IView;
 
 /**
  *
  * @author jtaelman
  */
-public class ObjectInstanceController extends AbstractController<AxoObjectInstanceAbstract, AbstractView, PatchController> {
+public class ObjectInstanceController extends AbstractController<AxoObjectInstanceAbstract, IView, PatchController> {
 
     public static final String OBJ_LOCATION = "Location";
     public static final String OBJ_SELECTED = "Selected";

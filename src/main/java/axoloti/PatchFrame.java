@@ -18,7 +18,6 @@
 package axoloti;
 
 import static axoloti.PatchViewType.PICCOLO;
-import axoloti.mvc.AbstractView;
 import axoloti.mvc.UndoUI;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjects;
@@ -57,22 +56,19 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
-import javax.swing.event.UndoableEditEvent;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import qcmds.QCmdCompileModule;
-import qcmds.QCmdLock;
 import qcmds.QCmdProcessor;
-import qcmds.QCmdStart;
 import qcmds.QCmdStop;
-import qcmds.QCmdUploadPatch;
+import axoloti.mvc.IView;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener, AbstractView {
+public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener, IView {
 
     /**
      * Creates new form PatchFrame

@@ -22,7 +22,7 @@ import axoloti.DocumentWindowList;
 import axoloti.MainFrame;
 import axoloti.mvc.UndoUI;
 import axoloti.object.AxoObject;
-import axoloti.object.AxoObjectAbstract;
+import axoloti.object.IAxoObject;
 import axoloti.object.ObjectController;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.OSDetect;
@@ -275,10 +275,10 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
                 if (sellib.isReadOnly()) {
                     SetReadOnly(true);
                     jLabelLibrary.setText(sellib.getId() + " (readonly)");
-                    setTitle(sellib.getId() + ":" + ctrl.getModel().id + " (readonly)");
+                    setTitle(sellib.getId() + ":" + ctrl.getModel().getId() + " (readonly)");
                 } else {
                     jLabelLibrary.setText(sellib.getId());
-                    setTitle(sellib.getId() + ":" + ctrl.getModel().id);
+                    setTitle(sellib.getId() + ":" + ctrl.getModel().getId());
                 }
             }
 
@@ -454,7 +454,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
             return false;
         }
         int count = 0;
-        for (AxoObjectAbstract o : MainFrame.axoObjects.ObjectList) {
+        for (IAxoObject o : MainFrame.axoObjects.ObjectList) {
             if (getModel().getPath().equalsIgnoreCase(o.getPath())) {
                 count++;
             }

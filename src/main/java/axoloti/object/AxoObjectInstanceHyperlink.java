@@ -75,7 +75,6 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

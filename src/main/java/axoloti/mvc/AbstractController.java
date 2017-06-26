@@ -11,7 +11,7 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
-public abstract class AbstractController<Model extends AbstractModel, View extends AbstractView, ParentController extends AbstractController> implements PropertyChangeListener {
+public abstract class AbstractController<Model extends IModel, View extends IView, ParentController extends AbstractController> implements PropertyChangeListener {
 
     final private ArrayList<View> registeredViews = new ArrayList<View>();
     private final Model model;

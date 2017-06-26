@@ -20,7 +20,6 @@ package axoloti;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.array.ArrayModel;
-import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceComment;
@@ -29,6 +28,7 @@ import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.object.AxoObjects;
+import axoloti.object.IAxoObject;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.AxolotiLibrary;
@@ -55,7 +55,7 @@ import org.simpleframework.xml.strategy.Strategy;
  * @author Johannes Taelman
  */
 @Root
-public class PatchModel extends AbstractModel {
+public class PatchModel extends AbstractModel /*implements IAxoObject*/ {
 
     //TODO - use execution order, rather than UI ordering
     static final boolean USE_EXECUTION_ORDER = false;
@@ -377,8 +377,8 @@ public class PatchModel extends AbstractModel {
         return -1;
     }
 
-    List<AxoObjectAbstract> GetUsedAxoObjects() {
-        ArrayList<AxoObjectAbstract> aos = new ArrayList<AxoObjectAbstract>();
+    List<IAxoObject> GetUsedAxoObjects() {
+        ArrayList<IAxoObject> aos = new ArrayList<IAxoObject>();
         for (AxoObjectInstanceAbstract o : objectinstances) {
             if (!aos.contains(o.getType())) {
                 aos.add(o.getType());

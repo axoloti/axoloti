@@ -32,8 +32,8 @@ public class AxoObjectTreeNode implements Comparable {
     @Attribute
     String id;
     public TreeMap<String, AxoObjectTreeNode> SubNodes = new TreeMap<String, AxoObjectTreeNode>();
-    public ArrayList<AxoObjectAbstract> Objects = new ArrayList<AxoObjectAbstract>();
-    public AxoObjectAbstract NodeObject;
+    public ArrayList<IAxoObject> Objects = new ArrayList<IAxoObject>();
+    public IAxoObject NodeObject;
     public String description;
 
     public AxoObjectTreeNode(String id) {
@@ -47,7 +47,7 @@ public class AxoObjectTreeNode implements Comparable {
 
     @Override
     public int compareTo(Object t) {
-        String tn = ((AxoObjectAbstract) t).id;
+        String tn = ((IAxoObject) t).getId();
         if (id.startsWith(tn)) {
             return -1;
         }

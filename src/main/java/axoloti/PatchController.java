@@ -4,10 +4,8 @@ import static axoloti.PatchModel.USE_EXECUTION_ORDER;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObject;
-import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFile;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceFactory;
@@ -18,7 +16,6 @@ import axoloti.object.AxoObjectPatcherObject;
 import axoloti.object.ObjectController;
 import axoloti.object.ObjectInstanceController;
 import axoloti.object.ObjectInstancePatcherController;
-import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.utils.Constants;
 import axoloti.utils.Preferences;
@@ -45,8 +42,10 @@ import qcmds.QCmdCompilePatch;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
 import qcmds.QCmdUploadFile;
+import axoloti.mvc.IView;
+import axoloti.object.IAxoObject;
 
-public class PatchController extends AbstractController<PatchModel, AbstractView, AbstractController> {
+public class PatchController extends AbstractController<PatchModel, IView, AbstractController> {
 
     public final static String PATCH_LOCKED = "Locked";
     public final static String PATCH_FILENAME = "FileNamePath";
@@ -294,7 +293,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         return succeeded;
     }
 
-    public AxoObjectInstanceAbstract AddObjectInstance(AxoObjectAbstract obj, Point loc) {
+    public AxoObjectInstanceAbstract AddObjectInstance(IAxoObject obj, Point loc) {
         if (!isLocked()) {
 
             if (obj == null) {
@@ -394,7 +393,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
                 linked_object_instance.applyValues(o);
                 getModel().objectinstances.add(linked_object_instance);
             } else {
-                AxoObjectAbstract t = o.resolveType(getModel().GetCurrentWorkingDirectory());
+                IAxoObject t = o.resolveType(getModel().GetCurrentWorkingDirectory());
                 AxoObjectInstanceAbstract linked_object_instance = AxoObjectInstanceFactory.createView(t.createController(null, null), this, o.getInstanceName(), o.getLocation());
                 linked_object_instance.applyValues(o);
                 getModel().objectinstances.add(linked_object_instance);
@@ -581,7 +580,7 @@ public class PatchController extends AbstractController<PatchModel, AbstractView
         return new Point(100, 100); //patchView.getLocationOnScreen();
     }
 
-    public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, AxoObjectAbstract objType) {
+    public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract obj, IAxoObject objType) {
 //        AxoObjectInstanceAbstract newObject = getModel().ChangeObjectInstanceType(obj, objType);
 //        return newObject;
         return null;

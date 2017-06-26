@@ -1,13 +1,13 @@
 package axoloti.object.codegenview;
 
-import axoloti.mvc.AbstractView;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.mvc.IView;
 
 /**
  *
  * @author jtaelman
  */
-public abstract class AxoObjectInstanceAbstractCodegenView implements AbstractView {
+public abstract class AxoObjectInstanceAbstractCodegenView implements IView {
    
     abstract public String GenerateUICode(int count[]);
 

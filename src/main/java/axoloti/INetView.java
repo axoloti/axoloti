@@ -1,11 +1,11 @@
 package axoloti;
 
 import axoloti.inlets.IInletInstanceView;
-import axoloti.mvc.AbstractView;
 import axoloti.outlets.IOutletInstanceView;
 import java.util.ArrayList;
+import axoloti.mvc.IView;
 
-public interface INetView extends AbstractView {
+public interface INetView extends IView {
 
     public void updateBounds();
 

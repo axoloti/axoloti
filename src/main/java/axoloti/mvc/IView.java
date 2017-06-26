@@ -6,7 +6,7 @@ import java.beans.PropertyChangeEvent;
  *
  * @author jtaelman
  */
-public interface AbstractView<T extends AbstractController> {
+public interface IView<T extends AbstractController> {
 
     abstract void modelPropertyChange(PropertyChangeEvent evt);
 

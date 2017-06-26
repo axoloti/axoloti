@@ -11,7 +11,6 @@ import axoloti.PatchViewSwing;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
-import axoloti.mvc.AbstractView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
@@ -28,8 +27,9 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import org.simpleframework.xml.Attribute;
+import axoloti.mvc.IView;
 
-public abstract class IoletAbstract extends JPanel implements MouseListener, MouseMotionListener, IIoletAbstract, AbstractView {
+public abstract class IoletAbstract extends JPanel implements MouseListener, MouseMotionListener, IIoletAbstract, IView {
 
     @Deprecated
     @Attribute(required = false)

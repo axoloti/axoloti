@@ -2,12 +2,12 @@ package axoloti.parameterviews;
 
 import axoloti.Preset;
 import axoloti.datatypes.Value;
-import axoloti.mvc.AbstractView;
 import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstance;
 import javax.swing.JPopupMenu;
+import axoloti.mvc.IView;
 
-public interface IParameterInstanceView extends AbstractView {
+public interface IParameterInstanceView extends IView {
 
     public void PostConstructor();
 

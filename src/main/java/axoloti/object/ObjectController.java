@@ -6,16 +6,16 @@ import axoloti.displays.Display;
 import axoloti.inlets.Inlet;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.outlets.Outlet;
 import axoloti.parameters.Parameter;
+import axoloti.mvc.IView;
 
 /**
  *
  * @author jtaelman
  */
-public class ObjectController extends AbstractController<AxoObjectAbstract, AbstractView, AbstractController> {
+public class ObjectController extends AbstractController<IAxoObject, IView, AbstractController> {
 
     public static final String OBJ_ID = "Id";
     public static final String OBJ_DESCRIPTION = "Description";
@@ -34,7 +34,7 @@ public class ObjectController extends AbstractController<AxoObjectAbstract, Abst
     public ArrayController<AtomDefinitionController, Parameter, ObjectController> params;
     public ArrayController<AtomDefinitionController, Display, ObjectController> disps;
 
-    public ObjectController(AxoObjectAbstract model, AbstractDocumentRoot documentRoot) {
+    public ObjectController(IAxoObject model, AbstractDocumentRoot documentRoot) {
         super(model, documentRoot, null);
         AbstractController c = null;
         if (model instanceof AxoObject) {

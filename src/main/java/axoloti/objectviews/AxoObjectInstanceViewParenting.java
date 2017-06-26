@@ -7,7 +7,6 @@ import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInt32;
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
@@ -20,17 +19,18 @@ import axoloti.outlets.OutletInt32;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterInstanceController;
 import java.beans.PropertyChangeEvent;
+import axoloti.mvc.IView;
 
 
 /*
  * @author jtaelman
  */
-public class AxoObjectInstanceViewParenting implements AbstractView<ObjectInstanceController> {
+public class AxoObjectInstanceViewParenting implements IView<ObjectInstanceController> {
 
     final ObjectInstanceController controller;
     final AtomDefinition[] atom;
 
-    class ParameterOnParentView implements AbstractView {
+    class ParameterOnParentView implements IView {
 
         final ArrayModel<AtomDefinition> atomDefinitionsOnParent;
         final ParameterInstanceController pic;
@@ -104,19 +104,19 @@ public class AxoObjectInstanceViewParenting implements AbstractView<ObjectInstan
             atom = new AtomDefinition[]{i};
         } else {
             atom = null;
-            ArrayView<AbstractView> paramOnParentObserver = new ArrayView<AbstractView>(controller.parameterInstanceControllers) {
+            ArrayView<IView> paramOnParentObserver = new ArrayView<IView>(controller.parameterInstanceControllers) {
                 @Override
                 public void updateUI() {
                 }
 
                 @Override
-                public AbstractView viewFactory(AbstractController ctrl1) {
+                public IView viewFactory(AbstractController ctrl1) {
                     ParameterInstanceController pic = (ParameterInstanceController) ctrl1;
                     return new ParameterOnParentView(ctrl1, pic, atomDefinitionsOnParent);
                 }
 
                 @Override
-                public void removeView(AbstractView view) {
+                public void removeView(IView view) {
                     atomDefinitionsOnParent.remove(((ParameterOnParentView) view).p);
                 }
             };
@@ -127,7 +127,7 @@ public class AxoObjectInstanceViewParenting implements AbstractView<ObjectInstan
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_INSTANCENAME)) {
-            String typeName = controller.getModel().getType().id;
+            String typeName = controller.getModel().getType().getId();
             if (typeName.equals("patch/inlet a")
                     || typeName.equals("patch/inlet b")
                     || typeName.equals("patch/inlet f")

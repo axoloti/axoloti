@@ -1,8 +1,7 @@
 package axoloti.mvc.array;
 
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
+import axoloti.mvc.IModel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -13,7 +12,7 @@ import java.util.ListIterator;
  *
  * @author jtaelman
  */
-public class ArrayModel<T extends AbstractModel> extends AbstractModel implements List<T>, Iterable<T> {
+public class ArrayModel<T extends IModel> extends AbstractModel implements List<T>, Iterable<T> {
 
     ArrayList<T> array = new ArrayList<>();
 

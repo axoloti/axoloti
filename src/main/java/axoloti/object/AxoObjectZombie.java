@@ -17,6 +17,9 @@
  */
 package axoloti.object;
 
+import axoloti.inlets.Inlet;
+import axoloti.mvc.array.ArrayModel;
+import axoloti.outlets.Outlet;
 import org.simpleframework.xml.Root;
 
 /**
@@ -39,4 +42,13 @@ public class AxoObjectZombie extends AxoObjectAbstract {
         return "zombie";
     }
 
+    @Override
+    public ArrayModel<Inlet> getInlets() {
+        return null;
+    }
+
+    @Override
+    public ArrayModel<Outlet> getOutlets() {
+        return null;
+    }
 }

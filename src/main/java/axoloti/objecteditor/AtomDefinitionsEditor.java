@@ -22,7 +22,6 @@ import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.mvc.array.ArrayView;
 import java.awt.event.ActionEvent;
@@ -45,6 +44,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
+import axoloti.mvc.IView;
 
 /**
  *
@@ -554,12 +554,12 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
     }
 
     @Override
-    public AbstractView viewFactory(AbstractController ctrl) {
+    public IView viewFactory(AbstractController ctrl) {
         return null;
     }
 
     @Override
-    public void removeView(AbstractView view) {
+    public void removeView(IView view) {
     }
 
     abstract String getAtomTypeName();

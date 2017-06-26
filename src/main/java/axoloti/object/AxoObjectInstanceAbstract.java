@@ -24,7 +24,6 @@ import axoloti.attribute.AttributeInstance;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
-import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
@@ -35,13 +34,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
+import axoloti.mvc.IView;
+import java.util.List;
 
 /**
  *
  * @author Johannes Taelman
  */
 @Root(name = "obj_abstr")
-public abstract class AxoObjectInstanceAbstract extends AbstractModel implements Comparable<AxoObjectInstanceAbstract>, AbstractView {
+public abstract class AxoObjectInstanceAbstract extends AbstractModel implements Comparable<AxoObjectInstanceAbstract>, IView {
 
     @Attribute(name = "type")
     public String typeName;
@@ -61,7 +62,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
 
     private PatchModel patchModel;
 
-    AxoObjectAbstract type;
+    IAxoObject type;
     private boolean typeWasAmbiguous = false;
     
     ObjectController controller;
@@ -73,8 +74,8 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         super();
         this.type = typeController.getModel();
         this.controller = typeController;
-        typeName = type.id;
-        if (type.createdFromRelativePath && (patchModel != null)) {
+        typeName = type.getId();
+        if (type.isCreatedFromRelativePath() && (patchModel != null)) {
             String pPath = patchModel.getFileNamePath();
             String oPath = type.getPath();
 
@@ -113,12 +114,12 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         this.patchModel = patchModel;
     }
 
-    public void setType(AxoObjectAbstract type) {
+    public void setType(IAxoObject type) {
         this.type = type;
         typeUUID = type.getUUID();
     }
 
-    public AxoObjectAbstract getType() {
+    public IAxoObject getType() {
         return type;
     }
 
@@ -157,19 +158,19 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         firePropertyChange(ObjectInstanceController.OBJ_SELECTED, prev_value, selected);
     }
 
-    public AxoObjectAbstract resolveType(String directory) {
+    public IAxoObject resolveType(String directory) {
         if (type != null) {
             return type;
         }
         if (typeUUID != null) {
             type = MainFrame.axoObjects.GetAxoObjectFromUUID(typeUUID);
             if (type != null) {
-                System.out.println("restored from UUID:" + type.id);
-                typeName = type.id;
+                System.out.println("restored from UUID:" + type.getId());
+                typeName = type.getId();
             }
         }
         if (type == null) {
-            ArrayList<AxoObjectAbstract> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, directory);
+            List<IAxoObject> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, directory);
             if (types == null) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} not found", typeName);
             } else { // pick first

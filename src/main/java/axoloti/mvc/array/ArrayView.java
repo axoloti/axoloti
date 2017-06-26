@@ -2,17 +2,17 @@ package axoloti.mvc.array;
 
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
-import axoloti.mvc.AbstractView;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import axoloti.mvc.IView;
 
 /**
  *
  * @author jtaelman
  */
-public abstract class ArrayView<T extends AbstractView> implements AbstractView<ArrayController>, Iterable<T> {
+public abstract class ArrayView<T extends IView> implements IView<ArrayController>, Iterable<T> {
 
     ArrayController<AbstractController, AbstractModel, AbstractController> controller;
     final List<T> subviews;

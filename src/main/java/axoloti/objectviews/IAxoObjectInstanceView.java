@@ -6,7 +6,6 @@ import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
-import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectInstanceController;
@@ -16,8 +15,9 @@ import axoloti.parameterviews.IParameterInstanceView;
 import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JComponent;
+import axoloti.mvc.IView;
 
-public interface IAxoObjectInstanceView extends AbstractView<ObjectInstanceController> {
+public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> {
 
     public AxoObjectInstanceAbstract getModel();
 

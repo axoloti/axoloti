@@ -39,7 +39,7 @@ import org.simpleframework.xml.core.Persist;
  * @author Johannes Taelman
  */
 @Root(name = "objdef")
-public abstract class AxoObjectAbstract extends AbstractModel implements Comparable, Cloneable {
+public abstract class AxoObjectAbstract extends AbstractModel implements Comparable, Cloneable, IAxoObject {
 
     @Attribute
     public String id;
@@ -95,13 +95,9 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         this.upgradeSha = null;
     }
 
-    public ArrayModel<Inlet> getInlets() {
-        return null;
-    }
+    public abstract ArrayModel<Inlet> getInlets();
 
-    public ArrayModel<Outlet> getOutlets() {
-        return null;
-    }
+    public abstract ArrayModel<Outlet> getOutlets();
 
     @Override
     public String toString() {
@@ -171,6 +167,10 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         this.uuid = uuid;
     }
 
+    
+/* MVC clean methods below... */    
+    
+    
     public String getId() {
         return id;
     }
@@ -241,4 +241,10 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         }
         return controller;
     }
+
+    @Override
+    public boolean isCreatedFromRelativePath() {
+        return createdFromRelativePath;
+    }
+
 }

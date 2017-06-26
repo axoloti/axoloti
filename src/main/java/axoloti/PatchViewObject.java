@@ -5,7 +5,6 @@ import axoloti.inlets.Inlet;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
-import axoloti.mvc.AbstractView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.mvc.array.ArrayModel;
 import axoloti.mvc.array.ArrayView;
@@ -15,6 +14,7 @@ import axoloti.objectviews.AxoObjectInstanceViewParenting;
 import axoloti.outlets.Outlet;
 import axoloti.parameters.Parameter;
 import java.beans.PropertyChangeEvent;
+import axoloti.mvc.IView;
 
 /**
  * The {@code PatchViewObject} class is a view of a Patch that collects the Atoms
@@ -33,7 +33,7 @@ public class PatchViewObject extends PatchAbstractView {
 
     ArrayModel<AtomDefinition> atomDefinitionsOnParent;
     ArrayController<AbstractController, AtomDefinition, AbstractController> atomDefinitionsOnParentController;
-    ArrayView<AbstractView> atomDefinitionsOnParentView;
+    ArrayView<IView> atomDefinitionsOnParentView;
     
     public PatchViewObject(PatchController controller, AxoObjectPatcher targetObj) {
         super(controller);
@@ -70,14 +70,14 @@ public class PatchViewObject extends PatchAbstractView {
 
         controller.objectInstanceControllers.addView(objectInstanceViews);
 
-        atomDefinitionsOnParentView = new ArrayView<AbstractView>(atomDefinitionsOnParentController) {
+        atomDefinitionsOnParentView = new ArrayView<IView>(atomDefinitionsOnParentController) {
             
             @Override
             public void updateUI() {
             }
             
             @Override
-            public AbstractView viewFactory(AbstractController ctrl1) {
+            public IView viewFactory(AbstractController ctrl1) {
                 AtomDefinition m = (AtomDefinition)ctrl1.getModel();
                 if (m instanceof Inlet) {
                     targetObj.getInlets().add((Inlet) m);
@@ -86,7 +86,7 @@ public class PatchViewObject extends PatchAbstractView {
                 } else if (m instanceof Parameter) {
                     targetObj.getParameters().add((Parameter) m);
                 }
-                return new AbstractView() {
+                return new IView() {
                     @Override
                     public void modelPropertyChange(PropertyChangeEvent evt) {
                         System.out.println("event >" + evt.getPropertyName() + " >" + evt.getNewValue());
@@ -100,7 +100,7 @@ public class PatchViewObject extends PatchAbstractView {
             }
             
             @Override
-            public void removeView(AbstractView view) {
+            public void removeView(IView view) {
                 AtomDefinition m = (AtomDefinition)view.getController().getModel();
                 if (m instanceof Inlet) {
                     targetObj.getInlets().remove((Inlet) m);

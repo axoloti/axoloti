@@ -5,6 +5,7 @@ import axoloti.PatchController;
 import axoloti.PatchViewPiccolo;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObject;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
 import java.awt.Dimension;
@@ -19,11 +20,11 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
     }
 
     @Override
-    public void SetPreview(AxoObjectAbstract o) {
+    public void SetPreview(IAxoObject o) {
         SetPreview(o, false);
     }
 
-    private void SetPreview(AxoObjectAbstract o, boolean scaleChanged) {
+    private void SetPreview(IAxoObject o, boolean scaleChanged) {
         if (o == null) {
             previewObj = null;
             type = null;
@@ -62,7 +63,7 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
             getMainView().revalidate();
             getMainView().repaint();
 
-            AxoObjectAbstract t = objectInstanceView.getModel().getType();
+            IAxoObject t = objectInstanceView.getModel().getType();
             if (t != null) {
                 String description = t.getDescription() == null || t.getDescription().isEmpty() ? o.getDescription() : t.getDescription();
                 String path = t.getPath() == null ? o.getPath() : t.getPath();

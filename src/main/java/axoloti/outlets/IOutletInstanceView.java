@@ -1,10 +1,10 @@
 package axoloti.outlets;
 
-import axoloti.mvc.AbstractView;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import java.awt.Point;
+import axoloti.mvc.IView;
 
-public interface IOutletInstanceView extends AbstractView {
+public interface IOutletInstanceView extends IView {
 
     public void PostConstructor();
 

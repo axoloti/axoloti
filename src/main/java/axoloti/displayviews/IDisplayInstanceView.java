@@ -1,7 +1,7 @@
 package axoloti.displayviews;
 
-import axoloti.mvc.AbstractView;
+import axoloti.mvc.IView;
 
-public interface IDisplayInstanceView extends AbstractView {
+public interface IDisplayInstanceView extends IView {
 
 }

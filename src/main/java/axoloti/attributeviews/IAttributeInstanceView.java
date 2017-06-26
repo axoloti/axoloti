@@ -2,9 +2,9 @@ package axoloti.attributeviews;
 
 import axoloti.PatchView;
 import axoloti.attribute.AttributeInstance;
-import axoloti.mvc.AbstractView;
+import axoloti.mvc.IView;
 
-public interface IAttributeInstanceView extends AbstractView {
+public interface IAttributeInstanceView extends IView {
 
     public void Lock();
 

@@ -1,13 +1,13 @@
 package axoloti;
 
-import axoloti.mvc.AbstractView;
 import java.beans.PropertyChangeEvent;
+import axoloti.mvc.IView;
 
 /**
  *
  * @author jtaelman
  */
-public class PatchViewLive implements AbstractView<PatchController> {
+public class PatchViewLive implements IView<PatchController> {
 
     final PatchController controller;
     

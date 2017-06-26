@@ -88,7 +88,6 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // a comment object is not supposed to mutate
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override

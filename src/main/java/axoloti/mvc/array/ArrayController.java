@@ -3,7 +3,7 @@ package axoloti.mvc.array;
 import axoloti.NetController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.AbstractModel;
+import axoloti.mvc.IModel;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,7 +12,7 @@ import java.util.Iterator;
  *
  * @author jtaelman
  */
-public abstract class ArrayController<T extends AbstractController, M extends AbstractModel, P extends AbstractController> extends AbstractController<ArrayModel, ArrayView, P> implements Iterable<T> {
+public abstract class ArrayController<T extends AbstractController, M extends IModel, P extends AbstractController> extends AbstractController<ArrayModel, ArrayView, P> implements Iterable<T> {
 
     static final String ARRAY = "Array";
 
@@ -43,7 +43,7 @@ public abstract class ArrayController<T extends AbstractController, M extends Ab
     }
 
     public boolean remove(M m) {
-        ArrayList<AbstractModel> n = (ArrayList<AbstractModel>) (getModel().getArray().clone());
+        ArrayList<IModel> n = (ArrayList<IModel>) (getModel().getArray().clone());
         
         boolean r = n.remove(m);
         if (r) {

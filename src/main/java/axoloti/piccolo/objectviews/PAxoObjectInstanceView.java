@@ -131,7 +131,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         titleBar.addChild(popupIcon);
 
-        PLabelComponent titleBarLabel = new PLabelComponent(model.getController().getModel().id);
+        PLabelComponent titleBarLabel = new PLabelComponent(model.getController().getModel().getId());
         titleBarLabel.setAlignmentX(LEFT_ALIGNMENT);
         titleBarLabel.setPickable(false);
 

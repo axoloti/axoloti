@@ -831,7 +831,7 @@ public class PatchViewCodegen extends PatchAbstractView {
     public AxoObject GenerateAxoObjNormal(AxoObject template) {
         AxoObject ao = template;
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            String typeName = o.getType().id;
+            String typeName = o.getType().getId();
             if (typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/inlet i")) {
@@ -881,7 +881,7 @@ public class PatchViewCodegen extends PatchAbstractView {
         }
         ao.sKRateCode = "int i; /*...*/\n";
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            String typeName = o.getType().id;
+            String typeName = o.getType().getId();
             if (typeName.equals("patch/inlet f") || typeName.equals("patch/inlet i") || typeName.equals("patch/inlet b")) {
                 ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
             } else if (typeName.equals("patch/inlet string")) {
@@ -893,7 +893,7 @@ public class PatchViewCodegen extends PatchAbstractView {
         }
         ao.sKRateCode += GenerateDSPCodePlusPlusSub("attr_parent", true);
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            String typeName = o.getType().id;
+            String typeName = o.getType().getId();
             if (typeName.equals("patch/outlet f") || typeName.equals("patch/outlet i") || typeName.equals("patch/outlet b")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = " + o.getCInstanceName() + "_i._outlet;\n";
             } else if (typeName.equals("patch/outlet string")) {
@@ -956,7 +956,7 @@ public class PatchViewCodegen extends PatchAbstractView {
         }
 
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            String typeName = o.getType().id;
+            String typeName = o.getType().getId();
             if (typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/inlet i")) {
@@ -1073,7 +1073,7 @@ public class PatchViewCodegen extends PatchAbstractView {
                 + "}\n";
         ao.sKRateCode = "";
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            String typeName = o.getType().id;
+            String typeName = o.getType().getId();
             if (typeName.equals("patch/outlet f") || typeName.equals("patch/outlet i")
                     || typeName.equals("patch/outlet b") || typeName.equals("patch/outlet string")) {
                 ao.sKRateCode += "   outlet_" + o.getLegalName() + " = 0;\n";
@@ -1087,7 +1087,7 @@ public class PatchViewCodegen extends PatchAbstractView {
         ao.sKRateCode += "int vi; for(vi=0;vi<attr_poly;vi++) {";
 
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            String typeName = o.getType().id;
+            String typeName = o.getType().getId();
             if (typeName.equals("inlet") || typeName.equals("inlet_i") || typeName.equals("inlet_b") || typeName.equals("inlet_")
                     || typeName.equals("patch/inlet f") || typeName.equals("patch/inlet i") || typeName.equals("patch/inlet b")) {
                 ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
@@ -1099,7 +1099,7 @@ public class PatchViewCodegen extends PatchAbstractView {
         }
         ao.sKRateCode += "getVoices()[vi].dsp();\n";
         for (AxoObjectInstanceAbstract o : getModel().objectinstances) {
-            String typeName = o.getType().id;
+            String typeName = o.getType().getId();
             if (typeName.equals("outlet") || typeName.equals("patch/outlet f")
                     || typeName.equals("patch/outlet i")
                     || typeName.equals("patch/outlet b")) {
