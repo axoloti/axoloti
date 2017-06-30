@@ -18,13 +18,17 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
+import axoloti.attribute.AttributeInstance;
+import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceZombie;
-import axoloti.mvc.array.ArrayModel;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceZombie;
+import axoloti.parameters.ParameterInstance;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
 import org.simpleframework.xml.Root;
 
 /**
@@ -34,8 +38,8 @@ import org.simpleframework.xml.Root;
 @Root(name = "zombie")
 public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
 
-    public ArrayModel<InletInstance> inletInstances = new ArrayModel<InletInstance>();
-    public ArrayModel<OutletInstance> outletInstances = new ArrayModel<OutletInstance>();
+    public List<InletInstance> inletInstances = new ArrayList<>();
+    public List<OutletInstance> outletInstances = new ArrayList<>();
 
     public AxoObjectInstanceZombie() {
     }
@@ -81,13 +85,28 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
 //        return "\n#error \"unresolved object: " + getInstanceName() + " in patch: " + getPatchModel().getFileNamePath() + "\"\n";
 //    }
     @Override
-    public ArrayModel<InletInstance> getInletInstances() {
+    public List<InletInstance> getInletInstances() {
         return inletInstances;
     }
 
     @Override
-    public ArrayModel<OutletInstance> getOutletInstances() {
+    public List<OutletInstance> getOutletInstances() {
         return outletInstances;
+    }
+
+    @Override
+    public List<ParameterInstance> getParameterInstances() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<AttributeInstance> getAttributeInstances() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<DisplayInstance> getDisplayInstances() {
+        return new ArrayList<>();
     }
 
     @Override

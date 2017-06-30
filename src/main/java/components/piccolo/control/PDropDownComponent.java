@@ -15,6 +15,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PInputEvent;
@@ -28,11 +29,11 @@ public class PDropDownComponent extends PCtrlComponentAbstract {
     }
 
     int SelectedIndex;
-    ArrayList<String> Items;
+    List<String> Items;
 
     final private AttributeInstanceComboBox parent;
 
-    public PDropDownComponent(ArrayList<String> Items, AttributeInstanceComboBox parent, IAxoObjectInstanceView axoObjectInstanceView) {
+    public PDropDownComponent(List<String> Items, AttributeInstanceComboBox parent, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
         this.Items = Items;
         this.parent = parent;

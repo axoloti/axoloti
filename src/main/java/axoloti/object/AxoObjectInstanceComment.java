@@ -28,7 +28,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "comment")
-public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
+public class AxoObjectInstanceComment extends AxoObjectInstance0 {
 
     static int nextInstanceNumber = 0;
 
@@ -96,4 +96,5 @@ public class AxoObjectInstanceComment extends AxoObjectInstanceAbstract {
             this.commentText = ((AxoObjectInstanceComment) unlinked_object_instance).commentText;
         }
     }
+
 }

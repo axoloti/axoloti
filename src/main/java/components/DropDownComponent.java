@@ -32,6 +32,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -48,18 +49,19 @@ public class DropDownComponent extends JComponent implements MouseListener {
     }
     
     int SelectedIndex;
-    ArrayList<String> Items;
+    List<String> items;
     
-    final private AttributeInstanceComboBox parent;
-    
-    public DropDownComponent(ArrayList<String> Items, AttributeInstanceComboBox parent) {
-        this.Items = Items;
-        this.parent = parent;
+    public DropDownComponent(List<String> items) {
         SelectedIndex = 0;
-        
+        setItems(items);
+        addMouseListener((MouseListener) this);
+    }
+    
+    public void setItems(List<String> items) {
+        this.items = items;
         FontRenderContext frc = new FontRenderContext(null, true, true);
         int maxWidth = 0;
-        for (String s : Items) {
+        for (String s : items) {
             TextLayout tl = new TextLayout(s, Constants.FONT, frc);
             Rectangle2D r = tl.getBounds();
             if (maxWidth < r.getWidth()) {
@@ -71,8 +73,6 @@ public class DropDownComponent extends JComponent implements MouseListener {
         setPreferredSize(d);
         setMinimumSize(d);
         setMaximumSize(new Dimension(5000, 15));
-        
-        addMouseListener((MouseListener) this);
     }
     
     @Override
@@ -97,8 +97,8 @@ public class DropDownComponent extends JComponent implements MouseListener {
         int[] yp = new int[]{vmargin, vmargin, vmargin + htick * 2};
         g2.fillPolygon(xp, yp, 3);
         setFont(Constants.FONT);
-        if (Items.size() > 0) {
-            g2.drawString(Items.get(SelectedIndex), 4, 12);
+        if (items.size() > 0) {
+            g2.drawString(items.get(SelectedIndex), 4, 12);
         }
     }
     
@@ -107,10 +107,10 @@ public class DropDownComponent extends JComponent implements MouseListener {
     }
     
     public void setSelectedItem(String selection) {
-        int index = Items.indexOf(selection);
+        int index = items.indexOf(selection);
         if ((SelectedIndex != index) && (index >= 0)) {
             SelectedIndex = index;
-            //ItemEvent ie = new ItemEvent(this, 0, Items.get(SelectedIndex), 0);
+            //ItemEvent ie = new ItemEvent(this, 0, items.get(SelectedIndex), 0);
             for (DDCListener il : ddcListeners) {
                 il.SelectionChanged();
             }
@@ -119,15 +119,15 @@ public class DropDownComponent extends JComponent implements MouseListener {
     }
     
     public String getSelectedItem() {
-        return Items.get(SelectedIndex);
+        return items.get(SelectedIndex);
     }
     
     public int getItemCount() {
-        return Items.size();
+        return items.size();
     }
     
     public String getItemAt(int i) {
-        return Items.get(i);
+        return items.get(i);
     }
     
     ArrayList<DDCListener> ddcListeners = new ArrayList<DDCListener>();
@@ -135,7 +135,7 @@ public class DropDownComponent extends JComponent implements MouseListener {
     void doPopup() {
         if (isEnabled()) {
             JPopupMenu p = new JPopupMenu();
-            for (String s : Items) {
+            for (String s : items) {
                 JMenuItem mi = p.add(s);
                 mi.addActionListener(new ActionListener() {
                     

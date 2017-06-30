@@ -28,7 +28,7 @@ import org.simpleframework.xml.Element;
 public abstract class ParameterFrac32<T extends ParameterInstanceFrac32> extends Parameter<T> {
 
     @Element(required = false)
-    public ValueFrac32 DefaultValue;
+    public ValueFrac32 DefaultValue = new ValueFrac32(0);
 
     public ParameterFrac32() {
     }

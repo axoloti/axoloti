@@ -51,7 +51,6 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
         }
         add(label);
         add(Box.createHorizontalGlue());
-        setToolTipText(getModel().getModel().getDescription());
 
         addMouseListener(this);
         addMouseMotionListener(this);

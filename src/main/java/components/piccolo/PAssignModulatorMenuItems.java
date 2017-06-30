@@ -45,7 +45,7 @@ public class PAssignModulatorMenuItems {
 
         hsls.clear();
 
-        for (Modulator m : parameterInstanceView.getModel().getObjectInstance().getPatchModel().getModulators()) {
+        for (Modulator m : parameterInstanceView.getModel().getObjectInstance().getPatchModel().getPatchModulators()) {
             JPanel p = new JPanel();
             p.setLayout(new BoxLayout(p, BoxLayout.LINE_AXIS));
             String modlabel;
@@ -90,7 +90,7 @@ public class PAssignModulatorMenuItems {
             p.add(hsl);
             parent.add(p);
         }
-        if (parameterInstanceView.getModel().getObjectInstance().getPatchModel().getModulators().isEmpty()) {
+        if (parameterInstanceView.getModel().getObjectInstance().getPatchModel().getPatchModulators().isEmpty()) {
             JMenuItem d = new JMenuItem("no modulation sources in patch");
             d.setEnabled(false);
             parent.add(d);

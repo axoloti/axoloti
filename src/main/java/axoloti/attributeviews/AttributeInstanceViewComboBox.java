@@ -1,10 +1,13 @@
 package axoloti.attributeviews;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.AttributeInstanceComboBox;
 import axoloti.attribute.AttributeInstanceController;
 import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.utils.Constants;
 import components.DropDownComponent;
+import java.beans.PropertyChangeEvent;
+import java.util.List;
 
 class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
 
@@ -22,7 +25,7 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
     @Override
     void PostConstructor() {
         super.PostConstructor();
-        comboBox = new DropDownComponent(getModel().getModel().getMenuEntries(), getModel());
+        comboBox = new DropDownComponent(getModel().getModel().getMenuEntries());
         comboBox.setFont(Constants.FONT);
         setString(getModel().getValue());
         comboBox.addItemListener(new DropDownComponent.DDCListener() {
@@ -57,4 +60,13 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
             comboBox.setSelectedItem(aic.getModel().getMenuEntries().get(index));
         }
     }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_MENUENTRIES)) {
+            comboBox.setItems((List<String>) evt.getNewValue());
+        }
+    }
+
 }

@@ -4,7 +4,6 @@ import axoloti.PatchViewPiccolo;
 import axoloti.Theme;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
-import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
@@ -19,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -168,12 +168,12 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
     }
 
     @Override
-    public ArrayView<IInletInstanceView> getInletInstanceViews() {
+    public List<IInletInstanceView> getInletInstanceViews() {
         return null; //inletInstanceViews;
     }
 
     @Override
-    public ArrayView<IOutletInstanceView> getOutletInstanceViews() {
+    public List<IOutletInstanceView> getOutletInstanceViews() {
         return null; //outletInstanceViews;
     }
 

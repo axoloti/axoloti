@@ -24,7 +24,6 @@ import axoloti.attribute.AttributeInstance;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
-import axoloti.mvc.array.ArrayModel;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.CharEscape;
@@ -35,6 +34,7 @@ import java.util.logging.Logger;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 import axoloti.mvc.IView;
+import java.util.AbstractList;
 import java.util.List;
 
 /**
@@ -239,34 +239,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return "";
     }
 
-    public ArrayModel<InletInstance> getInletInstances() {
-        return new ArrayModel<>();
-    }
-
-    public ArrayModel<OutletInstance> getOutletInstances() {
-        return new ArrayModel<>();
-    }
-
-    public ArrayModel<ParameterInstance> getParameterInstances() {
-        return new ArrayModel();
-    }
-
-    public ArrayModel getAttributeInstances() {
-        return new ArrayModel();
-    }
-
-    public ArrayModel<DisplayInstance> getDisplayInstances() {
-        return new ArrayModel();
-    }
-
-    public InletInstance GetInletInstance(String n) {
-        return null;
-    }
-
-    public OutletInstance GetOutletInstance(String n) {
-        return null;
-    }
-
     public void refreshIndex() {
     }
 
@@ -350,33 +322,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     public void Close() {
     }
 
-    @Deprecated
-    private boolean isDirty = false;
-
-    @Deprecated
-    public void setDirty(boolean dirty) {
-    }
-
-    @Deprecated
-    public boolean isDirty() {
-        return isDirty;
-    }
-
-    public void setDisplayInstances(ArrayModel<DisplayInstance> displayInstances) {
-    }
-
-    public void setAttributeInstances(ArrayModel<AttributeInstance> Instances) {
-    }
-
-    public void setInletInstances(ArrayModel<InletInstance> inletInstances) {
-    }
-
-    public void setOutletInstances(ArrayModel<OutletInstance> outletInstances) {
-    }
-
-    public void setParameterInstances(ArrayModel<ParameterInstance> parameterInstances) {
-    }
-
     @Override
     public ObjectController getController() {
         return controller;
@@ -389,5 +334,37 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         if (type != null) return type.getId();
         else return typeName;
     }
+
+    List<ParameterInstance> parentParameters = new ArrayList<>();
+    List<InletInstance> parentInlets = new ArrayList<>();
+    List<OutletInstance> parentOutlets = new ArrayList<>();
     
+    /* MVC clean methods*/
+
+    abstract public List<InletInstance> getInletInstances();
+
+    abstract public List<OutletInstance> getOutletInstances();
+
+    abstract public List<ParameterInstance> getParameterInstances();
+
+    abstract public List<AttributeInstance> getAttributeInstances();
+
+    abstract public List<DisplayInstance> getDisplayInstances();
+
+    abstract public InletInstance GetInletInstance(String n);
+
+    abstract public OutletInstance GetOutletInstance(String n);
+        
+    public List<ParameterInstance> getParentParameters() {
+        return parentParameters;
+    }
+
+    public List<InletInstance> getParentInlets() {
+        return parentInlets;
+    }
+
+    public List<OutletInstance> getParentOutlets() {
+        return parentOutlets;
+    }
+
 }

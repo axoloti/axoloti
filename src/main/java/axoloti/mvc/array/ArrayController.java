@@ -7,56 +7,59 @@ import axoloti.mvc.IModel;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  *
  * @author jtaelman
  */
-public abstract class ArrayController<T extends AbstractController, M extends IModel, P extends AbstractController> extends AbstractController<ArrayModel, ArrayView, P> implements Iterable<T> {
-
-    static final String ARRAY = "Array";
+public abstract class ArrayController<T extends AbstractController, M extends IModel, P extends AbstractController> implements Iterable<T> {
 
     final ArrayList<T> subcontrollers;
 
     public abstract T createController(M model, AbstractDocumentRoot documentRoot, P parent);
+    public abstract void disposeController(T controller);
 
-    public ArrayController(ArrayModel model, AbstractDocumentRoot documentRoot, P parent) {
-        super(model, documentRoot, parent);
-        ArrayList<M> am = model.getArray();
-        subcontrollers = new ArrayList<>(am.size());
-        for (M m : am) {
-            subcontrollers.add(createController(m, documentRoot, parent));
-        }
+    final P parent;
+    final String propertyName;
+    
+    public ArrayController(P parent, String propertyName) {
+        this.parent = parent;
+        this.propertyName = propertyName;
+        subcontrollers = new ArrayList<>();
+        syncControllers();
     }
 
-    public T add(M m) {
-        if (getModel().getArray().contains(m)) {
+    public void add(M m) {
+        ArrayList<M> n = new ArrayList<>(((List<M>)parent.getModelProperty(propertyName)));
+        if (n.contains(m)) {
             System.out.println("array already contains model :" + m.toString());
-            return null;
         }
-        AbstractController c = createController(m, getDocumentRoot(), getParent());
-        subcontrollers.add((T) c);
-        ArrayList<M> n = (ArrayList<M>) (getModel().getArray().clone());
         n.add(m);
-        setModelUndoableProperty(ARRAY, n);
-        return (T) c;
+        parent.setModelUndoableProperty(propertyName, n);
     }
 
     public boolean remove(M m) {
-        ArrayList<IModel> n = (ArrayList<IModel>) (getModel().getArray().clone());
-        
+        ArrayList<M> n = new ArrayList<>(((List<M>)parent.getModelProperty(propertyName)));
         boolean r = n.remove(m);
         if (r) {
-            setModelUndoableProperty(ARRAY, n);
+            parent.setModelUndoableProperty(propertyName, n);
         }
         return r;
     }
 
-    public void syncControllers() {
-        ArrayList<AbstractController> subcontrollers2 = (ArrayList<AbstractController>) subcontrollers.clone();
+    public final void syncControllers() {
+        ArrayList<T> subcontrollers2 = (ArrayList<T>) subcontrollers.clone();
+        List<M> models = (List<M>)parent.getModelProperty(propertyName);
+        for (T c: subcontrollers2) {
+            M m = (M)c.getModel();
+            if (!models.contains(m)) {
+                disposeController(c);
+            }
+        }
         subcontrollers.clear();
-        for (Object o : getModel().array) {
-            M om = (M) o;
+        ArrayList<M> models_clone = new ArrayList<>(models);
+        for (M om : models_clone) {
             AbstractController ctrl = null;
             for (AbstractController ctrl2 : subcontrollers2) {
                 if (om == ctrl2.getModel()) {
@@ -65,23 +68,16 @@ public abstract class ArrayController<T extends AbstractController, M extends IM
                 }
             }
             if (ctrl == null) {
-                ctrl = createController(om, getDocumentRoot(), getParent());
+                ctrl = createController(om, parent.getDocumentRoot(), parent);
             }
             subcontrollers.add((T) ctrl);
         }
     }
 
-    /*
-     */
-    @Override
-    public ArrayModel getModel() {
-        return super.getModel();
-    }
-
-    @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        syncControllers();
-        super.propertyChange(evt);
+        if (evt.getPropertyName().equals(propertyName)) {
+            syncControllers();
+        }
     }
 
     @Override
@@ -93,28 +89,17 @@ public abstract class ArrayController<T extends AbstractController, M extends IM
         return subcontrollers.get(index);
     }
 
-    public void moveUp(int index) {
-        if (index < 1) {
-            return;
-        }
-        ArrayList<M> n = (ArrayList<M>) (getModel().getArray().clone());
-        M elem = n.get(index);
-        n.remove(index);
-        n.add(index - 1, elem);
-        setModelUndoableProperty(ARRAY, n);
-    }
-
     public void moveDown(int row) {
         if (row < 0) {
             return;
         }
-        if (row > (getModel().getArray().size() - 1)) {
+        ArrayList<M> n = new ArrayList<>(((List<M>)parent.getModelProperty(propertyName)));
+        if (row > (n.size() - 1)) {
             return;
         }
-        ArrayList<M> n = (ArrayList<M>) (getModel().getArray().clone());
         M o = n.remove(row);
         n.add(row + 1, o);
-        setModelUndoableProperty(ARRAY, n);
+        parent.setModelUndoableProperty(propertyName, n.toArray());
     }
 
     public int indexOf(NetController netController) {

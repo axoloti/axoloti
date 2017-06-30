@@ -20,6 +20,7 @@ package axoloti.objecteditor;
 import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
 import axoloti.MainFrame;
+import axoloti.mvc.IView;
 import axoloti.mvc.UndoUI;
 import axoloti.object.AxoObject;
 import axoloti.object.IAxoObject;
@@ -27,6 +28,9 @@ import axoloti.object.ObjectController;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.OSDetect;
 import java.awt.BorderLayout;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
@@ -37,8 +41,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -49,7 +51,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public final class AxoObjectEditor extends JFrame implements DocumentWindow {
+public final class AxoObjectEditor extends JFrame implements DocumentWindow, IView {
 
     final ObjectController controller;
     private String origXML;
@@ -75,7 +77,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         return rsta;
     }
     
-    ObjectController getController(){
+    @Override
+    public ObjectController getController(){
         return controller;
     }
     
@@ -83,33 +86,40 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         return (AxoObject)(getController().getModel());
     }
 
-    private abstract class DocumentChangeListener implements DocumentListener {
-
-        abstract void update();
-
-        @Override
-        public void insertUpdate(DocumentEvent e) {
-            update();
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        String propertyName = evt.getPropertyName();
+        if (propertyName.equals(ObjectController.OBJ_AUTHOR)) {
+            jTextFieldAuthor.setText((String) evt.getNewValue());
+        } else if (propertyName.equals(ObjectController.OBJ_LICENSE)) {
+            jTextFieldLicense.setText((String) evt.getNewValue());
+        } else if (propertyName.equals(ObjectController.OBJ_DESCRIPTION)) {
+            jTextDesc.setText((String) evt.getNewValue());
+        } else if (propertyName.equals(ObjectController.OBJ_HELPPATCH)) {
+            jTextFieldHelp.setText((String) evt.getNewValue());
+        } else if (propertyName.equals(ObjectController.OBJ_LOCAL_DATA)) {
+            jTextAreaLocalData.setText((String) evt.getNewValue());
+        } else if (propertyName.equals(ObjectController.OBJ_INIT_CODE)) {
+            jTextAreaInitCode.setText((String) evt.getNewValue());
+        } else if (propertyName.equals(ObjectController.OBJ_KRATE_CODE)) {
+            jTextAreaKRateCode.setText((String) evt.getNewValue());
+        } else if (propertyName.equals(ObjectController.OBJ_SRATE_CODE)) {
+            jTextAreaSRateCode.setText((String) evt.getNewValue());
+        } else if (propertyName.equals(ObjectController.OBJ_DISPOSE_CODE)) {
+            jTextAreaDisposeCode.setText((String) evt.getNewValue());
+        } else if (propertyName.equals(ObjectController.OBJ_MIDI_CODE)) {
+            jTextAreaMidiCode.setText((String) evt.getNewValue());
         }
-
-        @Override
-        public void removeUpdate(DocumentEvent e) {
-            update();
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e) {
-            update();
-        }
+        updateReferenceXML();
     }
 
     String CleanString(String s) {
         if (s == null) {
-            return null;
+            return "";
         }
         s = s.trim();
         if (s.isEmpty()) {
-            return null;
+            return "";
         }
         return s;
     }
@@ -123,6 +133,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
         origXML = origOS.toString();
+        rSyntaxTextAreaXML.setText(origXML);
     }
 
     void Revert() {
@@ -140,6 +151,13 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         */
     }
 
+    void SetUndoablePropString(String propName, String s){
+        String orig = (String)getController().getModelProperty(propName);
+        if (s.equals(orig)) return;
+        getController().addMetaUndo("edit " + propName);
+        getController().setModelUndoableProperty(propName,s);
+    }
+    
     public AxoObjectEditor(ObjectController ctrl) {
         initComponents();
         this.controller = ctrl;
@@ -163,91 +181,129 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
         }
         jMenuEdit.add(undoUi.createMenuItemUndo());
         jMenuEdit.add(undoUi.createMenuItemRedo());
-        
+
         initEditFromOrig();
-        updateReferenceXML();
-        InletDefinitionsEditorPanel inlets = new InletDefinitionsEditorPanel(ctrl.inlets);
-        OutletDefinitionsEditorPanel outlets = new OutletDefinitionsEditorPanel(ctrl.outlets);
-        AttributeDefinitionsEditorPanel attrs = new AttributeDefinitionsEditorPanel(ctrl.attrs);
-        ParamDefinitionsEditorPanel params = new ParamDefinitionsEditorPanel(ctrl.params);
-        DisplayDefinitionsEditorPanel disps = new DisplayDefinitionsEditorPanel(ctrl.disps);
-        
-        inlets.initComponents(ctrl.inlets, inletDefinitionsEditor1);
-        ctrl.inlets.addView(inlets);
-        outlets.initComponents(ctrl.outlets, outletDefinitionsEditor1);
-        ctrl.outlets.addView(outlets);
-        attrs.initComponents(ctrl.attrs, attributeDefinitionsEditorPanel1);
-        ctrl.attrs.addView(attrs);
-        params.initComponents(ctrl.params, paramDefinitionsEditorPanel1);
-        ctrl.params.addView(params);
-        disps.initComponents(ctrl.disps, displayDefinitionsEditorPanel1);
-        ctrl.disps.addView(disps);
+        InletDefinitionsEditorPanel inlets = new InletDefinitionsEditorPanel(ctrl);
+        OutletDefinitionsEditorPanel outlets = new OutletDefinitionsEditorPanel(ctrl);
+        AttributeDefinitionsEditorPanel attrs = new AttributeDefinitionsEditorPanel(ctrl);
+        ParamDefinitionsEditorPanel params = new ParamDefinitionsEditorPanel(ctrl);
+        DisplayDefinitionsEditorPanel disps = new DisplayDefinitionsEditorPanel(ctrl);
 
-        jTextFieldAuthor.getDocument().addDocumentListener(new DocumentChangeListener() {
+        ctrl.addView(inlets);
+        ctrl.addView(outlets);
+        ctrl.addView(attrs);
+        ctrl.addView(params);
+        ctrl.addView(disps);
+
+        inlets.initComponents(inletDefinitionsEditor1);
+        outlets.initComponents(outletDefinitionsEditor1);
+        attrs.initComponents(attributeDefinitionsEditorPanel1);
+        params.initComponents(paramDefinitionsEditorPanel1);
+        disps.initComponents(displayDefinitionsEditorPanel1);
+
+        jTextFieldAuthor.addFocusListener(new FocusListener() {
             @Override
-            void update() {
-                getController().setModelUndoableProperty(ObjectController.OBJ_AUTHOR, jTextFieldAuthor.getText().trim());
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SetUndoablePropString(ObjectController.OBJ_AUTHOR, jTextFieldAuthor.getText());
             }
         });
 
-        jTextFieldLicense.getDocument().addDocumentListener(new DocumentChangeListener() {
+        jTextFieldLicense.addFocusListener(new FocusListener() {
             @Override
-            void update() {
-                getController().setModelUndoableProperty(ObjectController.OBJ_LICENSE, jTextFieldLicense.getText().trim());
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SetUndoablePropString(ObjectController.OBJ_LICENSE, jTextFieldLicense.getText());
             }
         });
 
-        jTextFieldHelp.getDocument().addDocumentListener(new DocumentChangeListener() {
+        jTextFieldHelp.addFocusListener(new FocusListener() {
             @Override
-            void update() {
-                // TODO...
-                getModel().helpPatch = jTextFieldHelp.getText().trim();
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SetUndoablePropString(ObjectController.OBJ_HELPPATCH, jTextFieldHelp.getText().trim());
             }
         });
 
-        jTextDesc.getDocument().addDocumentListener(new DocumentChangeListener() {
+        jTextDesc.addFocusListener(new FocusListener() {
             @Override
-            void update() {
-                getController().setModelUndoableProperty(ObjectController.OBJ_DESCRIPTION, jTextDesc.getText().trim());
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SetUndoablePropString(ObjectController.OBJ_DESCRIPTION, jTextDesc.getText());
             }
         });
 
 //        jLabelMidiPrototype.setText(AxoObjectInstance.MidiHandlerFunctionHeader);
+        jTextAreaLocalData.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
 
-        jTextAreaLocalData.getDocument().addDocumentListener(new DocumentChangeListener() {
             @Override
-            void update() {
-                getModel().sLocalData = CleanString(jTextAreaLocalData.getText());
+            public void focusLost(FocusEvent e) {
+                SetUndoablePropString(ObjectController.OBJ_LOCAL_DATA, CleanString(jTextAreaLocalData.getText()));
             }
         });
-        jTextAreaInitCode.getDocument().addDocumentListener(new DocumentChangeListener() {
+        jTextAreaInitCode.addFocusListener(new FocusListener() {
             @Override
-            void update() {
-                getModel().sInitCode = CleanString(jTextAreaInitCode.getText());
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SetUndoablePropString(ObjectController.OBJ_INIT_CODE, CleanString(jTextAreaInitCode.getText()));
             }
         });
-        jTextAreaKRateCode.getDocument().addDocumentListener(new DocumentChangeListener() {
+        jTextAreaKRateCode.addFocusListener(new FocusListener() {
             @Override
-            void update() {
-                getModel().sKRateCode = CleanString(jTextAreaKRateCode.getText());
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SetUndoablePropString(ObjectController.OBJ_KRATE_CODE, CleanString(jTextAreaKRateCode.getText()));
             }
         });
-        jTextAreaSRateCode.getDocument().addDocumentListener(new DocumentChangeListener() {
+        jTextAreaSRateCode.addFocusListener(new FocusListener() {
             @Override
-            void update() {
-                getModel().sSRateCode = CleanString(jTextAreaSRateCode.getText());
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SetUndoablePropString(ObjectController.OBJ_SRATE_CODE, CleanString(jTextAreaSRateCode.getText()));
             }
         });
-        jTextAreaDisposeCode.getDocument().addDocumentListener(new DocumentChangeListener() {
+        jTextAreaDisposeCode.addFocusListener(new FocusListener() {
             @Override
-            void update() {
-                getModel().sDisposeCode = CleanString(jTextAreaDisposeCode.getText());
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SetUndoablePropString(ObjectController.OBJ_DISPOSE_CODE, CleanString(jTextAreaDisposeCode.getText()));
             }
         });
-        jTextAreaMidiCode.getDocument().addDocumentListener(new DocumentChangeListener() {
+        jTextAreaMidiCode.addFocusListener(new FocusListener() {
             @Override
-            void update() {
-                getModel().sMidiCode = CleanString(jTextAreaMidiCode.getText());
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                SetUndoablePropString(ObjectController.OBJ_MIDI_CODE, CleanString(jTextAreaMidiCode.getText()));
             }
         });
         rSyntaxTextAreaXML.setEditable(false);
@@ -283,6 +339,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
             }
 
         jTextDesc.requestFocus();
+        controller.addView(this);
     }
 
     boolean IsEmbeddedObj() {
@@ -312,10 +369,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
 
     void initFields() {
         jLabelName.setText(getModel().getCName());
-        jTextFieldLicense.setText(getModel().getLicense());
-        jTextDesc.setText(getModel().getDescription());
-        jTextFieldAuthor.setText(getModel().getAuthor());
-        jTextFieldHelp.setText(getModel().helpPatch);
 
         ((DefaultListModel) jListIncludes.getModel()).removeAllElements();
         if (getModel().includes != null) {
@@ -337,8 +390,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
             }
         }
 
-        // this updates text editors
-        ObjectModified(null);
     }
 
     boolean compareField(String oVal, String nVal) {
@@ -362,6 +413,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
     }
 
     // needed?
+    /*
     public void ObjectModified(Object source) {
         if (source != this) {
             jTextAreaLocalData.setText(getModel().sLocalData == null ? "" : getModel().sLocalData);
@@ -384,6 +436,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow {
 
 //        AxoObjectInstance obji = getModel().CreateInstance(null, "test", new Point(0, 0));
     }
+*/
 
     public void initEditFromOrig() {
         initFields();

@@ -26,8 +26,6 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
         this.axoObj = axoObj;
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
     }
-    
-    
 
     @Override
     public void PostConstructor() {
@@ -46,7 +44,6 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
         jack = new components.JackOutputComponent(this);
         jack.setForeground(getModel().getModel().getDatatype().GetColor());
         add(jack);
-        setToolTipText(getModel().getModel().getDescription());
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -79,9 +76,9 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
-            label.setText((String)evt.getNewValue());
+            label.setText((String) evt.getNewValue());
         } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
-            setToolTipText((String)evt.getNewValue());
+            setToolTipText((String) evt.getNewValue());
         }
     }
 

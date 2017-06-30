@@ -18,6 +18,7 @@
 package axoloti.objecteditor;
 
 import axoloti.mvc.array.ArrayController;
+import axoloti.object.ObjectController;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletTypes;
 
@@ -27,8 +28,8 @@ import axoloti.outlets.OutletTypes;
  */
 public class OutletDefinitionsEditorPanel extends AtomDefinitionsEditor<Outlet> {
 
-    public OutletDefinitionsEditorPanel(ArrayController controller) {
-        super(controller, OutletTypes.getTypes());
+    public OutletDefinitionsEditorPanel(ObjectController controller) {
+        super(controller, ObjectController.OBJ_OUTLETS, OutletTypes.getTypes());
     }
 
     @Override
@@ -39,6 +40,11 @@ public class OutletDefinitionsEditorPanel extends AtomDefinitionsEditor<Outlet> 
     @Override
     String getAtomTypeName() {
         return "outlet";
+    }
+
+    @Override
+    ArrayController getTController() {
+        return getController().outlets;
     }
 
 }

@@ -381,11 +381,11 @@ public class AxoObjects {
         if (o instanceof AxoObject) {
             // remove labels when there's only a single parameter
             AxoObject oo = (AxoObject) o;
-            if ((oo.params != null) && (oo.params.size() == 1)) {
-                oo.params.get(0).noLabel = true;
+            if ((oo.getParameters() != null) && (oo.getParameters().size() == 1)) {
+                oo.getParameters().get(0).noLabel = true;
             }
-            if ((oo.displays != null) && (oo.displays.size() == 1)) {
-                oo.displays.get(0).noLabel = true;
+            if ((oo.getDisplays() != null) && (oo.getDisplays().size() == 1)) {
+                oo.getDisplays().get(0).noLabel = true;
             }
             if (oo.depends == null) {
                 oo.depends = new HashSet<String>();

@@ -70,15 +70,16 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(
+        String propertyName = evt.getPropertyName();
+        if (propertyName.equals(
                 AttributeInstanceController.ELEMENT_ATTR_VALUE)) {
             Integer newValue = (Integer) evt.getNewValue();
             spinner.setValue(newValue);
-        } else if (evt.getPropertyName().equals(
+        } else if (propertyName.equals(
                 AtomDefinitionController.ATOM_MAXVALUE)) {
             Integer newValue = (Integer) evt.getNewValue();
             spinner.setMax(newValue);
-        } else if (evt.getPropertyName().equals(
+        } else if (propertyName.equals(
                 AtomDefinitionController.ATOM_MINVALUE)) {
             Integer newValue = (Integer) evt.getNewValue();
             spinner.setMin(newValue);

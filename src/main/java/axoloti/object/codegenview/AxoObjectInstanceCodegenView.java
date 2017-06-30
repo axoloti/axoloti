@@ -109,8 +109,8 @@ typedef struct ui_object {
         for (DisplayInstance p : getModel().displayInstances) {
             c += p.GenerateCodeInit("");
         }
-        if (getModel().getType().sInitCode != null) {
-            String s = getModel().getType().sInitCode;
+        if (getModel().getType().getInitCode() != null) {
+            String s = getModel().getType().getInitCode();
             for (AttributeInstance p : getModel().attributeInstances) {
                 s = s.replace(p.GetCName(), p.CValue());
             }
@@ -136,8 +136,8 @@ typedef struct ui_object {
     @Override
     public String GenerateDisposeCodePlusPlus(String classname) {
         String c = "";
-        if (getModel().getType().sDisposeCode != null) {
-            String s = getModel().getType().sDisposeCode;
+        if (getModel().getType().getDisposeCode() != null) {
+            String s = getModel().getType().getDisposeCode();
             for (AttributeInstance p : getModel().attributeInstances) {
                 s = s.replaceAll(p.GetCName(), p.CValue());
             }
@@ -148,7 +148,7 @@ typedef struct ui_object {
     }
 
     public String GenerateKRateCodePlusPlus(String vprefix, boolean enableOnParent, String OnParentAccess) {
-        String s = getModel().getType().sKRateCode;
+        String s = getModel().getType().getKRateCode();
         if (s != null) {
             for (AttributeInstance p : getModel().attributeInstances) {
                 s = s.replaceAll(p.GetCName(), p.CValue());
@@ -172,21 +172,21 @@ typedef struct ui_object {
     }
 
     public String GenerateSRateCodePlusPlus(String vprefix, boolean enableOnParent, String OnParentAccess) {
-        if (getModel().getType().sSRateCode != null) {
+        if (getModel().getType().getSRateCode() != null) {
             String s = "int buffer_index;\n"
                     + "for(buffer_index=0;buffer_index<BUFSIZE;buffer_index++) {\n"
-                    + getModel().getType().sSRateCode
+                    + getModel().getType().getSRateCode()
                     + "\n}\n";
 
             for (AttributeInstance p : getModel().attributeInstances) {
                 s = s.replaceAll(p.GetCName(), p.CValue());
             }
-            for (InletInstance i : getModel().inletInstances) {
+            for (InletInstance i : getModel().getInletInstances()) {
                 if (i.getDataType() instanceof Frac32buffer) {
                     s = s.replaceAll(i.GetCName(), i.GetCName() + "[buffer_index]");
                 }
             }
-            for (OutletInstance i : getModel().outletInstances) {
+            for (OutletInstance i : getModel().getOutletInstances()) {
                 if (i.getDataType() instanceof Frac32buffer) {
                     s = s.replaceAll(i.GetCName(), i.GetCName() + "[buffer_index]");
                 }
@@ -204,14 +204,14 @@ typedef struct ui_object {
         String s;
         boolean comma = true;
         s = "  public: void dsp (" + ClassName + " * parent";
-        for (InletInstance i : getModel().inletInstances) {
+        for (InletInstance i : getModel().getInletInstances()) {
             if (comma) {
                 s += ",\n";
             }
             s += "const " + i.getDataType().CType() + " " + i.GetCName();
             comma = true;
         }
-        for (OutletInstance i : getModel().outletInstances) {
+        for (OutletInstance i : getModel().getOutletInstances()) {
             if (comma) {
                 s += ",\n";
             }
@@ -251,8 +251,8 @@ typedef struct ui_object {
 
     public String GenerateInstanceDataDeclaration2() {
         String c = "";
-        if (getModel().getType().sLocalData != null) {
-            String s = getModel().getType().sLocalData;
+        if (getModel().getType().getLocalData() != null) {
+            String s = getModel().getType().getLocalData();
             s = s.replaceAll("attr_parent", getModel().getCInstanceName());
             c += s + "\n";
         }
@@ -293,8 +293,8 @@ typedef struct ui_object {
 
     public String GenerateCodeMidiHandler(String vprefix) {
         String s = "";
-        if (getModel().getType().sMidiCode != null) {
-            s += getModel().getType().sMidiCode;
+        if (getModel().getType().getMidiCode() != null) {
+            s += getModel().getType().getMidiCode();
         }
         for (ParameterInstance i : getModel().parameterInstances) {
             s += i.GenerateCodeMidiHandler("");
@@ -313,7 +313,7 @@ typedef struct ui_object {
     }
 
     public String GenerateCallMidiHandler() {
-        if ((getModel().getType().sMidiCode != null) && (!getModel().getType().sMidiCode.isEmpty())) {
+        if ((getModel().getType().getMidiCode() != null) && (!getModel().getType().getMidiCode().isEmpty())) {
             return getModel().getCInstanceName() + "_i.MidiInHandler(this, dev, port, status, data1, data2);\n";
         }
         for (ParameterInstance pi : getModel().getParameterInstances()) {

@@ -9,7 +9,6 @@ import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.array.ArrayController;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceController;
 import axoloti.parameters.ParameterInstance;
@@ -17,6 +16,7 @@ import axoloti.parameters.ParameterInstanceController;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import axoloti.mvc.IView;
+import axoloti.mvc.array.ArrayController;
 
 /**
  *
@@ -32,11 +32,21 @@ public class ObjectInstanceController extends AbstractController<AxoObjectInstan
     public static final String OBJ_INLET_INSTANCES = "InletInstances";
     public static final String OBJ_OUTLET_INSTANCES = "OutletInstances";
     public static final String OBJ_DISPLAY_INSTANCES = "DisplayInstances";
+    public static final String OBJ_PARENT_PARAMETERS = "ParentParameters";
     public static final String OBJ_COMMENT = "CommentText";
 
     @Override
     public String[] getPropertyNames() {
-        return new String[]{OBJ_LOCATION, OBJ_SELECTED};
+        return new String[]{
+            OBJ_LOCATION,
+            OBJ_SELECTED,
+            OBJ_INSTANCENAME,
+            OBJ_PARAMETER_INSTANCES,
+            OBJ_ATTRIBUTE_INSTANCES,
+            OBJ_INLET_INSTANCES,
+            OBJ_OUTLET_INSTANCES,
+            OBJ_DISPLAY_INSTANCES,
+            OBJ_PARENT_PARAMETERS};
     }
 
     public final ArrayController<AttributeInstanceController, AttributeInstance, ObjectInstanceController> attributeInstanceControllers;
@@ -44,44 +54,81 @@ public class ObjectInstanceController extends AbstractController<AxoObjectInstan
     public final ArrayController<InletInstanceController, InletInstance, ObjectInstanceController> inletInstanceControllers;
     public final ArrayController<OutletInstanceController, OutletInstance, ObjectInstanceController> outletInstanceControllers;
     public final ArrayController<DisplayInstanceController, DisplayInstance, ObjectInstanceController> displayInstanceControllers;
+//    public final ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController> parentParameterControllers;
 
     public ObjectInstanceController(AxoObjectInstanceAbstract model, AbstractDocumentRoot documentRoot, PatchController parent) {
         super(model, documentRoot, parent);
-        attributeInstanceControllers = new ArrayController<AttributeInstanceController, AttributeInstance, ObjectInstanceController>(getModel().getAttributeInstances(), documentRoot, this) {
+        attributeInstanceControllers = new ArrayController<AttributeInstanceController, AttributeInstance, ObjectInstanceController>(this, OBJ_ATTRIBUTE_INSTANCES) {
 
             @Override
             public AttributeInstanceController createController(AttributeInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
                 return new AttributeInstanceController(model, documentRoot, parent);
             }
+
+            @Override
+            public void disposeController(AttributeInstanceController controller) {
+            }
         };
-        parameterInstanceControllers = new ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController>(getModel().getParameterInstances(), documentRoot, this) {
+        parameterInstanceControllers = new ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController>(this, OBJ_PARAMETER_INSTANCES) {
 
             @Override
             public ParameterInstanceController createController(ParameterInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
                 return new ParameterInstanceController(model, documentRoot, parent);
             }
+
+            @Override
+            public void disposeController(ParameterInstanceController controller) {
+            }
         };
-        inletInstanceControllers = new ArrayController<InletInstanceController, InletInstance, ObjectInstanceController>(getModel().getInletInstances(), documentRoot, this) {
+        inletInstanceControllers = new ArrayController<InletInstanceController, InletInstance, ObjectInstanceController>(this, OBJ_INLET_INSTANCES) {
 
             @Override
             public InletInstanceController createController(InletInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
                 return new InletInstanceController(model, documentRoot, parent);
             }
+
+            @Override
+            public void disposeController(InletInstanceController controller) {
+                if (getParent() != null) {
+                    getParent().disconnect(controller.getModel());
+                }
+            }
         };
-        outletInstanceControllers = new ArrayController<OutletInstanceController, OutletInstance, ObjectInstanceController>(getModel().getOutletInstances(), documentRoot, this) {
+        outletInstanceControllers = new ArrayController<OutletInstanceController, OutletInstance, ObjectInstanceController>(this, OBJ_OUTLET_INSTANCES) {
 
             @Override
             public OutletInstanceController createController(OutletInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
                 return new OutletInstanceController(model, documentRoot, parent);
             }
+
+            @Override
+            public void disposeController(OutletInstanceController controller) {
+                getParent().disconnect(controller.getModel());
+            }
         };
-        displayInstanceControllers = new ArrayController<DisplayInstanceController, DisplayInstance, ObjectInstanceController>(getModel().getDisplayInstances(), documentRoot, this) {
+        displayInstanceControllers = new ArrayController<DisplayInstanceController, DisplayInstance, ObjectInstanceController>(this, OBJ_DISPLAY_INSTANCES) {
 
             @Override
             public DisplayInstanceController createController(DisplayInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
                 return new DisplayInstanceController(model, documentRoot, parent);
             }
+
+            @Override
+            public void disposeController(DisplayInstanceController controller) {
+            }
         };
+        /*
+        parentParameterControllers = new ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController>(this, OBJ_PARENT_PARAMETERS) {
+            @Override
+            public ParameterInstanceController createController(ParameterInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
+                return new ParameterInstanceController(model, documentRoot, parent);
+            }
+
+            @Override
+            public void disposeController(ParameterInstanceController controller) {
+            }
+        };
+                */
     }
 
     public void changeLocation(int x, int y) {
@@ -97,20 +144,17 @@ public class ObjectInstanceController extends AbstractController<AxoObjectInstan
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(OBJ_PARAMETER_INSTANCES)) {
+        String propertyName = evt.getPropertyName();
+        if (propertyName.equals(OBJ_PARAMETER_INSTANCES)) {
             parameterInstanceControllers.syncControllers();
-        }
-        if (evt.getPropertyName().equals(OBJ_ATTRIBUTE_INSTANCES)) {
+        } else if (propertyName.equals(OBJ_ATTRIBUTE_INSTANCES)) {
             attributeInstanceControllers.syncControllers();
-        }
-        if (evt.getPropertyName().equals(OBJ_INLET_INSTANCES)) {
-            inletInstanceControllers.syncControllers();
-        }
-        if (evt.getPropertyName().equals(OBJ_OUTLET_INSTANCES)) {
-            outletInstanceControllers.syncControllers();
-        }
-        if (evt.getPropertyName().equals(OBJ_DISPLAY_INSTANCES)) {
+        } else if (propertyName.equals(OBJ_DISPLAY_INSTANCES)) {
             displayInstanceControllers.syncControllers();
+        } else if (propertyName.equals(OBJ_INLET_INSTANCES)) {
+            inletInstanceControllers.syncControllers();
+        } else if (propertyName.equals(OBJ_OUTLET_INSTANCES)) {
+            outletInstanceControllers.syncControllers();
         }
         super.propertyChange(evt);
     }

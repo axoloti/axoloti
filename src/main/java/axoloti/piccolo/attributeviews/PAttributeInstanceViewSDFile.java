@@ -85,7 +85,6 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
                     TFFileName.setText(f);
                     if (!f.equals(attributeInstance.getValue())) {
                         attributeInstance.setValue(f);
-                        attributeInstance.getObjectInstance().getPatchModel().setDirty();
                     }
                 }
             }

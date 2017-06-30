@@ -21,9 +21,6 @@ import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.array.ArrayController;
-import axoloti.mvc.array.ArrayView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -45,25 +42,39 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 import axoloti.mvc.IView;
+import axoloti.mvc.array.ArrayController;
+import axoloti.object.ObjectController;
 
 /**
  *
  * @author jtaelman
  * @param <T>
  */
-abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView {
+abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView {
 
     final T[] AtomDefinitionsList;
-//    ArrayController atomDefinitions;
     private AtomDefinitionController o;
+    final String atomfield;
+    final ObjectController objcontroller;
+    JPanel parentPanel;
 
-    public AtomDefinitionsEditor(ArrayController atomDefinitions, T[] atomDefinitionsList) {
-        super(atomDefinitions);
+    public AtomDefinitionsEditor(ObjectController objcontroller, String atomfield, T[] atomDefinitionsList) {
+        this.objcontroller = objcontroller;
+        this.atomfield = atomfield;
         this.AtomDefinitionsList = atomDefinitionsList;
     }
 
+    @Override
+    public ObjectController getController(){
+        return objcontroller;
+    }
+    
     abstract String getDefaultName();
 
+    abstract String getAtomTypeName();
+
+    abstract ArrayController getTController();
+   
     static String StringArrayToString(ArrayList<String> va) {
         // items quoted, separated by comma
         // quote characters escaped with backslash
@@ -140,102 +151,137 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
         }
         return l;
     }
+    
+    ActionListener actionListenerMoveUp = new ActionListener() {
 
-    void initComponents(ArrayController obj, JPanel panel) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int row = jTable1.getSelectedRow();
+            if (row < 1) {
+                return;
+            }
+            getController().addMetaUndo("move " + getAtomTypeName());
+
+            ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(atomfield));
+            T elem = n.get(row);
+            n.remove(row);
+            n.add(row - 1, elem);
+            objcontroller.setModelUndoableProperty(atomfield, n);
+
+            jTable1.setRowSelectionInterval(row - 1, row - 1);
+        }
+    };
+
+    ActionListener actionListenerMoveDown = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int row = jTable1.getSelectedRow();
+            getController().addMetaUndo("move " + getAtomTypeName());
+
+            if (row < 0) {
+                return;
+            }
+            ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(atomfield));
+            if (row > (n.size() - 1)) {
+                return;
+            }
+            T o = n.remove(row);
+            n.add(row + 1, o);
+            objcontroller.setModelUndoableProperty(atomfield, n);
+
+            jTable1.setRowSelectionInterval(row + 1, row + 1);
+        }
+    };
+
+    ActionListener actionListenerRemove = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int row = jTable1.getSelectedRow();
+            if (row < 0) {
+                return;
+            }
+            if (jTable1.getRowCount() >= row) {
+                getController().addMetaUndo("remove " + getAtomTypeName());
+                ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(atomfield));
+                n.remove(row);
+                objcontroller.setModelUndoableProperty(atomfield, n);
+            }
+            if (row > 0) {
+                jTable1.setRowSelectionInterval(row - 1, row - 1);
+            }
+            UpdateTable2();
+            parentPanel.revalidate();
+        }
+    };
+
+    ActionListener actionListenerAdd = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                T o2 = (T) AtomDefinitionsList[0].getClass().newInstance();
+                int i = 0;
+                while (true) {
+                    i++;
+                    boolean free = true;
+                    for (T a : (List<T>) objcontroller.getModelProperty(atomfield)) {
+                        if (a.getName().equals(getDefaultName() + i)) {
+                            free = false;
+                        }
+                    }
+                    if (free == true) {
+                        break;
+                    }
+                }
+                o2.setName(getDefaultName() + i);
+                getController().addMetaUndo("add " + getAtomTypeName());
+                ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(atomfield));
+                n.add(o2);
+                objcontroller.setModelUndoableProperty(atomfield, n);
+                UpdateTable2();
+            } catch (InstantiationException ex) {
+                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    };
+
+
+    void initComponents(JPanel parentPanel) {
+        this.parentPanel = parentPanel;
 //        this.obj = obj;
         jScrollPane1 = new JScrollPane();
         jTable1 = new JTable();
         jTable1.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jTable1.setVisible(true);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.Y_AXIS));
         jScrollPane1.add(jTable1);
-        panel.add(jScrollPane1);
+        parentPanel.add(jScrollPane1);
 
         jPanel1 = new JPanel();
         jPanel1.setLayout(new BoxLayout(jPanel1, BoxLayout.X_AXIS));
-        panel.add(jPanel1);
+        parentPanel.add(jPanel1);
 
         jScrollPane2 = new JScrollPane();
         jTable2 = new JTable();
         jTable2.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jTable2.setVisible(true);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.Y_AXIS));
         jScrollPane2.add(jTable2);
-        panel.add(jScrollPane2);
+        parentPanel.add(jScrollPane2);
 
         jButtonAdd = new JButton("Add");
-        jButtonAdd.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    T o = (T) AtomDefinitionsList[0].getClass().newInstance();
-                    int i = 0;
-                    while (true) {
-                        i++;
-                        boolean free = true;
-                        for (Object a : getController().getModel().getArray()) {
-                            if (((AtomDefinition) a).getName().equals(getDefaultName() + i)) {
-                                free = false;
-                            }
-                        }
-                        if (free == true) {
-                            break;
-                        }
-                    }
-                    o.setName(getDefaultName() + i);
-                    getController().addMetaUndo("add " + getAtomTypeName());
-                    getController().add(o);
-                    UpdateTable2();
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
+        jButtonAdd.addActionListener(actionListenerAdd);
         jPanel1.add(jButtonAdd);
         jButtonRemove = new JButton("Remove");
-        jButtonRemove.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int row = jTable1.getSelectedRow();
-                if (row < 0) {
-                    return;
-                }
-                if (jTable1.getRowCount() >= row) {
-                getController().addMetaUndo("remove " + getAtomTypeName());
-                    getController().remove(getController().get(row).getModel());
-                }
-                if (row > 0) {
-                    jTable1.setRowSelectionInterval(row - 1, row - 1);
-                }
-                UpdateTable2();
-                panel.revalidate();
-            }
-        });
+        jButtonRemove.addActionListener(actionListenerRemove);
         jPanel1.add(jButtonRemove);
         jButtonMoveUp = new JButton("Move up");
-        jButtonMoveUp.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int row = jTable1.getSelectedRow();
-                getController().addMetaUndo("move " + getAtomTypeName());
-                getController().moveUp(row);
-                jTable1.setRowSelectionInterval(row - 1, row - 1);
-            }
-        });
+        jButtonMoveUp.addActionListener(actionListenerMoveUp);
         jPanel1.add(jButtonMoveUp);
         jButtonMoveDown = new JButton("Move down");
-        jButtonMoveDown.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int row = jTable1.getSelectedRow();
-                getController().addMetaUndo("move " + getAtomTypeName());
-                getController().moveDown(row);
-                jTable1.setRowSelectionInterval(row + 1, row + 1);
-            }
-        });
+        jButtonMoveDown.addActionListener(actionListenerMoveDown);
         jPanel1.add(jButtonMoveDown);
         jScrollPane1.setVisible(true);
         jTable1.setModel(new AbstractTableModel() {
@@ -266,21 +312,22 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
 
             @Override
             public int getRowCount() {
-                return getController().getModel().size();
+                return ((List<T>)objcontroller.getModelProperty(atomfield)).size();
             }
 
             @Override
             public void setValueAt(Object value, int rowIndex, int columnIndex) {
-                AtomDefinitionController atomDefinitionController = ((AtomDefinitionController) (getController().get(rowIndex)));
+                List<T> list = (List<T>)objcontroller.getModelProperty(atomfield);
+                T atomDefinitionController = list.get(rowIndex);
                 if (atomDefinitionController == null) {
                     return;
                 }
                 switch (columnIndex) {
                     case 0: {
                         assert (value instanceof String);
-                        AtomDefinitionController c = (AtomDefinitionController) getController().get(rowIndex);
                         getController().addMetaUndo("edit " + getAtomTypeName() + " name");
-                        c.changeName((String) value);
+                        AtomDefinitionController ox = (AtomDefinitionController) getTController().get(rowIndex);
+                        ox.setModelUndoableProperty(AtomDefinitionController.ATOM_NAME, value);
                     }
                     break;
                     case 1:
@@ -289,8 +336,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                             j.setName(GetAtomDefinition(rowIndex).getName());
                             j.setDescription(GetAtomDefinition(rowIndex).getDescription());
                             getController().addMetaUndo("change " + getAtomTypeName() + " type");
-                            getController().add(j);
-                            getController().getModel().remove(getController().getModel().get(rowIndex));
+                            ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(atomfield));
+                            n.set(rowIndex, j);
+                            objcontroller.setModelUndoableProperty(atomfield, n);
                             UpdateTable2();
                         } catch (InstantiationException ex) {
                             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -301,15 +349,17 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                     case 2: {
                         assert (value instanceof String);
                         getController().addMetaUndo("edit " + getAtomTypeName() + " description");
-                        atomDefinitionController.changeDescription((String) value);
+                        AtomDefinitionController ox = (AtomDefinitionController) getTController().get(rowIndex);
+                        ox.setModelUndoableProperty(AtomDefinitionController.ATOM_DESCRIPTION, value);
                     }
                     break;
                 }
             }
 
             T GetAtomDefinition(int rowIndex) {
-                if (rowIndex < getController().getModel().size()) {
-                    return (T) getController().getModel().get(rowIndex);
+                List<T> list = (List<T>)objcontroller.getModelProperty(atomfield);
+                if (rowIndex < list.size()) {
+                    return (T) list.get(rowIndex);
                 } else {
                     return null;
                 }
@@ -318,16 +368,17 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
                 Object returnValue = null;
+                List<T> list = (List<T>)objcontroller.getModelProperty(atomfield);
 
                 switch (columnIndex) {
                     case 0:
-                        returnValue = ((AtomDefinitionController) (getController().get(rowIndex))).getModel().getName();
+                        returnValue = list.get(rowIndex).getName();
                         break;
                     case 1:
-                        returnValue = ((AtomDefinitionController) (getController().get(rowIndex))).getModel().getTypeName();
+                        returnValue = list.get(rowIndex).getTypeName();
                         break;
                     case 2:
-                        returnValue = ((AtomDefinitionController) (getController().get(rowIndex))).getModel().getDescription();
+                        returnValue = list.get(rowIndex).getDescription();
                         break;
                 }
                 return returnValue;
@@ -353,7 +404,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                     UpdateTable2();
                 } else {
                     jButtonMoveUp.setEnabled(row > 0);
-                    jButtonMoveDown.setEnabled(row < getController().getModel().size() - 1);
+                    jButtonMoveDown.setEnabled(row < ((List<T>)objcontroller.getModelProperty(atomfield)).size() - 1);
                     jButtonRemove.setEnabled(true);
                     jTable2.removeEditor();
                     UpdateTable2();
@@ -418,18 +469,12 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         } else if (v instanceof ArrayList) {
-                            /*
-                             try {
-                             ArrayList<String> l = (ArrayList<String>) f.get(o);
-                             l.clear();
-                             String s = (String) value;
-                             l.addAll(StringToStringArrayList(s));
-                             } catch (IllegalArgumentException ex) {
-                             Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
-                             } catch (IllegalAccessException ex) {
-                             Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
-                             }
-                             */
+                            try {
+                                String s = (String) value;
+                                o.setModelUndoableProperty(field, StringToStringArrayList(s));
+                            } catch (IllegalArgumentException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         } else if (v instanceof ValueInt32) {
                             try {
                                 ValueInt32 v2 = new ValueInt32(Integer.parseInt((String) value));
@@ -515,9 +560,10 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
     void UpdateTable2() {
         jButtonRemove.setEnabled(jTable1.getRowCount() > 0);
         fields = null;
+        List<T> list = (List<T>) objcontroller.getModelProperty(atomfield);
         int row = jTable1.getSelectedRow();
-        if (row != -1 && (row < getController().getModel().size())) {
-            o = (AtomDefinitionController) getController().get(row);
+        if (row != -1 && (row < list.size())) {
+            o = (AtomDefinitionController) getTController().get(row);
             fields = o.getModel().getEditableFields();
         }
         ((AbstractTableModel) jTable2.getModel()).fireTableDataChanged();
@@ -544,24 +590,10 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> extends ArrayView
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (jTable1 != null) {
-            jTable1.tableChanged(new TableModelEvent(jTable1.getModel()));
+        if (evt.getPropertyName().contains(atomfield)) {
+            if (jTable1 != null) {
+                jTable1.tableChanged(new TableModelEvent(jTable1.getModel()));
+            }
         }
     }
-
-    @Override
-    public void updateUI() {
-    }
-
-    @Override
-    public IView viewFactory(AbstractController ctrl) {
-        return null;
-    }
-
-    @Override
-    public void removeView(IView view) {
-    }
-
-    abstract String getAtomTypeName();
-
 }

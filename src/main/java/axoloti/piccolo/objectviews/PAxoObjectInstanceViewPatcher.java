@@ -42,7 +42,7 @@ public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
         BtnUpdate.addActListener(new PButtonComponent.ActListener() {
             @Override
             public void OnPushed() {
-                model.updateObj();
+                //model.updateObj();
             }
         });
         addChild(BtnUpdate);

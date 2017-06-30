@@ -210,7 +210,6 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     public int getIndex() {
         return index;
     }
-
     
     // review!
     public String GetUserParameterName() {
@@ -340,9 +339,15 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         }
         Boolean oldValue = this.onParent;
         this.onParent = onParent;
+        if (onParent) {
+            axoObjectInstance.getParentParameters().add(this);
+        } else {
+            axoObjectInstance.getParentParameters().remove(this);            
+        }
         firePropertyChange(
                 ParameterInstanceController.ELEMENT_PARAM_ON_PARENT,
                 oldValue, onParent);
+        axoObjectInstance.getPatchModel().UpdateOnParent();
     }
 
     public ArrayList<Preset> getPresets() {

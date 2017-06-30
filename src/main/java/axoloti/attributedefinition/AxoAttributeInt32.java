@@ -17,6 +17,7 @@
  */
 package axoloti.attributedefinition;
 
+import axoloti.atom.AtomDefinitionController;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 
@@ -27,11 +28,11 @@ import org.simpleframework.xml.Attribute;
 public class AxoAttributeInt32 extends AxoAttribute {
 
     @Attribute
-    public int MinValue;
+    public Integer MinValue = 0;
     @Attribute
-    public int MaxValue;
+    public Integer MaxValue = 1;
     @Attribute
-    public int DefaultValue;
+    public Integer DefaultValue = 0;
 
     public AxoAttributeInt32() {
     }
@@ -43,16 +44,34 @@ public class AxoAttributeInt32 extends AxoAttribute {
         this.DefaultValue = DefaultValue;
     }
 
-    public int getMinValue() {
+    public Integer getMinValue() {
         return MinValue;
     }
 
-    public int getMaxValue() {
+    public Integer getMaxValue() {
         return MaxValue;
     }
 
-    public int getDefaultValue() {
+    public Integer getDefaultValue() {
         return DefaultValue;
+    }
+
+    public void setMinValue(Integer MinValue) {
+        Integer oldValue = this.MinValue;
+        this.MinValue = MinValue;
+        firePropertyChange(AtomDefinitionController.ATOM_MINVALUE, oldValue, MinValue);
+    }
+
+    public void setMaxValue(Integer MaxValue) {
+        Integer oldValue = this.MaxValue;
+        this.MaxValue = MaxValue;
+        firePropertyChange(AtomDefinitionController.ATOM_MAXVALUE, oldValue, MaxValue);
+    }
+
+    public void setDefaultValue(Integer DefaultValue) {
+        Integer oldValue = this.DefaultValue;
+        this.DefaultValue = DefaultValue;
+        firePropertyChange(AtomDefinitionController.ATOM_DEFAULTVALUE, oldValue, DefaultValue);
     }
 
     static public final String TypeName = "int";

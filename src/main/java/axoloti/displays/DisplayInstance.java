@@ -20,7 +20,6 @@ package axoloti.displays;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.mvc.AbstractModel;
-import axoloti.object.AxoObjectInstance;
 import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.nio.ByteBuffer;

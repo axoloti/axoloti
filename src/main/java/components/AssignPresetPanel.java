@@ -88,9 +88,6 @@ public class AssignPresetPanel extends JPanel {
                 parameterInstanceView.RemovePreset(i + 1);
             }
             PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
-            if (patchModel != null) {
-                patchModel.setDirty();
-            }
             patchModel.presetUpdatePending = true;
         }
 
@@ -130,9 +127,6 @@ public class AssignPresetPanel extends JPanel {
             if (i >= 0) {
                 if (valueBeforeAdjustment != ctrls.get(i).getValue()) {
                     PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
-                    if (patchModel != null) {
-                        patchModel.setDirty();
-                    }
                 }
             }
         }

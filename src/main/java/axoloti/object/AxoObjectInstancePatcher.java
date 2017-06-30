@@ -17,8 +17,15 @@
  */
 package axoloti.object;
 
+import axoloti.PatchController;
 import axoloti.PatchModel;
+import axoloti.inlets.InletInstance;
+import axoloti.mvc.IView;
+import axoloti.outlets.OutletInstance;
+import axoloti.parameters.ParameterInstance;
 import java.awt.Point;
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import org.simpleframework.xml.Element;
 
 /**
@@ -30,6 +37,8 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     @Element(name = "subpatch")
     PatchModel subPatchModel;
 
+    PatchController subPatchController;
+
     public AxoObjectInstancePatcher() {
         if (subPatchModel == null) {
             subPatchModel = new PatchModel();
@@ -37,15 +46,35 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     }
 
     public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location) {
-        super(controller, patch1, InstanceName1, location);        
+        this(controller, patch1, InstanceName1, location, new PatchController(new PatchModel(), controller.getDocumentRoot(), controller));
     }
 
-    public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location, PatchModel subPatchModel) {
+    public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location, PatchController subPatchController) {
         super(controller, patch1, InstanceName1, location);
-        if (subPatchModel == null) {
-            subPatchModel = new PatchModel();
-        }
-        this.subPatchModel = subPatchModel;
+        this.subPatchModel = subPatchController.getModel();
+        this.subPatchController = subPatchController;
+        IView parenting = new IView<PatchController>() {
+            @Override
+            public void modelPropertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(PatchController.PATCH_PARENT_INLETS)) {
+                    setInletInstances((ArrayList<InletInstance>) evt.getNewValue());
+                } else if (evt.getPropertyName().equals(PatchController.PATCH_PARENT_OUTLETS)) {
+                    setOutletInstances((ArrayList<OutletInstance>) evt.getNewValue());
+                } else if (evt.getPropertyName().equals(PatchController.PATCH_PARENT_PARAMETERS)) {
+                    setParameterInstances((ArrayList<ParameterInstance>) evt.getNewValue());
+                }
+            }
+
+            @Override
+            public PatchController getController() {
+                return subPatchController;
+            }
+        };
+        subPatchController.addView(parenting);
+    }
+
+    public PatchController getSubPatchController() {
+        return subPatchController;
     }
 
     public PatchModel getSubPatchModel() {

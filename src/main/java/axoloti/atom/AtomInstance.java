@@ -17,6 +17,7 @@
  */
 package axoloti.atom;
 
+import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
 
 /**
@@ -26,7 +27,7 @@ import axoloti.mvc.IView;
 /**
  * An Axoloti Object Instance is composed out of AtomInstances
  */
-public interface AtomInstance<T extends AtomDefinition> extends IView {
+public interface AtomInstance<T extends AtomDefinition> extends IView, IModel {
 
     public T getModel();
 

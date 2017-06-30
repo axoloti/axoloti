@@ -15,8 +15,6 @@ import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
-import axoloti.mvc.array.ArrayModel;
-import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstance;
@@ -41,6 +39,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JMenuItem;
@@ -64,9 +63,9 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     public PatchPNode p_outletViews;
     boolean deferredObjTypeUpdate = false;
 
-    private ArrayView<IInletInstanceView> inletInstanceViews;
-    private ArrayView<IOutletInstanceView> outletInstanceViews;
-    private ArrayView<IParameterInstanceView> parameterInstanceViews;
+    //private ArrayView<IInletInstanceView> inletInstanceViews;
+    //private ArrayView<IOutletInstanceView> outletInstanceViews;
+    //private ArrayView<IParameterInstanceView> parameterInstanceViews;
 
     String tooltipText = "<html>";
 
@@ -76,7 +75,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     public AxoObject getType() {
-        return model.getType();
+        return (AxoObject)model.getType();
     }
 
     @Override
@@ -116,16 +115,16 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         p_outletViews.setAlignmentX(RIGHT_ALIGNMENT);
         p_outletViews.setAlignmentY(TOP_ALIGNMENT);
 
-        ArrayModel<ParameterInstance> pParameterInstances = getModel().getParameterInstances();
-        ArrayModel<AttributeInstance> pAttributeInstances = getModel().getAttributeInstances();
+        //ArrayModel<ParameterInstance> pParameterInstances = getModel().getParameterInstances();
+        //ArrayModel<AttributeInstance> pAttributeInstances = getModel().getAttributeInstances();
         Collection<InletInstance> pInletInstances = getModel().getInletInstances();
         Collection<OutletInstance> pOutletInstances = getModel().getOutletInstances();
 
-        getModel().setParameterInstances(new ArrayModel<>());
-        getModel().setAttributeInstances(new ArrayModel<>());
-        getModel().setDisplayInstances(new ArrayModel<>());
-        getModel().setInletInstances(new ArrayModel<>());
-        getModel().setOutletInstances(new ArrayModel<>());
+//        getModel().setParameterInstances(new ArrayModel<>());
+//        getModel().setAttributeInstances(new ArrayModel<>());
+//        getModel().setDisplayInstances(new ArrayModel<>());
+//        getModel().setInletInstances(new ArrayModel<>());
+//        getModel().setOutletInstances(new ArrayModel<>());
 
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.PAGE_AXIS));
 
@@ -169,7 +168,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         p_displayViews.addToSwingProxy(Box.createHorizontalGlue());
         p_parameterViews.addToSwingProxy(Box.createHorizontalGlue());
-        for (Inlet inlet : getType().inlets) {
+        for (Inlet inlet : getType().getInlets()) {
             InletInstance inletInstanceP = null;
             for (InletInstance inletInstance : pInletInstances) {
                 if (inletInstance.GetLabel().equals(inlet.getName())) {
@@ -195,7 +194,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 //            getPatchModel().disconnect(inletInstance);
         }
 
-        for (Outlet o : getType().outlets) {
+        for (Outlet o : getType().getOutlets()) {
             OutletInstance outletInstanceP = null;
             for (OutletInstance outletInstance : pOutletInstances) {
                 if (outletInstance.GetLabel().equals(o.getName())) {
@@ -226,7 +225,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         p_ioletViews.addToSwingProxy(Box.createHorizontalGlue());
         p_ioletViews.addChild(p_outletViews);
         addChild(p_ioletViews);
-
+/*
         for (AxoAttribute p : getType().attributes) {
             AttributeInstance attributeInstanceP = null;
             for (AttributeInstance attributeInstance : pAttributeInstances) {
@@ -256,7 +255,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             view.setAlignmentX(RIGHT_ALIGNMENT);
             getModel().getParameterInstances().add(pin);
         }
-
+*/
         for (Display p : getType().displays) {
 //            DisplayInstance pin = p.CreateInstance(getModel());
             PDisplayInstanceView view = null; 
@@ -402,7 +401,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
     public void refreshIndex() {
         if (getPatchView() != null && IndexLabel != null) {
-            IndexLabel.setText(" " + getPatchView().getObjectInstanceViews().getSubViews().indexOf(this));
+//            IndexLabel.setText(" " + getPatchView().getObjectInstanceViews().getSubViews().indexOf(this));
         }
     }
 
@@ -427,7 +426,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             a.UnLock();
         }
         if (deferredObjTypeUpdate) {
-            model.updateObj();
+            //model.updateObj();
             deferredObjTypeUpdate = false;
         }
     }
@@ -438,18 +437,18 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     @Override
-    public ArrayView<IInletInstanceView> getInletInstanceViews() {
-        return inletInstanceViews;
+    public List<IInletInstanceView> getInletInstanceViews() {
+        return null;//inletInstanceViews;
     }
 
     @Override
-    public ArrayView<IOutletInstanceView> getOutletInstanceViews() {
-        return outletInstanceViews;
+    public List<IOutletInstanceView> getOutletInstanceViews() {
+        return null;//outletInstanceViews;
     }
 
     @Override
-    public ArrayView<IParameterInstanceView> getParameterInstanceViews() {
-        return parameterInstanceViews;
+    public List<IParameterInstanceView> getParameterInstanceViews() {
+        return null;//parameterInstanceViews;
     }
 
     @Override

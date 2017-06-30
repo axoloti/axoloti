@@ -15,6 +15,8 @@ public class AtomDefinitionController extends AbstractController<AtomDefinition,
     public static final String ATOM_MINVALUE = "MinValue";
     public static final String ATOM_MAXVALUE = "MaxValue";
     public static final String ATOM_DEFAULTVALUE = "DefaultValue";
+    public static final String ATOM_MENUENTRIES = "MenuEntries";
+    public static final String ATOM_CENTRIES = "CEntries";    
 
     public static final String[] PROPERTY_NAMES = {ATOM_NAME, ATOM_DESCRIPTION};
 
@@ -25,14 +27,6 @@ public class AtomDefinitionController extends AbstractController<AtomDefinition,
 
     public AtomDefinitionController(AtomDefinition model, AbstractDocumentRoot documentRoot, ObjectController parent) {
         super(model, documentRoot, parent);
-    }
-
-    public void changeName(String name) {
-        setModelUndoableProperty(ATOM_NAME, name);
-    }
-
-    public void changeDescription(String name) {
-        setModelUndoableProperty(ATOM_DESCRIPTION, name);
     }
 
 }

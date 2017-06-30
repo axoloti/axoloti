@@ -1,5 +1,6 @@
 package axoloti.inlets;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.object.ObjectInstanceController;
@@ -12,6 +13,14 @@ public class InletInstanceController extends AbstractController<InletInstance, I
 
     public InletInstanceController(InletInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
         super(model, documentRoot, parent);
+    }
+
+    @Override
+    public String[] getPropertyNames() {
+        return new String[]{
+            AtomDefinitionController.ATOM_NAME,
+            AtomDefinitionController.ATOM_DESCRIPTION
+        };
     }
 
 }

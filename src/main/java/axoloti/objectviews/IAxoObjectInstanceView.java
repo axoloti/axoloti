@@ -6,7 +6,6 @@ import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
-import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
@@ -16,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JComponent;
 import axoloti.mvc.IView;
+import java.util.List;
 
 public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> {
 
@@ -37,11 +37,11 @@ public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> 
 
     public IOutletInstanceView getOutletInstanceView(OutletInstance ouletInstance);
 
-    public ArrayView<IInletInstanceView> getInletInstanceViews();
+    public List<IInletInstanceView> getInletInstanceViews();
 
-    public ArrayView<IOutletInstanceView> getOutletInstanceViews();
+    public List<IOutletInstanceView> getOutletInstanceViews();
 
-    public ArrayView<IParameterInstanceView> getParameterInstanceViews();
+    public List<IParameterInstanceView> getParameterInstanceViews();
 
     public void setLocation(int x, int y);
 

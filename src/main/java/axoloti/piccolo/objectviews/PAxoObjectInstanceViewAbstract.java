@@ -9,7 +9,6 @@ import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
-import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -34,6 +33,7 @@ import java.awt.geom.Rectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -168,17 +168,17 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public ArrayView<IInletInstanceView> getInletInstanceViews() {
+    public List<IInletInstanceView> getInletInstanceViews() {
         return null;
     }
 
     @Override
-    public ArrayView<IOutletInstanceView> getOutletInstanceViews() {
+    public List<IOutletInstanceView> getOutletInstanceViews() {
         return null;
     }
 
     @Override
-    public ArrayView<IParameterInstanceView> getParameterInstanceViews() {
+    public List<IParameterInstanceView> getParameterInstanceViews() {
         return null;
     }
 

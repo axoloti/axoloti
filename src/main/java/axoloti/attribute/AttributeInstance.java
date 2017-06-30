@@ -81,7 +81,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
         if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
             setName((String) evt.getNewValue());
         } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
-            //setDescription(evt.getNewValue());
+            firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
     }
 
@@ -98,6 +98,10 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
         String preVal = this.attributeName;
         this.attributeName = attributeName;
         firePropertyChange(AtomDefinitionController.ATOM_NAME, preVal, attributeName);
+    }
+
+    public String getDescription() {
+        return getModel().getDescription();
     }
 
 }

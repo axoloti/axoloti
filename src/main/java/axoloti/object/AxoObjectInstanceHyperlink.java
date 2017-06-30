@@ -35,7 +35,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "hyperlink")
-public class AxoObjectInstanceHyperlink extends AxoObjectInstanceAbstract {
+public class AxoObjectInstanceHyperlink extends AxoObjectInstance0 {
 
     AxoObjectInstanceHyperlink() {
     }

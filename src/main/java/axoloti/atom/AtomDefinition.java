@@ -60,6 +60,9 @@ abstract public class AtomDefinition extends AbstractModel {
     }
 
     final public String getDescription() {
+        if (description == null) {
+            return "";
+        }
         return description;
     }
 

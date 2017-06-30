@@ -17,11 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.PatchController;
-import axoloti.inlets.Inlet;
-import axoloti.mvc.array.ArrayModel;
-import axoloti.outlets.Outlet;
-import java.awt.Point;
 import org.simpleframework.xml.Root;
 
 /**
@@ -29,7 +24,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root
-public class AxoObjectComment extends AxoObjectAbstract {
+public class AxoObjectComment extends AxoObjectAbstract0 {
 
     public AxoObjectComment() {
         super();
@@ -44,15 +39,4 @@ public class AxoObjectComment extends AxoObjectAbstract {
         return null;
     }
 
-    @Override
-    public ArrayModel<Inlet> getInlets() {
-        return null;
-    }
-
-    @Override
-    public ArrayModel<Outlet> getOutlets() {
-        return null;
-    }
-    
-    
 }

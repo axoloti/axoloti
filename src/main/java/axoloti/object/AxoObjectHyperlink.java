@@ -17,17 +17,11 @@
  */
 package axoloti.object;
 
-import axoloti.PatchController;
-import axoloti.inlets.Inlet;
-import axoloti.mvc.array.ArrayModel;
-import axoloti.outlets.Outlet;
-import java.awt.Point;
-
 /**
  *
  * @author jtaelman
  */
-public class AxoObjectHyperlink extends AxoObjectAbstract {
+public class AxoObjectHyperlink extends AxoObjectAbstract0 {
 
     public AxoObjectHyperlink() {
         super();
@@ -42,13 +36,4 @@ public class AxoObjectHyperlink extends AxoObjectAbstract {
         return null;
     }
 
-    @Override
-    public ArrayModel<Inlet> getInlets() {
-        return null;
-    }
-
-    @Override
-    public ArrayModel<Outlet> getOutlets() {
-        return null;
-    }
 }

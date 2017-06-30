@@ -84,9 +84,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private JScrollPane jScrollPane1;
 
     public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
+        initComponents();
+        fileMenu1.initComponents();
         patchView = new PatchViewSwing(patchController);
         patchView.PostConstructor();
-        patchController.addView(this);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
         this.patchController = patchController;
@@ -96,8 +97,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             patchController.getDocumentRoot().addUndoListener(undoUi);
         }
 
-        initComponents();
-        fileMenu1.initComponents();
         JMenuItem menuItemNewView = new JMenuItem("new view");
         menuItemNewView.addActionListener(new ActionListener() {
             @Override
@@ -244,6 +243,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                 AskClose();
             }
         });
+        
+        patchController.addView(this);
+        patchController.addView(patchView);        
     }
 
     private void initializeZoomMenuItems() {
@@ -355,7 +357,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public boolean AskClose() {
-        // FIXME: only ask if document is dirty
+        if (!getController().getUndoManager().canUndo()) {
+            Close();
+            return false;
+        }
         if (getPatchController().getParent() == null) {
             Object[] options = {"Save",
                 "Don't save",

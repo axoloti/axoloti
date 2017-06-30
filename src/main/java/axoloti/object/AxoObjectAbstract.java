@@ -18,12 +18,9 @@
 package axoloti.object;
 
 import axoloti.Modulator;
-import axoloti.inlets.Inlet;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
-import axoloti.mvc.array.ArrayModel;
-import axoloti.outlets.Outlet;
 import java.util.HashSet;
 import java.util.Set;
 import org.simpleframework.xml.Attribute;
@@ -95,10 +92,6 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         this.upgradeSha = null;
     }
 
-    public abstract ArrayModel<Inlet> getInlets();
-
-    public abstract ArrayModel<Outlet> getOutlets();
-
     @Override
     public String toString() {
         return id;
@@ -168,9 +161,16 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
     }
 
     
-/* MVC clean methods below... */    
+/* MVC clean methods below... */
     
     
+    
+    private String StringDenull(String s){
+        if (s == null) return "";
+        return s;
+    }
+    
+    @Override
     public String getId() {
         return id;
     }
@@ -183,8 +183,9 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
                 oldvalue, id);
     }
 
+    @Override
     public String getDescription() {
-        return sDescription;
+        return StringDenull(sDescription);
     }
 
     public void setDescription(String sDescription) {
@@ -195,8 +196,9 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
                 oldvalue, sDescription);
     }
 
+    @Override
     public String getLicense() {
-        return sLicense;
+        return StringDenull(sLicense);
     }
 
     public void setLicense(String sLicense) {
@@ -207,8 +209,9 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
                 oldvalue, sLicense);
     }
 
+    @Override
     public String getPath() {
-        return sPath;
+        return StringDenull(sPath);
     }
 
     public void setPath(String sPath) {
@@ -219,8 +222,9 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
                 oldvalue, sPath);
     }
 
+    @Override
     public String getAuthor() {
-        return sAuthor;
+        return StringDenull(sAuthor);
     }
 
     public void setAuthor(String sAuthor) {
@@ -228,7 +232,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         this.sAuthor = sAuthor;
         firePropertyChange(
                 ObjectController.OBJ_AUTHOR,
-                oldvalue, sPath);
+                oldvalue, sAuthor);
     }
 
     // Let's violate the MVC pattern for now and use a singleton controller for this model

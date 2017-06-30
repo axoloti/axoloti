@@ -19,7 +19,6 @@ package axoloti;
 
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
-import axoloti.mvc.array.ArrayModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceComment;
@@ -55,7 +54,7 @@ import org.simpleframework.xml.strategy.Strategy;
  * @author Johannes Taelman
  */
 @Root
-public class PatchModel extends AbstractModel /*implements IAxoObject*/ {
+public class PatchModel extends AbstractModel {
 
     //TODO - use execution order, rather than UI ordering
     static final boolean USE_EXECUTION_ORDER = false;
@@ -69,9 +68,9 @@ public class PatchModel extends AbstractModel /*implements IAxoObject*/ {
         @ElementList(entry = "comment", type = AxoObjectInstanceComment.class, inline = true, required = false),
         @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true, required = false),
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true, required = false)})
-    ArrayModel<AxoObjectInstanceAbstract> objectinstances = new ArrayModel<AxoObjectInstanceAbstract>();
+    List<AxoObjectInstanceAbstract> objectinstances = new ArrayList<>();
     @ElementList(name = "nets")
-    public ArrayModel<Net> nets = new ArrayModel<Net>();
+    public List<Net> nets = new ArrayList<>();
     @Element(required = false)
     PatchSettings settings;
     @Element(required = false, data = true)
@@ -80,11 +79,11 @@ public class PatchModel extends AbstractModel /*implements IAxoObject*/ {
     Rectangle windowPos;
     String FileNamePath;
 
-    ArrayList<Modulator> Modulators = new ArrayList<Modulator>();
+    ArrayList<Modulator> Modulators = new ArrayList<>();
     @Element(required = false)
     String helpPatch;
 
-    Integer dspLoad;
+    Integer dspLoad = 0;
 
     // a "controller object" is magically added to evey top-level patch
     // (configured in preferences)
@@ -94,6 +93,40 @@ public class PatchModel extends AbstractModel /*implements IAxoObject*/ {
 
     boolean locked = false;
 
+    List<ParameterInstance> parameters = new ArrayList<>();
+    List<InletInstance> inlets = new ArrayList<>();
+    List<OutletInstance> outlets = new ArrayList<>();
+
+    public void UpdateOnParent() {
+        {
+            ArrayList<ParameterInstance> pnew = new ArrayList<>();
+            for (AxoObjectInstanceAbstract o : objectinstances) {
+                for (ParameterInstance pi : o.getParentParameters()) {
+                    pnew.add(pi);
+                }
+            }
+            setParentParameters(pnew);
+        }
+        {
+            ArrayList<InletInstance> pnew = new ArrayList<>();
+            for (AxoObjectInstanceAbstract o : objectinstances) {
+                for (InletInstance pi : o.getParentInlets()) {
+                    pnew.add(pi);
+                }
+            }
+            setParentInlets(pnew);
+        }
+        {
+            ArrayList<OutletInstance> pnew = new ArrayList<>();
+            for (AxoObjectInstanceAbstract o : objectinstances) {
+                for (OutletInstance pi : o.getParentOutlets()) {
+                    pnew.add(pi);
+                }
+            }
+            setParentOutlets(pnew);
+        }
+    }
+    
     static public class PatchVersionException
             extends RuntimeException {
 
@@ -213,10 +246,6 @@ public class PatchModel extends AbstractModel /*implements IAxoObject*/ {
             }
         }
         return null;
-    }
-
-    @Deprecated
-    public void setDirty() {
     }
 
     public void updateModulation(Modulation n) {
@@ -759,11 +788,11 @@ public class PatchModel extends AbstractModel /*implements IAxoObject*/ {
         return new File(buildDir + "/xpatch.bin");
     }
 
-    public ArrayModel<AxoObjectInstanceAbstract> getObjectInstances() {
+    public List<AxoObjectInstanceAbstract> getObjectInstances() {
         return objectinstances;
     }
 
-    public ArrayList<Modulator> getModulators() {
+    public ArrayList<Modulator> getPatchModulators() {
         return Modulators;
     }
 
@@ -772,10 +801,6 @@ public class PatchModel extends AbstractModel /*implements IAxoObject*/ {
             Modulators = new ArrayList<Modulator>();
         }
         Modulators.add(m);
-    }
-
-    public ArrayModel<Net> getNets() {
-        return nets;
     }
 
     // ------------- new MVC methods
@@ -815,15 +840,55 @@ public class PatchModel extends AbstractModel /*implements IAxoObject*/ {
                 oldvalue, dspLoad);
     }
 
-    public ArrayModel<AxoObjectInstanceAbstract> getObjectinstances() {
+    public List<AxoObjectInstanceAbstract> getObjectinstances() {
         return objectinstances;
     }
 
-    public void setObjectinstances(ArrayModel<AxoObjectInstanceAbstract> objectinstances) {
-        ArrayModel<AxoObjectInstanceAbstract> old_value = this.objectinstances;
+    public void setObjectinstances(ArrayList<AxoObjectInstanceAbstract> objectinstances) {
+        List<AxoObjectInstanceAbstract> old_value = this.objectinstances;
         this.objectinstances = objectinstances;
         firePropertyChange(
                 PatchController.PATCH_OBJECTINSTANCES,
                 old_value, objectinstances);
     }
+
+    public List<Net> getNets() {
+        return nets;
+    }
+
+    public void setNets(ArrayList<Net> nets) {
+        List<Net> old_value = this.nets;
+        this.nets = nets;
+        firePropertyChange(
+                PatchController.PATCH_NETS,
+                old_value, nets);
+    }
+
+    public List<ParameterInstance> getParentParameters() {
+        return parameters;
+    }
+
+    private void setParentParameters(ArrayList<ParameterInstance> parameters) {
+        this.parameters = parameters;
+        firePropertyChange(PatchController.PATCH_PARENT_PARAMETERS, null, parameters);
+    }
+
+    public List<InletInstance> getParentInlets() {
+        return inlets;
+    }
+
+    private void setParentInlets(ArrayList<InletInstance> inlets) {
+        this.inlets = inlets;
+        firePropertyChange(PatchController.PATCH_PARENT_INLETS, null, inlets);
+    }
+
+    public List<OutletInstance> getParentOutlets() {
+        return outlets;
+    }
+
+    private void setParentOutlets(ArrayList<OutletInstance> outlets) {
+        this.outlets = outlets;
+        firePropertyChange(PatchController.PATCH_PARENT_OUTLETS, null, outlets);
+    }
+
 }

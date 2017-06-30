@@ -30,7 +30,6 @@ public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString
                 if (!attributeInstance.getValue().equals(comboBox.getSelectedItem())) {
                     attributeInstance.setValue(comboBox.getSelectedItem());
                     //attributeInstance.setSelectedIndex(comboBox.getSelectedIndex());
-                    attributeInstance.getObjectInstance().getPatchModel().setDirty();
                 }
             }
         });

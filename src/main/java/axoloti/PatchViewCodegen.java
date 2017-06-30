@@ -8,8 +8,6 @@ import axoloti.inlets.InletFrac32;
 import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInt32;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectInstanceController;
@@ -26,6 +24,7 @@ import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,8 +35,8 @@ import java.util.logging.Logger;
  */
 public class PatchViewCodegen extends PatchAbstractView {
    
-    ArrayView<AxoObjectInstanceAbstractCodegenView> objectInstanceViews;
-    ArrayView<INetView> netViews;
+    List<AxoObjectInstanceAbstractCodegenView> objectInstanceViews;
+    List<INetView> netViews;
 
     final ArrayList<ParameterInstance> ParameterInstances;    
     final ArrayList<DisplayInstance> DisplayInstances;
@@ -45,20 +44,11 @@ public class PatchViewCodegen extends PatchAbstractView {
     
     public PatchViewCodegen(PatchController controller) {
         super(controller);
-        objectInstanceViews = new ArrayView<AxoObjectInstanceAbstractCodegenView>(controller.objectInstanceControllers) {            
-            @Override
-            public void updateUI() {
-            }
-
-            @Override
-            public AxoObjectInstanceAbstractCodegenView viewFactory(AbstractController ctrl) {
-                return AxoObjectInstanceCodegenViewFactory.createView((ObjectInstanceController)ctrl);
-            }
-
-            @Override
-            public void removeView(AxoObjectInstanceAbstractCodegenView view) {
-            }
-        };
+        objectInstanceViews = new ArrayList<AxoObjectInstanceAbstractCodegenView>();
+        for(ObjectInstanceController c: controller.objectInstanceControllers) {
+            AxoObjectInstanceAbstractCodegenView o = AxoObjectInstanceCodegenViewFactory.createView(c);
+            objectInstanceViews.add(o);
+        }
 
         int i = 0;        
         ParameterInstances = new ArrayList<ParameterInstance>();
@@ -83,8 +73,6 @@ public class PatchViewCodegen extends PatchAbstractView {
             }
         }
         displayDataLength = offset;        
-        
-        controller.objectInstanceControllers.addView(objectInstanceViews);
     }
 
     private PatchSettings getSettings() {

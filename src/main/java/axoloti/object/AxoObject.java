@@ -62,7 +62,6 @@ import axoloti.inlets.InletFrac32Pos;
 import axoloti.inlets.InletInt32;
 import axoloti.inlets.InletInt32Bipolar;
 import axoloti.inlets.InletInt32Pos;
-import axoloti.mvc.array.ArrayModel;
 import axoloti.objecteditor.AxoObjectEditor;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletBool32;
@@ -112,6 +111,7 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import org.simpleframework.xml.*;
@@ -126,9 +126,9 @@ public class AxoObject extends AxoObjectAbstract {
     @Element(required = false)
     public String helpPatch;
     @Element(required = false)
-    private Boolean providesModulationSource;
+    private Boolean providesModulationSource = false;
     @Element(required = false)
-    private Boolean rotatedParams;
+    private Boolean rotatedParams = false;
     @ElementList(required = false)
     public ArrayList<String> ModulationSources;
     @Path("inlets")
@@ -147,7 +147,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = InletFrac32BufferPos.TypeName, type = InletFrac32BufferPos.class, inline = true, required = false),
         @ElementList(entry = InletFrac32BufferBipolar.TypeName, type = InletFrac32BufferBipolar.class, inline = true, required = false)
     })
-    public ArrayModel<Inlet> inlets;
+    public List<Inlet> inlets = new ArrayList<>();
     @Path("outlets")
     @ElementListUnion({
         @ElementList(entry = OutletBool32.TypeName, type = OutletBool32.class, inline = true, required = false),
@@ -163,7 +163,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = OutletFrac32BufferPos.TypeName, type = OutletFrac32BufferPos.class, inline = true, required = false),
         @ElementList(entry = OutletFrac32BufferBipolar.TypeName, type = OutletFrac32BufferBipolar.class, inline = true, required = false)
     })
-    public ArrayModel<Outlet> outlets;
+    public List<Outlet> outlets = new ArrayList<>();
     @Path("displays")
     @ElementListUnion({
         @ElementList(entry = DisplayBool32.TypeName, type = DisplayBool32.class, inline = true, required = false),
@@ -186,7 +186,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = DisplayFrac8U128VBar.TypeName, type = DisplayFrac8U128VBar.class, inline = true, required = false),
         @ElementList(entry = DisplayNoteLabel.TypeName, type = DisplayNoteLabel.class, inline = true, required = false)
     })
-    public ArrayModel<Display> displays; // readouts
+    public List<Display> displays = new ArrayList<>(); // readouts
     @Path("params")
     @ElementListUnion({
         @ElementList(entry = ParameterFrac32UMap.TypeName, type = ParameterFrac32UMap.class, inline = true, required = false),
@@ -220,7 +220,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = ParameterBin1.TypeName, type = ParameterBin1.class, inline = true, required = false),
         @ElementList(entry = ParameterBin1Momentary.TypeName, type = ParameterBin1Momentary.class, inline = true, required = false)
     })
-    public ArrayModel<Parameter> params; // variables
+    public List<Parameter> params  = new ArrayList<>(); // variables
     @Path("attribs")
     @ElementListUnion({
         @ElementList(entry = AxoAttributeObjRef.TypeName, type = AxoAttributeObjRef.class, inline = true, required = false),
@@ -230,7 +230,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = AxoAttributeSpinner.TypeName, type = AxoAttributeSpinner.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeSDFile.TypeName, type = AxoAttributeSDFile.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeTextEditor.TypeName, type = AxoAttributeTextEditor.class, inline = true, required = false)})
-    public ArrayModel<AxoAttribute> attributes; // literal constants
+    public List<AxoAttribute> attributes = new ArrayList<>(); // literal constants
     @ElementList(name = "file-depends", entry = "file-depend", type = SDFileReference.class, required = false)
     public ArrayList<SDFileReference> filedepends;
     @ElementList(name = "includes", entry = "include", type = String.class, required = false)
@@ -242,17 +242,17 @@ public class AxoObject extends AxoObjectAbstract {
     public HashSet<String> modules;
 
     @Element(name = "code.declaration", required = false, data = true)
-    public String sLocalData;
+    public String sLocalData = "";
     @Element(name = "code.init", required = false, data = true)
-    public String sInitCode;
+    public String sInitCode = "";
     @Element(name = "code.dispose", required = false, data = true)
-    public String sDisposeCode;
+    public String sDisposeCode = "";
     @Element(name = "code.krate", required = false, data = true)
-    public String sKRateCode;
+    public String sKRateCode = "";
     @Element(name = "code.srate", required = false, data = true)
-    public String sSRateCode;
+    public String sSRateCode = "";
     @Element(name = "code.midihandler", required = false, data = true)
-    public String sMidiCode;
+    public String sMidiCode = "";
 
     @Element(name = "code.midicc", required = false, data = true)
     @Deprecated
@@ -277,22 +277,10 @@ public class AxoObject extends AxoObjectAbstract {
     public String sMidiResetControllersCode;
 
     public AxoObject() {
-        inlets = new ArrayModel<Inlet>();
-        outlets = new ArrayModel<Outlet>();
-        displays = new ArrayModel<Display>();
-        params = new ArrayModel<Parameter>();
-        attributes = new ArrayModel<AxoAttribute>();
-        includes = new HashSet<String>();
     }
 
     public AxoObject(String id, String sDescription) {
         super(id, sDescription);
-        inlets = new ArrayModel<Inlet>();
-        outlets = new ArrayModel<Outlet>();
-        displays = new ArrayModel<Display>();
-        params = new ArrayModel<Parameter>();
-        attributes = new ArrayModel<AxoAttribute>();
-        includes = new HashSet<String>();
     }
 
     AxoObjectEditor editor;
@@ -394,20 +382,6 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public ArrayModel<Inlet> getInlets() {
-        return inlets;
-    }
-
-    @Override
-    public ArrayModel<Outlet> getOutlets() {
-        return outlets;
-    }
-
-    public ArrayModel<Parameter> getParameters() {
-        return params;
-    }
-
-    @Override
     public String getCName() {
         return id;
     }
@@ -416,18 +390,6 @@ public class AxoObject extends AxoObjectAbstract {
     public String GenerateUUID() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
-    }
-
-    public Boolean getRotatedParams() {
-        if (rotatedParams == null) {
-            return false;
-        } else {
-            return rotatedParams;
-        }
-    }
-
-    public void setRotatedParams(boolean rotatedParams) {
-        this.rotatedParams = rotatedParams;
     }
 
     private static String getRelativePath(String baseDir, String targetPath) {
@@ -525,23 +487,23 @@ public class AxoObject extends AxoObjectAbstract {
     @Override
     public AxoObject clone() throws CloneNotSupportedException {
         AxoObject c = (AxoObject) super.clone();
-        c.inlets = new ArrayModel<Inlet>();
+        c.inlets = new ArrayList<Inlet>();
         for (Inlet i : inlets) {
             c.inlets.add(i.clone());
         }
-        c.outlets = new ArrayModel<Outlet>();
+        c.outlets = new ArrayList<Outlet>();
         for (Outlet i : outlets) {
             c.outlets.add(i.clone());
         }
-        c.params = new ArrayModel<Parameter>();
+        c.params = new ArrayList<Parameter>();
         for (Parameter i : params) {
             c.params.add(i.clone());
         }
-        c.displays = new ArrayModel<Display>();
+        c.displays = new ArrayList<Display>();
         for (Display i : displays) {
             c.displays.add(i.clone());
         }
-        c.attributes = new ArrayModel<AxoAttribute>();
+        c.attributes = new ArrayList<AxoAttribute>();
         for (AxoAttribute i : attributes) {
             c.attributes.add(i.clone());
         }
@@ -550,23 +512,23 @@ public class AxoObject extends AxoObjectAbstract {
 
     public void copy(AxoObject o) throws CloneNotSupportedException {
 
-        inlets = new ArrayModel<Inlet>();
+        inlets = new ArrayList<Inlet>();
         for (Inlet i : o.inlets) {
             inlets.add(i.clone());
         }
-        outlets = new ArrayModel<Outlet>();
+        outlets = new ArrayList<Outlet>();
         for (Outlet i : o.outlets) {
             outlets.add(i.clone());
         }
-        params = new ArrayModel<Parameter>();
+        params = new ArrayList<Parameter>();
         for (Parameter i : o.params) {
             params.add(i.clone());
         }
-        displays = new ArrayModel<Display>();
+        displays = new ArrayList<Display>();
         for (Display i : o.displays) {
             displays.add(i.clone());
         }
-        attributes = new ArrayModel<AxoAttribute>();
+        attributes = new ArrayList<AxoAttribute>();
         for (AxoAttribute i : o.attributes) {
             attributes.add(i.clone());
         }
@@ -612,6 +574,164 @@ public class AxoObject extends AxoObjectAbstract {
 
     public AxoObjectEditor getEditor() {
         return editor;
+    }
+
+    /* MVC code */
+    
+    private String StringDenull(String s){
+        if (s == null) return "";
+        return s;
+    }
+
+    @Override
+    public String getHelpPatch() {
+        return StringDenull(helpPatch);
+    }
+
+    public void setHelpPatch(String helpPatch) {
+        String prev_val = this.helpPatch;
+        this.helpPatch = helpPatch;
+        firePropertyChange(ObjectController.OBJ_HELPPATCH, prev_val, helpPatch);
+    }
+    
+    @Override
+    public List<Inlet> getInlets() {
+        if (inlets == null) return new ArrayList<>();
+        return inlets;
+    }
+
+    public void setInlets(ArrayList<Inlet> inlets) {
+        List<Inlet> old_val = this.inlets;
+        this.inlets = inlets;
+        firePropertyChange(ObjectController.OBJ_INLETS, old_val, inlets);
+    }
+
+    @Override
+    public List<Outlet> getOutlets() {
+        if (outlets == null) return new ArrayList<>();
+        return outlets;
+    }
+
+    public void setOutlets(ArrayList<Outlet> outlets) {
+        List<Outlet> old_val = this.outlets;
+        this.outlets = outlets;
+        firePropertyChange(ObjectController.OBJ_OUTLETS, old_val, inlets);
+    }
+
+    @Override
+    public List<Parameter> getParameters() {
+        if (params == null) return new ArrayList<>();
+        return params;
+    }
+
+    public void setParameters(ArrayList<Parameter> parameters) {
+        List<Parameter> old_val = this.params;
+        this.params = parameters;
+        firePropertyChange(ObjectController.OBJ_PARAMETERS, old_val, parameters);
+    }
+
+    @Override
+    public List<AxoAttribute> getAttributes() {
+        if (attributes == null) return new ArrayList<>();
+        return attributes;
+    }
+
+    public void setAttributes(ArrayList<AxoAttribute> attributes) {
+        List<AxoAttribute> old_val = this.attributes;
+        this.attributes = attributes;
+        firePropertyChange(ObjectController.OBJ_ATTRIBUTES, old_val, attributes);
+    }
+
+    @Override
+    public List<Display> getDisplays() {
+        if (displays == null) return new ArrayList<>();
+        return displays;
+    }
+
+    public void setDisplays(ArrayList<Display> displays) {
+        List<Display> old_val = this.displays;
+        this.displays = displays;
+        firePropertyChange(ObjectController.OBJ_DISPLAYS, old_val, displays);
+    }
+
+    public Boolean getRotatedParams() {
+        if (rotatedParams == null) {
+            return false;
+        } else {
+            return rotatedParams;
+        }
+    }
+
+    public void setRotatedParams(Boolean rotatedParams) {
+        Boolean prev_value = this.rotatedParams;
+        this.rotatedParams = rotatedParams;
+        // FIXME: property
+    }
+
+    @Override
+    public String getInitCode() {
+        return StringDenull(sInitCode);
+    }
+
+    public void setInitCode(String sInitCode) {
+        String prev_val = this.sInitCode;
+        this.sInitCode = sInitCode;
+        firePropertyChange(ObjectController.OBJ_INIT_CODE, prev_val, sInitCode);
+    }
+
+    @Override
+    public String getDisposeCode() {
+        return StringDenull(sDisposeCode);
+    }
+
+    public void setDisposeCode(String sDisposeCode) {
+        String prev_val = this.sDisposeCode;
+        this.sDisposeCode = sDisposeCode;
+        firePropertyChange(ObjectController.OBJ_DISPOSE_CODE, prev_val, sDisposeCode);
+    }
+
+    @Override
+    public String getLocalData() {
+        return StringDenull(sLocalData);
+    }
+
+    public void setLocalData(String sLocalData) {
+        String prev_val = this.sLocalData;
+        this.sLocalData = sLocalData;
+        firePropertyChange(ObjectController.OBJ_LOCAL_DATA, prev_val, sLocalData);
+    }
+
+    @Override
+    public String getKRateCode() {
+        return StringDenull(sKRateCode);
+    }
+
+    public void setKRateCode(String sKRateCode) {
+        String prev_val = this.sKRateCode;
+        this.sKRateCode = sKRateCode;
+        firePropertyChange(ObjectController.OBJ_KRATE_CODE, prev_val, sKRateCode);
+    }
+
+    @Override
+    public String getSRateCode() {
+        return StringDenull(sSRateCode);
+    }
+
+    public void setSRateCode(String sSRateCode) {
+        String prev_val = this.sSRateCode;
+        this.sSRateCode = sSRateCode;
+        firePropertyChange(ObjectController.OBJ_SRATE_CODE, prev_val, sSRateCode);
+    }
+
+    @Override
+    public String getMidiCode() {
+        return StringDenull(sMidiCode);
+    }
+
+    public void setMidiCode(String sMidiCode) {
+        String prev_val = this.sMidiCode;
+        this.sMidiCode = sMidiCode;
+        firePropertyChange(ObjectController.OBJ_MIDI_CODE, prev_val, sMidiCode);
     }
 
 }

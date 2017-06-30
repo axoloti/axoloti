@@ -18,8 +18,6 @@
 package axoloti.attributedefinition;
 
 import axoloti.atom.AtomDefinitionController;
-import axoloti.attribute.AttributeInstanceSpinner;
-import axoloti.object.AxoObjectInstance;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 
@@ -30,11 +28,11 @@ import org.simpleframework.xml.Attribute;
 public class AxoAttributeSpinner extends AxoAttribute {
 
     @Attribute
-    Integer MinValue;
+    Integer MinValue = 0;
     @Attribute
-    Integer MaxValue;
+    Integer MaxValue = 1;
     @Attribute
-    Integer DefaultValue;
+    Integer DefaultValue = 0;
 
     public AxoAttributeSpinner() {
         MinValue = 0;

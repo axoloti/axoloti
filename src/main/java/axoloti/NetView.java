@@ -51,14 +51,25 @@ public class NetView extends JComponent implements INetView {
         for (OutletInstance i : net.getSources()) {
             AxoObjectInstanceAbstract o = i.getObjectInstance();
             IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
-            IOutletInstanceView o2 = ov.getOutletInstanceViews().getViewOfModel(i);
-            source.add(o2);
+            if (ov == null) {
+                throw new Error("no corresponding outlet instance view found");
+            }
+            for (IOutletInstanceView o2: ov.getOutletInstanceViews()) {
+                if (o2.getController().getModel() == i) {
+                    source.add(o2);
+                    break;
+                }
+            }
         }
         for (InletInstance i : net.getDestinations()) {
             AxoObjectInstanceAbstract o = i.getObjectInstance();
             IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
-            IInletInstanceView o2 = ov.getInletInstanceViews().getViewOfModel(i);
-            dest.add(o2);
+            for (IInletInstanceView o2: ov.getInletInstanceViews()) {
+                if (o2.getController().getModel() == i) {
+                    dest.add(o2);
+                    break;
+                }
+            }
         }
     }
 

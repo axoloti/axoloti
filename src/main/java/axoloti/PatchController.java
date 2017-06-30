@@ -4,7 +4,6 @@ import static axoloti.PatchModel.USE_EXECUTION_ORDER;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFile;
 import axoloti.object.AxoObjectInstanceAbstract;
@@ -15,7 +14,6 @@ import axoloti.object.AxoObjectPatcher;
 import axoloti.object.AxoObjectPatcherObject;
 import axoloti.object.ObjectController;
 import axoloti.object.ObjectInstanceController;
-import axoloti.object.ObjectInstancePatcherController;
 import axoloti.outlets.OutletInstance;
 import axoloti.utils.Constants;
 import axoloti.utils.Preferences;
@@ -43,6 +41,7 @@ import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
 import qcmds.QCmdUploadFile;
 import axoloti.mvc.IView;
+import axoloti.mvc.array.ArrayController;
 import axoloti.object.IAxoObject;
 
 public class PatchController extends AbstractController<PatchModel, IView, AbstractController> {
@@ -53,36 +52,58 @@ public class PatchController extends AbstractController<PatchModel, IView, Abstr
     public final static String PATCH_OBJECTINSTANCES = "Objectinstances";
     public final static String PATCH_NETS = "Nets";
 
+    public final static String PATCH_PARENT_PARAMETERS = "ParentParameters";
+    public final static String PATCH_PARENT_INLETS = "ParentInlets";
+    public final static String PATCH_PARENT_OUTLETS = "ParentOutlets";
+
+    @Override
+    public String[] getPropertyNames() {
+        return new String[]{
+            PATCH_LOCKED,
+            PATCH_FILENAME,
+            PATCH_DSPLOAD,
+            PATCH_OBJECTINSTANCES,
+            PATCH_NETS
+        };
+    }
+
     public PatchController(PatchModel model, AbstractDocumentRoot documentRoot, AbstractController parentController) {
         super(model, documentRoot, parentController);
         if (model.settings == null) {
             model.settings = new PatchSettings();
         }
+
         // Now it is the time to cleanup the model, replace object instances with linked objects
-        ArrayList<AxoObjectInstanceAbstract> unlinked_object_instances = (ArrayList<AxoObjectInstanceAbstract>) model.objectinstances.getArray().clone();
+        ArrayList<AxoObjectInstanceAbstract> unlinked_object_instances = new ArrayList<AxoObjectInstanceAbstract>(model.objectinstances);
         model.objectinstances.clear();
         for (AxoObjectInstanceAbstract unlinked_object_instance : unlinked_object_instances) {
             add_unlinked_objectinstance(unlinked_object_instance);
         }
-
-        objectInstanceControllers = new ArrayController<ObjectInstanceController, AxoObjectInstanceAbstract, PatchController>(model.objectinstances, documentRoot, this) {
+        objectInstanceControllers = new ArrayController<ObjectInstanceController, AxoObjectInstanceAbstract, PatchController>(this, PATCH_OBJECTINSTANCES) {
 
             @Override
             public ObjectInstanceController createController(AxoObjectInstanceAbstract model, AbstractDocumentRoot documentRoot, PatchController parent) {
-                if (model instanceof AxoObjectInstancePatcher) {
-                    return new ObjectInstancePatcherController((AxoObjectInstancePatcher) model, documentRoot, parent);
-                } else {
-                    return new ObjectInstanceController(model, documentRoot, parent);
-                }
+                return new ObjectInstanceController(model, documentRoot, parent);
+            }
+
+            @Override
+            public void disposeController(ObjectInstanceController controller) {
+                // TODO: disconnect its inlets/outlets
             }
         };
-        netControllers = new ArrayController<NetController, Net, PatchController>(model.nets, documentRoot, this) {
+        netControllers = new ArrayController<NetController, Net, PatchController>(this, PATCH_NETS) {
 
             @Override
             public NetController createController(Net model, AbstractDocumentRoot documentRoot, PatchController parent) {
                 return new NetController(model, documentRoot, parent);
             }
+
+            @Override
+            public void disposeController(NetController controller) {
+            }
         };
+        
+        getModel().UpdateOnParent();
     }
 
     QCmdProcessor GetQCmdProcessor() {
@@ -186,8 +207,8 @@ public class PatchController extends AbstractController<PatchModel, IView, Abstr
         PatchViewCodegen codegen = new PatchViewCodegen(this);               
         String c = codegen.GenerateCode4();
         return c;
-    }    
- 
+    }
+
     public PatchViewCodegen WriteCode() {
 //        String c = GenerateCode3();
         getModel().CreateIID();
@@ -211,8 +232,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Abstr
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Generate code complete");
         return codegen;
     }
-   
-    
+
     public void UploadToSDCard(String sdfilename) {
         WriteCode();
         Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
@@ -305,7 +325,15 @@ public class PatchController extends AbstractController<PatchModel, IView, Abstr
             while (getModel().GetObjectInstance(n + i) != null) {
                 i++;
             }
-            AxoObjectInstanceAbstract objinst = AxoObjectInstanceFactory.createView(obj.createController(null, null), this, n + i, loc);
+            AxoObjectInstanceAbstract objinst;
+            /*
+            if (obj instanceof AxoObjectPatcher) {
+                AxoObjectPatcher objp = (AxoObjectPatcher)obj;
+                objp.createController(null, this)
+                
+            }
+            else*/
+            objinst = AxoObjectInstanceFactory.createView(obj.createController(null, null), this, n + i, loc);
 
             Modulator[] m = obj.getModulators();
             if (m != null) {
@@ -318,6 +346,11 @@ public class PatchController extends AbstractController<PatchModel, IView, Abstr
                 }
             }
             objectInstanceControllers.add(objinst);
+            if (!(objinst.getParentInlets().isEmpty() && 
+                    objinst.getParentOutlets().isEmpty() &&
+                    objinst.getParentParameters().isEmpty())) {
+                getModel().UpdateOnParent();
+            }            
             return objinst;
         } else {
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked!");
@@ -366,6 +399,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Abstr
 
     public void ShowCompileFail() {
         // TODO: fixme
+        getModel().setLocked(false);
         // patchView.ShowCompileFail();
     }
 
@@ -380,23 +414,27 @@ public class PatchController extends AbstractController<PatchModel, IView, Abstr
 
     void add_unlinked_objectinstance(AxoObjectInstanceAbstract o) {
             o.setPatchModel(getModel());
+            AxoObjectInstanceAbstract linked_object_instance;
             if (o instanceof AxoObjectInstancePatcher) {
                 AxoObjectPatcher op = new AxoObjectPatcher("patch/patcher", "");
-                AxoObjectInstancePatcher linked_object_instance = op.CreateInstance(this, o.getInstanceName(), o.getLocation(), ((AxoObjectInstancePatcher) o).getSubPatchModel());
-                linked_object_instance.applyValues(o);
-                getModel().objectinstances.add(linked_object_instance);
+                PatchController pc = new PatchController(((AxoObjectInstancePatcher) o).getSubPatchModel(), getDocumentRoot(), null);
+                linked_object_instance = op.CreateInstance(this, o.getInstanceName(), o.getLocation(), pc);
             } else if (o instanceof AxoObjectInstancePatcherObject) {
                 AxoObjectPatcherObject opo = ((AxoObjectInstancePatcherObject) o).ao;
                 ObjectController opoc = new ObjectController(opo, getDocumentRoot());
-                AxoObjectInstanceAbstract linked_object_instance = new AxoObjectInstancePatcherObject(opoc, getModel(), o.getInstanceName(), o.getLocation());
+                linked_object_instance = new AxoObjectInstancePatcherObject(opoc, getModel(), o.getInstanceName(), o.getLocation());
                 opoc.addView(linked_object_instance);
-                linked_object_instance.applyValues(o);
-                getModel().objectinstances.add(linked_object_instance);
             } else {
                 IAxoObject t = o.resolveType(getModel().GetCurrentWorkingDirectory());
-                AxoObjectInstanceAbstract linked_object_instance = AxoObjectInstanceFactory.createView(t.createController(null, null), this, o.getInstanceName(), o.getLocation());
-                linked_object_instance.applyValues(o);
-                getModel().objectinstances.add(linked_object_instance);
+                linked_object_instance = AxoObjectInstanceFactory.createView(t.createController(null, null), this, o.getInstanceName(), o.getLocation());
+            }
+            linked_object_instance.applyValues(o);
+            if (objectInstanceControllers != null) {
+                objectInstanceControllers.add(linked_object_instance);
+            } else {
+                // PatchController is not created yet, 
+                // in this specific case we can modify the ObjectInstances ArrayList contents directly
+                getModel().getObjectInstances().add(linked_object_instance);
             }
     }
 
@@ -409,7 +447,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Abstr
         try {
             PatchModel p = serializer.read(PatchModel.class, v);
             Map<String, String> dict = new HashMap<String, String>();
-            ArrayList<AxoObjectInstanceAbstract> obj2 = (ArrayList<AxoObjectInstanceAbstract>) p.objectinstances.getArray().clone();
+            ArrayList<AxoObjectInstanceAbstract> obj2 = new ArrayList<>(p.objectinstances);
             /*
              for (AxoObjectInstanceAbstract o : obj2) {
              o.patchModel = getModel();
@@ -417,7 +455,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Abstr
              if (o instanceof AxoObjectInstance)
              getModel().applyType((AxoObjectInstance)o, obj);
              if (obj != null) {
-             Modulator[] m = obj.getModulators();
+             Modulator[] m = obj.getPatchModulators();
              if (m != null) {
              if (getModel().Modulators == null) {
              getModel().Modulators = new ArrayList<Modulator>();
@@ -604,8 +642,11 @@ public class PatchController extends AbstractController<PatchModel, IView, Abstr
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(PATCH_OBJECTINSTANCES)) {
+        String propertyName = evt.getPropertyName();
+        if (propertyName.equals(PATCH_OBJECTINSTANCES)) {
             objectInstanceControllers.syncControllers();
+        } else  if (propertyName.equals(PATCH_NETS)) {
+            netControllers.syncControllers();
         }
         super.propertyChange(evt);
     }

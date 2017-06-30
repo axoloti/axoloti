@@ -17,6 +17,7 @@
  */
 package axoloti.attributedefinition;
 
+import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.AttributeInstanceComboBox;
 import axoloti.object.AxoObjectInstance;
 import java.util.ArrayList;
@@ -31,33 +32,37 @@ import org.simpleframework.xml.ElementList;
 public class AxoAttributeComboBox extends AxoAttribute {
 
     @ElementList(required = false)
-    public ArrayList<String> MenuEntries;
+    public List<String> MenuEntries = new ArrayList<>();
     @ElementList(required = false)
-    public ArrayList<String> CEntries;
+    public List<String> CEntries = new ArrayList<>();
 
     public AxoAttributeComboBox() {
-        if (MenuEntries == null) {
-            MenuEntries = new ArrayList<String>();
-        }
-        if (CEntries == null) {
-            CEntries = new ArrayList<String>();
-        }
     }
 
     public AxoAttributeComboBox(String name, String MenuEntries[], String CEntries[]) {
         super(name);
-        this.MenuEntries = new ArrayList<String>();
-        this.CEntries = new ArrayList<String>();
         this.MenuEntries.addAll(Arrays.asList(MenuEntries));
         this.CEntries.addAll(Arrays.asList(CEntries));
     }
 
-    public ArrayList<String> getMenuEntries() {
+    public List<String> getMenuEntries() {
         return MenuEntries;
     }
 
-    public ArrayList<String> getCEntries() {
+    public void setMenuEntries(ArrayList<String> MenuEntries) {
+        List<String> oldVal = this.MenuEntries;
+        this.MenuEntries = MenuEntries;
+        firePropertyChange(AtomDefinitionController.ATOM_MENUENTRIES, oldVal, MenuEntries);
+    }
+
+    public List<String> getCEntries() {
         return CEntries;
+    }
+
+    public void setCEntries(ArrayList<String> CEntries) {
+        List<String> oldVal = this.CEntries;
+        this.CEntries = CEntries;
+        firePropertyChange(AtomDefinitionController.ATOM_CENTRIES, oldVal, CEntries);
     }
 
     static public final String TypeName = "combo";

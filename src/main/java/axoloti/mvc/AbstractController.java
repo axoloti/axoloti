@@ -117,7 +117,11 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
 
             Method method = model.getClass().
                     getMethod("get" + propertyName, new Class[]{});
-            return method.invoke(model);
+            Object val = method.invoke(model);
+            if (val == null) {
+                System.out.println("Property method get" + propertyName + " returned null.");
+            }
+            return val;
 
         } catch (NoSuchMethodException ex) {
             Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, null, ex);

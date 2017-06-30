@@ -9,7 +9,6 @@ import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
-import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
@@ -32,6 +31,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
@@ -257,17 +257,17 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     }
 
     @Override
-    public ArrayView<IInletInstanceView> getInletInstanceViews() {
+    public List<IInletInstanceView> getInletInstanceViews() {
         return null;
     }
 
     @Override
-    public ArrayView<IOutletInstanceView> getOutletInstanceViews() {
+    public List<IOutletInstanceView> getOutletInstanceViews() {
         return null;
     }
 
     @Override
-    public ArrayView<IParameterInstanceView> getParameterInstanceViews() {
+    public List<IParameterInstanceView> getParameterInstanceViews() {
         return null;
     }
 

@@ -17,9 +17,11 @@
  */
 package axoloti.objecteditor;
 
+import axoloti.attributedefinition.AttributeTypes;
 import axoloti.displays.Display;
 import axoloti.displays.DisplayTypes;
 import axoloti.mvc.array.ArrayController;
+import axoloti.object.ObjectController;
 
 /**
  *
@@ -27,8 +29,8 @@ import axoloti.mvc.array.ArrayController;
  */
 public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
 
-    public DisplayDefinitionsEditorPanel(ArrayController controller) {
-        super(controller, DisplayTypes.getTypes());
+    public DisplayDefinitionsEditorPanel(ObjectController controller) {
+        super(controller, ObjectController.OBJ_DISPLAYS, DisplayTypes.getTypes());
     }
 
     @Override
@@ -41,4 +43,8 @@ public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display
         return "display";
     }
 
+    @Override
+    ArrayController getTController() {
+        return getController().disps;
+    }
 }

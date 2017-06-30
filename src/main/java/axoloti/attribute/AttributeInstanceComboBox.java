@@ -20,6 +20,7 @@ package axoloti.attribute;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.object.AxoObjectInstance;
+import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -53,6 +54,9 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
 
     @Override
     public String getValue() {
+        if (selection == null) {
+            return "";
+        }
         return selection;
     }
 
@@ -84,4 +88,15 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     public int getSelectedIndex() {
         return getIndex(selection);
     }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_CENTRIES)
+                || evt.getPropertyName().equals(AtomDefinitionController.ATOM_MENUENTRIES)) {
+            firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+        }
+    }
+    
+    
 }

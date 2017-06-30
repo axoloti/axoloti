@@ -132,7 +132,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
         if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
             setName((String) evt.getNewValue());
         } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
-            //setDescription(evt.getNewValue());
+            firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
     }
 
@@ -151,4 +151,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
         return controller;
     }
 
+    public String getDescription() {
+        return getModel().getDescription();
+    }
 }

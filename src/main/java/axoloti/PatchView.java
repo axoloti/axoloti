@@ -10,7 +10,6 @@ import axoloti.inlets.IInletInstanceView;
 import axoloti.iolet.IoletAbstract;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.array.ArrayModel;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectInstanceAbstract;
@@ -71,59 +70,19 @@ public abstract class PatchView extends PatchAbstractView {
     final static String patchMidiKey = "midi/in/keyb";
     final static String patchDisplay = "disp/";
 
-    ArrayView<IAxoObjectInstanceView> objectInstanceViews;
-    ArrayView<INetView> netViews;
+    List<IAxoObjectInstanceView> objectInstanceViews = new ArrayList<>();
+    List<INetView> netViews = new ArrayList<>();
     
     PatchView(PatchController patchController) {
         super(patchController);
     }
 
     public void PostConstructor() {
-        objectInstanceViews = new ArrayView<IAxoObjectInstanceView>(controller.objectInstanceControllers) {
-            @Override
-            public IAxoObjectInstanceView viewFactory(AbstractController ctrl) {
-                IAxoObjectInstanceView view = AxoObjectInstanceViewFactory.createView((ObjectInstanceController) ctrl, (PatchViewSwing) PatchView.this);
-                view.PostConstructor();
-                add(view);
-                return view;
-            }
 
-            @Override
-            public void updateUI() {
-            }
-
-            @Override
-            public void removeView(IAxoObjectInstanceView view) {
-                remove(view);
-            }
-        };
-        controller.objectInstanceControllers.addView(objectInstanceViews);
-
-        netViews = new ArrayView<INetView>(controller.netControllers) {
-            @Override
-            public INetView viewFactory(AbstractController ctrl) {
-                INetView view = new NetView((Net) (ctrl.getModel()), (NetController) ctrl, (PatchViewSwing) PatchView.this);
-                view.PostConstructor();
-                ctrl.addView(view);
-                add(view);
-                view.repaint();
-                return view;
-            }
-
-            @Override
-            public void updateUI() {
-            }
-
-            @Override
-            public void removeView(INetView view) {
-                remove(view);
-            }
-        };
-        controller.netControllers.addView(netViews);
         
     }
 
-    public ArrayView<IAxoObjectInstanceView> getObjectInstanceViews() {
+    public List<IAxoObjectInstanceView> getObjectInstanceViews() {
         return objectInstanceViews;
     }
 
@@ -228,7 +187,7 @@ public abstract class PatchView extends PatchAbstractView {
                 p.objectinstances.add(o.getModel());
             }
         }
-        p.nets = new ArrayModel<Net>();
+        p.nets = new ArrayList<Net>();
         for (INetView n : netViews) {
             int sel = 0;
             for (IInletInstanceView i : n.getDestinationViews()) {
@@ -541,7 +500,12 @@ public abstract class PatchView extends PatchAbstractView {
     }
 
     IAxoObjectInstanceView getObjectInstanceView(AxoObjectInstanceAbstract o) {
-        return objectInstanceViews.getViewOfModel(o);
+        for (IAxoObjectInstanceView o2 : objectInstanceViews) {
+            if (o2.getModel() == o) {
+                return o2;
+            }
+        }
+        return null;
     }
 
     public INetView GetNetView(IInletInstanceView i) {
@@ -588,7 +552,7 @@ public abstract class PatchView extends PatchAbstractView {
         return null;
     }
 
-    public ArrayView<INetView> getNetViews() {
+    public List<INetView> getNetViews() {
         return netViews;
     }
 
@@ -611,6 +575,48 @@ public abstract class PatchView extends PatchAbstractView {
         }
         */
     }
+    
+    ArrayView<IAxoObjectInstanceView> objectInstanceViewSync = new ArrayView<IAxoObjectInstanceView>() {
+        @Override
+        public IAxoObjectInstanceView viewFactory(AbstractController ctrl) {
+            IAxoObjectInstanceView view = AxoObjectInstanceViewFactory.createView((ObjectInstanceController) ctrl, (PatchViewSwing) PatchView.this);
+            view.PostConstructor();
+            add(view);
+            return view;
+        }
+
+        @Override
+        public void updateUI(List<IAxoObjectInstanceView> views) {
+        }
+
+        @Override
+        public void removeView(IAxoObjectInstanceView view) {
+            remove(view);
+        }
+
+    };
+
+    ArrayView<INetView> netViewSync = new ArrayView<INetView>() {
+        @Override
+        public INetView viewFactory(AbstractController ctrl) {
+            INetView view = new NetView((Net) (ctrl.getModel()), (NetController) ctrl, (PatchViewSwing) PatchView.this);
+            view.PostConstructor();
+            ctrl.addView(view);
+            add(view);
+            view.repaint();
+            return view;
+        }
+
+        @Override
+        public void updateUI(List<INetView> views) {
+        }
+
+        @Override
+        public void removeView(INetView view) {
+            remove(view);
+        }
+
+    };
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
@@ -625,9 +631,9 @@ public abstract class PatchView extends PatchAbstractView {
                 }
             }
         } else if (evt.getPropertyName().equals(PatchController.PATCH_OBJECTINSTANCES)) {
-            objectInstanceViews.updateUI();
+            objectInstanceViews = objectInstanceViewSync.Sync(objectInstanceViews, getController().objectInstanceControllers);
         } else if (evt.getPropertyName().equals(PatchController.PATCH_NETS)) {
-            netViews.updateUI();
+            netViews = netViewSync.Sync(netViews, getController().netControllers);
         }
     }
 

@@ -136,7 +136,6 @@ public abstract class PIoletAbstract extends PatchPNode implements IIoletAbstrac
                     dragtarget.repaint();
                 }
                 if (n != null) {
-                    getPatchModel().setDirty();
                 }
                 PIoletAbstract.this.repaint();
                 e.setHandled(true);

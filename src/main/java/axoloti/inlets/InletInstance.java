@@ -53,7 +53,7 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     public AxoObjectInstanceAbstract getObjectInstance() {
         return axoObj;
     }
-    
+
     @Persist
     public void Persist() {
         objname = axoObj.getInstanceName();
@@ -75,8 +75,7 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
         this.objname = objname;
         this.inletname = inletname;
     }
-    
-    
+
     public InletInstance(AtomDefinitionController inletController, final AxoObjectInstance axoObj) {
         this.controller = inletController;
         this.axoObj = axoObj;
@@ -122,9 +121,9 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
-            setName((String)evt.getNewValue());
+            setName((String) evt.getNewValue());
         } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
-            //setDescription(evt.getNewValue());
+            firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
     }
 
@@ -136,10 +135,14 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     public String getName() {
         return inletname;
     }
-    
+
     public void setName(String inletname) {
         String preVal = this.inletname;
         this.inletname = inletname;
         firePropertyChange(AtomDefinitionController.ATOM_NAME, preVal, inletname);
+    }
+
+    public String getDescription() {
+        return getModel().getDescription();
     }
 }

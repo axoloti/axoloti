@@ -17,12 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.PatchController;
-import axoloti.PatchModel;
-import axoloti.inlets.Inlet;
-import axoloti.mvc.array.ArrayModel;
-import axoloti.outlets.Outlet;
-import java.awt.Point;
 import java.io.File;
 import org.simpleframework.xml.Root;
 
@@ -31,7 +25,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root
-public class AxoObjectUnloaded extends AxoObjectAbstract {
+public class AxoObjectUnloaded extends AxoObjectAbstract0 {
 
     File f;
 
@@ -54,28 +48,9 @@ public class AxoObjectUnloaded extends AxoObjectAbstract {
         return loadedObject;
     }
 
-    /*
-    @Override
-    public AxoObjectInstance CreateInstance(PatchController patchController, String InstanceName1, Point location) {
-        Load();
-        AxoObjectInstance oi = new AxoObjectInstance(loadedObject.createController(null, null), patchController.getModel(), InstanceName1, location);
-        if (patchController.getModel() != null) {
-            patchController.getModel().objectinstances.add(oi);
-        }
-        return oi;
-    }*/
     @Override
     public String GenerateUUID() {
         return "unloaded";
     }
 
-    @Override
-    public ArrayModel<Inlet> getInlets() {
-        return null;
-    }
-
-    @Override
-    public ArrayModel<Outlet> getOutlets() {
-        return null;
-    }
 }

@@ -20,6 +20,7 @@ package axoloti.objecteditor;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletTypes;
 import axoloti.mvc.array.ArrayController;
+import axoloti.object.ObjectController;
 
 /**
  *
@@ -27,18 +28,22 @@ import axoloti.mvc.array.ArrayController;
  */
 public class InletDefinitionsEditorPanel extends AtomDefinitionsEditor<Inlet> {
 
-    public InletDefinitionsEditorPanel(ArrayController controller) {
-        super(controller, InletTypes.getTypes());
+    public InletDefinitionsEditorPanel(ObjectController controller) {
+        super(controller, ObjectController.OBJ_INLETS, InletTypes.getTypes());
     }
 
     @Override
     String getDefaultName() {
         return "i";
     }
-    
+
     @Override
     String getAtomTypeName() {
         return "inlet";
     }
-    
+
+    @Override
+    ArrayController getTController() {
+        return getController().inlets;
+    }
 }
