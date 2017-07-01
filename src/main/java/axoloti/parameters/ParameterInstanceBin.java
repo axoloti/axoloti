@@ -66,8 +66,7 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
         super.CopyValueFrom(p);
         if (p instanceof ParameterInstanceBin) {
             ParameterInstanceBin p1 = (ParameterInstanceBin) p;
-            presets = p1.presets;
-            value.setRaw(p1.value.getRaw());
+            setValue(p1.getValue());
         }
     }
 

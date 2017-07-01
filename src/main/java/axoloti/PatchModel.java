@@ -20,7 +20,6 @@ package axoloti;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceComment;
 import axoloti.object.AxoObjectInstanceHyperlink;
 import axoloti.object.AxoObjectInstancePatcher;
@@ -28,6 +27,7 @@ import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectInstanceZombie;
 import axoloti.object.AxoObjects;
 import axoloti.object.IAxoObject;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.AxolotiLibrary;
@@ -68,9 +68,9 @@ public class PatchModel extends AbstractModel {
         @ElementList(entry = "comment", type = AxoObjectInstanceComment.class, inline = true, required = false),
         @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true, required = false),
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true, required = false)})
-    List<AxoObjectInstanceAbstract> objectinstances = new ArrayList<>();
+    List<IAxoObjectInstance> objectinstances = new ArrayList<>();
     @ElementList(name = "nets")
-    public List<Net> nets = new ArrayList<>();
+    public ArrayList<Net> nets = new ArrayList<>();
     @Element(required = false)
     PatchSettings settings;
     @Element(required = false, data = true)
@@ -87,46 +87,14 @@ public class PatchModel extends AbstractModel {
 
     // a "controller object" is magically added to evey top-level patch
     // (configured in preferences)
-    AxoObjectInstanceAbstract controllerObjectInstance;
+    IAxoObjectInstance controllerObjectInstance;
 
     public boolean presetUpdatePending = false;
 
     boolean locked = false;
 
-    List<ParameterInstance> parameters = new ArrayList<>();
-    List<InletInstance> inlets = new ArrayList<>();
-    List<OutletInstance> outlets = new ArrayList<>();
+    AxoObjectInstancePatcher container = null;
 
-    public void UpdateOnParent() {
-        {
-            ArrayList<ParameterInstance> pnew = new ArrayList<>();
-            for (AxoObjectInstanceAbstract o : objectinstances) {
-                for (ParameterInstance pi : o.getParentParameters()) {
-                    pnew.add(pi);
-                }
-            }
-            setParentParameters(pnew);
-        }
-        {
-            ArrayList<InletInstance> pnew = new ArrayList<>();
-            for (AxoObjectInstanceAbstract o : objectinstances) {
-                for (InletInstance pi : o.getParentInlets()) {
-                    pnew.add(pi);
-                }
-            }
-            setParentInlets(pnew);
-        }
-        {
-            ArrayList<OutletInstance> pnew = new ArrayList<>();
-            for (AxoObjectInstanceAbstract o : objectinstances) {
-                for (OutletInstance pi : o.getParentOutlets()) {
-                    pnew.add(pi);
-                }
-            }
-            setParentOutlets(pnew);
-        }
-    }
-    
     static public class PatchVersionException
             extends RuntimeException {
 
@@ -239,8 +207,8 @@ public class PatchModel extends AbstractModel {
         settings = new PatchSettings();
     }
 
-    public AxoObjectInstanceAbstract GetObjectInstance(String n) {
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+    public IAxoObjectInstance GetObjectInstance(String n) {
+        for (IAxoObjectInstance o : objectinstances) {
             if (n.equals(o.getInstanceName())) {
                 return o;
             }
@@ -302,10 +270,7 @@ public class PatchModel extends AbstractModel {
 
 
     void refreshIndexes() {
-        for (AxoObjectInstanceAbstract o : objectinstances) {
-            o.refreshIndex();
-        }
-
+        // FIXME
     }
 
     void SortByPosition() {
@@ -313,7 +278,7 @@ public class PatchModel extends AbstractModel {
         refreshIndexes();
     }
 
-    void SortParentsByExecution(AxoObjectInstanceAbstract o, LinkedList<AxoObjectInstanceAbstract> result) {
+    void SortParentsByExecution(IAxoObjectInstance o, LinkedList<IAxoObjectInstance> result) {
         /*
         LinkedList<AxoObjectInstanceAbstract> before = new LinkedList<AxoObjectInstanceAbstract>(result);
         LinkedList<AxoObjectInstanceAbstract> parents = new LinkedList<AxoObjectInstanceAbstract>();
@@ -408,7 +373,7 @@ public class PatchModel extends AbstractModel {
 
     List<IAxoObject> GetUsedAxoObjects() {
         ArrayList<IAxoObject> aos = new ArrayList<IAxoObject>();
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        for (IAxoObjectInstance o : objectinstances) {
             if (!aos.contains(o.getType())) {
                 aos.add(o.getType());
             }
@@ -424,7 +389,7 @@ public class PatchModel extends AbstractModel {
                 includes.addAll(i);
             }
         }
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        for (IAxoObjectInstance o : objectinstances) {
             Set<String> i = o.getType().GetIncludes();
             if (i != null) {
                 includes.addAll(i);
@@ -436,7 +401,7 @@ public class PatchModel extends AbstractModel {
 
     public HashSet<String> getDepends() {
         HashSet<String> depends = new HashSet<String>();
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        for (IAxoObjectInstance o : objectinstances) {
             Set<String> i = o.getType().GetDepends();
             if (i != null) {
                 depends.addAll(i);
@@ -447,7 +412,7 @@ public class PatchModel extends AbstractModel {
 
     public HashSet<String> getModules() {
         HashSet<String> modules = new HashSet<>();
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        for (IAxoObjectInstance o : objectinstances) {
             Set<String> i = o.getType().GetModules();
             if (i != null) {
                 modules.addAll(i);
@@ -604,7 +569,7 @@ public class PatchModel extends AbstractModel {
             pdata[j * 2] = -1;
         }
         int index = 0;
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        for (IAxoObjectInstance o : objectinstances) {
             for (ParameterInstance param : o.getParameterInstances()) {
                 ParameterInstance p7 = (ParameterInstance) param;
                 Preset p = p7.GetPreset(i);
@@ -731,7 +696,7 @@ public class PatchModel extends AbstractModel {
         boolean promotionOccured = false;
         while (p && !(ProcessedInstances.size() == objectinstances.size())) {
             p = false;
-            for (AxoObjectInstanceAbstract o : objectinstances) {
+            for (IAxoObjectInstance o : objectinstances) {
                 if (!ProcessedInstances.contains(o.getInstanceName())) {
                     ProcessedInstances.add(o.getInstanceName());
                     if (!initial || o.isTypeWasAmbiguous()) {
@@ -743,7 +708,7 @@ public class PatchModel extends AbstractModel {
             }
         }
         if (!(ProcessedInstances.size() == objectinstances.size())) {
-            for (AxoObjectInstanceAbstract o : objectinstances) {
+            for (IAxoObjectInstance o : objectinstances) {
                 if (!ProcessedInstances.contains(o.getInstanceName())) {
                     Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "PromoteOverloading : fault in {0}", o.getInstanceName());
                 }
@@ -773,7 +738,7 @@ public class PatchModel extends AbstractModel {
 
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
-        for (AxoObjectInstanceAbstract o : objectinstances) {
+        for (IAxoObjectInstance o : objectinstances) {
             ArrayList<SDFileReference> f2 = o.GetDependendSDFiles();
             if (f2 != null) {
                 files.addAll(f2);
@@ -788,7 +753,7 @@ public class PatchModel extends AbstractModel {
         return new File(buildDir + "/xpatch.bin");
     }
 
-    public List<AxoObjectInstanceAbstract> getObjectInstances() {
+    public List<IAxoObjectInstance> getObjectInstances() {
         return objectinstances;
     }
 
@@ -798,13 +763,16 @@ public class PatchModel extends AbstractModel {
 
     public void addModulator(Modulator m) {
         if (Modulators == null) {
-            Modulators = new ArrayList<Modulator>();
+            Modulators = new ArrayList<>();
         }
         Modulators.add(m);
     }
 
     // ------------- new MVC methods
     public String getFileNamePath() {
+        if (FileNamePath == null) {
+            return "";
+        }
         return FileNamePath;
     }
 
@@ -840,12 +808,12 @@ public class PatchModel extends AbstractModel {
                 oldvalue, dspLoad);
     }
 
-    public List<AxoObjectInstanceAbstract> getObjectinstances() {
+    public List<IAxoObjectInstance> getObjectinstances() {
         return objectinstances;
     }
 
-    public void setObjectinstances(ArrayList<AxoObjectInstanceAbstract> objectinstances) {
-        List<AxoObjectInstanceAbstract> old_value = this.objectinstances;
+    public void setObjectinstances(ArrayList<IAxoObjectInstance> objectinstances) {
+        List<IAxoObjectInstance> old_value = this.objectinstances;
         this.objectinstances = objectinstances;
         firePropertyChange(
                 PatchController.PATCH_OBJECTINSTANCES,
@@ -864,31 +832,12 @@ public class PatchModel extends AbstractModel {
                 old_value, nets);
     }
 
-    public List<ParameterInstance> getParentParameters() {
-        return parameters;
+    public AxoObjectInstancePatcher getContainer() {
+        return container;
     }
 
-    private void setParentParameters(ArrayList<ParameterInstance> parameters) {
-        this.parameters = parameters;
-        firePropertyChange(PatchController.PATCH_PARENT_PARAMETERS, null, parameters);
-    }
-
-    public List<InletInstance> getParentInlets() {
-        return inlets;
-    }
-
-    private void setParentInlets(ArrayList<InletInstance> inlets) {
-        this.inlets = inlets;
-        firePropertyChange(PatchController.PATCH_PARENT_INLETS, null, inlets);
-    }
-
-    public List<OutletInstance> getParentOutlets() {
-        return outlets;
-    }
-
-    private void setParentOutlets(ArrayList<OutletInstance> outlets) {
-        this.outlets = outlets;
-        firePropertyChange(PatchController.PATCH_PARENT_OUTLETS, null, outlets);
+    public void setContainer(AxoObjectInstancePatcher container) {
+        this.container = container;
     }
 
 }

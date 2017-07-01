@@ -12,7 +12,7 @@ import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectFromPatch;
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewFactory;
@@ -275,7 +275,7 @@ public abstract class PatchView extends PatchAbstractView {
         }
         getController().ShowPreset(0);
         getController().setPresetUpdatePending(false);
-        for (AxoObjectInstanceAbstract o : getController().getModel().getObjectInstances()) {
+        for (IAxoObjectInstance o : getController().getModel().getObjectInstances()) {
             for (ParameterInstance pi : o.getParameterInstances()) {
                 pi.ClearNeedsTransmit();
             }
@@ -363,9 +363,10 @@ public abstract class PatchView extends PatchAbstractView {
     }
     
     public static PatchFrame OpenPatchModel(PatchModel pm, String fileNamePath) {
-        if (pm.getFileNamePath() == null) {
-            pm.setFileNamePath("untitled");
+        if (fileNamePath == null) {
+            fileNamePath = "untitled";
         }
+        pm.setFileNamePath(fileNamePath);
         long ChronoStart = Calendar.getInstance().getTimeInMillis();
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
         PatchController patchController = new PatchController(pm, documentRoot, null);
@@ -499,7 +500,7 @@ public abstract class PatchView extends PatchAbstractView {
         return new Dimension(mx, my);
     }
 
-    IAxoObjectInstanceView getObjectInstanceView(AxoObjectInstanceAbstract o) {
+    IAxoObjectInstanceView getObjectInstanceView(IAxoObjectInstance o) {
         for (IAxoObjectInstanceView o2 : objectInstanceViews) {
             if (o2.getModel() == o) {
                 return o2;

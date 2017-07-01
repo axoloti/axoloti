@@ -15,7 +15,7 @@ import java.beans.PropertyChangeEvent;
  *
  * @author jtaelman
  */
-public class AxoObjectInstanceCodegenView extends AxoObjectInstanceAbstractCodegenView {
+public class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenView {
 
     final ObjectInstanceController controller;
     
@@ -89,7 +89,7 @@ typedef struct ui_object {
 //        else
 //        if (!classname.equals("one"))
 //        c += "parent = _parent;\n";
-        for (ParameterInstance p : getModel().parameterInstances) {
+        for (ParameterInstance p : getModel().getParameterInstances()) {
             if (p.parameter.PropagateToChild != null) {
                 c += "// on Parent: propagate " + p.getName() + " " + enableOnParent + " " + getModel().getLegalName() + "" + p.parameter.PropagateToChild + "\n";
                 c += p.PExName("parent->") + ".pfunction = PropagateToSub;\n";
@@ -106,19 +106,19 @@ typedef struct ui_object {
             //c += "parent->parent->PExch[PARAM_INDEX_" + parentparametername + "_" + getLegalName() + "].finalvalue = (int32_t)(&(" + p.PExName("parent->") + "));\n";
             //         }
         }
-        for (DisplayInstance p : getModel().displayInstances) {
+        for (DisplayInstance p : getModel().getDisplayInstances()) {
             c += p.GenerateCodeInit("");
         }
         if (getModel().getType().getInitCode() != null) {
             String s = getModel().getType().getInitCode();
-            for (AttributeInstance p : getModel().attributeInstances) {
+            for (AttributeInstance p : getModel().getAttributeInstances()) {
                 s = s.replace(p.GetCName(), p.CValue());
             }
             c += s + "\n";
         }
         String d = "  public: void Init(" + classname + " * parent";
-        if (!getModel().displayInstances.isEmpty()) {
-            for (DisplayInstance p : getModel().displayInstances) {
+        if (!getModel().getDisplayInstances().isEmpty()) {
+            for (DisplayInstance p : getModel().getDisplayInstances()) {
                 if (p.getModel().getLength() > 0) {
                     d += ",\n";
                     if (p.getModel().getDatatype().isPointer()) {
@@ -138,7 +138,7 @@ typedef struct ui_object {
         String c = "";
         if (getModel().getType().getDisposeCode() != null) {
             String s = getModel().getType().getDisposeCode();
-            for (AttributeInstance p : getModel().attributeInstances) {
+            for (AttributeInstance p : getModel().getAttributeInstances()) {
                 s = s.replaceAll(p.GetCName(), p.CValue());
             }
             c += s + "\n";
@@ -150,12 +150,12 @@ typedef struct ui_object {
     public String GenerateKRateCodePlusPlus(String vprefix, boolean enableOnParent, String OnParentAccess) {
         String s = getModel().getType().getKRateCode();
         if (s != null) {
-            for (AttributeInstance p : getModel().attributeInstances) {
+            for (AttributeInstance p : getModel().getAttributeInstances()) {
                 s = s.replaceAll(p.GetCName(), p.CValue());
             }
             s = s.replace("attr_name", getModel().getCInstanceName());
             s = s.replace("attr_legal_name", getModel().getLegalName());
-            for (ParameterInstance p : getModel().parameterInstances) {
+            for (ParameterInstance p : getModel().getParameterInstances()) {
                 Boolean op = p.getOnParent();
                 if (op!=null && op == true) {
 //                    s = s.replace("%" + p.name + "%", OnParentAccess + p.variableName(vprefix, enableOnParent));
@@ -163,7 +163,7 @@ typedef struct ui_object {
 //                    s = s.replace("%" + p.name + "%", p.variableName(vprefix, enableOnParent));
                 }
             }
-            for (DisplayInstance p : getModel().displayInstances) {
+            for (DisplayInstance p : getModel().getDisplayInstances()) {
 //                s = s.replace("%" + p.name + "%", p.valueName(vprefix));
             }
             return s + "\n";
@@ -178,7 +178,7 @@ typedef struct ui_object {
                     + getModel().getType().getSRateCode()
                     + "\n}\n";
 
-            for (AttributeInstance p : getModel().attributeInstances) {
+            for (AttributeInstance p : getModel().getAttributeInstances()) {
                 s = s.replaceAll(p.GetCName(), p.CValue());
             }
             for (InletInstance i : getModel().getInletInstances()) {
@@ -218,7 +218,7 @@ typedef struct ui_object {
             s += i.getDataType().CType() + " & " + i.GetCName();
             comma = true;
         }
-        for (ParameterInstance i : getModel().parameterInstances) {
+        for (ParameterInstance i : getModel().getParameterInstances()) {
             if (i.parameter.PropagateToChild == null) {
                 if (comma) {
                     s += ",\n";
@@ -227,7 +227,7 @@ typedef struct ui_object {
                 comma = true;
             }
         }
-        for (DisplayInstance i : getModel().displayInstances) {
+        for (DisplayInstance i : getModel().getDisplayInstances()) {
             if (i.getModel().getLength() > 0) {
                 if (comma) {
                     s += ",\n";
@@ -262,7 +262,7 @@ typedef struct ui_object {
     public String GenerateInstanceCodePlusPlus(String classname, boolean enableOnParent) {
         String c = "";
         c += GenerateInstanceDataDeclaration2();
-        for (AttributeInstance p : getModel().attributeInstances) {
+        for (AttributeInstance p : getModel().getAttributeInstances()) {
             if (p.CValue() != null) {
                 c = c.replaceAll(p.GetCName(), p.CValue());
             }
@@ -296,10 +296,10 @@ typedef struct ui_object {
         if (getModel().getType().getMidiCode() != null) {
             s += getModel().getType().getMidiCode();
         }
-        for (ParameterInstance i : getModel().parameterInstances) {
+        for (ParameterInstance i : getModel().getParameterInstances()) {
             s += i.GenerateCodeMidiHandler("");
         }
-        for (AttributeInstance p : getModel().attributeInstances) {
+        for (AttributeInstance p : getModel().getAttributeInstances()) {
             s = s.replaceAll(p.GetCName(), p.CValue());
         }
         s = s.replace("attr_name", getModel().getCInstanceName());

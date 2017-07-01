@@ -18,7 +18,7 @@
 package axoloti.dialogs;
 
 import axoloti.PatchModel;
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.IParameterInstanceView;
 import java.util.Collection;
@@ -42,7 +42,7 @@ public class MidiAssignments extends javax.swing.JDialog {
         PatchModel patch = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
         String CCObj[] = new String[128];
         String CCParam[] = new String[128];
-        for (AxoObjectInstanceAbstract obj : patch.objectinstances) {
+        for (IAxoObjectInstance obj : patch.objectinstances) {
             Collection<ParameterInstance> params = obj.getParameterInstances();
             if (params != null) {
                 for (ParameterInstance param1 : params) {

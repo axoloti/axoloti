@@ -113,4 +113,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     public void modelPropertyChange(PropertyChangeEvent evt) {
     }
 
+    @Override
+    public void Remove() {
+    }    
 }

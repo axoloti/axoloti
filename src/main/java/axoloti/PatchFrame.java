@@ -19,7 +19,6 @@ package axoloti;
 
 import static axoloti.PatchViewType.PICCOLO;
 import axoloti.mvc.UndoUI;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjects;
 import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.AxoObjectInstanceView;
@@ -63,6 +62,7 @@ import qcmds.QCmdCompileModule;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStop;
 import axoloti.mvc.IView;
+import axoloti.object.IAxoObjectInstance;
 
 /**
  *
@@ -147,7 +147,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     StringSelection s = new StringSelection(baos.toString());
                     clip.setContents(s, (ClipboardOwner) null);
                     getController().addMetaUndo("cut");
-                    for (AxoObjectInstanceAbstract o : p.getObjectInstances()) {
+                    for (IAxoObjectInstance o : p.getObjectInstances()) {
                         getController().delete(o);
                     }
                 } catch (Exception ex) {

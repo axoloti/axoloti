@@ -2,12 +2,12 @@ package axoloti.objectviews;
 
 import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceComment;
 import axoloti.object.AxoObjectInstanceHyperlink;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectInstanceZombie;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstanceController;
 
 /**
@@ -17,7 +17,7 @@ import axoloti.object.ObjectInstanceController;
 public class AxoObjectInstanceViewFactory {
 
     public static AxoObjectInstanceViewAbstract createView(ObjectInstanceController controller, PatchViewSwing pv) {
-        AxoObjectInstanceAbstract model = controller.getModel();
+        IAxoObjectInstance model = controller.getModel();
         AxoObjectInstanceViewAbstract view = null;
         if (model instanceof AxoObjectInstanceComment) {
             view = new AxoObjectInstanceViewComment(controller, pv);

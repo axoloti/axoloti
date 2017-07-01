@@ -1,12 +1,15 @@
 package axoloti.parameters;
 
+import axoloti.PatchController;
 import axoloti.Preset;
 import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueInt32;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.object.AxoObjectPatcher;
 import axoloti.object.ObjectInstanceController;
+import axoloti.object.ObjectInstancePatcherController;
 import axoloti.parameterviews.IParameterInstanceView;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 
 /**
@@ -19,8 +22,13 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
     public static final String ELEMENT_PARAM_ON_PARENT = "OnParent";
     public static final String ELEMENT_PARAM_MIDI_CC = "MidiCC";
     public static final String ELEMENT_PARAM_PRESETS = "Presets";
+//    public static final String ELEMENT_PARAM_PARAM_ON_PARENT = "ParamOnParent";
 
-    public static String[] propertyNames = {ELEMENT_PARAM_VALUE, ELEMENT_PARAM_ON_PARENT, ELEMENT_PARAM_MIDI_CC, ELEMENT_PARAM_PRESETS};
+    public static String[] propertyNames = {ELEMENT_PARAM_VALUE, 
+        ELEMENT_PARAM_ON_PARENT,
+//        ELEMENT_PARAM_PARAM_ON_PARENT,
+        ELEMENT_PARAM_MIDI_CC, 
+        ELEMENT_PARAM_PRESETS};
 
     @Override
     public String[] getPropertyNames() {
@@ -71,5 +79,26 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
             setModelUndoableProperty(ELEMENT_PARAM_VALUE, d);
         }
     }    
-    
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        super.propertyChange(evt);
+        /*
+        if (evt.getPropertyName().equals(ELEMENT_PARAM_PARAM_ON_PARENT)) {
+            PatchController pc = getParent().getParent();
+            ObjectInstancePatcherController oipc = (ObjectInstancePatcherController) pc.getParent();
+            AxoObjectPatcher aop = (AxoObjectPatcher) oipc.getModel().getController().getModel();
+            ArrayList<Parameter> ps = new ArrayList<>(aop.getParameters());
+            if (evt.getNewValue() != null) {
+                ps.add((Parameter) evt.getNewValue());
+                // TODO: sort
+            }
+            if (evt.getOldValue() != null) {
+                ps.remove((Parameter) evt.getOldValue());                
+            }
+            aop.setParameters(ps);
+        }
+        */
+    }
+
 }

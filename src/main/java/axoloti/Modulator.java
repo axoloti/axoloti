@@ -17,7 +17,7 @@
  */
 package axoloti;
 
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObjectInstance;
 import java.util.ArrayList;
 
 /**
@@ -27,8 +27,8 @@ import java.util.ArrayList;
 public class Modulator {
 
     public String name;
-    public AxoObjectInstanceAbstract objinst;
-    public ArrayList<Modulation> Modulations = new ArrayList<Modulation>();
+    public IAxoObjectInstance objinst;
+    public ArrayList<Modulation> Modulations = new ArrayList<>();
 
     public String getCName() {
         if ((name != null) && (!name.isEmpty())) {

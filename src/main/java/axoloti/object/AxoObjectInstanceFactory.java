@@ -2,7 +2,15 @@ package axoloti.object;
 
 import axoloti.PatchController;
 import axoloti.PatchModel;
+import axoloti.inlets.InletBool32;
+import axoloti.inlets.InletFrac32;
+import axoloti.inlets.InletFrac32Buffer;
+import axoloti.inlets.InletInt32;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.outlets.OutletBool32;
+import axoloti.outlets.OutletFrac32;
+import axoloti.outlets.OutletFrac32Buffer;
+import axoloti.outlets.OutletInt32;
 import java.awt.Point;
 
 /**
@@ -11,26 +19,29 @@ import java.awt.Point;
  */
 public class AxoObjectInstanceFactory {
 
-    static public AxoObjectInstanceAbstract createView(ObjectController obj, PatchController patchController, String instanceName, Point location) {
+    static public AxoObjectInstanceAbstract createView(ObjectController objc, PatchController patchController, String instanceName, Point location) {
         PatchModel patchModel;
         if (patchController != null) {
             patchModel = patchController.getModel();
         } else {
             patchModel = null;
         }
-        IAxoObject objm = obj.getModel();
+        IAxoObject objm = objc.getModel();
         AxoObjectInstanceAbstract obji;
         if (objm instanceof AxoObjectUnloaded) {
             ((AxoObjectUnloaded) objm).Load();
             objm = ((AxoObjectUnloaded) objm).loadedObject;
-            obj = objm.createController(null, null);
+            objc = objm.createController(null, null);
         }
         if (objm instanceof AxoObjectComment) {
-            obji = new AxoObjectInstanceComment(obj, patchModel, instanceName, location);
+            obji = new AxoObjectInstanceComment(objc, patchModel, instanceName, location);
         } else if (objm instanceof AxoObjectHyperlink) {
-            obji = new AxoObjectInstanceHyperlink(obj, patchModel, instanceName, location);
+            obji = new AxoObjectInstanceHyperlink(objc, patchModel, instanceName, location);
         } else if (objm instanceof AxoObjectPatcher) {
-            obji = new AxoObjectInstancePatcher(obj, patchModel, instanceName, location);
+            // every AxoObjectPatcherInstance needs an independent AxoObjectPatcher object
+            AxoObjectPatcher obj = new AxoObjectPatcher();
+            objc = new ObjectController(obj, null);
+            obji = new AxoObjectInstancePatcher(objc, patchModel, instanceName, location);
         } else if (objm instanceof AxoObjectPatcherObject) {
             AxoObjectPatcherObject objm1 = new AxoObjectPatcherObject();
             AbstractDocumentRoot dr;
@@ -44,14 +55,27 @@ public class AxoObjectInstanceFactory {
             oc.addView(obji);
             return obji;
         } else if (objm instanceof AxoObjectZombie) {
-            obji = new AxoObjectInstanceZombie(obj, patchModel, instanceName, location);
+            obji = new AxoObjectInstanceZombie(objc, patchModel, instanceName, location);
         } else if (objm instanceof AxoObject) {
-            obji = new AxoObjectInstance(obj, patchModel, instanceName, location);
+            String typeName = objm.getId();
+            if (typeName.equals("patch/outlet a")
+                    || typeName.equals("patch/outlet b")
+                    || typeName.equals("patch/outlet f")
+                    || typeName.equals("patch/outlet i")) {
+                obji = new AxoObjectInstanceOutlet(objc, patchModel, instanceName, location);
+            } else if (typeName.equals("patch/inlet a")
+                    || typeName.equals("patch/inlet b")
+                    || typeName.equals("patch/inlet f")
+                    || typeName.equals("patch/inlet i")) {
+                obji = new AxoObjectInstanceInlet(objc, patchModel, instanceName, location);
+            } else {
+                obji = new AxoObjectInstance(objc, patchModel, instanceName, location);
+            }
         } else {
             obji = null;
             throw new Error("unknown object type");
         }
-        obj.addView(obji);
+        objc.addView(obji);
         return obji;
     }
 }

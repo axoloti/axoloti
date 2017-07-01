@@ -239,6 +239,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
     // how undo/redo must be handled when open documents contain instances is yet unclear...
     private ObjectController controller;
 
+    @Override
     public ObjectController createController(AbstractDocumentRoot documentRoot, AbstractController parent) {
         if (controller == null) {
             controller = new ObjectController(this, documentRoot);

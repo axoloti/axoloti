@@ -37,8 +37,6 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     @Element(name = "subpatch")
     PatchModel subPatchModel;
 
-    PatchController subPatchController;
-
     public AxoObjectInstancePatcher() {
         if (subPatchModel == null) {
             subPatchModel = new PatchModel();
@@ -46,35 +44,12 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     }
 
     public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location) {
-        this(controller, patch1, InstanceName1, location, new PatchController(new PatchModel(), controller.getDocumentRoot(), controller));
+        this(controller, patch1, InstanceName1, location, new PatchModel());
     }
 
-    public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location, PatchController subPatchController) {
+    public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location, PatchModel subPatchModel) {
         super(controller, patch1, InstanceName1, location);
-        this.subPatchModel = subPatchController.getModel();
-        this.subPatchController = subPatchController;
-        IView parenting = new IView<PatchController>() {
-            @Override
-            public void modelPropertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(PatchController.PATCH_PARENT_INLETS)) {
-                    setInletInstances((ArrayList<InletInstance>) evt.getNewValue());
-                } else if (evt.getPropertyName().equals(PatchController.PATCH_PARENT_OUTLETS)) {
-                    setOutletInstances((ArrayList<OutletInstance>) evt.getNewValue());
-                } else if (evt.getPropertyName().equals(PatchController.PATCH_PARENT_PARAMETERS)) {
-                    setParameterInstances((ArrayList<ParameterInstance>) evt.getNewValue());
-                }
-            }
-
-            @Override
-            public PatchController getController() {
-                return subPatchController;
-            }
-        };
-        subPatchController.addView(parenting);
-    }
-
-    public PatchController getSubPatchController() {
-        return subPatchController;
+        this.subPatchModel = subPatchModel;
     }
 
     public PatchModel getSubPatchModel() {

@@ -404,6 +404,14 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 }
             }
         }
+
+        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Known issues: \n"
+                + "* repainting issues\n"
+                + "* removing objects with parameter-on-parent broken\n"
+                + "* only mono patch/patcher objects are working\n"
+                + "* comment objects are broken\n"
+                + "* modulations are broken\n"
+                + "* sdfiles/modules are broken\n");
     }
 
     static boolean TestDir(String var, boolean write) {

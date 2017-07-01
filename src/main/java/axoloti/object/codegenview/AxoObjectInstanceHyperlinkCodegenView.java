@@ -1,8 +1,8 @@
 
 package axoloti.object.codegenview;
 
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceHyperlink;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstanceController;
 import java.beans.PropertyChangeEvent;
 
@@ -10,7 +10,7 @@ import java.beans.PropertyChangeEvent;
  *
  * @author jtaelman
  */
-public class AxoObjectInstanceHyperlinkCodegenView extends AxoObjectInstanceAbstractCodegenView {
+public class AxoObjectInstanceHyperlinkCodegenView implements IAxoObjectInstanceCodegenView {
     
     final ObjectInstanceController controller;
     
@@ -19,7 +19,7 @@ public class AxoObjectInstanceHyperlinkCodegenView extends AxoObjectInstanceAbst
     }
 
     @Override
-    public AxoObjectInstanceAbstract getModel() {
+    public IAxoObjectInstance getModel() {
         return controller.getModel();
     }
 

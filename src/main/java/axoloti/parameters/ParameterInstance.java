@@ -18,6 +18,8 @@
 package axoloti.parameters;
 
 import axoloti.Modulation;
+import axoloti.PatchController;
+import axoloti.PatchModel;
 import axoloti.Preset;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
@@ -25,6 +27,9 @@ import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
+import axoloti.object.AxoObjectInstancePatcher;
+import axoloti.object.AxoObjectPatcher;
+import axoloti.object.ObjectInstancePatcherController;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import java.beans.PropertyChangeEvent;
@@ -89,6 +94,9 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         if (MidiCC != null && MidiCC < 0) {
             MidiCC = null;
         }
+        if (presets != null && presets.isEmpty()) {
+            presets = null;
+        }
     }
 
     public String GetCName() {
@@ -99,6 +107,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         if (p.onParent != null) {
             setOnParent(p.onParent);
         }
+        setPresets(p.getPresets());
         setMidiCC(p.MidiCC);
     }
 
@@ -184,7 +193,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     abstract public String valueName(String vprefix);
 
     public String ControlOnParentName() {
-        if (axoObjectInstance.parameterInstances.size() == 1) {
+        if (axoObjectInstance.getParameterInstances().size() == 1) {
             return axoObjectInstance.getInstanceName();
         } else {
             return axoObjectInstance.getInstanceName() + ":" + parameter.getName();
@@ -213,7 +222,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     
     // review!
     public String GetUserParameterName() {
-        if (axoObjectInstance.parameterInstances.size() == 1) {
+        if (axoObjectInstance.getParameterInstances().size() == 1) {
             return axoObjectInstance.getInstanceName();
         } else {
             return getName();
@@ -240,8 +249,8 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         }
     }
 
-    public Parameter getParameterForParent() {
-        Parameter pcopy = parameter.getClone();
+    public T createParameterForParent() {
+        T pcopy = (T)parameter.getClone();
         pcopy.setName(ControlOnParentName());
         pcopy.noLabel = null;
         pcopy.PropagateToChild = axoObjectInstance.getLegalName() + "_" + getLegalName();
@@ -330,6 +339,33 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         }
     }
 
+    T paramOnParent;
+
+    public T getParamOnParent() {
+        return paramOnParent;
+    }
+
+    void setParamOnParent(T paramOnParent) {
+        Parameter prev_value = this.paramOnParent;
+        this.paramOnParent = paramOnParent;
+//      firePropertyChange(ParameterInstanceController.ELEMENT_PARAM_PARAM_ON_PARENT, prev_value, paramOnParent);
+//      PatchController pc = getParent().getParent();
+        PatchModel pm = getObjectInstance().getPatchModel();
+        if (pm == null) return;
+        if (pm.getContainer() == null) return;
+        AxoObjectInstancePatcher aoip = pm.getContainer();
+        AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+        ArrayList<Parameter> ps = new ArrayList<>(aop.getParameters());
+        if (paramOnParent != null) {
+            ps.add(paramOnParent);
+            // TODO: sort
+        }
+        if (prev_value != null) {
+            ps.remove((Parameter) prev_value);                
+        }
+        aop.setParameters(ps);
+    }
+    
     public void setOnParent(Boolean onParent) {
         if (onParent == null) {
             return;
@@ -340,14 +376,13 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         Boolean oldValue = this.onParent;
         this.onParent = onParent;
         if (onParent) {
-            axoObjectInstance.getParentParameters().add(this);
+            setParamOnParent(createParameterForParent());
         } else {
-            axoObjectInstance.getParentParameters().remove(this);            
+            setParamOnParent(null);
         }
         firePropertyChange(
                 ParameterInstanceController.ELEMENT_PARAM_ON_PARENT,
                 oldValue, onParent);
-        axoObjectInstance.getPatchModel().UpdateOnParent();
     }
 
     public ArrayList<Preset> getPresets() {

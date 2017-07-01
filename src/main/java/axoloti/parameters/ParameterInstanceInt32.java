@@ -87,8 +87,7 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
         super.CopyValueFrom(p);
         if (p instanceof ParameterInstanceInt32) {
             ParameterInstanceInt32 p1 = (ParameterInstanceInt32) p;
-            presets = p1.presets;
-            value.setRaw(p1.value.getRaw());
+            setValue(p1.getValue());
         }
     }
 

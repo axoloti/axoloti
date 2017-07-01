@@ -18,7 +18,7 @@
 package axoloti;
 
 import axoloti.datatypes.ValueFrac32;
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.parameters.ParameterInstanceFrac32;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
@@ -86,6 +86,6 @@ public class Modulation {
             }
         }
     }
-    public AxoObjectInstanceAbstract source;
+    public IAxoObjectInstance source;
     public ParameterInstanceFrac32 destination;
 }

@@ -24,6 +24,7 @@ import axoloti.attribute.AttributeInstance;
 import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
+import axoloti.mvc.IView;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.utils.CharEscape;
@@ -33,8 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import axoloti.mvc.IView;
-import java.util.AbstractList;
 import java.util.List;
 
 /**
@@ -42,10 +41,10 @@ import java.util.List;
  * @author Johannes Taelman
  */
 @Root(name = "obj_abstr")
-public abstract class AxoObjectInstanceAbstract extends AbstractModel implements Comparable<AxoObjectInstanceAbstract>, IView {
+public abstract class AxoObjectInstanceAbstract extends AbstractModel implements IAxoObjectInstance, IView<ObjectController> {
 
     @Attribute(name = "type")
-    public String typeName;
+    String typeName;
     @Deprecated
     @Attribute(name = "sha", required = false)
     String typeSHA;
@@ -60,7 +59,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     
     Boolean selected = false;
 
-    private PatchModel patchModel;
+    private final PatchModel patchModel;
 
     IAxoObject type;
     private boolean typeWasAmbiguous = false;
@@ -68,6 +67,8 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     ObjectController controller;
 
     public AxoObjectInstanceAbstract() {
+        patchModel = null;
+        type = null;
     }
 
     public AxoObjectInstanceAbstract(ObjectController typeController, PatchModel patchModel, String InstanceName1, Point location) {
@@ -114,50 +115,12 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         this.patchModel = patchModel;
     }
 
-    public void setType(IAxoObject type) {
-        this.type = type;
-        typeUUID = type.getUUID();
-    }
-
+    @Override
     public IAxoObject getType() {
         return type;
     }
 
-    public String getInstanceName() {
-        return InstanceName;
-    }
-
-    public boolean setInstanceName(String InstanceName) {
-        String oldvalue = this.InstanceName;
-        if (this.InstanceName.equals(InstanceName)) {
-            return false;
-        }
-        if (getPatchModel() != null) {
-            AxoObjectInstanceAbstract o1 = getPatchModel().GetObjectInstance(InstanceName);
-            if ((o1 != null) && (o1 != this)) {
-                Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} already exists!", InstanceName);
-                return false;
-            }
-        }
-        this.InstanceName = InstanceName;
-
-        firePropertyChange(
-            ObjectInstanceController.OBJ_INSTANCENAME,
-            oldvalue, this.InstanceName);
-        return true;
-    }
-    
-
-    public Boolean getSelected() {
-        return selected;
-    }
-
-    public void setSelected(Boolean selected) {
-        Boolean prev_value = this.selected;
-        this.selected = selected;
-        firePropertyChange(ObjectInstanceController.OBJ_SELECTED, prev_value, selected);
-    }
-
+    @Override
     public IAxoObject resolveType(String directory) {
         if (type != null) {
             return type;
@@ -188,16 +151,12 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return type;
     }
 
-    @Deprecated
-    public void setLocation(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
@@ -228,69 +187,54 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
      }
      */
     public String GenerateInstanceDataDeclaration2() {
-        return null;
+        return "";
     }
 
     public String GenerateCodeMidiHandler(String vprefix) {
         return "";
     }
 
+    @Override
     public String GenerateCallMidiHandler() {
         return "";
     }
 
-    public void refreshIndex() {
-    }
-
     private Point p = new Point();
-    
-    public void setLocation(Point p) {
-        Point oldvalue = this.p;
-        this.p = p;
-        x = p.x;
-        y = p.y;
-        firePropertyChange(
-            ObjectInstanceController.OBJ_LOCATION,
-            oldvalue, p);
-    }
-
-    public Point getLocation() {
-        p.x = x;
-        p.y = y;
-        return p;
-    }
     
     public boolean providesModulationSource() {
         return false;
     }
 
     @Override
-    public int compareTo(AxoObjectInstanceAbstract o) {
-        if (o.y == this.y) {
-            if (o.x < x) {
+    public int compareTo(IAxoObjectInstance o) {
+        if (o.getY() == this.y) {
+            if (o.getX() < x) {
                 return 1;
-            } else if (o.x == x) {
+            } else if (o.getX() == x) {
                 return 0;
             } else {
                 return -1;
             }
         }
-        if (o.y < y) {
+        if (o.getY() < y) {
             return 1;
         } else {
             return -1;
         }
     }
 
+    @Override
     public String getLegalName() {
         return CharEscape.CharEscape(InstanceName);
     }
 
+    @Override
     public String getCInstanceName() {
         String s = "instance" + getLegalName();
         return s;
     }
 
+    @Override
     public boolean PromoteToOverloadedObj() {
         return false;
     }
@@ -303,20 +247,19 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return false;
     }
 
+    @Override
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         return null;
     }
 
+    @Override
     public boolean isTypeWasAmbiguous() {
         return typeWasAmbiguous;
     }
 
+    @Override
     public PatchModel getPatchModel() {
         return patchModel;
-    }
-
-    public void setPatchModel(PatchModel patchModel) {
-        this.patchModel = patchModel;
     }
 
     public void Close() {
@@ -327,44 +270,100 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return controller;
     }
 
-    public void applyValues(AxoObjectInstanceAbstract unlinked_object_instance) {
+    public void applyValues(IAxoObjectInstance unlinked_object_instance) {
     }
 
     public String getTypeName() {
-        if (type != null) return type.getId();
-        else return typeName;
+        if (type != null) {
+            return type.getId();
+        } else {
+            return typeName;
+        }
     }
 
-    List<ParameterInstance> parentParameters = new ArrayList<>();
-    List<InletInstance> parentInlets = new ArrayList<>();
-    List<OutletInstance> parentOutlets = new ArrayList<>();
-    
-    /* MVC clean methods*/
+    final AxoObjectInstancePatcher getContainer() {
+        PatchModel pm = getPatchModel();
+        if (pm == null) {
+            return null;
+        }
+        return pm.getContainer();
+    }
 
+    /* MVC clean methods*/
+    @Override
+    public String getInstanceName() {
+        return InstanceName;
+    }
+
+    @Override
+    public boolean setInstanceName(String InstanceName) {
+        String oldvalue = this.InstanceName;
+        if (this.InstanceName.equals(InstanceName)) {
+            return false;
+        }
+        if (getPatchModel() != null) {
+            IAxoObjectInstance o1 = getPatchModel().GetObjectInstance(InstanceName);
+            if ((o1 != null) && (o1 != this)) {
+                Logger.getLogger(IAxoObjectInstance.class.getName()).log(Level.SEVERE, "Object name {0} already exists!", InstanceName);
+                return false;
+            }
+        }
+        this.InstanceName = InstanceName;
+
+        firePropertyChange(
+                ObjectInstanceController.OBJ_INSTANCENAME,
+                oldvalue, this.InstanceName);
+        return true;
+    }
+
+    @Override
+    public Boolean getSelected() {
+        return selected;
+    }
+
+    @Override
+    public void setSelected(Boolean selected) {
+        Boolean prev_value = this.selected;
+        this.selected = selected;
+        firePropertyChange(ObjectInstanceController.OBJ_SELECTED, prev_value, selected);
+    }
+
+    @Override
+    public void setLocation(Point p) {
+        Point oldvalue = this.p;
+        this.p = p;
+        x = p.x;
+        y = p.y;
+        firePropertyChange(
+                ObjectInstanceController.OBJ_LOCATION,
+                oldvalue, p);
+    }
+
+    @Override
+    public Point getLocation() {
+        p.x = x;
+        p.y = y;
+        return p;
+    }
+
+    @Override
     abstract public List<InletInstance> getInletInstances();
 
+    @Override
     abstract public List<OutletInstance> getOutletInstances();
 
+    @Override
     abstract public List<ParameterInstance> getParameterInstances();
 
+    @Override
     abstract public List<AttributeInstance> getAttributeInstances();
 
+    @Override
     abstract public List<DisplayInstance> getDisplayInstances();
 
+    @Override
     abstract public InletInstance GetInletInstance(String n);
 
+    @Override
     abstract public OutletInstance GetOutletInstance(String n);
-        
-    public List<ParameterInstance> getParentParameters() {
-        return parentParameters;
-    }
-
-    public List<InletInstance> getParentInlets() {
-        return parentInlets;
-    }
-
-    public List<OutletInstance> getParentOutlets() {
-        return parentOutlets;
-    }
-
 }

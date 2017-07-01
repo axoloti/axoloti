@@ -66,6 +66,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstance0 {
     }
 
     public String getCommentText() {
+        if (commentText == null) return "";
         return commentText;
     }
 
@@ -91,9 +92,9 @@ public class AxoObjectInstanceComment extends AxoObjectInstance0 {
     }
 
     @Override
-    public void applyValues(AxoObjectInstanceAbstract unlinked_object_instance) {
+    public void applyValues(IAxoObjectInstance unlinked_object_instance) {
         if (unlinked_object_instance instanceof AxoObjectInstanceComment) {
-            this.commentText = ((AxoObjectInstanceComment) unlinked_object_instance).commentText;
+            setCommentText(((AxoObjectInstanceComment) unlinked_object_instance).getCommentText());
         }
     }
 

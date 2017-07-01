@@ -22,7 +22,7 @@ import axoloti.mvc.array.ArrayController;
  *
  * @author jtaelman
  */
-public class ObjectInstanceController extends AbstractController<AxoObjectInstanceAbstract, IView, PatchController> {
+public class ObjectInstanceController extends AbstractController<IAxoObjectInstance, IView, PatchController> {
 
     public static final String OBJ_LOCATION = "Location";
     public static final String OBJ_SELECTED = "Selected";
@@ -32,7 +32,6 @@ public class ObjectInstanceController extends AbstractController<AxoObjectInstan
     public static final String OBJ_INLET_INSTANCES = "InletInstances";
     public static final String OBJ_OUTLET_INSTANCES = "OutletInstances";
     public static final String OBJ_DISPLAY_INSTANCES = "DisplayInstances";
-    public static final String OBJ_PARENT_PARAMETERS = "ParentParameters";
     public static final String OBJ_COMMENT = "CommentText";
 
     @Override
@@ -45,8 +44,7 @@ public class ObjectInstanceController extends AbstractController<AxoObjectInstan
             OBJ_ATTRIBUTE_INSTANCES,
             OBJ_INLET_INSTANCES,
             OBJ_OUTLET_INSTANCES,
-            OBJ_DISPLAY_INSTANCES,
-            OBJ_PARENT_PARAMETERS};
+            OBJ_DISPLAY_INSTANCES};
     }
 
     public final ArrayController<AttributeInstanceController, AttributeInstance, ObjectInstanceController> attributeInstanceControllers;
@@ -54,10 +52,10 @@ public class ObjectInstanceController extends AbstractController<AxoObjectInstan
     public final ArrayController<InletInstanceController, InletInstance, ObjectInstanceController> inletInstanceControllers;
     public final ArrayController<OutletInstanceController, OutletInstance, ObjectInstanceController> outletInstanceControllers;
     public final ArrayController<DisplayInstanceController, DisplayInstance, ObjectInstanceController> displayInstanceControllers;
-//    public final ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController> parentParameterControllers;
 
-    public ObjectInstanceController(AxoObjectInstanceAbstract model, AbstractDocumentRoot documentRoot, PatchController parent) {
+    public ObjectInstanceController(IAxoObjectInstance model, AbstractDocumentRoot documentRoot, PatchController parent) {
         super(model, documentRoot, parent);
+
         attributeInstanceControllers = new ArrayController<AttributeInstanceController, AttributeInstance, ObjectInstanceController>(this, OBJ_ATTRIBUTE_INSTANCES) {
 
             @Override
@@ -117,18 +115,6 @@ public class ObjectInstanceController extends AbstractController<AxoObjectInstan
             public void disposeController(DisplayInstanceController controller) {
             }
         };
-        /*
-        parentParameterControllers = new ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController>(this, OBJ_PARENT_PARAMETERS) {
-            @Override
-            public ParameterInstanceController createController(ParameterInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
-                return new ParameterInstanceController(model, documentRoot, parent);
-            }
-
-            @Override
-            public void disposeController(ParameterInstanceController controller) {
-            }
-        };
-                */
     }
 
     public void changeLocation(int x, int y) {

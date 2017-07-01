@@ -3,7 +3,7 @@ package axoloti;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.outlets.OutletInstance;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
                 String objname = i.getObjname();
                 String outletname = i.getOutletname();
 
-                AxoObjectInstanceAbstract o = patchModel.GetObjectInstance(objname);
+                IAxoObjectInstance o = patchModel.GetObjectInstance(objname);
                 if (o == null) {
                     Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net source obj : {0}::{1}", new Object[]{i.getObjname(), i.getOutletname()});
                     patchModel.nets.remove(model);
@@ -47,7 +47,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
             for (InletInstance i : model.getDestinations()) {
                 String objname = i.getObjname();
                 String inletname = i.getInletname();
-                AxoObjectInstanceAbstract o = patchModel.GetObjectInstance(objname);
+                IAxoObjectInstance o = patchModel.GetObjectInstance(objname);
                 if (o == null) {
                     Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net dest obj :{0}::{1}", new Object[]{i.getObjname(), i.getInletname()});
                     patchModel.nets.remove(model);
@@ -125,7 +125,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         if (getModel().getSources().length == 1) {
             return true;
         }
-        for (AxoObjectInstanceAbstract o : getParent().getModel().objectinstances) {
+        for (IAxoObjectInstance o : getParent().getModel().objectinstances) {
             for (OutletInstance i : o.getOutletInstances()) {
                 List<OutletInstance> outletlist = Arrays.asList(getModel().getSources());
                 if (outletlist.contains(i)) {

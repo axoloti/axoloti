@@ -21,8 +21,7 @@ import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.mvc.AbstractModel;
-import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObjectInstance;
 import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persist;
@@ -44,13 +43,13 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
 
     private final AtomDefinitionController controller;
 
-    protected AxoObjectInstanceAbstract axoObj;
+    protected IAxoObjectInstance axoObj;
 
     public String getInletname() {
         return inletname;
     }
 
-    public AxoObjectInstanceAbstract getObjectInstance() {
+    public IAxoObjectInstance getObjectInstance() {
         return axoObj;
     }
 
@@ -76,7 +75,7 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
         this.inletname = inletname;
     }
 
-    public InletInstance(AtomDefinitionController inletController, final AxoObjectInstance axoObj) {
+    public InletInstance(AtomDefinitionController inletController, final IAxoObjectInstance axoObj) {
         this.controller = inletController;
         this.axoObj = axoObj;
         RefreshName();

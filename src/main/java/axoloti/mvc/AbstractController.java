@@ -118,9 +118,6 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
             Method method = model.getClass().
                     getMethod("get" + propertyName, new Class[]{});
             Object val = method.invoke(model);
-            if (val == null) {
-                System.out.println("Property method get" + propertyName + " returned null.");
-            }
             return val;
 
         } catch (NoSuchMethodException ex) {
@@ -147,6 +144,10 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
             setModelProperty(propertyName, newValue);
         } else {
             Object old_val = getModelProperty(propertyName);
+            if (old_val == null) {
+                System.out.println("Property method get" + propertyName + " returned null, this is illegal for undoable property changes.");
+                throw new Error("Property method get" + propertyName + " returned null, this is illegal for undoable property changes.");
+            }            
             if (old_val == newValue) {
                 return;
             }

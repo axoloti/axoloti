@@ -21,8 +21,7 @@ import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
 import axoloti.mvc.AbstractModel;
-import axoloti.object.AxoObjectInstance;
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObjectInstance;
 import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persist;
@@ -44,14 +43,14 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
 
     final private AtomDefinitionController controller;
 
-    protected AxoObjectInstanceAbstract axoObj;
+    protected IAxoObjectInstance axoObj;
 
     @Persist
     public void Persist() {
         objname = axoObj.getInstanceName();
     }
 
-    public AxoObjectInstanceAbstract getObjectInstance() {
+    public IAxoObjectInstance getObjectInstance() {
         return this.axoObj;
     }
 
@@ -76,7 +75,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
         this.outletname = outletname;
     }
 
-    public OutletInstance(AtomDefinitionController outletController, AxoObjectInstance axoObj) {
+    public OutletInstance(AtomDefinitionController outletController, IAxoObjectInstance axoObj) {
         this.controller = outletController;
         this.axoObj = axoObj;
         //RefreshName();

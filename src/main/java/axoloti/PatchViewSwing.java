@@ -17,7 +17,7 @@
  */
 package axoloti;
 
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.object.AxoObjects;
 import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
@@ -352,7 +352,7 @@ public class PatchViewSwing extends PatchView {
             }
             if (action == MOVE) {
                 getController().addMetaUndo("cut");
-                for (AxoObjectInstanceAbstract o : p.getObjectInstances()) {
+                for (IAxoObjectInstance o : p.getObjectInstances()) {
                     getController().delete(o);
                 }
             }

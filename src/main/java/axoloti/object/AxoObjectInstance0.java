@@ -61,4 +61,8 @@ public abstract class AxoObjectInstance0 extends AxoObjectInstanceAbstract {
         return new ArrayList<>();
     }
 
+    @Override
+    public void Remove() {
+    }
+
 }

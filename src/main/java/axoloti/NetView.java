@@ -3,7 +3,7 @@ package axoloti;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractController;
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
@@ -49,7 +49,7 @@ public class NetView extends JComponent implements INetView {
         dest.clear();
         // resolve inlet/outlet views
         for (OutletInstance i : net.getSources()) {
-            AxoObjectInstanceAbstract o = i.getObjectInstance();
+            IAxoObjectInstance o = i.getObjectInstance();
             IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
             if (ov == null) {
                 throw new Error("no corresponding outlet instance view found");
@@ -62,7 +62,7 @@ public class NetView extends JComponent implements INetView {
             }
         }
         for (InletInstance i : net.getDestinations()) {
-            AxoObjectInstanceAbstract o = i.getObjectInstance();
+            IAxoObjectInstance o = i.getObjectInstance();
             IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
             for (IInletInstanceView o2: ov.getInletInstanceViews()) {
                 if (o2.getController().getModel() == i) {

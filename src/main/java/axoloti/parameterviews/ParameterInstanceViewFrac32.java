@@ -46,6 +46,7 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
         m_default.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                getController().addMetaUndo("Reset to default");
                 getController().applyDefaultValue();
             }
         });
@@ -73,13 +74,12 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     public void updateModulation(int index, double amount) {
         getModel().updateModulation(index, amount);
     }
-    
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
         if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_VALUE)) {
-            Value v = (Value)evt.getNewValue();
+            Value v = (Value) evt.getNewValue();
             ctrl.setValue(v.getDouble());
         }
     }    

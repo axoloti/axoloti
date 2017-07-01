@@ -15,11 +15,12 @@ import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JComponent;
 import axoloti.mvc.IView;
+import axoloti.object.IAxoObjectInstance;
 import java.util.List;
 
 public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> {
 
-    public AxoObjectInstanceAbstract getModel();
+    public IAxoObjectInstance getModel();
 
     public void Lock();
 

@@ -5,6 +5,7 @@ import axoloti.PatchFrame;
 import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.ObjectInstanceController;
+import axoloti.object.ObjectInstancePatcherController;
 import components.ButtonComponent;
 
 public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
@@ -21,10 +22,15 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
         return (AxoObjectInstancePatcher) super.getModel();
     }
 
+    @Override
+    public ObjectInstancePatcherController getController() {
+        return (ObjectInstancePatcherController)super.getController();
+    }
+
     public void initSubpatchFrame() {
         if (pf == null) {
-            pf = new PatchFrame(getModel().getSubPatchController(), MainFrame.mainframe.getQcmdprocessor());
-            getModel().getSubPatchController().addView(pf);
+            pf = new PatchFrame(getController().getSubPatchController(), MainFrame.mainframe.getQcmdprocessor());
+            getController().getSubPatchController().addView(pf);
         }
     }
 

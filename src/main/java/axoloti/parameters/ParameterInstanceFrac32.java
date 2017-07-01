@@ -21,7 +21,6 @@ import axoloti.Modulation;
 import axoloti.Modulator;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueFrac32;
-import axoloti.datatypes.ValueInt32;
 import axoloti.object.AxoObjectInstance;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
@@ -136,20 +135,12 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     }
 
     @Override
-    public Parameter getParameterForParent() {
-        Parameter p = super.getParameterForParent();
-        ((ParameterFrac32) p).DefaultValue = value;
-        return p;
-    }
-
-    @Override
     public void CopyValueFrom(ParameterInstance p) {
         super.CopyValueFrom(p);
         if (p instanceof ParameterInstanceFrac32) {
             ParameterInstanceFrac32 p1 = (ParameterInstanceFrac32) p;
             modulators = p1.getModulators();
-            presets = p1.presets;
-            value.setRaw(p1.value.getRaw());
+            setValue(p1.getValue());
         }
     }
 
@@ -204,6 +195,9 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         firePropertyChange(
             ParameterInstanceController.ELEMENT_PARAM_VALUE,
             oldvalue, value);
+        if (paramOnParent != null) {
+            paramOnParent.setDefaultValue(value);
+        }        
     }
     
 }

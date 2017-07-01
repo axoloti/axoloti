@@ -10,6 +10,7 @@ import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
 import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
@@ -61,7 +62,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     }
 
     @Override
-    public AxoObjectInstanceAbstract getModel() {
+    public IAxoObjectInstance getModel() {
         return getController().getModel();
     }
 

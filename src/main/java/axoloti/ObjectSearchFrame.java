@@ -22,8 +22,10 @@ import axoloti.object.AxoObjectInstanceFactory;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectTreeNode;
 import axoloti.object.IAxoObject;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectController;
 import axoloti.object.ObjectInstanceController;
+import axoloti.object.ObjectInstancePatcherController;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewFactory;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -63,7 +65,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     DefaultTreeModel tm;
     public IAxoObject type;
     protected final PatchController patchController;
-    public AxoObjectInstanceAbstract target_object;
+    public IAxoObjectInstance target_object;
     private AxoObjectTreeNode objectTree;
 
     /**
@@ -322,7 +324,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 SetPreview(oa);
                 ExpandJTreeToEl(oa);
             }
-            jTextFieldObjName.setText(o.getModel().getController().getModel().getId());
+            jTextFieldObjName.setText(o.getModel().getType().getId());
         } else if (searchString != null) {
             Search(searchString);
             jTextFieldObjName.setText(searchString);
@@ -352,14 +354,14 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             }
             ObjectController oc = o.createController(null, null);
             AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(oc, null, "dummy", new Point(5, 5));
-            ObjectInstanceController c = new ObjectInstanceController(objectInstance, null, null);
-/*
+            ObjectInstanceController c;
+
             if (objectInstance instanceof AxoObjectInstancePatcher) {
-                c 
+                c = new ObjectInstancePatcherController((AxoObjectInstancePatcher) objectInstance, null, null);
             } else {
                 c = new ObjectInstanceController(objectInstance, null, null);
             }
-*/
+
             AxoObjectInstanceViewAbstract objectInstanceView = AxoObjectInstanceViewFactory.createView(c, null);
             jPanel1.removeAll();
             jPanel1.add(objectInstanceView);

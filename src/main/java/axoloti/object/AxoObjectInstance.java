@@ -41,7 +41,6 @@ import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceFactory;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.*;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
@@ -77,7 +76,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         @ElementList(entry = "bin32", type = ParameterInstanceBin32.class, inline = true, required = false),
         @ElementList(entry = "bool32.tgl", type = ParameterInstanceBin1.class, inline = true, required = false),
         @ElementList(entry = "bool32.mom", type = ParameterInstanceBin1Momentary.class, inline = true, required = false)})
-    public List<ParameterInstance> parameterInstances = new ArrayList<>();
+    List<ParameterInstance> parameterInstances = new ArrayList<>();
     @Path("attribs")
     @ElementListUnion({
         @ElementList(entry = "objref", type = AttributeInstanceObjRef.class, inline = true, required = false),
@@ -87,12 +86,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         @ElementList(entry = "spinner", type = AttributeInstanceSpinner.class, inline = true, required = false),
         @ElementList(entry = "file", type = AttributeInstanceSDFile.class, inline = true, required = false),
         @ElementList(entry = "text", type = AttributeInstanceTextEditor.class, inline = true, required = false)})
-    public List<AttributeInstance> attributeInstances = new ArrayList<>();
-    public List<DisplayInstance> displayInstances = new ArrayList<>();
+    List<AttributeInstance> attributeInstances = new ArrayList<>();
+    List<DisplayInstance> displayInstances = new ArrayList<>();
 
-    private Inlet parentInlet;
-    private Outlet parentOutlet;
-    private AtomDefinitionController parentIOletController;
 
     public AxoObjectInstance() {
         super();
@@ -100,39 +96,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     public AxoObjectInstance(ObjectController controller, PatchModel patchModel, String InstanceName1, Point location) {
         super(controller, patchModel, InstanceName1, location);
-        
-        parentInlet = null;
-        parentOutlet = null;
-        if (typeName.equals("patch/inlet a")) {
-            parentInlet = new InletFrac32Buffer(getInstanceName(), "");
-        } else if (typeName.equals("patch/inlet b")) {
-            parentInlet = new InletBool32(getInstanceName(), "");
-        } else if (typeName.equals("patch/inlet f")) {
-            parentInlet = new InletFrac32(getInstanceName(), "");
-        } else if (typeName.equals("patch/inlet i")) {
-            parentInlet = new InletInt32(getInstanceName(), "");
-        } else if (typeName.equals("patch/outlet a")) {
-            parentOutlet = new OutletFrac32Buffer(getInstanceName(), "");
-        } else if (typeName.equals("patch/outlet b")) {
-            parentOutlet = new OutletBool32(getInstanceName(), "");
-        } else if (typeName.equals("patch/outlet f")) {
-            parentOutlet = new OutletFrac32(getInstanceName(), "");
-        } else if (typeName.equals("patch/outlet i")) {
-            parentOutlet = new OutletInt32(getInstanceName(), "");
-        }
-        if (parentInlet != null) {
-            parentIOletController = new AtomDefinitionController(parentInlet, null, controller);
-            InletInstance i = InletInstanceFactory.createView(parentIOletController, this /* FIXME: this is wrong */ );
-            parentInlets.add(i);
-        }
-        if (parentOutlet != null) {
-            parentIOletController = new AtomDefinitionController(parentOutlet, null, controller);
-            OutletInstance i = OutletInstanceFactory.createView(parentIOletController, this /* FIXME: this is wrong */ );
-            parentOutlets.add(i);
-        }
-            
     }
-
+   
     @Override
     public boolean setInstanceName(String s) {
         boolean result = super.setInstanceName(s);
@@ -388,6 +353,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 typeSHA = null;
             }
         }
+        if (parameterInstances.isEmpty()) {
+            parameterInstances = null;
+        }
+        if (attributeInstances.isEmpty()) {
+            attributeInstances = null;
+        }
     }
 
     public Rectangle editorBounds;
@@ -421,9 +392,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
     }
 
-
     @Override
-    public void applyValues(AxoObjectInstanceAbstract sourceObject) {
+    public void applyValues(IAxoObjectInstance sourceObject) {
         if (sourceObject instanceof AxoObjectInstance) {
             AxoObjectInstance sourceObject2 = (AxoObjectInstance) sourceObject;
             for (ParameterInstance p : parameterInstances) {
@@ -445,6 +415,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 }
             }
         }
+    }    
+
+    @Override
+    public void Remove() {
     }    
     
         /* MVC clean code below here */

@@ -615,7 +615,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setOutlets(ArrayList<Outlet> outlets) {
         List<Outlet> old_val = this.outlets;
         this.outlets = outlets;
-        firePropertyChange(ObjectController.OBJ_OUTLETS, old_val, inlets);
+        firePropertyChange(ObjectController.OBJ_OUTLETS, old_val, outlets);
     }
 
     @Override
