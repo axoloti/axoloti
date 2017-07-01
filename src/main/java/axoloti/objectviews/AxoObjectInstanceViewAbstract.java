@@ -9,7 +9,6 @@ import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
-import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
@@ -272,9 +271,10 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         return null;
     }
 
-    protected void handleInstanceNameEditorAction() {
+    void handleInstanceNameEditorAction() {
         String s = InstanceNameTF.getText();
-        getController().changeInstanceName(s);
+        getController().addMetaUndo("edit object name");
+        getController().setModelUndoableProperty(ObjectInstanceController.OBJ_INSTANCENAME, s);
         if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
             InstanceNameTF.getParent().remove(InstanceNameTF);
         }

@@ -84,6 +84,16 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
     }
 
     @Override
+    void handleInstanceNameEditorAction() {
+        String s = InstanceNameTF.getText();
+        getController().addMetaUndo("edit comment");
+        getController().setModelUndoableProperty(ObjectInstanceController.OBJ_COMMENT, s);
+        if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
+            InstanceNameTF.getParent().remove(InstanceNameTF);
+        }
+    }   
+    
+    @Override
     public void addInstanceNameEditor() {
         InstanceNameTF = new TextFieldComponent(getModel().getCommentText());
         InstanceNameTF.selectAll();
@@ -129,7 +139,6 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
 
     @Override
     public void showInstanceName(String s) {
-        getController().setModelUndoableProperty(ObjectInstanceController.OBJ_COMMENT, s);
     }
 
     @Override

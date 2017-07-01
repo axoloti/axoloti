@@ -65,6 +65,11 @@ public class AxoObjectInstanceComment extends AxoObjectInstance0 {
         return "";
     }
 
+    @Override
+    public boolean setInstanceName(String InstanceName) {
+        return false;
+    }
+    
     public String getCommentText() {
         if (commentText == null) return "";
         return commentText;

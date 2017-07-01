@@ -124,10 +124,6 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
         }
     }
 
-    public void changeInstanceName(String s) {
-        setModelUndoableProperty(OBJ_INSTANCENAME, s);
-    }
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String propertyName = evt.getPropertyName();
