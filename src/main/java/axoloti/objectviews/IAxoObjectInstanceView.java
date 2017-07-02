@@ -78,4 +78,6 @@ public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> 
 
     public void validate();
 
+    public void dispose();
+
 }

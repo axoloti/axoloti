@@ -18,7 +18,6 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
-import axoloti.objecteditor.AxoObjectEditor;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
 
@@ -27,8 +26,6 @@ import org.simpleframework.xml.Element;
  * @author Johannes Taelman
  */
 public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
-
-    public AxoObjectEditor aoe;
 
     @Element(name = "object")
     public AxoObjectPatcherObject ao;
@@ -42,6 +39,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     public AxoObjectInstancePatcherObject(ObjectController objectController, PatchModel patch1, String InstanceName1, Point location) {
         super(objectController, patch1, InstanceName1, location);
         ao = (AxoObjectPatcherObject) objectController.getModel();
+        ao.setId(getInstanceName());
     }
 
     public AxoObject getAxoObject() {
@@ -51,9 +49,13 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     @Override
     public void Close() {
         super.Close();
-        /*
-        if (aoe != null) {
-            aoe.Close();
-        }*/
     }
+
+    @Override
+    public boolean setInstanceName(String s) {
+        boolean b = super.setInstanceName(s);
+        ao.setId(getInstanceName());
+        return b;
+    }
+
 }

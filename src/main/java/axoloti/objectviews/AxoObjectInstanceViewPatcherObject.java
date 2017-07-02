@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
 
     ButtonComponent BtnEdit;
+    AxoObjectEditor aoe;
 
     public AxoObjectInstanceViewPatcherObject(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller, patchView);
@@ -42,21 +43,28 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     }
 
     public void edit() {
-        if (getModel().aoe == null) {
-            getModel().aoe = new AxoObjectEditor(getModel().getController());
+        if (aoe == null) {
+            aoe = new AxoObjectEditor(getModel().getController());
         } else {
-            getModel().aoe.updateReferenceXML();
+            aoe.updateReferenceXML();
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                getModel().aoe.setState(java.awt.Frame.NORMAL);
-                getModel().aoe.setVisible(true);
+                aoe.setState(java.awt.Frame.NORMAL);
+                aoe.setVisible(true);
             }
         });
     }
 
     public boolean isEditorOpen() {
-        return getModel().aoe != null && getModel().aoe.isVisible();
+        return aoe != null && aoe.isVisible();
     }
+
+    @Override
+    public void dispose() {
+        aoe.Close();
+        aoe = null;
+    }
+
 }

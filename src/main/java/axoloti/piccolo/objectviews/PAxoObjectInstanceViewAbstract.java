@@ -335,4 +335,9 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     public ObjectInstanceController getController() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public void dispose() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

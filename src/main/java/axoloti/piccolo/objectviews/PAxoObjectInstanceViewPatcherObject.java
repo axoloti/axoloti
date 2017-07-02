@@ -13,6 +13,7 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
 
     AxoObjectInstancePatcherObject model;
     PButtonComponent BtnEdit;
+    AxoObjectEditor aoe;
 
     public PAxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject model, PatchViewPiccolo p) {
         super(model, p);
@@ -46,21 +47,21 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
             //model.setAxoObject(new AxoObjectPatcherObject());
             model.getAxoObject().setDescription("");
         }
-        if (model.aoe == null) {
-            model.aoe = new AxoObjectEditor(model.getAxoObject().createController(null, null));
+        if (aoe == null) {
+            aoe = new AxoObjectEditor(model.getAxoObject().createController(null, null));
         } else {
-            model.aoe.updateReferenceXML();
+            aoe.updateReferenceXML();
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                model.aoe.setState(java.awt.Frame.NORMAL);
-                model.aoe.setVisible(true);
+                aoe.setState(java.awt.Frame.NORMAL);
+                aoe.setVisible(true);
             }
         });
     }
 
     public boolean isEditorOpen() {
-        return model.aoe != null && model.aoe.isVisible();
+        return aoe != null && aoe.isVisible();
     }
 }

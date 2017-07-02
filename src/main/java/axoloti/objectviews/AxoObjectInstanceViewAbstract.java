@@ -436,4 +436,9 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     public ObjectInstanceController getController() {
         return controller;
     }
+
+    @Override
+    public void dispose() {        
+    }
+
 }

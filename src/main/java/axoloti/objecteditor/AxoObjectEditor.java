@@ -65,7 +65,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     private boolean readonly = false;
 
     UndoUI undoUi;
-    
+
     static RSyntaxTextArea initCodeEditor(JPanel p) {
         RSyntaxTextArea rsta = new RSyntaxTextArea(20, 60);
         rsta.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
@@ -76,14 +76,14 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         rsta.setVisible(true);
         return rsta;
     }
-    
+
     @Override
-    public ObjectController getController(){
+    public ObjectController getController() {
         return controller;
     }
-    
-    AxoObject getModel(){
-        return (AxoObject)(getController().getModel());
+
+    AxoObject getModel() {
+        return (AxoObject) (getController().getModel());
     }
 
     @Override
@@ -109,6 +109,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
             jTextAreaDisposeCode.setText((String) evt.getNewValue());
         } else if (propertyName.equals(ObjectController.OBJ_MIDI_CODE)) {
             jTextAreaMidiCode.setText((String) evt.getNewValue());
+        } else if (propertyName.equals(ObjectController.OBJ_ID)) {
+            setTitle((String) evt.getNewValue());
         }
         updateReferenceXML();
     }
@@ -151,13 +153,15 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         */
     }
 
-    void SetUndoablePropString(String propName, String s){
-        String orig = (String)getController().getModelProperty(propName);
-        if (s.equals(orig)) return;
+    void SetUndoablePropString(String propName, String s) {
+        String orig = (String) getController().getModelProperty(propName);
+        if (s.equals(orig)) {
+            return;
+        }
         getController().addMetaUndo("edit " + propName);
-        getController().setModelUndoableProperty(propName,s);
+        getController().setModelUndoableProperty(propName, s);
     }
-    
+
     public AxoObjectEditor(ObjectController ctrl) {
         initComponents();
         this.controller = ctrl;
@@ -326,17 +330,17 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
             jTextFieldHelp.setVisible(false);
             jLabelHelp.setVisible(false);
         } else // normal objects
-         if (sellib != null) {
-                jMenuItemSave.setEnabled(!sellib.isReadOnly());
-                if (sellib.isReadOnly()) {
-                    SetReadOnly(true);
-                    jLabelLibrary.setText(sellib.getId() + " (readonly)");
-                    setTitle(sellib.getId() + ":" + ctrl.getModel().getId() + " (readonly)");
-                } else {
-                    jLabelLibrary.setText(sellib.getId());
-                    setTitle(sellib.getId() + ":" + ctrl.getModel().getId());
-                }
+        if (sellib != null) {
+            jMenuItemSave.setEnabled(!sellib.isReadOnly());
+            if (sellib.isReadOnly()) {
+                SetReadOnly(true);
+                jLabelLibrary.setText(sellib.getId() + " (readonly)");
+                setTitle(sellib.getId() + ":" + ctrl.getModel().getId() + " (readonly)");
+            } else {
+                jLabelLibrary.setText(sellib.getId());
+                setTitle(sellib.getId() + ":" + ctrl.getModel().getId());
             }
+        }
 
         jTextDesc.requestFocus();
         controller.addView(this);
@@ -411,32 +415,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         }
         return !(origXML.equals(editOS.toString()));
     }
-
-    // needed?
-    /*
-    public void ObjectModified(Object source) {
-        if (source != this) {
-            jTextAreaLocalData.setText(getModel().sLocalData == null ? "" : getModel().sLocalData);
-            jTextAreaInitCode.setText(getModel().sInitCode == null ? "" : getModel().sInitCode);
-            jTextAreaKRateCode.setText(getModel().sKRateCode == null ? "" : getModel().sKRateCode);
-            jTextAreaSRateCode.setText(getModel().sSRateCode == null ? "" : getModel().sSRateCode);
-            jTextAreaDisposeCode.setText(getModel().sDisposeCode == null ? "" : getModel().sDisposeCode);
-            jTextAreaMidiCode.setText(getModel().sMidiCode == null ? "" : getModel().sMidiCode);
-        }
-        Serializer serializer = new Persister();
-        ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
-        try {
-            serializer.write(getModel(), os);
-        } catch (Exception ex) {
-            Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        rSyntaxTextAreaXML.setText(os.toString());
-        rSyntaxTextAreaXML.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);
-        rSyntaxTextAreaXML.setCodeFoldingEnabled(true);
-
-//        AxoObjectInstance obji = getModel().CreateInstance(null, "test", new Point(0, 0));
-    }
-*/
 
     public void initEditFromOrig() {
         initFields();

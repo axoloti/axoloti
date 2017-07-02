@@ -592,6 +592,7 @@ public abstract class PatchView extends PatchAbstractView {
 
         @Override
         public void removeView(IAxoObjectInstanceView view) {
+            view.dispose();
             remove(view);
         }
 

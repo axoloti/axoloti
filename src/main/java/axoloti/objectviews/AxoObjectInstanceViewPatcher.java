@@ -24,7 +24,7 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
     @Override
     public ObjectInstancePatcherController getController() {
-        return (ObjectInstancePatcherController)super.getController();
+        return (ObjectInstancePatcherController) super.getController();
     }
 
     public void initSubpatchFrame() {
@@ -71,5 +71,11 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
         if (BtnUpdate != null) {
             BtnUpdate.setEnabled(false);
         }
+    }
+
+    @Override
+    public void dispose() {
+        pf.Close();
+        pf = null;
     }
 }
