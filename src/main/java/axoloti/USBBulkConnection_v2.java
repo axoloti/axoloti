@@ -419,8 +419,10 @@ public class USBBulkConnection_v2 extends IConnection {
                 Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "Device disconnected");
             } else if (result == LibUsb.ERROR_TIMEOUT) {
                 Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "USB transmit timeout");
+                disconnect();
             } else {
                 Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "Control transfer failed: {0}", result);
+                disconnect();
             }
         }
         //System.out.println(transfered.get() + " bytes sent");
