@@ -100,6 +100,7 @@ public class Net extends AbstractModel {
         for (int j = 0; j < dests.length; j++) {
             InletInstance i = dests[j];
             IAxoObjectInstance o = i.getObjectInstance();
+            if (o == null) continue;
             if (!o.getInletInstances().contains(i)) {
                 String inletName = i.getName();
                 InletInstance i2 = o.GetInletInstance(inletName);
@@ -112,6 +113,7 @@ public class Net extends AbstractModel {
         for (int j = 0; j < sources.length; j++) {
             OutletInstance i = sources[j];
             IAxoObjectInstance o = i.getObjectInstance();
+            if (o == null) continue;
             if (!o.getOutletInstances().contains(i)) {
                 String outletName = i.getName();
                 OutletInstance i2 = o.GetOutletInstance(outletName);

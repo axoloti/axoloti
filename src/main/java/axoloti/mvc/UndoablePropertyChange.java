@@ -20,6 +20,7 @@ public class UndoablePropertyChange implements UndoableEdit {
         this.controller = controller;
         this.propertyName = propertyName;
         this.old_value = old_value;
+        //System.out.println("undoablePropChange: " + propertyName + " : " + ((new_value!=null)?new_value.toString() : "null"));
     }
 
     public AbstractController getController() {

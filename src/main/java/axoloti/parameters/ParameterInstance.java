@@ -29,6 +29,7 @@ import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectPatcher;
+import axoloti.object.ObjectInstanceController;
 import axoloti.object.ObjectInstancePatcherController;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
@@ -298,12 +299,17 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     /* MVC getters and setters */
 
     /* View personality */    
-
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)
-                || evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+        String propertyName = evt.getPropertyName();
+        if (propertyName.equals(AtomDefinitionController.ATOM_NAME)) {
+            updateParamOnParent();
+            firePropertyChange(
+                    evt.getPropertyName(),
+                    evt.getOldValue(),
+                    evt.getNewValue());
+        } else if (propertyName.equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
             firePropertyChange(
                     evt.getPropertyName(),
                     evt.getOldValue(),
@@ -343,6 +349,14 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
 
     public T getParamOnParent() {
         return paramOnParent;
+    }
+    
+    public void updateParamOnParent() {
+        if (paramOnParent != null) {
+            paramOnParent.setName(ControlOnParentName());
+            paramOnParent.noLabel = null;
+            paramOnParent.PropagateToChild = axoObjectInstance.getLegalName() + "_" + getLegalName();
+        }
     }
 
     void setParamOnParent(T paramOnParent) {
@@ -409,4 +423,10 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         firePropertyChange(AtomDefinitionController.ATOM_NAME, prevValue, name);
     }
 
+    public void Remove(){
+        if (paramOnParent!=null) {
+            setParamOnParent(null);
+        }
+    }
+    
 }

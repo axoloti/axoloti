@@ -24,27 +24,16 @@ import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.*;
 import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceFactory;
-import axoloti.inlets.Inlet;
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceFactory;
-import axoloti.inlets.InletInt32;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.array.ArrayView;
-import axoloti.outlets.Outlet;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceFactory;
-import axoloti.outlets.OutletInt32;
 import axoloti.parameters.*;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.simpleframework.xml.*;
@@ -320,29 +309,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     }
 
-    public void ConvertToEmbeddedObj() {/*
-         try {
-         ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object", null);
-         assert (!ol.isEmpty());
-         AxoObjectAbstract o = ol.get(0);
-         String iname = getInstanceName();
-         AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getPatchModel().ChangeObjectInstanceType1(this, o);
-         AxoObject ao = getType();
-         oi.ao = new AxoObjectPatcherObject(ao.id, ao.sDescription);
-         oi.ao.copy(ao);
-         oi.ao.sPath = "";
-         oi.ao.upgradeSha = null;
-         oi.ao.CloseEditor();
-         oi.setInstanceName(iname);
-         getPatchModel().setDirty();
-         getPatchModel().transferState(this, oi);
-         //getPatchModel().delete(this);
-         getPatchModel().setDirty();
-         } catch (CloneNotSupportedException ex) {
-         Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
-
-    }
 
     @Persist
     public void Persist() {
@@ -419,6 +385,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public void Remove() {
+        for (ParameterInstance p : getParameterInstances()) {
+            p.Remove();
+        }
     }    
     
         /* MVC clean code below here */

@@ -50,10 +50,8 @@ public class AxoObjectInstanceFactory {
             } else {
                 dr = null;
             }
-            ObjectController oc = objm1.createController(dr, patchController);
-            obji = new AxoObjectInstancePatcherObject(oc, patchModel, instanceName, location);
-            oc.addView(obji);
-            return obji;
+            objc = objm1.createController(dr, patchController);
+            obji = new AxoObjectInstancePatcherObject(objc, patchModel, instanceName, location);
         } else if (objm instanceof AxoObjectZombie) {
             obji = new AxoObjectInstanceZombie(objc, patchModel, instanceName, location);
         } else if (objm instanceof AxoObject) {

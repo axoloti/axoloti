@@ -45,6 +45,7 @@ import axoloti.mvc.array.ArrayController;
 import axoloti.object.IAxoObject;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstancePatcherController;
+import axoloti.parameters.ParameterInstance;
 
 public class PatchController extends AbstractController<PatchModel, IView, ObjectInstanceController> {
 
@@ -88,14 +89,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
 
             @Override
             public void disposeController(ObjectInstanceController controller) {
-                for (InletInstance i: controller.getModel().getInletInstances()) {
-                    disconnect(i);
-                }
-                for (OutletInstance i: controller.getModel().getOutletInstances()) {
-                    disconnect(i);
-                }
                 controller.getModel().Remove();
-                // TODO: disconnect its inlets/outlets
             }
         };
         for (IAxoObjectInstance unlinked_object_instance : unlinked_object_instances) {
@@ -292,7 +286,6 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
 
     public void setFileNamePath(String FileNamePath) {
         setModelProperty(PATCH_FILENAME, FileNamePath);
-        getModel().setFileNamePath(FileNamePath);
     }
 
     public boolean delete(IAxoObjectInstance o) {
@@ -300,12 +293,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         if (o == null) {
             return deletionSucceeded;
         }
-        for (InletInstance ii : o.getInletInstances()) {
-            disconnect(ii);
-        }
-        for (OutletInstance oi : o.getOutletInstances()) {
-            disconnect(oi);
-        }
+        disconnect(o);
         int i;
         for (i = getModel().Modulators.size() - 1; i >= 0; i--) {
             Modulator m1 = getModel().Modulators.get(i);
@@ -425,6 +413,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 ObjectController opoc = new ObjectController(opo, getDocumentRoot());
                 linked_object_instance = new AxoObjectInstancePatcherObject(opoc, getModel(), o.getInstanceName(), o.getLocation());
                 opoc.addView(linked_object_instance);
+//                linked_object_instance = AxoObjectInstanceFactory.createView(o.createController(null, null), this, o.getInstanceName(), o.getLocation());
             } else {
                 IAxoObject t = o.resolveType(getModel().GetCurrentWorkingDirectory());
                 linked_object_instance = AxoObjectInstanceFactory.createView(t.createController(null, null), this, o.getInstanceName(), o.getLocation());
@@ -620,10 +609,74 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         return new Point(100, 100); //patchView.getLocationOnScreen();
     }
 
+    public void checkCoherency() {
+        for (Net n: getModel().getNets()) {
+            for (InletInstance i : n.getDestinations()) {
+                IAxoObjectInstance o = i.getObjectInstance();
+                assert(o.getInletInstances().contains(i));
+                assert(getModel().getObjectInstances().contains(o));
+            }
+            for (OutletInstance i : n.getSources()) {
+                IAxoObjectInstance o = i.getObjectInstance();
+                assert(o.getOutletInstances().contains(i));
+                assert(getModel().getObjectInstances().contains(o));
+            }
+        }
+        for (IAxoObjectInstance o: getModel().getObjectInstances()){
+            assert(o.getPatchModel() == getModel());
+            for (ParameterInstance p : o.getParameterInstances()) {
+                assert(p.getObjectInstance() == o);
+            }
+            for (InletInstance p : o.getInletInstances()) {
+                assert(p.getObjectInstance() == o);
+            }
+            for (OutletInstance p : o.getOutletInstances()) {
+                assert(p.getObjectInstance() == o);
+            }
+        }
+    }
+    
+
+    public void disconnect(IAxoObjectInstance o){
+        for (InletInstance i: o.getInletInstances()) {
+            disconnect(i);
+        }
+        for (OutletInstance i: o.getOutletInstances()) {
+            disconnect(i);
+        }        
+    }
+    
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(IAxoObjectInstance obj, IAxoObject objType) {
-//        AxoObjectInstanceAbstract newObject = getModel().ChangeObjectInstanceType(obj, objType);
-//        return newObject;
-        return null;
+        AxoObjectInstanceAbstract newObj = AxoObjectInstanceFactory.createView(objType.createController(getDocumentRoot(), this), this, obj.getInstanceName(), obj.getLocation());
+
+        newObj.applyValues(obj);
+        objectInstanceControllers.add(newObj);
+
+        for(InletInstance i: obj.getInletInstances()){
+            NetController n = getNetFromInlet(i);
+            if (n!=null) {
+                for(InletInstance i2: newObj.getInletInstances()) {
+                    if (i2.getName().equals(i.getName())) {
+                        n.connectInlet(i2);
+                        break;
+                    }
+                }
+            }
+        }
+        for(OutletInstance i: obj.getOutletInstances()){
+            NetController n = getNetFromOutlet(i);
+            if (n!=null) {
+                for(OutletInstance i2: newObj.getOutletInstances()){
+                    if (i2.getName().equals(i.getName())) {
+                        n.connectOutlet(i2);
+                        break;
+                    }
+                }
+            }
+        }
+        disconnect(obj);
+        objectInstanceControllers.remove(obj);
+        return newObj;
     }
 
     public boolean isLocked() {
@@ -648,13 +701,10 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         if (propertyName.equals(PATCH_OBJECTINSTANCES)) {
             objectInstanceControllers.syncControllers();
         } else  if (propertyName.equals(PATCH_NETS)) {
-            if (netControllers == null) {
-                System.out.println("netcontrollers still null...");
-            }
-            
             netControllers.syncControllers();
         }
         super.propertyChange(evt);
+        checkCoherency();
     }
 
     public NetController getNetFromInlet(InletInstance il) {
@@ -789,9 +839,8 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         return null;
     }
 
-    public NetController delete(NetController n) {
+    public void delete(NetController n) {
         netControllers.remove(n.getModel());
-        return n;
     }
 
     @Deprecated // no longer in use?

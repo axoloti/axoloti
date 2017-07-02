@@ -313,6 +313,9 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         firePropertyChange(
                 ObjectInstanceController.OBJ_INSTANCENAME,
                 oldvalue, this.InstanceName);
+        for (ParameterInstance p : getParameterInstances()) {
+            p.updateParamOnParent();
+        }
         return true;
     }
 

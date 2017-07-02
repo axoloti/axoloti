@@ -44,6 +44,8 @@ public abstract class ArrayController<T extends AbstractController, M extends IM
         boolean r = n.remove(m);
         if (r) {
             parent.setModelUndoableProperty(propertyName, n);
+        } else {
+            throw new Error("model did not contain " + m);
         }
         return r;
     }

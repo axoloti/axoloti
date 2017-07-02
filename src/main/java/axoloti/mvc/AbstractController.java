@@ -73,7 +73,7 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
     //  and propagate them on to all the views.
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        //System.out.println("propertyChange: " + evt.getPropertyName() + " : " + ((evt.getNewValue()!=null)?evt.getNewValue().toString() : "null"));
         for (View view : registeredViews) {
             view.modelPropertyChange(evt);
         }
@@ -151,9 +151,9 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
             if (old_val == newValue) {
                 return;
             }
+            setModelProperty(propertyName, newValue);
             UndoableEdit uedit = new UndoablePropertyChange(this, propertyName, old_val, newValue);
             getUndoManager().addEdit(uedit);
-            setModelProperty(propertyName, newValue);
             if (documentRoot != null) {
                 documentRoot.fireUndoListeners(new UndoableEditEvent(this, uedit));
             }

@@ -390,7 +390,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     if (!getPatchView().isLocked()) {
-                        model.ConvertToEmbeddedObj();
+                        getController().ConvertToEmbeddedObj();
                     }
                 }
             });
