@@ -20,6 +20,7 @@ package axoloti;
 import axoloti.datatypes.DataType;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.outlets.OutletInstance;
 import java.awt.Color;
 import java.util.Arrays;
@@ -34,8 +35,8 @@ import org.simpleframework.xml.*;
 @Root(name = "net")
 public class Net extends AbstractModel {
 
-    OutletInstance[] sources;
-    InletInstance[] dests;
+    private OutletInstance[] sources;
+    private InletInstance[] dests;
     boolean selected = false;
 
     public Net(
@@ -95,6 +96,30 @@ public class Net extends AbstractModel {
         }
         if (dests.length + sources.length < 2) {
             throw new Error("less than 2 iolets connected, should not exist");
+        }
+        for (int j = 0; j < dests.length; j++) {
+            InletInstance i = dests[j];
+            IAxoObjectInstance o = i.getObjectInstance();
+            if (!o.getInletInstances().contains(i)) {
+                String inletName = i.getName();
+                InletInstance i2 = o.GetInletInstance(inletName);
+                if (i2 == null) {
+                    throw new Error("detached net");
+                }
+                dests[j] = i2;
+            }
+        }
+        for (int j = 0; j < sources.length; j++) {
+            OutletInstance i = sources[j];
+            IAxoObjectInstance o = i.getObjectInstance();
+            if (!o.getOutletInstances().contains(i)) {
+                String outletName = i.getName();
+                OutletInstance i2 = o.GetOutletInstance(outletName);
+                if (i2 == null) {
+                    throw new Error("detached net");
+                }
+                sources[j] = i2;
+            }
         }
     }
 
