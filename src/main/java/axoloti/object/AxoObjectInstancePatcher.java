@@ -17,15 +17,8 @@
  */
 package axoloti.object;
 
-import axoloti.PatchController;
 import axoloti.PatchModel;
-import axoloti.inlets.InletInstance;
-import axoloti.mvc.IView;
-import axoloti.outlets.OutletInstance;
-import axoloti.parameters.ParameterInstance;
 import java.awt.Point;
-import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import org.simpleframework.xml.Element;
 
 /**
@@ -50,6 +43,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location, PatchModel subPatchModel) {
         super(controller, patch1, InstanceName1, location);
         this.subPatchModel = subPatchModel;
+        subPatchModel.setFileNamePath(InstanceName1);
     }
 
     public PatchModel getSubPatchModel() {
@@ -61,4 +55,10 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         super.Close();
     }
 
+    @Override
+    public boolean setInstanceName(String s) {
+        boolean b = super.setInstanceName(s);
+        subPatchModel.setFileNamePath(s);
+        return b;
+    }
 }
