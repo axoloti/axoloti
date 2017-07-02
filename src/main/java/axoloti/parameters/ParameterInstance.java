@@ -18,7 +18,6 @@
 package axoloti.parameters;
 
 import axoloti.Modulation;
-import axoloti.PatchController;
 import axoloti.PatchModel;
 import axoloti.Preset;
 import axoloti.atom.AtomDefinitionController;
@@ -29,8 +28,6 @@ import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectPatcher;
-import axoloti.object.ObjectInstanceController;
-import axoloti.object.ObjectInstancePatcherController;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import java.beans.PropertyChangeEvent;

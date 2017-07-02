@@ -410,11 +410,12 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 + "* removing objects with parameter-on-parent broken\n"
                 + "* only mono patch/patcher objects are working\n"
                 + "* modulations are broken\n"
-                + "* embed... broken\n"
+                + "* embed as patch/patcher broken\n"
                 + "* prevent object to be moved to negative coordinates\n"
                 + "* zombie objects broken\n"
                 + "* sdfiles/modules are broken\n"
-                + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo");
+                + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo\n"
+                + "* paste creates overlapping objects at original location");
     }
 
     static boolean TestDir(String var, boolean write) {
@@ -1122,7 +1123,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             jLabelCPUID.setText(" ");
         } else {
             String name = MainFrame.prefs.getBoardName(cpuId);
-            String txt;
             if (name == null) {
                 jLabelCPUID.setText("Cpu ID = " + cpuId);
             } else {

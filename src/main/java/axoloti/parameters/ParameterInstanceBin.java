@@ -1,6 +1,5 @@
 package axoloti.parameters;
 
-import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
 import axoloti.object.AxoObjectInstance;
 import org.simpleframework.xml.Attribute;

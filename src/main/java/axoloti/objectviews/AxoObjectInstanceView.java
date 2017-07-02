@@ -409,7 +409,8 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    getController().ConvertToEmbeddedObj();
+                    getController().addMetaUndo("embed");
+                    getController().getParent().ConvertToEmbeddedObj(getModel());
                 }
             });
             popup.add(popm_embed);

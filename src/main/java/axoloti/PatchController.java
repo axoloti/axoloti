@@ -46,6 +46,8 @@ import axoloti.object.IAxoObject;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstancePatcherController;
 import axoloti.parameters.ParameterInstance;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 public class PatchController extends AbstractController<PatchModel, IView, ObjectInstanceController> {
 
@@ -645,6 +647,30 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             disconnect(i);
         }        
     }
+    
+    public void ConvertToEmbeddedObj(IAxoObjectInstance obj) {
+        try {
+            AxoObjectPatcherObject po = new AxoObjectPatcherObject();
+            ObjectController objc = po.createController(getDocumentRoot(), this);
+            AxoObjectInstancePatcherObject newObj = (AxoObjectInstancePatcherObject)AxoObjectInstanceFactory.createView(objc, this, obj.getInstanceName(), obj.getLocation());
+            // clone by serialization/deserialization...
+            ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
+            Strategy strategy = new AnnotationStrategy();
+            Serializer serializer = new Persister(strategy);
+            serializer.write(obj.getType(), os);
+            ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
+            AxoObjectPatcherObject of = serializer.read(AxoObjectPatcherObject.class, is);
+            newObj.ao = of;
+            disconnect(obj);
+            delete(obj);
+            add_unlinked_objectinstance(newObj);            
+        } catch (Exception ex) {
+            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
     
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(IAxoObjectInstance obj, IAxoObject objType) {
         AxoObjectInstanceAbstract newObj = AxoObjectInstanceFactory.createView(objType.createController(getDocumentRoot(), this), this, obj.getInstanceName(), obj.getLocation());

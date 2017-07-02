@@ -1,13 +1,10 @@
 package axoloti.parameters;
 
-import axoloti.PatchController;
 import axoloti.Preset;
 import axoloti.datatypes.Value;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.object.AxoObjectPatcher;
 import axoloti.object.ObjectInstanceController;
-import axoloti.object.ObjectInstancePatcherController;
 import axoloti.parameterviews.IParameterInstanceView;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;

@@ -470,6 +470,7 @@ public class AxoObject extends AxoObjectAbstract {
         return modules;
     }
 
+    @Override
     public File GetHelpPatchFile() {
         if ((helpPatch == null) || (getPath() == null) || getPath().isEmpty()) {
             return null;
@@ -486,6 +487,9 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public AxoObject clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException();        
+        /* 
+        // This implementation does not make a shallow clone!
         AxoObject c = (AxoObject) super.clone();
         c.inlets = new ArrayList<Inlet>();
         for (Inlet i : inlets) {
@@ -508,10 +512,13 @@ public class AxoObject extends AxoObjectAbstract {
             c.attributes.add(i.clone());
         }
         return c;
+        */
     }
 
     public void copy(AxoObject o) throws CloneNotSupportedException {
-
+        throw new CloneNotSupportedException();        
+        /* 
+        // This implementation does not make a shallow clone!
         inlets = new ArrayList<Inlet>();
         for (Inlet i : o.inlets) {
             inlets.add(i.clone());
@@ -570,6 +577,7 @@ public class AxoObject extends AxoObjectAbstract {
         //sAuthor = o.sAuthor;
         //sLicense = o.sLicense;
         sDescription = o.sDescription;
+        */
     }
 
     public AxoObjectEditor getEditor() {
