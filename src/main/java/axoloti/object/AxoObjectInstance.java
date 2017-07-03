@@ -287,29 +287,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         */
     }
 
-    public void ConvertToPatchPatcher() {/*
-         try {
-         ArrayList<AxoObjectAbstract> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/patcher", null);
-         assert (!ol.isEmpty());
-         AxoObjectAbstract o = ol.get(0);
-         AxoObjectInstancePatcher oi = (AxoObjectInstancePatcher) getPatchModel().AddObjectInstance(o, new Point(x, y));
-         AxoObjectFromPatch ao = (AxoObjectFromPatch) getType();
-         Strategy strategy = new AnnotationStrategy();
-         Serializer serializer = new Persister(strategy);
-         oi.setSubPatchModel(serializer.read(PatchModel.class, new File(ao.patchModel.getFileNamePath())));
-         oi.initSubpatchFrame();
-         oi.updateObj();
-         getPatchModel().transferState(this, oi);
-         //getPatchModel().delete(this);
-         getPatchModel().setDirty();
-         oi.setInstanceName(getInstanceName());
-         } catch (Exception ex) {
-         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Failed to convert to patch/patcher", ex);
-         }*/
-
-    }
-
-
     @Persist
     public void Persist() {
         IAxoObject o = getType();

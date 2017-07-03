@@ -399,7 +399,8 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     if (!getPatchView().isLocked()) {
-                        getModel().ConvertToPatchPatcher();
+                        getController().addMetaUndo("embed");
+                        getController().getParent().ConvertToPatchPatcher(getModel());
                     }
                 }
             });

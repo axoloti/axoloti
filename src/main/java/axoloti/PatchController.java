@@ -42,6 +42,7 @@ import qcmds.QCmdRecallPreset;
 import qcmds.QCmdUploadFile;
 import axoloti.mvc.IView;
 import axoloti.mvc.array.ArrayController;
+import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.IAxoObject;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstancePatcherController;
@@ -667,11 +668,25 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         } catch (Exception ex) {
             Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
     }
-    
-    
+
+    public void ConvertToPatchPatcher(IAxoObjectInstance obj) {
+        try {
+            AxoObjectPatcher po = new AxoObjectPatcher();
+            ObjectController objc = po.createController(getDocumentRoot(), this);
+            Strategy strategy = new AnnotationStrategy();
+            Serializer serializer = new Persister(strategy);
+            AxoObjectFromPatch ofp = (AxoObjectFromPatch) obj.getType();
+            PatchModel pm = serializer.read(PatchModel.class, new File(ofp.getPath()));
+            AxoObjectInstancePatcher newObj = new AxoObjectInstancePatcher(objc, getModel(), obj.getInstanceName(), obj.getLocation(), pm);
+            disconnect(obj);
+            delete(obj);
+            add_unlinked_objectinstance(newObj);
+        } catch (Exception ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Failed to convert to patch/patcher", ex);
+        }
+    }
+
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(IAxoObjectInstance obj, IAxoObject objType) {
         AxoObjectInstanceAbstract newObj = AxoObjectInstanceFactory.createView(objType.createController(getDocumentRoot(), this), this, obj.getInstanceName(), obj.getLocation());
 

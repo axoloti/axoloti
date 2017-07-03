@@ -76,6 +76,7 @@ public class NetView extends JComponent implements INetView {
         }
     }
 
+    @Override
     public void setSelected(boolean selected) {
         if (this.selected == selected) {
             return;
@@ -90,6 +91,7 @@ public class NetView extends JComponent implements INetView {
         repaint();
     }
 
+    @Override
     public boolean getSelected() {
         return selected;
     }
@@ -110,6 +112,7 @@ public class NetView extends JComponent implements INetView {
         g2.draw(curve);
     }
 
+    @Override
     public void updateBounds() {
         int min_y = Integer.MAX_VALUE;
         int min_x = Integer.MAX_VALUE;
@@ -215,6 +218,7 @@ public class NetView extends JComponent implements INetView {
         }
     }
 
+    @Override
     public Net getNet() {
         return net;
     }

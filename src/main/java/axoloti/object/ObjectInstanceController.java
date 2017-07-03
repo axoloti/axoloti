@@ -120,27 +120,7 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
             }
         };
     }
-/*
-    public void ConvertToEmbeddedObj() {
-        try {
-            List<IAxoObject> ol = MainFrame.mainframe.axoObjects.GetAxoObjectFromName("patch/object", null);
-            assert (!ol.isEmpty());
-            IAxoObject o = ol.get(0);
-            String iname = getModel().getInstanceName();
-            AxoObjectInstancePatcherObject oi = (AxoObjectInstancePatcherObject) getModel().getPatchModel().ChangeObjectInstanceType1(this, o);
-            IAxoObject ao = getModel().getType();
-            oi.ao = new AxoObjectPatcherObject(ao.getId(), ao.getDescription());
-            oi.ao.copy(ao);
-            oi.ao.sPath = "";
-            oi.ao.upgradeSha = null;
-            oi.ao.CloseEditor();
-            oi.setInstanceName(iname);
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(ObjectController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-*/
-    
+
     public void changeLocation(int x, int y) {
         if ((getModel().getX() != x) || (getModel().getY() != y)) {
             Point p = new Point(x, y);

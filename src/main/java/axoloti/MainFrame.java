@@ -410,12 +410,12 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 + "* removing objects with parameter-on-parent broken\n"
                 + "* only mono patch/patcher objects are working\n"
                 + "* modulations are broken\n"
-                + "* embed as patch/patcher broken\n"
                 + "* prevent object to be moved to negative coordinates\n"
                 + "* zombie objects broken\n"
                 + "* sdfiles/modules are broken\n"
                 + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo\n"
-                + "* paste creates overlapping objects at original location");
+                + "* paste creates overlapping objects at original location\n"
+                + "* object promotion");
     }
 
     static boolean TestDir(String var, boolean write) {

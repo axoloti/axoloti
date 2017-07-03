@@ -48,6 +48,7 @@ public class AxoObjectFromPatch extends AxoObject {
         Serializer serializer = new Persister();
         try {
             patchModel = serializer.read(PatchModel.class, f);
+            patchModel.setFileNamePath(f.getPath());
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
             patchController = new PatchController(patchModel, documentRoot, null);
         } catch (Exception ex) {
@@ -92,6 +93,10 @@ public class AxoObjectFromPatch extends AxoObject {
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);
+    }
+
+    public PatchModel getPatchModel() {
+        return patchModel;
     }
 
 }
