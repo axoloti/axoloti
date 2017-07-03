@@ -648,76 +648,77 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             disconnect(i);
         }        
     }
-    
+
     public void ConvertToEmbeddedObj(IAxoObjectInstance obj) {
-        try {
-            AxoObjectPatcherObject po = new AxoObjectPatcherObject();
-            ObjectController objc = po.createController(getDocumentRoot(), this);
-            AxoObjectInstancePatcherObject newObj = (AxoObjectInstancePatcherObject)AxoObjectInstanceFactory.createView(objc, this, obj.getInstanceName(), obj.getLocation());
-            // clone by serialization/deserialization...
-            ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
-            Strategy strategy = new AnnotationStrategy();
-            Serializer serializer = new Persister(strategy);
-            serializer.write(obj.getType(), os);
-            ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
-            AxoObjectPatcherObject of = serializer.read(AxoObjectPatcherObject.class, is);
-            newObj.ao = of;
-            disconnect(obj);
-            delete(obj);
-            add_unlinked_objectinstance(newObj);            
-        } catch (Exception ex) {
-            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        ChangeObjectInstanceType(obj, new AxoObjectPatcherObject());
     }
 
     public void ConvertToPatchPatcher(IAxoObjectInstance obj) {
-        try {
-            AxoObjectPatcher po = new AxoObjectPatcher();
-            ObjectController objc = po.createController(getDocumentRoot(), this);
-            Strategy strategy = new AnnotationStrategy();
-            Serializer serializer = new Persister(strategy);
-            AxoObjectFromPatch ofp = (AxoObjectFromPatch) obj.getType();
-            PatchModel pm = serializer.read(PatchModel.class, new File(ofp.getPath()));
-            AxoObjectInstancePatcher newObj = new AxoObjectInstancePatcher(objc, getModel(), obj.getInstanceName(), obj.getLocation(), pm);
-            disconnect(obj);
-            delete(obj);
-            add_unlinked_objectinstance(newObj);
-        } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Failed to convert to patch/patcher", ex);
-        }
+        ChangeObjectInstanceType(obj, new AxoObjectPatcher());
     }
 
     public AxoObjectInstanceAbstract ChangeObjectInstanceType(IAxoObjectInstance obj, IAxoObject objType) {
-        AxoObjectInstanceAbstract newObj = AxoObjectInstanceFactory.createView(objType.createController(getDocumentRoot(), this), this, obj.getInstanceName(), obj.getLocation());
-
-        newObj.applyValues(obj);
-        objectInstanceControllers.add(newObj);
-
-        for(InletInstance i: obj.getInletInstances()){
-            NetController n = getNetFromInlet(i);
-            if (n!=null) {
-                for(InletInstance i2: newObj.getInletInstances()) {
-                    if (i2.getName().equals(i.getName())) {
-                        n.connectInlet(i2);
-                        break;
+        try {
+            AxoObjectInstanceAbstract newObj;
+            if ((objType instanceof AxoObjectPatcher)
+                    && (obj.getType() instanceof AxoObjectFromPatch)) {
+                // ConvertToPatchPatcher
+                AxoObjectPatcher po = (AxoObjectPatcher) objType;
+                ObjectController objc = po.createController(getDocumentRoot(), this);
+                Strategy strategy = new AnnotationStrategy();
+                Serializer serializer = new Persister(strategy);
+                AxoObjectFromPatch ofp = (AxoObjectFromPatch) obj.getType();
+                PatchModel pm = serializer.read(PatchModel.class, new File(ofp.getPath()));
+                newObj = new AxoObjectInstancePatcher(objc, getModel(), obj.getInstanceName(), obj.getLocation(), pm);
+                objc.addView(newObj);
+            } else if (objType instanceof AxoObjectPatcherObject) {
+                // ConvertToEmbeddedObj
+                // clone by serialization/deserialization...
+                ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
+                Strategy strategy = new AnnotationStrategy();
+                Serializer serializer = new Persister(strategy);
+                serializer.write(obj.getType(), os);
+                ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
+                AxoObjectPatcherObject of = serializer.read(AxoObjectPatcherObject.class, is);
+                ObjectController opoc = new ObjectController(of, getDocumentRoot());
+                newObj = new AxoObjectInstancePatcherObject(opoc, getModel(), obj.getInstanceName(), obj.getLocation());
+                opoc.addView(newObj);
+            } else {
+                newObj = AxoObjectInstanceFactory.createView(objType.createController(getDocumentRoot(), this), this, obj.getInstanceName(), obj.getLocation());
+            }
+            newObj.applyValues(obj);
+            
+            objectInstanceControllers.add(newObj);
+            
+            for (InletInstance i : obj.getInletInstances()) {
+                NetController n = getNetFromInlet(i);
+                if (n != null) {
+                    for (InletInstance i2 : newObj.getInletInstances()) {
+                        if (i2.getName().equals(i.getName())) {
+                            n.connectInlet(i2);
+                            break;
+                        }
                     }
                 }
             }
-        }
-        for(OutletInstance i: obj.getOutletInstances()){
-            NetController n = getNetFromOutlet(i);
-            if (n!=null) {
-                for(OutletInstance i2: newObj.getOutletInstances()){
-                    if (i2.getName().equals(i.getName())) {
-                        n.connectOutlet(i2);
-                        break;
+            for (OutletInstance i : obj.getOutletInstances()) {
+                NetController n = getNetFromOutlet(i);
+                if (n != null) {
+                    for (OutletInstance i2 : newObj.getOutletInstances()) {
+                        if (i2.getName().equals(i.getName())) {
+                            n.connectOutlet(i2);
+                            break;
+                        }
                     }
                 }
             }
+            disconnect(obj);
+            objectInstanceControllers.remove(obj);
+            return newObj;
+        } catch (Exception ex) {
+            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        disconnect(obj);
-        objectInstanceControllers.remove(obj);
-        return newObj;
     }
 
     public boolean isLocked() {
