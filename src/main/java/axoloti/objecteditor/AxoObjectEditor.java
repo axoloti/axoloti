@@ -347,8 +347,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     }
 
     boolean IsEmbeddedObj() {
-        // FIXME!
-        return false; // (editObj.sPath == null || editObj.sPath.length() == 0);
+        return controller.getModel().getPath().isEmpty();
     }
 
     void SetReadOnly(boolean readonly) {
@@ -424,9 +423,6 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     public boolean AskClose() {
         // if it's an embedded object ("patch/object"), assume the parent patch is saving
         if (IsEmbeddedObj()) {
-            if (hasChanged()) {
-
-            }
             Close();
             return false;
         }
