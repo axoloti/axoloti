@@ -75,7 +75,9 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
     @Override
     public void dispose() {
-        pf.Close();
-        pf = null;
+        if (pf != null) {
+            pf.Close();
+            pf = null;
+        }
     }
 }

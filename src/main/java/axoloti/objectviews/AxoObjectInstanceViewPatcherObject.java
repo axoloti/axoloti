@@ -63,8 +63,10 @@ public class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
 
     @Override
     public void dispose() {
-        aoe.Close();
-        aoe = null;
+        if (aoe != null) {
+            aoe.Close();
+            aoe = null;
+        }
     }
 
 }
