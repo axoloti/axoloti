@@ -397,8 +397,6 @@ public class PatchViewSwing extends PatchView {
     public void PostConstructor() {
         super.PostConstructor();
         Layers.setPreferredSize(new Dimension(5000, 5000));
-//        modelChanged(false);
-//        getPatchController().getModel().PromoteOverloading(true);
         ShowPreset(0);
     }
 

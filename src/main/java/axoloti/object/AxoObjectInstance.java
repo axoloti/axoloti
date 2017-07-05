@@ -17,11 +17,13 @@
  */
 package axoloti.object;
 
+import axoloti.Net;
 import axoloti.PatchModel;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.*;
+import axoloti.datatypes.DataType;
 import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceFactory;
 import axoloti.inlets.InletInstance;
@@ -36,6 +38,8 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persist;
 
@@ -172,87 +176,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     @Override
     public IAxoObject getType() {
         return (IAxoObject) super.getType();
-    }
-
-    @Override
-    public boolean PromoteToOverloadedObj() {
-        /* FIXME
-         if (getType() instanceof AxoObjectFromPatch) {
-         return false;
-         }
-         if (getType() instanceof AxoObjectPatcher) {
-         return false;
-         }
-         if (getType() instanceof AxoObjectPatcherObject) {
-         return false;
-         }
-         String id = typeName;
-         ArrayList<AxoObjectAbstract> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, getPatchModel().GetCurrentWorkingDirectory());
-         if (candidates == null) {
-         return false;
-         }
-         if (candidates.isEmpty()) {
-         Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "could not resolve any candidates {0}", id);
-         }
-         if (candidates.size() == 1) {
-         return false;
-         }
-
-         int ranking[];
-         ranking = new int[candidates.size()];
-         // auto-choose depending on 1st connected inlet
-
-         //      InletInstance i = null;// = GetInletInstances().get(0);
-         for (InletInstance j : getInletInstances()) {
-         Net n = getPatchModel().GetNet(j);
-         if (n == null) {
-         continue;
-         }
-         DataType d = n.getDataType();
-         if (d == null) {
-         continue;
-         }
-         String name = j.getModel().getName();
-         for (int i = 0; i < candidates.size(); i++) {
-         AxoObjectAbstract o = candidates.get(i);
-         Inlet i2 = o.GetInlet(name);
-         if (i2 == null) {
-         continue;
-         }
-         if (i2.getDatatype().equals(d)) {
-         ranking[i] += 10;
-         } else if (d.IsConvertableToType(i2.getDatatype())) {
-         ranking[i] += 2;
-         }
-         }
-         }
-
-         int max = -1;
-         int maxi = 0;
-         for (int i = 0; i < candidates.size(); i++) {
-         if (ranking[i] > max) {
-         max = ranking[i];
-         maxi = i;
-         }
-         }
-         AxoObjectAbstract selected = candidates.get(maxi);
-         int rindex = candidates.indexOf(getType());
-         if (rindex >= 0) {
-         if (ranking[rindex] == max) {
-         selected = getType();
-         }
-         }
-
-         if (selected == null) {
-         //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion to null" + this + " to " + selected);
-         return false;
-         }
-         if (selected != getType()) {
-         Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.FINE, "promoting " + this + " to " + selected);
-         getPatchModel().ChangeObjectInstanceType(this, selected);
-         return true;
-         }*/
-        return false;
     }
 
     @Override

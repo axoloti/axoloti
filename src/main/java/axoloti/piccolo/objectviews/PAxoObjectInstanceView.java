@@ -367,7 +367,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             popm_adapt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    model.PromoteToOverloadedObj();
+                    getController().getParent().PromoteToOverloadedObj(getModel());
                 }
             });
             popup.add(popm_adapt);

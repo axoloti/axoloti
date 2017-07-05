@@ -387,7 +387,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             popm_adapt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    getModel().PromoteToOverloadedObj();
+                    getController().getParent().PromoteToOverloadedObj(getModel());
                 }
             });
             popup.add(popm_adapt);

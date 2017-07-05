@@ -171,10 +171,7 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
                         n = getPatchView().getController().AddConnection(((InletInstanceView) dragtarget).getController().getModel(), ((OutletInstanceView) IoletAbstract.this).getController().getModel());
                     }
                 }
-                //if (axoObj.getPatchModel().PromoteOverloading(false)) {
-                //getPatchView().getPatchController().popUndoState();
-                //getPatchView().getPatchController().pushUndoState();
-                //}
+                getPatchView().getController().PromoteOverloading(false);
             }
             getPatchView().selectionRectLayerPanel.repaint();
             e.consume();

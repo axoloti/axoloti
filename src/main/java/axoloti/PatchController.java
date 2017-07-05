@@ -1,6 +1,8 @@
 package axoloti;
 
 import static axoloti.PatchModel.USE_EXECUTION_ORDER;
+import axoloti.datatypes.DataType;
+import axoloti.inlets.Inlet;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
@@ -43,12 +45,15 @@ import qcmds.QCmdUploadFile;
 import axoloti.mvc.IView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObjectFromPatch;
+import axoloti.object.AxoObjectInstance;
 import axoloti.object.IAxoObject;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstancePatcherController;
 import axoloti.parameters.ParameterInstance;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PatchController extends AbstractController<PatchModel, IView, ObjectInstanceController> {
 
@@ -109,6 +114,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             public void disposeController(NetController controller) {
             }
         };
+        PromoteOverloading(true);        
     }
 
     QCmdProcessor GetQCmdProcessor() {
@@ -945,6 +951,152 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             }
         }
         return selected;
+    }
+
+    public boolean PromoteToOverloadedObj(IAxoObjectInstance axoObjectInstance) {
+        if (axoObjectInstance.getType() instanceof AxoObjectFromPatch) {
+            return false;
+        }
+        if (axoObjectInstance.getType() instanceof AxoObjectPatcher) {
+            return false;
+        }
+        if (axoObjectInstance.getType() instanceof AxoObjectPatcherObject) {
+            return false;
+        }
+        String id = axoObjectInstance.getType().getId();
+        List<IAxoObject> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, axoObjectInstance.getPatchModel().GetCurrentWorkingDirectory());
+        if (candidates == null) {
+            return false;
+        }
+        if (candidates.isEmpty()) {
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.SEVERE, "could not resolve any candidates {0}", id);
+        }
+        if (candidates.size() == 1) {
+            return false;
+        }
+        int[] ranking;
+        ranking = new int[candidates.size()];
+        for (InletInstance j : axoObjectInstance.getInletInstances()) {
+            NetController n = getNetFromInlet(j);
+            if (n == null) {
+                continue;
+            }
+            DataType d = n.getModel().getDataType();
+            if (d == null) {
+                continue;
+            }
+            String name = j.getModel().getName();
+            for (int i = 0; i < candidates.size(); i++) {
+                IAxoObject o = candidates.get(i);
+                Inlet i2 = null;
+                for (Inlet i3 : o.getInlets()) {
+                    if (name.equals(i3.getName())) {
+                        i2 = i3;
+                        break;
+                    }
+                }
+                if (i2 == null) {
+                    continue;
+                }
+                if (i2.getDatatype().equals(d)) {
+                    ranking[i] += 10;
+                } else if (d.IsConvertableToType(i2.getDatatype())) {
+                    ranking[i] += 2;
+                }
+            }
+        }
+        int max = -1;
+        int maxi = 0;
+        for (int i = 0; i < candidates.size(); i++) {
+            if (ranking[i] > max) {
+                max = ranking[i];
+                maxi = i;
+            }
+        }
+        IAxoObject selected = candidates.get(maxi);
+        int rindex = candidates.indexOf(axoObjectInstance.getType());
+        if (rindex >= 0) {
+            if (ranking[rindex] == max) {
+                selected = axoObjectInstance.getType();
+            }
+        }
+        if (selected == null) {
+            //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion to null" + this + " to " + selected);
+            return false;
+        }
+        if (selected != axoObjectInstance.getType()) {
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.FINE, "promoting " + axoObjectInstance + " to " + selected);
+            ChangeObjectInstanceType(axoObjectInstance, selected);
+            return true;
+        }
+        return false;
+    }
+
+    // broken: should move to controller...
+    /*
+    public AxoObjectInstanceAbstract ChangeObjectInstanceType1(AxoObjectInstanceAbstract oldObject, AxoObjectAbstract newObjectType) {
+    if ((oldObject instanceof AxoObjectInstancePatcher) && (newObjectType instanceof AxoObjectPatcher)) {
+    return oldObject;
+    } else if ((oldObject instanceof AxoObjectInstancePatcherObject) && (newObjectType instanceof AxoObjectPatcherObject)) {
+    return oldObject;
+    } else if (oldObject instanceof AxoObjectInstance) {
+    String n = oldObject.getInstanceName();
+    oldObject.setInstanceName(n + Constants.TEMP_OBJECT_SUFFIX);
+    AxoObjectInstanceAbstract newObject = AddObjectInstance(newObjectType, new Point(oldObject.getX(), oldObject.getY()));
+    if (newObject instanceof AxoObjectInstance) {
+    transferState((AxoObjectInstance) oldObject, (AxoObjectInstance) newObject);
+    }
+    return newObject;
+    } else if (oldObject instanceof AxoObjectInstanceZombie) {
+    AxoObjectInstanceAbstract newObject = AddObjectInstance(newObjectType, new Point(oldObject.getX(), oldObject.getY()));
+    if ((newObject instanceof AxoObjectInstance)) {
+    transferObjectConnections((AxoObjectInstanceZombie) oldObject, (AxoObjectInstance) newObject);
+    }
+    return newObject;
+    }
+    return oldObject;
+    }
+    public AxoObjectInstanceAbstract ChangeObjectInstanceType(AxoObjectInstanceAbstract oldObject, AxoObjectAbstract newObjectType) {
+    AxoObjectInstanceAbstract newObject = ChangeObjectInstanceType1(oldObject, newObjectType);
+    if (newObject != oldObject) {
+    //            delete(oldObject);
+    setDirty();
+    }
+    return newObject;
+    }
+     */
+    /**
+     *
+     * @param initial If true, only objects restored from object name reference
+     * (not UUID) will promote to a variant with the same name.
+     */
+    public boolean PromoteOverloading(boolean initial) {
+        PatchModel patchModel = getModel();
+        patchModel.refreshIndexes();
+        Set<String> ProcessedInstances = new HashSet<String>();
+        boolean p = true;
+        boolean promotionOccured = false;
+        while (p && !(ProcessedInstances.size() == patchModel.objectinstances.size())) {
+            p = false;
+            for (IAxoObjectInstance o : patchModel.objectinstances) {
+                if (!ProcessedInstances.contains(o.getInstanceName())) {
+                    ProcessedInstances.add(o.getInstanceName());
+                    if (!initial || o.isTypeWasAmbiguous()) {
+                        promotionOccured |= PromoteToOverloadedObj(o);
+                    }
+                    p = true;
+                    break;
+                }
+            }
+        }
+        if (!(ProcessedInstances.size() == patchModel.objectinstances.size())) {
+            for (IAxoObjectInstance o : patchModel.objectinstances) {
+                if (!ProcessedInstances.contains(o.getInstanceName())) {
+                    Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "PromoteOverloading : fault in {0}", o.getInstanceName());
+                }
+            }
+        }
+        return promotionOccured;
     }
 
 }

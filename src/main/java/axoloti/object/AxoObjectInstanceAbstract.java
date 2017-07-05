@@ -234,11 +234,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return s;
     }
 
-    @Override
-    public boolean PromoteToOverloadedObj() {
-        return false;
-    }
-
     public boolean hasStruct() {
         return false;
     }

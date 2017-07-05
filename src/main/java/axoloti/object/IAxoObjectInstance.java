@@ -56,8 +56,6 @@ public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IMod
 
     public ArrayList<SDFileReference> GetDependendSDFiles();
 
-    public boolean PromoteToOverloadedObj();
-
     public boolean isTypeWasAmbiguous();
 
     public String GenerateCallMidiHandler();
