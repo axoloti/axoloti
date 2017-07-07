@@ -280,6 +280,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                     }
                 }
             }
+            typeWasAmbiguous = sourceObject.isTypeWasAmbiguous();
         }
     }    
 

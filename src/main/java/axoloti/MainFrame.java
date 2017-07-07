@@ -414,8 +414,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 + "* zombie objects broken\n"
                 + "* sdfiles/modules are broken\n"
                 + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo\n"
-                + "* paste creates overlapping objects at original location\n"
-                + "* object promotion");
+                + "* paste creates overlapping objects at original location");
     }
 
     static boolean TestDir(String var, boolean write) {

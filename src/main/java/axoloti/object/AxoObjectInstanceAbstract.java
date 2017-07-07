@@ -62,7 +62,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     private final PatchModel patchModel;
 
     IAxoObject type;
-    private boolean typeWasAmbiguous = false;
+    boolean typeWasAmbiguous = false;
     
     ObjectController controller;
 

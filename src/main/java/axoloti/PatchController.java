@@ -537,7 +537,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             for (Net n : p.nets) {
                 InletInstance connectedInlet = null;
                 OutletInstance connectedOutlet = null;
-                ArrayList<OutletInstance> source2 = new ArrayList<OutletInstance>();
+                ArrayList<OutletInstance> source2 = new ArrayList<>();
                 for (OutletInstance o : n.getSources()) {
                     String objname = o.getObjname();
                     String outletname = o.getOutletname();
@@ -1073,7 +1073,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     public boolean PromoteOverloading(boolean initial) {
         PatchModel patchModel = getModel();
         patchModel.refreshIndexes();
-        Set<String> ProcessedInstances = new HashSet<String>();
+        Set<String> ProcessedInstances = new HashSet<>();
         boolean p = true;
         boolean promotionOccured = false;
         while (p && !(ProcessedInstances.size() == patchModel.objectinstances.size())) {
