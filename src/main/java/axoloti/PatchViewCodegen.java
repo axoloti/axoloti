@@ -573,10 +573,11 @@ public class PatchViewCodegen extends PatchAbstractView {
 
     public String GenerateMidiInCodePlusPlus() {
         String c = "";
-        if (getModel().controllerObjectInstance != null) {
-            c += getModel().controllerObjectInstance.GenerateCallMidiHandler();
-        }
-        for (IAxoObjectInstance o : getModel().objectinstances) {
+        // fixme: enable controller object
+//        if (getModel().controllerObjectInstance != null) {
+//            c += getModel().controllerObjectInstance.GenerateCallMidiHandler();
+//        }
+        for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             c += o.GenerateCallMidiHandler();
         }
         return c;

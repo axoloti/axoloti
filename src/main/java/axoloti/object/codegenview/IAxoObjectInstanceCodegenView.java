@@ -17,5 +17,7 @@ public interface IAxoObjectInstanceCodegenView extends IView {
 
     public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent);
 
+    public String GenerateCallMidiHandler();
+    
     public IAxoObjectInstance getModel();
 }

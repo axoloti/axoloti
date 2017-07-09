@@ -128,10 +128,8 @@ public class USBBulkConnection_v2 extends IConnection {
                 Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             }
             Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Disconnect request");
-            synchronized (sync) {
-                sync.Acked = false;
-                sync.notifyAll();
-            }
+            ClearSync();
+            ClearReadSync();
 
             if (receiverThread.isAlive()) {
                 receiverThread.interrupt();

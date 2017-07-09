@@ -194,11 +194,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return "";
     }
 
-    @Override
-    public String GenerateCallMidiHandler() {
-        return "";
-    }
-
     private Point p = new Point();
     
     public boolean providesModulationSource() {

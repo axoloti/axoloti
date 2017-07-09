@@ -52,4 +52,9 @@ public class AxoObjectInstanceHyperlinkCodegenView implements IAxoObjectInstance
         return "";
     }
 
+    @Override
+    public String GenerateCallMidiHandler() {
+        return "";
+    }
+
 }

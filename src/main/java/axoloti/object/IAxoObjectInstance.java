@@ -58,8 +58,6 @@ public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IMod
 
     public boolean isTypeWasAmbiguous();
 
-    public String GenerateCallMidiHandler();
-
     public boolean setInstanceName(String InstanceName);
 
     public IAxoObject resolveType(String directory);
