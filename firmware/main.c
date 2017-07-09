@@ -48,7 +48,7 @@
 /* Initialization and main thread.                                           */
 /*===========================================================================*/
 
-//#define ENABLE_SERIAL_DEBUG 1
+#define ENABLE_SERIAL_DEBUG 1
 
 int main(void) {
   // remap SRAM1 to 0x00000000
@@ -130,9 +130,10 @@ int main(void) {
     }
   }
 
-  while (1) {
-    chThdSleepMilliseconds(1000);
-  }
+	while (1) {
+		usbhMainLoop(&USBHD2);
+		chThdSleepMilliseconds(1000);
+	}
 }
 
 void HAL_Delay(unsigned int n) {

@@ -762,8 +762,11 @@ static THD_FUNCTION(BulkReader, arg) {
     	  // AxoM : midi injection
     	  rcv_pckt_midi_t *p = (rcv_pckt_midi_t *)bulk_rxbuf;
     	  // TODO: inject into specified virtual cable...
-          MidiInMsgHandler(MIDI_DEVICE_INTERNAL, 1, p->midi[0], p->midi[1],
-                           p->midi[2]);
+    	  midi_message_t m;
+    	  m.fields.b0 = p->midi[0];
+    	  m.fields.b1 = p->midi[1];
+    	  m.fields.b2 = p->midi[2];
+    	  midi_input_buffer_put(&midi_input_buffer, m);
       } else if (header == rcv_hdr_fs_create) {
     	  rcv_pckt_fs_create_t *p = (rcv_pckt_fs_create_t *)bulk_rxbuf;
     	  if (p->fn[0]) {

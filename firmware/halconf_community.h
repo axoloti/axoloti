@@ -66,6 +66,100 @@
 #define HAL_USE_RNG                 FALSE
 #endif
 
+/**
+ * @brief   Enables the USBH subsystem.
+ */
+#if !defined(HAL_USE_USBH) || defined(__DOXYGEN__)
+
+#ifndef __cplusplus // can't compile with C++...
+#define HAL_USE_USBH                 TRUE
+#endif
+
+#endif
+
+
+/*===========================================================================*/
+/* USBH driver related settings.                                             */
+/*===========================================================================*/
+
+/* main driver */
+#define HAL_USBH_PORT_DEBOUNCE_TIME                   200
+#define HAL_USBH_PORT_RESET_TIMEOUT                   500
+#define HAL_USBH_DEVICE_ADDRESS_STABILIZATION         20
+
+/* MSD */
+#define HAL_USBH_USE_MSD                              0
+
+#define HAL_USBHMSD_MAX_LUNS                          1
+#define HAL_USBHMSD_MAX_INSTANCES                     1
+
+/* IAD */
+#define HAL_USBH_USE_FTDI                             1
+
+#define HAL_USBHFTDI_MAX_PORTS                        1
+#define HAL_USBHFTDI_MAX_INSTANCES                    1
+#define HAL_USBHFTDI_DEFAULT_SPEED                    9600
+#define HAL_USBHFTDI_DEFAULT_FRAMING                  (USBHFTDI_FRAMING_DATABITS_8 | USBHFTDI_FRAMING_PARITY_NONE | USBHFTDI_FRAMING_STOP_BITS_1)
+#define HAL_USBHFTDI_DEFAULT_HANDSHAKE                USBHFTDI_HANDSHAKE_NONE
+#define HAL_USBHFTDI_DEFAULT_XON                      0x11
+#define HAL_USBHFTDI_DEFAULT_XOFF                     0x13
+
+
+/* IAD */
+#define HAL_USBH_USE_IAD                              0
+
+/* UVC */
+#define HAL_USBH_USE_UVC                              0
+
+#define HAL_USBHUVC_MAX_INSTANCES                     1
+#define HAL_USBHUVC_MAX_MAILBOX_SZ                    70
+#define HAL_USBHUVC_WORK_RAM_SIZE                     20000
+#define HAL_USBHUVC_STATUS_PACKETS_COUNT              10
+
+
+/* HUB */
+#define HAL_USBH_USE_HUB                              0 /* was 1 */
+
+#define HAL_USBHHUB_MAX_INSTANCES                     1
+#define HAL_USBHHUB_MAX_PORTS                         4 /* was 6 */
+
+
+/* debug */
+#define USBH_DEBUG_ENABLE                             1
+#define USBH_DEBUG_USBHD                              USBHD2
+#define USBH_DEBUG_SD                                 SD2
+#define USBH_DEBUG_BUFFER                             5000 /* was 25000 */
+
+#define USBH_DEBUG_ENABLE_TRACE                       0
+#define USBH_DEBUG_ENABLE_INFO                        1
+#define USBH_DEBUG_ENABLE_WARNINGS                    1
+#define USBH_DEBUG_ENABLE_ERRORS                      1
+
+#define USBH_LLD_DEBUG_ENABLE_TRACE                   0
+#define USBH_LLD_DEBUG_ENABLE_INFO                    1
+#define USBH_LLD_DEBUG_ENABLE_WARNINGS                1
+#define USBH_LLD_DEBUG_ENABLE_ERRORS                  1
+
+#define USBHHUB_DEBUG_ENABLE_TRACE                    0
+#define USBHHUB_DEBUG_ENABLE_INFO                     1
+#define USBHHUB_DEBUG_ENABLE_WARNINGS                 1
+#define USBHHUB_DEBUG_ENABLE_ERRORS                   1
+
+#define USBHMSD_DEBUG_ENABLE_TRACE                    0
+#define USBHMSD_DEBUG_ENABLE_INFO                     1
+#define USBHMSD_DEBUG_ENABLE_WARNINGS                 1
+#define USBHMSD_DEBUG_ENABLE_ERRORS                   1
+
+#define USBHUVC_DEBUG_ENABLE_TRACE                    0
+#define USBHUVC_DEBUG_ENABLE_INFO                     1
+#define USBHUVC_DEBUG_ENABLE_WARNINGS                 1
+#define USBHUVC_DEBUG_ENABLE_ERRORS                   1
+
+#define USBHFTDI_DEBUG_ENABLE_TRACE                   0
+#define USBHFTDI_DEBUG_ENABLE_INFO                    1
+#define USBHFTDI_DEBUG_ENABLE_WARNINGS                1
+#define USBHFTDI_DEBUG_ENABLE_ERRORS                  1
+
 /*===========================================================================*/
 /* FSMCNAND driver related settings.                                         */
 /*===========================================================================*/

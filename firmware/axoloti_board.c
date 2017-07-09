@@ -20,7 +20,7 @@
 #include "axoloti_defines.h"
 #include "axoloti_board.h"
 
-//#define ENABLE_SERIAL_DEBUG 1
+#define ENABLE_SERIAL_DEBUG 1
 
 
 void axoloti_board_init(void) {

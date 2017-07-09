@@ -66,8 +66,11 @@ midi_input_remap_t midi_inputmap_usbh[16] = {
 		{MIDI_DEVICE_USB_HOST, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE}
 };
 
-
+#if 0
 USB_Setup_TypeDef MIDI_Setup;
+#endif
+
+#define USBH_DbgLog(x)
 
 #define MIDI_MIN_READ_POLL 1
 #define MIDI_MIN_WRITE_POLL 1
@@ -203,195 +206,65 @@ int  usbh_MidiGetOutputBufferAvailable(void) {
  */
 
 
+#include "hal.h"
 
+//#if HAL_USBH_USE_MIDI
 
-/****************** MIDI interface ****************************/
+#if !HAL_USE_USBH
+#error "USBHMIDI needs USBH"
+#endif
 
-USBH_ClassTypeDef  MIDI_Class = {
-  "MID",
-  USB_AUDIO_CLASS,
-  USBH_MIDI_InterfaceInit,
-  USBH_MIDI_InterfaceDeInit,
-  USBH_MIDI_ClassRequest,
-  USBH_MIDI_Process,
-  USBH_MIDI_SOFProcess,
-  NULL,
-};
+#include <string.h>
+#include "usbh_midi_core_lld.h"
+#include "usbh/internal.h"
 
+#if USBHMIDI_DEBUG_ENABLE_TRACE
+#define udbgf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
+#define udbg(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
+#else
+#define udbgf(f, ...)  do {} while(0)
+#define udbg(f, ...)   do {} while(0)
+#endif
 
-bool isValidInput(MIDI_HandleTypeDef* pH)
-{           
-    return pH!= NULL && pH->input_valid;
-}           
-            
-bool isValidOutput(MIDI_HandleTypeDef* pH)
-{           
-    return pH!= NULL && pH->output_valid;
-}
+#if USBHMIDI_DEBUG_ENABLE_INFO
+#define uinfof(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
+#define uinfo(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
+#else
+#define uinfof(f, ...)  do {} while(0)
+#define uinfo(f, ...)   do {} while(0)
+#endif
 
+#if USBHMIDI_DEBUG_ENABLE_WARNINGS
+#define uwarnf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
+#define uwarn(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
+#else
+#define uwarnf(f, ...)  do {} while(0)
+#define uwarn(f, ...)   do {} while(0)
+#endif
 
-/*-----------------------------------------------------------------------------------------*/
-/**
- * @brief  USBH_MIDI_InterfaceInit
- *         The function init the MIDI class.
- * @param  pdev: Selected device
- * @param  hdev: Selected device property
- * @retval  USBH_Status :Response for USB MIDI driver intialization
- */
-USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
-
-    USBH_StatusTypeDef status = USBH_FAIL;
-    MIDI_HandleTypeDef *MIDI_Handle;
-
-    uint8_t interface;
-    midi_output_buffer_objinit(&midi_output_usbh, notify);
-//    sysmon_disable_blinker();
-
-    // this is limited to one midi interface, and also currently only 1 input and 1 output endpoint on that interface
-    
-    for(interface=0; interface<phost->device.CfgDesc.bNumInterfaces && interface < USBH_MAX_NUM_INTERFACES; interface++) {
-        if( (phost->device.CfgDesc.Itf_Desc[interface].bInterfaceClass == USB_AUDIO_CLASS) &&
-            (phost->device.CfgDesc.Itf_Desc[interface].bInterfaceSubClass == USB_MIDISTREAMING_SubCLASS) ) {
-
-            // bizarre, why select the interface... all it does is put it in current interface and then log it,
-            // but we may not even actually use it !?
-            USBH_SelectInterface(phost, interface);
-            phost->pActiveClass->pData = (MIDI_HandleTypeDef *)USBH_malloc(sizeof(MIDI_HandleTypeDef));
-            MIDI_Handle = phost->pActiveClass->pData;
-            MIDI_Handle->state_in = MIDI_INIT;
-            MIDI_Handle->state_out = MIDI_INIT;
-
-
-            uint8_t num_ep = ((phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].bNumEndpoints <= USBH_MAX_NUM_ENDPOINTS)
-                              ? phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].bNumEndpoints
-                              : USBH_MAX_NUM_ENDPOINTS);
-
-            // eventually we should be looking for multiple input and output EP, for output we then just write to the one indicated
-            // by the CID, for READ we may have to consider allowing the user to select which ports they are interested in (for efficiency?)
-            // but for the moment just pick the first input and the first output
-            MIDI_Handle->input_valid = false;
-            MIDI_Handle->output_valid = false;
-
-            uint8_t i=0;
-            for (; i< num_ep && (!isValidInput(MIDI_Handle) || !isValidOutput(MIDI_Handle)) ; i++) {
-                bool bInput = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bEndpointAddress & 0x80;
-                if(!isValidInput(MIDI_Handle) && bInput) {
-                    MIDI_Handle->InEp = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bEndpointAddress;
-                    MIDI_Handle->InEpSize  = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].wMaxPacketSize;
-                    USBH_UsrLog("USB Host Input size requests : %x", MIDI_Handle->InEpSize );
-                    MIDI_Handle->InEpSize = USBH_MIDI_EPS_IN_SIZE; // why bother reducing the size? Some devices will lie about the max ep size...
-//                    MIDI_Handle->read_poll = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bInterval;
-//                  USBH_UsrLog("USB Host Input interval : %i", MIDI_Handle->read_poll);
-//                    if(MIDI_Handle->read_poll<MIDI_MIN_READ_POLL) MIDI_Handle->read_poll = MIDI_MIN_READ_POLL;
-                    MIDI_Handle->input_valid = true;
-                }
-                if(!isValidOutput(MIDI_Handle) && !bInput) {
-                    MIDI_Handle->OutEp = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bEndpointAddress;
-                    MIDI_Handle->OutEpSize  = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].wMaxPacketSize;
-                    USBH_UsrLog("USB Host Output size requests : %x", MIDI_Handle->OutEpSize );
-                    if(MIDI_Handle->OutEpSize >USBH_MIDI_EPS_OUT_SIZE) MIDI_Handle->OutEpSize = USBH_MIDI_EPS_OUT_SIZE;
-//                    MIDI_Handle->write_poll = phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i].bInterval;
-//                  USBH_UsrLog("USB Host Output interval : %i", MIDI_Handle->write_poll);
-//                    if(MIDI_Handle->write_poll<MIDI_MIN_WRITE_POLL) MIDI_Handle->write_poll = MIDI_MIN_WRITE_POLL;
-                    MIDI_Handle->output_valid = true;
-                }
-                
-            } // each endpoint, or until ive found both input and output endpoint
+#if USBHMIDI_DEBUG_ENABLE_ERRORS
+#define uerrf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
+#define uerr(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
+#else
+#define uerrf(f, ...)  do {} while(0)
+#define uerr(f, ...)   do {} while(0)
+#endif
 
 
 
-            if (isValidOutput(MIDI_Handle)) {
-                USBH_UsrLog("USB Host Output connected to %x : %x", interface, MIDI_Handle->OutEp );
-
-                MIDI_Handle->OutPipe = USBH_AllocPipe(phost, MIDI_Handle->OutEp);
-                USBH_OpenPipe  (phost,
-                                MIDI_Handle->OutPipe,
-                                MIDI_Handle->OutEp,
-                                phost->device.address,
-                                phost->device.speed,
-                                USB_EP_TYPE_BULK,
-                                MIDI_Handle->OutEpSize);
-                USBH_LL_SetToggle  (phost, MIDI_Handle->OutPipe,0);
-
-                // ring buffer ready to use
-                midi_output_buffer_reset(&midi_output_usbh);
-            }
-            
-            if (isValidInput(MIDI_Handle)) {
-                USBH_UsrLog("USB Host Input connected to %x : %x", interface, MIDI_Handle->InEp );
-
-                MIDI_Handle->InPipe = USBH_AllocPipe(phost, MIDI_Handle->InEp);
-                USBH_OpenPipe  (phost,
-                                MIDI_Handle->InPipe,
-                                MIDI_Handle->InEp,
-                                phost->device.address,
-                                phost->device.speed,
-                                USB_EP_TYPE_BULK,
-                                MIDI_Handle->InEpSize);
-                USBH_LL_SetToggle  (phost, MIDI_Handle->InPipe,0);
-            }
-            status = USBH_OK;
+#define USBH_MIDI_REQ_GET_REPORT		0x01
+#define USBH_MIDI_REQ_GET_IDLE		0x02
+#define USBH_MIDI_REQ_GET_PROTOCOL	0x03
+#define USBH_MIDI_REQ_SET_REPORT		0x09
+#define USBH_MIDI_REQ_SET_IDLE		0x0A
+#define USBH_MIDI_REQ_SET_PROTOCOL	0x0B
 
 
-            return status;
-        } // if, a midi interface
-  
-    }// for each interface
-    
-  return status;
-}
 
 
-/*-----------------------------------------------------------------------------------------*/
-/**
- * @brief  USBH_MIDI_InterfaceDeInit
- *         The function DeInit the Host Channels used for the MIDI class.
- * @param  pdev: Selected device
- * @param  hdev: Selected device property
- * @retval None
- */
-USBH_StatusTypeDef USBH_MIDI_InterfaceDeInit  (__attribute__((__unused__))  USBH_HandleTypeDef *phost) {
-    USBH_UsrLog("USB Host : device disconnected");
-    MIDI_HandleTypeDef *MIDI_Handle = phost->pActiveClass->pData;
-    if (isValidOutput(MIDI_Handle)) {
-        USBH_ClosePipe(phost, MIDI_Handle->OutPipe);
-        USBH_FreePipe(phost, MIDI_Handle->OutPipe);
-        MIDI_Handle->OutPipe = 0;
-        MIDI_Handle->output_valid = false;
-    }
-    if (isValidInput(MIDI_Handle)) {
-        USBH_ClosePipe(phost, MIDI_Handle->InPipe);
-        USBH_FreePipe(phost, MIDI_Handle->InPipe);
-        MIDI_Handle->InPipe = 0;
-        MIDI_Handle->input_valid = false;
-    }
-    
-    if(phost->pActiveClass->pData)
-    {
-        USBH_free (phost->pActiveClass->pData);
-        phost->pActiveClass->pData = NULL;
-    }
 
-    midi_output_buffer_deinit(&midi_output_usbh);
-
-    return USBH_OK;
-}
-/*-----------------------------------------------------------------------------------------*/
-/**
- * @brief  USBH_MIDI_ClassRequest
- *         The function is responsible for handling MIDI Class requests
- *         for MIDI class.
- * @param  pdev: Selected device
- * @param  hdev: Selected device property
- * @retval  USBH_Status :Response for USB Set Protocol request
- */
-USBH_StatusTypeDef USBH_MIDI_ClassRequest(__attribute__((__unused__))  USBH_HandleTypeDef *phost) {
-    USBH_StatusTypeDef status = USBH_OK;
-
-    return status;
-}
-
-__STATIC_INLINE void usbh_midi_dispatch(midi_message_t m) {
+void usbh_midi_dispatch(midi_message_t m) {
+	udbgf("M %8X", m.word);
 	int8_t *inputmap = midi_inputmap_usbh[m.fields.port];
 	int i=0;
 	for (i=0;i<MIDI_INPUT_REMAP_ENTRIES;i++) {
@@ -403,275 +276,179 @@ __STATIC_INLINE void usbh_midi_dispatch(midi_message_t m) {
 	}
 }
 
-/*-----------------------------------------------------------------------------------------*/
-/**
- * @brief  USBH_MIDI_Handle
- *         The function is for managing state machine for MIDI data transfers
- * @param  pdev: Selected device
- * @param  hdev: Selected device property
- * @retval USBH_Status
- */
 
 
-USBH_StatusTypeDef USBH_MIDI_ProcessInput(USBH_HandleTypeDef *phost) {
-    USBH_StatusTypeDef status = USBH_OK;
-    MIDI_HandleTypeDef *MIDI_Handle = phost->pActiveClass->pData;
 
-    if(!isValidInput(MIDI_Handle)) {
-        USBH_UsrLog("USBH_MIDI_ProcessInput : invalid input");
-        return status; // ?
-    }
+/*===========================================================================*/
+/* USB Class driver loader for MIDI								 		 	 */
+/*===========================================================================*/
 
-    USBH_URBStateTypeDef URB_state_in = USBH_LL_GetURBState(phost, MIDI_Handle->InPipe);
+USBHMIDIDriver USBHMIDID[HAL_USBHMIDI_MAX_INSTANCES];
 
-    switch (MIDI_Handle->state_in) {
-        case MIDI_INIT:
-            MIDI_Handle->state_in = MIDI_GET_DATA;
-            break;
+static usbh_baseclassdriver_t *_midi_load(usbh_device_t *dev, const uint8_t *descriptor, uint16_t rem);
+static void _midi_unload(usbh_baseclassdriver_t *drv);
 
-        case MIDI_GET_DATA:
-            if (URB_state_in == USBH_URB_STALL) {
-                USBH_ErrLog("USB Host Input,GD  URB STALL");
-                USBH_ClrFeature(phost, MIDI_Handle->InEp);
-            } else if (URB_state_in == USBH_URB_ERROR) {
-                USBH_ErrLog("USB Host Input,GD  URB ERROR");
-                USBH_ClrFeature(phost, MIDI_Handle->InEp);
-            }
+static const usbh_classdriver_vmt_t class_driver_vmt = {
+	_midi_load,
+	_midi_unload
+};
 
-            USBH_BulkReceiveData(phost, MIDI_Handle->buff_in, MIDI_Handle->InEpSize, MIDI_Handle->InPipe);
-            MIDI_Handle->state_in = MIDI_POLL;
-            //STM_EVAL_LEDOn(LED_Blue);
-            break; 
+const usbh_classdriverinfo_t usbhmidiClassDriverInfo = {
+	USB_AUDIO_CLASS, USB_MIDISTREAMING_SubCLASS, -1, "MIDI", &class_driver_vmt
+};
 
-        case MIDI_RETRY:
-        case MIDI_POLL:
-            if (URB_state_in == USBH_URB_DONE) {
-                // USBH_DbgLog("USB Host Input  URB DONE");
-                int i;
-                
-                int n = USBH_LL_GetLastXferSize(phost, MIDI_Handle->InPipe);
-                for (i=0; i<n; i+=4) {
-                    if (MIDI_Handle->buff_in[0+i]) {
-                    	midi_message_t m;
-                    	m.word = *(uint32_t *)&MIDI_Handle->buff_in[i];
-                    	usbh_midi_dispatch(m);
-                //  USBH_DbgLog("USB Host Input recv data : %x, %x, %x %x",
-                //              MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
-                    }
-                }
-                MIDI_Handle->state_in = MIDI_POLL;
-                URB_state_in = USBH_LL_GetURBState(phost, MIDI_Handle->InPipe);
-                if (URB_state_in != USBH_URB_DONE) {
-                  USBH_ErrLog("URB0 Not done %d",URB_state_in);
-                }
-                USBH_BulkReceiveData(phost, MIDI_Handle->buff_in, MIDI_Handle->InEpSize, MIDI_Handle->InPipe);
-                if (URB_state_in != USBH_URB_DONE) {
-                  USBH_ErrLog("URB1 Not done %d",URB_state_in);
-                }
-            } else if (URB_state_in == USBH_URB_STALL) {
-                USBH_ErrLog("USB Host Input,POLL  URB STALL 2");
-                if (USBH_ClrFeature(phost, MIDI_Handle->InEp) == USBH_OK) {
-                    MIDI_Handle->state_in = MIDI_GET_DATA;
-                }
-            } else {
-              if (URB_state_in == USBH_URB_IDLE) {
-#if 1
-                //USBH_ErrLog("URB state? %d",URB_state_in);
-//                palTogglePad(LED2_PORT,LED2_PIN);
-//                if (USBH_ClrFeature(phost, MIDI_Handle->InEp) == USBH_OK) {
-//                    //MIDI_Handle->state_in = MIDI_GET_DATA;
-//                }
+static usbh_baseclassdriver_t *_midi_load(usbh_device_t *dev, const uint8_t *descriptor, uint16_t rem) {
+	int i;
+	USBHMIDIDriver *midip;
 
-                int i;
+	if ((rem < descriptor[0]) || (descriptor[1] != USBH_DT_INTERFACE))
+		return NULL;
 
-                int n = USBH_LL_GetLastXferSize(phost, MIDI_Handle->InPipe);
-                for (i=0; i<n; i+=4) {
-                    if (MIDI_Handle->buff_in[0+i]) {
-                    	// TODO: add real to virtual port mapping
-                    	midi_message_t m;
-                    	m.word = *(uint32_t *)&MIDI_Handle->buff_in[i];
-                    	usbh_midi_dispatch(m);
+	const usbh_interface_descriptor_t * const ifdesc = (const usbh_interface_descriptor_t *)descriptor;
 
-                    	//  USBH_DbgLog("USB Host Input recv data : %x, %x, %x %x",
-                //              MIDI_Handle->buff_in[0+i],MIDI_Handle->buff_in[1+i],MIDI_Handle->buff_in[2+i],MIDI_Handle->buff_in[3+i]);
-                    }
-                }
+	if ((ifdesc->bAlternateSetting != 0)
+			|| (ifdesc->bNumEndpoints < 1)) {
+		return NULL;
+	}
 
 
-                USBH_BulkReceiveData(phost, MIDI_Handle->buff_in, MIDI_Handle->InEpSize, MIDI_Handle->InPipe);
-                MIDI_Handle->state_in = MIDI_RETRY; // hanging notes when using MIDI_POLL...
+	/* alloc driver */
+	for (i = 0; i < HAL_USBHMIDI_MAX_INSTANCES; i++) {
+		if (USBHMIDID[i].dev == NULL) {
+			midip = &USBHMIDID[i];
+			goto alloc_ok;
+		}
+	}
+
+	uwarn("Can't alloc MIDI driver");
+
+	/* can't alloc */
+	return NULL;
+
+alloc_ok:
+	/* initialize the driver's variables */
+	midip->epin.status = USBH_EPSTATUS_UNINITIALIZED;
+#if HAL_USBHMIDI_USE_INTERRUPT_OUT
+	midip->epout.status = USBH_EPSTATUS_UNINITIALIZED;
 #endif
-              } else {
-                USBH_DbgLog("URB Host Input state? %d",URB_state_in);
-              }
-            }
-            break;
+	midip->ifnum = ifdesc->bInterfaceNumber;
+	usbhEPSetName(&dev->ctrl, "MIDI[CTRL]");
 
-        default:
-                USBH_DbgLog("USB Host Input  Invalid State");
-            break;
-    } // case
-    return status;
+	/* parse the configuration descriptor */
+	if_iterator_t iif;
+	generic_iterator_t iep;
+	iif.iad = 0;
+	iif.curr = descriptor;
+	iif.rem = rem;
+	for (ep_iter_init(&iep, &iif); iep.valid; ep_iter_next(&iep)) {
+		const usbh_endpoint_descriptor_t *const epdesc = ep_get(&iep);
+		if ((epdesc->bEndpointAddress & 0x80) && (epdesc->bmAttributes == USBH_EPTYPE_BULK)) {
+			uinfof("BULK IN endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
+			usbhEPObjectInit(&midip->epin, dev, epdesc);
+			usbhEPSetName(&midip->epin, "MIDI[IIN ]");
+		} else if (((epdesc->bEndpointAddress & 0x80) == 0)
+				&& (epdesc->bmAttributes == USBH_EPTYPE_BULK)) {
+			uinfof("BULK OUT endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
+			usbhEPObjectInit(&midip->epout, dev, epdesc);
+			usbhEPSetName(&midip->epout, "MIDI[IOUT]");
+		} else {
+			uinfof("unsupported endpoint found: bEndpointAddress=%02x, bmAttributes=%02x",
+					epdesc->bEndpointAddress, epdesc->bmAttributes);
+		}
+	}
+	if (midip->epin.status != USBH_EPSTATUS_CLOSED) {
+		goto deinit;
+	}
+
+	midip->state = USBHMIDI_STATE_ACTIVE;
+
+	return (usbh_baseclassdriver_t *)midip;
+
+deinit:
+	/* Here, the enpoints are closed, and the driver is unlinked */
+	return NULL;
 }
 
-// PING = 1 for HS, apparently ,but 0 or 1 makes no difference
-#define SEND_DATA_DO_PING 0
-
-USBH_StatusTypeDef USBH_MIDI_ProcessOutput(USBH_HandleTypeDef *phost) {
-    USBH_StatusTypeDef status = USBH_OK;
-    MIDI_HandleTypeDef *MIDI_Handle = phost->pActiveClass->pData;
-
-    if(!isValidOutput(MIDI_Handle)) {
-        USBH_UsrLog("USBH_MIDI_ProcessOutput : invalid output");
-        return status; // ?
-    }
-
-    USBH_URBStateTypeDef URB_state_out = USBH_LL_GetURBState(phost, MIDI_Handle->OutPipe);
-
-    switch (MIDI_Handle->state_out) {
-        case MIDI_INIT:
-            MIDI_Handle->state_out = MIDI_SEND_DATA;
-            break;
-
-
-        case MIDI_POLL:
-            if(URB_state_out == USBH_URB_DONE) {
-                MIDI_Handle->buff_out_len = 0;
-                MIDI_Handle->state_out = MIDI_SEND_DATA;
-                USBH_DbgLog("USB Host Output URB DONE");
-            }
-            else if(URB_state_out == USBH_URB_NOTREADY) {
-                USBH_ErrLog("USB Host Output NOT READY");
-                // send again
-                USBH_BulkSendData(phost, MIDI_Handle->buff_out, MIDI_Handle->buff_out_len, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
-                MIDI_Handle->state_out = MIDI_POLL;
-                break;
-            } else if (URB_state_out == USBH_URB_IDLE) {
-//                MIDI_Handle->state_out = MIDI_SEND_DATA;
-//                osMessagePutI ( phost->os_event, USBH_URB_EVENT, 0);
-
-//              USBH_BulkSendData(phost, MIDI_Handle->buff_out, MIDI_Handle->buff_out_len, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
-//              MIDI_Handle->state_out = MIDI_POLL;
- //             osMessagePutI ( phost->os_event, USBH_URB_EVENT, 0);
-/*
-              if (USBH_ClrFeature(phost, MIDI_Handle->OutEp) == USBH_OK) {
-                USBH_ErrLog("USB Idle1");
-              }
-              else {
-                USBH_ErrLog("USB Idle2");
-              }*/
-
-              MIDI_Handle->state_out = MIDI_RETRY;
-              break;
-                // wait
-                //USBH_DbgLog("USB Host Output IDLE %i " ,MIDI_Handle->buff_out_len);
-                ; // NOP
-            } else if (URB_state_out == USBH_URB_ERROR) {
-                // giveup
-                USBH_ErrLog("USB Host Output Error sending data");
-                MIDI_Handle->state_out = MIDI_SEND_DATA;
-                MIDI_Handle->buff_out_len = 0;
-                break;
-            } else if (URB_state_out == USBH_URB_STALL) {
-                // stalled, reset ep
-                if (USBH_ClrFeature(phost, MIDI_Handle->OutEp) == USBH_OK) {
-                    MIDI_Handle->state_out = MIDI_SEND_DATA;
-                    USBH_ErrLog("USB Host Output STALLED and cleared");
-                }
-                else {
-                    USBH_ErrLog("USB Host Output  write pipe stalled unable to clear");
-                    MIDI_Handle->state_out = MIDI_SEND_DATA;
-                    MIDI_Handle->buff_out_len = 0;
-                }
-                break;
-            } else {
-                // giveup
-                USBH_ErrLog("USB Host Output  unknown state sending data %x ", URB_state_out);
-                MIDI_Handle->state_out = MIDI_SEND_DATA;
-                MIDI_Handle->buff_out_len = 0;
-                break;
-            }
-            
-        case MIDI_SEND_DATA:
-            if (URB_state_out == USBH_URB_STALL) {
-                USBH_ErrLog("USB Host Output(SD) STALL");
-                USBH_ClrFeature(phost, MIDI_Handle->OutEp);
-            } else if (URB_state_out == USBH_URB_ERROR) {
-                USBH_ErrLog("USB Host Output(SD) ERROR");
-                USBH_ClrFeature(phost, MIDI_Handle->OutEp);
-            }
-            midi_message_t *buf = (midi_message_t *)MIDI_Handle->buff_out;
-            msg_t r = midi_output_buffer_get(&midi_output_usbh, buf);
-            int s = 0;
-            int max_pckts = MIDI_Handle->OutEpSize/sizeof(midi_message_t);
-            while (r==MSG_OK) {
-            	max_pckts--;
-            	s++;
-            	if (max_pckts) break;
-            	buf++;
-                r = midi_output_buffer_get(&midi_output_usbh, buf);
-            }
-            if (s>0) {
-            	MIDI_Handle->buff_out_len = s*4;
-                USBH_BulkSendData(phost, MIDI_Handle->buff_out, MIDI_Handle->buff_out_len, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
-                USBH_DbgLog("USB Host Output sent bytes : %i", MIDI_Handle->buff_out_len);
-                // now poll for completion
-                MIDI_Handle->state_out = MIDI_POLL;
-            }
-            break;
-
-        case MIDI_RETRY:
-          USBH_BulkSendData(phost, MIDI_Handle->buff_out, MIDI_Handle->buff_out_len, MIDI_Handle->OutPipe, SEND_DATA_DO_PING);
-          USBH_DbgLog("USB Host Output sent bytes : %i", MIDI_Handle->buff_out_len);
-
-          // now poll for completion
-          MIDI_Handle->state_out = MIDI_POLL;
-          break;
-
-
-            
-        default:
-            break;
-    } // case
-
-    return status;
+static void _midi_unload(usbh_baseclassdriver_t *drv) {
+	(void)drv;
 }
 
-USBH_StatusTypeDef USBH_MIDI_Process(USBH_HandleTypeDef *phost) {
-    USBH_StatusTypeDef status=USBH_OK;
+static void _in_cb(usbh_urb_t *urb) {
+	USBHMIDIDriver *const midip = (USBHMIDIDriver *)urb->userData;
+	switch (urb->status) {
+	case USBH_URBSTATUS_OK:
+		if (midip->config->cb_report) {
+			midip->config->cb_report(midip, urb->actualLength);
+		}
+		break;
+	case USBH_URBSTATUS_DISCONNECTED:
+		uwarn("MIDI: URB IN disconnected");
 
-    status =  USBH_MIDI_ProcessInput(phost);
-    if (status!=USBH_OK) return status;
-
-    status =  USBH_MIDI_ProcessOutput(phost);
-    return status;
+		return;
+	case USBH_URBSTATUS_TIMEOUT:
+		//no data
+		break;
+	default:
+		uerrf("MIDI: URB IN status unexpected = %d", urb->status);
+		break;
+	}
+	usbhURBObjectResetI(&midip->in_urb);
+	usbhURBSubmitI(&midip->in_urb);
 }
-/*-----------------------------------------------------------------------------------------*/
 
-USBH_StatusTypeDef USBH_MIDI_SOFProcess(USBH_HandleTypeDef *phost) {
-    MIDI_HandleTypeDef *MIDI_Handle =  (MIDI_HandleTypeDef *) phost->pActiveClass->pData;
+void usbhmidiStart(USBHMIDIDriver *midip, const USBHMIDIConfig *cfg) {
+	osalDbgCheck(midip && cfg);
+	osalDbgCheck((midip->state == USBHMIDI_STATE_ACTIVE)
+			|| (midip->state == USBHMIDI_STATE_READY));
 
-    if (!isValidInput(MIDI_Handle) && !isValidOutput(MIDI_Handle)) {
-        USBH_UsrLog("USBH_MIDI_SOFProcess : invalid input/output");
-        return USBH_OK; //?
-    }
-//    palTogglePad(LED1_PORT,LED1_PIN);
+	if (midip->state == USBHMIDI_STATE_READY)
+		return;
 
-    if (MIDI_Handle->state_out == MIDI_SEND_DATA) {
-//        if (( phost->Timer - MIDI_Handle->write_timer) >= MIDI_Handle->write_poll
-//              || phost->Timer < MIDI_Handle->write_timer) {
-    	if (midi_output_usbh.read_index != midi_output_usbh.write_index) {
-                // ready to send more data, and we have data to send
-                #if (USBH_USE_OS == 1)
-                osMessagePutI ( phost->os_event, USBH_URB_EVENT, 0);
-                #endif
-            }
-//        }
-    } else if ((MIDI_Handle->state_out == MIDI_RETRY)||
-        (MIDI_Handle->state_in == MIDI_RETRY)) {
-      #if (USBH_USE_OS == 1)
-      osMessagePutI ( phost->os_event, USBH_URB_EVENT, 0);
-      #endif
-    }
-    return USBH_OK;
+	midip->config = cfg;
+
+	/* init the URBs */
+	usbhURBObjectInit(&midip->in_urb, &midip->epin, _in_cb, midip,
+			cfg->report_buffer, cfg->report_len);
+
+	/* open the int IN/OUT endpoints */
+	usbhEPOpen(&midip->epin);
+	usbhEPOpen(&midip->epout);
+
+	osalSysLock();
+	usbhURBSubmitI(&midip->in_urb);
+	osalSysUnlock();
+
+	midip->state = USBHMIDI_STATE_READY;
 }
+
+void usbhmidiStop(USBHMIDIDriver *midip) {
+	osalDbgCheck((midip->state == USBHMIDI_STATE_ACTIVE)
+			|| (midip->state == USBHMIDI_STATE_READY));
+
+	if (midip->state != USBHMIDI_STATE_READY)
+		return;
+
+	osalSysLock();
+	usbhEPCloseS(&midip->epin);
+	usbhEPCloseS(&midip->epout);
+	midip->state = USBHMIDI_STATE_ACTIVE;
+	osalSysUnlock();
+}
+
+void usbhmidiObjectInit(USBHMIDIDriver *midip) {
+	osalDbgCheck(midip != NULL);
+	memset(midip, 0, sizeof(*midip));
+	midip->info = &usbhmidiClassDriverInfo;
+	midip->state = USBHMIDI_STATE_STOP;
+}
+
+void usbhmidiInit(void) {
+	uint8_t i;
+	for (i = 0; i < HAL_USBHMIDI_MAX_INSTANCES; i++) {
+		usbhmidiObjectInit(&USBHMIDID[i]);
+	}
+}
+
+//#endif
+
+

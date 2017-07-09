@@ -1,4 +1,4 @@
-/// basdd on the quirk added to te ALSA linux kernel
+// based on the quirk added to the ALSA linux kernel
 // https://lkml.org/lkml/2010/2/10/25
 
 
@@ -6,6 +6,8 @@
 #include "usbh_midi_core.h"
 
 #include "ch.h"
+
+#if 0 // this needs to be re-implemented for the chibios community usbh framework
 
 USB_Setup_TypeDef MIDI_Setup;
 
@@ -152,3 +154,6 @@ static USBH_StatusTypeDef USBH_Virus_InterfaceInit(USBH_HandleTypeDef *phost) {
     
   return status;
 }
+
+#endif
+
