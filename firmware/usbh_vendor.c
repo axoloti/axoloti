@@ -2,10 +2,10 @@
 // https://lkml.org/lkml/2010/2/10/25
 
 
-#include "usbh_midi_core_lld.h"
-#include "usbh_midi_core.h"
+#include "midi_usbh.h"
 
 #include "ch.h"
+#include "usbh_midi_class.h"
 
 #if 0 // this needs to be re-implemented for the chibios community usbh framework
 

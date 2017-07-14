@@ -27,7 +27,7 @@
 void midi_input_buffer_objinit(midi_input_buffer_t *obj) {
 	  // make no bytes available for output, initialise will reset
 	  obj->read_index  = 0;
-	  obj->write_index = MIDI_RING_BUFFER_SIZE - 1;
+	  obj->write_index = 0;
 }
 
 void midi_intput_buffer_deinit(midi_input_buffer_t *obj) {

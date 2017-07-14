@@ -21,11 +21,10 @@
 #include "midi.h"
 #include "midi_routing.h"
 #include "serial_midi.h"
-#include "usbh_midi_core.h"
+#include "midi_usbh.h"
 #include "midi_usb.h"
 #include "patch.h"
 #include "midi_buffer.h"
-#include "usbh_midi_core.h"
 
 midi_input_buffer_t midi_input_buffer;
 

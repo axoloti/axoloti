@@ -221,13 +221,14 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/flash.c \
        ${FIRMWARE}/firmware_chunks.c \
        ${FIRMWARE}/midi_buffer.c \
+       ${FIRMWARE}/midi_usbh.c \
        ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_cos_q31.c \
        ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sin_q31.c \
        ${CMSIS}/DSP_Lib/Source/CommonTables/arm_common_tables.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c \
-       ${FIRMWARE}/usbh_midi_core.c \
+       ${FIRMWARE}/usbh_midi_class.c \
        ${FIRMWARE}/usbh_vendor.c \
        ${FIRMWARE}/usbh_conf.c \
        ${FIRMWARE}/serial_midi.c \
