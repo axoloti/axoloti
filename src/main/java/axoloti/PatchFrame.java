@@ -18,6 +18,7 @@
 package axoloti;
 
 import static axoloti.PatchViewType.PICCOLO;
+import axoloti.dialogs.PatchSettingsFrame;
 import axoloti.mvc.UndoUI;
 import axoloti.object.AxoObjects;
 import axoloti.object.ObjectInstanceController;
@@ -958,10 +959,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         if (selObj != null) {
             ((AxoObjectInstanceView) selObj).OpenEditor();
         } else {
-            if (getPatchModel().settings == null) {
-                getPatchModel().settings = new PatchSettings();
-            }
-            getPatchModel().settings.showEditor(patchController);
+            PatchSettingsFrame psf = new PatchSettingsFrame(getController());
+            getController().addView(psf);
+            psf.setVisible(true);
         }
     }//GEN-LAST:event_jMenuItemSettingsActionPerformed
 

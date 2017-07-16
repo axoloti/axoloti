@@ -585,7 +585,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     /* MVC code */
-    
+
     private String StringDenull(String s){
         if (s == null) return "";
         return s;

@@ -17,6 +17,8 @@
  */
 package axoloti;
 
+import axoloti.attributedefinition.AxoAttribute;
+import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
@@ -25,6 +27,7 @@ import axoloti.object.AxoObjectInstanceHyperlink;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectInstanceZombie;
+import axoloti.object.AxoObjectPatcher;
 import axoloti.object.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.IAxoObjectInstance;
@@ -564,8 +567,8 @@ public class PatchModel extends AbstractModel {
     //final int NPRESET_ENTRIES = 32;
     public int[] DistillPreset(int i) {
         int[] pdata;
-        pdata = new int[settings.GetNPresetEntries() * 2];
-        for (int j = 0; j < settings.GetNPresetEntries(); j++) {
+        pdata = new int[getNPresetEntries() * 2];
+        for (int j = 0; j < getNPresetEntries(); j++) {
             pdata[j * 2] = -1;
         }
         int index = 0;
@@ -577,8 +580,8 @@ public class PatchModel extends AbstractModel {
                     pdata[index * 2] = p7.getIndex();
                     pdata[index * 2 + 1] = p.value.getRaw();
                     index++;
-                    if (index == settings.GetNPresetEntries()) {
-                        Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "more than {0}entries in preset, skipping...", settings.GetNPresetEntries());
+                    if (index == getNPresetEntries()) {
+                        Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "more than {0}entries in preset, skipping...", getNPresetEntries());
                         return pdata;
                     }
                 }
@@ -696,8 +699,28 @@ public class PatchModel extends AbstractModel {
         }
         Modulators.add(m);
     }
+    
+    AxoAttributeComboBox attrMidiChannel = new AxoAttributeComboBox("midichannel", 
+            new String[]{"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
+            new String[]{"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"});
+    // use a cut down list of those currently supported
+    AxoAttributeComboBox attrMidiDevice = new AxoAttributeComboBox("mididevice", 
+            new String[]{"omni", "din", "usb device", "usb host", "internal"},
+            new String[]{"0", "1", "2", "3", "15"});
+    AxoAttributeComboBox attrMidiPort = new AxoAttributeComboBox("midiport", 
+            new String[]{"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}, 
+            new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"});    
+    AxoAttributeComboBox attrPoly = new AxoAttributeComboBox("poly", 
+            new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}, 
+            new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"});
 
     // ------------- new MVC methods
+
+    private String StringDenull(String s){
+        if (s == null) return "";
+        return s;
+    }
+
     public String getFileNamePath() {
         if (FileNamePath == null) {
             return "";
@@ -761,12 +784,178 @@ public class PatchModel extends AbstractModel {
                 old_value, nets);
     }
 
+    public String getAuthor() {
+        return StringDenull(getSettings().Author);
+    }
+
+    public void setAuthor(String Author) {
+        getSettings().Author = Author;
+        firePropertyChange(
+                PatchController.PATCH_AUTHOR,
+                null, Author);
+    }
+
+    public String getLicense() {
+        return StringDenull(getSettings().License);
+    }
+
+    public void setLicense(String License) {
+        getSettings().License = License;
+        firePropertyChange(
+                PatchController.PATCH_LICENSE,
+                null, License);
+    }
+
+    public String getAttributions() {
+        return StringDenull(getSettings().Attributions);
+    }
+
+    public void setAttributions(String Attributions) {
+        getSettings().Attributions = Attributions;
+        firePropertyChange(
+                PatchController.PATCH_ATTRIBUTIONS,
+                null, Attributions);
+    }
+
+    public SubPatchMode getSubPatchMode() {
+        return settings.subpatchmode;
+    }
+
+    public void setSubPatchMode(SubPatchMode mode) {
+        settings.subpatchmode = mode;
+        AxoObjectInstancePatcher aoip = getContainer();
+        if (aoip != null) {
+            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+            ArrayList<AxoAttribute> ps = new ArrayList<>(aop.getAttributes());
+            if (mode == SubPatchMode.polyphonic
+                    || mode == SubPatchMode.polychannel
+                    || mode == SubPatchMode.polyexpression) {
+                if (!ps.contains(attrPoly)) {
+                    ps.add(attrPoly);
+                }
+            } else {
+                ps.remove(attrPoly);
+            }
+            aop.setAttributes(ps);
+        }
+        firePropertyChange(
+                PatchController.PATCH_SUBPATCHMODE,
+                null, mode);
+    }
+
+    public Integer getNPresetEntries() {
+        if (settings.NPresetEntries == null) {
+            return 8;
+        }
+        return settings.NPresetEntries;
+    }
+
+    public void setNPresetEntries(Integer n) {
+        settings.NPresetEntries = n;
+        firePropertyChange(
+                PatchController.PATCH_NPRESETENTRIES,
+                null, n);
+    }
+
+    public Integer getNPresets() {
+        if (settings.NPresets == null) {
+            return 8;
+        }
+        return settings.NPresets;
+    }
+
+    public void setNPresets(Integer n) {
+        settings.NPresets = n;
+        firePropertyChange(
+                PatchController.PATCH_NPRESETS,
+                null, n);
+    }
+
+    public Integer getNModulationSources() {
+        if (settings.NModulationSources == null) {
+            return 8;
+        }
+        return settings.NModulationSources;
+    }
+
+    public void setNModulationSources(Integer n) {
+        settings.NModulationSources = n;
+        firePropertyChange(
+                PatchController.PATCH_NMODULATIONSOURCES,
+                null, n);
+    }
+
+    public Integer getNModulationTargetsPerSource() {
+        if (settings.NModulationTargetsPerSource == null) {
+            return 1;
+        }
+        return settings.NModulationTargetsPerSource;
+    }
+
+    public void setNModulationTargetsPerSource(Integer n) {
+        settings.NModulationTargetsPerSource = n;
+        firePropertyChange(
+                PatchController.PATCH_NMODULATIONTARGETSPERSOURCE,
+                null, n);
+    }
+
+    public Integer getMidiChannel() {
+        if (settings.MidiChannel == null) {
+            return 1;
+        }
+        return settings.MidiChannel;
+    }
+
+    public void setMidiChannel(Integer n) {
+        settings.MidiChannel = n;
+        firePropertyChange(
+                PatchController.PATCH_MIDICHANNEL,
+                null, n);
+    }
+
+    public Boolean getMidiSelector() {
+        if (settings.HasMidiChannelSelector == null) {
+            return false;
+        }
+        return settings.HasMidiChannelSelector;
+    }
+
+    public void setMidiSelector(Boolean b) {
+        settings.HasMidiChannelSelector = b;
+        AxoObjectInstancePatcher aoip = getContainer();
+        if (aoip != null) {
+            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+            ArrayList<AxoAttribute> ps = new ArrayList<>(aop.getAttributes());
+            if (b) {
+                if (!ps.contains(attrMidiChannel)) {
+                    ps.add(attrMidiChannel);
+                }
+                if (!ps.contains(attrMidiPort)) {
+                    ps.add(attrMidiPort);
+                }
+                if (!ps.contains(attrMidiDevice)) {
+                    ps.add(attrMidiDevice);
+                }
+            } else {
+                ps.remove(attrMidiChannel);
+                ps.remove(attrMidiPort);
+                ps.remove(attrMidiDevice);
+            }
+            aop.setAttributes(ps);
+        }
+        firePropertyChange(
+                PatchController.PATCH_MIDISELECTOR,
+                null, b);
+    }
+
     public AxoObjectInstancePatcher getContainer() {
         return container;
     }
 
     public void setContainer(AxoObjectInstancePatcher container) {
         this.container = container;
+        setSubPatchMode(getSubPatchMode());
+        setMidiSelector(getMidiSelector());
     }
 
 }

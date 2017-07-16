@@ -23,7 +23,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
 
     public PAssignPresetPanel(PParameterInstanceView parameterInstanceView) {
         this.parameterInstanceView = parameterInstanceView;
-        int n = parameterInstanceView.getModel().getObjectInstance().getPatchModel().getSettings().GetNPresets();
+        int n = parameterInstanceView.getModel().getObjectInstance().getPatchModel().getNPresets();
         setVisible(true);
 
         removeInputEventListener(zoomEventHandler);

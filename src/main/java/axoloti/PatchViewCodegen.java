@@ -75,10 +75,6 @@ public class PatchViewCodegen extends PatchAbstractView {
         displayDataLength = offset;        
     }
 
-    private PatchSettings getSettings() {
-        return controller.getSettings();
-    }
-
     private PatchModel getModel() {
         return controller.getModel();
     }
@@ -134,10 +130,10 @@ public class PatchViewCodegen extends PatchAbstractView {
             c += disp.GenerateDisplayMetaInitializer();
         }
         c += "};\n";
-        c += "    static const uint32_t NPRESETS = " + getSettings().GetNPresets() + ";\n";
-        c += "    static const uint32_t NPRESET_ENTRIES = " + getSettings().GetNPresetEntries() + ";\n";
-        c += "    static const uint32_t NMODULATIONSOURCES = " + getSettings().GetNModulationSources() + ";\n";
-        c += "    static const uint32_t NMODULATIONTARGETS = " + getSettings().GetNModulationTargetsPerSource() + ";\n";
+        c += "    static const uint32_t NPRESETS = " + getModel().getNPresets() + ";\n";
+        c += "    static const uint32_t NPRESET_ENTRIES = " + getModel().getNPresetEntries() + ";\n";
+        c += "    static const uint32_t NMODULATIONSOURCES = " + getModel().getNModulationSources() + ";\n";
+        c += "    static const uint32_t NMODULATIONTARGETS = " + getModel().getNModulationTargetsPerSource() + ";\n";
         return c;
     }    
 
@@ -245,20 +241,20 @@ public class PatchViewCodegen extends PatchAbstractView {
     public String GeneratePresetCode3(String ClassName) {
         String c = "   static const int32_t * GetPresets(void){\n";
         c += "      static const int32_t p[NPRESETS][NPRESET_ENTRIES][2] = {\n";
-        for (int i = 0; i < getSettings().GetNPresets(); i++) {
+        for (int i = 0; i < getModel().getNPresets(); i++) {
 //            c += "// preset " + i + "\n";
 //            c += "pp = (int*)(&Presets[" + i + "]);\n";
             int[] dp = getModel().DistillPreset(i + 1);
             c += "         {\n";
-            for (int j = 0; j < getSettings().GetNPresetEntries(); j++) {
+            for (int j = 0; j < getModel().getNPresetEntries(); j++) {
                 c += "           {" + dp[j * 2] + "," + dp[j * 2 + 1] + "}";
-                if (j != getSettings().GetNPresetEntries() - 1) {
+                if (j != getModel().getNPresetEntries() - 1) {
                     c += ",\n";
                 } else {
                     c += "\n";
                 }
             }
-            if (i != getSettings().GetNPresets() - 1) {
+            if (i != getModel().getNPresets() - 1) {
                 c += "         },\n";
             } else {
                 c += "         }\n";
@@ -297,30 +293,30 @@ public class PatchViewCodegen extends PatchAbstractView {
         String s = "   static PExModulationTarget_t * GetModulationTable(void){\n";
         s += "    static const PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS] = \n";
         s += "{";
-        for (int i = 0; i < getSettings().GetNModulationSources(); i++) {
+        for (int i = 0; i < getModel().getNModulationSources(); i++) {
             s += "{";
             if (i < getModel().Modulators.size()) {
                 Modulator m = getModel().Modulators.get(i);
-                for (int j = 0; j < getSettings().GetNModulationTargetsPerSource(); j++) {
+                for (int j = 0; j < getModel().getNModulationTargetsPerSource(); j++) {
                     if (j < m.Modulations.size()) {
                         Modulation n = m.Modulations.get(j);
                         s += "{" + n.destination.indexName() + ", " + n.value.getRaw() + "}";
                     } else {
                         s += "{-1,0}";
                     }
-                    if (j != getSettings().GetNModulationTargetsPerSource() - 1) {
+                    if (j != getModel().getNModulationTargetsPerSource() - 1) {
                         s += ",";
                     } else {
                         s += "}";
                     }
                 }
             } else {
-                for (int j = 0; j < getSettings().GetNModulationTargetsPerSource() - 1; j++) {
+                for (int j = 0; j < getModel().getNModulationTargetsPerSource() - 1; j++) {
                     s += "{-1,0},";
                 }
                 s += "{-1,0}}";
             }
-            if (i != getSettings().GetNModulationSources() - 1) {
+            if (i != getModel().getNModulationSources() - 1) {
                 s += ",\n";
             }
         }
@@ -615,7 +611,7 @@ public class PatchViewCodegen extends PatchAbstractView {
                 + "     }\n"
                 + "  }\n"
                 + "  root.dsp();\n";
-        if (getSettings().getSaturate()) {
+        if (true /*TBC: review: getModel().getSaturate()*/) {
             c += "  for(i=0;i<BUFSIZE;i++){\n"
                     + "    outbuf[i*2] = __SSAT(AudioOutputLeft[i],28)<<4;\n"
                     + "    switch(AudioOutputMode) {\n"
@@ -714,8 +710,8 @@ public class PatchViewCodegen extends PatchAbstractView {
                 + "		},\n"
                 + "		patch_preset : {\n"
                 + "			header : CHUNK_HEADER(patch_preset),\n"
-                + "			npresets : " + getSettings().GetNPresets() + ",\n"
-                + "			npreset_entries : " + getSettings().GetNPresetEntries() + ",\n"
+                + "			npresets : " + getModel().getNPresets() + ",\n"
+                + "			npreset_entries : " + getModel().getNPresetEntries() + ",\n"
                 + "			pPresets : 0\n"
                 + "		},\n"
                 + "		patch_parameter : {\n"
@@ -765,10 +761,10 @@ public class PatchViewCodegen extends PatchAbstractView {
         c += "\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
                 + "#pragma GCC diagnostic ignored \"-Wunused-parameter\"\n";
-        if (getSettings() == null) {
+        if (true == false) {
             c += "#define MIDICHANNEL 0 // DEPRECATED!\n";
         } else {
-            c += "#define MIDICHANNEL " + (getSettings().GetMidiChannel() - 1) + " // DEPRECATED!\n";
+            c += "#define MIDICHANNEL " + (getModel().getMidiChannel() - 1) + " // DEPRECATED!\n";
         }
         c += "void xpatch_init2(int32_t fwid);\n"
                 + "extern \"C\" __attribute__ ((section(\".boot\"))) void xpatch_init(int32_t fwid){\n"
@@ -804,12 +800,9 @@ public class PatchViewCodegen extends PatchAbstractView {
 
         c = c.replace("attr_poly", "1");
 
-        if (getSettings() == null) {
-            c = c.replace("attr_midichannel", "0");
-        } else {
-            c = c.replace("attr_midichannel", Integer.toString(getSettings().GetMidiChannel() - 1));
-        }
-        if (getSettings() == null || !getSettings().GetMidiSelector()) {
+        c = c.replace("attr_midichannel", Integer.toString(getModel().getMidiChannel() - 1));
+
+        if (!getModel().getMidiSelector()) {
             c = c.replace("attr_mididevice", "0");
             c = c.replace("attr_midiport", "0");
         }
@@ -851,6 +844,32 @@ public class PatchViewCodegen extends PatchAbstractView {
         }
         /* object structures */
 //         ao.sCName = fnNoExtension;
+        ao.includes = getModel().getIncludes();
+        ao.depends = getModel().getDepends();
+        ao.modules = getModel().getModules();
+        if ((getModel().notes != null) && (!getModel().notes.isEmpty())) {
+            ao.setDescription(getModel().notes);
+        } else {
+            ao.setDescription("no description");
+        }
+
+        if (getModel().getMidiSelector()) {
+            String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+            String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
+            // use a cut down list of those currently supported
+            String cdev[] = {"0", "1", "2", "3", "15"};
+            String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
+            ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
+            String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
+        }
+        GenerateNormalCode(ao);
+        return ao;
+    }
+    
+    public void GenerateNormalCode(AxoObject ao){
         ao.sLocalData = GenerateStructCodePlusPlusSub("attr_parent", true)
                 + "static const int polyIndex = 0;\n";
         ao.sLocalData += GenerateParamInitCode3("");
@@ -860,14 +879,6 @@ public class PatchViewCodegen extends PatchAbstractView {
         ao.sInitCode = GenerateParamInitCodePlusPlusSub("attr_parent", "this");
         ao.sInitCode += GenerateObjInitCodePlusPlusSub("attr_parent", "this");
         ao.sDisposeCode = GenerateDisposeCodePlusPlusSub("attr_parent");
-        ao.includes = getModel().getIncludes();
-        ao.depends = getModel().getDepends();
-        ao.modules = getModel().getModules();
-        if ((getModel().notes != null) && (!getModel().notes.isEmpty())) {
-            ao.setDescription(getModel().notes);
-        } else {
-            ao.setDescription("no description");
-        }
         ao.sKRateCode = "int i; /*...*/\n";
         for (IAxoObjectInstance o : getModel().objectinstances) {
             String typeName = o.getType().getId();
@@ -896,85 +907,10 @@ public class PatchViewCodegen extends PatchAbstractView {
                 + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
                 + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
                 + GenerateMidiInCodePlusPlus();
-
-        if ((getSettings() != null) && (getSettings().GetMidiSelector())) {
-            String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
-            String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-            ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
-            // use a cut down list of those currently supported
-            String cdev[] = {"0", "1", "2", "3", "15"};
-            String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
-            ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
-            String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-            String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-            ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
-        }
-        return ao;
+    
     }
-
-
-//    void ExportAxoObjPoly2(File f1) {
-//        String fnNoExtension = f1.getName().substring(0, f1.getName().lastIndexOf(".axo"));
-//    }
-    // Poly voices from one (or omni) midi channel
-    AxoObject GenerateAxoObjPoly(AxoObject template) {
-        AxoObject ao = template;
-        ao.id = "unnamedobject";
-        ao.setDescription(getModel().FileNamePath);
-        ao.includes = getModel().getIncludes();
-        ao.depends = getModel().getDepends();
-        ao.modules = getModel().getModules();
-        if ((getModel().notes != null) && (!getModel().notes.isEmpty())) {
-            ao.setDescription(getModel().notes);
-        } else {
-            ao.setDescription("no description");
-        }
-        String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-        ao.attributes.add(new AxoAttributeComboBox("poly", centries, centries));
-        if ((getSettings() != null) && (getSettings().GetMidiSelector())) {
-            String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
-            String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-            ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
-            // use a cut down list of those currently supported
-            String cdev[] = {"0", "1", "2", "3", "15"};
-            String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
-            ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
-            String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-            String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-            ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
-        }
-
-        for (IAxoObjectInstance o : getModel().objectinstances) {
-            String typeName = o.getType().getId();
-            if (typeName.equals("patch/inlet f")) {
-                ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (typeName.equals("patch/inlet i")) {
-                ao.inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (typeName.equals("patch/inlet b")) {
-                ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (typeName.equals("patch/inlet a")) {
-                ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
-            } else if (typeName.equals("patch/inlet string")) {
-                ao.inlets.add(new InletCharPtr32(o.getInstanceName(), o.getInstanceName()));
-            } else if (typeName.equals("patch/outlet f")) {
-                ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
-            } else if (typeName.equals("patch/outlet i")) {
-                ao.outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
-            } else if (typeName.equals("patch/outlet b")) {
-                ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
-            } else if (typeName.equals("patch/outlet a")) {
-                ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
-            } else if (typeName.equals("patch/outlet string")) {
-                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "string outlet impossible in poly subpatches!");
-                // ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
-            }
-            for (ParameterInstance p : o.getParameterInstances()) {
-                if (p.getOnParent()) {
-                    ao.params.add(p.createParameterForParent());
-                }
-            }
-        }
-
+    
+    public void GeneratePolyCode(AxoObject ao) {
         ao.sLocalData = GenerateParamInitCode3("");
         ao.sLocalData += GeneratePexchAndDisplayCode();
         ao.sLocalData += "/* parameter instance indices */\n";
@@ -1149,13 +1085,10 @@ public class PatchViewCodegen extends PatchAbstractView {
                 + "} else {"
                 + "  int i;   for(i=0;i<attr_poly;i++) getVoices()[i].MidiInHandler(this, dev, port, status, data1, data2);\n"
                 + "}\n";
-        return ao;
     }
 
-    // Poly (Multi) Channel supports per Channel CC/Touch
-    // all channels are independent
-    AxoObject GenerateAxoObjPolyChannel(AxoObject template) {
-        AxoObject o = GenerateAxoObjPoly(template);
+    public void GeneratePolyChannelCode(AxoObject o) {
+        GeneratePolyCode(o);
         o.sLocalData
                 += "int8_t voiceChannel[attr_poly];\n";
         o.sInitCode
@@ -1229,14 +1162,11 @@ public class PatchViewCodegen extends PatchAbstractView {
                 + "    }\n"
                 + "  }\n"
                 + "}\n";
-        return o;
     }
 
-    // Poly Expression supports the Midi Polyphonic Expression (MPE) Spec
-    // Can be used with (or without) the MPE objects
-    // the midi channel of the patch is the 'main/global channel'
-    AxoObject GenerateAxoObjPolyExpression(AxoObject template) {
-        AxoObject o = GenerateAxoObjPoly(template);
+    
+    public void GeneratePolyExpressionCode(AxoObject o) {
+        GeneratePolyCode(o);
         o.sLocalData
                 += "int8_t voiceChannel[attr_poly];\n"
                 + "int8_t pitchbendRange;\n"
@@ -1374,39 +1304,114 @@ public class PatchViewCodegen extends PatchAbstractView {
                 + "         getVoices()[i].MidiInHandler(dev, port, msg + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
-                + "}\n"; // other midi
+                + "}\n"; // other midi        
+    }
+    
+//    void ExportAxoObjPoly2(File f1) {
+//        String fnNoExtension = f1.getName().substring(0, f1.getName().lastIndexOf(".axo"));
+//    }
+    // Poly voices from one (or omni) midi channel
+    AxoObject GenerateAxoObjPoly(AxoObject template) {
+        AxoObject ao = template;
+        ao.id = "unnamedobject";
+        ao.setDescription(getModel().FileNamePath);
+        ao.includes = getModel().getIncludes();
+        ao.depends = getModel().getDepends();
+        ao.modules = getModel().getModules();
+        if ((getModel().notes != null) && (!getModel().notes.isEmpty())) {
+            ao.setDescription(getModel().notes);
+        } else {
+            ao.setDescription("no description");
+        }
+        String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+        ao.attributes.add(new AxoAttributeComboBox("poly", centries, centries));
+        if (getModel().getMidiSelector()) {
+            String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
+            String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
+            // use a cut down list of those currently supported
+            String cdev[] = {"0", "1", "2", "3", "15"};
+            String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
+            ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
+            String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
+        }
+
+        for (IAxoObjectInstance o : getModel().objectinstances) {
+            String typeName = o.getType().getId();
+            if (typeName.equals("patch/inlet f")) {
+                ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
+            } else if (typeName.equals("patch/inlet i")) {
+                ao.inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
+            } else if (typeName.equals("patch/inlet b")) {
+                ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
+            } else if (typeName.equals("patch/inlet a")) {
+                ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
+            } else if (typeName.equals("patch/inlet string")) {
+                ao.inlets.add(new InletCharPtr32(o.getInstanceName(), o.getInstanceName()));
+            } else if (typeName.equals("patch/outlet f")) {
+                ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
+            } else if (typeName.equals("patch/outlet i")) {
+                ao.outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
+            } else if (typeName.equals("patch/outlet b")) {
+                ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
+            } else if (typeName.equals("patch/outlet a")) {
+                ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
+            } else if (typeName.equals("patch/outlet string")) {
+                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "string outlet impossible in poly subpatches!");
+                // ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
+            }
+            for (ParameterInstance p : o.getParameterInstances()) {
+                if (p.getOnParent()) {
+                    ao.params.add(p.createParameterForParent());
+                }
+            }
+        }
+        GeneratePolyCode(ao);
+        return ao;
+    }
+
+    // Poly (Multi) Channel supports per Channel CC/Touch
+    // all channels are independent
+    AxoObject GenerateAxoObjPolyChannel(AxoObject template) {
+        AxoObject o = GenerateAxoObjPoly(template);
+        GeneratePolyChannelCode(o);
+        return o;
+    }
+
+    // Poly Expression supports the Midi Polyphonic Expression (MPE) Spec
+    // Can be used with (or without) the MPE objects
+    // the midi channel of the patch is the 'main/global channel'
+    AxoObject GenerateAxoObjPolyExpression(AxoObject template) {
+        AxoObject o = GenerateAxoObjPoly(template);
+        GeneratePolyExpressionCode(o);
         return o;
     }    
     
     public AxoObject GenerateAxoObj(AxoObject template) {
         AxoObject ao;
-        if (getSettings() == null) {
-            ao = GenerateAxoObjNormal(template);
-        } else {
-            switch (getSettings().subpatchmode) {
-                case no:
-                case normal:
-                    ao = GenerateAxoObjNormal(template);
-                    break;
-                case polyphonic:
-                    ao = GenerateAxoObjPoly(template);
-                    break;
-                case polychannel:
-                    ao = GenerateAxoObjPolyChannel(template);
-                    break;
-                case polyexpression:
-                    ao = GenerateAxoObjPolyExpression(template);
-                    break;
-                default:
-                    return null;
-            }
+        switch (getModel().getSubPatchMode()) {
+            case no:
+            case normal:
+                ao = GenerateAxoObjNormal(template);
+                break;
+            case polyphonic:
+                ao = GenerateAxoObjPoly(template);
+                break;
+            case polychannel:
+                ao = GenerateAxoObjPolyChannel(template);
+                break;
+            case polyexpression:
+                ao = GenerateAxoObjPolyExpression(template);
+                break;
+            default:
+                return null;
         }
-        if (getSettings() != null) {
-            ao.setAuthor(getSettings().getAuthor());
-            ao.setLicense(getSettings().getLicense());
-            ao.setDescription(getModel().notes);
-            ao.helpPatch = getModel().helpPatch;
-        }
+        ao.setAuthor(getModel().getAuthor());
+        ao.setLicense(getModel().getLicense());
+        ao.setDescription(getModel().notes);
+        ao.helpPatch = getModel().helpPatch;
         return ao;
     }
 

@@ -62,23 +62,42 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     public final static String PATCH_DSPLOAD = "DspLoad";
     public final static String PATCH_OBJECTINSTANCES = "Objectinstances";
     public final static String PATCH_NETS = "Nets";
+    public final static String PATCH_AUTHOR = "Author";
+    public final static String PATCH_LICENSE = "License";
+    public final static String PATCH_ATTRIBUTIONS = "Attributions";
+    public final static String PATCH_SUBPATCHMODE = "SubPatchMode";
+    public final static String PATCH_NPRESETENTRIES = "NPresetEntries";
+    public final static String PATCH_NPRESETS = "NPresets";
+    public final static String PATCH_NMODULATIONSOURCES = "NModulationSources";
+    public final static String PATCH_NMODULATIONTARGETSPERSOURCE = "NModulationTargetsPerSource";
+    public final static String PATCH_MIDICHANNEL = "MidiChannel";
+    public final static String PATCH_MIDISELECTOR = "MidiSelector";
+
+    public final static String[] PROPERTYNAMES = new String[]{
+        PATCH_LOCKED,
+        PATCH_FILENAME,
+        PATCH_DSPLOAD,
+        PATCH_OBJECTINSTANCES,
+        PATCH_NETS,
+        PATCH_AUTHOR,
+        PATCH_LICENSE,
+        PATCH_ATTRIBUTIONS,
+        PATCH_SUBPATCHMODE,
+        PATCH_NPRESETENTRIES,
+        PATCH_NPRESETS,
+        PATCH_NMODULATIONSOURCES,
+        PATCH_NMODULATIONTARGETSPERSOURCE,
+        PATCH_MIDICHANNEL,
+        PATCH_MIDISELECTOR
+    };
 
     @Override
     public String[] getPropertyNames() {
-        return new String[]{
-            PATCH_LOCKED,
-            PATCH_FILENAME,
-            PATCH_DSPLOAD,
-            PATCH_OBJECTINSTANCES,
-            PATCH_NETS
-        };
+        return PROPERTYNAMES;
     }
 
     public PatchController(PatchModel model, AbstractDocumentRoot documentRoot, ObjectInstancePatcherController parentController) {
         super(model, documentRoot, parentController);
-        if (model.settings == null) {
-            model.settings = new PatchSettings();
-        }
         if (parentController != null) {
             model.setContainer(parentController.getModel());
         }
@@ -391,10 +410,6 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     Dimension GetSize() {
         // hmmm don't know which view...
         return new Dimension(500, 500); // patchView.GetSize();
-    }
-
-    public PatchSettings getSettings() {
-        return getModel().settings;
     }
 
     public void ShowCompileFail() {
