@@ -350,7 +350,8 @@ public abstract class PatchView extends PatchAbstractView {
         if (NotesFrame != null) {
             getController().getModel().notes = NotesFrame.GetText();
         }
-        getController().getModel().windowPos = getPatchFrame().getBounds();
+        // FIXME
+        //getController().getModel().windowPos = getPatchFrame().getBounds();
     }
 
     boolean save(File f) {
