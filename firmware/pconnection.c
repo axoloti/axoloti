@@ -863,9 +863,10 @@ static THD_FUNCTION(BulkReader, arg) {
     	  }
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
       } else if (header == rcv_hdr_ui_button) {
+    	  // FIXME
     	  rcv_pckt_ui_button_t *p = (rcv_pckt_ui_button_t *)bulk_rxbuf;
-    	  Btn_Nav_Or.word |= p->b_or;
-    	  Btn_Nav_And.word |= p->b_and;
+//    	  Btn_Nav_Or.word |= p->b_or;
+//    	  Btn_Nav_And.word |= p->b_and;
     	  EncBuffer[0] += p->enc1;
     	  EncBuffer[1] += p->enc2;
       } else {

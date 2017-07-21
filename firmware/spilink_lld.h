@@ -22,12 +22,26 @@
 __STATIC_INLINE void spilink_master_process1(spilink_data_t *tx, spilink_data_t *rx){
 	spilink_update_index++;
 
-	// every N updates send a led update
-	if((spilink_update_index % 0x020) == 0) {
-		tx->control_type = 0x200;
-		int i;
-		for(i=0;i < LEDSIZE;i++){
-			((int32_t*) tx->control_data)[i] = leds[i].led_32b;
+	// one in every 8 packets is an update of led data - 375Hz
+	// but requires 2 packets for a full update, so 187.5Hz effective
+	if ((spilink_update_index & 0x07) == 0) {
+		if (spilink_update_index & 0x08) {
+			// 4 encoder rings...
+			tx->control_type = 0x200;
+			int i;
+			for(i=0;i<4;i++){
+				((int32_t*) tx->control_data)[i] = leds[i].led_32b;
+			}
+		} else {
+			// other leds...
+			tx->control_type = 0x201;
+			int i;
+			for(i=0;i<2;i++){
+				((int32_t*) tx->control_data)[i] = leds[i+4].led_32b;
+			}
+			// these do not exist
+			((int32_t*) tx->control_data)[i++] = 0;
+			((int32_t*) tx->control_data)[i++] = 0;
 		}
 	} else {
 		lcd_update_index = (lcd_update_index+1)&0x3f;
@@ -39,10 +53,16 @@ __STATIC_INLINE void spilink_master_process1(spilink_data_t *tx, spilink_data_t 
 	}
 
 	if (rx->control_type == 0x80) {
-		Btn_Nav_Or.word |= ((int32_t *)rx->control_data)[0];
-		Btn_Nav_And.word |= ((int32_t *)rx->control_data)[1];
+//		Btn_Nav_Or.word |= ((int32_t *)rx->control_data)[0];
+//		Btn_Nav_And.word |= ((int32_t *)rx->control_data)[1];
+		ui_event evt;
+		evt.word = ((int32_t *)rx->control_data)[0];
+		if (evt.word)
+			processUIEvent(evt);
 		EncBuffer[0] += rx->control_data[8];
 		EncBuffer[1] += rx->control_data[9];
+		EncBuffer[2] += rx->control_data[10];
+		EncBuffer[3] += rx->control_data[11];
 	}
 }
 

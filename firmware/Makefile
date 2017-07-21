@@ -247,9 +247,15 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/exceptions.c \
        ${FIRMWARE}/watchdog.c \
        ${FIRMWARE}/sysmon.c \
-       ${FIRMWARE}/axoloti_memory.c
-
-
+       ${FIRMWARE}/axoloti_memory.c \
+       ${FIRMWARE}/ui_nodes/action_function.c \
+       ${FIRMWARE}/ui_nodes/int_value.c \
+       ${FIRMWARE}/ui_nodes/node_list.c \
+       ${FIRMWARE}/ui_nodes/object_list.c \
+       ${FIRMWARE}/ui_nodes/object.c \
+       ${FIRMWARE}/ui_nodes/param_list.c \
+       ${FIRMWARE}/ui_nodes/param.c \
+       ${FIRMWARE}/ui_nodes/short_value.c
 
 
 #optional modules
