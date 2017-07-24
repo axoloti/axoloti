@@ -1,12 +1,12 @@
 #include "../ui.h"
 #include "ui_nodes_common.h"
 
-static void fhandle_evt(const struct ui_node * node, ui_event evt) {
+static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
 	if (evtIsUp(evt))
-		list_nav_up(node);
+		return list_nav_up(node);
 	int n = node->obj.obj->nparams + node->obj.obj->ndisplays;
 	if (evtIsDown(evt))
-		list_nav_down(node, n);
+		return list_nav_down(node, n);
 	int nparams = node->obj.obj->nparams;
 	if (nparams > 0) {
 		int pos = menu_stack[menu_stack_position].currentpos;
@@ -17,7 +17,7 @@ static void fhandle_evt(const struct ui_node * node, ui_event evt) {
 						&(node->obj.obj->param_names)[menu_stack[menu_stack_position].currentpos];
 				ParamMenu.param.param = p;
 				ParamMenu.param.param_name = pn;
-				ui_enter_node(&ParamMenu);
+				return ui_enter_node(&ParamMenu);
 			}
 			if ((evt.fields.button == btn_encoder)
 					&& (evt.fields.quadrant == quadrant_topright))
@@ -25,16 +25,14 @@ static void fhandle_evt(const struct ui_node * node, ui_event evt) {
 			ProcessStepButtonsParameter(p);
 		}
 	}
+	return 0;
 }
 
-static void fpaint_screen_initial(const struct ui_node * node) {
-}
-
-static void fpaint_screen_update(const struct ui_node * node) {
+static void fpaint_screen_update(const struct ui_node * node, uint32_t flags) {
 	ui_object_t *ui_object;
 	ui_object = node->obj.obj;
 	int l = ui_object->nparams + ui_object->ndisplays;
-	if (lcd_dirty_flags & lcd_dirty_flag_listnav) {
+	if (flags & lcd_dirty_flag_listnav) {
 		update_list_nav(l);
 		return;
 	}
@@ -100,10 +98,7 @@ static void fpaint_screen_update(const struct ui_node * node) {
 
 const nodeFunctionTable nodeFunctionTable_object = {
 		fhandle_evt,
-		fpaint_screen_initial,
 		fpaint_screen_update,
-		0,
-		0,
 		0,
 		0
 };

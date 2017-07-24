@@ -22,7 +22,7 @@
 #define MAIN_MENU_INDEX_PATCH 0
 #define MAIN_MENU_INDEX_PARAMS 1
 
-#define MainMenu_length 7
+#define MainMenu_length 8
 extern ui_node_t MainMenu[MainMenu_length];
 
 void ui_deinit_patch(void);

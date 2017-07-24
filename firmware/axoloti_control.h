@@ -27,6 +27,8 @@
 // leds, dont exceed SPILINK_CTLDATASIZE
 #define LEDSIZE 6
 
+#include "inttypes.h"
+
 extern uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS];
 
 typedef struct {

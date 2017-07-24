@@ -1,17 +1,15 @@
 #include "../ui.h"
 #include "../axoloti_control.h"
 
-static void fhandle_evt(const struct ui_node * node, ui_event evt) {
+static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
 	if ((evt.fields.button == btn_encoder)
 			&& (evt.fields.quadrant == quadrant_topright))
 		ProcessEncoderParameter(node->param.param, evt.fields.value);
 	ProcessStepButtonsParameter(node->param.param);
+	return 0;
 }
 
-static void fpaint_screen_initial(const struct ui_node * node) {
-}
-
-static void fpaint_screen_update(const struct ui_node * node) {
+static void fpaint_screen_update(const struct ui_node * node, uint32_t flags) {
 	LCD_clear();
 	Parameter_t *p = node->param.param;
 	Parameter_name_t *pn = node->param.param_name;
@@ -81,24 +79,15 @@ static void fpaint_screen_update(const struct ui_node * node) {
 	}
 }
 
-static void fpaint_line_initial(const struct ui_node * node, int y) {
+static void fpaint_line_update(const struct ui_node * node, int y, uint32_t flags) {
 }
 
-static void fpaint_line_initial_inv(const struct ui_node * node, int y) {
-}
-
-static void fpaint_line_update(const struct ui_node * node, int y) {
-}
-
-static void fpaint_line_update_inv(const struct ui_node * node, int y) {
+static void fpaint_line_update_inv(const struct ui_node * node, int y, uint32_t flags) {
 }
 
 const nodeFunctionTable nodeFunctionTable_param = {
 		fhandle_evt,
-		fpaint_screen_initial,
 		fpaint_screen_update,
 		fpaint_line_update,
 		fpaint_line_update_inv,
-		fpaint_line_initial,
-		fpaint_line_initial_inv
 };

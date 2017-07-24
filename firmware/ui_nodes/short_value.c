@@ -1,17 +1,14 @@
 #include "../ui.h"
 #include "../axoloti_control.h"
 
-static void fhandle_evt(const struct ui_node * node, ui_event evt) {
+static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
+	return 0;
 }
 
-static void fpaint_screen_initial(const struct ui_node * node) {
-}
-
-static void fpaint_screen_update(const struct ui_node * node) {
+static void fpaint_screen_update(const struct ui_node * node, uint32_t flags) {
 	// little oscilloscope!
 	static int xpos = 0;
-	if (lcd_dirty_flags & lcd_dirty_flag_initial) {
-		lcd_dirty_flags &= ~lcd_dirty_flag_initial;
+	if (flags & lcd_dirty_flag_initial) {
 		xpos = 0;
 	} else {
 		uint8_t *p = &lcd_buffer[xpos + LCDWIDTH];
@@ -62,20 +59,17 @@ static void fpaint_screen_update(const struct ui_node * node) {
 	}
 }
 
-static void fpaint_line_update(const struct ui_node * node, int y) {
+static void fpaint_line_update(const struct ui_node * node, int y, uint32_t flags) {
 	LCD_drawNumber5D(LCD_COL_VAL, y, *node->shortValue.pvalue);
 }
 
-static void fpaint_line_update_inv(const struct ui_node * node, int y) {
+static void fpaint_line_update_inv(const struct ui_node * node, int y, uint32_t flags) {
 	LCD_drawNumber5DInv(LCD_COL_VAL, y, *node->shortValue.pvalue);
 }
 
 const nodeFunctionTable nodeFunctionTable_short_value = {
 		fhandle_evt,
-		fpaint_screen_initial,
 		fpaint_screen_update,
 		fpaint_line_update,
 		fpaint_line_update_inv,
-		0,
-		0
 };

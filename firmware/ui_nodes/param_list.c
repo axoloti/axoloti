@@ -1,12 +1,12 @@
 #include "../ui.h"
 #include "ui_nodes_common.h"
 
-static void fhandle_evt(const struct ui_node * node, ui_event evt) {
+static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
 	if (evtIsUp(evt))
-		list_nav_up(node);
+		return list_nav_up(node);
 	int n = node->paramList.nparams;
 	if (evtIsDown(evt))
-		list_nav_down(node, n);
+		return list_nav_down(node, n);
 	if (n > 0) {
 		Parameter_t *p =
 				&node->paramList.params[menu_stack[menu_stack_position].currentpos];
@@ -14,24 +14,22 @@ static void fhandle_evt(const struct ui_node * node, ui_event evt) {
 			ParamMenu.param.param = p;
 			ParamMenu.param.param_name =
 					&node->paramList.param_names[menu_stack[menu_stack_position].currentpos];
-			ui_enter_node(&ParamMenu);
+			return ui_enter_node(&ParamMenu);
 		}
 		if ((evt.fields.button == btn_encoder)
 				&& (evt.fields.quadrant == quadrant_topright))
 			ProcessEncoderParameter(p, evt.fields.value);
 		ProcessStepButtonsParameter(p);
 	}
+	return 0;
 }
 
-static void fpaint_screen_initial(const struct ui_node * node) {
-}
-
-static void fpaint_screen_update(const struct ui_node * node) {
+static void fpaint_screen_update(const struct ui_node * node, uint32_t flags) {
 	Parameter_t *params = node->paramList.params;
 	Parameter_name_t *param_names = node->paramList.param_names;
 	const int current_menu_position = menu_stack[menu_stack_position].currentpos;
 	int l = node->paramList.nparams;
-	if (lcd_dirty_flags & lcd_dirty_flag_listnav) {
+	if (flags & lcd_dirty_flag_listnav) {
 		update_list_nav(l);
 		return;
 	}
@@ -76,20 +74,17 @@ static void fpaint_screen_update(const struct ui_node * node) {
 	LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
 }
 
-static void fpaint_line_initial(const struct ui_node * node, int y) {
+static void fpaint_line_initial(const struct ui_node * node, int y, uint32_t flags) {
 	LCD_drawStringN(LCD_COL_EQ, y, "     $", LCD_COL_EQ_LENGTH);
 }
 
-static void fpaint_line_initial_inv(const struct ui_node * node, int y) {
+static void fpaint_line_initial_inv(const struct ui_node * node, int y, uint32_t flags) {
 	LCD_drawStringInvN(LCD_COL_EQ, y, "     $", LCD_COL_EQ_LENGTH);
 }
 
 const nodeFunctionTable nodeFunctionTable_param_list = {
 		fhandle_evt,
-		fpaint_screen_initial,
 		fpaint_screen_update,
-		0,
-		0,
 		fpaint_line_initial,
 		fpaint_line_initial_inv
 };

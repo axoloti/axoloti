@@ -3,6 +3,7 @@ extern "C" {
 #include <axoloti.h>
 #include <parameter_functions.h>
 #include <axoloti_memory.h>
+#include <glcdfont.h>
 }
 
 #include "patch_chunks.h"

@@ -25,9 +25,11 @@
 #include "glcdfont.h"
 #include <string.h>
 #include "spilink.h"
-#include "ui_menu_content.h"
+#include "menu_content/main_menu.h"
 
 #pragma GCC optimize ("Og")
+
+static thread_t * thd_ui2 = 0;
 
 
 //Btn_Nav_States_struct Btn_Nav_Or;
@@ -60,7 +62,7 @@ ui_node_t ParamMenu = {
   &nodeFunctionTable_param, "Param", .param = {0}
 };
 
-// ------ Object menu stuff ------
+// ------ Object node ------
 
 // todo: use a stack of ObjMenu's
 char objname[MAX_PARAMETER_NAME_LENGTH + 1];
@@ -68,8 +70,6 @@ char objname[MAX_PARAMETER_NAME_LENGTH + 1];
 ui_node_t ObjMenu = {
   &nodeFunctionTable_object, objname, .obj = {0}
 };
-
-uint32_t lcd_dirty_flags;
 
 #if 0 // obsolete, use static initializers instead
 void SetKVP_APVP(ui_node_t *kvp, ui_node_t *parent,
@@ -125,17 +125,17 @@ void SetKVP_CUSTOM(ui_node_t *node, ui_node_t *parent,
 }
 #endif
 
-void list_nav_down(const ui_node_t *node, int maxposition) {
+uint32_t list_nav_down(const ui_node_t *node, int maxposition) {
 	if (menu_stack[menu_stack_position].currentpos
 			< (maxposition - 1))
 		menu_stack[menu_stack_position].currentpos++;
-	lcd_dirty_flags |= lcd_dirty_flag_listnav;
+	return lcd_dirty_flag_listnav;
 }
 
-void list_nav_up(const ui_node_t *node) {
+uint32_t list_nav_up(const ui_node_t *node) {
 	if (menu_stack[menu_stack_position].currentpos > 0)
 		menu_stack[menu_stack_position].currentpos--;
-	lcd_dirty_flags |= lcd_dirty_flag_listnav;
+	return lcd_dirty_flag_listnav;
 }
 
 void DisplayHeading(void) {
@@ -146,7 +146,7 @@ void DisplayHeading(void) {
 		int l = strlen(name);
 		if (l>h) {
 			l=h;
-			LCD_drawStringInvN(0, 0, "----------------------", l);
+			LCD_drawStringInvN(0, 0, "......................", l);
 			break;
 		}
 		h -= l;
@@ -186,21 +186,22 @@ void DisplayHeading(void) {
  *                 no up_evt detectable from cur/prev!
  */
 
-static void nav_Back(void) {
+static uint32_t nav_Back(void) {
 	if (menu_stack_position > 0)
 		menu_stack_position--;
-	lcd_dirty_flags = ~0;
+	return ~0;
 }
 
-void ui_enter_node(const ui_node_t *nodex) {
+uint32_t ui_enter_node(const ui_node_t *nodex) {
 	if (menu_stack_position < menu_stack_size - 1) {
 		LCD_clear();
 		menu_stack_t *m = &menu_stack[menu_stack_position + 1];
 		m->parent = nodex;
 		m->currentpos = 0;
 		menu_stack_position++;
-		lcd_dirty_flags = ~0;
-	}
+		return ~0;
+	} else
+		return 0;
 }
 
 void drawParamValue(int line, int x, Parameter_t *param) {
@@ -476,7 +477,6 @@ void ShowParameterOnButtonArrayLEDs(led_array_t *led_array, Parameter_t *p) {
 }
 
 void update_list_nav(int current_menu_length) {
-	lcd_dirty_flags &= ~lcd_dirty_flag_listnav;
 	const int current_menu_position = menu_stack[menu_stack_position].currentpos;
 	// update list navigation indicators
 	ShowListPositionOnEncoderLEDRing(LED_RING_TOPLEFT, current_menu_position,
@@ -489,11 +489,11 @@ void update_list_nav(int current_menu_length) {
 	return;
 }
 
-bool evtIsEnter(ui_event evt) {
+bool evtIsEnter(input_event evt) {
 	return ((evt.fields.button == btn_E) && (evt.fields.quadrant == quadrant_main) && (evt.fields.value));
 }
 
-bool evtIsUp(ui_event evt) {
+bool evtIsUp(input_event evt) {
 	if (evt.fields.button == btn_up)
 		return ((evt.fields.quadrant == quadrant_main) && (evt.fields.value));
 	else if ((evt.fields.button == btn_encoder) && (evt.fields.quadrant == quadrant_topleft))
@@ -501,7 +501,7 @@ bool evtIsUp(ui_event evt) {
 	return 0;
 }
 
-bool evtIsDown(ui_event evt) {
+bool evtIsDown(input_event evt) {
 	if (evt.fields.button == btn_down)
 		return ((evt.fields.quadrant == quadrant_main) && (evt.fields.value));
 	else if ((evt.fields.button == btn_encoder) && (evt.fields.quadrant == quadrant_topleft))
@@ -509,18 +509,33 @@ bool evtIsDown(ui_event evt) {
 	return 0;
 }
 
-void processUIEvent(ui_event evt) {
+void processUIEvent(input_event evt) {
 	const ui_node_t * head_node = menu_stack[menu_stack_position].parent;
 	if (head_node->functions && head_node->functions->handle_evt) {
-		(head_node->functions->handle_evt)(head_node, evt);
+		eventmask_t resp_evt;
+		resp_evt = head_node->functions->handle_evt(head_node, evt);
+		if (resp_evt) {
+			chEvtSignal(thd_ui2, resp_evt);
+		}
+	}
+}
+
+void processUIEventI(input_event evt) {
+	const ui_node_t * head_node = menu_stack[menu_stack_position].parent;
+	if (head_node->functions && head_node->functions->handle_evt) {
+		eventmask_t resp_evt;
+		resp_evt = head_node->functions->handle_evt(head_node, evt);
+		if (resp_evt) {
+			chEvtSignalI(thd_ui2, resp_evt);
+		}
 	}
 	// ALWAYS handle back
 	if ((evt.fields.button == btn_X) && (evt.fields.quadrant == quadrant_main) && (evt.fields.value))
-		nav_Back();
+		chEvtSignalI(thd_ui2, nav_Back());
 }
 
 static void UIPollButtons(void) {
-	ui_event evt;
+	input_event evt;
 	// FIXME: shift
 	if (EncBuffer[0]) {
 		evt.fields.button = btn_encoder;
@@ -557,65 +572,51 @@ static void UIPollButtons(void) {
 
 }
 
-static void UIUpdateLCD(void) {
-
-	const ui_node_t * head_node = menu_stack[menu_stack_position].parent;
-	const int current_menu_position = menu_stack[menu_stack_position].currentpos;
-
-	if (lcd_dirty_flags & lcd_dirty_flag_clearscreen) {
-		lcd_dirty_flags &= ~lcd_dirty_flag_clearscreen;
-		LCD_clear();
-		LED_clear(LED_RING_TOPLEFT);
-		LED_clear(LED_RING_TOPRIGHT);
-		LED_clear(LED_RING_BOTTOMLEFT);
-		LED_clear(LED_RING_BOTTOMRIGHT);
-		LED_clear(LED_STEPS);
-		LED_clear(LED_LVL);
-		return;
-	}
-	if (lcd_dirty_flags & lcd_dirty_flag_header) {
-		lcd_dirty_flags &= ~lcd_dirty_flag_header;
-		DisplayHeading();
-		return;
-	}
-	if (head_node->functions && head_node->functions->paint_screen_update) {
-		head_node->functions->paint_screen_update(head_node);
-	}
-
-
-#if 0 // show protocol diagnostics
-	static int counter = 0;
-	counter++;
-	LCD_drawNumberHex32(0, 0, spilink_rx[0].header);
-	LCD_drawNumberHex32(0, 1, spilink_rx[0].frameno);
-	LCD_drawNumberHex32(0, 2, spilink_rx[0].control_type);
-	LCD_drawNumberHex32(0, 3, Btn_Nav_CurStates.word);
-	LCD_drawNumberHex32(0, 4, Btn_Nav_And.word);
-	LCD_drawNumberHex32(0, 5, Btn_Nav_Or.word);
-	LCD_drawNumberHex32(0, 6, counter);
-#endif
-}
 
 static WORKING_AREA(waThreadUI2, 512);
 static THD_FUNCTION(ThreadUI2, arg) {
 	(void) (arg);
 	chRegSetThreadName("ui2");
 	while (1) {
-		// todo: make better
-		// the motivation for differentiating between
-		// input handling and screen painting is that
-		// screen painting can be much slower
-		// than knob tweaking
+		eventmask_t evt = chEvtWaitOneTimeout(0xFFFFFFFF, MS2ST(16)); // ~ 60Hz refresh rate
+
+		const ui_node_t * head_node = menu_stack[menu_stack_position].parent;
+		if (evt == lcd_dirty_flag_clearscreen) {
+			LCD_clear();
+			LED_clear(LED_RING_TOPLEFT);
+			LED_clear(LED_RING_TOPRIGHT);
+			LED_clear(LED_RING_BOTTOMLEFT);
+			LED_clear(LED_RING_BOTTOMRIGHT);
+			LED_clear(LED_STEPS);
+			LED_clear(LED_LVL);
+		} else if (evt == lcd_dirty_flag_header) {
+			DisplayHeading();
+		} else if (head_node->functions && head_node->functions->paint_screen_update) {
+			head_node->functions->paint_screen_update(head_node, evt);
+		}
+
+	#if 0 // show protocol diagnostics
+		static int counter = 0;
+		counter++;
+		LCD_drawNumberHex32(0, 0, spilink_rx[0].header);
+		LCD_drawNumberHex32(0, 1, spilink_rx[0].frameno);
+		LCD_drawNumberHex32(0, 2, spilink_rx[0].control_type);
+		LCD_drawNumberHex32(0, 3, Btn_Nav_CurStates.word);
+		LCD_drawNumberHex32(0, 4, Btn_Nav_And.word);
+		LCD_drawNumberHex32(0, 5, Btn_Nav_Or.word);
+		LCD_drawNumberHex32(0, 6, counter);
+	#endif
+		// todo: avoid UIPollButtons...
 		UIPollButtons();
-		UIUpdateLCD();
-		chThdSleepMilliseconds(15);
+
+		// sleep a bit to prevent LCD repaint flood
+		// hmm we don't get a steady idle refresh rate this way...
+		chThdSleepMilliseconds(8);
 	}
 }
 
 void ui_init(void) {
-	lcd_dirty_flags = ~0;
-
-	chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2,
+	thd_ui2 = chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2,
 			NULL);
 	axoloti_control_init();
 
@@ -627,7 +628,7 @@ void ui_init(void) {
 
 void ui_go_home(void) {
 	menu_stack_position = 0;
-	lcd_dirty_flags = ~0;
+	chEvtSignal(thd_ui2, ~0);
 }
 
 #if 0 // obsolete

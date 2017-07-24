@@ -1,6 +1,7 @@
-#ifndef UI_EVT_H
-#define UI_EVT_H
+#ifndef INPUT_EVT_H
+#define INPUT_EVT_H
 
+#include "stdbool.h"
 
 enum {
 	quadrant_main = 0,
@@ -12,29 +13,29 @@ enum {
 };
 
 enum {
-		btn_up = 1,
-		btn_down = 2,
-		btn_encoder = 3,
-		btn_F,
-		btn_S,
-		btn_X,
-		btn_E,
-		btn_1,
-		btn_2,
-		btn_3,
-		btn_4,
-		btn_5,
-		btn_6,
-		btn_7,
-		btn_8,
-		btn_9,
-		btn_10,
-		btn_11,
-		btn_12,
-		btn_13,
-		btn_14,
-		btn_15,
-		btn_16,
+	btn_up = 1,
+	btn_down = 2,
+	btn_encoder = 3,
+	btn_F,
+	btn_S,
+	btn_X,
+	btn_E,
+	btn_1,
+	btn_2,
+	btn_3,
+	btn_4,
+	btn_5,
+	btn_6,
+	btn_7,
+	btn_8,
+	btn_9,
+	btn_10,
+	btn_11,
+	btn_12,
+	btn_13,
+	btn_14,
+	btn_15,
+	btn_16,
 };
 
 #define EVT_MODIFIER_SHIFT 1
@@ -49,7 +50,11 @@ typedef union {
 	  uint8_t button;
   } fields;
   int32_t word;
-} ui_event;
+} input_event;
+
+extern bool evtIsEnter(input_event evt);
+extern bool evtIsUp(input_event evt);
+extern bool evtIsDown(input_event evt);
 
 
 #endif

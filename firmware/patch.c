@@ -29,7 +29,7 @@
 #include "spilink.h"
 #include "codec.h"
 #include "axoloti_memory.h"
-#include "ui_menu_content.h"
+#include "menu_content/main_menu.h"
 
 //#define DEBUG_INT_ON_GPIO 1
 

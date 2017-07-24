@@ -1,12 +1,12 @@
 #include "../ui.h"
 #include "ui_nodes_common.h"
 
-static void fhandle_evt(const struct ui_node * node, ui_event evt) {
+static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
 	if (evtIsUp(evt))
-		list_nav_up(node);
+		return list_nav_up(node);
 	int n = node->objList.nobjs;
 	if (evtIsDown(evt))
-		list_nav_down(node, n);
+		return list_nav_down(node, n);
 	if (node->objList.objs[menu_stack[menu_stack_position].currentpos].nparams
 			> 0) {
 		Parameter_t *p =
@@ -26,18 +26,16 @@ static void fhandle_evt(const struct ui_node * node, ui_event evt) {
 			((char *) ObjMenu.name)[i] = ObjMenu.obj.obj->name[i];
 		}
 		((char *) ObjMenu.name)[i] = 0;
-		ui_enter_node(&ObjMenu);
+		return ui_enter_node(&ObjMenu);
 	}
+	return 0;
 }
 
-static void fpaint_screen_initial(const struct ui_node * node) {
-}
-
-static void fpaint_screen_update(const struct ui_node * node) {
+static void fpaint_screen_update(const struct ui_node * node, uint32_t flags) {
 	ui_object_t *ui_objects;
 	ui_objects = node->objList.objs;
 	int l = node->objList.nobjs;
-	if (lcd_dirty_flags & lcd_dirty_flag_listnav) {
+	if (flags & lcd_dirty_flag_listnav) {
 		update_list_nav(l);
 		return;
 	}
@@ -98,20 +96,17 @@ static void fpaint_screen_update(const struct ui_node * node) {
 	LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
 }
 
-static void fpaint_line_initial(const struct ui_node * node, int y) {
+static void fpaint_line_initial(const struct ui_node * node, int y, uint32_t flags) {
 	LCD_drawStringN(LCD_COL_EQ, y, "     0", LCD_COL_EQ_LENGTH);
 }
 
-static void fpaint_line_initial_inv(const struct ui_node * node, int y) {
+static void fpaint_line_initial_inv(const struct ui_node * node, int y, uint32_t flags) {
 	LCD_drawStringInvN(LCD_COL_EQ, y, "     0", LCD_COL_EQ_LENGTH);
 }
 
 const nodeFunctionTable nodeFunctionTable_object_list = {
 		fhandle_evt,
-		fpaint_screen_initial,
 		fpaint_screen_update,
-		0,
-		0,
 		fpaint_line_initial,
 		fpaint_line_initial_inv
 };
