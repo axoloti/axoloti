@@ -35,7 +35,7 @@ static thread_t * thd_ui2 = 0;
 //Btn_Nav_States_struct Btn_Nav_Or;
 //Btn_Nav_States_struct Btn_Nav_And;
 
-int8_t EncBuffer[4];
+int8_t EncBuffer[4] = {0,0,0,0};
 
 extern const ui_node_t RootMenu;
 
@@ -618,17 +618,13 @@ static THD_FUNCTION(ThreadUI2, arg) {
 void ui_init(void) {
 	thd_ui2 = chThdCreateStatic(waThreadUI2, sizeof(waThreadUI2), NORMALPRIO, ThreadUI2,
 			NULL);
-	axoloti_control_init();
-
-	int i;
-	for (i = 0; i < 2; i++) {
-		EncBuffer[i] = 0;
-	}
+	chEvtSignal(thd_ui2, ~0);
 }
 
 void ui_go_home(void) {
 	menu_stack_position = 0;
-	chEvtSignal(thd_ui2, ~0);
+	if (thd_ui2)
+		chEvtSignal(thd_ui2, ~0);
 }
 
 #if 0 // obsolete
