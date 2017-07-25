@@ -155,18 +155,25 @@ public class QCmdProcessor implements Runnable {
         });
     }
 
-    public void WaitQueueFinished() {
+    public void WaitQueueFinished() throws Exception {
+        int t = 0;
         while (true) {
             if (queue.isEmpty() && queueResponse.isEmpty()) {
                 break;
             }
             try {
                 Thread.sleep(10);
+                t += 10;
+                if (t > 2000) {
+                    throw new Exception("Queue timeout " + currentcmd);
+                }
             } catch (InterruptedException ex) {
                 Logger.getLogger(QCmdProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
+
+    QCmd currentcmd = null;
 
     @Override
     public void run() {
@@ -178,38 +185,38 @@ public class QCmdProcessor implements Runnable {
             setProgress(0);
             try {
                 queueResponse.clear();
-                QCmd cmd = queue.take();
-                if (!((cmd instanceof QCmdPing) || (cmd instanceof QCmdGuiDialTx))) {
+                currentcmd = queue.take();
+                if (!((currentcmd instanceof QCmdPing) || (currentcmd instanceof QCmdGuiDialTx))) {
                     //System.out.println(cmd);
                     //setProgress((100 * (queue.size() + 1)) / (queue.size() + 2));
                 }
-                String m = cmd.GetStartMessage();
+                String m = currentcmd.GetStartMessage();
                 if (m != null) {
                     publish(m);
                     println(m);
                 }
-                if (QCmdShellTask.class.isInstance(cmd)) {
+                if (QCmdShellTask.class.isInstance(currentcmd)) {
                     //                shellprocessor.AppendToQueue((QCmdShellTask)cmd);
                     //                publish(queueResponse.take());
-                    QCmd response = ((QCmdShellTask) cmd).Do(this);
+                    QCmd response = ((QCmdShellTask) currentcmd).Do(this);
                     if ((response != null)) {
                         ((QCmdGUITask) response).DoGUI(this);
                     }
                 }
-                if (QCmdSerialTask.class.isInstance(cmd)) {
+                if (QCmdSerialTask.class.isInstance(currentcmd)) {
                     if (serialconnection.isConnected()) {
-                        serialconnection.AppendToQueue((QCmdSerialTask) cmd);
+                        serialconnection.AppendToQueue((QCmdSerialTask) currentcmd);
                         QCmd response = queueResponse.take();
                         publish(response);
-                        if (response instanceof QCmdDisconnect){
+                        if (response instanceof QCmdDisconnect) {
                             queue.clear();
                         }
                     }
                 }
-                if (QCmdGUITask.class.isInstance(cmd)) {
-                    publish(cmd);
+                if (QCmdGUITask.class.isInstance(currentcmd)) {
+                    publish(currentcmd);
                 }
-                m = cmd.GetDoneMessage();
+                m = currentcmd.GetDoneMessage();
                 if (m != null) {
                     println(m);
                     publish(m);
