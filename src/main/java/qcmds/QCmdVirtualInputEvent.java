@@ -18,36 +18,18 @@
 package qcmds;
 
 import axoloti.IConnection;
+import axoloti.VirtualInputEvent;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class QCmdVirtualButton implements QCmdSerialTask {
+public class QCmdVirtualInputEvent implements QCmdSerialTask {
 
-    int b_or;
-    int b_and;
-    int enc1;
-    int enc2;
-    int enc3;
-    int enc4;
+    final VirtualInputEvent evt;
 
-    public QCmdVirtualButton(int b_or, int b_and) {
-        this.b_or = b_or;
-        this.b_and = b_and;
-        enc1 = 0;
-        enc2 = 0;
-        enc3 = 0;
-        enc4 = 0;
-    }
-
-    public QCmdVirtualButton(int enc1, int enc2, int enc3, int enc4) {
-        this.enc1 = enc1;
-        this.enc2 = enc2;
-        this.enc3 = enc3;
-        this.enc4 = enc4;
-        this.b_or = 0;
-        this.b_and = 0;
+    public QCmdVirtualInputEvent(VirtualInputEvent evt) {
+        this.evt = evt;
     }
 
     @Override
@@ -63,7 +45,7 @@ public class QCmdVirtualButton implements QCmdSerialTask {
     @Override
     public QCmd Do(IConnection connection) {
         connection.ClearSync();
-        connection.TransmitVirtualButton(b_or, b_and, enc1, enc2, enc3, enc4);
+        connection.TransmitVirtualInputEvent(evt.getQuadrant(), evt.getModifiers(), evt.getValue(), evt.getButton());
         return this;
     }
 }

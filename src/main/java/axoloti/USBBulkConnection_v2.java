@@ -683,24 +683,16 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     @Override
-    public void TransmitVirtualButton(int b_or, int b_and, int enc1, int enc2, int enc3, int enc4) {
-        byte[] data = new byte[16];
+    public void TransmitVirtualInputEvent(byte b0, byte b1, byte b2, byte b3) {
+        byte[] data = new byte[8];
         data[0] = 'A';
         data[1] = 'x';
         data[2] = 'o';
         data[3] = 'B';
-        data[4] = (byte) b_or;
-        data[5] = (byte) (b_or >> 8);
-        data[6] = (byte) (b_or >> 16);
-        data[7] = (byte) (b_or >> 24);
-        data[8] = (byte) b_and;
-        data[9] = (byte) (b_and >> 8);
-        data[10] = (byte) (b_and >> 16);
-        data[11] = (byte) (b_and >> 24);
-        data[12] = (byte) (enc1);
-        data[13] = (byte) (enc2);
-        data[14] = (byte) (enc3);
-        data[15] = (byte) (enc4);
+        data[4] = b0;
+        data[5] = b1;
+        data[6] = b2;
+        data[7] = b3;
         writeBytes(data);
     }
 

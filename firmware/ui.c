@@ -31,12 +31,6 @@
 
 static thread_t * thd_ui2 = 0;
 
-
-//Btn_Nav_States_struct Btn_Nav_Or;
-//Btn_Nav_States_struct Btn_Nav_And;
-
-int8_t EncBuffer[4] = {0,0,0,0};
-
 extern const ui_node_t RootMenu;
 
 // ------ menu stack ------
@@ -158,33 +152,6 @@ void DisplayHeading(void) {
 		i--;
 	}
 }
-
-
-/*
- * We need one uniform state for the buttons, whether controlled from the GUI or from Axoloti Control.
- * btn_or is a true if the button was down during the last time interval
- * btn_and is false if the button was released after being held down in the last time interval
- *
- * say btn_or1, btn_and1 is from control source 1
- * say btn_or2, btn_and2 is from control source 2
- *
- * Current state |= (btn_or1 | btn_or2)
- * process_buttons()
- * Prev_state = Current state & btn_and1 & btn_and2
- *
- *
- * a click within a time interval is transmitted as btn_or = 1, btn_and = 0
- * It is desirable that the current state is true during a whole process interval.
- *
- *
- *
- * btn1or    0 0 1 0
- * btn1and   1 1 0 1
- * curstate  0 0 1 0
- * prevstate 0 0 0 0
- *               down_evt
- *                 no up_evt detectable from cur/prev!
- */
 
 static uint32_t nav_Back(void) {
 	if (menu_stack_position > 0)
@@ -518,6 +485,9 @@ void processUIEvent(input_event evt) {
 			chEvtSignal(thd_ui2, resp_evt);
 		}
 	}
+	// ALWAYS handle back
+	if ((evt.fields.button == btn_X) && (evt.fields.quadrant == quadrant_main) && (evt.fields.value))
+		chEvtSignal(thd_ui2, nav_Back());
 }
 
 void processUIEventI(input_event evt) {
@@ -533,45 +503,6 @@ void processUIEventI(input_event evt) {
 	if ((evt.fields.button == btn_X) && (evt.fields.quadrant == quadrant_main) && (evt.fields.value))
 		chEvtSignalI(thd_ui2, nav_Back());
 }
-
-static void UIPollButtons(void) {
-	input_event evt;
-	// FIXME: shift
-	if (EncBuffer[0]) {
-		evt.fields.button = btn_encoder;
-		evt.fields.value = EncBuffer[0];
-		EncBuffer[0] = 0;
-		evt.fields.quadrant = quadrant_topleft;
-		processUIEvent(evt);
-	}
-	if (EncBuffer[1]) {
-		evt.fields.button = btn_encoder;
-		evt.fields.value = EncBuffer[1];
-		EncBuffer[1] = 0;
-		evt.fields.quadrant = quadrant_topright;
-		processUIEvent(evt);
-	}
-	if (EncBuffer[2]) {
-		evt.fields.button = btn_encoder;
-		evt.fields.value = EncBuffer[2];
-		EncBuffer[2] = 0;
-		evt.fields.quadrant = quadrant_bottomleft;
-		processUIEvent(evt);
-	}
-	if (EncBuffer[3]) {
-		evt.fields.button = btn_encoder;
-		evt.fields.value = EncBuffer[3];
-		EncBuffer[3] = 0;
-		evt.fields.quadrant = quadrant_bottomright;
-		processUIEvent(evt);
-	}
-
-	// for repaint diagnosis:
-//	if (BTN_NAV_DOWN(swm4_S))
-//		LCD_grey();
-
-}
-
 
 static WORKING_AREA(waThreadUI2, 512);
 static THD_FUNCTION(ThreadUI2, arg) {
@@ -606,9 +537,6 @@ static THD_FUNCTION(ThreadUI2, arg) {
 		LCD_drawNumberHex32(0, 5, Btn_Nav_Or.word);
 		LCD_drawNumberHex32(0, 6, counter);
 	#endif
-		// todo: avoid UIPollButtons...
-		UIPollButtons();
-
 		// sleep a bit to prevent LCD repaint flood
 		// hmm we don't get a steady idle refresh rate this way...
 		chThdSleepMilliseconds(8);

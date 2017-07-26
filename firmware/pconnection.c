@@ -549,13 +549,8 @@ typedef struct {
 
 typedef struct {
 	uint32_t header;
-	uint32_t b_or;
-	uint32_t b_and;
-	uint8_t enc1;
-	uint8_t enc2;
-	uint8_t enc3;
-	uint8_t enc4;
-} rcv_pckt_ui_button_t;
+	input_event input_event;
+} rcv_pckt_virtual_input_event_t;
 
 const uint32_t rcv_hdr_ping = 0x706f7841; // "Axop"
 const uint32_t rcv_hdr_getfwid = 0x566f7841; // "AxoV"
@@ -574,7 +569,7 @@ const uint32_t rcv_hdr_fs_close = 0x636f7841; // "Axoc"
 const uint32_t rcv_hdr_fs_append = 0x416f7841; // "AxoA"
 const uint32_t rcv_hdr_preset_apply = 0x546f7841; // "AxoT"
 const uint32_t rcv_hdr_preset_write = 0x526f7841; // "AxoR"
-const uint32_t rcv_hdr_ui_button = 0x426f7841; // "AxoB"
+const uint32_t rcv_hdr_virtual_input_event = 0x426f7841; // "AxoB"
 
 void ManipulateFile(void) {
   sdcard_attemptMountIfUnmounted();
@@ -862,13 +857,10 @@ static THD_FUNCTION(BulkReader, arg) {
 			  }
     	  }
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
-      } else if (header == rcv_hdr_ui_button) {
+      } else if (header == rcv_hdr_virtual_input_event) {
     	  // FIXME
-    	  rcv_pckt_ui_button_t *p = (rcv_pckt_ui_button_t *)bulk_rxbuf;
-//    	  Btn_Nav_Or.word |= p->b_or;
-//    	  Btn_Nav_And.word |= p->b_and;
-    	  EncBuffer[0] += p->enc1;
-    	  EncBuffer[1] += p->enc2;
+    	  rcv_pckt_virtual_input_event_t *p = (rcv_pckt_virtual_input_event_t *)bulk_rxbuf;
+    	  processUIEvent(p->input_event);
       } else {
     	  // unidentified header!
     	  int i=100;

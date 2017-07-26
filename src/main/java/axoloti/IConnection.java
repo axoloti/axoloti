@@ -28,7 +28,7 @@ public abstract class IConnection {
     abstract public void TransmitRecallPreset(int presetNo);
     abstract public void UploadFragment(byte[] buffer, int offset);
     abstract public void TransmitGetFileList();
-    abstract public void TransmitVirtualButton(int b_or, int b_and, int enc1, int enc2, int enc3, int enc4);
+    abstract public void TransmitVirtualInputEvent(byte b0, byte b1, byte b2, byte b3);
     abstract public void TransmitCreateFile(String filename, int size);
     abstract public void TransmitGetFileInfo(String filename);
     abstract public void TransmitCreateFile(String filename, int size, Calendar date);

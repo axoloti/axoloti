@@ -92,6 +92,7 @@ static void fpaint_screen_update(const struct ui_node * node, uint32_t flags) {
 		LCD_drawStringN(32, 6, evt_btn_to_string(last_evt.fields.button), 5);
 		LCD_drawNumber3D(0, 7, last_evt.fields.quadrant);
 		LCD_drawNumber3D(14, 7, last_evt.fields.value);
+		LCD_drawNumber3D(28, 7, last_evt.fields.modifiers);
 		break;
 	}
 }

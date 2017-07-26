@@ -197,5 +197,6 @@ extern void update_list_nav(int current_menu_length);
 extern ui_node_t ObjMenu;
 extern ui_node_t ParamMenu;
 
+extern void processUIEvent(input_event evt);
 
 #endif

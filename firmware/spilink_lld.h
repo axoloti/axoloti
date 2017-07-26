@@ -59,10 +59,6 @@ __STATIC_INLINE void spilink_master_process1(spilink_data_t *tx, spilink_data_t 
 		evt.word = ((int32_t *)rx->control_data)[0];
 		if (evt.word)
 			processUIEventI(evt);
-		EncBuffer[0] += rx->control_data[8];
-		EncBuffer[1] += rx->control_data[9];
-		EncBuffer[2] += rx->control_data[10];
-		EncBuffer[3] += rx->control_data[11];
 	}
 }
 

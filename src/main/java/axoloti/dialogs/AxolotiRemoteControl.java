@@ -21,6 +21,7 @@ import axoloti.ConnectionStatusListener;
 import axoloti.MainFrame;
 import axoloti.CConnection;
 import axoloti.IConnection;
+import axoloti.VirtualInputEvent;
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
 import axoloti.menus.StandardMenubar;
@@ -32,6 +33,8 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -46,7 +49,7 @@ import javax.swing.JLabel;
 import javax.swing.KeyStroke;
 import qcmds.QCmdMemRead;
 import qcmds.QCmdProcessor;
-import qcmds.QCmdVirtualButton;
+import qcmds.QCmdVirtualInputEvent;
 
 /**
  *
@@ -77,65 +80,61 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         jPanelLCD.add(new JLabel(ii));
         jPanelLCD.doLayout();
         jPanelLCD.setVisible(true);
-        jPanelLCD.setFocusable(true);
+        //jPanelLCD.setFocusable(true);
+
+        setFocusable(true);        
+        setFocusTraversalKeysEnabled(false);
+        
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                VirtualInputEvent evt = KeyToVirtualEvent(e, true);
+                if (evt!=null) {
+                    tx(evt);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                VirtualInputEvent evt = KeyToVirtualEvent(e, false);
+                if (evt!=null) {
+                    tx(evt);
+                }
+            }
+        });
         InputMap inputmap = jPanelLCD.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        inputmap.put(KeyStroke.getKeyStroke("UP"),"up");
-        inputmap.put(KeyStroke.getKeyStroke("DOWN"),"down");
-        inputmap.put(KeyStroke.getKeyStroke("ENTER"),"enter");
-        inputmap.put(KeyStroke.getKeyStroke("ESCAPE"),"back");
-        ActionMap actionmap = jPanelLCD.getActionMap();
- 
-        actionmap.put("up", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tx_clicked(K_UP);
-            }
-        });
-        actionmap.put("down", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tx_clicked(K_DOWN);
-            }
-        });
-        actionmap.put("enter", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tx_clicked(K_ENTER);
-            }
-        });
-        actionmap.put("back", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tx_clicked(K_BACK);
-            }
-        });
 
         encoders[0] = new RControlEncoder() {
             @Override
             public void DoRotation(int ticks) {
-                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-                processor.AppendToQueue(new QCmdVirtualButton(ticks, 0, 0, 0));
+//                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+//                processor.AppendToQueue(new QCmdVirtualInputEvent(ticks, 0, 0, 0));
             }
         };
         encoders[1] = new RControlEncoder() {
             @Override
             public void DoRotation(int ticks) {
-                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-                processor.AppendToQueue(new QCmdVirtualButton(0, ticks, 0, 0));
+//                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+//                processor.AppendToQueue(new QCmdVirtualInputEvent(0, ticks, 0, 0));
             }
         };
         encoders[2] = new RControlEncoder() {
             @Override
             public void DoRotation(int ticks) {
-                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-                processor.AppendToQueue(new QCmdVirtualButton(0, 0, ticks, 0));
+//                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+//                processor.AppendToQueue(new QCmdVirtualInputEvent(0, 0, ticks, 0));
             }
         };
         encoders[3] = new RControlEncoder() {
             @Override
             public void DoRotation(int ticks) {
-                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-                processor.AppendToQueue(new QCmdVirtualButton(0, 0, 0, ticks));
+//                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+//                processor.AppendToQueue(new QCmdVirtualInputEvent(0, 0, 0, ticks));
             }
         };
 
@@ -162,6 +161,23 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         jButtonUp.setFocusable(false);
         jButtoneEnter.setFocusable(false);
         jButtonShift.setFocusable(false);        
+    }
+    
+    VirtualInputEvent KeyToVirtualEvent(KeyEvent e, boolean pressed){        
+        byte modifiers = e.isShiftDown()?VirtualInputEvent.MODIFIER_SHIFT:0;
+        byte value = pressed?(byte)1:0;
+        switch(e.getKeyCode()) {
+            case KeyEvent.VK_UP :
+                return new VirtualInputEvent(VirtualInputEvent.BTN_UP, modifiers, value, VirtualInputEvent.QUADRANT_MAIN);
+            case KeyEvent.VK_DOWN :
+                return new VirtualInputEvent(VirtualInputEvent.BTN_DOWN, modifiers, value, VirtualInputEvent.QUADRANT_MAIN);
+            case KeyEvent.VK_ENTER :
+                return new VirtualInputEvent(VirtualInputEvent.BTN_E, modifiers, value, VirtualInputEvent.QUADRANT_MAIN);
+            case KeyEvent.VK_ESCAPE :
+                return new VirtualInputEvent(VirtualInputEvent.BTN_X, modifiers, value, VirtualInputEvent.QUADRANT_MAIN);
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -200,12 +216,12 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
 
         @Override
         public void mousePressed(MouseEvent e) {
-            tx_pressed(1 << (index));
+            //tx_pressed(1 << (index));
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            tx_released(1 << (index));
+            //tx_released(1 << (index));
         }
 
         @Override
@@ -397,47 +413,10 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    void tx(int b_or, int b_and) {
+    void tx(VirtualInputEvent evt) {
         QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
-        processor.AppendToQueue(new QCmdVirtualButton(b_or, b_and));
+        processor.AppendToQueue(new QCmdVirtualInputEvent(evt));
     }
-
-    void tx_pressed(int k) {
-        tx(k, 0);
-    }
-
-    void tx_released(int k) {
-        tx(0, k);
-    }
-
-    void tx_clicked(int k) {
-        tx(k, k);
-    }
-// button masks
-    final int K_UP = 1<<24;
-    final int K_DOWN = 1<<25;
-    final int K_LEFT = 1<<26;
-    final int K_RIGHT = 1<<27;
-    final int K_BACK = 1<<28;
-    final int K_ENTER = 1<<29;
-    final int K_HOME = 1<<30;
-    final int K_SHIFT = 1<<31;
-    final int K_1 = 1 << 0;
-    final int K_2 = 1 << 1;
-    final int K_3 = 1 << 2;
-    final int K_4 = 1 << 3;
-    final int K_5 = 1 << 4;
-    final int K_6 = 1 << 5;
-    final int K_7 = 1 << 6;
-    final int K_8 = 1 << 7;
-    final int K_9 = 1 << 8;
-    final int K_10 = 1 << 9;
-    final int K_11 = 1 << 10;
-    final int K_12 = 1 << 11;
-    final int K_13 = 1 << 12;
-    final int K_14 = 1 << 13;
-    final int K_15 = 1 << 14;
-    final int K_16 = 1 << 15;
     
     public void refreshFB() {
         QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
@@ -456,35 +435,35 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
     }
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        tx_clicked(K_BACK);
+        //tx_clicked(K_BACK);
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLeftActionPerformed
-        tx_clicked(K_LEFT);
+        //tx_clicked(K_LEFT);
     }//GEN-LAST:event_jButtonLeftActionPerformed
 
     private void jButtoneEnterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtoneEnterActionPerformed
-        tx_clicked(K_ENTER);
+        //tx_clicked(K_ENTER);
     }//GEN-LAST:event_jButtoneEnterActionPerformed
 
     private void jButtonUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpActionPerformed
-        tx_clicked(K_UP);
+        //tx_clicked(K_UP);
     }//GEN-LAST:event_jButtonUpActionPerformed
 
     private void jButtonDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDownActionPerformed
-        tx_clicked(K_DOWN);
+        //tx_clicked(K_DOWN);
     }//GEN-LAST:event_jButtonDownActionPerformed
 
     private void jButtonRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRightActionPerformed
-        tx_clicked(K_RIGHT);
+        //tx_clicked(K_RIGHT);
     }//GEN-LAST:event_jButtonRightActionPerformed
 
     private void jButtonShiftMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonShiftMousePressed
-        tx_pressed(K_SHIFT);
+        //tx_pressed(K_SHIFT);
     }//GEN-LAST:event_jButtonShiftMousePressed
 
     private void jButtonShiftMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonShiftMouseReleased
-        tx_pressed(K_SHIFT);
+        //tx_pressed(K_SHIFT);
     }//GEN-LAST:event_jButtonShiftMouseReleased
 
     private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshActionPerformed

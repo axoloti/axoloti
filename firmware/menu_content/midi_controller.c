@@ -330,7 +330,7 @@ static void fpaint_screen_update_midicc(const struct ui_node * node, uint32_t fl
 		LCD_drawStringN(20,7,"...KEYS...",10);
 		if (midiccdata.page>0) LCD_drawChar(0,7,CHAR_ARROW_UP);
 		else LCD_drawChar(0,7,' ');
-		if (midiccdata.page<4) LCD_drawChar(10,7,CHAR_ARROW_DOWN);
+		if (midiccdata.page<(NQUADS-4)) LCD_drawChar(10,7,CHAR_ARROW_DOWN);
 		else LCD_drawChar(12,7,' ');
    	} break;
    	case lcd_dirty_flag_usr1: {
