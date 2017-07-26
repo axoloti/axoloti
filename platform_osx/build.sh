@@ -3,6 +3,15 @@
 # Downloads and builds all the required dependencies and toolchain executables
 # Items already present are skipped to save your bandwidth.
 
+#checking for required executables
+command -v 7z >/dev/null 2>&1 || { echo >&2 "I require 7zip (7z) but it's not installed. 
+Please install 7zip prior to running this script again. Aborting.
+To install via brew run:
+brew update
+brew install p7zip
+" ; exit 1; }
+
+
 set -e
 
 PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
