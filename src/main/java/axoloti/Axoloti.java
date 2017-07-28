@@ -41,6 +41,7 @@ public class Axoloti {
     public final static String HOME_DIR = "axoloti_home";
     public final static String RELEASE_DIR = "axoloti_release";
     public final static String FIRMWARE_DIR = "axoloti_firmware";
+    public final static String CHIBIOS_DIR = "axoloti_chibios";
 
     /**
      * @param args the command line arguments
@@ -236,6 +237,11 @@ public class Axoloti {
             System.err.println("Firmware directory is invalid");
         }
 
+        BuildEnv(CHIBIOS_DIR, System.getProperty(RELEASE_DIR) + File.separator + "ChibiOS_16.1.8");
+        if (!TestDir(CHIBIOS_DIR)) {
+            System.err.println("chibios directory is invalid");
+        }
+
         Preferences prefs = Preferences.LoadPreferences();
         if (versionedHome) {
             String fwDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
@@ -261,7 +267,8 @@ public class Axoloti {
                 + "Release = " + System.getProperty(RELEASE_DIR) + "\n"
                 + "Runtime = " + System.getProperty(RUNTIME_DIR) + "\n"
                 + "Firmware = " + System.getProperty(FIRMWARE_DIR) + "\n"
-                + "AxolotiHome = " + System.getProperty(HOME_DIR)
+                + "AxolotiHome = " + System.getProperty(HOME_DIR) + "\n"
+                + "Chibios = " + System.getProperty(CHIBIOS_DIR) + "\n"                
         );
     }
 
