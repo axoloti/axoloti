@@ -41,7 +41,7 @@ case $OS in
                ant curl p7zip-full
       else
             sudo apt-get install -y libtool libudev-dev automake autoconf \
-               ant curl lib32z1 lib32ncurses5 p7zip-full
+               ant curl lib32z1 lib32ncurses5 p7zip-full fakeroot
       fi
 
         # On more recent versions of Ubuntu
