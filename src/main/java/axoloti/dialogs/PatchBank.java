@@ -772,7 +772,11 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                 ;
             }
 
-            QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
+            try {
+                QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
+            } catch (Exception ex) {
+                Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

@@ -31,8 +31,10 @@ led_array_t leds[LEDSIZE] DMA_MEM_FW;
 
 void axoloti_control_init(void) {
 	LCD_clear();
-	LED_clear(LED_RING_LEFT);
-	LED_clear(LED_RING_RIGHT);
+	LED_clear(LED_RING_TOPLEFT);
+	LED_clear(LED_RING_TOPRIGHT);
+	LED_clear(LED_RING_BOTTOMLEFT);
+	LED_clear(LED_RING_BOTTOMRIGHT);
 	LED_clear(LED_STEPS);
 }
 

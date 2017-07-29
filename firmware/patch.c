@@ -29,7 +29,7 @@
 #include "spilink.h"
 #include "codec.h"
 #include "axoloti_memory.h"
-#include "ui_menu_content.h"
+#include "menu_content/main_menu.h"
 
 //#define DEBUG_INT_ON_GPIO 1
 
@@ -348,7 +348,7 @@ static THD_FUNCTION(ThreadDSP, arg) {
 }
 
 void StopPatch(void) {
-  if (!patchStatus) {
+  if (patchStatus != STOPPED) {
     patchStatus = STOPPING;
     while (1) {
       chThdSleepMilliseconds(1);
@@ -405,10 +405,12 @@ void LoadPatch(const char *name) {
 }
 
 void LoadPatchStartSD(void) {
-  strcpy(loadFName, "/START.BIN");
-  loadPatchIndex = START_SD;
-  chEvtSignal(pThreadDSP, (eventmask_t)2);
-  chThdSleepMilliseconds(50);
+  if (!palReadPad(SW2_PORT, SW2_PIN)) {
+	  strcpy(loadFName, "/START.BIN");
+	  loadPatchIndex = START_SD;
+	  chEvtSignal(pThreadDSP, (eventmask_t)2);
+	  chThdSleepMilliseconds(50);
+  }
 }
 
 void LoadPatchStartFlash(void) {

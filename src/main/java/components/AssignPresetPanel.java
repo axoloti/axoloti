@@ -44,7 +44,7 @@ public class AssignPresetPanel extends JPanel {
 
     public AssignPresetPanel(ParameterInstanceView parameterInstanceView) {
         this.parameterInstanceView = parameterInstanceView;
-        int n = parameterInstanceView.getModel().getObjectInstance().getPatchModel().getSettings().GetNPresets();
+        int n = parameterInstanceView.getModel().getObjectInstance().getPatchModel().getNPresets();
         ctrls = new ArrayList<ACtrlComponent>(n);
 
         setLayout(new GridBagLayout());

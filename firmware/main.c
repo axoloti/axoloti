@@ -113,12 +113,13 @@ int main(void) {
 
   MY_USBH_Init();
 
-  if (!exception_check() && !palReadPad(SW2_PORT, SW2_PIN)) {
+  sdcard_attemptMountIfUnmounted();
+
+  if (!exception_check()) {
     // only try booting a patch when no exception is to be reported
 	// TODO: maybe only skip startup patch when exception was caused by startup patch
     // and button S2 is not pressed
 
-    sdcard_attemptMountIfUnmounted();
     if (fs_ready){
       LoadPatchStartSD();
     }

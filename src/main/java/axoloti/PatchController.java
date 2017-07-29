@@ -62,23 +62,42 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     public final static String PATCH_DSPLOAD = "DspLoad";
     public final static String PATCH_OBJECTINSTANCES = "Objectinstances";
     public final static String PATCH_NETS = "Nets";
+    public final static String PATCH_AUTHOR = "Author";
+    public final static String PATCH_LICENSE = "License";
+    public final static String PATCH_ATTRIBUTIONS = "Attributions";
+    public final static String PATCH_SUBPATCHMODE = "SubPatchMode";
+    public final static String PATCH_NPRESETENTRIES = "NPresetEntries";
+    public final static String PATCH_NPRESETS = "NPresets";
+    public final static String PATCH_NMODULATIONSOURCES = "NModulationSources";
+    public final static String PATCH_NMODULATIONTARGETSPERSOURCE = "NModulationTargetsPerSource";
+    public final static String PATCH_MIDICHANNEL = "MidiChannel";
+    public final static String PATCH_MIDISELECTOR = "MidiSelector";
+
+    public final static String[] PROPERTYNAMES = new String[]{
+        PATCH_LOCKED,
+        PATCH_FILENAME,
+        PATCH_DSPLOAD,
+        PATCH_OBJECTINSTANCES,
+        PATCH_NETS,
+        PATCH_AUTHOR,
+        PATCH_LICENSE,
+        PATCH_ATTRIBUTIONS,
+        PATCH_SUBPATCHMODE,
+        PATCH_NPRESETENTRIES,
+        PATCH_NPRESETS,
+        PATCH_NMODULATIONSOURCES,
+        PATCH_NMODULATIONTARGETSPERSOURCE,
+        PATCH_MIDICHANNEL,
+        PATCH_MIDISELECTOR
+    };
 
     @Override
     public String[] getPropertyNames() {
-        return new String[]{
-            PATCH_LOCKED,
-            PATCH_FILENAME,
-            PATCH_DSPLOAD,
-            PATCH_OBJECTINSTANCES,
-            PATCH_NETS
-        };
+        return PROPERTYNAMES;
     }
 
     public PatchController(PatchModel model, AbstractDocumentRoot documentRoot, ObjectInstancePatcherController parentController) {
         super(model, documentRoot, parentController);
-        if (model.settings == null) {
-            model.settings = new PatchSettings();
-        }
         if (parentController != null) {
             model.setContainer(parentController.getModel());
         }
@@ -164,24 +183,28 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 targetfn = sdpath + "/" + fref.targetPath;
             }
             if (!SDCardInfo.getInstance().exists(targetfn, f.lastModified(), f.length())) {
-                GetQCmdProcessor().AppendToQueue(new qcmds.QCmdGetFileInfo(targetfn));
-                GetQCmdProcessor().WaitQueueFinished();
-                GetQCmdProcessor().AppendToQueue(new qcmds.QCmdPing());
-                GetQCmdProcessor().WaitQueueFinished();
-                if (!SDCardInfo.getInstance().exists(targetfn, f.lastModified(), f.length())) {
-                    if (f.length() > 8 * 1024 * 1024) {
-                        Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
-                        continue;
-                    }
-                    for (int i = 1; i < targetfn.length(); i++) {
-                        if (targetfn.charAt(i) == '/') {
-                            GetQCmdProcessor().AppendToQueue(new qcmds.QCmdCreateDirectory(targetfn.substring(0, i)));
-                            GetQCmdProcessor().WaitQueueFinished();
+                try {
+                    GetQCmdProcessor().AppendToQueue(new qcmds.QCmdGetFileInfo(targetfn));
+                    GetQCmdProcessor().WaitQueueFinished();
+                    GetQCmdProcessor().AppendToQueue(new qcmds.QCmdPing());
+                    GetQCmdProcessor().WaitQueueFinished();
+                    if (!SDCardInfo.getInstance().exists(targetfn, f.lastModified(), f.length())) {
+                        if (f.length() > 8 * 1024 * 1024) {
+                            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
+                            continue;
                         }
+                        for (int i = 1; i < targetfn.length(); i++) {
+                            if (targetfn.charAt(i) == '/') {
+                                GetQCmdProcessor().AppendToQueue(new qcmds.QCmdCreateDirectory(targetfn.substring(0, i)));
+                                GetQCmdProcessor().WaitQueueFinished();
+                            }
+                        }
+                        GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, targetfn));
+                    } else {
+                        Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
                     }
-                    GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, targetfn));
-                } else {
-                    Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
+                } catch (Exception ex) {
+                    Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
@@ -245,48 +268,52 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     }
 
     public void UploadToSDCard(String sdfilename) {
-        WriteCode();
-        Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
-        QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
-        for (String module : getModel().getModules()) {
-            qcmdprocessor.AppendToQueue(new QCmdCompileModule(this,
-                    module,
-                    getModel().getModuleDir(module)
-            ));
-        }
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
-        // create subdirs...
-
-        for (int i = 1; i < sdfilename.length(); i++) {
-            if (sdfilename.charAt(i) == '/') {
-                qcmdprocessor.AppendToQueue(new qcmds.QCmdCreateDirectory(sdfilename.substring(0, i)));
-                qcmdprocessor.WaitQueueFinished();
+        try {
+            WriteCode();
+            Logger.getLogger(PatchFrame.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
+            QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
+            for (String module : getModel().getModules()) {
+                qcmdprocessor.AppendToQueue(new QCmdCompileModule(this,
+                        module,
+                        getModel().getModuleDir(module)
+                ));
             }
-        }
-        qcmdprocessor.WaitQueueFinished();
-        Calendar cal;
-        if (true) { // getModel().isDirty()) {
-            cal = Calendar.getInstance();
-        } else {
-            cal = Calendar.getInstance();
-            if (getFileNamePath() != null && !getFileNamePath().isEmpty()) {
-                File f = new File(getFileNamePath());
-                if (f.exists()) {
-                    cal.setTimeInMillis(f.lastModified());
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
+            // create subdirs...
+
+            for (int i = 1; i < sdfilename.length(); i++) {
+                if (sdfilename.charAt(i) == '/') {
+                    qcmdprocessor.AppendToQueue(new qcmds.QCmdCreateDirectory(sdfilename.substring(0, i)));
+                    qcmdprocessor.WaitQueueFinished();
                 }
             }
-        }
-        qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadPatchSD(sdfilename, cal));
+            qcmdprocessor.WaitQueueFinished();
+            Calendar cal;
+            if (true) { // getModel().isDirty()) {
+                cal = Calendar.getInstance();
+            } else {
+                cal = Calendar.getInstance();
+                if (getFileNamePath() != null && !getFileNamePath().isEmpty()) {
+                    File f = new File(getFileNamePath());
+                    if (f.exists()) {
+                        cal.setTimeInMillis(f.lastModified());
+                    }
+                }
+            }
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadPatchSD(sdfilename, cal));
 
-        String dir;
-        int i = sdfilename.lastIndexOf("/");
-        if (i > 0) {
-            dir = sdfilename.substring(0, i);
-        } else {
-            dir = "";
+            String dir;
+            int i = sdfilename.lastIndexOf("/");
+            if (i > 0) {
+                dir = sdfilename.substring(0, i);
+            } else {
+                dir = "";
+            }
+            UploadDependentFiles(dir);
+        } catch (Exception ex) {
+            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        UploadDependentFiles(dir);
     }
 
     public void UploadToSDCard() {
@@ -391,10 +418,6 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     Dimension GetSize() {
         // hmmm don't know which view...
         return new Dimension(500, 500); // patchView.GetSize();
-    }
-
-    public PatchSettings getSettings() {
-        return getModel().settings;
     }
 
     public void ShowCompileFail() {

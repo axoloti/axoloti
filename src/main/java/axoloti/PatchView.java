@@ -350,7 +350,8 @@ public abstract class PatchView extends PatchAbstractView {
         if (NotesFrame != null) {
             getController().getModel().notes = NotesFrame.GetText();
         }
-        getController().getModel().windowPos = getPatchFrame().getBounds();
+        // FIXME
+        //getController().getModel().windowPos = getPatchFrame().getBounds();
     }
 
     boolean save(File f) {
@@ -456,10 +457,10 @@ public abstract class PatchView extends PatchAbstractView {
         if (NotesFrame != null) {
             NotesFrame.dispose();
         }
-        if ((getController().getSettings() != null)
-                && (getController().getSettings().editor != null)) {
-            getController().getSettings().editor.dispose();
-        }
+//        if ((getController().getSettings() != null)
+//                && (getController().getSettings().editor != null)) {
+//            getController().getSettings().editor.dispose();
+//        }
     }
 
     public Dimension GetSize() {

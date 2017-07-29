@@ -20,74 +20,45 @@
 #define __UI_H
 
 #include "parameters.h"
+#include "stdbool.h"
+#include "input_evt.h"
 
-typedef union {
-  struct {
-    int btn_1 :1;
-    int btn_2 :1;
-    int btn_3 :1;
-    int btn_4 :1;
-    int btn_5 :1;
-    int btn_6 :1;
-    int btn_7 :1;
-    int btn_8 :1;
-    int btn_9 :1;
-    int btn_10 :1;
-    int btn_11 :1;
-    int btn_12 :1;
-    int btn_13 :1;
-    int btn_14 :1;
-    int btn_15 :1;
-    int btn_16 :1;
-    int unused :8;
-    int btn_nav_Up :1;
-    int btn_nav_Down :1;
-    int btn_nav_Left :1;
-    int btn_nav_Right :1;
-    int btn_nav_Back :1;
-    int btn_nav_Enter :1;
-    int btn_nav_Home :1;
-    int btn_nav_Shift :1;
-  } fields;
-  int32_t word;
-} Btn_Nav_States_struct;
-
-extern Btn_Nav_States_struct Btn_Nav_Or;
-extern Btn_Nav_States_struct Btn_Nav_And;
-extern int8_t EncBuffer[2];
-
-extern Btn_Nav_States_struct Btn_Nav_CurStates;
-extern Btn_Nav_States_struct Btn_Nav_PrevStates;
-
-#define BTN_NAV_DOWN(x) \
-  (Btn_Nav_CurStates.fields.x && !Btn_Nav_PrevStates.fields.x)
+extern int8_t EncBuffer[4];
 
 typedef struct {
   int *pvalue;
   int minvalue;
   int maxvalue;
-} ui_node_type_integer_adjustable;
+} ui_node_integer_adjustable;
 
 typedef struct {
   const void *array; // pointer to ui_node_t array
   int length;
-} ui_node_type_node_list_t;
+} ui_node_node_list_t;
 
 typedef struct {
   int16_t *pvalue;
   int16_t minvalue;
   int16_t scale;
-} ui_node_type_short_value_t;
+} ui_node_short_value_t;
 
-typedef void (*DisplayFunction)(void * userdata, int initialize);
-typedef void (*ButtonFunction)(void * userdata);
-typedef void (*VoidFunction)(void);
+
+struct ui_node;
+
+typedef uint32_t (*nodeFunctionHandleEvent)(const struct ui_node * node, input_event evt);
+typedef void (*nodeFunctionPaintScreen)(const struct ui_node * node, uint32_t dirtyflags);
+typedef void (*nodeFunctionPaintLine)(const struct ui_node * node, int line, uint32_t dirtyflags);
 
 typedef struct {
-  DisplayFunction displayFunction; // function pointer
-  ButtonFunction buttonFunction;
-  void * userdata;
-} ui_node_custom_t;
+	nodeFunctionHandleEvent handle_evt;
+	nodeFunctionPaintScreen paint_screen_update;
+	nodeFunctionPaintLine paint_line_update;
+	nodeFunctionPaintLine paint_line_update_inv;
+} nodeFunctionTable;
+
+extern nodeFunctionTable nodeFunctionTable_custom;
+
+typedef void (*VoidFunction)(void);
 
 typedef struct {
   VoidFunction fnctn;
@@ -113,34 +84,29 @@ typedef struct node_object_list {
 	int32_t nobjs;
 } ui_node_object_list_t;
 
-typedef enum {
-  node_type_integer_value,
-  node_type_short_value,
-  node_type_custom,
-//  node_type_INTDISPLAY,
-  node_type_node_list,
-  node_type_action_function,
-  node_type_param_list,
-  node_type_param,
-  node_type_object_list,
-  node_type_object
-} ui_node_type;
-
-typedef struct {
-  ui_node_type node_type;
+typedef struct ui_node {
+  const nodeFunctionTable *functions;
   const char *name;
   union {
-    ui_node_type_integer_adjustable intValue;
-    ui_node_type_short_value_t shortValue;
-    ui_node_custom_t custom;
+    ui_node_integer_adjustable intValue;
+    ui_node_short_value_t shortValue;
     ui_node_action_function_t fnctn;
-    ui_node_type_node_list_t nodeList;
+    ui_node_node_list_t nodeList;
     ui_node_param_list_t paramList;
     ui_node_param_t param;
     ui_node_object_list_t objList;
     ui_node_object_t obj;
   };
 } ui_node_t;
+
+extern const nodeFunctionTable nodeFunctionTable_integer_value;
+extern const nodeFunctionTable nodeFunctionTable_short_value;
+extern const nodeFunctionTable nodeFunctionTable_node_list;
+extern const nodeFunctionTable nodeFunctionTable_action_function;
+extern const nodeFunctionTable nodeFunctionTable_param_list;
+extern const nodeFunctionTable nodeFunctionTable_param;
+extern const nodeFunctionTable nodeFunctionTable_object_list;
+extern const nodeFunctionTable nodeFunctionTable_object;
 
 #if 0
 // OBSOLETE
@@ -176,9 +142,61 @@ void SetKVP_FNCTN(ui_node_t *node, ui_node_t *parent,
 //void AxolotiControlUpdate(void);
 //extern void (*pControlUpdate)(void);
 
-void ui_go_home(void);
 void ui_init(void);
-void ui_enter_node(const ui_node_t *node);
+void ui_go_home(void);
+uint32_t ui_enter_node(const ui_node_t *node);
 
+#define LCD_COL_EQ 45
+#define LCD_COL_EQ_LENGTH 6
+#define LCD_COL_VAL 45
+
+// last line on the screen is for status
+#define STATUSROW 7
+
+// normal content has a indent to allow indicators on first column:
+#define LCD_COL_INDENT 3
+
+// the last column to write a character on:
+#define LCD_COL_RIGHT 61
+
+#define LCD_COL_ENTER 48
+
+#define LCD_VALUE_POSITION 36
+
+
+typedef struct {
+	const ui_node_t *parent;
+	int currentpos;
+} menu_stack_t;
+
+#define menu_stack_size 10
+extern menu_stack_t menu_stack[menu_stack_size];
+extern int menu_stack_position;
+
+// ------ LCD dirty flags ------
+// for selective repainting
+// in high to low priority order:
+#define lcd_dirty_flag_clearscreen  (1<<0)
+#define lcd_dirty_flag_header  (1<<1)
+#define lcd_dirty_flag_initial (1<<2)
+#define lcd_dirty_flag_listnav (1<<3)
+#define lcd_dirty_flag_usr0 (1<<4)
+#define lcd_dirty_flag_usr1 (1<<5)
+#define lcd_dirty_flag_usr2 (1<<6)
+#define lcd_dirty_flag_usr3 (1<<7)
+#define lcd_dirty_flag_usr4 (1<<8)
+#define lcd_dirty_flag_usr5 (1<<9)
+#define lcd_dirty_flag_usr6 (1<<10)
+#define lcd_dirty_flag_usr7 (1<<11)
+
+
+extern uint32_t list_nav_down(const ui_node_t *node, int maxposition);
+extern uint32_t list_nav_up(const ui_node_t *node);
+extern void update_list_nav(int current_menu_length);
+
+extern ui_node_t ObjMenu;
+extern ui_node_t ParamMenu;
+
+extern void processUIEvent(input_event evt);
 
 #endif

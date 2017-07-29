@@ -208,7 +208,6 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/midi.c \
        ${FIRMWARE}/midi_usb.c \
        ${FIRMWARE}/ui.c \
-       ${FIRMWARE}/ui_menu_content.c \
        ${FIRMWARE}/glcdfont.c \
        ${FIRMWARE}/usbcfg.c \
        ${FIRMWARE}/sdcard.c \
@@ -238,9 +237,22 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/exceptions.c \
        ${FIRMWARE}/watchdog.c \
        ${FIRMWARE}/sysmon.c \
-       ${FIRMWARE}/axoloti_memory.c
-
-
+       ${FIRMWARE}/axoloti_memory.c \
+       ${FIRMWARE}/qgfx.c \
+       ${FIRMWARE}/ui_nodes/action_function.c \
+       ${FIRMWARE}/ui_nodes/int_value.c \
+       ${FIRMWARE}/ui_nodes/node_list.c \
+       ${FIRMWARE}/ui_nodes/object_list.c \
+       ${FIRMWARE}/ui_nodes/object.c \
+       ${FIRMWARE}/ui_nodes/param_list.c \
+       ${FIRMWARE}/ui_nodes/param.c \
+       ${FIRMWARE}/ui_nodes/short_value.c \
+       ${FIRMWARE}/menu_content/adc_menu.c \
+       ${FIRMWARE}/menu_content/food_menu.c \
+       ${FIRMWARE}/menu_content/main_menu.c \
+       ${FIRMWARE}/menu_content/midi_controller.c \
+       ${FIRMWARE}/menu_content/sdcard_menu.c \
+       ${FIRMWARE}/ui_nodes/test_menu.c
 
 
 #optional modules

@@ -17,6 +17,7 @@
  */
 package axoloti.object;
 
+import static axoloti.Axoloti.CHIBIOS_DIR;
 import static axoloti.Axoloti.FIRMWARE_DIR;
 import axoloti.Modulator;
 import axoloti.SDFileReference;
@@ -442,7 +443,7 @@ public class AxoObject extends AxoObjectAbstract {
                     s2 = s2.replace('\\', '/');
                     r.add(s2);
                 } else if (s.startsWith("chibios/")) {
-                    r.add((new File(System.getProperty(FIRMWARE_DIR))).getAbsolutePath() + "/../ChibiOS_16.1.7" + s.substring(7));
+                    r.add((new File(System.getProperty(CHIBIOS_DIR))).getAbsolutePath() + s.substring(7));
                 } else {
                     r.add(s);
                 }
@@ -585,7 +586,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     /* MVC code */
-    
+
     private String StringDenull(String s){
         if (s == null) return "";
         return s;

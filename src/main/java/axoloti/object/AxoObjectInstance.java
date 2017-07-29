@@ -219,10 +219,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 typeSHA = null;
             }
         }
-        if (parameterInstances.isEmpty()) {
+        if ((parameterInstances!= null) && parameterInstances.isEmpty()) {
             parameterInstances = null;
         }
-        if (attributeInstances.isEmpty()) {
+        if ((attributeInstances!=null) && attributeInstances.isEmpty()) {
             attributeInstances = null;
         }
     }

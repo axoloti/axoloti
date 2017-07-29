@@ -130,6 +130,7 @@ public class USBBulkConnection_v2 extends IConnection {
             Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Disconnect request");
             ClearSync();
             ClearReadSync();
+            MainFrame.mainframe.getQcmdprocessor().Panic();
 
             if (receiverThread.isAlive()) {
                 receiverThread.interrupt();
@@ -242,7 +243,8 @@ public class USBBulkConnection_v2 extends IConnection {
 
         try //devicePath = Usb.DeviceToPath(device);
         {
-
+            QCmdProcessor qcmdp = MainFrame.mainframe.getQcmdprocessor();
+            qcmdp.Panic();
             int result = LibUsb.claimInterface(handle, interfaceNumber);
             if (result != LibUsb.SUCCESS) {
                 throw new LibUsbException("Unable to claim interface", result);
@@ -279,7 +281,6 @@ public class USBBulkConnection_v2 extends IConnection {
             } catch (InterruptedException ex) {
                 Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             }
-            QCmdProcessor qcmdp = MainFrame.mainframe.getQcmdprocessor();
 
             qcmdp.AppendToQueue(new QCmdTransmitGetFWVersion());
             try {
@@ -682,24 +683,16 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     @Override
-    public void TransmitVirtualButton(int b_or, int b_and, int enc1, int enc2, int enc3, int enc4) {
-        byte[] data = new byte[16];
+    public void TransmitVirtualInputEvent(byte b0, byte b1, byte b2, byte b3) {
+        byte[] data = new byte[8];
         data[0] = 'A';
         data[1] = 'x';
         data[2] = 'o';
         data[3] = 'B';
-        data[4] = (byte) b_or;
-        data[5] = (byte) (b_or >> 8);
-        data[6] = (byte) (b_or >> 16);
-        data[7] = (byte) (b_or >> 24);
-        data[8] = (byte) b_and;
-        data[9] = (byte) (b_and >> 8);
-        data[10] = (byte) (b_and >> 16);
-        data[11] = (byte) (b_and >> 24);
-        data[12] = (byte) (enc1);
-        data[13] = (byte) (enc2);
-        data[14] = (byte) (enc3);
-        data[15] = (byte) (enc4);
+        data[4] = b0;
+        data[5] = b1;
+        data[6] = b2;
+        data[7] = b3;
         writeBytes(data);
     }
 
@@ -952,16 +945,42 @@ public class USBBulkConnection_v2 extends IConnection {
         @Override
         public void run() {
             ByteBuffer recvbuffer = ByteBuffer.allocateDirect(32768);
+            ByteBuffer packetbuffer = ByteBuffer.allocateDirect(32768);
             recvbuffer.order(ByteOrder.LITTLE_ENDIAN);
+            packetbuffer.order(ByteOrder.LITTLE_ENDIAN);
             IntBuffer transfered = IntBuffer.allocate(1);
             while (!disconnectRequested) {
                 int result = LibUsb.bulkTransfer(handle, (byte) IN_ENDPOINT, recvbuffer, transfered, 1000);
-                if (result != LibUsb.SUCCESS) {
-                    //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receive: " + result);
-                }
-                {
-                    int sz = transfered.get(0);
-                    processPacket(recvbuffer, sz);
+                switch (result) {
+                    case LibUsb.SUCCESS:
+                        int sz = transfered.get(0);
+                        recvbuffer.limit(sz);
+                        switch (sz) {
+                            case 64: // full recvbuffer, expect more buffers or zero-length-packet to terminate
+                                packetbuffer.put(recvbuffer);
+                                break;
+                            case 0: // zero-length-packet, packetbuffer is complete
+                            {
+                                packetbuffer.rewind();
+                                processPacket(packetbuffer, packetbuffer.remaining());
+                                packetbuffer.rewind();
+                                packetbuffer.limit(0);
+                            }
+                            break;
+                            default: // non-zero length, not full, recvbuffer is a complete packet
+                                processPacket(recvbuffer, sz);
+                        }   break;
+                    case LibUsb.ERROR_TIMEOUT:
+                        if (state != ReceiverState.header) {
+                            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "timeout: " + state);
+                        }   break;
+                    default:
+                        String err = LibUsb.errorName(result);
+                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receive error: " + err);
+                        packetbuffer.rewind();
+                        packetbuffer.limit(0);
+                        GoIdleState();
+                        break;
                 }
             }
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receiver: thread stopped");
@@ -1099,7 +1118,6 @@ public class USBBulkConnection_v2 extends IConnection {
      "AxoP" + bb + vvvv -> parameter change index bb (16bit), value vvvv (32bit)
      */
     private ReceiverState state = ReceiverState.header;
-    private int headerstate;
     private int[] packetData = new int[64];
     private int dataIndex = 0; // in bytes
     private int dataLength = 0; // in bytes
@@ -1201,15 +1219,12 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     void GoIdleState() {
-        headerstate = 0;
         state = ReceiverState.header;
     }
     ByteBuffer dispData;
 
     int LCDPacketRow = 0;
 
-    ReceiverState rstate=ReceiverState.ackPckt;
-    
     final int tx_hdr_acknowledge = 0x416F7841;  // "AxoA"
     final int tx_hdr_fwid = 0x566f7841;         // "AxoV"
     final int tx_hdr_log = 0x546F7841;          // "AxoT"
@@ -1217,9 +1232,9 @@ public class USBBulkConnection_v2 extends IConnection {
     final int tx_hdr_memrdx = 0x726f7841;       // "Axor"
     final int rx_hdr_displaypckt = 0x446F7841;  // "AxoD"
     final int rx_hdr_paramchange = 0x516F7841;  // "AxoQ" 
-    
+
     final boolean log_rx_diagnostics = true;
-    
+
     void processPacket(ByteBuffer rbuf, int size) {
         if (size == 0) {
             GoIdleState();
@@ -1276,10 +1291,16 @@ public class USBBulkConnection_v2 extends IConnection {
                         }
                         break;
                         case tx_hdr_log: {
+                            if (size == 4) {
+                                state = ReceiverState.textPckt;
+                                break;
+                            }
                             while (rbuf.remaining() > 0) {
-                                byte b =  rbuf.get();
-                                textRcvBuffer.append((char)b);
-                                if (b==0) break;
+                                byte b = rbuf.get();
+                                if (b == 0) {
+                                    break;
+                                }
+                                textRcvBuffer.append((char) b);
                             }
                             textRcvBuffer.limit(textRcvBuffer.position());
                             textRcvBuffer.rewind();
@@ -1290,10 +1311,10 @@ public class USBBulkConnection_v2 extends IConnection {
                             memReadAddr = rbuf.getInt();
                             memReadLength = rbuf.getInt();
                             if (false && log_rx_diagnostics) {
-                                System.out.print("rx memrd addr=" + String.format("0x%08X", memReadAddr) + " le=" + memReadLength +" [");
-                                for(int i= 12;i<size;i++) {
+                                System.out.print("rx memrd addr=" + String.format("0x%08X", memReadAddr) + " le=" + memReadLength + " [");
+                                for (int i = 12; i < size; i++) {
                                     // this would be unexpected extra data...
-                                    System.out.print("|"+(char)rbuf.get(i));
+                                    System.out.print("|" + (char) rbuf.get(i));
                                 }
                                 System.out.println("]");
                             }
@@ -1319,6 +1340,20 @@ public class USBBulkConnection_v2 extends IConnection {
                 }
             }
             break;
+            case textPckt: {
+                while (rbuf.remaining() > 0) {
+                    byte b =  rbuf.get();
+                    if (b==0) {
+                        textRcvBuffer.limit(textRcvBuffer.position());
+                        textRcvBuffer.rewind();
+                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
+                        GoIdleState();
+                    } else {
+                        textRcvBuffer.append((char)b);                        
+                    }
+                }
+                GoIdleState();
+            } break;
             case memread: {                
                 if (memReadLength < size) {
                     System.out.print("memread barf:<");

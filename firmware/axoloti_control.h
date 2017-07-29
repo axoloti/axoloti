@@ -25,7 +25,9 @@
 #define LCD_CHAR_WIDTH 6
 
 // leds, dont exceed SPILINK_CTLDATASIZE
-#define LEDSIZE 3
+#define LEDSIZE 6
+
+#include "inttypes.h"
 
 extern uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS];
 
@@ -70,9 +72,12 @@ typedef struct {
 } led_array_t;
 
 extern led_array_t leds[LEDSIZE];
-#define LED_RING_LEFT (&leds[0])
-#define LED_RING_RIGHT (&leds[1])
-#define LED_STEPS (&leds[2])
+#define LED_RING_TOPLEFT (&leds[0])
+#define LED_RING_TOPRIGHT (&leds[1])
+#define LED_RING_BOTTOMLEFT (&leds[2])
+#define LED_RING_BOTTOMRIGHT (&leds[3])
+#define LED_STEPS (&leds[4])
+#define LED_LVL (&leds[5])
 
 extern uint8_t control_rx_buffer[(LCDHEADER + LCDWIDTH)];
 
